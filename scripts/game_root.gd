@@ -224,12 +224,12 @@ var projection_rejection_reason := &""
 ## audits and test/dev preview, never for normal gameplay.
 var reference_audit_mode := false
 ## FREEZE-P0.2R: projection profiles contain closures and must be reused during
-## actor/location updates. The key includes the map, audit context, and formal
-## registry generation so a map switch, audit-mode switch, publish, or hotpatch
-## can never reuse closures from the previous authority context.
+## actor/location updates. Formal profiles also retain the exact runtime
+## Dictionary that their closures captured, so a bridge cache invalidation can
+## discard only the stale map profile without a cross-script generation API.
 var _projection_profile_cache: Dictionary = {}
 var _projection_profile_cache_audit_mode := false
-var _projection_profile_cache_generation := -1
+var _projection_profile_runtime_identity_cache: Dictionary = {}
 var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
@@ -7791,30 +7791,39 @@ func _resolve_projection_profile_for_map(map_id: int) -> Dictionary:
 	## FREEZE-P0.2R: formal runtime profile in normal gameplay; reference
 	## profile only inside an explicit reference_audit_mode context (migration /
 	## import audit / test-dev preview). Never inferred from WorldContent.
-	var registry_generation := MapEditorRuntimeBridgeScript.registry_generation()
-	if (
-		_projection_profile_cache_generation != registry_generation
-		or _projection_profile_cache_audit_mode != reference_audit_mode
-	):
+	if _projection_profile_cache_audit_mode != reference_audit_mode:
 		_projection_profile_cache.clear()
-		_projection_profile_cache_generation = registry_generation
+		_projection_profile_runtime_identity_cache.clear()
 		_projection_profile_cache_audit_mode = reference_audit_mode
-	var cache_key := "%d|%d|%d" % [
+	var cache_key := "%d|%d" % [
 		map_id,
 		1 if reference_audit_mode else 0,
-		registry_generation,
 	]
-	if _projection_profile_cache.has(cache_key):
-		return _projection_profile_cache[cache_key]
 	var profile: Dictionary
 	if reference_audit_mode:
+		_projection_profile_runtime_identity_cache.clear()
+		if _projection_profile_cache.has(cache_key):
+			return _projection_profile_cache[cache_key]
 		profile = MapCoordinateMapperScript.resolve_reference_projection_profile(
 			map_id
 		)
 	else:
+		var runtime_identity := MapEditorRuntimeBridgeScript.load_map(map_id)
+		if (
+			_projection_profile_cache.has(cache_key)
+			and _projection_profile_runtime_identity_cache.has(cache_key)
+			and is_same(
+				_projection_profile_runtime_identity_cache[cache_key],
+				runtime_identity
+			)
+		):
+			return _projection_profile_cache[cache_key]
+		_projection_profile_cache.erase(cache_key)
+		_projection_profile_runtime_identity_cache.erase(cache_key)
 		profile = MapCoordinateMapperScript.resolve_formal_runtime_projection_profile(
 			map_id
 		)
+		_projection_profile_runtime_identity_cache[cache_key] = runtime_identity
 	_projection_profile_cache[cache_key] = profile
 	return profile
 

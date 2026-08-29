@@ -60,11 +60,16 @@ func _run() -> void:
 		MapEditorRuntimeBridge.BICH_MAP_ID
 	)
 	formal_before_invalidate["_registry_cache_probe"] = true
-	var registry_generation_before := MapEditorRuntimeBridge.registry_generation()
+	var runtime_before_invalidate := MapEditorRuntimeBridge.load_map(
+		MapEditorRuntimeBridge.BICH_MAP_ID
+	)
 	MapEditorRuntimeBridge.invalidate_release_registry()
+	var runtime_after_invalidate := MapEditorRuntimeBridge.load_map(
+		MapEditorRuntimeBridge.BICH_MAP_ID
+	)
 	assert(
-		MapEditorRuntimeBridge.registry_generation() == registry_generation_before + 1,
-		"formal registry invalidation did not advance its generation"
+		not is_same(runtime_before_invalidate, runtime_after_invalidate),
+		"formal registry invalidation reused the old runtime Dictionary"
 	)
 	var formal_after_invalidate: Dictionary = game._resolve_projection_profile_for_map(
 		MapEditorRuntimeBridge.BICH_MAP_ID
@@ -72,6 +77,33 @@ func _run() -> void:
 	assert(
 		not formal_after_invalidate.has("_registry_cache_probe"),
 		"registry invalidation reused a stale formal projection Dictionary"
+	)
+	assert(
+		not is_same(formal_before_invalidate, formal_after_invalidate),
+		"runtime identity change did not rebuild the formal profile"
+	)
+	formal_after_invalidate["_runtime_identity_cache_probe"] = true
+	var callable_after_invalidate: Callable = formal_after_invalidate.get(
+		"screen_to_ground", Callable()
+	)
+	var formal_after_invalidate_hit: Dictionary = (
+		game._resolve_projection_profile_for_map(
+			MapEditorRuntimeBridge.BICH_MAP_ID
+		)
+	)
+	assert(
+		is_same(formal_after_invalidate, formal_after_invalidate_hit)
+		and bool(
+			formal_after_invalidate_hit.get(
+				"_runtime_identity_cache_probe", false
+			)
+		),
+		"unchanged runtime identity did not reuse the rebuilt profile"
+	)
+	assert(
+		callable_after_invalidate
+			== formal_after_invalidate_hit.get("screen_to_ground", Callable()),
+		"unchanged runtime identity did not reuse the rebuilt Callable"
 	)
 	game.current_map_id = 9999  # mapped id with NO runtime map available
 	var before := int(game.missing_projection_rejection_count)

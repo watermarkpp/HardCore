@@ -48,10 +48,6 @@ static var _registry_load_reason := &""
 static var _registry_load_errors: Array[String] = []
 static var _registry_override_path := ""
 static var _readiness_result: Dictionary = {}
-## Monotonic identity for the currently loaded formal release registry.
-## Runtime-derived caches outside this bridge must include it in their key so
-## an in-process publish/hotpatch cannot leave closures bound to stale map data.
-static var _registry_generation := 0
 
 
 static func _registry_path() -> String:
@@ -126,7 +122,6 @@ static func reset_release_registry_override() -> void:
 
 
 static func invalidate_release_registry() -> void:
-	_registry_generation += 1
 	_registry_loaded = false
 	_registry_cache.clear()
 	_registry_load_valid = false
@@ -134,10 +129,6 @@ static func invalidate_release_registry() -> void:
 	_registry_load_errors = []
 	_runtime_cache.clear()
 	_readiness_result.clear()
-
-
-static func registry_generation() -> int:
-	return _registry_generation
 
 static func released_map_ids() -> Array[int]:
 	_load_release_registry()
