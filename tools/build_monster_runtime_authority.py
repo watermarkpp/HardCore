@@ -69,6 +69,73 @@ SPECIAL_VIEW_BY_PROFILE = {
     "zuma_archer": (5, "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas:102-107"),
 }
 
+# Monster.DB Race selects the concrete Pascal actor in TUserEngine.AddBaseObject.
+# The per-class ViewRange is then inherited from TMonster/TAnimalObject or
+# overridden by that concrete class.  Keep the candidate DB binding authority
+# separate from the A-grade source-code rule: an exact candidate row may apply
+# this rule as B_CANDIDATE, while a reused/missing row must remain DATA_HOLD.
+CLASSIC_TARGETING_BY_SERVER_RACE: dict[int, dict[str, Any]] = {
+    52: {"pascal_class": "TMonster/TChickenDeer", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    53: {"pascal_class": "TATMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    81: {"pascal_class": "TATMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    82: {"pascal_class": "TSpitSpider", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    83: {"pascal_class": "TSlowATMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    84: {"pascal_class": "TScorpion", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    85: {"pascal_class": "TStickMonster", "view_range_cells": 7, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas:154-161"},
+    86: {"pascal_class": "TATMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    87: {"pascal_class": "TDualAxeMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas:102-107"},
+    88: {"pascal_class": "TATMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    89: {"pascal_class": "TATMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    90: {"pascal_class": "TGasAttackMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    91: {"pascal_class": "TMagCowMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    92: {"pascal_class": "TCowKingMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    93: {"pascal_class": "TThornDarkMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas:19-24,102-107"},
+    94: {"pascal_class": "TLightingZombi", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    95: {"pascal_class": "TDigOutZombi", "view_range_cells": 7, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:1193-1199"},
+    96: {"pascal_class": "TZilKinZombi", "view_range_cells": 6, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:1265-1270"},
+    97: {"pascal_class": "TCowMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+    100: {"pascal_class": "TWhiteSkeleton", "view_range_cells": 6, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:1317-1322"},
+    101: {"pascal_class": "TScultureMonster", "view_range_cells": 7, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:1357-1363"},
+    102: {"pascal_class": "TScultureKingMonster", "view_range_cells": 8, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:1446-1454"},
+    103: {"pascal_class": "TBeeQueen", "view_range_cells": 9, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas:370-374"},
+    104: {"pascal_class": "TArcherMonster", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas:26-31,102-107"},
+    105: {"pascal_class": "TGasMothMonster", "view_range_cells": 7, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:1569-1572"},
+    107: {"pascal_class": "TCentipedeKingMonster", "view_range_cells": 6, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas:442-450"},
+    112: {"pascal_class": "TArcherGuard", "view_range_cells": 12, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas:889-893"},
+    114: {"pascal_class": "TElfWarriorMonster", "view_range_cells": 6, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:1718-1722"},
+    115: {"pascal_class": "TBigHeartMonster", "view_range_cells": 16, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas:588-593"},
+    116: {"pascal_class": "TSpiderHouseMonster", "view_range_cells": 9, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas:648-655"},
+    117: {"pascal_class": "TExplosionSpider", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas:729-736"},
+    120: {"pascal_class": "TSoccerBall", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas:1203-1219"},
+    200: {"pascal_class": "TElectronicScolpionMon", "view_range_cells": 5, "view_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"},
+}
+
+CLASS_BINDING_SOURCE = (
+    "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas:1831-1938"
+)
+
+SOURCE_ROW_MISSING_TARGETING_IDS = {
+    41, 59, 78, 123, 161, 190, 228, 229, 230, 231, 232, 233,
+}
+
+KNOWN_EXACT_VIEW_CORRECTIONS = {
+    30: 7,
+    81: 7,
+    83: 6,
+    85: 6,
+    87: 6,
+    128: 7,
+    143: 7,
+    146: 6,
+    166: 6,
+    168: 7,
+    187: 6,
+    194: 12,
+    226: 6,
+    227: 6,
+    234: 6,
+}
+
 SOURCE_LOCKED_STATIONARY_PROFILES = {
     "touch_dragon",
     "stationary_summoner",
@@ -233,19 +300,84 @@ def movement_record(
     }
 
 
-def targeting_record(profile_id: str) -> dict[str, Any]:
-    view, view_source = SPECIAL_VIEW_BY_PROFILE.get(
-        profile_id,
-        (5, "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258"),
-    )
-    special_locked = profile_id in SPECIAL_VIEW_BY_PROFILE
+def targeting_record(
+    monster_id: int,
+    profile_id: str,
+    movement_source: dict[str, Any],
+) -> dict[str, Any]:
+    source_binding = dict(movement_source.get("source_binding", {}))
+    server_binding = dict(movement_source.get("server_class_binding", {}))
+    exact_source_row = source_binding.get("binding_status") == "EXACT_SOURCE_ROW"
+
+    if exact_source_row:
+        server_race = int(server_binding.get("server_race", -1))
+        class_rule = CLASSIC_TARGETING_BY_SERVER_RACE.get(server_race)
+        if class_rule is None:
+            raise RuntimeError(
+                f"monster_id={monster_id} exact server_race={server_race} has no Pascal targeting rule"
+            )
+        view = int(class_rule["view_range_cells"])
+        view_source: str | None = str(class_rule["view_source"])
+        pascal_class: str | None = str(class_rule["pascal_class"])
+        class_binding_status = "CANDIDATE"
+        class_binding_authority = "B_CANDIDATE"
+        view_status = "CANDIDATE"
+        view_authority = "B_CANDIDATE"
+        acquisition_status = "CANDIDATE"
+        acquisition_authority = "B_CANDIDATE"
+
+        profile_view = SPECIAL_VIEW_BY_PROFILE.get(profile_id)
+        if profile_view is not None and int(profile_view[0]) != view:
+            raise RuntimeError(
+                f"monster_id={monster_id} profile={profile_id} view={profile_view[0]} "
+                f"conflicts with server_race={server_race} class={pascal_class} view={view}"
+            )
+        missing_evidence = None
+    else:
+        # The movement master deliberately retains a candidate reused race for
+        # audit, but it is not an exact row for this stable monster_id.  Do not
+        # project that candidate race or its class/view into active targeting.
+        server_race = None
+        pascal_class = None
+        class_binding_status = "DATA_HOLD"
+        class_binding_authority = "UNKNOWN"
+        view = None
+        view_source = None
+        view_status = "DATA_HOLD"
+        view_authority = "UNKNOWN"
+        acquisition_status = "DATA_HOLD"
+        acquisition_authority = "UNKNOWN"
+        missing_evidence = {
+            "reason": "no exact Monster.DB source row; reused base-row Race cannot authorize target acquisition",
+            "source_binding_status": source_binding.get("binding_status"),
+            "source_binding_kind": source_binding.get("source_binding_kind"),
+            "candidate_reused_server_race": server_binding.get("server_race"),
+            "candidate_reused_behavior_family": server_binding.get("behavior_family"),
+            "source": "assets/data/monster_movement_source_master_v1.json",
+        }
+
     return {
+        "server_race": server_race,
+        "pascal_class": pascal_class,
+        "class_binding_status": class_binding_status,
+        "class_binding_authority": class_binding_authority,
+        "class_binding_source": CLASS_BINDING_SOURCE if exact_source_row else None,
+        "class_rule_authority": "A_LOCKED" if exact_source_row else "UNKNOWN",
+        "class_binding_missing_evidence": missing_evidence,
         "view_range_cells": view,
-        "view_range_status": "LOCKED" if special_locked else "CANDIDATE",
-        "view_range_authority": "A_LOCKED" if special_locked else "B_CANDIDATE",
+        "view_range_status": view_status,
+        "view_range_authority": view_authority,
+        "view_range_rule_authority": "A_LOCKED" if exact_source_row else "UNKNOWN",
         "view_range_source": view_source,
-        "acquisition_status": "CANDIDATE",
-        "acquisition_authority": "B_CANDIDATE",
+        "view_range_primary_missing_evidence": {
+            "monster_id": monster_id,
+            "source": "assets/data/monster_21cq_detail_source_v1.json",
+            "fields_checked": ["view_range", "view_range_cells", "viewRange"],
+            "result": "MISSING",
+            "reason": "21CQ exact-ID detail records contain timing and anti-stealth but no view-range field",
+        },
+        "acquisition_status": acquisition_status,
+        "acquisition_authority": acquisition_authority,
         "idle_search_ms": None,
         "idle_search_status": "DATA_HOLD",
         "engaged_search_ms": None,
@@ -385,7 +517,11 @@ def build_payload() -> dict[str, Any]:
                 "runtime_allowed": bool(entry.get("runtime_allowed", False)),
                 "behavior_profile_id": profile_id or None,
                 "movement": movement,
-                "targeting": targeting_record(profile_id),
+                "targeting": targeting_record(
+                    monster_id,
+                    profile_id,
+                    dict(movement_by_id[str(monster_id)]),
+                ),
                 "recovery": recovery_record(),
                 "wandering": wandering_record(),
                 "special": {
@@ -457,6 +593,29 @@ def build_payload() -> dict[str, Any]:
             for item in records
             if item["movement"]["movement_source_status"] == "COMPATIBILITY_HOLD"
         ),
+        "targeting_exact_class_bindings": sum(
+            1
+            for item in records
+            if item["targeting"]["class_binding_status"] == "CANDIDATE"
+        ),
+        "targeting_class_binding_data_hold": sum(
+            1
+            for item in records
+            if item["targeting"]["class_binding_status"] == "DATA_HOLD"
+        ),
+        "targeting_view_range_data_hold": sum(
+            1
+            for item in records
+            if item["targeting"]["view_range_status"] == "DATA_HOLD"
+        ),
+        "targeting_view_range_distribution": {
+            str(view_range): sum(
+                1
+                for item in records
+                if item["targeting"]["view_range_cells"] == view_range
+            )
+            for view_range in (5, 6, 7, 8, 9, 12, 16)
+        },
     }
 
     return {
@@ -568,7 +727,15 @@ def build_payload() -> dict[str, Any]:
 def validate(payload: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     catalog = read_json(CATALOG_PATH)
+    movement_master = read_json(MOVEMENT_MASTER_PATH)
+    detail_source = read_json(DETAIL_SOURCE_PATH)
     canonical = {int(item["monster_id"]): item for item in catalog.get("entries", [])}
+    movement_by_id = {
+        int(item["monster_id"]): item for item in movement_master.get("records", [])
+    }
+    detail_by_id = {
+        int(item["monster_id"]): item for item in detail_source.get("records", [])
+    }
     records = payload.get("records", [])
     if len(records) != len(canonical):
         errors.append(f"record count {len(records)} != canonical count {len(canonical)}")
@@ -628,6 +795,60 @@ def validate(payload: dict[str, Any]) -> list[str]:
         ):
             if required not in targeting:
                 errors.append(f"monster_id={monster_id} missing targeting.{required}")
+        detail_record = dict(detail_by_id.get(monster_id, {}))
+        if any(key in detail_record for key in ("view_range", "view_range_cells", "viewRange")):
+            errors.append(f"monster_id={monster_id} 21CQ view-range missing evidence is stale")
+        primary_missing = dict(targeting.get("view_range_primary_missing_evidence", {}))
+        if (
+            primary_missing.get("monster_id") != monster_id
+            or primary_missing.get("source") != "assets/data/monster_21cq_detail_source_v1.json"
+            or primary_missing.get("result") != "MISSING"
+        ):
+            errors.append(f"monster_id={monster_id} view-range primary missing evidence drift")
+        movement_source = dict(movement_by_id.get(monster_id, {}))
+        source_binding = dict(movement_source.get("source_binding", {}))
+        exact_source_row = source_binding.get("binding_status") == "EXACT_SOURCE_ROW"
+        if exact_source_row:
+            source_class_binding = dict(movement_source.get("server_class_binding", {}))
+            server_race = int(source_class_binding.get("server_race", -1))
+            rule = CLASSIC_TARGETING_BY_SERVER_RACE.get(server_race)
+            if rule is None:
+                errors.append(
+                    f"monster_id={monster_id} exact server_race={server_race} has no targeting rule"
+                )
+            else:
+                if targeting.get("server_race") != server_race:
+                    errors.append(f"monster_id={monster_id} targeting.server_race drift")
+                if targeting.get("pascal_class") != rule["pascal_class"]:
+                    errors.append(f"monster_id={monster_id} targeting.pascal_class drift")
+                if targeting.get("view_range_cells") != rule["view_range_cells"]:
+                    errors.append(f"monster_id={monster_id} targeting.view_range_cells drift")
+                if targeting.get("view_range_source") != rule["view_source"]:
+                    errors.append(f"monster_id={monster_id} targeting.view_range_source drift")
+            if targeting.get("class_binding_status") != "CANDIDATE":
+                errors.append(f"monster_id={monster_id} exact class binding not CANDIDATE")
+            if targeting.get("class_binding_authority") != "B_CANDIDATE":
+                errors.append(f"monster_id={monster_id} exact class binding authority promoted")
+            if targeting.get("class_rule_authority") != "A_LOCKED":
+                errors.append(f"monster_id={monster_id} Pascal class rule is not A_LOCKED")
+            if targeting.get("view_range_status") != "CANDIDATE":
+                errors.append(f"monster_id={monster_id} exact view range not CANDIDATE")
+            if targeting.get("view_range_rule_authority") != "A_LOCKED":
+                errors.append(f"monster_id={monster_id} view rule is not A_LOCKED")
+            if targeting.get("acquisition_status") != "CANDIDATE":
+                errors.append(f"monster_id={monster_id} exact acquisition not CANDIDATE")
+        else:
+            if monster_id not in SOURCE_ROW_MISSING_TARGETING_IDS:
+                errors.append(f"monster_id={monster_id} unexpected non-exact targeting row")
+            for key in ("server_race", "pascal_class", "view_range_cells", "view_range_source"):
+                if targeting.get(key) is not None:
+                    errors.append(f"monster_id={monster_id} DATA_HOLD targeting.{key} must be null")
+            for key in ("class_binding_status", "view_range_status", "acquisition_status"):
+                if targeting.get(key) != "DATA_HOLD":
+                    errors.append(f"monster_id={monster_id} invalid DATA_HOLD {key}")
+            missing_evidence = dict(targeting.get("class_binding_missing_evidence", {}))
+            if missing_evidence.get("source_binding_status") != "SOURCE_ROW_MISSING":
+                errors.append(f"monster_id={monster_id} missing exact-row evidence drift")
         recovery = dict(record.get("recovery", {}))
         if recovery.get("status") not in FINAL_STATUSES:
             errors.append(f"monster_id={monster_id} invalid recovery.status")
@@ -648,6 +869,29 @@ def validate(payload: dict[str, Any]) -> list[str]:
         errors.append("M01 movement fields still contain DATA_HOLD")
     if payload.get("stage_gate", {}).get("m01") != "ALLOWED":
         errors.append("M01 gate is not released")
+    if summary.get("targeting_exact_class_bindings") != 144:
+        errors.append("targeting_exact_class_bindings must be 144")
+    if summary.get("targeting_class_binding_data_hold") != 12:
+        errors.append("targeting_class_binding_data_hold must be 12")
+    if summary.get("targeting_view_range_data_hold") != 12:
+        errors.append("targeting_view_range_data_hold must be 12")
+    expected_distribution = {"5": 117, "6": 10, "7": 11, "8": 1, "9": 2, "12": 1, "16": 2}
+    if summary.get("targeting_view_range_distribution") != expected_distribution:
+        errors.append("targeting_view_range_distribution drift")
+    by_id = {int(item.get("monster_id", -1)): item for item in records}
+    for monster_id, expected_view in KNOWN_EXACT_VIEW_CORRECTIONS.items():
+        targeting = dict(by_id.get(monster_id, {}).get("targeting", {}))
+        if targeting.get("view_range_cells") != expected_view:
+            errors.append(
+                f"monster_id={monster_id} exact view correction != {expected_view}"
+            )
+    actual_holds = {
+        int(item.get("monster_id", -1))
+        for item in records
+        if dict(item.get("targeting", {})).get("acquisition_status") == "DATA_HOLD"
+    }
+    if actual_holds != SOURCE_ROW_MISSING_TARGETING_IDS:
+        errors.append("targeting DATA_HOLD monster_id set drift")
     return errors
 
 

@@ -172,6 +172,14 @@ func _make_enemy(
 	enemy._pending_attack_target = null
 	enemy._pending_attack_damage = 0
 	enemy._pending_attack_release_record = {}
+	# M02A setup keeps the current target null. After the fixture has established
+	# its final Ground-GU positions, explicitly drive the production first-search
+	# API without changing the runtime retarget cadence.
+	enemy.target = null
+	enemy._threat_table.clear()
+	enemy._retarget_timer = 0.0
+	enemy._retarget(0.0)
+	assert(enemy.target == player, "fixture failed explicit first target acquisition")
 	return enemy
 
 

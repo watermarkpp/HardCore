@@ -34,6 +34,9 @@ const MonsterNaturalRegenPolicyScript := preload(
 const MonsterNeighborStepPolicyScript := preload(
 	"res://scripts/monster_neighbor_step_policy.gd"
 )
+const MonsterTargetAcquisitionPolicyScript := preload(
+	"res://scripts/monster_target_acquisition_policy.gd"
+)
 const MONSTER_RUNTIME_AUTHORITY_PATH := (
 	"res://assets/data/monster_runtime_authority_v1.json"
 )
@@ -230,6 +233,8 @@ var actual_ground_motion_gu := Vector2.ZERO
 
 var _movement_cadence
 var _natural_regen := MonsterNaturalRegenPolicyScript.new()
+var _target_acquisition_policy: MonsterTargetAcquisitionPolicyScript
+var _target_acquisition_authority_failed_closed := true
 var _movement_authority_failed_closed := false
 var _movement_step_active := false
 var _movement_step_start_ground_gu := Vector2.INF
@@ -271,7 +276,9 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 		"drop_profile_id": str(canonical_entry.get("drop_profile_id", "")),
 	}
 	monster_id = requested_id
-	target = player_target
+	# M02A: primary_target is the searchable player reference. A current combat
+	# target exists only after the exact monster-id acquisition policy accepts it.
+	target = null
 	primary_target = player_target
 	is_boss = classification == "boss"
 	set_meta("caller_boss_ignored", bool(caller_boss) != is_boss)
@@ -325,6 +332,7 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 			_apply_boss_rule()
 	if stationary:
 		move_speed_gu_per_sec = 0.0
+	_configure_target_acquisition()
 	_configure_movement_cadence()
 
 
@@ -429,6 +437,31 @@ static func _movement_authority_record_for_id(
 	if raw == null or not (raw is Dictionary):
 		return {}
 	return (raw as Dictionary).duplicate(true)
+
+
+func _configure_target_acquisition() -> bool:
+	_target_acquisition_policy = MonsterTargetAcquisitionPolicyScript.new()
+	var authority_record := _movement_authority_record_for_id(monster_id)
+	var ok := _target_acquisition_policy.configure(authority_record, monster_id)
+	_target_acquisition_authority_failed_closed = not ok
+	if not ok:
+		set_meta("target_acquisition_authority_rejected", true)
+		set_meta(
+			"target_acquisition_authority_rejection_reason",
+			_target_acquisition_policy.rejection_reason,
+		)
+		return false
+	remove_meta("target_acquisition_authority_rejected")
+	remove_meta("target_acquisition_authority_rejection_reason")
+	return true
+
+
+func _initial_acquisition_contains_ground_delta_gu(delta_ground_gu: Vector2) -> bool:
+	return (
+		not _target_acquisition_authority_failed_closed
+		and _target_acquisition_policy != null
+		and _target_acquisition_policy.contains_ground_delta_gu(delta_ground_gu)
+	)
 
 
 func _configure_movement_cadence() -> bool:
@@ -3340,8 +3373,11 @@ func _retarget(delta := 0.0) -> void:
 		if _retarget_timer > 0.0 and delta > 0.0:
 			return
 	_retarget_full_scan_count += 1
+	var acquiring_without_current_target := not is_instance_valid(target)
 	var chosen: Node2D
 	var best_score := -INF
+	var best_initial_manhattan_gu := INF
+	var chose_threat_candidate := false
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
 	var leash_radius_gu := aggro_radius_gu * _leash_multiplier
 	var candidates:Array=[]
@@ -3359,14 +3395,45 @@ func _retarget(delta := 0.0) -> void:
 			node.global_position,
 		).length()
 		var threat:=_threat_for(node)
-		if distance_gu > aggro_radius_gu and threat <= 0.0:continue
+		if threat <= 0.0:
+			if acquiring_without_current_target:
+				var acquisition_delta_ground_gu := (
+					_ground_delta_gu_between_screen_positions(
+						global_position,
+						node.global_position,
+					)
+				)
+				if not _initial_acquisition_contains_ground_delta_gu(
+					acquisition_delta_ground_gu
+				):
+					continue
+				# M02A first acquisition is centered on the actor's current cell.
+				# Spawn return/leash does not narrow this exact ViewRange branch.
+				# Preserve stable first-seen ordering for equal Manhattan distance.
+				var manhattan_gu := (
+					absf(acquisition_delta_ground_gu.x)
+					+ absf(acquisition_delta_ground_gu.y)
+				)
+				if (
+					not chose_threat_candidate
+					and manhattan_gu < best_initial_manhattan_gu
+				):
+					best_initial_manhattan_gu = manhattan_gu
+					chosen = node
+				continue
+			elif distance_gu > aggro_radius_gu:
+				continue
 		if spawn_distance_gu > leash_radius_gu:continue
 		var distance_score := (
 			maxf(0.0, 1.0 - distance_gu / maxf(aggro_radius_gu, GroundUnitSpace.EPSILON_GU))
 			* 100.0
 		)
 		var score:=threat+distance_score
-		if score>best_score:best_score=score;chosen=node
+		if score>best_score:
+			best_score=score
+			chosen=node
+			if acquiring_without_current_target and threat > 0.0:
+				chose_threat_candidate = true
 	target = chosen
 	if not boss_rule.is_empty():
 		var search: Dictionary = boss_rule.get("targetSearch", {})
