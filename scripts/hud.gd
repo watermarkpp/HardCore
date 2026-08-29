@@ -206,26 +206,131 @@ func _ready() -> void:
 	_build_approved_hud()
 
 
+func _hud_loading_profile_mark(
+	profile: Dictionary,
+	stage_name: String,
+	stage_started_usec: int,
+	profile_started_usec: int,
+) -> int:
+	var ended_usec := Time.get_ticks_usec()
+	profile["stages_ms"][stage_name] = {
+		"start_ms": float(stage_started_usec - profile_started_usec) / 1000.0,
+		"duration_ms": float(ended_usec - stage_started_usec) / 1000.0,
+	}
+	return ended_usec
+
+
 func _build_approved_hud() -> void:
+	var loading_profile_enabled := OS.is_debug_build()
+	var profile_started_usec := 0
+	if loading_profile_enabled:
+		profile_started_usec = Time.get_ticks_usec()
+	var loading_profile: Dictionary = {}
+	if loading_profile_enabled:
+		loading_profile = {
+			"origin": "GameHUD._ready",
+			"pre_ready_boundary": (
+				"GameHUD_static_script_preloads_before_ready_not_instrumented"
+			),
+			"stages_ms": {},
+		}
+	var stage_started_usec := profile_started_usec
 	var root := Control.new()
 	root.name = "MobileSafeRoot"
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.theme = GothicUIThemeScript.build()
 	add_child(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"root_and_theme",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	MobileLayoutRules.apply_display_safe_area(root, get_viewport())
 	get_viewport().size_changed.connect(MobileLayoutRules.apply_display_safe_area.bind(root, get_viewport()))
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"safe_area_setup",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	_build_hidden_compatibility_info(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_hidden_compatibility_info",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_target_bar(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_target_bar",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_loot_feedback(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_loot_feedback",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_right_utility_stack(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_right_utility_stack",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_bottom_chassis(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_bottom_chassis",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_combat_controls(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_combat_controls",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_item_quick_slot_menu()
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_item_quick_slot_menu",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	# P1-C: panels are now lazy-loaded on first open
 	TouchScrollSupportScript.attach_tree(self)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"attach_touch_scroll_support",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_loading_transition()
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_loading_transition",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	PlayerState.profile_changed.connect(update_profile)
 	PlayerState.profile_changed.connect(update_experience_bar)
@@ -233,6 +338,13 @@ func _build_approved_hud() -> void:
 	PlayerState.profile_changed.connect(update_special_actions)
 	PlayerState.skills_changed.connect(update_quick_slots)
 	PlayerState.inventory_changed.connect(update_item_quick_slots)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"wire_player_state_signals",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	update_profile()
 	update_experience_bar()
 	update_quest_tracker()
@@ -240,6 +352,17 @@ func _build_approved_hud() -> void:
 	update_quick_slots()
 	update_item_quick_slots()
 	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"initial_state_sync",
+			stage_started_usec,
+			profile_started_usec,
+		)
+		loading_profile["total_ms"] = (
+			float(Time.get_ticks_usec() - profile_started_usec) / 1000.0
+		)
+		print("[InitialHUDProfile] ", JSON.stringify(loading_profile))
 
 
 func _build_hidden_compatibility_info(root: Control) -> void:

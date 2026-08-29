@@ -270,6 +270,12 @@ var _death_revival_request_in_flight := false
 var _world_bootstrap_coordinator := WorldBootstrapCoordinator.new()
 var _gameplay_input_locks: Dictionary = {}
 var _device_lab_runtime: DeviceLabRuntimeScript
+## Debug-only lifecycle markers for the character-hall -> world handoff.
+## GameRoot._init() is the earliest hook available in this script; scene
+## resource loading/instantiation before that hook remains outside this
+## profile and is called out explicitly in the emitted record.
+var _loading_handoff_init_usec := 0
+var _loading_handoff_enter_tree_usec := 0
 
 # --- P1-A: Gameplay Input Gate (counted runtime locks) ---
 
@@ -329,7 +335,64 @@ func _on_gameplay_movement(value: Vector2) -> void:
 
 
 
+func _init() -> void:
+	if OS.is_debug_build():
+		_loading_handoff_init_usec = Time.get_ticks_usec()
+
+
+func _enter_tree() -> void:
+	if OS.is_debug_build():
+		_loading_handoff_enter_tree_usec = Time.get_ticks_usec()
+
+
+func _loading_profile_mark(
+	profile: Dictionary,
+	stage_name: String,
+	stage_started_usec: int,
+	profile_started_usec: int,
+) -> int:
+	var ended_usec := Time.get_ticks_usec()
+	profile["stages_ms"][stage_name] = {
+		"start_ms": float(stage_started_usec - profile_started_usec) / 1000.0,
+		"duration_ms": float(ended_usec - stage_started_usec) / 1000.0,
+	}
+	return ended_usec
+
+
 func _ready() -> void:
+	var loading_profile_enabled := OS.is_debug_build()
+	var ready_started_usec := 0
+	if loading_profile_enabled:
+		ready_started_usec = Time.get_ticks_usec()
+	var profile_started_usec := ready_started_usec
+	if _loading_handoff_init_usec > 0:
+		profile_started_usec = _loading_handoff_init_usec
+	var loading_profile: Dictionary = {}
+	if loading_profile_enabled:
+		loading_profile = {
+			"origin": "GameRoot._init",
+			"pre_ready_boundary": (
+				"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented"
+			),
+			"stages_ms": {},
+			"lifecycle_ms": {
+				"init_to_enter_tree": (
+					float(_loading_handoff_enter_tree_usec - _loading_handoff_init_usec)
+					/ 1000.0
+					if _loading_handoff_init_usec > 0
+					and _loading_handoff_enter_tree_usec > 0
+					else -1.0
+				),
+				"enter_tree_to_ready": (
+					float(ready_started_usec - _loading_handoff_enter_tree_usec)
+					/ 1000.0
+					if _loading_handoff_enter_tree_usec > 0
+					else -1.0
+				),
+			},
+		}
+	var stage_started_usec := ready_started_usec
+
 	y_sort_enabled = true
 	_rng.randomize()
 	_combat_spatial_index = RuntimeCombatSpatialIndexScript.new()
@@ -347,8 +410,22 @@ func _ready() -> void:
 	get_tree().auto_accept_quit = false
 	_bich_camp_layout = GothicBichCampBuilderScript.load_layout()
 	_register_input_actions()
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"pre_background_setup",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	background = WorldBackground.new()
 	add_child(background)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"background_construct_and_attach",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	player = PlayerCharacter.new()
 	player.name = "Player"
@@ -366,6 +443,13 @@ func _ready() -> void:
 		Callable(self, "_capture_taoist_main_pet_runtime_states")
 	)
 	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"player_construct_wire_attach_restore",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	_world_camera = Camera2D.new()
 	_world_camera.name = "WorldCamera"
@@ -376,8 +460,22 @@ func _ready() -> void:
 	# stable GameRoot coordinate domain so Player physics cannot implicitly move
 	# the camera between constraint updates and introduce a one-frame jitter.
 	add_child(_world_camera)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"camera_construct_and_attach",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	hud = GameHUD.new()
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"hud_construct",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	hud.movement_changed.connect(_on_gameplay_movement)
 	hud.attack_input_started.connect(_on_mobile_attack_input_started)
 	hud.attack_input_ended.connect(_on_mobile_attack_input_ended)
@@ -399,7 +497,21 @@ func _ready() -> void:
 	hud.quest_abandon_requested.connect(_on_quest_abandon_requested)
 	hud.warehouse_sort_requested.connect(_on_warehouse_sort_requested)
 	hud.revival_requested.connect(_on_revival_requested)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"hud_signal_wiring",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	add_child(hud)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"hud_attach_and_ready",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
 	# Device Lab is intentionally a Debug-only child.  It exposes only the
 	# bounded ADB mailbox service; release builds never create the node.
@@ -413,12 +525,37 @@ func _ready() -> void:
 		func(_current_hp: int, _max_hp: int, _current_mp: int, _max_mp: int) -> void:
 			_sync_player_runtime_snapshot_to_hud()
 	)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"hud_post_ready_setup",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	# 主动同步首次运行时快照到 HUD，确保资源正确后再加载地图。
 	# 120/120、40/40 仅作为未绑定前的占位值。
 	_sync_player_runtime_snapshot_to_hud()
 	# 初次进场通过独立 bootstrap 合约：显示遮罩 → 预加载 → 加载地图 → 开放输入。
 	_build_system_menu()
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"system_menu_build",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_begin_initial_world_bootstrap()
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"bootstrap_dispatch",
+			stage_started_usec,
+			profile_started_usec,
+		)
+		loading_profile["total_ms"] = (
+			float(Time.get_ticks_usec() - profile_started_usec) / 1000.0
+		)
+		print("[InitialGameRootProfile] ", JSON.stringify(loading_profile))
 
 
 func _exit_tree() -> void:
