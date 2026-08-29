@@ -653,6 +653,7 @@ static func build_snapshot(root: Node) -> Dictionary:
 		"timestamp": Time.get_unix_time_from_system(),
 		"frame": Engine.get_process_frames(),
 		"fps": Engine.get_frames_per_second(),
+		"performance": _performance_snapshot(),
 		"window": _window_snapshot(root),
 		"scene": _scene_snapshot(root),
 		"map": _map_snapshot(root),
@@ -673,6 +674,33 @@ static func build_snapshot(root: Node) -> Dictionary:
 	return snapshot
 
 
+## Returns only a fixed set of numeric engine monitors.  This is intentionally
+## content-free and bounded so a host can compare frame pacing against scene
+## and actor counts without receiving arbitrary runtime data.
+static func _performance_snapshot() -> Dictionary:
+	return {
+		"fps": _performance_value(Performance.TIME_FPS),
+		"process_ms": _performance_value(Performance.TIME_PROCESS),
+		"physics_process_ms": _performance_value(Performance.TIME_PHYSICS_PROCESS),
+		"node_count": _performance_value(Performance.OBJECT_NODE_COUNT),
+		"object_count": _performance_value(Performance.OBJECT_COUNT),
+		"resource_count": _performance_value(Performance.OBJECT_RESOURCE_COUNT),
+		"render_objects": _performance_value(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME),
+		"render_primitives": _performance_value(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),
+		"draw_calls": _performance_value(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+		"video_mem": _performance_value(Performance.RENDER_VIDEO_MEM_USED),
+		"texture_mem": _performance_value(Performance.RENDER_TEXTURE_MEM_USED),
+		"buffer_mem": _performance_value(Performance.RENDER_BUFFER_MEM_USED),
+	}
+
+
+static func _performance_value(monitor: int) -> float:
+	var value := float(Performance.get_monitor(monitor))
+	if is_nan(value) or is_inf(value) or value < 0.0:
+		return 0.0
+	return value
+
+
 static func _window_snapshot(root: Node) -> Dictionary:
 	var logical := Vector2.ZERO
 	if root != null and root.get_viewport() != null:
@@ -685,11 +713,16 @@ static func _window_snapshot(root: Node) -> Dictionary:
 
 
 static func _scene_snapshot(root: Node) -> Dictionary:
-	return {
+	var result := {
 		"name": root.name if root != null else "",
 		"class": root.get_class() if root != null else "",
 		"treeRoot": str(root.get_tree().current_scene.name) if root != null and root.get_tree() != null and root.get_tree().current_scene != null else "",
 	}
+	if root != null and is_instance_valid(root):
+		var world_camera := root.get_node_or_null("WorldCamera")
+		if world_camera is Camera2D:
+			result["camera_zoom"] = maxf(float((world_camera as Camera2D).zoom.x), 0.0)
+	return result
 
 
 static func _map_snapshot(root: Node) -> Dictionary:

@@ -232,6 +232,33 @@ func _test_bounded_snapshot() -> void:
 	assert((snapshot["node2d"] as Array).size() <= DeviceLabRuntimeScript.MAX_SNAPSHOT_NODE2D, "Node2D snapshot exceeded bound")
 	assert(not JSON.stringify(snapshot).to_lower().contains("inventorycell"), "snapshot leaked full dynamic inventory")
 	assert(snapshot.has("window") and snapshot.has("player") and snapshot.has("scene"), "snapshot summary fields missing")
+	var performance: Variant = snapshot.get("performance", null)
+	assert(performance is Dictionary, "performance snapshot missing")
+	var performance_fields := [
+		"fps",
+		"process_ms",
+		"physics_process_ms",
+		"node_count",
+		"object_count",
+		"resource_count",
+		"render_objects",
+		"render_primitives",
+		"draw_calls",
+		"video_mem",
+		"texture_mem",
+		"buffer_mem",
+	]
+	for field: String in performance_fields:
+		assert((performance as Dictionary).has(field), "performance field missing: %s" % field)
+		var value: Variant = (performance as Dictionary).get(field)
+		assert(value is int or value is float, "performance field is not numeric: %s" % field)
+		assert(float(value) >= 0.0, "performance field is negative: %s" % field)
+	var camera := Camera2D.new()
+	camera.name = "WorldCamera"
+	camera.zoom = Vector2(1.25, 1.25)
+	root.add_child(camera)
+	var camera_snapshot := DeviceLabRuntimeScript.build_snapshot(root)
+	assert(camera_snapshot["scene"].get("camera_zoom", -1.0) == 1.25, "WorldCamera zoom missing from snapshot")
 	for control: Dictionary in snapshot["controls"] as Array:
 		assert(control.has("textHash") and control.has("runtime_text"), "control redaction fields missing")
 
