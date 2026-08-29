@@ -803,6 +803,11 @@ func _enter_selected_character() -> void:
 	if selected_main_profile_id.is_empty():
 		message_label.text = "请先选择主角色"
 		return
+	var launch_started_msec := Time.get_ticks_msec()
+	var profile_hydration_msec := 0
+	var preload_was_ready_at_click := (
+		_launch_scene_preload_state == LAUNCH_PRELOAD_READY
+	)
 	_launch_in_progress = true
 	launch_loading_overlay.show_loading_immediately("character:%s" % selected_main_profile_id)
 	# Global button feedback may perform its first texture preparation on this
@@ -823,17 +828,35 @@ func _enter_selected_character() -> void:
 	# The hall already hydrates a profile when it becomes selected. Do not parse
 	# the same save a second time on launch; only hydrate when the authority no
 	# longer matches the requested profile.
+	var profile_hydration_started_msec := Time.get_ticks_msec()
 	if (
 		PlayerState.active_profile_id != selected_main_profile_id
 		and not PlayerState.select_character(selected_main_profile_id)
 	):
+		profile_hydration_msec = (
+			Time.get_ticks_msec() - profile_hydration_started_msec
+		)
 		_restore_after_launch_failure("角色存档不存在或已损坏")
 		_refresh_profiles()
 		return
+	profile_hydration_msec = (
+		Time.get_ticks_msec() - profile_hydration_started_msec
+	)
 	last_launch_request = build_launch_request()
 	get_tree().root.set_meta(LAUNCH_CONTEXT_META, last_launch_request.duplicate(true))
 	character_launch_requested.emit(last_launch_request.duplicate(true))
+	var preload_wait_started_msec := Time.get_ticks_msec()
 	var launch_scene := await _wait_for_launch_scene_preload()
+	var preload_wait_msec := Time.get_ticks_msec() - preload_wait_started_msec
+	if OS.is_debug_build():
+		print("[CharacterLaunchProfile] ", JSON.stringify({
+			"total_before_handoff_ms": Time.get_ticks_msec() - launch_started_msec,
+			"profile_hydration_ms": profile_hydration_msec,
+			"preload_wait_ms": preload_wait_msec,
+			"preload_was_ready_at_click": preload_was_ready_at_click,
+			"preload_state": _launch_scene_preload_state,
+			"preload_request_count": _launch_scene_preload_request_count,
+		}))
 	if launch_scene == null:
 		_restore_after_launch_failure("暂时无法进入游戏，请重试")
 		return
