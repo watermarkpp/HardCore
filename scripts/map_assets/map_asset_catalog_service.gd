@@ -44,10 +44,15 @@ static func load_catalog() -> Dictionary:
 		return {}
 	_ensure_normalized_ground_index()
 	_ensure_v15_asset_index()
+	var override_payload := MapAssetCalibrationService.load_overrides()
+	var overrides: Dictionary = override_payload.get("overrides", {})
 	var effective_assets: Array = []
 	_asset_index.clear()
 	for asset: Dictionary in _raw_assets():
-		var effective := MapAssetCalibrationService.effective_asset(_canonical_editor_asset(asset))
+		var effective := MapAssetCalibrationService.effective_asset_from_overrides(
+			_canonical_editor_asset(asset),
+			overrides
+		)
 		# Ground geometry remains canonical after calibration, while an explicit
 		# user-saved wall calibration is allowed to replace the visual-only
 		# family default.
