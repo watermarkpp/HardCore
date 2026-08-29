@@ -23,6 +23,7 @@ const LAUNCH_PRELOAD_IDLE := &"idle"
 const LAUNCH_PRELOAD_REQUESTED := &"requested"
 const LAUNCH_PRELOAD_READY := &"ready"
 const LAUNCH_PRELOAD_FAILED := &"failed"
+const LAUNCH_PRELOAD_TIMING_META := &"hardcore.startup.launch_preload_timing.v1"
 const HALL_TEXTURE := preload("res://assets/ui/gothic_preview/character_hall.png")
 const PROFESSION_PRESENTATION := {
 	"战士": {
@@ -102,6 +103,7 @@ func _ready() -> void:
 	TouchScrollSupportScript.attach_tree(self)
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
 	_restore_character_action_visual_contract()
+	_record_launch_timing(&"character_hall_ready")
 	call_deferred("_restore_character_action_visual_contract")
 	# The request itself is deferred until the complete hall has entered the tree.
 	# Main-scene parsing can then overlap the player's stable hall interaction.
@@ -125,6 +127,7 @@ func _request_launch_scene_preload() -> void:
 		_mark_launch_scene_preload_failed(ERR_FILE_NOT_FOUND, generation, requested_path)
 		return
 	_launch_scene_preload_request_count += 1
+	_record_launch_timing(&"character_select_preload_request_started")
 	var request_error := ResourceLoader.load_threaded_request(requested_path, "PackedScene")
 	if request_error != OK:
 		var existing_status := ResourceLoader.load_threaded_get_status(requested_path)
@@ -148,6 +151,7 @@ func _monitor_launch_scene_preload(generation: int, requested_path: String) -> v
 			if resource is PackedScene:
 				_launch_scene_preload_resource = resource
 				_launch_scene_preload_state = LAUNCH_PRELOAD_READY
+				_record_launch_timing(&"character_select_preload_ready")
 			else:
 				_mark_launch_scene_preload_failed(ERR_FILE_CORRUPT, generation, requested_path)
 			return
@@ -185,6 +189,43 @@ func _wait_for_launch_scene_preload() -> PackedScene:
 	):
 		return _launch_scene_preload_resource
 	return null
+
+
+func launch_preload_timing_snapshot() -> Dictionary:
+	if not is_inside_tree():
+		return {}
+	var raw: Variant = get_tree().root.get_meta(LAUNCH_PRELOAD_TIMING_META, {})
+	return raw.duplicate(true) if raw is Dictionary else {}
+
+
+func _record_launch_timing(event_name: StringName) -> void:
+	if not is_inside_tree():
+		return
+	var raw: Variant = get_tree().root.get_meta(LAUNCH_PRELOAD_TIMING_META, {})
+	var timing: Dictionary = raw.duplicate(true) if raw is Dictionary else {}
+	timing[String(event_name)] = Time.get_ticks_usec()
+	get_tree().root.set_meta(LAUNCH_PRELOAD_TIMING_META, timing)
+
+
+func _print_launch_timing() -> void:
+	if not OS.is_debug_build():
+		return
+	var timing := launch_preload_timing_snapshot()
+	var click_usec := int(timing.get("character_launch_click", 0))
+	var handoff_usec := int(timing.get("character_scene_handoff", 0))
+	if click_usec <= 0 or handoff_usec < click_usec:
+		return
+	var wait_started_usec := int(timing.get("character_launch_wait_started", 0))
+	var wait_ms := 0.0
+	if wait_started_usec >= click_usec and handoff_usec >= wait_started_usec:
+		wait_ms = float(handoff_usec - wait_started_usec) / 1000.0
+	print(
+		"[CharacterLaunchTiming] click_to_handoff_ms=%.3f preload_wait_ms=%.3f"
+		% [
+			float(handoff_usec - click_usec) / 1000.0,
+			wait_ms,
+		]
+	)
 
 func _input(event: InputEvent) -> void:
 	if profile_scroll == null or not is_instance_valid(profile_scroll):
@@ -804,6 +845,7 @@ func _enter_selected_character() -> void:
 		message_label.text = "请先选择主角色"
 		return
 	_launch_in_progress = true
+	_record_launch_timing(&"character_launch_click")
 	launch_loading_overlay.show_loading_immediately("character:%s" % selected_main_profile_id)
 	# Global button feedback may perform its first texture preparation on this
 	# activation. Present Loading in a completed draw before that work, profile
@@ -833,6 +875,7 @@ func _enter_selected_character() -> void:
 	last_launch_request = build_launch_request()
 	get_tree().root.set_meta(LAUNCH_CONTEXT_META, last_launch_request.duplicate(true))
 	character_launch_requested.emit(last_launch_request.duplicate(true))
+	_record_launch_timing(&"character_launch_wait_started")
 	var launch_scene := await _wait_for_launch_scene_preload()
 	if launch_scene == null:
 		_restore_after_launch_failure("暂时无法进入游戏，请重试")
@@ -842,6 +885,9 @@ func _enter_selected_character() -> void:
 	var scene_error := get_tree().change_scene_to_packed(launch_scene)
 	if scene_error != OK:
 		_restore_after_launch_failure("暂时无法进入游戏，请重试")
+	else:
+		_record_launch_timing(&"character_scene_handoff")
+		_print_launch_timing()
 
 
 func _restore_after_launch_failure(reason: String) -> void:
