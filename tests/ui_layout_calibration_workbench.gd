@@ -9,6 +9,7 @@ const DEVICE_SAFE_LEFT_PX := 121.0
 const DEVICE_SAFE_RIGHT_PX := 129.0
 const INSPECTOR_WINDOW_SIZE := Vector2i(412, 1040)
 const INSPECTOR_GAP := 16
+const WORLD_BOOTSTRAP_TIMEOUT_MSEC := 30000
 
 const PANEL_SPECS := [
 	{"id": "skill", "label": "技能", "panel_property": "skill_panel", "open_method": "_toggle_skill_book"},
@@ -136,6 +137,7 @@ func _build_production_game() -> void:
 	await get_tree().process_frame
 	hud = game.get("hud") as Node
 	assert(hud != null, "calibrator did not create the production GameHUD")
+	await _wait_for_production_world_ready()
 	var logical_size := get_viewport().get_visible_rect().size
 	assert(logical_size.is_equal_approx(EXPECTED_DEVICE_LOGICAL_SIZE), "game logical viewport mismatch: %s" % logical_size)
 	var safe_root := hud.get_node_or_null("MobileSafeRoot") as Control
@@ -146,6 +148,25 @@ func _build_production_game() -> void:
 	safe_root.position = Vector2(safe_left, 0.0)
 	safe_root.size = logical_size - Vector2(safe_left + safe_right, 0.0)
 	await get_tree().process_frame
+
+
+func _wait_for_production_world_ready() -> void:
+	var deadline := Time.get_ticks_msec() + WORLD_BOOTSTRAP_TIMEOUT_MSEC
+	while (
+		bool(game.get("_world_bootstrap_in_progress"))
+		or bool(game.get("_map_transition_in_progress"))
+	):
+		assert(
+			Time.get_ticks_msec() < deadline,
+			"calibrator timed out waiting for production world bootstrap"
+		)
+		await get_tree().process_frame
+	var loading_overlay := hud.get("loading_transition_overlay") as Control
+	assert(loading_overlay != null, "calibrator production Loading overlay is missing")
+	assert(
+		not loading_overlay.visible,
+		"calibrator cannot freeze the production world while Loading is visible"
+	)
 
 
 func _freeze_calibration_world() -> void:
