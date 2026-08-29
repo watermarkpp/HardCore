@@ -56,6 +56,17 @@ const NEAR_RETARGET_MIN_SECONDS := 0.18
 const NEAR_RETARGET_STAGGER_SECONDS := 0.011
 const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
 const BACKGROUND_AI_MIN_DISTANCE_GU := 37.5
+## The acquisition broadphase is screen-space only.  The exact phase below
+## still evaluates canonical Ground GU deltas, so this rectangle can only add
+## candidates; it must never decide whether a target is in range.
+const TARGET_GRID_CELL_SIZE_PX := Vector2(128.0, 64.0)
+## Keep the broadphase rectangle deliberately conservative around the formal
+## iso projection.  Exact Ground-GU checks remain authoritative below.
+const TARGET_GRID_HALF_EXTENTS_PER_GU := Vector2(128.0, 64.0)
+## Secondary combat targets may be newly spawned between shared refreshes.  A
+## 250 ms window matches the existing background decision cadence; the known
+## primary player remains a live direct candidate and is never delayed here.
+const TARGET_GRID_REFRESH_SECONDS := BACKGROUND_AI_INTERVAL_SECONDS
 const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
 const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
 const POISON_INDICATOR_STYLE := "overhead_green_red_dot_row"
@@ -95,6 +106,11 @@ static var _crowd_grid_actor_scan_count := 0
 static var _crowd_query_candidate_count := 0
 static var _crowd_steering_evaluation_count := 0
 static var _retarget_full_scan_count := 0
+static var _target_grid_last_refresh_msec := -1
+static var _target_grid: Dictionary = {}
+static var _target_grid_node_ids: Dictionary = {}
+static var _target_grid_group_scan_count := 0
+static var _target_grid_candidate_count := 0
 static var _background_ai_evaluation_count := 0
 static var _physics_move_count := 0
 static var _environment_guard_check_count := 0
@@ -2986,6 +3002,98 @@ func _ensure_crowd_grid() -> void:
 		_crowd_grid[cell] = bucket
 
 
+func _ensure_target_grid(force_refresh := false) -> void:
+	if not is_inside_tree():
+		return
+	var now_msec := Time.get_ticks_msec()
+	if (
+		not force_refresh
+		and _target_grid_last_refresh_msec >= 0
+		and now_msec - _target_grid_last_refresh_msec
+			< int(TARGET_GRID_REFRESH_SECONDS * 1000.0)
+	):
+		return
+	_target_grid_last_refresh_msec = now_msec
+	_target_grid.clear()
+	_target_grid_node_ids.clear()
+	# Keep the established diagnostic name, but count actual group walks now;
+	# per-actor candidate decisions are no longer misreported as full scans.
+	_retarget_full_scan_count += 1
+	_target_grid_group_scan_count += 1
+	# One shared group walk per 250 ms window replaces one group walk per
+	# retargeting actor.  Group order is retained in each record because equal
+	# Manhattan-distance first acquisitions are order-stable by contract.
+	var group_order := 0
+	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+		if node is Node2D and is_instance_valid(node) and not node.is_queued_for_deletion():
+			var target_node := node as Node2D
+			if target_node.global_position.is_finite():
+				var cell := _target_grid_cell(target_node.global_position)
+				var bucket: Array = _target_grid.get(cell, [])
+				bucket.append({"node": target_node, "order": group_order})
+				_target_grid[cell] = bucket
+				_target_grid_node_ids[target_node.get_instance_id()] = true
+				_target_grid_candidate_count += 1
+		group_order += 1
+
+
+static func _target_grid_cell(screen_position_px: Vector2) -> Vector2i:
+	return Vector2i(
+		floori(screen_position_px.x / TARGET_GRID_CELL_SIZE_PX.x),
+		floori(screen_position_px.y / TARGET_GRID_CELL_SIZE_PX.y),
+	)
+
+
+func _target_grid_candidates(max_range_gu: float) -> Array[Node2D]:
+	var result: Array[Node2D] = []
+	if not is_finite(max_range_gu) or max_range_gu <= 0.0:
+		return result
+	var half_extents := TARGET_GRID_HALF_EXTENTS_PER_GU * max_range_gu
+	var min_cell := _target_grid_cell(global_position - half_extents)
+	var max_cell := _target_grid_cell(global_position + half_extents)
+	var records: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	for cell_y in range(min_cell.y, max_cell.y + 1):
+		for cell_x in range(min_cell.x, max_cell.x + 1):
+			var bucket: Array = _target_grid.get(Vector2i(cell_x, cell_y), [])
+			for raw_record: Variant in bucket:
+				if not raw_record is Dictionary:
+					continue
+				var record: Dictionary = raw_record
+				var raw_node: Variant = record.get("node")
+				if not is_instance_valid(raw_node) or not raw_node is Node2D:
+					continue
+				var node := raw_node as Node2D
+				if node.is_queued_for_deletion():
+					continue
+				var instance_id := node.get_instance_id()
+				if seen.has(instance_id):
+					continue
+				seen[instance_id] = true
+				records.append({"node": node, "order": int(record.get("order", 0))})
+	records.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool:
+			return int(a.get("order", 0)) < int(b.get("order", 0))
+	)
+	for record: Dictionary in records:
+		var raw_node: Variant = record.get("node")
+		if is_instance_valid(raw_node) and raw_node is Node2D:
+			var node := raw_node as Node2D
+			if node.is_queued_for_deletion():
+				continue
+			result.append(node)
+	return result
+
+
+func _append_live_target_candidate(candidates: Array, raw_candidate: Variant) -> void:
+	if not is_instance_valid(raw_candidate) or not raw_candidate is Node2D:
+		return
+	var candidate := raw_candidate as Node2D
+	if candidate.is_queued_for_deletion() or candidates.has(candidate):
+		return
+	candidates.append(candidate)
+
+
 func _crowd_grid_cell(world_position: Vector2) -> Vector2i:
 	var ground_position_gu := _screen_position_px_to_ground_position_gu(world_position)
 	return Vector2i(
@@ -2997,11 +3105,16 @@ func _crowd_grid_cell(world_position: Vector2) -> Vector2i:
 static func reset_performance_diagnostics() -> void:
 	_crowd_grid_physics_frame = -1
 	_crowd_grid.clear()
+	_target_grid_last_refresh_msec = -1
+	_target_grid.clear()
+	_target_grid_node_ids.clear()
 	_crowd_grid_build_count = 0
 	_crowd_grid_actor_scan_count = 0
 	_crowd_query_candidate_count = 0
 	_crowd_steering_evaluation_count = 0
 	_retarget_full_scan_count = 0
+	_target_grid_group_scan_count = 0
+	_target_grid_candidate_count = 0
 	_background_ai_evaluation_count = 0
 	_physics_move_count = 0
 	_environment_guard_check_count = 0
@@ -3014,6 +3127,8 @@ static func performance_diagnostics() -> Dictionary:
 		"crowd_query_candidates": _crowd_query_candidate_count,
 		"crowd_steering_evaluations": _crowd_steering_evaluation_count,
 		"retarget_full_scans": _retarget_full_scan_count,
+		"retarget_target_group_scans": _target_grid_group_scan_count,
+		"retarget_target_candidates": _target_grid_candidate_count,
 		"background_ai_evaluations": _background_ai_evaluation_count,
 		"physics_moves": _physics_move_count,
 		"environment_guard_checks": _environment_guard_check_count,
@@ -3364,15 +3479,14 @@ func _retarget(delta := 0.0) -> void:
 			return
 	else:
 		# Ordinary monsters keep their current target between decision ticks.
-		# Damage threat still switches immediately in _add_threat(), so scanning
-		# the target set every physics frame adds CPU cost without improving
-		# reaction latency.
+		# Damage threat still switches immediately in _add_threat(), so rebuilding
+		# the target set for every actor decision adds CPU cost without improving
+		# reaction latency; the shared broadphase refreshes within 250 ms instead.
 		# delta == 0 is the explicit decision API used when the target set changes
 		# immediately (for example, a newly summoned combat target). Physics calls
 		# always pass delta and remain rate-limited.
 		if _retarget_timer > 0.0 and delta > 0.0:
 			return
-	_retarget_full_scan_count += 1
 	var acquiring_without_current_target := not is_instance_valid(target)
 	var chosen: Node2D
 	var best_score := -INF
@@ -3382,8 +3496,36 @@ func _retarget(delta := 0.0) -> void:
 	var leash_radius_gu := aggro_radius_gu * _leash_multiplier
 	var candidates:Array=[]
 	if is_instance_valid(primary_target):candidates.append(primary_target)
-	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
-		if node is Node2D and is_instance_valid(node) and not candidates.has(node):candidates.append(node)
+	_ensure_target_grid(delta == 0.0)
+	var candidate_range_gu := aggro_radius_gu
+	if acquiring_without_current_target:
+		candidate_range_gu = float(
+			_target_acquisition_policy.view_range_cells
+			if _target_acquisition_policy != null
+			else 0
+		)
+	elif not _threat_table.is_empty():
+		candidate_range_gu = leash_radius_gu
+	var target_grid_has_only_primary := (
+		_target_grid_node_ids.size() == 1
+		and is_instance_valid(primary_target)
+		and _target_grid_node_ids.has(primary_target.get_instance_id())
+	)
+	if not target_grid_has_only_primary:
+		for node: Node2D in _target_grid_candidates(candidate_range_gu):
+			if not candidates.has(node):
+				candidates.append(node)
+	# The current target and live threat entries are always retained even when a
+	# target moved or spawned after the last shared cache refresh.  This preserves
+	# immediate threat handoff and prevents a stale broadphase from clearing it.
+	_append_live_target_candidate(candidates, target)
+	for raw_record: Variant in _threat_table.values():
+		if not raw_record is Dictionary:
+			continue
+		var record: Dictionary = raw_record
+		var raw_ref: Variant = record.get("node")
+		if raw_ref is WeakRef:
+			_append_live_target_candidate(candidates, raw_ref.get_ref())
 	for node:Node2D in candidates:
 		if _point_inside_safe_zone(node.global_position):continue
 		var distance_gu := _ground_delta_gu_between_screen_positions(
