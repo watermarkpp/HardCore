@@ -70,7 +70,411 @@
     "workspace_state": "res://map_editor_workspace/corpse_king_hall/ground/ground_state.json"
   },
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn.auto.v2.bich_corpse_king_hall.000089",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000001",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12,
+          8
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000002",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          9
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000003",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000004",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17,
+          16
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000005",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14,
+          18
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000006",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          17
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000007",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "bich_corpse_king_hall",
+          "source_category_role": "boss",
+          "source_line": 57.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            44.0,
+            1.0,
+            1.0,
+            709.0,
+            -1.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0,
+        "respawn_seconds": 1800,
+        "runtime_export": true,
+        "semantic_id": "boss_spawn_000008",
+        "spawn_group_id": "auto:v2:bich_corpse_king_hall:elite:000089",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          13
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -139,12 +543,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000005",
+        "collision_id": "manual_000021",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7.0,
-            21.0,
+            1.0,
+            3.0,
             1.0,
             1.0
           ]
@@ -155,12 +559,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000006",
+        "collision_id": "manual_000022",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7.0,
-            20.0,
+            2.0,
+            3.0,
             1.0,
             1.0
           ]
@@ -171,12 +575,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000007",
+        "collision_id": "manual_000023",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            6.0,
-            20.0,
+            3.0,
+            3.0,
             1.0,
             1.0
           ]
@@ -187,12 +591,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000008",
+        "collision_id": "manual_000024",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            6.0,
-            21.0,
+            3.0,
+            2.0,
             1.0,
             1.0
           ]
@@ -203,12 +607,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000009",
+        "collision_id": "manual_000025",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            6.0,
-            7.0,
+            3.0,
+            1.0,
             1.0,
             1.0
           ]
@@ -219,12 +623,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000010",
+        "collision_id": "manual_000026",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7.0,
-            7.0,
+            2.0,
+            1.0,
             1.0,
             1.0
           ]
@@ -235,12 +639,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000011",
+        "collision_id": "manual_000027",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7.0,
-            6.0,
+            1.0,
+            1.0,
             1.0,
             1.0
           ]
@@ -251,12 +655,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000012",
+        "collision_id": "manual_000028",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            6.0,
-            6.0,
+            1.0,
+            2.0,
             1.0,
             1.0
           ]
@@ -267,12 +671,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000013",
+        "collision_id": "manual_000029",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            20.0,
-            21.0,
+            2.0,
+            2.0,
             1.0,
             1.0
           ]
@@ -283,12 +687,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000014",
+        "collision_id": "manual_000030",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            21.0,
-            21.0,
+            1.0,
+            26.0,
             1.0,
             1.0
           ]
@@ -299,12 +703,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000015",
+        "collision_id": "manual_000031",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            21.0,
-            20.0,
+            2.0,
+            26.0,
             1.0,
             1.0
           ]
@@ -315,12 +719,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000016",
+        "collision_id": "manual_000032",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            20.0,
-            20.0,
+            3.0,
+            26.0,
             1.0,
             1.0
           ]
@@ -331,12 +735,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000017",
+        "collision_id": "manual_000033",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            20.0,
-            7.0,
+            3.0,
+            27.0,
             1.0,
             1.0
           ]
@@ -347,12 +751,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000018",
+        "collision_id": "manual_000034",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            21.0,
-            7.0,
+            3.0,
+            28.0,
             1.0,
             1.0
           ]
@@ -363,12 +767,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000019",
+        "collision_id": "manual_000035",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            21.0,
-            6.0,
+            2.0,
+            28.0,
             1.0,
             1.0
           ]
@@ -379,12 +783,332 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000020",
+        "collision_id": "manual_000036",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            20.0,
-            6.0,
+            2.0,
+            27.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000037",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1.0,
+            27.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000038",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1.0,
+            28.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000039",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            28.0,
+            28.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000040",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            28.0,
+            27.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000041",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            28.0,
+            26.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000042",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            26.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000043",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            26.0,
+            26.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000044",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            26.0,
+            27.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000045",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            27.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000046",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            28.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000047",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            26.0,
+            28.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000048",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            28.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000049",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            28.0,
+            2.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000050",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            28.0,
+            3.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000051",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            2.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000052",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            3.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000053",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            26.0,
+            3.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000054",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            26.0,
+            2.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000055",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            26.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000056",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            1.0,
             1.0,
             1.0
           ]
@@ -413,7 +1137,7 @@
         "display_name": "尸王殿入口（仅到达）",
         "exit_id": "map_exit_000001",
         "exit_policy": "town_scroll_or_death_only",
-        "explicit_one_way_reason": "尸王殿只允许进入，离开必须使用回城功能或死亡回城",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -518,11 +1242,11 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          130.0,
-          422.0
+          180.0,
+          353.0
         ],
-        "asset_id": "mse.new_pillar.13",
-        "collision_authority": "manual_by_user",
+        "asset_id": "user.ac90ef674904bc20",
+        "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
           0.0,
@@ -535,20 +1259,20 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
-          3.0,
-          3.0
+          4.0,
+          4.0
         ],
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
-        "instance_id": "inst_000002",
-        "instance_scale_level": -2.0,
+        "instance_id": "inst_000039",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
-        "manual_collision_expected": true,
+        "manual_collision_expected": false,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
@@ -556,50 +1280,50 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
-          -32.0
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          130.0,
-          422.0
+          180.0,
+          353.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3333333432674408,
-          0.3333333432674408
+          0.5000000000000001,
+          0.5000000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          8.0,
-          22.0
+          27.0,
+          1.0
         ],
         "tile_anchor": [
-          8.0,
-          22.0
+          27.0,
+          1.0
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          129.0,
-          423.0
+          135.0,
+          328.0
         ],
-        "asset_id": "mse.new_pillar.12",
-        "collision_authority": "manual_by_user",
+        "asset_id": "user.20f9cc5b11f1409e",
+        "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
           0.0,
@@ -612,20 +1336,20 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
-          3.0,
-          3.0
+          4.0,
+          4.0
         ],
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
-        "instance_id": "inst_000003",
-        "instance_scale_level": -2.0,
+        "instance_id": "inst_000040",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
-        "manual_collision_expected": true,
+        "manual_collision_expected": false,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
@@ -633,50 +1357,50 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
-          -32.0
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          129.0,
-          423.0
+          135.0,
+          328.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3333333432674408,
-          0.3333333432674408
+          0.5000000000000001,
+          0.5000000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          8.0,
-          8.0
+          27.0,
+          27.0
         ],
         "tile_anchor": [
-          8.0,
-          8.0
+          27.0,
+          27.0
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          130.0,
-          421.0
+          120.0,
+          354.0
         ],
-        "asset_id": "mse.new_pillar.14",
-        "collision_authority": "manual_by_user",
+        "asset_id": "user.d8df293f9f98109b",
+        "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
           0.0,
@@ -689,20 +1413,20 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
-          3.0,
-          3.0
+          4.0,
+          4.0
         ],
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
-        "instance_id": "inst_000004",
-        "instance_scale_level": -2.0,
+        "instance_id": "inst_000041",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
-        "manual_collision_expected": true,
+        "manual_collision_expected": false,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
@@ -710,50 +1434,50 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
-          -32.0
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          130.0,
-          421.0
+          120.0,
+          354.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3333333432674408,
-          0.3333333432674408
+          0.5000000000000001,
+          0.5000000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          8.0
+          1.0,
+          27.0
         ],
         "tile_anchor": [
-          22.0,
-          8.0
+          1.0,
+          27.0
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          133.0,
-          422.0
+          132.0,
+          345.0
         ],
-        "asset_id": "mse.new_pillar.15",
-        "collision_authority": "manual_by_user",
+        "asset_id": "user.97906173348af5a5",
+        "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
           0.0,
@@ -766,20 +1490,20 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
-          3.0,
-          3.0
+          4.0,
+          4.0
         ],
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
-        "instance_id": "inst_000005",
-        "instance_scale_level": -2.0,
+        "instance_id": "inst_000042",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
-        "manual_collision_expected": true,
+        "manual_collision_expected": false,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
@@ -787,40 +1511,40 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
-          -32.0
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          133.0,
-          422.0
+          132.0,
+          345.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3333333432674408,
-          0.3333333432674408
+          0.5000000000000001,
+          0.5000000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          22.0
-        ],
-        "tile_anchor": [
-          22.0,
-          22.0
-        ],
-        "visual_footprint_tiles": [
           1.0,
           1.0
+        ],
+        "tile_anchor": [
+          1.0,
+          1.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       }
     ],
@@ -841,8 +1565,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -912,8 +1636,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -983,8 +1707,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1054,8 +1778,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1125,8 +1849,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1196,8 +1920,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1267,8 +1991,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1338,8 +2062,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1409,8 +2133,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1480,8 +2204,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1551,8 +2275,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1622,8 +2346,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1693,8 +2417,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1764,8 +2488,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1783,7 +2507,9 @@
           1.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000020",
+        "instance_scale_level": 0.0,
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
@@ -1823,6 +2549,10 @@
         "tile_anchor": [
           19.0,
           0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
         ]
       },
       {
@@ -1835,8 +2565,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1854,7 +2584,9 @@
           1.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000021",
+        "instance_scale_level": 0.0,
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
@@ -1894,6 +2626,10 @@
         "tile_anchor": [
           23.0,
           0.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          1.0
         ]
       },
       {
@@ -1906,8 +2642,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -1977,8 +2713,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2048,8 +2784,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2119,8 +2855,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2190,8 +2926,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2261,8 +2997,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2332,8 +3068,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2403,8 +3139,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2474,8 +3210,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2545,8 +3281,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2616,8 +3352,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2687,8 +3423,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2758,8 +3494,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2829,8 +3565,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2900,8 +3636,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -2971,8 +3707,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",
@@ -3042,8 +3778,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "cave_tomb_manual_collision_v1",

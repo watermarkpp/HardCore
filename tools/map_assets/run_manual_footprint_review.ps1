@@ -1,3 +1,7 @@
+param(
+    [string]$AssetPrefix = ''
+)
+
 $ErrorActionPreference = 'Stop'
 
 $RepoRoot = (
@@ -32,8 +36,17 @@ if (-not $Godot) {
     throw 'Godot 4.7 executable not found'
 }
 
-& $Godot `
-    --path $RepoRoot `
+$GodotArgs = @(
+    '--path',
+    $RepoRoot,
     'res://tools/map_assets/manual_footprint_review.tscn'
+)
+
+if (-not [string]::IsNullOrWhiteSpace($AssetPrefix)) {
+    $GodotArgs += '--'
+    $GodotArgs += "--asset-prefix=$AssetPrefix"
+}
+
+& $Godot @GodotArgs
 
 exit $LASTEXITCODE
