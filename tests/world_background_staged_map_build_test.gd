@@ -14,13 +14,53 @@ func _wait_for_transition(game: Node) -> bool:
 	return not bool(game._map_transition_in_progress)
 
 
+func _wait_for_initial_world(game: Node) -> bool:
+	var deadline := Time.get_ticks_msec() + 15000
+	while not bool(game.gameplay_input_is_enabled()) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	return bool(game.gameplay_input_is_enabled())
+
+
 func _run() -> void:
+	# Standalone/editor-style callers keep the legacy _ready build by default.
+	var legacy_background := WorldBackground.new()
+	legacy_background.zone_name = "staged-build-contract-test-empty"
+	add_child(legacy_background)
+	await get_tree().process_frame
+	assert(
+		legacy_background.legacy_ready_rebuild_count() == 1,
+		"default WorldBackground attachment must retain the legacy _ready build"
+	)
+	assert(
+		bool(legacy_background._staged_build_complete),
+		"default legacy build must still finish its environment contract"
+	)
+	legacy_background.queue_free()
+	await get_tree().process_frame
+
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	assert(await _wait_for_initial_world(game), "initial staged world did not finish")
+	var initial_bootstrap_deadline := Time.get_ticks_msec() + 15000
+	while (
+		bool(game._world_bootstrap_in_progress)
+		and Time.get_ticks_msec() < initial_bootstrap_deadline
+	):
+		await get_tree().process_frame
+	assert(
+		not bool(game._world_bootstrap_in_progress),
+		"initial staged bootstrap must finish before the transition fixture starts"
+	)
+	assert(
+		game.background.legacy_ready_rebuild_count() == 0,
+		"GameRoot initial staged entry must skip the legacy _ready build"
+	)
+	assert(
+		bool(game.background.get_meta("initial_legacy_build_skipped", false)),
+		"GameRoot must declare the staged initial-build contract before attachment"
+	)
 	game._monster_prefetch_enabled = false
 
 	# Production path: staged map build with real frame-budget slicing.
@@ -29,14 +69,17 @@ func _run() -> void:
 		"world/loading/max_items_per_frame",
 		WorldBootstrapCoordinator.DEFAULT_MAX_ITEMS_PER_FRAME
 	))
-	game.travel_to_map(217)
-	assert(game._map_transition_in_progress)
+	var travel_requested := bool(game._request_map_travel(911001))
+	assert(
+		travel_requested and game._map_transition_in_progress,
+		"staged travel request failed: %s" % JSON.stringify(game.gameplay_input_gate_snapshot())
+	)
 	game.hud.loading_transition_covered.emit({
 		"contract_id": LOADING_CONTRACT_ID,
 		"transition_id": game._active_map_transition_id,
 	})
 	assert(await _wait_for_transition(game), "transition did not finish")
-	assert(game.current_map_id == 217)
+	assert(game.current_map_id == 911001)
 
 	var coord = game._world_bootstrap_coordinator
 	assert(coord.planned_map_item_count > max_items, "fixture must exceed single-frame budget")

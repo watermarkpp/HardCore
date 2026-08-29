@@ -418,6 +418,10 @@ func _ready() -> void:
 			profile_started_usec,
 		)
 	background = WorldBackground.new()
+	# The initial world is built by WorldBootstrapCoordinator's staged pipeline.
+	# Declare this before attachment so WorldBackground._ready() does not also
+	# run the legacy synchronous environment build.
+	background.defer_initial_legacy_build_to_coordinator()
 	add_child(background)
 	if loading_profile_enabled:
 		stage_started_usec = _loading_profile_mark(

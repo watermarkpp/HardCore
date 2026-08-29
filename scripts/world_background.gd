@@ -89,6 +89,7 @@ const SOURCE_COLLISION_RADIUS := 28
 const EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
 const EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES := 10.0
 const DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD := 1536.0
+const STAGED_INITIAL_BUILD_CONTRACT_ID := "world_background.staged_initial_build.v1"
 
 @export var grid_radius := 28
 @export var tile_width := 64.0
@@ -132,6 +133,8 @@ var _pending_collision_descriptors: Array[Dictionary] = []
 var _pending_arrival_position := Vector2.ZERO
 var _source_mask_markers: Array[Node] = []
 var _gothic_camp_built: Dictionary = {}
+var _skip_initial_legacy_build_once := false
+var _legacy_ready_rebuild_count := 0
 
 # Explicit whitelist of global resources that may be shared across regions.
 # Each entry documents ownership; these are the only resources allowed with
@@ -151,8 +154,28 @@ const SHARED_GLOBAL_RESOURCE_WHITELIST := {
 func _ready() -> void:
 	z_index = -20
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_rebuild_environment()
+	if _skip_initial_legacy_build_once:
+		_skip_initial_legacy_build_once = false
+		set_meta("initial_legacy_build_skipped", true)
+	else:
+		_legacy_ready_rebuild_count += 1
+		_rebuild_environment()
 	queue_redraw()
+
+
+## Production initial entry calls this before add_child(background). The
+## coordinator then owns the first map build through prepare_map_build() and
+## its staged descriptor/collision queues. Other callers retain the legacy
+## synchronous _ready() build by default.
+func defer_initial_legacy_build_to_coordinator() -> bool:
+	if is_inside_tree():
+		return false
+	_skip_initial_legacy_build_once = true
+	return true
+
+
+func legacy_ready_rebuild_count() -> int:
+	return _legacy_ready_rebuild_count
 
 
 func set_zone(value: String) -> void:
