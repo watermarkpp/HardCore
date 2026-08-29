@@ -1,2049 +1,1546 @@
 {
-  "schemaVersion": 1.0,
-  "contractId": "equipment.world_helmet.player_visual_v2.overrides.v1",
-  "runtimeReadable": true,
-  "itemOverrides": {
-    "146": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            1.5,
-            -5.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            1.5,
-            -4.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            1.0,
-            -1.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            1.0,
-            0.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            0.5,
-            0.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            0.5,
-            -0.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            -0.5,
-            -3.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            0.0,
-            -3.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "151": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            1.0,
-            -5.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            1.5,
-            -2.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            2.0,
-            1.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            1.0,
-            -0.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            1.0,
-            -1.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            1.0,
-            -0.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            -1.0,
-            0.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            -1.0,
-            -1.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "147": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            0.5,
-            -3.0
-          ],
-          "scale_percent": 80,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            1.5,
-            0.0
-          ],
-          "scale_percent": 80,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            0.5,
-            1.0
-          ],
-          "scale_percent": 80,
-          "status": "unassigned",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            2.0,
-            0.0
-          ],
-          "scale_percent": 80,
-          "status": "unassigned",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            1.0,
-            1.0
-          ],
-          "scale_percent": 80,
-          "status": "unassigned",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            1.0,
-            0.5
-          ],
-          "scale_percent": 80,
-          "status": "unassigned",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            -1.0,
-            -0.5
-          ],
-          "scale_percent": 80,
-          "status": "unassigned",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            0.0,
-            -2.0
-          ],
-          "scale_percent": 80,
-          "status": "unassigned",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "149": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            0.5,
-            -4.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            0.5,
-            -1.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            0.0,
-            -1.0
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            1.0,
-            0.0
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            1.0,
-            0.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            0.0,
-            0.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            0.0,
-            -1.0
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            1.0,
-            -3.0
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "150": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            0.5,
-            -3.0
-          ],
-          "scale_percent": 40,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            1.5,
-            -1.5
-          ],
-          "scale_percent": 40,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            0.0,
-            0.5
-          ],
-          "scale_percent": 40,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            0.0,
-            1.0
-          ],
-          "scale_percent": 40,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            0.5,
-            0.5
-          ],
-          "scale_percent": 40,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            2.0,
-            0.5
-          ],
-          "scale_percent": 40,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            -0.5,
-            0.5
-          ],
-          "scale_percent": 40,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            0.0,
-            -1.0
-          ],
-          "scale_percent": 40,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "218": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            1.0,
-            -5.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            1.5,
-            -3.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        },
-        "E": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            0.5,
-            0.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "SE": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            1.5,
-            0.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            1.0,
-            1.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            0.0,
-            1.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "W": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            -1.5,
-            -2.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "NW": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            -1.0,
-            -4.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        }
-      }
-    },
-    "224": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            0.5,
-            -4.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            1.0,
-            -2.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            -0.5,
-            1.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            0.5,
-            2.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            0.0,
-            3.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            0.0,
-            3.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            -1.5,
-            0.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            -0.5,
-            -1.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "228": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            0.5,
-            -4.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            1.0,
-            -2.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            1.5,
-            2.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            0.0,
-            -0.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            1.0,
-            0.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            0.5,
-            1.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            -2.0,
-            -0.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            0.5,
-            -1.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "236": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            1.5,
-            -6.5
-          ],
-          "scale_percent": 45,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            2.0,
-            -4.5
-          ],
-          "scale_percent": 45,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            1.5,
-            -1.0
-          ],
-          "scale_percent": 45,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            1.5,
-            -0.5
-          ],
-          "scale_percent": 45,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            0.5,
-            -0.5
-          ],
-          "scale_percent": 45,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            0.0,
-            -0.5
-          ],
-          "scale_percent": 45,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            -1.5,
-            -2.0
-          ],
-          "scale_percent": 45,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            -1.0,
-            -4.0
-          ],
-          "scale_percent": 45,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "232": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            1.5,
-            -6.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            1.5,
-            -4.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            1.5,
-            -1.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            1.5,
-            -1.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            0.5,
-            0.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            0.0,
-            0.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            -1.0,
-            -2.0
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            0.0,
-            -3.5
-          ],
-          "scale_percent": 50,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    },
-    "240": {
-      "directions": {
-        "N": {
-          "source_row": 0,
-          "source_slot_id": "slot_0",
-          "nudge": [
-            1.0,
-            -7.0
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "N"
-        },
-        "NE": {
-          "source_row": 1,
-          "source_slot_id": "slot_1",
-          "nudge": [
-            0.5,
-            -4.0
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NE"
-        },
-        "E": {
-          "source_row": 2,
-          "source_slot_id": "slot_2",
-          "nudge": [
-            0.5,
-            -1.0
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "E"
-        },
-        "SE": {
-          "source_row": 3,
-          "source_slot_id": "slot_3",
-          "nudge": [
-            0.5,
-            -0.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SE"
-        },
-        "S": {
-          "source_row": 4,
-          "source_slot_id": "slot_4",
-          "nudge": [
-            0.5,
-            0.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "S"
-        },
-        "SW": {
-          "source_row": 5,
-          "source_slot_id": "slot_5",
-          "nudge": [
-            1.5,
-            -0.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "SW"
-        },
-        "W": {
-          "source_row": 6,
-          "source_slot_id": "slot_6",
-          "nudge": [
-            -0.5,
-            -2.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "W"
-        },
-        "NW": {
-          "source_row": 7,
-          "source_slot_id": "slot_7",
-          "nudge": [
-            0.0,
-            -4.5
-          ],
-          "scale_percent": 60,
-          "status": "valid",
-          "locked": false,
-          "source_direction": "NW"
-        }
-      }
-    }
-  },
-  "visualAssetOverrides": {
-    "elf_146": {
-      "uniform_scale_percent": 50,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/elf_146/final_69cda4143e9c/elf_146_idle.png",
-        "walk": "res://assets/generated/helmet_v2/elf_146/final_69cda4143e9c/elf_146_walk.png",
-        "attack": "res://assets/generated/helmet_v2/elf_146/final_69cda4143e9c/elf_146_attack.png",
-        "cast": "res://assets/generated/helmet_v2/elf_146/final_69cda4143e9c/elf_146_cast.png",
-        "hit": "res://assets/generated/helmet_v2/elf_146/final_69cda4143e9c/elf_146_hit.png",
-        "death": "res://assets/generated/helmet_v2/elf_146/final_69cda4143e9c/elf_146_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "d198680e4cace4df28a888451ff5fb43ebd080d3723dd03785f6a4995c816680",
-        "walk": "e026b7696a9a7b96d6fe350bace83a5e4bf23ec073ba5ff94d606a49375246bd",
-        "attack": "212844b23f1424c00550d256410392870dbfc5dc9d7da7c2cd889d2007988d62",
-        "cast": "beec777415c87889ef9f2fb00a92c572f9a38460430f820bc8525d143301d5f4",
-        "hit": "5aa60afeb7307fd954737153e76e8356f9ab60f7e7862959b49abd3187f15b44",
-        "death": "a457b418c3bd74cbd2c911ac3e1961645f78817a52fc2d8bc8acda784f2fd089"
-      },
-      "derivedAtlasSha256": {
-        "idle": "946eaf455821143e73de8e850182c462ab5ccba24911b4fe21b7e1b449a5e053",
-        "walk": "1e2c0f32e6de831d166d87eac2d92323bb78118fb5d4e6d4e2c0d02f6773064e",
-        "attack": "7b0c1f214e34b0665e832dd13c5b7174f44321cd76baef004377782f1c3e7af4",
-        "cast": "8c3a44f9163838483108c6df7362d4145bcb1d8f2e24ddc48a69dc98afed96bd",
-        "hit": "f2ac0c69ddc7702a68fb8882d093599f0533bed8e94a136a6fdb4359d3e409d9",
-        "death": "3ca49d00784ea0737b8006a64babd8df544351abf1579e5567840e856240a1b5"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.elf_146.69cda4143e9c.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_146.json",
-        "draftSha256": "69cda4143e9cb989a3156c8e5d881fcafab0cf7e074e76b4f3960067f52484d6"
-      },
-      "directionScalePercent": {
-        "N": 50,
-        "NE": 50,
-        "E": 50,
-        "SE": 50,
-        "S": 50,
-        "SW": 50,
-        "W": 50,
-        "NW": 50
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            263.0,
-            144.0
-          ],
-          "scale_percent": 40
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S"
-        },
-        "ground": {
-          "source_row": 6,
-          "source_direction": "W"
-        }
-      }
-    },
-    "black_iron_golden_151": {
-      "uniform_scale_percent": 50,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/black_iron_golden_151/final_24b7774b8724/black_iron_golden_151_idle.png",
-        "walk": "res://assets/generated/helmet_v2/black_iron_golden_151/final_24b7774b8724/black_iron_golden_151_walk.png",
-        "attack": "res://assets/generated/helmet_v2/black_iron_golden_151/final_24b7774b8724/black_iron_golden_151_attack.png",
-        "cast": "res://assets/generated/helmet_v2/black_iron_golden_151/final_24b7774b8724/black_iron_golden_151_cast.png",
-        "hit": "res://assets/generated/helmet_v2/black_iron_golden_151/final_24b7774b8724/black_iron_golden_151_hit.png",
-        "death": "res://assets/generated/helmet_v2/black_iron_golden_151/final_24b7774b8724/black_iron_golden_151_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "8a78c841d88b47946ef6f559f731cbbe9c08313e11c7ef48e5457d12d839e052",
-        "walk": "8b32472b1dd8ebe2723b34cb1fd2d5d73d151891c7372dfc4f93a4f5d3ceb4a6",
-        "attack": "427855f0a799fd8cc442071255861e6a22456532facb3801e9774c4236f069ca",
-        "cast": "92fc7557bad923e567183c7ae6590a2066e4a42389367ff21142e248b0a588f4",
-        "hit": "605d12ebd303bbc9be5ee3da645145ad53f9077d28e0fff83ac5d95970575cf7",
-        "death": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec"
-      },
-      "derivedAtlasSha256": {
-        "idle": "694fab1a4398a74e69010d600036a238cedd26820cb4818a5ffe40cf20a66eb1",
-        "walk": "d50e2faeb6a4b34c23612f37a42a5f4eb1d1e879ff9d5a467396021b80bfa38c",
-        "attack": "8b158972047b95bd89197d0cba18e46a0acd35cdcc80d122988ce6ff8565d309",
-        "cast": "2ef464834f6fdc769757a04ca9b72bd7221fb41ef71bb145de2222a190682a77",
-        "hit": "f2bb2e612d91ad4a8f7702fcaa3b16128e195295e00e2fb7e1cccd3350adc899",
-        "death": "9fac6b1064932e7b298fbb58f15f087570768a35a4d7802d587a1d636d2790c5"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.black_iron_golden_151.24b7774b8724.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_151.json",
-        "draftSha256": "24b7774b8724676bc2deeeb925f92f61ff071ced9ea24a52f2ff8b2b2d8d2cdd"
-      },
-      "directionScalePercent": {
-        "N": 50,
-        "NE": 50,
-        "E": 50,
-        "SE": 50,
-        "S": 50,
-        "SW": 50,
-        "W": 50,
-        "NW": 50
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            261.5,
-            137.0
-          ],
-          "scale_percent": 85
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S"
-        },
-        "ground": {
-          "source_row": 5,
-          "source_direction": "SW"
-        }
-      }
-    },
-    "bronze_magic": {
-      "uniform_scale_percent": 80,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/bronze_magic/final_2753cdd7ba86/bronze_magic_idle.png",
-        "walk": "res://assets/generated/helmet_v2/bronze_magic/final_2753cdd7ba86/bronze_magic_walk.png",
-        "attack": "res://assets/generated/helmet_v2/bronze_magic/final_2753cdd7ba86/bronze_magic_attack.png",
-        "cast": "res://assets/generated/helmet_v2/bronze_magic/final_2753cdd7ba86/bronze_magic_cast.png",
-        "hit": "res://assets/generated/helmet_v2/bronze_magic/final_2753cdd7ba86/bronze_magic_hit.png",
-        "death": "res://assets/generated/helmet_v2/bronze_magic/final_2753cdd7ba86/bronze_magic_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "725ba4db91370479dd63cc5425d99a89fe87a3a370b23dd91098b62b7c15d053",
-        "walk": "eb08be22c3dcb2302f7158a1d18572559630ac73e9d525e0d37b866687ae5455",
-        "attack": "bf099428a54ef5743de474147b2759ce3fcb061f18a08f0801b14b4984cf9ca8",
-        "cast": "a32f7377dc21369fbb46a3e5543916cc40fbecdce619afabbf3784337f08cbd1",
-        "hit": "b55e90d7a25e9c091712e6efe8c7a0e28367fcdd67568ace61d6b39408e21b70",
-        "death": "343c0bf95dfb7eb6307cb35a445f70a8d3499e410b3fa0ae31553c11997d52f5"
-      },
-      "derivedAtlasSha256": {
-        "idle": "87d75cc31f4475a94f850f21da3ff4fa9c0ef1f009356c906de48f6608e41108",
-        "walk": "44e9abf22afcc2e5dc882f1a5aa00e8c9b54cbc97369f81855d4d3f07728ebc7",
-        "attack": "25f994b077af0bd4cbac26ea09b23129b0fb46c8fe2b924dbe781a0ee93cec9f",
-        "cast": "04f4828ddef4a9ca57569747b9535c722d754e9cdebee5b2baf72445849ea800",
-        "hit": "be70c2691d5c5a802e12fee5d6d3d776abf80460fec18ca2eac6e601d1f5aeee",
-        "death": "9e8dbad9ee932965f9d94b1821c6b15bf40b492d72a72c19d37138b1b424beb2"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.bronze_magic.2753cdd7ba86.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_147.json",
-        "draftSha256": "2753cdd7ba86f540ee29f9a6a7279085e5e952fa8bc4064b9ad168bac082b0e5"
-      },
-      "directionScalePercent": {
-        "N": 80,
-        "NE": 80,
-        "E": 80,
-        "SE": 80,
-        "S": 80,
-        "SW": 80,
-        "W": 80,
-        "NW": 80
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            261.5,
-            136.5
-          ],
-          "scale_percent": 75
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S"
-        },
-        "ground": {
-          "source_row": 5,
-          "source_direction": "SW"
-        }
-      }
-    },
-    "taoist": {
-      "uniform_scale_percent": 60,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/taoist/final_6047d7bac6de/taoist_idle.png",
-        "walk": "res://assets/generated/helmet_v2/taoist/final_6047d7bac6de/taoist_walk.png",
-        "attack": "res://assets/generated/helmet_v2/taoist/final_6047d7bac6de/taoist_attack.png",
-        "cast": "res://assets/generated/helmet_v2/taoist/final_6047d7bac6de/taoist_cast.png",
-        "hit": "res://assets/generated/helmet_v2/taoist/final_6047d7bac6de/taoist_hit.png",
-        "death": "res://assets/generated/helmet_v2/taoist/final_6047d7bac6de/taoist_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "a479e6a4ff8ce028a47959c6e7b4677efb9c360ee2dc9ced6cb3c3930fb47f89",
-        "walk": "4207bbc6bc0f4d79aabe756f1b79140f3030a697310cab2960212eefcc9c815b",
-        "attack": "8190630956f72be2b9cee768aa9553cc787c91d4aa7322314f2c1154bfa189d0",
-        "cast": "3016c204c37d84c36e7c3c5843ff182efaac06b564c26b5056ab0a4d6ef6fbea",
-        "hit": "c20b884e659328c4cdb8fba252f713e9a7cf5d7d51beaaf74f73968501f36dae",
-        "death": "4456892985df33ce4bc1094231df618bb982f569c94296ab8ea1a989bc629203"
-      },
-      "derivedAtlasSha256": {
-        "idle": "2fc7dd8929edbbb5828cfb7798f0c080d26b5ff3c7b96f28475a8ac72e397e8b",
-        "walk": "593c66923d8f9b978d4b8035ba497200db807d034eb921902cd2aa1dc2fd4e12",
-        "attack": "431dfa4f4c0f707979e702537ff4ff7bd4599b59667c4bfd2603fc545e93e9d4",
-        "cast": "f9fac8106c55971cc727c10de6c305e20a8992a5c2f09610cbb9632ae1f48907",
-        "hit": "00530b614daafda93a444b4e69fed8274ecf011fb0800c787616771b9b590f52",
-        "death": "0f84b6de70582e6c3f9938084468727b5226af287108a257fbe43d91aa6fe567"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.taoist.6047d7bac6de.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_149.json",
-        "draftSha256": "6047d7bac6de781d44498749598176c06a677c075054e5b224186a608e6e954c"
-      },
-      "directionScalePercent": {
-        "N": 60,
-        "NE": 60,
-        "E": 60,
-        "SE": 60,
-        "S": 60,
-        "SW": 60,
-        "W": 60,
-        "NW": 60
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            261.5,
-            136.5
-          ],
-          "scale_percent": 75
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S",
-          "source_variant": "dedicated_inventory"
-        },
-        "ground": {
-          "source_row": 2,
-          "source_direction": "E"
-        }
-      }
-    },
-    "skeleton": {
-      "uniform_scale_percent": 40,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/skeleton/final_29f8f5d4c2c1/skeleton_idle.png",
-        "walk": "res://assets/generated/helmet_v2/skeleton/final_29f8f5d4c2c1/skeleton_walk.png",
-        "attack": "res://assets/generated/helmet_v2/skeleton/final_29f8f5d4c2c1/skeleton_attack.png",
-        "cast": "res://assets/generated/helmet_v2/skeleton/final_29f8f5d4c2c1/skeleton_cast.png",
-        "hit": "res://assets/generated/helmet_v2/skeleton/final_29f8f5d4c2c1/skeleton_hit.png",
-        "death": "res://assets/generated/helmet_v2/skeleton/final_29f8f5d4c2c1/skeleton_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "f7c7e59ff4757e915997225778b7933142d26976c455292748ca0cd27c891fbe",
-        "walk": "373af3c58dfdab4f9dc615b151ea65887f5df214af21c6fe708b1f96e8f73ca3",
-        "attack": "d0976052d548a6adc7a47f3f6b4a37d0ead0875c9b22dd5e71f8a28664556be9",
-        "cast": "21058ba7b06b2bfb0e4b7f5b401403aa65f00210135c181a5d6d13429c14f7cd",
-        "hit": "ca0974187389c9cf3ca7948aaba75a0f35ae14c5c8ca024e2e13d9da63767a10",
-        "death": "a0a7b46d964f2fcdf82ae7c02c40ccc5bf5e8db05876f0e085b70d4782cfa4a7"
-      },
-      "derivedAtlasSha256": {
-        "idle": "63bd3c8851126dbd31a59a84e164e7c1bb63534eb1d40b095933c3ced6440872",
-        "walk": "a64ba49423f4b593b49a1af8574eaa7f4e13757b7dca69cba57444244e2526b2",
-        "attack": "7a50c5d3780de9f06c44cffa4905046a612f2399f93bb4e59b05c600bd3022b8",
-        "cast": "ba7dad7fa5297e1713471e7507d37141f1a1caa067462cfd8ef1d4e9add273c7",
-        "hit": "6bc07e738a074050851f6606b85cb148f8093407e71ffaf03e58725f5983f256",
-        "death": "f91919f83287c99a62f9c6fff6604395c6dbb57a744e320d3689ab45f0e0ece2"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.skeleton.29f8f5d4c2c1.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_150.json",
-        "draftSha256": "29f8f5d4c2c1a90535a9e08eb70c93c5b58ebec74fe378a6177d30b224b0ce10"
-      },
-      "directionScalePercent": {
-        "N": 40,
-        "NE": 40,
-        "E": 40,
-        "SE": 40,
-        "S": 40,
-        "SW": 40,
-        "W": 40,
-        "NW": 40
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            263.5,
-            139.5
-          ],
-          "scale_percent": 55
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S"
-        },
-        "ground": {
-          "source_row": 5,
-          "source_direction": "SW"
-        }
-      }
-    },
-    "mystery": {
-      "uniform_scale_percent": 50,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/mystery/final_8e347ccb67df/mystery_idle.png",
-        "walk": "res://assets/generated/helmet_v2/mystery/final_8e347ccb67df/mystery_walk.png",
-        "attack": "res://assets/generated/helmet_v2/mystery/final_8e347ccb67df/mystery_attack.png",
-        "cast": "res://assets/generated/helmet_v2/mystery/final_8e347ccb67df/mystery_cast.png",
-        "hit": "res://assets/generated/helmet_v2/mystery/final_8e347ccb67df/mystery_hit.png",
-        "death": "res://assets/generated/helmet_v2/mystery/final_8e347ccb67df/mystery_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "b8d9658de50325291fded0e1c31f17a59d5fa3b23915332e0822b2f8aef0c741",
-        "walk": "a7988e47368e6f3945c9730a145c26585be72e466491ab72f1fb0e255d27fe94",
-        "attack": "942cde53d75cac1234d0797d8c57df7608b7fa65f2b9d21b06078a727d9b8f3e",
-        "cast": "92f9ea8f9cd3c4095320cbc6b9e88ef2a54cee5152178d04cffbe5947f2f37ad",
-        "hit": "0e6a714ea1fa51dcd82aaaf9ae1c85626c1fb511443fb3bfdbe1edc1c3aa7589",
-        "death": "2228a5e8f21e8a650ecb431e125334d4646fcb9f339d8e630e70002f82d24ce4"
-      },
-      "derivedAtlasSha256": {
-        "idle": "2f6388d3d5249c1a525c9c6ecd728e5b690148f0acca655417edecab3b7bb188",
-        "walk": "b067778b696f9e76b5bbc955721492a01bd99b1085af50dff9ddfce71cba18c7",
-        "attack": "ae6bb7e4335e16c11b5d7d2a9aa51b2ac5fed029830b4c01e85378a942dd2a2d",
-        "cast": "0ccbb8cdd6d97e447b12a28c8ff0fb07639bf29feb0898700eb7b93582f937a5",
-        "hit": "02748273538090a44b97bfb0c7f45880db3edccb3312fe8467d2040e34475dac",
-        "death": "617b9eb3b1ed701bc3a850b47675a2e895ebca425a27b700350f0c4f21553e74"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.mystery.8e347ccb67df.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_218.json",
-        "draftSha256": "8e347ccb67df29f18bd4511172fc29e9ce2e14e626c6db8ef404499f47472307"
-      },
-      "directionScalePercent": {
-        "N": 50,
-        "NE": 50,
-        "E": 50,
-        "SE": 50,
-        "S": 50,
-        "SW": 50,
-        "W": 50,
-        "NW": 50
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            262.0,
-            139.0
-          ],
-          "scale_percent": 50
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S",
-          "source_variant": "dedicated_inventory"
-        },
-        "ground": {
-          "source_row": 2,
-          "source_direction": "E"
-        }
-      }
-    },
-    "prayer": {
-      "uniform_scale_percent": 50,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/prayer/final_4747c24a259c/prayer_idle.png",
-        "walk": "res://assets/generated/helmet_v2/prayer/final_4747c24a259c/prayer_walk.png",
-        "attack": "res://assets/generated/helmet_v2/prayer/final_4747c24a259c/prayer_attack.png",
-        "cast": "res://assets/generated/helmet_v2/prayer/final_4747c24a259c/prayer_cast.png",
-        "hit": "res://assets/generated/helmet_v2/prayer/final_4747c24a259c/prayer_hit.png",
-        "death": "res://assets/generated/helmet_v2/prayer/final_4747c24a259c/prayer_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "18aab75a74b57b6cf87500f13f07548a3a3bec6e05a337f1a0c72eb0b09aafa4",
-        "walk": "1567249f8de1066e683ef007d3148a014021b7cf35687edd0ccab27d4ff1891b",
-        "attack": "e7390493dc9b6830a9d876d7d05fdac362e362fab41af0e3e01b8f0cbbba4421",
-        "cast": "bb44e65f62f699b58b8a3621582d137138f4b3cde970fefe9edbc6df7be3f741",
-        "hit": "985eaf3f1308646deac11d2a06ea638f37739b97ecf79f3aedfacda857dc4b10",
-        "death": "4f8d34ddadb47b60b7c176e32e208bbb9267b9eca49c7f0419f597ffa7de9af6"
-      },
-      "derivedAtlasSha256": {
-        "idle": "0df72f9e938a4a05d4913f7373b04b6d6dc31b00d04a1eb90fc50bd82c98b6f2",
-        "walk": "981c8e2c2f81d18584fbea2b6386c1975f445c3f8d8fba2c0153b61e1bac4685",
-        "attack": "90242dc99609e368f6d7b700ad3b7fcf68b2815354ce5aad7d72a232726a8b2f",
-        "cast": "c8fde9f0336e2eb2db010d057b7febfc12a0da669f87a928e822ea2d22ff689b",
-        "hit": "86b8ef719e90602ee2f27a468d314fade51730ab4cc750216876c4453dcda058",
-        "death": "9d331f1127b5e10b7021c8eabadaf371791c1ee5fa3663754b4f90d0e15cdcb9"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.prayer.4747c24a259c.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_224.json",
-        "draftSha256": "4747c24a259c6eb8b73c88e42061096d5164f7bd740a124be48d5f7301ddd8f6"
-      },
-      "directionScalePercent": {
-        "N": 50,
-        "NE": 50,
-        "E": 50,
-        "SE": 50,
-        "S": 50,
-        "SW": 50,
-        "W": 50,
-        "NW": 50
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            261.0,
-            141.5
-          ],
-          "scale_percent": 70
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S",
-          "source_variant": "dedicated_inventory"
-        },
-        "ground": {
-          "source_row": 2,
-          "source_direction": "E"
-        }
-      }
-    },
-    "memory": {
-      "uniform_scale_percent": 50,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/memory/final_b8aa296e7d4b/memory_idle.png",
-        "walk": "res://assets/generated/helmet_v2/memory/final_b8aa296e7d4b/memory_walk.png",
-        "attack": "res://assets/generated/helmet_v2/memory/final_b8aa296e7d4b/memory_attack.png",
-        "cast": "res://assets/generated/helmet_v2/memory/final_b8aa296e7d4b/memory_cast.png",
-        "hit": "res://assets/generated/helmet_v2/memory/final_b8aa296e7d4b/memory_hit.png",
-        "death": "res://assets/generated/helmet_v2/memory/final_b8aa296e7d4b/memory_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "05173ae4ad4dcfaaec72ab4bb728d364cbcc8b8189c5870e0af08bceb5588a9a",
-        "walk": "99dbf26a32a8c39be2400dcc7920730de4025c5366bfb7b9bb53e3ff8884032c",
-        "attack": "8b437f10416af84ca9ffde136227081ded37930f624be82816f440a024ec9e1a",
-        "cast": "f3cf01031fdf5c8c5d9009d7f3ec0e2c8614e36a1a6414e6ef9d6c2d68ad28a9",
-        "hit": "c2a3805259e6d7eee620ee09dd679c2a83de93274abee065925c8e6ed5eb9549",
-        "death": "ad0c21d9cfcf39d2a03f57a84f81bf520996bf5b76d9d0dfc8503374be81988d"
-      },
-      "derivedAtlasSha256": {
-        "idle": "24a3c36f0ecf2f43e31e8fd07a39e888090d1856ef5659de87da6a70cd97d1c9",
-        "walk": "f919d8efabf29b956bcfabe257eb2244931a12cc09017f91f2b7e0f874610c33",
-        "attack": "9b7d9774efe222e0d7d336b52abd03db731717ac69e4fea8259dad432e718bc6",
-        "cast": "f085178abd659f060c96adda87cbb025d1a5fc8a034aefb24be2abc4e40c1061",
-        "hit": "288a1cda7d0ed2aeb4d0af7789ba0392d729681df70263c57d940af5239dba83",
-        "death": "3a0b554fc68f618f35ee5880b8812855cd617532b2d72c1327198a9b1ee866c9"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.memory.b8aa296e7d4b.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_228.json",
-        "draftSha256": "b8aa296e7d4b42612efd14107c6e661167aa5a378f8232b6e0d47d5fc4de41a3"
-      },
-      "directionScalePercent": {
-        "N": 50,
-        "NE": 50,
-        "E": 50,
-        "SE": 50,
-        "S": 50,
-        "SW": 50,
-        "W": 50,
-        "NW": 50
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            260.0,
-            137.0
-          ],
-          "scale_percent": 70
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S"
-        },
-        "ground": {
-          "source_row": 5,
-          "source_direction": "SW"
-        }
-      }
-    },
-    "god_magic": {
-      "uniform_scale_percent": 45,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/god_magic/final_d89124686256/god_magic_idle.png",
-        "walk": "res://assets/generated/helmet_v2/god_magic/final_d89124686256/god_magic_walk.png",
-        "attack": "res://assets/generated/helmet_v2/god_magic/final_d89124686256/god_magic_attack.png",
-        "cast": "res://assets/generated/helmet_v2/god_magic/final_d89124686256/god_magic_cast.png",
-        "hit": "res://assets/generated/helmet_v2/god_magic/final_d89124686256/god_magic_hit.png",
-        "death": "res://assets/generated/helmet_v2/god_magic/final_d89124686256/god_magic_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "c5f77ca64c823cedab3d95578b9874f9bd8e8e482ed9d723d0f6f188c815799f",
-        "walk": "ec339bd71740fc712666bd7ac3097970dcac7e240475b0c7ccf6718e8956147f",
-        "attack": "8a40cff083b6481a93633c5f1e9ebeabf4a6a2f0968e73e86238ee24bca2d626",
-        "cast": "40e02b152c15997c1ae41ff510a0e125b793c819b1975b95ec002c2b0db5f21a",
-        "hit": "a2ebc69c2374b4ce7e99ea042c3d403a9680bd3743fbcc583337ee69c9b7182a",
-        "death": "f6e58e5a6fe462312bfea4dd68ace5222e5b9d24cc1ebda2b8e850eabee005d7"
-      },
-      "derivedAtlasSha256": {
-        "idle": "c98331552e2e6175dcb672cde52d33cbebd75fe10c7fd12c1e1e686e243c633a",
-        "walk": "3043b9d8a03fc5e5c254a78608444416f79db26b4cdbdcc81499b62caa931173",
-        "attack": "32b06f9f60711108d0f8854b6f6e2f506f361d078158913cbc5b2acefb1d1485",
-        "cast": "8fc0a067cef3b863af6e178db26d04acba094ae2ce8a1fbe65f581f800d19b0a",
-        "hit": "4f7508f215abc3ada23cd0c73469e90c74890c5fe536a1890bc54ce39d7b9586",
-        "death": "bfdda912e7d34d48840811c7d9705ea551addecd4b6a749463ebb5c7e0278fc7"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.god_magic.d89124686256.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_236.json",
-        "draftSha256": "d89124686256e2f3ec6eb08fc031dd68b373d5939a3b4b67ee0a2cbe4c740322"
-      },
-      "directionScalePercent": {
-        "N": 45,
-        "NE": 45,
-        "E": 45,
-        "SE": 45,
-        "S": 45,
-        "SW": 45,
-        "W": 45,
-        "NW": 45
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            261.5,
-            139.5
-          ],
-          "scale_percent": 45
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S"
-        },
-        "ground": {
-          "source_row": 4,
-          "source_direction": "S"
-        }
-      }
-    },
-    "holy_war": {
-      "uniform_scale_percent": 50,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/holy_war/final_291e39829b96/holy_war_idle.png",
-        "walk": "res://assets/generated/helmet_v2/holy_war/final_291e39829b96/holy_war_walk.png",
-        "attack": "res://assets/generated/helmet_v2/holy_war/final_291e39829b96/holy_war_attack.png",
-        "cast": "res://assets/generated/helmet_v2/holy_war/final_291e39829b96/holy_war_cast.png",
-        "hit": "res://assets/generated/helmet_v2/holy_war/final_291e39829b96/holy_war_hit.png",
-        "death": "res://assets/generated/helmet_v2/holy_war/final_291e39829b96/holy_war_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "3379be9725838e8f9965f93074ccf1e66916459f65fc79e836e157ae2d342355",
-        "walk": "575899c1dcc036ea54717707dbc36862a3a36b9a21d3c2c40b4781f7f0106ffb",
-        "attack": "0e079079c04fc8e0aa9c4b965a7ce8a506cd459e2b0b998aa9eab303bc77c314",
-        "cast": "6b4011b209ec50f00cb3a638f4c1688a35d636ff4054b0cbeb6d34e656af575d",
-        "hit": "6be7a53491e623a856eab1f4858ce83fec79f797473dcfbdee0c31171349af13",
-        "death": "2e3b471eb80b92869babd9ce9663d3cfa2763ae9d82ce02beedbecea69d1cc74"
-      },
-      "derivedAtlasSha256": {
-        "idle": "97c0ce0255433e743b1a8423ccd03e525fdab9d4d5377e0b0cae60dee46cf11d",
-        "walk": "a5cdee5a0ef3ac4d32b5916dc6571e70099af0d812e008d40bbbda3dbb76bd0b",
-        "attack": "0f5ec0fbf18f326320ca842f1452cf12afc43b474c5e47bf325b9eb4d9b82421",
-        "cast": "df924be28f8b3d0163c5099e366a45cae86af62060aafebe09ff6b2e37b3cccc",
-        "hit": "78d2be43091173e32cbac34e26333492f51428656e6bc93aa1febd459ab7086d",
-        "death": "b106158ebce72b488965bbd8b689425f80b30b811c80f26b5d5c39099b3ee832"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.holy_war.291e39829b96.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_232.json",
-        "draftSha256": "291e39829b96ef60c0471394f9d8ebf6fbd383e69e3203b684361e9737513418"
-      },
-      "directionScalePercent": {
-        "N": 50,
-        "NE": 50,
-        "E": 50,
-        "SE": 50,
-        "S": 50,
-        "SW": 50,
-        "W": 50,
-        "NW": 50
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            260.5,
-            136.5
-          ],
-          "scale_percent": 65
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S"
-        },
-        "ground": {
-          "source_row": 5,
-          "source_direction": "SW"
-        }
-      }
-    },
-    "heavenly_taoist": {
-      "uniform_scale_percent": 60,
-      "derivedAtlases": {
-        "idle": "res://assets/generated/helmet_v2/heavenly_taoist/final_e114ad10fc5a/heavenly_taoist_idle.png",
-        "walk": "res://assets/generated/helmet_v2/heavenly_taoist/final_e114ad10fc5a/heavenly_taoist_walk.png",
-        "attack": "res://assets/generated/helmet_v2/heavenly_taoist/final_e114ad10fc5a/heavenly_taoist_attack.png",
-        "cast": "res://assets/generated/helmet_v2/heavenly_taoist/final_e114ad10fc5a/heavenly_taoist_cast.png",
-        "hit": "res://assets/generated/helmet_v2/heavenly_taoist/final_e114ad10fc5a/heavenly_taoist_hit.png",
-        "death": "res://assets/generated/helmet_v2/heavenly_taoist/final_e114ad10fc5a/heavenly_taoist_death.png"
-      },
-      "sourceAtlasSha256": {
-        "idle": "cd5c255f226343f2d4bb6119ff33bdbc89d1b0817ddcf3013f2dfd5353ab43b3",
-        "walk": "e1030c5a53ae4066d96226401f11f498a8c422e20c1129aa979b7b58ff5d8487",
-        "attack": "b5a32c5c24b5d1d8b50949f80f806862357428ea41333e9652c221a2466484b6",
-        "cast": "8658d90f240857c038832d272872f3b61c8dc52772d2f05fb7838e77e57f8c16",
-        "hit": "7adaa6f5e533b9cad97efea643385ad9edbf11e03c35737917d30b75f42be6bb",
-        "death": "1b33c0ff195d78ee05cb2044dbdf87941045ec4958ead1d55f4ba0a9add492c7"
-      },
-      "derivedAtlasSha256": {
-        "idle": "e78a9a908581a89b692d379049963ae4787cec2ec98a93632055ed7d497a6a1d",
-        "walk": "c0a3de79689a94748cbdc996ef32b62d6fb0f287678ce77d910be13c942c82e7",
-        "attack": "75384b36efdccb9213b87052260cd05e946a845eae5f1c20e588f2eda4a6c797",
-        "cast": "feea8872201159be2a789f58359ffe9e78f231bad0638db2406128b5de7f0fbb",
-        "hit": "d46e80188549be2dc2a248cbc218cf98c97fd4c2b120e1a972dff23753879925",
-        "death": "5020ef2c763fe950735ab0453eb5152347f7b4905c1de7882da3a320681dac92"
-      },
-      "bakePolicy": {
-        "filter": "premultiplied_alpha_lanczos_original_single_pass",
-        "sourceAspectPreserved": true,
-        "idleSizing": "area_equivalent_aspect_preserving",
-        "motionTransform": "head_pivot_translation_plus_bounded_second_moment_xy",
-        "normalActionAspectLogLimit": 0.08,
-        "deathActionAspectLogLimit": 0.18,
-        "pivotInvariant": true,
-        "directionIndependent": true,
-        "allActionsDirectionsFrames": true,
-        "requiredActions": [
-          "idle",
-          "walk",
-          "attack",
-          "cast",
-          "hit",
-          "death"
-        ],
-        "runtimeScale": [
-          1,
-          1
-        ],
-        "runtimeTextureFilter": "nearest",
-        "sourceAtlasModified": false,
-        "sourceRecipeId": "final_calibration.heavenly_taoist.e114ad10fc5a.original_rgba_single_pass_v1",
-        "draftPath": "res://assets/data/helmet_calibration_drafts/item_240.json",
-        "draftSha256": "e114ad10fc5ac48492cb932828200712f1aa2de0717436426a7f4b9639beaf70"
-      },
-      "directionScalePercent": {
-        "N": 60,
-        "NE": 60,
-        "E": 60,
-        "SE": 60,
-        "S": 60,
-        "SW": 60,
-        "W": 60,
-        "NW": 60
-      },
-      "presentationCalibration": {
-        "contractId": "equipment.helmet.presentation_calibration.v1",
-        "paperDoll": {
-          "source_row": 4,
-          "source_direction": "S",
-          "offset": [
-            263.0,
-            136.5
-          ],
-          "scale_percent": 65
-        },
-        "inventory": {
-          "source_row": 4,
-          "source_direction": "S",
-          "source_variant": "dedicated_inventory"
-        },
-        "ground": {
-          "source_row": 4,
-          "source_direction": "S",
-          "source_variant": "dedicated_ground"
-        }
-      }
-    }
-  }
+	"schemaVersion": 1.0,
+	"contractId": "equipment.world_helmet.player_visual_v2.overrides.v1",
+	"runtimeReadable": true,
+	"itemOverrides": {
+		"146": {
+			"directions": {
+				"NE": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						-1.0,
+						-5.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "NE"
+				},
+				"N": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						1.0,
+						-5.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "N"
+				},
+				"E": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-1.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "E"
+				},
+				"SE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						-1.0,
+						1.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "SE"
+				},
+				"S": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						-1.0,
+						3.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						1.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						1.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "W"
+				},
+				"NW": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						0.0,
+						-5.0
+					],
+					"status": "valid",
+					"locked": true,
+					"source_direction": "NW"
+				}
+			}
+		},
+		"151": {
+			"directions": {
+				"N": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						0.0,
+						-4.0
+					],
+					"status": "unassigned",
+					"locked": false
+				},
+				"E": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						2.0,
+						0.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						0.0,
+						-6.0
+					],
+					"status": "valid",
+					"locked": false
+				},
+				"SE": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						-1.0,
+						-3.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"SW": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						1.0,
+						1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-1.0,
+						2.0
+					],
+					"status": "valid",
+					"locked": false
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						-2.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NW"
+				},
+				"S": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						0.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false
+				}
+			}
+		},
+		"147": {
+			"directions": {
+				"N": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						-1.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						1.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NE"
+				},
+				"E": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						1.0,
+						0.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"SE": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						2.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"S": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						1.0,
+						0.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						0.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-1.0,
+						0.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						-2.0,
+						0.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NW"
+				}
+			}
+		},
+		"149": {
+			"directions": {
+				"N": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						0.0,
+						-3.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						1.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NE"
+				},
+				"E": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						1.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"SE": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						1.0,
+						0.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"S": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						1.0,
+						0.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						0.0,
+						0.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						1.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						0.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NW"
+				}
+			}
+		},
+		"150": {
+			"directions": {
+				"N": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						-2.0,
+						-3.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						0.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NE"
+				},
+				"E": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-7.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"SE": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						-2.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"S": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						0.0,
+						-2.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						3.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"W": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						7.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						0.0,
+						-2.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NW"
+				}
+			}
+		},
+		"218": {
+			"directions": {
+				"N": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						0.0,
+						-3.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						1.0,
+						-4.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NE"
+				},
+				"E": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-1.0,
+						-3.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"SE": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						0.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"S": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						1.0,
+						-2.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						1.0,
+						-2.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						0.0,
+						-5.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						-1.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NW"
+				}
+			}
+		},
+		"224": {
+			"directions": {
+				"N": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						0.0,
+						-5.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"E": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						1.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"SE": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						3.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"S": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						0.0,
+						2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"SW": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-2.0,
+						1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NE"
+				},
+				"W": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						-2.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						0.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NE"
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						0.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "NW"
+				}
+			}
+		},
+		"228": {
+			"directions": {
+				"N": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						0.0,
+						-7.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"NE": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						2.0,
+						-4.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NE"
+				},
+				"E": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						0.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NE"
+				},
+				"SE": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						0.0,
+						0.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"S": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						0.0,
+						3.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						-1.0,
+						0.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						-2.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						-1.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NW"
+				}
+			}
+		},
+		"236": {
+			"directions": {
+				"N": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						0.0,
+						-4.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						2.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NW"
+				},
+				"E": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						3.0,
+						-1.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"SE": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						2.0,
+						-3.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"S": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						0.0,
+						-3.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						0.0,
+						-3.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-2.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						-2.0,
+						-4.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NE"
+				}
+			}
+		},
+		"232": {
+			"directions": {
+				"N": {
+					"source_row": 0.0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						0.0,
+						-7.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"NE": {
+					"source_row": 1.0,
+					"source_slot_id": "slot_1",
+					"nudge": [
+						2.0,
+						-4.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NW"
+				},
+				"E": {
+					"source_row": 6.0,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						0.0,
+						-2.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"SE": {
+					"source_row": 3.0,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						2.0,
+						-4.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"S": {
+					"source_row": 4.0,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						0.0,
+						-4.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 5.0,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						-1.0,
+						-4.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"W": {
+					"source_row": 2.0,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						1.0,
+						-1.0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"NW": {
+					"source_row": 7.0,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						-1.0,
+						-4.0
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NE"
+				}
+			}
+		},
+		"240": {
+			"directions": {
+				"N": {
+					"source_row": 0,
+					"source_slot_id": "slot_0",
+					"nudge": [
+						1,
+						-6
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "N"
+				},
+				"NE": {
+					"source_row": 6,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						0,
+						-5
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"E": {
+					"source_row": 6,
+					"source_slot_id": "slot_6",
+					"nudge": [
+						-1,
+						-1
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "W"
+				},
+				"SE": {
+					"source_row": 5,
+					"source_slot_id": "slot_5",
+					"nudge": [
+						-2,
+						-2
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SW"
+				},
+				"S": {
+					"source_row": 4,
+					"source_slot_id": "slot_4",
+					"nudge": [
+						0,
+						0
+					],
+					"status": "unassigned",
+					"locked": false,
+					"source_direction": "S"
+				},
+				"SW": {
+					"source_row": 3,
+					"source_slot_id": "slot_3",
+					"nudge": [
+						3,
+						-2
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "SE"
+				},
+				"W": {
+					"source_row": 2,
+					"source_slot_id": "slot_2",
+					"nudge": [
+						1,
+						-1
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "E"
+				},
+				"NW": {
+					"source_row": 7,
+					"source_slot_id": "slot_7",
+					"nudge": [
+						0,
+						-3
+					],
+					"status": "valid",
+					"locked": false,
+					"source_direction": "NW"
+				}
+			}
+		}
+	},
+	"visualAssetOverrides": {
+		"elf_146": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/elf_146/scale_100/elf_146_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "d198680e4cace4df28a888451ff5fb43ebd080d3723dd03785f6a4995c816680",
+				"walk": "e026b7696a9a7b96d6fe350bace83a5e4bf23ec073ba5ff94d606a49375246bd",
+				"attack": "212844b23f1424c00550d256410392870dbfc5dc9d7da7c2cd889d2007988d62",
+				"cast": "beec777415c87889ef9f2fb00a92c572f9a38460430f820bc8525d143301d5f4",
+				"hit": "5aa60afeb7307fd954737153e76e8356f9ab60f7e7862959b49abd3187f15b44",
+				"death": "a457b418c3bd74cbd2c911ac3e1961645f78817a52fc2d8bc8acda784f2fd089"
+			},
+			"derivedAtlasSha256": {
+				"idle": "ea0655119b0541d73d1f1e753a0fe9aef29f4df3076b25de50d9a21d9eb94210",
+				"walk": "39da47f429c20932208243c6ad844fde9564244d8b78962f25076053c67cc24c",
+				"attack": "9de2421d0e44f4b7cc8c77c05b5547471f2052fbf62e4a1c6f9135987ce31591",
+				"cast": "1dcaca96632725d01c893d8f40c15c9813a7d3a3392ddff7448801fe6f8243b6",
+				"hit": "b214ca2d7b2fd6ddbe70b12449cdf8ebf5d350ec686c55fa050de78a4a00136f",
+				"death": "363a33235eef72ea58ac321534f0948c5f7bf1d9491df1d4f454b7fb11e59ad2"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "elf_146.user_authorized_nw_mirror.v1"
+			}
+		},
+		"black_iron_golden_151": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/black_iron_golden_151/scale_100/black_iron_golden_151_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/black_iron_golden_151/scale_100/black_iron_golden_151_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/black_iron_golden_151/scale_100/black_iron_golden_151_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/black_iron_golden_151/scale_100/black_iron_golden_151_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/black_iron_golden_151/scale_100/black_iron_golden_151_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/black_iron_golden_151/scale_100/black_iron_golden_151_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "8a78c841d88b47946ef6f559f731cbbe9c08313e11c7ef48e5457d12d839e052",
+				"walk": "8b32472b1dd8ebe2723b34cb1fd2d5d73d151891c7372dfc4f93a4f5d3ceb4a6",
+				"attack": "427855f0a799fd8cc442071255861e6a22456532facb3801e9774c4236f069ca",
+				"cast": "92fc7557bad923e567183c7ae6590a2066e4a42389367ff21142e248b0a588f4",
+				"hit": "605d12ebd303bbc9be5ee3da645145ad53f9077d28e0fff83ac5d95970575cf7",
+				"death": "f99492398eadb01b1b7e50f1f7c5bb347b42994054a165e3318922fd5599beec"
+			},
+			"derivedAtlasSha256": {
+				"idle": "1d4e0cc615f7e5a7dcbf247465e0f8840b5d6aef433501a3e2c4fc1a2a64ff8a",
+				"walk": "10ed4c7c84f2a80b3297b1d8fe88b48e4b692cb74e83f0dc542a125373f44fdb",
+				"attack": "0740e5a1dc1719f99760afeba0de46da164e46702ad67ae25b83b71b1ae16d80",
+				"cast": "0e8b56415fa71799f9d33806d0071aaef62ffbf42795bf806dd0f8c00f17a33d",
+				"hit": "dec15b748d62cf2053194148424101e2bc5fcdd733e908fa1fbab42152766cea",
+				"death": "7f43c1388df94285abe79fc772088ddfa0bc666264aae128be01dd497a84b5d6"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "active_target.black_iron_151.meteoric_streamlined.v2.8ec5c751f001c5a7f66b3fec3ad1e9b0ee9c31fdc636455957c54fab8095dccd.direct_png_v1"
+			}
+		},
+		"bronze_magic": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/bronze_magic/scale_100/bronze_magic_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "725ba4db91370479dd63cc5425d99a89fe87a3a370b23dd91098b62b7c15d053",
+				"walk": "eb08be22c3dcb2302f7158a1d18572559630ac73e9d525e0d37b866687ae5455",
+				"attack": "bf099428a54ef5743de474147b2759ce3fcb061f18a08f0801b14b4984cf9ca8",
+				"cast": "a32f7377dc21369fbb46a3e5543916cc40fbecdce619afabbf3784337f08cbd1",
+				"hit": "b55e90d7a25e9c091712e6efe8c7a0e28367fcdd67568ace61d6b39408e21b70",
+				"death": "343c0bf95dfb7eb6307cb35a445f70a8d3499e410b3fa0ae31553c11997d52f5"
+			},
+			"derivedAtlasSha256": {
+				"idle": "fa3d63f5b86ceb926d0362f61b8c36263f0415d9c273134e4a8d7de45d6d08dd",
+				"walk": "aa0bc59011047f6b49b7fe9567bb64f2479b5ed7de8754a18f14e6931096f336",
+				"attack": "6fc410f77665fee235641e4e858a6b43a86434c9585dbb519a574da22ed2034b",
+				"cast": "eeac665a72ebab8ef3c498c38d1ecaae8710e554322ba429b84f9d338aad4308",
+				"hit": "b6bcb58881b0d3052174f0a10ec81f23f347317ee1463f87d19bfd920578c567",
+				"death": "11fafc3aa31d6f651f8c709e3c08c5fbb05ec5097993b740bc11665b45b5afb9"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"offlineDownsampleFilter": "premultiplied_alpha_lanczos_high_res_single_pass",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "active_target.bronze_magic.user_approved_transparent.v1.8d5b9b4af6e28947cb4437d5f09ea8f26fd8822b4d589d619a8153eda37504ee.premultiplied_alpha_lanczos_high_res_single_pass_nearest_runtime_v2.direct_png_v3"
+			}
+		},
+		"taoist": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/taoist/scale_100/taoist_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "a479e6a4ff8ce028a47959c6e7b4677efb9c360ee2dc9ced6cb3c3930fb47f89",
+				"walk": "4207bbc6bc0f4d79aabe756f1b79140f3030a697310cab2960212eefcc9c815b",
+				"attack": "8190630956f72be2b9cee768aa9553cc787c91d4aa7322314f2c1154bfa189d0",
+				"cast": "3016c204c37d84c36e7c3c5843ff182efaac06b564c26b5056ab0a4d6ef6fbea",
+				"hit": "c20b884e659328c4cdb8fba252f713e9a7cf5d7d51beaaf74f73968501f36dae",
+				"death": "4456892985df33ce4bc1094231df618bb982f569c94296ab8ea1a989bc629203"
+			},
+			"derivedAtlasSha256": {
+				"idle": "58c1216a9c08f0d1deb5552d880223eb5c79adaf01e825713c6bc66d4c4b8c2a",
+				"walk": "82b1824933cf4d29706cb55153a8e8a88ac0852732dd5e9b9291dfb48ec82f83",
+				"attack": "ecaadaa84763b388e8920b63388a27645a1f703acd917703f110c310cb438893",
+				"cast": "111c3111b44f94e5ff17bb36a08dea5be79d2716917ed02e93009ad4cb3021df",
+				"hit": "9b3260d05a7c084c56bc5e71b4a6df3f85e0162e99d2cb6fa3f15977568a9ea0",
+				"death": "e0b7ae4c55412f6c832e56ddd127636cf04287e915fd460e4fad1c577cfd4b8d"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "primary_source_rows.v1"
+			}
+		},
+		"skeleton": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/skeleton/scale_100/skeleton_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/skeleton/scale_100/skeleton_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/skeleton/scale_100/skeleton_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/skeleton/scale_100/skeleton_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/skeleton/scale_100/skeleton_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/skeleton/scale_100/skeleton_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "f7c7e59ff4757e915997225778b7933142d26976c455292748ca0cd27c891fbe",
+				"walk": "373af3c58dfdab4f9dc615b151ea65887f5df214af21c6fe708b1f96e8f73ca3",
+				"attack": "d0976052d548a6adc7a47f3f6b4a37d0ead0875c9b22dd5e71f8a28664556be9",
+				"cast": "21058ba7b06b2bfb0e4b7f5b401403aa65f00210135c181a5d6d13429c14f7cd",
+				"hit": "ca0974187389c9cf3ca7948aaba75a0f35ae14c5c8ca024e2e13d9da63767a10",
+				"death": "a0a7b46d964f2fcdf82ae7c02c40ccc5bf5e8db05876f0e085b70d4782cfa4a7"
+			},
+			"derivedAtlasSha256": {
+				"idle": "2103aaabbe6e94c45531f0886e300a185daea4f50f61b8577d8d7e3db97714fb",
+				"walk": "234e40e38ecf57cef874c1a71eb3d53b20ba56ed2fff6e64c970a5563362e207",
+				"attack": "94b1a8cdaa80b7cc5ddf5624ec53956ab2b9d5669f8443f62bd28102f084cfcb",
+				"cast": "d7fa3e5ccc6a4db37306df48240811168ec7ed69873817b1bb44456a43477b84",
+				"hit": "4e8c2a9b02a9965049db01e92773fee2b840042f81125a9e711f8db7c8a7b310",
+				"death": "b4b3b9d53e395562cb37800c169147d3bfb6645abf9191114ff58c0c4fe92371"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "primary_source_rows.v1"
+			}
+		},
+		"mystery": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/mystery/scale_100/mystery_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/mystery/scale_100/mystery_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/mystery/scale_100/mystery_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/mystery/scale_100/mystery_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/mystery/scale_100/mystery_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/mystery/scale_100/mystery_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "3eff64737bb4206c785055863bd0334d9ca72f7f3d8ce9d0cfbfd7ec125c7dee",
+				"walk": "a31466c9cc570e07db758fb6d4fd9c77d77e985502df1cfc65dd5b90587d1f18",
+				"attack": "93a368ac8a4936509c0c00dacc1e69d7b1412dd1fea70346eb696e8d37bfc163",
+				"cast": "3e26678ec03316c70441d157c83c11c9a6542cc4659a20935a35e6dc27151e62",
+				"hit": "cd94bf8b343876e0a850ecf4b4a12ef3f7fb3bd3d9f1c9d38c2b566bd03d9139",
+				"death": "5afe8b2addec15bab5b731573b7681205ab0001e52ead1f87256cd2629dd7f41"
+			},
+			"derivedAtlasSha256": {
+				"idle": "7d5b04f887d1efd80b94ef862e1f1c7a3d0c59996f4e7c84fc6b1ebce49aab13",
+				"walk": "0460745a7db813c3311705cb4d2dacf5d7ecda93e61197d7ee5c5e7ca40d5555",
+				"attack": "146821e4c959a572e0b40bbdd1ebec94b96e5a83889578c210c0ac13da84539f",
+				"cast": "fb96f70865bb05c21e1416a40c07ec5d8a606f7a30c1e6fde27547c7909ece57",
+				"hit": "2ef1f68d42d61da2a0d710095c515122e443d95aa537ebcc5f344ab6fbf14fed",
+				"death": "994c1780d07817d86314983e928dda9dc3b1ce3d69d082a16b4c10b7b6bfc9f3"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "primary_source_rows.v1"
+			}
+		},
+		"prayer": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/prayer/scale_100/prayer_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/prayer/scale_100/prayer_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/prayer/scale_100/prayer_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/prayer/scale_100/prayer_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/prayer/scale_100/prayer_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/prayer/scale_100/prayer_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "18aab75a74b57b6cf87500f13f07548a3a3bec6e05a337f1a0c72eb0b09aafa4",
+				"walk": "1567249f8de1066e683ef007d3148a014021b7cf35687edd0ccab27d4ff1891b",
+				"attack": "e7390493dc9b6830a9d876d7d05fdac362e362fab41af0e3e01b8f0cbbba4421",
+				"cast": "bb44e65f62f699b58b8a3621582d137138f4b3cde970fefe9edbc6df7be3f741",
+				"hit": "985eaf3f1308646deac11d2a06ea638f37739b97ecf79f3aedfacda857dc4b10",
+				"death": "4f8d34ddadb47b60b7c176e32e208bbb9267b9eca49c7f0419f597ffa7de9af6"
+			},
+			"derivedAtlasSha256": {
+				"idle": "286523bc99ce35be4e0ad6bc496eda1975bbf0cf03154958792300df3b589bb9",
+				"walk": "2f43499656a0792dfba5307385969bbb5c4130b0fc0449aac41a05296994f1b0",
+				"attack": "326d4160ffe5dc8585a91b95bae072c2f57ff67f44e3462ec8f667674968d164",
+				"cast": "6c543b631267782954fff38a0ec17c430589d2c31bb0406469b0af89b398c3de",
+				"hit": "d431d04395f13995490cc6196718a3ace31b3ad292cdc69d4f5654d6c7d13642",
+				"death": "04a9c06e6f27de7b0445ef4cffe7f984fc666f08f8593880a22b4e2cbbf76d93"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "primary_source_rows.v1"
+			}
+		},
+		"memory": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/memory/scale_100/memory_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/memory/scale_100/memory_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/memory/scale_100/memory_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/memory/scale_100/memory_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/memory/scale_100/memory_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/memory/scale_100/memory_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "05173ae4ad4dcfaaec72ab4bb728d364cbcc8b8189c5870e0af08bceb5588a9a",
+				"walk": "99dbf26a32a8c39be2400dcc7920730de4025c5366bfb7b9bb53e3ff8884032c",
+				"attack": "8b437f10416af84ca9ffde136227081ded37930f624be82816f440a024ec9e1a",
+				"cast": "f3cf01031fdf5c8c5d9009d7f3ec0e2c8614e36a1a6414e6ef9d6c2d68ad28a9",
+				"hit": "c2a3805259e6d7eee620ee09dd679c2a83de93274abee065925c8e6ed5eb9549",
+				"death": "ad0c21d9cfcf39d2a03f57a84f81bf520996bf5b76d9d0dfc8503374be81988d"
+			},
+			"derivedAtlasSha256": {
+				"idle": "28537c15794ec71b42f0449dc99930efb654e4b639830eef886c7dc2960d5a2e",
+				"walk": "deb6f9c71f5ce8616dd747154491825ce5528007a0ecf3b686c07daafca6de7f",
+				"attack": "d964eb0431253a96ba6121ef83d51b75c6f0f4c847d0f392bc9034531eef9cbf",
+				"cast": "f8b968c1d55f063cb93580bf95567651dddbb01fa4cc7e9aa2b7b311833359b8",
+				"hit": "33f683cc7bfceff1c9d0a35168b6a786f37c638e5d282e3dd898dd86c279c5e8",
+				"death": "672d6aa40025dcfbe6061d6d50944d24a85a0488d4b69c2020f504331baa1f29"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "active_target.memory_228.full_profiles.v1.770778d6cdb5eee2346eb2b4c873de55a5bf73aa2112a6cefeb5742d5aa5b40a.direct_png_v1"
+			}
+		},
+		"god_magic": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/god_magic/scale_100/god_magic_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/god_magic/scale_100/god_magic_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/god_magic/scale_100/god_magic_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/god_magic/scale_100/god_magic_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/god_magic/scale_100/god_magic_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/god_magic/scale_100/god_magic_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "b17ff21baf0349f78e92a93a5cd9ed5baf4a468d08ff0e4570facd8b1c2f37f1",
+				"walk": "af3336d532f752409764dc0c9de6d716ee452a77c371fe086b47e9e1707fdcf0",
+				"attack": "80c43265a84e49cd1c7cc7d325b13d816e9df5c8d2acb44f05609a71e09d34b5",
+				"cast": "9f1e60220f9170a6a71086900bec241b0edcf7ad029f2698a33950a6d7e91a8d",
+				"hit": "ad5891d0ab02098c82461570a9f9f2d5dd18d5a0a896fde7ed0fd80a5e47aa13",
+				"death": "85303c2e0ea2431d82c87ccc4c4c8709534d08d73207972f6b1e3f89de161cc7"
+			},
+			"derivedAtlasSha256": {
+				"idle": "2d2868a9298b4152bbe61b198882f609707461d3fee23cfda34aa26210308754",
+				"walk": "e8ef478e078c7c99dcb0149b00a1c971ef70af895579905c608def32dd72455c",
+				"attack": "570c1c33e5252a6e1a9470b76db1fa69f62a57f807aa861424d9fe960be94278",
+				"cast": "d7e411e30c8e45821d2236e221371a3705f228fce568055c5eca7d83b2c37606",
+				"hit": "7c25a0a7e83d880b9320d7543261cf00d9bc0f7820af8369db9fd66cdd716fec",
+				"death": "1deab2936b66e9b7e5e23660ff7f48287cf88605da59e4914424708d51a1d445"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "primary_source_rows.v1"
+			}
+		},
+		"holy_war": {
+			"uniform_scale_percent": 100.0,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/holy_war/scale_100/holy_war_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/holy_war/scale_100/holy_war_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/holy_war/scale_100/holy_war_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/holy_war/scale_100/holy_war_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/holy_war/scale_100/holy_war_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/holy_war/scale_100/holy_war_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "3379be9725838e8f9965f93074ccf1e66916459f65fc79e836e157ae2d342355",
+				"walk": "575899c1dcc036ea54717707dbc36862a3a36b9a21d3c2c40b4781f7f0106ffb",
+				"attack": "0e079079c04fc8e0aa9c4b965a7ce8a506cd459e2b0b998aa9eab303bc77c314",
+				"cast": "6b4011b209ec50f00cb3a638f4c1688a35d636ff4054b0cbeb6d34e656af575d",
+				"hit": "6be7a53491e623a856eab1f4858ce83fec79f797473dcfbdee0c31171349af13",
+				"death": "2e3b471eb80b92869babd9ce9663d3cfa2763ae9d82ce02beedbecea69d1cc74"
+			},
+			"derivedAtlasSha256": {
+				"idle": "07404d00e98db46f272de8c1225db2e5f5cc72e3a87239eda3bde655a78f3b22",
+				"walk": "344f95604fb8481c7b97d90d4d41ae1a5cea57ab1176d642c8c217bec2f91621",
+				"attack": "f229edce8c7e9a05bc74325043f79ec4799a842757239ed9f73c1d70dcaf4d8c",
+				"cast": "2075bf8eea1320be6b48aacdfc02f23263f87d3e015f739a2826c323f84f59c0",
+				"hit": "1a348db16dbd34bff6b70a22052a645ffe967f80486a8040713d5a83a0e9ad6f",
+				"death": "7d08547aba8d35eee2d561e089aedb421169934cb9817dc45a2d2256dfaee722"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1.0,
+					1.0
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "primary_source_rows.v1"
+			}
+		},
+		"heavenly_taoist": {
+			"uniform_scale_percent": 100,
+			"derivedAtlases": {
+				"idle": "res://assets/generated/helmet_v2/heavenly_taoist/scale_100/heavenly_taoist_idle_scale_100.png",
+				"walk": "res://assets/generated/helmet_v2/heavenly_taoist/scale_100/heavenly_taoist_walk_scale_100.png",
+				"attack": "res://assets/generated/helmet_v2/heavenly_taoist/scale_100/heavenly_taoist_attack_scale_100.png",
+				"cast": "res://assets/generated/helmet_v2/heavenly_taoist/scale_100/heavenly_taoist_cast_scale_100.png",
+				"hit": "res://assets/generated/helmet_v2/heavenly_taoist/scale_100/heavenly_taoist_hit_scale_100.png",
+				"death": "res://assets/generated/helmet_v2/heavenly_taoist/scale_100/heavenly_taoist_death_scale_100.png"
+			},
+			"sourceAtlasSha256": {
+				"idle": "cd5c255f226343f2d4bb6119ff33bdbc89d1b0817ddcf3013f2dfd5353ab43b3",
+				"walk": "e1030c5a53ae4066d96226401f11f498a8c422e20c1129aa979b7b58ff5d8487",
+				"attack": "b5a32c5c24b5d1d8b50949f80f806862357428ea41333e9652c221a2466484b6",
+				"cast": "8658d90f240857c038832d272872f3b61c8dc52772d2f05fb7838e77e57f8c16",
+				"hit": "7adaa6f5e533b9cad97efea643385ad9edbf11e03c35737917d30b75f42be6bb",
+				"death": "1b33c0ff195d78ee05cb2044dbdf87941045ec4958ead1d55f4ba0a9add492c7"
+			},
+			"derivedAtlasSha256": {
+				"idle": "39d3ddb534f13670e03764661ebbc9373aac3bd932afcb22dd1d26c75503a497",
+				"walk": "828766e4afe196663df667de829745abfeb973ae0faf94180f6c4aa0b093bf47",
+				"attack": "dfe12c77f6aa64a1e39129d5050e86dd60766a36f471f2b133473353a00a5fb8",
+				"cast": "d19b9b89f71a82fc0c8d97ffebf8c50e4b0bbf10109386453372774425695576",
+				"hit": "97d2073ef9b27747b86a04742ae0d161a61e0934bb22f7083bdfbd4ff5246f31",
+				"death": "bdd22fc1d4419abcde16ad4a7583cc5c7523fe7a81f0c0cc401fc515eda5d677"
+			},
+			"bakePolicy": {
+				"filter": "nearest",
+				"pivotInvariant": true,
+				"allActionsDirectionsFrames": true,
+				"requiredActions": [
+					"idle",
+					"walk",
+					"attack",
+					"cast",
+					"hit",
+					"death"
+				],
+				"pivotSource": "res://assets/data/equipment_male_world_helmet.json#visualIdentities.*.actions.*.frames[].hairAnchorCentroid",
+				"castPivotUsesSameFramePrimaryHairEvidence": true,
+				"runtimeScale": [
+					1,
+					1
+				],
+				"sourceAtlasModified": false,
+				"sourceRecipeId": "primary_source_rows.v1"
+			}
+		}
+	}
 }
