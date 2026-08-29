@@ -1,0 +1,63 @@
+{
+  "map_id": "wooma_temple_boss_hall",
+  "legacy_map_id": "wooma_temple_3",
+  "runtime_map_id": 915003,
+  "display_name": "沃玛教主大厅",
+  "source_sha256": "1788e420db4465ce108fc219ee9433dbfdb0d4969491b09e039dc3a74c5803ef",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 1640,
+  "component_sizes": [
+    1640
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 2,
+  "placement_count": 7,
+  "selected": [
+    {
+      "monster_id": 62,
+      "canonical_name": "暗黑战士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 64,
+      "canonical_name": "沃玛战士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 66,
+      "canonical_name": "沃玛勇士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 68,
+      "canonical_name": "沃玛战将",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 70,
+      "canonical_name": "火焰沃玛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 73,
+      "canonical_name": "沃玛卫士",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    },
+    {
+      "monster_id": 76,
+      "canonical_name": "沃玛教主",
+      "classification": "boss",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [],
+  "candidate_sha256": "56c0e54307677770942934e22af2401ba66482b9718e2bb5d24bf10dc63de18c",
+  "non_target_fields_unchanged": true,
+  "replaced_source_spawn_count": 0
+}

@@ -1,0 +1,66 @@
+{
+  "map_id": "world_wooma_forest",
+  "legacy_map_id": "wooma_forest",
+  "runtime_map_id": 910004,
+  "display_name": "沃玛森林",
+  "source_sha256": "84e64ff166f43dae5f2114a9c003bafdc74c6cf4152e52da0cb0534954c3612f",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 2256,
+  "component_sizes": [
+    2233,
+    23
+  ],
+  "monster_spawn_count": 5,
+  "boss_spawn_count": 1,
+  "placement_count": 6,
+  "selected": [
+    {
+      "monster_id": 24,
+      "canonical_name": "多钩猫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 26,
+      "canonical_name": "钉耙猫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 28,
+      "canonical_name": "森林雪人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 34,
+      "canonical_name": "半兽人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 36,
+      "canonical_name": "半兽战士",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 38,
+      "canonical_name": "半兽勇士",
+      "classification": "elite",
+      "placement_kind": "boss_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "弓箭护卫",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    }
+  ],
+  "candidate_sha256": "f93426acb2f4630887b15fe7d5d6a479e7b9ffe267930cdee3d7c15e48178ea1",
+  "non_target_fields_unchanged": true,
+  "replaced_source_spawn_count": 0
+}

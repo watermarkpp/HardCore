@@ -1,0 +1,4142 @@
+{
+  "schema_version": 1,
+  "contract_id": "hardcore.map_monster_placement_batch.v1",
+  "generated_by": "tools/map_editor/build_map_monster_placement_batch.py",
+  "inputs": {
+    "authority_sha256": "6a757a948ce161aa500f925502048e1ba7d1346f4064e082b43a011693f4cb8c",
+    "identity_registry_sha256": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
+    "current_monster_library_sha256": "0f6ed32f1f77b92523410819526a648c05f23a4a1a7d7c5ad89e950b729b1143",
+    "execution_policy_sha256": "21d4559de8d4a54d268fdfad6a8a66292988e004262ffe21474d42ba47a05f9c"
+  },
+  "summary": {
+    "formal_map_count": 67,
+    "candidate_map_count": 66,
+    "preserved_map_count": 1,
+    "transition_backfill_map_count": 0,
+    "no_fixed_spawn_map_count": 0,
+    "placement_entry_count": 405,
+    "skipped_token_count": 26
+  },
+  "maps": [
+    {
+      "map_id": "world_bich_province",
+      "legacy_map_id": "bich_province",
+      "runtime_map_id": 910001,
+      "display_name": "±ÈÆæÊ¡£¨µ¥»úÖØÖÆ£©",
+      "source_sha256": "369f112d7ded43aea47baadcc4069b4d6aae6bd7637e5ca285031401ecff7a93",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 4510,
+      "component_sizes": [
+        4510
+      ],
+      "monster_spawn_count": 8,
+      "boss_spawn_count": 0,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 18,
+          "canonical_name": "¶¾Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 19,
+          "canonical_name": "¸òó¡",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 21,
+          "canonical_name": "µ¾²ÝÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 24,
+          "canonical_name": "¶à¹³Ã¨",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 26,
+          "canonical_name": "¶¤°ÒÃ¨",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 28,
+          "canonical_name": "É­ÁÖÑ©ÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 30,
+          "canonical_name": "Ê³ÈË»¨",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 34,
+          "canonical_name": "°ëÊÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "¼¦",
+          "source_category_role": "ordinary",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "INTENTIONALLY_EXCLUDED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "Â¹",
+          "source_category_role": "ordinary",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "INTENTIONALLY_EXCLUDED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "¹­¼ý»¤ÎÀ",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "eb97721edeb34595c8c545a0cbacaa96d730fbb006c9ece5d33c7f9031762e80",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
+    },
+    {
+      "map_id": "bich_orc_tomb_f1",
+      "legacy_map_id": "orc_tomb_1",
+      "runtime_map_id": 911001,
+      "display_name": "ÊÞÈË¹ÅÄ¹Ò»²ã",
+      "source_sha256": "613394c63c95e6121b7765387121b91da319eb142f8926e6742d6c47d423a509",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1162,
+      "component_sizes": [
+        1162
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "É½¶´òùòð",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 45,
+          "canonical_name": "Ð«×Ó",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 46,
+          "canonical_name": "¶´Çù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 47,
+          "canonical_name": "÷¼÷Ã",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 50,
+          "canonical_name": "ÖÀ¸«÷¼÷Ã",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 52,
+          "canonical_name": "÷¼÷ÃÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "61a26868627a1b4408cff644e4c896a3ebe79c548a8cb31c6f8673f9d537cd1f",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_orc_tomb_f2",
+      "legacy_map_id": "orc_tomb_2",
+      "runtime_map_id": 911002,
+      "display_name": "ÊÞÈË¹ÅÄ¹¶þ²ã",
+      "source_sha256": "12e81ca5072588a099300e6806118e87d81e9b00da5985a57dbd1bf5a38701f7",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1126,
+      "component_sizes": [
+        1126
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "É½¶´òùòð",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 45,
+          "canonical_name": "Ð«×Ó",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 46,
+          "canonical_name": "¶´Çù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 47,
+          "canonical_name": "÷¼÷Ã",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 50,
+          "canonical_name": "ÖÀ¸«÷¼÷Ã",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 52,
+          "canonical_name": "÷¼÷ÃÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "181ba7a35cec3ba9a4de1eb8c33927cc0b5b8a73bef76f9d59ff507000b6d21e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_orc_tomb_f3",
+      "legacy_map_id": "orc_tomb_3",
+      "runtime_map_id": 911003,
+      "display_name": "ÊÞÈË¹ÅÄ¹Èý²ã",
+      "source_sha256": "e71f32925d3cfdaf10fbb8f02d56fbb4c90903b79cf35a23afbefddfdfbedfed",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1198,
+      "component_sizes": [
+        1198
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 1,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "É½¶´òùòð",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 45,
+          "canonical_name": "Ð«×Ó",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 46,
+          "canonical_name": "¶´Çù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 47,
+          "canonical_name": "÷¼÷Ã",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 50,
+          "canonical_name": "ÖÀ¸«÷¼÷Ã",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 52,
+          "canonical_name": "÷¼÷ÃÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 54,
+          "canonical_name": "÷¼÷ÃÕ½½«",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 56,
+          "canonical_name": "÷¼÷Ã¾«Áé",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "2a6765e1aa10fdd7dd7b84b4a6768e2065121d1853473ffd97e7c507c40e51f7",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_mine_f1",
+      "legacy_map_id": "bich_mine_1",
+      "runtime_map_id": 911101,
+      "display_name": "¿óÇøÒ»²ã",
+      "source_sha256": "ae6811ffd06f89ed67716a224f463328b43fc8d43d0a38370b16b6293fe79b8f",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2037,
+      "component_sizes": [
+        2037
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 1,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "¶´Çù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "½©Ê¬1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "½©Ê¬2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "½©Ê¬3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "½©Ê¬4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "½©Ê¬5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 89,
+          "canonical_name": "Ê¬Íõ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "eaa8df9eeb6f54ee462b55666b84b16deb464bb0666fb05d23012453307ab892",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_mine_f2",
+      "legacy_map_id": "bich_mine_2",
+      "runtime_map_id": 911102,
+      "display_name": "¿óÇø¶þ²ã",
+      "source_sha256": "0cd1842da384ec5eef7cd0131a519b4187381870f5da2a9860dbd3785e268cd9",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2002,
+      "component_sizes": [
+        2002
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 1,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "¶´Çù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "½©Ê¬1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "½©Ê¬2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "½©Ê¬3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "½©Ê¬4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "½©Ê¬5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 89,
+          "canonical_name": "Ê¬Íõ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "b4ad1cf88e2f06093f6b04c613e1afd08d593cce135198728fb34575ef893c48",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "bich_corpse_king_hall",
+      "legacy_map_id": "corpse_king_hall",
+      "runtime_map_id": 911103,
+      "display_name": "Ê¬Íõµî",
+      "source_sha256": "5345dd1b493c9357eae032ca6593b43ca2dd5de15c2172910f89bf23f4b3e296",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 709,
+      "component_sizes": [
+        709
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 89,
+          "canonical_name": "Ê¬Íõ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "d38ec063bf85c827684d37e29816a7ae002f6b96285d158ca4872cfcf757a4e6",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_hellfire",
+      "legacy_map_id": "dyly_2",
+      "runtime_map_id": 918002,
+      "display_name": "µØÓüÁÒÑæ",
+      "source_sha256": "bd1b858fb312531fd16dcfcf1ac773414ef9e92e46e1b0becd30c7a8051fc5d1",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 815,
+      "component_sizes": [
+        815
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 238,
+          "canonical_name": "°µÖ®÷¼÷Ã¾«Áé",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "e3fe1cbe491bc6b6346be33c14b8cf55e1496d818b06534a0f121a3ebabdd0ec",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_snake_valley",
+      "legacy_map_id": "snake_valley",
+      "runtime_map_id": 910002,
+      "display_name": "¶¾ÉßÉ½¹È",
+      "source_sha256": "9bbf068504c1ecfd0080186ec0e8e0ddf224666e9370a80f7fadb9ba9a7dfefb",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2065,
+      "component_sizes": [
+        2065
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 0,
+      "placement_count": 5,
+      "selected": [
+        {
+          "monster_id": 18,
+          "canonical_name": "¶¾Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 30,
+          "canonical_name": "Ê³ÈË»¨",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 34,
+          "canonical_name": "°ëÊÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 92,
+          "canonical_name": "ºìÉß",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 94,
+          "canonical_name": "»¢Éß",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "¹­¼ý»¤ÎÀ",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "12bcec6d754c6c42a1850b6ef29bff5ec920b694f681aa619662e81a65a6ef75",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "snake_mine_passage_1",
+      "legacy_map_id": "connection_passage_1",
+      "runtime_map_id": 912001,
+      "display_name": "Á¬½ÓÍ¨µÀ1",
+      "source_sha256": "a28807d5ec6ba1741fac827ba27bba54886d1b1478b2d49e4e324aa31debacba",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2024,
+      "component_sizes": [
+        2024
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "¶´Çù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "½©Ê¬1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "½©Ê¬2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "½©Ê¬3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "½©Ê¬4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "½©Ê¬5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "1f2516cd43990a2102c29a6e104ed2dcf70ab75c7296ea95a0ba9d190b9f63ec",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "snake_mine_passage_2",
+      "legacy_map_id": "connection_passage_2",
+      "runtime_map_id": 912002,
+      "display_name": "Á¬½ÓÍ¨µÀ2",
+      "source_sha256": "615dc2805da527510bce753dfdc68e1ad04d7c515305e31645f814a524161e13",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1994,
+      "component_sizes": [
+        1994
+      ],
+      "monster_spawn_count": 10,
+      "boss_spawn_count": 1,
+      "placement_count": 11,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "¶´Çù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "½©Ê¬1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "½©Ê¬2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "½©Ê¬3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "½©Ê¬4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "½©Ê¬5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 89,
+          "canonical_name": "Ê¬Íõ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 110,
+          "canonical_name": "òÚò¼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "ÌøÌø·ä",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "Ç¯³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "c99cd4a2ec6be6546691dac416455b5f042d220a0c6391c989ab39269450cad7",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "snake_unknown_dark_palace",
+      "legacy_map_id": "quest_1",
+      "runtime_map_id": 912003,
+      "display_name": "Î´Öª°µµî",
+      "source_sha256": "1462445453781d9d495dc6dd6c0edcb7dca7e478288caacb655e57c2da6363af",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2003,
+      "component_sizes": [
+        2003
+      ],
+      "monster_spawn_count": 8,
+      "boss_spawn_count": 0,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 39,
+          "canonical_name": "°ëÊÞÓÂÊ¿1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 57,
+          "canonical_name": "÷¼÷Ã¾«Áé1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 74,
+          "canonical_name": "ÎÖÂêÎÀÊ¿1",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 77,
+          "canonical_name": "ÎÖÂê½ÌÖ÷1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 90,
+          "canonical_name": "Ê¬Íõ1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 121,
+          "canonical_name": "Ð°¶ñÇ¯³æ1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 137,
+          "canonical_name": "°×Ò°Öí1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 142,
+          "canonical_name": "Ð°¶ñ¶¾Éß1",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "¼¦£¨Î´Öª°µµî±äÌå£©",
+          "source_category_role": "special",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "Â¹£¨Î´Öª°µµî±äÌå£©",
+          "source_category_role": "special",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "µ¾²ÝÈË£¨Î´Öª°µµî±äÌå£©",
+          "source_category_role": "special",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "¾ÞÐÍ¶à½Ç³æ£¨Î´Öª°µµî±äÌå£©",
+          "source_category_role": "special",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "bffd4536493e1c2c9879bee85ae1c2cb1a16b5e663413e54d35d7b22fc7685b3",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_mengzhong_province",
+      "legacy_map_id": "mengzhong_province",
+      "runtime_map_id": 910003,
+      "display_name": "ÃËÖØÊ¡",
+      "source_sha256": "056b54043b1f0d3ffa5b7e2f6c36bf7cdf59d90fe6fb9eca580be9435f0fe97d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 5554,
+      "component_sizes": [
+        5554
+      ],
+      "monster_spawn_count": 8,
+      "boss_spawn_count": 0,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 96,
+          "canonical_name": "Ñò",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 97,
+          "canonical_name": "ÁÔÓ¥",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 100,
+          "canonical_name": "ÀÇ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 101,
+          "canonical_name": "¿ø¼×³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 103,
+          "canonical_name": "ÍþË¼¶øÐ¡³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 104,
+          "canonical_name": "É³³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 105,
+          "canonical_name": "¶à½Ç³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 107,
+          "canonical_name": "¾ÞÐÍ¶à½Ç³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "¹­¼ý»¤ÎÀ",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "6debd0caaa3481e4acae869465a01d2096b59e251d027bc0c33dd670814d3829",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_tomb_f1",
+      "legacy_map_id": "stone_tomb_1",
+      "runtime_map_id": 913001,
+      "display_name": "Ê¯Ä¹Ò»²ã",
+      "source_sha256": "a8e042b76c2d522fa34e2da99fafe02bdb9dd6f6445652d35148b513781354e9",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2023,
+      "component_sizes": [
+        2023
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "6967bc7fc101061e15aa6a643a2d0f33cce2b2aa80b159838069bce3dfcf1cd2",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_tomb_f2",
+      "legacy_map_id": "stone_tomb_2",
+      "runtime_map_id": 913002,
+      "display_name": "Ê¯Ä¹¶þ²ã",
+      "source_sha256": "314421ae23d6e296d20f2e54477a5e8c2cf18a3d2084b781231a04d3f37edf04",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2023,
+      "component_sizes": [
+        2023
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "e8548e425b1a0a69de834251e5608965ada7b38dea8f0973f14198c3db30dbea",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_tomb_f3",
+      "legacy_map_id": "stone_tomb_3",
+      "runtime_map_id": 913003,
+      "display_name": "Ê¯Ä¹Èý²ã",
+      "source_sha256": "dbf5b269863708891c35383307d34b649d8b60dd8f89397fa6a535f570013022",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1999,
+      "component_sizes": [
+        1999
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "Ð«Éß",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "eb4a9fff3ec0bbb17def001e21be7d3dcfbd01fa3df608a6646b1bc74dcdd437",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_tomb_f4",
+      "legacy_map_id": "stone_tomb_4",
+      "runtime_map_id": 913004,
+      "display_name": "Ê¯Ä¹ËÄ²ã",
+      "source_sha256": "1d11eb615cbd0e2e76d047930b93e867d5a2ba1dd03c775ee656b94c9182acc9",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2023,
+      "component_sizes": [
+        2023
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 3,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "°×Ò°Öí",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "Ð«Éß",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 141,
+          "canonical_name": "Ð°¶ñ¶¾Éß",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 143,
+          "canonical_name": "Ê¯Ä¹Ê¬Íõ",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "fa921d84708c92d287aab4659e4ea87292e024ef64425c13d48ee3d5acaec240",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_confusion_hall",
+      "legacy_map_id": "boss_2",
+      "runtime_map_id": 918001,
+      "display_name": "À§»óµîÌÃ",
+      "source_sha256": "ecf586d1b55c8aaceab173436e2abf3f3a5cfd19040af6a643766562cd21fcb0",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 359,
+      "component_sizes": [
+        359
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 235,
+          "canonical_name": "°µÖ®Ë«Í·ÑªÄ§",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "507b47892e701e34d7ff0b40f5814ed7e0d539a7755beb2124aaf7a5ca8209f6",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_temple_f1",
+      "legacy_map_id": "zuma_temple_1",
+      "runtime_map_id": 913101,
+      "display_name": "×æÂêËÂÃíÒ»²ã",
+      "source_sha256": "7519359ce01e6f9ec29c331b68b096293966e7892cfedddd4aa9c52c0b2888ac",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2008,
+      "component_sizes": [
+        2008
+      ],
+      "monster_spawn_count": 3,
+      "boss_spawn_count": 0,
+      "placement_count": 3,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 148,
+          "canonical_name": "´óÀÏÊó",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "8eb563e0366c1a9a68df0aa91a53051eb29b3f215a61d27ebf680876def2ea0e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_temple_f2",
+      "legacy_map_id": "zuma_temple_2",
+      "runtime_map_id": 913102,
+      "display_name": "×æÂêËÂÃí¶þ²ã",
+      "source_sha256": "f051c73feb1d9e85c13b89c31dc0746c3dd3287f8d923cf8fb09d4bf8aaf6c03",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2008,
+      "component_sizes": [
+        2008
+      ],
+      "monster_spawn_count": 3,
+      "boss_spawn_count": 0,
+      "placement_count": 3,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 148,
+          "canonical_name": "´óÀÏÊó",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "b469105a51f991473bcc53eb76be59e1c4f991746004863bb9b03d8b20bd4faf",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_temple_f3",
+      "legacy_map_id": "zuma_temple_3",
+      "runtime_map_id": 913103,
+      "display_name": "×æÂêËÂÃíÈý²ã",
+      "source_sha256": "f771066188dd78963bfca3d0234a30357212befbabe4e4b2d4b0d766ecc03e8b",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1981,
+      "component_sizes": [
+        1981
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 148,
+          "canonical_name": "´óÀÏÊó",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 150,
+          "canonical_name": "×æÂê¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 153,
+          "canonical_name": "×æÂêµñÏñ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 156,
+          "canonical_name": "×æÂêÎÀÊ¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "4b398de15b3fcc2641f553db02b56a452bfe44bd60527fc218b68c0c29055c9e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_temple_f4",
+      "legacy_map_id": "zuma_temple_4",
+      "runtime_map_id": 913104,
+      "display_name": "×æÂêËÂÃíËÄ²ã",
+      "source_sha256": "c08e04b0b3dffc95c40c1ed145e377d79f75cddd7df358f76cbd52bd65dc0e32",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2008,
+      "component_sizes": [
+        2008
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 148,
+          "canonical_name": "´óÀÏÊó",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 150,
+          "canonical_name": "×æÂê¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 153,
+          "canonical_name": "×æÂêµñÏñ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 156,
+          "canonical_name": "×æÂêÎÀÊ¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "95c22fd3832cc595e0edb3ae10f77f8d04a0bc5cdf3351c793d953a8e471190c",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_pavilion",
+      "legacy_map_id": "zumage_1",
+      "runtime_map_id": 913105,
+      "display_name": "×æÂê¸ó",
+      "source_sha256": "ded7a06daf6777ea34b232fa9f2f151d93108ea73f21924dbf95b0a599839614",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3415,
+      "component_sizes": [
+        3415
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 3,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 150,
+          "canonical_name": "×æÂê¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 152,
+          "canonical_name": "×æÂê¹­¼ýÊÖ3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 153,
+          "canonical_name": "×æÂêµñÏñ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 155,
+          "canonical_name": "×æÂêµñÏñ3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 156,
+          "canonical_name": "×æÂêÎÀÊ¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 158,
+          "canonical_name": "×æÂêÎÀÊ¿3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "f4fc042d767d94a2912d6b7c24a66b4f6df6718f7ba372b5762bfb8c6028a6f4",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_zuma_leader_home",
+      "legacy_map_id": "zmjzzj_2",
+      "runtime_map_id": 913106,
+      "display_name": "×æÂê½ÌÖ÷Ö®¼Ò",
+      "source_sha256": "0235e7afe5544ebaadcfe4af638e855efb2a9005ace361e80be8e69fded88678",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1281,
+      "component_sizes": [
+        1281
+      ],
+      "monster_spawn_count": 2,
+      "boss_spawn_count": 1,
+      "placement_count": 3,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 160,
+          "canonical_name": "×æÂê½ÌÖ÷",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "0a3b5b482f0b24260599496bdbea364fc06a7bc88fc583cd663f56903af12390",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_death_valley_dungeon",
+      "legacy_map_id": "swsg_2",
+      "runtime_map_id": 913201,
+      "display_name": "ËÀÍöÉ½¹ÈµØÀÎ",
+      "source_sha256": "071498e2e261fd13c3ece9504ff49b6ca99e8bd38a4ae9707bf06d85dd02c10a",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1844,
+      "component_sizes": [
+        1844
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "òÚò¼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "ÌøÌø·ä",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "¾ÞÐÍÈä³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "¹­¼ý»¤ÎÀ£¨Èë¿Ú¸½½ü£¬¿ÉÑ¡£©",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "c51b278860bb1e0d85255946d0e4332dd98f3bbfa19e2b2869d88bfd54c9bd2a",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_stone_coffin_room",
+      "legacy_map_id": "sgcw_2",
+      "runtime_map_id": 913202,
+      "display_name": "Ê¯¹×²ÄÎÝ",
+      "source_sha256": "5301cf742330209cbf417df4795f3b1a5d344c688a61664218beee5a5e304b19",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 721,
+      "component_sizes": [
+        721
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "òÚò¼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "ÌøÌø·ä",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "¾ÞÐÍÈä³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "Ç¯³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "Ð°¶ñÇ¯³æ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "source_map_id": "mengzhong_death_valley_dungeon",
+          "raw_token": "¹­¼ý»¤ÎÀ£¨Èë¿Ú¸½½ü£¬¿ÉÑ¡£©",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "bfb9150109eb7aba2272ca557666389ef4508b0e3ae420d48bf1d0427fb9cdfe",
+      "non_target_fields_unchanged": true,
+      "pool_inheritance": {
+        "mode": "adjacent_pool_union",
+        "target_map_id": "mengzhong_stone_coffin_room",
+        "target_authority_ref": {
+          "map_id": "mengzhong_stone_coffin_room",
+          "source_line": 130,
+          "source_category_role": "special",
+          "source_token_index": 1
+        },
+        "source_map_ids": [
+          "mengzhong_death_valley_dungeon",
+          "mengzhong_dark_area"
+        ],
+        "source_reports": [
+          {
+            "map_id": "mengzhong_death_valley_dungeon",
+            "selected_monster_ids": [
+              110,
+              112,
+              114,
+              116
+            ],
+            "skipped_count": 1
+          },
+          {
+            "map_id": "mengzhong_dark_area",
+            "selected_monster_ids": [
+              110,
+              112,
+              114,
+              116,
+              118,
+              120
+            ],
+            "skipped_count": 0
+          }
+        ],
+        "selected_monster_ids": [
+          110,
+          112,
+          114,
+          116,
+          118,
+          120
+        ],
+        "source_authority_refs_by_monster_id": {
+          "110": [
+            {
+              "map_id": "mengzhong_death_valley_dungeon",
+              "source_line": 126,
+              "source_category_role": "ordinary",
+              "source_token_index": 1
+            },
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 1
+            }
+          ],
+          "112": [
+            {
+              "map_id": "mengzhong_death_valley_dungeon",
+              "source_line": 126,
+              "source_category_role": "ordinary",
+              "source_token_index": 4
+            },
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 4
+            }
+          ],
+          "114": [
+            {
+              "map_id": "mengzhong_death_valley_dungeon",
+              "source_line": 126,
+              "source_category_role": "ordinary",
+              "source_token_index": 2
+            },
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 2
+            }
+          ],
+          "116": [
+            {
+              "map_id": "mengzhong_death_valley_dungeon",
+              "source_line": 126,
+              "source_category_role": "ordinary",
+              "source_token_index": 3
+            },
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 3
+            }
+          ],
+          "118": [
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 133,
+              "source_category_role": "ordinary",
+              "source_token_index": 5
+            }
+          ],
+          "120": [
+            {
+              "map_id": "mengzhong_dark_area",
+              "source_line": 134,
+              "source_category_role": "elite",
+              "source_token_index": 1
+            }
+          ]
+        }
+      },
+      "replaced_source_spawn_count": 0
+    },
+    {
+      "map_id": "mengzhong_dark_area",
+      "legacy_map_id": "hadd_2",
+      "runtime_map_id": 913203,
+      "display_name": "ºÚ°µµØ´ø",
+      "source_sha256": "a5236037d1e8ab232f0bc083e32992c54a401ecead59b6bb38b667b05b63b04d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1027,
+      "component_sizes": [
+        1026,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "òÚò¼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "ÌøÌø·ä",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "¾ÞÐÍÈä³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "Ç¯³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "Ð°¶ñÇ¯³æ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "ed959dd6a508f0bf4a2c166c4cdff29b87ea653ba8b3a4f23d395aa16d22ab84",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_between_life_and_death",
+      "legacy_map_id": "between_life_and_death",
+      "runtime_map_id": 913204,
+      "display_name": "ÉúËÀÖ®¼ä",
+      "source_sha256": "f5f96ca71a3de04e5edf85d4fa2081a420979da389e4fd368820cd6e1a8cb6c0",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1027,
+      "component_sizes": [
+        1026,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "òÚò¼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "ÌøÌø·ä",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "¾ÞÐÍÈä³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "Ç¯³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "Ð°¶ñÇ¯³æ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "4ff8a00adb7eee2095d4cd5834a05f999d717cd35cc701032b9d14b888228698",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_terror_space",
+      "legacy_map_id": "terror_space",
+      "runtime_map_id": 913205,
+      "display_name": "¿Ö²À¿Õ¼ä",
+      "source_sha256": "1737e0919b2a52fce0453d0703190dc19c50c492b8f4cc3e3a7d29bce5f1d701",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 992,
+      "component_sizes": [
+        991,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "òÚò¼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "ÌøÌø·ä",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "¾ÞÐÍÈä³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "Ç¯³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "Ð°¶ñÇ¯³æ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "0687388ac018cc84562c582f282c4361065acb3cb8854081af98812862c9a2b0",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_thin_sky_passage",
+      "legacy_map_id": "thin_sky_passage",
+      "runtime_map_id": 913206,
+      "display_name": "Ò»ÏßÌì",
+      "source_sha256": "18c7ee6d1684df31b5d708aa569e5573d0d9452aa330479bfbf2608b5bbb56f7",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1027,
+      "component_sizes": [
+        1026,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "òÚò¼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "ÌøÌø·ä",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "¾ÞÐÍÈä³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "Ç¯³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "Ð°¶ñÇ¯³æ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "6ceed57d969582e55b6aee2a48594f845cd504b8e0ff21f31946bd5fdf15d3ae",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "mengzhong_death_coffin",
+      "legacy_map_id": "death_coffin",
+      "runtime_map_id": 913207,
+      "display_name": "ËÀÍö¹×²Ä",
+      "source_sha256": "18308100af372cf0c18424cc5f62a8845df76c0923097ad5ac57450664861e08",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1076,
+      "component_sizes": [
+        1075,
+        1
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 2,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 110,
+          "canonical_name": "òÚò¼",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 114,
+          "canonical_name": "ÌøÌø·ä",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 116,
+          "canonical_name": "¾ÞÐÍÈä³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 118,
+          "canonical_name": "Ç¯³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 120,
+          "canonical_name": "Ð°¶ñÇ¯³æ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 124,
+          "canonical_name": "´¥ÁúÉñ",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "d0c7bc21db273179ee6f4564e4e8b9c9b044698ef1dec17b2d6f6481d0270cbe",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_wooma_forest",
+      "legacy_map_id": "wooma_forest",
+      "runtime_map_id": 910004,
+      "display_name": "ÎÖÂêÉ­ÁÖ",
+      "source_sha256": "84e64ff166f43dae5f2114a9c003bafdc74c6cf4152e52da0cb0534954c3612f",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2256,
+      "component_sizes": [
+        2233,
+        23
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 1,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 24,
+          "canonical_name": "¶à¹³Ã¨",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 26,
+          "canonical_name": "¶¤°ÒÃ¨",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 28,
+          "canonical_name": "É­ÁÖÑ©ÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 34,
+          "canonical_name": "°ëÊÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 36,
+          "canonical_name": "°ëÊÞÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 38,
+          "canonical_name": "°ëÊÞÓÂÊ¿",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "¹­¼ý»¤ÎÀ",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "f93426acb2f4630887b15fe7d5d6a479e7b9ffe267930cdee3d7c15e48178ea1",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
+    },
+    {
+      "map_id": "wooma_temple_f1",
+      "legacy_map_id": "wooma_temple_1",
+      "runtime_map_id": 915001,
+      "display_name": "ÎÖÂêËÂÃíÒ»²ã",
+      "source_sha256": "03ca90d79bd6209488204f4cf39c32927f00b31643d682727fe917d4475f2f0f",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1625,
+      "component_sizes": [
+        1625
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "É½¶´òùòð",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 60,
+          "canonical_name": "·à³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 64,
+          "canonical_name": "ÎÖÂêÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 66,
+          "canonical_name": "ÎÖÂêÓÂÊ¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 68,
+          "canonical_name": "ÎÖÂêÕ½½«",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 70,
+          "canonical_name": "»ðÑæÎÖÂê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "d3253b6f8a89f5e085bd7ea02e962e4bf439623b6d9afe1c9324b72133b25415",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
+    },
+    {
+      "map_id": "wooma_temple_f2",
+      "legacy_map_id": "wooma_temple_2",
+      "runtime_map_id": 915002,
+      "display_name": "ÎÖÂêËÂÃí¶þ²ã",
+      "source_sha256": "95a8f313a246144bf03996430e03c298d7752236ce5b954f6f7b0b07276a76a3",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1582,
+      "component_sizes": [
+        1582
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 1,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 43,
+          "canonical_name": "É½¶´òùòð",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 60,
+          "canonical_name": "·à³æ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 62,
+          "canonical_name": "°µºÚÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 64,
+          "canonical_name": "ÎÖÂêÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 66,
+          "canonical_name": "ÎÖÂêÓÂÊ¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 68,
+          "canonical_name": "ÎÖÂêÕ½½«",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 70,
+          "canonical_name": "»ðÑæÎÖÂê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 73,
+          "canonical_name": "ÎÖÂêÎÀÊ¿",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "eee285caeda63b1ccca098e05ac5b8dda116bddd40cd264f2c031ddddd99b24f",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
+    },
+    {
+      "map_id": "wooma_temple_boss_hall",
+      "legacy_map_id": "wooma_temple_3",
+      "runtime_map_id": 915003,
+      "display_name": "ÎÖÂê½ÌÖ÷´óÌü",
+      "source_sha256": "1788e420db4465ce108fc219ee9433dbfdb0d4969491b09e039dc3a74c5803ef",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1640,
+      "component_sizes": [
+        1640
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 2,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 62,
+          "canonical_name": "°µºÚÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 64,
+          "canonical_name": "ÎÖÂêÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 66,
+          "canonical_name": "ÎÖÂêÓÂÊ¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 68,
+          "canonical_name": "ÎÖÂêÕ½½«",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 70,
+          "canonical_name": "»ðÑæÎÖÂê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 73,
+          "canonical_name": "ÎÖÂêÎÀÊ¿",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 76,
+          "canonical_name": "ÎÖÂê½ÌÖ÷",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "56c0e54307677770942934e22af2401ba66482b9718e2bb5d24bf10dc63de18c",
+      "non_target_fields_unchanged": true,
+      "replaced_source_spawn_count": 0
+    },
+    {
+      "map_id": "hidden_fallen_graveyard",
+      "legacy_map_id": "dlfc_2",
+      "runtime_map_id": 918003,
+      "display_name": "¶éÂä·Ø³¡",
+      "source_sha256": "51742f5f2c0fa741abb876766479be3acc64f2a6fc9608f17c189f75b5417f58",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 843,
+      "component_sizes": [
+        843
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 237,
+          "canonical_name": "°µÖ®»ÆÈª½ÌÖ÷",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "a2b2cd8d17cc78d708e8dabe7770c4347a53825a47c5383a31838609049605ab",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_abyss_domain",
+      "legacy_map_id": "symy_2",
+      "runtime_map_id": 918005,
+      "display_name": "ÉîÔ¨Ä§Óò",
+      "source_sha256": "5e8fc91c4d18926e1e9d14b65c7cf5f7767482db8ef3f293dac87c56a3599996",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 831,
+      "component_sizes": [
+        831
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 236,
+          "canonical_name": "°µÖ®Ë«Í·½ð¸Õ",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "5c94f5be04b46b23c833cae9b8b4166d01d7ff7e64134b36e68e867ce2240085",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_fengmo_valley",
+      "legacy_map_id": "fmg_1",
+      "runtime_map_id": 910005,
+      "display_name": "·âÄ§¹È",
+      "source_sha256": "2376258e0d3b83c1f7703b723ea0c52ffc61512af1f52836b358f4c541dfaae8",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1517,
+      "component_sizes": [
+        1496,
+        18,
+        3
+      ],
+      "monster_spawn_count": 11,
+      "boss_spawn_count": 2,
+      "placement_count": 13,
+      "selected": [
+        {
+          "monster_id": 36,
+          "canonical_name": "°ëÊÞÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 38,
+          "canonical_name": "°ëÊÞÓÂÊ¿",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 47,
+          "canonical_name": "÷¼÷Ã",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 50,
+          "canonical_name": "ÖÀ¸«÷¼÷Ã",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 52,
+          "canonical_name": "÷¼÷ÃÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 54,
+          "canonical_name": "÷¼÷ÃÕ½½«",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 56,
+          "canonical_name": "÷¼÷Ã¾«Áé",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "½©Ê¬1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "½©Ê¬2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "½©Ê¬3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "½©Ê¬4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "½©Ê¬5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 195,
+          "canonical_name": "Ç§ÄêÊ÷Ñý",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "¶ñÄ§¹­¼ýÊÖ",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            194
+          ]
+        }
+      ],
+      "candidate_sha256": "f5ad3ef3ca02e43af8294b05d95427d9f4ee816de097839d915f768ebf5fece1",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_forked_path",
+      "legacy_map_id": "ql_1",
+      "runtime_map_id": 914001,
+      "display_name": "ÆéÂ·",
+      "source_sha256": "385eff206f6630f8f4c0bff676243b337c6b4c420fa31dde1d9e1551e5093741",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1679,
+      "component_sizes": [
+        1679
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 1,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 46,
+          "canonical_name": "¶´Çù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 79,
+          "canonical_name": "½©Ê¬1",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 81,
+          "canonical_name": "½©Ê¬2",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 83,
+          "canonical_name": "½©Ê¬3",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 85,
+          "canonical_name": "½©Ê¬4",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 87,
+          "canonical_name": "½©Ê¬5",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 89,
+          "canonical_name": "Ê¬Íõ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "a50e804afc2436caa76153ab5071e75be34466af2e46d3e62217129127c7cdc8",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_light_corridor",
+      "legacy_map_id": "gmhl_1",
+      "runtime_map_id": 914002,
+      "display_name": "¹âÃ¢»ØÀÈ",
+      "source_sha256": "6eba2e723c0fd339f393d32da201111cdc5aafcb943576bf73f5b87a81ff6361",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2536,
+      "component_sizes": [
+        2536
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "91e637832f8289d80f58cc82a5f459b99716a6519c45deefecaf3f92d5e40205",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_thunder_road",
+      "legacy_map_id": "gmhl_thunder_road",
+      "runtime_map_id": 914003,
+      "display_name": "À×öªÖ®Â·",
+      "source_sha256": "257226aea8d23b40edcb542777b7fb5b6f12036282da62145e0130e410e338da",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2536,
+      "component_sizes": [
+        2536
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 1,
+      "placement_count": 5,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "°×Ò°Öí",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "693dffd7cb3b99956056067a8b31736f6840113c1b7a5f4f570aa4fad5da63aa",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_bazhe_hall",
+      "legacy_map_id": "gmhl_bazhe_hall",
+      "runtime_map_id": 914004,
+      "display_name": "°ÔÕß´óÌü",
+      "source_sha256": "218911db769d6393ceab4f8ae1ec57768426925fa6ef3b6983e1d0c23633ea3d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2536,
+      "component_sizes": [
+        2536
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 2,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "°×Ò°Öí",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "Ð«Éß",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 188,
+          "canonical_name": "ºçÄ§ÖíÎÀ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "c38cf41ab8d7f464512d2b36f1c8aa2a02298230d18e0202f42fd6c2a6be10b8",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_zonghengdao",
+      "legacy_map_id": "gmhl_zonghengdao",
+      "runtime_map_id": 914005,
+      "display_name": "×ÝºáµÀ",
+      "source_sha256": "b33f3fe10c46d45c1c71c551cd4c09fe6948d474d932a0e996fba4cdd3861afc",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2506,
+      "component_sizes": [
+        2506
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 2,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "°×Ò°Öí",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "Ð«Éß",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 141,
+          "canonical_name": "Ð°¶ñ¶¾Éß",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "107422b780d8d3fd03c8ff347b8b88f96da7ba15eb6438a307ee275e7b6142eb",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_mohun_hall",
+      "legacy_map_id": "gmhl_mohun_dian",
+      "runtime_map_id": 914006,
+      "display_name": "Ä§»êµî",
+      "source_sha256": "1e5590026c2edeb74a9358a6f743b612f327cc73a7f7b6b49fda5bfa57c6f4b5",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2536,
+      "component_sizes": [
+        2536
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 3,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 112,
+          "canonical_name": "ºÚÉ«¶ñÇù",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 129,
+          "canonical_name": "ºìÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 132,
+          "canonical_name": "ºÚÒ°Öí",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 135,
+          "canonical_name": "°×Ò°Öí",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 138,
+          "canonical_name": "Ð«Éß",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 141,
+          "canonical_name": "Ð°¶ñ¶¾Éß",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 191,
+          "canonical_name": "ºçÄ§Ð«ÎÀ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "9906dc053905d81d3f0f465587f3e9df8305bbcf1ba5fcf3f9b5896b27b9de50",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "fengmo_purgatory_corridor",
+      "legacy_map_id": "gmhl_purgatory_corridor",
+      "runtime_map_id": 914007,
+      "display_name": "Á¶Óü»ØÀÈ",
+      "source_sha256": "62e52339a0c1c818f41861ecde3d91a1def54894596e31bcfea5997de2a36bb9",
+      "status": "PRESERVE_USER_ACCEPTED",
+      "placement_count": 15
+    },
+    {
+      "map_id": "fengmo_final_hall",
+      "legacy_map_id": "gmhl_fengmo_dian",
+      "runtime_map_id": 914008,
+      "display_name": "·âÄ§µî",
+      "source_sha256": "3e15cd7212b485c8dd4ee7e2cdec811beefdb1f080cb4cfd57647434ee11c487",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2661,
+      "component_sizes": [
+        2661
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 6,
+      "placement_count": 11,
+      "selected": [
+        {
+          "monster_id": 126,
+          "canonical_name": "½ÇÓ¬",
+          "classification": "special",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 128,
+          "canonical_name": "Ð¨¶ê",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 150,
+          "canonical_name": "×æÂê¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 152,
+          "canonical_name": "×æÂê¹­¼ýÊÖ3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 153,
+          "canonical_name": "×æÂêµñÏñ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 155,
+          "canonical_name": "×æÂêµñÏñ3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 156,
+          "canonical_name": "×æÂêÎÀÊ¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 158,
+          "canonical_name": "×æÂêÎÀÊ¿3",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 188,
+          "canonical_name": "ºçÄ§ÖíÎÀ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 191,
+          "canonical_name": "ºçÄ§Ð«ÎÀ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 193,
+          "canonical_name": "ºçÄ§½ÌÖ÷",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "bcfd1e4ec17a6ca60c13e7170c124ced3537f37eb455ed0e97f9ac45a633216f",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_death_temple",
+      "legacy_map_id": "swsd_2",
+      "runtime_map_id": 918004,
+      "display_name": "ËÀÍöÉñµî",
+      "source_sha256": "d0d4406135b31b26f19ffd065f341fa9c26b7d2608ef96d2cc60c3ea095a64f1",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 835,
+      "component_sizes": [
+        835
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 240,
+          "canonical_name": "°µÖ®ºçÄ§½ÌÖ÷",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "79d85eb4de9cc12e88dc78ca27dfb813c5447624917a892ab678c7bef501c897",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_white_day_gate",
+      "legacy_map_id": "brm_2",
+      "runtime_map_id": 910006,
+      "display_name": "°×ÈÕÃÅ",
+      "source_sha256": "295748315885dd1ced03e68f58d3ffe2fc4df05a8d5743247576e9900470e556",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1602,
+      "component_sizes": [
+        1602
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 3,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 28,
+          "canonical_name": "É­ÁÖÑ©ÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 31,
+          "canonical_name": "¶à¹³Ã¨Íõ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 32,
+          "canonical_name": "¶¤°ÒÃ¨Íõ",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 36,
+          "canonical_name": "°ëÊÞÕ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 38,
+          "canonical_name": "°ëÊÞÓÂÊ¿",
+          "classification": "elite",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 42,
+          "canonical_name": "°ëÊÞÍ³Áì",
+          "classification": "elite",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "ÌìÀÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 185,
+          "canonical_name": "¾ç¶¾Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "Ñ©ÈËÍõ",
+          "source_category_role": "elite",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "INTENTIONALLY_EXCLUDED",
+          "resolved_monster_ids": []
+        },
+        {
+          "raw_token": "¹­¼ý»¤ÎÀ",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "325ba1318fe0453bde9b8a88326a42aab2c5d9add1ca111bfd588006fa9846e5",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_valley",
+      "legacy_map_id": "cyxg_2",
+      "runtime_map_id": 916001,
+      "display_name": "³àÔÂÏ¿¹È",
+      "source_sha256": "4fe41e22a9c106e302a0f148a7ee4be4fabd9f29441d33f9e1ce9f8a320aca65",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2557,
+      "component_sizes": [
+        2557
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 168,
+          "canonical_name": "ÔÂÄ§Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "ºÚïÉÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "¸ÖÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "±©ÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "ÌìÀÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "»¨ÎÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "9e32116d5bbfd1d4d59495f59c5782db8bed786838093d19aaebeb322093f2fb",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_valley_square",
+      "legacy_map_id": "cyxggc_2",
+      "runtime_map_id": 916002,
+      "display_name": "³àÔÂÏ¿¹È¹ã³¡",
+      "source_sha256": "45b5a95bfb58dba97ad1b9d63e48fea84c5abcceea3c80aae18591c02743c11e",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 7623,
+      "component_sizes": [
+        3148,
+        1415,
+        1398,
+        903,
+        759
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 0,
+      "placement_count": 7,
+      "selected": [
+        {
+          "monster_id": 168,
+          "canonical_name": "ÔÂÄ§Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "ºÚïÉÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "¸ÖÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "±©ÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "ÌìÀÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "»¨ÎÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 182,
+          "canonical_name": "»ÃÓ°Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "2c6f94e83c00230d8a86ed07d5cc4cfc1c3d88af4351608fb64704a58ba6d163",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_choice_land",
+      "legacy_map_id": "chiyue_choice_land",
+      "runtime_map_id": 916003,
+      "display_name": "¾ñÔñÖ®µØ",
+      "source_sha256": "73df38d3a8b221df2aaf2570e44625d0aec7626da6d40b80055090c8814b32c5",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 7555,
+      "component_sizes": [
+        3080,
+        1415,
+        1398,
+        903,
+        759
+      ],
+      "monster_spawn_count": 9,
+      "boss_spawn_count": 0,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 164,
+          "canonical_name": "Ñª¾ÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "Ñª½©Ê¬",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "ÔÂÄ§Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "ºÚïÉÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "¸ÖÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "±©ÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "ÌìÀÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "»¨ÎÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 182,
+          "canonical_name": "»ÃÓ°Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "d871e840389487bcb9d0a0babcbf7f7715c3bf06eda25c14e95dfbd93abfb921",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_valley_secret_passage_a",
+      "legacy_map_id": "chiyue_valley_secret_passage_a",
+      "runtime_map_id": 916004,
+      "display_name": "É½¹ÈÃÜµÀA",
+      "source_sha256": "22fa62dd8d996a364579c282074906e194ffa600cf916746a6a2343f2f6838ae",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2557,
+      "component_sizes": [
+        2557
+      ],
+      "monster_spawn_count": 9,
+      "boss_spawn_count": 0,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 164,
+          "canonical_name": "Ñª¾ÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "Ñª½©Ê¬",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "ÔÂÄ§Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "ºÚïÉÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "¸ÖÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "±©ÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "ÌìÀÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "»¨ÎÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 182,
+          "canonical_name": "»ÃÓ°Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "c567238fd20a720ad92b9ec0cbcd0becfe7679d9be88a06f9a69209299914533",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_demon_altar",
+      "legacy_map_id": "emjt_2",
+      "runtime_map_id": 916006,
+      "display_name": "¶ñÄ§¼ÀÌ³",
+      "source_sha256": "fbc01b21e9a7ba7ab5b381debef5a1c815c3f035ee2d34371108180507cfd7c3",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1775,
+      "component_sizes": [
+        1775
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 2,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 162,
+          "canonical_name": "Ë«Í·ÑªÄ§",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 163,
+          "canonical_name": "Ë«Í·½ð¸Õ",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        },
+        {
+          "monster_id": 164,
+          "canonical_name": "Ñª¾ÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "Ñª½©Ê¬",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "ÔÂÄ§Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "ºÚïÉÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "¸ÖÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "±©ÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "»¨ÎÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "4f591f3251853f2453c1148decdca5cbeb0c3e961a18206ff0e96391de4e76ef",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_valley_secret_passage_b",
+      "legacy_map_id": "chiyue_valley_secret_passage_b",
+      "runtime_map_id": 916005,
+      "display_name": "É½¹ÈÃÜµÀB",
+      "source_sha256": "07196b1596bffe65e2d19cbd33461eb76d1f818d8caa3209b533c248274c9bd7",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2557,
+      "component_sizes": [
+        2557
+      ],
+      "monster_spawn_count": 9,
+      "boss_spawn_count": 0,
+      "placement_count": 9,
+      "selected": [
+        {
+          "monster_id": 164,
+          "canonical_name": "Ñª¾ÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "Ñª½©Ê¬",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "ÔÂÄ§Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "ºÚïÉÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "¸ÖÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "±©ÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 176,
+          "canonical_name": "ÌìÀÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "»¨ÎÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 182,
+          "canonical_name": "»ÃÓ°Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "bfc59293ed4aea43efbc61667ee08d8aa8732cb698bf37222bd040377536be1d",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "chiyue_red_moon_lair",
+      "legacy_map_id": "cymx_2",
+      "runtime_map_id": 916007,
+      "display_name": "³àÔÂÄ§Ñ¨",
+      "source_sha256": "01ce431acf95f6fe2c764a1985d1b74352546b8179a8422580f56bfa8e85552d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 795,
+      "component_sizes": [
+        795
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 1,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 164,
+          "canonical_name": "Ñª¾ÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 166,
+          "canonical_name": "Ñª½©Ê¬",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 168,
+          "canonical_name": "ÔÂÄ§Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 170,
+          "canonical_name": "ºÚïÉÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 172,
+          "canonical_name": "¸ÖÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 174,
+          "canonical_name": "±©ÑÀÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 178,
+          "canonical_name": "»¨ÎÇÖ©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 180,
+          "canonical_name": "³àÔÂ¶ñÄ§",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "de8574ab57931884cea470c933b1990834d61eed76e4ef2e78dca50ff9c58351",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "hidden_pincer_nest",
+      "legacy_map_id": "qccx_2",
+      "runtime_map_id": 918006,
+      "display_name": "Ç¯³æ³²Ñ¨",
+      "source_sha256": "0ac2ae0930d41a0a48d535d551ed0267f4bf8a78baccdee5b8a9a9d78c382733",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 823,
+      "component_sizes": [
+        823
+      ],
+      "monster_spawn_count": 0,
+      "boss_spawn_count": 1,
+      "placement_count": 1,
+      "selected": [
+        {
+          "monster_id": 239,
+          "canonical_name": "°µÖ®ÎÖÂê½ÌÖ÷",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [],
+      "candidate_sha256": "07bb21474d37a4578855ab427d6bf01afe37e55784ca92e6a90b5abb40bbc078",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "world_cangyue_island",
+      "legacy_map_id": "cyd_1",
+      "runtime_map_id": 910007,
+      "display_name": "²ÔÔÂµº",
+      "source_sha256": "87c53c163f7b87ba2444d91dc7f3b111624d88b14221be760f4955fb77975be3",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 1683,
+      "component_sizes": [
+        1683
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 18,
+          "canonical_name": "¶¾Ö©Öë",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 21,
+          "canonical_name": "µ¾²ÝÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 26,
+          "canonical_name": "¶¤°ÒÃ¨",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 28,
+          "canonical_name": "É­ÁÖÑ©ÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 30,
+          "canonical_name": "Ê³ÈË»¨",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 34,
+          "canonical_name": "°ëÊÞÈË",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "Â¹",
+          "source_category_role": "ordinary",
+          "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+          "authority_status": "INTENTIONALLY_EXCLUDED",
+          "resolved_monster_ids": []
+        }
+      ],
+      "candidate_sha256": "b2c16a862c43042108475449f2f7e2ebce26b803afdb29b32c3a91874b5b24d3",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f1",
+      "legacy_map_id": "gmd_1",
+      "runtime_map_id": 917001,
+      "display_name": "¹ÇÄ§¶´Ò»²ã",
+      "source_sha256": "2e2cf474e6951d4cb2af4c610ee38f9ccc741f56b3dfe2c6e0c184e3805373b6",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2112,
+      "component_sizes": [
+        2112
+      ],
+      "monster_spawn_count": 3,
+      "boss_spawn_count": 0,
+      "placement_count": 3,
+      "selected": [
+        {
+          "monster_id": 202,
+          "canonical_name": "÷¼÷Ã³¤Ç¹±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "÷¼÷Ãµ¶¸«ÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "÷¼÷Ã¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "fb0035628cd4821ec8aa144f6862ee102125f21d91f353b8e7c6b93c6c2ff995",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f2",
+      "legacy_map_id": "gmd_2",
+      "runtime_map_id": 917002,
+      "display_name": "¹ÇÄ§¶´¶þ²ã",
+      "source_sha256": "a22dcbd6934cdd55e37a33cfad43e140afa2c13f4b7cf6f6d9abe47e1cb19781",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2112,
+      "component_sizes": [
+        2112
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 200,
+          "canonical_name": "÷¼÷Ã´¸±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 202,
+          "canonical_name": "÷¼÷Ã³¤Ç¹±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "÷¼÷Ãµ¶¸«ÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "÷¼÷Ã¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "41e24ada9a953884cadb0031f2fc34fb89d10e4c3879c28e2ae61d1ea21d2cc6",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f3",
+      "legacy_map_id": "gmd_3",
+      "runtime_map_id": 917003,
+      "display_name": "¹ÇÄ§¶´Èý²ã",
+      "source_sha256": "b4e708a98367ee1dfc46a71af5710043f57c2303293e3446240a6777278b7d0d",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2085,
+      "component_sizes": [
+        2085
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 200,
+          "canonical_name": "÷¼÷Ã´¸±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 202,
+          "canonical_name": "÷¼÷Ã³¤Ç¹±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "÷¼÷Ãµ¶¸«ÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "÷¼÷Ã¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "1efbb1f235e2461ffdeeadce05b9ec1fffae3ab6b1160a4d23edbda5a0118bd3",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f4",
+      "legacy_map_id": "gmd_4",
+      "runtime_map_id": 917004,
+      "display_name": "¹ÇÄ§¶´ËÄ²ã",
+      "source_sha256": "a2b263c8daa8360059d23dad0f0a33e550376ab1b5b00785b74e5538c0f646e8",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2112,
+      "component_sizes": [
+        2112
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 200,
+          "canonical_name": "÷¼÷Ã´¸±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 202,
+          "canonical_name": "÷¼÷Ã³¤Ç¹±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "÷¼÷Ãµ¶¸«ÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "÷¼÷Ã¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "f92441d27bc5f2a32255faa5d3078c447d76a4f80a760aa9b9cf542df131cacd",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bone_cave_f5",
+      "legacy_map_id": "gmd_5",
+      "runtime_map_id": 917005,
+      "display_name": "¹ÇÄ§¶´Îå²ã",
+      "source_sha256": "c196d7aff417b35e9dab09996aa87479d6ce98791014e3c4ec42963144b90334",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 2161,
+      "component_sizes": [
+        2161
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 1,
+      "placement_count": 5,
+      "selected": [
+        {
+          "monster_id": 200,
+          "canonical_name": "÷¼÷Ã´¸±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 202,
+          "canonical_name": "÷¼÷Ã³¤Ç¹±ø",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 204,
+          "canonical_name": "÷¼÷Ãµ¶¸«ÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 206,
+          "canonical_name": "÷¼÷Ã¹­¼ýÊÖ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 208,
+          "canonical_name": "»ÆÈª½ÌÖ÷",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "958ca1e14d7f6344f5bd4c4220d48b127aac784c7840e9c1f0f393acfd4ce0df",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_f1",
+      "legacy_map_id": "nmsm_1",
+      "runtime_map_id": 917101,
+      "display_name": "Å£Ä§ËÂÃíÒ»²ã",
+      "source_sha256": "ee261b7bb6b2a3ccdb322e16fb06f3dac36ea7781b782fa36c4a1dc71e06a7a2",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3220,
+      "component_sizes": [
+        3215,
+        5
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "Å£Í·Ä§",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "Å£Ä§Õ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "Å£Ä§¶·Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "Å£Ä§ÊÌÎÀ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "3960447429bd85b1438c7005c2a1591adcc1f12652b95cf61ffb065ae977765e",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_f2",
+      "legacy_map_id": "nmsm_2",
+      "runtime_map_id": 917102,
+      "display_name": "Å£Ä§ËÂÃí¶þ²ã",
+      "source_sha256": "fb0e8dacb884d5dc8d9672f258c9112933976a44f15c6cb5ff02e30bf3d65a67",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3220,
+      "component_sizes": [
+        3215,
+        5
+      ],
+      "monster_spawn_count": 4,
+      "boss_spawn_count": 0,
+      "placement_count": 4,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "Å£Í·Ä§",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "Å£Ä§Õ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "Å£Ä§¶·Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "Å£Ä§ÊÌÎÀ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "e03009ff74cea884a81cfea0d9b72d1e507242d5935564ad0b49fb78e2955324",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_f3",
+      "legacy_map_id": "nmsm_3",
+      "runtime_map_id": 917103,
+      "display_name": "Å£Ä§ËÂÃíÈý²ã",
+      "source_sha256": "4107a38dd9c26e6974a27caf620af2557aa24c916f9851325ab06b4ab2dbfb4f",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3190,
+      "component_sizes": [
+        3185,
+        5
+      ],
+      "monster_spawn_count": 5,
+      "boss_spawn_count": 0,
+      "placement_count": 5,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "Å£Í·Ä§",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "Å£Ä§Õ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "Å£Ä§¶·Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "Å£Ä§ÊÌÎÀ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 220,
+          "canonical_name": "Å£Ä§·¨Ê¦",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "5bc2fc57b5a812690981310b56c050343053856e1e5b016e86b6a31903fd2833",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_f4",
+      "legacy_map_id": "nmsm_4",
+      "runtime_map_id": 917104,
+      "display_name": "Å£Ä§ËÂÃíËÄ²ã",
+      "source_sha256": "e7c85cb642b4fb96ad995731d682bb50c464b4857ea7b19f9ef88236f5741009",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3220,
+      "component_sizes": [
+        3215,
+        5
+      ],
+      "monster_spawn_count": 6,
+      "boss_spawn_count": 0,
+      "placement_count": 6,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "Å£Í·Ä§",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "Å£Ä§Õ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "Å£Ä§¶·Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "Å£Ä§ÊÌÎÀ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 218,
+          "canonical_name": "Å£Ä§½«¾ü",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 220,
+          "canonical_name": "Å£Ä§·¨Ê¦",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "b91ab6f2edad78f1b5b2ad5f1bb5c60c9b5be0ad64898b95002da50ba1b267ef",
+      "non_target_fields_unchanged": true
+    },
+    {
+      "map_id": "cangyue_bull_temple_hall",
+      "legacy_map_id": "nmsm_hall",
+      "runtime_map_id": 917105,
+      "display_name": "Å£Ä§ËÂÃí´óÌü",
+      "source_sha256": "06694798e7da58fc2510fb8e4e0b6d7663b3e290393a147b3e8d5890f8acb960",
+      "status": "CANDIDATE_WRITTEN",
+      "walkable_tile_count": 3272,
+      "component_sizes": [
+        3272
+      ],
+      "monster_spawn_count": 7,
+      "boss_spawn_count": 1,
+      "placement_count": 8,
+      "selected": [
+        {
+          "monster_id": 210,
+          "canonical_name": "Å£Í·Ä§",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 212,
+          "canonical_name": "Å£Ä§Õ½Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 214,
+          "canonical_name": "Å£Ä§¶·Ê¿",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 216,
+          "canonical_name": "Å£Ä§ÊÌÎÀ",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 218,
+          "canonical_name": "Å£Ä§½«¾ü",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 220,
+          "canonical_name": "Å£Ä§·¨Ê¦",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 222,
+          "canonical_name": "Å£Ä§¼ÀË¾",
+          "classification": "ordinary",
+          "placement_kind": "monster_spawn"
+        },
+        {
+          "monster_id": 224,
+          "canonical_name": "Å£Ä§Íõ",
+          "classification": "boss",
+          "placement_kind": "boss_spawn"
+        }
+      ],
+      "skipped": [
+        {
+          "raw_token": "±¦Ïä¹Ö",
+          "source_category_role": "special",
+          "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+          "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+          "resolved_monster_ids": [
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      ],
+      "candidate_sha256": "4b75c7bf435768e5a801498bba20cb4d8fb7665f29fde17a17ae3ed986da09ed",
+      "non_target_fields_unchanged": true
+    }
+  ]
+}

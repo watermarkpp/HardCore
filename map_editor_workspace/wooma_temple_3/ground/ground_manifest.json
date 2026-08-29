@@ -1,0 +1,121 @@
+{
+  "blank_chunk_policy": "transparent_until_painted",
+  "chunk_grid_size": [
+    3,
+    2
+  ],
+  "chunk_size_px": [
+    1024,
+    1024
+  ],
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "fill_asset_id": "",
+      "grid": [
+        0,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        0,
+        0,
+        1024,
+        1024
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "fill_asset_id": "",
+      "grid": [
+        1,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        1024,
+        0,
+        1024,
+        1024
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "fill_asset_id": "",
+      "grid": [
+        2,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        2048,
+        0,
+        768,
+        1024
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "fill_asset_id": "",
+      "grid": [
+        0,
+        1
+      ],
+      "materialized": false,
+      "rect_px": [
+        0,
+        1024,
+        1024,
+        384
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "fill_asset_id": "",
+      "grid": [
+        1,
+        1
+      ],
+      "materialized": false,
+      "rect_px": [
+        1024,
+        1024,
+        1024,
+        384
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "fill_asset_id": "",
+      "grid": [
+        2,
+        1
+      ],
+      "materialized": false,
+      "rect_px": [
+        2048,
+        1024,
+        768,
+        384
+      ],
+      "state": "virtual"
+    }
+  ],
+  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "default_fill_asset_id": "",
+  "design_size": [
+    44,
+    44
+  ],
+  "ground_pixel_size": [
+    2816,
+    1408
+  ],
+  "map_id": "wooma_temple_boss_hall",
+  "schema_version": 1
+}

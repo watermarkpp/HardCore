@@ -1,0 +1,91 @@
+{
+  "map_id": "world_bich_province",
+  "legacy_map_id": "bich_province",
+  "runtime_map_id": 910001,
+  "display_name": "比奇省（单机重制）",
+  "source_sha256": "369f112d7ded43aea47baadcc4069b4d6aae6bd7637e5ca285031401ecff7a93",
+  "status": "CANDIDATE_WRITTEN",
+  "walkable_tile_count": 4510,
+  "component_sizes": [
+    4510
+  ],
+  "monster_spawn_count": 8,
+  "boss_spawn_count": 0,
+  "placement_count": 8,
+  "selected": [
+    {
+      "monster_id": 18,
+      "canonical_name": "毒蜘蛛",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 19,
+      "canonical_name": "蛤蟆",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 21,
+      "canonical_name": "稻草人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 24,
+      "canonical_name": "多钩猫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 26,
+      "canonical_name": "钉耙猫",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 28,
+      "canonical_name": "森林雪人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 30,
+      "canonical_name": "食人花",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    },
+    {
+      "monster_id": 34,
+      "canonical_name": "半兽人",
+      "classification": "ordinary",
+      "placement_kind": "monster_spawn"
+    }
+  ],
+  "skipped": [
+    {
+      "raw_token": "鸡",
+      "source_category_role": "ordinary",
+      "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+      "authority_status": "INTENTIONALLY_EXCLUDED",
+      "resolved_monster_ids": []
+    },
+    {
+      "raw_token": "鹿",
+      "source_category_role": "ordinary",
+      "reason": "SKIP_DELETED_OR_NOT_IN_CURRENT_LIBRARY",
+      "authority_status": "INTENTIONALLY_EXCLUDED",
+      "resolved_monster_ids": []
+    },
+    {
+      "raw_token": "弓箭护卫",
+      "source_category_role": "special",
+      "reason": "SKIP_SPECIAL_SYSTEM_USER_HANDLED",
+      "authority_status": "SPECIAL_SYSTEM_REQUIRED",
+      "resolved_monster_ids": []
+    }
+  ],
+  "candidate_sha256": "eb97721edeb34595c8c545a0cbacaa96d730fbb006c9ece5d33c7f9031762e80",
+  "non_target_fields_unchanged": true,
+  "replaced_source_spawn_count": 0
+}
