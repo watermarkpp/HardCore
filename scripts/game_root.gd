@@ -1214,19 +1214,18 @@ func _run_map_transition(
 				break
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
-	# Initial entry used to serialize all reusable-panel warm-up after the world
-	# had already reached FINALIZE. Start the same hidden, fully awaited warm-up
-	# now that Loading is opaque so its frame-separated layout passes overlap
-	# threaded resource waits and frame-budgeted map construction below.
-	if _world_bootstrap_in_progress and not PlayerState.test_mode:
-		hud.prewarm_all_panels(_system_menu_panel)
+	# Initial entry deliberately does not prewarm every reusable panel. That
+	# work is not part of the world-ready contract and made the first Loading
+	# screen wait for unrelated UI layout/action preparation. Panels remain
+	# on-demand and are created only when the player opens them.
 	_last_monster_prefetch_status.clear()
 	if PlayerState.test_mode:
 		_last_monster_prefetch_status = {"complete": true}
 	elif _monster_prefetch_enabled and target_map_id >= 0:
 		_last_monster_prefetch_status = (
 			_streaming_coordinator.begin_map_prefetch(
-				_monster_ids_for_map(target_map_id)
+				_monster_ids_for_map(target_map_id),
+				_world_bootstrap_in_progress
 			)
 		)
 		var prefetch_deadline := (
@@ -1263,10 +1262,8 @@ func _run_map_transition(
 		return
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
 	if _check_world_ready_contract():
-		# Complete reusable UI construction while initial Loading still covers
-		# the world. Panels stay hidden and this warm-up does not invoke actions.
-		if _world_bootstrap_in_progress and not PlayerState.test_mode:
-			await hud.prewarm_all_panels(_system_menu_panel)
+		# Initial reusable panels are intentionally on-demand; do not reintroduce
+		# the full hidden warm-up here after the world has reached FINALIZE.
 		hud.finish_loading_transition()
 		if PlayerState.test_mode and hud.loading_transition_overlay != null:
 			# Test-mode fast path hides the fade overlay immediately so tests

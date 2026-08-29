@@ -173,6 +173,7 @@ func _run() -> void:
 	_cleanup()
 	await get_tree().process_frame
 	await _verify_runtime_reload_lane()
+	await _verify_bootstrap_handoff_hold()
 	print(
 		"MONSTER_STREAMING_ACTIVE_LEASE_PASS "
 		+ "RGBA8/W-L/generation-safe/runtime-reload-lane"
@@ -364,6 +365,74 @@ func _verify_runtime_reload_lane() -> void:
 			owner.queue_free()
 	await get_tree().process_frame
 	MonsterVisual.reset_client_resource_cache()
+
+
+func _verify_bootstrap_handoff_hold() -> void:
+	# A bootstrap handoff is intentionally independent of the normal pin budget:
+	# several low-budget profiles must survive until their first real visual
+	# lease, without being re-requested at spawn time.
+	_coordinator = CoordinatorScript.new()
+	MonsterVisual.set_streaming_coordinator(_coordinator)
+	var helper := MonsterVisual.new()
+	var hold_keys: Array[String] = []
+	for monster_id: int in RELOAD_PREFETCH_IDS:
+		var mapping := helper._client_mapping_for(
+			GameData.get_monster_by_id(monster_id)
+		)
+		hold_keys.append(helper._client_resource_cache_key(mapping))
+	helper.free()
+	var prefetch: Dictionary = _coordinator.begin_map_prefetch(
+		RELOAD_PREFETCH_IDS,
+		true
+	)
+	var deadline := Time.get_ticks_msec() + 30000
+	while (
+		not bool(prefetch.get("complete", false))
+		and Time.get_ticks_msec() < deadline
+	):
+		_coordinator.poll_once(Engine.get_process_frames())
+		await get_tree().process_frame
+		prefetch = _coordinator.map_prefetch_status()
+	assert(bool(prefetch.get("complete", false)), "handoff prefetch timed out")
+	assert(int(prefetch.get("failed", -1)) == 0)
+	assert(
+		int(_coordinator.bootstrap_handoff_status().get("hold_count", -1))
+			== hold_keys.size()
+	)
+	var held_diag: Dictionary = _coordinator.monster_streaming_diagnostics()
+	assert(
+		_coordinator.cached_client_profile_count() == hold_keys.size(),
+		"handoff hold must prevent low-budget prefetch eviction"
+	)
+	assert(
+		int(held_diag.get("bootstrap_handoff_hold_count", -1))
+			== hold_keys.size()
+	)
+	assert(
+		int(held_diag.get("same_key_reload_count", -1)) == 0,
+		"handoff admission must not trigger same-key reload"
+	)
+	var handoff_owner := _new_owner(hold_keys[0], 50)
+	assert(_coordinator.declare_visual_need(
+		handoff_owner.get_instance_id(), hold_keys[0], 1
+	))
+	assert(_coordinator.notify_visual_applied(
+		handoff_owner, hold_keys[0], 1
+	))
+	assert(
+		int(_coordinator.bootstrap_handoff_status().get("hold_count", -1))
+			== hold_keys.size() - 1,
+		"first visual lease must release only its profile hold"
+	)
+	assert(
+		_coordinator.active_lease_count_for_resource(hold_keys[0]) == 1
+	)
+	_coordinator.set_generation_for_tests(2)
+	assert(
+		int(_coordinator.bootstrap_handoff_status().get("hold_count", -1)) == 0,
+		"generation fence must clear bootstrap handoff holds"
+	)
+	_coordinator.release_bootstrap_handoff_hold()
 
 
 func _cleanup() -> void:

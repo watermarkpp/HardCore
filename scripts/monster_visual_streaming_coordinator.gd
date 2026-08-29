@@ -34,6 +34,12 @@ var _map_pinned_profile_keys: Dictionary = {}
 var _map_prefetch_completed_keys: Dictionary = {}
 var _map_pinned_decoded_rgba8_bytes := 0
 var _map_prefetch_generation := 0
+## Bootstrap handoff protection is separate from map pins. A profile may be
+## larger than the steady-state cache budget, or map pin admission may be
+## rejected, while the initial world is still waiting for its first real
+## MonsterVisual lease.
+var _bootstrap_handoff_hold_keys: Dictionary = {}
+var _bootstrap_handoff_hold_generation := -1
 var _last_streaming_poll_frame := -1
 var _request_sequence := 0
 
@@ -476,6 +482,10 @@ func _touch_client_resource_profile(cache_key: String) -> void:
 func _set_world_generation(generation: int) -> void:
 	if generation == _map_prefetch_generation:
 		return
+	# A generation fence is also a bootstrap-handoff cancellation boundary.
+	# Clear the old hold before stale visual state is released.
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = -1
 	_map_prefetch_generation = generation
 	# Fence old W/L state before any new-generation admission can be published.
 	# unregister_visual is idempotent and also removes stale reverse indexes.
@@ -483,7 +493,10 @@ func _set_world_generation(generation: int) -> void:
 	_evict_client_resource_profiles()
 
 
-func begin_map_prefetch(monster_ids: Array) -> Dictionary:
+func begin_map_prefetch(
+	monster_ids: Array,
+	hold_for_bootstrap := false
+) -> Dictionary:
 	release_map_pins()
 	_set_world_generation(_map_prefetch_generation + 1)
 	var helper := MonsterVisualScript.new()
@@ -515,7 +528,46 @@ func begin_map_prefetch(monster_ids: Array) -> Dictionary:
 				JOB_LANE_MAP_PREFETCH
 			)
 	helper.free()
+	if hold_for_bootstrap:
+		begin_bootstrap_handoff_hold()
 	return map_prefetch_status()
+
+
+## Protect every profile requested by the current map prefetch until its first
+## real visual lease arrives. This is temporary handoff protection, not a
+## permanent cache pin; leased visuals take over protection per key.
+func begin_bootstrap_handoff_hold() -> void:
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = _map_prefetch_generation
+	for cache_key: String in _map_prefetch_keys:
+		_bootstrap_handoff_hold_keys[cache_key] = true
+	_evict_client_resource_profiles()
+
+
+func release_bootstrap_handoff_hold() -> void:
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = -1
+	_evict_client_resource_profiles()
+
+
+func bootstrap_handoff_status() -> Dictionary:
+	var resident_count := 0
+	var held_bytes := 0
+	for raw_key: Variant in _bootstrap_handoff_hold_keys.keys():
+		var cache_key := str(raw_key)
+		if not _client_resource_profiles.has(cache_key):
+			continue
+		resident_count += 1
+		held_bytes += int(
+			_client_resource_profile_decoded_rgba8_bytes.get(cache_key, 0)
+		)
+	return {
+		"active": not _bootstrap_handoff_hold_keys.is_empty(),
+		"generation": _bootstrap_handoff_hold_generation,
+		"hold_count": _bootstrap_handoff_hold_keys.size(),
+		"resident_count": resident_count,
+		"held_decoded_rgba8_bytes": held_bytes,
+	}
 
 
 func map_prefetch_status() -> Dictionary:
@@ -577,6 +629,8 @@ func release_map_pins() -> void:
 	_map_pinned_profile_keys.clear()
 	_map_prefetch_completed_keys.clear()
 	_map_pinned_decoded_rgba8_bytes = 0
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = -1
 	for cache_key: String in _threaded_profile_queue.duplicate():
 		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
 		if (
@@ -734,6 +788,9 @@ func notify_visual_applied(
 		return true
 	_remove_resource_waiter(visual_id, resource_key)
 	_add_resource_lease(visual_id, resource_key)
+	# The first real visual lease is the handoff boundary for this profile.
+	# From here normal per-visual lease protection owns its residency.
+	_bootstrap_handoff_hold_keys.erase(resource_key)
 	_resource_first_apply_seen[resource_key] = true
 	_resource_had_demand[resource_key] = true
 	resource_apply_count += 1
@@ -906,6 +963,10 @@ func _has_resource_waiters(resource_key: String) -> bool:
 func _resource_is_protected(resource_key: String) -> bool:
 	return (
 		_map_pinned_profile_keys.has(resource_key)
+		or (
+			_bootstrap_handoff_hold_generation == _map_prefetch_generation
+			and _bootstrap_handoff_hold_keys.has(resource_key)
+		)
 		or _has_resource_waiters(resource_key)
 		or (
 			_resource_leases.has(resource_key)
@@ -1067,6 +1128,8 @@ func reset_for_tests() -> void:
 	_map_pinned_profile_keys.clear()
 	_map_prefetch_completed_keys.clear()
 	_map_pinned_decoded_rgba8_bytes = 0
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = -1
 	_map_prefetch_generation = 0
 	_last_streaming_poll_frame = -1
 	_request_sequence = 0
@@ -1137,6 +1200,11 @@ func monster_streaming_diagnostics() -> Dictionary:
 		"unprotected_decoded_rgba8_bytes": unprotected_cached_client_profile_decoded_rgba8_bytes(),
 		"map_pinned_profile_count": _map_pinned_profile_keys.size(),
 		"pinned_decoded_rgba8_bytes": _map_pinned_decoded_rgba8_bytes,
+		"bootstrap_handoff_hold_count": _bootstrap_handoff_hold_keys.size(),
+		"bootstrap_handoff_resident_count": int(
+			bootstrap_handoff_status().get("resident_count", 0)
+		),
+		"bootstrap_handoff_generation": _bootstrap_handoff_hold_generation,
 		"protected_overbudget_bytes": protected_overbudget_bytes(),
 		"failed_resource_count": failed_resource_count,
 		"status_poll_count": status_poll_count,

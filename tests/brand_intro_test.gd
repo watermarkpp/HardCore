@@ -26,6 +26,10 @@ func _run() -> void:
 	assert(startup_source.contains("ContentLayers.ensure_loaded()"), "startup must explicitly open the content-layer gate")
 	assert(startup_source.contains("WorldContent.ensure_loaded()"), "startup must explicitly open the world-content gate")
 	assert(startup_source.contains("GameData.ensure_loaded()"), "startup must explicitly open the GameData gate")
+	assert(startup_source.contains("MAIN_SCENE_PREFETCH_PATH"), "startup must define the main-scene prefetch target")
+	assert(startup_source.contains("_begin_main_scene_prefetch()"), "startup must prefetch the main scene during the intro")
+	assert(startup_source.contains("main_scene_prefetch_diagnostic()"), "startup must expose bounded prefetch diagnostics")
+	assert(startup_source.contains("already_requested"), "startup must reuse a global main-scene request")
 	assert(startup_source.find("_run_finite_loading_phase.call_deferred()") < startup_source.find("load_threaded_request"), "finite loading phase must start before request result is known")
 	assert(startup_source.contains("if not _load_requested or _resource_ready"), "failed request must not transition")
 	var intro_source := FileAccess.get_file_as_string("res://scripts/brand_intro.gd")
@@ -47,6 +51,7 @@ func _run() -> void:
 		var handoff: Control = load("res://scenes/startup_loading.tscn").instantiate()
 		handoff.auto_start = false
 		handoff.suppress_scene_handoff_for_test = true
+		handoff.force_main_scene_prefetch_failure_for_test = launch_index == 1
 		add_child(handoff)
 		await get_tree().process_frame
 		var packed_target := PackedScene.new()
@@ -61,6 +66,14 @@ func _run() -> void:
 		assert(not handoff._target_prepare_started, "target preparation escaped before authoritative data readiness on launch %d" % launch_index)
 		handoff._authoritative_data_ready = true
 		handoff._check_transition()
+		var prefetch_diagnostic: Dictionary = handoff.main_scene_prefetch_diagnostic()
+		assert(prefetch_diagnostic.get("attempted", false), "main-scene prefetch did not start before Logo completion on launch %d" % launch_index)
+		assert(prefetch_diagnostic.get("request_count", -1) <= 1, "main-scene prefetch submitted more than one request on launch %d" % launch_index)
+		if launch_index == 1:
+			assert(prefetch_diagnostic.get("status", "") == "failed", "prefetch failure must be observable without blocking target handoff")
+		var request_count_before_repeat := int(prefetch_diagnostic.get("request_count", -1))
+		handoff._check_transition()
+		assert(int(handoff.main_scene_prefetch_diagnostic().get("request_count", -1)) == request_count_before_repeat, "repeated transition checks duplicated main-scene prefetch on launch %d" % launch_index)
 		await get_tree().process_frame
 		assert(not handoff._target_prepare_started, "target preparation froze the authored CG before completion on launch %d" % launch_index)
 		handoff._animation_finished = true
