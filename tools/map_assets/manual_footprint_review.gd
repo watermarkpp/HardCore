@@ -17,6 +17,7 @@ const REVIEW_CONTRACT_ID := (
 
 const STATUS_VERIFIED := "verified"
 const STATUS_REWORK := "rework"
+const DEFAULT_FILTER := 1
 
 
 var assets: Array[Dictionary] = []
@@ -126,6 +127,7 @@ func _build_ui() -> void:
 		"仅需返工",
 		2
 	)
+	filter_option.select(DEFAULT_FILTER)
 	filter_option.item_selected.connect(
 		_on_filter_changed
 	)

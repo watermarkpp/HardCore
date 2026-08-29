@@ -60,7 +60,7 @@ static func load_catalog() -> Dictionary:
 		effective_assets.append(effective)
 		_asset_index[str(effective.get("asset_id", ""))] = effective
 	catalog["assets"] = effective_assets
-	catalog["extension_catalogs"] = EXTENSION_CATALOG_PATHS.duplicate()
+	catalog["extension_catalogs"] = ([V15_CATALOG_PATH] + EXTENSION_CATALOG_PATHS).duplicate()
 	_catalog_cache = catalog
 	return catalog
 
@@ -234,7 +234,7 @@ static func _resolve_tracked_staging_image(asset: Dictionary) -> Dictionary:
 
 static func _raw_assets() -> Array:
 	var assets: Array = []
-	for path: String in [CATALOG_PATH] + EXTENSION_CATALOG_PATHS:
+	for path: String in [CATALOG_PATH, V15_CATALOG_PATH] + EXTENSION_CATALOG_PATHS:
 		var catalog := _read_catalog(path)
 		for asset: Dictionary in catalog.get("assets", []):
 			assets.append(asset)
