@@ -56,6 +56,23 @@ func _run() -> void:
 	)
 	assert(not reference.has("_cache_probe"), "audit-mode switch reused formal Dictionary")
 	game.reference_audit_mode = false
+	var formal_before_invalidate: Dictionary = game._resolve_projection_profile_for_map(
+		MapEditorRuntimeBridge.BICH_MAP_ID
+	)
+	formal_before_invalidate["_registry_cache_probe"] = true
+	var registry_generation_before := MapEditorRuntimeBridge.registry_generation()
+	MapEditorRuntimeBridge.invalidate_release_registry()
+	assert(
+		MapEditorRuntimeBridge.registry_generation() == registry_generation_before + 1,
+		"formal registry invalidation did not advance its generation"
+	)
+	var formal_after_invalidate: Dictionary = game._resolve_projection_profile_for_map(
+		MapEditorRuntimeBridge.BICH_MAP_ID
+	)
+	assert(
+		not formal_after_invalidate.has("_registry_cache_probe"),
+		"registry invalidation reused a stale formal projection Dictionary"
+	)
 	game.current_map_id = 9999  # mapped id with NO runtime map available
 	var before := int(game.missing_projection_rejection_count)
 	var result: Dictionary = game._try_canonical_screen_px_to_ground_gu(
