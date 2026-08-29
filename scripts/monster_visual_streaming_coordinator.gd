@@ -1095,6 +1095,18 @@ func reset_for_tests() -> void:
 
 
 func monster_streaming_diagnostics() -> Dictionary:
+	var request_state_counts := {
+		"queued": 0,
+		"loading": 0,
+		"loaded": 0,
+		"failed": 0,
+	}
+	for raw_job: Variant in _threaded_profile_requests.values():
+		if not raw_job is Dictionary:
+			continue
+		var state := str((raw_job as Dictionary).get("state", ""))
+		if request_state_counts.has(state):
+			request_state_counts[state] = int(request_state_counts[state]) + 1
 	return {
 		"contract_id": CONTRACT_ID,
 		"registered_visual_count": _visual_subscriptions.size(),
@@ -1105,6 +1117,10 @@ func monster_streaming_diagnostics() -> Dictionary:
 		"unique_request_count": unique_request_count,
 		"duplicate_request_count": duplicate_request_count,
 		"active_request_count": _threaded_profile_requests.size(),
+		"queued_request_count": int(request_state_counts.queued),
+		"loading_request_count": int(request_state_counts.loading),
+		"loaded_request_count": int(request_state_counts.loaded),
+		"failed_request_count": int(request_state_counts.failed),
 		"ready_resource_count": _client_resource_profiles.size(),
 		"decoded_rgba8_bytes": _client_resource_cache_decoded_rgba8_bytes,
 		"cached_client_profile_decoded_rgba8_bytes": _client_resource_cache_decoded_rgba8_bytes,

@@ -232,6 +232,13 @@ func _test_bounded_snapshot() -> void:
 	assert((snapshot["node2d"] as Array).size() <= DeviceLabRuntimeScript.MAX_SNAPSHOT_NODE2D, "Node2D snapshot exceeded bound")
 	assert(not JSON.stringify(snapshot).to_lower().contains("inventorycell"), "snapshot leaked full dynamic inventory")
 	assert(snapshot.has("window") and snapshot.has("player") and snapshot.has("scene"), "snapshot summary fields missing")
+	var monster_streaming: Variant = snapshot.get("monster_streaming", null)
+	assert(monster_streaming is Dictionary, "monster streaming snapshot missing")
+	for field: String in DeviceLabRuntimeScript.MONSTER_STREAMING_DIAGNOSTIC_FIELDS:
+		assert((monster_streaming as Dictionary).has(field), "monster streaming diagnostic field missing: %s" % field)
+		var streaming_value: Variant = (monster_streaming as Dictionary).get(field)
+		assert(streaming_value is int or streaming_value is float, "monster streaming diagnostic field is not numeric: %s" % field)
+		assert(float(streaming_value) >= 0.0, "monster streaming diagnostic field is negative: %s" % field)
 	var performance: Variant = snapshot.get("performance", null)
 	assert(performance is Dictionary, "performance snapshot missing")
 	assert(is_equal_approx(DeviceLabRuntimeScript._seconds_to_milliseconds(0.25), 250.0), "seconds-to-ms conversion is incorrect")

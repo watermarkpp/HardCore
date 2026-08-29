@@ -98,6 +98,33 @@ const ENEMY_DIAGNOSTIC_FIELDS := [
 	"environment_guard_checks",
 ]
 
+const MONSTER_STREAMING_DIAGNOSTIC_FIELDS := [
+	"registered_visual_count",
+	"request_enqueue_count",
+	"unique_request_count",
+	"duplicate_request_count",
+	"active_request_count",
+	"queued_request_count",
+	"loading_request_count",
+	"loaded_request_count",
+	"failed_request_count",
+	"ready_resource_count",
+	"decoded_rgba8_bytes",
+	"protected_overbudget_bytes",
+	"failed_resource_count",
+	"status_poll_count",
+	"resource_apply_count",
+	"stale_completion_count",
+	"waiting_visual_count",
+	"leased_visual_count",
+	"leased_profile_count",
+	"pin_rejection_count",
+	"immediate_eviction_count",
+	"same_key_reload_count",
+	"evicted_before_first_apply_count",
+	"late_completion_resident_skip_count",
+]
+
 var _game_root: Node
 var _poll_elapsed := 0.0
 var _busy := false
@@ -671,6 +698,7 @@ static func build_snapshot(root: Node) -> Dictionary:
 		"map": _map_snapshot(root),
 		"player": _player_snapshot(root),
 		"enemy_activity": _enemy_activity_snapshot(root),
+		"monster_streaming": _monster_streaming_snapshot(root),
 		"controls": [],
 		"node2d": [],
 		"limits": {
@@ -779,6 +807,33 @@ static func _enemy_diagnostics_snapshot() -> Dictionary:
 	var source := diagnostics as Dictionary
 	for field: String in ENEMY_DIAGNOSTIC_FIELDS:
 		result[field] = _non_negative_counter(source.get(field, 0))
+	return result
+
+
+static func _monster_streaming_snapshot(root: Node) -> Dictionary:
+	var result := {}
+	for field: String in MONSTER_STREAMING_DIAGNOSTIC_FIELDS:
+		result[field] = 0
+	if root == null or not is_instance_valid(root):
+		return result
+	var has_coordinator_property := false
+	for property: Dictionary in root.get_property_list():
+		if str(property.get("name", "")) == "_streaming_coordinator":
+			has_coordinator_property = true
+			break
+	if not has_coordinator_property:
+		return result
+	var coordinator: Variant = root.get("_streaming_coordinator")
+	if not coordinator is Object or not is_instance_valid(coordinator):
+		return result
+	if not (coordinator as Object).has_method("monster_streaming_diagnostics"):
+		return result
+	var raw_diagnostics: Variant = (coordinator as Object).call("monster_streaming_diagnostics")
+	if not raw_diagnostics is Dictionary:
+		return result
+	var diagnostics := raw_diagnostics as Dictionary
+	for field: String in MONSTER_STREAMING_DIAGNOSTIC_FIELDS:
+		result[field] = _non_negative_counter(diagnostics.get(field, 0))
 	return result
 
 
