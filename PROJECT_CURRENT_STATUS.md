@@ -1,17 +1,27 @@
 # HardCore Current Status
 
-Updated against audited runtime HEAD: `58db719671c15a126fde67733745e1a84ccee3a9`
+Updated against consolidated main-tree anchor: `550b1cf5`
 Branch: `codex/integration`
-Updated: 2026-08-10
+Updated: 2026-08-29
 Purpose: where the project stands right now.
 
 ## Current HEAD
 
-`58db719671c15a126fde67733745e1a84ccee3a9`（APK runtime commit；后续仅文档快照提交）
+Use annotated tag `standard-20260829-main-tree` for the immutable consolidated standard. Formal runtime/map baseline is `00f6e5e6525a4a07679b41eb482a2cfd05fdd068`.
 
 ## Current Stage
 
-**FOUNDATION AUDIT CLOSED / DEVICE ACCEPTANCE READY**
+**MAIN TREE CONSOLIDATION CLOSED / DEVICE ACCEPTANCE CONTINUES**
+
+## 2026-08-29 Main Tree Standard Freeze
+
+- 地图、怪物、装备、职业、UI、地图编辑器、素材编辑工具和校准器已按提交与工作副本双层筛查，正式内容统一收口到 `codex/integration`。
+- DeepSeek/DSH 工作树的正式地图编辑器、footprint 校准、XZSC 素材导入/校准及怪物编辑器成果均已在正式历史中；未倒灌中间版本和旧 217 怪 Authority。
+- 所有仍有历史价值但不应启用的 WIP、候选数据和校准证据均已保存到远端 `archive/*-20260829` refs。
+- 以后正常修改只在主树完成；临时工作树验收并合入后立即删除。可热修内容继续通过补丁进入 APK，超出热修边界的重大修改重新打包。
+- 完整证据与恢复点见 `docs/handoff/2026-08-29/MAIN_TREE_STANDARD_FREEZE.md`。
+
+## Historical 2026-08-10 Foundation Audit Closure
 
 ## 2026-08-10 Foundation Audit Closure
 
