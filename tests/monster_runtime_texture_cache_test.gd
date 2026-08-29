@@ -2,6 +2,9 @@ extends Node
 
 
 const SAMPLE_MONSTER_ID := 31
+const CoordinatorScript := preload(
+	"res://scripts/monster_visual_streaming_coordinator.gd"
+)
 
 
 func _ready() -> void:
@@ -11,6 +14,8 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	var coordinator := CoordinatorScript.new()
+	MonsterVisual.set_streaming_coordinator(coordinator)
 	MonsterVisual.reset_client_resource_cache()
 	assert(MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY == 12, "mobile texture cache count guard changed")
 	assert(MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_BYTES == 64 * 1024 * 1024, "mobile texture cache byte guard changed")
@@ -21,7 +26,7 @@ func _run() -> void:
 
 	var first := await _spawn_sample(player)
 	var second := await _spawn_sample(player)
-	assert(MonsterVisual.cached_client_profile_count() == 1, "same-species actors rebuilt the five-action resource profile")
+	assert(coordinator.cached_client_profile_count() == 1, "same-species actors rebuilt the five-action resource profile")
 	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
 		var first_texture: Texture2D = first.visual.active_resources[action_name]
 		var second_texture: Texture2D = second.visual.active_resources[action_name]
@@ -45,7 +50,7 @@ func _run() -> void:
 	second.queue_free()
 	await get_tree().process_frame
 	var returned := await _spawn_sample(player)
-	assert(MonsterVisual.cached_client_profile_count() == 1, "returning to an area rebuilt an already-seen species profile")
+	assert(coordinator.cached_client_profile_count() == 1, "returning to an area rebuilt an already-seen species profile")
 	for action_name: String in retained_rids:
 		assert((returned.visual.active_resources[action_name] as Texture2D).get_rid() == retained_rids[action_name], "returning to an area recreated %s texture" % action_name)
 	returned.queue_free()
@@ -53,16 +58,21 @@ func _run() -> void:
 
 	# Stress the byte/count eviction policy without decoding another 21 enormous
 	# profile sets. Reusing the fixture textures is sufficient here because the
-	# cache accounts conservative ETC2 residency from atlas dimensions.
+	# cache accounts exact decoded RGBA8 residency from atlas dimensions.
 	MonsterVisual.reset_client_resource_cache()
-	var loader := MonsterVisual.new()
-	var fixture_bytes := loader._estimated_client_profile_bytes(fixture_resources)
-	assert(fixture_bytes > 0, "fixture did not produce a measurable ETC2 residency estimate")
+	var fixture_bytes := coordinator._decoded_rgba8_profile_bytes(fixture_resources)
+	var expected_fixture_bytes := 0
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var fixture_texture := fixture_resources[action_name] as Texture2D
+		var fixture_size := fixture_texture.get_size()
+		expected_fixture_bytes += int(fixture_size.x) * int(fixture_size.y) * 4
+	assert(fixture_bytes == expected_fixture_bytes, "fixture cache accounting must be decoded RGBA8")
+	assert(fixture_bytes > 0, "fixture did not produce a measurable decoded RGBA8 residency")
 	for index in range(40):
-		loader._retain_client_resource_profile("synthetic_pressure_%02d" % index, fixture_resources)
-	assert(MonsterVisual.cached_client_profile_count() <= MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY, "pressure cache exceeded profile cap")
-	assert(MonsterVisual.cached_client_profile_estimated_bytes() <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_BYTES, "pressure cache exceeded 64 MiB: %d" % MonsterVisual.cached_client_profile_estimated_bytes())
-	assert(MonsterVisual.cached_client_profile_count() < 40, "pressure cache did not evict old profiles")
+		coordinator.retain_client_resource_profile("synthetic_pressure_%02d" % index, fixture_resources)
+	assert(coordinator.cached_client_profile_count() <= MonsterVisual.CLIENT_RESOURCE_CACHE_CAPACITY, "pressure cache exceeded profile cap")
+	assert(coordinator.cached_client_profile_decoded_rgba8_bytes() <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES, "non-protected pressure cache exceeded 64 MiB: %d" % coordinator.cached_client_profile_decoded_rgba8_bytes())
+	assert(coordinator.cached_client_profile_count() < 40, "pressure cache did not evict old profiles")
 
 	# Actor residency is independent of the bounded cross-zone cache: far actors
 	# release their own five atlas references and reacquire before entering view.
@@ -83,13 +93,13 @@ func _run() -> void:
 	# loader. Approaching the already-prefetched crowd must perform zero sync loads.
 	MonsterVisual.reset_client_resource_cache()
 	MonsterVisual.set_synchronous_loading_for_tests(false)
-	assert(loader._try_pin_map_profile("priority_a", 48 * 1024 * 1024), "first priority profile did not fit hard pin budget")
-	assert(not loader._try_pin_map_profile("priority_b", 20 * 1024 * 1024), "map pins exceeded the 64 MiB hard budget")
-	assert(int(MonsterVisual.map_prefetch_status().pinned_bytes) == 48 * 1024 * 1024, "rejected pin changed budget accounting")
-	MonsterVisual.release_map_pins()
-	var prefetch := MonsterVisual.begin_map_prefetch([31, 31, 76, 18])
+	assert(coordinator._try_pin_map_profile("priority_a", 48 * 1024 * 1024), "first priority profile did not fit hard pin budget")
+	assert(not coordinator._try_pin_map_profile("priority_b", 20 * 1024 * 1024), "map pins exceeded the 64 MiB hard budget")
+	assert(int(coordinator.map_prefetch_status().pinned_bytes) == 48 * 1024 * 1024, "rejected pin changed budget accounting")
+	coordinator.release_map_pins()
+	var prefetch := coordinator.begin_map_prefetch([31, 31, 76, 18])
 	assert(int(prefetch.requested) == 3, "map prefetch did not deduplicate stable monsterIds: %s" % prefetch)
-	assert(MonsterVisual.threaded_texture_request_count() <= MonsterVisual.MAX_CONCURRENT_PROFILE_LOADS * 5, "map prefetch launched the entire map at once")
+	assert(coordinator.threaded_texture_request_count() <= MonsterVisual.MAX_CONCURRENT_PROFILE_LOADS * 5, "map prefetch launched the entire map at once")
 	player.global_position = Vector2.ZERO
 	var prefetched_actor := EnemyActor.new()
 	prefetched_actor.setup({
@@ -105,16 +115,18 @@ func _run() -> void:
 	var deadline_msec := Time.get_ticks_msec() + 15000
 	var poll_count := 0
 	while not bool(prefetch.complete) and Time.get_ticks_msec() < deadline_msec:
-		prefetch = MonsterVisual.poll_streaming()
+		prefetch = coordinator.poll_once(Engine.get_process_frames())
 		poll_count += 1
 		if poll_count % 60 == 0:
 			print("MONSTER_STREAMING_PENDING %s" % prefetch)
 		await get_tree().process_frame
 	assert(bool(prefetch.complete) and int(prefetch.failed) == 0, "threaded map prefetch exceeded 15s; pending path/status: %s" % prefetch)
 	assert(int(prefetch.ready) + int(prefetch.streamed) == 3, "prefetch completion accounting lost a profile: %s" % prefetch)
-	assert(int(prefetch.pinned_bytes) <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_BYTES, "map pins exceeded the 64 MiB hard budget: %s" % prefetch)
-	assert(MonsterVisual.cached_client_profile_estimated_bytes() <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_BYTES, "async cache exceeded the 64 MiB hard budget")
-	assert(MonsterVisual.threaded_texture_request_count() == 15, "bounded queue did not eventually request 3 x 5 atlases")
+	assert(int(prefetch.pinned_decoded_rgba8_bytes) <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES, "map pins exceeded the 64 MiB hard budget: %s" % prefetch)
+	var async_diag: Dictionary = coordinator.monster_streaming_diagnostics()
+	assert(int(async_diag.decoded_rgba8_bytes) == coordinator.cached_client_profile_decoded_rgba8_bytes(), "diagnostics decoded bytes drifted from cache accounting")
+	assert(int(async_diag.protected_overbudget_bytes) == maxi(0, coordinator.cached_client_profile_decoded_rgba8_bytes() - MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES), "protected overbudget bytes are not explicit")
+	assert(coordinator.threaded_texture_request_count() == 15, "bounded queue did not eventually request 3 x 5 atlases")
 	assert(MonsterVisual.client_texture_load_request_count() == 0, "map prefetch used synchronous texture loading")
 	prefetched_actor.visual._resource_residency_timer = 0.0
 	prefetched_actor.visual._process(0.13)
@@ -122,8 +134,9 @@ func _run() -> void:
 	assert(not prefetched_actor.should_draw_synthetic_ground_shadow(), "final WIL monster retained the legacy circular shadow")
 	assert(MonsterVisual.client_texture_load_request_count() == 0, "approaching a prefetched monster blocked on synchronous loading")
 	prefetched_actor.queue_free()
-	MonsterVisual.release_map_pins()
-	loader.free()
+	await get_tree().process_frame
+	coordinator.release_map_pins()
+	assert(coordinator.cached_client_profile_decoded_rgba8_bytes() <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES, "released visual/pins must return cache to RGBA8 budget")
 	MonsterVisual.reset_client_resource_cache()
 
 	print("MONSTER_RUNTIME_TEXTURE_CACHE_PASS lazy residency; async stable-ID map pin; runtime sync loads=0")

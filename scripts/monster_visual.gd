@@ -23,7 +23,10 @@ const MANUAL_ALIGNMENT_SPAWN_GAP := 14.0
 const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
 const HEALTH_BAR_BODY_GAP := 8.0
 const CLIENT_RESOURCE_CACHE_CAPACITY := 12
-const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := 64 * 1024 * 1024
+## Compatibility name retained for callers; this is decoded RGBA8 residency
+## (four bytes per pixel across all five action atlases), not ETC2 bytes.
+const CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES := 64 * 1024 * 1024
+const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
 const RESOURCE_RESIDENCY_CONTRACT_ID := "monster.visual.resource_residency.screen_px.v1"
 const VISUAL_ACTIVATION_DISTANCE_PX := 1600.0
 const VISUAL_RELEASE_DISTANCE_PX := 2000.0
@@ -78,6 +81,8 @@ var _action_duration := 0.0
 var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
 var _resource_residency_timer := 0.0
+var _streaming_resource_key := ""
+var _streaming_world_generation := -1
 var _last_ground_contact_position := Vector2.INF
 var _last_ground_indicator_radii := Vector2.INF
 
@@ -119,14 +124,18 @@ func _ready() -> void:
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
+	# Registration is the R state only. Declare an actual W demand from
+	# _activate_resources after this subscription exists, so a near visual
+	# cannot miss its first protection window.
+	_register_with_streaming_coordinator()
 	if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
 		_activate_resources()
-	_register_with_streaming_coordinator()
 
 
 func _exit_tree() -> void:
 	var coordinator = _streaming_coordinator
 	if coordinator != null and is_instance_valid(coordinator):
+		coordinator.release_visual_resource(get_instance_id(), _streaming_resource_key)
 		coordinator.unregister_visual(get_instance_id())
 
 
@@ -136,6 +145,19 @@ func _register_with_streaming_coordinator() -> void:
 		return
 	var mapping := _client_mapping_for(actor.monster_data)
 	if mapping.is_empty():
+		# Keep the lifecycle in R even for a procedural/unmapped visual. It has no
+		# resource key and therefore cannot become a waiter, but it still needs a
+		# generation-safe unregister on teardown.
+		coordinator.register_visual(
+			self,
+			actor.monster_id,
+			actor.runtime_map_id,
+			coordinator.current_world_generation(),
+			"",
+			{},
+			int(actor.get_meta("spawn_serial", actor.get_instance_id()))
+		)
+		_streaming_world_generation = coordinator.current_world_generation()
 		return
 	coordinator.register_visual(
 		self,
@@ -146,6 +168,8 @@ func _register_with_streaming_coordinator() -> void:
 		_client_resource_paths(mapping),
 		int(actor.get_meta("spawn_serial", actor.get_instance_id()))
 	)
+	_streaming_resource_key = _client_resource_cache_key(mapping)
+	_streaming_world_generation = coordinator.current_world_generation()
 
 
 static func set_streaming_coordinator(
@@ -314,6 +338,19 @@ func _activate_resources() -> void:
 	visible = not actor._burrowed
 	_last_state = ""
 	_apply_render_state(active_resources["idle"], Rect2(Vector2.ZERO, frame_size))
+	# The coordinator only receives L after the complete profile has been
+	# applied. Until this point the explicit W demand remains the eviction guard.
+	var coordinator = _streaming_coordinator
+	if (
+		coordinator != null
+		and is_instance_valid(coordinator)
+		and not _streaming_resource_key.is_empty()
+	):
+		coordinator.notify_visual_applied(
+			get_instance_id(),
+			_streaming_resource_key,
+			_streaming_world_generation
+		)
 	# A cold runtime profile reaches this method after the EnemyActor has already
 	# created its overhead. Apply the real texture before asking the actor for its
 	# anchor: health_bar_anchor_y() deliberately uses the procedural fallback
@@ -324,6 +361,18 @@ func _activate_resources() -> void:
 
 
 func _release_resources() -> void:
+	var coordinator = _streaming_coordinator
+	if (
+		coordinator != null
+		and is_instance_valid(coordinator)
+		and not _streaming_resource_key.is_empty()
+	):
+		coordinator.release_visual_resource(
+			get_instance_id(),
+			_streaming_resource_key
+		)
+	_streaming_resource_key = ""
+	_streaming_world_generation = -1
 	if active_resources.is_empty():
 		return
 	visible = false
@@ -602,22 +651,33 @@ func _client_resources(client_mapping: Dictionary) -> Dictionary:
 	var cache_key := _client_resource_cache_key(client_mapping)
 	var coordinator = _streaming_coordinator
 	if coordinator != null and is_instance_valid(coordinator):
-		var cached = coordinator.client_resources(cache_key)
-		if cached is Dictionary and not cached.is_empty():
-			coordinator.notify_visual_applied(cache_key)
-			return cached
+		# The visual must explicitly enter W before reading the cache. R alone is
+		# not a permanent waiter, so far-away actors cannot pin every atlas.
+		var request_async := not PlayerState.test_mode or not _synchronous_loading_for_tests
+		var requested = coordinator.request_visual_resources(
+			self,
+			client_mapping,
+			actor.monster_id if is_instance_valid(actor) else -1,
+			request_async
+		)
+		if requested is Dictionary and not requested.is_empty():
+			_streaming_resource_key = cache_key
+			_streaming_world_generation = coordinator.current_world_generation()
+			return requested
+		# A stale subscription is fenced and must never fall through to a
+		# synchronous load that could apply a new-map profile to an old actor.
+		if not coordinator.visual_subscription_is_current(get_instance_id(), cache_key):
+			return {}
 		# Unit/asset tests retain their deterministic immediate-load fixture.
 		# Runtime activation never enters the sync branch: it queues the five
-		# atlases on the threaded loader via the coordinator and keeps the cheap
-		# procedural fallback until ready.
+		# atlases on the threaded loader and keeps the fallback until ready.
 		if not PlayerState.test_mode or not _synchronous_loading_for_tests:
-			coordinator.request_client_profile(
-				client_mapping,
-				actor.monster_id if is_instance_valid(actor) else -1
-			)
 			return {}
 	elif not PlayerState.test_mode or not _synchronous_loading_for_tests:
 		return {}
+	_streaming_resource_key = cache_key
+	if coordinator != null and is_instance_valid(coordinator):
+		_streaming_world_generation = coordinator.current_world_generation()
 	return _load_client_profile_synchronously(client_mapping)
 
 

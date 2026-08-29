@@ -55,8 +55,18 @@ func _run() -> void:
 	)
 	var diag: Dictionary = _coordinator.monster_streaming_diagnostics()
 	assert(
-		_coordinator.cached_client_profile_count() >= 1,
-		"the shared resource must still enter the cache for later reuse"
+		int(diag.get("waiting_visual_count", -1)) == 0
+		and int(diag.get("leased_visual_count", -1)) == 0,
+		"a completed no-visual request must not retain waiter/lease protection"
+	)
+	assert(
+		int(diag.get("decoded_rgba8_bytes", -1))
+			<= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES,
+		"an unprotected no-visual profile must obey the decoded RGBA8 cache budget"
+	)
+	assert(
+		int(diag.get("protected_overbudget_bytes", -1)) == 0,
+		"a no-visual completion must not create protected overbudget debt"
 	)
 	_cleanup()
 	await get_tree().process_frame

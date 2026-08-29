@@ -24,7 +24,13 @@ func _run() -> void:
 	_coordinator = Fixtures.make_coordinator()
 	_player = Fixtures.make_player(self)
 	MonsterVisual.set_synchronous_loading_for_tests(true)
-	var catalog := Fixtures.catalog_ids()
+	var catalog: Array[int] = []
+	for monster_id: int in Fixtures.catalog_ids():
+		if MonsterIdentity.is_runtime_allowed(monster_id):
+			catalog.append(monster_id)
+		if catalog.size() == 10:
+			break
+	assert(catalog.size() == 10, "fixture needs 10 runtime-allowed monsters")
 	for i: int in range(10):
 		_enemies.append(
 			Fixtures.make_enemy(self, _player, catalog[i], i + 1)
