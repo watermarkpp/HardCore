@@ -89,6 +89,7 @@ const SOURCE_COLLISION_RADIUS := 28
 const EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
 const EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES := 10.0
 const DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD := 1536.0
+const EDITOR_RUNTIME_GUARD_CULL_EPSILON_WORLD := 0.01
 
 @export var grid_radius := 28
 @export var tile_width := 64.0
@@ -117,6 +118,11 @@ var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_blocked_tiles: Dictionary = {}
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
 var _editor_runtime_fallback_ground := false
+var _editor_runtime_guard: Polygon2D = null
+var _editor_runtime_guard_inner_boundary: PackedVector2Array = PackedVector2Array()
+var _editor_runtime_guard_viewport: Viewport = null
+var _editor_runtime_guard_camera: Camera2D = null
+var _editor_runtime_guard_visibility_known := false
 
 # ── HC-P1-004 staged build contract ──
 # When attached, every formal resource in the build stages is obtained through
@@ -151,8 +157,13 @@ const SHARED_GLOBAL_RESOURCE_WHITELIST := {
 func _ready() -> void:
 	z_index = -20
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	set_process(false)
 	_rebuild_environment()
 	queue_redraw()
+
+
+func _process(_delta: float) -> void:
+	_update_editor_runtime_guard_visibility()
 
 
 func set_zone(value: String) -> void:
@@ -585,6 +596,7 @@ func _rebuild_environment() -> void:
 
 
 func clear_environment() -> void:
+	set_process(false)
 	_ground_tile_cache.clear()
 	_full_ground_ready = false
 	_gothic_camp_layout.clear()
@@ -593,6 +605,11 @@ func clear_environment() -> void:
 	_editor_runtime_blocked_tiles.clear()
 	_editor_runtime_chunk_draws.clear()
 	_editor_runtime_fallback_ground = false
+	_editor_runtime_guard = null
+	_editor_runtime_guard_inner_boundary = PackedVector2Array()
+	_editor_runtime_guard_viewport = null
+	_editor_runtime_guard_camera = null
+	_editor_runtime_guard_visibility_known = false
 	for node: Node in _environment_nodes:
 		if is_instance_valid(node):
 			node.queue_free()
@@ -1626,6 +1643,7 @@ func _build_guard_band_node(payload: Dictionary) -> Node:
 	var raw_size: Array = visual.get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var corners := editor_runtime_ground_boundary_world(size)
+	_editor_runtime_guard_inner_boundary = corners
 	var authored_bounds := Rect2(corners[0], Vector2.ZERO)
 	for point: Vector2 in corners:
 		authored_bounds = authored_bounds.expand(point)
@@ -1735,7 +1753,91 @@ void fragment() {
 		"fade_tiles", EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES
 	)
 	guard.material = material
-	return _append_environment_node(guard)
+	guard.visible = true
+	var appended := _append_environment_node(guard)
+	if appended is Polygon2D:
+		_editor_runtime_guard = appended as Polygon2D
+		_editor_runtime_guard_viewport = get_viewport()
+		_editor_runtime_guard_camera = null
+		_editor_runtime_guard_visibility_known = true
+		set_process(true)
+	return appended
+
+
+func _update_editor_runtime_guard_visibility() -> void:
+	var guard := _editor_runtime_guard
+	if not is_instance_valid(guard):
+		set_process(false)
+		return
+	var viewport := _editor_runtime_guard_viewport
+	if not is_instance_valid(viewport):
+		viewport = get_viewport()
+		_editor_runtime_guard_viewport = viewport
+	if not is_instance_valid(viewport):
+		_set_editor_runtime_guard_visible(true)
+		return
+	var camera := _editor_runtime_guard_camera
+	if (
+		not is_instance_valid(camera)
+		or not camera.is_inside_tree()
+		or not camera.is_current()
+	):
+		camera = viewport.get_camera_2d()
+		_editor_runtime_guard_camera = camera
+	if not is_instance_valid(camera) or not camera.is_inside_tree():
+		_set_editor_runtime_guard_visible(true)
+		return
+	var visible_rect := viewport.get_visible_rect()
+	if visible_rect.size.x <= 0.0 or visible_rect.size.y <= 0.0:
+		_set_editor_runtime_guard_visible(true)
+		return
+	var viewport_to_background := get_global_transform_with_canvas().affine_inverse()
+	if is_zero_approx(viewport_to_background.determinant()):
+		_set_editor_runtime_guard_visible(true)
+		return
+	var top_left := viewport_to_background * visible_rect.position
+	var top_right := viewport_to_background * Vector2(
+		visible_rect.end.x, visible_rect.position.y
+	)
+	var bottom_right := viewport_to_background * visible_rect.end
+	var bottom_left := viewport_to_background * Vector2(
+		visible_rect.position.x, visible_rect.end.y
+	)
+	var inside := (
+		_editor_runtime_guard_boundary_contains(top_left)
+		and _editor_runtime_guard_boundary_contains(top_right)
+		and _editor_runtime_guard_boundary_contains(bottom_right)
+		and _editor_runtime_guard_boundary_contains(bottom_left)
+	)
+	_set_editor_runtime_guard_visible(not inside)
+
+
+func _set_editor_runtime_guard_visible(visible: bool) -> void:
+	if not is_instance_valid(_editor_runtime_guard):
+		return
+	if (
+		_editor_runtime_guard_visibility_known
+		and _editor_runtime_guard.visible == visible
+	):
+		return
+	_editor_runtime_guard.visible = visible
+	_editor_runtime_guard_visibility_known = true
+
+
+func _editor_runtime_guard_boundary_contains(point: Vector2) -> bool:
+	if not point.is_finite() or _editor_runtime_guard_inner_boundary.size() < 3:
+		return false
+	var previous := _editor_runtime_guard_inner_boundary[
+		_editor_runtime_guard_inner_boundary.size() - 1
+	]
+	for boundary_point: Vector2 in _editor_runtime_guard_inner_boundary:
+		var edge := boundary_point - previous
+		var relative := point - previous
+		var cross := edge.x * relative.y - edge.y * relative.x
+		if cross < -EDITOR_RUNTIME_GUARD_CULL_EPSILON_WORLD:
+			return false
+		previous = boundary_point
+	return true
 
 
 func editor_runtime_chunk_texture_count() -> int:
