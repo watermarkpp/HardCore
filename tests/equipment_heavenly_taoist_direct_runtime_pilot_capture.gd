@@ -1,6 +1,7 @@
 extends Node
 
 const HelmetVisualV2 := preload("res://scripts/helmet_visual_v2.gd")
+const ArtSpec := preload("res://scripts/art_spec.gd")
 const EDITOR_SCENE := preload("res://tools/helmet_calibration_tool.tscn")
 const ITEM_ID := 240
 const DRAFT_PATH := "res://assets/data/helmet_calibration_drafts/item_240.json"
@@ -24,10 +25,12 @@ const ACTION_ORDER := ["idle", "walk", "attack", "cast", "hit", "death"]
 const DIRECTIONS := ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 const WORLD_CELL := Vector2i(192, 160)
 const WORLD_FOOT_POINT := Vector2i(128, 190)
-const HEAD_CROP_SIZE := Vector2i(64, 64)
-const HEAD_DETAIL_ZOOM := 4
+const FULL_FIGURE_DETAIL_CELL := Vector2i(256, 240)
+const FULL_FIGURE_PADDING := 12
+const FULL_FIGURE_MAX_ZOOM := 4.0
 const PAPER_CANVAS := Vector2i(540, 340)
 const BACKGROUND := Color("111418")
+const PLAYER_VISUAL_ID := "player.male.cloth_002"
 
 
 func _ready() -> void:
@@ -65,6 +68,9 @@ func _run() -> void:
 	assert(world_capture["headDetail"].save_png(
 		output_dir.path_join("item_240_direct_world_head_detail_4x.png")
 	) == OK)
+	assert(world_capture["fullFigureDetail"].save_png(
+		output_dir.path_join("item_240_direct_world_full_figure_detail.png")
+	) == OK)
 	assert(presentation_capture["paperDoll"].save_png(
 		output_dir.path_join("item_240_direct_paper_doll.png")
 	) == OK)
@@ -86,7 +92,13 @@ func _run() -> void:
 				"sourcePixelSize * 0.08 * savedScalePercent / 100"
 			),
 			"worldPlacement": "bodyHeadSocket + savedNudge",
-			"actionDeformation": "none",
+			"actionRotation": (
+				"angle(bodyFootAnchor->currentHeadSocket) "
+				+ "- angle(bodyFootAnchor->idleHeadSocket)"
+			),
+			"rotationBaseline": "idle; walk remains authored zero-angle",
+			"rotationPivot": "authored source visual centre at saved head centre",
+			"actionDeformation": "uniform only; no aspect-ratio distortion",
 			"persistentDownsample": false,
 			"captureRasterizationOnly": true,
 			"paperDoll": "original_high_resolution_selected_direction",
@@ -97,6 +109,10 @@ func _run() -> void:
 			"world": OUTPUT_ROOT + "/item_240_direct_world_all_actions.png",
 			"worldHeadDetail": (
 				OUTPUT_ROOT + "/item_240_direct_world_head_detail_4x.png"
+			),
+			"worldFullFigureDetail": (
+				OUTPUT_ROOT
+				+ "/item_240_direct_world_full_figure_detail.png"
 			),
 			"paperDoll": OUTPUT_ROOT + "/item_240_direct_paper_doll.png",
 			"presentationOverview": (
@@ -118,7 +134,8 @@ func _run() -> void:
 	print(
 		"EQUIPMENT_HEAVENLY_TAOIST_DIRECT_RUNTIME_PILOT_CAPTURE_PASS "
 		+ "isolated=true source=original_high_resolution "
-		+ "actions=6 directions=8 deformation=none formal_changes=0"
+		+ "actions=6 directions=8 rotation=body_axis_delta "
+		+ "deformation=uniform_only formal_changes=0"
 	)
 	get_tree().quit(0)
 
@@ -131,14 +148,13 @@ func _capture_world(editor: Node, draft: Dictionary) -> Dictionary:
 		Image.FORMAT_RGBA8
 	)
 	sheet.fill(BACKGROUND)
-	var detail_cell := HEAD_CROP_SIZE * HEAD_DETAIL_ZOOM
-	var head_detail := Image.create(
-		detail_cell.x * ACTION_ORDER.size(),
-		detail_cell.y * DIRECTIONS.size(),
+	var full_figure_detail := Image.create(
+		FULL_FIGURE_DETAIL_CELL.x * ACTION_ORDER.size(),
+		FULL_FIGURE_DETAIL_CELL.y * DIRECTIONS.size(),
 		false,
 		Image.FORMAT_RGBA8
 	)
-	head_detail.fill(BACKGROUND)
+	full_figure_detail.fill(BACKGROUND)
 	var records: Array[Dictionary] = []
 	for action_index: int in ACTION_ORDER.size():
 		var action: String = ACTION_ORDER[action_index]
@@ -162,11 +178,11 @@ func _capture_world(editor: Node, draft: Dictionary) -> Dictionary:
 			var body: Image = editor._runtime_frame(
 				action, direction_index, frame_index, false, false
 			)
-			var composed := Image.create(
+			var actor := Image.create(
 				WORLD_CELL.x, WORLD_CELL.y, false, Image.FORMAT_RGBA8
 			)
-			composed.fill(BACKGROUND)
-			composed.blend_rect(
+			actor.fill(Color(0, 0, 0, 0))
+			actor.blend_rect(
 				body,
 				Rect2i(Vector2i.ZERO, body.get_size()),
 				Vector2i.ZERO
@@ -187,14 +203,40 @@ func _capture_world(editor: Node, draft: Dictionary) -> Dictionary:
 				maxi(1, roundi(display_size.x)),
 				maxi(1, roundi(display_size.y))
 			)
-			var capture_texture := _scaled_copy(
-				source, target_size, Image.INTERPOLATE_LANCZOS
+			var rotation_radians := _pose_rotation_radians(
+				action, direction_index, frame_index
 			)
-			var top_left := Vector2i((centre - display_size * 0.5).round())
-			composed.blend_rect(
+			var rotated_source := _rotated_high_resolution_copy(
+				source, rotation_radians
+			)
+			var world_scale := (
+				float(target_size.x) / float(source.get_width())
+			)
+			var rotated_target_size := Vector2i(
+				maxi(1, roundi(rotated_source.get_width() * world_scale)),
+				maxi(1, roundi(rotated_source.get_height() * world_scale))
+			)
+			var capture_texture := _scaled_copy(
+				rotated_source,
+				rotated_target_size,
+				Image.INTERPOLATE_LANCZOS
+			)
+			var top_left := Vector2i(
+				(centre - Vector2(rotated_target_size) * 0.5).round()
+			)
+			actor.blend_rect(
 				capture_texture,
 				Rect2i(Vector2i.ZERO, capture_texture.get_size()),
 				top_left
+			)
+			var composed := Image.create(
+				WORLD_CELL.x, WORLD_CELL.y, false, Image.FORMAT_RGBA8
+			)
+			composed.fill(BACKGROUND)
+			composed.blend_rect(
+				actor,
+				Rect2i(Vector2i.ZERO, actor.get_size()),
+				Vector2i.ZERO
 			)
 			sheet.blend_rect(
 				composed,
@@ -204,21 +246,16 @@ func _capture_world(editor: Node, draft: Dictionary) -> Dictionary:
 					direction_index * WORLD_CELL.y
 				)
 			)
-			var head_crop := composed.get_region(Rect2i(
-				Vector2i(centre.round()) - HEAD_CROP_SIZE / 2,
-				HEAD_CROP_SIZE
-			))
-			head_crop.resize(
-				detail_cell.x,
-				detail_cell.y,
-				Image.INTERPOLATE_NEAREST
-			)
-			head_detail.blend_rect(
-				head_crop,
-				Rect2i(Vector2i.ZERO, detail_cell),
+			var full_figure_cell := _full_figure_detail_cell(actor)
+			full_figure_detail.blend_rect(
+				full_figure_cell,
+				Rect2i(
+					Vector2i.ZERO,
+					FULL_FIGURE_DETAIL_CELL
+				),
 				Vector2i(
-					action_index * detail_cell.x,
-					direction_index * detail_cell.y
+					action_index * FULL_FIGURE_DETAIL_CELL.x,
+					direction_index * FULL_FIGURE_DETAIL_CELL.y
 				)
 			)
 			records.append({
@@ -233,16 +270,184 @@ func _capture_world(editor: Node, draft: Dictionary) -> Dictionary:
 				"scalePercent": scale_percent,
 				"displaySize": [display_size.x, display_size.y],
 				"capturePixelSize": [target_size.x, target_size.y],
+				"rotatedCapturePixelSize": [
+					rotated_target_size.x, rotated_target_size.y,
+				],
 				"savedNudge": direction_record.get("nudge", [0, 0]),
 				"headCentre": [centre.x, centre.y],
 				"topLeft": [top_left.x, top_left.y],
+				"rotationDegrees": rad_to_deg(rotation_radians),
+				"rotationRule": (
+					"idle_walk_zero"
+					if action in ["idle", "walk"]
+					else "head_socket_body_axis_delta"
+				),
 				"deformation": [1.0, 1.0],
 			})
 	return {
 		"sheet": sheet,
-		"headDetail": head_detail,
+		"headDetail": full_figure_detail,
+		"fullFigureDetail": full_figure_detail,
 		"records": records,
 	}
+
+
+func _pose_rotation_radians(
+	action: String,
+	direction_index: int,
+	frame_index: int
+) -> float:
+	# Idle is the user's calibrated directional baseline. Walk already passed
+	# visual review and therefore remains an exact zero-angle derivative.
+	if action in ["idle", "walk"]:
+		return 0.0
+	var idle_socket := Vector2(HelmetVisualV2.body_head_socket(
+		PLAYER_VISUAL_ID, "idle", direction_index, 0
+	))
+	var pose_socket := Vector2(HelmetVisualV2.body_head_socket(
+		PLAYER_VISUAL_ID, action, direction_index, frame_index
+	))
+	assert(idle_socket != Vector2.ZERO)
+	assert(pose_socket != Vector2.ZERO)
+	var foot := Vector2(ArtSpec.WARRIOR_FOOT_ANCHOR)
+	var idle_axis := idle_socket - foot
+	var pose_axis := pose_socket - foot
+	assert(idle_axis.length_squared() > 0.0)
+	assert(pose_axis.length_squared() > 0.0)
+	return wrapf(pose_axis.angle() - idle_axis.angle(), -PI, PI)
+
+
+func _full_figure_detail_cell(actor: Image) -> Image:
+	var cell := Image.create(
+		FULL_FIGURE_DETAIL_CELL.x,
+		FULL_FIGURE_DETAIL_CELL.y,
+		false,
+		Image.FORMAT_RGBA8
+	)
+	cell.fill(BACKGROUND)
+	var used := actor.get_used_rect()
+	if used.size == Vector2i.ZERO:
+		return cell
+	var actor_bounds := Rect2i(Vector2i.ZERO, actor.get_size())
+	var padded := Rect2i(
+		used.position - Vector2i(FULL_FIGURE_PADDING, FULL_FIGURE_PADDING),
+		used.size + Vector2i(
+			FULL_FIGURE_PADDING * 2,
+			FULL_FIGURE_PADDING * 2
+		)
+	).intersection(actor_bounds)
+	var figure := actor.get_region(padded)
+	var available := Vector2(
+		FULL_FIGURE_DETAIL_CELL
+		- Vector2i(FULL_FIGURE_PADDING * 2, FULL_FIGURE_PADDING * 2)
+	)
+	var zoom := minf(
+		FULL_FIGURE_MAX_ZOOM,
+		minf(
+			available.x / float(figure.get_width()),
+			available.y / float(figure.get_height())
+		)
+	)
+	var target_size := Vector2i(
+		maxi(1, roundi(figure.get_width() * zoom)),
+		maxi(1, roundi(figure.get_height() * zoom))
+	)
+	var enlarged := _scaled_copy(
+		figure, target_size, Image.INTERPOLATE_NEAREST
+	)
+	var destination := Vector2i(
+		(FULL_FIGURE_DETAIL_CELL - target_size) / 2
+	)
+	cell.blend_rect(
+		enlarged,
+		Rect2i(Vector2i.ZERO, target_size),
+		destination
+	)
+	return cell
+
+
+func _rotated_high_resolution_copy(
+	source: Image,
+	radians: float
+) -> Image:
+	if is_zero_approx(radians):
+		return source.duplicate()
+	var cosine := cos(radians)
+	var sine := sin(radians)
+	var source_size := Vector2(source.get_size())
+	var rotated_size := Vector2i(
+		maxi(1, ceili(
+			absf(source_size.x * cosine)
+			+ absf(source_size.y * sine)
+		)),
+		maxi(1, ceili(
+			absf(source_size.x * sine)
+			+ absf(source_size.y * cosine)
+		))
+	)
+	var result := Image.create(
+		rotated_size.x,
+		rotated_size.y,
+		false,
+		Image.FORMAT_RGBA8
+	)
+	result.fill(Color(0, 0, 0, 0))
+	var source_centre := (source_size - Vector2.ONE) * 0.5
+	var result_centre := (Vector2(rotated_size) - Vector2.ONE) * 0.5
+	for y: int in rotated_size.y:
+		for x: int in rotated_size.x:
+			var offset := Vector2(x, y) - result_centre
+			var sample := Vector2(
+				cosine * offset.x + sine * offset.y,
+				-sine * offset.x + cosine * offset.y
+			) + source_centre
+			if (
+				sample.x < 0.0
+				or sample.y < 0.0
+				or sample.x > source_size.x - 1.0
+				or sample.y > source_size.y - 1.0
+			):
+				continue
+			result.set_pixel(x, y, _sample_bilinear_premultiplied(
+				source, sample
+			))
+	return result
+
+
+func _sample_bilinear_premultiplied(
+	source: Image,
+	point: Vector2
+) -> Color:
+	var x0 := clampi(floori(point.x), 0, source.get_width() - 1)
+	var y0 := clampi(floori(point.y), 0, source.get_height() - 1)
+	var x1 := mini(x0 + 1, source.get_width() - 1)
+	var y1 := mini(y0 + 1, source.get_height() - 1)
+	var tx := point.x - float(x0)
+	var ty := point.y - float(y0)
+	var c00 := _premultiplied(source.get_pixel(x0, y0))
+	var c10 := _premultiplied(source.get_pixel(x1, y0))
+	var c01 := _premultiplied(source.get_pixel(x0, y1))
+	var c11 := _premultiplied(source.get_pixel(x1, y1))
+	var top := c00.lerp(c10, tx)
+	var bottom := c01.lerp(c11, tx)
+	var mixed := top.lerp(bottom, ty)
+	if mixed.a <= 0.00001:
+		return Color(0, 0, 0, 0)
+	return Color(
+		mixed.r / mixed.a,
+		mixed.g / mixed.a,
+		mixed.b / mixed.a,
+		mixed.a
+	)
+
+
+func _premultiplied(color: Color) -> Color:
+	return Color(
+		color.r * color.a,
+		color.g * color.a,
+		color.b * color.a,
+		color.a
+	)
 
 
 func _capture_presentation(editor: Node, draft: Dictionary) -> Dictionary:
