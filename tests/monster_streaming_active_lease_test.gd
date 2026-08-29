@@ -10,6 +10,10 @@ const Fixtures := preload(
 const CoordinatorScript := preload(
 	"res://scripts/monster_visual_streaming_coordinator.gd"
 )
+const RELOAD_PREFETCH_IDS := [18, 19, 21, 24, 26]
+## These profiles are rejected by the decoded-RGBA8 pin budget. Requesting
+## them in this order reproduces the production 2-loaded + 1-queued HOL shape.
+const RELOAD_DEMAND_IDS := [24, 26, 18]
 
 var _coordinator
 var _player: PlayerCharacter
@@ -168,7 +172,11 @@ func _run() -> void:
 
 	_cleanup()
 	await get_tree().process_frame
-	print("MONSTER_STREAMING_ACTIVE_LEASE_PASS RGBA8/W-L/generation-safe")
+	await _verify_runtime_reload_lane()
+	print(
+		"MONSTER_STREAMING_ACTIVE_LEASE_PASS "
+		+ "RGBA8/W-L/generation-safe/runtime-reload-lane"
+	)
 	get_tree().quit(0)
 
 
@@ -210,6 +218,152 @@ func _small_profile() -> Dictionary:
 		"hit": texture,
 		"death": texture,
 	}
+
+
+func _verify_runtime_reload_lane() -> void:
+	# Production order: GameRoot finishes map prefetch before spawning visuals.
+	_coordinator = CoordinatorScript.new()
+	MonsterVisual.set_streaming_coordinator(_coordinator)
+	MonsterVisual.reset_client_resource_cache()
+	MonsterVisual.set_synchronous_loading_for_tests(false)
+	var helper := MonsterVisual.new()
+	var mappings := {}
+	var keys := {}
+	for monster_id: int in RELOAD_PREFETCH_IDS:
+		var mapping := helper._client_mapping_for(
+			GameData.get_monster_by_id(monster_id)
+		)
+		assert(
+			not mapping.is_empty(),
+			"missing formal mapping for monster_id=%d" % monster_id
+		)
+		mappings[monster_id] = mapping
+		keys[monster_id] = helper._client_resource_cache_key(mapping)
+	helper.free()
+
+	var prefetch: Dictionary = _coordinator.begin_map_prefetch(
+		RELOAD_PREFETCH_IDS
+	)
+	var prefetch_deadline := Time.get_ticks_msec() + 30000
+	while (
+		not bool(prefetch.get("complete", false))
+		and Time.get_ticks_msec() < prefetch_deadline
+	):
+		_coordinator.poll_once(Engine.get_process_frames())
+		await get_tree().process_frame
+		prefetch = _coordinator.map_prefetch_status()
+	assert(
+		bool(prefetch.get("complete", false)),
+		"initial map prefetch timed out: %s" % prefetch
+	)
+	assert(
+		int(prefetch.get("failed", -1)) == 0,
+		"initial map prefetch failed: %s" % prefetch
+	)
+	assert(
+		int(prefetch.get("pinned", -1)) == 2,
+		"RGBA8 pin priority drifted: %s" % prefetch
+	)
+	assert(
+		int(prefetch.get("streamed", -1)) == 3,
+		"test requires three completed/evicted profiles: %s" % prefetch
+	)
+	for monster_id: int in RELOAD_DEMAND_IDS:
+		assert(
+			_coordinator.client_resources(str(keys[monster_id])).is_empty(),
+			"rejected profile %d unexpectedly remained resident" % monster_id
+		)
+
+	# Spawn-time W demand re-requests the completed map keys out of prefetch
+	# order. These jobs belong to runtime delivery and must not reopen the
+	# already-complete map-prefetch lane.
+	var reload_owners: Array[Node] = []
+	var completed_before: int = (
+		_coordinator._map_prefetch_completed_keys.size()
+	)
+	for monster_id: int in RELOAD_DEMAND_IDS:
+		var owner := Node.new()
+		add_child(owner)
+		reload_owners.append(owner)
+		var mapping: Dictionary = mappings[monster_id]
+		var cache_key := str(keys[monster_id])
+		_coordinator.register_visual(
+			owner,
+			monster_id,
+			910001,
+			_coordinator.current_world_generation(),
+			cache_key,
+			{},
+			monster_id
+		)
+		assert(
+			_coordinator.request_visual_resources(
+				owner, mapping, monster_id, true
+			).is_empty(),
+			"evicted profile %d unexpectedly resolved synchronously" % monster_id
+		)
+		assert(
+			str(
+				_coordinator._threaded_profile_requests[cache_key].get(
+					"lane", ""
+				)
+			) == CoordinatorScript.JOB_LANE_RUNTIME_DEMAND,
+			"runtime reload %d entered the map-prefetch lane" % monster_id
+		)
+	assert(
+		_coordinator._map_prefetch_completed_keys.size() == completed_before,
+		"runtime reload reopened completed map-prefetch keys"
+	)
+	var queued_shape: Dictionary = (
+		_coordinator.monster_streaming_diagnostics()
+	)
+	assert(
+		int(queued_shape.get("loading_request_count", -1)) == 2,
+		"expected two loading slots: %s" % queued_shape
+	)
+	assert(
+		int(queued_shape.get("queued_request_count", -1)) == 1,
+		"expected one queued reload: %s" % queued_shape
+	)
+
+	var reload_deadline := Time.get_ticks_msec() + 30000
+	while (
+		_coordinator.pending_request_count() > 0
+		and Time.get_ticks_msec() < reload_deadline
+	):
+		_coordinator.poll_once(Engine.get_process_frames())
+		await get_tree().process_frame
+	var final_diag: Dictionary = _coordinator.monster_streaming_diagnostics()
+	assert(
+		_coordinator.pending_request_count() == 0,
+		"runtime reload lane deadlocked: %s" % final_diag
+	)
+	assert(
+		int(final_diag.get("queued_request_count", -1)) == 0
+		and int(final_diag.get("loading_request_count", -1)) == 0
+		and int(final_diag.get("loaded_request_count", -1)) == 0,
+		"reload jobs survived completion: %s" % final_diag
+	)
+	assert(
+		int(final_diag.get("failed_request_count", -1)) == 0,
+		"runtime reload failed: %s" % final_diag
+	)
+	assert(
+		int(final_diag.get("same_key_reload_count", -1))
+			== RELOAD_DEMAND_IDS.size()
+	)
+	for monster_id: int in RELOAD_DEMAND_IDS:
+		assert(
+			not _coordinator.client_resources(str(keys[monster_id])).is_empty(),
+			"runtime-demand profile %d was never published" % monster_id
+		)
+	for owner: Node in reload_owners:
+		if is_instance_valid(owner):
+			_coordinator.release_visual_resource(owner)
+			_coordinator.unregister_visual(owner.get_instance_id())
+			owner.queue_free()
+	await get_tree().process_frame
+	MonsterVisual.reset_client_resource_cache()
 
 
 func _cleanup() -> void:

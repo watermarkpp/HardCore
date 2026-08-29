@@ -17,6 +17,8 @@ const CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES := 64 * 1024 * 1024
 const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
 const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTIONS := ["idle", "walk", "attack", "hit", "death"]
+const JOB_LANE_MAP_PREFETCH := "map_prefetch"
+const JOB_LANE_RUNTIME_DEMAND := "runtime_demand"
 
 
 var _threaded_profile_requests: Dictionary = {}
@@ -95,7 +97,8 @@ func retain_client_resource_profile(
 func request_client_profile(
 	client_mapping: Dictionary,
 	monster_id := -1,
-	map_generation := -1
+	map_generation := -1,
+	job_lane := JOB_LANE_RUNTIME_DEMAND
 ) -> void:
 	var helper := MonsterVisualScript.new()
 	var cache_key := helper._client_resource_cache_key(client_mapping)
@@ -125,6 +128,7 @@ func request_client_profile(
 				"monster_id": monster_id,
 				"map_generation": map_generation,
 				"request_sequence": _request_sequence,
+				"lane": job_lane,
 				"failed_path": path,
 			}
 			failed_resource_count += 1
@@ -136,16 +140,6 @@ func request_client_profile(
 			* Vector2i(int(action.get("framesPerDirection", 1)), 8)
 		)
 	_request_sequence += 1
-	# A pin-rejected prefetch may have completed as "streamed" and then been
-	# evicted by the RGBA8 LRU while no visual needed it. If that same key is
-	# requested again, reopen the prefetch completion slot so
-	# _commit_loaded_profiles publishes the reload instead of treating the
-	# loaded job as already complete.
-	if (
-		_map_prefetch_keys.has(cache_key)
-		and _map_prefetch_completed_keys.has(cache_key)
-	):
-		_map_prefetch_completed_keys.erase(cache_key)
 	if _resource_ever_loaded.has(cache_key):
 		same_key_reload_count += 1
 	_request_order.append(cache_key)
@@ -157,6 +151,7 @@ func request_client_profile(
 		"monster_id": monster_id,
 		"map_generation": map_generation,
 		"request_sequence": _request_sequence,
+		"lane": job_lane,
 	}
 	unique_request_count += 1
 	_threaded_profile_queue.append(cache_key)
@@ -166,7 +161,7 @@ func request_client_profile(
 func _pump_threaded_profile_queue() -> void:
 	var active_count := 0
 	for job: Dictionary in _threaded_profile_requests.values():
-		if str(job.get("state", "")) in ["loading", "loaded"]:
+		if str(job.get("state", "")) == "loading":
 			active_count += 1
 	while (
 		active_count < MAX_CONCURRENT_PROFILE_LOADS
@@ -282,25 +277,25 @@ func _commit_loaded_profiles() -> void:
 		if _map_prefetch_completed_keys.has(cache_key):
 			continue
 		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
+		if str(job.get("lane", JOB_LANE_MAP_PREFETCH)) != JOB_LANE_MAP_PREFETCH:
+			continue
 		var state := str(job.get("state", ""))
 		if state == "failed":
 			continue
 		if state != "loaded":
 			break
 		_dispatch_loaded_job(cache_key, job, true)
-	# Non-prefetch requests commit in stable request-sequence order.
-	var ready_keys: Array[String] = []
+	# Runtime demand (including a reload of a completed/evicted map-prefetch
+	# key) is a separate delivery lane. It must never re-open or wait behind the
+	# map-prefetch completion order: that order only owns initial pin priority.
+	# Stable request sequence keeps simultaneous visual demand deterministic.
+	var runtime_keys: Array[String] = []
 	for cache_key: String in _threaded_profile_requests.keys():
 		var job: Dictionary = _threaded_profile_requests[cache_key]
-		if str(job.get("state", "")) != "loaded":
+		if str(job.get("lane", JOB_LANE_RUNTIME_DEMAND)) != JOB_LANE_RUNTIME_DEMAND:
 			continue
-		if (
-			int(job.get("map_generation", -1)) == _map_prefetch_generation
-			and _map_prefetch_keys.has(cache_key)
-		):
-			continue
-		ready_keys.append(cache_key)
-	ready_keys.sort_custom(
+		runtime_keys.append(cache_key)
+	runtime_keys.sort_custom(
 		func(a: String, b: String) -> bool:
 			return (
 				int(_threaded_profile_requests.get(a, {}).get(
@@ -311,8 +306,17 @@ func _commit_loaded_profiles() -> void:
 				))
 			)
 	)
-	for cache_key: String in ready_keys:
-		_dispatch_loaded_job(cache_key, _threaded_profile_requests[cache_key], false)
+	# Commit only the ready prefix. A later completion cannot overtake an
+	# earlier runtime request, but queued/loading jobs no longer consume loaded
+	# slots in the queue pump, so this ordering fence cannot deadlock the pump.
+	for cache_key: String in runtime_keys:
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		var state := str(job.get("state", ""))
+		if state == "failed":
+			continue
+		if state != "loaded":
+			break
+		_dispatch_loaded_job(cache_key, job, false)
 
 
 func _dispatch_loaded_job(
@@ -504,7 +508,12 @@ func begin_map_prefetch(monster_ids: Array) -> Dictionary:
 				int(_client_resource_profile_decoded_rgba8_bytes.get(cache_key, 0))
 			)
 		else:
-			request_client_profile(mapping, monster_id, _map_prefetch_generation)
+			request_client_profile(
+				mapping,
+				monster_id,
+				_map_prefetch_generation,
+				JOB_LANE_MAP_PREFETCH
+			)
 	helper.free()
 	return map_prefetch_status()
 
@@ -660,7 +669,8 @@ func request_visual_resources(
 		request_client_profile(
 			client_mapping,
 			monster_id,
-			int(sub.get("world_generation", -1))
+			int(sub.get("world_generation", -1)),
+			JOB_LANE_RUNTIME_DEMAND
 		)
 	return {}
 
