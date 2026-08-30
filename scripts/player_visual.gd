@@ -177,14 +177,15 @@ func _process(delta: float) -> void:
 	if not visible:
 		return
 	_action_remaining = maxf(0.0, _action_remaining - delta)
-	current_state = "action" if _action_remaining > 0.0 else ("walk" if actor.velocity.length_squared() > 25.0 else "idle")
-	# 移动时以实际速度为最高优先级，避免自动目标/战斗朝向覆盖行走动画方向。
+	current_state = "action" if _action_remaining > 0.0 else ("run" if actor.velocity.length_squared() > 25.0 else "idle")
+	# 当前移动速度就是跑步速度；移动时以实际速度为最高优先级，避免
+	# 自动目标/战斗朝向覆盖跑步动画方向。
 	current_direction = _resolved_direction_row()
 	if current_state != _last_state:
 		_elapsed = 0.0
 		_last_state = current_state
 	_elapsed += delta
-	var fps := 12.0 if current_state == "action" else (10.0 if current_state == "walk" else 6.0)
+	var fps := 12.0 if current_state == "action" else (10.0 if current_state == "run" else 6.0)
 	var action_key := _visual_action_key()
 	var frame_count := _frame_count_for_action(action_key)
 	if current_state == "action":
@@ -313,9 +314,9 @@ func play_passive_proc_effect(effect_name: String, duration := 0.24) -> void:
 
 
 func _resolved_direction_row() -> int:
-	# Walking must use real screen displacement. Actions use the combat-facing
+	# Running must use real screen displacement. Actions use the combat-facing
 	# vector captured from the selected target at action start.
-	var direction := actor.actual_motion_facing if current_state == "walk" else actor.facing
+	var direction := actor.actual_motion_facing if current_state == "run" else actor.facing
 	return ArtSpec.mir2_client_direction_row(direction)
 
 
@@ -444,8 +445,8 @@ func _is_warrior_attack_action(animation_name: String) -> bool:
 
 
 func _visual_action_key() -> String:
-	if current_state == "walk":
-		return "walk"
+	if current_state == "run":
+		return "run"
 	if current_state == "action" and _action_name == "hit":
 		return "hit"
 	if current_state == "action" and _action_name == "death":
@@ -462,6 +463,9 @@ func _default_body_texture(action_key: String) -> Texture2D:
 	if formal != null:
 		return formal
 	match action_key:
+		# There is no legacy placeholder for running. If the formal male run
+		# atlas is missing, fail closed instead of silently reusing another action.
+		"run": return null
 		"walk": return PresentationAssets.player_texture("walk")
 		"attack": return PresentationAssets.player_texture("attack")
 		"cast": return PresentationAssets.player_texture("idle")
@@ -471,7 +475,7 @@ func _default_body_texture(action_key: String) -> Texture2D:
 
 
 func _current_frame_count() -> int:
-	return _frame_count_for_action("walk" if current_state == "walk" else "idle")
+	return _frame_count_for_action("run" if current_state == "run" else "idle")
 
 
 func _frame_count_for_action(action_key: String) -> int:

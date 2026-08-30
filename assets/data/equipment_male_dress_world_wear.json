@@ -48,6 +48,10 @@
       "death": {
         "start": 536,
         "frames": 4
+      },
+      "run": {
+        "start": 128,
+        "frames": 6
       }
     },
     "footPointContractChanged": false
@@ -63,7 +67,7 @@
     "expectedMaleArmorItems": 12,
     "maleHumFeatureFamiliesIncludingBase": 9,
     "dressedFeatureFamilies": 8,
-    "actionsPerFeature": 6,
+    "actionsPerFeature": 7,
     "directionsPerAction": 8,
     "missingFrames": 0,
     "femaleItems": 0
@@ -100,6 +104,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "8bee959b0417f67fb23ef6ccc7ebf6eefbc43597f45700d3602800bc2bdb90e8",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 0,
@@ -613,8 +618,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "21b453f189604c2222fb24463f83428a297599828f77eb0ed7ef810e12f43c29"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_walk.png",
@@ -634,6 +638,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "8001a1c56abb4ba8f8123e80b3a64d6e234c8a7898187e1ffc14e520be762b78",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 64,
@@ -1403,8 +1408,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "b5c017d93284e6a4102bfe09a7cdfcb3da9c0295aa7a08a46a947e000e57ac6f"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_attack.png",
@@ -1424,6 +1428,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "65cdebf1f193ac3794213d855cd07490018d4025ee52395cc1656c39c01c89e0",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 200,
@@ -2193,8 +2198,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "9666e417025259a0bd42954befbe4601c8abb59f5512bc60607437deb47376ff"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_cast.png",
@@ -2214,6 +2218,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "0c9ea9d72672ef67ca2c1943f5cac513b45950c2e2b9b0bf641da5aab8e40e4f",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 392,
@@ -2983,8 +2988,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "c9ec18250da1df355b79ae1caa8a0492defb82bbef4e2421f0b081c5ae3d96c1"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_hit.png",
@@ -3004,6 +3008,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "c54a0214a67b4520be9195f225fc49bd6178971de7a3fa2d0f65d7864af59dc0",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 472,
@@ -3389,8 +3394,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "01dc4664e57d3bc576dbab32ad905ddf463c66c4bae2049f5c55efa39e6d437f"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_death.png",
@@ -3410,6 +3414,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "bbfe1b10f9a075184e2da380e11d40338faa22b77cae9e436d136445e9e05ba0",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 536,
@@ -3923,8 +3928,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "92c8e5017a33a466537d7415463ad6da18a2a9e852e5399768f719e0bc58c5ae"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 0,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "2aba5af859da157f3aae39934db253270fbbd937077865433fe3e9000114a24e",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     },
@@ -3959,6 +3985,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "ca018b77844fb91c3c46dc85b63b00558331a58019b1b93e74f0c03838118f08",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 1200,
@@ -4472,8 +4499,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "df6c8ddc79f4328acac44b3251aae0e6a84bb65e3db214decfe9528529e0d2c9"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_walk.png",
@@ -4493,6 +4519,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "91106d27159784e6b1ae32d80f0e8fecc4220f30b07c39bd00ddbbb89bc951bf",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 1264,
@@ -5262,8 +5289,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "1d091dd4c74ec6d43c404d78a886b684db7e3da0397e9628d284168dc1672e3f"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_attack.png",
@@ -5283,6 +5309,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "3959a1409bc125241d934a2db9ed6737185452a7795a921d045432a69dc81c5d",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 1400,
@@ -6052,8 +6079,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "6104b8089682bfb79a918ada8e4ce12bc16be93b1917df9636a210f800ad2fc5"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_cast.png",
@@ -6073,6 +6099,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "bb1f9bfc9c5d445afcfe8776898818c59cbfe9102269bc1256b5822aff0f5455",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 1592,
@@ -6842,8 +6869,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "7adea45217c536a569c5075e681e217883e68b592728aa3464ee6d31a5956daa"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_hit.png",
@@ -6863,6 +6889,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "7e89d3a0fcaac0a7e8ed002d6513cb4577fc0fcdf0a0169b50a319102301a505",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 1672,
@@ -7248,8 +7275,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "2182147ca68d1d6a64d28e10b7b58b3a7049096dae953e51cd1d72e83073881f"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_death.png",
@@ -7269,6 +7295,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "5f32b7342bf00ce0e9f0f1d1dc80c8e994e32212d50d1c5ff33742d50f96520d",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 1736,
@@ -7782,8 +7809,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "366000b07d9c451554facd512a9951336615739e00b97e10b6b96b43ab491478"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 2,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "b25d59195f38db365964ef05de6e38a62f9fc160815ab99d1afd3fb7b80d2ec3",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     },
@@ -7818,6 +7866,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "fad6429dbda2e867474a14f3e903b712b7b4e2bcbadc2e6b309477236f140334",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 2400,
@@ -8331,8 +8380,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "6bdbeec12afed29c541ae8a483180ec95003b024ed5da86e253197addcc5fbcf"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_walk.png",
@@ -8352,6 +8400,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "bbbba3ea26f6a6d5be840a3b9bc808202d7b9ae7ae5280810328bff5a0f4e20c",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 2464,
@@ -9121,8 +9170,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "087c63ac5ee3623b7a568fea59a3aa9dc9ff8e2d3ab1edbce2066b45886ab9b2"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_attack.png",
@@ -9142,6 +9190,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "3249da0184a60e847b52e2c5e71e840956604b26f4c32d40a937bd9e01023a09",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 2600,
@@ -9911,8 +9960,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "6f195648bda364bfa7170962ffef6e68aa7da37f5df7f8e7ce77c0bb468b9d08"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_cast.png",
@@ -9932,6 +9980,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "2f11ce59fd757241c2c80e02fac2a375de446b05a033729b6ed1850fcc94e53c",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 2792,
@@ -10701,8 +10750,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "095651668da365bb8512d600b6c7258e546761be740af2a75140b4fd837dc4d7"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_hit.png",
@@ -10722,6 +10770,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "452bf4da1d3037cf81f103c8ce9969e0d9dc64c4ac9c7e1fbe1f5054183d1a34",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 2872,
@@ -11107,8 +11156,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "590d35e08f7f4695d4a751f75393a63809922860f53570aba77bec0775cf678c"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_death.png",
@@ -11128,6 +11176,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "5613dd4f3eb7f964d041815e53ec55799933027e29fd3d35f190d4a96c86e317",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 2936,
@@ -11641,8 +11690,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "6c35bee24f14c395bc54a1ba0864f7f134937504cdef93ce54b45670d794dddf"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 4,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "62ff76b99146dc7d473703c4b67c920ddc907c5cc18807d392a81f02295ccc6e",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     },
@@ -11677,6 +11747,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "b0fd447860a0a96de173e2c1747863b470e19730a80f003992e0017da7cce887",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 3600,
@@ -12190,8 +12261,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "9f62a842b692448de51d7f9839e7f6f8e2b5f1e25386aba7f4635ed854e97312"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_walk.png",
@@ -12211,6 +12281,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "5e656093ff9e674e93d806688f9926375b92deb74b29c0a638acd45c4ce6c077",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 3664,
@@ -12980,8 +13051,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "88837924bb8d8e65fbf36260c9107bbfda1c39b8c55adc53a1f7794bdbceca8f"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_attack.png",
@@ -13001,6 +13071,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "b37c90dd2b81b60646510f17b9026f4d162579a2c54bf2038e1e4043ae2769d1",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 3800,
@@ -13770,8 +13841,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "67ad1850bb5aed6122002555e51e102c3d6083736beaaaf9f7a67ce18112aad5"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_cast.png",
@@ -13791,6 +13861,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "6d17e486607640af3372d6f85ae43562b1e340149f5b4f6013be504305536407",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 3992,
@@ -14560,8 +14631,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "89bf3ffbaa6945ff9fdc25dd3762d1185e6bff01a734709fbfa30451fa197a4b"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_hit.png",
@@ -14581,6 +14651,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "6a497c3390997cdeeac42c0e12923f5e552a14893a2337c02fed5df190f50af2",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 4072,
@@ -14966,8 +15037,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "1211dabfb8c4118d55fc976ab3bffc1dcf921546deebf234728493a7d9120a9b"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_death.png",
@@ -14987,6 +15057,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "519b76664dec76513afb49b3ad9e444bd5d1d45291fed92f1dad1130008be3cb",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 4136,
@@ -15500,8 +15571,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "71981e54ef9005375f97fcad63ae1e28abd50f1a75006f41077f070ec6d26cb8"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "e2f8501f6ef94045ea2820ae7a88f3ca7d3efa46daa766e291ff193c281e8c93",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     },
@@ -15536,6 +15628,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "e657a0d677271d28c62a1c2dc773ef285b19b3954f15325c540d59047eca68ea",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 4800,
@@ -16049,8 +16142,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "dca65f92b2d897c9c4632d902f2f14530645ab39d92e260deba8bb950f75594f"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_walk.png",
@@ -16070,6 +16162,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "5cdce53aa2a3e2fec5698dc85945338c6e57531e14050fa0041badb87d319e56",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 4864,
@@ -16839,8 +16932,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "82ccfc4678b6b2051456b02d8ea010b00d7662b0830cc0594ca57e528e5021f0"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_attack.png",
@@ -16860,6 +16952,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "cf821c04c608dec87f2f98e872f27b6818399039c9ead80a471ab4dbd7ca766a",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 5000,
@@ -17629,8 +17722,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "1b14a2aa0f2f498b249ac77e1cc1985b947d9bcf2c3df12f5035af14bc0317f6"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_cast.png",
@@ -17650,6 +17742,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "a0b7477c2c2ac00710e6100290897dee1285b3300cce08b59f75fbda05f6f977",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 5192,
@@ -18419,8 +18512,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "f33723137730cf2bf0cd13690fef38fe050d679ad3a3882f88ba8aca79042336"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_hit.png",
@@ -18440,6 +18532,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "115921566508d5089f6b0e8a5933301dfd30c80429642a0b503ac1fb541261ab",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 5272,
@@ -18825,8 +18918,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "ae3d5adb2a72251f75281b0dba419047704b878f4cf8bbf020d54dd054db627d"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_death.png",
@@ -18846,6 +18938,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "d60851be390db250e3749bfea356aadd674a1bde1f4ac75b7aabcd0ae473d29c",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 5336,
@@ -19359,8 +19452,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "a064c8db9912da5fe7934dd55767751fcf923cd0837f828553fa8d77dca2a8b3"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 8,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "d936b219a70bf7624157cdd3be0b86963929e3740ef395e62676ebad58db23af",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     },
@@ -19395,6 +19509,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "316e4561a514f2bd62927f9318138eb8d716bf3230328a04238bed3f0a3f4020",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 6000,
@@ -19908,8 +20023,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "120508ed40d9d751157e82caf292f77bf55fb9d66b3a386c357b6863a465a384"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_walk.png",
@@ -19929,6 +20043,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "0346a91dedee1eea7444aef9f3eb21964e14680a8f81700c4d8ef0599346c7a0",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 6064,
@@ -20698,8 +20813,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "43d5fc9388f01b091c75b9ce89f3d5a6c484fef9f0b1e9eeee71695ac5e366af"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_attack.png",
@@ -20719,6 +20833,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "d20ca2f3b1b62eb5cdaf91e1250617877bbe9deef6769991cba136f983e979c3",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 6200,
@@ -21488,8 +21603,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "8b5ceb74094af7a781b5a5dd298c68e75a395fc14bd04caf9d78f43bb0e8bd22"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_cast.png",
@@ -21509,6 +21623,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "9042787ddcbf913ba6077a5e372939889f57aa81803020cdbc76ebf3d8a766bd",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 6392,
@@ -22278,8 +22393,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "3f6219a354514f7f52ac78a490ee5f045e20f403bb9e52766fecd232fcaaad2b"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_hit.png",
@@ -22299,6 +22413,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "0bdb0df97c6ec3fbf21edb9a74017440bf51a8cd8fb1afb63febd9f5579a6301",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 6472,
@@ -22684,8 +22799,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "99fd06fe5db7a5a1f75fa4f9f4583718ba0731f241fcb28cb3e6dc6056f2d02e"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_death.png",
@@ -22705,6 +22819,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "d9b2a5eb93b403d859983317788624c7dc1cff1279505023af79f533994d0308",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 6536,
@@ -23218,8 +23333,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "ccdc7eecbec8bd98bb93fd85de04c168e77bd59a03940961c95e682d386f9290"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 10,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "ffeea45d491438237e2a81baa53fe79352239f88daf4cb8dfceee3f4676255fa",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     },
@@ -23254,6 +23390,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "45ac33bedde4629c7362595419b29dda21e0dea36169dfa73d797db35be181b4",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 7200,
@@ -23767,8 +23904,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "43aad3755127535c25a107d1f9f0a202f3f4c4928825380378c73c92ffe553b1"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_walk.png",
@@ -23788,6 +23924,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "53908fa259f41942d0f7f7e0cef496bce199aaee6ac12acc87b7202a41e1c39c",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 7264,
@@ -24557,8 +24694,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "b37e7ddddd47cf0951812f855ed0348e1642d0b50310ca40b5da9a2cfd6fb90d"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_attack.png",
@@ -24578,6 +24714,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "ee3392466d11be10738afe50fdc3b69895696a033a4abd951900e1a1051e81a9",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 7400,
@@ -25347,8 +25484,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "52379a724333c2c04184f2022844bb9ed2ca25762ad078d1550883bd0cdbe2ec"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_cast.png",
@@ -25368,6 +25504,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "a6ecd63d0f968ff6f3f00aa29a31eea4e3cff6564e554ee420d333829abc1fe0",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 7592,
@@ -26137,8 +26274,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "1674b59b736fd79810c895da44d2cc9ed4b10c6ae1129377faaf356969c4d94b"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_hit.png",
@@ -26158,6 +26294,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "54bdbdf56daf4da3227f33c44ee1126b25b28f2e211339a795aeb9905167786b",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 7672,
@@ -26543,8 +26680,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "7f9e50dfefd2d3524411032b76494e7217d1aea8db91853e0df765d253f0403f"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_death.png",
@@ -26564,6 +26700,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "ddea341053c41180908175b26fbe7c6bf30f291c1f1bf41f5e261010ba51c74a",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 7736,
@@ -27077,8 +27214,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "8c58705d77d57fba127fdf820c00d7b65615a2d8f5a32db49435d8efe2bf9a38"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 12,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "9d26609e044e0389ed9d7970e0fb9252b8f8d9abb29edcb6674ed86d4a9bc1d9",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     },
@@ -27113,6 +27271,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "b3ae93e09711d6b69ab3cf8eb47d704ab94d7f48ac992adcfea67302c1bbf607",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 8400,
@@ -27626,8 +27785,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "61667cd9da38ef73a744f4cb570334f7442faf2c48d802acf64cdee4afd04da8"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_walk.png",
@@ -27647,6 +27805,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "1e0390f2d4b771d491be993da6277884ff86a9804beb59337275d373ae74946c",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 8464,
@@ -28416,8 +28575,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "e2aaafcb76a43395e370837d5739e211c043b85309c4d9a08c3916a0b09b7299"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_attack.png",
@@ -28437,6 +28595,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "fbcf2af7aea8c93d1226b39b8d9c8ec2a71ce2c788d05395f55cd17da909cbf4",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 8600,
@@ -29206,8 +29365,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "31b59f1ca2f17fd223649abc42b2bf84b60c49a67a99c022323285042c93cb39"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_cast.png",
@@ -29227,6 +29385,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "5baa41b53383773587069ab5f1c22f6c1a016375322d0b7a741100982f1c1650",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 8792,
@@ -29996,8 +30155,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "fea7b4a06202dc2ed13337440c8137ee419623ceb459e17125d4a11ed00efa3c"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_hit.png",
@@ -30017,6 +30175,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "6a9c1b7edeede9832c88fea1d1b7c9296bd622c8c0312e9cadca68a84b038ce6",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 8872,
@@ -30402,8 +30561,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "cf8a9e27e796f310e0c208ede1b51aca03a05d56ea5eb6edd2681e5ebb6a75d6"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_death.png",
@@ -30423,6 +30581,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "4ab76cf7f5135c9b33687668527e0b14029fb188f5e17bae3a369e723271d303",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 8936,
@@ -30936,8 +31095,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "f03faced09efe30b9f87344d55c46f5bfea014a57890f6b70d8dc7ef43adaf56"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 14,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "025c38cbdbb10a32539c4f994163a8b428a1ec03b5974a3cdd507e0f98f16dfc",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     },
@@ -30972,6 +31152,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "4c0ac34974157bf010bdc0d2271659c58449803e3a41eba05d3c5f2033a04702",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 9600,
@@ -31485,8 +31666,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "234a8db8f25e82c86f86b0b7da2de30c3305cb4590744d6fdd54ee8f7a90adda"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "walk": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_walk.png",
@@ -31506,6 +31686,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "06799b687902979cf7817651316bb417193cc90c155b68d7edeff02b913edadf",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 9664,
@@ -32275,8 +32456,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "e5a085c907d0b5ab0e32e4adf71c1a3af4119e2285cbe8e413509302ef3cbb69"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "attack": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_attack.png",
@@ -32296,6 +32476,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "270d3166c8294584b1b218ffff740925d606913b8cb24044ca3df7e8f230426f",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 9800,
@@ -33065,8 +33246,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "4a49f1da4a88651f7677d067388aaba9568c13ecd7f0fa6d2f1d4c05a2dfaed8"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "cast": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_cast.png",
@@ -33086,6 +33266,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "7ddc977adcb1cae70db1955be2f6b448b11f58c2fd2bdcab545be2a5dceccc3c",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 9992,
@@ -33855,8 +34036,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "fc74460c05d940c8d0537a9e8ad0bbbc44553eefe60512a749b1b95263f66468"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "hit": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_hit.png",
@@ -33876,6 +34056,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "90d4c3fb3aecfd2f0244bb266c5ea773a3f5f3c1a0dee4249dacfb63c56edac7",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 10072,
@@ -34261,8 +34442,7 @@
               "transparentEmpty": false,
               "rgbaSha256": "ece5690f2fed2f694d5906a951cc3f601ec305a10bcd03ec990b248b54ccb4f7"
             }
-          ],
-          "libraryImageCount": 10800
+          ]
         },
         "death": {
           "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_death.png",
@@ -34282,6 +34462,7 @@
           "transparentEmptyFrames": [],
           "pixelActionConfidence": "A",
           "atlasRgbaSha256": "cebdfee4d51a7fd767a648cb4466fcc6c61234bcb3adc0447c1ec996469f32df",
+          "libraryImageCount": 10800,
           "sourceFrames": [
             {
               "sourceIndex": 10136,
@@ -34795,8 +34976,29 @@
               "transparentEmpty": false,
               "rgbaSha256": "a49b6b06ff65e388fc0c7f910de5434e0baa1d1ac7514f866c042f1f9eb760ab"
             }
+          ]
+        },
+        "run": {
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_run.png",
+          "cell": [
+            192,
+            160
           ],
-          "libraryImageCount": 10800
+          "actorOrigin": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "framesPerDirection": 6,
+          "sourceFeature": 16,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "transparentEmptyFrames": [],
+          "pixelActionConfidence": "A",
+          "atlasRgbaSha256": "863774f5f253307845273402db860d11054e70ff214f580715f49f6d87ce24dd",
+          "libraryImageCount": 10800,
+          "sourceStart": 128,
+          "sourceIndexRule": "feature*600 + sourceStart + direction*8 + frame"
         }
       }
     }
@@ -34962,6 +35164,11 @@
             "featureActionRef": "featureFamilies.2.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.2.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35023,6 +35230,11 @@
             "featureActionRef": "featureFamilies.4.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.4.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35084,6 +35296,11 @@
             "featureActionRef": "featureFamilies.4.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.4.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35145,6 +35362,11 @@
             "featureActionRef": "featureFamilies.6.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.6.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35206,6 +35428,11 @@
             "featureActionRef": "featureFamilies.6.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.6.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35267,6 +35494,11 @@
             "featureActionRef": "featureFamilies.12.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.12.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35328,6 +35560,11 @@
             "featureActionRef": "featureFamilies.8.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.8.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35389,6 +35626,11 @@
             "featureActionRef": "featureFamilies.8.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.8.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35450,6 +35692,11 @@
             "featureActionRef": "featureFamilies.14.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.14.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35511,6 +35758,11 @@
             "featureActionRef": "featureFamilies.10.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.10.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35572,6 +35824,11 @@
             "featureActionRef": "featureFamilies.10.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.10.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35633,6 +35890,11 @@
             "featureActionRef": "featureFamilies.16.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.16.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35677,6 +35939,11 @@
             "featureActionRef": "featureFamilies.2.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.2.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35719,6 +35986,11 @@
             "featureActionRef": "featureFamilies.4.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.4.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35761,6 +36033,11 @@
             "featureActionRef": "featureFamilies.4.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.4.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35803,6 +36080,11 @@
             "featureActionRef": "featureFamilies.6.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.6.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35845,6 +36127,11 @@
             "featureActionRef": "featureFamilies.6.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.6.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35887,6 +36174,11 @@
             "featureActionRef": "featureFamilies.12.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.12.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35929,6 +36221,11 @@
             "featureActionRef": "featureFamilies.8.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.8.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -35971,6 +36268,11 @@
             "featureActionRef": "featureFamilies.8.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.8.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -36013,6 +36315,11 @@
             "featureActionRef": "featureFamilies.14.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.14.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -36055,6 +36362,11 @@
             "featureActionRef": "featureFamilies.10.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.10.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -36097,6 +36409,11 @@
             "featureActionRef": "featureFamilies.10.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.10.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}
@@ -36139,6 +36456,11 @@
             "featureActionRef": "featureFamilies.16.actions.death",
             "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_death.png",
             "framesPerDirection": 4
+          },
+          "run": {
+            "featureActionRef": "featureFamilies.16.actions.run",
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_run.png",
+            "framesPerDirection": 6
           }
         },
         "actionFallbacks": {}

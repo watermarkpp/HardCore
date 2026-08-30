@@ -1,0 +1,3947 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment.world_wear.male_run.v1",
+  "scope": "male_world_actor_run_preparation_only",
+  "sourcePolicy": {
+    "lane": "client_assets",
+    "tier": "primary",
+    "distribution": "client.classic_raw_complete",
+    "femaleExcluded": true,
+    "femaleAssetsGenerated": 0,
+    "helmetRunGenerated": false,
+    "unresolvedWeaponPolicy": "retain unresolved_no_placeholder; never guess feature"
+  },
+  "source": {
+    "action": "run",
+    "actionStart": 128,
+    "framesPerDirection": 6,
+    "blockFrames": 600,
+    "directions": [
+      "N",
+      "NE",
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW"
+    ],
+    "indexRule": "feature*600 + actionStart + directionRow*8 + frame",
+    "humWil": {
+      "path": "res://dev_art_sources/reference/mir2_client_raw/Data/Hum.wil",
+      "fileSha256": "6a3867b84cdda2f972aea76586e68d113894832b07d93bb7f10bfcfb1e17005e"
+    },
+    "weaponWil": {
+      "path": "res://dev_art_sources/reference/mir2_client_raw/Data/Weapon.wil",
+      "fileSha256": "130e39f4656584769d7d0ff8ab615830f4e74ddddcb82bd8ca76ac4da5c0a63e"
+    },
+    "hairWil": {
+      "path": "res://dev_art_sources/reference/mir2_client_raw/Data/Hair.wil",
+      "fileSha256": "ae377f1529913d97f0ff9ba25c94352fc348490a99d291adc2e821fbb3180927"
+    }
+  },
+  "actorContract": {
+    "contractId": "player.visual.classic_eight_direction.v1",
+    "directionOrder": [
+      "N",
+      "NE",
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW"
+    ],
+    "movementActions": {
+      "walk": {
+        "start": 64,
+        "frames": 6
+      },
+      "run": {
+        "start": 128,
+        "frames": 6
+      }
+    },
+    "dress": {
+      "cell": [
+        192,
+        160
+      ],
+      "footAnchor": [
+        64,
+        80
+      ],
+      "sourceLibrary": "Hum.wil"
+    },
+    "weapon": {
+      "cell": [
+        224,
+        224
+      ],
+      "footAnchor": [
+        80,
+        116
+      ],
+      "sourceLibrary": "Weapon.wil"
+    },
+    "hair": {
+      "cell": [
+        192,
+        160
+      ],
+      "footAnchor": [
+        64,
+        80
+      ],
+      "sourceLibrary": "Hair.wil",
+      "appearance": 2,
+      "sourceBlock": 4,
+      "appearanceStride": 600
+    },
+    "footPointContractChanged": false
+  },
+  "worldHelmet": {
+    "visible": false,
+    "frontLayerVisible": false,
+    "backLayerVisible": false,
+    "headOcclusionMaskEnabled": false,
+    "runAssetsGenerated": false,
+    "presentationScopesPreserved": [
+      "paper_doll",
+      "inventory",
+      "ground"
+    ]
+  },
+  "coverage": {
+    "maleDressItems": 12,
+    "maleDressFeaturesIncludingBase": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16
+    ],
+    "maleWeaponItemsMapped": 36,
+    "maleWeaponFeaturesMapped": 33,
+    "unresolvedWeaponItemIds": [
+      111
+    ],
+    "maleHairBlock": 4,
+    "actionsPerItem": 2,
+    "directionsPerAction": 8,
+    "framesPerDirection": 6,
+    "femaleItems": 0,
+    "helmetRunAtlases": 0
+  },
+  "contracts": {
+    "catalog": "res://assets/data/equipment_visual_catalog.json",
+    "dress": "res://assets/data/equipment_male_dress_world_wear.json",
+    "weapon": "res://assets/data/equipment_male_weapon_world_wear.json",
+    "existingHairPolicy": "res://assets/data/equipment_world_helmet_runtime_policy.json"
+  },
+  "baseBodyAppearance": {
+    "sex": "male",
+    "sourceFeature": 0,
+    "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/0",
+    "actions": {
+      "walk": {
+        "featureActionRef": "dressFeatureFamilies.0.actions.walk",
+        "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_walk.png",
+        "sourceLibrary": "Hum.wil",
+        "sourceFeature": 0,
+        "sourceAction": "walk",
+        "sourceStart": 64,
+        "cell": [
+          192,
+          160
+        ],
+        "footAnchor": [
+          64,
+          80
+        ],
+        "directions": 8,
+        "directionOrder": [
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "NW"
+        ],
+        "framesPerDirection": 6,
+        "decodedFrameCount": 48,
+        "missingFrames": [],
+        "atlasRgbaSha256": "8001a1c56abb4ba8f8123e80b3a64d6e234c8a7898187e1ffc14e520be762b78",
+        "fileSha256": "",
+        "confidence": "A"
+      },
+      "run": {
+        "featureActionRef": "dressFeatureFamilies.0.actions.run",
+        "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_run.png",
+        "sourceLibrary": "Hum.wil",
+        "sourceFeature": 0,
+        "sourceAction": "run",
+        "sourceStart": 128,
+        "cell": [
+          192,
+          160
+        ],
+        "footAnchor": [
+          64,
+          80
+        ],
+        "directions": 8,
+        "directionOrder": [
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "NW"
+        ],
+        "framesPerDirection": 6,
+        "decodedFrameCount": 48,
+        "missingFrames": [],
+        "atlasRgbaSha256": "2aba5af859da157f3aae39934db253270fbbd937077865433fe3e9000114a24e",
+        "fileSha256": "",
+        "confidence": "A"
+      }
+    }
+  },
+  "itemsById": {
+    "116": {
+      "itemId": 116,
+      "itemName": "布衣(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 2,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/2",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.2.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 2,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "91106d27159784e6b1ae32d80f0e8fecc4220f30b07c39bd00ddbbb89bc951bf",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.2.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 2,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "b25d59195f38db365964ef05de6e38a62f9fc160815ab99d1afd3fb7b80d2ec3",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "118": {
+      "itemId": 118,
+      "itemName": "轻型盔甲(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 4,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/4",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.4.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 4,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "bbbba3ea26f6a6d5be840a3b9bc808202d7b9ae7ae5280810328bff5a0f4e20c",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.4.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 4,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "62ff76b99146dc7d473703c4b67c920ddc907c5cc18807d392a81f02295ccc6e",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "120": {
+      "itemId": 120,
+      "itemName": "中型盔甲(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 4,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/4",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.4.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 4,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "bbbba3ea26f6a6d5be840a3b9bc808202d7b9ae7ae5280810328bff5a0f4e20c",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.4.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 4,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "62ff76b99146dc7d473703c4b67c920ddc907c5cc18807d392a81f02295ccc6e",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "122": {
+      "itemId": 122,
+      "itemName": "重盔甲(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 6,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/6",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.6.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 6,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "5e656093ff9e674e93d806688f9926375b92deb74b29c0a638acd45c4ce6c077",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.6.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 6,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "e2f8501f6ef94045ea2820ae7a88f3ca7d3efa46daa766e291ff193c281e8c93",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "124": {
+      "itemId": 124,
+      "itemName": "魔法长袍(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 8,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/8",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.8.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 8,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "5cdce53aa2a3e2fec5698dc85945338c6e57531e14050fa0041badb87d319e56",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.8.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 8,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "d936b219a70bf7624157cdd3be0b86963929e3740ef395e62676ebad58db23af",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "126": {
+      "itemId": 126,
+      "itemName": "灵魂战衣(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 10,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/10",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.10.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 10,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "0346a91dedee1eea7444aef9f3eb21964e14680a8f81700c4d8ef0599346c7a0",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.10.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 10,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "ffeea45d491438237e2a81baa53fe79352239f88daf4cb8dfceee3f4676255fa",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "128": {
+      "itemId": 128,
+      "itemName": "战神盔甲(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 6,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/6",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.6.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 6,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "5e656093ff9e674e93d806688f9926375b92deb74b29c0a638acd45c4ce6c077",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.6.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 6,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "e2f8501f6ef94045ea2820ae7a88f3ca7d3efa46daa766e291ff193c281e8c93",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "130": {
+      "itemId": 130,
+      "itemName": "恶魔长袍(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 8,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/8",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.8.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 8,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "5cdce53aa2a3e2fec5698dc85945338c6e57531e14050fa0041badb87d319e56",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.8.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 8,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "d936b219a70bf7624157cdd3be0b86963929e3740ef395e62676ebad58db23af",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "132": {
+      "itemId": 132,
+      "itemName": "幽灵战衣(男)",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 10,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/10",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.10.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 10,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "0346a91dedee1eea7444aef9f3eb21964e14680a8f81700c4d8ef0599346c7a0",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.10.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 10,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "ffeea45d491438237e2a81baa53fe79352239f88daf4cb8dfceee3f4676255fa",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "140": {
+      "itemId": 140,
+      "itemName": "天魔神甲",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 12,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/12",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.12.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 12,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "53908fa259f41942d0f7f7e0cef496bce199aaee6ac12acc87b7202a41e1c39c",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.12.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 12,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "9d26609e044e0389ed9d7970e0fb9252b8f8d9abb29edcb6674ed86d4a9bc1d9",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "142": {
+      "itemId": 142,
+      "itemName": "法神披风",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 14,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/14",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.14.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 14,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "1e0390f2d4b771d491be993da6277884ff86a9804beb59337275d373ae74946c",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.14.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 14,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "025c38cbdbb10a32539c4f994163a8b428a1ec03b5974a3cdd507e0f98f16dfc",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "144": {
+      "itemId": 144,
+      "itemName": "天尊道袍",
+      "category": "dress",
+      "sex": "male",
+      "sourceFeature": 16,
+      "sourceContract": "res://assets/data/equipment_male_dress_world_wear.json#/featureFamilies/16",
+      "actions": {
+        "walk": {
+          "featureActionRef": "dressFeatureFamilies.16.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_walk.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 16,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "06799b687902979cf7817651316bb417193cc90c155b68d7edeff02b913edadf",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "dressFeatureFamilies.16.actions.run",
+          "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_run.png",
+          "sourceLibrary": "Hum.wil",
+          "sourceFeature": 16,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            192,
+            160
+          ],
+          "footAnchor": [
+            64,
+            80
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "863774f5f253307845273402db860d11054e70ff214f580715f49f6d87ce24dd",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "80": {
+      "itemId": 80,
+      "itemName": "木剑",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 2,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/2",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.2.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_002_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 2,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "6601fd948a8437a53f05a581b5b4052bc4a859f9cbb859145da63b7a58e6c645",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.2.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_002_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 2,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "d080b38dd33552effc902116153c034a08b8f62a2a0068909a2090c8f6aca1bd",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "81": {
+      "itemId": 81,
+      "itemName": "匕首",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 12,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/12",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.12.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_012_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 12,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "6701bae8d7336a1c4fcdd68d58455127164c25f663e2a5468728e91152820cdf",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.12.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_012_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 12,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "d3504c1334151477fb7ce53c07022771f017c57f6343793bc51bea2346aa65b3",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "82": {
+      "itemId": 82,
+      "itemName": "乌木剑",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 2,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/2",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.2.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_002_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 2,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "6601fd948a8437a53f05a581b5b4052bc4a859f9cbb859145da63b7a58e6c645",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.2.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_002_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 2,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "d080b38dd33552effc902116153c034a08b8f62a2a0068909a2090c8f6aca1bd",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "83": {
+      "itemId": 83,
+      "itemName": "青铜剑",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 4,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/4",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.4.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_004_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 4,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "9fd9412c1e2a746c4bf2d52645d8d2dca962f47e94d6997aff0f196e95e0e6d7",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.4.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_004_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 4,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "88c83b7a44338103251a106deb74b48de807a6a3728109028fbb7815cf147601",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "84": {
+      "itemId": 84,
+      "itemName": "短剑",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 8,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/8",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.8.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_008_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 8,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "89524948e6da9f9be80ad43a78c0f75bb913ca7960e3a23184b7dc3b371f1060",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.8.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_008_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 8,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "8ca682130f1d4cecc897b1b093dbf1549894aa0875262af5e81eb9e49a450039",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "85": {
+      "itemId": 85,
+      "itemName": "铁剑",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 4,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/4",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.4.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_004_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 4,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "9fd9412c1e2a746c4bf2d52645d8d2dca962f47e94d6997aff0f196e95e0e6d7",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.4.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_004_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 4,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "88c83b7a44338103251a106deb74b48de807a6a3728109028fbb7815cf147601",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "86": {
+      "itemId": 86,
+      "itemName": "鹤嘴锄",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 38,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/38",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.38.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_038_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 38,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "d1162e76ad7a0bdcaa45687e14927e50425d35d2854cf99460965d7b661ba3ac",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.38.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_038_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 38,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "4c643800b1b0e6d0b62ca2ed23a1814edc90adfebd7f9ccf67fab3598baeb90d",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "87": {
+      "itemId": 87,
+      "itemName": "青铜斧",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 6,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/6",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.6.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_006_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 6,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "aebc4e5c1f4347167b7cd567032c37b3e5e22ab6337f4cbfe08b86f1a9a89ae3",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.6.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_006_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 6,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "3287bc701e78659a0f9a92e11fc21666da4acd8084d9b7fbcb047a8d28bfcb2d",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "88": {
+      "itemId": 88,
+      "itemName": "罗刹",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 14,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/14",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.14.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_014_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 14,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "3999cbce611b78bea8dd8c6ad651e32366ff9656738491288689488d2bf69e6e",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.14.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_014_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 14,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "48e44c963ffab08706110e527390e4a4f98acf08d73ebd838e5be5a9ea5537ef",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "89": {
+      "itemId": 89,
+      "itemName": "八荒",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 30,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/30",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.30.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_030_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 30,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "6993fc7b4b4b9fdd966fa8d5db2d8abab6b3feaa9490d41090f6d5de41c093ce",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.30.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_030_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 30,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "20a48f6424378462184f6e03e1715f917e27cddb2e2c19f1cab29c00b4c42f5c",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "90": {
+      "itemId": 90,
+      "itemName": "海魂",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 16,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/16",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.16.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_016_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 16,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "0fe3c6859fd6f6aebcbb6ad6ae7393e0ef78c9e679bcc51d08876b21a03ceeb9",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.16.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_016_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 16,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "6164c89ce1ffd3199fdf87074c3ad4617e3bec9bc65543c7347279ec2ef72c19",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "91": {
+      "itemId": 91,
+      "itemName": "半月",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 32,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/32",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.32.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_032_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 32,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "d41e4fa20690c3b029e592dd3bb87cabc951f298cd7599c04e5aabfdc71e7101",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.32.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_032_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 32,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "6ba60e29b22a8123fafb7625c32f2a4c640c2557e31643535affb0caef297e6a",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "92": {
+      "itemId": 92,
+      "itemName": "凌风",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 10,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/10",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.10.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_010_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 10,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "03e5f78e29aa1430cdef8964758e9ac2c169d2d125090deacd0cf96b5d81a866",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.10.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_010_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 10,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "2ee999e42d5d172e91c4c61b67cb923cb4760863ac5dc14345c80378735176ad",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "93": {
+      "itemId": 93,
+      "itemName": "破魂",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 40,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/40",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.40.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_040_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 40,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "ac767ca41b68cbbcaf0fd50366ab62c1346427548d3dacbef9f21499f378f3b1",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.40.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_040_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 40,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "32709e86625a7d450275d7db49186102cd3df17c8772f22c2d29aae3349e4652",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "94": {
+      "itemId": 94,
+      "itemName": "斩马刀",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 20,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/20",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.20.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_020_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 20,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "c5d5e73c1401e5bd9d9cb38f40de8bc3ff3a4f22edd3d73140aa471646b84d0a",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.20.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_020_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 20,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "50a3901d16f08265ea122bff4ce90fe06da3ec92ac49e69eb59dec478a6273a3",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "95": {
+      "itemId": 95,
+      "itemName": "偃月",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 36,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/36",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.36.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_036_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 36,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "207067f4077bfe21b96b4112d0b81d96a9c22037315cf931b8aafe3bdbc072cd",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.36.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_036_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 36,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "0e7af12068f93b07be6f008fd28ba902e4412d358fb46f165fade95f66c1f5eb",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "96": {
+      "itemId": 96,
+      "itemName": "降魔",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 28,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/28",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.28.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_028_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 28,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "7aa85ab19e20ab529bd867f983c9515b4a665a160da319f50205cadfb5ee17b7",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.28.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_028_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 28,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "01172687686c6f367d00f29f4b8fc7e188446d2eda11c92a305ea32d168769d5",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "97": {
+      "itemId": 97,
+      "itemName": "修罗",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 14,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/14",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.14.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_014_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 14,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "3999cbce611b78bea8dd8c6ad651e32366ff9656738491288689488d2bf69e6e",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.14.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_014_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 14,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "48e44c963ffab08706110e527390e4a4f98acf08d73ebd838e5be5a9ea5537ef",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "98": {
+      "itemId": 98,
+      "itemName": "凝霜",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 26,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/26",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.26.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_026_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 26,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "9d540fedcca55cc8bab7026401a5853340e5e44cce23f5be9721e8ba4bcafeeb",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.26.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_026_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 26,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "b1d5c7b489c685b38b44b7c2569e507e4cae1bdb309e8fbc7c710bd175451262",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "99": {
+      "itemId": 99,
+      "itemName": "炼狱",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 22,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/22",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.22.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_022_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 22,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "b5ef927d23f0d696e3ffd543eff6e28f7cb0ddb37ec1c625c182d2ecf47dffdd",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.22.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_022_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 22,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "6394a8f08f686fcbcdc871f99aa3dd4cc86f0b220d31e36d67e60a541fea7c4a",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "100": {
+      "itemId": 100,
+      "itemName": "魔杖",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 24,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/24",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.24.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_024_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 24,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "7b53f0defbf0313d7d1fc89b4268279f13cb0d06782979ca972babbadd176261",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.24.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_024_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 24,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "ed92d4d518a45d09a93166721382650bcb845c2567bc15677b59e539592d435a",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "101": {
+      "itemId": 101,
+      "itemName": "银蛇",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 18,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/18",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.18.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_018_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 18,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "52ee3082af2997ada9783bb9665d4623c849b24d13a99149052a53fca8dc8dc1",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.18.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_018_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 18,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "d415b9253d6304e267ad2c2be25c5de3b0471fecf8e8862e58713a6bcc623353",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "102": {
+      "itemId": 102,
+      "itemName": "井中月",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 34,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/34",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.34.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_034_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 34,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "a91c9d15f4ae5f354a2e99b686e9cc947c76ce5ad53d53190ca2d42889ecfd22",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.34.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_034_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 34,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "fe32ab2b27fae4323e2b65291a075a319d55776743c38685971c4f0b0fa08b47",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "103": {
+      "itemId": 103,
+      "itemName": "血饮",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 44,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/44",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.44.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_044_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 44,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "e6d567e4cd878f65061ef6ee7f6f38134ded9cbeaa68b5c6f0567e2b1338e101",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.44.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_044_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 44,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "5648fba2cd990f751a481328ce5d0bc63510d2eed4576f5174795cc262df59bd",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "104": {
+      "itemId": 104,
+      "itemName": "无极棍",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 42,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/42",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.42.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_042_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 42,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "62777fa3ddf0563de7c66a7654a3c20c21e3cdcc08f8949f91e422e2724fff08",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.42.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_042_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 42,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "2cce9d51253346f46bb43bf4e25684ea47c80ea45e8db91908620ba7f4a2c474",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "105": {
+      "itemId": 105,
+      "itemName": "裁决之杖",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 48,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/48",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.48.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_048_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 48,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "39f85fee16694c65fe69c9cf0f516c40a2edc9de725ab5793d30705e8959c55b",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.48.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_048_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 48,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "92044436795425d731cb31071aea1f0dd9521cbce6de21b41895d7858e4dbe9f",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "106": {
+      "itemId": 106,
+      "itemName": "骨玉权杖",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 56,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/56",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.56.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_056_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 56,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "77d2f9fa67b8836cc54aa3fcd0a724e01cee1d795f4eca1839a1f249767c0b4c",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.56.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_056_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 56,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "130e7af1479f06f6f930db30c6ab333fd5c478ee1c1c39e11ddf6e20f740ab38",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "107": {
+      "itemId": 107,
+      "itemName": "龙纹剑",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 50,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/50",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.50.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_050_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 50,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "42c3a4fcb773ba9fd981715b2b229ca939042817cec9b64933f562d6d450bc47",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.50.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_050_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 50,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "073da90fb6d9a426d7865766a27344afad971e1a1fc1d30b1f26c0a81082b3d2",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "108": {
+      "itemId": 108,
+      "itemName": "屠龙",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 52,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/52",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.52.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 52,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "1e417789aeb4fa5244830010a813048a226c3446e2b89d7b2b96a420ed5bbb62",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.52.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 52,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "ec8fb5533af7a19c8d3ef1292766b8bafa5e59ec00fa468c0d093938136c7031",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "109": {
+      "itemId": 109,
+      "itemName": "嗜魂法杖",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 54,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/54",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.54.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_054_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 54,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "fe3e440b7af22a4754ee5c2866d06d7e0ca81668fb1abe47e865d39332f313fa",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.54.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_054_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 54,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "73b703de013090a5420f22fa5fffdeee77f743da39d3e4623beb94ac2871fdc5",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "110": {
+      "itemId": 110,
+      "itemName": "命运之刃",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 58,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/58",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.58.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 58,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "dcabced07e14a0670808a479a3daba97cfc6a9531bd8cf102e4d2c439d7d5b9b",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.58.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 58,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "538d3964394920879d2de60b35c8c6aef652348e5d5161df7cb683defcb49860",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "112": {
+      "itemId": 112,
+      "itemName": "赤血魔剑",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 60,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/60",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.60.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_060_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 60,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "139d7bfe950db2b39c9d4502e5a535df659f5c4734387869662d2d1c8320839a",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.60.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_060_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 60,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "9988437de4ea4cae19576fff4c58f685487dad1846615a4b47f9043bfcf2828c",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "113": {
+      "itemId": 113,
+      "itemName": "怒斩",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 64,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/64",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.64.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_064_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 64,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "71651e0ba48edb157436990abe037789585024c274fbe64f356eca6849bc1c67",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.64.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_064_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 64,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "a0656ed53206d2be7d3e406fd1b555a8884882a26062ee5d38487b15f0430c4c",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "114": {
+      "itemId": 114,
+      "itemName": "龙牙",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 62,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/62",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.62.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_062_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 62,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "1119c814d80c69205ec6ef5c79cd4d70bcf87bbc6ecc970196a6b37905a264c6",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.62.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_062_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 62,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "e5b42254c84dd2d7f074b3a4692139c5c124090dc89f98901ac64f268f68175c",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "115": {
+      "itemId": 115,
+      "itemName": "逍遥扇",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 66,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/66",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.66.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_066_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 66,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "9c9d43ce347d8ec3b4b9d36e83e9cf5dd9dd5f3d1a267ff01d411b480a410899",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.66.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_066_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 66,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "b66c32aad811c5281e7f1fd3f677cc23b1fad319d5adf6f7835a33f6bce6eaaa",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    },
+    "223": {
+      "itemId": 223,
+      "itemName": "祈祷之刃",
+      "category": "weapon",
+      "sex": "male",
+      "sourceFeature": 46,
+      "sourceContract": "res://assets/data/equipment_male_weapon_world_wear.json#/featureFamilies/46",
+      "actions": {
+        "walk": {
+          "featureActionRef": "weaponFeatureFamilies.46.actions.walk",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_046_walk.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 46,
+          "sourceAction": "walk",
+          "sourceStart": 64,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "540db6242890a4913d78f697c1ceea818f53ea7ee4e6b4d5c823ebddb7d12f37",
+          "fileSha256": "",
+          "confidence": "A"
+        },
+        "run": {
+          "featureActionRef": "weaponFeatureFamilies.46.actions.run",
+          "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_046_run.png",
+          "sourceLibrary": "Weapon.wil",
+          "sourceFeature": 46,
+          "sourceAction": "run",
+          "sourceStart": 128,
+          "cell": [
+            224,
+            224
+          ],
+          "footAnchor": [
+            80,
+            116
+          ],
+          "directions": 8,
+          "directionOrder": [
+            "N",
+            "NE",
+            "E",
+            "SE",
+            "S",
+            "SW",
+            "W",
+            "NW"
+          ],
+          "framesPerDirection": 6,
+          "decodedFrameCount": 48,
+          "missingFrames": [],
+          "atlasRgbaSha256": "02c78d3618c6e6fa7e7c838b5925d0873f1182e690eab59a9969fb67e06fc1c4",
+          "fileSha256": "",
+          "confidence": "A"
+        }
+      }
+    }
+  },
+  "hairAppearance": {
+    "sex": "male",
+    "appearance": 2,
+    "sourceBlock": 4,
+    "sourceContract": "res://assets/data/equipment_world_helmet_runtime_policy.json#/hairAppearance",
+    "actions": {
+      "walk": {
+        "featureActionRef": "hairFeatureFamilies.4.actions.walk",
+        "path": "res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_walk.png",
+        "sourceLibrary": "Hair.wil",
+        "sourceFeature": 4,
+        "sourceAction": "walk",
+        "sourceStart": 64,
+        "cell": [
+          192,
+          160
+        ],
+        "footAnchor": [
+          64,
+          80
+        ],
+        "directions": 8,
+        "directionOrder": [
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "NW"
+        ],
+        "framesPerDirection": 6,
+        "decodedFrameCount": 48,
+        "missingFrames": [],
+        "atlasRgbaSha256": "10d37bd74f72729b876622a0d0344d552aaf24674544ffb344d44f5b51db91d1",
+        "fileSha256": "de192fc86c9d335dcb084898633b17d88f18c8e32e5a52272ffc21bd62481004",
+        "confidence": "primary_client_exact",
+        "sourceIndexBase": 2400,
+        "sourceIndexRule": "sourceBlock*600 + actionStart + directionRow*8 + frame"
+      },
+      "run": {
+        "featureActionRef": "hairFeatureFamilies.4.actions.run",
+        "path": "res://assets/art/items/client/world_wear/helmet/male/runtime_hair_002/hair_002_run.png",
+        "sourceLibrary": "Hair.wil",
+        "sourceFeature": 4,
+        "sourceAction": "run",
+        "sourceStart": 128,
+        "cell": [
+          192,
+          160
+        ],
+        "footAnchor": [
+          64,
+          80
+        ],
+        "directions": 8,
+        "directionOrder": [
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "NW"
+        ],
+        "framesPerDirection": 6,
+        "decodedFrameCount": 48,
+        "missingFrames": [],
+        "atlasRgbaSha256": "bfe6e87762e9508a6d11581dce69fd16666ec86d705aace29b62a777a96fb6c8",
+        "fileSha256": "1fbfa91a89fa71f017d7492a588b18223d9b0c76767f03779ea76bf4342417dc",
+        "confidence": "primary_client_exact",
+        "sourceIndexBase": 2400,
+        "sourceIndexRule": "sourceBlock*600 + actionStart + directionRow*8 + frame"
+      }
+    }
+  }
+}

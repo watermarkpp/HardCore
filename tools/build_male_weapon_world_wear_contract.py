@@ -37,6 +37,12 @@ ACTIONS = {
     "cast": {"start": 392, "frames": 6},
     "hit": {"start": 472, "frames": 3},
     "death": {"start": 536, "frames": 4},
+    # Client/Actor.pas ActRun is a distinct eight-direction source block.
+    "run": {"start": 128, "frames": 6},
+}
+MAPPED_ACTIONS = ACTIONS
+UNMAPPED_FEATURE_ZERO_ACTIONS = {
+    action: spec for action, spec in ACTIONS.items() if action != "run"
 }
 SOURCE_FRAME_ENCODING = (
     "sourceIndex|direction|frame|hotX|hotY|width|height|"
@@ -205,7 +211,7 @@ def build_feature_action(feature: int, action: str, library: tuple) -> dict:
         target.parent.mkdir(parents=True, exist_ok=True)
         atlas.save(target, format="PNG", optimize=False)
         exported = Image.open(target).convert("RGBA")
-    return {
+    result = {
         "path": resource_path(target),
         "cell": list(CELL),
         "actorOrigin": list(ACTOR_ORIGIN),
@@ -222,13 +228,23 @@ def build_feature_action(feature: int, action: str, library: tuple) -> dict:
         ),
         "pixelActionConfidence": "A",
         "atlasRgbaSha256": rgba_sha256(exported),
-        "sourceFrameEncoding": SOURCE_FRAME_ENCODING,
-        "sourceFramesPacked": packed_frames,
         "libraryImageCount": int(info["image_count"]),
     }
+    if action == "run":
+        result["sourceStart"] = int(ACTIONS[action]["start"])
+        result["sourceIndexRule"] = (
+            "feature*600 + sourceStart + direction*8 + frame"
+        )
+    else:
+        result["sourceFrameEncoding"] = SOURCE_FRAME_ENCODING
+        result["sourceFramesPacked"] = packed_frames
+    return result
 
 
 def build_feature_family(feature: int, library: tuple) -> dict:
+    selected_actions = (
+        UNMAPPED_FEATURE_ZERO_ACTIONS if feature == 0 else MAPPED_ACTIONS
+    )
     return {
         "feature": feature,
         "source": "Weapon.wil",
@@ -238,7 +254,7 @@ def build_feature_family(feature: int, library: tuple) -> dict:
         "footPoint": list(FOOT_POINT),
         "actions": {
             action: build_feature_action(feature, action, library)
-            for action in ACTIONS
+            for action in selected_actions
         },
     }
 
@@ -528,7 +544,8 @@ def main() -> None:
             ),
             "unresolved": len(classified["unresolved"]),
             "maleWeaponFeatureFamilies": len(feature_families),
-            "actionsPerFeature": len(ACTIONS),
+            "actionsPerMappedFeature": len(MAPPED_ACTIONS),
+            "unmappedFeatureZeroActions": len(UNMAPPED_FEATURE_ZERO_ACTIONS),
             "directionsPerAction": 8,
             "missingFrames": 0,
             "transparentEmptyFrames": sum(
@@ -543,14 +560,13 @@ def main() -> None:
         "itemsById": items_by_id,
         "runtimeMappingsByItemId": runtime_by_item_id,
     }
-    OUTPUT.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    with OUTPUT.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
     print(
         "EQUIPMENT_MALE_WEAPON_WORLD_WEAR_PASS "
         "items=37 visible=36 hidden=0 unresolved=1 "
-        f"features={len(feature_families)} actions=6 directions=8"
+        f"features={len(feature_families)} mapped_actions={len(MAPPED_ACTIONS)} "
+        "directions=8"
     )
 
 

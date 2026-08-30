@@ -67,7 +67,37 @@
     "worldActorSourceFootAnchor": [
       64,
       80
-    ]
+    ],
+    "maleActions": {
+      "idle": {
+        "start": 0,
+        "frames": 4
+      },
+      "walk": {
+        "start": 64,
+        "frames": 6
+      },
+      "attack": {
+        "start": 200,
+        "frames": 6
+      },
+      "cast": {
+        "start": 392,
+        "frames": 6
+      },
+      "hit": {
+        "start": 472,
+        "frames": 3
+      },
+      "death": {
+        "start": 536,
+        "frames": 4
+      },
+      "run": {
+        "start": 128,
+        "frames": 6
+      }
+    }
   },
   "professionManifests": {
     "warrior": {
@@ -249,6 +279,24 @@
               "framesPerDirection": 4,
               "sourceFeature": 0,
               "decodedFrameCount": 32,
+              "missingFrames": [],
+              "libraryImageCount": 10800,
+              "confidence": "A"
+            },
+            "run": {
+              "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_run.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "sourceFeature": 0,
+              "decodedFrameCount": 48,
               "missingFrames": [],
               "libraryImageCount": 10800,
               "confidence": "A"
@@ -560,6 +608,24 @@
               "missingFrames": [],
               "libraryImageCount": 10800,
               "confidence": "A"
+            },
+            "run": {
+              "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_run.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "sourceFeature": 0,
+              "decodedFrameCount": 48,
+              "missingFrames": [],
+              "libraryImageCount": 10800,
+              "confidence": "A"
             }
           },
           "actionFallbacks": {}
@@ -865,6 +931,24 @@
               "framesPerDirection": 4,
               "sourceFeature": 0,
               "decodedFrameCount": 32,
+              "missingFrames": [],
+              "libraryImageCount": 10800,
+              "confidence": "A"
+            },
+            "run": {
+              "path": "res://assets/art/items/client/world_wear/dress/male/dress_000_run.png",
+              "cell": [
+                192,
+                160
+              ],
+              "footAnchor": [
+                64,
+                80
+              ],
+              "directions": 8,
+              "framesPerDirection": 6,
+              "sourceFeature": 0,
+              "decodedFrameCount": 48,
               "missingFrames": [],
               "libraryImageCount": 10800,
               "confidence": "A"
@@ -2035,6 +2119,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_002_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 2,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -3071,6 +3173,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 12,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_012_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 12,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -4113,6 +4233,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_002_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 2,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -5149,6 +5287,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 4,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_004_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 4,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -6191,6 +6347,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_008_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 8,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -7227,6 +7401,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 4,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_004_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 4,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -8269,6 +8461,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_038_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 38,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -9305,6 +9515,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 6,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_006_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 6,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -10347,6 +10575,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_014_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 14,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -11383,6 +11629,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 30,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_030_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 30,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -12425,6 +12689,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_010_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 10,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -13461,6 +13743,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 40,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_040_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 40,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -14503,6 +14803,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_020_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 20,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -15539,6 +15857,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 14,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_014_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 14,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -16581,6 +16917,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_026_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 26,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -17617,6 +17971,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 22,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_022_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 22,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -18659,6 +19031,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_034_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 34,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -19695,6 +20085,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 48,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_048_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 48,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -20737,6 +21145,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 52,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -21773,6 +22199,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 58,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 58,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -22905,6 +23349,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_060_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 60,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -23941,6 +24403,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 64,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_064_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 64,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -24983,6 +25463,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_046_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 46,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -26019,6 +26517,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 16,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_016_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 16,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -27061,6 +27577,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_036_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 36,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -28097,6 +28631,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 24,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_024_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 24,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -29139,6 +29691,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_044_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 44,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -30175,6 +30745,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 56,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_056_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 56,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -31217,6 +31805,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_054_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 54,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -32253,6 +32859,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 62,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_062_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 62,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -33295,6 +33919,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_032_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 32,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -34331,6 +34973,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 28,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_028_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 28,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -35373,6 +36033,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_018_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 18,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -36409,6 +37087,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 42,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_042_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 42,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
@@ -37451,6 +38147,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_050_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 50,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -38490,6 +39204,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 40855,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_066_run.png",
+                "cell": [
+                  224,
+                  224
+                ],
+                "footAnchor": [
+                  80,
+                  116
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 66,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 40855,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -38708,6 +39440,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 2,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 2,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
@@ -39139,6 +39889,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 4,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -39564,6 +40332,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 4,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 4,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
@@ -39995,6 +40781,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 6,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -40420,6 +41224,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 6,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 6,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
@@ -40851,6 +41673,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 12,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -41276,6 +42116,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 8,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 8,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
@@ -41707,6 +42565,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 8,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -42132,6 +43008,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 14,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 14,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
@@ -42563,6 +43457,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 10,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -42991,6 +43903,24 @@
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 10,
+                "decodedFrameCount": 48,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
               }
             },
             "actionFallbacks": {}
@@ -43416,6 +44346,24 @@
                 "framesPerDirection": 4,
                 "sourceFeature": 16,
                 "decodedFrameCount": 32,
+                "missingFrames": [],
+                "libraryImageCount": 10800,
+                "confidence": "A"
+              },
+              "run": {
+                "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_run.png",
+                "cell": [
+                  192,
+                  160
+                ],
+                "footAnchor": [
+                  64,
+                  80
+                ],
+                "directions": 8,
+                "framesPerDirection": 6,
+                "sourceFeature": 16,
+                "decodedFrameCount": 48,
                 "missingFrames": [],
                 "libraryImageCount": 10800,
                 "confidence": "A"
@@ -54665,6 +55613,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_002_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 2,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -55599,6 +56565,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 12,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_012_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 12,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -56539,6 +57523,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_002_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 2,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -57473,6 +58475,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 4,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_004_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 4,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -58413,6 +59433,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_008_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 8,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -59347,6 +60385,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 4,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_004_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 4,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -60287,6 +61343,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_038_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 38,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -61221,6 +62295,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 6,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_006_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 6,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -62161,6 +63253,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_014_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 14,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -63095,6 +64205,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 30,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_030_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 30,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -64035,6 +65163,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_010_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 10,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -64969,6 +66115,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 40,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_040_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 40,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -65909,6 +67073,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_020_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 20,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -66843,6 +68025,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 14,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_014_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 14,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -67783,6 +68983,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_026_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 26,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -68717,6 +69935,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 22,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_022_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 22,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -69657,6 +70893,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_034_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 34,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -70591,6 +71845,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 48,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_048_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 48,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -71531,6 +72803,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_052_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 52,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -72465,6 +73755,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 58,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_058_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 58,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -73405,6 +74713,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_060_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 60,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -74339,6 +75665,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 64,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_064_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 64,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -75279,6 +76623,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_046_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 46,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -76213,6 +77575,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 16,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_016_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 16,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -77153,6 +78533,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_036_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 36,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -78087,6 +79485,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 24,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_024_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 24,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -79027,6 +80443,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_044_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 44,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -79961,6 +81395,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 56,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_056_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 56,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -80901,6 +82353,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_054_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 54,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -81835,6 +83305,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 62,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_062_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 62,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -82775,6 +84263,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_032_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 32,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -83709,6 +85215,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 28,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_028_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 28,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -84649,6 +86173,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_018_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 18,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -85583,6 +87125,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 42,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_042_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 42,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
@@ -86523,6 +88083,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_050_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 50,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -87460,6 +89038,24 @@
             "missingFrames": [],
             "libraryImageCount": 40855,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/weapon/male/weapon_066_run.png",
+            "cell": [
+              224,
+              224
+            ],
+            "footAnchor": [
+              80,
+              116
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 66,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 40855,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -87576,6 +89172,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 2,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_002_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 2,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
@@ -87698,6 +89312,24 @@
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 4,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -87814,6 +89446,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 4,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_004_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 4,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
@@ -87936,6 +89586,24 @@
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 6,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -88052,6 +89720,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 6,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_006_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 6,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
@@ -88174,6 +89860,24 @@
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_012_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 12,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -88290,6 +89994,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 8,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 8,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
@@ -88412,6 +90134,24 @@
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_008_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 8,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -88528,6 +90268,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 14,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_014_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 14,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
@@ -88650,6 +90408,24 @@
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 10,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -88769,6 +90545,24 @@
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_010_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 10,
+            "decodedFrameCount": 48,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
           }
         },
         "actionFallbacks": {}
@@ -88885,6 +90679,24 @@
             "framesPerDirection": 4,
             "sourceFeature": 16,
             "decodedFrameCount": 32,
+            "missingFrames": [],
+            "libraryImageCount": 10800,
+            "confidence": "A"
+          },
+          "run": {
+            "path": "res://assets/art/items/client/world_wear/dress/male/dress_016_run.png",
+            "cell": [
+              192,
+              160
+            ],
+            "footAnchor": [
+              64,
+              80
+            ],
+            "directions": 8,
+            "framesPerDirection": 6,
+            "sourceFeature": 16,
+            "decodedFrameCount": 48,
             "missingFrames": [],
             "libraryImageCount": 10800,
             "confidence": "A"
@@ -91729,5 +93541,25 @@
       "baseActionTemplate": "player.visual.classic_eight_direction.v1"
     }
   },
-  "generatedAtlases": 306
+  "generatedAtlases": 348,
+  "maleRunPreparation": {
+    "sourceAction": "run",
+    "sourceStart": 128,
+    "framesPerDirection": 6,
+    "directions": 8,
+    "directionOrder": [
+      "N",
+      "NE",
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW"
+    ],
+    "maleOnly": true,
+    "femaleAssetsGenerated": 0,
+    "helmetRunGenerated": 0,
+    "newAtlases": 0
+  }
 }

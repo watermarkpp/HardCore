@@ -15,6 +15,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	var visual: Node2D = game.player.get_node("PlayerVisual")
 	var sprite: Sprite2D = visual.get_node("BodySprite")
+	var weapon_layer: Sprite2D = visual.get_node("ClientWeaponLayer")
 	var health_bar: PlayerHealthBar = game.player.get_node("HealthBar")
 	var fixed_health_bar_position := health_bar.position
 	assert(fixed_health_bar_position == ArtSpec.PLAYER_HEALTH_BAR_OFFSET, "player health bar must use a fixed actor-space anchor")
@@ -58,13 +59,31 @@ func _run() -> void:
 	game.player.facing = Vector2.DOWN
 	visual._process(0.2)
 	assert(visual.current_direction == 4, "warrior south Hum row mapping is wrong")
+	var walk_body_texture: Texture2D = visual._dress_action_textures.get("walk", null)
+	var walk_hair_texture: Texture2D = visual._hair_action_textures.get("walk", null)
+	var walk_weapon_texture: Texture2D = visual._weapon_action_textures.get("walk", null)
+	var run_body_texture: Texture2D = visual._dress_action_textures.get("run", null)
+	game.player.actual_motion_facing = Vector2.RIGHT
 	game.player.velocity = Vector2.RIGHT * 80.0
 	visual._process(0.12)
-	assert(visual.current_state == "walk", "warrior should switch to walk state")
-	assert(sprite.texture.resource_path.ends_with("dress_006_walk.png"), "warrior walk state should use equipped dress atlas")
-	assert(hair_layer.texture == visual._hair_action_textures.get("walk", null) and not helmet_layer.visible, "行走必须显示男性头发并隐藏头盔")
-	assert(health_bar.position == fixed_health_bar_position, "walking must not move the health bar")
-	assert(sprite.texture.get_size() == Vector2(1152, 1280), "warrior walk atlas must contain MIR2 six-frame directions")
+	assert(visual.current_state == "run", "warrior should switch to run state")
+	assert(visual.current_animation_name() == "run", "moving warrior should report run animation")
+	assert(run_body_texture != null and sprite.texture == run_body_texture, "warrior run state must use the formal equipped dress run atlas")
+	assert(hair_layer.texture == visual._hair_action_textures.get("run", null) and not helmet_layer.visible, "跑步必须显示男性头发并隐藏头盔")
+	assert(weapon_layer.visible and weapon_layer.texture == visual._weapon_action_textures.get("run", null), "跑步必须使用已装备武器的正式 run 图集")
+	assert(sprite.texture != walk_body_texture and hair_layer.texture != walk_hair_texture and weapon_layer.texture != walk_weapon_texture, "跑步不得回退到 walk 图集")
+	assert(visual.current_direction == 2, "run direction must follow actual motion facing")
+	assert(int(weapon_layer.region_rect.position.x / visual._weapon_frame_size.x) == visual.current_frame, "run weapon frame is out of sync with body")
+	assert(int(weapon_layer.region_rect.position.y / visual._weapon_frame_size.y) == visual.current_direction, "run weapon direction is out of sync with body")
+	assert(hair_layer.region_rect == sprite.region_rect and hair_layer.position == sprite.position, "run hair and body regions must share one foot-anchored cell")
+	assert(health_bar.position == fixed_health_bar_position, "running must not move the health bar")
+	assert(sprite.texture.get_size() == Vector2(1152, 1280), "warrior run atlas must contain MIR2 six-frame directions")
+	game.player.velocity = Vector2.ZERO
+	visual._process(0.01)
+	assert(visual.current_state == "idle" and visual.current_animation_name() == "idle", "stopping must return the warrior to idle")
+	assert(sprite.texture == visual._dress_action_textures.get("idle", null), "stopping must restore the equipped idle dress atlas")
+	assert(hair_layer.texture == visual._hair_action_textures.get("idle", null), "stopping must restore the male idle hair atlas")
+	assert(weapon_layer.texture == visual._weapon_action_textures.get("idle", null), "stopping must restore the equipped idle weapon atlas")
 	var attack_emitted := [false]
 	game.player.attack_requested.connect(func(_origin: Vector2, _direction: Vector2, _damage: int) -> void: attack_emitted[0] = true)
 	game.player._attack_timer = 0.0
@@ -73,16 +92,24 @@ func _run() -> void:
 	await get_tree().create_timer(0.19).timeout
 	assert(attack_emitted[0], "warrior damage was not emitted at the configured windup")
 	assert(visual.current_frame >= 2, "warrior hit timing must align with client effect frame two")
+	game.player.velocity = Vector2.RIGHT * 80.0
+	game.player.actual_motion_facing = Vector2.RIGHT
 	visual.play_action("attack", 0.5)
 	visual._process(0.05)
 	assert(visual.current_state == "action", "warrior attack state did not trigger")
 	assert(visual.current_animation_name() == "attack", "warrior action name was not preserved")
 	assert(sprite.texture.resource_path.ends_with("dress_006_attack.png"), "warrior attack should use equipped dress atlas")
 	assert(hair_layer.texture == visual._hair_action_textures.get("attack", null) and not helmet_layer.visible, "攻击必须显示男性头发并隐藏头盔")
+	assert(weapon_layer.texture == visual._weapon_action_textures.get("attack", null), "攻击必须切换到同一武器动作图集")
 	assert(health_bar.position == fixed_health_bar_position, "attacking must not move the health bar into the chest")
 	assert(sprite.texture.get_size() == Vector2(1152, 1280), "warrior attack atlas must contain MIR2-size six-frame directions")
 	assert(sprite.region_rect.size == Vector2(ArtSpec.WARRIOR_ATTACK_FRAME), "warrior attack should use the MIR2 attack frame size")
 	assert(sprite.position == -Vector2(ArtSpec.WARRIOR_ATTACK_FOOT_ANCHOR), "warrior attack foot anchor should preserve MIR2 offsets")
+	visual.play_action("cast", 0.5)
+	visual._process(0.05)
+	assert(visual.current_state == "action" and visual.current_animation_name() == "cast", "cast action must override run while moving")
+	assert(sprite.texture.resource_path.ends_with("dress_006_cast.png"), "cast should use equipped dress atlas")
+	assert(hair_layer.texture == visual._hair_action_textures.get("cast", null) and weapon_layer.texture == visual._weapon_action_textures.get("cast", null), "cast body, hair and weapon layers must stay synchronized")
 	visual.play_action("烈火剑法", 0.86)
 	visual._process(0.01)
 	assert(sprite.texture.resource_path.ends_with("dress_006_attack.png"), "warrior skills should reuse the equipped attack atlas")
