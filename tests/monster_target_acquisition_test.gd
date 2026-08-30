@@ -20,6 +20,7 @@ func _run() -> void:
 
 	await _test_view_five_runtime_boundaries(player)
 	await _test_exact_special_view_ranges(player)
+	await _test_runtime_classification_floors(player)
 	await _test_data_hold_runtime_fail_closed(player)
 	await _test_current_center_and_nearest_manhattan(player)
 	_test_policy_fail_closed_contract()
@@ -80,6 +81,63 @@ func _test_exact_special_view_ranges(player: PlayerCharacter) -> void:
 	_checks += 2
 
 
+func _test_runtime_classification_floors(player: PlayerCharacter) -> void:
+	var authority_file := FileAccess.open("res://assets/data/monster_runtime_authority_v1.json", FileAccess.READ)
+	assert(authority_file != null, "runtime authority must be readable for classification floors")
+	var payload: Variant = JSON.parse_string(authority_file.get_as_text())
+	assert(payload is Dictionary)
+	var records: Array = (payload as Dictionary).get("records", [])
+	for raw_record: Variant in records:
+		assert(raw_record is Dictionary)
+		var record: Dictionary = raw_record
+		if not bool(record.get("runtime_allowed", false)):
+			continue
+		var classification := str(record.get("classification", ""))
+		var minimum_view := 0
+		if classification == "elite":
+			minimum_view = 7
+		elif classification == "boss":
+			minimum_view = 9
+		if minimum_view <= 0:
+			continue
+		var targeting: Dictionary = record.get("targeting", {})
+		if str(targeting.get("acquisition_status", "")) == "DATA_HOLD":
+			continue
+		assert(
+			int(targeting.get("view_range_cells", 0)) >= minimum_view,
+			"active %s must honor classification floor: monster_id=%s view=%s floor=%d"
+			% [classification, record.get("monster_id", -1), targeting.get("view_range_cells"), minimum_view],
+		)
+		_checks += 1
+
+	var dark_skeleton_spirit := await _make_enemy(238, player)
+	assert(dark_skeleton_spirit._target_acquisition_policy.view_range_cells == 9)
+	_assert_acquisition(
+		dark_skeleton_spirit,
+		player,
+		Vector2(9.0, 0.0),
+		true,
+		"ID 238 boss classification floor axis boundary 9",
+	)
+	_assert_acquisition(
+		dark_skeleton_spirit,
+		player,
+		Vector2(9.0, 9.0),
+		true,
+		"ID 238 boss classification floor square boundary 9",
+	)
+	_assert_acquisition(
+		dark_skeleton_spirit,
+		player,
+		Vector2(9.001, 0.0),
+		false,
+		"ID 238 boss classification floor beyond 9",
+	)
+	dark_skeleton_spirit.queue_free()
+	await get_tree().process_frame
+	_checks += 4
+
+
 func _test_data_hold_runtime_fail_closed(player: PlayerCharacter) -> void:
 	var enemy := await _make_enemy(228, player)
 	assert(enemy._target_acquisition_authority_failed_closed)
@@ -104,7 +162,10 @@ func _test_current_center_and_nearest_manhattan(player: PlayerCharacter) -> void
 	# The monster may already have walked far from spawn. First acquisition is
 	# still centered on its current Ground-GU cell and is not spawn-leash gated.
 	enemy.global_position = _ground_position_from_enemy(enemy, Vector2(30.0, 0.0))
-	player.global_position = _ground_position_from_enemy(enemy, Vector2(5.0, 0.0))
+	# This scenario translates the actor 30 GU before round-tripping through the
+	# isometric projection. Stay one float epsilon inside the already-tested
+	# inclusive 5-GU boundary so the assertion measures leash behavior only.
+	player.global_position = _ground_position_from_enemy(enemy, Vector2(4.99999, 0.0))
 	enemy.target = null
 	enemy._threat_table.clear()
 	enemy._retarget_timer = 0.0
@@ -117,7 +178,7 @@ func _test_current_center_and_nearest_manhattan(player: PlayerCharacter) -> void
 	alternate.add_to_group("combat_targets")
 	# Euclidean would pick (3,3); original nearest-Manhattan must pick (5,0).
 	player.global_position = _ground_position_from_enemy(enemy, Vector2(3.0, 3.0))
-	alternate.global_position = _ground_position_from_enemy(enemy, Vector2(5.0, 0.0))
+	alternate.global_position = _ground_position_from_enemy(enemy, Vector2(4.99999, 0.0))
 	enemy.target = null
 	enemy._retarget_timer = 0.0
 	enemy._retarget(0.0)
@@ -125,8 +186,8 @@ func _test_current_center_and_nearest_manhattan(player: PlayerCharacter) -> void
 	_checks += 1
 
 	# Equal Manhattan distance preserves candidate order; primary_target is first.
-	player.global_position = _ground_position_from_enemy(enemy, Vector2(3.0, 2.0))
-	alternate.global_position = _ground_position_from_enemy(enemy, Vector2(5.0, 0.0))
+	player.global_position = _ground_position_from_enemy(enemy, Vector2(2.99999, 2.0))
+	alternate.global_position = _ground_position_from_enemy(enemy, Vector2(4.99999, 0.0))
 	enemy.target = null
 	enemy._retarget_timer = 0.0
 	enemy._retarget(0.0)

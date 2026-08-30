@@ -136,6 +136,19 @@ KNOWN_EXACT_VIEW_CORRECTIONS = {
     234: 6,
 }
 
+# The class-derived ViewRange remains the historical source value. This
+# project-level floor only governs first acquisition for active runtime
+# classifications; it must never reduce a larger class/special value.
+RUNTIME_CLASSIFICATION_VIEW_FLOOR_CELLS: dict[str, int | None] = {
+    "ordinary": None,
+    "elite": 7,
+    "boss": 9,
+}
+CLASSIFICATION_FLOOR_AUTHORITY = "HUMAN_FROZEN"
+CLASSIFICATION_FLOOR_SOURCE = (
+    "user.authority.monster_classification_view_floor.2026-08-30"
+)
+
 SOURCE_LOCKED_STATIONARY_PROFILES = {
     "touch_dragon",
     "stationary_summoner",
@@ -300,14 +313,39 @@ def movement_record(
     }
 
 
+def classification_floor_view_range_cells(
+    classification: str,
+    runtime_allowed: bool,
+    exact_source_row: bool,
+) -> int | None:
+    # A DATA_HOLD identity remains fail-closed. The classification floor is a
+    # runtime acquisition rule only after the exact source binding exists.
+    if not runtime_allowed or not exact_source_row:
+        return None
+    return RUNTIME_CLASSIFICATION_VIEW_FLOOR_CELLS.get(classification)
+
+
 def targeting_record(
     monster_id: int,
     profile_id: str,
+    classification: str,
+    runtime_allowed: bool,
     movement_source: dict[str, Any],
 ) -> dict[str, Any]:
     source_binding = dict(movement_source.get("source_binding", {}))
     server_binding = dict(movement_source.get("server_class_binding", {}))
     exact_source_row = source_binding.get("binding_status") == "EXACT_SOURCE_ROW"
+    classification_floor = classification_floor_view_range_cells(
+        classification,
+        runtime_allowed,
+        exact_source_row,
+    )
+    classification_floor_authority = (
+        CLASSIFICATION_FLOOR_AUTHORITY if classification_floor is not None else None
+    )
+    class_derived_view: int | None = None
+    effective_view_authority: str | None = None
+    classification_floor_applied = False
 
     if exact_source_row:
         server_race = int(server_binding.get("server_race", -1))
@@ -316,7 +354,14 @@ def targeting_record(
             raise RuntimeError(
                 f"monster_id={monster_id} exact server_race={server_race} has no Pascal targeting rule"
             )
-        view = int(class_rule["view_range_cells"])
+        class_derived_view = int(class_rule["view_range_cells"])
+        view = max(
+            class_derived_view,
+            classification_floor if classification_floor is not None else class_derived_view,
+        )
+        classification_floor_applied = (
+            classification_floor is not None and classification_floor > class_derived_view
+        )
         view_source: str | None = str(class_rule["view_source"])
         pascal_class: str | None = str(class_rule["pascal_class"])
         class_binding_status = "CANDIDATE"
@@ -325,12 +370,18 @@ def targeting_record(
         view_authority = "B_CANDIDATE"
         acquisition_status = "CANDIDATE"
         acquisition_authority = "B_CANDIDATE"
+        effective_view_authority = (
+            CLASSIFICATION_FLOOR_AUTHORITY
+            if classification_floor_applied
+            else view_authority
+        )
 
         profile_view = SPECIAL_VIEW_BY_PROFILE.get(profile_id)
-        if profile_view is not None and int(profile_view[0]) != view:
+        if profile_view is not None and int(profile_view[0]) != class_derived_view:
             raise RuntimeError(
                 f"monster_id={monster_id} profile={profile_id} view={profile_view[0]} "
-                f"conflicts with server_race={server_race} class={pascal_class} view={view}"
+                f"conflicts with server_race={server_race} class={pascal_class} "
+                f"class_derived_view={class_derived_view}"
             )
         missing_evidence = None
     else:
@@ -365,6 +416,19 @@ def targeting_record(
         "class_rule_authority": "A_LOCKED" if exact_source_row else "UNKNOWN",
         "class_binding_missing_evidence": missing_evidence,
         "view_range_cells": view,
+        "class_derived_view_range_cells": class_derived_view,
+        "classification_floor_view_range_cells": classification_floor,
+        "classification_floor_authority": classification_floor_authority,
+        "classification_floor_source": (
+            CLASSIFICATION_FLOOR_SOURCE if classification_floor is not None else None
+        ),
+        "classification_floor_applied": classification_floor_applied,
+        "effective_view_range_authority": effective_view_authority,
+        "effective_view_range_rule": (
+            "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+            if classification_floor is not None
+            else "class_derived_view_range_cells"
+        ),
         "view_range_status": view_status,
         "view_range_authority": view_authority,
         "view_range_rule_authority": "A_LOCKED" if exact_source_row else "UNKNOWN",
@@ -520,6 +584,8 @@ def build_payload() -> dict[str, Any]:
                 "targeting": targeting_record(
                     monster_id,
                     profile_id,
+                    str(entry.get("classification", "")),
+                    bool(entry.get("runtime_allowed", False)),
                     dict(movement_by_id[str(monster_id)]),
                 ),
                 "recovery": recovery_record(),
@@ -699,6 +765,18 @@ def build_payload() -> dict[str, Any]:
                 "authority": "A_LOCKED",
                 "source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas:249-258",
             },
+            "runtime_classification_first_acquisition_floor": {
+                "status": "LOCKED",
+                "authority": CLASSIFICATION_FLOOR_AUTHORITY,
+                "source": CLASSIFICATION_FLOOR_SOURCE,
+                "rule": "effective_view=max(class_derived_view, classification_floor)",
+                "classification_floor_view_range_cells": {
+                    "ordinary": None,
+                    "elite": 7,
+                    "boss": 9,
+                },
+                "scope": "active runtime first acquisition only; class/special values are never reduced",
+            },
             "standard_active_class_search": {
                 "idle_search_ms": 1000,
                 "engaged_search_ms": 8000,
@@ -783,8 +861,24 @@ def validate(payload: dict[str, Any]) -> list[str]:
                     f"monster_id={monster_id} invalid {authority_key}={movement.get(authority_key)}"
                 )
         targeting = dict(record.get("targeting", {}))
+        movement_source = dict(movement_by_id.get(monster_id, {}))
+        source_binding = dict(movement_source.get("source_binding", {}))
+        classification = str(record.get("classification", ""))
+        runtime_allowed = bool(record.get("runtime_allowed", False))
+        expected_classification_floor = classification_floor_view_range_cells(
+            classification,
+            runtime_allowed,
+            source_binding.get("binding_status") == "EXACT_SOURCE_ROW",
+        )
         for required in (
             "view_range_cells",
+            "class_derived_view_range_cells",
+            "classification_floor_view_range_cells",
+            "classification_floor_authority",
+            "classification_floor_source",
+            "classification_floor_applied",
+            "effective_view_range_authority",
+            "effective_view_range_rule",
             "acquisition_status",
             "idle_search_ms",
             "engaged_search_ms",
@@ -805,8 +899,6 @@ def validate(payload: dict[str, Any]) -> list[str]:
             or primary_missing.get("result") != "MISSING"
         ):
             errors.append(f"monster_id={monster_id} view-range primary missing evidence drift")
-        movement_source = dict(movement_by_id.get(monster_id, {}))
-        source_binding = dict(movement_source.get("source_binding", {}))
         exact_source_row = source_binding.get("binding_status") == "EXACT_SOURCE_ROW"
         if exact_source_row:
             source_class_binding = dict(movement_source.get("server_class_binding", {}))
@@ -821,7 +913,44 @@ def validate(payload: dict[str, Any]) -> list[str]:
                     errors.append(f"monster_id={monster_id} targeting.server_race drift")
                 if targeting.get("pascal_class") != rule["pascal_class"]:
                     errors.append(f"monster_id={monster_id} targeting.pascal_class drift")
-                if targeting.get("view_range_cells") != rule["view_range_cells"]:
+                class_derived_view = int(rule["view_range_cells"])
+                expected_view = max(
+                    class_derived_view,
+                    expected_classification_floor
+                    if expected_classification_floor is not None
+                    else class_derived_view,
+                )
+                expected_floor_applied = (
+                    expected_classification_floor is not None
+                    and expected_classification_floor > class_derived_view
+                )
+                if targeting.get("class_derived_view_range_cells") != class_derived_view:
+                    errors.append(f"monster_id={monster_id} class-derived view range drift")
+                if targeting.get("classification_floor_view_range_cells") != expected_classification_floor:
+                    errors.append(f"monster_id={monster_id} classification floor drift")
+                expected_floor_authority = (
+                    CLASSIFICATION_FLOOR_AUTHORITY
+                    if expected_classification_floor is not None
+                    else None
+                )
+                if targeting.get("classification_floor_authority") != expected_floor_authority:
+                    errors.append(f"monster_id={monster_id} classification floor authority drift")
+                expected_floor_source = (
+                    CLASSIFICATION_FLOOR_SOURCE
+                    if expected_classification_floor is not None
+                    else None
+                )
+                if targeting.get("classification_floor_source") != expected_floor_source:
+                    errors.append(f"monster_id={monster_id} classification floor source drift")
+                if targeting.get("classification_floor_applied") != expected_floor_applied:
+                    errors.append(f"monster_id={monster_id} classification floor application drift")
+                if targeting.get("effective_view_range_authority") != (
+                    CLASSIFICATION_FLOOR_AUTHORITY
+                    if expected_floor_applied
+                    else "B_CANDIDATE"
+                ):
+                    errors.append(f"monster_id={monster_id} effective view authority drift")
+                if targeting.get("view_range_cells") != expected_view:
                     errors.append(f"monster_id={monster_id} targeting.view_range_cells drift")
                 if targeting.get("view_range_source") != rule["view_source"]:
                     errors.append(f"monster_id={monster_id} targeting.view_range_source drift")
@@ -843,6 +972,26 @@ def validate(payload: dict[str, Any]) -> list[str]:
             for key in ("server_race", "pascal_class", "view_range_cells", "view_range_source"):
                 if targeting.get(key) is not None:
                     errors.append(f"monster_id={monster_id} DATA_HOLD targeting.{key} must be null")
+            for key, expected in (
+                ("class_derived_view_range_cells", None),
+                ("classification_floor_view_range_cells", expected_classification_floor),
+                (
+                    "classification_floor_authority",
+                    CLASSIFICATION_FLOOR_AUTHORITY
+                    if expected_classification_floor is not None
+                    else None,
+                ),
+                (
+                    "classification_floor_source",
+                    CLASSIFICATION_FLOOR_SOURCE
+                    if expected_classification_floor is not None
+                    else None,
+                ),
+                ("classification_floor_applied", False),
+                ("effective_view_range_authority", None),
+            ):
+                if targeting.get(key) != expected:
+                    errors.append(f"monster_id={monster_id} DATA_HOLD targeting.{key} drift")
             for key in ("class_binding_status", "view_range_status", "acquisition_status"):
                 if targeting.get(key) != "DATA_HOLD":
                     errors.append(f"monster_id={monster_id} invalid DATA_HOLD {key}")
@@ -875,15 +1024,32 @@ def validate(payload: dict[str, Any]) -> list[str]:
         errors.append("targeting_class_binding_data_hold must be 12")
     if summary.get("targeting_view_range_data_hold") != 12:
         errors.append("targeting_view_range_data_hold must be 12")
-    expected_distribution = {"5": 117, "6": 10, "7": 11, "8": 1, "9": 2, "12": 1, "16": 2}
+    expected_distribution = {"5": 78, "6": 9, "7": 34, "8": 0, "9": 20, "12": 1, "16": 2}
     if summary.get("targeting_view_range_distribution") != expected_distribution:
         errors.append("targeting_view_range_distribution drift")
     by_id = {int(item.get("monster_id", -1)): item for item in records}
     for monster_id, expected_view in KNOWN_EXACT_VIEW_CORRECTIONS.items():
         targeting = dict(by_id.get(monster_id, {}).get("targeting", {}))
-        if targeting.get("view_range_cells") != expected_view:
+        if targeting.get("class_derived_view_range_cells") != expected_view:
             errors.append(
-                f"monster_id={monster_id} exact view correction != {expected_view}"
+                f"monster_id={monster_id} exact class-derived view correction != {expected_view}"
+            )
+    for record in records:
+        if not bool(record.get("runtime_allowed", False)):
+            continue
+        classification = str(record.get("classification", ""))
+        minimum_view = RUNTIME_CLASSIFICATION_VIEW_FLOOR_CELLS.get(classification)
+        if minimum_view is None:
+            continue
+        view = dict(record.get("targeting", {})).get("view_range_cells")
+        if view is None:
+            # DATA_HOLD remains fail-closed; it is not a runtime classification
+            # floor failure and must not be promoted by this rule.
+            continue
+        if not isinstance(view, int) or view < minimum_view:
+            errors.append(
+                f"monster_id={record.get('monster_id')} active {classification} view range "
+                f"{view} below classification floor {minimum_view}"
             )
     actual_holds = {
         int(item.get("monster_id", -1))

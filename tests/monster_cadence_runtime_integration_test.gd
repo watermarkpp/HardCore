@@ -7,6 +7,9 @@ extends Node2D
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const NeighborPolicy := preload("res://scripts/monster_neighbor_step_policy.gd")
 const Cadence := preload("res://scripts/monster_movement_cadence.gd")
+const CombatUnitLegacyAdapterScript := preload(
+	"res://scripts/skills/combat_unit_legacy_adapter.gd"
+)
 const AUTHORITY_PATH := "res://assets/data/monster_runtime_authority_v1.json"
 
 
@@ -460,38 +463,89 @@ func _await_diagonal_step_reaches_exact_target() -> void:
 
 
 # ---------------------------------------------------------------------------
-# Test 6: Runtime move speed, not walk_interval_ms, owns interpolation. Axis
-#         and diagonal neighbors complete in the same time through distance
-#         compensation while cadence still records the high-level grant.
+# Test 6: Runtime move speed, not walk_interval_ms, owns interpolation. Every
+#         neighbor direction uses the same Ground-GU/s scalar; diagonal cells
+#         therefore take sqrt(2) times the axis duration. Cadence still records
+#         the high-level grant.
 # ---------------------------------------------------------------------------
 
 func _test_multi_step_visual_continuity() -> void:
-	var axis_enemy := await _make_enemy(18)
-	var diagonal_enemy := await _make_enemy(18)
-	axis_enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(0.5, 0.5)), &"test_setup")
-	diagonal_enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(0.5, 0.5)), &"test_setup")
+	var directions := NeighborPolicy.allowed_neighbors()
+	assert(directions.size() == 8, "runtime speed evidence must cover all eight neighbors")
+	var player_run_speed := float(CombatUnitLegacyAdapterScript.PLAYER_MOVE_SPEED_GU_PER_SEC)
+	var player_ground_direction := Vector2(1.0, 1.0).normalized()
+	var player_screen_velocity := GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
+		player_ground_direction,
+		player_run_speed,
+	)
+	var player_ground_velocity := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		player_screen_velocity,
+	)
+	assert(
+		is_equal_approx(player_ground_velocity.length(), player_run_speed),
+		"Player run projection must preserve normalized Ground-GU/s",
+	)
+	var measured_speeds: Array[float] = []
+	var measured_durations: Array[float] = []
 	var physics_delta := 1.0 / float(Engine.physics_ticks_per_second)
-	var ready_ms := Time.get_ticks_msec() + 1000
-	assert(axis_enemy._request_autonomous_step(Vector2.RIGHT, 1.0, false, &"speed_test", ready_ms))
-	assert(diagonal_enemy._request_autonomous_step(Vector2(1.0, 1.0), 1.0, false, &"speed_test", ready_ms))
-	var axis_frames := 0
-	var diagonal_frames := 0
-	while axis_enemy._movement_step_active and axis_frames < 120:
-		axis_enemy._advance_autonomous_step(physics_delta)
-		axis_frames += 1
-	while diagonal_enemy._movement_step_active and diagonal_frames < 120:
-		diagonal_enemy._advance_autonomous_step(physics_delta)
-		diagonal_frames += 1
-	assert(not axis_enemy._movement_step_active and not diagonal_enemy._movement_step_active)
-	assert(abs(axis_frames - diagonal_frames) <= 1, "axis/diagonal cell time must match: axis=%d diagonal=%d" % [axis_frames, diagonal_frames])
-	var expected_frames := int(ceil(1.0 / axis_enemy.move_speed_gu_per_sec / physics_delta))
-	assert(abs(axis_frames - expected_frames) <= 1, "runtime move speed must own cell duration")
-	assert(int(axis_enemy._movement_cadence.walk_tick_ms) == ready_ms, "cadence grant timestamp must remain authoritative history")
-	_checks += 6
-
-	axis_enemy.queue_free()
-	diagonal_enemy.queue_free()
-	await get_tree().physics_frame
+	var axis_duration := 0.0
+	var diagonal_duration := 0.0
+	for neighbor: Vector2i in directions:
+		var enemy := await _make_enemy(18)
+		enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(0.5, 0.5)), &"test_setup")
+		var ready_ms := Time.get_ticks_msec() + 1000
+		assert(
+			enemy._request_autonomous_step(
+				Vector2(neighbor),
+				1.0,
+				false,
+				&"speed_test",
+				ready_ms,
+			)
+		)
+		var start_ground := _screen_px_to_ground_gu(enemy.global_position)
+		var selected_distance := enemy._movement_step_distance_gu
+		var expected_distance := start_ground.distance_to(enemy._movement_step_target_ground_gu)
+		assert(
+			is_equal_approx(selected_distance, expected_distance),
+			"captured step distance must remain Ground-GU distance for %s" % neighbor,
+		)
+		var frames := 0
+		while enemy._movement_step_active and frames < 120:
+			enemy._advance_autonomous_step(physics_delta)
+			frames += 1
+		assert(not enemy._movement_step_active, "neighbor step must complete for %s" % neighbor)
+		var final_ground := _screen_px_to_ground_gu(enemy.global_position)
+		var travelled_gu := start_ground.distance_to(final_ground)
+		var duration_seconds := float(frames) * physics_delta
+		var measured_speed := travelled_gu / maxf(duration_seconds, physics_delta)
+		assert(
+			absf(measured_speed - enemy.move_speed_gu_per_sec)
+			<= enemy.move_speed_gu_per_sec * 0.08,
+			"Ground-GU/s must be direction invariant for %s: expected=%f measured=%f"
+			% [neighbor, enemy.move_speed_gu_per_sec, measured_speed],
+		)
+		measured_speeds.append(measured_speed)
+		measured_durations.append(duration_seconds)
+		if neighbor.x == 0 or neighbor.y == 0:
+			axis_duration = duration_seconds
+		else:
+			diagonal_duration = duration_seconds
+		assert(
+			int(enemy._movement_cadence.walk_tick_ms) == ready_ms,
+			"cadence grant timestamp must remain authoritative history",
+		)
+		enemy.queue_free()
+		await get_tree().physics_frame
+	assert(axis_duration > 0.0 and diagonal_duration > 0.0)
+	var diagonal_duration_ratio := diagonal_duration / axis_duration
+	assert(
+		diagonal_duration_ratio >= 1.30 and diagonal_duration_ratio <= 1.55,
+		"diagonal Ground-GU step must take sqrt(2) times axis duration: ratio=%f"
+		% diagonal_duration_ratio,
+	)
+	assert(measured_speeds.size() == 8 and measured_durations.size() == 8)
+	_checks += 4 + directions.size() * 5
 
 
 # ---------------------------------------------------------------------------

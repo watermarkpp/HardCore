@@ -823,15 +823,13 @@ func _advance_autonomous_step(delta: float) -> void:
 		_clear_autonomous_step_state()
 		_continue_continuous_pursuit_from_current_target()
 		return
-	# Runtime movement speed owns interpolation. Axis neighbors cost 1 GU; a
-	# diagonal neighbor costs sqrt(2) GU, so multiplying by the captured step
-	# distance preserves equal cell-crossing time without slowing diagonals.
+	# Runtime movement speed is a true Ground-GU/s scalar.  Every neighbor uses
+	# the same scalar; a diagonal neighbor therefore travels sqrt(2) GU and
+	# takes sqrt(2) times as long as an axis neighbor instead of gaining a hidden
+	# diagonal speed multiplier.
 	var presentation_speed := (
 		move_speed_gu_per_sec
 		* _movement_step_speed_scale
-		* MonsterNeighborStepPolicyScript.neighbor_distance_gu(
-			_movement_step_neighbor
-		)
 		if move_speed_gu_per_sec > 0.0 and _movement_step_speed_scale > 0.0
 		else 0.0
 	)
@@ -3730,7 +3728,11 @@ func _retarget(delta := 0.0) -> void:
 				continue
 			elif distance_gu > aggro_radius_gu:
 				continue
-		if spawn_distance_gu > leash_radius_gu:continue
+		# First acquisition is centered on the actor's current cell.  A stale
+		# spawn position must not narrow the exact per-monster ViewRange; the
+		# leash resumes once a target or threat already exists.
+		if not acquiring_without_current_target and spawn_distance_gu > leash_radius_gu:
+			continue
 		var distance_score := (
 			maxf(0.0, 1.0 - distance_gu / maxf(aggro_radius_gu, GroundUnitSpace.EPSILON_GU))
 			* 100.0
