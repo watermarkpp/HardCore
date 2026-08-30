@@ -171,8 +171,14 @@ var control_time := 0.0:
 	set(value):
 		if value > 0.0 and control_time <= 0.0:
 			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
+			if _movement_step_active:
+				_cancel_autonomous_step(true)
 		control_time = value
-var charm_time := 0.0
+var charm_time := 0.0:
+	set(value):
+		if value > 0.0 and charm_time <= 0.0 and _movement_step_active:
+			_cancel_autonomous_step(true)
+		charm_time = value
 var dormant := false
 var life_steal_ratio := 0.0
 var control_on_hit_seconds := 0.0
@@ -226,6 +232,12 @@ var _boss_base_move_speed_gu_per_sec := 0.0
 var _boss_base_attack_interval := 0.0
 var _burrowed := false
 var _rng := RandomNumberGenerator.new()
+## Spawn presentation uses an instance-local RNG so the one-time direction
+## choice cannot advance combat, loot, summon, or status-effect randomness.
+var _spawn_facing_rng := RandomNumberGenerator.new()
+var _spawn_facing_seed_override := 0
+var _spawn_facing_seed_override_active := false
+var _spawn_facing_initialized := false
 var _threat_table := {}
 var _threat_decay_per_second := 4.0
 var _leash_multiplier := 1.5
@@ -260,10 +272,15 @@ var _movement_step_distance_gu := 0.0
 var _movement_step_neighbor := Vector2i.ZERO
 var _movement_step_engagement_target_instance_id := 0
 ## Retain the existing caller scale as part of the step state for diagnostics
-## and call-site compatibility.  The canonical walk interval owns the visual
-## duration; autonomous movement must not introduce a second actor multiplier.
+## and call-site compatibility. Runtime GU speed owns interpolation; this is
+## the sole behavior multiplier applied by return/retreat paths.
 var _movement_step_speed_scale := 1.0
 var _movement_step_reason: StringName = &""
+## A cadence grant creates a high-level pursuit intent. Once granted, the
+## actor may chain neighbor cells at its runtime speed; cell completion reads
+## only the already-selected live target and never calls retarget/broadphase.
+var _continuous_pursuit_active := false
+var _continuous_pursuit_speed_scale := 1.0
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
@@ -538,6 +555,45 @@ func _request_autonomous_step(
 		return false
 	if not cadence_result.granted:
 		return false
+	var creates_continuous_pursuit := (
+		reason == &"pursuit"
+		and is_instance_valid(engagement_target)
+		and engagement_target == target
+	)
+	if creates_continuous_pursuit:
+		_continuous_pursuit_active = true
+		_continuous_pursuit_speed_scale = maxf(0.0, speed_scale)
+	else:
+		_clear_continuous_pursuit_intent()
+	var started := _begin_autonomous_step_without_cadence(
+		desired_direction_ground_gu,
+		speed_scale,
+		use_crowd_steering,
+		reason,
+		engagement_target,
+	)
+	if not started:
+		_clear_continuous_pursuit_intent()
+	return started
+
+
+func _begin_autonomous_step_without_cadence(
+	desired_direction_ground_gu: Vector2,
+	speed_scale: float,
+	use_crowd_steering: bool,
+	reason: StringName,
+	engagement_target: Node2D = null,
+) -> bool:
+	if _movement_step_active:
+		return false
+	if _movement_authority_failed_closed or stationary or dormant:
+		return false
+	if control_time > 0.0 or charm_time > 0.0:
+		return false
+	if not desired_direction_ground_gu.is_finite():
+		return false
+	if desired_direction_ground_gu.length() <= GroundUnitSpace.EPSILON_GU:
+		return false
 	var pursuit_ground := desired_direction_ground_gu.normalized()
 	var steering_ground := pursuit_ground
 	if use_crowd_steering:
@@ -586,6 +642,56 @@ func _request_autonomous_step(
 	return true
 
 
+func _clear_continuous_pursuit_intent() -> void:
+	_continuous_pursuit_active = false
+	_continuous_pursuit_speed_scale = 1.0
+
+
+func _live_continuous_pursuit_target() -> Node2D:
+	if not _continuous_pursuit_active:
+		return null
+	if not is_instance_valid(target) or target.is_queued_for_deletion():
+		return null
+	if target is PlayerCharacter and target.current_hp <= 0:
+		return null
+	if target is EnemyActor and (target._dying or target.current_hp <= 0):
+		return null
+	if target is SummonActor and target.current_hp <= 0:
+		return null
+	return target
+
+
+func _continue_continuous_pursuit_from_current_target() -> void:
+	var live_target := _live_continuous_pursuit_target()
+	if live_target == null:
+		_clear_continuous_pursuit_intent()
+		return
+	if _target_is_safe_player(live_target) or _point_inside_safe_zone(live_target.global_position):
+		_clear_continuous_pursuit_intent()
+		return
+	var desired_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		live_target.global_position,
+	)
+	if (
+		not desired_ground_gu.is_finite()
+		or desired_ground_gu.length() > aggro_radius_gu
+		or _movement_step_engagement_ready()
+	):
+		_clear_continuous_pursuit_intent()
+		return
+	# Cell continuation deliberately omits crowd/target-grid evaluation. The
+	# current target reference is the only actor read on this hot path.
+	if not _begin_autonomous_step_without_cadence(
+		desired_ground_gu,
+		_continuous_pursuit_speed_scale,
+		false,
+		&"pursuit",
+		live_target,
+	):
+		_clear_continuous_pursuit_intent()
+
+
 func _clear_autonomous_step_state() -> void:
 	_movement_step_active = false
 	_movement_step_start_ground_gu = Vector2.INF
@@ -602,9 +708,12 @@ func _cancel_autonomous_step(preserve_current_position := true) -> void:
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
 	_clear_autonomous_step_state()
+	_clear_continuous_pursuit_intent()
 
 
 func _movement_step_engagement_target() -> Node2D:
+	if _continuous_pursuit_active:
+		return _live_continuous_pursuit_target()
 	if _movement_step_engagement_target_instance_id <= 0:
 		return null
 	var candidate: Object = instance_from_id(
@@ -656,6 +765,7 @@ func _fail_autonomous_step_blocked() -> void:
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
 	_clear_autonomous_step_state()
+	_clear_continuous_pursuit_intent()
 
 
 func _advance_autonomous_step(delta: float) -> void:
@@ -677,6 +787,23 @@ func _advance_autonomous_step(delta: float) -> void:
 	if not current_ground_gu.is_finite():
 		_cancel_autonomous_step(true)
 		return
+	if _continuous_pursuit_active:
+		var live_target := _live_continuous_pursuit_target()
+		if live_target == null:
+			_cancel_autonomous_step(true)
+			return
+		var live_offset_ground_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			live_target.global_position,
+		)
+		if (
+			_target_is_safe_player(live_target)
+			or _point_inside_safe_zone(live_target.global_position)
+			or not live_offset_ground_gu.is_finite()
+			or live_offset_ground_gu.length() > aggro_radius_gu
+		):
+			_cancel_autonomous_step(true)
+			return
 	# A pursuit step is allowed to finish early when the already-selected
 	# combat target becomes attack-ready. This preserves the existing attack
 	# geometry and prevents a full-cell attempt from colliding with the target
@@ -685,6 +812,7 @@ func _advance_autonomous_step(delta: float) -> void:
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
 		_clear_autonomous_step_state()
+		_clear_continuous_pursuit_intent()
 		return
 	var remaining := _movement_step_target_ground_gu - current_ground_gu
 	if remaining.length_squared() <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
@@ -693,22 +821,18 @@ func _advance_autonomous_step(delta: float) -> void:
 			set_combat_position(target_screen, &"autonomous_step_arrival")
 		velocity = Vector2.ZERO
 		_clear_autonomous_step_state()
+		_continue_continuous_pursuit_from_current_target()
 		return
-	# `walk_interval_ms` is the canonical interval between adjacent logical
-	# movement grants.  The old path used move_speed_gu_per_sec here, so a
-	# one-neighbor step arrived early and left the actor standing until the next
-	# grant.  Use the fixed distance captured at grant time and spread it across
-	# exactly that legal interval; this keeps logical cadence authoritative while
-	# making the visual step continuously bridge adjacent grants.
-	var walk_interval_ms := (
-		int(_movement_cadence.walk_interval_ms)
-		if _movement_cadence != null and _movement_cadence.configured
-		else 0
-	)
-	var interval_seconds := float(walk_interval_ms) / 1000.0
+	# Runtime movement speed owns interpolation. Axis neighbors cost 1 GU; a
+	# diagonal neighbor costs sqrt(2) GU, so multiplying by the captured step
+	# distance preserves equal cell-crossing time without slowing diagonals.
 	var presentation_speed := (
-		(_movement_step_distance_gu / interval_seconds) * _movement_step_speed_scale
-		if interval_seconds > 0.0 and _movement_step_speed_scale > 0.0
+		move_speed_gu_per_sec
+		* _movement_step_speed_scale
+		* MonsterNeighborStepPolicyScript.neighbor_distance_gu(
+			_movement_step_neighbor
+		)
+		if move_speed_gu_per_sec > 0.0 and _movement_step_speed_scale > 0.0
 		else 0.0
 	)
 	if presentation_speed <= 0.0:
@@ -733,6 +857,7 @@ func _advance_autonomous_step(delta: float) -> void:
 	if after_ground_gu.is_finite() and _movement_step_engagement_ready():
 		velocity = Vector2.ZERO
 		_clear_autonomous_step_state()
+		_clear_continuous_pursuit_intent()
 		return
 	var blocked := false
 	if get_slide_collision_count() > 0:
@@ -762,6 +887,7 @@ func _advance_autonomous_step(delta: float) -> void:
 			set_combat_position(exact_target_screen, &"autonomous_step_arrival")
 		velocity = Vector2.ZERO
 		_clear_autonomous_step_state()
+		_continue_continuous_pursuit_from_current_target()
 		return
 
 
@@ -798,6 +924,43 @@ func _apply_boss_rule() -> void:
 	_boss_base_attack_interval = _attack_interval
 
 
+static func legal_spawn_facing_directions() -> Array[Vector2]:
+	var result: Array[Vector2] = []
+	for neighbor: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
+		result.append(
+			_screen_facing_for_ground_direction(
+				MonsterNeighborStepPolicyScript.desired_ground_direction(neighbor)
+			)
+		)
+	return result
+
+
+func set_spawn_facing_seed_for_test(seed_value: int) -> void:
+	if _spawn_facing_initialized or is_node_ready():
+		return
+	_spawn_facing_seed_override = seed_value
+	_spawn_facing_seed_override_active = true
+
+
+func _initialize_spawn_facing_once() -> void:
+	if _spawn_facing_initialized:
+		return
+	_spawn_facing_initialized = true
+	if _spawn_facing_seed_override_active:
+		_spawn_facing_rng.seed = _spawn_facing_seed_override
+	else:
+		_spawn_facing_rng.randomize()
+	var neighbors := MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS
+	var selected_neighbor: Vector2i = neighbors[
+		_spawn_facing_rng.randi_range(0, neighbors.size() - 1)
+	]
+	var selected_facing := _screen_facing_for_ground_direction(
+		MonsterNeighborStepPolicyScript.desired_ground_direction(selected_neighbor)
+	)
+	facing = selected_facing
+	movement_facing = selected_facing
+
+
 func _ready() -> void:
 	if monster_id < 0 or bool(get_meta("canonical_rejected", false)):
 		queue_free()
@@ -819,6 +982,7 @@ func _ready() -> void:
 	safe_margin = 0.35
 	max_slides = 6
 	_rng.randomize()
+	_initialize_spawn_facing_once()
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
 	combat_radius_gu = (
@@ -2230,6 +2394,7 @@ func configure_spatial_index(
 
 
 func _exit_tree() -> void:
+	_cancel_autonomous_step(true)
 	clear_entrapment("exit_tree")
 	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
 		combat_spatial_index.unregister(spatial_actor_runtime_id)
@@ -3196,7 +3361,7 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 func _begin_death() -> void:
 	clear_entrapment("death")
 	_dying = true
-	velocity = Vector2.ZERO
+	_cancel_autonomous_step(true)
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
 	_pending_attack_damage = 0

@@ -9,6 +9,13 @@ const NeighborPolicy := preload("res://scripts/monster_neighbor_step_policy.gd")
 const Cadence := preload("res://scripts/monster_movement_cadence.gd")
 const AUTHORITY_PATH := "res://assets/data/monster_runtime_authority_v1.json"
 
+
+class RuntimeEnemyFixture extends EnemyActor:
+	func _ready() -> void:
+		motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+		_initialize_spawn_facing_once()
+
+
 var _records_by_id: Dictionary = {}
 var _checks := 0
 
@@ -30,6 +37,10 @@ func _run() -> void:
 	await _test_multi_step_visual_continuity()
 	await _test_scaled_step_keeps_continuous_motion()
 	await _test_next_event_waits_for_cadence_interval()
+	await _test_1500ms_pursuit_is_continuous_and_scan_free()
+	await _test_live_target_turns_at_next_cell()
+	await _test_id70_speed_unit_contract()
+	await _test_seeded_spawn_facing_is_legal_and_varied()
 	await _test_stationary_and_compatibility_runtime()
 	await _test_quantized_facing_matches_neighbor()
 	await _test_engagement_completion_does_not_rollback()
@@ -65,7 +76,7 @@ func _record(id: int) -> Dictionary:
 
 
 func _make_enemy(monster_id: int) -> EnemyActor:
-	var enemy := EnemyActor.new()
+	var enemy := RuntimeEnemyFixture.new()
 	enemy.setup(GameData.get_monster_by_id(monster_id), null, false)
 	enemy.move_speed_gu_per_sec = 3.0
 	enemy.attack_range_gu = 1.5
@@ -79,6 +90,21 @@ func _make_enemy(monster_id: int) -> EnemyActor:
 	add_child(enemy)
 	# Let the enemy settle into the scene tree.
 	await get_tree().physics_frame
+	enemy.set_physics_process(false)
+	_checks += 1
+	return enemy
+
+
+func _make_unready_enemy(monster_id: int) -> EnemyActor:
+	var enemy := RuntimeEnemyFixture.new()
+	enemy.setup(GameData.get_monster_by_id(monster_id), null, false)
+	enemy.move_speed_gu_per_sec = 3.0
+	enemy.attack_range_gu = 1.5
+	enemy.aggro_radius_gu = 12.0
+	enemy.environment_blocker = null
+	enemy.global_position = Vector2.ZERO
+	enemy.set_meta("spawn_position", Vector2.ZERO)
+	enemy.set_meta("safe_zones", [])
 	_checks += 1
 	return enemy
 
@@ -116,7 +142,7 @@ func _force_cadence_ready(enemy: EnemyActor) -> void:
 # ---------------------------------------------------------------------------
 
 func _test_cadence_interval_not_elapsed() -> void:
-	var enemy := await _make_enemy(18)
+	var enemy := _make_unready_enemy(18)
 	var start_position := enemy.global_position
 
 	# Immediately request a step with the same timestamp that was used during
@@ -134,8 +160,136 @@ func _test_cadence_interval_not_elapsed() -> void:
 	assert(not enemy._movement_step_active, "step must not be active without grant")
 	_checks += 3
 
-	enemy.queue_free()
+	enemy.free()
+
+
+func _test_1500ms_pursuit_is_continuous_and_scan_free() -> void:
+	var player := PlayerCharacter.new()
+	player.name = "ContinuousPursuitPlayer"
+	player.set_physics_process(false)
+	add_child(player)
 	await get_tree().physics_frame
+	player.set_touch_vector(Vector2.ZERO)
+	player.global_position = _ground_gu_to_screen_px(Vector2(12.5, 0.5))
+
+	var enemy := RuntimeEnemyFixture.new()
+	enemy.setup(GameData.get_monster_by_id(19), player, false)
+	enemy.environment_blocker = null
+	enemy.aggro_radius_gu = 20.0
+	enemy.set_physics_process(false)
+	add_child(enemy)
+	await get_tree().physics_frame
+	enemy.set_physics_process(false)
+	enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(0.5, 0.5)), &"test_setup")
+	enemy.set_meta("spawn_position", enemy.global_position)
+	enemy.set_meta("safe_zones", [])
+	enemy.target = player
+	enemy.primary_target = player
+	assert(enemy._movement_cadence.walk_interval_ms == 1500, "fixture must retain 21CQ 1500ms history")
+	assert(is_equal_approx(enemy.move_speed_gu_per_sec, 1.8125), "fixture must use exact runtime speed")
+	_force_cadence_ready(enemy)
+	EnemyActor.reset_performance_diagnostics()
+	var before_diagnostics := EnemyActor.performance_diagnostics()
+	assert(enemy._request_autonomous_step(Vector2.RIGHT, 1.0, false, &"pursuit", -1, player))
+	var start_ground := _screen_px_to_ground_gu(enemy.global_position)
+	var physics_delta := 1.0 / 60.0
+	for _frame in range(90):
+		assert(enemy._movement_step_active, "continuous pursuit must not idle between cells")
+		enemy._advance_autonomous_step(physics_delta)
+	var travelled_gu := start_ground.distance_to(_screen_px_to_ground_gu(enemy.global_position))
+	assert(absf(travelled_gu - 2.71875) <= 0.08, "1.5s at 1.8125 GU/s must travel about 2.7 GU: %f" % travelled_gu)
+	var after_diagnostics := EnemyActor.performance_diagnostics()
+	assert(int(after_diagnostics.retarget_full_scans) == int(before_diagnostics.retarget_full_scans))
+	assert(int(after_diagnostics.retarget_target_group_scans) == int(before_diagnostics.retarget_target_group_scans))
+	_checks += 7
+	enemy.queue_free()
+	player.queue_free()
+	await get_tree().physics_frame
+
+
+func _test_live_target_turns_at_next_cell() -> void:
+	var player := PlayerCharacter.new()
+	player.name = "LiveTurnPlayer"
+	player.set_physics_process(false)
+	add_child(player)
+	await get_tree().physics_frame
+	player.set_touch_vector(Vector2.ZERO)
+	player.global_position = _ground_gu_to_screen_px(Vector2(12.5, 0.5))
+
+	var enemy := RuntimeEnemyFixture.new()
+	enemy.setup(GameData.get_monster_by_id(19), player, false)
+	enemy.environment_blocker = null
+	enemy.aggro_radius_gu = 20.0
+	enemy.set_physics_process(false)
+	add_child(enemy)
+	await get_tree().physics_frame
+	enemy.set_physics_process(false)
+	enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(0.5, 0.5)), &"test_setup")
+	enemy.set_meta("spawn_position", enemy.global_position)
+	enemy.set_meta("safe_zones", [])
+	enemy.target = player
+	enemy.primary_target = player
+	_force_cadence_ready(enemy)
+	assert(enemy._request_autonomous_step(Vector2.RIGHT, 1.0, false, &"pursuit", -1, player))
+	var first_target := enemy._movement_step_target_ground_gu
+	for _frame in range(8):
+		enemy._advance_autonomous_step(1.0 / 60.0)
+	player.global_position = _ground_gu_to_screen_px(Vector2(first_target.x, -10.0))
+	var turn_elapsed := 8.0 / 60.0
+	while enemy._movement_step_target_ground_gu == first_target and turn_elapsed < 1.0:
+		enemy._advance_autonomous_step(1.0 / 60.0)
+		turn_elapsed += 1.0 / 60.0
+	assert(enemy._movement_step_active, "pursuit must continue after the first cell")
+	assert(enemy._movement_step_neighbor == Vector2i(0, -1), "next cell must use the target's current position")
+	assert(turn_elapsed <= 0.60, "1.8125 GU/s monster must correct within one cell: %f" % turn_elapsed)
+	_checks += 4
+	enemy.queue_free()
+	player.queue_free()
+	await get_tree().physics_frame
+
+
+func _test_id70_speed_unit_contract() -> void:
+	var profile_file := FileAccess.open("res://assets/data/monster_behavior_profiles.json", FileAccess.READ)
+	assert(profile_file != null)
+	var profiles: Dictionary = JSON.parse_string(profile_file.get_as_text())
+	var flame_profile: Dictionary = profiles.get("profiles", {}).get("flame_wooma", {})
+	assert(is_equal_approx(float(flame_profile.get("runtimeProjection", {}).get("move_speed_gu_per_sec", 0.0)), 1.4375))
+	var authority := _record(70)
+	assert(is_equal_approx(float(authority.get("movement", {}).get("current_runtime_move_speed_gu_per_sec", 0.0)), 1.4375))
+	assert(int(authority.get("movement", {}).get("walk_interval_ms", 0)) == 800)
+	var runtime_enemy := EnemyActor.new()
+	runtime_enemy.setup(GameData.get_monster_by_id(70), null, false)
+	assert(is_equal_approx(runtime_enemy.move_speed_gu_per_sec, 1.4375), "46px/s must never become 46GU/s")
+	runtime_enemy.queue_free()
+	_checks += 5
+
+
+func _test_seeded_spawn_facing_is_legal_and_varied() -> void:
+	var legal := EnemyActor.legal_spawn_facing_directions()
+	assert(legal.size() == 8, "spawn facing must expose exactly eight candidates")
+	var observed: Array[Vector2] = []
+	for seed_value in range(24):
+		var enemy := EnemyActor.new()
+		enemy.setup(GameData.get_monster_by_id(18), null, false)
+		enemy.set_spawn_facing_seed_for_test(seed_value)
+		enemy._initialize_spawn_facing_once()
+		var legal_match := false
+		for candidate: Vector2 in legal:
+			if enemy.facing.is_equal_approx(candidate):
+				legal_match = true
+				break
+		assert(legal_match, "seeded spawn facing must stay in the legal 8-direction set")
+		assert(enemy.movement_facing.is_equal_approx(enemy.facing), "initial visual and movement facings must match")
+		var already_seen := false
+		for candidate: Vector2 in observed:
+			if enemy.facing.is_equal_approx(candidate):
+				already_seen = true
+				break
+		if not already_seen:
+			observed.append(enemy.facing)
+		enemy.free()
+	assert(observed.size() > 1, "multiple deterministic seeds must produce varied spawn facings")
+	_checks += 50
 
 
 # ---------------------------------------------------------------------------
@@ -143,7 +297,7 @@ func _test_cadence_interval_not_elapsed() -> void:
 # ---------------------------------------------------------------------------
 
 func _test_grant_starts_one_step() -> void:
-	var enemy := await _make_enemy(18)
+	var enemy := _make_unready_enemy(18)
 	var now_ms := Time.get_ticks_msec()
 
 	# Advance the clock past the 900ms walk_interval so the cadence grants.
@@ -173,8 +327,7 @@ func _test_grant_starts_one_step() -> void:
 	assert(not second_started, "second request must be rejected while step is active")
 	_checks += 4
 
-	enemy.queue_free()
-	await get_tree().physics_frame
+	enemy.free()
 
 
 # ---------------------------------------------------------------------------
@@ -182,7 +335,7 @@ func _test_grant_starts_one_step() -> void:
 # ---------------------------------------------------------------------------
 
 func _test_target_moves_mid_step() -> void:
-	var enemy := await _make_enemy(18)
+	var enemy := _make_unready_enemy(18)
 	var now_ms := Time.get_ticks_msec()
 	var fake_now := now_ms + 1000
 
@@ -208,8 +361,7 @@ func _test_target_moves_mid_step() -> void:
 	)
 	_checks += 2
 
-	enemy.queue_free()
-	await get_tree().physics_frame
+	enemy.free()
 
 
 # ---------------------------------------------------------------------------
@@ -244,7 +396,6 @@ func _await_axis_step_reaches_exact_target() -> void:
 		if not enemy._movement_step_active:
 			break
 		enemy._advance_autonomous_step(1.0 / 60.0)
-		await get_tree().physics_frame
 
 	assert(
 		not enemy._movement_step_active,
@@ -292,7 +443,6 @@ func _await_diagonal_step_reaches_exact_target() -> void:
 		if not enemy._movement_step_active:
 			break
 		enemy._advance_autonomous_step(1.0 / 60.0)
-		await get_tree().physics_frame
 
 	assert(
 		not enemy._movement_step_active,
@@ -310,107 +460,60 @@ func _await_diagonal_step_reaches_exact_target() -> void:
 
 
 # ---------------------------------------------------------------------------
-# Test 6: Every logical step owns the full canonical interval.  Three grants
-#         must form a continuous multi-step path without the old early-arrival
-#         idle gap, while the cadence timestamps remain the step-start clock.
+# Test 6: Runtime move speed, not walk_interval_ms, owns interpolation. Axis
+#         and diagonal neighbors complete in the same time through distance
+#         compensation while cadence still records the high-level grant.
 # ---------------------------------------------------------------------------
 
 func _test_multi_step_visual_continuity() -> void:
-	var enemy := await _make_enemy(18)
-	# This test advances the step explicitly.  Disable the actor's normal
-	# physics callback after it enters the tree so an awaited physics frame does
-	# not advance the same step a second time.
-	enemy.set_physics_process(false)
-	var cadence = enemy._movement_cadence
-	var interval_ms := int(cadence.walk_interval_ms)
+	var axis_enemy := await _make_enemy(18)
+	var diagonal_enemy := await _make_enemy(18)
+	axis_enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(0.5, 0.5)), &"test_setup")
+	diagonal_enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(0.5, 0.5)), &"test_setup")
 	var physics_delta := 1.0 / float(Engine.physics_ticks_per_second)
-	var expected_frames := int(ceil(float(interval_ms) / 1000.0 / physics_delta))
-	var next_start_ms := Time.get_ticks_msec() + interval_ms + 1
-	var logical_starts: Array[int] = []
+	var ready_ms := Time.get_ticks_msec() + 1000
+	assert(axis_enemy._request_autonomous_step(Vector2.RIGHT, 1.0, false, &"speed_test", ready_ms))
+	assert(diagonal_enemy._request_autonomous_step(Vector2(1.0, 1.0), 1.0, false, &"speed_test", ready_ms))
+	var axis_frames := 0
+	var diagonal_frames := 0
+	while axis_enemy._movement_step_active and axis_frames < 120:
+		axis_enemy._advance_autonomous_step(physics_delta)
+		axis_frames += 1
+	while diagonal_enemy._movement_step_active and diagonal_frames < 120:
+		diagonal_enemy._advance_autonomous_step(physics_delta)
+		diagonal_frames += 1
+	assert(not axis_enemy._movement_step_active and not diagonal_enemy._movement_step_active)
+	assert(abs(axis_frames - diagonal_frames) <= 1, "axis/diagonal cell time must match: axis=%d diagonal=%d" % [axis_frames, diagonal_frames])
+	var expected_frames := int(ceil(1.0 / axis_enemy.move_speed_gu_per_sec / physics_delta))
+	assert(abs(axis_frames - expected_frames) <= 1, "runtime move speed must own cell duration")
+	assert(int(axis_enemy._movement_cadence.walk_tick_ms) == ready_ms, "cadence grant timestamp must remain authoritative history")
+	_checks += 6
 
-	for step_index in range(3):
-		var started := enemy._request_autonomous_step(
-			Vector2.RIGHT,
-			1.0,
-			false,
-			&"continuity_test",
-			next_start_ms,
-		)
-		assert(started, "multi-step path grant %d must start" % step_index)
-		logical_starts.append(next_start_ms)
-		assert(
-			int(cadence.walk_tick_ms) == next_start_ms,
-			"logical step start must be recorded at the cadence grant timestamp"
-		)
-		var target_ground := enemy._movement_step_target_ground_gu
-		var step_motion_gu := 0.0
-		for frame_index in range(expected_frames):
-			assert(
-				enemy._movement_step_active,
-				"step %d arrived before its canonical interval at frame %d/%d"
-				% [step_index, frame_index, expected_frames]
-				+ " current=%s target=%s distance=%f interval_ms=%d"
-				% [
-					_screen_px_to_ground_gu(enemy.global_position),
-					target_ground,
-					enemy._movement_step_distance_gu,
-					interval_ms,
-				],
-			)
-			var before_ground := _screen_px_to_ground_gu(enemy.global_position)
-			enemy._advance_autonomous_step(physics_delta)
-			var after_ground := _screen_px_to_ground_gu(enemy.global_position)
-			var frame_motion := before_ground.distance_to(after_ground)
-			assert(
-				frame_motion > GroundUnitSpaceScript.EPSILON_GU,
-				"step %d has an intermediate idle frame at %d/%d"
-				% [step_index, frame_index, expected_frames],
-			)
-			step_motion_gu += frame_motion
-			await get_tree().physics_frame
-		assert(not enemy._movement_step_active, "step %d must end at interval" % step_index)
-		assert(
-			_screen_px_to_ground_gu(enemy.global_position).distance_to(target_ground)
-			<= GroundUnitSpaceScript.EPSILON_GU,
-			"step %d must finish at its selected neighbor" % step_index,
-		)
-		assert(step_motion_gu > GroundUnitSpaceScript.EPSILON_GU)
-		next_start_ms += interval_ms + 1
-
-	assert(
-		logical_starts[1] - logical_starts[0] == interval_ms + 1
-		and logical_starts[2] - logical_starts[1] == interval_ms + 1,
-		"adjacent logical step starts must preserve walk_interval_ms: %s"
-		% str(logical_starts),
-	)
-	_checks += 3 + 3 * (expected_frames * 2 + 5)
-
-	enemy.queue_free()
+	axis_enemy.queue_free()
+	diagonal_enemy.queue_free()
 	await get_tree().physics_frame
 
 
 # ---------------------------------------------------------------------------
-# Test 7: Existing return/overlap speed scales retain their slower semantics
-#         without reintroducing an early-arrival idle gap.
+# Test 7: Existing speed scales multiply exact runtime speed.
 # ---------------------------------------------------------------------------
 
 func _test_scaled_step_keeps_continuous_motion() -> void:
 	var enemy := await _make_enemy(18)
 	enemy.set_physics_process(false)
-	var cadence = enemy._movement_cadence
-	var interval_ms := int(cadence.walk_interval_ms)
+	enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(0.5, 0.5)), &"test_setup")
 	var physics_delta := 1.0 / float(Engine.physics_ticks_per_second)
 	var speed_scale := 0.75
-	var expected_duration_seconds := float(interval_ms) / 1000.0 / speed_scale
+	var expected_duration_seconds := 1.0 / enemy.move_speed_gu_per_sec / speed_scale
 	var expected_frames := int(ceil(expected_duration_seconds / physics_delta))
 	var started := enemy._request_autonomous_step(
 		Vector2.RIGHT,
 		speed_scale,
 		false,
 		&"scaled_continuity_test",
-		Time.get_ticks_msec() + interval_ms + 1,
+		Time.get_ticks_msec() + 1000,
 	)
-	assert(started, "scaled step must start after canonical interval")
+	assert(started, "scaled step must start after cadence grant")
 	var target_ground := enemy._movement_step_target_ground_gu
 	var travelled_gu := 0.0
 	for frame_index in range(expected_frames):
@@ -428,7 +531,6 @@ func _test_scaled_step_keeps_continuous_motion() -> void:
 			"scaled step must move every visual frame, including its final frame",
 		)
 		travelled_gu += frame_motion
-		await get_tree().physics_frame
 	assert(not enemy._movement_step_active, "scaled step must finish")
 	assert(
 		_screen_px_to_ground_gu(enemy.global_position).distance_to(target_ground)
@@ -437,8 +539,8 @@ func _test_scaled_step_keeps_continuous_motion() -> void:
 	)
 	assert(
 		travelled_gu > GroundUnitSpaceScript.EPSILON_GU
-		and expected_frames > int(ceil(float(interval_ms) / 1000.0 / physics_delta)),
-		"scale 0.75 must preserve the existing slower step semantics",
+		and expected_frames > int(ceil(1.0 / enemy.move_speed_gu_per_sec / physics_delta)),
+		"scale 0.75 must preserve the existing slower runtime-speed semantics",
 	)
 	_checks += 4 + expected_frames * 2
 
@@ -469,7 +571,6 @@ func _test_next_event_waits_for_cadence_interval() -> void:
 		if not enemy._movement_step_active:
 			break
 		enemy._advance_autonomous_step(1.0 / 60.0)
-		await get_tree().physics_frame
 
 	assert(
 		not enemy._movement_step_active,
@@ -505,7 +606,7 @@ func _test_next_event_waits_for_cadence_interval() -> void:
 # ---------------------------------------------------------------------------
 
 func _test_stationary_and_compatibility_runtime() -> void:
-	var stationary := await _make_enemy(30)
+	var stationary := _make_unready_enemy(30)
 	assert(stationary._movement_cadence != null)
 	assert(stationary._movement_cadence.source_status == Cadence.STATUS_LOCKED)
 	_force_cadence_ready(stationary)
@@ -515,10 +616,9 @@ func _test_stationary_and_compatibility_runtime() -> void:
 	)
 	assert(not stationary._movement_step_active)
 	_checks += 3
-	stationary.queue_free()
-	await get_tree().physics_frame
+	stationary.free()
 
-	var compatibility := await _make_enemy(41)
+	var compatibility := _make_unready_enemy(41)
 	assert(compatibility._movement_cadence != null)
 	assert(compatibility._movement_cadence.source_status == Cadence.STATUS_COMPATIBILITY_HOLD)
 	_force_cadence_ready(compatibility)
@@ -529,12 +629,11 @@ func _test_stationary_and_compatibility_runtime() -> void:
 	assert(compatibility._movement_step_active)
 	compatibility._cancel_autonomous_step(true)
 	_checks += 4
-	compatibility.queue_free()
-	await get_tree().physics_frame
+	compatibility.free()
 
 
 func _test_quantized_facing_matches_neighbor() -> void:
-	var enemy := await _make_enemy(18)
+	var enemy := _make_unready_enemy(18)
 	_force_cadence_ready(enemy)
 	assert(enemy._request_autonomous_step(Vector2(100.0, -0.01), 1.0, false, &"facing_test"))
 	assert(enemy._movement_step_neighbor == Vector2i(1, -1), "desired direction must quantize to the diagonal neighbor")
@@ -543,8 +642,7 @@ func _test_quantized_facing_matches_neighbor() -> void:
 	)
 	assert(enemy.movement_facing.is_equal_approx(expected_facing), "walk animation facing must follow the actual quantized neighbor")
 	_checks += 3
-	enemy.queue_free()
-	await get_tree().physics_frame
+	enemy.free()
 
 
 func _test_engagement_completion_does_not_rollback() -> void:
@@ -557,7 +655,7 @@ func _test_engagement_completion_does_not_rollback() -> void:
 	var player_ground := Vector2(0.5, 0.5)
 	player.global_position = _ground_gu_to_screen_px(player_ground)
 
-	var enemy := EnemyActor.new()
+	var enemy := RuntimeEnemyFixture.new()
 	enemy.setup(GameData.get_monster_by_id(18), player, false)
 	enemy.move_speed_gu_per_sec = 3.0
 	enemy.environment_blocker = null
@@ -565,6 +663,7 @@ func _test_engagement_completion_does_not_rollback() -> void:
 	enemy.set_physics_process(false)
 	add_child(enemy)
 	await get_tree().physics_frame
+	enemy.set_physics_process(false)
 
 	var contact_distance := enemy._contact_distance_gu_to_target(player)
 	var start_ground := player_ground + Vector2(contact_distance + 0.60, 0.0)
@@ -581,7 +680,6 @@ func _test_engagement_completion_does_not_rollback() -> void:
 		if not enemy._movement_step_active:
 			break
 		enemy._advance_autonomous_step(1.0 / 60.0)
-		await get_tree().physics_frame
 
 	assert(not enemy._movement_step_active, "pursuit step must finish once the target becomes attack-ready")
 
@@ -625,13 +723,14 @@ func _test_safe_zone_return_uses_cadence() -> void:
 	var safe_center_screen := _ground_gu_to_screen_px(safe_center_ground)
 	player.global_position = _ground_gu_to_screen_px(Vector2(5.5, 5.0))
 
-	var enemy := EnemyActor.new()
+	var enemy := RuntimeEnemyFixture.new()
 	enemy.setup(GameData.get_monster_by_id(18), player, false)
 	enemy.move_speed_gu_per_sec = 3.0
 	enemy.environment_blocker = null
 	enemy.set_physics_process(false)
 	add_child(enemy)
 	await get_tree().physics_frame
+	enemy.set_physics_process(false)
 
 	enemy.set_combat_position(_ground_gu_to_screen_px(Vector2(4.5, 5.0)), &"test_setup")
 	enemy.set_meta("spawn_position", _ground_gu_to_screen_px(Vector2.ZERO))

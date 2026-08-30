@@ -23,7 +23,7 @@
     "flame_wooma": {
       "timing": {"attackIntervalMs": 1700, "moveIntervalMs": 800, "confidence": "A", "source": "Monster.DB ATTACK_SPD/WALK_SPD exact Race=91"},
       "serviceBehavior": {"aiCode": 91, "viewRange": 0, "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas AddBaseObject"},
-      "runtimeProjection": {"move_speed_gu_per_sec": 46.0, "attack_range_gu": 1.0, "aggroRadius": 360.0},
+      "runtimeProjection": {"move_speed_gu_per_sec": 1.4375, "attack_range_gu": 1.0, "aggroRadius": 360.0},
       "serviceClass": {"race": 91, "name": "TMagCowMonster", "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas + ObjMon.pas"},
       "attackDelivery": {
         "kind": "special_melee",
