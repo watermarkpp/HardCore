@@ -81,14 +81,24 @@ func _run() -> void:
 		not game.background.is_environment_point_blocked(game.player.global_position),
 		"READY requires a clear player spawn"
 	)
+	var terrain_ready_enemy_count := 0
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if node is EnemyActor:
+			assert(
+				node.terrain_navigation_context_ready(),
+				"formal enemy missing shared terrain navigation context"
+			)
+			terrain_ready_enemy_count += 1
+	assert(terrain_ready_enemy_count > 0, "formal map must spawn terrain-aware enemies")
 
 	game.queue_free()
 	print(
 		"WORLD_BACKGROUND_READY_COLLISION_CONTRACT_PASS input_locked_during_build=true "
-		+ "collisions=%d/%d failed=%d ready=%s" % [
+		+ "collisions=%d/%d failed=%d terrain_enemies=%d ready=%s" % [
 			coord.built_collision_count,
 			coord.planned_collision_count,
 			coord.failed_collision_count,
+			terrain_ready_enemy_count,
 			str(coord.stage == WorldBootstrapCoordinator.Stage.READY),
 		]
 	)

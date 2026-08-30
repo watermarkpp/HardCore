@@ -1,6 +1,7 @@
 extends Node
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const TerrainPolicy := preload("res://scripts/monster_terrain_navigation_policy.gd")
 const SnapshotScript := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 const ProjectileEffectScript := preload(
 	"res://scripts/monster_ranged_projectile_effect.gd"
@@ -36,11 +37,15 @@ func _run() -> void:
 		Callable(self, "_ground_to_screen"),
 		Callable(self, "_screen_to_ground"),
 	)
+	attacker.configure_terrain_navigation_context(_empty_terrain_context())
 	attacker.environment_blocker = self
 	attacker.ranged_projectile_requested.connect(_capture_descriptor)
 	add_child(attacker)
 	attacker.set_physics_process(false)
 	await get_tree().process_frame
+	# This fixture verifies delivery, not target acquisition. Keep the intended
+	# target explicit under the formal terrain-context contract.
+	attacker.target = player
 	attacker.attack_min = 7
 	attacker.attack_max = 7
 	attacker._attack_timer = 0.0
@@ -139,3 +144,16 @@ func _ground_to_screen(value: Vector2) -> Vector2:
 
 func _screen_to_ground(value: Vector2) -> Vector2:
 	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(value)
+
+
+func _empty_terrain_context() -> Dictionary:
+	return TerrainPolicy.build_context(
+		1,
+		{
+			"build_sha256": "1".repeat(64),
+			"source": {"runtime_map_id": 1},
+			"design": {"design_size": [32, 32]},
+			"collision": {"blocked_tiles": []},
+		},
+		TerrainPolicy.EXPECTED_GROUND_COORDINATE_CONTRACT_ID,
+	)

@@ -37,6 +37,9 @@ const MonsterNeighborStepPolicyScript := preload(
 const MonsterTargetAcquisitionPolicyScript := preload(
 	"res://scripts/monster_target_acquisition_policy.gd"
 )
+const MonsterTerrainNavigationPolicyScript := preload(
+	"res://scripts/monster_terrain_navigation_policy.gd"
+)
 const MONSTER_RUNTIME_AUTHORITY_PATH := (
 	"res://assets/data/monster_runtime_authority_v1.json"
 )
@@ -156,6 +159,8 @@ var target: Node2D:
 	set(value):
 		var changed := target != value
 		target = value
+		if changed:
+			_reset_terrain_navigation_state()
 		if not is_instance_valid(target):
 			_target_focus_tick_ms = 0
 		elif changed:
@@ -291,6 +296,15 @@ var _movement_step_reason: StringName = &""
 ## only the already-selected live target and never calls retarget/broadphase.
 var _continuous_pursuit_active := false
 var _continuous_pursuit_speed_scale := 1.0
+var _terrain_navigation_context: Dictionary = {}
+var _terrain_path_waypoints: Array[Vector2i] = []
+var _terrain_path_target_instance_id := 0
+var _terrain_path_target_cell := Vector2i.ZERO
+var _terrain_path_has_target_cell := false
+var _terrain_no_path_until_ms := 0
+var _terrain_failed_cell := Vector2i.ZERO
+var _terrain_has_failed_cell := false
+var _terrain_failed_cell_until_ms := 0
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
@@ -718,6 +732,14 @@ func _begin_autonomous_step_without_cadence(
 	var current_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
 	if not current_ground_gu.is_finite():
 		return false
+	if reason == &"pursuit" and is_instance_valid(engagement_target):
+		neighbor = _terrain_neighbor_for_pursuit(
+			current_ground_gu,
+			engagement_target,
+			neighbor,
+		)
+		if neighbor == Vector2i.ZERO:
+			return false
 	var step := MonsterNeighborStepPolicyScript.build_neighbor_step(
 		current_ground_gu,
 		neighbor
@@ -748,9 +770,145 @@ func _begin_autonomous_step_without_cadence(
 	return true
 
 
+func _terrain_neighbor_for_pursuit(
+	current_ground_gu: Vector2,
+	engagement_target: Node2D,
+	direct_neighbor: Vector2i,
+) -> Vector2i:
+	if runtime_map_id < 0:
+		return direct_neighbor
+	if not MonsterTerrainNavigationPolicyScript.context_valid(
+		_terrain_navigation_context,
+		runtime_map_id,
+	):
+		# A formal map without its exact release collision context must not start
+		# a blind pursuit that can only be corrected by repeated physics rollback.
+		return Vector2i.ZERO
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		engagement_target.global_position
+	)
+	if not target_ground_gu.is_finite():
+		return Vector2i.ZERO
+	var current_cell := MonsterNeighborStepPolicyScript.temporary_cell(current_ground_gu)
+	var goal_cell := MonsterNeighborStepPolicyScript.temporary_cell(target_ground_gu)
+	var target_instance_id := engagement_target.get_instance_id()
+	if (
+		_terrain_path_target_instance_id != target_instance_id
+		or not _terrain_path_has_target_cell
+		or _terrain_path_target_cell != goal_cell
+	):
+		_clear_terrain_route_cache()
+		_terrain_path_target_instance_id = target_instance_id
+		_terrain_path_target_cell = goal_cell
+		_terrain_path_has_target_cell = true
+	var now_ms := Time.get_ticks_msec()
+	if _terrain_has_failed_cell and now_ms >= _terrain_failed_cell_until_ms:
+		_terrain_has_failed_cell = false
+	var direct_cell := current_cell + direct_neighbor
+	var direct_is_recent_physics_failure := (
+		_terrain_has_failed_cell and direct_cell == _terrain_failed_cell
+	)
+	while not _terrain_path_waypoints.is_empty() and _terrain_path_waypoints[0] == current_cell:
+		_terrain_path_waypoints.pop_front()
+	if not _terrain_path_waypoints.is_empty():
+		var direct_los_clear := MonsterTerrainNavigationPolicyScript.static_line_of_sight_clear(
+			_terrain_navigation_context,
+			current_ground_gu,
+			target_ground_gu,
+		)
+		if (
+			direct_los_clear
+			and not direct_is_recent_physics_failure
+			and MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(
+				_terrain_navigation_context,
+				current_cell,
+				direct_cell,
+				combat_radius_gu,
+			)
+		):
+			_terrain_path_waypoints.clear()
+			return direct_neighbor
+		var cached_cell := _terrain_path_waypoints[0]
+		if MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(
+			_terrain_navigation_context,
+			current_cell,
+			cached_cell,
+			combat_radius_gu,
+			_terrain_failed_cell if _terrain_has_failed_cell else Vector2i(-2147483648, -2147483648),
+		):
+			_terrain_path_waypoints.pop_front()
+			return cached_cell - current_cell
+		_terrain_path_waypoints.clear()
+	if (
+		not direct_is_recent_physics_failure
+		and MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(
+			_terrain_navigation_context,
+			current_cell,
+			direct_cell,
+			combat_radius_gu,
+		)
+	):
+		# The overwhelming open-ground case remains the existing O(1) neighbor
+		# selection. A* is strictly a wall-detour fallback.
+		return direct_neighbor
+	if now_ms < _terrain_no_path_until_ms:
+		return Vector2i.ZERO
+	var path_result := MonsterTerrainNavigationPolicyScript.find_bounded_path(
+		_terrain_navigation_context,
+		current_cell,
+		goal_cell,
+		combat_radius_gu,
+		_terrain_failed_cell if _terrain_has_failed_cell else Vector2i(-2147483648, -2147483648),
+	)
+	if not bool(path_result.get("accepted", false)):
+		# Frame budget exhaustion is not a path failure. Another actor gets the
+		# next frame; no animation starts while this actor waits.
+		return Vector2i.ZERO
+	if not bool(path_result.get("found", false)):
+		_terrain_no_path_until_ms = (
+			now_ms + MonsterTerrainNavigationPolicyScript.NO_PATH_COOLDOWN_MS
+			+ int(posmod(get_instance_id(), 7)) * 17
+		)
+		return Vector2i.ZERO
+	var raw_waypoints: Variant = path_result.get("waypoints", [])
+	if raw_waypoints is Array:
+		for raw_cell: Variant in raw_waypoints:
+			if raw_cell is Vector2i:
+				_terrain_path_waypoints.append(raw_cell)
+	if _terrain_path_waypoints.is_empty():
+		return Vector2i.ZERO
+	var next_cell: Vector2i = _terrain_path_waypoints.pop_front()
+	if not MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(
+		_terrain_navigation_context,
+		current_cell,
+		next_cell,
+		combat_radius_gu,
+		_terrain_failed_cell if _terrain_has_failed_cell else Vector2i(-2147483648, -2147483648),
+	):
+		_terrain_path_waypoints.clear()
+		return Vector2i.ZERO
+	return next_cell - current_cell
+
+
+func _clear_terrain_route_cache() -> void:
+	_terrain_path_waypoints.clear()
+	_terrain_path_target_instance_id = 0
+	_terrain_path_target_cell = Vector2i.ZERO
+	_terrain_path_has_target_cell = false
+
+
+func _reset_terrain_navigation_state() -> void:
+	_clear_terrain_route_cache()
+	_terrain_no_path_until_ms = 0
+	_terrain_failed_cell = Vector2i.ZERO
+	_terrain_has_failed_cell = false
+	_terrain_failed_cell_until_ms = 0
+
+
 func _clear_continuous_pursuit_intent() -> void:
 	_continuous_pursuit_active = false
 	_continuous_pursuit_speed_scale = 1.0
+	_clear_terrain_route_cache()
 
 
 func _live_continuous_pursuit_target() -> Node2D:
@@ -814,6 +972,7 @@ func _cancel_autonomous_step(preserve_current_position := true) -> void:
 	actual_ground_motion_gu = Vector2.ZERO
 	_clear_autonomous_step_state()
 	_clear_continuous_pursuit_intent()
+	_reset_terrain_navigation_state()
 
 
 func _movement_step_engagement_target() -> Node2D:
@@ -861,6 +1020,8 @@ func _movement_step_engagement_ready() -> bool:
 
 
 func _fail_autonomous_step_blocked() -> void:
+	var failed_reason := _movement_step_reason
+	var failed_target_ground_gu := _movement_step_target_ground_gu
 	if _movement_step_start_screen_px.is_finite() and _movement_step_start_screen_px != Vector2.INF:
 		set_combat_position(
 			_movement_step_start_screen_px,
@@ -871,6 +1032,20 @@ func _fail_autonomous_step_blocked() -> void:
 	actual_ground_motion_gu = Vector2.ZERO
 	_clear_autonomous_step_state()
 	_clear_continuous_pursuit_intent()
+	if failed_reason == &"pursuit" and failed_target_ground_gu.is_finite():
+		var now_ms := Time.get_ticks_msec()
+		_terrain_failed_cell = MonsterNeighborStepPolicyScript.temporary_cell(
+			failed_target_ground_gu
+		)
+		_terrain_has_failed_cell = true
+		_terrain_failed_cell_until_ms = (
+			now_ms + MonsterTerrainNavigationPolicyScript.NO_PATH_COOLDOWN_MS
+			+ 250 + int(posmod(get_instance_id(), 7)) * 17
+		)
+		_terrain_no_path_until_ms = (
+			now_ms + MonsterTerrainNavigationPolicyScript.NO_PATH_COOLDOWN_MS
+			+ int(posmod(get_instance_id(), 7)) * 17
+		)
 
 
 func _advance_autonomous_step(delta: float) -> void:
@@ -2485,6 +2660,34 @@ func configure_runtime_map_projection(
 	)
 
 
+func configure_terrain_navigation_context(context: Dictionary) -> void:
+	_terrain_navigation_context = context
+	_reset_terrain_navigation_state()
+
+
+func terrain_navigation_context_ready() -> bool:
+	if runtime_map_id < 0:
+		return true
+	return MonsterTerrainNavigationPolicyScript.context_valid(
+		_terrain_navigation_context,
+		runtime_map_id,
+	)
+
+
+func _initial_acquisition_static_los_clear(candidate: Node2D) -> bool:
+	if runtime_map_id < 0:
+		return true
+	if not terrain_navigation_context_ready() or not is_instance_valid(candidate):
+		return false
+	var start_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var end_ground_gu := _screen_position_px_to_ground_position_gu(candidate.global_position)
+	return MonsterTerrainNavigationPolicyScript.static_line_of_sight_clear(
+		_terrain_navigation_context,
+		start_ground_gu,
+		end_ground_gu,
+	)
+
+
 func configure_spatial_index(
 	index: RuntimeCombatSpatialIndexScript,
 	actor_runtime_id: int
@@ -3822,6 +4025,8 @@ func _retarget(delta := 0.0) -> void:
 				if not _initial_acquisition_contains_ground_delta_gu(
 					acquisition_delta_ground_gu
 				):
+					continue
+				if not _initial_acquisition_static_los_clear(node):
 					continue
 				# M02A first acquisition is centered on the actor's current cell.
 				# Spawn return/leash does not narrow this exact ViewRange branch.

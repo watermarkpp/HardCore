@@ -3,6 +3,9 @@ extends Node2D
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const AcquisitionPolicy := preload("res://scripts/monster_target_acquisition_policy.gd")
+const NeighborPolicy := preload("res://scripts/monster_neighbor_step_policy.gd")
+const TerrainPolicy := preload("res://scripts/monster_terrain_navigation_policy.gd")
+const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 
 var _checks := 0
 
@@ -24,6 +27,9 @@ func _run() -> void:
 	await _test_data_hold_runtime_fail_closed(player)
 	await _test_current_center_and_nearest_manhattan(player)
 	await _test_target_retention_authority(player)
+	await _test_formal_terrain_los_and_bounded_detour(player)
+	_test_all_released_terrain_contexts()
+	_test_terrain_policy_budget_and_corner_contract()
 	_test_policy_fail_closed_contract()
 
 	player.queue_free()
@@ -274,6 +280,181 @@ func _test_policy_fail_closed_contract() -> void:
 		},
 	}, 18))
 	_checks += 7
+
+
+func _test_formal_terrain_los_and_bounded_detour(player: PlayerCharacter) -> void:
+	var enemy := await _make_enemy(18, player)
+	enemy.configure_runtime_map_projection(
+		990001,
+		func(ground_gu: Vector2) -> Vector2:
+			return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(ground_gu),
+		func(screen_px: Vector2) -> Vector2:
+			return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(screen_px),
+	)
+	enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(2.5, 5.5)
+	)
+	enemy.set_meta("spawn_position", enemy.global_position)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(4.5, 5.5)
+	)
+
+	# Missing exact formal terrain identity is fail-closed, and a canonical wall
+	# inside the existing 5-GU square blocks first acquisition.
+	enemy.target = null
+	enemy._retarget_timer = 0.0
+	enemy._retarget(0.0)
+	assert(enemy.target == null)
+	enemy.configure_terrain_navigation_context(_terrain_context(["3,5"]))
+	enemy._retarget_timer = 0.0
+	enemy._retarget(0.0)
+	assert(enemy.target == null)
+	enemy.configure_terrain_navigation_context(_terrain_context([]))
+	enemy._retarget_timer = 0.0
+	enemy._retarget(0.0)
+	assert(enemy.target == player)
+	_checks += 3
+	TerrainPolicy.reset_diagnostics()
+	var open_neighbor := enemy._terrain_neighbor_for_pursuit(
+		Vector2(2.5, 5.5),
+		player,
+		Vector2i.RIGHT,
+	)
+	assert(open_neighbor == Vector2i.RIGHT)
+	assert(int(TerrainPolicy.diagnostics().path_queries) == 0)
+	_checks += 2
+
+	# Threat keeps the target through a wall. A long wall forces several cached
+	# detour steps; a temporarily clear direct neighbor must not discard the
+	# route while static LOS remains blocked.
+	var long_wall: Array = []
+	for y in range(2, 8):
+		long_wall.append("3,%d" % y)
+	enemy.configure_terrain_navigation_context(_terrain_context(long_wall))
+	enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(2.5, 5.5)
+	)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(6.5, 5.5)
+	)
+	enemy._add_threat(player, 1.0)
+	TerrainPolicy.reset_diagnostics()
+	EnemyActor.reset_performance_diagnostics()
+	var current_ground := Vector2(2.5, 5.5)
+	for step_index in range(4):
+		var desired := player.global_position - enemy.global_position
+		var desired_ground := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(desired)
+		var direct_neighbor := NeighborPolicy.neighbor_for_desired_ground_direction(desired_ground)
+		var detour_neighbor := enemy._terrain_neighbor_for_pursuit(
+			current_ground,
+			player,
+			direct_neighbor,
+		)
+		assert(detour_neighbor != Vector2i.ZERO)
+		var next_cell := NeighborPolicy.temporary_cell(current_ground) + detour_neighbor
+		current_ground = NeighborPolicy.cell_center_ground_gu(next_cell)
+		enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			current_ground
+		)
+		_checks += 1
+	assert(int(TerrainPolicy.diagnostics().path_queries) == 1)
+	assert(int(EnemyActor.performance_diagnostics().retarget_target_group_scans) == 0)
+	_checks += 2
+
+	# Sealed terrain performs one bounded query, starts no movement event, then
+	# observes the instance-staggered >=500 ms cooldown on the immediate retry.
+	enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(2.5, 5.5)
+	)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		Vector2(6.5, 5.5)
+	)
+	enemy.configure_terrain_navigation_context(_terrain_context([
+		"1,4", "2,4", "3,4",
+		"1,5",        "3,5",
+		"1,6", "2,6", "3,6",
+	]))
+	enemy.target = player
+	TerrainPolicy.reset_diagnostics()
+	var started := enemy._begin_autonomous_step_without_cadence(
+		Vector2.RIGHT, 1.0, false, &"pursuit", player
+	)
+	assert(not started and not enemy._movement_step_active)
+	var queries_after_failure := int(TerrainPolicy.diagnostics().path_queries)
+	assert(queries_after_failure == 1)
+	started = enemy._begin_autonomous_step_without_cadence(
+		Vector2.RIGHT, 1.0, false, &"pursuit", player
+	)
+	assert(not started and not enemy._movement_step_active)
+	assert(int(TerrainPolicy.diagnostics().path_queries) == queries_after_failure)
+	_checks += 4
+
+	enemy.queue_free()
+	await get_tree().process_frame
+
+
+func _test_all_released_terrain_contexts() -> void:
+	var released_ids := RuntimeBridge.released_map_ids()
+	assert(not released_ids.is_empty())
+	for runtime_map_id: int in released_ids:
+		var runtime := RuntimeBridge.load_map(runtime_map_id)
+		var context := TerrainPolicy.build_context(
+			runtime_map_id,
+			runtime,
+			TerrainPolicy.EXPECTED_GROUND_COORDINATE_CONTRACT_ID,
+		)
+		assert(TerrainPolicy.context_valid(context, runtime_map_id))
+		assert(str(context.build_sha256) == str(runtime.build_sha256))
+		var raw_size: Array = runtime.design.design_size
+		assert(context.design_size == Vector2i(int(raw_size[0]), int(raw_size[1])))
+		assert(int(context.blocked_count) == runtime.collision.blocked_tiles.size())
+		assert(context.is_read_only())
+		assert((context.blocked_cells as Dictionary).is_read_only())
+		_checks += 6
+	_checks += 1
+
+
+func _test_terrain_policy_budget_and_corner_contract() -> void:
+	var corner_context := _terrain_context(["3,2", "2,3"])
+	assert(not TerrainPolicy.can_traverse_neighbor(
+		corner_context,
+		Vector2i(2, 2),
+		Vector2i(3, 3),
+		0.25,
+	))
+	assert(not TerrainPolicy.cell_walkable(corner_context, Vector2i(2, 2), 0.75))
+	TerrainPolicy.reset_diagnostics()
+	var clear_context := _terrain_context([])
+	var first := TerrainPolicy.find_bounded_path(
+		clear_context, Vector2i(1, 1), Vector2i(2, 1), 0.25
+	)
+	var second := TerrainPolicy.find_bounded_path(
+		clear_context, Vector2i(1, 2), Vector2i(2, 2), 0.25
+	)
+	var third := TerrainPolicy.find_bounded_path(
+		clear_context, Vector2i(1, 3), Vector2i(2, 3), 0.25
+	)
+	assert(first.accepted and second.accepted)
+	assert(not third.accepted and third.reason == "frame_budget_exhausted")
+	var diagnostics := TerrainPolicy.diagnostics()
+	assert(int(diagnostics.path_queries) == 2)
+	assert(int(diagnostics.path_budget_rejections) == 1)
+	assert(int(diagnostics.max_queries_per_physics_frame) == 2)
+	assert(int(diagnostics.path_expansions) <= TerrainPolicy.MAX_PATH_EXPANSIONS * 2)
+	_checks += 8
+
+
+func _terrain_context(blocked_tiles: Array) -> Dictionary:
+	return TerrainPolicy.build_context(
+		990001,
+		{
+			"build_sha256": "c".repeat(64),
+			"source": {"runtime_map_id": 990001},
+			"design": {"design_size": [12, 12]},
+			"collision": {"blocked_tiles": blocked_tiles},
+		},
+		TerrainPolicy.EXPECTED_GROUND_COORDINATE_CONTRACT_ID,
+	)
 
 
 func _make_enemy(monster_id: int, player: PlayerCharacter) -> EnemyActor:

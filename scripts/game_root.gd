@@ -85,6 +85,9 @@ const DeviceLabRuntimeScript := preload("res://scripts/device_lab_runtime.gd")
 const MonsterRespawnPolicyScript := preload(
 	"res://scripts/monster_respawn_policy.gd"
 )
+const MonsterTerrainNavigationPolicyScript := preload(
+	"res://scripts/monster_terrain_navigation_policy.gd"
+)
 const DEFAULT_NORMAL_RESPAWN_SECONDS := MonsterRespawnPolicyScript.BEGINNER_OUTDOOR_SECONDS
 const DEFAULT_BOSS_RESPAWN_SECONDS := MonsterRespawnPolicyScript.BOSS_SECONDS
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
@@ -179,6 +182,7 @@ var current_zone := ""
 var current_map_id := -1
 var current_map_data: Dictionary = {}
 var _zone_generation := 0
+var _monster_terrain_navigation_context: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var locked_target: EnemyActor
 var manual_target_lock := false
@@ -1846,6 +1850,13 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# map 4). Snapshot consumers receive a formal runtime map id instead of
 		# -1, so STRICT_V2 absolute snapshots stay valid.
 		current_map_id = GameData.service_runtime_map_id(0)
+	_monster_terrain_navigation_context = (
+		MonsterTerrainNavigationPolicyScript.build_context(
+			current_map_id,
+			MapEditorRuntimeBridgeScript.load_map(current_map_id),
+			MonsterTerrainNavigationPolicyScript.EXPECTED_GROUND_COORDINATE_CONTRACT_ID,
+		)
+	)
 	background.set_zone_data(zone_name, current_map_data)
 	hud.set_zone_name(
 		"比奇营地 · 安全区"
@@ -2369,6 +2380,9 @@ func _spawn_enemy(
 		current_map_id,
 		Callable(self, "_canonical_ground_gu_to_screen_px"),
 		Callable(self, "_canonical_screen_px_to_ground_gu")
+	)
+	enemy.configure_terrain_navigation_context(
+		_monster_terrain_navigation_context
 	)
 	enemy.configure_spatial_index(
 		_combat_spatial_index,
