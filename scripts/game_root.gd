@@ -308,6 +308,11 @@ func _release_gameplay_input_lock(reason: StringName) -> void:
 	else:
 		_gameplay_input_locks[reason] = _count - 1
 	_refresh_gameplay_input_state()
+	if _gameplay_input_locks.is_empty() and is_instance_valid(player):
+		# A completed bootstrap/map/death transition is a fresh movement
+		# gesture. Never carry a pre-transition run-up into the ready world,
+		# even when the player keeps a direction held through the lock.
+		player.reset_locomotion()
 	if RuntimeDiagnostics.input_gate_enabled():
 		print("[GameplayInputGate] enabled=", gameplay_input_is_enabled(), " locks=", _gameplay_input_locks)
 

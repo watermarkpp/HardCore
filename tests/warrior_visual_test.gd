@@ -59,6 +59,23 @@ func _run() -> void:
 	game.player.facing = Vector2.DOWN
 	visual._process(0.2)
 	assert(visual.current_direction == 4, "warrior south Hum row mapping is wrong")
+	game.player.movement_input_active = true
+	game.player.velocity = Vector2.RIGHT * 10.0
+	game.player.locomotion_state = "walk"
+	visual._process(0.01)
+	assert(visual.current_state == "walk" and visual.current_animation_name() == "walk", "explicit walk locomotion state was not presented")
+	var walk_frame_before: int = visual.current_frame
+	var walk_texture: Texture2D = visual._dress_action_textures.get("walk", null)
+	assert(walk_texture != null and walk_texture != visual._dress_action_textures.get("idle", null), "walk must use a distinct formal multi-frame atlas")
+	assert(sprite.texture == walk_texture, "walk state did not bind the formal dress walk atlas")
+	visual._process(0.20)
+	assert(visual.current_frame != walk_frame_before, "walk atlas frame did not advance")
+	assert(hair_layer.texture == visual._hair_action_textures.get("walk", null), "walk hair atlas is not synchronized")
+	assert(weapon_layer.texture == visual._weapon_action_textures.get("walk", null), "walk weapon atlas is not synchronized")
+	assert(hair_layer.region_rect == sprite.region_rect and hair_layer.position == sprite.position, "walk hair/body anchor diverged")
+	game.player.locomotion_state = "run"
+	visual._process(0.01)
+	assert(visual.current_state == "run" and visual.current_animation_name() == "run", "explicit run locomotion state was not presented")
 	var walk_body_texture: Texture2D = visual._dress_action_textures.get("walk", null)
 	var walk_hair_texture: Texture2D = visual._hair_action_textures.get("walk", null)
 	var walk_weapon_texture: Texture2D = visual._weapon_action_textures.get("walk", null)

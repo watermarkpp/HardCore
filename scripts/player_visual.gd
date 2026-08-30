@@ -177,7 +177,16 @@ func _process(delta: float) -> void:
 	if not visible:
 		return
 	_action_remaining = maxf(0.0, _action_remaining - delta)
-	current_state = "action" if _action_remaining > 0.0 else ("run" if actor.velocity.length_squared() > 25.0 else "idle")
+	var moving := actor.velocity.length_squared() > 0.01
+	var locomotion := str(actor.get("locomotion_state"))
+	if locomotion != "walk" and locomotion != "run":
+		locomotion = "run" if actor.velocity.length_squared() > 25.0 else "walk"
+	# Preserve direct presentation-test/manual pose injection, where velocity is
+	# assigned without the gameplay movement flag. Runtime movement always uses
+	# the authoritative locomotion state above.
+	if not bool(actor.get("movement_input_active")) and actor.velocity.length_squared() > 25.0:
+		locomotion = "run"
+	current_state = "action" if _action_remaining > 0.0 else (locomotion if moving else "idle")
 	# 当前移动速度就是跑步速度；移动时以实际速度为最高优先级，避免
 	# 自动目标/战斗朝向覆盖跑步动画方向。
 	current_direction = _resolved_direction_row()
@@ -314,9 +323,9 @@ func play_passive_proc_effect(effect_name: String, duration := 0.24) -> void:
 
 
 func _resolved_direction_row() -> int:
-	# Running must use real screen displacement. Actions use the combat-facing
+	# Locomotion must use real screen displacement. Actions use the combat-facing
 	# vector captured from the selected target at action start.
-	var direction := actor.actual_motion_facing if current_state == "run" else actor.facing
+	var direction := actor.actual_motion_facing if current_state in ["walk", "run"] else actor.facing
 	return ArtSpec.mir2_client_direction_row(direction)
 
 
@@ -447,6 +456,8 @@ func _is_warrior_attack_action(animation_name: String) -> bool:
 func _visual_action_key() -> String:
 	if current_state == "run":
 		return "run"
+	if current_state == "walk":
+		return "walk"
 	if current_state == "action" and _action_name == "hit":
 		return "hit"
 	if current_state == "action" and _action_name == "death":
@@ -475,7 +486,9 @@ func _default_body_texture(action_key: String) -> Texture2D:
 
 
 func _current_frame_count() -> int:
-	return _frame_count_for_action("run" if current_state == "run" else "idle")
+	return _frame_count_for_action(
+		"run" if current_state == "run" else ("walk" if current_state == "walk" else "idle")
+	)
 
 
 func _frame_count_for_action(action_key: String) -> int:

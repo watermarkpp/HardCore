@@ -43,6 +43,12 @@ const WARRIOR_STATE_SKILL_NAMES := [
 	"半月弯刀",
 	"烈火剑法",
 ]
+## Legacy movement speed is the two-ground-unit run cadence (2 GU/600 ms).
+## A fresh directional input performs one 1 GU walk step before entering run.
+const WALK_MOVE_SPEED_GU_PER_SEC := 1.0 / 0.6
+const WALK_TO_RUN_DISTANCE_GU := 1.0
+const LOCOMOTION_WALK := "walk"
+const LOCOMOTION_RUN := "run"
 
 # GameOfMir server evidence:
 # - M2Server/ObjBase.pas RM_STRUCK only records m_dwStruckTick when nPower > 0.
@@ -129,6 +135,10 @@ var movement_input_active := false
 var movement_facing := Vector2.DOWN
 var actual_motion_facing := Vector2.DOWN
 var actual_ground_motion_gu := Vector2.ZERO
+## Gameplay locomotion state. This is driven by successful Ground GU motion,
+## never by screen velocity or animation timing.
+var locomotion_state := LOCOMOTION_WALK
+var locomotion_distance_gu := 0.0
 var environment_blocker: Node
 var ground_runtime_diagnostic_overlay: Node2D
 
@@ -241,6 +251,7 @@ func _physics_process(delta: float) -> void:
 		mac_buff = 0
 	var keyboard := _keyboard_movement_vector()
 	var direction := touch_vector if touch_vector.length() > keyboard.length() else keyboard
+	var has_direction_input := direction.length() > 0.08
 	var movement_locked := (
 		_attack_action_timer > 0.0
 		or _movement_visual_lock_timer > 0.0
@@ -248,6 +259,8 @@ func _physics_process(delta: float) -> void:
 	)
 	if _dead or control_time > 0.0 or movement_locked:
 		direction = Vector2.ZERO
+	if not has_direction_input or control_time > 0.0:
+		reset_locomotion()
 	movement_input_active = direction.length() > 0.08
 	if movement_locked:
 		velocity = Vector2.ZERO
@@ -265,9 +278,14 @@ func _physics_process(delta: float) -> void:
 		)
 		facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction_screen_px)]
 		movement_facing = facing
+		var movement_speed := (
+			move_speed_gu_per_sec
+			if locomotion_state == LOCOMOTION_RUN
+			else WALK_MOVE_SPEED_GU_PER_SEC
+		)
 		velocity = GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
 			direction_ground_gu,
-			move_speed_gu_per_sec
+			movement_speed
 		)
 	else:
 		velocity = Vector2.ZERO
@@ -293,10 +311,30 @@ func _physics_process(delta: float) -> void:
 		movement_facing = actual_motion_facing
 		facing = actual_motion_facing
 		movement_performed.emit(global_position, facing)
+	if has_direction_input and not movement_locked and control_time <= 0.0 and not _dead:
+		# Accumulate only the displacement accepted by move_and_slide. A blocked
+		# frame therefore contributes zero and cannot manufacture a run transition.
+		locomotion_distance_gu += actual_ground_motion_gu.length()
+		if locomotion_state == LOCOMOTION_WALK and locomotion_distance_gu >= WALK_TO_RUN_DISTANCE_GU:
+			locomotion_state = LOCOMOTION_RUN
 
 
 func set_touch_vector(value: Vector2) -> void:
 	touch_vector = value.limit_length(1.0)
+
+
+func reset_locomotion() -> void:
+	locomotion_state = LOCOMOTION_WALK
+	locomotion_distance_gu = 0.0
+
+
+func locomotion_snapshot() -> Dictionary:
+	return {
+		"state": locomotion_state,
+		"distance_gu": locomotion_distance_gu,
+		"walk_speed_gu_per_sec": WALK_MOVE_SPEED_GU_PER_SEC,
+		"run_speed_gu_per_sec": move_speed_gu_per_sec,
+	}
 
 
 func _keyboard_movement_vector() -> Vector2:
@@ -333,6 +371,7 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 	var action_duration := attack_animation_duration
 	_attack_timer = attack_cooldown
 	_attack_action_timer = action_duration
+	reset_locomotion()
 	velocity = Vector2.ZERO
 	var action_id := _begin_combat_action("attack")
 	var animation_name := str(context.get("skill_name", "attack"))
@@ -501,6 +540,7 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 			_skill_cooldown_remaining[partner_skill_id] = cooldown_seconds
 	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0)
 	_attack_action_timer = action_duration
+	reset_locomotion()
 	var primary_visual_duration := (
 		CasterSkillVisualRegistryScript.primary_action_completion_seconds(
 			stable_skill_id
@@ -741,6 +781,7 @@ func _apply_resolved_damage(
 			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 			return
 		_dead = true
+		reset_locomotion()
 		velocity = Vector2.ZERO
 		touch_vector = Vector2.ZERO
 		_pending_combat_action_active = false
@@ -766,6 +807,7 @@ func complete_death_revival() -> void:
 	current_hp = max_hp
 	current_mp = max_mp
 	_dead = false
+	reset_locomotion()
 	velocity = Vector2.ZERO
 	touch_vector = Vector2.ZERO
 	if visual != null:
@@ -959,6 +1001,7 @@ func _finish_combat_action(action_id: int) -> void:
 func _start_struck_reaction() -> void:
 	var duration := ProfessionRules.player_struck_reaction_seconds()
 	_struck_reaction_lock_remaining = maxf(_struck_reaction_lock_remaining, duration)
+	reset_locomotion()
 	visual.play_hit(duration)
 
 
