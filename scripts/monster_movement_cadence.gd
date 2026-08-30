@@ -164,15 +164,23 @@ func configure(authority_record: Variant, initial_now_ms: Variant = 0) -> bool:
 	var step_count := int(movement.get("walk_step"))
 	var wait_ms := int(movement.get("walk_wait_ms"))
 	var wait_zero_explicit := bool(movement.get("walk_wait_explicit_zero"))
+	var raw_movement_override: Variant = movement.get("movement_authority_override", null)
+	var has_human_stationary_override := (
+		raw_movement_override is Dictionary
+		and str((raw_movement_override as Dictionary).get("authority", "")) == "HUMAN_FROZEN"
+		and str((raw_movement_override as Dictionary).get("kind", "")) == "stationary_entity"
+	)
 	if wait_zero_explicit != (wait_ms == 0):
 		return _reject("walk_wait_zero_marker_mismatch")
 
-	if source_status == STATUS_LOCKED:
-		if enabled or interval_ms != 0 or step_count != 0 or wait_ms != 0:
-			return _reject("locked_record_must_be_stationary")
+	if not enabled:
+		if interval_ms != 0 or step_count != 0 or wait_ms != 0:
+			return _reject("stationary_record_fields_must_be_zero")
+		if source_status != STATUS_LOCKED and not has_human_stationary_override:
+			return _reject("disabled_record_requires_locked_or_human_authority")
 	else:
-		if not enabled:
-			return _reject("active_record_must_enable_movement")
+		if source_status == STATUS_LOCKED:
+			return _reject("locked_record_must_be_stationary")
 		if interval_ms < MIN_WALK_INTERVAL_MS:
 			return _reject("walk_interval_below_minimum")
 		if step_count < 1:

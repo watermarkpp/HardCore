@@ -43,6 +43,7 @@ func _run() -> void:
 	await _test_1500ms_pursuit_is_continuous_and_scan_free()
 	await _test_live_target_turns_at_next_cell()
 	await _test_id70_speed_unit_contract()
+	await _test_formal_interval_speed_authority()
 	await _test_seeded_spawn_facing_is_legal_and_varied()
 	await _test_stationary_and_compatibility_runtime()
 	await _test_quantized_facing_matches_neighbor()
@@ -189,7 +190,7 @@ func _test_1500ms_pursuit_is_continuous_and_scan_free() -> void:
 	enemy.target = player
 	enemy.primary_target = player
 	assert(enemy._movement_cadence.walk_interval_ms == 1500, "fixture must retain 21CQ 1500ms history")
-	assert(is_equal_approx(enemy.move_speed_gu_per_sec, 1.8125), "fixture must use exact runtime speed")
+	assert(is_equal_approx(enemy.move_speed_gu_per_sec, 1000.0 / 1500.0), "fixture must use interval-derived runtime speed")
 	_force_cadence_ready(enemy)
 	EnemyActor.reset_performance_diagnostics()
 	var before_diagnostics := EnemyActor.performance_diagnostics()
@@ -200,7 +201,8 @@ func _test_1500ms_pursuit_is_continuous_and_scan_free() -> void:
 		assert(enemy._movement_step_active, "continuous pursuit must not idle between cells")
 		enemy._advance_autonomous_step(physics_delta)
 	var travelled_gu := start_ground.distance_to(_screen_px_to_ground_gu(enemy.global_position))
-	assert(absf(travelled_gu - 2.71875) <= 0.08, "1.5s at 1.8125 GU/s must travel about 2.7 GU: %f" % travelled_gu)
+	var expected_travel_gu := enemy.move_speed_gu_per_sec * 1.5
+	assert(absf(travelled_gu - expected_travel_gu) <= 0.08, "1.5s at interval-derived speed must preserve continuous travel: %f" % travelled_gu)
 	var after_diagnostics := EnemyActor.performance_diagnostics()
 	assert(int(after_diagnostics.retarget_full_scans) == int(before_diagnostics.retarget_full_scans))
 	assert(int(after_diagnostics.retarget_target_group_scans) == int(before_diagnostics.retarget_target_group_scans))
@@ -239,12 +241,12 @@ func _test_live_target_turns_at_next_cell() -> void:
 		enemy._advance_autonomous_step(1.0 / 60.0)
 	player.global_position = _ground_gu_to_screen_px(Vector2(first_target.x, -10.0))
 	var turn_elapsed := 8.0 / 60.0
-	while enemy._movement_step_target_ground_gu == first_target and turn_elapsed < 1.0:
+	while enemy._movement_step_target_ground_gu == first_target and turn_elapsed < 2.0:
 		enemy._advance_autonomous_step(1.0 / 60.0)
 		turn_elapsed += 1.0 / 60.0
 	assert(enemy._movement_step_active, "pursuit must continue after the first cell")
 	assert(enemy._movement_step_neighbor == Vector2i(0, -1), "next cell must use the target's current position")
-	assert(turn_elapsed <= 0.60, "1.8125 GU/s monster must correct within one cell: %f" % turn_elapsed)
+	assert(turn_elapsed <= 1.0 / enemy.move_speed_gu_per_sec + 0.05, "monster must correct at the next cell: %f" % turn_elapsed)
 	_checks += 4
 	enemy.queue_free()
 	player.queue_free()
@@ -258,13 +260,46 @@ func _test_id70_speed_unit_contract() -> void:
 	var flame_profile: Dictionary = profiles.get("profiles", {}).get("flame_wooma", {})
 	assert(is_equal_approx(float(flame_profile.get("runtimeProjection", {}).get("move_speed_gu_per_sec", 0.0)), 1.4375))
 	var authority := _record(70)
-	assert(is_equal_approx(float(authority.get("movement", {}).get("current_runtime_move_speed_gu_per_sec", 0.0)), 1.4375))
+	assert(is_equal_approx(float(authority.get("movement", {}).get("current_runtime_move_speed_gu_per_sec", 0.0)), 1000.0 / 800.0))
 	assert(int(authority.get("movement", {}).get("walk_interval_ms", 0)) == 800)
 	var runtime_enemy := EnemyActor.new()
 	runtime_enemy.setup(GameData.get_monster_by_id(70), null, false)
-	assert(is_equal_approx(runtime_enemy.move_speed_gu_per_sec, 1.4375), "46px/s must never become 46GU/s")
+	assert(is_equal_approx(runtime_enemy.move_speed_gu_per_sec, 1000.0 / 800.0), "formal interval must own runtime speed")
 	runtime_enemy.queue_free()
 	_checks += 5
+
+
+func _test_formal_interval_speed_authority() -> void:
+	# The final movement projection is bound once from the generated authority;
+	# legacy behavior/boss moveSpeed fields remain provenance only.
+	var expected_by_id := {
+		145: {"interval_ms": 500, "speed": 2.0, "stationary": false},
+		146: {"interval_ms": 500, "speed": 2.0, "stationary": false},
+		160: {"interval_ms": 300, "speed": 1000.0 / 300.0, "stationary": false},
+		161: {"interval_ms": 200, "speed": 5.0, "stationary": false},
+		226: {"interval_ms": 0, "speed": 0.0, "stationary": true},
+		234: {"interval_ms": 0, "speed": 0.0, "stationary": true},
+		235: {"interval_ms": 500, "speed": 2.0, "stationary": false},
+		240: {"interval_ms": 500, "speed": 2.0, "stationary": false},
+	}
+	for monster_id: int in expected_by_id:
+		var expected: Dictionary = expected_by_id[monster_id]
+		var authority := _record(monster_id)
+		var movement: Dictionary = authority.get("movement", {})
+		assert(int(movement.get("walk_interval_ms", -1)) == int(expected.interval_ms))
+		assert(is_equal_approx(float(movement.get("base_move_speed_gu_per_sec", -1.0)), float(expected.speed)))
+		assert(bool(movement.get("stationary", false)) == bool(expected.stationary))
+		var override: Variant = movement.get("movement_authority_override", null)
+		if monster_id in [145, 146, 235, 236, 237, 238, 239, 240, 226, 227, 228, 229, 230, 231, 232, 233, 234]:
+			assert(override is Dictionary, "human movement decision must be explicit for %d" % monster_id)
+			assert(str((override as Dictionary).get("authority", "")) == "HUMAN_FROZEN")
+
+		var runtime_enemy := EnemyActor.new()
+		runtime_enemy.setup(GameData.get_monster_by_id(monster_id), null, false)
+		assert(is_equal_approx(runtime_enemy.move_speed_gu_per_sec, float(expected.speed)))
+		assert(runtime_enemy.stationary == bool(expected.stationary))
+		runtime_enemy.queue_free()
+	_checks += expected_by_id.size() * 5
 
 
 func _test_seeded_spawn_facing_is_legal_and_varied() -> void:
@@ -690,11 +725,11 @@ func _test_quantized_facing_matches_neighbor() -> void:
 	var enemy := _make_unready_enemy(18)
 	_force_cadence_ready(enemy)
 	assert(enemy._request_autonomous_step(Vector2(100.0, -0.01), 1.0, false, &"facing_test"))
-	assert(enemy._movement_step_neighbor == Vector2i(1, -1), "desired direction must quantize to the diagonal neighbor")
+	assert(enemy._movement_step_neighbor == Vector2i(1, 0), "minor residual must preserve the nearest Ground-axis neighbor")
 	var expected_facing := enemy._screen_facing_for_ground_direction(
-		NeighborPolicy.desired_ground_direction(Vector2i(1, -1))
+		NeighborPolicy.desired_ground_direction(Vector2i(1, 0))
 	)
-	assert(enemy.movement_facing.is_equal_approx(expected_facing), "walk animation facing must follow the actual quantized neighbor")
+	assert(enemy.movement_facing.is_equal_approx(expected_facing), "walk animation facing must follow the stable quantized neighbor")
 	_checks += 3
 	enemy.free()
 

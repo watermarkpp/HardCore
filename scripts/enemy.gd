@@ -152,7 +152,14 @@ var level := 1
 var move_speed_gu_per_sec := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(55.0)
 var aggro_radius_gu := 12.0
 var attack_range_gu := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(38.0)
-var target: Node2D
+var target: Node2D:
+	set(value):
+		var changed := target != value
+		target = value
+		if not is_instance_valid(target):
+			_target_focus_tick_ms = 0
+		elif changed:
+			_refresh_target_focus()
 var primary_target: PlayerCharacter
 var is_boss := false
 var runtime_map_id: int = -1
@@ -263,6 +270,9 @@ var _movement_cadence
 var _natural_regen := MonsterNaturalRegenPolicyScript.new()
 var _target_acquisition_policy: MonsterTargetAcquisitionPolicyScript
 var _target_acquisition_authority_failed_closed := true
+var _target_focus_timeout_ms := 0
+var _target_disengage_axis_cells := 0
+var _target_focus_tick_ms := 0
 var _movement_authority_failed_closed := false
 var _movement_step_active := false
 var _movement_step_start_ground_gu := Vector2.INF
@@ -476,12 +486,24 @@ func _configure_target_acquisition() -> bool:
 	_target_acquisition_policy = MonsterTargetAcquisitionPolicyScript.new()
 	var authority_record := _movement_authority_record_for_id(monster_id)
 	var ok := _target_acquisition_policy.configure(authority_record, monster_id)
+	var targeting: Dictionary = authority_record.get("targeting", {})
+	_target_focus_timeout_ms = int(targeting.get("focus_timeout_ms", 0))
+	_target_disengage_axis_cells = int(targeting.get("disengage_axis_cells", 0))
+	ok = (
+		ok
+		and _target_focus_timeout_ms > 0
+		and _target_disengage_axis_cells > 0
+	)
 	_target_acquisition_authority_failed_closed = not ok
 	if not ok:
 		set_meta("target_acquisition_authority_rejected", true)
 		set_meta(
 			"target_acquisition_authority_rejection_reason",
-			_target_acquisition_policy.rejection_reason,
+			(
+				_target_acquisition_policy.rejection_reason
+				if _target_acquisition_policy.failed_closed
+				else "invalid_target_retention_authority"
+			),
 		)
 		return false
 	remove_meta("target_acquisition_authority_rejected")
@@ -494,6 +516,52 @@ func _initial_acquisition_contains_ground_delta_gu(delta_ground_gu: Vector2) -> 
 		not _target_acquisition_authority_failed_closed
 		and _target_acquisition_policy != null
 		and _target_acquisition_policy.contains_ground_delta_gu(delta_ground_gu)
+	)
+
+
+func _refresh_target_focus(now_ms_override := -1) -> void:
+	_target_focus_tick_ms = (
+		now_ms_override
+		if now_ms_override >= 0
+		else Time.get_ticks_msec()
+	)
+
+
+func _target_should_disengage(
+	candidate: Node2D,
+	now_ms_override := -1,
+) -> bool:
+	if not is_instance_valid(candidate) or candidate.is_queued_for_deletion():
+		return true
+	if _target_focus_timeout_ms <= 0 or _target_disengage_axis_cells <= 0:
+		return true
+	var now_ms := (
+		now_ms_override
+		if now_ms_override >= 0
+		else Time.get_ticks_msec()
+	)
+	if _target_focus_tick_ms <= 0:
+		_refresh_target_focus(now_ms)
+	elif now_ms - _target_focus_tick_ms > _target_focus_timeout_ms:
+		return true
+	var origin_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		candidate.global_position
+	)
+	if not origin_ground_gu.is_finite() or not target_ground_gu.is_finite():
+		return true
+	var origin_cell := Vector2i(
+		floori(origin_ground_gu.x),
+		floori(origin_ground_gu.y),
+	)
+	var target_cell := Vector2i(
+		floori(target_ground_gu.x),
+		floori(target_ground_gu.y),
+	)
+	var axis_delta := (target_cell - origin_cell).abs()
+	return (
+		axis_delta.x > _target_disengage_axis_cells
+		or axis_delta.y > _target_disengage_axis_cells
 	)
 
 
@@ -514,8 +582,46 @@ func _configure_movement_cadence() -> bool:
 		_movement_authority_failed_closed = true
 		set_meta("movement_authority_rejected", true)
 		return false
+	var movement: Dictionary = authority_record.get("movement", {})
+	var raw_speed: Variant = movement.get("base_move_speed_gu_per_sec", null)
+	if raw_speed == null or typeof(raw_speed) not in [TYPE_INT, TYPE_FLOAT]:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		set_meta("movement_authority_rejection_reason", "missing_base_move_speed_gu_per_sec")
+		return false
+	var authority_speed := float(raw_speed)
+	if not is_finite(authority_speed) or authority_speed < 0.0:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		set_meta("movement_authority_rejection_reason", "invalid_base_move_speed_gu_per_sec")
+		return false
+	var authority_movement_enabled := bool(movement.get("movement_enabled", false))
+	var authority_stationary := bool(movement.get("stationary", false))
+	if (not authority_movement_enabled or authority_stationary) and not is_zero_approx(authority_speed):
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		set_meta("movement_authority_rejection_reason", "stationary_speed_must_be_zero")
+		return false
+	if authority_movement_enabled and not authority_stationary and authority_speed <= 0.0:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		set_meta("movement_authority_rejection_reason", "active_speed_must_be_positive")
+		return false
 	_movement_cadence = new_cadence
+	# The effective interval is the source of the actual continuous motor
+	# speed.  Bind it once at setup; behavior/boss compatibility projections may
+	# still describe historical data, but cannot replace this formal value.
+	move_speed_gu_per_sec = authority_speed
+	stationary = authority_stationary
+	service_move_interval_ms = int(movement.get("walk_interval_ms", 0))
+	if is_boss:
+		# _apply_boss_rule() runs before this method and may have captured a
+		# compatibility speed. Re-anchor all temporary boss multipliers to the
+		# formal per-monster base after the final authority is bound.
+		_boss_base_move_speed_gu_per_sec = move_speed_gu_per_sec
 	_movement_authority_failed_closed = false
+	remove_meta("movement_authority_rejected")
+	remove_meta("movement_authority_rejection_reason")
 	return true
 
 
@@ -675,7 +781,6 @@ func _continue_continuous_pursuit_from_current_target() -> void:
 	)
 	if (
 		not desired_ground_gu.is_finite()
-		or desired_ground_gu.length() > aggro_radius_gu
 		or _movement_step_engagement_ready()
 	):
 		_clear_continuous_pursuit_intent()
@@ -800,7 +905,6 @@ func _advance_autonomous_step(delta: float) -> void:
 			_target_is_safe_player(live_target)
 			or _point_inside_safe_zone(live_target.global_position)
 			or not live_offset_ground_gu.is_finite()
-			or live_offset_ground_gu.length() > aggro_radius_gu
 		):
 			_cancel_autonomous_step(true)
 			return
@@ -1268,6 +1372,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		if _attack_timer <= 0.0:
 			_attack_timer = _current_attack_interval()
+			_refresh_target_focus()
 			if visual != null:
 				visual.play_attack(maxf(_attack_animation_duration,0.62))
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
@@ -1287,7 +1392,7 @@ func _physics_process(delta: float) -> void:
 				_pending_attack_release_record = {}
 			else:
 				_deal_melee_hit(target, dealt_damage)
-	elif distance_gu <= aggro_radius_gu:
+	else:
 		var pursuit_ground := offset_ground_gu.normalized()
 		var started := _request_autonomous_step(
 			pursuit_ground,
@@ -1302,9 +1407,6 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity = Vector2.ZERO
 			actual_ground_motion_gu = Vector2.ZERO
-	else:
-		velocity = Vector2.ZERO
-		actual_ground_motion_gu = Vector2.ZERO
 	if is_boss and is_instance_valid(target):
 		var fresh_offset_ground_gu := _ground_delta_gu_between_screen_positions(
 			global_position,
@@ -3650,6 +3752,10 @@ func _retarget(delta := 0.0) -> void:
 		# always pass delta and remain rate-limited.
 		if _retarget_timer > 0.0 and delta > 0.0:
 			return
+	if is_instance_valid(target) and _target_should_disengage(target):
+		target = null
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 	var acquiring_without_current_target := not is_instance_valid(target)
 	var chosen: Node2D
 	var best_score := -INF
@@ -3700,6 +3806,11 @@ func _retarget(delta := 0.0) -> void:
 			node.global_position,
 		).length()
 		var threat:=_threat_for(node)
+		var retaining_current_target := (
+			not acquiring_without_current_target
+			and is_instance_valid(target)
+			and node == target
+		)
 		if threat <= 0.0:
 			if acquiring_without_current_target:
 				var acquisition_delta_ground_gu := (
@@ -3726,12 +3837,16 @@ func _retarget(delta := 0.0) -> void:
 					best_initial_manhattan_gu = manhattan_gu
 					chosen = node
 				continue
-			elif distance_gu > aggro_radius_gu:
+			elif not retaining_current_target and distance_gu > aggro_radius_gu:
 				continue
 		# First acquisition is centered on the actor's current cell.  A stale
 		# spawn position must not narrow the exact per-monster ViewRange; the
 		# leash resumes once a target or threat already exists.
-		if not acquiring_without_current_target and spawn_distance_gu > leash_radius_gu:
+		if (
+			not acquiring_without_current_target
+			and not retaining_current_target
+			and spawn_distance_gu > leash_radius_gu
+		):
 			continue
 		var distance_score := (
 			maxf(0.0, 1.0 - distance_gu / maxf(aggro_radius_gu, GroundUnitSpace.EPSILON_GU))
@@ -3757,6 +3872,7 @@ func _add_threat(source:Node2D,amount:float)->void:
 	var key:=source.get_instance_id()
 	_threat_table[key]={"node":weakref(source),"score":float(_threat_table.get(key,{}).get("score",0.0))+maxf(0.0,amount)}
 	target=source
+	_refresh_target_focus()
 
 
 func _threat_for(source:Node2D)->float:

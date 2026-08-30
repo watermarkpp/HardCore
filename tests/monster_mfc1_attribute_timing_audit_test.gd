@@ -167,13 +167,16 @@ func _audit_all_monsters(
 			if not cadence.configure(authority_record):
 				_stats["movement_authority_missing"] = int(_stats["movement_authority_missing"]) + 1
 				_failures.append("mv_cadence_reject:%d:%s" % [mid, cadence.last_error_reason])
-			# stationary cross-source consistency
+			# The generated movement authority is the final runtime source. A
+			# HUMAN_FROZEN ruling is allowed to supersede a stale compatibility
+			# profile while retaining that profile as provenance.
 			var a_stationary := bool(a_movement.get("stationary", false))
 			var bp_stationary := bool(bp_movement.get("stationary", false))
-			if a_stationary != bp_stationary:
+			var has_human_movement_override := a_movement.get("movement_authority_override") is Dictionary
+			if not has_human_movement_override and a_stationary != bp_stationary:
 				_stats["stationary_mismatch"] = int(_stats["stationary_mismatch"]) + 1
 				_failures.append("stationary_mismatch:%d auth=%s bp=%s" % [mid, a_stationary, bp_stationary])
-			if bp_stationary and enemy.move_speed_gu_per_sec != 0.0:
+			if a_stationary and enemy.move_speed_gu_per_sec != 0.0:
 				_stats["stationary_mismatch"] = int(_stats["stationary_mismatch"]) + 1
 				_failures.append("stationary_not_zero_speed:%d speed=%f" % [mid, enemy.move_speed_gu_per_sec])
 			# move speed against the authority projection record
@@ -181,11 +184,12 @@ func _audit_all_monsters(
 			if a_speed != null and absf(float(a_speed) - enemy.move_speed_gu_per_sec) > 0.001:
 				_stats["movement_runtime_mismatch"] = int(_stats["movement_runtime_mismatch"]) + 1
 				_failures.append("mv_speed_runtime_vs_auth:%d runtime=%f auth=%f" % [mid, enemy.move_speed_gu_per_sec, float(a_speed)])
-			# move speed has an explicit authority projection (C_COMPATIBILITY is a
-			# documented project compatibility ruling, not an accidental default).
-			if str(a_movement.get("current_runtime_projection_status", "")) != "C_COMPATIBILITY":
+			# The speed projection is now explicit and derived from the effective
+			# interval. It may be B/A/C or a HUMAN_FROZEN ruling, but never an
+			# implicit compatibility default.
+			if str(a_movement.get("current_runtime_projection_status", "")) != str(a_movement.get("base_move_speed_authority", "")):
 				_stats["movement_default_fallback"] = int(_stats["movement_default_fallback"]) + 1
-				_failures.append("mv_speed_no_ruling:%d status=%s" % [mid, str(a_movement.get("current_runtime_projection_status", ""))])
+				_failures.append("mv_speed_no_ruling:%d status=%s authority=%s" % [mid, str(a_movement.get("current_runtime_projection_status", "")), str(a_movement.get("base_move_speed_authority", ""))])
 			# authority records the projected GU speed for all 153; verify no
 			# accidental code-only default is used without an authority record.
 			if a_speed == null:
@@ -193,7 +197,7 @@ func _audit_all_monsters(
 				_failures.append("mv_speed_no_authority_record:%d" % mid)
 			var interval_authority: Dictionary = a_movement.get("interval_authority", {})
 			_check_int_attr(mid, "move_interval_ms", int(interval_authority.get("raw_interval_ms", -1)), int(detail.get("move_interval_ms", -2)))
-			var expected_effective_interval := 0 if bool(a_movement.get("stationary", false)) else maxi(200, int(detail.get("move_interval_ms", 0)))
+			var expected_effective_interval := int(interval_authority.get("effective_interval_ms", -1))
 			_check_int_attr(mid, "effective_move_interval_ms", int(a_movement.get("walk_interval_ms", -1)), expected_effective_interval)
 
 		# --- Attack timing authority ---

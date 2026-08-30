@@ -64,9 +64,35 @@ func _test_direction_and_distance_mapping() -> void:
 
 	assert(NeighborPolicy.neighbor_for_desired_ground_direction(Vector2.ZERO) == Vector2i.ZERO)
 	assert(NeighborPolicy.neighbor_for_desired_ground_direction(Vector2(INF, 1.0)) == Vector2i.ZERO)
-	assert(NeighborPolicy.neighbor_for_desired_ground_direction(Vector2(-0.01, 100.0)) == Vector2i(-1, 1))
-	assert(NeighborPolicy.neighbor_for_desired_ground_direction(Vector2(100.0, -0.01)) == Vector2i(1, -1))
+	assert(NeighborPolicy.neighbor_for_desired_ground_direction(Vector2(-0.01, 100.0)) == Vector2i(0, 1))
+	assert(NeighborPolicy.neighbor_for_desired_ground_direction(Vector2(100.0, -0.01)) == Vector2i(1, 0))
+	_test_stable_axis_sectors()
 	_checks += 4
+
+
+func _test_stable_axis_sectors() -> void:
+	var cases: Array = [
+		[Vector2(1.0, 0.01), Vector2i(1, 0)],
+		[Vector2(1.0, -0.01), Vector2i(1, 0)],
+		[Vector2(-1.0, 0.01), Vector2i(-1, 0)],
+		[Vector2(-1.0, -0.01), Vector2i(-1, 0)],
+		[Vector2(0.01, 1.0), Vector2i(0, 1)],
+		[Vector2(-0.01, 1.0), Vector2i(0, 1)],
+		[Vector2(0.01, -1.0), Vector2i(0, -1)],
+		[Vector2(-0.01, -1.0), Vector2i(0, -1)],
+		[Vector2(1.0, 0.5), Vector2i(1, 1)],
+		[Vector2(-1.0, 0.5), Vector2i(-1, 1)],
+		[Vector2(1.0, -0.5), Vector2i(1, -1)],
+		[Vector2(-1.0, -0.5), Vector2i(-1, -1)],
+	]
+	for quantization_case: Array in cases:
+		assert(
+			NeighborPolicy.neighbor_for_desired_ground_direction(
+				quantization_case[0]
+			) == quantization_case[1],
+			"eight-way sector must stay stable for %s" % quantization_case[0],
+		)
+		_checks += 1
 
 
 func _test_one_event_and_pure_position_boundary() -> void:

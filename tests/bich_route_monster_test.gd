@@ -11,7 +11,7 @@ const EXPECTED := {
 	64: {"name": "沃玛战士", "attack_ms": 2000, "move_ms": 1000, "move_speed": 48.0, "ai": 0},
 	66: {"name": "沃玛勇士", "attack_ms": 2000, "move_ms": 1000, "move_speed": 48.0, "ai": 0},
 	68: {"name": "沃玛战将", "attack_ms": 2000, "move_ms": 1000, "move_speed": 48.0, "ai": 0},
-	70: {"name": "火焰沃玛", "attack_ms": 1700, "move_ms": 800, "move_speed": 46.0, "ai": 10},
+	70: {"name": "火焰沃玛", "attack_ms": 1700, "move_ms": 800, "move_speed": 1.4375, "ai": 10},
 	73: {"name": "沃玛卫士", "attack_ms": 1500, "move_ms": 800, "move_speed": 46.0, "ai": 0},
 	92: {"name": "红蛇", "attack_ms": 2500, "move_ms": 1200, "move_speed": 44.0, "ai": 0},
 	94: {"name": "虎蛇", "attack_ms": 2500, "move_ms": 1200, "move_speed": 44.0, "ai": 0},
@@ -66,7 +66,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(renamed.monster_id == 36 and renamed.visual.uses_final_art(), "改名怪物未通过monsterId读取正式动画")
 	assert(is_equal_approx(renamed._attack_interval, 2.0) and renamed.service_move_interval_ms == 1500, "EnemyActor未应用monsterId时序")
-	assert(is_equal_approx(renamed.move_speed_gu_per_sec, 40.0 / 32.0) and renamed.service_ai_code == 0, "EnemyActor未应用monsterId移动/AI档案")
+	assert(is_equal_approx(renamed.move_speed_gu_per_sec, 1000.0 / 1500.0) and renamed.service_ai_code == 0, "EnemyActor未应用monsterId正式移动速度/AI档案")
 
 	var name_only := EnemyActor.new()
 	name_only.setup({"name": "沃玛护卫", "hp": 100, "attackMin": 1, "attackMax": 2}, player, false)

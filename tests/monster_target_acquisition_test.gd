@@ -23,6 +23,7 @@ func _run() -> void:
 	await _test_runtime_classification_floors(player)
 	await _test_data_hold_runtime_fail_closed(player)
 	await _test_current_center_and_nearest_manhattan(player)
+	await _test_target_retention_authority(player)
 	_test_policy_fail_closed_contract()
 
 	player.queue_free()
@@ -195,6 +196,35 @@ func _test_current_center_and_nearest_manhattan(player: PlayerCharacter) -> void
 	_checks += 1
 
 	alternate.queue_free()
+	enemy.queue_free()
+	await get_tree().process_frame
+
+
+func _test_target_retention_authority(player: PlayerCharacter) -> void:
+	var enemy := await _make_enemy(18, player)
+	assert(enemy._target_focus_timeout_ms == 30000)
+	assert(enemy._target_disengage_axis_cells == 15)
+
+	# The original contract is an inclusive per-axis boundary, not the old
+	# 12-GU Euclidean aggro circle. Its (15,15) corner must remain engaged.
+	player.global_position = _ground_position_from_enemy(enemy, Vector2(15.0, 15.0))
+	enemy.target = player
+	enemy._target_focus_tick_ms = 1000
+	enemy._retarget_timer = 0.0
+	enemy._retarget(0.0)
+	assert(enemy.target == player, "12-GU aggro circle cleared the 15-axis target")
+	assert(not enemy._target_should_disengage(player, 31000), "30-second focus boundary must be inclusive")
+	assert(enemy._target_should_disengage(player, 31001), "focus must expire strictly after 30 seconds")
+
+	# Crossing either axis is sufficient to disengage, even when the other axis
+	# remains aligned.
+	enemy._target_focus_tick_ms = Time.get_ticks_msec()
+	player.global_position = _ground_position_from_enemy(enemy, Vector2(16.0, 0.0))
+	enemy._retarget_timer = 0.0
+	enemy._retarget(0.0)
+	assert(enemy.target == null, "target beyond the 15-axis boundary was retained")
+	_checks += 6
+
 	enemy.queue_free()
 	await get_tree().process_frame
 

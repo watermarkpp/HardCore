@@ -39,7 +39,131 @@ AUTHORITY_CLASSES = {
     "C_COMPATIBILITY",
     "CONFLICT",
     "UNKNOWN",
+    "HUMAN_FROZEN",
 }
+
+# These are project-level rulings on top of the preserved 21CQ/Monster.DB
+# source rows.  The source master remains an immutable provenance record; the
+# generated runtime authority below records both the source value and this
+# explicit final ruling.  Keeping the rulings here makes regeneration
+# deterministic without asking runtime code to infer them from names or
+# profiles.
+HUMAN_MOVEMENT_OVERRIDES: dict[int, dict[str, Any]] = {
+    145: {
+        "kind": "effective_interval",
+        "walk_interval_ms": 500,
+        "reason": "Taoist summon skeleton rank-0 target speed; user authority",
+    },
+    146: {
+        "kind": "effective_interval",
+        "walk_interval_ms": 500,
+        "reason": "Taoist summoned divine beast rank-0 target speed; user authority",
+    },
+    226: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    227: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    228: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    229: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    230: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    231: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    232: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    233: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    234: {
+        "kind": "stationary_entity",
+        "movement_enabled": False,
+        "walk_interval_ms": 0,
+        "walk_step": 0,
+        "walk_wait_ms": 0,
+        "reason": "treasure chest is a fixed non-combat entity",
+    },
+    235: {
+        "kind": "effective_interval",
+        "walk_interval_ms": 500,
+        "reason": "dark new-clothes boss target speed; user authority",
+    },
+    236: {
+        "kind": "effective_interval",
+        "walk_interval_ms": 500,
+        "reason": "dark new-clothes boss target speed; user authority",
+    },
+    237: {
+        "kind": "effective_interval",
+        "walk_interval_ms": 500,
+        "reason": "dark new-clothes boss target speed; user authority",
+    },
+    238: {
+        "kind": "effective_interval",
+        "walk_interval_ms": 500,
+        "reason": "dark new-clothes boss target speed; user authority",
+    },
+    239: {
+        "kind": "effective_interval",
+        "walk_interval_ms": 500,
+        "reason": "dark new-clothes boss target speed; user authority",
+    },
+    240: {
+        "kind": "effective_interval",
+        "walk_interval_ms": 500,
+        "reason": "dark new-clothes boss target speed; user authority",
+    },
+}
+
+HUMAN_MOVEMENT_OVERRIDE_SOURCE = "user.authority.monster_movement_speed.2026-08-30"
 
 CLASSIC_DB_SOURCE = {
     "distribution": "candidate.mylgd_mir2server_176",
@@ -177,24 +301,47 @@ def load_raw_monster_db() -> tuple[dict[str, dict[str, Any]], dict[str, Any]]:
     return {str(row["Name"]): row for row in rows}, metadata
 
 
-def projection_value_gu(projection: dict[str, Any], default: float) -> float:
-    if "move_speed_gu_per_sec" in projection:
-        return max(0.0, float(projection["move_speed_gu_per_sec"]))
-    if "moveSpeed" in projection:
-        return max(0.0, float(projection["moveSpeed"]) / 32.0)
-    return default
+def effective_movement_source(
+    monster_id: int,
+    movement_source: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    """Apply explicit project rulings while retaining source provenance."""
+    override = HUMAN_MOVEMENT_OVERRIDES.get(monster_id)
+    if override is None:
+        return dict(movement_source), None
 
-
-def current_runtime_speed_gu(
-    entry: dict[str, Any], profile: dict[str, Any], boss_rule: dict[str, Any]
-) -> float:
-    value = 1.25 if entry.get("classification") == "boss" else 1.8125
-    value = projection_value_gu(dict(profile.get("runtimeProjection", {})), value)
-    if entry.get("classification") == "boss":
-        value = projection_value_gu(dict(boss_rule.get("runtimeProjection", {})), value)
-    if bool(dict(profile.get("movement", {})).get("stationary", False)):
-        return 0.0
-    return round(value, 6)
+    effective = dict(movement_source)
+    original_values = {
+        key: movement_source.get(key)
+        for key in ("movement_enabled", "walk_interval_ms", "walk_step", "walk_wait_ms")
+    }
+    for key in ("movement_enabled", "walk_interval_ms", "walk_step", "walk_wait_ms"):
+        if key in override:
+            effective[key] = override[key]
+    final_values = {
+        key: effective.get(key)
+        for key in ("movement_enabled", "walk_interval_ms", "walk_step", "walk_wait_ms")
+    }
+    authority_override = {
+        "authority": "HUMAN_FROZEN",
+        "source": HUMAN_MOVEMENT_OVERRIDE_SOURCE,
+        "monster_id": monster_id,
+        "kind": str(override["kind"]),
+        "reason": str(override["reason"]),
+        "source_values": original_values,
+        "final_values": final_values,
+    }
+    effective["movement_authority_override"] = authority_override
+    effective["decision_reason"] = (
+        f"{movement_source.get('decision_reason', '')}; "
+        f"human authority: {override['reason']}"
+    )
+    interval_authority = dict(effective.get("interval_authority", {}))
+    interval_authority["effective_interval_ms"] = int(effective["walk_interval_ms"])
+    interval_authority["override_authority"] = "HUMAN_FROZEN"
+    interval_authority["override_source"] = HUMAN_MOVEMENT_OVERRIDE_SOURCE
+    effective["interval_authority"] = interval_authority
+    return effective, authority_override
 
 
 def movement_record(
@@ -207,6 +354,10 @@ def movement_record(
     combat_source: dict[str, Any],
     movement_source: dict[str, Any],
 ) -> dict[str, Any]:
+    source_movement = dict(movement_source)
+    movement_source, human_override = effective_movement_source(
+        int(entry["monster_id"]), source_movement
+    )
     exact = combat_record is not None and raw_row is not None
     canonical_interval = int(
         dict(dict(entry.get("combat", {})).get("timing", {})).get("move_interval_ms", 0)
@@ -216,8 +367,13 @@ def movement_record(
     )
     timing_confidence = str(timing_profile.get("confidence", "")) or None
     timing_resolution = str(timing_profile.get("resolutionStatus", "")) or "unknown"
-    stationary = bool(dict(profile.get("movement", {})).get("stationary", False))
-    stationary_locked = profile_id in SOURCE_LOCKED_STATIONARY_PROFILES
+    stationary = bool(dict(profile.get("movement", {})).get("stationary", False)) or not bool(
+        movement_source["movement_enabled"]
+    )
+    stationary_locked = (
+        profile_id in SOURCE_LOCKED_STATIONARY_PROFILES
+        or human_override is not None and str(human_override.get("kind")) == "stationary_entity"
+    )
     unresolved: list[str] = []
 
     if exact:
@@ -277,6 +433,34 @@ def movement_record(
     selected_binding = dict(movement_source["source_binding"])
     selected_binding["master"] = "assets/data/monster_movement_source_master_v1.json"
     interval_authority = dict(movement_source.get("interval_authority", {}))
+    final_interval_ms = int(movement_source["walk_interval_ms"])
+    runtime_speed = (
+        round(1000.0 / float(final_interval_ms), 6)
+        if bool(entry.get("runtime_allowed", False))
+        and bool(movement_source["movement_enabled"])
+        and final_interval_ms > 0
+        else 0.0
+    )
+    speed_authority = (
+        "HUMAN_FROZEN"
+        if human_override is not None
+        else selected_authority
+    )
+    speed_derivation = {
+        "formula": "1000.0 / effective_move_interval_ms",
+        "effective_move_interval_ms": final_interval_ms,
+        "base_move_speed_gu_per_sec": runtime_speed,
+        "axis_neighbor_distance_gu": 1.0,
+        "diagonal_neighbor_distance_gu": 1.4142135623730951,
+        "diagonal_duration_multiplier": 1.4142135623730951,
+        "minimum_interval_ms": 200,
+        "runtime_allowed": bool(entry.get("runtime_allowed", False)),
+    }
+    source_unresolved = (
+        ["compatibility hold requires explicit later review"]
+        if selected_status == "COMPATIBILITY_HOLD"
+        else []
+    )
 
     return {
         "movement_source_status": selected_status,
@@ -302,14 +486,25 @@ def movement_record(
         "classic_176_non_routed_candidate": classic_candidate,
         "stationary": stationary,
         "stationary_status": "LOCKED" if stationary_locked else "CANDIDATE",
-        "stationary_authority": "A_LOCKED" if stationary_locked else "B_CANDIDATE",
-        "current_runtime_move_speed_gu_per_sec": current_runtime_speed_gu(entry, profile, boss_rule),
-        "current_runtime_projection_status": "C_COMPATIBILITY",
-        "unresolved_conflicts": (
-            ["compatibility hold requires explicit later review"]
-            if selected_status == "COMPATIBILITY_HOLD"
-            else []
+        "stationary_authority": (
+            "HUMAN_FROZEN"
+            if human_override is not None and str(human_override.get("kind")) == "stationary_entity"
+            else "A_LOCKED" if stationary_locked else "B_CANDIDATE"
         ),
+        "base_move_speed_gu_per_sec": runtime_speed,
+        "base_move_speed_status": "HUMAN_FROZEN" if human_override is not None else selected_status,
+        "base_move_speed_authority": speed_authority,
+        "base_move_speed_source": (
+            HUMAN_MOVEMENT_OVERRIDE_SOURCE
+            if human_override is not None
+            else "assets/data/monster_movement_source_master_v1.json"
+        ),
+        "speed_derivation": speed_derivation,
+        "current_runtime_move_speed_gu_per_sec": runtime_speed,
+        "current_runtime_projection_status": speed_authority,
+        "movement_authority_override": human_override,
+        "source_unresolved_conflicts": source_unresolved,
+        "unresolved_conflicts": [] if human_override is not None else source_unresolved,
     }
 
 
@@ -717,6 +912,21 @@ def build_payload() -> dict[str, Any]:
                 "field": "move_interval_ms",
                 "scope": "monster timing only; strict cadence algorithm and stationary gate unchanged",
             },
+            "movement_speed_derivation": {
+                "authority": "derived_from_effective_move_interval",
+                "formula": "base_move_speed_gu_per_sec = 1000.0 / effective_move_interval_ms",
+                "stationary_value": 0.0,
+                "minimum_interval_ms": 200,
+                "axis_neighbor_distance_gu": 1.0,
+                "diagonal_neighbor_distance_gu": 1.4142135623730951,
+                "diagonal_speed_policy": "same_scalar_gu_per_sec; diagonal traversal takes sqrt(2) duration",
+            },
+            "human_movement_overrides": {
+                "authority": "HUMAN_FROZEN",
+                "source": HUMAN_MOVEMENT_OVERRIDE_SOURCE,
+                "monster_ids": sorted(HUMAN_MOVEMENT_OVERRIDES),
+                "scope": "explicit final interval/entity rulings; source rows remain provenance",
+            },
             "classic_176_db_candidate": {
                 **CLASSIC_DB_SOURCE,
                 "adoption": "adopted_by_M00R_audited_candidate_routing",
@@ -839,6 +1049,34 @@ def validate(payload: dict[str, Any]) -> list[str]:
             errors.append(f"monster_id={monster_id} move interval source drift")
         if int(interval_authority.get("effective_interval_ms", -1)) != int(movement.get("walk_interval_ms", -2)):
             errors.append(f"monster_id={monster_id} move interval effective value drift")
+        final_interval_ms = int(movement.get("walk_interval_ms", -1))
+        movement_enabled = bool(movement.get("movement_enabled", False))
+        stationary = bool(movement.get("stationary", False))
+        expected_speed = (
+            round(1000.0 / float(final_interval_ms), 6)
+            if bool(record.get("runtime_allowed", False))
+            and movement_enabled
+            and final_interval_ms > 0
+            else 0.0
+        )
+        actual_speed = float(movement.get("base_move_speed_gu_per_sec", -1.0))
+        if abs(actual_speed - expected_speed) > 0.000001:
+            errors.append(
+                f"monster_id={monster_id} base move speed drift: "
+                f"actual={actual_speed} expected={expected_speed}"
+            )
+        if float(movement.get("current_runtime_move_speed_gu_per_sec", -1.0)) != actual_speed:
+            errors.append(f"monster_id={monster_id} current runtime speed is not bound to base speed")
+        if stationary != (not movement_enabled or final_interval_ms == 0):
+            errors.append(f"monster_id={monster_id} stationary flag does not match fixed movement authority")
+        if movement_enabled and final_interval_ms < 200:
+            errors.append(f"monster_id={monster_id} active effective interval below 200ms")
+        human_override = movement.get("movement_authority_override")
+        if monster_id in HUMAN_MOVEMENT_OVERRIDES:
+            if not isinstance(human_override, dict) or human_override.get("authority") != "HUMAN_FROZEN":
+                errors.append(f"monster_id={monster_id} missing HUMAN_FROZEN movement ruling")
+        elif human_override is not None:
+            errors.append(f"monster_id={monster_id} unexpected movement override")
         for value_key, status_key in (
             ("walk_interval_ms", "walk_interval_status"),
             ("walk_step", "walk_step_status"),

@@ -8,6 +8,11 @@ const CONTRACT_ID := "monster.movement.neighbor_step.m01a.v1"
 const AXIS_NEIGHBOR_DISTANCE_GU := 1.0
 const DIAGONAL_NEIGHBOR_DISTANCE_GU := 1.4142135623730951
 const MOVEMENT_EVENTS_PER_NEIGHBOR := 1
+## Half of one 45-degree eight-way sector.  A direction remains on a Ground
+## axis while its minor component is within tan(22.5 degrees) of the major
+## component.  This prevents tiny projection/cell-centre residuals from
+## turning a visually straight isometric diagonal into alternating Z steps.
+const AXIS_SECTOR_MINOR_TO_MAJOR_RATIO := 0.41421356237309503
 
 const NEIGHBOR_DELTAS: Array[Vector2i] = [
 	Vector2i(-1, -1),
@@ -73,19 +78,22 @@ static func desired_ground_direction(neighbor: Variant) -> Vector2:
 	return Vector2(neighbor).normalized()
 
 
-## Deterministic inverse mapping from a desired Ground direction to one of the
-## eight classic neighbor cells.  Sign components are intentional: there is
-## no angle search, random choice, pathfinding, or wall routing here.
+## Deterministic nearest-sector mapping from a desired Ground direction to one
+## of the eight classic neighbor cells.  Ground-axis directions project to the
+## four isometric screen diagonals, so they must tolerate small lateral
+## residuals instead of requiring one component to be exactly zero.
 static func neighbor_for_desired_ground_direction(direction_ground_gu: Variant) -> Vector2i:
 	if not _is_finite_ground_position(direction_ground_gu):
 		return Vector2i.ZERO
 	var direction: Vector2 = direction_ground_gu
 	if direction.length_squared() <= 0.00000001:
 		return Vector2i.ZERO
-	return Vector2i(
-		_sign_component(direction.x),
-		_sign_component(direction.y)
-	)
+	var absolute := direction.abs()
+	if absolute.y <= absolute.x * AXIS_SECTOR_MINOR_TO_MAJOR_RATIO:
+		return Vector2i(_sign_component(direction.x), 0)
+	if absolute.x <= absolute.y * AXIS_SECTOR_MINOR_TO_MAJOR_RATIO:
+		return Vector2i(0, _sign_component(direction.y))
+	return Vector2i(_sign_component(direction.x), _sign_component(direction.y))
 
 
 static func neighbor_from_desired_ground_direction(direction_ground_gu: Variant) -> Vector2i:
