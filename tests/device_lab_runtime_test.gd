@@ -12,6 +12,7 @@ func _ready() -> void:
 func _run() -> void:
 	_test_protocol_rejection()
 	await _test_player_state_roundtrip()
+	await _test_chiyue_test_roster_append_only()
 	await _test_external_profile_guards()
 	_test_bounded_snapshot()
 	await _test_transaction_rollback()
@@ -83,6 +84,16 @@ func _test_protocol_rejection() -> void:
 		"checksum": "0".repeat(64),
 	}
 	assert(DeviceLabRuntimeScript.validate_command(player_apply).get("ok", false), "valid player-state command rejected")
+	var ensure_chiyue := {
+		"schemaVersion": 1,
+		"nonce": "chiyue_roster_001",
+		"action": "ensure_chiyue_test_roster",
+		"allowlist": ["device_lab.v1", "ensure_chiyue_test_roster"],
+	}
+	assert(
+		DeviceLabRuntimeScript.validate_command(ensure_chiyue).get("ok", false),
+		"valid Chiyue roster command rejected",
+	)
 	var unknown_player_field := player_apply.duplicate(true)
 	unknown_player_field["profile"] = "inventory"
 	assert(str(DeviceLabRuntimeScript.validate_command(unknown_player_field).get("error", "")).begins_with("unknown_field"), "player-state command accepted unknown field")
@@ -145,6 +156,170 @@ func _cleanup_player_state_fixture(directory_path: String, index_path: String) -
 			for file_name: String in directory.get_files():
 				DirAccess.remove_absolute(directory_path + "/" + file_name)
 		DirAccess.remove_absolute(directory_path)
+
+
+func _test_chiyue_test_roster_append_only() -> void:
+	var test_root := "user://device_lab_chiyue_roster_%d" % Time.get_ticks_usec()
+	var test_directory := test_root + "/characters"
+	var test_index := test_root + "/character_profiles.json"
+	var old_directory: String = PlayerState.profile_directory
+	var old_index: String = PlayerState.profile_index_path
+	var old_test_mode: bool = PlayerState.test_mode
+	var old_failure_injection: bool = PlayerState._test_force_atomic_write_failure
+	PlayerState.profile_directory = test_directory
+	PlayerState.profile_index_path = test_index
+	PlayerState.test_mode = true
+	PlayerState._test_force_atomic_write_failure = false
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(test_directory))
+
+	var user_profile_id := "user_preserved_character"
+	var user_profile := {
+		"profile_id": user_profile_id,
+		"character_name": "保留的用户角色",
+		"profession": "战士",
+		"gold": 7654321,
+	}
+	assert(PlayerState._write_json_atomic(
+		PlayerState._profile_path(user_profile_id),
+		user_profile
+	))
+	var user_index_entry := {
+		"id": user_profile_id,
+		"name": "保留的用户角色",
+		"profession": "战士",
+		"gender": "男",
+		"level": 47,
+		"updated_at": 123456,
+	}
+	assert(PlayerState._write_json_atomic(test_index, {
+		"version": 1,
+		"profiles": [user_index_entry],
+	}))
+
+	var warrior_loadout := EquipmentTestLoadoutCatalog.get_loadout("战士", "chiyue")
+	var warrior_skills := TestCharacterSkillProfiles.qa_v2_profile_for_character(
+		"warrior",
+		"chiyue"
+	)
+	var warrior_id := "test.character.warrior.chiyue.v2"
+	var warrior_entry := {
+		"id": warrior_id,
+		"name": str(warrior_skills.get("character_name", warrior_id)),
+		"profession": "战士",
+		"gender": str(warrior_loadout.get("gender", "男")),
+		"level": 50,
+		"updated_at": 222222,
+	}
+	var warrior_payload := PlayerState._test_character_payload(
+		warrior_loadout,
+		warrior_skills,
+		warrior_entry,
+		222222
+	)
+	warrior_payload["gold"] = 24681357
+	assert(PlayerState._write_json_atomic(
+		PlayerState._profile_path(warrior_id),
+		warrior_payload
+	))
+	var user_bytes_before := FileAccess.get_file_as_bytes(
+		PlayerState._profile_path(user_profile_id)
+	)
+	var warrior_bytes_before := FileAccess.get_file_as_bytes(
+		PlayerState._profile_path(warrior_id)
+	)
+
+	var runtime := DeviceLabRuntimeScript.new()
+	add_child(runtime)
+	var first: Dictionary = await runtime.call("_execute", {
+		"action": "ensure_chiyue_test_roster",
+	})
+	assert(bool(first.get("ok", false)), "Chiyue roster append failed: %s" % first)
+	assert(int(first.get("created", -1)) == 2)
+	assert(int(first.get("indexed", -1)) == 3)
+	assert(int(first.get("existing", -1)) == 1)
+	assert(int(first.get("total", -1)) == 3)
+	assert(first.get("profile_ids", []) == PlayerState.CHIYUE_TEST_PROFILE_IDS)
+	assert(
+		FileAccess.get_file_as_bytes(PlayerState._profile_path(user_profile_id))
+		== user_bytes_before,
+		"existing user profile bytes changed",
+	)
+	assert(
+		FileAccess.get_file_as_bytes(PlayerState._profile_path(warrior_id))
+		== warrior_bytes_before,
+		"existing Chiyue profile bytes changed",
+	)
+	var index_after_first := PlayerState._read_json(test_index)
+	var indexed_ids: Array[String] = []
+	for value: Variant in index_after_first.get("profiles", []):
+		assert(value is Dictionary)
+		indexed_ids.append(str((value as Dictionary).get("id", "")))
+	assert(indexed_ids.count(user_profile_id) == 1)
+	for target_id: String in PlayerState.CHIYUE_TEST_PROFILE_IDS:
+		assert(indexed_ids.count(target_id) == 1)
+	var preserved_user_index: Dictionary = index_after_first.get("profiles", [])[0]
+	assert(preserved_user_index.size() == user_index_entry.size())
+	for key: String in user_index_entry:
+		var before_value: Variant = user_index_entry[key]
+		var after_value: Variant = preserved_user_index.get(key, "")
+		if before_value is int or before_value is float:
+			assert(is_equal_approx(float(after_value), float(before_value)))
+		else:
+			assert(str(after_value) == str(before_value))
+	assert(indexed_ids.size() == 4, "unexpected Wooma/Zuma test profiles were indexed")
+	var files := DirAccess.get_files_at(test_directory)
+	var profile_json_files: Array[String] = []
+	for file_name: String in files:
+		if file_name.ends_with(".json") and not file_name.ends_with(".bak"):
+			profile_json_files.append(file_name)
+	assert(profile_json_files.size() == 4, "only user plus three Chiyue profiles may exist")
+	for forbidden_tier: String in ["woma", "zuma"]:
+		for file_name: String in profile_json_files:
+			assert(not file_name.contains(".%s." % forbidden_tier))
+
+	var profile_bytes_before_repeat := {}
+	for profile_id: String in [user_profile_id] + PlayerState.CHIYUE_TEST_PROFILE_IDS:
+		profile_bytes_before_repeat[profile_id] = FileAccess.get_file_as_bytes(
+			PlayerState._profile_path(profile_id)
+		)
+	var index_bytes_before_repeat := FileAccess.get_file_as_bytes(test_index)
+	var second: Dictionary = await runtime.call("_execute", {
+		"action": "ensure_chiyue_test_roster",
+	})
+	assert(bool(second.get("ok", false)), "idempotent Chiyue roster call failed")
+	assert(int(second.get("created", -1)) == 0)
+	assert(int(second.get("indexed", -1)) == 0)
+	assert(int(second.get("existing", -1)) == 3)
+	assert(int(second.get("total", -1)) == 3)
+	assert(FileAccess.get_file_as_bytes(test_index) == index_bytes_before_repeat)
+	for profile_id: String in profile_bytes_before_repeat:
+		assert(
+			FileAccess.get_file_as_bytes(PlayerState._profile_path(profile_id))
+			== profile_bytes_before_repeat[profile_id]
+		)
+
+	var failure_root := test_root + "/failure"
+	PlayerState.profile_directory = failure_root + "/characters"
+	PlayerState.profile_index_path = failure_root + "/character_profiles.json"
+	DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(PlayerState.profile_directory)
+	)
+	PlayerState._test_force_atomic_write_failure = true
+	var failed: Dictionary = await runtime.call("_execute", {
+		"action": "ensure_chiyue_test_roster",
+	})
+	assert(not bool(failed.get("ok", true)), "write failure reported success")
+	assert(int(failed.get("created", -1)) == 0)
+	assert(int(failed.get("indexed", -1)) == 0)
+	assert(int(failed.get("existing", -1)) == 0)
+	assert(int(failed.get("total", -1)) == 3)
+	assert(DirAccess.get_files_at(PlayerState.profile_directory).is_empty())
+
+	runtime.queue_free()
+	PlayerState.profile_directory = old_directory
+	PlayerState.profile_index_path = old_index
+	PlayerState.test_mode = old_test_mode
+	PlayerState._test_force_atomic_write_failure = old_failure_injection
 
 
 func _test_external_profile_guards() -> void:
@@ -449,6 +624,7 @@ func _test_powershell_contract() -> void:
 	assert(not source.contains("ConvertFrom-Json -Depth"), "PS tool must remain compatible with Windows PowerShell 5.1")
 	assert(source.contains("Invoke-Adb -Arguments @('pull', $remoteScreenshot, $target)"), "PS screenshot must use binary-safe adb pull")
 	assert(source.contains("'export_player_state' { $result.document; break }"), "PS player-state export routing missing")
+	assert(source.contains("'ensure_chiyue_test_roster'"), "PS Chiyue roster action missing")
 	assert(source.contains("'repair_diagnostics' { $result; break }"), "PS repair diagnostics export routing missing")
 	assert(source.contains("ConvertTo-Json -Depth 100"), "PS structured export must preserve nested save data")
 

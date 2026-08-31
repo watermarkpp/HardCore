@@ -42,6 +42,11 @@ const TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID := (
 )
 const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
+const CHIYUE_TEST_PROFILE_IDS: Array[String] = [
+	"test.character.warrior.chiyue.v2",
+	"test.character.wizard.chiyue.v2",
+	"test.character.taoist.chiyue.v2",
+]
 const CURRENT_CONTENT_SCHEMA_VERSION := 2
 const CANONICAL_MATERIAL_ITEMS := {
 	"grey_powder": "灰色药粉",
@@ -3657,6 +3662,217 @@ func ensure_equipment_skill_test_roster() -> Dictionary:
 		"indexed": indexed,
 		"total": EquipmentTestLoadoutCatalogScript.loadouts().size(),
 	}
+
+
+## Debug-lab fixture entry that appends only the three canonical QA v2 Chiyue
+## profiles. Existing profile documents are validated but never rewritten;
+## existing index rows are preserved verbatim and missing rows are appended.
+func ensure_chiyue_test_roster() -> Dictionary:
+	var result := {
+		"ok": false,
+		"contract_id": TEST_CHARACTER_ROSTER_CONTRACT_ID,
+		"created": 0,
+		"indexed": 0,
+		"existing": 0,
+		"total": CHIYUE_TEST_PROFILE_IDS.size(),
+		"profile_ids": CHIYUE_TEST_PROFILE_IDS.duplicate(),
+		"reason": "",
+	}
+	var directory_absolute := ProjectSettings.globalize_path(profile_directory)
+	if (
+		not DirAccess.dir_exists_absolute(directory_absolute)
+		and DirAccess.make_dir_recursive_absolute(directory_absolute) != OK
+	):
+		result["reason"] = "profile_directory_failed"
+		return result
+
+	var index_status := _read_json_document(profile_index_path)
+	if bool(index_status.get("exists", false)) and not bool(index_status.get("valid", false)):
+		result["reason"] = "profile_index_invalid"
+		return result
+	if (
+		not bool(index_status.get("exists", false))
+		and FileAccess.file_exists(profile_index_path + ".bak")
+	):
+		result["reason"] = "profile_index_primary_missing"
+		return result
+	var index: Dictionary = (
+		(index_status.get("data", {}) as Dictionary).duplicate(true)
+		if bool(index_status.get("exists", false))
+		else {"version": 1, "profiles": []}
+	)
+	if not index.get("profiles", null) is Array:
+		result["reason"] = "profile_index_profiles_invalid"
+		return result
+	var profiles: Array = (index.get("profiles", []) as Array).duplicate(true)
+	var index_id_counts := {}
+	for value: Variant in profiles:
+		if not value is Dictionary:
+			result["reason"] = "profile_index_entry_invalid"
+			return result
+		var indexed_id := str((value as Dictionary).get("id", ""))
+		if indexed_id.is_empty():
+			result["reason"] = "profile_index_id_missing"
+			return result
+		index_id_counts[indexed_id] = int(index_id_counts.get(indexed_id, 0)) + 1
+	for target_id: String in CHIYUE_TEST_PROFILE_IDS:
+		if int(index_id_counts.get(target_id, 0)) > 1:
+			result["reason"] = "duplicate_target_index:%s" % target_id
+			return result
+
+	var fixture_specs: Array[Dictionary] = []
+	var now := int(Time.get_unix_time_from_system())
+	for profession_id: String in ["warrior", "wizard", "taoist"]:
+		var profession_name := ProfessionRules.profession_display_name(profession_id)
+		var loadout := EquipmentTestLoadoutCatalogScript.get_loadout(
+			profession_name,
+			"chiyue"
+		)
+		var skill_profile := TestCharacterSkillProfilesScript.qa_v2_profile_for_character(
+			profession_id,
+			"chiyue"
+		)
+		var expected_profile_id := "test.character.%s.chiyue.v2" % profession_id
+		if (
+			loadout.is_empty()
+			or skill_profile.is_empty()
+			or str(loadout.get("tierId", "")) != "chiyue"
+			or str(loadout.get("profession", "")) != profession_name
+			or str(skill_profile.get("equipment_tier", "")) != "chiyue"
+			or str(skill_profile.get("character_profile_id", "")) != expected_profile_id
+			or expected_profile_id not in CHIYUE_TEST_PROFILE_IDS
+		):
+			result["reason"] = "fixture_authority_invalid:%s" % profession_id
+			return result
+		var character_level := maxi(
+			int(loadout.get("level", 1)),
+			int(skill_profile.get("minimum_character_level", 1))
+		)
+		var profile_entry := {
+			"id": expected_profile_id,
+			"name": str(skill_profile.get("character_name", expected_profile_id)),
+			"profession": profession_name,
+			"gender": str(loadout.get("gender", "男")),
+			"level": character_level,
+			"updated_at": now,
+		}
+		var payload := _test_character_payload(
+			loadout,
+			skill_profile,
+			profile_entry,
+			now
+		)
+		if not _valid_chiyue_test_profile_document(
+			payload,
+			expected_profile_id,
+			profession_name,
+			str(loadout.get("loadoutId", "")),
+			str(skill_profile.get("template_id", ""))
+		):
+			result["reason"] = "fixture_payload_invalid:%s" % profession_id
+			return result
+		fixture_specs.append({
+			"profile_id": expected_profile_id,
+			"profession": profession_name,
+			"loadout_id": str(loadout.get("loadoutId", "")),
+			"skill_template_id": str(skill_profile.get("template_id", "")),
+			"entry": profile_entry,
+			"payload": payload,
+		})
+
+	var created_profile_ids: Array[String] = []
+	for spec: Dictionary in fixture_specs:
+		var profile_id := str(spec.get("profile_id", ""))
+		var profile_path := _profile_path(profile_id)
+		if FileAccess.file_exists(profile_path):
+			var existing_status := _read_json_document(profile_path)
+			if (
+				not bool(existing_status.get("valid", false))
+				or not _valid_chiyue_test_profile_document(
+					existing_status.get("data", {}) as Dictionary,
+					profile_id,
+					str(spec.get("profession", "")),
+					str(spec.get("loadout_id", "")),
+					str(spec.get("skill_template_id", ""))
+				)
+			):
+				_rollback_new_chiyue_test_profiles(created_profile_ids)
+				result["reason"] = "existing_profile_invalid:%s" % profile_id
+				return result
+			result["existing"] = int(result["existing"]) + 1
+			continue
+		if (
+			FileAccess.file_exists(profile_path + ".bak")
+			or FileAccess.file_exists(profile_path + ".tmp")
+			or FileAccess.file_exists(profile_path + ".corrupt.tmp")
+		):
+			_rollback_new_chiyue_test_profiles(created_profile_ids)
+			result["reason"] = "existing_profile_primary_missing:%s" % profile_id
+			return result
+		if not _write_json_atomic(profile_path, spec.get("payload", {}) as Dictionary):
+			_rollback_new_chiyue_test_profiles(created_profile_ids)
+			result["reason"] = "profile_write_failed:%s" % profile_id
+			return result
+		created_profile_ids.append(profile_id)
+
+	var indexed := 0
+	for spec: Dictionary in fixture_specs:
+		var profile_id := str(spec.get("profile_id", ""))
+		if int(index_id_counts.get(profile_id, 0)) == 0:
+			profiles.append((spec.get("entry", {}) as Dictionary).duplicate(true))
+			index_id_counts[profile_id] = 1
+			indexed += 1
+	if indexed > 0:
+		index["profiles"] = profiles
+		if not _write_json_atomic(profile_index_path, index):
+			_rollback_new_chiyue_test_profiles(created_profile_ids)
+			result["reason"] = "profile_index_write_failed"
+			return result
+
+	for target_id: String in CHIYUE_TEST_PROFILE_IDS:
+		if (
+			not FileAccess.file_exists(_profile_path(target_id))
+			or int(index_id_counts.get(target_id, 0)) != 1
+		):
+			result["reason"] = "postcondition_failed:%s" % target_id
+			return result
+	result["created"] = created_profile_ids.size()
+	result["indexed"] = indexed
+	result["ok"] = true
+	return result
+
+
+func _valid_chiyue_test_profile_document(
+	document: Dictionary,
+	expected_profile_id: String,
+	expected_profession: String,
+	expected_loadout_id: String,
+	expected_skill_template_id: String
+) -> bool:
+	if (
+		str(document.get("profile_id", "")) != expected_profile_id
+		or str(document.get("profession", "")) != expected_profession
+		or int(document.get("save_version", 0)) != SAVE_VERSION
+		or int(document.get("level", 0)) < 50
+		or not document.get("equipment", null) is Dictionary
+		or not document.get("learned_skills", null) is Dictionary
+	):
+		return false
+	var contracts: Variant = document.get("test_contracts", null)
+	return (
+		contracts is Dictionary
+		and str((contracts as Dictionary).get("roster", ""))
+		== TEST_CHARACTER_ROSTER_CONTRACT_ID
+		and str((contracts as Dictionary).get("equipment", ""))
+		== expected_loadout_id
+		and str((contracts as Dictionary).get("skills", ""))
+		== expected_skill_template_id
+	)
+
+
+func _rollback_new_chiyue_test_profiles(profile_ids: Array[String]) -> void:
+	for profile_id: String in profile_ids:
+		_remove_new_profile_files(profile_id)
 
 
 func _skill_tier_for_equipment_tier(equipment_tier: String) -> String:

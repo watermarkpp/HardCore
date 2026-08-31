@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('push', 'status', 'snapshot', 'repair_diagnostics', 'apply_ui_profile', 'export_player_state', 'apply_player_state', 'list_checkpoints', 'rollback_player_state', 'rollback_ui_profile', 'pull', 'screenshot')]
+    [ValidateSet('push', 'status', 'snapshot', 'repair_diagnostics', 'apply_ui_profile', 'export_player_state', 'ensure_chiyue_test_roster', 'apply_player_state', 'list_checkpoints', 'rollback_player_state', 'rollback_ui_profile', 'pull', 'screenshot')]
     [string]$Action = 'status',
     [ValidatePattern('^$|^[A-Za-z0-9._:-]{1,128}$')]
     [string]$Serial = '',

@@ -51,6 +51,7 @@ const ACTION_COMMAND_FIELDS := {
 	"snapshot": {},
 	"repair_diagnostics": {},
 	"export_player_state": {},
+	"ensure_chiyue_test_roster": {},
 	"list_checkpoints": {},
 	"apply_ui_profile": {
 		"profile": true,
@@ -279,7 +280,7 @@ static func validate_command(command: Dictionary) -> Dictionary:
 	if nonce.is_empty() or nonce.length() > MAX_NONCE_LENGTH or not _is_safe_token(nonce):
 		return {"ok": false, "error": "nonce"}
 	var action := str(command.get("action", ""))
-	if action not in ["status", "snapshot", "repair_diagnostics", "export_player_state", "list_checkpoints", "apply_ui_profile", "apply_player_state", "rollback_player_state", "rollback_ui_profile"]:
+	if action not in ["status", "snapshot", "repair_diagnostics", "export_player_state", "ensure_chiyue_test_roster", "list_checkpoints", "apply_ui_profile", "apply_player_state", "rollback_player_state", "rollback_ui_profile"]:
 		return {"ok": false, "error": "unknown_action"}
 	var allowed_fields: Dictionary = COMMON_COMMAND_FIELDS.duplicate()
 	var action_fields: Dictionary = ACTION_COMMAND_FIELDS.get(action, {})
@@ -367,6 +368,8 @@ func _execute(command: Dictionary) -> Dictionary:
 			return _repair_diagnostics()
 		"export_player_state":
 			return _export_player_state()
+		"ensure_chiyue_test_roster":
+			return _ensure_chiyue_test_roster()
 		"list_checkpoints":
 			return {"ok": true, "action": action, "checkpoints": _list_checkpoints()}
 		"apply_ui_profile":
@@ -400,7 +403,7 @@ func status_snapshot() -> Dictionary:
 		"inbox": PENDING_PATH,
 		"outbox": OUTBOX_DIR,
 		"lastCommandNonce": _last_command_nonce,
-		"capabilities": ["ui_profile", "player_state", "checkpoints", "snapshot", "repair_diagnostics", "resource_patch"],
+		"capabilities": ["ui_profile", "player_state", "chiyue_test_roster", "checkpoints", "snapshot", "repair_diagnostics", "resource_patch"],
 		"resourcePatch": patch_status,
 	}
 
@@ -458,6 +461,12 @@ func _export_player_state() -> Dictionary:
 		"document": document,
 		"checksum": _sha256(JSON.stringify(document).to_utf8_buffer()),
 	}
+
+
+func _ensure_chiyue_test_roster() -> Dictionary:
+	var result: Dictionary = PlayerState.ensure_chiyue_test_roster()
+	result["action"] = "ensure_chiyue_test_roster"
+	return result
 
 
 func _apply_player_state(command: Dictionary) -> Dictionary:
