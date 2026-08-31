@@ -1,9 +1,9 @@
 class_name MapEditorRuntimeVisualGeometryService
 extends RefCounted
 
-const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v5"
+const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v6"
 const EDITOR_LAYOUT_CONTRACT_ID := "map_editor_authoritative_layout_v1"
-const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v5"
+const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v6"
 const RENDER_DOMAIN_STATIC_BACKGROUND := "static_background"
 const RENDER_DOMAIN_ACTOR_Y_SORT := "actor_y_sort"
 const WALL_PART_SORT_BASELINE_TILE_OFFSET := Vector2(0.5, 0.5)
@@ -86,6 +86,20 @@ static func resolved_anchor_px(
 		)
 	)
 	return Vector2(float(raw[0]), float(raw[1]))
+
+
+static func wall_part_anchor_px(
+	asset: Dictionary,
+	part: Dictionary
+) -> Array:
+	# Manual wall calibration is stored once on the effective asset.  Published
+	# render_parts still carry their generated pre-calibration anchor, so using
+	# the part value first silently discards the user's verified correction and
+	# moves multi-cell wall pixels away from their occupied/sort cells.
+	var calibrated: Array = asset.get("anchor_px", [])
+	if calibrated.size() == 2:
+		return calibrated
+	return part.get("anchor", asset.get("anchor", [0, 0]))
 
 
 static func editor_instance_geometry(
@@ -346,9 +360,7 @@ static func instance_draw_commands(
 			var part_sort_baseline := (
 				Vector2(sort_tile) + WALL_PART_SORT_BASELINE_TILE_OFFSET
 			)
-			var anchor: Array = part.get(
-				"anchor", asset.get("anchor_px", [0, 0])
-			)
+			var anchor := wall_part_anchor_px(asset, part)
 			for image_pass: Dictionary in [
 				{"field": "shadow_image", "pass": 0},
 				{"field": "base_image", "pass": 1},

@@ -1,5 +1,6 @@
 param(
-    [string]$AssetPrefix = ''
+    [string]$AssetPrefix = '',
+    [string]$AssetType = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -45,6 +46,13 @@ $GodotArgs = @(
 if (-not [string]::IsNullOrWhiteSpace($AssetPrefix)) {
     $GodotArgs += '--'
     $GodotArgs += "--asset-prefix=$AssetPrefix"
+}
+
+if (-not [string]::IsNullOrWhiteSpace($AssetType)) {
+    if ($GodotArgs -notcontains '--') {
+        $GodotArgs += '--'
+    }
+    $GodotArgs += "--asset-type=$AssetType"
 }
 
 & $Godot @GodotArgs
