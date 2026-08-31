@@ -90,6 +90,7 @@ const EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_ski
 const EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES := 10.0
 const DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD := 1536.0
 const STAGED_INITIAL_BUILD_CONTRACT_ID := "world_background.staged_initial_build.v1"
+const STATIC_WALL_BRIDGE_BUCKET_SIZE := 256
 
 @export var grid_radius := 28
 @export var tile_width := 64.0
@@ -118,6 +119,18 @@ var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_blocked_tiles: Dictionary = {}
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
 var _editor_runtime_fallback_ground := false
+var _editor_runtime_actor_sort_roots: Dictionary = {}
+var _editor_runtime_bridge_commands: Array[Dictionary] = []
+var _editor_runtime_bridge_size := Vector2i.ZERO
+var _static_wall_bridge_image_cache: Dictionary = {}
+var _static_wall_bridge_built_generation := -999999
+var _static_wall_bridge_stats := {
+	"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
+	"generation": -1,
+	"candidate_pairs": 0,
+	"scanned_pixels": 0,
+	"overlay_count": 0,
+}
 
 # ── HC-P1-004 staged build contract ──
 # When attached, every formal resource in the build stages is obtained through
@@ -614,6 +627,18 @@ func clear_environment() -> void:
 	_editor_runtime_blocked_tiles.clear()
 	_editor_runtime_chunk_draws.clear()
 	_editor_runtime_fallback_ground = false
+	_editor_runtime_actor_sort_roots.clear()
+	_editor_runtime_bridge_commands.clear()
+	_editor_runtime_bridge_size = Vector2i.ZERO
+	_static_wall_bridge_image_cache.clear()
+	_static_wall_bridge_built_generation = -999999
+	_static_wall_bridge_stats = {
+		"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
+		"generation": _generation_token(),
+		"candidate_pairs": 0,
+		"scanned_pixels": 0,
+		"overlay_count": 0,
+	}
 	for node: Node in _environment_nodes:
 		if is_instance_valid(node):
 			node.queue_free()
@@ -695,6 +720,9 @@ func finish_map_build() -> void:
 
 
 func _finish_map_build() -> void:
+	_build_static_authored_wall_bridge(
+		_editor_runtime_bridge_commands, _editor_runtime_bridge_size
+	)
 	_staged_build_complete = true
 	_staged_build_map_id = _active_map_id()
 	queue_redraw()
@@ -934,6 +962,8 @@ func _append_instance_descriptors(
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
 		runtime.get("instances", [])
 	)
+	_editor_runtime_bridge_commands = commands
+	_editor_runtime_bridge_size = size
 	for command_index in commands.size():
 		var command: Dictionary = commands[command_index]
 		var image_path := str(command.get("image_path", ""))
@@ -1772,22 +1802,28 @@ func uses_editor_runtime_fallback_ground() -> bool:
 	return _editor_runtime_fallback_ground
 
 
+func static_wall_bridge_stats() -> Dictionary:
+	return _static_wall_bridge_stats.duplicate(true)
+
+
 func _build_editor_runtime_instances(runtime:Dictionary)->void:
 	var raw_size: Array = runtime.design.get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
 		runtime.get("instances", [])
 	)
-	var actor_sort_roots := {}
+	_editor_runtime_bridge_commands = commands
+	_editor_runtime_bridge_size = size
 	for command_index in commands.size():
 		var command: Dictionary = commands[command_index]
 		var group_key := str(command.get("actor_sort_group", ""))
-		var shared_root: Node2D = actor_sort_roots.get(group_key) as Node2D
+		var shared_root: Node2D = _editor_runtime_actor_sort_roots.get(group_key) as Node2D
 		var built := _build_one_editor_runtime_instance(
 			command, command_index, size, null, shared_root
 		)
 		if not group_key.is_empty() and built is Node2D:
-			actor_sort_roots[group_key] = built
+			_editor_runtime_actor_sort_roots[group_key] = built
+	_build_static_authored_wall_bridge(commands, size)
 
 
 func _build_one_editor_runtime_instance(
@@ -1832,6 +1868,9 @@ func _build_one_editor_runtime_instance(
 	var parent_world_origin := Vector2.ZERO
 	if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
 		actor_sort_root = shared_actor_sort_root
+		var group_key := str(command.get("actor_sort_group", ""))
+		if actor_sort_root == null and not group_key.is_empty():
+			actor_sort_root = _editor_runtime_actor_sort_roots.get(group_key) as Node2D
 		if actor_sort_root == null:
 			actor_sort_root = Node2D.new()
 			actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
@@ -1848,10 +1887,13 @@ func _build_one_editor_runtime_instance(
 		actor_sort_root.set_meta("editor_runtime_instance_id", str(
 			command.get("instance", {}).get("instance_id", "")
 		))
+		if not group_key.is_empty():
+			_editor_runtime_actor_sort_roots[group_key] = actor_sort_root
 	RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
 		sprite, command, geometry, parent_world_origin
 	)
 	sprite.set_meta("editor_runtime_render_domain", render_domain)
+	sprite.set_meta("editor_runtime_image_pass", int(command.get("image_pass", -1)))
 	if actor_sort_root != null:
 		# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
 		# Keep the sprite in that same z domain so Y order, not a fixed z,
@@ -1861,6 +1903,343 @@ func _build_one_editor_runtime_instance(
 	if actor_sort_root != null and get_parent() != null:
 		return _append_actor_sort_node(actor_sort_root, sprite)
 	return _append_environment_node(sprite)
+
+
+func _build_static_authored_wall_bridge(
+	commands: Array[Dictionary],
+	size: Vector2i
+) -> void:
+	var generation := _generation_token()
+	if (
+		commands.is_empty()
+		or size == Vector2i.ZERO
+		or _static_wall_bridge_built_generation == generation
+	):
+		return
+	_static_wall_bridge_built_generation = generation
+	var groups := {}
+	var wall_pass_records: Array[Dictionary] = []
+	var object_records: Array[Dictionary] = []
+	for command: Dictionary in commands:
+		if (
+			RuntimeVisualGeometryScript.is_atomic_wall_pass(command)
+			or RuntimeVisualGeometryScript.is_static_authored_wall_bridge_candidate(command)
+		):
+			var record := _static_wall_bridge_record(command, size)
+			if record.is_empty():
+				continue
+			if RuntimeVisualGeometryScript.is_atomic_wall_pass(command):
+				wall_pass_records.append(record)
+				var group_key := str(command.get("actor_sort_group", ""))
+				if not groups.has(group_key):
+					groups[group_key] = {
+						"group_key": group_key,
+						"wall_command": {},
+						"aabb": record.aabb,
+						"pixels": {},
+						"source_instance_ids": {},
+					}
+				var group: Dictionary = groups[group_key]
+				var group_aabb: Rect2i = group.aabb
+				group.aabb = group_aabb.merge(record.aabb)
+				if int(command.get("image_pass", -1)) == 1:
+					group.wall_command = command
+			else:
+				object_records.append(record)
+	if groups.is_empty() or object_records.is_empty():
+		_static_wall_bridge_stats = _static_wall_bridge_empty_stats(generation)
+		return
+	var group_grid := _static_wall_bridge_group_grid(groups)
+	var pass_grid := _static_wall_bridge_pass_grid(wall_pass_records)
+	var candidate_pairs := 0
+	var scanned_pixels := 0
+	# Commands are already in the original global draw order. Processing the
+	# object records in that order preserves all object-object compositing.
+	for object_record: Dictionary in object_records:
+		var candidate_groups := {}
+		for bucket: Vector2i in _static_wall_bridge_buckets(object_record.aabb):
+			for group_key: String in group_grid.get(bucket, []):
+				candidate_groups[group_key] = true
+		for group_key: String in candidate_groups:
+			var group: Dictionary = groups[group_key]
+			var object_aabb: Rect2i = object_record.aabb
+			var group_aabb: Rect2i = group.aabb
+			if (
+				group.wall_command.is_empty()
+				or not RuntimeVisualGeometryScript.static_wall_bridge_pair_is_candidate(
+					object_record.command, group.wall_command, size,
+					object_aabb, group_aabb
+				)
+			):
+				continue
+			var scan_rect := object_aabb.intersection(group_aabb)
+			if scan_rect.size.x <= 0 or scan_rect.size.y <= 0:
+				continue
+			candidate_pairs += 1
+			scanned_pixels += scan_rect.get_area()
+			_static_wall_bridge_scan_pair(
+				object_record, group, groups, size, scan_rect, pass_grid
+			)
+	var overlay_count := 0
+	for group_key: String in groups:
+		var group: Dictionary = groups[group_key]
+		if _static_wall_bridge_append_overlay(group):
+			overlay_count += 1
+	_static_wall_bridge_stats = {
+		"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
+		"generation": generation,
+		"candidate_pairs": candidate_pairs,
+		"scanned_pixels": scanned_pixels,
+		"overlay_count": overlay_count,
+	}
+	set_meta("static_wall_bridge_stats", _static_wall_bridge_stats.duplicate(true))
+
+
+func _static_wall_bridge_record(
+	command: Dictionary,
+	size: Vector2i
+) -> Dictionary:
+	var resource_path := _res_path(str(command.get("image_path", "")))
+	if resource_path.is_empty() or not ResourceLoader.exists(resource_path):
+		return {}
+	var texture := _prefetched_texture(resource_path, "BUILD_MAP")
+	if texture == null:
+		return {}
+	var image: Image = _static_wall_bridge_image_cache.get(resource_path) as Image
+	if image == null:
+		image = texture.get_image()
+		_static_wall_bridge_image_cache[resource_path] = image
+	if image == null or image.is_empty():
+		return {}
+	var transform := RuntimeVisualGeometryScript.command_texture_transform(
+		command, size, texture.get_size()
+	)
+	return {
+		"command": command,
+		"command_index": int(command.get("command_index", -1)),
+		"image_pass": int(command.get("image_pass", -1)),
+		"group_key": str(command.get("actor_sort_group", "")),
+		"image": image,
+		"inverse_transform": transform.affine_inverse(),
+		"aabb": RuntimeVisualGeometryScript.transformed_texture_aabb(
+			transform, texture.get_size()
+		),
+	}
+
+
+func _static_wall_bridge_group_grid(groups: Dictionary) -> Dictionary:
+	var result := {}
+	for group_key: String in groups:
+		var group: Dictionary = groups[group_key]
+		for bucket: Vector2i in _static_wall_bridge_buckets(group.aabb):
+			if not result.has(bucket):
+				result[bucket] = []
+			result[bucket].append(group_key)
+	return result
+
+
+func _static_wall_bridge_pass_grid(records: Array[Dictionary]) -> Dictionary:
+	var result := {}
+	for record_index in records.size():
+		var record: Dictionary = records[record_index]
+		for bucket: Vector2i in _static_wall_bridge_buckets(record.aabb):
+			if not result.has(bucket):
+				result[bucket] = []
+			result[bucket].append(record_index)
+	return {"grid": result, "records": records}
+
+
+func _static_wall_bridge_buckets(rect: Rect2i) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	if rect.size.x <= 0 or rect.size.y <= 0:
+		return result
+	var last := rect.end - Vector2i.ONE
+	var begin_bucket := Vector2i(
+		floori(float(rect.position.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
+		floori(float(rect.position.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
+	)
+	var end_bucket := Vector2i(
+		floori(float(last.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
+		floori(float(last.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
+	)
+	for bucket_y in range(begin_bucket.y, end_bucket.y + 1):
+		for bucket_x in range(begin_bucket.x, end_bucket.x + 1):
+			result.append(Vector2i(bucket_x, bucket_y))
+	return result
+
+
+func _static_wall_bridge_scan_pair(
+	object_record: Dictionary,
+	source_group: Dictionary,
+	groups: Dictionary,
+	size: Vector2i,
+	scan_rect: Rect2i,
+	pass_grid: Dictionary
+) -> void:
+	for world_y in range(scan_rect.position.y, scan_rect.end.y):
+		for world_x in range(scan_rect.position.x, scan_rect.end.x):
+			var world_pixel := Vector2i(world_x, world_y)
+			var source := _static_wall_bridge_sample(object_record, world_pixel)
+			if source.a <= 0.0:
+				continue
+			var source_base := _static_wall_bridge_top_base_in_front_relation(
+				world_pixel, object_record, size, pass_grid
+			)
+			if (
+				source_base.is_empty()
+				or str(source_base.group_key) != str(source_group.group_key)
+			):
+				continue
+			var owner := _static_wall_bridge_owner(world_pixel, pass_grid)
+			if owner.is_empty() or not groups.has(str(owner.group_key)):
+				continue
+			var owner_group: Dictionary = groups[str(owner.group_key)]
+			if (
+				owner_group.wall_command.is_empty()
+				or not RuntimeVisualGeometryScript.static_authored_command_is_in_front_of_wall(
+					object_record.command, owner_group.wall_command, size
+				)
+			):
+				continue
+			var pixels: Dictionary = owner_group.pixels
+			var destination: Color = pixels.get(world_pixel, Color(0, 0, 0, 0))
+			pixels[world_pixel] = RuntimeVisualGeometryScript.static_wall_bridge_source_over(
+				source, destination
+			)
+			var source_ids: Dictionary = owner_group.source_instance_ids
+			var source_command: Dictionary = object_record.command
+			source_ids[str(source_command.get("instance", {}).get("instance_id", ""))] = true
+
+
+func _static_wall_bridge_owner(
+	world_pixel: Vector2i,
+	pass_grid: Dictionary
+) -> Dictionary:
+	var bucket := Vector2i(
+		floori(float(world_pixel.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
+		floori(float(world_pixel.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
+	)
+	var grid: Dictionary = pass_grid.grid
+	var records: Array[Dictionary] = pass_grid.records
+	var owner: Dictionary = {}
+	for record_index: int in grid.get(bucket, []):
+		var record: Dictionary = records[record_index]
+		var record_aabb: Rect2i = record.aabb
+		if not record_aabb.has_point(world_pixel):
+			continue
+		if _static_wall_bridge_sample(record, world_pixel).a <= 0.0:
+			continue
+		if owner.is_empty() or int(record.command_index) > int(owner.command_index):
+			owner = record
+	return owner
+
+
+func _static_wall_bridge_top_base_in_front_relation(
+	world_pixel: Vector2i,
+	object_record: Dictionary,
+	size: Vector2i,
+	pass_grid: Dictionary
+) -> Dictionary:
+	var bucket := Vector2i(
+		floori(float(world_pixel.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
+		floori(float(world_pixel.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
+	)
+	var grid: Dictionary = pass_grid.grid
+	var records: Array[Dictionary] = pass_grid.records
+	var result: Dictionary = {}
+	for record_index: int in grid.get(bucket, []):
+		var record: Dictionary = records[record_index]
+		if (
+			int(record.image_pass) != 1
+			or not RuntimeVisualGeometryScript.static_authored_command_is_in_front_of_wall(
+				object_record.command, record.command, size
+			)
+		):
+			continue
+		var record_aabb: Rect2i = record.aabb
+		if (
+			record_aabb.has_point(world_pixel)
+			and _static_wall_bridge_sample(record, world_pixel).a > 0.0
+			and (
+				result.is_empty()
+				or int(record.command_index) > int(result.command_index)
+			)
+		):
+			result = record
+	return result
+
+
+func _static_wall_bridge_sample(record: Dictionary, world_pixel: Vector2i) -> Color:
+	var inverse_transform: Transform2D = record.inverse_transform
+	var source_position: Vector2 = inverse_transform * (
+		Vector2(world_pixel) + Vector2(0.5, 0.5)
+	)
+	var source_pixel := Vector2i(floori(source_position.x), floori(source_position.y))
+	var image: Image = record.image
+	if (
+		source_pixel.x < 0
+		or source_pixel.y < 0
+		or source_pixel.x >= image.get_width()
+		or source_pixel.y >= image.get_height()
+	):
+		return Color(0, 0, 0, 0)
+	return image.get_pixelv(source_pixel)
+
+
+func _static_wall_bridge_append_overlay(group: Dictionary) -> bool:
+	var pixels: Dictionary = group.pixels
+	if pixels.is_empty():
+		return false
+	var minimum := Vector2i(2147483647, 2147483647)
+	var maximum := Vector2i(-2147483648, -2147483648)
+	for world_pixel: Vector2i in pixels:
+		minimum = minimum.min(world_pixel)
+		maximum = maximum.max(world_pixel)
+	var image_size := maximum - minimum + Vector2i.ONE
+	var image := Image.create(image_size.x, image_size.y, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
+	for world_pixel: Vector2i in pixels:
+		image.set_pixelv(world_pixel - minimum, pixels[world_pixel])
+	var root := _editor_runtime_actor_sort_roots.get(str(group.group_key)) as Node2D
+	if root == null or not is_instance_valid(root):
+		return false
+	var overlay := Sprite2D.new()
+	overlay.name = "StaticAuthoredWallBridge"
+	overlay.texture = ImageTexture.create_from_image(image)
+	overlay.centered = false
+	overlay.position = Vector2(minimum) - root.position
+	overlay.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	overlay.z_index = 0
+	overlay.set_meta("static_authored_wall_bridge", true)
+	overlay.set_meta(
+		"static_wall_bridge_contract_id",
+		RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID
+	)
+	overlay.set_meta("static_wall_bridge_world_rect", Rect2i(minimum, image_size))
+	var source_instance_ids: Dictionary = group.source_instance_ids
+	overlay.set_meta(
+		"static_wall_bridge_source_instance_ids", source_instance_ids.keys()
+	)
+	root.add_child(overlay)
+	# Pre-674 wall bases were static and fronts were actor-sorted. Insert the
+	# restoration after every base but before the first front, never after the
+	# complete wall union.
+	for child_index in root.get_child_count():
+		var child := root.get_child(child_index)
+		if int(child.get_meta("editor_runtime_image_pass", -1)) == 2:
+			root.move_child(overlay, child_index)
+			break
+	return true
+
+
+func _static_wall_bridge_empty_stats(generation: int) -> Dictionary:
+	return {
+		"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
+		"generation": generation,
+		"candidate_pairs": 0,
+		"scanned_pixels": 0,
+		"overlay_count": 0,
+	}
 
 
 func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
