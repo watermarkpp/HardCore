@@ -343,6 +343,15 @@ func _on_gameplay_movement(value: Vector2) -> void:
 	player.set_touch_vector(value)
 
 
+func _cancel_map_transition_movement_input() -> void:
+	if is_instance_valid(hud) and hud.has_method("cancel_movement_input"):
+		hud.cancel_movement_input()
+	if is_instance_valid(player):
+		# HUD's zero signal is intentionally ignored while the gameplay lock is
+		# held, so clear the authoritative player vector at the boundary too.
+		player.set_touch_vector(Vector2.ZERO)
+
+
 
 func _init() -> void:
 	if OS.is_debug_build():
@@ -1344,6 +1353,7 @@ func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	]
 	_map_transition_in_progress = true
 	_acquire_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+	_cancel_map_transition_movement_input()
 	_run_map_transition(_active_map_transition_id, operation, target_map_id)
 	return true
 
@@ -1434,6 +1444,9 @@ func _run_map_transition(
 				"max_slice_ms": float(bootstrap_profile.get("max_slice_ms", 0.0)),
 				"hud": hud.panel_prewarm_diagnostic(),
 			}))
+		# Cancel again immediately before READY releases the lock. This covers a
+		# release delivered during the lock as well as a release lost entirely.
+		_cancel_map_transition_movement_input()
 		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 	else:
 		# READY contract failed: keep the input lock and Loading overlay so the

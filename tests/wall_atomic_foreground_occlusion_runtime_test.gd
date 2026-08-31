@@ -6,6 +6,15 @@ const VisualGeometry := preload(
 const RELEASE_REGISTRY_PATH := (
 	"res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
 )
+const F1_OVERLAY_HASH := (
+	"521215ee6a2a29f0741908c7b6abc07a48b15f0af33296b6455a53b63f6cdf30"
+)
+const MULTI_DECOR_FIXTURE_HASH := (
+	"fd131e6eebd139e6be5ee5a137af7e182918d8224d0791cc9aad68c7b5b5886c"
+)
+const MAX_F1_SCANNED_OBJECT_PIXELS := 111084
+const MAX_BRIDGE_BUILD_USEC := 1000000
+const EXPECTED_PUBLISHED_DECOR_PAIRS := 7178
 
 const PUBLISHED_RUNTIME_MAPS := [
 	"bich_province",
@@ -221,7 +230,8 @@ func _audit_all_published_bridge_pairs() -> void:
 	assert(covered_maps == entries.size())
 	assert(maps_with_walls > 0 and maps_with_pairs > 0)
 	assert(total_wall_groups > 0 and total_static_commands > 0 and total_pairs > 0)
-	assert(total_preserved_pairs > 0 and total_reversals == 0)
+	assert(total_preserved_pairs == EXPECTED_PUBLISHED_DECOR_PAIRS)
+	assert(total_reversals == 0)
 	assert(total_terrain_floor_shadow_rejections > 0)
 	print(
 		(
@@ -652,12 +662,36 @@ func _assert_static_authored_bridge_fixture() -> void:
 	assert(int(stats.candidate_pairs) > 0)
 	assert(int(stats.scanned_pixels) > 0)
 	assert(int(stats.overlay_count) > 0)
+	_assert_bridge_build_metrics(stats)
 	var fixture_order_proof := _assert_actual_overlay_matches_original_static_order(
 		VisualGeometry.sorted_draw_commands(fixture.instances),
 		Vector2i(32, 32), runtime_root, true
 	)
+	assert(str(fixture_order_proof.hash) == MULTI_DECOR_FIXTURE_HASH)
 	print("STATIC_BRIDGE_MULTI_DECOR_FIXTURE_PASS ", fixture_order_proof)
 	runtime_root.queue_free()
+	await get_tree().process_frame
+
+	# A static-only map takes the metadata fast path before any bridge texture is
+	# hydrated. Sprite construction may load its normal texture, but the bridge
+	# itself must decode zero Images.
+	var no_wall_root := Node2D.new()
+	add_child(no_wall_root)
+	var no_wall_background := WorldBackground.new()
+	no_wall_root.add_child(no_wall_background)
+	no_wall_background.clear_environment()
+	no_wall_background._build_editor_runtime_instances({
+		"design": fixture.design,
+		"instances": [fixture.instances[1], fixture.instances[2]],
+	})
+	var no_wall_stats := no_wall_background.static_wall_bridge_stats()
+	assert(int(no_wall_stats.candidate_pairs) == 0)
+	assert(int(no_wall_stats.scanned_pixels) == 0)
+	assert(int(no_wall_stats.hydrated_textures) == 0)
+	assert(int(no_wall_stats.hydrated_bytes) == 0)
+	assert(int(no_wall_stats.build_usec) <= MAX_BRIDGE_BUILD_USEC)
+	print("STATIC_BRIDGE_NO_WALL_FAST_PATH_PASS ", no_wall_stats)
+	no_wall_root.queue_free()
 	await get_tree().process_frame
 
 	# Production builds the same commands through staged descriptors. This also
@@ -714,7 +748,9 @@ func _assert_orc_tomb_f1_real_bridge() -> void:
 	var stats := background.static_wall_bridge_stats()
 	assert(int(stats.candidate_pairs) > 0)
 	assert(int(stats.scanned_pixels) > 0)
+	assert(int(stats.scanned_pixels) <= MAX_F1_SCANNED_OBJECT_PIXELS)
 	assert(int(stats.overlay_count) > 0)
+	_assert_bridge_build_metrics(stats)
 	var original_static_indices := _original_static_command_indices(background)
 	for command: Dictionary in commands:
 		if VisualGeometry.is_static_authored_wall_bridge_candidate(command):
@@ -773,6 +809,7 @@ func _assert_orc_tomb_f1_real_bridge() -> void:
 		runtime_root,
 		false
 	)
+	assert(str(overlay_order_proof.hash) == F1_OVERLAY_HASH)
 	var after_payload := []
 	for command: Dictionary in VisualGeometry.sorted_draw_commands(loaded.runtime.instances):
 		after_payload.append([
@@ -792,7 +829,10 @@ func _assert_orc_tomb_f1_real_bridge() -> void:
 	print(
 		(
 			"STATIC_AUTHORED_WALL_BRIDGE_F1_STATS candidates=%d scanned=%d "
-			+ "overlays=%d pixels=%d compared=%d multi_decor_pixels=%d hash=%s"
+			+ "overlays=%d pixels=%d compared=%d multi_decor_pixels=%d hash=%s "
+			+ "record_usec=%d raster_usec=%d upload_usec=%d build_usec=%d "
+			+ "wall_alpha_samples=%d stack_hits=%d stack_misses=%d "
+			+ "duplicate_stacks=%d hydrated_textures=%d hydrated_bytes=%d"
 		)
 		% [
 			int(stats.candidate_pairs), int(stats.scanned_pixels),
@@ -800,9 +840,28 @@ func _assert_orc_tomb_f1_real_bridge() -> void:
 			int(overlay_order_proof.compared_pixels),
 			int(overlay_order_proof.multi_decor_pixels),
 			str(overlay_order_proof.hash),
+			int(stats.record_usec), int(stats.raster_usec),
+			int(stats.upload_usec), int(stats.build_usec),
+			int(stats.wall_alpha_samples), int(stats.wall_stack_cache_hits),
+			int(stats.wall_stack_cache_misses),
+			int(stats.wall_stack_duplicate_builds),
+			int(stats.hydrated_textures), int(stats.hydrated_bytes),
 		]
 	)
 	runtime_root.queue_free()
+
+
+func _assert_bridge_build_metrics(stats: Dictionary) -> void:
+	assert(int(stats.record_usec) >= 0)
+	assert(int(stats.raster_usec) >= 0)
+	assert(int(stats.upload_usec) >= 0)
+	assert(int(stats.build_usec) <= MAX_BRIDGE_BUILD_USEC)
+	assert(int(stats.wall_alpha_samples) > 0)
+	assert(int(stats.wall_stack_cache_misses) > 0)
+	assert(int(stats.wall_stack_cache_hits) >= 0)
+	assert(int(stats.wall_stack_duplicate_builds) == 0)
+	assert(int(stats.hydrated_textures) > 0)
+	assert(int(stats.hydrated_bytes) > 0)
 
 
 func _assert_actual_overlay_matches_original_static_order(

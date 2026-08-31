@@ -150,6 +150,7 @@ var warehouse_panel
 var death_revival_panel
 var loot_feedback_layer
 var loading_transition_overlay
+var movement_joystick: TouchJoystick
 var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
@@ -1172,7 +1173,8 @@ func _build_combat_controls(root: Control) -> void:
 	joystick_art.set_meta("stable_id", "ui.hud.gothic.v2.joystick")
 	root.add_child(joystick_art)
 
-	var joystick := TouchJoystick.new()
+	movement_joystick = TouchJoystick.new()
+	var joystick := movement_joystick
 	joystick.name = "TouchJoystick"
 	joystick.radius = 58.0
 	joystick.knob_radius = 24.0
@@ -1938,6 +1940,13 @@ func show_loot_feedback(event: Dictionary) -> void:
 func begin_loading_transition(transition_id := "") -> void:
 	if loading_transition_overlay != null:
 		loading_transition_overlay.begin_loading(transition_id)
+
+
+func cancel_movement_input() -> void:
+	if movement_joystick != null and is_instance_valid(movement_joystick):
+		movement_joystick.cancel_input()
+	else:
+		movement_changed.emit(Vector2.ZERO)
 
 
 func finish_loading_transition() -> void:

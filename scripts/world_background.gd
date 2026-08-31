@@ -90,7 +90,7 @@ const EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_ski
 const EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES := 10.0
 const DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD := 1536.0
 const STAGED_INITIAL_BUILD_CONTRACT_ID := "world_background.staged_initial_build.v1"
-const STATIC_WALL_BRIDGE_BUCKET_SIZE := 256
+const STATIC_WALL_BRIDGE_BUCKET_SIZE := 96
 
 @export var grid_radius := 28
 @export var tile_width := 64.0
@@ -130,6 +130,16 @@ var _static_wall_bridge_stats := {
 	"candidate_pairs": 0,
 	"scanned_pixels": 0,
 	"overlay_count": 0,
+	"record_usec": 0,
+	"raster_usec": 0,
+	"upload_usec": 0,
+	"build_usec": 0,
+	"wall_alpha_samples": 0,
+	"wall_stack_cache_hits": 0,
+	"wall_stack_cache_misses": 0,
+	"wall_stack_duplicate_builds": 0,
+	"hydrated_textures": 0,
+	"hydrated_bytes": 0,
 }
 
 # ── HC-P1-004 staged build contract ──
@@ -638,6 +648,16 @@ func clear_environment() -> void:
 		"candidate_pairs": 0,
 		"scanned_pixels": 0,
 		"overlay_count": 0,
+		"record_usec": 0,
+		"raster_usec": 0,
+		"upload_usec": 0,
+		"build_usec": 0,
+		"wall_alpha_samples": 0,
+		"wall_stack_cache_hits": 0,
+		"wall_stack_cache_misses": 0,
+		"wall_stack_duplicate_builds": 0,
+		"hydrated_textures": 0,
+		"hydrated_bytes": 0,
 	}
 	for node: Node in _environment_nodes:
 		if is_instance_valid(node):
@@ -1909,6 +1929,7 @@ func _build_static_authored_wall_bridge(
 	commands: Array[Dictionary],
 	size: Vector2i
 ) -> void:
+	var build_started_usec := Time.get_ticks_usec()
 	var generation := _generation_token()
 	if (
 		commands.is_empty()
@@ -1917,6 +1938,18 @@ func _build_static_authored_wall_bridge(
 	):
 		return
 	_static_wall_bridge_built_generation = generation
+	# Do not even request texture metadata when a map has no atomic walls.
+	var has_atomic_wall := false
+	for command: Dictionary in commands:
+		if RuntimeVisualGeometryScript.is_atomic_wall_pass(command):
+			has_atomic_wall = true
+			break
+	if not has_atomic_wall:
+		_static_wall_bridge_stats = _static_wall_bridge_empty_stats(generation)
+		_static_wall_bridge_stats.build_usec = Time.get_ticks_usec() - build_started_usec
+		set_meta("static_wall_bridge_stats", _static_wall_bridge_stats.duplicate(true))
+		return
+	var record_started_usec := Time.get_ticks_usec()
 	var groups := {}
 	var wall_pass_records: Array[Dictionary] = []
 	var object_records: Array[Dictionary] = []
@@ -1925,7 +1958,7 @@ func _build_static_authored_wall_bridge(
 			RuntimeVisualGeometryScript.is_atomic_wall_pass(command)
 			or RuntimeVisualGeometryScript.is_static_authored_wall_bridge_candidate(command)
 		):
-			var record := _static_wall_bridge_record(command, size)
+			var record := _static_wall_bridge_record_metadata(command, size)
 			if record.is_empty():
 				continue
 			if RuntimeVisualGeometryScript.is_atomic_wall_pass(command):
@@ -1946,13 +1979,27 @@ func _build_static_authored_wall_bridge(
 					group.wall_command = command
 			else:
 				object_records.append(record)
+	var record_usec := Time.get_ticks_usec() - record_started_usec
 	if groups.is_empty() or object_records.is_empty():
 		_static_wall_bridge_stats = _static_wall_bridge_empty_stats(generation)
+		_static_wall_bridge_stats.record_usec = record_usec
+		_static_wall_bridge_stats.build_usec = Time.get_ticks_usec() - build_started_usec
+		set_meta("static_wall_bridge_stats", _static_wall_bridge_stats.duplicate(true))
 		return
 	var group_grid := _static_wall_bridge_group_grid(groups)
 	var pass_grid := _static_wall_bridge_pass_grid(wall_pass_records)
-	var candidate_pairs := 0
-	var scanned_pixels := 0
+	var metrics := {
+		"candidate_pairs": 0,
+		"scanned_pixels": 0,
+		"wall_alpha_samples": 0,
+		"wall_stack_cache_hits": 0,
+		"wall_stack_cache_misses": 0,
+		"wall_stack_duplicate_builds": 0,
+		"hydrated_texture_paths": {},
+		"hydrated_bytes": 0,
+	}
+	var wall_stack_cache := {}
+	var raster_started_usec := Time.get_ticks_usec()
 	# Commands are already in the original global draw order. Processing the
 	# object records in that order preserves all object-object compositing.
 	for object_record: Dictionary in object_records:
@@ -1960,6 +2007,7 @@ func _build_static_authored_wall_bridge(
 		for bucket: Vector2i in _static_wall_bridge_buckets(object_record.aabb):
 			for group_key: String in group_grid.get(bucket, []):
 				candidate_groups[group_key] = true
+		var scan_rects: Array[Rect2i] = []
 		for group_key: String in candidate_groups:
 			var group: Dictionary = groups[group_key]
 			var object_aabb: Rect2i = object_record.aabb
@@ -1975,27 +2023,45 @@ func _build_static_authored_wall_bridge(
 			var scan_rect := object_aabb.intersection(group_aabb)
 			if scan_rect.size.x <= 0 or scan_rect.size.y <= 0:
 				continue
-			candidate_pairs += 1
-			scanned_pixels += scan_rect.get_area()
-			_static_wall_bridge_scan_pair(
-				object_record, group, groups, size, scan_rect, pass_grid
-			)
+			metrics.candidate_pairs = int(metrics.candidate_pairs) + 1
+			scan_rects.append(scan_rect)
+		if scan_rects.is_empty():
+			continue
+		if not _static_wall_bridge_hydrate_record(object_record, metrics):
+			continue
+		_static_wall_bridge_scan_object_once(
+			object_record, groups, size, scan_rects, pass_grid,
+			wall_stack_cache, metrics
+		)
+	var raster_usec := Time.get_ticks_usec() - raster_started_usec
+	var upload_started_usec := Time.get_ticks_usec()
 	var overlay_count := 0
 	for group_key: String in groups:
 		var group: Dictionary = groups[group_key]
 		if _static_wall_bridge_append_overlay(group):
 			overlay_count += 1
+	var upload_usec := Time.get_ticks_usec() - upload_started_usec
 	_static_wall_bridge_stats = {
 		"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
 		"generation": generation,
-		"candidate_pairs": candidate_pairs,
-		"scanned_pixels": scanned_pixels,
+		"candidate_pairs": int(metrics.candidate_pairs),
+		"scanned_pixels": int(metrics.scanned_pixels),
 		"overlay_count": overlay_count,
+		"record_usec": record_usec,
+		"raster_usec": raster_usec,
+		"upload_usec": upload_usec,
+		"build_usec": Time.get_ticks_usec() - build_started_usec,
+		"wall_alpha_samples": int(metrics.wall_alpha_samples),
+		"wall_stack_cache_hits": int(metrics.wall_stack_cache_hits),
+		"wall_stack_cache_misses": int(metrics.wall_stack_cache_misses),
+		"wall_stack_duplicate_builds": int(metrics.wall_stack_duplicate_builds),
+		"hydrated_textures": (metrics.hydrated_texture_paths as Dictionary).size(),
+		"hydrated_bytes": int(metrics.hydrated_bytes),
 	}
 	set_meta("static_wall_bridge_stats", _static_wall_bridge_stats.duplicate(true))
 
 
-func _static_wall_bridge_record(
+func _static_wall_bridge_record_metadata(
 	command: Dictionary,
 	size: Vector2i
 ) -> Dictionary:
@@ -2005,12 +2071,6 @@ func _static_wall_bridge_record(
 	var texture := _prefetched_texture(resource_path, "BUILD_MAP")
 	if texture == null:
 		return {}
-	var image: Image = _static_wall_bridge_image_cache.get(resource_path) as Image
-	if image == null:
-		image = texture.get_image()
-		_static_wall_bridge_image_cache[resource_path] = image
-	if image == null or image.is_empty():
-		return {}
 	var transform := RuntimeVisualGeometryScript.command_texture_transform(
 		command, size, texture.get_size()
 	)
@@ -2019,12 +2079,39 @@ func _static_wall_bridge_record(
 		"command_index": int(command.get("command_index", -1)),
 		"image_pass": int(command.get("image_pass", -1)),
 		"group_key": str(command.get("actor_sort_group", "")),
-		"image": image,
+		"resource_path": resource_path,
+		"texture": texture,
+		"image": null,
 		"inverse_transform": transform.affine_inverse(),
 		"aabb": RuntimeVisualGeometryScript.transformed_texture_aabb(
 			transform, texture.get_size()
 		),
 	}
+
+
+func _static_wall_bridge_hydrate_record(
+	record: Dictionary,
+	metrics: Dictionary
+) -> bool:
+	var image: Image = record.get("image") as Image
+	if image != null and not image.is_empty():
+		return true
+	var resource_path := str(record.get("resource_path", ""))
+	image = _static_wall_bridge_image_cache.get(resource_path) as Image
+	if image == null:
+		var texture := record.get("texture") as Texture2D
+		if texture == null:
+			return false
+		image = texture.get_image()
+		if image == null or image.is_empty():
+			return false
+		_static_wall_bridge_image_cache[resource_path] = image
+		var hydrated_paths: Dictionary = metrics.hydrated_texture_paths
+		if not hydrated_paths.has(resource_path):
+			hydrated_paths[resource_path] = true
+			metrics.hydrated_bytes = int(metrics.hydrated_bytes) + image.get_data_size()
+	record.image = image
+	return true
 
 
 func _static_wall_bridge_group_grid(groups: Dictionary) -> Dictionary:
@@ -2068,105 +2155,119 @@ func _static_wall_bridge_buckets(rect: Rect2i) -> Array[Vector2i]:
 	return result
 
 
-func _static_wall_bridge_scan_pair(
+func _static_wall_bridge_scan_object_once(
 	object_record: Dictionary,
-	source_group: Dictionary,
 	groups: Dictionary,
 	size: Vector2i,
-	scan_rect: Rect2i,
-	pass_grid: Dictionary
+	scan_rects: Array[Rect2i],
+	pass_grid: Dictionary,
+	wall_stack_cache: Dictionary,
+	metrics: Dictionary
 ) -> void:
-	for world_y in range(scan_rect.position.y, scan_rect.end.y):
-		for world_x in range(scan_rect.position.x, scan_rect.end.x):
-			var world_pixel := Vector2i(world_x, world_y)
-			var source := _static_wall_bridge_sample(object_record, world_pixel)
-			if source.a <= 0.0:
-				continue
-			var source_base := _static_wall_bridge_top_base_in_front_relation(
-				world_pixel, object_record, size, pass_grid
-			)
-			if (
-				source_base.is_empty()
-				or str(source_base.group_key) != str(source_group.group_key)
-			):
-				continue
-			var owner := _static_wall_bridge_owner(world_pixel, pass_grid)
-			if owner.is_empty() or not groups.has(str(owner.group_key)):
-				continue
-			var owner_group: Dictionary = groups[str(owner.group_key)]
-			if (
-				owner_group.wall_command.is_empty()
-				or not RuntimeVisualGeometryScript.static_authored_command_is_in_front_of_wall(
-					object_record.command, owner_group.wall_command, size
+	var spans_by_y := _static_wall_bridge_merged_scan_spans(scan_rects)
+	for world_y: int in spans_by_y:
+		for span: Vector2i in spans_by_y[world_y]:
+			for world_x in range(span.x, span.y):
+				metrics.scanned_pixels = int(metrics.scanned_pixels) + 1
+				var world_pixel := Vector2i(world_x, world_y)
+				var source := _static_wall_bridge_sample(object_record, world_pixel)
+				if source.a <= 0.0:
+					continue
+				var wall_stack := _static_wall_bridge_wall_stack(
+					world_pixel, pass_grid, wall_stack_cache, metrics
 				)
-			):
-				continue
-			var pixels: Dictionary = owner_group.pixels
-			var destination: Color = pixels.get(world_pixel, Color(0, 0, 0, 0))
-			pixels[world_pixel] = RuntimeVisualGeometryScript.static_wall_bridge_source_over(
-				source, destination
-			)
-			var source_ids: Dictionary = owner_group.source_instance_ids
-			var source_command: Dictionary = object_record.command
-			source_ids[str(source_command.get("instance", {}).get("instance_id", ""))] = true
+				if wall_stack.is_empty():
+					continue
+				# The stack is in original wall command order. One reverse traversal
+				# obtains both exclusive actual owner and the top eligible base.
+				var owner: Dictionary = wall_stack[wall_stack.size() - 1]
+				var top_base: Dictionary = {}
+				for stack_index in range(wall_stack.size() - 1, -1, -1):
+					var wall_record: Dictionary = wall_stack[stack_index]
+					if (
+						int(wall_record.image_pass) == 1
+						and RuntimeVisualGeometryScript.static_authored_command_is_in_front_of_wall(
+							object_record.command, wall_record.command, size
+						)
+					):
+						top_base = wall_record
+						break
+				if top_base.is_empty() or not groups.has(str(owner.group_key)):
+					continue
+				var owner_group: Dictionary = groups[str(owner.group_key)]
+				if (
+					owner_group.wall_command.is_empty()
+					or not RuntimeVisualGeometryScript.static_authored_command_is_in_front_of_wall(
+						object_record.command, owner_group.wall_command, size
+					)
+				):
+					continue
+				var pixels: Dictionary = owner_group.pixels
+				var destination: Color = pixels.get(world_pixel, Color(0, 0, 0, 0))
+				pixels[world_pixel] = RuntimeVisualGeometryScript.static_wall_bridge_source_over(
+					source, destination
+				)
+				var source_ids: Dictionary = owner_group.source_instance_ids
+				var source_command: Dictionary = object_record.command
+				source_ids[str(source_command.get("instance", {}).get("instance_id", ""))] = true
 
 
-func _static_wall_bridge_owner(
-	world_pixel: Vector2i,
-	pass_grid: Dictionary
+func _static_wall_bridge_merged_scan_spans(
+	scan_rects: Array[Rect2i]
 ) -> Dictionary:
+	var rows := {}
+	for rect: Rect2i in scan_rects:
+		for world_y in range(rect.position.y, rect.end.y):
+			if not rows.has(world_y):
+				rows[world_y] = []
+			(rows[world_y] as Array).append(Vector2i(rect.position.x, rect.end.x))
+	for world_y: int in rows:
+		var intervals: Array = rows[world_y]
+		intervals.sort_custom(
+			func(a: Vector2i, b: Vector2i) -> bool:
+				return a.x < b.x or (a.x == b.x and a.y < b.y)
+		)
+		var merged: Array[Vector2i] = []
+		for interval: Vector2i in intervals:
+			if merged.is_empty() or interval.x > merged[merged.size() - 1].y:
+				merged.append(interval)
+			else:
+				var last := merged[merged.size() - 1]
+				last.y = maxi(last.y, interval.y)
+				merged[merged.size() - 1] = last
+		rows[world_y] = merged
+	return rows
+
+
+func _static_wall_bridge_wall_stack(
+	world_pixel: Vector2i,
+	pass_grid: Dictionary,
+	wall_stack_cache: Dictionary,
+	metrics: Dictionary
+) -> Array[Dictionary]:
+	if wall_stack_cache.has(world_pixel):
+		metrics.wall_stack_cache_hits = int(metrics.wall_stack_cache_hits) + 1
+		return wall_stack_cache[world_pixel]
+	metrics.wall_stack_cache_misses = int(metrics.wall_stack_cache_misses) + 1
 	var bucket := Vector2i(
 		floori(float(world_pixel.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
 		floori(float(world_pixel.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
 	)
 	var grid: Dictionary = pass_grid.grid
 	var records: Array[Dictionary] = pass_grid.records
-	var owner: Dictionary = {}
+	var stack: Array[Dictionary] = []
 	for record_index: int in grid.get(bucket, []):
 		var record: Dictionary = records[record_index]
 		var record_aabb: Rect2i = record.aabb
 		if not record_aabb.has_point(world_pixel):
 			continue
-		if _static_wall_bridge_sample(record, world_pixel).a <= 0.0:
+		if not _static_wall_bridge_hydrate_record(record, metrics):
 			continue
-		if owner.is_empty() or int(record.command_index) > int(owner.command_index):
-			owner = record
-	return owner
-
-
-func _static_wall_bridge_top_base_in_front_relation(
-	world_pixel: Vector2i,
-	object_record: Dictionary,
-	size: Vector2i,
-	pass_grid: Dictionary
-) -> Dictionary:
-	var bucket := Vector2i(
-		floori(float(world_pixel.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
-		floori(float(world_pixel.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
-	)
-	var grid: Dictionary = pass_grid.grid
-	var records: Array[Dictionary] = pass_grid.records
-	var result: Dictionary = {}
-	for record_index: int in grid.get(bucket, []):
-		var record: Dictionary = records[record_index]
-		if (
-			int(record.image_pass) != 1
-			or not RuntimeVisualGeometryScript.static_authored_command_is_in_front_of_wall(
-				object_record.command, record.command, size
-			)
-		):
-			continue
-		var record_aabb: Rect2i = record.aabb
-		if (
-			record_aabb.has_point(world_pixel)
-			and _static_wall_bridge_sample(record, world_pixel).a > 0.0
-			and (
-				result.is_empty()
-				or int(record.command_index) > int(result.command_index)
-			)
-		):
-			result = record
-	return result
+		metrics.wall_alpha_samples = int(metrics.wall_alpha_samples) + 1
+		if _static_wall_bridge_sample(record, world_pixel).a > 0.0:
+			stack.append(record)
+	wall_stack_cache[world_pixel] = stack
+	return stack
 
 
 func _static_wall_bridge_sample(record: Dictionary, world_pixel: Vector2i) -> Color:
@@ -2239,6 +2340,16 @@ func _static_wall_bridge_empty_stats(generation: int) -> Dictionary:
 		"candidate_pairs": 0,
 		"scanned_pixels": 0,
 		"overlay_count": 0,
+		"record_usec": 0,
+		"raster_usec": 0,
+		"upload_usec": 0,
+		"build_usec": 0,
+		"wall_alpha_samples": 0,
+		"wall_stack_cache_hits": 0,
+		"wall_stack_cache_misses": 0,
+		"wall_stack_duplicate_builds": 0,
+		"hydrated_textures": 0,
+		"hydrated_bytes": 0,
 	}
 
 
