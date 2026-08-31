@@ -2308,22 +2308,14 @@ func _static_wall_bridge_resolve_owner(
 	var owner: Dictionary = {}
 	var object_sort_y := float(object_record.static_sort_y)
 	# Bucket records are explicitly sorted by descending global command index.
-	# The first opaque pass is the same owner as the old complete stack's tail.
-	# Once that owner is known, only depth-eligible base passes can satisfy the
-	# second result consumed by the old algorithm, so all other passes are free
-	# to skip without an alpha read or per-pixel Array allocation.
+	# The first opaque pass is the owner of this wall pixel. The wall group's
+	# cached base sort Y is the depth authority for the whole wall union, so a
+	# front-only pixel must not require same-pixel base alpha to bridge.
 	for record_index: int in grid.get(bucket, []):
 		var record: Dictionary = records[record_index]
 		var record_aabb: Rect2i = record.aabb
 		if not record_aabb.has_point(world_pixel):
 			continue
-		if not owner.is_empty():
-			if (
-				int(record.image_pass) != 1
-				or object_sort_y <= float(record.wall_sort_y)
-			):
-				metrics.wall_relation_skips = int(metrics.wall_relation_skips) + 1
-				continue
 		if not _static_wall_bridge_hydrate_record(record, metrics):
 			continue
 		var used_world_aabb: Rect2i = record.used_world_aabb
@@ -2344,11 +2336,6 @@ func _static_wall_bridge_resolve_owner(
 				or object_sort_y <= float(owner_group.wall_sort_y)
 			):
 				return {}
-			if int(owner.image_pass) == 1:
-				return owner
-			continue
-		metrics.wall_base_samples = int(metrics.wall_base_samples) + 1
-		if _static_wall_bridge_sample(record, world_pixel).a > 0.0:
 			return owner
 	return {}
 
@@ -2407,14 +2394,12 @@ func _static_wall_bridge_append_overlay(group: Dictionary) -> bool:
 		"static_wall_bridge_source_instance_ids", source_instance_ids.keys()
 	)
 	root.add_child(overlay)
-	# Pre-674 wall bases were static and fronts were actor-sorted. Insert the
-	# restoration after every base but before the first front, never after the
-	# complete wall union.
-	for child_index in root.get_child_count():
-		var child := root.get_child(child_index)
-		if int(child.get_meta("editor_runtime_image_pass", -1)) == 2:
-			root.move_child(overlay, child_index)
-			break
+	# The bridge is the completed wall union restoration. It must be drawn after
+	# every authored wall base/front child so the wall's upper/front pixels cannot
+	# cover a decoration that was authored in front of the wall. The bridge raster
+	# itself already contains only the pixels resolved by the shared owner/base
+	# algorithm, so changing node placement does not alter object-object order.
+	root.move_child(overlay, root.get_child_count() - 1)
 	return true
 
 

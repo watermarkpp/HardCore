@@ -7,10 +7,10 @@ const RELEASE_REGISTRY_PATH := (
 	"res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
 )
 const F1_OVERLAY_HASH := (
-	"521215ee6a2a29f0741908c7b6abc07a48b15f0af33296b6455a53b63f6cdf30"
+	"bf43daed182b9ca2b630560af5cb349c8ace30beee5aabd2e4d0e09fa3355685"
 )
 const MULTI_DECOR_FIXTURE_HASH := (
-	"fd131e6eebd139e6be5ee5a137af7e182918d8224d0791cc9aad68c7b5b5886c"
+	"31f620f617f5c3eb6cc8fa4f64c796fc1c48f12ff7cc1a54cb77823e4aeef03a"
 )
 const MAX_F1_SCANNED_OBJECT_PIXELS := 111084
 const MAX_BRIDGE_BUILD_USEC := 1000000
@@ -667,6 +667,7 @@ func _assert_static_authored_bridge_fixture() -> void:
 		VisualGeometry.sorted_draw_commands(fixture.instances),
 		Vector2i(32, 32), runtime_root, true
 	)
+	assert(int(fixture_order_proof.front_only_overlay_pixels) > 0)
 	assert(str(fixture_order_proof.hash) == MULTI_DECOR_FIXTURE_HASH)
 	print("STATIC_BRIDGE_MULTI_DECOR_FIXTURE_PASS ", fixture_order_proof)
 	runtime_root.queue_free()
@@ -763,17 +764,16 @@ func _assert_orc_tomb_f1_real_bridge() -> void:
 	for wrapper: Node in runtime_root.get_children():
 		if not bool(wrapper.get_meta("editor_runtime_actor_occluder", false)):
 			continue
-		var first_front := -1
+		var last_front := -1
 		for child_index in wrapper.get_child_count():
 			var child := wrapper.get_child(child_index)
 			if int(child.get_meta("editor_runtime_image_pass", -1)) == 2:
-				first_front = child_index
-				break
+				last_front = child_index
 		for child_index in wrapper.get_child_count():
 			var child := wrapper.get_child(child_index)
 			if not bool(child.get_meta("static_authored_wall_bridge", false)):
 				continue
-			assert(first_front < 0 or child_index < first_front)
+			assert(last_front < 0 or child_index > last_front)
 			for instance_id: String in child.get_meta(
 				"static_wall_bridge_source_instance_ids", []
 			):
@@ -809,6 +809,7 @@ func _assert_orc_tomb_f1_real_bridge() -> void:
 		runtime_root,
 		false
 	)
+	assert(int(overlay_order_proof.front_only_overlay_pixels) > 0)
 	assert(str(overlay_order_proof.hash) == F1_OVERLAY_HASH)
 	var after_payload := []
 	for command: Dictionary in VisualGeometry.sorted_draw_commands(loaded.runtime.instances):
@@ -899,6 +900,7 @@ func _assert_actual_overlay_matches_original_static_order(
 	context.start(HashingContext.HASH_SHA256)
 	var compared_pixels := 0
 	var multi_decor_pixels := 0
+	var front_only_overlay_pixels := 0
 	var compared_overlays := 0
 	var quantizer := Image.create(1, 1, false, Image.FORMAT_RGBA8)
 	for wrapper: Node in runtime_root.get_children():
@@ -927,12 +929,8 @@ func _assert_actual_overlay_matches_original_static_order(
 							var source := _sample_decor_pixel(static_record, world_pixel)
 							if source.a <= 0.0:
 								continue
-							var top_base := _expected_top_base_for_static(
-								world_pixel, static_record.command,
-								design_size, wall_records
-							)
 							if (
-								top_base.is_empty()
+								owner_base.is_empty()
 								or not VisualGeometry.static_authored_command_is_in_front_of_wall(
 									static_record.command, owner_base.command, design_size
 								)
@@ -963,6 +961,15 @@ func _assert_actual_overlay_matches_original_static_order(
 					compared_pixels += 1
 					if ordered_colors.size() >= 2 and actual.a > 0.0:
 						multi_decor_pixels += 1
+					if actual.a > 0.0 and not owner.is_empty():
+						var owner_base_for_pixel: Dictionary = base_by_group.get(
+							str(owner.group_key), {}
+						)
+						if not owner_base_for_pixel.is_empty():
+							var owner_front := _sample_decor_pixel(owner, world_pixel)
+							var owner_base_color := _sample_decor_pixel(owner_base_for_pixel, world_pixel)
+							if owner_front.a > 0.0 and owner_base_color.a <= 0.0:
+								front_only_overlay_pixels += 1
 					context.update(
 						("%d,%d:%08x;" % [world_pixel.x, world_pixel.y, actual.to_rgba32()]).to_utf8_buffer()
 					)
@@ -976,6 +983,7 @@ func _assert_actual_overlay_matches_original_static_order(
 		"compared_overlays": compared_overlays,
 		"compared_pixels": compared_pixels,
 		"multi_decor_pixels": multi_decor_pixels,
+		"front_only_overlay_pixels": front_only_overlay_pixels,
 		"hash": context.finish().hex_encode(),
 	}
 
