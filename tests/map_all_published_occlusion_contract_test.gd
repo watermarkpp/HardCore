@@ -135,8 +135,10 @@ func _assert_synthetic_command_families() -> void:
 		}],
 	})
 	assert(split.size() == 2)
-	assert(split[0].render_domain == VisualGeometry.RENDER_DOMAIN_STATIC_BACKGROUND)
+	assert(split[0].render_domain == VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
 	assert(split[1].render_domain == VisualGeometry.RENDER_DOMAIN_ACTOR_Y_SORT)
+	assert(not str(split[0].actor_sort_group).is_empty())
+	assert(split[0].actor_sort_group == split[1].actor_sort_group)
 	assert(Vector2(split[1].sort_baseline_tile).is_equal_approx(
 		Vector2(split[1].sort_tile)
 		+ VisualGeometry.WALL_PART_SORT_BASELINE_TILE_OFFSET

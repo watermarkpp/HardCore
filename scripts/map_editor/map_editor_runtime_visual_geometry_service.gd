@@ -1,9 +1,9 @@
 class_name MapEditorRuntimeVisualGeometryService
 extends RefCounted
 
-const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v5"
+const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v6"
 const EDITOR_LAYOUT_CONTRACT_ID := "map_editor_authoritative_layout_v1"
-const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v5"
+const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v6"
 const RENDER_DOMAIN_STATIC_BACKGROUND := "static_background"
 const RENDER_DOMAIN_ACTOR_Y_SORT := "actor_y_sort"
 const WALL_PART_SORT_BASELINE_TILE_OFFSET := Vector2(0.5, 0.5)
@@ -330,7 +330,8 @@ static func instance_draw_commands(
 	if (
 		split_wall
 	):
-		for part: Dictionary in render_parts:
+		for part_index in render_parts.size():
+			var part: Dictionary = render_parts[part_index]
 			var sort_offset_raw: Array = part.get(
 				"sort_tile_offset", part.get("tile_offset", [0, 0])
 			)
@@ -357,6 +358,21 @@ static func instance_draw_commands(
 				var image_path := str(part.get(str(image_pass.field), ""))
 				if image_path.is_empty():
 					continue
+				var pass_index := int(image_pass.pass)
+				var render_domain := render_domain_for_pass(
+					instance, asset, pass_index, has_split_foreground
+				)
+				var actor_sort_group := ""
+				if (
+					pass_index > 0
+					and render_domain == RENDER_DOMAIN_ACTOR_Y_SORT
+				):
+					# A wall part is one opaque occluder relative to actors.  Its
+					# base and front images remain separate children only to retain
+					# their authored pass order; they share one Y-sort wrapper.
+					actor_sort_group = "wall_part:%s:%d:%d" % [
+						str(instance.get("instance_id", "")), sequence, part_index,
+					]
 				result.append({
 					"instance": instance,
 					"asset": asset,
@@ -369,13 +385,9 @@ static func instance_draw_commands(
 					"sort_baseline_tile": part_sort_baseline,
 					"sort_baseline_offset_px": Vector2.ZERO,
 					"layer_index": layer_index,
-					"image_pass": int(image_pass.pass),
-					"render_domain": render_domain_for_pass(
-						instance,
-						asset,
-						int(image_pass.pass),
-						has_split_foreground
-					),
+					"image_pass": pass_index,
+					"render_domain": render_domain,
+					"actor_sort_group": actor_sort_group,
 					"occlusion_contract_id": OCCLUSION_SORT_CONTRACT_ID,
 					"part_order": int(part.get("draw_order_index", 0)),
 					"sequence": sequence,
@@ -428,17 +440,14 @@ static func render_domain_for_pass(
 	image_pass: int,
 	has_split_foreground: bool
 ) -> String:
-	# Shadows and the lower/base half of a deliberately split wall stay baked
-	# behind actors. Its foreground half sorts at the authored foot. Every
-	# unsplit occluder (ordinary tree/building or legacy wall) sorts as one unit.
+	# Ground shadows stay baked behind actors.  Both opaque halves of a split
+	# wall sort at the same authored foot: base contains real lower-facade pixels,
+	# so leaving it static lets every world object paint into the wall.  Ordinary
+	# unsplit occluders continue to sort as one unit.
 	if image_pass == 0:
 		return RENDER_DOMAIN_STATIC_BACKGROUND
 	if has_split_foreground:
-		return (
-			RENDER_DOMAIN_ACTOR_Y_SORT
-			if image_pass == 2
-			else RENDER_DOMAIN_STATIC_BACKGROUND
-		)
+		return RENDER_DOMAIN_ACTOR_Y_SORT
 	return (
 		RENDER_DOMAIN_ACTOR_Y_SORT
 		if instance_is_occluder(instance, asset)
@@ -581,6 +590,7 @@ static func draw_command_payload(instances: Array) -> Array[Dictionary]:
 			"render_domain": str(command.get(
 				"render_domain", RENDER_DOMAIN_STATIC_BACKGROUND
 			)),
+			"actor_sort_group": str(command.get("actor_sort_group", "")),
 			"occlusion_contract_id": str(command.get(
 				"occlusion_contract_id", OCCLUSION_SORT_CONTRACT_ID
 			)),

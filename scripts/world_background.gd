@@ -740,9 +740,10 @@ func _append_actor_sort_node(root: Node2D, sprite: Sprite2D) -> Node2D:
 	if not _generation_is_current():
 		root.free()
 		return null
-	get_parent().add_child(root)
+	if root.get_parent() == null:
+		get_parent().add_child(root)
+		_environment_nodes.append(root)
 	root.add_child(sprite)
-	_environment_nodes.append(root)
 	return root
 
 
@@ -1777,16 +1778,24 @@ func _build_editor_runtime_instances(runtime:Dictionary)->void:
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
 		runtime.get("instances", [])
 	)
+	var actor_sort_roots := {}
 	for command_index in commands.size():
 		var command: Dictionary = commands[command_index]
-		_build_one_editor_runtime_instance(command, command_index, size)
+		var group_key := str(command.get("actor_sort_group", ""))
+		var shared_root: Node2D = actor_sort_roots.get(group_key) as Node2D
+		var built := _build_one_editor_runtime_instance(
+			command, command_index, size, null, shared_root
+		)
+		if not group_key.is_empty() and built is Node2D:
+			actor_sort_roots[group_key] = built
 
 
 func _build_one_editor_runtime_instance(
 	command: Dictionary,
 	command_index: int,
 	size: Vector2i,
-	texture: Texture2D = null
+	texture: Texture2D = null,
+	shared_actor_sort_root: Node2D = null
 ) -> Node:
 	var image_path := str(command.get("image_path", ""))
 	if image_path.is_empty():
@@ -1822,13 +1831,19 @@ func _build_one_editor_runtime_instance(
 	var actor_sort_root: Node2D = null
 	var parent_world_origin := Vector2.ZERO
 	if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
-		actor_sort_root = Node2D.new()
-		actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
-		actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
-			command, size
-		)
+		actor_sort_root = shared_actor_sort_root
+		if actor_sort_root == null:
+			actor_sort_root = Node2D.new()
+			actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
+			actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
+				command, size
+			)
 		parent_world_origin = actor_sort_root.position
 		actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
+		actor_sort_root.set_meta(
+			"editor_runtime_actor_sort_group",
+			str(command.get("actor_sort_group", ""))
+		)
 		actor_sort_root.set_meta("editor_runtime_sort_tile", command.sort_tile)
 		actor_sort_root.set_meta("editor_runtime_instance_id", str(
 			command.get("instance", {}).get("instance_id", "")

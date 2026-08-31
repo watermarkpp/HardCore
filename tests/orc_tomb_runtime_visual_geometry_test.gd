@@ -4,9 +4,9 @@ const GeometryService := preload(
 	"res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd"
 )
 const MAPS := [
-	{"map_id": "orc_tomb_1", "runtime_map_id": 217},
-	{"map_id": "orc_tomb_2", "runtime_map_id": 218},
-	{"map_id": "orc_tomb_3", "runtime_map_id": 221},
+	{"map_id": "bich_orc_tomb_f1", "runtime_map_id": 911001},
+	{"map_id": "bich_orc_tomb_f2", "runtime_map_id": 911002},
+	{"map_id": "bich_orc_tomb_f3", "runtime_map_id": 911003},
 ]
 
 
@@ -82,7 +82,14 @@ func _ready() -> void:
 				runtime_command, design_size, texture.get_size()
 			)
 			_assert_same_geometry(
-				editor_geometry, runtime_geometry, map_id, command_index
+				editor_geometry,
+				runtime_geometry,
+				(
+					-editor_draw_offset
+					- MapEditorCoordinate.ground_pixel_center(design_size)
+				),
+				map_id,
+				command_index
 			)
 			_assert_sprite_geometry(
 				runtime_command, runtime_geometry, design_size, map_id,
@@ -127,7 +134,7 @@ func _ready() -> void:
 	)
 	print(
 		"ORC_TOMB_RUNTIME_VISUAL_GEOMETRY_PASS "
-		+ "contract=%s maps=217,218,221 instances=%d commands=%d walls=%d"
+		+ "contract=%s maps=911001,911002,911003 instances=%d commands=%d walls=%d"
 		% [
 			GeometryService.VISUAL_GEOMETRY_CONTRACT_ID,
 			total_instances,
@@ -158,18 +165,31 @@ func _assert_same_command(
 func _assert_same_geometry(
 	editor: Dictionary,
 	runtime: Dictionary,
+	editor_to_runtime: Vector2,
 	map_id: String,
 	command_index: int
 ) -> void:
 	var context := "%s command=%d" % [map_id, command_index]
-	for field: String in ["center", "anchor", "visual_scale", "top_left"]:
+	for field: String in ["anchor", "visual_scale"]:
 		var editor_value: Vector2 = editor[field]
 		var runtime_value: Vector2 = runtime[field]
 		assert(editor_value.is_equal_approx(runtime_value), "%s:%s" % [context, field])
+	for field: String in ["center", "top_left"]:
+		var editor_value: Vector2 = editor[field]
+		var runtime_value: Vector2 = runtime[field]
+		assert(
+			(editor_value + editor_to_runtime).is_equal_approx(runtime_value),
+			"%s:%s" % [context, field]
+		)
 	assert(is_equal_approx(float(editor.rotation), float(runtime.rotation)), context)
 	var editor_rect: Rect2 = editor.rect
 	var runtime_rect: Rect2 = runtime.rect
-	assert(editor_rect.position.is_equal_approx(runtime_rect.position), context)
+	assert(
+		(editor_rect.position + editor_to_runtime).is_equal_approx(
+			runtime_rect.position
+		),
+		context
+	)
 	assert(editor_rect.size.is_equal_approx(runtime_rect.size), context)
 
 
