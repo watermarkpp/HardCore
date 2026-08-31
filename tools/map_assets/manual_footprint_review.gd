@@ -45,7 +45,6 @@ var draft_anchor_px := Vector2.ZERO
 var delete_dialog: ConfirmationDialog
 var pending_delete_asset_id := ""
 var asset_id_prefix_filter := ""
-var asset_type_filter := ""
 
 
 func _ready() -> void:
@@ -68,8 +67,7 @@ func _load_scope_from_args() -> void:
 	for argument: String in OS.get_cmdline_user_args():
 		if argument.begins_with("--asset-prefix="):
 			asset_id_prefix_filter = argument.trim_prefix("--asset-prefix=").strip_edges()
-		elif argument.begins_with("--asset-type="):
-			asset_type_filter = argument.trim_prefix("--asset-type=").strip_edges()
+			return
 
 
 func _build_ui() -> void:
@@ -395,12 +393,6 @@ func _load_assets() -> void:
 		if (
 			not asset_id_prefix_filter.is_empty()
 			and not asset_id.begins_with(asset_id_prefix_filter)
-		):
-			continue
-
-		if (
-			not asset_type_filter.is_empty()
-			and str(raw.get("asset_type", "")) != asset_type_filter
 		):
 			continue
 

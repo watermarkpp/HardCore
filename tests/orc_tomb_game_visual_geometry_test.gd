@@ -6,7 +6,7 @@ const GeometryService := preload(
 const RuntimeBridge := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
-const MAP_IDS := [911001, 911002, 911003]
+const MAP_IDS := [217, 218, 221]
 
 
 func _ready() -> void:
@@ -70,7 +70,7 @@ func _run() -> void:
 		assert(not game.background.uses_editor_runtime_fallback_ground())
 	print(
 		"ORC_TOMB_GAME_VISUAL_GEOMETRY_PASS "
-		+ "contract=%s maps=911001,911002,911003 commands=%d legacy_fallback=false"
+		+ "contract=%s maps=217,218,221 commands=%d legacy_fallback=false"
 		% [GeometryService.VISUAL_GEOMETRY_CONTRACT_ID, verified_commands]
 	)
 	get_tree().quit(0)

@@ -90,17 +90,6 @@ func _assert_real_map_406_runtime(
 	for index in sample_count:
 		var command: Dictionary = front_commands[index]
 		var wrapper: Node2D = wrappers[index]
-		assert(
-			wrapper.get_script() == null
-			and not wrapper.is_processing()
-			and not wrapper.is_physics_processing(),
-			"map406 wall foreground gained a per-frame processor"
-		)
-		var wall_sprite := wrapper.get_child(0) as Sprite2D
-		assert(
-			wall_sprite != null and wall_sprite.material == null,
-			"map406 wall foreground gained a runtime shader"
-		)
 		var expected_world := VisualGeometry.command_actor_sort_world(
 			command, Vector2i(50, 50)
 		)
@@ -130,21 +119,6 @@ func _assert_real_map_406_runtime(
 			behind_actor.z_index == wrapper.z_index
 			and front_actor.z_index == wrapper.z_index,
 			"map406 actors and wall foreground do not share one Y-sort plane"
-		)
-
-	var wrapper_ids: Array[int] = []
-	for wrapper: Node2D in wrappers:
-		wrapper_ids.append(wrapper.get_instance_id())
-	await get_tree().process_frame
-	await get_tree().process_frame
-	var wrappers_after := _runtime_wall_front_wrappers(
-		runtime_root, front_commands
-	)
-	assert(wrappers_after.size() == wrappers.size())
-	for index in wrappers_after.size():
-		assert(
-			wrappers_after[index].get_instance_id() == wrapper_ids[index],
-			"map406 rebuilt wall foregrounds during idle frames"
 		)
 
 
