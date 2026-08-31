@@ -146,7 +146,7 @@ func _run() -> void:
 	assert(panel.buy_button.get_meta("calibration_layout_revision", 0) == 1 and panel.repair_button.get_meta("calibration_layout_revision", 0) == 1, "购买页按钮没有退役旧尺寸校准")
 	assert(panel.sell_quantity_button.get_meta("calibration_text_revision", 0) == 1, "出售按钮文案版本元数据缺失")
 	assert(not quote_batches.is_empty() and quote_batches[-1].size() == PlayerState.inventory.size(), "出售页没有向玩法层请求背包报价")
-	assert(panel.goods_buttons.size() == PlayerState.inventory.size(), "出售页没有排除已穿戴装备或遗漏背包物品")
+	assert(panel.goods_buttons.is_empty(), "出售页请求报价前不应提前构建物品卡片")
 	assert(panel.sell_quantity_button.disabled, "没有报价时出售按钮没有禁用")
 	var quotes := {}
 	for inventory_index in range(PlayerState.inventory.size()):
@@ -287,14 +287,12 @@ func _run() -> void:
 
 	sell_requests.clear()
 	panel._request_selected_quantity()
-	assert(sell_requests.size() == 1 and panel._batch_sell_active, "批量出售没有先提交第一笔请求")
-	assert(int(sell_requests[0].get("inventory_index", -1)) == maxi(safe_indices[0], safe_indices[1]), "批量出售没有按背包索引降序开始")
-	panel.apply_sell_result({"success": true, "message": "第一笔成功", "quotes": quotes})
-	assert(sell_requests.size() == 2, "第一笔成功后没有继续下一笔批量请求")
-	assert(int(sell_requests[0].get("inventory_index", -1)) > int(sell_requests[1].get("inventory_index", -1)), "批量请求顺序不是严格降序")
+	assert(sell_requests.size() == 1 and sell_requests[0].get("batch", null) is Array, "批量出售没有一次提交batch")
+	var batch_requests: Array = sell_requests[0].get("batch", [])
+	assert(batch_requests.size() == 2, "批量出售没有包含全部选中物品")
 	var amounts_by_index := {
-		int(sell_requests[0].get("inventory_index", -1)): int(sell_requests[0].get("amount", 0)),
-		int(sell_requests[1].get("inventory_index", -1)): int(sell_requests[1].get("amount", 0)),
+		int(batch_requests[0].get("inventory_index", -1)): int(batch_requests[0].get("amount", 0)),
+		int(batch_requests[1].get("inventory_index", -1)): int(batch_requests[1].get("amount", 0)),
 	}
 	assert(int(amounts_by_index.get(safe_indices[0], 0)) == 2, "批量出售丢失第一个物品的独立数量")
 	assert(int(amounts_by_index.get(safe_indices[1], 0)) == 1, "批量出售错误复用了其他物品数量")
@@ -308,9 +306,8 @@ func _run() -> void:
 	panel._select_sell_item(safe_indices[1])
 	sell_requests.clear()
 	panel._request_sell()
-	assert(sell_requests.size() == 1, "失败路径没有提交首笔请求")
+	assert(sell_requests.size() == 1 and sell_requests[0].get("batch", null) is Array, "失败路径没有提交batch请求")
 	panel.apply_sell_result({"success": false, "message": "测试失败停止", "quotes": quotes})
-	assert(sell_requests.size() == 1, "批量失败后仍提交了后续请求")
 	assert(not panel._batch_sell_active and panel._batch_sell_queue.is_empty(), "批量失败后队列仍在活动")
 	assert(panel._selected_sell_indices.is_empty() and "测试失败停止" in panel.detail_label.text, "批量失败后状态或消息没有收口")
 
@@ -327,10 +324,8 @@ func _run() -> void:
 	assert(panel._pending_sell_request.is_empty() and panel._batch_sell_queue.is_empty() and sell_requests.is_empty(), "取消高风险批量后仍保留待处理交易")
 	panel._request_sell()
 	panel.sell_confirmation.confirm_button.pressed.emit()
-	assert(sell_requests.size() == 1 and "quote_id" in sell_requests[0], "确认后没有提交第一笔玩法层报价")
-	panel.apply_sell_result({"success": true, "message": "风险批量第一笔成功", "quotes": quotes})
-	assert(sell_requests.size() == 2, "风险批量第一笔成功后没有继续")
-	assert(int(sell_requests[0].get("inventory_index", -1)) > int(sell_requests[1].get("inventory_index", -1)), "风险批量没有按背包索引降序")
+	assert(sell_requests.size() == 1 and sell_requests[0].get("batch", null) is Array, "确认后没有一次提交风险批量")
+	assert((sell_requests[0].get("batch", []) as Array).size() == 2, "风险批量缺少选中物品")
 	panel.apply_sell_result({"success": true, "message": "风险批量完成", "quotes": quotes})
 	assert(panel._selected_sell_indices.is_empty() and not panel._batch_sell_active, "风险批量完成后状态没有清空")
 	print("SHOP_GOTHIC_UI_PASS：单击多选/取消、独立数量、降序批量、失败停止、风险确认与镜像布局均正常")

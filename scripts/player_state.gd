@@ -162,6 +162,9 @@ var last_load_result: Dictionary = {
 	"reason": "not_attempted",
 }
 var _consumed_shop_sell_quote_ids: Dictionary = {}
+var _loot_batch_debug: Dictionary = {"plan_scans": 0, "initial_weight_scans": 0, "save_commits": 0}
+var _item_instance_serial := 0
+var _test_transaction_counters: Dictionary = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
 var _consumed_shop_buy_quote_ids: Dictionary = {}
 var _shop_buy_quote_serial := 0
 var _shop_pricing_session_nonce := ""
@@ -799,6 +802,8 @@ func _shop_buy_result(success: bool, message: String, stock: Array, context: Dic
 
 
 func sell_inventory_item(request: Dictionary) -> Dictionary:
+	if request.get("batch", null) is Array:
+		return sell_inventory_items(request.get("batch", []))
 	var merchant_id := str(request.get("merchant_id", ""))
 	var quote := _shop_sell_quote(request)
 	var quote_id := str(request.get("quote_id", ""))
@@ -850,6 +855,81 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 		],
 		merchant_id
 	)
+
+
+func sell_inventory_items(requests: Array) -> Dictionary:
+	var result := {"contract_id": SHOP_SELL_CONTRACT_ID, "success": false, "message": "批量出售失败。", "quotes": {}}
+	if requests.is_empty():
+		result["message"] = "没有可出售物品。"
+		return result
+	var ordered := requests.duplicate(true)
+	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("inventory_index", -1)) > int(b.get("inventory_index", -1)))
+	var merchant_id := str(ordered[0].get("merchant_id", ""))
+	if GameData.merchant_context_by_id(merchant_id).is_empty():
+		result["message"] = "商人状态已变化。"
+		return result
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var consumed_before := _consumed_shop_sell_quote_ids.duplicate(true)
+	var working_inventory := inventory.duplicate(true)
+	var total_gold := 0
+	var used_quotes: Array[String] = []
+	for raw_request: Variant in ordered:
+		if not raw_request is Dictionary:
+			result["message"] = "出售请求无效。"
+			return result
+		var request: Dictionary = raw_request
+		if str(request.get("merchant_id", "")) != merchant_id:
+			result["message"] = "不能跨商人批量出售。"
+			return result
+		var quote := _shop_sell_quote(request)
+		var quote_id := str(request.get("quote_id", ""))
+		if not bool(quote.get("sellable", false)) or quote_id.is_empty() or quote_id != str(quote.get("quote_id", "")) or _consumed_shop_sell_quote_ids.has(quote_id) or quote_id in used_quotes:
+			result["message"] = "出售报价已失效，请重新选择物品。"
+			return result
+		var index := int(request.get("inventory_index", -1))
+		var amount := int(request.get("amount", 0))
+		if index < 0 or index >= working_inventory.size() or not working_inventory[index] is Dictionary:
+			result["message"] = "出售数量或背包位置无效。"
+			return result
+		var record: Dictionary = working_inventory[index]
+		var current_count := maxi(1, int(record.get("count", 1)))
+		if amount <= 0 or amount > current_count or amount > int(quote.get("max_quantity", 0)):
+			result["message"] = "出售数量超过当前背包库存。"
+			return result
+		if amount >= current_count:
+			working_inventory.remove_at(index)
+		else:
+			record["count"] = current_count - amount
+		total_gold += int(quote.get("unit_price", 0)) * amount
+		used_quotes.append(quote_id)
+	inventory = working_inventory
+	gold = maxi(0, gold + total_gold)
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		_consumed_shop_sell_quote_ids = consumed_before
+		result["message"] = "出售存档失败，物品和金币均未改变。"
+		return result
+	for quote_id: String in used_quotes:
+		_consumed_shop_sell_quote_ids[quote_id] = true
+	if test_mode:
+		_test_transaction_counters["inventory_signals"] = int(_test_transaction_counters.get("inventory_signals", 0)) + 1
+		_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
+	inventory_changed.emit()
+	profile_changed.emit()
+	result["success"] = true
+	result["message"] = "已批量出售%d项物品，获得%d金币。" % [used_quotes.size(), total_gold]
+	result["quotes"] = shop_sell_quotes(_current_shop_sell_quote_items(merchant_id))
+	return result
+
+
+func test_transaction_debug_reset() -> void:
+	_test_transaction_counters = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
+
+
+func test_transaction_debug_snapshot() -> Dictionary:
+	return _test_transaction_counters.duplicate(true)
 
 
 func _shop_sell_quote(request: Dictionary) -> Dictionary:
@@ -1126,7 +1206,7 @@ func _apply_weapon_repair_oil_without_commit(
 	recalculate_stats(false)
 
 
-func _make_item_instance(item_name: String, catalog_item: Dictionary) -> Dictionary:
+func _make_item_instance(item_name: String, catalog_item: Dictionary, instance_serial := -1) -> Dictionary:
 	var instance := {"name": item_name, "count": 1}
 	if str(catalog_item.get("kind", "")) == "equipment":
 		var maximum := maxi(1, int(catalog_item.get("maxDurability", 1)))
@@ -1135,7 +1215,10 @@ func _make_item_instance(item_name: String, catalog_item: Dictionary) -> Diction
 		instance["durability_raw"] = maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
 		instance["max_durability_raw"] = maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
 		instance["durability_contract_id"] = DURABILITY_CONTRACT_ID
-		instance["instance_id"] = "%d_%d" % [Time.get_ticks_usec(), inventory.size()]
+		if instance_serial < 0:
+			_item_instance_serial += 1
+			instance_serial = _item_instance_serial
+		instance["instance_id"] = "%d_%d" % [Time.get_ticks_usec(), instance_serial]
 		if str(catalog_item.get("category", "")) == "武器":
 			instance["weapon_luck"] = 0
 			instance["weapon_curse"] = 0
@@ -1196,6 +1279,56 @@ func add_experience(amount: int) -> void:
 		recalculate_stats()
 	profile_changed.emit()
 	_commit_save()
+
+
+## Atomic death settlement: quest progress and experience share one save.
+## This is intentionally separate from the legacy single-purpose entry points.
+func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary:
+	var quests_before := quest_states.duplicate(true)
+	var experience_before := experience
+	var level_before := level
+	var quest_changed := false
+	for quest_id: String in quest_states.keys():
+		var state: Dictionary = quest_states[quest_id]
+		if str(state.get("status", "")) != "active":
+			continue
+		var quest := GameData.get_bich_quest(quest_id)
+		if quest.is_empty():
+			continue
+		var progress: Dictionary = state.get("progress", {})
+		var requirements: Dictionary = quest.get("objectives", {}).get("kills", {})
+		for objective_name: String in requirements.keys():
+			if not _quest_monster_matches(monster_name, objective_name):
+				continue
+			progress[objective_name] = mini(int(requirements[objective_name]), int(progress.get(objective_name, 0)) + 1)
+			quest_changed = true
+		state["progress"] = progress
+		if _quest_objectives_complete(quest, state):
+			state["status"] = "ready"
+	var gained := maxi(0, amount)
+	if gained > 0:
+		experience += gained
+		while experience >= experience_to_next_level():
+			experience -= experience_to_next_level()
+			level += 1
+			recalculate_stats(false)
+	if not quest_changed and gained <= 0:
+		return {"success": true, "quest_changed": false, "experience_gained": 0}
+	if not _commit_save():
+		quest_states = quests_before
+		experience = experience_before
+		level = level_before
+		recalculate_stats(false)
+		return {"success": false, "quest_changed": false, "experience_gained": 0, "reason": "save_failed"}
+	if quest_changed:
+		if test_mode:
+			_test_transaction_counters["quest_signals"] = int(_test_transaction_counters.get("quest_signals", 0)) + 1
+		quests_changed.emit()
+	if gained > 0:
+		if test_mode:
+			_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
+		profile_changed.emit()
+	return {"success": true, "quest_changed": quest_changed, "experience_gained": gained}
 
 
 ## Applies the formal-death experience penalty exactly as a level-local
@@ -3701,6 +3834,8 @@ func ensure_chiyue_test_roster() -> Dictionary:
 		if bool(index_status.get("exists", false))
 		else {"version": 1, "profiles": []}
 	)
+
+
 	if not index.get("profiles", null) is Array:
 		result["reason"] = "profile_index_profiles_invalid"
 		return result
@@ -3840,6 +3975,95 @@ func ensure_chiyue_test_roster() -> Dictionary:
 	result["indexed"] = indexed
 	result["ok"] = true
 	return result
+
+
+## Partial atomic pickup transaction. Each candidate is simulated in order;
+## failures do not prevent later candidates from being attempted.
+func receive_loot_batch_partial(candidates: Array) -> Dictionary:
+	var inventory_before := inventory.duplicate(true)
+	var gold_before := gold
+	var working_inventory := inventory.duplicate(true)
+	var working_gold := gold
+	var initial_weight := inventory_weight(inventory)
+	_loot_batch_debug["plan_scans"] = int(_loot_batch_debug.get("plan_scans", 0)) + 1
+	_loot_batch_debug["initial_weight_scans"] = int(_loot_batch_debug.get("initial_weight_scans", 0)) + 1
+	var working_weight := initial_weight
+	var maximum_weight := max_inventory_weight()
+	var outcomes: Array = []
+	var changed := false
+	for raw_candidate: Variant in candidates:
+		if not raw_candidate is Dictionary:
+			continue
+		var candidate: Dictionary = raw_candidate
+		if bool(candidate.get("gold", false)):
+			var amount := maxi(0, int(candidate.get("amount", 0)))
+			if amount > 0:
+				working_gold = maxi(0, working_gold + amount)
+				changed = true
+			outcomes.append({"success": amount > 0, "gold": true, "amount": amount})
+			continue
+		var item_name := str(candidate.get("item_name", ""))
+		var catalog := GameData.get_item_record(item_name)
+		if catalog.is_empty():
+			outcomes.append({"success": false, "item_name": item_name, "message": "物品无效。", "reason": "unknown_item"})
+			continue
+		var item_weight := maxi(0, int(catalog.get("weight", 0)))
+		var kind := str(catalog.get("kind", ""))
+		var stackable := bool(catalog.get("stackable", false)) and kind != "equipment"
+		var prospective_weight := working_weight + item_weight
+		if prospective_weight > maximum_weight and prospective_weight > initial_weight:
+			outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_WEIGHT_REJECTION, "reason": "overweight"})
+			continue
+		var merged := false
+		if stackable:
+			var max_stack := _max_stack_for_item(catalog)
+			for existing: Variant in working_inventory:
+				if not existing is Dictionary or str(existing.get("name", "")) != item_name:
+					continue
+				if _inventory_records_mergeable(existing, {"name": item_name, "count": 1}) and int(existing.get("count", 0)) < max_stack:
+					existing["count"] = int(existing.get("count", 0)) + 1
+					merged = true
+					break
+		if not merged:
+			if working_inventory.size() >= INVENTORY_CAPACITY:
+				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
+				continue
+			working_inventory.append(_make_item_instance(item_name, catalog, Time.get_ticks_usec() + working_inventory.size() + outcomes.size()) if kind == "equipment" else {"name": item_name, "count": 1})
+		working_weight = prospective_weight
+		changed = true
+		outcomes.append({"success": true, "item_name": item_name})
+	if not changed:
+		return {"success": true, "saved": false, "outcomes": outcomes, "success_count": 0}
+	inventory = working_inventory
+	gold = working_gold
+	_loot_batch_debug["save_commits"] = int(_loot_batch_debug.get("save_commits", 0)) + 1
+	if not _commit_save():
+		inventory = inventory_before
+		gold = gold_before
+		for outcome: Dictionary in outcomes:
+			if bool(outcome.get("success", false)):
+				outcome["success"] = false
+				outcome["reason"] = "save_failed"
+				outcome["message"] = "拾取存档失败，物品和金币均未改变。"
+		return {"success": false, "saved": false, "outcomes": outcomes, "success_count": 0, "reason": "save_failed"}
+	last_receive_result = {"success": true, "outcomes": outcomes}
+	if inventory != inventory_before:
+		if test_mode:
+			_test_transaction_counters["inventory_signals"] = int(_test_transaction_counters.get("inventory_signals", 0)) + 1
+		inventory_changed.emit()
+	if gold != gold_before:
+		if test_mode:
+			_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
+		profile_changed.emit()
+	var success_count := 0
+	for outcome: Dictionary in outcomes:
+		if bool(outcome.get("success", false)):
+			success_count += 1
+	return {"success": true, "saved": true, "outcomes": outcomes, "success_count": success_count}
+
+
+func loot_batch_debug_snapshot() -> Dictionary:
+	return _loot_batch_debug.duplicate(true)
 
 
 func _valid_chiyue_test_profile_document(
@@ -4375,6 +4599,8 @@ func _migrate_single_save_to_profile() -> void:
 
 
 func _commit_save() -> bool:
+	if test_mode:
+		_test_transaction_counters["commit_attempts"] = int(_test_transaction_counters.get("commit_attempts", 0)) + 1
 	if not test_mode:
 		return save_game()
 	return not _test_force_atomic_write_failure

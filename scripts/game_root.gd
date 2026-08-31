@@ -88,6 +88,7 @@ const MonsterRespawnPolicyScript := preload(
 const MonsterTerrainNavigationPolicyScript := preload(
 	"res://scripts/monster_terrain_navigation_policy.gd"
 )
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const DEFAULT_NORMAL_RESPAWN_SECONDS := MonsterRespawnPolicyScript.BEGINNER_OUTDOOR_SECONDS
 const DEFAULT_BOSS_RESPAWN_SECONDS := MonsterRespawnPolicyScript.BOSS_SECONDS
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
@@ -264,6 +265,8 @@ var _stealth_alpha_restore: Dictionary = {}
 var _last_taoist_buff_hint_text := ""
 var _melee_diagnostic_serial := 0
 var _pending_melee_diagnostic: Dictionary = {}
+var _pending_loot_collections: Array = []
+var _loot_collection_flush_queued := false
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
 var _world_bootstrap_in_progress := false
 var _player_input_enabled := false
@@ -620,6 +623,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	UIItemTextureCacheScript.poll_threaded_paths()
 	# Q2-D: the single formal MonsterVisual streaming poll (once per frame).
 	if _streaming_coordinator != null:
 		_streaming_coordinator.poll_once(Engine.get_process_frames())
@@ -865,7 +869,8 @@ func _on_shop_buy_requested(request: Dictionary) -> void:
 
 func _on_shop_sell_requested(request: Dictionary) -> void:
 	if is_instance_valid(hud):
-		hud.apply_shop_sell_result(PlayerState.sell_inventory_item(request))
+		var result := PlayerState.sell_inventory_items(request.get("batch", [])) if request.get("batch", null) is Array else PlayerState.sell_inventory_item(request)
+		hud.apply_shop_sell_result(result)
 
 
 func _on_quest_abandon_requested(quest_id: String) -> void:
@@ -1379,6 +1384,7 @@ func _run_map_transition(
 	# screen wait for unrelated UI layout/action preparation. Panels remain
 	# on-demand and are created only when the player opens them.
 	_last_monster_prefetch_status.clear()
+	_preload_map_loot_icons(target_map_id)
 	if PlayerState.test_mode:
 		_last_monster_prefetch_status = {"complete": true}
 	elif _monster_prefetch_enabled and target_map_id >= 0:
@@ -1628,6 +1634,13 @@ func _check_world_ready_contract() -> bool:
 	if declares_content and get_tree().get_nodes_in_group("zone_content").is_empty():
 		return false
 	return true
+
+
+func _preload_map_loot_icons(map_id: int) -> void:
+	if map_id < 0:
+		return
+	var names := LootRuntime.possible_item_names_for_monster_ids(_monster_ids_for_map(map_id))
+	LootPickup.prewarm_item_names(names)
 
 
 func _monster_ids_for_map(map_id: int) -> Array[int]:
@@ -8792,9 +8805,11 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		return
 	var combat: Dictionary = canonical_monster.get("combat", {})
 	var stats: Dictionary = combat.get("stats", {})
-	PlayerState.record_kill(str(canonical_monster.get("canonical_name", "")))
-	PlayerState.add_experience(int(stats.get("exp", 0)))
-	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng)
+	PlayerState.record_kill_and_experience(
+		str(canonical_monster.get("canonical_name", "")),
+		int(stats.get("exp", 0))
+	)
+	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, false)
 	var overflow_discarded_count := int(
 		drop_roll.get("overflow_discarded_count", 0)
 	)
@@ -8905,27 +8920,42 @@ func _spawn_gold_loot(amount: int, position: Vector2) -> void:
 
 
 func _on_gold_loot_collected(amount: int, pickup: LootPickup) -> void:
-	if amount <= 0:
-		return
-	PlayerState.add_gold(amount)
-	if hud != null:
-		hud.show_loot("金币 +%d" % amount)
-	if is_instance_valid(pickup):
-		pickup.confirm_collect()
+	_queue_loot_collection({"gold": true, "amount": amount, "pickup": pickup})
 
 
 func _on_loot_collected(item_name: String, pickup: LootPickup) -> void:
-	var result: Dictionary = PlayerState.receive(item_name, 1)
-	if bool(result.get("success", false)):
-		hud.show_loot(item_name)
-		if is_instance_valid(pickup):
-			pickup.confirm_collect()
-	else:
-		var message := str(result.get("message", "超过负重，无法拾取。"))
-		if is_instance_valid(pickup):
-			pickup.reject_collection(message)
-		else:
-			hud.show_message(message)
+	_queue_loot_collection({"item_name": item_name, "pickup": pickup})
+
+
+func _queue_loot_collection(candidate: Dictionary) -> void:
+	_pending_loot_collections.append(candidate)
+	if not _loot_collection_flush_queued:
+		_loot_collection_flush_queued = true
+		call_deferred("_flush_loot_collections")
+
+
+func _flush_loot_collections() -> void:
+	_loot_collection_flush_queued = false
+	if _pending_loot_collections.is_empty():
+		return
+	var pending := _pending_loot_collections
+	_pending_loot_collections = []
+	var candidates: Array = []
+	for candidate: Dictionary in pending:
+		candidates.append(candidate.duplicate(true))
+	var result := PlayerState.receive_loot_batch_partial(candidates)
+	var outcomes: Array = result.get("outcomes", [])
+	for index in range(mini(pending.size(), outcomes.size())):
+		var candidate: Dictionary = pending[index]
+		var outcome: Dictionary = outcomes[index]
+		var pickup: Variant = candidate.get("pickup")
+		if bool(outcome.get("success", false)):
+			if hud != null:
+				hud.show_loot("金币 +%d" % int(candidate.get("amount", 0)) if bool(candidate.get("gold", false)) else str(candidate.get("item_name", "")))
+			if is_instance_valid(pickup):
+				pickup.confirm_collect()
+		elif is_instance_valid(pickup):
+			pickup.reject_collection(str(outcome.get("message", "超过负重，无法拾取。")))
 
 
 func _on_loot_collection_rejected(_item_name: String, message: String) -> void:

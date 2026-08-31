@@ -5,9 +5,31 @@ const DROP_CONTRACT_ID := "monster.loot.dpv2_direct_baseline.v2"
 var _overflow_telemetry_by_monster_id: Dictionary = {}
 
 
+func possible_item_names_for_monster_ids(monster_ids: Array) -> Array[String]:
+	var names: Array[String] = []
+	var seen := {}
+	for raw_id: Variant in monster_ids:
+		var resolved_id := GameData.canonical_monster_id(int(raw_id))
+		if resolved_id <= 0:
+			continue
+		var profile := GameData.dpv2_direct_profile(resolved_id)
+		for raw_slot: Variant in profile.get("slots", []):
+			if not raw_slot is Dictionary:
+				continue
+			var reward := GameData.dpv2_direct_resolve_slot_reward(raw_slot)
+			var item_name := str(reward.get("item_name", "")) if bool(reward.get("ok", false)) else ""
+			if str(reward.get("kind", "")) == "gold" or item_name.is_empty() or seen.has(item_name):
+				continue
+			seen[item_name] = true
+			names.append(item_name)
+	names.sort()
+	return names
+
+
 func roll_monster_drops(
 	monster_id: int,
-	rng: RandomNumberGenerator
+	rng: RandomNumberGenerator,
+	include_audit := true,
 ) -> Dictionary:
 	var result := {
 		"contract_id": DROP_CONTRACT_ID,
@@ -174,16 +196,20 @@ func roll_monster_drops(
 		result.rng_roll_count += 1
 		var draw := rng.randi_range(1, denominator)
 		var success := draw <= numerator
-		var attempt := _build_attempt(slot, probability, reward, draw, success)
-		_record_attempt(result, attempt)
+		var attempt: Dictionary = {}
+		if include_audit:
+			attempt = _build_attempt(slot, probability, reward, draw, success)
+			_record_attempt(result, attempt)
 		if success:
-			successful_rewards.append({
+			var successful_candidate := {
 				"slot_uid": slot_uid,
 				"canonical_item_id": int(probability.get("canonical_item_id", -1)),
 				"reward": reward.duplicate(true),
 				"policy": probability.duplicate(true),
-				"attempt": attempt,
-			})
+			}
+			if include_audit:
+				successful_candidate["attempt"] = attempt
+			successful_rewards.append(successful_candidate)
 	result.successful_roll_count = successful_rewards.size()
 	result.all_resolved_slots_rng = (
 		result.rng_roll_count == result.resolved_entry_count
@@ -221,7 +247,8 @@ func roll_monster_drops(
 		result.ground_output_count + result.overflow_discarded_count
 		== result.successful_roll_count
 	)
-	_sync_attempt_views(result)
+	if include_audit:
+		_sync_attempt_views(result)
 	return result
 
 

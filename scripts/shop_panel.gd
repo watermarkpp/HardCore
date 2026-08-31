@@ -523,7 +523,7 @@ func _set_trade_mode(mode: String) -> void:
 		_sell_quantity = 1
 		_selected_sell_indices.clear()
 		_sell_quantities.clear()
-		_rebuild_sell_cards()
+		_clear_goods_cards()
 		_set_sell_actions_enabled(false)
 		_update_sell_quantity_label()
 		detail_label.text = "[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]"
@@ -539,12 +539,32 @@ func sell_quote_key(inventory_index: int, record: Dictionary) -> String:
 func set_sell_quotes(quotes: Dictionary) -> void:
 	_sell_quotes = quotes.duplicate(true)
 	if _trade_mode == "sell":
-		_rebuild_sell_cards()
+		_refresh_sell_card_contents()
 		for card: Button in goods_buttons:
 			var selected := _selected_sell_indices.has(int(card.get_meta("inventory_index", -1)))
 			_set_shop_card_selected(card, selected)
 		_reclamp_sell_quantities()
 		_update_sell_quantity_label()
+
+
+func _refresh_sell_card_contents() -> void:
+	if goods_buttons.size() != PlayerState.inventory.size():
+		_rebuild_sell_cards()
+		return
+	for card: Button in goods_buttons:
+		var inventory_index := int(card.get_meta("inventory_index", -1))
+		if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
+			continue
+		var record: Dictionary = PlayerState.inventory[inventory_index]
+		var quote: Dictionary = _sell_quotes.get(sell_quote_key(inventory_index, record), {})
+		card.tooltip_text = str(quote.get("reason", "等待玩法层提供出售报价"))
+		for child: Node in card.get_children():
+			child.free()
+		var display_entry := record.duplicate(true)
+		var count := int(record.get("count", 1))
+		if count > 1:
+			display_entry["name"] = "%s ×%d" % [record.get("name", "物品"), count]
+		_build_card_contents(card, display_entry, "%d 金币 / 件" % int(quote.get("unit_price", 0)) if bool(quote.get("sellable", false)) else "", bool(quote.get("sellable", false)))
 
 
 func _reclamp_sell_quantities() -> void:
@@ -582,15 +602,29 @@ func apply_sell_result(result: Dictionary) -> void:
 	if result.get("quotes", null) is Dictionary:
 		_sell_quotes = result.get("quotes", {}).duplicate(true)
 	_refresh_gold()
+	if not bool(result.get("success", false)) and _trade_mode == "sell":
+		_selected_sell_index = -1
+		_selected_sell_indices.clear()
+		_sell_quantities.clear()
+		_batch_sell_queue.clear()
+		_batch_sell_active = false
+		if result.get("quotes", null) is Dictionary:
+			_refresh_sell_card_contents()
+		else:
+			_apply_inventory_change()
+		_set_sell_actions_enabled(false)
 	if bool(result.get("success", false)) and _trade_mode == "sell":
 		_inventory_refresh_pending = false
 		_selected_sell_index = -1
 		_selected_sell_indices.clear()
 		_sell_quantities.clear()
 		_batch_sell_queue.clear()
-		_rebuild_sell_cards()
+		if result.get("quotes", null) is Dictionary:
+			_refresh_sell_card_contents()
+		else:
+			_rebuild_sell_cards()
+			_request_sell_quotes()
 		_set_sell_actions_enabled(false)
-		_request_sell_quotes()
 	_show_transaction_result_feedback(sell_quantity_button, bool(result.get("success", false)), "shop.sell")
 
 
@@ -761,9 +795,9 @@ func _request_sell_batch() -> void:
 		_pending_sell_request = {"batch": requests}
 		sell_confirmation.open_confirmation({"action_id": "shop.sell.risky_item", "title": "确认批量出售", "message": "批量出售 %d 件物品，其中包含稀有物品。" % requests.size(), "confirm_label": "确认出售", "cancel_label": "取消", "tone": "danger", "context": {"quote_id": requests[0].get("quote_id", "")}})
 		return
-	_batch_sell_queue = requests
-	_batch_sell_active = true
-	_emit_next_batch_request()
+	_batch_sell_queue.clear()
+	_batch_sell_active = false
+	_emit_sell_request({"batch": requests, "merchant_id": str(requests[0].get("merchant_id", ""))})
 
 func _emit_next_batch_request() -> void:
 	if _batch_sell_queue.is_empty():
@@ -789,10 +823,11 @@ func _confirm_pending_sell() -> void:
 	if _pending_sell_request.is_empty():
 		return
 	if _pending_sell_request.has("batch"):
-		_batch_sell_queue = _pending_sell_request.get("batch", []).duplicate(true)
+		var confirmed_batch: Array = _pending_sell_request.get("batch", []).duplicate(true)
 		_pending_sell_request.clear()
-		_batch_sell_active = true
-		_emit_next_batch_request()
+		_batch_sell_queue.clear()
+		_batch_sell_active = false
+		_emit_sell_request({"batch": confirmed_batch, "merchant_id": str(confirmed_batch[0].get("merchant_id", "")) if not confirmed_batch.is_empty() else ""})
 		return
 	var request := _pending_sell_request.duplicate(true)
 	_pending_sell_request.clear()

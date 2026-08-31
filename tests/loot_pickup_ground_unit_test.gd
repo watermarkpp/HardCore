@@ -44,12 +44,14 @@ func _ready() -> void:
 	overweight_pickup.global_position = Vector2.ZERO
 	target.global_position = Vector2.ZERO
 	overweight_pickup._process(0.0)
-	assert(overweight_pickup.collection_authority_check_count() == 1 and _rejection_count == 1, "首次超重拾取未执行一次权威检查")
-	assert(not overweight_pickup.is_queued_for_deletion(), "超重拒绝错误删除地物")
+	assert(overweight_pickup.collection_authority_check_count() == 1 and overweight_pickup.collection_pending(), "拾取候选未进入统一批处理")
+	overweight_pickup.reject_collection("超过负重，无法拾取。")
+	assert(_rejection_count == 1 and not overweight_pickup.is_queued_for_deletion(), "批处理失败反馈未保留地物")
 	overweight_pickup._process(4.99)
 	assert(overweight_pickup.collection_authority_check_count() == 1 and _rejection_count == 1, "5秒内重复检查/提示同一地物")
 	overweight_pickup._process(0.01)
-	assert(overweight_pickup.collection_authority_check_count() == 2 and _rejection_count == 2, "5秒后未重新检查同一地物")
+	assert(overweight_pickup.collection_authority_check_count() == 2 and overweight_pickup.collection_pending(), "5秒后未重新进入统一批处理")
+	overweight_pickup.reject_collection("超过负重，无法拾取。")
 	target.global_position = Vector2(1000, 1000)
 	overweight_pickup._process(0.01)
 	assert(is_zero_approx(overweight_pickup.retry_cooldown_remaining()), "离开拾取范围未立即解除冷却")
