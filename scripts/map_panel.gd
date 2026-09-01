@@ -509,11 +509,10 @@ func _show_selected(index: int) -> void:
 
 func _player_map_content(map_id: int) -> Dictionary:
 	var dto: Dictionary = _presentation_by_id.get(map_id, {})
-	var cached: Variant = dto.get("content", {})
-	if cached is Dictionary and not (cached as Dictionary).is_empty():
-		return cached
-	var runtime_content := MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
-	return runtime_content if not runtime_content.is_empty() else RegionContent.get_map_content(map_id)
+	if not dto.has("content"):
+		return {}
+	var cached: Variant = dto["content"]
+	return cached if cached is Dictionary else {}
 
 
 func _map_card_summary(map_data: Dictionary) -> String:
