@@ -27,10 +27,16 @@
   "display_name": "盟重省",
   "editor_meta": {
     "blank_template_id": "blank.world_mengzhong_province",
+    "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
-    "revision": 1.0,
+    "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
+    "portal_contract_id": "unified_map_portal_endpoint_v1",
+    "revision": 2.0,
+    "source_editor_schema_version": 4,
     "template_kind": "empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/world_mengzhong_province"
   },
   "ground": {
@@ -60,6 +66,7 @@
     "workspace_manifest": "res://map_editor_workspace/world_mengzhong_province/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/world_mengzhong_province/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
     "boss_spawn": [],
     "collision": [
@@ -7310,28 +7317,37 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_mengzhong_province.map_exit_000001.world_snake_valley.map_exit_000002",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "毒蛇山谷",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "official_connection_id": "portal.world_mengzhong_province.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "world_snake_valley",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_mengzhong_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000002",
+        "target_map_id": 910002.0,
+        "target_map_key": "world_snake_valley",
+        "target_portal_id": "map_exit_000002",
+        "target_tile": [
+          23.0,
+          5.0
+        ],
         "tile": [
           39.0,
           78.0
@@ -7343,28 +7359,37 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_mengzhong_province.map_exit_000002.mengzhong_stone_tomb_f1.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "石墓",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "official_connection_id": "portal.world_mengzhong_province.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "mengzhong_stone_tomb_f1",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_mengzhong_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 913001.0,
+        "target_map_key": "mengzhong_stone_tomb_f1",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          4.0,
+          47.0
+        ],
         "tile": [
           7.0,
           79.0
@@ -7376,28 +7401,37 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_mengzhong_province.map_exit_000003.mengzhong_zuma_temple_f1.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "祖玛寺庙",
         "exit_id": "map_exit_000003",
         "kind": "map_exit",
+        "official_connection_id": "portal.world_mengzhong_province.map_exit_000003",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "mengzhong_zuma_temple_f1",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_mengzhong_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 913101.0,
+        "target_map_key": "mengzhong_zuma_temple_f1",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          44.0,
+          46.0
+        ],
         "tile": [
           8.0,
           8.0
@@ -7409,28 +7443,37 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "reverse",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_cangyue_island.map_exit_000003.world_mengzhong_province.map_exit_000004",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "苍月岛",
         "exit_id": "map_exit_000004",
         "kind": "map_exit",
+        "official_connection_id": "portal.world_mengzhong_province.map_exit_000004",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000003",
+        "reciprocal_map_key": "world_cangyue_island",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000004",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_mengzhong_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000003",
+        "target_map_id": 910007.0,
+        "target_map_key": "world_cangyue_island",
+        "target_portal_id": "map_exit_000003",
+        "target_tile": [
+          41.0,
+          41.0
+        ],
         "tile": [
           79.0,
           78.0
@@ -7442,28 +7485,37 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_mengzhong_province.map_exit_000005.mengzhong_death_valley_dungeon.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "死亡山谷",
         "exit_id": "map_exit_000005",
         "kind": "map_exit",
+        "official_connection_id": "portal.world_mengzhong_province.map_exit_000005",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "mengzhong_death_valley_dungeon",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000005",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_mengzhong_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 913201.0,
+        "target_map_key": "mengzhong_death_valley_dungeon",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          4.0,
+          42.0
+        ],
         "tile": [
           79.0,
           8.0
@@ -7472,7 +7524,1665 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "羊",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 96.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            5554.0,
+            -53.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          54.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "猎鹰",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 97.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            129.0,
+            8.0,
+            1.0,
+            5554.0,
+            -9.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          85.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "狼",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 100.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            97.0,
+            22.0,
+            1.0,
+            5554.0,
+            -86.0,
+            -65.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          65.0,
+          86.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "盔甲虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 101.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            72.0,
+            21.0,
+            1.0,
+            5554.0,
+            -1.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          1.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "威思而小虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 103.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            3.0,
+            26.0,
+            5554.0,
+            -37.0,
+            -61.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          61.0,
+          37.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沙虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 104.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            48.0,
+            17.0,
+            7.0,
+            5554.0,
+            -80.0,
+            -23.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          80.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 105.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            26.0,
+            1.0,
+            5554.0,
+            -59.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          86.0,
+          59.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 107.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            40.0,
+            7.0,
+            23.0,
+            5554.0,
+            -64.0,
+            -47.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          47.0,
+          64.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 107.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            40.0,
+            7.0,
+            23.0,
+            5554.0,
+            -64.0,
+            -47.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          59.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 107.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            40.0,
+            7.0,
+            23.0,
+            5554.0,
+            -64.0,
+            -47.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          30.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 107.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            40.0,
+            7.0,
+            23.0,
+            5554.0,
+            -64.0,
+            -47.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          60.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 107.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            40.0,
+            7.0,
+            23.0,
+            5554.0,
+            -64.0,
+            -47.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          79.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 107.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            40.0,
+            7.0,
+            23.0,
+            5554.0,
+            -64.0,
+            -47.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          72.0,
+          66.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "狼",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 100.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            97.0,
+            22.0,
+            1.0,
+            5554.0,
+            -86.0,
+            -65.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          44.0,
+          73.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "狼",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 100.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            97.0,
+            22.0,
+            1.0,
+            5554.0,
+            -86.0,
+            -65.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          45.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "狼",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 100.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            97.0,
+            22.0,
+            1.0,
+            5554.0,
+            -86.0,
+            -65.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "狼",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 100.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            97.0,
+            22.0,
+            1.0,
+            5554.0,
+            -86.0,
+            -65.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35.0,
+          9.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "狼",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 100.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            97.0,
+            22.0,
+            1.0,
+            5554.0,
+            -86.0,
+            -65.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          79.0,
+          48.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 105.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            26.0,
+            1.0,
+            5554.0,
+            -59.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12.0,
+          69.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 105.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            26.0,
+            1.0,
+            5554.0,
+            -59.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          36.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 105.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            26.0,
+            1.0,
+            5554.0,
+            -59.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          54.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 105.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            26.0,
+            1.0,
+            5554.0,
+            -59.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          74.0,
+          16.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多角虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 105.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            26.0,
+            1.0,
+            5554.0,
+            -59.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          64.0,
+          72.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沙虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 104.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            48.0,
+            17.0,
+            7.0,
+            5554.0,
+            -80.0,
+            -23.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          68.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沙虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 104.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            48.0,
+            17.0,
+            7.0,
+            5554.0,
+            -80.0,
+            -23.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          20.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沙虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 104.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            48.0,
+            17.0,
+            7.0,
+            5554.0,
+            -80.0,
+            -23.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沙虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 104.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            48.0,
+            17.0,
+            7.0,
+            5554.0,
+            -80.0,
+            -23.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          68.0,
+          28.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沙虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 104.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            48.0,
+            17.0,
+            7.0,
+            5554.0,
+            -80.0,
+            -23.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          71.0,
+          54.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "猎鹰",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 97.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            129.0,
+            8.0,
+            1.0,
+            5554.0,
+            -9.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          72.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "猎鹰",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 97.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            129.0,
+            8.0,
+            1.0,
+            5554.0,
+            -9.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000030",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2.0,
+          72.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "猎鹰",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 97.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            129.0,
+            8.0,
+            1.0,
+            5554.0,
+            -9.0,
+            -86.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000031",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "羊",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 96.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            5554.0,
+            -53.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000032",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          85.0,
+          72.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "羊",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 96.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            5554.0,
+            -53.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000033",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "羊",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 96.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            5554.0,
+            -53.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000034",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000034",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16.0,
+          85.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "盔甲虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 101.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            72.0,
+            21.0,
+            1.0,
+            5554.0,
+            -1.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000035",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000035",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          52.0,
+          84.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "盔甲虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 101.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            72.0,
+            21.0,
+            1.0,
+            5554.0,
+            -1.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000036",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000036",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31.0,
+          16.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_mengzhong_province",
+          "source_category_role": "ordinary",
+          "source_line": 85.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "盔甲虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 101.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            72.0,
+            21.0,
+            1.0,
+            5554.0,
+            -1.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_mengzhong_province.monster_spawn.000037",
+        "spawn_group_id": "mse.group.v1.world_mengzhong_province.monster_spawn.000037",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          60.0,
+          58.0
+        ]
+      }
+    ],
     "npc_points": [
       {
         "collision_policy": "profile",
@@ -7817,12 +9527,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          53.0,
-          41.0
+          53,
+          41
         ],
         "tile_anchor": [
-          53.0,
-          41.0
+          53,
+          41
         ],
         "visual_footprint_tiles": [
           9.0,
@@ -7894,12 +9604,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          53.0,
-          36.0
+          53,
+          36
         ],
         "tile_anchor": [
-          53.0,
-          36.0
+          53,
+          36
         ],
         "visual_footprint_tiles": [
           9.0,
@@ -7971,12 +9681,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          20.0
+          25,
+          20
         ],
         "tile_anchor": [
-          25.0,
-          20.0
+          25,
+          20
         ],
         "visual_footprint_tiles": [
           10.0,
@@ -8048,12 +9758,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
-          50.0
+          34,
+          50
         ],
         "tile_anchor": [
-          34.0,
-          50.0
+          34,
+          50
         ],
         "visual_footprint_tiles": [
           10.0,
@@ -8123,12 +9833,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          44.0
+          26,
+          44
         ],
         "tile_anchor": [
-          26.0,
-          44.0
+          26,
+          44
         ]
       },
       {
@@ -8194,12 +9904,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          35.0,
-          24.0
+          35,
+          24
         ],
         "tile_anchor": [
-          35.0,
-          24.0
+          35,
+          24
         ]
       },
       {
@@ -8265,12 +9975,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          38.0
+          26,
+          38
         ],
         "tile_anchor": [
-          26.0,
-          38.0
+          26,
+          38
         ]
       },
       {
@@ -8336,12 +10046,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          40.0,
-          24.0
+          40,
+          24
         ],
         "tile_anchor": [
-          40.0,
-          24.0
+          40,
+          24
         ]
       },
       {
@@ -8407,12 +10117,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          45.0,
-          24.0
+          45,
+          24
         ],
         "tile_anchor": [
-          45.0,
-          24.0
+          45,
+          24
         ]
       },
       {
@@ -8478,12 +10188,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          72.0
+          26,
+          72
         ],
         "tile_anchor": [
-          26.0,
-          72.0
+          26,
+          72
         ]
       },
       {
@@ -8549,12 +10259,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          27.0
+          11,
+          27
         ],
         "tile_anchor": [
-          11.0,
-          27.0
+          11,
+          27
         ]
       },
       {
@@ -8567,8 +10277,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          5.0,
-          5.0
+          4.0,
+          4.0
         ],
         "collision_policy": "solid_footprint",
         "collision_policy_id": "",
@@ -8622,12 +10332,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          70.0,
-          42.0
+          70,
+          42
         ],
         "tile_anchor": [
-          70.0,
-          42.0
+          70,
+          42
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -8699,12 +10409,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          42.0,
-          12.0
+          42,
+          12
         ],
         "tile_anchor": [
-          42.0,
-          12.0
+          42,
+          12
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8776,12 +10486,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          38.0,
-          2.0
+          38,
+          2
         ],
         "tile_anchor": [
-          38.0,
-          2.0
+          38,
+          2
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -8851,12 +10561,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          58.0,
-          74.0
+          58,
+          74
         ],
         "tile_anchor": [
-          58.0,
-          74.0
+          58,
+          74
         ]
       },
       {
@@ -8928,12 +10638,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          79.0
+          0,
+          79
         ],
         "tile_anchor": [
-          0.0,
-          79.0
+          0,
+          79
         ],
         "visual_footprint_tiles": [
           8.0,
@@ -9009,12 +10719,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           8.0,
@@ -9088,12 +10798,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          37.0,
-          81.0
+          37,
+          81
         ],
         "tile_anchor": [
-          37.0,
-          81.0
+          37,
+          81
         ],
         "visual_footprint_tiles": [
           7.0,
@@ -9169,12 +10879,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          78.0,
-          77.0
+          78,
+          77
         ],
         "tile_anchor": [
-          78.0,
-          77.0
+          78,
+          77
         ],
         "visual_footprint_tiles": [
           10.0,
@@ -9224,7 +10934,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           1.0,
           2.0
@@ -9250,12 +10960,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28.0,
-          37.0
+          28,
+          37
         ],
         "tile_anchor": [
-          28.0,
-          37.0
+          28,
+          37
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9305,7 +11015,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -9331,12 +11041,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          42.0,
-          56.0
+          42,
+          56
         ],
         "tile_anchor": [
-          42.0,
-          56.0
+          42,
+          56
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9386,7 +11096,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           2.0,
           2.0
@@ -9412,12 +11122,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          55.0
+          43,
+          55
         ],
         "tile_anchor": [
-          43.0,
-          55.0
+          43,
+          55
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -9467,7 +11177,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           2.0,
           2.0
@@ -9493,12 +11203,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          40.0,
-          39.0
+          40,
+          39
         ],
         "tile_anchor": [
-          40.0,
-          39.0
+          40,
+          39
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -9548,7 +11258,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           2.0,
           2.0
@@ -9574,12 +11284,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          56.0,
-          48.0
+          56,
+          48
         ],
         "tile_anchor": [
-          56.0,
-          48.0
+          56,
+          48
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -9629,7 +11339,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           4.0,
           3.0
@@ -9655,12 +11365,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          45.0,
-          55.0
+          45,
+          55
         ],
         "tile_anchor": [
-          45.0,
-          55.0
+          45,
+          55
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9696,7 +11406,7 @@
         "content_layer": "personal_expansion",
         "display_name": "安全区",
         "kind": "safe_area",
-        "polygon_tiles": [
+        "polygon_ground_gu": [
           [
             23.0,
             25.0
@@ -9734,7 +11444,7 @@
             25.0
           ]
         ],
-        "radius_tiles": 0.0,
+        "radius_gu": 0.0,
         "return_anchor": false,
         "runtime_export": true,
         "semantic_id": "safe_area_000001",
@@ -9828,7 +11538,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           82.19999694824219,
-          97.60000610351562
+          97.60000610351563
         ],
         "asset_id": "cave_dungeon.rock_pillar_02",
         "collision_authority": "asset",
@@ -9875,7 +11585,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           82.19999694824219,
-          97.60000610351562
+          97.60000610351563
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
@@ -9904,9 +11614,11 @@
     ],
     "terrain_front": []
   },
+  "legacy_map_id": "mengzhong_province",
+  "legacy_runtime_map_id": 478.0,
   "map_id": "world_mengzhong_province",
-  "runtime_map_id": 478.0,
-  "schema_version": 4.0,
+  "runtime_map_id": 910003.0,
+  "schema_version": 5,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "ok",
