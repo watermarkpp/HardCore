@@ -42,6 +42,14 @@ var _selected_map_id := -1
 var _selected_world_node_id := "bich_province"
 var _detail_base_text := ""
 var _teleport_request_locked := false
+var _presentation_snapshot_key := ""
+var _presentation_maps: Array = []
+var _presentation_by_id: Dictionary = {}
+var _presentation_by_region: Dictionary = {}
+var _incoming_routes_by_destination: Dictionary = {}
+var _last_entry_ids: Array[int] = []
+var _layout_profile_applied := false
+var _debug_operation_counters := {"snapshot_scans": 0, "snapshot_builds": 0, "content_resolves": 0, "world_tree_rebuilds": 0, "card_rebuilds": 0, "layout_applies": 0}
 
 
 func _ready() -> void:
@@ -61,10 +69,11 @@ func _ready() -> void:
 	_build_map_detail_section()
 	_build_compatibility_list()
 	GothicFrameFactoryScript.seal_modal_rings(self)
+	_ensure_presentation_snapshot()
 	world_tree_nodes = _build_runtime_catalog()
 	_selected_world_node_id = _first_filterable_node_id(world_tree_nodes)
 	_rebuild_world_tree()
-	refresh()
+	refresh(true)
 
 
 func _build_modal_surface() -> void:
@@ -158,7 +167,7 @@ func _build_world_tree_section() -> void:
 func _build_runtime_catalog() -> Array:
 	var result: Array = []
 	var region_nodes: Dictionary = {}
-	for map_value: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
+	for map_value: Variant in _presentation_maps:
 		if not map_value is Dictionary:
 			continue
 		var map_data: Dictionary = map_value
@@ -170,6 +179,65 @@ func _build_runtime_catalog() -> Array:
 			region_nodes[region] = {"node_id": region_id, "label": region.trim_suffix("地区").trim_suffix("区"), "depth": 0, "regions": [region]}
 			result.append(region_nodes[region])
 	return result
+
+
+func _ensure_presentation_snapshot() -> bool:
+	var key := "later:%s" % str(PlayerState.later_content_enabled)
+	if key == _presentation_snapshot_key and not _presentation_maps.is_empty():
+		return false
+	_debug_operation_counters["snapshot_scans"] += 1
+	_presentation_snapshot_key = key
+	_presentation_maps.clear()
+	_presentation_by_id.clear()
+	_presentation_by_region.clear()
+	_incoming_routes_by_destination.clear()
+	for map_value: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
+		if not map_value is Dictionary:
+			continue
+		var map_data: Dictionary = map_value
+		var region := str(map_data.get("region", "")).strip_edges()
+		if region.is_empty():
+			continue
+		var map_id := int(map_data.get("mapId", -1))
+		if map_id <= 0:
+			continue
+		var content := MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+		_debug_operation_counters["content_resolves"] += 1
+		if content.is_empty():
+			content = RegionContent.get_map_content(map_id)
+		var summary := "探索区域"
+		for boss: Variant in content.get("bosses", []):
+			if boss is Dictionary and not str(boss.get("name", "")).strip_edges().is_empty():
+				summary = "有首领"
+				break
+		var dto := {"map": map_data, "content": content, "summary": summary}
+		_presentation_maps.append(map_data)
+		_presentation_by_id[map_id] = dto
+		if not _presentation_by_region.has(region):
+			_presentation_by_region[region] = []
+		(_presentation_by_region[region] as Array).append(map_data)
+		for portal: Variant in content.get("portals", []):
+			if not portal is Dictionary:
+				continue
+			var destination_id := int(portal.get("target_map_id", -1))
+			if destination_id <= 0:
+				continue
+			if not _incoming_routes_by_destination.has(destination_id):
+				_incoming_routes_by_destination[destination_id] = []
+			var source_name := str(map_data.get("name", "相邻区域")).strip_edges()
+			if not source_name.is_empty() and not (_incoming_routes_by_destination[destination_id] as Array).has(source_name):
+				(_incoming_routes_by_destination[destination_id] as Array).append(source_name)
+	_debug_operation_counters["snapshot_builds"] += 1
+	return true
+
+
+func debug_operation_counters() -> Dictionary:
+	return _debug_operation_counters.duplicate(true)
+
+
+func debug_reset_operation_counters() -> void:
+	for key: Variant in _debug_operation_counters.keys():
+		_debug_operation_counters[key] = 0
 
 
 func _stable_catalog_id(value: String, suffix: String) -> String:
@@ -232,14 +300,16 @@ func _build_compatibility_list() -> void:
 func open_panel() -> void:
 	_teleport_request_locked = false
 	GothicUIThemeScript.clear_button_feedback(teleport_button)
-	var previous := _selected_world_node_id
-	world_tree_nodes = _build_runtime_catalog()
-	if not _world_node(previous).is_empty():
-		_selected_world_node_id = previous
+	var snapshot_changed := _ensure_presentation_snapshot()
+	if snapshot_changed:
+		var previous := _selected_world_node_id
+		world_tree_nodes = _build_runtime_catalog()
+		_selected_world_node_id = previous if not _world_node(previous).is_empty() else _first_filterable_node_id(world_tree_nodes)
+		_rebuild_world_tree()
+		refresh(true)
 	else:
-		_selected_world_node_id = _first_filterable_node_id(world_tree_nodes)
-	_rebuild_world_tree()
-	refresh()
+		_refresh_teleport_button()
+		teleport_availability_requested.emit(_visible_map_ids())
 	show()
 
 
@@ -249,7 +319,7 @@ func set_world_tree(new_nodes: Array) -> void:
 	world_tree_nodes = new_nodes.duplicate(true)
 	_selected_world_node_id = _first_filterable_node_id(world_tree_nodes)
 	_rebuild_world_tree()
-	refresh()
+	refresh(true)
 
 
 func set_teleport_availability(rules: Dictionary) -> void:
@@ -257,20 +327,36 @@ func set_teleport_availability(rules: Dictionary) -> void:
 	_refresh_teleport_button()
 
 
-func refresh() -> void:
+func refresh(force_structure: bool = false) -> void:
 	if map_list == null:
 		return
-	map_entries.clear()
-	map_list.clear()
+	var snapshot_changed := _ensure_presentation_snapshot()
+	if snapshot_changed:
+		world_tree_nodes = _build_runtime_catalog()
+		_selected_world_node_id = _first_filterable_node_id(world_tree_nodes) if _world_node(_selected_world_node_id).is_empty() else _selected_world_node_id
+		_rebuild_world_tree()
 	var node := _world_node(_selected_world_node_id)
-	for map_data: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
+	var next_entries: Array = []
+	var candidates: Array = _presentation_maps
+	var node_regions: Array = node.get("regions", [])
+	if node_regions.size() == 1 and node.get("map_groups", []).is_empty() and node.get("map_ids", []).is_empty() and node.get("name_terms", []).is_empty():
+		candidates = _presentation_by_region.get(str(node_regions[0]), [])
+	for map_data: Variant in candidates:
 		if not map_data is Dictionary or not _node_matches_map(node, map_data):
 			continue
-		map_entries.append(map_data)
-		var later_marker := "［后期］" if str(map_data.get("versionTag", "")).begins_with("1.76后期") else ""
-		map_list.add_item("%s%s" % [later_marker, map_data.get("name", "未命名")])
-	_rebuild_map_cards()
-	var node_label := str(node.get("label", "HardCore 世界"))
+		next_entries.append(map_data)
+	var next_ids: Array[int] = []
+	for entry: Dictionary in next_entries:
+		next_ids.append(int(entry.get("mapId", -1)))
+	var structure_changed := force_structure or snapshot_changed or next_ids != _last_entry_ids
+	map_entries = next_entries
+	if structure_changed:
+		map_list.clear()
+		for map_data: Dictionary in map_entries:
+			var later_marker := "［后期］" if str(map_data.get("versionTag", "")).begins_with("1.76后期") else ""
+			map_list.add_item("%s%s" % [later_marker, map_data.get("name", "未命名")])
+		_rebuild_map_cards()
+		_last_entry_ids = next_ids
 	var selected_index := _index_for_map_id(_selected_map_id)
 	if selected_index >= 0:
 		map_list.select(selected_index)
@@ -281,10 +367,14 @@ func refresh() -> void:
 	else:
 		_clear_map_selection()
 	teleport_availability_requested.emit(_visible_map_ids())
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "map")
+	if not _layout_profile_applied:
+		_layout_profile_applied = true
+		_debug_operation_counters["layout_applies"] += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "map")
 
 
 func _rebuild_world_tree() -> void:
+	_debug_operation_counters["world_tree_rebuilds"] += 1
 	for child: Node in world_tree_container.get_children():
 		world_tree_container.remove_child(child)
 		child.free()
@@ -319,6 +409,7 @@ func _rebuild_world_tree() -> void:
 
 
 func _rebuild_map_cards() -> void:
+	_debug_operation_counters["card_rebuilds"] += 1
 	for child: Node in map_list_container.get_children():
 		map_list_container.remove_child(child)
 		child.free()
@@ -417,19 +508,17 @@ func _show_selected(index: int) -> void:
 
 
 func _player_map_content(map_id: int) -> Dictionary:
+	var dto: Dictionary = _presentation_by_id.get(map_id, {})
+	var cached: Variant = dto.get("content", {})
+	if cached is Dictionary and not (cached as Dictionary).is_empty():
+		return cached
 	var runtime_content := MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
 	return runtime_content if not runtime_content.is_empty() else RegionContent.get_map_content(map_id)
 
 
 func _map_card_summary(map_data: Dictionary) -> String:
-	var content := _player_map_content(int(map_data.get("mapId", -1)))
-	var bosses: Array[String] = []
-	for boss: Variant in content.get("bosses", []):
-		if boss is Dictionary:
-			var boss_name := str(boss.get("name", "")).strip_edges()
-			if not boss_name.is_empty() and not bosses.has(boss_name):
-				bosses.append(boss_name)
-	return "有首领" if not bosses.is_empty() else "探索区域"
+	var dto: Dictionary = _presentation_by_id.get(int(map_data.get("mapId", -1)), {})
+	return str(dto.get("summary", "探索区域"))
 
 
 func _player_map_detail(map_data: Dictionary, content: Dictionary, boss_names: Array[String]) -> String:
@@ -467,28 +556,18 @@ func _player_map_detail(map_data: Dictionary, content: Dictionary, boss_names: A
 	var camp_text := "有安全营地，可在此休整。" if has_camp else "未发现可供休整的安全营地。"
 	var monster_text := "、".join(monster_names) if not monster_names.is_empty() else "暂未发现常驻怪物"
 	var boss_text := "会刷新：%s" % "、".join(boss_names) if not boss_names.is_empty() else "未发现首领刷新"
-	var entrance_sources := _incoming_route_names(map_id)
+	var entrance_sources: Array = []
+	for source_value: Variant in _incoming_route_names(map_id):
+		entrance_sources.append(str(source_value))
 	var entrance_text := "可从%s进入。" % "、".join(entrance_sources) if not entrance_sources.is_empty() else "入口线索暂无记录，需要继续探索。"
 	var exit_text := "；".join(portal_lines) if not portal_lines.is_empty() else "未发现通往其他区域的出口。"
 	return "[color=#d8c8ae]地图说明：%s\n\n营地：%s\n\n常见怪物：%s\n\n首领：%s\n\n入口：%s\n\n出口：%s[/color]" % [description, camp_text, monster_text, boss_text, entrance_text, exit_text]
 
 
 func _incoming_route_names(destination_map_id: int) -> Array[String]:
-	var sources: Array[String] = []
-	for source_value: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
-		if not source_value is Dictionary:
-			continue
-		var source_map: Dictionary = source_value
-		var source_map_id := int(source_map.get("mapId", -1))
-		if source_map_id == destination_map_id:
-			continue
-		for portal: Variant in _player_map_content(source_map_id).get("portals", []):
-			if portal is Dictionary and int(portal.get("target_map_id", -1)) == destination_map_id:
-				var source_name := str(source_map.get("name", "相邻区域")).strip_edges()
-				if not source_name.is_empty() and not sources.has(source_name):
-					sources.append(source_name)
-				break
-	return sources
+	_ensure_presentation_snapshot()
+	var cached: Variant = _incoming_routes_by_destination.get(destination_map_id, [])
+	return (cached as Array).duplicate() if cached is Array else []
 
 
 func _clear_map_selection() -> void:
