@@ -3,6 +3,7 @@ extends Node
 const CHASSIS_PATH := "res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png"
 const ACTION_FRAME_PATH := "res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png"
 const MobileLayout := preload("res://scripts/mobile_layout.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 
 
 func _ready() -> void:
@@ -350,13 +351,15 @@ func _run() -> void:
 	PlayerState.add_item("基本剑术", 1)
 	PlayerState.add_item("匕首", 1)
 	PlayerState.add_item("布衣(女)", 1)
+	PlayerState.add_item("回城卷", 1)
+	PlayerState.add_item("体力强效神水", 1)
 	await get_tree().process_frame
 	var candidates: Array = hud.call("_item_quick_slot_candidates")
-	assert(candidates.size() == 4, "快捷候选应过滤装备并稳定去重，实际 %d" % candidates.size())
+	assert(candidates.size() == 6, "快捷候选应过滤装备并稳定去重，实际 %d" % candidates.size())
 	var candidate_names: Array[String] = []
 	for candidate: Variant in candidates:
 		candidate_names.append(str(candidate.get("item_name", "")))
-	assert("太阳水" in candidate_names and "强效太阳水" in candidate_names and "修复油" in candidate_names and "基本剑术" in candidate_names, "可用候选缺失")
+	assert("太阳水" in candidate_names and "强效太阳水" in candidate_names and "修复油" in candidate_names and "基本剑术" in candidate_names and "回城卷" in candidate_names and "体力强效神水" in candidate_names, "可用候选缺失")
 	assert(not ("匕首" in candidate_names) and not ("布衣(女)" in candidate_names), "装备不应进入快捷候选")
 	assert(int(candidates[0].get("count", 0)) == 2, "同名物品数量应汇总")
 	assert(not hud.call("_is_quick_slot_candidate", {"kind": "quest", "usable": true}), "任务材料不应作为快捷候选")
@@ -401,7 +404,7 @@ func _run() -> void:
 	await get_tree().create_timer(0.55).timeout
 	await get_tree().process_frame
 	assert(hud.item_quick_slot_menu.visible, "长按应弹出快捷物品选择菜单")
-	assert(hud.item_quick_slot_candidate_buttons.size() == 4, "可视选择器应列出全部四个候选")
+	assert(hud.item_quick_slot_candidate_buttons.size() == 6, "可视选择器应列出全部候选")
 	var candidate_screen_ys: Array[float] = []
 	for candidate_index in range(hud.item_quick_slot_candidate_buttons.size()):
 		var candidate_button := hud.item_quick_slot_candidate_buttons[candidate_index] as Button
@@ -444,6 +447,14 @@ func _run() -> void:
 	assert(absf(left_margin - right_margin) <= 1.0, "快捷选择器内容左右内边距必须对称")
 	var first_card := hud.item_quick_slot_candidate_buttons[0] as Button
 	assert(absf(first_card.get_screen_position().x - scroll_rect.position.x) <= 1.0, "候选卡必须水平居中于选择器内容区")
+	var picker_scroll := hud._item_quick_slot_menu_scroll as ScrollContainer
+	var picker_bar := picker_scroll.get_v_scroll_bar()
+	var picker_max_scroll := maxf(0.0, picker_bar.max_value - picker_bar.page)
+	assert(picker_max_scroll > 0.0, "超过 4 个候选时选择器必须产生可滚动溢出")
+	assert(
+		picker_scroll.get_meta("touch_scroll_policy", "") == TouchScrollSupportScript.STABLE_ID,
+		"快捷选择器必须复用共享触摸滚动支持器",
+	)
 	hud._finish_item_slot_press(2, slot_center, 7)
 	assert(use_signals.size() == before_menu_use_count, "长按后释放不应触发 use")
 	var repair_id := -1
@@ -459,6 +470,62 @@ func _run() -> void:
 	hud._begin_item_slot_press(3, slot_center, 8)
 	await get_tree().create_timer(0.55).timeout
 	assert(hud.item_quick_slot_menu.visible, "触摸长按应弹出快捷物品选择菜单")
+	picker_scroll = hud._item_quick_slot_menu_scroll as ScrollContainer
+	picker_bar = picker_scroll.get_v_scroll_bar()
+	picker_bar.value = 0.0
+	await get_tree().process_frame
+	var picker_support := TouchScrollSupportScript.attach_tree(hud)
+	assert(
+		hud.item_quick_slot_menu.window_input.is_connected(hud._on_item_quick_slot_popup_input),
+		"快捷选择器独立窗口没有接入共享触摸滚动输入",
+	)
+	var picker_scroll_screen_rect := Rect2(picker_scroll.get_screen_position(), picker_scroll.size)
+	var picker_drag_center := picker_scroll.get_global_rect().get_center()
+	var picker_touch_down := InputEventScreenTouch.new()
+	picker_touch_down.index = 23
+	picker_touch_down.pressed = true
+	picker_touch_down.position = picker_drag_center
+	hud._on_item_quick_slot_popup_input(picker_touch_down)
+	assert(picker_support.get("_active_control") == picker_scroll, "共享触摸支持器未命中快捷选择器滚动区")
+	var picker_drag := InputEventScreenDrag.new()
+	picker_drag.index = 23
+	picker_max_scroll = maxf(0.0, picker_bar.max_value - picker_bar.page)
+	picker_drag.position = picker_drag_center + Vector2(0, -picker_max_scroll)
+	picker_drag.relative = Vector2(0, -picker_max_scroll)
+	hud._on_item_quick_slot_popup_input(picker_drag)
+	assert(picker_bar.value >= picker_max_scroll - 1.0, "快捷选择器触摸拖动无法滚动到底")
+	var picker_touch_up := InputEventScreenTouch.new()
+	picker_touch_up.index = 23
+	picker_touch_up.pressed = false
+	picker_touch_up.position = picker_drag.position
+	hud._on_item_quick_slot_popup_input(picker_touch_up)
+	# Reverse the same shared gesture to expose the post-fourth candidate, then
+	# activate it through the existing card callback.
+	var picker_reverse_down := InputEventScreenTouch.new()
+	picker_reverse_down.index = 24
+	picker_reverse_down.pressed = true
+	picker_reverse_down.position = picker_drag_center
+	hud._on_item_quick_slot_popup_input(picker_reverse_down)
+	var picker_reverse_drag := InputEventScreenDrag.new()
+	picker_reverse_drag.index = 24
+	picker_reverse_drag.position = picker_drag_center + Vector2(0, picker_max_scroll)
+	picker_reverse_drag.relative = Vector2(0, picker_max_scroll)
+	hud._on_item_quick_slot_popup_input(picker_reverse_drag)
+	assert(picker_bar.value <= 1.0, "快捷选择器触摸反向拖动无法回到顶部")
+	var picker_reverse_up := InputEventScreenTouch.new()
+	picker_reverse_up.index = 24
+	picker_reverse_up.pressed = false
+	picker_reverse_up.position = picker_reverse_drag.position
+	hud._on_item_quick_slot_popup_input(picker_reverse_up)
+	await get_tree().create_timer(0.18).timeout
+	var later_candidate := hud.item_quick_slot_candidate_buttons[5] as Button
+	assert(
+		Rect2(later_candidate.get_screen_position(), later_candidate.size).intersects(picker_scroll_screen_rect),
+		"后续候选滚动后仍不可见",
+	)
+	later_candidate.pressed.emit()
+	assert(hud.item_quick_slots[3] == "体力强效神水", "后续候选点击没有更新快捷槽")
+	assert(assignment_signals.size() == 3 and assignment_signals[2] == [3, "体力强效神水"], "后续候选点击未保持 assignment 语义")
 	hud._finish_item_slot_press(3, slot_center, 8)
 	assert(use_signals.size() == before_menu_use_count, "触摸长按释放不应触发 use")
 	hud.item_quick_slot_menu.hide()

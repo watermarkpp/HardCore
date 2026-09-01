@@ -89,6 +89,11 @@ const INVENTORY_WEIGHT_CONTRACT_ID := "gameplay.inventory.weight_authority.v1"
 const INVENTORY_WEIGHT_REJECTION := "超过负重，无法拾取。"
 const INVENTORY_SLOT_REJECTION := "背包空间不足。"
 const WAREHOUSE_TRANSFER_CONTRACT_ID := "gameplay.warehouse.transfer_authority.v1"
+const SHARED_WAREHOUSE_SCHEMA_VERSION := 1
+const SHARED_WAREHOUSE_CONTRACT_ID := "player_state.shared_warehouse.v1"
+const SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID := "player_state.shared_warehouse.legacy_merge.v1"
+const SHARED_WAREHOUSE_DEFAULT_PATH := "user://shared_warehouse.json"
+const SHARED_WAREHOUSE_TRANSACTION_LOG_PATH := "user://shared_warehouse.transaction.json"
 const MAX_SAFE_WEIGHT := 9223372036854775807
 const SHOP_SELL_HIGH_VALUE_PRICE := 10000
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"]
@@ -117,6 +122,16 @@ var experience := 0
 var gold := 0
 var inventory: Array = []
 var warehouse_inventory: Array = []
+## The public warehouse is account-scoped, never character-scoped.  The path
+## is overridable only by isolated tests; production always uses the default.
+var shared_warehouse_path := SHARED_WAREHOUSE_DEFAULT_PATH
+var shared_warehouse_transaction_log_path := SHARED_WAREHOUSE_TRANSACTION_LOG_PATH
+var _shared_warehouse_initialized := false
+var _warehouse_transaction_locked := false
+var _persistence_transaction_in_progress := false
+var _test_fail_shared_write := false
+var _test_fail_profile_write := false
+var _test_fail_warehouse_rollback_write := false
 var equipment: Dictionary = {
 	"武器": {}, "衣服": {}, "头盔": {}, "项链": {},
 	"左手镯": {}, "右手镯": {}, "左戒指": {}, "右戒指": {}, "圣物": {}, "徽章": {},
@@ -200,6 +215,8 @@ func _ready() -> void:
 	_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
 	_migrate_single_save_to_profile()
+	_recover_shared_warehouse_transaction()
+	_initialize_shared_warehouse()
 	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
 		if ProjectSettings.get_setting("hardcore/debug/enable_qa_test_roster", false):
 			prepare_qa_test_roster_v2()
@@ -216,7 +233,13 @@ func reset_progress(emit_updates := true) -> void:
 	experience = 0
 	gold = 0
 	inventory = []
-	warehouse_inventory = []
+	# reset_progress is character-local.  Never clear the account warehouse.
+	if test_mode and not _shared_warehouse_test_isolation_enabled():
+		warehouse_inventory = []
+	elif _shared_warehouse_initialized:
+		warehouse_inventory = _shared_warehouse_read_inventory()
+	else:
+		warehouse_inventory = []
 	equipment = _empty_equipment()
 	learned_skills = {}
 	_skill_progression.load_snapshot({})
@@ -1644,6 +1667,10 @@ func sort_warehouse() -> Dictionary:
 		"success": false,
 		"message": "仓库整理失败。",
 	}
+	var legacy_test_memory := test_mode and not _shared_warehouse_test_isolation_enabled()
+	if not legacy_test_memory and not _ensure_shared_warehouse_ready():
+		result["message"] = "公共仓库不可用，已拒绝整理。"
+		return result
 	if warehouse_inventory.size() > WAREHOUSE_CAPACITY:
 		result["message"] = "仓库数据超过容量，已拒绝整理以避免丢失物品。"
 		return result
@@ -1663,7 +1690,7 @@ func sort_warehouse() -> Dictionary:
 	for record: Dictionary in records:
 		warehouse_inventory.append(record)
 	inventory_changed.emit()
-	if not _commit_save():
+	if not legacy_test_memory and not _write_shared_warehouse(warehouse_inventory):
 		warehouse_inventory = warehouse_before
 		inventory_changed.emit()
 		result["message"] = "仓库存档失败，原有顺序已恢复。"
@@ -2823,7 +2850,347 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 	return bool(_read_json_document(path).get("valid", false))
 
 
+func _shared_warehouse_empty_document() -> Dictionary:
+	return {
+		"schema_version": SHARED_WAREHOUSE_SCHEMA_VERSION,
+		"contract_id": SHARED_WAREHOUSE_CONTRACT_ID,
+		"revision": 0,
+		"warehouse_inventory": [],
+		"legacy_migration": {
+			"completed": false,
+			"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+			"sources": {},
+		},
+	}
+
+
+func _shared_digest(value: Variant) -> String:
+	# Hash the JSON round-trip representation so integers/floats and typed Arrays
+	# compare identically after an atomic file is parsed back from disk.
+	var normalized: Variant = JSON.parse_string(JSON.stringify(value))
+	return JSON.stringify(normalized).sha256_text()
+
+
+func _shared_warehouse_read_inventory() -> Array:
+	var document := _read_json(shared_warehouse_path)
+	var records: Variant = document.get("warehouse_inventory", null)
+	return (records as Array).duplicate(true) if records is Array else []
+
+
+func _shared_warehouse_test_isolation_enabled() -> bool:
+	return (
+		profile_directory != PROFILE_DIRECTORY
+		and shared_warehouse_path != SHARED_WAREHOUSE_DEFAULT_PATH
+		and shared_warehouse_transaction_log_path != SHARED_WAREHOUSE_TRANSACTION_LOG_PATH
+	)
+
+
+func _valid_profile_storage_id(profile_id: String) -> bool:
+	return (
+		not profile_id.is_empty()
+		and not profile_id.contains("/")
+		and not profile_id.contains("\\")
+		and profile_id not in [".", ".."]
+	)
+
+
+func _profile_ids_for_shared_warehouse() -> Dictionary:
+	var ids: Dictionary = {}
+	var index_status := _read_json_with_status(profile_index_path)
+	if FileAccess.file_exists(profile_index_path) and not bool(index_status.get("success", false)):
+		return {"ok": false, "ids": []}
+	var profiles: Variant = (index_status.get("data", {}) as Dictionary).get("profiles", [])
+	if not profiles is Array:
+		return {"ok": false, "ids": []}
+	for entry: Variant in profiles:
+		if not entry is Dictionary:
+			return {"ok": false, "ids": []}
+		var profile_id := str((entry as Dictionary).get("id", ""))
+		if not _valid_profile_storage_id(profile_id) or ids.has(profile_id):
+			return {"ok": false, "ids": []}
+		ids[profile_id] = true
+	var directory := DirAccess.open(profile_directory)
+	if directory != null:
+		for file_name: String in directory.get_files():
+			if not file_name.ends_with(".json"):
+				continue
+			var profile_id := file_name.left(file_name.length() - 5)
+			if not _valid_profile_storage_id(profile_id):
+				return {"ok": false, "ids": []}
+			ids[profile_id] = true
+	var sorted_ids: Array = ids.keys()
+	sorted_ids.sort()
+	return {"ok": true, "ids": sorted_ids}
+
+
+func _legacy_warehouse_source(document: Dictionary) -> Dictionary:
+	var legacy: Variant = document.get("warehouse_inventory", [])
+	if not legacy is Array or (legacy as Array).size() > WAREHOUSE_CAPACITY:
+		return {"ok": false, "records": []}
+	var records: Array = []
+	for raw_record: Variant in legacy:
+		if not raw_record is Dictionary:
+			return {"ok": false, "records": []}
+		if not (raw_record as Dictionary).is_empty():
+			records.append((raw_record as Dictionary).duplicate(true))
+	return {"ok": true, "records": records}
+
+
+func _validate_shared_warehouse_document(document: Dictionary) -> bool:
+	if int(document.get("schema_version", 0)) != SHARED_WAREHOUSE_SCHEMA_VERSION:
+		return false
+	if str(document.get("contract_id", "")) != SHARED_WAREHOUSE_CONTRACT_ID:
+		return false
+	var records: Variant = document.get("warehouse_inventory", null)
+	if not records is Array or (records as Array).size() > WAREHOUSE_CAPACITY:
+		return false
+	for record: Variant in records:
+		if not record is Dictionary:
+			return false
+	var ledger: Variant = document.get("legacy_migration", null)
+	if not ledger is Dictionary or not bool((ledger as Dictionary).get("completed", false)):
+		return false
+	if str((ledger as Dictionary).get("contract_id", "")) != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID:
+		return false
+	for record: Variant in records:
+		if not record is Dictionary or (record as Dictionary).is_empty():
+			return false
+	var sources: Variant = (ledger as Dictionary).get("sources", null)
+	if not sources is Dictionary:
+		return false
+	for raw_profile_id: Variant in (sources as Dictionary).keys():
+		var profile_id := str(raw_profile_id)
+		var ledger_source: Variant = (sources as Dictionary).get(profile_id, null)
+		if not _valid_profile_storage_id(profile_id) or not ledger_source is Dictionary:
+			return false
+		if (
+			not bool((ledger_source as Dictionary).get("complete", false))
+			or str((ledger_source as Dictionary).get("contract_id", "")) != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID
+			or str((ledger_source as Dictionary).get("digest", "")).is_empty()
+			or int((ledger_source as Dictionary).get("occupied_count", -1)) < 0
+		):
+			return false
+		var source_path := _profile_path(profile_id)
+		if not FileAccess.file_exists(source_path):
+			continue # deletion is allowed; the shared ledger remains authoritative.
+		var source := _read_json_with_status(source_path)
+		if not bool(source.get("success", false)):
+			return false
+		var legacy: Variant = (source.get("data", {}) as Dictionary).get("warehouse_inventory", null)
+		if legacy == null:
+			continue # migrated sources may be naturally retired by a later save.
+		var normalized := _legacy_warehouse_source(source.get("data", {}) as Dictionary)
+		if not bool(normalized.get("ok", false)):
+			return false
+		var occupied: Array = normalized.get("records", [])
+		if (
+			_shared_digest(occupied) != str((ledger_source as Dictionary).get("digest", ""))
+			or occupied.size() != int((ledger_source as Dictionary).get("occupied_count", -1))
+		):
+			return false
+	var profile_ids_result := _profile_ids_for_shared_warehouse()
+	if not bool(profile_ids_result.get("ok", false)):
+		return false
+	for raw_profile_id: Variant in profile_ids_result.get("ids", []):
+		var profile_id := str(raw_profile_id)
+		var source := _read_json_with_status(_profile_path(profile_id))
+		if not bool(source.get("success", false)):
+			return false
+		var source_document: Dictionary = source.get("data", {})
+		if source_document.has("warehouse_inventory") and not (sources as Dictionary).has(profile_id):
+			return false
+	return true
+
+
+func _occupied_records(records: Array) -> Array:
+	var result: Array = []
+	for record: Variant in records:
+		if record is Dictionary and not (record as Dictionary).is_empty():
+			result.append((record as Dictionary).duplicate(true))
+	return result
+
+
+func _initialize_shared_warehouse() -> bool:
+	var existing := _read_json_document(shared_warehouse_path)
+	if bool(existing.get("exists", false)):
+		if not bool(existing.get("valid", false)) or not _validate_shared_warehouse_document(existing.get("data", {})):
+			_shared_warehouse_initialized = false
+			return false
+		warehouse_inventory = _shared_warehouse_read_inventory()
+		_shared_warehouse_initialized = true
+		return true
+	var profile_ids_result := _profile_ids_for_shared_warehouse()
+	if not bool(profile_ids_result.get("ok", false)):
+		_shared_warehouse_initialized = false
+		return false
+	var merged: Array = []
+	var sources: Dictionary = {}
+	for raw_profile_id: Variant in profile_ids_result.get("ids", []):
+		var profile_id := str(raw_profile_id)
+		var source := _read_json_with_status(_profile_path(profile_id))
+		if not bool(source.get("success", false)):
+			_shared_warehouse_initialized = false
+			return false
+		var normalized := _legacy_warehouse_source(source.get("data", {}) as Dictionary)
+		if not bool(normalized.get("ok", false)):
+			_shared_warehouse_initialized = false
+			return false
+		var occupied: Array = normalized.get("records", [])
+		for record: Variant in occupied:
+			merged.append(record.duplicate(true))
+			if merged.size() > WAREHOUSE_CAPACITY:
+				_shared_warehouse_initialized = false
+				return false
+		sources[profile_id] = {
+			"digest": _shared_digest(occupied),
+			"occupied_count": occupied.size(),
+			"complete": true,
+			"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+		}
+	var document := _shared_warehouse_empty_document()
+	document["revision"] = 1
+	document["warehouse_inventory"] = merged
+	(document["legacy_migration"] as Dictionary)["completed"] = true
+	(document["legacy_migration"] as Dictionary)["sources"] = sources
+	if not _write_shared_warehouse_document_atomic(document):
+		_shared_warehouse_initialized = false
+		return false
+	_shared_warehouse_initialized = true
+	warehouse_inventory = merged.duplicate(true)
+	return true
+
+
+func _ensure_shared_warehouse_ready() -> bool:
+	if _warehouse_transaction_locked:
+		return false
+	if profile_directory != PROFILE_DIRECTORY and not _shared_warehouse_test_isolation_enabled():
+		return true
+	if _shared_warehouse_initialized:
+		return true
+	return _initialize_shared_warehouse()
+
+
+func _revalidate_shared_warehouse_authority() -> bool:
+	var current := _read_json_document(shared_warehouse_path)
+	return (
+		bool(current.get("valid", false))
+		and _validate_shared_warehouse_document(current.get("data", {}))
+	)
+
+
+func _recover_shared_warehouse_transaction() -> void:
+	var log_document := _read_json_document(shared_warehouse_transaction_log_path)
+	if not bool(log_document.get("exists", false)):
+		return
+	if not bool(log_document.get("valid", false)):
+		_warehouse_transaction_locked = true
+		return
+	var log: Dictionary = log_document.get("data", {})
+	if (
+		str(log.get("contract_id", "")) != WAREHOUSE_TRANSFER_CONTRACT_ID
+		or str(log.get("state", "")) != "PREPARED"
+		or not log.get("profile_path", "") is String
+	):
+		_warehouse_transaction_locked = true
+		return
+	var profile_id := str(log.get("profile_id", ""))
+	var profile_path := str(log.get("profile_path", ""))
+	var before_profile: Variant = log.get("before_profile", null)
+	var after_profile: Variant = log.get("after_profile", null)
+	var before_shared: Variant = log.get("before_shared", null)
+	var after_shared: Variant = log.get("after_shared", null)
+	if (
+		not _valid_profile_storage_id(profile_id)
+		or profile_path != _profile_path(profile_id)
+		or not before_profile is Dictionary
+		or not after_profile is Dictionary
+		or not before_shared is Dictionary
+		or not after_shared is Dictionary
+		or str((before_profile as Dictionary).get("profile_id", "")) != profile_id
+		or str((after_profile as Dictionary).get("profile_id", "")) != profile_id
+		or _shared_digest(before_profile) != str(log.get("before_profile_hash", ""))
+		or _shared_digest(after_profile) != str(log.get("after_profile_hash", ""))
+		or _shared_digest(before_shared) != str(log.get("before_shared_hash", ""))
+		or _shared_digest(after_shared) != str(log.get("after_shared_hash", ""))
+	):
+		_warehouse_transaction_locked = true
+		return
+	var current_profile := _read_json(profile_path)
+	var current_shared := _read_json(shared_warehouse_path)
+	if _shared_digest(current_profile) == _shared_digest(after_profile) and _shared_digest(current_shared) == _shared_digest(after_shared):
+		_warehouse_transaction_locked = not _remove_persistence_file(shared_warehouse_transaction_log_path)
+		_shared_warehouse_initialized = false
+		return
+	var profile_restored := _write_json_atomic(profile_path, before_profile as Dictionary)
+	var shared_restored := _write_json_atomic(shared_warehouse_path, before_shared as Dictionary)
+	if (
+		not profile_restored
+		or not shared_restored
+		or _shared_digest(_read_json(profile_path)) != _shared_digest(before_profile)
+		or _shared_digest(_read_json(shared_warehouse_path)) != _shared_digest(before_shared)
+	):
+		_warehouse_transaction_locked = true
+		return
+	_warehouse_transaction_locked = not _remove_persistence_file(shared_warehouse_transaction_log_path)
+	_shared_warehouse_initialized = false
+
+
+func _remove_persistence_file(path: String) -> bool:
+	if not FileAccess.file_exists(path):
+		return true
+	return DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK
+
+
+func _shared_document_for_records(records: Array) -> Dictionary:
+	var current := _read_json(shared_warehouse_path)
+	var document := _shared_warehouse_empty_document()
+	document["revision"] = int(current.get("revision", 0)) + 1
+	document["warehouse_inventory"] = records.duplicate(true)
+	document["legacy_migration"] = current.get("legacy_migration", {
+		"completed": true,
+		"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+		"sources": {},
+	})
+	return document
+
+
+func _write_shared_warehouse_document_atomic(document: Dictionary) -> bool:
+	if test_mode and _test_fail_shared_write:
+		return false
+	return _write_json_atomic(shared_warehouse_path, document)
+
+
+func _write_shared_warehouse(records: Array) -> bool:
+	# Legacy unit tests exercise the in-memory authority without booting the
+	# profile service.  Never let those fixtures touch production user:// data.
+	if (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+		and not _shared_warehouse_initialized
+	):
+		return true
+	if records.size() > WAREHOUSE_CAPACITY:
+		return false
+	var current := _read_json(shared_warehouse_path)
+	if not _validate_shared_warehouse_document(current):
+		return false
+	var revision := int(current.get("revision", 0)) + 1
+	var migration: Dictionary = current.get("legacy_migration", {
+		"completed": true,
+		"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+		"sources": {},
+	})
+	var document := _shared_warehouse_empty_document()
+	document["revision"] = revision
+	document["warehouse_inventory"] = records.duplicate(true)
+	document["legacy_migration"] = migration.duplicate(true)
+	return _write_shared_warehouse_document_atomic(document)
+
+
 func save_game() -> bool:
+	if _warehouse_transaction_locked and not _persistence_transaction_in_progress:
+		last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked"}
+		return false
 	if active_profile_id.is_empty():
 		last_save_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
@@ -2834,6 +3201,33 @@ func save_game() -> bool:
 	_refresh_taoist_main_pet_runtime_states_for_save()
 	_ensure_skill_progression_matches_legacy()
 	var profile_path := _profile_path(active_profile_id)
+	var legacy_isolated_profile_fixture := (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+	)
+	if legacy_isolated_profile_fixture:
+		# Existing save tests redirect the profile root; never touch production
+		# shared storage from such an isolated fixture.
+		_shared_warehouse_initialized = false
+	elif not _shared_warehouse_initialized and not _initialize_shared_warehouse():
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "shared_warehouse_unavailable",
+		}
+		return false
+	if (
+		not legacy_isolated_profile_fixture
+		and FileAccess.file_exists(profile_path)
+		and _read_json(profile_path).has("warehouse_inventory")
+		and not _revalidate_shared_warehouse_authority()
+	):
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "shared_warehouse_legacy_source_changed",
+		}
+		return false
 	var payload := {
 		"save_version": SAVE_VERSION,
 		"profile_id": active_profile_id,
@@ -2847,7 +3241,7 @@ func save_game() -> bool:
 		"experience": experience,
 		"gold": gold,
 		"inventory": inventory,
-		"warehouse_inventory": warehouse_inventory,
+		"warehouse_storage_contract_id": SHARED_WAREHOUSE_CONTRACT_ID,
 		"equipment": equipment,
 		"learned_skills": learned_skills,
 		"skill_progression": _skill_progression.snapshot(),
@@ -2870,6 +3264,8 @@ func save_game() -> bool:
 			else []
 		),
 	}
+	if legacy_isolated_profile_fixture:
+		payload["warehouse_inventory"] = warehouse_inventory
 	if not _taoist_main_pet_runtime_state_slots().is_empty():
 		payload["taoist_main_pet_runtime_states"] = (
 			taoist_main_pet_runtime_states.duplicate(true)
@@ -2932,7 +3328,12 @@ func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
 	if previous.is_empty():
 		result["error"] = "previous_save_missing"
 		return result
-	if not _write_json_atomic(path, document.duplicate(true)):
+	var character_document := document.duplicate(true)
+	# DeviceLab edits one character only. An older exported character document
+	# may still carry the former private warehouse field; it must never replace
+	# or recreate the account-wide public warehouse authority.
+	character_document.erase("warehouse_inventory")
+	if not _write_json_atomic(path, character_document):
 		result["error"] = "atomic_write_failed"
 		return result
 	load_save()
@@ -2952,6 +3353,9 @@ func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
 
 func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictionary:
 	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
+	if not (test_mode and not _shared_warehouse_test_isolation_enabled()) and not _ensure_shared_warehouse_ready():
+		result["message"] = "公共仓库不可用，物品未改变。"
+		return result
 	if inventory_index < 0 or inventory_index >= inventory.size() or not _inventory_slot_is_occupied(inventory[inventory_index]) or warehouse_slot < 0 or warehouse_slot >= WAREHOUSE_CAPACITY:
 		result["message"] = "存入位置无效。"
 		return result
@@ -2965,7 +3369,7 @@ func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictiona
 		return result
 	warehouse_inventory[warehouse_slot] = inventory[inventory_index].duplicate(true) if inventory[inventory_index] is Dictionary else inventory[inventory_index]
 	_clear_inventory_slot(inventory, inventory_index)
-	if not _commit_save():
+	if not _warehouse_transfer_commit(inventory_before, warehouse_before):
 		inventory = inventory_before
 		warehouse_inventory = warehouse_before
 		result["message"] = "仓库存档失败，物品未改变。"
@@ -2978,6 +3382,9 @@ func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictiona
 
 func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
 	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
+	if not (test_mode and not _shared_warehouse_test_isolation_enabled()) and not _ensure_shared_warehouse_ready():
+		result["message"] = "公共仓库不可用，物品未改变。"
+		return result
 	if warehouse_slot < 0 or warehouse_slot >= warehouse_inventory.size() or not warehouse_inventory[warehouse_slot] is Dictionary or (warehouse_inventory[warehouse_slot] as Dictionary).is_empty():
 		result["message"] = "仓库位置无效。"
 		return result
@@ -2992,7 +3399,7 @@ func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
 	inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
 	warehouse_inventory[warehouse_slot] = {}
 	_trim_warehouse_empty_tail()
-	if not _commit_save():
+	if not _warehouse_transfer_commit(inventory_before, warehouse_before):
 		inventory = inventory_before
 		warehouse_inventory = warehouse_before
 		result["message"] = "仓库存档失败，物品未改变。"
@@ -3020,8 +3427,6 @@ func _validate_device_lab_save_document(document: Dictionary) -> Dictionary:
 		return {"ok": false, "error": "save_version"}
 	if not document.get("inventory", null) is Array or (document.get("inventory") as Array).size() > 100:
 		return {"ok": false, "error": "inventory"}
-	if not document.get("warehouse_inventory", null) is Array or (document.get("warehouse_inventory") as Array).size() > WAREHOUSE_CAPACITY:
-		return {"ok": false, "error": "warehouse_inventory"}
 	if not document.get("equipment", null) is Dictionary:
 		return {"ok": false, "error": "equipment"}
 	if int(document.get("level", 0)) < 1 or int(document.get("level", 0)) > 255:
@@ -3048,6 +3453,7 @@ func _emit_device_lab_state_changed() -> void:
 
 
 func load_save() -> void:
+	_recover_shared_warehouse_transaction()
 	var load_path := _profile_path(active_profile_id) if not active_profile_id.is_empty() else SAVE_PATH
 	var load_result := _read_json_with_status(load_path)
 	last_load_result = {
@@ -3060,6 +3466,19 @@ func load_save() -> void:
 		reset_progress(false)
 		return
 	var parsed: Dictionary = load_result.get("data", {})
+	var legacy_isolated_profile_fixture := (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+	)
+	if legacy_isolated_profile_fixture:
+		# Isolated profile fixtures retain their historical in-memory warehouse
+		# behavior and are forbidden from migrating production account data.
+		warehouse_inventory = (parsed.get("warehouse_inventory", []) as Array).duplicate(true) if parsed.get("warehouse_inventory", []) is Array else []
+	elif not _shared_warehouse_initialized and not _initialize_shared_warehouse():
+		last_load_result["success"] = false
+		last_load_result["reason"] = "shared_warehouse_unavailable"
+		reset_progress(false)
+		return
 	level = maxi(1, int(parsed.get("level", 1)))
 	profession = str(parsed.get("profession", "战士"))
 	if not ProfessionRules.is_valid_profession(profession):
@@ -3076,9 +3495,9 @@ func load_save() -> void:
 	experience = maxi(0, int(parsed.get("experience", 0)))
 	gold = maxi(0, int(parsed.get("gold", 0)))
 	var loaded_inventory: Variant = parsed.get("inventory", [])
-	var loaded_warehouse: Variant = parsed.get("warehouse_inventory", [])
 	inventory = (loaded_inventory as Array).duplicate(true) if loaded_inventory is Array else []
-	warehouse_inventory = (loaded_warehouse as Array).duplicate(true) if loaded_warehouse is Array else []
+	if not legacy_isolated_profile_fixture:
+		warehouse_inventory = _shared_warehouse_read_inventory()
 	_trim_inventory_empty_tail()
 	var saved_equipment: Dictionary = parsed.get("equipment", {})
 	equipment = migrate_equipment_slots(saved_equipment)
@@ -4070,6 +4489,84 @@ func ensure_chiyue_test_roster() -> Dictionary:
 	return result
 
 
+func _warehouse_transfer_commit(inventory_before: Array, warehouse_before: Array) -> bool:
+	if test_mode and not _shared_warehouse_test_isolation_enabled():
+		return _commit_save()
+	if not _ensure_shared_warehouse_ready():
+		return false
+	if (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+		and not _shared_warehouse_initialized
+	):
+		return _commit_save()
+	var profile_path := _profile_path(active_profile_id)
+	var before_profile := _read_json(profile_path)
+	var before_shared := _read_json(shared_warehouse_path)
+	if (
+		before_profile.is_empty()
+		or str(before_profile.get("profile_id", "")) != active_profile_id
+		or not _validate_shared_warehouse_document(before_shared)
+	):
+		return false
+	var after_profile := before_profile.duplicate(true)
+	after_profile["inventory"] = inventory.duplicate(true)
+	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
+	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
+	after_profile.erase("warehouse_inventory")
+	var after_shared := _shared_document_for_records(warehouse_inventory)
+	var prepared := {
+		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
+		"state": "PREPARED",
+		"profile_id": active_profile_id,
+		"profile_path": profile_path,
+		"before_profile": before_profile,
+		"after_profile": after_profile,
+		"before_shared": before_shared,
+		"after_shared": after_shared,
+		"before_profile_hash": _shared_digest(before_profile),
+		"after_profile_hash": _shared_digest(after_profile),
+		"before_shared_hash": _shared_digest(before_shared),
+		"after_shared_hash": _shared_digest(after_shared),
+	}
+	if not _write_json_atomic(shared_warehouse_transaction_log_path, prepared):
+		return false
+	_warehouse_transaction_locked = true
+	_persistence_transaction_in_progress = true
+	var after_shared_ok := _write_shared_warehouse_document_atomic(after_shared)
+	var after_profile_ok := false
+	if after_shared_ok and not (test_mode and _test_fail_profile_write):
+		after_profile_ok = _write_json_atomic(profile_path, after_profile)
+	_persistence_transaction_in_progress = false
+	var after_verified := (
+		after_shared_ok
+		and after_profile_ok
+		and _shared_digest(_read_json(profile_path)) == _shared_digest(after_profile)
+		and _shared_digest(_read_json(shared_warehouse_path)) == _shared_digest(after_shared)
+	)
+	if after_verified:
+		_warehouse_transaction_locked = not _remove_persistence_file(
+			shared_warehouse_transaction_log_path
+		)
+		return true
+	var shared_restored := false
+	var profile_restored := false
+	if not (test_mode and _test_fail_warehouse_rollback_write):
+		shared_restored = _write_json_atomic(shared_warehouse_path, before_shared)
+		profile_restored = _write_json_atomic(profile_path, before_profile)
+	var rollback_verified := (
+		shared_restored
+		and profile_restored
+		and _shared_digest(_read_json(profile_path)) == _shared_digest(before_profile)
+		and _shared_digest(_read_json(shared_warehouse_path)) == _shared_digest(before_shared)
+	)
+	if rollback_verified:
+		_warehouse_transaction_locked = not _remove_persistence_file(
+			shared_warehouse_transaction_log_path
+		)
+	return false
+
+
 ## Partial atomic pickup transaction. Each candidate is simulated in order;
 ## failures do not prevent later candidates from being attempted.
 func receive_loot_batch_partial(candidates: Array) -> Dictionary:
@@ -4235,7 +4732,6 @@ func _test_character_payload(loadout: Dictionary, skill_profile: Dictionary, pro
 			{"name": "强效太阳水", "count": 99},
 			{"name": "魔法药(中量)", "count": 99},
 		],
-		"warehouse_inventory": [],
 		"equipment": equipment_data,
 		"learned_skills": skill_profile.get("learned_skills", {}).duplicate(true),
 		"quick_slots": legacy_slots,
@@ -4274,7 +4770,7 @@ func ensure_developer_test_character()->void:
 		if skill is Dictionary:all_skills[str(skill.get("skillName",""))]=3
 	var slots:Array[String]=["攻杀剑术","刺杀剑术","半月弯刀","烈火剑法"]
 	var now:=int(Time.get_unix_time_from_system())
-	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"warehouse_inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quick_item_slots":["", "", "", ""],"equip_cycle_cursor":_default_equip_cycle_cursor(),"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":910001,"position":[0.0,0.0]}
+	var payload:={"save_version":SAVE_VERSION,"profile_id":profile_id,"character_name":"测试战士30级","updated_at":now,"level":30,"profession":"战士","gender":"男","later_content_enabled":false,"game_mode_id":"classic_176","experience":0,"gold":100000,"inventory":[],"equipment":equipment_data,"learned_skills":all_skills,"quick_slots":slots,"quick_item_slots":["", "", "", ""],"equip_cycle_cursor":_default_equip_cycle_cursor(),"quest_states":{},"content_packages":ContentLayers.enabled_package_ids(),"content_schema_version":CURRENT_CONTENT_SCHEMA_VERSION,"map_id":910001,"position":[0.0,0.0]}
 	payload.merge(_default_world_position_fields(), true)
 	if not _write_json_atomic(_profile_path(profile_id),payload):return
 	var index:=_read_json(profile_index_path);var profiles:Array=index.get("profiles",[])
@@ -4314,7 +4810,7 @@ func ensure_zuma_test_character() -> void:
 		"save_version": SAVE_VERSION, "profile_id": profile_id, "character_name": "祖玛套装测试号",
 		"updated_at": now, "level": 40, "profession": "战士", "gender": "男",
 		"later_content_enabled": false, "game_mode_id": "classic_176", "experience": 0,
-		"gold": 100000, "inventory": [{"name": "太阳水", "count": 10}], "warehouse_inventory": [],
+		"gold": 100000, "inventory": [{"name": "太阳水", "count": 10}],
 		"equipment": equipment_data, "learned_skills": all_skills,
 		"quick_slots": ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"],
 		"quick_item_slots": ["", "", "", ""],
@@ -4420,6 +4916,10 @@ func _default_world_position_fields() -> Dictionary:
 
 
 func create_character(new_name: String, new_profession := "战士", new_gender := "男") -> String:
+	if _warehouse_transaction_locked:
+		return "仓库事务恢复中，暂不能创建角色"
+	if not _ensure_shared_warehouse_ready():
+		return "公共仓库不可用，角色未创建"
 	var clean_name := new_name.strip_edges().substr(0, 12)
 	if clean_name.is_empty():
 		return "角色名不能为空"
@@ -4468,6 +4968,15 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 
 
 func delete_character_profile(profile_id: String) -> Dictionary:
+	if _warehouse_transaction_locked:
+		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked", "profile_id": profile_id}
+	if not _ensure_shared_warehouse_ready():
+		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "shared_warehouse_unavailable", "profile_id": profile_id}
+	if (
+		(profile_directory == PROFILE_DIRECTORY or _shared_warehouse_test_isolation_enabled())
+		and not _revalidate_shared_warehouse_authority()
+	):
+		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "shared_warehouse_validation_failed", "profile_id": profile_id}
 	var result := {
 		"contract_id": CHARACTER_DELETE_CONTRACT_ID,
 		"success": false,
@@ -4717,6 +5226,10 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 
 
 func select_character(profile_id: String) -> bool:
+	if _warehouse_transaction_locked:
+		return false
+	if not _ensure_shared_warehouse_ready():
+		return false
 	var profile_path := _profile_path(profile_id)
 	if (
 		not FileAccess.file_exists(profile_path)

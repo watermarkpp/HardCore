@@ -172,6 +172,7 @@ var _item_quick_slot_menu_slot := -1
 var _item_quick_slot_menu_candidates: Dictionary = {}
 var _item_quick_slot_menu_scroll: ScrollContainer
 var _item_quick_slot_menu_list: Control
+var _touch_scroll_support: Node
 var _item_slot_press_index := -1
 var _item_slot_press_origin := Vector2.ZERO
 var _item_slot_press_touch_index := -1
@@ -316,7 +317,7 @@ func _build_approved_hud() -> void:
 			profile_started_usec,
 		)
 	# P1-C: panels are now lazy-loaded on first open
-	TouchScrollSupportScript.attach_tree(self)
+	_touch_scroll_support = TouchScrollSupportScript.attach_tree(self)
 	if loading_profile_enabled:
 		stage_started_usec = _hud_loading_profile_mark(
 			loading_profile,
@@ -810,6 +811,7 @@ func _build_item_quick_slot_menu() -> void:
 	picker_style.shadow_size = 4
 	picker_style.shadow_offset = Vector2.ZERO
 	item_quick_slot_menu.add_theme_stylebox_override("panel", picker_style)
+	item_quick_slot_menu.window_input.connect(_on_item_quick_slot_popup_input)
 	add_child(item_quick_slot_menu)
 	_item_quick_slot_menu_scroll = ScrollContainer.new()
 	_item_quick_slot_menu_scroll.name = "ItemQuickSlotScroll"
@@ -998,11 +1000,30 @@ func _is_quick_slot_candidate(record: Dictionary) -> bool:
 
 
 func _on_item_quick_slot_menu_pressed(id: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	var item_name := str(_item_quick_slot_menu_candidates.get(id, ""))
 	if item_name.is_empty():
 		return
 	item_quick_slot_menu.hide()
 	_assign_item_quick_slot(_item_quick_slot_menu_slot, item_name)
+
+
+func _on_item_quick_slot_popup_input(event: InputEvent) -> void:
+	# PopupPanel owns a separate viewport, so its touch stream does not reach the
+	# SceneTree-root support node automatically. Window input positions are local
+	# to that popup; translate them to screen coordinates before forwarding into
+	# the shared policy. Taps still continue to the candidate Buttons.
+	if (
+		_touch_scroll_support != null
+		and (event is InputEventScreenTouch or event is InputEventScreenDrag)
+	):
+		var screen_event := event.duplicate() as InputEvent
+		if screen_event is InputEventScreenTouch:
+			(screen_event as InputEventScreenTouch).position += Vector2(item_quick_slot_menu.position)
+		else:
+			(screen_event as InputEventScreenDrag).position += Vector2(item_quick_slot_menu.position)
+		_touch_scroll_support.call("_input", screen_event)
 
 
 func _layout_native_item_icon(icon: TextureRect, texture: Texture2D, bounds: Vector2) -> void:
