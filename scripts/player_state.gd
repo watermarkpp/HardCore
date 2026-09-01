@@ -93,6 +93,7 @@ const MAX_SAFE_WEIGHT := 9223372036854775807
 const SHOP_SELL_HIGH_VALUE_PRICE := 10000
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"]
 const STARTER_LOADOUT_CONTRACT_ID := "gameplay.character.starter_loadout.v1"
+const CHARACTER_DELETE_CONTRACT_ID := "player_state.character.delete.v1"
 const STARTER_WEAPON_ITEM_NAME := "木剑"
 const STARTER_ARMOR_BY_GENDER := {"男": "布衣(男)", "女": "布衣(女)"}
 const VERIFIED_EXPERIENCE_1_TO_22 := {
@@ -4464,6 +4465,76 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 		}
 		return "角色存档失败，角色未创建"
 	return ""
+
+
+func delete_character_profile(profile_id: String) -> Dictionary:
+	var result := {
+		"contract_id": CHARACTER_DELETE_CONTRACT_ID,
+		"success": false,
+		"reason": "",
+		"profile_id": profile_id,
+		"deleted_files": [],
+		"cleanup_failures": [],
+		"cleanup_complete": false,
+		"active_profile_cleared": false,
+	}
+	if (
+		profile_id.is_empty()
+		or profile_id.contains("/")
+		or profile_id.contains("\\")
+		or profile_id == "."
+		or profile_id == ".."
+	):
+		result["reason"] = "invalid_profile_id"
+		return result
+	var index_status := _read_json_with_status(profile_index_path)
+	if not bool(index_status.get("success", false)):
+		result["reason"] = "profile_index_unavailable"
+		return result
+	var index: Dictionary = (index_status.get("data", {}) as Dictionary).duplicate(true)
+	var indexed_profiles: Variant = index.get("profiles", null)
+	if not indexed_profiles is Array:
+		result["reason"] = "profile_index_invalid"
+		return result
+	var remaining_profiles: Array = []
+	var found := false
+	for value: Variant in indexed_profiles:
+		if value is Dictionary and str((value as Dictionary).get("id", "")) == profile_id:
+			found = true
+			continue
+		remaining_profiles.append(value.duplicate(true) if value is Dictionary else value)
+	if not found:
+		result["reason"] = "profile_not_found"
+		return result
+	index["profiles"] = remaining_profiles
+	# Commit the authoritative index first.  A failed atomic write therefore
+	# leaves every profile byte untouched and the character fully selectable.
+	if not _write_json_atomic(profile_index_path, index):
+		result["reason"] = "profile_index_write_failed"
+		return result
+	var base_path := _profile_path(profile_id)
+	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
+		var path := base_path + suffix
+		if not FileAccess.file_exists(path):
+			continue
+		if DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) != OK:
+			(result["cleanup_failures"] as Array).append(path)
+			continue
+		(result["deleted_files"] as Array).append(path)
+	if active_profile_id == profile_id:
+		active_profile_id = ""
+		character_name = ""
+		_autosave_elapsed = 0.0
+		result["active_profile_cleared"] = true
+		profile_changed.emit()
+	result["cleanup_complete"] = (result["cleanup_failures"] as Array).is_empty()
+	if not bool(result["cleanup_complete"]):
+		# The profile index is authoritative: after its atomic commit succeeds the
+		# deletion is logically complete even if an OS-level sidecar cleanup needs
+		# a later retry.  Returning success keeps the hall in sync with that truth.
+		result["reason"] = "profile_sidecar_cleanup_incomplete"
+	result["success"] = true
+	return result
 
 
 func _character_name_exists(candidate: String) -> bool:

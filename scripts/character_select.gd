@@ -6,12 +6,14 @@ const EquipmentCharacterPreviewScript := preload("res://scripts/equipment_charac
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
+const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 
 signal character_creation_requested(request: Dictionary)
 signal character_launch_requested(request: Dictionary)
 
 const LAUNCH_CONTRACT_ID := "ui.character.launch.v1"
 const CREATION_CONTRACT_ID := "ui.character.creation.v1"
+const DELETE_ACTION_ID := "character.delete"
 const ROSTER_TOUCH_SCROLL_CONTRACT_ID := "ui.character.roster.touch_drag.v1"
 const LAUNCH_CONTEXT_META := &"pending_character_launch_context"
 const FIXED_CHARACTER_GENDER := "男"
@@ -54,8 +56,9 @@ var profile_cards: Dictionary = {}
 var profession_button_group: ButtonGroup
 var profile_scroll: ScrollContainer
 var ai_teammate_toggle: CheckButton
-var _creation_feedback_serial := 0
 var enter_button: Button
+var delete_button: Button
+var delete_confirmation: GothicConfirmationPanel
 var launch_loading_overlay: Control
 var preview_visual_root: Control
 var preview_name_label: Label
@@ -98,6 +101,7 @@ func _ready() -> void:
 	_build_preview_panel()
 	_build_creation_panel()
 	_build_launch_loading_overlay()
+	_build_delete_confirmation()
 	_refresh_profiles()
 	TouchScrollSupportScript.attach_tree(self)
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
@@ -418,8 +422,11 @@ func _build_preview_panel() -> void:
 	enter_button = Button.new()
 	enter_button.name = "EnterGame"
 	enter_button.text = "进入 HardCore"
-	enter_button.position = Vector2(94, 458)
-	enter_button.size = Vector2(296, 62)
+	enter_button.position = Vector2(54, 458)
+	enter_button.size = Vector2(244, 62)
+	# Retire only the former single-button saved rect.  The new pair is authored
+	# together here so an older character_hall calibration cannot overlap it.
+	enter_button.set_meta("calibration_layout_revision", 1)
 	# Enter is a transition action, not a persistent selection.  The selected
 	# character card owns the persistent selection highlight; this button only
 	# receives an explicit transition cue while the loading surface takes over.
@@ -428,6 +435,17 @@ func _build_preview_panel() -> void:
 	enter_button.set_meta("stable_id", "character.launch")
 	enter_button.pressed.connect(_enter_selected_character)
 	panel.add_child(enter_button)
+	delete_button = Button.new()
+	delete_button.name = "DeleteCharacter"
+	delete_button.text = "删除人物"
+	delete_button.position = Vector2(310, 458)
+	delete_button.size = Vector2(120, 62)
+	delete_button.theme_type_variation = "GothicComponentButton"
+	delete_button.add_theme_font_size_override("font_size", 16)
+	delete_button.set_meta("stable_id", "character.delete")
+	delete_button.set_meta("calibration_layout_revision", 1)
+	delete_button.pressed.connect(_request_delete_selected_character)
+	panel.add_child(delete_button)
 	var launch_hint := Label.new()
 	launch_hint.name = "LaunchHint"
 	launch_hint.text = "主角色决定世界进度；AI 队友使用自己的角色档案"
@@ -445,6 +463,13 @@ func _build_launch_loading_overlay() -> void:
 	launch_loading_overlay.name = "CharacterLaunchLoading"
 	launch_loading_overlay.set_meta("stable_id", "character.launch.loading")
 	add_child(launch_loading_overlay)
+
+
+func _build_delete_confirmation() -> void:
+	delete_confirmation = GothicConfirmationPanelScript.new()
+	delete_confirmation.name = "DeleteCharacterConfirmation"
+	delete_confirmation.confirmed.connect(_on_delete_confirmation_confirmed)
+	add_child(delete_confirmation)
 
 
 func _build_creation_panel() -> void:
@@ -622,6 +647,7 @@ func _refresh_selection_state() -> void:
 	teammate_status_label.text = "AI队友功能暂未开放"
 	enter_button.disabled = selected_main_profile_id.is_empty()
 	enter_button.text = "选择主角色" if enter_button.disabled else "进入 HardCore"
+	delete_button.disabled = selected_main_profile_id.is_empty()
 	_refresh_character_preview()
 
 
@@ -749,8 +775,6 @@ func _restore_character_action_visual_contract() -> void:
 func _create_character() -> void:
 	if create_button == null:
 		return
-	_creation_feedback_serial += 1
-	GothicUIThemeScript.set_button_feedback(create_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "character.create")
 	last_creation_request = build_creation_request()
 	character_creation_requested.emit(last_creation_request.duplicate(true))
 	var error := PlayerState.create_character(
@@ -761,7 +785,6 @@ func _create_character() -> void:
 	if not error.is_empty():
 		message_label.add_theme_color_override("font_color", Color("d47868"))
 		message_label.text = error
-		_show_creation_result(false)
 		return
 	selected_main_profile_id = PlayerState.active_profile_id
 	selected_ai_profile_id = ""
@@ -769,20 +792,45 @@ func _create_character() -> void:
 	message_label.text = "角色创建成功，请选择是否携带 AI 队友"
 	name_input.clear()
 	_refresh_profiles()
-	_show_creation_result(true)
 
 
-func _show_creation_result(success: bool) -> void:
-	var serial := _creation_feedback_serial
-	GothicUIThemeScript.set_button_feedback(
-		create_button,
-		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
-		"character.create",
-	)
-	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
-		if serial == _creation_feedback_serial and is_instance_valid(create_button) and create_button.is_inside_tree():
-			GothicUIThemeScript.clear_button_feedback(create_button)
-	)
+func _request_delete_selected_character() -> void:
+	var profile := _profile_by_id(selected_main_profile_id)
+	if profile.is_empty():
+		message_label.text = "请先选择要删除的人物"
+		return
+	var profile_name := str(profile.get("name", "未命名"))
+	delete_confirmation.open_confirmation({
+		"action_id": DELETE_ACTION_ID,
+		"tone": "danger",
+		"title": "删除人物",
+		"message": "确定删除人物「%s」吗？\n该人物的存档将被永久删除。" % profile_name,
+		"cancel_label": "取消",
+		"confirm_label": "确认删除",
+		"context": {
+			"profile_id": selected_main_profile_id,
+			"profile_name": profile_name,
+		},
+	})
+
+
+func _on_delete_confirmation_confirmed(request: Dictionary) -> void:
+	if str(request.get("action_id", "")) != DELETE_ACTION_ID:
+		return
+	var context: Dictionary = request.get("context", {})
+	var profile_id := str(context.get("profile_id", ""))
+	var profile_name := str(context.get("profile_name", "未命名"))
+	var result: Dictionary = PlayerState.delete_character_profile(profile_id)
+	if not bool(result.get("success", false)):
+		message_label.add_theme_color_override("font_color", Color("d47868"))
+		message_label.text = "人物删除失败，请重试"
+		return
+	if selected_main_profile_id == profile_id:
+		selected_main_profile_id = ""
+	selected_ai_profile_id = ""
+	_refresh_profiles()
+	message_label.add_theme_color_override("font_color", Color("a8c38f"))
+	message_label.text = "已删除人物：%s" % profile_name
 
 
 func build_creation_request() -> Dictionary:
