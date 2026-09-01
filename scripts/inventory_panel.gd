@@ -555,6 +555,7 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 	button.size = BAG_CELL_SIZE
 	button.tooltip_text = "空物品格"
 	button.disabled = true
+	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.theme_type_variation = "GothicComponentSlotButton"
 	button.pressed.connect(_select_inventory_item.bind(index))

@@ -723,16 +723,24 @@ static func _apply_character_launch_button(theme: Theme) -> void:
 
 static func _apply_slot_button_variation(theme: Theme, variation: StringName, selected: bool) -> void:
 	theme.set_type_variation(variation, "Button")
-	var normal := _slot_box(Color("21150d"), Color("bd8644"), 1) if selected else _slot_box(Color("0c0a09"), Color("594532"), 1)
-	var hover := _slot_box(Color("18110c"), Color("9a7044"), 1)
-	var pressed := _slot_box(Color("26160c"), Color("d3a15e"), 1)
-	_apply_flat_press_feedback(pressed)
 	if selected:
-		_apply_selected_flat_feedback(normal)
-	theme.set_stylebox("normal", variation, normal)
-	theme.set_stylebox("hover", variation, hover)
-	theme.set_stylebox("pressed", variation, pressed)
-	theme.set_stylebox("focus", variation, normal)
+		# Semantic multi-selection must dominate transient Button state. Reused
+		# slot nodes retain hover/focus after a touch, so different state boxes
+		# would make the first and later selected items appear at different
+		# brightness. Share one visible full-cell fill for every selected state.
+		var selected_box := _slot_box(Color("3b2015"), Color("d39a52"), 1)
+		_apply_selected_flat_feedback(selected_box)
+		for state: StringName in [&"normal", &"hover", &"pressed", &"focus"]:
+			theme.set_stylebox(state, variation, selected_box)
+	else:
+		var normal := _slot_box(Color("0c0a09"), Color("594532"), 1)
+		var hover := _slot_box(Color("18110c"), Color("9a7044"), 1)
+		var pressed := _slot_box(Color("26160c"), Color("d3a15e"), 1)
+		_apply_flat_press_feedback(pressed)
+		theme.set_stylebox("normal", variation, normal)
+		theme.set_stylebox("hover", variation, hover)
+		theme.set_stylebox("pressed", variation, pressed)
+		theme.set_stylebox("focus", variation, normal)
 	theme.set_stylebox("disabled", variation, _slot_box(Color("090807"), Color("332a22"), 1))
 	theme.set_color("font_color", variation, PARCHMENT)
 	theme.set_color("font_hover_color", variation, Color.WHITE)

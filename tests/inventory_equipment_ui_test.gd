@@ -44,6 +44,12 @@ func _run() -> void:
 	]:
 		assert(panel.get_node_or_null(stable_title_path) is Label, "inventory section title must have a stable saved path: %s" % stable_title_path)
 	assert(panel.theme.get_stylebox("normal", "GothicComponentSlotButton") is StyleBoxFlat, "人物与背包插槽没有使用简洁原生方格")
+	var selected_normal := panel.theme.get_stylebox("normal", "GothicComponentSelectedSlotButton") as StyleBoxFlat
+	assert(selected_normal != null and selected_normal.bg_color != (panel.theme.get_stylebox("normal", "GothicComponentSlotButton") as StyleBoxFlat).bg_color, "背包选中格缺少整格背景高亮")
+	for state: StringName in [&"hover", &"pressed", &"focus"]:
+		var selected_state := panel.theme.get_stylebox(state, "GothicComponentSelectedSlotButton") as StyleBoxFlat
+		assert(selected_state != null and selected_state.bg_color == selected_normal.bg_color and selected_state.border_color == selected_normal.border_color, "背包选中格的交互状态亮度不一致：%s" % state)
+	assert((panel.item_grid.get_child(0).get_child(0) as Button).focus_mode == Control.FOCUS_NONE, "复用背包格仍会保留持久焦点高亮")
 	assert(panel.get_node("AttributePanel").position.x < panel.get_node("EquipmentPanel").position.x, "人物属性面板必须位于装备栏左侧")
 	assert(panel.get_node("EquipmentPanel").position.x < panel.get_node("BagPanel").position.x, "综合背包必须位于装备栏右侧")
 	assert(panel.bag_summary_label.position.y >= 18.0 and panel.bag_summary_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "背包金币与占用格数仍然贴近装饰框上沿")
