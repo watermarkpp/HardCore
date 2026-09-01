@@ -46,6 +46,22 @@ const CHARACTER_PROFESSION_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/charac
 const CHARACTER_PROFILE_FEEDBACK_MASK_V1 := preload(COMPONENT_V3_ROOT + "/character_profile_frame_v7_feedback_mask_v1.png")
 const CHARACTER_PROFILE_FRAME_ONLY_V1 := preload(COMPONENT_V3_ROOT + "/character_profile_frame_v7_frame_only_v1.png")
 const COMPONENT_INSET_FRAME_V3 := preload(COMPONENT_V3_ROOT + "/inset_frame_v3.png")
+const SKILL_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/skill_exact_frames"
+const SKILL_LIST_GEM_266X64 := preload(SKILL_EXACT_FRAME_ROOT + "/gem_266x64.png")
+const SKILL_LIST_GEM_266X64_MASK := preload(SKILL_EXACT_FRAME_ROOT + "/gem_266x64_feedback_mask_v1.png")
+const SKILL_LIST_GEM_266X64_FRAME := preload(SKILL_EXACT_FRAME_ROOT + "/gem_266x64_frame_only_v1.png")
+const SKILL_CONFIG_PLAIN_230X82 := preload(SKILL_EXACT_FRAME_ROOT + "/plain_230x82.png")
+const SKILL_CONFIG_PLAIN_230X82_MASK := preload(SKILL_EXACT_FRAME_ROOT + "/plain_230x82_feedback_mask_v1.png")
+const SKILL_CONFIG_PLAIN_230X82_FRAME := preload(SKILL_EXACT_FRAME_ROOT + "/plain_230x82_frame_only_v1.png")
+const SKILL_CONFIG_PLAIN_104X82 := preload(SKILL_EXACT_FRAME_ROOT + "/plain_104x82.png")
+const SKILL_CONFIG_PLAIN_104X82_MASK := preload(SKILL_EXACT_FRAME_ROOT + "/plain_104x82_feedback_mask_v1.png")
+const SKILL_CONFIG_PLAIN_104X82_FRAME := preload(SKILL_EXACT_FRAME_ROOT + "/plain_104x82_frame_only_v1.png")
+const SKILL_CONFIG_PLAIN_108X60 := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x60.png")
+const SKILL_CONFIG_PLAIN_108X60_MASK := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x60_feedback_mask_v1.png")
+const SKILL_CONFIG_PLAIN_108X60_FRAME := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x60_frame_only_v1.png")
+const SKILL_CONFIG_PLAIN_108X40 := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x40.png")
+const SKILL_CONFIG_PLAIN_108X40_MASK := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x40_feedback_mask_v1.png")
+const SKILL_CONFIG_PLAIN_108X40_FRAME := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x40_frame_only_v1.png")
 const BUTTON_V3_PATCH := Vector4(34, 8, 34, 8)
 const BUTTON_ADAPTIVE_PATCH := Vector4(36, 0, 36, 0)
 const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot_single_v2.png")
@@ -223,6 +239,12 @@ static func build() -> Theme:
 	# 仓库操作按钮复用技能配置区已验收的 v5 细边按钮三态族。
 	_apply_warehouse_thin_button(result)
 	_apply_small_button(result, &"GothicSkillConfigCompactButton")
+	_apply_exact_skill_button(result, &"GothicSkillListGemButton", _visible_alpha_region(SKILL_LIST_GEM_266X64, Rect2(1, 3, 264, 56)), _visible_alpha_region(SKILL_LIST_GEM_266X64_MASK, Rect2(1, 3, 264, 56)), _visible_alpha_region(SKILL_LIST_GEM_266X64_FRAME, Rect2(1, 3, 264, 56)))
+	_apply_exact_skill_button(result, &"GothicSkillListSelectedGemButton", _visible_alpha_region(SKILL_LIST_GEM_266X64, Rect2(1, 3, 264, 56)), _visible_alpha_region(SKILL_LIST_GEM_266X64_MASK, Rect2(1, 3, 264, 56)), _visible_alpha_region(SKILL_LIST_GEM_266X64_FRAME, Rect2(1, 3, 264, 56)), BUTTON_SELECTED_FILL)
+	_apply_exact_skill_button(result, &"GothicSkillPrimaryPlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_230X82, Rect2(1, 8, 228, 64)), _visible_alpha_region(SKILL_CONFIG_PLAIN_230X82_MASK, Rect2(1, 8, 228, 64)), _visible_alpha_region(SKILL_CONFIG_PLAIN_230X82_FRAME, Rect2(1, 8, 228, 64)))
+	_apply_exact_skill_button(result, &"GothicSkillRestorePlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82, Rect2(1, 8, 102, 64)), _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82_MASK, Rect2(1, 8, 102, 64)), _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82_FRAME, Rect2(1, 8, 102, 64)))
+	_apply_exact_skill_button(result, &"GothicSkillRingPlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60, Rect2(1, 5, 106, 48)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_MASK, Rect2(1, 5, 106, 48)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_FRAME, Rect2(1, 5, 106, 48)))
+	_apply_exact_skill_button(result, &"GothicSkillClearPlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40, Rect2(1, 3, 106, 33)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40_MASK, Rect2(1, 3, 106, 33)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40_FRAME, Rect2(1, 3, 106, 33)))
 	_apply_character_hall_buttons(result)
 	_apply_character_launch_button(result)
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14)
@@ -576,6 +598,35 @@ static func _apply_small_button(theme: Theme, variation: StringName) -> void:
 	theme.set_stylebox("normal", variation, n); theme.set_stylebox("hover", variation, n); theme.set_stylebox("focus", variation, n)
 	theme.set_stylebox("pressed", variation, p); theme.set_stylebox("disabled", variation, d)
 	theme.set_color("font_color", variation, PARCHMENT); theme.set_color("font_hover_color", variation, Color.WHITE); theme.set_color("font_pressed_color", variation, Color("ffe2ad")); theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24)); theme.set_constant("outline_size", variation, 3)
+
+
+static func _apply_exact_skill_button(theme: Theme, variation: StringName, texture: Texture2D, mask: Texture2D, frame: Texture2D, fill := Color(0.055, 0.035, 0.018, 0.96)) -> void:
+	theme.set_type_variation(variation, "Button")
+	var normal := _exact_skill_frame_style(texture, mask, frame, fill)
+	var pressed := _exact_skill_frame_style(texture, mask, frame, BUTTON_PRESS_FILL)
+	theme.set_stylebox("normal", variation, normal)
+	theme.set_stylebox("hover", variation, normal)
+	theme.set_stylebox("focus", variation, normal)
+	theme.set_stylebox("pressed", variation, pressed)
+	theme.set_stylebox("disabled", variation, normal)
+	theme.set_color("font_color", variation, PARCHMENT)
+	theme.set_color("font_hover_color", variation, Color.WHITE)
+	theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
+	theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24))
+	theme.set_constant("outline_size", variation, 3)
+
+
+static func _exact_skill_frame_style(texture: Texture2D, mask: Texture2D, frame: Texture2D, fill: Color) -> AdaptiveButtonStyleBox:
+	var style := AdaptiveButtonStyleBoxScript.new().configure_small(texture, texture, texture, fill)
+	style.set_precomputed_layered_feedback(fill, texture, mask, frame)
+	return style
+
+
+static func _visible_alpha_region(texture: Texture2D, region: Rect2) -> Texture2D:
+	var visible_texture := AtlasTexture.new()
+	visible_texture.atlas = texture
+	visible_texture.region = region
+	return visible_texture
 
 
 static func _apply_warehouse_thin_button(theme: Theme) -> void:

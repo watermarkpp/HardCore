@@ -23,6 +23,8 @@ const SECTION_VERTICAL_SHIFT := 24.0
 const LONG_PRESS_SECONDS := 0.48
 const ATTACK_SLOT_COUNT := 1
 const ATTACK_RING_SLOT_COUNT := 6
+const SKILL_CARD_TEXT_X_OFFSET := 4.0
+const SKILL_CONFIG_TEXT_X_OFFSET := 2.0
 
 var trainer_title: Label
 var trainer_context_label: Label
@@ -244,7 +246,7 @@ func _build_assignment_section() -> void:
 	attack_slot.position = Vector2(18, 80)
 	attack_slot.size = Vector2(230, 82)
 	attack_slot.text = ""
-	attack_slot.theme_type_variation = "GothicSkillConfigCompactButton"
+	attack_slot.theme_type_variation = "GothicSkillPrimaryPlainButton"
 	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
 	attack_slot.set_meta("slot_group", "attack")
 	attack_slot.set_meta("slot_index", 0)
@@ -254,14 +256,17 @@ func _build_assignment_section() -> void:
 	assignment_buttons.append(attack_slot)
 	var clear_attack := Button.new()
 	clear_attack.name = "ClearAttackSkillSlot"
-	clear_attack.text = "恢复\n普通攻击"
+	clear_attack.text = ""
 	clear_attack.position = Vector2(252, 80)
 	clear_attack.size = Vector2(104, 82)
-	clear_attack.theme_type_variation = "GothicSkillConfigCompactButton"
+	clear_attack.theme_type_variation = "GothicSkillRestorePlainButton"
+	clear_attack.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	clear_attack.set_meta("calibration_runtime_text", true)
 	clear_attack.pressed.connect(_request_clear_target.bind("attack", 0))
 	clear_attack.set_meta("stable_slot_id", "hud.attack.primary")
 	clear_attack.set_meta("assignment_action", "clear")
 	panel.add_child(clear_attack)
+	_add_centered_button_label(clear_attack, "恢复\n普通攻击", 15, SKILL_CONFIG_TEXT_X_OFFSET)
 	var ring_title := Label.new()
 	ring_title.name = "AttackRingSlotsTitle"
 	ring_title.text = "攻击环技能槽 1–6"
@@ -277,7 +282,7 @@ func _build_assignment_section() -> void:
 		button.position = Vector2(18 + (slot_index % 3) * 118, 208 + floori(float(slot_index) / 3.0) * 112)
 		button.size = Vector2(108, 60)
 		button.text = ""
-		button.theme_type_variation = "GothicSkillConfigCompactButton"
+		button.theme_type_variation = "GothicSkillRingPlainButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
 		button.set_meta("slot_group", "attack_ring")
 		button.set_meta("slot_index", slot_index)
@@ -287,14 +292,17 @@ func _build_assignment_section() -> void:
 		assignment_buttons.append(button)
 		var clear_button := Button.new()
 		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
-		clear_button.text = "清空 %d" % (slot_index + 1)
+		clear_button.text = ""
 		clear_button.position = button.position + Vector2(0, 64)
 		clear_button.size = Vector2(108, 40)
-		clear_button.theme_type_variation = "GothicSkillConfigCompactButton"
+		clear_button.theme_type_variation = "GothicSkillClearPlainButton"
+		clear_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		clear_button.set_meta("calibration_runtime_text", true)
 		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
 		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
 		clear_button.set_meta("assignment_action", "clear")
 		panel.add_child(clear_button)
+		_add_centered_button_label(clear_button, "清空 %d" % (slot_index + 1), 15, SKILL_CONFIG_TEXT_X_OFFSET)
 	var hint := Label.new()
 	hint.name = "AssignmentHint"
 	hint.text = "主动技能可配置到攻击主键或六个环形技能位\n被动技能仅在技能列表中展示"
@@ -543,20 +551,41 @@ func _rebuild_skill_cards() -> void:
 		var detail_status := "Lv.%d · %s" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
 		var button := Button.new()
 		button.name = "SkillCard_%d" % index
-		button.custom_minimum_size = Vector2(266, 64)
+		button.set_meta("calibration_layout_revision", 1)
+		button.custom_minimum_size = Vector2(266, 80)
 		button.toggle_mode = true
-		button.text = "%s（%s）\n%s" % [skill_name, status, detail_status]
+		var card_text := "%s（%s）\n%s" % [skill_name, status, detail_status]
+		button.text = ""
 		button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.add_theme_font_size_override("font_size", 15)
+		button.set_meta("calibration_runtime_text", true)
 		button.set_pressed_no_signal(index == selected_skill_index)
-		button.theme_type_variation = "GothicComponentSelectedButton" if index == selected_skill_index else "GothicComponentButton"
+		button.theme_type_variation = "GothicSkillListSelectedGemButton" if index == selected_skill_index else "GothicSkillListGemButton"
 		button.pressed.connect(_on_skill_selected.bind(index))
 		button.gui_input.connect(_skill_card_input.bind(index))
 		button.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 		button.set_meta("learned", learned)
 		button.set_meta("assignment_eligible", _skill_interaction_mode(skill_name) != "passive")
 		skill_list_container.add_child(button)
+		_add_centered_button_label(button, card_text, 15, SKILL_CARD_TEXT_X_OFFSET)
 		skill_buttons.append(button)
+
+
+func _add_centered_button_label(button: Button, text_value: String, font_size: int, horizontal_offset: float) -> void:
+	var label := Label.new()
+	label.name = "CenteredText"
+	label.text = text_value
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", font_size)
+	button.add_child(label)
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# Move the full label rect, not the text margins, so its accepted vertical
+	# center and wrapping width stay unchanged while each frame family receives
+	# its measured optical horizontal correction.
+	label.offset_left = horizontal_offset
+	label.offset_right = horizontal_offset
 
 
 func _on_skill_selected(index: int) -> void:
@@ -570,7 +599,7 @@ func _on_skill_selected(index: int) -> void:
 		var button := skill_buttons[button_index]
 		var selected := button_index == index
 		button.set_pressed_no_signal(selected)
-		button.theme_type_variation = "GothicComponentSelectedButton" if selected else "GothicComponentButton"
+		button.theme_type_variation = "GothicSkillListSelectedGemButton" if selected else "GothicSkillListGemButton"
 	_show_skill_detail(index)
 
 
