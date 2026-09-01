@@ -34,6 +34,11 @@ var _selected_quest_id := ""
 var _pending_abandon_quest_id := ""
 var _action_request_locked := false
 var _action_feedback_serial := 0
+var _refresh_pending := false
+var _refresh_scheduled := false
+var _refresh_execution_count := 0
+var _layout_initialized := false
+var _layout_apply_count := 0
 
 
 func _ready() -> void:
@@ -51,7 +56,8 @@ func _ready() -> void:
 	_build_quest_list()
 	_build_quest_detail()
 	GothicFrameFactoryScript.seal_modal_rings(self)
-	PlayerState.quests_changed.connect(refresh)
+	PlayerState.quests_changed.connect(_on_quests_changed)
+	visibility_changed.connect(_on_visibility_changed)
 	refresh()
 
 
@@ -255,6 +261,9 @@ func open_for(display_name: String) -> void:
 func refresh() -> void:
 	if status_label == null:
 		return
+	_refresh_pending = false
+	_refresh_scheduled = false
+	_refresh_execution_count += 1
 	var active_quest_id := PlayerState.current_bich_quest_id()
 	if _selected_quest_id.is_empty() or GameData.get_bich_quest(_selected_quest_id).is_empty():
 		_selected_quest_id = active_quest_id
@@ -265,7 +274,31 @@ func refresh() -> void:
 	current_quest_id = _selected_quest_id
 	_rebuild_quest_cards(active_quest_id)
 	_refresh_selected_quest(active_quest_id)
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "quest")
+	if not _layout_initialized:
+		_layout_initialized = true
+		_layout_apply_count += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "quest")
+
+
+func _on_quests_changed() -> void:
+	_refresh_pending = true
+	if not visible:
+		return
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_flush_queued_refresh")
+
+
+func _on_visibility_changed() -> void:
+	if visible and _refresh_pending:
+		refresh()
+
+
+func _flush_queued_refresh() -> void:
+	_refresh_scheduled = false
+	if visible and _refresh_pending:
+		refresh()
 
 
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:
@@ -458,7 +491,7 @@ func _act() -> void:
 	_action_request_locked = false
 	_show_action_result_feedback(after_state != before_state and not after_state.is_empty())
 	_selected_quest_id = PlayerState.current_bich_quest_id()
-	refresh.call_deferred()
+	_on_quests_changed()
 
 
 func _set_abandon_available(enabled: bool) -> void:
@@ -532,7 +565,7 @@ func apply_abandon_result(result: Dictionary) -> void:
 	status_label.text = str(result.get("message", "放弃任务请求已处理"))
 	if bool(result.get("success", false)):
 		_selected_quest_id = PlayerState.current_bich_quest_id()
-		refresh.call_deferred()
+		_on_quests_changed()
 	else:
 		abandon_button.disabled = false
 

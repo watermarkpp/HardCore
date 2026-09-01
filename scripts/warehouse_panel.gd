@@ -56,6 +56,12 @@ var selected_stash_index := -1
 var warehouse_page := 0
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _refresh_scheduled := false
+var _layout_initialized := false
+var _layout_apply_count := 0
+var _bag_cells: Array[Control] = []
+var _stash_cells: Array[Control] = []
+var _grid_cell_creation_count := 0
 var _action_feedback_serial := 0
 
 
@@ -87,8 +93,8 @@ func _ready() -> void:
 	GothicFrameFactoryScript.seal_modal_rings(self)
 	visibility_changed.connect(_on_visibility_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
+	_initialize_grid_cells()
 	refresh()
-	_stabilize_grid_layout.call_deferred()
 
 
 func _build_modal_surface() -> void:
@@ -282,15 +288,19 @@ func _build_compatibility_lists() -> void:
 
 
 func open_panel() -> void:
-	refresh()
 	show()
+	# A hidden inventory signal is normally consumed synchronously by
+	# visibility_changed. Keep the explicit guard for callers opening an already
+	# visible panel with pending data, without rebuilding an up-to-date panel.
+	if _refresh_pending:
+		refresh()
 
 
 func _on_inventory_changed() -> void:
 	if not visible:
 		_refresh_pending = true
 		return
-	refresh()
+	_queue_refresh()
 
 
 func _on_visibility_changed() -> void:
@@ -302,8 +312,9 @@ func refresh() -> void:
 	if bag_grid == null or stash_grid == null:
 		return
 	_refresh_pending = false
+	_refresh_scheduled = false
 	_refresh_execution_count += 1
-	if selected_bag_index >= PlayerState.inventory.size():
+	if _bag_record(selected_bag_index).is_empty():
 		selected_bag_index = -1
 	if _warehouse_record(selected_stash_index).is_empty():
 		selected_stash_index = -1
@@ -319,16 +330,34 @@ func refresh() -> void:
 		"stash",
 		selected_stash_index
 	)
-	bag_summary_label.text = "背包占用　%d/%d 格" % [PlayerState.inventory.size(), BAG_CAPACITY]
+	bag_summary_label.text = "背包占用　%d/%d 格" % [PlayerState.inventory_occupied_count(), BAG_CAPACITY]
 	stash_summary_label.text = "仓库占用　%d/%d 格" % [_warehouse_occupied_count(), WAREHOUSE_DISPLAY_CAPACITY]
 	warehouse_page_label.text = "第 %d/%d 页" % [warehouse_page + 1, WAREHOUSE_PAGE_COUNT]
 	previous_page_button.disabled = warehouse_page <= 0
 	next_page_button.disabled = warehouse_page >= WAREHOUSE_PAGE_COUNT - 1
 	deposit_button.disabled = selected_bag_index < 0 or _first_free_slot_on_current_page() < 0
-	withdraw_button.disabled = selected_stash_index < 0 or PlayerState.inventory.size() >= BAG_CAPACITY
+	withdraw_button.disabled = selected_stash_index < 0 or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
 	_refresh_transfer_detail()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "warehouse")
-	_stabilize_grid_layout.call_deferred()
+	if not _layout_initialized:
+		_layout_initialized = true
+		_layout_apply_count += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "warehouse")
+		_stabilize_grid_layout.call_deferred()
+
+
+func _queue_refresh() -> void:
+	_refresh_pending = true
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_flush_queued_refresh")
+
+
+func _flush_queued_refresh() -> void:
+	_refresh_scheduled = false
+	if not _refresh_pending or not visible:
+		return
+	refresh()
 
 
 func _stabilize_grid_layout() -> void:
@@ -356,13 +385,28 @@ func _fill_grid(
 	side: String,
 	selected_index: int
 ) -> void:
-	for child: Node in grid.get_children():
-		child.free()
+	_initialize_grid_cells()
+	var cells := _bag_cells if side == "bag" else _stash_cells
 	for display_index in range(slot_count):
 		var data_index := start_index + display_index
-		var record: Dictionary = records[data_index] if data_index < records.size() and records[data_index] is Dictionary else {}
-		grid.add_child(_create_item_cell(side, data_index, display_index, record, data_index == selected_index))
+		var record: Dictionary = records[data_index] if data_index < records.size() and records[data_index] is Dictionary and not (records[data_index] as Dictionary).is_empty() else {}
+		_update_item_cell(cells[display_index], side, data_index, display_index, record, data_index == selected_index)
 	grid.queue_sort()
+
+
+func _initialize_grid_cells() -> void:
+	if _bag_cells.is_empty():
+		for display_index in range(BAG_CAPACITY):
+			var cell := _create_item_cell("bag", display_index, display_index, {}, false)
+			bag_grid.add_child(cell)
+			_bag_cells.append(cell)
+			_grid_cell_creation_count += 1
+	if _stash_cells.is_empty():
+		for display_index in range(WAREHOUSE_PAGE_CAPACITY):
+			var cell := _create_item_cell("stash", display_index, display_index, {}, false)
+			stash_grid.add_child(cell)
+			_stash_cells.append(cell)
+			_grid_cell_creation_count += 1
 
 
 func _create_item_cell(
@@ -379,44 +423,88 @@ func _create_item_cell(
 	button.name = "ItemButton"
 	button.position = Vector2.ZERO
 	button.size = ITEM_CELL_SIZE
+	button.theme_type_variation = "GothicComponentSlotButton"
+	button.disabled = true
+	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.tooltip_text = "空物品格"
+	button.pressed.connect(_select_grid_button.bind(button))
+	cell.add_child(button)
+	var count_label := Label.new()
+	count_label.name = "StackCount"
+	count_label.set_meta("calibration_layout_revision", LAYOUT_REVISION)
+	count_label.position = Vector2(30, 41)
+	count_label.size = Vector2(22, 19)
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count_label.add_theme_font_size_override("font_size", 14)
+	count_label.add_theme_color_override("font_color", Color.WHITE)
+	count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	count_label.add_theme_constant_override("shadow_offset_x", 2)
+	count_label.add_theme_constant_override("shadow_offset_y", 2)
+	count_label.hide()
+	cell.add_child(count_label)
+	return cell
+
+
+func _update_item_cell(
+	cell: Control,
+	side: String,
+	data_index: int,
+	display_index: int,
+	record: Dictionary,
+	selected: bool
+) -> void:
+	cell.name = "%sCell_%d" % [side.capitalize(), display_index]
+	var button := cell.get_node("ItemButton") as Button
+	button.set_meta("side", side)
+	button.set_meta("data_index", data_index)
 	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected else "GothicComponentSlotButton"
 	button.disabled = record.is_empty()
+	button.mouse_filter = Control.MOUSE_FILTER_IGNORE if record.is_empty() else Control.MOUSE_FILTER_STOP
 	button.tooltip_text = str(record.get("name", "空物品格"))
-	if record.is_empty():
-		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	else:
-		button.pressed.connect(_select_item.bind(side, data_index))
-	cell.add_child(button)
 	_set_button_texture(button, _item_texture(record))
+	var count_label := cell.get_node("StackCount") as Label
 	var count := int(record.get("count", 1))
-	if not record.is_empty() and count > 1:
-		var count_label := Label.new()
-		count_label.name = "StackCount"
-		count_label.set_meta("calibration_layout_revision", LAYOUT_REVISION)
-		count_label.text = str(count)
-		count_label.position = Vector2(30, 41)
-		count_label.size = Vector2(22, 19)
-		count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		count_label.add_theme_font_size_override("font_size", 14)
-		count_label.add_theme_color_override("font_color", Color.WHITE)
-		count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
-		count_label.add_theme_constant_override("shadow_offset_x", 2)
-		count_label.add_theme_constant_override("shadow_offset_y", 2)
-		cell.add_child(count_label)
-	return cell
+	count_label.text = str(count)
+	count_label.visible = not record.is_empty() and count > 1
+
+
+func _select_grid_button(button: Button) -> void:
+	_select_item(str(button.get_meta("side", "")), int(button.get_meta("data_index", -1)))
 
 
 func _select_item(side: String, index: int) -> void:
 	if TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
+	if side == "bag" and _bag_record(index).is_empty():
+		return
+	if side == "stash" and _warehouse_record(index).is_empty():
+		return
+	var old_bag := selected_bag_index
+	var old_stash := selected_stash_index
 	if side == "bag":
 		selected_bag_index = index
 		selected_stash_index = -1
 	else:
 		selected_stash_index = index
 		selected_bag_index = -1
-	refresh()
+	_refresh_cell_selection("bag", old_bag, false)
+	_refresh_cell_selection("stash", old_stash, false)
+	_refresh_cell_selection(side, index, true)
+	deposit_button.disabled = selected_bag_index < 0 or _first_free_slot_on_current_page() < 0
+	withdraw_button.disabled = selected_stash_index < 0 or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
+	_refresh_transfer_detail()
+
+
+func _refresh_cell_selection(side: String, data_index: int, selected: bool) -> void:
+	if data_index < 0:
+		return
+	var display_index := data_index if side == "bag" else data_index - warehouse_page * WAREHOUSE_PAGE_CAPACITY
+	var cells := _bag_cells if side == "bag" else _stash_cells
+	if display_index < 0 or display_index >= cells.size():
+		return
+	var button := (cells[display_index] as Control).get_node("ItemButton") as Button
+	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected else "GothicComponentSlotButton"
 
 
 func _change_warehouse_page(delta: int) -> void:
@@ -427,8 +515,8 @@ func _change_warehouse_page(delta: int) -> void:
 
 func _refresh_transfer_detail() -> void:
 	if selected_bag_index >= 0:
-		transfer_detail_label.text = str(PlayerState.inventory[selected_bag_index].get("name", "未知物品"))
-	elif selected_stash_index >= 0 and PlayerState.inventory.size() >= BAG_CAPACITY:
+		transfer_detail_label.text = str(_bag_record(selected_bag_index).get("name", "未知物品"))
+	elif selected_stash_index >= 0 and PlayerState.inventory_occupied_count() >= BAG_CAPACITY:
 		transfer_detail_label.text = "背包已满，无法取出"
 	elif selected_stash_index >= 0:
 		transfer_detail_label.text = str(_warehouse_record(selected_stash_index).get("name", "未知物品"))
@@ -441,14 +529,14 @@ func _refresh_transfer_detail() -> void:
 func _fill_compatibility_list(list: ItemList, records: Array, selected_index: int) -> void:
 	list.clear()
 	for record: Variant in records:
-		list.add_item(str(record.get("name", "未知物品")) if record is Dictionary else str(record))
+		list.add_item(str(record.get("name", "")) if record is Dictionary else str(record))
 	if selected_index >= 0:
 		list.select(selected_index)
 
 
 func _deposit() -> void:
 	var target_slot := _first_free_slot_on_current_page()
-	if selected_bag_index < 0 or selected_bag_index >= PlayerState.inventory.size() or target_slot < 0:
+	if _bag_record(selected_bag_index).is_empty() or target_slot < 0:
 		return
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(deposit_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.deposit")
@@ -518,6 +606,13 @@ func _warehouse_record(slot_index: int) -> Dictionary:
 	return value if value is Dictionary else {"name": str(value)}
 
 
+func _bag_record(slot_index: int) -> Dictionary:
+	if slot_index < 0 or slot_index >= PlayerState.inventory.size():
+		return {}
+	var value: Variant = PlayerState.inventory[slot_index]
+	return value if value is Dictionary and not (value as Dictionary).is_empty() else {}
+
+
 func _warehouse_slot_has_item(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= PlayerState.warehouse_inventory.size():
 		return false
@@ -565,21 +660,27 @@ func _item_texture(record: Dictionary) -> Texture2D:
 
 
 func _set_button_texture(button: Button, texture: Texture2D) -> void:
+	var icon_rect := button.get_node_or_null("CenteredPixelIcon") as TextureRect
 	if texture == null:
+		if icon_rect != null:
+			icon_rect.texture = null
+			icon_rect.hide()
 		return
 	var source_size := texture.get_size()
 	if source_size.x <= 0.0 or source_size.y <= 0.0:
 		return
-	var icon_rect := TextureRect.new()
-	icon_rect.name = "CenteredPixelIcon"
+	if icon_rect == null:
+		icon_rect = TextureRect.new()
+		icon_rect.name = "CenteredPixelIcon"
+		icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.add_child(icon_rect)
 	icon_rect.texture = texture
 	icon_rect.position = (button.size - source_size) * 0.5
 	icon_rect.size = source_size
-	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	button.add_child(icon_rect)
+	icon_rect.show()
 
 
 func _section_panel(node_name: String, rect: Rect2) -> Control:

@@ -53,6 +53,9 @@ var skill_button_assignments: Dictionary = {}
 var skill_button_modes: Dictionary = {}
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _refresh_scheduled := false
+var _layout_initialized := false
+var _layout_apply_count := 0
 var _formal_skill_rules: Dictionary = {}
 var _action_feedback_serial := 0
 
@@ -443,14 +446,18 @@ func set_skill_button_assignments(assignments: Dictionary, interaction_modes := 
 	skill_button_assignments = assignments.duplicate(true)
 	skill_button_modes = interaction_modes.duplicate(true) if interaction_modes is Dictionary else {}
 	if skill_list != null:
-		refresh()
+		_on_panel_data_changed()
 
 
 func _on_panel_data_changed() -> void:
 	if not visible:
 		_refresh_pending = true
 		return
-	refresh()
+	_refresh_pending = true
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_flush_queued_refresh")
 
 
 func _on_visibility_changed() -> void:
@@ -462,6 +469,7 @@ func refresh() -> void:
 	if skill_list == null:
 		return
 	_refresh_pending = false
+	_refresh_scheduled = false
 	_refresh_execution_count += 1
 	skill_list.clear()
 	for entry: Variant in skill_entries:
@@ -480,8 +488,17 @@ func refresh() -> void:
 		_show_skill_detail(selected_skill_index)
 	else:
 		_clear_skill_detail()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "skill")
-	call_deferred("_ensure_skill_list_bottom_clearance")
+	if not _layout_initialized:
+		_layout_initialized = true
+		_layout_apply_count += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "skill")
+		call_deferred("_ensure_skill_list_bottom_clearance")
+
+
+func _flush_queued_refresh() -> void:
+	_refresh_scheduled = false
+	if visible and _refresh_pending:
+		refresh()
 
 
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:

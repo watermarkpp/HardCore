@@ -1594,9 +1594,9 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	)
 	# The shop owns two independent saved layouts. Warm the sell layout without
 	# requesting quotes or changing its business state, then restore buy.
-	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_sell")
+	shop_panel.call("_apply_layout_profile_once", "shop_sell")
 	var shop_sell_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
-	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_buy")
+	shop_panel.call("_apply_layout_profile_once", "shop_buy")
 	var shop_buy_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
 	_panel_prewarm_diagnostic["shop_sell_wait_frames"] = shop_sell_wait_frames
 	_panel_prewarm_diagnostic["shop_buy_wait_frames"] = shop_buy_wait_frames
@@ -2009,7 +2009,6 @@ func _toggle_inventory() -> void:
 		inventory_panel.hide()
 	else:
 		_close_modal_panels()
-		inventory_panel.refresh()
 		inventory_panel.show()
 
 

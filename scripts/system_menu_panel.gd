@@ -32,6 +32,8 @@ var current_page := "main"
 var music_enabled := true
 var sfx_enabled := true
 var _action_feedback_serial := 0
+var _layout_initialized := false
+var _layout_apply_count := 0
 
 
 func _ready() -> void:
@@ -42,7 +44,7 @@ func _ready() -> void:
 	_build_background()
 	_build_modal()
 	show_main_page()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "system_menu")
+	_ensure_layout_initialized()
 
 
 func _build_background() -> void:
@@ -258,6 +260,14 @@ func show_main_page() -> void:
 		main_page.show()
 	if settings_page != null:
 		settings_page.hide()
+	_ensure_layout_initialized()
+
+
+func _ensure_layout_initialized() -> void:
+	if _layout_initialized:
+		return
+	_layout_initialized = true
+	_layout_apply_count += 1
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "system_menu")
 
 

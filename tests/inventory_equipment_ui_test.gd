@@ -21,6 +21,13 @@ func _run() -> void:
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
+	var fixed_cell_zero := panel.item_grid.get_child(0)
+	var fixed_cell_last := panel.item_grid.get_child(InventoryPanel.BAG_CAPACITY - 1)
+	var created_cells := panel._bag_cell_creation_count
+	panel.refresh()
+	assert(created_cells == InventoryPanel.BAG_CAPACITY and panel._bag_cell_creation_count == created_cells, "背包刷新重复创建固定格节点")
+	assert(panel.item_grid.get_child(0) == fixed_cell_zero and panel.item_grid.get_child(InventoryPanel.BAG_CAPACITY - 1) == fixed_cell_last, "背包刷新替换了固定格节点")
+	assert(panel._layout_apply_count == 1, "背包重复刷新重复应用布局")
 	assert(panel._kind_label("skill_book") == "技能书", "技能书类型标签错误")
 	assert(panel._kind_label("scroll") == "卷轴", "卷轴被错误显示为技能书")
 	assert(panel._kind_label("quest_item") == "任务物品", "任务物品类型标签错误")
@@ -182,7 +189,17 @@ func _run() -> void:
 	assert(panel._context_actions[1].get("slot", "") == "左戒指" and panel._context_actions[2].get("slot", "") == "右戒指", "戒指左右槽位菜单顺序错误")
 
 	var attack_before := int(PlayerState.computed_stats.get("attack_max", 0))
+	var potion_index_for_slot_selection := _inventory_index_of("太阳水")
+	panel._select_inventory_item(potion_index_for_slot_selection)
+	var bag_updates_before_equipment_slot := panel._bag_cell_update_count
+	panel._select_equipment_slot("武器")
+	assert(panel._bag_cell_update_count == bag_updates_before_equipment_slot, "仅选择装备槽触发了全背包格刷新")
+	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "装备槽选择没有清除背包选择")
+	var selection_updates_before := panel._selection_cell_update_count
+	var cell_updates_before_selection := panel._bag_cell_update_count
 	panel._select_inventory_item(0)
+	assert(panel._selection_cell_update_count - selection_updates_before <= 2, "单次选择更新超过旧/新两个背包格")
+	assert(panel._bag_cell_update_count == cell_updates_before_selection, "单次选择触发了全背包格刷新")
 	assert("匕首" in panel.detail_label.text, "点击背包物品没有显示物品属性")
 	assert("穿戴要求：" in panel.detail_label.text, "装备详情缺少玩家可读的穿戴要求")
 	assert("（" not in panel.detail_label.text and "对比武器" not in panel.detail_label.text, "装备详情仍显示来源括号或无意义的武器对比")
@@ -192,8 +209,11 @@ func _run() -> void:
 	panel._context_actions.clear()
 	panel._add_inventory_context_actions(0)
 	assert(panel.context_menu.item_count == 1 and panel._context_actions[1].get("action", "") == "equip", "长按武器没有生成装备菜单")
+	var refresh_before_equip := panel._refresh_execution_count
 	panel._on_context_action(1)
+	assert(panel._refresh_execution_count == refresh_before_equip + 1, "单次穿戴没有恰好执行一次 UI 刷新")
 	await get_tree().process_frame
+	assert(panel._refresh_execution_count == refresh_before_equip + 1, "穿戴信号的 deferred refresh 重复执行")
 	assert(str(PlayerState.equipment["武器"].get("name", "")) == "匕首", "界面穿戴没有进入武器槽")
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) > attack_before, "界面穿戴没有即时刷新装备属性")
 	assert(panel.character_preview._weapon_texture != null, "武器穿戴后人物预览没有外观")

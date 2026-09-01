@@ -66,6 +66,13 @@ var _press_origin := Vector2.ZERO
 var _long_press_opened := false
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _refresh_scheduled := false
+var _layout_initialized := false
+var _layout_apply_count := 0
+var _bag_cells: Array[Control] = []
+var _bag_cell_creation_count := 0
+var _bag_cell_update_count := 0
+var _selection_cell_update_count := 0
 var _action_feedback_serial := 0
 # Production policy: the long-press context menu is intentionally suppressed.
 # The PopupMenu builder/action helpers remain for special items enabled later
@@ -102,8 +109,8 @@ func _ready() -> void:
 	PlayerState.inventory_changed.connect(_on_inventory_data_changed)
 	PlayerState.equipment_changed.connect(_on_equipment_data_changed)
 	PlayerState.profile_changed.connect(_refresh_character_stats)
+	_initialize_bag_cells()
 	refresh()
-	_refresh_bag_grid.call_deferred()
 
 
 func _build_modal_surface() -> void:
@@ -376,7 +383,7 @@ func _on_inventory_data_changed() -> void:
 	if not visible:
 		_refresh_pending = true
 		return
-	refresh()
+	_queue_refresh()
 
 
 func _on_equipment_data_changed() -> void:
@@ -388,7 +395,7 @@ func _on_equipment_data_changed() -> void:
 	if not visible:
 		_refresh_pending = true
 		return
-	refresh()
+	_queue_refresh()
 
 
 func _on_visibility_changed() -> void:
@@ -407,15 +414,33 @@ func refresh() -> void:
 	if item_grid == null:
 		return
 	_refresh_pending = false
+	_refresh_scheduled = false
 	_refresh_execution_count += 1
 	_refresh_equipment_slots()
 	_refresh_character_stats()
 	_refresh_bag_grid()
 	if character_preview != null:
 		character_preview.refresh()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "inventory")
+	if not _layout_initialized:
+		_layout_initialized = true
+		_layout_apply_count += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "inventory")
 	_stabilize_bag_layout()
-	call_deferred("_stabilize_bag_layout")
+
+
+func _queue_refresh() -> void:
+	_refresh_pending = true
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_flush_queued_refresh")
+
+
+func _flush_queued_refresh() -> void:
+	_refresh_scheduled = false
+	if not _refresh_pending or not visible:
+		return
+	refresh()
 
 
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:
@@ -491,29 +516,33 @@ func _character_stats_text(stats: Dictionary) -> String:
 
 
 func _refresh_bag_grid() -> void:
-	for child: Node in item_grid.get_children():
-		# Rebuild synchronously so stable cell names never collide with queued old nodes.
-		child.free()
-	if selected_inventory_index >= PlayerState.inventory.size():
+	_initialize_bag_cells()
+	if selected_inventory_index >= PlayerState.inventory.size() or _inventory_record(selected_inventory_index).is_empty():
 		selected_inventory_index = -1
 	var stale_selection_indices: Array = []
 	for selected_index: Variant in selected_inventory_indices.keys():
-		if int(selected_index) >= PlayerState.inventory.size():
+		if _inventory_record(int(selected_index)).is_empty():
 			stale_selection_indices.append(selected_index)
 	for selected_index: Variant in stale_selection_indices:
 		selected_inventory_indices.erase(selected_index)
-	for inventory_index in range(PlayerState.inventory.size()):
-		var stack: Variant = PlayerState.inventory[inventory_index]
-		if stack is Dictionary:
-			item_grid.add_child(_create_bag_cell(inventory_index, stack))
-	for empty_index in range(PlayerState.inventory.size(), BAG_CAPACITY):
-		item_grid.add_child(_create_empty_bag_cell(empty_index))
+	for inventory_index in range(BAG_CAPACITY):
+		_update_bag_cell(inventory_index, _inventory_record(inventory_index))
 	_stabilize_bag_layout()
-	bag_summary_label.text = "金币 %d　%d/%d格" % [PlayerState.gold, PlayerState.inventory.size(), BAG_CAPACITY]
+	bag_summary_label.text = "金币 %d　%d/%d格" % [PlayerState.gold, PlayerState.inventory_occupied_count(), BAG_CAPACITY]
 	if selected_inventory_index >= 0:
 		_show_inventory_detail(selected_inventory_index)
 	elif selected_equipment_slot.is_empty():
 		detail_label.text = "[color=#d9c09a]单击物品查看属性，双击使用或装备。[/color]"
+
+
+func _initialize_bag_cells() -> void:
+	if not _bag_cells.is_empty():
+		return
+	for index in range(BAG_CAPACITY):
+		var cell := _create_bag_cell(index, {})
+		item_grid.add_child(cell)
+		_bag_cells.append(cell)
+		_bag_cell_creation_count += 1
 
 
 func _create_bag_cell(index: int, stack: Dictionary) -> Control:
@@ -521,82 +550,117 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 	cell.name = "InventoryCell_%03d" % index
 	cell.custom_minimum_size = BAG_CELL_SIZE
 	var button := Button.new()
-	button.name = "ItemButton"
+	button.name = "EmptySlotBackground"
 	button.position = Vector2.ZERO
 	button.size = BAG_CELL_SIZE
-	button.tooltip_text = str(stack.get("name", "未知物品"))
-	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected_inventory_indices.has(index) else "GothicComponentSlotButton"
+	button.tooltip_text = "空物品格"
+	button.disabled = true
+	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.theme_type_variation = "GothicComponentSlotButton"
 	button.pressed.connect(_select_inventory_item.bind(index))
 	button.gui_input.connect(_inventory_input.bind(index, button))
 	cell.add_child(button)
-	_set_button_texture(button, _item_texture(GameData.get_item_record(str(stack.get("name", ""))), "inventoryIcon"))
+	var count_label := Label.new()
+	count_label.name = "StackCount"
+	count_label.position = Vector2(BAG_CELL_SIZE.x - 34, BAG_CELL_SIZE.y - 23)
+	count_label.size = Vector2(30, 20)
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count_label.add_theme_font_size_override("font_size", 14)
+	count_label.add_theme_color_override("font_color", Color.WHITE)
+	count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	count_label.add_theme_constant_override("shadow_offset_x", 2)
+	count_label.add_theme_constant_override("shadow_offset_y", 2)
+	count_label.hide()
+	cell.add_child(count_label)
+	var durability_label := Label.new()
+	durability_label.name = "Durability"
+	durability_label.position = Vector2(3, BAG_CELL_SIZE.y - 19)
+	durability_label.size = Vector2(BAG_CELL_SIZE.x - 6, 16)
+	durability_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	durability_label.add_theme_font_size_override("font_size", 10)
+	durability_label.add_theme_color_override("font_color", Color(0.96, 0.83, 0.52))
+	durability_label.hide()
+	cell.add_child(durability_label)
+	return cell
+
+
+func _update_bag_cell(index: int, stack: Dictionary) -> void:
+	if index < 0 or index >= _bag_cells.size():
+		return
+	_bag_cell_update_count += 1
+	var cell := _bag_cells[index]
+	var button := cell.get_child(0) as Button
+	var occupied := not stack.is_empty()
+	button.name = "ItemButton" if occupied else "EmptySlotBackground"
+	button.disabled = not occupied
+	button.mouse_filter = Control.MOUSE_FILTER_STOP if occupied else Control.MOUSE_FILTER_IGNORE
+	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else "空物品格"
+	button.theme_type_variation = "GothicComponentSelectedSlotButton" if occupied and selected_inventory_indices.has(index) else "GothicComponentSlotButton"
+	_set_button_texture(button, _item_texture(GameData.get_item_record(str(stack.get("name", ""))), "inventoryIcon") if occupied else null)
+	var count_label := cell.get_node("StackCount") as Label
 	var count := int(stack.get("count", 1))
-	if count > 1:
-		var count_label := Label.new()
-		count_label.name = "StackCount"
-		count_label.text = str(count)
-		count_label.position = Vector2(BAG_CELL_SIZE.x - 34, BAG_CELL_SIZE.y - 23)
-		count_label.size = Vector2(30, 20)
-		count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		count_label.add_theme_font_size_override("font_size", 14)
-		count_label.add_theme_color_override("font_color", Color.WHITE)
-		count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
-		count_label.add_theme_constant_override("shadow_offset_x", 2)
-		count_label.add_theme_constant_override("shadow_offset_y", 2)
-		cell.add_child(count_label)
-	if stack.has("durability"):
-		var durability_label := Label.new()
-		durability_label.name = "Durability"
-		durability_label.text = "%d/%d" % [int(stack.get("durability", 0)), int(stack.get("max_durability", 1))]
-		durability_label.position = Vector2(3, BAG_CELL_SIZE.y - 19)
-		durability_label.size = Vector2(BAG_CELL_SIZE.x - 6, 16)
-		durability_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		durability_label.add_theme_font_size_override("font_size", 10)
-		durability_label.add_theme_color_override("font_color", Color(0.96, 0.83, 0.52))
-		cell.add_child(durability_label)
-	return cell
+	count_label.text = str(count)
+	count_label.visible = occupied and count > 1
+	var durability_label := cell.get_node("Durability") as Label
+	durability_label.text = "%d/%d" % [int(stack.get("durability", 0)), int(stack.get("max_durability", 1))]
+	durability_label.visible = occupied and stack.has("durability")
 
 
-func _create_empty_bag_cell(index: int) -> Control:
-	var cell := Control.new()
-	cell.name = "InventoryCell_%03d" % index
-	cell.custom_minimum_size = BAG_CELL_SIZE
-	var background := Button.new()
-	background.name = "EmptySlotBackground"
-	background.position = Vector2.ZERO
-	background.size = BAG_CELL_SIZE
-	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	background.theme_type_variation = "GothicComponentSlotButton"
-	background.disabled = true
-	cell.add_child(background)
-	return cell
+func _inventory_record(index: int) -> Dictionary:
+	if index < 0 or index >= PlayerState.inventory.size():
+		return {}
+	var record: Variant = PlayerState.inventory[index]
+	return record if record is Dictionary and not (record as Dictionary).is_empty() else {}
 
 
 func _select_inventory_item(index: int) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
-	if index < 0 or index >= PlayerState.inventory.size():
+	if _inventory_record(index).is_empty():
 		return
 	if _suppress_next_pressed_index == index:
 		_suppress_next_pressed_index = -1
 		return
+	var old_selected_index := selected_inventory_index
 	if selected_inventory_indices.has(index):
 		selected_inventory_indices.erase(index)
 	else:
 		selected_inventory_indices[index] = true
 	selected_inventory_index = index if selected_inventory_indices.has(index) else (-1 if selected_inventory_indices.is_empty() else int(selected_inventory_indices.keys().back()))
 	selected_equipment_slot = ""
-	_show_inventory_detail(index)
+	if selected_inventory_index >= 0:
+		_show_inventory_detail(selected_inventory_index)
+	else:
+		detail_label.text = "[color=#d9c09a]单击物品查看属性，双击使用或装备。[/color]"
 	_refresh_equipment_slots()
-	_refresh_bag_grid.call_deferred()
+	for cell_index: int in [old_selected_index, index]:
+		_refresh_bag_cell_selection(cell_index)
+
+
+func _refresh_bag_cell_selection(index: int) -> void:
+	if index < 0 or index >= _bag_cells.size():
+		return
+	_selection_cell_update_count += 1
+	var button := (_bag_cells[index] as Control).get_child(0) as Button
+	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected_inventory_indices.has(index) else "GothicComponentSlotButton"
+
+
+func _clear_inventory_selection_styles() -> void:
+	var changed_indices: Array = selected_inventory_indices.keys()
+	if selected_inventory_index >= 0 and not changed_indices.has(selected_inventory_index):
+		changed_indices.append(selected_inventory_index)
+	selected_inventory_index = -1
+	selected_inventory_indices.clear()
+	for raw_index: Variant in changed_indices:
+		_refresh_bag_cell_selection(int(raw_index))
 
 
 func _select_equipment_slot(slot: String) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
-	if selected_inventory_index >= 0 and selected_inventory_index < PlayerState.inventory.size():
-		var item := GameData.get_item_record(str(PlayerState.inventory[selected_inventory_index].get("name", "")))
+	if selected_inventory_index >= 0 and not _inventory_record(selected_inventory_index).is_empty():
+		var item := GameData.get_item_record(str(_inventory_record(selected_inventory_index).get("name", "")))
 		if str(item.get("kind", "")) == "equipment":
 			var allowed: Array = _slots_for_category(str(item.get("category", "")))
 			if not allowed.has(slot):
@@ -610,21 +674,19 @@ func _select_equipment_slot(slot: String) -> void:
 			detail_label.text = "[color=#e8c277]%s[/color]" % result
 			return
 	selected_equipment_slot = slot
-	selected_inventory_index = -1
-	selected_inventory_indices.clear()
+	_clear_inventory_selection_styles()
 	var equipped: Variant = PlayerState.equipment.get(slot, {})
 	if equipped is Dictionary and not equipped.is_empty():
 		detail_label.text = _equipment_detail(slot, equipped)
 	else:
 		detail_label.text = "[color=#e0bd83][font_size=18]%s[/font_size][/color]\n当前为空。按住背包中的对应装备可选择穿戴位置。" % slot
 	_refresh_equipment_slots()
-	_refresh_bag_grid.call_deferred()
 
 
 func _show_inventory_detail(index: int) -> void:
-	if index < 0 or index >= PlayerState.inventory.size():
+	var stack := _inventory_record(index)
+	if stack.is_empty():
 		return
-	var stack: Dictionary = PlayerState.inventory[index]
 	var item := GameData.get_item_record(str(stack.get("name", "")))
 	if item.is_empty():
 		detail_label.text = "[color=#f2c783]%s[/color]\n物品目录缺少此记录。" % stack.get("name", "未知物品")
@@ -636,10 +698,13 @@ func _show_inventory_detail(index: int) -> void:
 
 
 func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
+	var stack := _inventory_record(index)
+	if stack.is_empty():
+		return
 	if _is_double_activation_event(event):
 		_cancel_long_press()
 		selected_inventory_indices.clear()
-		var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
+		var item := GameData.get_item_record(str(stack.get("name", "")))
 		if str(item.get("kind", "")) == "equipment":
 			_select_inventory_item(index)
 			# Button.pressed follows gui_input for the same physical gesture.  Keep
@@ -730,8 +795,8 @@ func _context_menu_allowed() -> bool:
 		var item_name := ""
 		if str(_press_context.get("source", "")) == "inventory":
 			var index := int(_press_context.get("index", -1))
-			if index >= 0 and index < PlayerState.inventory.size():
-				item_name = str(PlayerState.inventory[index].get("name", ""))
+			if not _inventory_record(index).is_empty():
+				item_name = str(_inventory_record(index).get("name", ""))
 		elif str(_press_context.get("source", "")) == "equipment":
 			var slot := str(_press_context.get("slot", ""))
 			var equipped: Variant = PlayerState.equipment.get(slot, {})
@@ -754,7 +819,7 @@ func _open_long_press_menu() -> void:
 			_add_context_action("卸下", {"action": "unequip", "slot": slot})
 	else:
 		var index := int(_press_context.get("index", -1))
-		if index >= 0 and index < PlayerState.inventory.size():
+		if not _inventory_record(index).is_empty():
 			_add_inventory_context_actions(index)
 	if context_menu.item_count == 0:
 		_add_context_action("无可用操作", {"action": "none"}, true)
@@ -764,7 +829,9 @@ func _open_long_press_menu() -> void:
 
 
 func _add_inventory_context_actions(index: int) -> void:
-	var stack: Dictionary = PlayerState.inventory[index]
+	var stack := _inventory_record(index)
+	if stack.is_empty():
+		return
 	var item := GameData.get_item_record(str(stack.get("name", "")))
 	var kind := str(item.get("kind", ""))
 	if kind == "equipment":
@@ -806,7 +873,7 @@ func _on_context_action(id: int) -> void:
 
 # Direct action helpers remain available for automated tests and accessibility.
 func _activate_selected_item(preferred_slot := "") -> void:
-	if selected_inventory_index < 0 or selected_inventory_index >= PlayerState.inventory.size():
+	if _inventory_record(selected_inventory_index).is_empty():
 		return
 	_activate_inventory_index(selected_inventory_index, preferred_slot)
 
@@ -814,13 +881,14 @@ func _activate_selected_item(preferred_slot := "") -> void:
 func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 	# preferred_slot stays empty for direct double-click activation: PlayerState
 	# is the authoritative equipment-slot resolver, so the UI never hardcodes a side.
-	if index < 0 or index >= PlayerState.inventory.size():
+	var stack := _inventory_record(index)
+	if stack.is_empty():
 		return
 	_cancel_long_press()
 	selected_inventory_index = index
 	selected_inventory_indices.clear()
 	selected_equipment_slot = ""
-	var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
+	var item := GameData.get_item_record(str(stack.get("name", "")))
 	var is_equipment := str(item.get("kind", "")) == "equipment"
 	# use_inventory_index emits inventory_changed synchronously.  Clear the
 	# selection before that signal so a consumed stack removal cannot make the
@@ -1005,11 +1073,12 @@ func _item_texture(record: Dictionary, field: String) -> Texture2D:
 
 
 func _set_button_texture(button: Button, texture: Texture2D) -> void:
-	var old_icon := button.get_node_or_null("CenteredPixelIcon")
-	if old_icon != null:
-		old_icon.free()
 	button.icon = null
+	var icon_rect := button.get_node_or_null("CenteredPixelIcon") as TextureRect
 	if texture == null:
+		if icon_rect != null:
+			icon_rect.texture = null
+			icon_rect.hide()
 		return
 	var source_size := texture.get_size()
 	if source_size.x <= 0.0 or source_size.y <= 0.0:
@@ -1017,16 +1086,18 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 	# The original client inventory art stays at its native 1:1 pixel size.
 	# Only its position changes; scaling it to fill the slot makes it look soft.
 	var display_size := source_size
-	var icon_rect := TextureRect.new()
-	icon_rect.name = "CenteredPixelIcon"
+	if icon_rect == null:
+		icon_rect = TextureRect.new()
+		icon_rect.name = "CenteredPixelIcon"
+		icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.add_child(icon_rect)
 	icon_rect.texture = texture
 	icon_rect.position = (button.size - display_size) * 0.5
 	icon_rect.size = display_size
-	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	button.add_child(icon_rect)
+	icon_rect.show()
 
 
 func _value(value: Variant) -> String:

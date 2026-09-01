@@ -473,7 +473,7 @@ func _build_receive_result_for_template(
 			if remaining <= 0:
 				break
 	while remaining > 0:
-		if next_inventory.size() >= INVENTORY_CAPACITY:
+		if inventory_occupied_count(next_inventory) >= INVENTORY_CAPACITY:
 			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
 		var moved := mini(remaining, max_stack) if is_stackable else 1
 		var new_record: Dictionary
@@ -484,7 +484,8 @@ func _build_receive_result_for_template(
 			new_record = _make_item_instance(item_name, catalog_item)
 		else:
 			new_record = {"name": item_name, "count": moved}
-		next_inventory.append(new_record)
+		if not _place_inventory_record_in_first_free_slot(next_inventory, new_record):
+			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
 		remaining -= moved
 	var weight_before := inventory_weight(base_inventory)
 	var weight_after := inventory_weight(next_inventory)
@@ -612,23 +613,99 @@ func item_count(item_name: String) -> int:
 	return total
 
 
+## Inventory arrays preserve absolute slot identity. Empty dictionaries are
+## holes, not items; trailing holes are trimmed only to keep saves compact.
+func inventory_occupied_count(records: Array = inventory) -> int:
+	var total := 0
+	for record: Variant in records:
+		if _inventory_slot_is_occupied(record):
+			total += 1
+	return total
+
+
+func warehouse_occupied_count(records: Array = warehouse_inventory) -> int:
+	var total := 0
+	for record: Variant in records:
+		if _inventory_slot_is_occupied(record):
+			total += 1
+	return total
+
+
+func _inventory_slot_is_occupied(record: Variant) -> bool:
+	if record is Dictionary:
+		return not (record as Dictionary).is_empty()
+	return record != null and not str(record).is_empty()
+
+
+func _first_free_inventory_slot(records: Array) -> int:
+	for index in range(mini(records.size(), INVENTORY_CAPACITY)):
+		if not _inventory_slot_is_occupied(records[index]):
+			return index
+	return records.size() if records.size() < INVENTORY_CAPACITY else -1
+
+
+func _place_inventory_record_in_first_free_slot(records: Array, record: Variant) -> bool:
+	var slot := _first_free_inventory_slot(records)
+	if slot < 0:
+		return false
+	var stored: Variant = record.duplicate(true) if record is Dictionary else record
+	if slot < records.size():
+		records[slot] = stored
+	else:
+		records.append(stored)
+	return true
+
+
+func _clear_inventory_slot(records: Array, index: int) -> void:
+	if index < 0 or index >= records.size():
+		return
+	records[index] = {}
+	_trim_inventory_empty_tail(records)
+
+
+func _trim_inventory_empty_tail(records: Array = inventory) -> void:
+	while not records.is_empty() and not _inventory_slot_is_occupied(records.back()):
+		records.pop_back()
+
+
 func remove_item(item_name: String, amount := 1) -> bool:
 	if amount <= 0 or not has_item(item_name, amount):
 		return false
 	var remaining := amount
 	var index := inventory.size() - 1
 	while index >= 0 and remaining > 0:
-		var stack: Dictionary = inventory[index]
-		if stack.get("name", "") == item_name:
+		var raw_stack: Variant = inventory[index]
+		if raw_stack is Dictionary and not (raw_stack as Dictionary).is_empty() and raw_stack.get("name", "") == item_name:
+			var stack: Dictionary = raw_stack
 			var count := int(stack.get("count", 0))
 			var consumed := mini(count, remaining)
 			count -= consumed
 			remaining -= consumed
 			if count <= 0:
-				inventory.remove_at(index)
+				inventory[index] = {}
 			else:
 				stack["count"] = count
 		index -= 1
+	_trim_inventory_empty_tail()
+	inventory_changed.emit()
+	_commit_save()
+	return true
+
+
+func _consume_inventory_index(index: int, amount := 1) -> bool:
+	if index < 0 or index >= inventory.size() or amount <= 0:
+		return false
+	var raw_record: Variant = inventory[index]
+	if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+		return false
+	var record: Dictionary = raw_record
+	var count := maxi(1, int(record.get("count", 1)))
+	if amount > count:
+		return false
+	if amount == count:
+		_clear_inventory_slot(inventory, index)
+	else:
+		record["count"] = count - amount
 	inventory_changed.emit()
 	_commit_save()
 	return true
@@ -638,14 +715,14 @@ func destroy_inventory_indices(indices: Array) -> Dictionary:
 	var targets: Array[int] = []
 	for raw_index: Variant in indices:
 		var index := int(raw_index)
-		if index < 0 or index >= inventory.size() or index in targets:
+		if index < 0 or index >= inventory.size() or not _inventory_slot_is_occupied(inventory[index]) or index in targets:
 			return {"success": false, "destroyed": 0, "reason": "invalid_inventory_index"}
 		targets.append(index)
 	if targets.is_empty():
 		return {"success": true, "destroyed": 0, "reason": "empty_selection"}
-	targets.sort()
-	for offset in range(targets.size() - 1, -1, -1):
-		inventory.remove_at(targets[offset])
+	for index: int in targets:
+		inventory[index] = {}
+	_trim_inventory_empty_tail()
 	inventory_changed.emit()
 	profile_changed.emit()
 	_commit_save()
@@ -656,10 +733,10 @@ func sort_inventory_deterministic() -> Dictionary:
 	var decorated: Array = []
 	for index in range(inventory.size()):
 		var record: Variant = inventory[index]
-		if record is Dictionary:
+		if record is Dictionary and not (record as Dictionary).is_empty():
 			var item := GameData.get_item_record(str(record.get("name", "")))
 			decorated.append({"record": record, "index": index, "key": "%s|%s|%s|%08d" % [str(item.get("kind", "")), str(item.get("category", "")), str(record.get("name", "")), index]})
-		else:
+		elif _inventory_slot_is_occupied(record):
 			decorated.append({"record": record, "index": index, "key": "!opaque|%08d" % index})
 	decorated.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a["key"]) < str(b["key"]))
 	var sorted_inventory: Array = []
@@ -675,7 +752,7 @@ func sort_inventory_deterministic() -> Dictionary:
 		inventory_changed.emit()
 		profile_changed.emit()
 		_commit_save()
-	return {"success": true, "changed": changed, "count": inventory.size()}
+	return {"success": true, "changed": changed, "count": inventory_occupied_count()}
 
 
 func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
@@ -825,7 +902,7 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 	):
 		return _shop_sell_result(false, "出售数量或背包位置无效。", merchant_id)
 	var record: Variant = inventory[inventory_index]
-	if not record is Dictionary:
+	if not record is Dictionary or (record as Dictionary).is_empty():
 		return _shop_sell_result(false, "物品状态已变化，出售已取消。", merchant_id)
 	var inventory_before := inventory.duplicate(true)
 	var gold_before := gold
@@ -833,19 +910,20 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 	if amount > current_count:
 		return _shop_sell_result(false, "出售数量超过当前背包库存。", merchant_id)
 	if amount >= current_count:
-		inventory.remove_at(inventory_index)
+		_clear_inventory_slot(inventory, inventory_index)
 	else:
 		(record as Dictionary)["count"] = current_count - amount
 	gold = maxi(0, gold + int(quote.get("unit_price", 0)) * amount)
-	inventory_changed.emit()
-	profile_changed.emit()
 	if not _commit_save():
 		inventory = inventory_before
 		gold = gold_before
-		inventory_changed.emit()
-		profile_changed.emit()
 		return _shop_sell_result(false, "出售存档失败，物品和金币均未改变。", merchant_id)
 	_consumed_shop_sell_quote_ids[quote_id] = true
+	if test_mode:
+		_test_transaction_counters["inventory_signals"] = int(_test_transaction_counters.get("inventory_signals", 0)) + 1
+		_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
+	inventory_changed.emit()
+	profile_changed.emit()
 	return _shop_sell_result(
 		true,
 		"已出售%s ×%d，获得%d金币。" % [
@@ -889,7 +967,7 @@ func sell_inventory_items(requests: Array) -> Dictionary:
 			return result
 		var index := int(request.get("inventory_index", -1))
 		var amount := int(request.get("amount", 0))
-		if index < 0 or index >= working_inventory.size() or not working_inventory[index] is Dictionary:
+		if index < 0 or index >= working_inventory.size() or not working_inventory[index] is Dictionary or (working_inventory[index] as Dictionary).is_empty():
 			result["message"] = "出售数量或背包位置无效。"
 			return result
 		var record: Dictionary = working_inventory[index]
@@ -898,11 +976,12 @@ func sell_inventory_items(requests: Array) -> Dictionary:
 			result["message"] = "出售数量超过当前背包库存。"
 			return result
 		if amount >= current_count:
-			working_inventory.remove_at(index)
+			working_inventory[index] = {}
 		else:
 			record["count"] = current_count - amount
 		total_gold += int(quote.get("unit_price", 0)) * amount
 		used_quotes.append(quote_id)
+	_trim_inventory_empty_tail(working_inventory)
 	inventory = working_inventory
 	gold = maxi(0, gold + total_gold)
 	if not _commit_save():
@@ -1072,7 +1151,7 @@ func _current_shop_sell_quote_items(merchant_id := "") -> Array:
 	var items: Array = []
 	for inventory_index in range(inventory.size()):
 		var raw_record: Variant = inventory[inventory_index]
-		if not raw_record is Dictionary:
+		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
 			continue
 		var record: Dictionary = raw_record
 		var instance_id := str(record.get("instance_id", ""))
@@ -1093,14 +1172,14 @@ func _current_shop_sell_quote_items(merchant_id := "") -> Array:
 
 
 func use_inventory_index(index: int) -> String:
-	if index < 0 or index >= inventory.size():
+	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return "请先选择物品"
 	var item_name := str(inventory[index].get("name", ""))
 	var item := GameData.get_item_record(item_name)
 	var kind := str(item.get("kind", ""))
 	var effect := str(item.get("useEffect", ""))
 	if kind == "skill_book":
-		return learn_skill(item_name)
+		return learn_skill(item_name, index)
 	if item.get("usable", true) == false:
 		return "%s当前没有可执行的本地规则" % item_name
 	if kind == "scroll":
@@ -1110,7 +1189,7 @@ func use_inventory_index(index: int) -> String:
 				return "需要先装备武器"
 			if effect in ["repair_oil", "war_god_oil"]:
 				return _use_weapon_repair_oil_item(index, effect == "war_god_oil")
-		if remove_item(item_name):
+		if _consume_inventory_index(index):
 			scroll_requested.emit(item_name)
 			return "使用：%s" % item_name
 		return "物品数量不足"
@@ -1127,18 +1206,18 @@ func use_inventory_index(index: int) -> String:
 		var buff_result := apply_temporary_item_buff(item_name, profile)
 		if not bool(buff_result.get("ok", false)):
 			return str(buff_result.get("reason", "增益效果应用失败"))
-		if remove_item(item_name):
+		if _consume_inventory_index(index):
 			recalculate_stats()
 			return "使用：%s" % item_name
 		return "物品数量不足"
-	if remove_item(item_name):
+	if _consume_inventory_index(index):
 		consumable_requested.emit(item_name)
 		return "使用：%s" % item_name
 	return "物品数量不足"
 
 
 func _use_weapon_repair_oil_item(index: int, full_repair: bool) -> String:
-	if index < 0 or index >= inventory.size():
+	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return "物品数量不足"
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
@@ -1153,7 +1232,7 @@ func _use_weapon_repair_oil_item(index: int, full_repair: bool) -> String:
 	var record: Dictionary = inventory[index]
 	var count := maxi(1, int(record.get("count", 1)))
 	if count <= 1:
-		inventory.remove_at(index)
+		_clear_inventory_slot(inventory, index)
 	else:
 		record["count"] = count - 1
 	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
@@ -1357,7 +1436,7 @@ func experience_to_next_level() -> int:
 
 
 func equip_inventory_index(index: int, preferred_slot := "") -> String:
-	if index < 0 or index >= inventory.size():
+	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return "请先选择物品"
 	var inventory_record: Dictionary = inventory[index]
 	var item_name := str(inventory_record.get("name", ""))
@@ -1395,7 +1474,7 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
 	var inventory_after := inventory.duplicate(true)
-	inventory_after.remove_at(index)
+	inventory_after[index] = {}
 	if previous is Dictionary and not previous.is_empty():
 		var return_preview := _build_receive_result_for_record(previous, inventory_after)
 		if not bool(return_preview.get("success", false)):
@@ -1403,13 +1482,15 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		# Preserve the selected slot during a replacement. Besides keeping the
 		# inventory deterministic, this prevents the old item from jumping to the
 		# tail and breaking the two-slot equip-cycle contract.
-		inventory_after.insert(index, previous.duplicate(true))
+		inventory_after[index] = previous.duplicate(true)
 	elif not previous is Dictionary and not str(previous).is_empty():
 		var legacy_previous := _make_item_instance(str(previous), GameData.get_item_record(str(previous)))
 		var return_preview := _build_receive_result_for_record(legacy_previous, inventory_after)
 		if not bool(return_preview.get("success", false)):
 			return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
-		inventory_after.insert(index, legacy_previous)
+		inventory_after[index] = legacy_previous
+	else:
+		_trim_inventory_empty_tail(inventory_after)
 	inventory = inventory_after
 	equipment[slot] = inventory_record.duplicate(true)
 	recalculate_stats()
@@ -1451,7 +1532,7 @@ func unequip_slot(slot: String) -> String:
 	return "已卸下：%s" % str(equipped_value.get("name", ""))
 
 
-func learn_skill(skill_name: String) -> String:
+func learn_skill(skill_name: String, inventory_index := -1) -> String:
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	if stable_skill_id.is_empty():
 		return "技能数据不存在"
@@ -1472,7 +1553,15 @@ func learn_skill(skill_name: String) -> String:
 				return "需要人物等级%d" % int(learn_result.get("required_level", 1))
 			_:
 				return "技能学习失败：%s" % str(learn_result.get("reason", "unknown"))
-	remove_item(skill_name)
+	if (
+		inventory_index >= 0
+		and inventory_index < inventory.size()
+		and inventory[inventory_index] is Dictionary
+		and str((inventory[inventory_index] as Dictionary).get("name", "")) == skill_name
+	):
+		_consume_inventory_index(inventory_index)
+	else:
+		remove_item(skill_name)
 	var base_rank := int(learn_result.get("base_rank", 0))
 	learned_skills[skill_name] = base_rank
 	var outcome := str(learn_result.get("outcome", ""))
@@ -1708,13 +1797,13 @@ func _grant_quest_item_without_commit(item_name: String, amount: int) -> void:
 	var catalog_item := GameData.get_item_record(item_name)
 	if str(catalog_item.get("kind", "")) == "equipment" or not bool(catalog_item.get("stackable", true)):
 		for count in range(amount):
-			inventory.append(_make_item_instance(item_name, catalog_item))
+			_place_inventory_record_in_first_free_slot(inventory, _make_item_instance(item_name, catalog_item))
 		return
 	for stack: Variant in inventory:
 		if stack is Dictionary and stack.get("name", "") == item_name:
 			stack["count"] = int(stack.get("count", 0)) + amount
 			return
-	inventory.append({"name": item_name, "count": amount})
+	_place_inventory_record_in_first_free_slot(inventory, {"name": item_name, "count": amount})
 
 
 func _migrate_quest_states() -> void:
@@ -2855,14 +2944,14 @@ func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
 	_emit_device_lab_state_changed()
 	result["ok"] = true
 	result["saveVersion"] = SAVE_VERSION
-	result["inventoryCount"] = inventory.size()
-	result["warehouseCount"] = warehouse_inventory.size()
+	result["inventoryCount"] = inventory_occupied_count()
+	result["warehouseCount"] = warehouse_occupied_count()
 	return result
 
 
 func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictionary:
 	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
-	if inventory_index < 0 or inventory_index >= inventory.size() or warehouse_slot < 0 or warehouse_slot >= WAREHOUSE_CAPACITY:
+	if inventory_index < 0 or inventory_index >= inventory.size() or not _inventory_slot_is_occupied(inventory[inventory_index]) or warehouse_slot < 0 or warehouse_slot >= WAREHOUSE_CAPACITY:
 		result["message"] = "存入位置无效。"
 		return result
 	var inventory_before := inventory.duplicate(true)
@@ -2870,11 +2959,11 @@ func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictiona
 	while warehouse_inventory.size() <= warehouse_slot:
 		warehouse_inventory.append({})
 	var target: Variant = warehouse_inventory[warehouse_slot]
-	if target is Dictionary and not target.is_empty():
+	if _inventory_slot_is_occupied(target):
 		result["message"] = "仓库位置已被占用。"
 		return result
 	warehouse_inventory[warehouse_slot] = inventory[inventory_index].duplicate(true) if inventory[inventory_index] is Dictionary else inventory[inventory_index]
-	inventory.remove_at(inventory_index)
+	_clear_inventory_slot(inventory, inventory_index)
 	if not _commit_save():
 		inventory = inventory_before
 		warehouse_inventory = warehouse_before
@@ -2985,8 +3074,11 @@ func load_save() -> void:
 	ContentLayers.set_expansion_enabled("later_176_content", later_content_enabled)
 	experience = maxi(0, int(parsed.get("experience", 0)))
 	gold = maxi(0, int(parsed.get("gold", 0)))
-	inventory = parsed.get("inventory", [])
-	warehouse_inventory = parsed.get("warehouse_inventory", [])
+	var loaded_inventory: Variant = parsed.get("inventory", [])
+	var loaded_warehouse: Variant = parsed.get("warehouse_inventory", [])
+	inventory = (loaded_inventory as Array).duplicate(true) if loaded_inventory is Array else []
+	warehouse_inventory = (loaded_warehouse as Array).duplicate(true) if loaded_warehouse is Array else []
+	_trim_inventory_empty_tail()
 	var saved_equipment: Dictionary = parsed.get("equipment", {})
 	equipment = migrate_equipment_slots(saved_equipment)
 	_migrate_item_collection_durability(inventory)
@@ -4025,10 +4117,13 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 					merged = true
 					break
 		if not merged:
-			if working_inventory.size() >= INVENTORY_CAPACITY:
+			if inventory_occupied_count(working_inventory) >= INVENTORY_CAPACITY:
 				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
 				continue
-			working_inventory.append(_make_item_instance(item_name, catalog, Time.get_ticks_usec() + working_inventory.size() + outcomes.size()) if kind == "equipment" else {"name": item_name, "count": 1})
+			var new_record: Dictionary = _make_item_instance(item_name, catalog, Time.get_ticks_usec() + working_inventory.size() + outcomes.size()) if kind == "equipment" else {"name": item_name, "count": 1}
+			if not _place_inventory_record_in_first_free_slot(working_inventory, new_record):
+				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
+				continue
 		working_weight = prospective_weight
 		changed = true
 		outcomes.append({"success": true, "item_name": item_name})

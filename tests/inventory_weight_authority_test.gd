@@ -91,5 +91,27 @@ func _run() -> void:
 	assert(PlayerState.warehouse_inventory == warehouse_before_failed_deposit, "仓库存入失败没有恢复仓库结构")
 	assert(PlayerState.warehouse_inventory.size() == 0, "仓库存入失败遗留扩容空槽")
 
+	# Absolute inventory slot contract: ordinary mutations leave middle holes;
+	# only explicit auto-sort may compact them, and new records fill the first hole.
+	PlayerState._test_force_atomic_write_failure = false
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	assert(PlayerState.receive("木剑").success)
+	assert(PlayerState.receive("太阳水").success)
+	assert(PlayerState.receive("回城卷").success)
+	var first_before: Dictionary = PlayerState.inventory[0].duplicate(true)
+	var tail_before: Dictionary = PlayerState.inventory[2].duplicate(true)
+	assert(PlayerState.use_inventory_index(1).begins_with("使用："), "中间消耗品使用失败")
+	assert(PlayerState.inventory.size() == 3 and PlayerState.inventory[1].is_empty(), "中间消耗后没有保留绝对空洞")
+	assert(PlayerState.inventory[0] == first_before and PlayerState.inventory[2] == tail_before, "中间消耗移动了相邻物品")
+	assert(PlayerState.receive("匕首").success, "首洞回填测试物品获取失败")
+	assert(str(PlayerState.inventory[1].get("name", "")) == "匕首", "新增物品没有优先填入第一个空槽")
+	assert(PlayerState.equip_inventory_index(1).begins_with("已装备"), "中间装备穿戴失败")
+	assert(PlayerState.inventory.size() == 3 and PlayerState.inventory[1].is_empty(), "穿戴后原背包槽没有保留空洞")
+	assert(PlayerState.inventory[0] == first_before and PlayerState.inventory[2] == tail_before, "穿戴移动了无关背包物品")
+	var sort_result := PlayerState.sort_inventory_deterministic()
+	assert(sort_result.success and PlayerState.inventory.size() == 2, "显式自动整理没有压缩中间空洞")
+
 	print("INVENTORY_WEIGHT_AUTHORITY_PASS")
 	get_tree().quit(0)

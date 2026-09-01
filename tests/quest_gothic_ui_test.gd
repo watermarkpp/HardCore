@@ -94,6 +94,13 @@ func _run() -> void:
 	assert(not panel.action_button.disabled and panel.action_button.text == "领取奖励", "完成目标后没有启用领取奖励按钮")
 	PlayerState.reset_progress()
 	panel.open_for("老兵")
+	var refresh_before_burst := panel._refresh_execution_count
+	for _burst_index in range(4):
+		PlayerState.quests_changed.emit()
+	assert(panel._refresh_execution_count == refresh_before_burst, "任务信号 burst 在同帧重复刷新")
+	await get_tree().process_frame
+	assert(panel._refresh_execution_count == refresh_before_burst + 1, "任务信号 burst 未合并为一次刷新")
+	assert(panel._layout_apply_count == 1, "任务面板重复打开/刷新重复应用布局")
 	assert(panel.current_quest_id == "bich_beginner_gear", "未接任务没有默认选中当前可接任务")
 	assert(not panel.action_button.disabled and panel.action_button.text == "接受任务", "点击未接受任务没有切换为接受任务按钮")
 	assert(panel.status_label.text.is_empty(), "可接任务不应在接受按钮左侧重复显示尚未接受")

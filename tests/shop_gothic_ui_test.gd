@@ -35,8 +35,11 @@ func _run() -> void:
 	panel.sell_quotes_requested.connect(func(items: Array) -> void: quote_batches.append(items))
 	panel.sell_requested.connect(func(request: Dictionary) -> void: sell_requests.append(request))
 	panel.buy_requested.connect(func(request: Dictionary) -> void: buy_requests.append(request))
+	var buy_content_updates_before_open := panel._goods_card_content_update_count
 	panel.open_for("测试商店", STOCK)
+	assert(panel.goods_buttons.is_empty() and panel._goods_card_content_update_count == buy_content_updates_before_open, "购买报价到达前提前绑定商品卡内容")
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
+	assert(panel._goods_card_content_update_count == buy_content_updates_before_open + STOCK.size(), "一次购买报价没有恰好绑定 stock.size 个卡片内容")
 	var medicine_context := GameData.merchant_context("medicine")
 	panel.open_for("空库存药剂商", [], medicine_context)
 	assert(
@@ -76,6 +79,10 @@ func _run() -> void:
 	assert(panel.detail_label.position.x >= 24.0 and panel.detail_label.position.y >= 60.0, "商品详情文字没有避开装饰框安全内边距")
 	assert(panel.detail_label.get_meta("calibration_runtime_text", false), "商店动态详情文字会被旧校准文案覆盖")
 	assert(panel.goods_grid.columns == 2 and panel.goods_buttons.size() == STOCK.size(), "商品没有使用两列双格卡布局")
+	var buy_card_creation_count := panel._goods_card_creation_count
+	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
+	assert(panel._goods_card_creation_count == buy_card_creation_count, "购买报价刷新重复创建商品卡")
+	assert(panel._buy_quotes_by_index.size() == STOCK.size(), "购买报价没有建立 stock_index 常数时间索引")
 	var goods_scroll := panel.get_node("GoodsPanel/GoodsScroll") as ScrollContainer
 	assert(goods_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "出售商品阵列外仍保留多余细框")
 	assert(not panel.item_list.visible and panel.item_list.item_count == STOCK.size(), "商店兼容选择列表异常")
@@ -136,6 +143,7 @@ func _run() -> void:
 		)
 	panel.open_for("测试商店", STOCK)
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
+	PlayerState.inventory.insert(1, {})
 	panel._set_trade_mode("sell")
 	assert(panel.sell_tab_button.theme_type_variation == "GothicComponentSelectedButton", "出售页签没有保持持久选中")
 	assert(panel.buy_tab_button.theme_type_variation == "GothicComponentButton", "切到出售后购买页签仍保持高亮")
@@ -145,12 +153,14 @@ func _run() -> void:
 	assert(panel.buy_button.size == panel.repair_button.size and panel.buy_button.size == Vector2(270, 51), "购买页两个操作按钮没有统一为出售按钮规格")
 	assert(panel.buy_button.get_meta("calibration_layout_revision", 0) == 1 and panel.repair_button.get_meta("calibration_layout_revision", 0) == 1, "购买页按钮没有退役旧尺寸校准")
 	assert(panel.sell_quantity_button.get_meta("calibration_text_revision", 0) == 1, "出售按钮文案版本元数据缺失")
-	assert(not quote_batches.is_empty() and quote_batches[-1].size() == PlayerState.inventory.size(), "出售页没有向玩法层请求背包报价")
+	assert(not quote_batches.is_empty() and quote_batches[-1].size() == PlayerState.inventory_occupied_count(), "出售页没有跳过空洞并保持绝对背包索引报价")
 	assert(panel.goods_buttons.is_empty(), "出售页请求报价前不应提前构建物品卡片")
 	assert(panel.sell_quantity_button.disabled, "没有报价时出售按钮没有禁用")
 	var quotes := {}
 	for inventory_index in range(PlayerState.inventory.size()):
-		var record: Dictionary = PlayerState.inventory[inventory_index]
+		var record: Dictionary = PlayerState.inventory[inventory_index] if PlayerState.inventory[inventory_index] is Dictionary else {}
+		if record.is_empty():
+			continue
 		var key := panel.sell_quote_key(inventory_index, record)
 		var risky := str(record.get("name", "")) == "古铜戒指"
 		quotes[key] = {
@@ -163,12 +173,44 @@ func _run() -> void:
 			"warning": "测试高风险物品",
 		}
 	panel.set_sell_quotes(quotes)
+	var synchronous_sell_quotes := [false]
+	panel.sell_quotes_requested.connect(func(items: Array) -> void:
+		if bool(synchronous_sell_quotes[0]):
+			panel.set_sell_quotes(PlayerState.shop_sell_quotes(items))
+	)
+	var sell_content_updates_before_signal := panel._goods_card_content_update_count
+	synchronous_sell_quotes[0] = true
+	PlayerState.inventory_changed.emit()
+	await get_tree().process_frame
+	synchronous_sell_quotes[0] = false
+	assert(
+		panel._goods_card_content_update_count - sell_content_updates_before_signal == PlayerState.inventory_occupied_count(),
+		"一次出售库存刷新没有恰好绑定 occupied_count 个卡片内容"
+	)
+	assert(panel.goods_buttons.size() == PlayerState.inventory_occupied_count(), "同步出售报价回调绑定的新卡被再次清空")
+	var sell_content_updates_before_success := panel._goods_card_content_update_count
+	synchronous_sell_quotes[0] = true
+	panel.apply_sell_result({"success": true, "message": "测试出售完成且结果不携带报价"})
+	synchronous_sell_quotes[0] = false
+	assert(
+		panel._goods_card_content_update_count - sell_content_updates_before_success == PlayerState.inventory_occupied_count(),
+		"出售成功无返回报价路径重复绑定卡片内容"
+	)
+	assert(panel.goods_buttons.size() == PlayerState.inventory_occupied_count(), "出售成功同步报价回调绑定的新卡被再次清空")
+	panel.set_sell_quotes(quotes)
+	var sell_card_creation_count := panel._goods_card_creation_count
+	panel.set_sell_quotes(quotes)
+	assert(panel._goods_card_creation_count == sell_card_creation_count, "出售报价刷新重复创建商品卡")
+	for card: Button in panel.goods_buttons:
+		assert(not _record_at(int(card.get_meta("inventory_index", -1))).is_empty(), "出售卡错误映射到背包空洞")
 	for card: Button in panel.goods_buttons:
 		assert(card.get_theme_stylebox("normal") is StyleBoxFlat, "出售商品卡没有使用背包格清晰代码边框")
 		assert(card.has_node("Price"), "可出售商品卡缺少单件售价")
 	var safe_indices: Array[int] = []
 	var risky_index := -1
 	for inventory_index in range(PlayerState.inventory.size()):
+		if not PlayerState.inventory[inventory_index] is Dictionary or (PlayerState.inventory[inventory_index] as Dictionary).is_empty():
+			continue
 		if str(PlayerState.inventory[inventory_index].get("name", "")) == "古铜戒指":
 			risky_index = inventory_index
 		else:
@@ -276,7 +318,8 @@ func _run() -> void:
 		func(card: Button) -> bool:
 			return int(card.get_meta("inventory_index", -1)) == risky_index
 	)[0] as Button
-	assert(blocked_card.get_node_or_null("Price") == null, "不可出售原因不应显示在物品列表")
+	var blocked_price := blocked_card.get_node_or_null("Price") as Label
+	assert(blocked_price == null or not blocked_price.visible, "不可出售原因不应显示在物品列表")
 	panel._select_sell_item(risky_index)
 	assert(decrease.disabled and increase.disabled, "不可售/count1物品数量按钮未禁用")
 	assert(panel._selected_sell_indices.size() == 2, "点击不可售物品破坏了已有多选")
@@ -330,3 +373,10 @@ func _run() -> void:
 	assert(panel._selected_sell_indices.is_empty() and not panel._batch_sell_active, "风险批量完成后状态没有清空")
 	print("SHOP_GOTHIC_UI_PASS：单击多选/取消、独立数量、降序批量、失败停止、风险确认与镜像布局均正常")
 	get_tree().quit(0)
+
+
+func _record_at(index: int) -> Dictionary:
+	if index < 0 or index >= PlayerState.inventory.size():
+		return {}
+	var record: Variant = PlayerState.inventory[index]
+	return record if record is Dictionary and not (record as Dictionary).is_empty() else {}

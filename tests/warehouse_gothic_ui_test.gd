@@ -20,8 +20,24 @@ func _run() -> void:
 	var panel := WarehousePanel.new()
 	add_child(panel)
 	await get_tree().process_frame
+	var refresh_before_first_open := panel._refresh_execution_count
 	panel.open_panel()
 	await get_tree().process_frame
+	assert(panel._refresh_execution_count == refresh_before_first_open, "仓库首次打开重复刷新 ready 已完成的数据")
+	panel.hide()
+	PlayerState.inventory_changed.emit()
+	assert(panel._refresh_pending and panel._refresh_execution_count == refresh_before_first_open, "隐藏仓库没有延迟库存刷新")
+	panel.open_panel()
+	assert(panel._refresh_execution_count == refresh_before_first_open + 1, "仓库 pending 打开未恰好刷新一次")
+	await get_tree().process_frame
+	assert(panel._refresh_execution_count == refresh_before_first_open + 1, "仓库 pending 打开后 deferred 又重复刷新")
+	var bag_cell_zero := panel.bag_grid.get_child(0)
+	var stash_cell_zero := panel.stash_grid.get_child(0)
+	var created_cells := panel._grid_cell_creation_count
+	panel.refresh()
+	assert(created_cells == 200 and panel._grid_cell_creation_count == created_cells, "仓库刷新重复创建固定格节点")
+	assert(panel.bag_grid.get_child(0) == bag_cell_zero and panel.stash_grid.get_child(0) == stash_cell_zero, "仓库刷新替换了固定格节点")
+	assert(panel._layout_apply_count == 1, "仓库重复打开或刷新重复应用布局")
 	assert(panel.size == Vector2(1164, 660), "仓库没有使用既定横屏布局尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "仓库没有使用公共哥特外框")
 	assert(panel.get_node("StashSection").position.x < panel.get_node("BagSection").position.x, "仓库必须位于左侧、人物背包位于右侧")
@@ -115,14 +131,22 @@ func _run() -> void:
 	assert(panel.stash_grid.get_child_count() == 100, "仓库第二页没有保持 100 格")
 	assert(panel.deposit_button.disabled and panel.withdraw_button.disabled, "未选择物品时转移按钮不应启用")
 
-	var bag_count := PlayerState.inventory.size()
+	var bag_count := PlayerState.inventory_occupied_count()
+	var bag_shape_before := PlayerState.inventory.size()
+	var bag_second_before: Dictionary = PlayerState.inventory[1].duplicate(true)
 	var stash_count := panel._warehouse_occupied_count()
 	var deposited_name := str(PlayerState.inventory[0].get("name", ""))
 	panel._select_item("bag", 0)
 	assert(not panel.deposit_button.disabled and panel.withdraw_button.disabled, "选择人物背包物品后存入按钮状态错误")
 	assert(panel.transfer_detail_label.text == str(PlayerState.inventory[0].get("name", "")), "中间转移栏没有显示选中物品")
+	var refresh_before_deposit := panel._refresh_execution_count
 	panel._deposit()
-	assert(PlayerState.inventory.size() == bag_count - 1, "存入后人物背包数量错误")
+	assert(panel._refresh_execution_count == refresh_before_deposit + 1, "单次存仓没有恰好执行一次 UI 刷新")
+	await get_tree().process_frame
+	assert(panel._refresh_execution_count == refresh_before_deposit + 1, "存仓信号的 deferred refresh 重复执行")
+	assert(PlayerState.inventory_occupied_count() == bag_count - 1, "存入后人物背包占用数量错误")
+	assert(PlayerState.inventory.size() == bag_shape_before and PlayerState.inventory[0].is_empty(), "存入后没有保留原绝对槽空洞")
+	assert(PlayerState.inventory[1] == bag_second_before, "存入后后续背包物品发生移位")
 	assert(panel._warehouse_occupied_count() == stash_count + 1, "存入后个人仓库数量错误")
 	assert(panel.warehouse_page == 1, "存入物品后不应跳离当前选择的仓库页")
 	assert(str(panel._warehouse_record(100).get("name", "")) == deposited_name, "物品没有存入当前选择的仓库第二页")
@@ -130,8 +154,13 @@ func _run() -> void:
 
 	panel._select_item("stash", 100)
 	assert(panel.deposit_button.disabled and not panel.withdraw_button.disabled, "选择仓库物品后取出按钮状态错误")
+	var refresh_before_withdraw := panel._refresh_execution_count
 	panel._withdraw()
-	assert(PlayerState.inventory.size() == bag_count, "取出后人物背包数量错误")
+	assert(panel._refresh_execution_count == refresh_before_withdraw + 1, "单次取仓没有恰好执行一次 UI 刷新")
+	await get_tree().process_frame
+	assert(panel._refresh_execution_count == refresh_before_withdraw + 1, "取仓信号的 deferred refresh 重复执行")
+	assert(PlayerState.inventory_occupied_count() == bag_count, "取出后人物背包占用数量错误")
+	assert(str(PlayerState.inventory[0].get("name", "")) == deposited_name, "取出没有优先填回第一个空槽")
 	assert(panel._warehouse_occupied_count() == stash_count, "取出后个人仓库数量错误")
 	assert(panel._warehouse_record(100).is_empty(), "取出后当前页物品格没有清空")
 

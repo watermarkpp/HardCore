@@ -22,6 +22,7 @@ func _run() -> void:
 	game.call("_hide_system_menu")
 	assert(not get_tree().paused and not menu.visible, "继续游戏没有关闭菜单")
 	assert(not bool(game.get("_system_menu_pause_owned")), "继续游戏没有释放系统菜单暂停所有权")
+	assert(menu._layout_apply_count == 1, "系统菜单重复打开重复应用布局")
 
 	# Android WM back arrives as a notification rather than ui_cancel.  It must
 	# toggle in both directions, including the deferred close from a paused tree.

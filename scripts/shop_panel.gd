@@ -41,6 +41,7 @@ var stock: Array = []
 var _merchant_context: Dictionary = {}
 var _trade_mode := "buy"
 var _buy_quotes: Array = []
+var _buy_quotes_by_index: Dictionary = {}
 var _selected_buy_index := -1
 var _buy_request_locked := false
 var _buy_lock_serial := 0
@@ -55,6 +56,12 @@ var _batch_sell_queue: Array = []
 var _batch_sell_active := false
 var _inventory_refresh_pending := false
 var _inventory_refresh_execution_count := 0
+var _inventory_refresh_scheduled := false
+var _goods_card_pool: Array[Button] = []
+var _goods_card_creation_count := 0
+var _goods_card_content_update_count := 0
+var _applied_layout_profiles: Dictionary = {}
+var _layout_apply_count := 0
 
 
 func _ready() -> void:
@@ -84,7 +91,7 @@ func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
 	_refresh_gold()
 	_refresh_repair_preview()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "shop_buy")
+	_apply_layout_profile_once("shop_buy")
 
 
 func _build_modal_surface() -> void:
@@ -336,6 +343,7 @@ func open_for(display_name: String, new_stock: Array, merchant_context: Dictiona
 	stock = new_stock
 	_merchant_context = merchant_context.duplicate(true) if not merchant_context.is_empty() else {}
 	_buy_quotes.clear()
+	_buy_quotes_by_index.clear()
 	_selected_buy_index = -1
 	_buy_request_locked = false
 	_buy_lock_serial += 1
@@ -358,6 +366,10 @@ func open_for(display_name: String, new_stock: Array, merchant_context: Dictiona
 func set_buy_quotes(quotes: Array) -> void:
 	var preserved_index := _selected_buy_index
 	_buy_quotes = quotes.duplicate(true)
+	_buy_quotes_by_index.clear()
+	for raw_quote: Variant in _buy_quotes:
+		if raw_quote is Dictionary:
+			_buy_quotes_by_index[int((raw_quote as Dictionary).get("stock_index", -1))] = raw_quote
 	if _trade_mode != "buy":
 		return
 	if preserved_index < 0 or preserved_index >= stock.size():
@@ -385,28 +397,19 @@ func apply_buy_result(result: Dictionary) -> void:
 
 
 func _buy_quote_for_index(stock_index: int) -> Dictionary:
-	for raw_quote: Variant in _buy_quotes:
-		if raw_quote is Dictionary and int(raw_quote.get("stock_index", -1)) == stock_index:
-			return raw_quote
-	return {}
+	var quote: Variant = _buy_quotes_by_index.get(stock_index, {})
+	return quote if quote is Dictionary else {}
 
 
 func _rebuild_goods_cards() -> void:
-	_clear_goods_cards()
+	var cards := _acquire_goods_cards(stock.size())
 	for index in range(stock.size()):
 		var entry: Dictionary = stock[index]
-		var card := Button.new()
+		var card: Button = cards[index]
 		card.name = "GoodsCard_%d" % index
-		card.custom_minimum_size = CARD_SIZE
-		card.size = CARD_SIZE
-		card.toggle_mode = true
-		card.focus_mode = Control.FOCUS_NONE
-		card.theme_type_variation = "GothicComponentShopCard"
 		card.tooltip_text = str(entry.get("name", "物品"))
-		card.pressed.connect(_select_shop_item.bind(index))
+		card.set_meta("trade_mode", "buy")
 		card.set_meta("stock_index", index)
-		goods_grid.add_child(card)
-		goods_buttons.append(card)
 		_set_shop_card_selected(card, index == _selected_buy_index)
 		var display_entry: Dictionary = entry.duplicate(true)
 		var quote := _buy_quote_for_index(index)
@@ -416,29 +419,28 @@ func _rebuild_goods_cards() -> void:
 
 
 func _rebuild_sell_cards() -> void:
-	_clear_goods_cards()
+	var occupied_indices: Array[int] = []
 	for inventory_index in range(PlayerState.inventory.size()):
 		var record: Variant = PlayerState.inventory[inventory_index]
-		if not record is Dictionary:
+		if not record is Dictionary or (record as Dictionary).is_empty():
 			continue
+		occupied_indices.append(inventory_index)
+	var cards := _acquire_goods_cards(occupied_indices.size())
+	for display_index in range(occupied_indices.size()):
+		var inventory_index := occupied_indices[display_index]
+		var record: Variant = PlayerState.inventory[inventory_index]
 		var sell_record: Dictionary = record
 		var quote_key := sell_quote_key(inventory_index, sell_record)
 		var quote: Dictionary = _sell_quotes.get(quote_key, {})
 		var sellable := bool(quote.get("sellable", false))
 		var price_text := "%d 金币 / 件" % int(quote.get("unit_price", 0)) if sellable else ""
-		var card := Button.new()
+		var card: Button = cards[display_index]
 		card.name = "SellCard_%d" % inventory_index
-		card.custom_minimum_size = CARD_SIZE
-		card.size = CARD_SIZE
-		card.toggle_mode = true
-		card.focus_mode = Control.FOCUS_NONE
-		card.theme_type_variation = "GothicComponentShopCard"
 		card.tooltip_text = str(quote.get("reason", "等待玩法层提供出售报价"))
-		card.pressed.connect(_select_sell_item.bind(inventory_index))
+		card.set_meta("trade_mode", "sell")
 		card.set_meta("inventory_index", inventory_index)
 		card.set_meta("quote_key", quote_key)
-		goods_grid.add_child(card)
-		goods_buttons.append(card)
+		_set_shop_card_selected(card, _selected_sell_indices.has(inventory_index))
 		var display_entry: Dictionary = sell_record.duplicate(true)
 		var count := int(sell_record.get("count", 1))
 		if count > 1:
@@ -447,9 +449,38 @@ func _rebuild_sell_cards() -> void:
 
 
 func _clear_goods_cards() -> void:
-	for child: Node in goods_grid.get_children():
-		child.free()
+	for card: Button in _goods_card_pool:
+		card.hide()
 	goods_buttons.clear()
+
+
+func _acquire_goods_cards(count: int) -> Array[Button]:
+	_clear_goods_cards()
+	while _goods_card_pool.size() < count:
+		var card := Button.new()
+		card.custom_minimum_size = CARD_SIZE
+		card.size = CARD_SIZE
+		card.toggle_mode = true
+		card.focus_mode = Control.FOCUS_NONE
+		card.theme_type_variation = "GothicComponentShopCard"
+		card.pressed.connect(_on_goods_card_pressed.bind(card))
+		goods_grid.add_child(card)
+		_goods_card_pool.append(card)
+		_goods_card_creation_count += 1
+	var active: Array[Button] = []
+	for index in range(count):
+		var card := _goods_card_pool[index]
+		card.show()
+		active.append(card)
+	goods_buttons = active
+	return active
+
+
+func _on_goods_card_pressed(card: Button) -> void:
+	if str(card.get_meta("trade_mode", "buy")) == "sell":
+		_select_sell_item(int(card.get_meta("inventory_index", -1)))
+	else:
+		_select_shop_item(int(card.get_meta("stock_index", -1)))
 
 
 func _build_card_contents(
@@ -458,41 +489,56 @@ func _build_card_contents(
 	price_text := "",
 	show_price := true,
 ) -> void:
+	_goods_card_content_update_count += 1
 	var item_name := str(entry.get("name", "物品"))
 	var catalog_name := item_name.split(" ×")[0]
 	var texture := _item_texture(GameData.get_item_record(catalog_name))
+	var icon := card.get_node_or_null("ItemIcon") as TextureRect
 	if texture != null:
-		var icon := TextureRect.new()
-		icon.name = "ItemIcon"
+		if icon == null:
+			icon = TextureRect.new()
+			icon.name = "ItemIcon"
+			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			card.add_child(icon)
 		icon.texture = texture
 		icon.size = texture.get_size()
 		icon.position = Vector2(37, CARD_SIZE.y * 0.5) - icon.size * 0.5
-		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		card.add_child(icon)
-	var name_label := Label.new()
-	name_label.name = "ItemName"
+		icon.show()
+	elif icon != null:
+		icon.texture = null
+		icon.hide()
+	var name_label := card.get_node_or_null("ItemName") as Label
+	if name_label == null:
+		name_label = Label.new()
+		name_label.name = "ItemName"
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.add_theme_font_size_override("font_size", 15)
+		name_label.add_theme_color_override("font_color", Color("ecd4aa"))
+		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card.add_child(name_label)
 	name_label.text = item_name
 	name_label.position = Vector2(84, 11 if show_price else 22)
 	name_label.size = Vector2(184, 28)
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 15)
-	name_label.add_theme_color_override("font_color", Color("ecd4aa"))
-	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	card.add_child(name_label)
+	name_label.show()
+	var price_label := card.get_node_or_null("Price") as Label
 	if not show_price:
+		if price_label != null:
+			price_label.hide()
 		return
-	var price_label := Label.new()
-	price_label.name = "Price"
+	if price_label == null:
+		price_label = Label.new()
+		price_label.name = "Price"
+		price_label.add_theme_font_size_override("font_size", 13)
+		price_label.add_theme_color_override("font_color", Color("b9955e"))
+		price_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card.add_child(price_label)
 	price_label.text = price_text if not price_text.is_empty() else "%d 金币" % int(entry.get("price", 0))
 	price_label.position = Vector2(84, 39)
 	price_label.size = Vector2(184, 22)
-	price_label.add_theme_font_size_override("font_size", 13)
-	price_label.add_theme_color_override("font_color", Color("b9955e"))
-	price_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	card.add_child(price_label)
+	price_label.show()
 
 
 func _select_shop_item(index: int) -> void:
@@ -515,7 +561,10 @@ func _set_trade_mode(mode: String) -> void:
 	sell_quantity_row.visible = not buying
 	sell_quantity_button.visible = not buying
 	if buying:
-		_rebuild_goods_cards()
+		if _buy_quotes.is_empty():
+			_clear_goods_cards()
+		else:
+			_rebuild_goods_cards()
 		detail_label.text = "[color=#cdbb9e]选择商品查看属性、价格与穿戴要求。[/color]"
 		_refresh_buy_action_enabled()
 	else:
@@ -524,11 +573,12 @@ func _set_trade_mode(mode: String) -> void:
 		_selected_sell_indices.clear()
 		_sell_quantities.clear()
 		_clear_goods_cards()
+		_sell_quotes.clear()
 		_set_sell_actions_enabled(false)
 		_update_sell_quantity_label()
 		detail_label.text = "[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]"
 		_request_sell_quotes()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "shop_sell" if not buying else "shop_buy")
+	_apply_layout_profile_once("shop_sell" if not buying else "shop_buy")
 
 
 func sell_quote_key(inventory_index: int, record: Dictionary) -> String:
@@ -548,33 +598,17 @@ func set_sell_quotes(quotes: Dictionary) -> void:
 
 
 func _refresh_sell_card_contents() -> void:
-	if goods_buttons.size() != PlayerState.inventory.size():
-		_rebuild_sell_cards()
-		return
-	for card: Button in goods_buttons:
-		var inventory_index := int(card.get_meta("inventory_index", -1))
-		if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
-			continue
-		var record: Dictionary = PlayerState.inventory[inventory_index]
-		var quote: Dictionary = _sell_quotes.get(sell_quote_key(inventory_index, record), {})
-		card.tooltip_text = str(quote.get("reason", "等待玩法层提供出售报价"))
-		for child: Node in card.get_children():
-			child.free()
-		var display_entry := record.duplicate(true)
-		var count := int(record.get("count", 1))
-		if count > 1:
-			display_entry["name"] = "%s ×%d" % [record.get("name", "物品"), count]
-		_build_card_contents(card, display_entry, "%d 金币 / 件" % int(quote.get("unit_price", 0)) if bool(quote.get("sellable", false)) else "", bool(quote.get("sellable", false)))
+	_rebuild_sell_cards()
 
 
 func _reclamp_sell_quantities() -> void:
 	for index_variant in _selected_sell_indices.keys().duplicate():
 		var inventory_index := int(index_variant)
-		if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
+		var record := _inventory_record(inventory_index)
+		if record.is_empty():
 			_selected_sell_indices.erase(inventory_index)
 			_sell_quantities.erase(inventory_index)
 			continue
-		var record: Dictionary = PlayerState.inventory[inventory_index]
 		var quote: Dictionary = _sell_quotes.get(sell_quote_key(inventory_index, record), {})
 		var maximum := clampi(int(quote.get("max_quantity", int(record.get("count", 1)))), 1, maxi(1, int(record.get("count", 1))))
 		_sell_quantities[inventory_index] = clampi(int(_sell_quantities.get(inventory_index, 1)), 1, maximum)
@@ -622,7 +656,8 @@ func apply_sell_result(result: Dictionary) -> void:
 		if result.get("quotes", null) is Dictionary:
 			_refresh_sell_card_contents()
 		else:
-			_rebuild_sell_cards()
+			_sell_quotes.clear()
+			_clear_goods_cards()
 			_request_sell_quotes()
 		_set_sell_actions_enabled(false)
 	_show_transaction_result_feedback(sell_quantity_button, bool(result.get("success", false)), "shop.sell")
@@ -635,7 +670,7 @@ func _request_sell_quotes() -> void:
 	var merchant_stock_key := str(merchant_context.get("stock_key", ""))
 	for inventory_index in range(PlayerState.inventory.size()):
 		var record: Variant = PlayerState.inventory[inventory_index]
-		if not record is Dictionary:
+		if not record is Dictionary or (record as Dictionary).is_empty():
 			continue
 		items.append({
 			"quote_key": sell_quote_key(inventory_index, record),
@@ -652,14 +687,15 @@ func _request_sell_quotes() -> void:
 func _select_sell_item(inventory_index: int) -> void:
 	if TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
-	if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
+	var record := _inventory_record(inventory_index)
+	if record.is_empty():
 		return
-	var record: Dictionary = PlayerState.inventory[inventory_index]
 	var quote: Dictionary = _sell_quotes.get(sell_quote_key(inventory_index, record), {})
 	if not bool(quote.get("sellable", false)):
 		_show_sell_detail(inventory_index, quote)
 		_set_sell_actions_enabled(not _selected_sell_indices.is_empty())
 		return
+	var old_selected_index := _selected_sell_index
 	if _selected_sell_indices.has(inventory_index):
 		_selected_sell_indices.erase(inventory_index)
 		_sell_quantities.erase(inventory_index)
@@ -667,17 +703,18 @@ func _select_sell_item(inventory_index: int) -> void:
 		_selected_sell_indices[inventory_index] = true
 		_sell_quantities[inventory_index] = 1
 	_selected_sell_index = inventory_index if _selected_sell_indices.has(inventory_index) else (_selected_sell_indices.keys()[-1] if not _selected_sell_indices.is_empty() else -1)
-	for card: Button in goods_buttons:
-		var selected := _selected_sell_indices.has(int(card.get_meta("inventory_index", -1)))
-		_set_shop_card_selected(card, selected)
+	for changed_index: int in [old_selected_index, inventory_index]:
+		var changed_card := _sell_card_for_inventory_index(changed_index)
+		if changed_card != null:
+			_set_shop_card_selected(changed_card, _selected_sell_indices.has(changed_index))
 	if _selected_sell_index < 0:
 		_sell_quantity = 1
 		_update_sell_quantity_label()
 		_set_sell_actions_enabled(false)
 		return
-	var quote_key := sell_quote_key(_selected_sell_index, PlayerState.inventory[_selected_sell_index])
+	var quote_key := sell_quote_key(_selected_sell_index, _inventory_record(_selected_sell_index))
 	quote = _sell_quotes.get(quote_key, {})
-	record = PlayerState.inventory[_selected_sell_index]
+	record = _inventory_record(_selected_sell_index)
 	var count := maxi(1, int(record.get("count", 1)))
 	var max_quantity := clampi(int(quote.get("max_quantity", count)), 1, count)
 	_sell_quantity = clampi(int(_sell_quantities.get(_selected_sell_index, 1)), 1, max_quantity)
@@ -695,7 +732,9 @@ func _select_sell_item(inventory_index: int) -> void:
 	)
 
 func _show_sell_detail(inventory_index: int, quote: Dictionary) -> void:
-	var record: Dictionary = PlayerState.inventory[inventory_index]
+	var record := _inventory_record(inventory_index)
+	if record.is_empty():
+		return
 	var item := GameData.get_item_record(str(record.get("name", "")))
 	detail_label.text = _sell_item_detail(record, item, quote)
 
@@ -736,9 +775,9 @@ func _equipment_stat_text(item: Dictionary) -> String:
 
 
 func _change_sell_quantity(delta: int) -> void:
-	if _selected_sell_index < 0 or _selected_sell_index >= PlayerState.inventory.size():
+	var record := _inventory_record(_selected_sell_index)
+	if record.is_empty():
 		return
-	var record: Dictionary = PlayerState.inventory[_selected_sell_index]
 	var quote: Dictionary = _sell_quotes.get(sell_quote_key(_selected_sell_index, record), {})
 	var maximum := clampi(int(quote.get("max_quantity", int(record.get("count", 1)))), 1, maxi(1, int(record.get("count", 1))))
 	_sell_quantity = clampi(int(_sell_quantities.get(_selected_sell_index, _sell_quantity)) + delta, 1, maximum)
@@ -750,7 +789,7 @@ func _update_sell_quantity_label() -> void:
 	if sell_quantity_label == null:
 		return
 	sell_quantity_label.text = "出售数量：%d" % _sell_quantity
-	var selected_record: Dictionary = PlayerState.inventory[_selected_sell_index] if _selected_sell_index >= 0 and _selected_sell_index < PlayerState.inventory.size() else {}
+	var selected_record := _inventory_record(_selected_sell_index)
 	var maximum := 1
 	var sellable := false
 	if not selected_record.is_empty():
@@ -778,9 +817,9 @@ func _request_sell_batch() -> void:
 	var requests: Array = []
 	for index_variant in _selected_sell_indices.keys():
 		var inventory_index := int(index_variant)
-		if inventory_index < 0 or inventory_index >= PlayerState.inventory.size():
+		var record := _inventory_record(inventory_index)
+		if record.is_empty():
 			continue
-		var record: Dictionary = PlayerState.inventory[inventory_index]
 		var quote_key := sell_quote_key(inventory_index, record)
 		var quote: Dictionary = _sell_quotes.get(quote_key, {})
 		if not bool(quote.get("sellable", false)):
@@ -871,7 +910,7 @@ func _on_inventory_changed() -> void:
 	if not visible:
 		_inventory_refresh_pending = true
 		return
-	_apply_inventory_change()
+	_queue_inventory_refresh()
 
 
 func _on_visibility_changed() -> void:
@@ -884,12 +923,37 @@ func _apply_inventory_change() -> void:
 		_inventory_refresh_pending = true
 		return
 	_inventory_refresh_pending = false
+	_inventory_refresh_scheduled = false
 	_inventory_refresh_execution_count += 1
 	_reclamp_sell_quantities()
 	_selected_sell_index = -1
-	_rebuild_sell_cards()
+	_sell_quotes.clear()
+	_clear_goods_cards()
 	_set_sell_actions_enabled(false)
 	_request_sell_quotes()
+
+
+func _queue_inventory_refresh() -> void:
+	_inventory_refresh_pending = true
+	if _inventory_refresh_scheduled:
+		return
+	_inventory_refresh_scheduled = true
+	call_deferred("_flush_inventory_refresh")
+
+
+func _flush_inventory_refresh() -> void:
+	_inventory_refresh_scheduled = false
+	if not _inventory_refresh_pending or not visible or _trade_mode != "sell":
+		return
+	_apply_inventory_change()
+
+
+func _apply_layout_profile_once(profile_id: String) -> void:
+	if _applied_layout_profiles.has(profile_id):
+		return
+	_applied_layout_profiles[profile_id] = true
+	_layout_apply_count += 1
+	UIRuntimeLayoutOverridesScript.apply_profile(self, profile_id)
 
 
 func _refresh_gold() -> void:
@@ -914,11 +978,11 @@ func _on_item_selected(index: int) -> void:
 		return
 	if index < 0 or index >= stock.size():
 		return
+	var old_selected_index := _selected_buy_index
 	_selected_buy_index = index
-	for card_index in range(goods_buttons.size()):
-		var card := goods_buttons[card_index]
-		var selected := card_index == index
-		_set_shop_card_selected(card, selected)
+	for card_index: int in [old_selected_index, index]:
+		if card_index >= 0 and card_index < goods_buttons.size():
+			_set_shop_card_selected(goods_buttons[card_index], card_index == index)
 	var entry: Dictionary = stock[index]
 	var item_name := str(entry.get("name", ""))
 	var item := GameData.get_item_record(item_name)
@@ -999,6 +1063,13 @@ func _set_shop_card_selected(card: Button, selected: bool) -> void:
 	)
 	if not selected:
 		card.release_focus()
+
+
+func _sell_card_for_inventory_index(inventory_index: int) -> Button:
+	for card: Button in goods_buttons:
+		if int(card.get_meta("inventory_index", -1)) == inventory_index:
+			return card
+	return null
 
 
 func _repair_all() -> void:
@@ -1098,6 +1169,13 @@ func _active_merchant_context() -> Dictionary:
 	if stock.is_empty() or not stock[0] is Dictionary:
 		return {}
 	return (stock[0].get("merchant_context", {}) as Dictionary).duplicate(true)
+
+
+func _inventory_record(index: int) -> Dictionary:
+	if index < 0 or index >= PlayerState.inventory.size():
+		return {}
+	var record: Variant = PlayerState.inventory[index]
+	return record if record is Dictionary and not (record as Dictionary).is_empty() else {}
 
 
 func _item_texture(record: Dictionary) -> Texture2D:

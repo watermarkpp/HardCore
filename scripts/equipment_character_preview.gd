@@ -78,6 +78,9 @@ var _used_world_avatar_fallback := false
 
 static var _json_cache: Dictionary = {}
 static var _opaque_rect_cache: Dictionary = {}
+static var _classic_head_mask_texture_cache: Dictionary = {}
+static var _classic_head_mask_cache_hits := 0
+static var _classic_head_mask_cache_misses := 0
 
 
 func _ready() -> void:
@@ -810,11 +813,22 @@ func _apply_classic_head_erase_mask() -> void:
 	var mask_texture := _texture_from_record({"path": mask_path})
 	if mask_texture == null:
 		return
+	var offset := _mapping_offset(helmet_layer)
+	var cache_key := "%s|%s|%d,%d" % [
+		_texture_cache_key(_base_source_texture),
+		mask_path,
+		int(offset.x),
+		int(offset.y),
+	]
+	if _classic_head_mask_texture_cache.has(cache_key):
+		_base_texture = _classic_head_mask_texture_cache[cache_key]
+		_classic_head_mask_cache_hits += 1
+		return
+	_classic_head_mask_cache_misses += 1
 	var base_image := _base_source_texture.get_image()
 	var mask_image := mask_texture.get_image()
 	if base_image == null or base_image.is_empty() or mask_image == null or mask_image.is_empty():
 		return
-	var offset := _mapping_offset(helmet_layer)
 	for mask_y: int in mask_image.get_height():
 		for mask_x: int in mask_image.get_width():
 			if mask_image.get_pixel(mask_x, mask_y).a <= 0.001:
@@ -827,6 +841,29 @@ func _apply_classic_head_erase_mask() -> void:
 			pixel.a = 0.0
 			base_image.set_pixel(base_x, base_y, pixel)
 	_base_texture = ImageTexture.create_from_image(base_image)
+	_classic_head_mask_texture_cache[cache_key] = _base_texture
+
+
+static func clear_classic_head_mask_cache_for_tests() -> void:
+	_classic_head_mask_texture_cache.clear()
+	_classic_head_mask_cache_hits = 0
+	_classic_head_mask_cache_misses = 0
+
+
+static func classic_head_mask_cache_debug_snapshot() -> Dictionary:
+	return {
+		"entries": _classic_head_mask_texture_cache.size(),
+		"hits": _classic_head_mask_cache_hits,
+		"misses": _classic_head_mask_cache_misses,
+	}
+
+
+static func _texture_cache_key(texture: Texture2D) -> String:
+	if texture == null:
+		return "null"
+	if not texture.resource_path.is_empty():
+		return texture.resource_path
+	return "instance:%d" % texture.get_instance_id()
 
 
 func _load_json_document(path: String) -> Dictionary:

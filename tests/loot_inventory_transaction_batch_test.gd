@@ -39,14 +39,21 @@ func _run() -> void:
 				sell_name = candidate
 				break
 	assert(not sell_name.is_empty(), "merchant has no deterministic stock item")
-	PlayerState.inventory = [{"name": sell_name, "count": 1}, {"name": sell_name, "count": 1}]
+	PlayerState.inventory = [
+		{"name": "太阳水", "count": 1, "guard": "head"},
+		{"name": sell_name, "count": 1},
+		{},
+		{"name": sell_name, "count": 1},
+		{"name": "太阳水", "count": 1, "guard": "tail"},
+	]
 	var sell_items := []
-	for index in range(2):
+	var sell_indices := [1, 3]
+	for index: int in sell_indices:
 		var record: Dictionary = PlayerState.inventory[index]
 		sell_items.append({"quote_key": "inventory:%d" % index, "inventory_index": index, "instance_id": "", "item_name": sell_name, "count": 1, "merchant_id": merchant_id, "merchant_stock_key": str(merchant_context.get("stock_key", merchant_keys[0]))})
 	var quotes := PlayerState.shop_sell_quotes(sell_items)
 	var requests := []
-	for index in range(2):
+	for index: int in sell_indices:
 		var quote: Dictionary = quotes["inventory:%d" % index]
 		assert(bool(quote.get("sellable", false)), "merchant stock item unexpectedly not sellable")
 		requests.append({"quote_key": "inventory:%d" % index, "quote_id": str(quote.get("quote_id", "")), "inventory_index": index, "instance_id": "", "item_name": sell_name, "amount": 1, "merchant_id": merchant_id})
@@ -68,7 +75,22 @@ func _run() -> void:
 	assert(not stale_result.success and stale_counters.commit_attempts == 0 and PlayerState.inventory == sell_inventory_before and PlayerState.gold == sell_gold_before, "stale quote partially changed sell transaction")
 	PlayerState.test_transaction_debug_reset()
 	var sold := PlayerState.sell_inventory_items(requests)
-	assert(sold.success and PlayerState.inventory.is_empty() and PlayerState.test_transaction_debug_snapshot().commit_attempts == 1, "sell batch transaction failed")
+	var sold_counters := PlayerState.test_transaction_debug_snapshot()
+	assert(sold.success and sold_counters.commit_attempts == 1 and sold_counters.inventory_signals == 1 and sold_counters.profile_signals == 1, "sell batch transaction/signal contract failed")
+	assert(PlayerState.inventory.size() == 5 and PlayerState.inventory[1].is_empty() and PlayerState.inventory[3].is_empty(), "批量出售没有保留绝对槽空洞")
+	assert(str(PlayerState.inventory[0].get("guard", "")) == "head" and str(PlayerState.inventory[4].get("guard", "")) == "tail", "批量出售移动了未售出物品")
+	PlayerState.inventory = [
+		{"name": "太阳水", "count": 1, "guard": "head"},
+		{"name": sell_name, "count": 1, "instance_id": "single-sell-fixture"},
+		{"name": "太阳水", "count": 1, "guard": "tail"},
+	]
+	var single_item := {"quote_key": "instance:single-sell-fixture", "inventory_index": 1, "instance_id": "single-sell-fixture", "item_name": sell_name, "count": 1, "merchant_id": merchant_id, "merchant_stock_key": str(merchant_context.get("stock_key", merchant_keys[0]))}
+	var single_quote: Dictionary = PlayerState.shop_sell_quotes([single_item]).get("instance:single-sell-fixture", {})
+	PlayerState.test_transaction_debug_reset()
+	var single_sold := PlayerState.sell_inventory_item({"quote_key": "instance:single-sell-fixture", "quote_id": str(single_quote.get("quote_id", "")), "inventory_index": 1, "instance_id": "single-sell-fixture", "item_name": sell_name, "amount": 1, "merchant_id": merchant_id})
+	var single_counters := PlayerState.test_transaction_debug_snapshot()
+	assert(single_sold.success and single_counters.commit_attempts == 1 and single_counters.inventory_signals == 1 and single_counters.profile_signals == 1, "单项出售没有保持一次 commit/signal")
+	assert(PlayerState.inventory.size() == 3 and PlayerState.inventory[1].is_empty() and str(PlayerState.inventory[2].get("guard", "")) == "tail", "单项出售移动了后续绝对槽")
 	PlayerState.test_transaction_debug_reset()
 	PlayerState.level = 1
 	PlayerState.experience = 0
