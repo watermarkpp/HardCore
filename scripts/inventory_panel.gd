@@ -303,18 +303,18 @@ func _build_bag_panel() -> void:
 	auto_sort_button = Button.new()
 	auto_sort_button.name = "AutoSortButton"
 	auto_sort_button.text = "自动整理"
-	auto_sort_button.position = Vector2(0, 0)
-	auto_sort_button.size = Vector2(215, 48)
+	auto_sort_button.position = Vector2(47, 4)
+	auto_sort_button.size = Vector2(179, 51)
 	auto_sort_button.pressed.connect(_on_auto_sort_pressed)
-	auto_sort_button.theme_type_variation = "GothicComponentButton"
+	auto_sort_button.theme_type_variation = "GothicInventoryActionGemButton"
 	actions.add_child(auto_sort_button)
 	discard_button = Button.new()
 	discard_button.name = "DiscardButton"
 	discard_button.text = "丢弃"
-	discard_button.position = Vector2(225, 0)
-	discard_button.size = Vector2(215, 48)
+	discard_button.position = Vector2(246, 4)
+	discard_button.size = Vector2(179, 51)
 	discard_button.pressed.connect(_on_discard_pressed)
-	discard_button.theme_type_variation = "GothicComponentButton"
+	discard_button.theme_type_variation = "GothicInventoryActionGemButton"
 	actions.add_child(discard_button)
 
 

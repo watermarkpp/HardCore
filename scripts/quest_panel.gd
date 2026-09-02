@@ -227,7 +227,8 @@ func _build_quest_detail() -> void:
 	abandon_button.text = "放弃任务"
 	abandon_button.position = Vector2(204, 436)
 	abandon_button.size = Vector2(128, 52)
-	abandon_button.theme_type_variation = "GothicComponentButton"
+	abandon_button.theme_type_variation = "GothicQuestAbandonPlainButton"
+	abandon_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	abandon_button.add_theme_font_size_override("font_size", 16)
 	abandon_button.visible = false
 	abandon_button.pressed.connect(_request_abandon)
@@ -238,7 +239,8 @@ func _build_quest_detail() -> void:
 	action_button.size = Vector2(400, 52)
 	# Accept/claim is a transaction action.  Quest cards keep the persistent
 	# selection state; this button receives only an explicit operation cue.
-	action_button.theme_type_variation = "GothicComponentButton"
+	action_button.theme_type_variation = "GothicQuestActionGemButton"
+	action_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	action_button.add_theme_font_size_override("font_size", 18)
 	action_button.pressed.connect(_act)
 	panel.add_child(action_button)
@@ -353,7 +355,7 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		button.toggle_mode = true
 		button.text = ""
 		button.set_pressed_no_signal(quest_id == _selected_quest_id)
-		button.theme_type_variation = "GothicComponentSelectedButton" if quest_id == _selected_quest_id else "GothicComponentButton"
+		button.theme_type_variation = "GothicQuestCardSelectedPlainButton" if quest_id == _selected_quest_id else "GothicQuestCardPlainButton"
 		button.pressed.connect(_select_quest.bind(quest_id))
 		button.set_meta("quest_id", quest_id)
 		button.set_meta("quest_state", state_text)
@@ -373,6 +375,7 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		name_label.text = str(quest.get("name", "任务"))
 		name_label.position = Vector2(54, 7)
 		name_label.size = Vector2(212, 25)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		name_label.add_theme_font_size_override("font_size", 16)
@@ -382,6 +385,7 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		state_label.text = state_text
 		state_label.position = Vector2(54, 32)
 		state_label.size = Vector2(212, 22)
+		state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		state_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		state_label.add_theme_font_size_override("font_size", 14)

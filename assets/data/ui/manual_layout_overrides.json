@@ -289,7 +289,7 @@
 					],
 					"text": "进入 HardCore",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicCharacterHallEnterGemButton",
 					"visible": true
 				},
 				"CenteredContent/CharacterPreviewPanel/LaunchHint": {
@@ -637,7 +637,7 @@
 					],
 					"text": "创建角色",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicCharacterHallCreateGemButton",
 					"visible": true
 				},
 				"CenteredContent/CreationPanel/CreationHint": {
@@ -790,7 +790,7 @@
 					],
 					"text": "道\n道士\n治疗 · 召唤",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicCharacterHallProfessionGemButton",
 					"visible": true
 				},
 				"CenteredContent/CreationPanel/WarriorProfession": {
@@ -829,7 +829,7 @@
 					],
 					"text": "战\n战士\n近战 · 爆发",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicCharacterHallSelectedProfessionGemButton",
 					"visible": true
 				},
 				"CenteredContent/CreationPanel/WizardProfession": {
@@ -868,7 +868,7 @@
 					],
 					"text": "法\n法师\n远程 · 群攻",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicCharacterHallProfessionGemButton",
 					"visible": true
 				},
 				"CenteredContent/HallSubtitle": {
@@ -70835,20 +70835,20 @@
 					"localRect": [
 						77.9574681273757,
 						6.66668796539255,
-						319.999997755838,
+						298.397412866586,
 						84.9999979734421
 					],
 					"logicalFontSize": 16.0,
 					"logicalRect": [
 						46.7627754211426,
 						4.00001287460327,
-						191.951950073242,
+						178.993642807007,
 						51.0
 					],
 					"normalized": [
 						0.101658207437266,
 						0.0833336015542348,
-						0.417286847985309,
+						0.389116614797841,
 						1.0625
 					],
 					"parent": "BagPanel/InventoryActions",
@@ -70859,12 +70859,12 @@
 					"rect": [
 						1579.99999368902,
 						889.999978780746,
-						319.999997755838,
+						298.397412866586,
 						84.9999979734421
 					],
 					"text": "自动整理",
 					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicInventoryActionGemButton",
 					"visible": true
 				},
 				"BagPanel/InventoryActions/DiscardButton": {
@@ -70872,22 +70872,22 @@
 					"fontSize": 26.6666660308838,
 					"layoutRevision": 0.0,
 					"localRect": [
-						388.093947855901,
+						409.696558182835,
 						6.66668796539255,
-						320.000023193519,
+						298.397412866586,
 						84.9999979734421
 					],
 					"logicalFontSize": 16.0,
 					"logicalRect": [
-						232.798095703125,
+						245.756418228149,
 						4.00001287460327,
-						191.951965332031,
+						178.993642807007,
 						51.0
 					],
 					"normalized": [
-						0.506082816745924,
+						0.534253083104672,
 						0.0833336015542348,
-						0.41728688115659,
+						0.389116614797841,
 						1.0625
 					],
 					"parent": "BagPanel/InventoryActions",
@@ -70896,14 +70896,14 @@
 						79.9999980926514
 					],
 					"rect": [
-						1890.13650521464,
+						1911.73908374448,
 						889.999978780746,
-						320.000023193519,
+						298.397412866586,
 						84.9999979734421
 					],
 					"text": "丢弃",
 					"textRevision": 0.0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicInventoryActionGemButton",
 					"visible": true
 				},
 				"BagPanel/InventoryScroll": {
@@ -72198,23 +72198,23 @@
 					"fontSize": 29.9999992847443,
 					"layoutRevision": 0,
 					"localRect": [
-						54.5609702811194,
-						742.333203736944,
-						400.00005442958,
-						89.9999978542328
+						105.362291062616,
+						744.833203677339,
+						298.397412866586,
+						84.9999979734421
 					],
 					"logicalFontSize": 18,
 					"logicalRect": [
-						32.7283897399902,
-						445.399932861328,
-						239.939971923828,
-						54.0
+						63.2015542984007,
+						446.899932861328,
+						178.993642807007,
+						51.0
 					],
 					"normalized": [
-						0.106955522026112,
-						0.812773600111913,
-						0.784117555306628,
-						0.0985401459854015
+						0.206541027118957,
+						0.815510826389285,
+						0.584946545120938,
+						0.0930656934306569
 					],
 					"parent": "MapDetailPanel",
 					"parentSize": [
@@ -72222,14 +72222,14 @@
 						913.33331155777
 					],
 					"rect": [
-						1760.9999810522,
-						887.333149417245,
-						400.00005442958,
-						89.9999978542328
+						1811.80129547428,
+						889.83320022027,
+						298.397412866586,
+						84.9999979734421
 					],
 					"text": "传送未开放",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicInventoryActionGemButton",
 					"visible": true
 				},
 				"MapListPanel": {
@@ -72302,7 +72302,7 @@
 						370.092693109536,
 						46.6666655540466
 					],
-					"text": "区域地图",
+					"text": "归属地图",
 					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
@@ -72449,7 +72449,7 @@
 						786.86358165741,
 						46.6666655540466
 					],
-					"text": "HardCore 世界地图树",
+					"text": "主城区",
 					"textRevision": 0,
 					"themeVariation": "GothicSectionTitle",
 					"visible": true
@@ -72596,7 +72596,7 @@
 						650.000005775604,
 						38.3333324193954
 					],
-					"text": "选择大地图节点，在左侧展开其包含的全部地图",
+					"text": "选择主城区，在左侧查看其归属的全部地图",
 					"textRevision": 0,
 					"themeVariation": "GothicMutedLabel",
 					"visible": true
@@ -73072,7 +73072,7 @@
 					],
 					"text": "接受任务",
 					"textRevision": 0.0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicQuestActionGemButton",
 					"visible": true
 				},
 				"QuestDetailPanel/DescriptionLabel": {
@@ -73924,7 +73924,7 @@
 					],
 					"text": "购买",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicShopBuyActionGemButton",
 					"visible": true
 				},
 				"DetailPanel/DetailLabel": {
@@ -74038,7 +74038,7 @@
 					],
 					"text": "装备无需维修",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicShopBuyActionGemButton",
 					"visible": true
 				},
 				"DetailPanel/SellQuantityRow/DecreaseQuantity": {
@@ -74230,7 +74230,7 @@
 					],
 					"text": "购买",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicShopTradeTabSelectedGemButton",
 					"visible": true
 				},
 				"GoodsPanel/GoldLabel": {
@@ -74380,7 +74380,7 @@
 					],
 					"text": "出售",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicShopTradeTabGemButton",
 					"visible": true
 				},
 				"GothicConfirmationPanel/ModalFrame": {
@@ -74893,7 +74893,7 @@
 					],
 					"text": "出售",
 					"textRevision": 1,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicShopSellActionGemButton",
 					"visible": true
 				},
 				"DetailPanel/SellQuantityRow/DecreaseQuantity": {
@@ -74932,7 +74932,7 @@
 					],
 					"text": "",
 					"textRevision": 0,
-					"themeVariation": "GothicPanelTransparentButton",
+					"themeVariation": "GothicShopSellQuantityPlainButton",
 					"visible": true
 				},
 				"DetailPanel/SellQuantityRow/IncreaseQuantity": {
@@ -74971,7 +74971,7 @@
 					],
 					"text": "",
 					"textRevision": 0,
-					"themeVariation": "GothicPanelTransparentButton",
+					"themeVariation": "GothicShopSellQuantityPlainButton",
 					"visible": true
 				},
 				"DetailPanel/SellQuantityRow/Quantity": {
@@ -75085,7 +75085,7 @@
 					],
 					"text": "购买",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicShopTradeTabGemButton",
 					"visible": true
 				},
 				"GoodsPanel/GoldLabel": {
@@ -75694,7 +75694,7 @@
 					],
 					"text": "出售",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicShopTradeTabSelectedGemButton",
 					"visible": true
 				},
 				"GothicConfirmationPanel/ModalFrame": {
@@ -79333,7 +79333,7 @@
 					],
 					"text": "返回人物选择",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicSystemMenuGemButton",
 					"visible": true
 				},
 				"SystemMenuModal/MainPage/ContinueButton": {
@@ -79372,7 +79372,7 @@
 					],
 					"text": "继续游戏",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicSystemMenuGemButton",
 					"visible": true
 				},
 				"SystemMenuModal/MainPage/Footer": {
@@ -79528,7 +79528,7 @@
 					],
 					"text": "保存并退出",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicSystemMenuGemButton",
 					"visible": true
 				},
 				"SystemMenuModal/MainPage/SettingsButton": {
@@ -79567,7 +79567,7 @@
 					],
 					"text": "游戏设置",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicSystemMenuGemButton",
 					"visible": true
 				},
 				"SystemMenuModal/SettingsPage/MusicStatus": {
@@ -79762,7 +79762,7 @@
 					],
 					"text": "返回游戏菜单",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicSystemSettingsBackGemButton",
 					"visible": true
 				},
 				"SystemMenuModal/SettingsPage/SettingsFooter": {
@@ -89341,7 +89341,7 @@
 					],
 					"text": "特殊复活",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicDeathRevivalGemButton",
 					"visible": true
 				},
 				"DeathRevivalModal/SpecialStatus": {
@@ -89497,7 +89497,7 @@
 					],
 					"text": "最近城镇复活",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicDeathRevivalSelectedGemButton",
 					"visible": true
 				},
 				"DeathRevivalModal/TownStatus": {
@@ -89701,7 +89701,7 @@
 					],
 					"text": "取消",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentButton",
+					"themeVariation": "GothicConfirmationGemButton",
 					"visible": true
 				},
 				"ModalFrame/Confirm": {
@@ -89740,7 +89740,7 @@
 					],
 					"text": "确认出售",
 					"textRevision": 0,
-					"themeVariation": "GothicComponentSelectedButton",
+					"themeVariation": "GothicConfirmationSelectedGemButton",
 					"visible": true
 				},
 				"ModalFrame/Message": {

@@ -19,6 +19,7 @@ const LAUNCH_CONTEXT_META := &"pending_character_launch_context"
 const FIXED_CHARACTER_GENDER := "男"
 const ROSTER_DRAG_THRESHOLD := 12.0
 const ROSTER_PRESS_SUPPRESSION_MSEC := 220
+const PROFILE_ROW_BUTTON_HEIGHT := 81.0
 const AI_TEAMMATE_AVAILABLE := false
 const LAUNCH_SCENE_PRELOAD_TIMEOUT_MSEC := 30000
 const LAUNCH_PRELOAD_IDLE := &"idle"
@@ -369,21 +370,23 @@ func _build_roster_panel() -> void:
 	ai_teammate_toggle = CheckButton.new()
 	ai_teammate_toggle.name = "AITeammateToggle"
 	ai_teammate_toggle.text = "携带 AI 队友"
-	ai_teammate_toggle.position = Vector2(26, 448)
+	ai_teammate_toggle.position = Vector2(26, 484)
 	ai_teammate_toggle.size = Vector2(274, 48)
 	ai_teammate_toggle.theme_type_variation = "GothicContentToggle"
 	ai_teammate_toggle.disabled = not AI_TEAMMATE_AVAILABLE
+	ai_teammate_toggle.set_meta("calibration_layout_revision", 1)
 	ai_teammate_toggle.set_meta("stable_id", "character.ai_teammate.enabled")
 	ai_teammate_toggle.toggled.connect(_set_ai_teammate_enabled)
 	panel.add_child(ai_teammate_toggle)
 	teammate_status_label = Label.new()
 	teammate_status_label.name = "TeammateStatus"
-	teammate_status_label.position = Vector2(24, 500)
+	teammate_status_label.position = Vector2(24, 522)
 	teammate_status_label.size = Vector2(278, 50)
 	teammate_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	teammate_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	teammate_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	teammate_status_label.theme_type_variation = "GothicMutedLabel"
+	teammate_status_label.set_meta("calibration_layout_revision", 1)
 	panel.add_child(teammate_status_label)
 
 
@@ -424,13 +427,14 @@ func _build_preview_panel() -> void:
 	enter_button.text = "进入 HardCore"
 	enter_button.position = Vector2(54, 458)
 	enter_button.size = Vector2(244, 62)
+	enter_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	# Retire only the former single-button saved rect.  The new pair is authored
 	# together here so an older character_hall calibration cannot overlap it.
 	enter_button.set_meta("calibration_layout_revision", 1)
 	# Enter is a transition action, not a persistent selection.  The selected
 	# character card owns the persistent selection highlight; this button only
 	# receives an explicit transition cue while the loading surface takes over.
-	enter_button.theme_type_variation = "GothicCharacterLaunchButton"
+	enter_button.theme_type_variation = "GothicCharacterHallEnterGemButton"
 	enter_button.add_theme_font_size_override("font_size", 20)
 	enter_button.set_meta("stable_id", "character.launch")
 	enter_button.pressed.connect(_enter_selected_character)
@@ -440,7 +444,8 @@ func _build_preview_panel() -> void:
 	delete_button.text = "删除人物"
 	delete_button.position = Vector2(310, 458)
 	delete_button.size = Vector2(120, 62)
-	delete_button.theme_type_variation = "GothicComponentButton"
+	delete_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	delete_button.theme_type_variation = "GothicCharacterHallDeleteGemButton"
 	delete_button.add_theme_font_size_override("font_size", 16)
 	delete_button.set_meta("stable_id", "character.delete")
 	delete_button.set_meta("calibration_layout_revision", 1)
@@ -508,10 +513,13 @@ func _build_creation_panel() -> void:
 		button.toggle_mode = true
 		button.button_group = profession_button_group
 		button.text = "%s\n%s\n%s" % [presentation.glyph, profession_name, presentation.role]
-		button.position = Vector2(26 + index * 104, 190)
-		button.size = Vector2(98, 132)
-		button.add_theme_font_size_override("font_size", 13)
-		button.theme_type_variation = "GothicCharacterProfessionButton"
+		button.position = Vector2(20 + index * 110, 222)
+		button.size = Vector2(104, 132)
+		button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.add_theme_font_size_override("font_size", 14)
+		button.theme_type_variation = "GothicCharacterHallProfessionGemButton"
+		button.set_meta("calibration_layout_revision", 1)
+		button.set_meta("calibration_runtime_text", true)
 		button.set_meta("stable_id", "character.profession.%s" % presentation.id)
 		button.set_meta("profession_id", presentation.id)
 		button.pressed.connect(_select_creation_profession.bind(profession_name))
@@ -532,7 +540,8 @@ func _build_creation_panel() -> void:
 	create_button.text = "创建角色"
 	create_button.position = Vector2(26, 374)
 	create_button.size = Vector2(310, 58)
-	create_button.theme_type_variation = "GothicComponentButton"
+	create_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	create_button.theme_type_variation = "GothicCharacterHallCreateGemButton"
 	create_button.add_theme_font_size_override("font_size", 18)
 	create_button.set_meta("stable_id", "character.create")
 	create_button.pressed.connect(_create_character)
@@ -600,17 +609,24 @@ func _add_profile_card(profile: Dictionary) -> void:
 		str(profile.get("profession", "战士")),
 	]
 	main_button.position = Vector2(0, 7)
-	main_button.size = Vector2(184, 81)
+	main_button.size = Vector2(184, PROFILE_ROW_BUTTON_HEIGHT)
 	main_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	main_button.theme_type_variation = "GothicCharacterHallProfilePlainButton"
 	main_button.add_theme_font_size_override("font_size", 16)
+	main_button.set_meta("calibration_layout_revision", 1)
+	main_button.set_meta("calibration_runtime_text", true)
 	main_button.set_meta("stable_id", "character.profile.%s.main" % profile_id)
 	main_button.pressed.connect(_on_profile_main_pressed.bind(profile_id))
 	card.add_child(main_button)
 	var ai_button := Button.new()
 	ai_button.name = "AITeammate"
-	ai_button.position = Vector2(190, 7)
-	ai_button.size = Vector2(80, 81)
+	ai_button.position = Vector2(190, 10)
+	ai_button.size = Vector2(80, PROFILE_ROW_BUTTON_HEIGHT - 6.0)
+	ai_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ai_button.theme_type_variation = "GothicCharacterHallAIPlainButton"
 	ai_button.add_theme_font_size_override("font_size", 12)
+	ai_button.set_meta("calibration_layout_revision", 1)
+	ai_button.set_meta("calibration_runtime_text", true)
 	ai_button.set_meta("stable_id", "character.profile.%s.ai_teammate" % profile_id)
 	ai_button.pressed.connect(_on_profile_ai_pressed.bind(profile_id))
 	card.add_child(ai_button)
@@ -633,12 +649,12 @@ func _refresh_selection_state() -> void:
 		GothicUIThemeScript.set_character_selection_feedback(
 			main_button,
 			selected,
-			&"GothicCharacterProfileButton",
-			&"GothicCharacterSelectedProfileButton",
+			&"GothicCharacterHallProfilePlainButton",
+			&"GothicCharacterHallSelectedProfilePlainButton",
 			"character.profile",
 		)
 		ai_button.disabled = true
-		ai_button.theme_type_variation = "GothicCharacterAIStatusButton"
+		ai_button.theme_type_variation = "GothicCharacterHallAIPlainButton"
 		ai_button.text = "AI队友\n暂未开放"
 	if create_button != null:
 		create_button.text = "创建角色"
@@ -751,13 +767,13 @@ func _refresh_creation_controls() -> void:
 		GothicUIThemeScript.set_character_selection_feedback(
 			button,
 			selected,
-			&"GothicCharacterProfessionButton",
-			&"GothicCharacterSelectedProfessionButton",
+			&"GothicCharacterHallProfessionGemButton",
+			&"GothicCharacterHallSelectedProfessionGemButton",
 			"character.profession",
 		)
 	if create_button != null:
 		create_button.text = "创建角色"
-		create_button.theme_type_variation = "GothicCharacterLaunchButton"
+		create_button.theme_type_variation = "GothicCharacterHallCreateGemButton"
 		create_button.z_index = 2
 	if message_label != null:
 		message_label.z_index = 1
@@ -765,7 +781,7 @@ func _refresh_creation_controls() -> void:
 
 func _restore_character_action_visual_contract() -> void:
 	if create_button != null:
-		create_button.theme_type_variation = "GothicCharacterLaunchButton"
+		create_button.theme_type_variation = "GothicCharacterHallCreateGemButton"
 		create_button.text = "创建角色"
 		create_button.z_index = 2
 	if message_label != null:

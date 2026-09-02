@@ -97,13 +97,20 @@ func _build_main_page() -> void:
 	status_label.add_theme_color_override("font_color", Color("b9c9a8"))
 	status.add_child(status_label)
 	continue_button = _menu_button(main_page, "ContinueButton", "继续游戏", 198, "system_menu.continue")
-	continue_button.theme_type_variation = "GothicComponentButton"
+	continue_button.theme_type_variation = "GothicSystemMenuGemButton"
+	continue_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	continue_button.pressed.connect(_request_continue)
 	settings_button = _menu_button(main_page, "SettingsButton", "游戏设置", 270, "system_menu.settings")
+	settings_button.theme_type_variation = "GothicSystemMenuGemButton"
+	settings_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	settings_button.pressed.connect(show_settings_page)
 	character_select_button = _menu_button(main_page, "CharacterSelectButton", "返回人物选择", 342, "system_menu.return_to_character_select")
+	character_select_button.theme_type_variation = "GothicSystemMenuGemButton"
+	character_select_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	character_select_button.pressed.connect(_request_character_select)
 	save_exit_button = _menu_button(main_page, "SaveExitButton", "保存并退出", 414, "system_menu.save_and_exit")
+	save_exit_button.theme_type_variation = "GothicSystemMenuGemButton"
+	save_exit_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	save_exit_button.pressed.connect(_request_save_exit)
 	var footer := Label.new()
 	footer.name = "Footer"
@@ -139,7 +146,8 @@ func _build_settings_page() -> void:
 	note.theme_type_variation = "GothicMutedLabel"
 	settings_page.add_child(note)
 	settings_back_button = _menu_button(settings_page, "SettingsBackButton", "返回游戏菜单", 430, "system_menu.settings.back")
-	settings_back_button.theme_type_variation = "GothicComponentButton"
+	settings_back_button.theme_type_variation = "GothicSystemSettingsBackGemButton"
+	settings_back_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	settings_back_button.pressed.connect(show_main_page)
 	var footer := Label.new()
 	footer.name = "SettingsFooter"
@@ -201,7 +209,7 @@ func _audio_toggle(parent: Control, node_name: String, label_text: String, y: fl
 	frame.name = node_name.trim_suffix("Toggle") + "Frame"
 	frame.position = Vector2(72, y)
 	frame.size = Vector2(356, 68)
-	frame.theme_type_variation = "GothicComponentButton"
+	frame.theme_type_variation = "GothicSystemSettingsRowGemButton"
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	frame.focus_mode = Control.FOCUS_NONE
 	frame.set_meta("calibration_layout_revision", 3)

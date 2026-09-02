@@ -86,7 +86,8 @@ func _build_interface() -> void:
 	cancel_button.name = "Cancel"
 	cancel_button.position = Vector2(58, 207)
 	cancel_button.size = Vector2(202, 58)
-	cancel_button.theme_type_variation = "GothicComponentButton"
+	cancel_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	cancel_button.theme_type_variation = "GothicConfirmationGemButton"
 	cancel_button.add_theme_font_size_override("font_size", 17)
 	cancel_button.set_meta("stable_id", "confirmation.cancel")
 	cancel_button.pressed.connect(_cancel)
@@ -98,7 +99,8 @@ func _build_interface() -> void:
 	confirm_button.size = Vector2(202, 58)
 	# Confirmation is an action, not a persistent selection.  The owner drives
 	# the transaction/transition feedback explicitly after this dialog emits.
-	confirm_button.theme_type_variation = "GothicComponentButton"
+	confirm_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	confirm_button.theme_type_variation = "GothicConfirmationGemButton"
 	confirm_button.add_theme_font_size_override("font_size", 17)
 	confirm_button.set_meta("stable_id", "confirmation.confirm")
 	confirm_button.pressed.connect(_confirm)

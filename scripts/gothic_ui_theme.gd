@@ -62,6 +62,75 @@ const SKILL_CONFIG_PLAIN_108X60_FRAME := preload(SKILL_EXACT_FRAME_ROOT + "/plai
 const SKILL_CONFIG_PLAIN_108X40 := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x40.png")
 const SKILL_CONFIG_PLAIN_108X40_MASK := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x40_feedback_mask_v1.png")
 const SKILL_CONFIG_PLAIN_108X40_FRAME := preload(SKILL_EXACT_FRAME_ROOT + "/plain_108x40_frame_only_v1.png")
+const INVENTORY_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/inventory_exact_frames"
+const INVENTORY_ACTION_GEM_176X62 := preload(INVENTORY_EXACT_FRAME_ROOT + "/gem_176x62.png")
+const INVENTORY_ACTION_GEM_176X62_MASK := preload(INVENTORY_EXACT_FRAME_ROOT + "/gem_176x62_feedback_mask_v1.png")
+const INVENTORY_ACTION_GEM_176X62_FRAME := preload(INVENTORY_EXACT_FRAME_ROOT + "/gem_176x62_frame_only_v1.png")
+const MAP_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/map_exact_frames"
+const MAP_CARD_PLAIN_230X82 := preload(MAP_EXACT_FRAME_ROOT + "/plain_230x82.png")
+const MAP_CARD_PLAIN_230X82_MASK := preload(MAP_EXACT_FRAME_ROOT + "/plain_230x82_feedback_mask_v1.png")
+const MAP_CARD_PLAIN_230X82_FRAME := preload(MAP_EXACT_FRAME_ROOT + "/plain_230x82_frame_only_v1.png")
+const MAP_WORLD_NODE_GEM_342X50 := preload(MAP_EXACT_FRAME_ROOT + "/gem_342x50.png")
+const MAP_WORLD_NODE_GEM_342X50_MASK := preload(MAP_EXACT_FRAME_ROOT + "/gem_342x50_feedback_mask_v1.png")
+const MAP_WORLD_NODE_GEM_342X50_FRAME := preload(MAP_EXACT_FRAME_ROOT + "/gem_342x50_frame_only_v1.png")
+const SHOP_SELL_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/shop_sell_exact_frames"
+const SHOP_TRADE_TAB_GEM_128X51 := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/gem_128x51.png")
+const SHOP_TRADE_TAB_GEM_128X51_MASK := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/gem_128x51_feedback_mask_v1.png")
+const SHOP_TRADE_TAB_GEM_128X51_FRAME := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/gem_128x51_frame_only_v1.png")
+const SHOP_SELL_ACTION_GEM_270X51 := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/gem_270x51.png")
+const SHOP_SELL_ACTION_GEM_270X51_MASK := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/gem_270x51_feedback_mask_v1.png")
+const SHOP_SELL_ACTION_GEM_270X51_FRAME := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/gem_270x51_frame_only_v1.png")
+const SHOP_SELL_QUANTITY_PLAIN_58X46 := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/plain_58x46.png")
+const SHOP_SELL_QUANTITY_PLAIN_58X46_MASK := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/plain_58x46_feedback_mask_v1.png")
+const SHOP_SELL_QUANTITY_PLAIN_58X46_FRAME := preload(SHOP_SELL_EXACT_FRAME_ROOT + "/plain_58x46_frame_only_v1.png")
+const QUEST_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/quest_exact_frames"
+const QUEST_CARD_PLAIN_286X62 := preload(QUEST_EXACT_FRAME_ROOT + "/plain_286x62.png")
+const QUEST_CARD_PLAIN_286X62_MASK := preload(QUEST_EXACT_FRAME_ROOT + "/plain_286x62_feedback_mask_v1.png")
+const QUEST_CARD_PLAIN_286X62_FRAME := preload(QUEST_EXACT_FRAME_ROOT + "/plain_286x62_frame_only_v1.png")
+const QUEST_ACTION_GEM_342X50 := preload(QUEST_EXACT_FRAME_ROOT + "/gem_342x50.png")
+const QUEST_ACTION_GEM_342X50_MASK := preload(QUEST_EXACT_FRAME_ROOT + "/gem_342x50_feedback_mask_v1.png")
+const QUEST_ACTION_GEM_342X50_FRAME := preload(QUEST_EXACT_FRAME_ROOT + "/gem_342x50_frame_only_v1.png")
+const QUEST_ABANDON_PLAIN_128X52 := preload(QUEST_EXACT_FRAME_ROOT + "/plain_128x52.png")
+const QUEST_ABANDON_PLAIN_128X52_MASK := preload(QUEST_EXACT_FRAME_ROOT + "/plain_128x52_feedback_mask_v1.png")
+const QUEST_ABANDON_PLAIN_128X52_FRAME := preload(QUEST_EXACT_FRAME_ROOT + "/plain_128x52_frame_only_v1.png")
+const SYSTEM_MENU_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/system_menu_exact_frames"
+const SYSTEM_MENU_GEM_356X60 := preload(SYSTEM_MENU_EXACT_FRAME_ROOT + "/gem_356x60.png")
+const SYSTEM_MENU_GEM_356X60_MASK := preload(SYSTEM_MENU_EXACT_FRAME_ROOT + "/gem_356x60_feedback_mask_v1.png")
+const SYSTEM_MENU_GEM_356X60_FRAME := preload(SYSTEM_MENU_EXACT_FRAME_ROOT + "/gem_356x60_frame_only_v1.png")
+const SYSTEM_SETTINGS_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/system_settings_exact_frames"
+const SYSTEM_SETTINGS_ROW_GEM_356X68 := preload(SYSTEM_SETTINGS_EXACT_FRAME_ROOT + "/gem_356x68.png")
+const SYSTEM_SETTINGS_ROW_GEM_356X68_MASK := preload(SYSTEM_SETTINGS_EXACT_FRAME_ROOT + "/gem_356x68_feedback_mask_v1.png")
+const SYSTEM_SETTINGS_ROW_GEM_356X68_FRAME := preload(SYSTEM_SETTINGS_EXACT_FRAME_ROOT + "/gem_356x68_frame_only_v1.png")
+const SYSTEM_SETTINGS_BACK_GEM_356X60 := preload(SYSTEM_SETTINGS_EXACT_FRAME_ROOT + "/gem_356x60.png")
+const SYSTEM_SETTINGS_BACK_GEM_356X60_MASK := preload(SYSTEM_SETTINGS_EXACT_FRAME_ROOT + "/gem_356x60_feedback_mask_v1.png")
+const SYSTEM_SETTINGS_BACK_GEM_356X60_FRAME := preload(SYSTEM_SETTINGS_EXACT_FRAME_ROOT + "/gem_356x60_frame_only_v1.png")
+const CHARACTER_HALL_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/character_hall_exact_frames"
+const CHARACTER_HALL_PROFILE_PLAIN_184X81 := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/plain_184x81.png")
+const CHARACTER_HALL_PROFILE_PLAIN_184X81_MASK := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/plain_184x81_feedback_mask_v1.png")
+const CHARACTER_HALL_PROFILE_PLAIN_184X81_FRAME := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/plain_184x81_frame_only_v1.png")
+const CHARACTER_HALL_AI_PLAIN_80X81 := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/plain_80x81.png")
+const CHARACTER_HALL_AI_PLAIN_80X81_MASK := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/plain_80x81_feedback_mask_v1.png")
+const CHARACTER_HALL_AI_PLAIN_80X81_FRAME := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/plain_80x81_frame_only_v1.png")
+const CHARACTER_HALL_PROFESSION_GEM_98X132 := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_98x132.png")
+const CHARACTER_HALL_PROFESSION_GEM_98X132_MASK := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_98x132_feedback_mask_v1.png")
+const CHARACTER_HALL_PROFESSION_GEM_98X132_FRAME := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_98x132_frame_only_v1.png")
+const CHARACTER_HALL_ENTER_GEM_286X62 := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_286x62.png")
+const CHARACTER_HALL_ENTER_GEM_286X62_MASK := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_286x62_feedback_mask_v1.png")
+const CHARACTER_HALL_ENTER_GEM_286X62_FRAME := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_286x62_frame_only_v1.png")
+const CHARACTER_HALL_DELETE_GEM_120X62 := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_120x62.png")
+const CHARACTER_HALL_DELETE_GEM_120X62_MASK := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_120x62_feedback_mask_v1.png")
+const CHARACTER_HALL_DELETE_GEM_120X62_FRAME := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_120x62_frame_only_v1.png")
+const CHARACTER_HALL_CREATE_GEM_310X58 := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_310x58.png")
+const CHARACTER_HALL_CREATE_GEM_310X58_MASK := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_310x58_feedback_mask_v1.png")
+const CHARACTER_HALL_CREATE_GEM_310X58_FRAME := preload(CHARACTER_HALL_EXACT_FRAME_ROOT + "/gem_310x58_frame_only_v1.png")
+const DEATH_REVIVAL_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/death_revival_exact_frames"
+const DEATH_REVIVAL_GEM_440X64 := preload(DEATH_REVIVAL_EXACT_FRAME_ROOT + "/gem_440x64.png")
+const DEATH_REVIVAL_GEM_440X64_MASK := preload(DEATH_REVIVAL_EXACT_FRAME_ROOT + "/gem_440x64_feedback_mask_v1.png")
+const DEATH_REVIVAL_GEM_440X64_FRAME := preload(DEATH_REVIVAL_EXACT_FRAME_ROOT + "/gem_440x64_frame_only_v1.png")
+const CONFIRMATION_EXACT_FRAME_ROOT := "res://assets/ui/gothic_theme/v1/confirmation_exact_frames"
+const CONFIRMATION_GEM_202X58 := preload(CONFIRMATION_EXACT_FRAME_ROOT + "/gem_202x58.png")
+const CONFIRMATION_GEM_202X58_MASK := preload(CONFIRMATION_EXACT_FRAME_ROOT + "/gem_202x58_feedback_mask_v1.png")
+const CONFIRMATION_GEM_202X58_FRAME := preload(CONFIRMATION_EXACT_FRAME_ROOT + "/gem_202x58_frame_only_v1.png")
 const BUTTON_V3_PATCH := Vector4(34, 8, 34, 8)
 const BUTTON_ADAPTIVE_PATCH := Vector4(36, 0, 36, 0)
 const COMPONENT_ITEM_SLOT := preload(COMPONENT_ROOT + "/item_slot_single_v2.png")
@@ -236,7 +305,7 @@ static func build() -> Theme:
 	result.set_stylebox("disabled", "GothicPanelTransparentButton", _flat(Color(0.035, 0.03, 0.028, 0.68), Color(0.24, 0.22, 0.20, 0.72), 1, 9))
 	_apply_adaptive_button(result, "GothicComponentButton")
 	_apply_adaptive_button(result, "GothicComponentSelectedButton")
-	# 仓库操作按钮复用技能配置区已验收的 v5 细边按钮三态族。
+	# 仓库五个 96x48 操作按钮统一使用有效像素最接近的无宝石框。
 	_apply_warehouse_thin_button(result)
 	_apply_small_button(result, &"GothicSkillConfigCompactButton")
 	_apply_exact_skill_button(result, &"GothicSkillListGemButton", _visible_alpha_region(SKILL_LIST_GEM_266X64, Rect2(1, 3, 264, 56)), _visible_alpha_region(SKILL_LIST_GEM_266X64_MASK, Rect2(1, 3, 264, 56)), _visible_alpha_region(SKILL_LIST_GEM_266X64_FRAME, Rect2(1, 3, 264, 56)))
@@ -245,6 +314,42 @@ static func build() -> Theme:
 	_apply_exact_skill_button(result, &"GothicSkillRestorePlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82, Rect2(1, 8, 102, 64)), _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82_MASK, Rect2(1, 8, 102, 64)), _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82_FRAME, Rect2(1, 8, 102, 64)))
 	_apply_exact_skill_button(result, &"GothicSkillRingPlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60, Rect2(1, 5, 106, 48)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_MASK, Rect2(1, 5, 106, 48)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_FRAME, Rect2(1, 5, 106, 48)))
 	_apply_exact_skill_button(result, &"GothicSkillClearPlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40, Rect2(1, 3, 106, 33)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40_MASK, Rect2(1, 3, 106, 33)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40_FRAME, Rect2(1, 3, 106, 33)))
+	_apply_exact_skill_button(result, &"GothicInventoryActionGemButton", _visible_alpha_region(INVENTORY_ACTION_GEM_176X62, Rect2(1, 3, 174, 54)), _visible_alpha_region(INVENTORY_ACTION_GEM_176X62_MASK, Rect2(1, 3, 174, 54)), _visible_alpha_region(INVENTORY_ACTION_GEM_176X62_FRAME, Rect2(1, 3, 174, 54)))
+	_apply_exact_skill_button(result, &"GothicMapCardPlainButton", _visible_alpha_region(MAP_CARD_PLAIN_230X82, Rect2(1, 8, 228, 64)), _visible_alpha_region(MAP_CARD_PLAIN_230X82_MASK, Rect2(1, 8, 228, 64)), _visible_alpha_region(MAP_CARD_PLAIN_230X82_FRAME, Rect2(1, 8, 228, 64)))
+	_apply_exact_skill_button(result, &"GothicMapCardSelectedPlainButton", _visible_alpha_region(MAP_CARD_PLAIN_230X82, Rect2(1, 8, 228, 64)), _visible_alpha_region(MAP_CARD_PLAIN_230X82_MASK, Rect2(1, 8, 228, 64)), _visible_alpha_region(MAP_CARD_PLAIN_230X82_FRAME, Rect2(1, 8, 228, 64)), BUTTON_SELECTED_FILL)
+	_apply_exact_skill_button(result, &"GothicMapWorldNodeGemButton", _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50, Rect2(1, 2, 340, 46)), _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50_MASK, Rect2(1, 2, 340, 46)), _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50_FRAME, Rect2(1, 2, 340, 46)))
+	_apply_exact_skill_button(result, &"GothicMapWorldNodeSelectedGemButton", _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50, Rect2(1, 2, 340, 46)), _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50_MASK, Rect2(1, 2, 340, 46)), _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50_FRAME, Rect2(1, 2, 340, 46)), BUTTON_SELECTED_FILL)
+	_offset_button_text_up(result, &"GothicMapWorldNodeGemButton", 2.0)
+	_offset_button_text_up(result, &"GothicMapWorldNodeSelectedGemButton", 2.0)
+	_apply_exact_skill_button(result, &"GothicShopTradeTabGemButton", _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51, Rect2(1, 2, 126, 45)), _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51_MASK, Rect2(1, 2, 126, 45)), _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51_FRAME, Rect2(1, 2, 126, 45)))
+	_apply_exact_skill_button(result, &"GothicShopTradeTabSelectedGemButton", _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51, Rect2(1, 2, 126, 45)), _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51_MASK, Rect2(1, 2, 126, 45)), _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51_FRAME, Rect2(1, 2, 126, 45)), BUTTON_SELECTED_FILL)
+	_apply_exact_skill_button(result, &"GothicShopBuyActionGemButton", _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_MASK, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_FRAME, Rect2(1, 2, 268, 45)))
+	_apply_exact_skill_button(result, &"GothicShopSellActionGemButton", _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_MASK, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_FRAME, Rect2(1, 2, 268, 45)))
+	_apply_exact_skill_button(result, &"GothicShopSellQuantityPlainButton", _visible_alpha_region(SHOP_SELL_QUANTITY_PLAIN_58X46, Rect2(1, 4, 56, 37)), _visible_alpha_region(SHOP_SELL_QUANTITY_PLAIN_58X46_MASK, Rect2(1, 4, 56, 37)), _visible_alpha_region(SHOP_SELL_QUANTITY_PLAIN_58X46_FRAME, Rect2(1, 4, 56, 37)))
+	_offset_button_text_up(result, &"GothicShopTradeTabGemButton", 2.0)
+	_offset_button_text_up(result, &"GothicShopTradeTabSelectedGemButton", 2.0)
+	_offset_button_text_up(result, &"GothicShopBuyActionGemButton", 2.0)
+	_offset_button_text_up(result, &"GothicShopSellActionGemButton", 2.0)
+	_apply_exact_skill_button(result, &"GothicQuestCardPlainButton", _visible_alpha_region(QUEST_CARD_PLAIN_286X62, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_MASK, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_FRAME, Rect2(1, 5, 284, 50)))
+	_apply_exact_skill_button(result, &"GothicQuestCardSelectedPlainButton", _visible_alpha_region(QUEST_CARD_PLAIN_286X62, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_MASK, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_FRAME, Rect2(1, 5, 284, 50)), BUTTON_SELECTED_FILL)
+	_apply_exact_skill_button(result, &"GothicQuestActionGemButton", _visible_alpha_region(QUEST_ACTION_GEM_342X50, Rect2(1, 2, 340, 46)), _visible_alpha_region(QUEST_ACTION_GEM_342X50_MASK, Rect2(1, 2, 340, 46)), _visible_alpha_region(QUEST_ACTION_GEM_342X50_FRAME, Rect2(1, 2, 340, 46)))
+	_apply_exact_skill_button(result, &"GothicQuestAbandonPlainButton", _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52, Rect2(1, 4, 126, 42)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_MASK, Rect2(1, 4, 126, 42)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_FRAME, Rect2(1, 4, 126, 42)))
+	_offset_button_text_up(result, &"GothicQuestActionGemButton", 2.0)
+	_offset_button_text_up(result, &"GothicQuestAbandonPlainButton", 2.0)
+	_apply_exact_skill_button(result, &"GothicSystemMenuGemButton", _visible_alpha_region(SYSTEM_MENU_GEM_356X60, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_MENU_GEM_356X60_MASK, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_MENU_GEM_356X60_FRAME, Rect2(1, 3, 354, 55)))
+	_offset_button_text_up(result, &"GothicSystemMenuGemButton", 3.0)
+	_apply_exact_skill_button(result, &"GothicSystemSettingsRowGemButton", _visible_alpha_region(SYSTEM_SETTINGS_ROW_GEM_356X68, Rect2(1, 3, 354, 59)), _visible_alpha_region(SYSTEM_SETTINGS_ROW_GEM_356X68_MASK, Rect2(1, 3, 354, 59)), _visible_alpha_region(SYSTEM_SETTINGS_ROW_GEM_356X68_FRAME, Rect2(1, 3, 354, 59)))
+	_apply_exact_skill_button(result, &"GothicSystemSettingsBackGemButton", _visible_alpha_region(SYSTEM_SETTINGS_BACK_GEM_356X60, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_SETTINGS_BACK_GEM_356X60_MASK, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_SETTINGS_BACK_GEM_356X60_FRAME, Rect2(1, 3, 354, 55)))
+	_offset_button_text_up(result, &"GothicSystemSettingsBackGemButton", 3.0)
+	_apply_exact_skill_button(result, &"GothicDeathRevivalGemButton", _visible_alpha_region(DEATH_REVIVAL_GEM_440X64, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_MASK, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_FRAME, Rect2(1, 5, 436, 52)))
+	_apply_exact_skill_button(result, &"GothicDeathRevivalSelectedGemButton", _visible_alpha_region(DEATH_REVIVAL_GEM_440X64, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_MASK, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_FRAME, Rect2(1, 5, 436, 52)), BUTTON_SELECTED_FILL)
+	_offset_button_text_up(result, &"GothicDeathRevivalGemButton", 3.0)
+	_offset_button_text_up(result, &"GothicDeathRevivalSelectedGemButton", 3.0)
+	_apply_exact_skill_button(result, &"GothicConfirmationGemButton", _visible_alpha_region(CONFIRMATION_GEM_202X58, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_MASK, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_FRAME, Rect2(1, 5, 199, 46)))
+	_apply_exact_skill_button(result, &"GothicConfirmationSelectedGemButton", _visible_alpha_region(CONFIRMATION_GEM_202X58, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_MASK, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_FRAME, Rect2(1, 5, 199, 46)), BUTTON_SELECTED_FILL)
+	_offset_button_text_up(result, &"GothicConfirmationGemButton", 3.0)
+	_offset_button_text_up(result, &"GothicConfirmationSelectedGemButton", 3.0)
+	_apply_character_hall_exact_buttons(result)
 	_apply_character_hall_buttons(result)
 	_apply_character_launch_button(result)
 	_apply_texture_button_variation(result, "GothicComponentTabButton", COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, COMPONENT_TAB_FRAME, Vector4(22, 18, 22, 18), 14)
@@ -307,6 +412,7 @@ static func build_character_hall() -> Theme:
 	result.set_type_variation("GothicInsetFrame", "Panel")
 	result.set_stylebox("panel", "GothicInsetFrame", GothicFrameFactoryScript.create_inset_frame_style_v3())
 	_apply_adaptive_button(result, "GothicComponentButton")
+	_apply_character_hall_exact_buttons(result)
 	_apply_character_hall_buttons(result)
 	_apply_character_launch_button(result)
 	_shared_character_hall_theme = result
@@ -478,7 +584,11 @@ static func set_button_feedback(button: BaseButton, state: StringName, selection
 
 
 static func _set_character_transition_font_feedback(button: BaseButton) -> void:
-	if button.theme_type_variation != &"GothicCharacterLaunchButton":
+	if button.theme_type_variation not in [
+		&"GothicCharacterLaunchButton",
+		&"GothicCharacterHallEnterGemButton",
+		&"GothicCharacterHallCreateGemButton",
+	]:
 		return
 	if not button.has_meta(BUTTON_FEEDBACK_META_FONT_BACKUP):
 		var backup := {"colors": {}, "constants": {}}
@@ -622,6 +732,20 @@ static func _exact_skill_frame_style(texture: Texture2D, mask: Texture2D, frame:
 	return style
 
 
+static func _offset_button_text_up(theme: Theme, variation: StringName, pixels: float) -> void:
+	for state: StringName in [&"normal", &"hover", &"focus", &"pressed", &"disabled"]:
+		var style := theme.get_stylebox(state, variation)
+		style.content_margin_top = 0.0
+		style.content_margin_bottom = pixels * 2.0
+
+
+static func _set_button_horizontal_padding(theme: Theme, variation: StringName, pixels: float) -> void:
+	for state: StringName in [&"normal", &"hover", &"focus", &"pressed", &"disabled"]:
+		var style := theme.get_stylebox(state, variation)
+		style.content_margin_left = pixels
+		style.content_margin_right = pixels
+
+
 static func _visible_alpha_region(texture: Texture2D, region: Rect2) -> Texture2D:
 	var visible_texture := AtlasTexture.new()
 	visible_texture.atlas = texture
@@ -629,16 +753,46 @@ static func _visible_alpha_region(texture: Texture2D, region: Rect2) -> Texture2
 	return visible_texture
 
 
+static func _apply_character_hall_exact_buttons(theme: Theme) -> void:
+	_apply_exact_skill_button(theme, &"GothicCharacterHallProfilePlainButton", _visible_alpha_region(CHARACTER_HALL_PROFILE_PLAIN_184X81, Rect2(1, 8, 182, 63)), _visible_alpha_region(CHARACTER_HALL_PROFILE_PLAIN_184X81_MASK, Rect2(1, 8, 182, 63)), _visible_alpha_region(CHARACTER_HALL_PROFILE_PLAIN_184X81_FRAME, Rect2(1, 8, 182, 63)))
+	_apply_exact_skill_button(theme, &"GothicCharacterHallSelectedProfilePlainButton", _visible_alpha_region(CHARACTER_HALL_PROFILE_PLAIN_184X81, Rect2(1, 8, 182, 63)), _visible_alpha_region(CHARACTER_HALL_PROFILE_PLAIN_184X81_MASK, Rect2(1, 8, 182, 63)), _visible_alpha_region(CHARACTER_HALL_PROFILE_PLAIN_184X81_FRAME, Rect2(1, 8, 182, 63)), BUTTON_SELECTED_FILL)
+	_apply_exact_skill_button(theme, &"GothicCharacterHallAIPlainButton", _visible_alpha_region(CHARACTER_HALL_AI_PLAIN_80X81, Rect2(7, 1, 63, 79)), _visible_alpha_region(CHARACTER_HALL_AI_PLAIN_80X81_MASK, Rect2(7, 1, 63, 79)), _visible_alpha_region(CHARACTER_HALL_AI_PLAIN_80X81_FRAME, Rect2(7, 1, 63, 79)))
+	_apply_exact_skill_button(theme, &"GothicCharacterHallProfessionGemButton", _visible_alpha_region(CHARACTER_HALL_PROFESSION_GEM_98X132, Rect2(6, 2, 82, 128)), _visible_alpha_region(CHARACTER_HALL_PROFESSION_GEM_98X132_MASK, Rect2(6, 2, 82, 128)), _visible_alpha_region(CHARACTER_HALL_PROFESSION_GEM_98X132_FRAME, Rect2(6, 2, 82, 128)))
+	_apply_exact_skill_button(theme, &"GothicCharacterHallSelectedProfessionGemButton", _visible_alpha_region(CHARACTER_HALL_PROFESSION_GEM_98X132, Rect2(6, 2, 82, 128)), _visible_alpha_region(CHARACTER_HALL_PROFESSION_GEM_98X132_MASK, Rect2(6, 2, 82, 128)), _visible_alpha_region(CHARACTER_HALL_PROFESSION_GEM_98X132_FRAME, Rect2(6, 2, 82, 128)), BUTTON_SELECTED_FILL)
+	_apply_exact_skill_button(theme, &"GothicCharacterHallEnterGemButton", _visible_alpha_region(CHARACTER_HALL_ENTER_GEM_286X62, Rect2(1, 3, 284, 54)), _visible_alpha_region(CHARACTER_HALL_ENTER_GEM_286X62_MASK, Rect2(1, 3, 284, 54)), _visible_alpha_region(CHARACTER_HALL_ENTER_GEM_286X62_FRAME, Rect2(1, 3, 284, 54)))
+	_apply_exact_skill_button(theme, &"GothicCharacterHallDeleteGemButton", _visible_alpha_region(CHARACTER_HALL_DELETE_GEM_120X62, Rect2(1, 3, 118, 54)), _visible_alpha_region(CHARACTER_HALL_DELETE_GEM_120X62_MASK, Rect2(1, 3, 118, 54)), _visible_alpha_region(CHARACTER_HALL_DELETE_GEM_120X62_FRAME, Rect2(1, 3, 118, 54)))
+	_apply_exact_skill_button(theme, &"GothicCharacterHallCreateGemButton", _visible_alpha_region(CHARACTER_HALL_CREATE_GEM_310X58, Rect2(1, 3, 308, 53)), _visible_alpha_region(CHARACTER_HALL_CREATE_GEM_310X58_MASK, Rect2(1, 3, 308, 53)), _visible_alpha_region(CHARACTER_HALL_CREATE_GEM_310X58_FRAME, Rect2(1, 3, 308, 53)))
+	for variation: StringName in [
+		&"GothicCharacterHallProfilePlainButton",
+		&"GothicCharacterHallSelectedProfilePlainButton",
+		&"GothicCharacterHallAIPlainButton",
+		&"GothicCharacterHallProfessionGemButton",
+		&"GothicCharacterHallSelectedProfessionGemButton",
+	]:
+		_offset_button_text_up(theme, variation, 2.0)
+	for variation: StringName in [
+		&"GothicCharacterHallProfessionGemButton",
+		&"GothicCharacterHallSelectedProfessionGemButton",
+	]:
+		_set_button_horizontal_padding(theme, variation, 8.0)
+	for variation: StringName in [
+		&"GothicCharacterHallEnterGemButton",
+		&"GothicCharacterHallDeleteGemButton",
+		&"GothicCharacterHallCreateGemButton",
+	]:
+		_offset_button_text_up(theme, variation, 3.0)
+
+
 static func _apply_warehouse_thin_button(theme: Theme) -> void:
 	var variation := &"GothicWarehouseThinButton"
-	_apply_small_button(theme, variation)
-	# Keep disabled actions disabled, but retain the accepted antique-gold frame.
-	var disabled := AdaptiveButtonStyleBoxScript.new().configure_small(
-		BUTTON_SQUARE_V5,
-		BUTTON_SHORTWIDE_V5,
-		BUTTON_WIDESMALL_V5
+	_apply_exact_skill_button(
+		theme,
+		variation,
+		_visible_alpha_region(SKILL_CONFIG_PLAIN_108X60, Rect2(1, 5, 106, 48)),
+		_visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_MASK, Rect2(1, 5, 106, 48)),
+		_visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_FRAME, Rect2(1, 5, 106, 48))
 	)
-	theme.set_stylebox("disabled", variation, disabled)
+	_offset_button_text_up(theme, variation, 2.0)
 
 
 static func _set_v4_feedback(style: AdaptiveButtonStyleBox, fill: Color, shadow: Color, shadow_size: float) -> void:

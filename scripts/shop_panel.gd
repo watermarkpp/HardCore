@@ -141,7 +141,7 @@ func _build_goods_section() -> void:
 	buy_tab_button.position = Vector2(47.5127563476563, 10)
 	buy_tab_button.size = Vector2(128, 51)
 	buy_tab_button.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
-	buy_tab_button.theme_type_variation = "GothicComponentSelectedButton"
+	buy_tab_button.theme_type_variation = "GothicShopTradeTabSelectedGemButton"
 	buy_tab_button.pressed.connect(_set_trade_mode.bind("buy"))
 	panel.add_child(buy_tab_button)
 	sell_tab_button = Button.new()
@@ -150,7 +150,7 @@ func _build_goods_section() -> void:
 	sell_tab_button.position = Vector2(191.476745605469, 10)
 	sell_tab_button.size = Vector2(128, 51)
 	sell_tab_button.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
-	sell_tab_button.theme_type_variation = "GothicComponentButton"
+	sell_tab_button.theme_type_variation = "GothicShopTradeTabGemButton"
 	sell_tab_button.pressed.connect(_set_trade_mode.bind("sell"))
 	panel.add_child(sell_tab_button)
 	gold_label = Label.new()
@@ -213,7 +213,8 @@ func _build_detail_section() -> void:
 	buy_button.size = Vector2(270, 51)
 	buy_button.set_meta("calibration_layout_revision", 1)
 	# Buying is a transaction action; the buy/sell tabs own persistent selection.
-	buy_button.theme_type_variation = "GothicComponentButton"
+	buy_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	buy_button.theme_type_variation = "GothicShopBuyActionGemButton"
 	buy_button.add_theme_font_size_override("font_size", 18)
 	buy_button.pressed.connect(_buy_selected)
 	panel.add_child(buy_button)
@@ -223,7 +224,8 @@ func _build_detail_section() -> void:
 	repair_button.position = Vector2(47, 381)
 	repair_button.size = Vector2(270, 51)
 	repair_button.set_meta("calibration_layout_revision", 1)
-	repair_button.theme_type_variation = "GothicComponentButton"
+	repair_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	repair_button.theme_type_variation = "GothicShopBuyActionGemButton"
 	repair_button.add_theme_font_size_override("font_size", 16)
 	repair_button.pressed.connect(_repair_all)
 	panel.add_child(repair_button)
@@ -243,7 +245,7 @@ func _build_detail_section() -> void:
 	minus_button.add_theme_font_size_override("font_size", 18)
 	minus_button.position = Vector2(8, 0)
 	minus_button.size = Vector2(58, 46)
-	minus_button.theme_type_variation = "GothicPanelTransparentButton"
+	minus_button.theme_type_variation = "GothicShopSellQuantityPlainButton"
 	minus_button.clip_contents = true
 	_add_quantity_symbol(minus_button, false)
 	minus_button.pressed.connect(_change_sell_quantity.bind(-1))
@@ -273,7 +275,7 @@ func _build_detail_section() -> void:
 	plus_button.add_theme_font_size_override("font_size", 18)
 	plus_button.position = Vector2(260, 0)
 	plus_button.size = Vector2(58, 46)
-	plus_button.theme_type_variation = "GothicPanelTransparentButton"
+	plus_button.theme_type_variation = "GothicShopSellQuantityPlainButton"
 	plus_button.clip_contents = true
 	_add_quantity_symbol(plus_button, true)
 	plus_button.pressed.connect(_change_sell_quantity.bind(1))
@@ -283,7 +285,8 @@ func _build_detail_section() -> void:
 	sell_quantity_button.text = "出售"
 	sell_quantity_button.position = Vector2(20, 356)
 	sell_quantity_button.size = Vector2(326, 48)
-	sell_quantity_button.theme_type_variation = "GothicComponentButton"
+	sell_quantity_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	sell_quantity_button.theme_type_variation = "GothicShopSellActionGemButton"
 	sell_quantity_button.visible = false
 	sell_quantity_button.pressed.connect(_request_selected_quantity)
 	sell_quantity_button.set_meta("calibration_text_revision", 1)
@@ -554,8 +557,8 @@ func _set_trade_mode(mode: String) -> void:
 	_clear_transaction_feedback()
 	_trade_mode = "sell" if mode == "sell" else "buy"
 	var buying := _trade_mode == "buy"
-	buy_tab_button.theme_type_variation = "GothicComponentSelectedButton" if buying else "GothicComponentButton"
-	sell_tab_button.theme_type_variation = "GothicComponentButton" if buying else "GothicComponentSelectedButton"
+	buy_tab_button.theme_type_variation = "GothicShopTradeTabSelectedGemButton" if buying else "GothicShopTradeTabGemButton"
+	sell_tab_button.theme_type_variation = "GothicShopTradeTabGemButton" if buying else "GothicShopTradeTabSelectedGemButton"
 	buy_button.visible = buying
 	repair_button.visible = buying and bool(_active_merchant_context().get("supports_repair", false))
 	sell_quantity_row.visible = not buying
