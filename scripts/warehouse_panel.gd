@@ -52,6 +52,10 @@ var next_page_button: Button
 var deposit_button: Button
 var withdraw_button: Button
 var sort_button: Button
+var selected_bag_indices: Dictionary = {}
+var selected_stash_indices: Dictionary = {}
+# Keep the scalar fields as the focused/last-selected compatibility view. The
+# dictionaries above are the authoritative transfer selection.
 var selected_bag_index := -1
 var selected_stash_index := -1
 var warehouse_page := 0
@@ -66,6 +70,8 @@ var _grid_cell_creation_count := 0
 var _grid_cells_ready := false
 var _grid_cell_initialization_running := false
 var _action_feedback_serial := 0
+var _active_selection_side := ""
+var _last_transfer_batch_result: Dictionary = {}
 
 
 func _ready() -> void:
@@ -275,18 +281,20 @@ func _transfer_button(node_name: String, label_text: String, position_value: Vec
 	button.size = Vector2(96, THIN_BUTTON_HEIGHT)
 	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	button.set_meta("calibration_layout_revision", LAYOUT_REVISION)
-	button.theme_type_variation = "GothicWarehouseThinButton"
-	button.add_theme_font_size_override("font_size", 17)
+	button.theme_type_variation = "GothicWarehouseActionPlainButton"
+	button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	return button
 
 
 func _build_compatibility_lists() -> void:
 	bag_list = ItemList.new()
 	bag_list.name = "CompatibilityBagList"
+	bag_list.select_mode = ItemList.SELECT_MULTI
 	bag_list.visible = false
 	add_child(bag_list)
 	stash_list = ItemList.new()
 	stash_list.name = "CompatibilityStashList"
+	stash_list.select_mode = ItemList.SELECT_MULTI
 	stash_list.visible = false
 	add_child(stash_list)
 
@@ -324,13 +332,10 @@ func refresh() -> void:
 	_refresh_pending = false
 	_refresh_scheduled = false
 	_refresh_execution_count += 1
-	if _bag_record(selected_bag_index).is_empty():
-		selected_bag_index = -1
-	if _warehouse_record(selected_stash_index).is_empty():
-		selected_stash_index = -1
-	_fill_compatibility_list(bag_list, PlayerState.inventory, selected_bag_index)
-	_fill_compatibility_list(stash_list, PlayerState.warehouse_inventory, selected_stash_index)
-	_fill_grid(bag_grid, PlayerState.inventory, 0, BAG_CAPACITY, "bag", selected_bag_index)
+	_sanitize_transfer_selections()
+	_fill_compatibility_list(bag_list, PlayerState.inventory, selected_bag_indices)
+	_fill_compatibility_list(stash_list, PlayerState.warehouse_inventory, selected_stash_indices)
+	_fill_grid(bag_grid, PlayerState.inventory, 0, BAG_CAPACITY, "bag", selected_bag_indices)
 	var page_start := warehouse_page * WAREHOUSE_PAGE_CAPACITY
 	_fill_grid(
 		stash_grid,
@@ -338,15 +343,14 @@ func refresh() -> void:
 		page_start,
 		WAREHOUSE_PAGE_CAPACITY,
 		"stash",
-		selected_stash_index
+		selected_stash_indices
 	)
 	bag_summary_label.text = "背包占用　%d/%d 格" % [PlayerState.inventory_occupied_count(), BAG_CAPACITY]
 	stash_summary_label.text = "仓库占用　%d/%d 格" % [_warehouse_occupied_count(), WAREHOUSE_DISPLAY_CAPACITY]
 	warehouse_page_label.text = "第 %d/%d 页" % [warehouse_page + 1, WAREHOUSE_PAGE_COUNT]
 	previous_page_button.disabled = warehouse_page <= 0
 	next_page_button.disabled = warehouse_page >= WAREHOUSE_PAGE_COUNT - 1
-	deposit_button.disabled = selected_bag_index < 0 or _first_free_slot_on_current_page() < 0
-	withdraw_button.disabled = selected_stash_index < 0 or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
+	_refresh_transfer_action_states()
 	_refresh_transfer_detail()
 	if not _layout_initialized:
 		_layout_initialized = true
@@ -393,7 +397,7 @@ func _fill_grid(
 	start_index: int,
 	slot_count: int,
 	side: String,
-	selected_index: int
+	selected_indices: Dictionary
 ) -> void:
 	if _bag_cells.is_empty() or _stash_cells.is_empty():
 		_initialize_grid_cells(GRID_VISIBLE_SLOTS)
@@ -401,7 +405,7 @@ func _fill_grid(
 	for display_index in range(mini(slot_count, cells.size())):
 		var data_index := start_index + display_index
 		var record: Dictionary = records[data_index] if data_index < records.size() and records[data_index] is Dictionary and not (records[data_index] as Dictionary).is_empty() else {}
-		_update_item_cell(cells[display_index], side, data_index, display_index, record, data_index == selected_index)
+		_update_item_cell(cells[display_index], side, data_index, display_index, record, selected_indices.has(data_index))
 	grid.queue_sort()
 
 
@@ -447,7 +451,7 @@ func _populate_grid_cells_from(first_index: int) -> void:
 			display_index,
 			display_index,
 			bag_record,
-			display_index == selected_bag_index
+			selected_bag_indices.has(display_index)
 		)
 		var stash_index := page_start + display_index
 		var stash_record := _warehouse_record(stash_index)
@@ -457,7 +461,7 @@ func _populate_grid_cells_from(first_index: int) -> void:
 			stash_index,
 			display_index,
 			stash_record,
-			stash_index == selected_stash_index
+			selected_stash_indices.has(stash_index)
 		)
 	bag_grid.queue_sort()
 	stash_grid.queue_sort()
@@ -541,20 +545,92 @@ func _select_item(side: String, index: int) -> void:
 		return
 	if side == "stash" and _warehouse_record(index).is_empty():
 		return
-	var old_bag := selected_bag_index
-	var old_stash := selected_stash_index
-	if side == "bag":
-		selected_bag_index = index
-		selected_stash_index = -1
+	if side not in ["bag", "stash"]:
+		return
+	if side != _active_selection_side:
+		# A batch always has exactly one source authority. Crossing the centre
+		# column starts a new batch and removes every selection from the old side.
+		selected_bag_indices.clear()
+		selected_stash_indices.clear()
+		_active_selection_side = side
+	var selection := selected_bag_indices if side == "bag" else selected_stash_indices
+	if selection.has(index):
+		selection.erase(index)
 	else:
-		selected_stash_index = index
-		selected_bag_index = -1
-	_refresh_cell_selection("bag", old_bag, false)
-	_refresh_cell_selection("stash", old_stash, false)
-	_refresh_cell_selection(side, index, true)
-	deposit_button.disabled = selected_bag_index < 0 or _first_free_slot_on_current_page() < 0
-	withdraw_button.disabled = selected_stash_index < 0 or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
+		selection[index] = true
+	if selection.is_empty():
+		_active_selection_side = ""
+	_sync_primary_selection_indices()
+	_refresh_transfer_selection_visuals()
+	_refresh_transfer_action_states()
 	_refresh_transfer_detail()
+
+
+func _refresh_transfer_selection_visuals() -> void:
+	# Repaint from the two authoritative sets so rapid toggles and side switches
+	# cannot leave a stale selected frame on a reused cell.
+	for cell: Control in _bag_cells:
+		var button := cell.get_node("ItemButton") as Button
+		var data_index := int(button.get_meta("data_index", -1))
+		button.theme_type_variation = (
+			"GothicComponentSelectedSlotButton"
+			if selected_bag_indices.has(data_index)
+			else "GothicComponentSlotButton"
+		)
+	for cell: Control in _stash_cells:
+		var button := cell.get_node("ItemButton") as Button
+		var data_index := int(button.get_meta("data_index", -1))
+		button.theme_type_variation = (
+			"GothicComponentSelectedSlotButton"
+			if selected_stash_indices.has(data_index)
+			else "GothicComponentSlotButton"
+		)
+	bag_list.deselect_all()
+	stash_list.deselect_all()
+	for raw_index: Variant in selected_bag_indices.keys():
+		var index := int(raw_index)
+		if index >= 0 and index < bag_list.item_count:
+			bag_list.select(index, false)
+	for raw_index: Variant in selected_stash_indices.keys():
+		var index := int(raw_index)
+		if index >= 0 and index < stash_list.item_count:
+			stash_list.select(index, false)
+
+
+func _sync_primary_selection_indices() -> void:
+	var bag_keys := selected_bag_indices.keys()
+	var stash_keys := selected_stash_indices.keys()
+	selected_bag_index = int(bag_keys.back()) if not bag_keys.is_empty() else -1
+	selected_stash_index = int(stash_keys.back()) if not stash_keys.is_empty() else -1
+
+
+func _sanitize_transfer_selections() -> void:
+	for raw_index: Variant in selected_bag_indices.keys().duplicate():
+		if _bag_record(int(raw_index)).is_empty():
+			selected_bag_indices.erase(raw_index)
+	for raw_index: Variant in selected_stash_indices.keys().duplicate():
+		if _warehouse_record(int(raw_index)).is_empty():
+			selected_stash_indices.erase(raw_index)
+	if _active_selection_side == "bag":
+		selected_stash_indices.clear()
+	elif _active_selection_side == "stash":
+		selected_bag_indices.clear()
+	elif not selected_bag_indices.is_empty():
+		_active_selection_side = "bag"
+		selected_stash_indices.clear()
+	elif not selected_stash_indices.is_empty():
+		_active_selection_side = "stash"
+	if (
+		(_active_selection_side == "bag" and selected_bag_indices.is_empty())
+		or (_active_selection_side == "stash" and selected_stash_indices.is_empty())
+	):
+		_active_selection_side = ""
+	_sync_primary_selection_indices()
+
+
+func _refresh_transfer_action_states() -> void:
+	deposit_button.disabled = selected_bag_indices.is_empty() or _first_free_slot_on_current_page() < 0
+	withdraw_button.disabled = selected_stash_indices.is_empty() or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
 
 
 func _refresh_cell_selection(side: String, data_index: int, selected: bool) -> void:
@@ -570,15 +646,22 @@ func _refresh_cell_selection(side: String, data_index: int, selected: bool) -> v
 
 func _change_warehouse_page(delta: int) -> void:
 	warehouse_page = clampi(warehouse_page + delta, 0, WAREHOUSE_PAGE_COUNT - 1)
-	selected_stash_index = -1
+	selected_stash_indices.clear()
+	if _active_selection_side == "stash":
+		_active_selection_side = ""
+	_sync_primary_selection_indices()
 	refresh()
 
 
 func _refresh_transfer_detail() -> void:
-	if selected_bag_index >= 0:
+	if selected_bag_indices.size() > 1:
+		transfer_detail_label.text = "已选择 %d 件背包物品" % selected_bag_indices.size()
+	elif selected_bag_index >= 0:
 		transfer_detail_label.text = str(_bag_record(selected_bag_index).get("name", "未知物品"))
-	elif selected_stash_index >= 0 and PlayerState.inventory_occupied_count() >= BAG_CAPACITY:
-		transfer_detail_label.text = "背包已满，无法取出"
+	elif not selected_stash_indices.is_empty() and PlayerState.inventory_occupied_count() >= BAG_CAPACITY:
+		transfer_detail_label.text = "已选择 %d 件；背包已满" % selected_stash_indices.size()
+	elif selected_stash_indices.size() > 1:
+		transfer_detail_label.text = "已选择 %d 件仓库物品" % selected_stash_indices.size()
 	elif selected_stash_index >= 0:
 		transfer_detail_label.text = str(_warehouse_record(selected_stash_index).get("name", "未知物品"))
 	elif _first_free_slot_on_current_page() < 0:
@@ -587,42 +670,104 @@ func _refresh_transfer_detail() -> void:
 		transfer_detail_label.text = "选择两侧物品"
 
 
-func _fill_compatibility_list(list: ItemList, records: Array, selected_index: int) -> void:
+func _fill_compatibility_list(list: ItemList, records: Array, selected_indices: Dictionary) -> void:
 	list.clear()
 	for record: Variant in records:
 		list.add_item(str(record.get("name", "")) if record is Dictionary else str(record))
-	if selected_index >= 0:
-		list.select(selected_index)
+	for raw_index: Variant in selected_indices.keys():
+		var index := int(raw_index)
+		if index >= 0 and index < list.item_count:
+			list.select(index, false)
 
 
 func _deposit() -> void:
-	var target_slot := _first_free_slot_on_current_page()
-	if _bag_record(selected_bag_index).is_empty() or target_slot < 0:
+	_sanitize_transfer_selections()
+	if _active_selection_side != "bag" or selected_bag_indices.is_empty():
 		return
+	var source_indices := _sorted_selection_indices(selected_bag_indices)
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(deposit_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.deposit")
-	var result: Dictionary = PlayerState.deposit_to_warehouse(selected_bag_index, target_slot)
-	selected_bag_index = -1
+	var transferred := 0
+	var failure_message := ""
+	for source_index: int in source_indices:
+		var target_slot := _first_free_slot_on_current_page()
+		if target_slot < 0:
+			failure_message = "当前仓库页空间不足。"
+			break
+		var result: Dictionary = PlayerState.deposit_to_warehouse(source_index, target_slot)
+		if not bool(result.get("success", false)):
+			failure_message = str(result.get("message", "仓库存取失败。"))
+			break
+		transferred += 1
+		selected_bag_indices.erase(source_index)
+	if selected_bag_indices.is_empty():
+		_active_selection_side = ""
+	_sync_primary_selection_indices()
 	refresh()
-	transfer_detail_label.text = str(result.get("message", "仓库存取失败。"))
-	_show_transfer_result(deposit_button, bool(result.get("success", false)), "warehouse.deposit")
+	_finish_transfer_batch("deposit", "已存入", source_indices.size(), transferred, failure_message)
+	_show_transfer_result(deposit_button, transferred == source_indices.size(), "warehouse.deposit")
 
 
 func _withdraw() -> void:
-	if not _warehouse_slot_has_item(selected_stash_index):
+	_sanitize_transfer_selections()
+	if _active_selection_side != "stash" or selected_stash_indices.is_empty():
 		return
+	var source_indices := _sorted_selection_indices(selected_stash_indices)
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(withdraw_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.withdraw")
-	var result: Dictionary = PlayerState.withdraw_from_warehouse(selected_stash_index)
-	if not bool(result.get("success", false)):
-		withdraw_button.disabled = true if str(result.get("reason", "")) == "inventory_full" else withdraw_button.disabled
-		transfer_detail_label.text = str(result.get("message", "仓库存取失败。"))
-		_show_transfer_result(withdraw_button, false, "warehouse.withdraw")
-		return
-	selected_stash_index = -1
+	var transferred := 0
+	var failure_message := ""
+	for source_index: int in source_indices:
+		var result: Dictionary = PlayerState.withdraw_from_warehouse(source_index)
+		if not bool(result.get("success", false)):
+			failure_message = str(result.get("message", "仓库存取失败。"))
+			break
+		transferred += 1
+		selected_stash_indices.erase(source_index)
+	if selected_stash_indices.is_empty():
+		_active_selection_side = ""
+	_sync_primary_selection_indices()
 	refresh()
-	transfer_detail_label.text = str(result.get("message", "已取出仓库物品。"))
-	_show_transfer_result(withdraw_button, true, "warehouse.withdraw")
+	_finish_transfer_batch("withdraw", "已取出", source_indices.size(), transferred, failure_message)
+	_show_transfer_result(withdraw_button, transferred == source_indices.size(), "warehouse.withdraw")
+
+
+func _sorted_selection_indices(selection: Dictionary) -> Array[int]:
+	var result: Array[int] = []
+	for raw_index: Variant in selection.keys():
+		result.append(int(raw_index))
+	result.sort()
+	return result
+
+
+func _finish_transfer_batch(
+	operation: String,
+	success_verb: String,
+	requested: int,
+	transferred: int,
+	failure_message: String
+) -> void:
+	var remaining := maxi(0, requested - transferred)
+	var complete := requested > 0 and remaining == 0
+	_last_transfer_batch_result = {
+		"operation": operation,
+		"requested": requested,
+		"transferred": transferred,
+		"remaining": remaining,
+		"complete": complete,
+		"failure_message": failure_message,
+	}
+	if complete:
+		transfer_detail_label.text = "%s %d 件物品。" % [success_verb, transferred]
+	elif transferred > 0:
+		transfer_detail_label.text = "%s %d 件，另有 %d 件未转移：%s" % [
+			success_verb,
+			transferred,
+			remaining,
+			failure_message if not failure_message.is_empty() else "操作未完成。",
+		]
+	else:
+		transfer_detail_label.text = failure_message if not failure_message.is_empty() else "仓库存取失败。"
 
 
 func _sort_requested() -> void:
@@ -632,11 +777,17 @@ func _sort_requested() -> void:
 
 
 func _show_transfer_result(button: Button, success: bool, group: String) -> void:
-	# A late authority result (for example sort completing after deposit) must
-	# invalidate and clear every transfer action before showing its own result.
-	_clear_transfer_feedback()
+	# Keep the initiating button's dark-red busy state for one rendered frame.
+	# A late authority result still invalidates every other transfer action.
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
+	for action_button: Button in [deposit_button, withdraw_button, sort_button]:
+		if action_button != button:
+			GothicUIThemeScript.clear_button_feedback(action_button)
+	if is_inside_tree():
+		await get_tree().process_frame
+	if serial != _action_feedback_serial or not is_instance_valid(button) or not button.is_inside_tree():
+		return
 	GothicUIThemeScript.set_button_feedback(
 		button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
@@ -655,6 +806,13 @@ func _clear_transfer_feedback() -> void:
 
 
 func apply_sort_result(result: Dictionary) -> void:
+	if bool(result.get("success", false)):
+		# Sorting changes warehouse slot identity. Any stash-side selection is
+		# stale after a successful authority result and must not target new items.
+		selected_stash_indices.clear()
+		if _active_selection_side == "stash":
+			_active_selection_side = ""
+		_sync_primary_selection_indices()
 	refresh()
 	transfer_detail_label.text = str(result.get("message", "仓库整理请求已处理"))
 	_show_transfer_result(sort_button, bool(result.get("success", false)), "warehouse.sort")

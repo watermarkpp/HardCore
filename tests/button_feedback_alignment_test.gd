@@ -8,6 +8,7 @@ func _ready() -> void:
 	assert(GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE == 16, "执行按钮字号没有以自动整理/丢弃的16号为统一标准")
 	for variation: StringName in [
 		&"GothicInventoryActionGemButton",
+		&"GothicWarehouseActionPlainButton",
 		&"GothicShopBuyActionGemButton",
 		&"GothicShopSellActionGemButton",
 		&"GothicQuestActionGemButton",

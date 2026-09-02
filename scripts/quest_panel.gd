@@ -15,11 +15,7 @@ const QUEST_CARD_SIZE := Vector2(286, 62)
 const QUEST_CARD_SEPARATION := 7
 const QUEST_LIST_LAYOUT_REVISION := 1
 const ACTION_ROW_GAP := 12.0
-## Pixel inspection of the rendered alpha bounds shows the compact plain frame
-## one logical pixel taller at both edges than the disabled gem action frame.
-## Keep the controls centred on the same row while compensating only that
-## effective border height; their authored x/width remain untouched.
-const ABANDON_FRAME_VERTICAL_COMPENSATION := 2.0
+const ABANDON_BUTTON_SIZE := Vector2(128, 52)
 
 var title_label: Label
 var description_label: RichTextLabel
@@ -232,7 +228,8 @@ func _build_quest_detail() -> void:
 	abandon_button.name = "AbandonButton"
 	abandon_button.text = "放弃任务"
 	abandon_button.position = Vector2(204, 436)
-	abandon_button.size = Vector2(128, 52)
+	abandon_button.size = ABANDON_BUTTON_SIZE
+	abandon_button.custom_minimum_size = Vector2.ZERO
 	abandon_button.theme_type_variation = "GothicQuestAbandonPlainButton"
 	abandon_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	abandon_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
@@ -512,22 +509,26 @@ func _set_abandon_available(enabled: bool) -> void:
 	# replace the user's saved action-button geometry with procedural presets
 	# after the profile has been applied.
 	var profile_ready := UIRuntimeLayoutOverridesScript.profile_is_ready(self, "quest")
+	# Once the async profile replay starts, its ActionButton rectangle owns the
+	# row even before the ready callback. This prevents a quest-state refresh in
+	# either replay frame from writing the procedural fallback over that rect.
+	var profile_owns_action_geometry := _layout_initialized or profile_ready
 	if enabled:
-		if not profile_ready:
+		if not profile_owns_action_geometry:
 			action_button.position = Vector2(344, 436)
 			action_button.size = Vector2(260, 52)
-		# The action rectangle may come from the saved calibration profile while
-		# AbandonButton was hidden and therefore absent from that profile.  Derive
-		# the secondary control from the live action rectangle so both always form
-		# one row without replacing the calibrated action geometry.
-		var abandon_frame_height := maxf(1.0, action_button.size.y - ABANDON_FRAME_VERTICAL_COMPENSATION)
+		# Both theme textures are already cropped to their alpha-visible regions.
+		# Therefore equal control rectangles produce equal effective frame heights;
+		# applying an additional source-image compensation here double-corrects the
+		# frame and can leak into runtime layout through custom minimum size.
+		var abandon_width := ABANDON_BUTTON_SIZE.x
+		abandon_button.custom_minimum_size = Vector2.ZERO
 		abandon_button.position = Vector2(
-			maxf(0.0, action_button.position.x - ACTION_ROW_GAP - abandon_button.size.x),
-			action_button.position.y + (action_button.size.y - abandon_frame_height) * 0.5,
+			maxf(0.0, action_button.position.x - ACTION_ROW_GAP - abandon_width),
+			action_button.position.y,
 		)
-		abandon_button.custom_minimum_size.y = abandon_frame_height
-		abandon_button.size.y = abandon_frame_height
-	elif not profile_ready:
+		abandon_button.size = Vector2(abandon_width, action_button.size.y)
+	elif not profile_owns_action_geometry:
 		action_button.position = Vector2(204, 436)
 		action_button.size = Vector2(400, 52)
 

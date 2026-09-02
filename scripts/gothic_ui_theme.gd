@@ -311,7 +311,8 @@ static func build() -> Theme:
 	result.set_stylebox("disabled", "GothicPanelTransparentButton", _flat(Color(0.035, 0.03, 0.028, 0.68), Color(0.24, 0.22, 0.20, 0.72), 1, 9))
 	_apply_adaptive_button(result, "GothicComponentButton")
 	_apply_adaptive_button(result, "GothicComponentSelectedButton")
-	# 仓库五个 96x48 操作按钮统一使用有效像素最接近的无宝石框。
+	# 仓库五个 96x48 按钮统一使用同一无宝石框；翻页保持普通态，
+	# 存入/取出/整理使用执行按钮的咖啡色空闲、暗红按下和灰色禁用语义。
 	_apply_warehouse_thin_button(result)
 	_apply_small_button(result, &"GothicSkillConfigCompactButton")
 	_apply_exact_skill_button(result, &"GothicSkillListGemButton", _visible_alpha_region(SKILL_LIST_GEM_266X64, Rect2(1, 3, 264, 56)), _visible_alpha_region(SKILL_LIST_GEM_266X64_MASK, Rect2(1, 3, 264, 56)), _visible_alpha_region(SKILL_LIST_GEM_266X64_FRAME, Rect2(1, 3, 264, 56)))
@@ -804,6 +805,7 @@ static func _prewarm_action_feedback_styles(theme: Theme) -> void:
 	# not allocate layered StyleBoxes in the input frame.
 	for variation: StringName in [
 		&"GothicInventoryActionGemButton",
+		&"GothicWarehouseActionPlainButton",
 		&"GothicShopBuyActionGemButton",
 		&"GothicShopSellActionGemButton",
 		&"GothicQuestActionGemButton",
@@ -857,15 +859,21 @@ static func _apply_character_hall_exact_buttons(theme: Theme) -> void:
 
 
 static func _apply_warehouse_thin_button(theme: Theme) -> void:
+	var texture := _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60, Rect2(1, 5, 106, 48))
+	var mask := _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_MASK, Rect2(1, 5, 106, 48))
+	var frame := _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_FRAME, Rect2(1, 5, 106, 48))
 	var variation := &"GothicWarehouseThinButton"
 	_apply_exact_skill_button(
 		theme,
 		variation,
-		_visible_alpha_region(SKILL_CONFIG_PLAIN_108X60, Rect2(1, 5, 106, 48)),
-		_visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_MASK, Rect2(1, 5, 106, 48)),
-		_visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_FRAME, Rect2(1, 5, 106, 48))
+		texture,
+		mask,
+		frame
 	)
 	_offset_button_text_up(theme, variation, 2.0)
+	var action_variation := &"GothicWarehouseActionPlainButton"
+	_apply_exact_action_button(theme, action_variation, texture, mask, frame)
+	_offset_button_text_up(theme, action_variation, 2.0)
 
 
 static func _set_v4_feedback(style: AdaptiveButtonStyleBox, fill: Color, shadow: Color, shadow_size: float) -> void:
