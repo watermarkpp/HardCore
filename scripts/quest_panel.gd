@@ -230,7 +230,7 @@ func _build_quest_detail() -> void:
 	abandon_button.size = Vector2(128, 52)
 	abandon_button.theme_type_variation = "GothicQuestAbandonPlainButton"
 	abandon_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	abandon_button.add_theme_font_size_override("font_size", 16)
+	abandon_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	abandon_button.visible = false
 	abandon_button.pressed.connect(_request_abandon)
 	panel.add_child(abandon_button)
@@ -242,7 +242,7 @@ func _build_quest_detail() -> void:
 	# selection state; this button receives only an explicit operation cue.
 	action_button.theme_type_variation = "GothicQuestActionGemButton"
 	action_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	action_button.add_theme_font_size_override("font_size", 18)
+	action_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	action_button.pressed.connect(_act)
 	panel.add_child(action_button)
 	abandon_confirmation = GothicConfirmationPanelScript.new()
@@ -519,6 +519,7 @@ func _set_abandon_available(enabled: bool) -> void:
 			maxf(0.0, action_button.position.x - ACTION_ROW_GAP - abandon_button.size.x),
 			action_button.position.y,
 		)
+		abandon_button.custom_minimum_size.y = action_button.size.y
 		abandon_button.size.y = action_button.size.y
 	elif not profile_ready:
 		action_button.position = Vector2(204, 436)

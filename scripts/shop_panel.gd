@@ -215,7 +215,7 @@ func _build_detail_section() -> void:
 	# Buying is a transaction action; the buy/sell tabs own persistent selection.
 	buy_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	buy_button.theme_type_variation = "GothicShopBuyActionGemButton"
-	buy_button.add_theme_font_size_override("font_size", 18)
+	buy_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	buy_button.pressed.connect(_buy_selected)
 	panel.add_child(buy_button)
 	repair_button = Button.new()
@@ -226,7 +226,7 @@ func _build_detail_section() -> void:
 	repair_button.set_meta("calibration_layout_revision", 1)
 	repair_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	repair_button.theme_type_variation = "GothicShopBuyActionGemButton"
-	repair_button.add_theme_font_size_override("font_size", 16)
+	repair_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	repair_button.pressed.connect(_repair_all)
 	panel.add_child(repair_button)
 	sell_quantity_row = Control.new()
@@ -287,6 +287,7 @@ func _build_detail_section() -> void:
 	sell_quantity_button.size = Vector2(326, 48)
 	sell_quantity_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sell_quantity_button.theme_type_variation = "GothicShopSellActionGemButton"
+	sell_quantity_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	sell_quantity_button.visible = false
 	sell_quantity_button.pressed.connect(_request_selected_quantity)
 	sell_quantity_button.set_meta("calibration_text_revision", 1)

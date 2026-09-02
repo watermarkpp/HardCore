@@ -170,7 +170,7 @@ func _revival_button(node_name: String, text_value: String, y: float, stable_id:
 	button.size = Vector2(440, 64)
 	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	button.theme_type_variation = "GothicDeathRevivalGemButton"
-	button.add_theme_font_size_override("font_size", 18)
+	button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	button.set_meta("stable_id", stable_id)
 	modal.add_child(button)
 	return button

@@ -69,6 +69,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "购买页签没有保持持久选中")
 	assert(panel.sell_tab_button.theme_type_variation == "GothicShopTradeTabGemButton", "未选中的出售页签错误高亮")
+	assert(panel.buy_button.get_theme_font_size("font_size") == panel.sell_quantity_button.get_theme_font_size("font_size"), "购买与出售操作按钮字号不一致")
+	assert(panel.buy_button.get_theme_font_size("font_size") == panel.repair_button.get_theme_font_size("font_size"), "购买与维修操作按钮字号不一致")
 	var repair_gold_before := PlayerState.gold
 	panel._repair_all()
 	assert(PlayerState.gold == repair_gold_before, "无需维修时错误扣除了金币")

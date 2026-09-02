@@ -75,6 +75,7 @@ func _run() -> void:
 	assert(panel.abandon_button.visible and panel.abandon_button.position.x < panel.action_button.position.x, "进行中任务左侧没有放弃任务按钮")
 	assert(is_equal_approx(panel.abandon_button.position.y, panel.action_button.position.y), "放弃任务与任务进行中没有处于同一纵坐标")
 	assert(is_equal_approx(panel.abandon_button.size.y, panel.action_button.size.y), "放弃任务与任务进行中按钮高度不一致")
+	assert(is_equal_approx(panel.abandon_button.custom_minimum_size.y, panel.action_button.size.y), "放弃任务的最小高度没有锁定到领取任务高度")
 	assert(is_equal_approx(panel.abandon_button.position.x + panel.abandon_button.size.x + QuestPanel.ACTION_ROW_GAP, panel.action_button.position.x), "放弃任务没有按固定间距位于任务进行中左侧")
 	var abandon_requests: Array[String] = []
 	panel.abandon_requested.connect(func(quest_id: String) -> void: abandon_requests.append(quest_id))

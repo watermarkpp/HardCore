@@ -88,7 +88,7 @@ func _build_interface() -> void:
 	cancel_button.size = Vector2(202, 58)
 	cancel_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	cancel_button.theme_type_variation = "GothicConfirmationGemButton"
-	cancel_button.add_theme_font_size_override("font_size", 17)
+	cancel_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	cancel_button.set_meta("stable_id", "confirmation.cancel")
 	cancel_button.pressed.connect(_cancel)
 	modal_frame.add_child(cancel_button)
@@ -101,7 +101,7 @@ func _build_interface() -> void:
 	# the transaction/transition feedback explicitly after this dialog emits.
 	confirm_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	confirm_button.theme_type_variation = "GothicConfirmationGemButton"
-	confirm_button.add_theme_font_size_override("font_size", 17)
+	confirm_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	confirm_button.set_meta("stable_id", "confirmation.confirm")
 	confirm_button.pressed.connect(_confirm)
 	modal_frame.add_child(confirm_button)

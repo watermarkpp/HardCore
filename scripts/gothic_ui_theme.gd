@@ -161,6 +161,7 @@ const BUTTON_FEEDBACK_META_STATE := &"gothic_feedback_state"
 const BUTTON_FEEDBACK_META_GROUP := &"gothic_feedback_selection_group"
 const BUTTON_FEEDBACK_META_BACKUP := &"gothic_feedback_override_backup"
 const BUTTON_FEEDBACK_META_FONT_BACKUP := &"gothic_feedback_font_override_backup"
+const BUTTON_FEEDBACK_META_STATE_FONT_BACKUP := &"gothic_feedback_state_font_override_backup"
 ## Interaction feedback is an interior cue, not a replacement frame.  Keep it
 ## in the approved dark-red family so a pressed/selected state never turns an
 ## otherwise antique-gold control orange.  Layered adaptive buttons draw the
@@ -172,6 +173,9 @@ const BUTTON_PRESS_SHADOW := Color(0.68, 0.12, 0.18, 0.68)
 const BUTTON_SELECTED_FILL := Color(0.30, 0.045, 0.105, 0.90)
 const BUTTON_SELECTED_BORDER := Color(0.78, 0.26, 0.28, 0.90)
 const BUTTON_SELECTED_SHADOW := Color(0.76, 0.16, 0.24, 0.76)
+const BUTTON_ACTION_IDLE_FILL := Color(0.36, 0.28, 0.075, 0.28)
+const BUTTON_ACTION_DISABLED_FILL := Color(0.095, 0.09, 0.085, 0.82)
+const BUTTON_ACTION_FONT_SIZE := 18
 const BUTTON_SUCCESS_FILL := Color(0.36, 0.28, 0.075, 0.28)
 const BUTTON_SUCCESS_BORDER := Color(0.93, 0.82, 0.38, 0.96)
 const BUTTON_SUCCESS_SHADOW := Color(0.94, 0.68, 0.18, 0.74)
@@ -314,7 +318,7 @@ static func build() -> Theme:
 	_apply_exact_skill_button(result, &"GothicSkillRestorePlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82, Rect2(1, 8, 102, 64)), _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82_MASK, Rect2(1, 8, 102, 64)), _visible_alpha_region(SKILL_CONFIG_PLAIN_104X82_FRAME, Rect2(1, 8, 102, 64)))
 	_apply_exact_skill_button(result, &"GothicSkillRingPlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60, Rect2(1, 5, 106, 48)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_MASK, Rect2(1, 5, 106, 48)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X60_FRAME, Rect2(1, 5, 106, 48)))
 	_apply_exact_skill_button(result, &"GothicSkillClearPlainButton", _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40, Rect2(1, 3, 106, 33)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40_MASK, Rect2(1, 3, 106, 33)), _visible_alpha_region(SKILL_CONFIG_PLAIN_108X40_FRAME, Rect2(1, 3, 106, 33)))
-	_apply_exact_skill_button(result, &"GothicInventoryActionGemButton", _visible_alpha_region(INVENTORY_ACTION_GEM_176X62, Rect2(1, 3, 174, 54)), _visible_alpha_region(INVENTORY_ACTION_GEM_176X62_MASK, Rect2(1, 3, 174, 54)), _visible_alpha_region(INVENTORY_ACTION_GEM_176X62_FRAME, Rect2(1, 3, 174, 54)))
+	_apply_exact_action_button(result, &"GothicInventoryActionGemButton", _visible_alpha_region(INVENTORY_ACTION_GEM_176X62, Rect2(1, 3, 174, 54)), _visible_alpha_region(INVENTORY_ACTION_GEM_176X62_MASK, Rect2(1, 3, 174, 54)), _visible_alpha_region(INVENTORY_ACTION_GEM_176X62_FRAME, Rect2(1, 3, 174, 54)))
 	_apply_exact_skill_button(result, &"GothicMapCardPlainButton", _visible_alpha_region(MAP_CARD_PLAIN_230X82, Rect2(1, 8, 228, 64)), _visible_alpha_region(MAP_CARD_PLAIN_230X82_MASK, Rect2(1, 8, 228, 64)), _visible_alpha_region(MAP_CARD_PLAIN_230X82_FRAME, Rect2(1, 8, 228, 64)))
 	_apply_exact_skill_button(result, &"GothicMapCardSelectedPlainButton", _visible_alpha_region(MAP_CARD_PLAIN_230X82, Rect2(1, 8, 228, 64)), _visible_alpha_region(MAP_CARD_PLAIN_230X82_MASK, Rect2(1, 8, 228, 64)), _visible_alpha_region(MAP_CARD_PLAIN_230X82_FRAME, Rect2(1, 8, 228, 64)), BUTTON_SELECTED_FILL)
 	_apply_exact_skill_button(result, &"GothicMapWorldNodeGemButton", _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50, Rect2(1, 2, 340, 46)), _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50_MASK, Rect2(1, 2, 340, 46)), _visible_alpha_region(MAP_WORLD_NODE_GEM_342X50_FRAME, Rect2(1, 2, 340, 46)))
@@ -323,8 +327,8 @@ static func build() -> Theme:
 	_offset_button_text_up(result, &"GothicMapWorldNodeSelectedGemButton", 2.0)
 	_apply_exact_skill_button(result, &"GothicShopTradeTabGemButton", _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51, Rect2(1, 2, 126, 45)), _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51_MASK, Rect2(1, 2, 126, 45)), _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51_FRAME, Rect2(1, 2, 126, 45)))
 	_apply_exact_skill_button(result, &"GothicShopTradeTabSelectedGemButton", _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51, Rect2(1, 2, 126, 45)), _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51_MASK, Rect2(1, 2, 126, 45)), _visible_alpha_region(SHOP_TRADE_TAB_GEM_128X51_FRAME, Rect2(1, 2, 126, 45)), BUTTON_SELECTED_FILL)
-	_apply_exact_skill_button(result, &"GothicShopBuyActionGemButton", _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_MASK, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_FRAME, Rect2(1, 2, 268, 45)))
-	_apply_exact_skill_button(result, &"GothicShopSellActionGemButton", _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_MASK, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_FRAME, Rect2(1, 2, 268, 45)))
+	_apply_exact_action_button(result, &"GothicShopBuyActionGemButton", _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_MASK, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_FRAME, Rect2(1, 2, 268, 45)))
+	_apply_exact_action_button(result, &"GothicShopSellActionGemButton", _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_MASK, Rect2(1, 2, 268, 45)), _visible_alpha_region(SHOP_SELL_ACTION_GEM_270X51_FRAME, Rect2(1, 2, 268, 45)))
 	_apply_exact_skill_button(result, &"GothicShopSellQuantityPlainButton", _visible_alpha_region(SHOP_SELL_QUANTITY_PLAIN_58X46, Rect2(1, 4, 56, 37)), _visible_alpha_region(SHOP_SELL_QUANTITY_PLAIN_58X46_MASK, Rect2(1, 4, 56, 37)), _visible_alpha_region(SHOP_SELL_QUANTITY_PLAIN_58X46_FRAME, Rect2(1, 4, 56, 37)))
 	_offset_button_text_up(result, &"GothicShopTradeTabGemButton", 2.0)
 	_offset_button_text_up(result, &"GothicShopTradeTabSelectedGemButton", 2.0)
@@ -332,8 +336,8 @@ static func build() -> Theme:
 	_offset_button_text_up(result, &"GothicShopSellActionGemButton", 2.0)
 	_apply_exact_skill_button(result, &"GothicQuestCardPlainButton", _visible_alpha_region(QUEST_CARD_PLAIN_286X62, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_MASK, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_FRAME, Rect2(1, 5, 284, 50)))
 	_apply_exact_skill_button(result, &"GothicQuestCardSelectedPlainButton", _visible_alpha_region(QUEST_CARD_PLAIN_286X62, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_MASK, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_FRAME, Rect2(1, 5, 284, 50)), BUTTON_SELECTED_FILL)
-	_apply_exact_skill_button(result, &"GothicQuestActionGemButton", _visible_alpha_region(QUEST_ACTION_GEM_342X50, Rect2(1, 2, 340, 46)), _visible_alpha_region(QUEST_ACTION_GEM_342X50_MASK, Rect2(1, 2, 340, 46)), _visible_alpha_region(QUEST_ACTION_GEM_342X50_FRAME, Rect2(1, 2, 340, 46)))
-	_apply_exact_skill_button(result, &"GothicQuestAbandonPlainButton", _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52, Rect2(1, 4, 126, 42)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_MASK, Rect2(1, 4, 126, 42)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_FRAME, Rect2(1, 4, 126, 42)))
+	_apply_exact_action_button(result, &"GothicQuestActionGemButton", _visible_alpha_region(QUEST_ACTION_GEM_342X50, Rect2(1, 2, 340, 46)), _visible_alpha_region(QUEST_ACTION_GEM_342X50_MASK, Rect2(1, 2, 340, 46)), _visible_alpha_region(QUEST_ACTION_GEM_342X50_FRAME, Rect2(1, 2, 340, 46)))
+	_apply_exact_action_button(result, &"GothicQuestAbandonPlainButton", _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52, Rect2(1, 4, 126, 42)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_MASK, Rect2(1, 4, 126, 42)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_FRAME, Rect2(1, 4, 126, 42)))
 	_offset_button_text_up(result, &"GothicQuestActionGemButton", 2.0)
 	_offset_button_text_up(result, &"GothicQuestAbandonPlainButton", 2.0)
 	_apply_exact_skill_button(result, &"GothicSystemMenuGemButton", _visible_alpha_region(SYSTEM_MENU_GEM_356X60, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_MENU_GEM_356X60_MASK, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_MENU_GEM_356X60_FRAME, Rect2(1, 3, 354, 55)))
@@ -341,11 +345,11 @@ static func build() -> Theme:
 	_apply_exact_skill_button(result, &"GothicSystemSettingsRowGemButton", _visible_alpha_region(SYSTEM_SETTINGS_ROW_GEM_356X68, Rect2(1, 3, 354, 59)), _visible_alpha_region(SYSTEM_SETTINGS_ROW_GEM_356X68_MASK, Rect2(1, 3, 354, 59)), _visible_alpha_region(SYSTEM_SETTINGS_ROW_GEM_356X68_FRAME, Rect2(1, 3, 354, 59)))
 	_apply_exact_skill_button(result, &"GothicSystemSettingsBackGemButton", _visible_alpha_region(SYSTEM_SETTINGS_BACK_GEM_356X60, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_SETTINGS_BACK_GEM_356X60_MASK, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_SETTINGS_BACK_GEM_356X60_FRAME, Rect2(1, 3, 354, 55)))
 	_offset_button_text_up(result, &"GothicSystemSettingsBackGemButton", 3.0)
-	_apply_exact_skill_button(result, &"GothicDeathRevivalGemButton", _visible_alpha_region(DEATH_REVIVAL_GEM_440X64, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_MASK, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_FRAME, Rect2(1, 5, 436, 52)))
+	_apply_exact_action_button(result, &"GothicDeathRevivalGemButton", _visible_alpha_region(DEATH_REVIVAL_GEM_440X64, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_MASK, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_FRAME, Rect2(1, 5, 436, 52)))
 	_apply_exact_skill_button(result, &"GothicDeathRevivalSelectedGemButton", _visible_alpha_region(DEATH_REVIVAL_GEM_440X64, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_MASK, Rect2(1, 5, 436, 52)), _visible_alpha_region(DEATH_REVIVAL_GEM_440X64_FRAME, Rect2(1, 5, 436, 52)), BUTTON_SELECTED_FILL)
 	_offset_button_text_up(result, &"GothicDeathRevivalGemButton", 3.0)
 	_offset_button_text_up(result, &"GothicDeathRevivalSelectedGemButton", 3.0)
-	_apply_exact_skill_button(result, &"GothicConfirmationGemButton", _visible_alpha_region(CONFIRMATION_GEM_202X58, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_MASK, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_FRAME, Rect2(1, 5, 199, 46)))
+	_apply_exact_action_button(result, &"GothicConfirmationGemButton", _visible_alpha_region(CONFIRMATION_GEM_202X58, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_MASK, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_FRAME, Rect2(1, 5, 199, 46)))
 	_apply_exact_skill_button(result, &"GothicConfirmationSelectedGemButton", _visible_alpha_region(CONFIRMATION_GEM_202X58, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_MASK, Rect2(1, 5, 199, 46)), _visible_alpha_region(CONFIRMATION_GEM_202X58_FRAME, Rect2(1, 5, 199, 46)), BUTTON_SELECTED_FILL)
 	_offset_button_text_up(result, &"GothicConfirmationGemButton", 3.0)
 	_offset_button_text_up(result, &"GothicConfirmationSelectedGemButton", 3.0)
@@ -541,6 +545,8 @@ static func set_button_feedback(button: BaseButton, state: StringName, selection
 	if state == BUTTON_FEEDBACK_NORMAL or not feedback_states().has(state):
 		clear_button_feedback(button)
 		return
+	if state not in [BUTTON_FEEDBACK_BUSY, BUTTON_FEEDBACK_SUCCESS, BUTTON_FEEDBACK_FAILURE]:
+		_clear_button_state_font_feedback(button)
 	if state != BUTTON_FEEDBACK_TRANSITION:
 		_clear_character_transition_font_feedback(button)
 	if not button.has_meta(BUTTON_FEEDBACK_META_BACKUP):
@@ -582,6 +588,39 @@ static func set_button_feedback(button: BaseButton, state: StringName, selection
 		button.set_meta(BUTTON_FEEDBACK_META_GROUP, selection_group)
 	if state == BUTTON_FEEDBACK_TRANSITION:
 		_set_character_transition_font_feedback(button)
+	elif state in [BUTTON_FEEDBACK_BUSY, BUTTON_FEEDBACK_SUCCESS, BUTTON_FEEDBACK_FAILURE]:
+		_set_button_state_font_feedback(button, state)
+
+
+static func _set_button_state_font_feedback(button: BaseButton, state: StringName) -> void:
+	if not button.has_meta(BUTTON_FEEDBACK_META_STATE_FONT_BACKUP):
+		var backup := {}
+		for property_name: String in ["font_color", "font_hover_color", "font_pressed_color", "font_disabled_color"]:
+			backup[property_name] = {
+				"overridden": button.has_theme_color_override(property_name),
+				"value": button.get_theme_color(property_name),
+			}
+		button.set_meta(BUTTON_FEEDBACK_META_STATE_FONT_BACKUP, backup)
+	var color := PARCHMENT
+	if state == BUTTON_FEEDBACK_BUSY:
+		color = Color("ffe2ad")
+	elif state == BUTTON_FEEDBACK_FAILURE:
+		color = Color("ffd1c5")
+	for property_name: String in ["font_color", "font_hover_color", "font_pressed_color", "font_disabled_color"]:
+		button.add_theme_color_override(property_name, color)
+
+
+static func _clear_button_state_font_feedback(button: BaseButton) -> void:
+	if not is_instance_valid(button) or not button.has_meta(BUTTON_FEEDBACK_META_STATE_FONT_BACKUP):
+		return
+	var backup: Dictionary = button.get_meta(BUTTON_FEEDBACK_META_STATE_FONT_BACKUP, {})
+	for property_name: String in ["font_color", "font_hover_color", "font_pressed_color", "font_disabled_color"]:
+		var entry: Dictionary = backup.get(property_name, {})
+		if bool(entry.get("overridden", false)):
+			button.add_theme_color_override(property_name, entry.get("value", Color.WHITE))
+		else:
+			button.remove_theme_color_override(property_name)
+	button.remove_meta(BUTTON_FEEDBACK_META_STATE_FONT_BACKUP)
 
 
 static func _set_character_transition_font_feedback(button: BaseButton) -> void:
@@ -653,6 +692,7 @@ static func clear_button_feedback(button: BaseButton) -> void:
 		button.remove_meta(BUTTON_FEEDBACK_META_STATE)
 	if button.has_meta(BUTTON_FEEDBACK_META_GROUP):
 		button.remove_meta(BUTTON_FEEDBACK_META_GROUP)
+	_clear_button_state_font_feedback(button)
 	_clear_character_transition_font_feedback(button)
 
 
@@ -725,6 +765,15 @@ static func _apply_exact_skill_button(theme: Theme, variation: StringName, textu
 	theme.set_color("font_pressed_color", variation, Color("ffe2ad"))
 	theme.set_color("font_disabled_color", variation, MUTED.darkened(0.24))
 	theme.set_constant("outline_size", variation, 3)
+
+
+static func _apply_exact_action_button(theme: Theme, variation: StringName, texture: Texture2D, mask: Texture2D, frame: Texture2D) -> void:
+	# Executable actions have three semantic appearances: enabled/idle is the
+	# pale coffee cue, pressed/busy is dark red, and genuinely unavailable is
+	# grey.  Persistent selections use their dedicated selected variations.
+	_apply_exact_skill_button(theme, variation, texture, mask, frame, BUTTON_ACTION_IDLE_FILL)
+	theme.set_stylebox("disabled", variation, _exact_skill_frame_style(texture, mask, frame, BUTTON_ACTION_DISABLED_FILL))
+	theme.set_font_size("font_size", variation, BUTTON_ACTION_FONT_SIZE)
 
 
 static func _exact_skill_frame_style(texture: Texture2D, mask: Texture2D, frame: Texture2D, fill: Color) -> AdaptiveButtonStyleBox:
