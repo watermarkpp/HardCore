@@ -30,6 +30,8 @@ func _run() -> void:
 	_write_index()
 	assert(PlayerState._write_json_atomic(_other_profile, {"profile_id": "q", "inventory": [_item("q-safe")]}))
 	_test_successful_deposit_and_withdraw()
+	_test_sparse_batch_deposit_and_withdraw()
+	_test_batch_write_failure_rolls_back_every_item()
 	_test_precise_write_failures_rollback()
 	_test_prepared_log_recovery_without_active_profile_coupling()
 	_restore_player_state()
@@ -51,6 +53,61 @@ func _test_successful_deposit_and_withdraw() -> void:
 	assert(str(PlayerState.inventory[0].get("name", "")) == "太阳水" and int(PlayerState.inventory[0].get("count", 0)) == 1)
 	assert((PlayerState._read_json(PlayerState.shared_warehouse_path).get("warehouse_inventory", []) as Array).is_empty())
 	assert((PlayerState._read_json(_profile).get("inventory", []) as Array).size() == 1)
+
+
+func _test_sparse_batch_deposit_and_withdraw() -> void:
+	_reset_documents("batch-a")
+	PlayerState.inventory = [_equipment_item("batch-a"), _equipment_item("batch-b"), _equipment_item("bag-safe")]
+	PlayerState.warehouse_inventory = [_equipment_item("stash-existing")]
+	assert(PlayerState._write_json_atomic(_profile, {"profile_id": "p", "inventory": PlayerState.inventory.duplicate(true)}))
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_path, _shared_document(PlayerState.warehouse_inventory)))
+	var revision_before := int(PlayerState._read_json(PlayerState.shared_warehouse_path).get("revision", -1))
+	var result := PlayerState.deposit_to_warehouse_batch([0, 1], [100, 101])
+	assert(bool(result.get("success", false)) and bool(result.get("complete", false)), str(result))
+	assert(int(result.get("transferred", -1)) == 2 and result.get("completed_source_indices", []) == [0, 1], str(result))
+	assert(_instance_ids(PlayerState.inventory) == ["bag-safe"])
+	assert(PlayerState.inventory.size() == 3 and PlayerState.inventory[0].is_empty() and PlayerState.inventory[1].is_empty())
+	var stored_shared := PlayerState._read_json(PlayerState.shared_warehouse_path)
+	assert(int(stored_shared.get("revision", -1)) == revision_before + 1, "批量存入不应逐件增加仓库版本")
+	assert(PlayerState._validate_shared_warehouse_document(stored_shared), "含固定槽空洞的公共仓库文档无法重新载入")
+	var stored_records: Array = stored_shared.get("warehouse_inventory", [])
+	assert(stored_records.size() == 102 and (stored_records[1] as Dictionary).is_empty())
+	assert(str(stored_records[100].get("instance_id", "")) == "batch-a" and str(stored_records[101].get("instance_id", "")) == "batch-b")
+	assert(not FileAccess.file_exists(PlayerState.shared_warehouse_transaction_log_path))
+
+	revision_before = int(stored_shared.get("revision", -1))
+	result = PlayerState.withdraw_from_warehouse_batch([0, 100])
+	assert(bool(result.get("success", false)) and bool(result.get("complete", false)), str(result))
+	assert(int(result.get("transferred", -1)) == 2 and result.get("completed_warehouse_slots", []) == [0, 100], str(result))
+	assert(_instance_ids(PlayerState.inventory) == ["stash-existing", "batch-a", "bag-safe"])
+	stored_shared = PlayerState._read_json(PlayerState.shared_warehouse_path)
+	assert(int(stored_shared.get("revision", -1)) == revision_before + 1, "批量取出不应逐件增加仓库版本")
+	assert(PlayerState._validate_shared_warehouse_document(stored_shared), "非尾部取出后公共仓库文档失效")
+	stored_records = stored_shared.get("warehouse_inventory", [])
+	assert(stored_records.size() == 102 and (stored_records[0] as Dictionary).is_empty() and (stored_records[100] as Dictionary).is_empty())
+	assert(str(stored_records[101].get("instance_id", "")) == "batch-b", "批量取出移动了未选择的固定槽物品")
+	PlayerState._shared_warehouse_initialized = false
+	PlayerState.warehouse_inventory = []
+	assert(PlayerState._initialize_shared_warehouse(), "含合法空槽的批量仓库存档无法冷载入")
+	assert(PlayerState.warehouse_inventory.size() == 102 and str(PlayerState.warehouse_inventory[101].get("instance_id", "")) == "batch-b")
+
+
+func _test_batch_write_failure_rolls_back_every_item() -> void:
+	_reset_documents("rollback-a")
+	PlayerState.inventory = [_equipment_item("rollback-a"), _equipment_item("rollback-b")]
+	assert(PlayerState._write_json_atomic(_profile, {"profile_id": "p", "inventory": PlayerState.inventory.duplicate(true)}))
+	var profile_before := PlayerState._read_json(_profile)
+	var shared_before := PlayerState._read_json(PlayerState.shared_warehouse_path)
+	PlayerState._test_fail_profile_write = true
+	var result := PlayerState.deposit_to_warehouse_batch([0, 1], [100, 101])
+	PlayerState._test_fail_profile_write = false
+	assert(not bool(result.get("success", false)) and int(result.get("transferred", -1)) == 0, str(result))
+	assert(_instance_ids(PlayerState.inventory) == ["rollback-a", "rollback-b"])
+	assert(PlayerState.warehouse_inventory.is_empty())
+	assert(PlayerState._shared_digest(PlayerState._read_json(_profile)) == PlayerState._shared_digest(profile_before))
+	assert(PlayerState._shared_digest(PlayerState._read_json(PlayerState.shared_warehouse_path)) == PlayerState._shared_digest(shared_before))
+	assert(not FileAccess.file_exists(PlayerState.shared_warehouse_transaction_log_path))
+	assert(not PlayerState._warehouse_transaction_locked)
 
 
 func _test_precise_write_failures_rollback() -> void:
@@ -167,6 +224,10 @@ func _prepared_log(before_profile: Dictionary, after_profile: Dictionary, before
 
 func _item(instance_id: String) -> Dictionary:
 	return {"name": "太阳水", "count": 1, "instance_id": instance_id}
+
+
+func _equipment_item(instance_id: String) -> Dictionary:
+	return {"name": "匕首", "count": 1, "instance_id": instance_id}
 
 
 func _instance_ids(records: Array) -> Array:

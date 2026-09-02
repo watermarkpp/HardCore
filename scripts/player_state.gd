@@ -2947,14 +2947,13 @@ func _validate_shared_warehouse_document(document: Dictionary) -> bool:
 	for record: Variant in records:
 		if not record is Dictionary:
 			return false
+	# The warehouse is a fixed 5 x 100-slot surface. Empty dictionaries are
+	# valid holes and must survive page-specific deposits and non-tail withdraws.
 	var ledger: Variant = document.get("legacy_migration", null)
 	if not ledger is Dictionary or not bool((ledger as Dictionary).get("completed", false)):
 		return false
 	if str((ledger as Dictionary).get("contract_id", "")) != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID:
 		return false
-	for record: Variant in records:
-		if not record is Dictionary or (record as Dictionary).is_empty():
-			return false
 	var sources: Variant = (ledger as Dictionary).get("sources", null)
 	if not sources is Dictionary:
 		return false
@@ -3352,23 +3351,86 @@ func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
 
 
 func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictionary:
-	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
+	var result := deposit_to_warehouse_batch([inventory_index], [warehouse_slot])
+	if bool(result.get("complete", false)):
+		result["message"] = "已存入仓库。"
+	return result
+
+
+## Moves one selected batch with one two-file persistence transaction.
+func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array) -> Dictionary:
+	var requested := inventory_indices.size()
+	var result := {
+		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
+		"operation": "deposit",
+		"success": false,
+		"complete": false,
+		"requested": requested,
+		"transferred": 0,
+		"remaining": requested,
+		"completed_source_indices": [],
+		"completed_warehouse_slots": [],
+		"message": "仓库存取失败。",
+	}
 	if not (test_mode and not _shared_warehouse_test_isolation_enabled()) and not _ensure_shared_warehouse_ready():
 		result["message"] = "公共仓库不可用，物品未改变。"
 		return result
-	if inventory_index < 0 or inventory_index >= inventory.size() or not _inventory_slot_is_occupied(inventory[inventory_index]) or warehouse_slot < 0 or warehouse_slot >= WAREHOUSE_CAPACITY:
+	if requested <= 0:
 		result["message"] = "存入位置无效。"
 		return result
+	var normalized_indices: Array[int] = []
+	var seen_indices: Dictionary = {}
+	for raw_index: Variant in inventory_indices:
+		var inventory_index := int(raw_index)
+		if (
+			inventory_index < 0
+			or inventory_index >= inventory.size()
+			or not _inventory_slot_is_occupied(inventory[inventory_index])
+			or seen_indices.has(inventory_index)
+		):
+			result["message"] = "存入位置无效。"
+			return result
+		seen_indices[inventory_index] = true
+		normalized_indices.append(inventory_index)
+	var transfer_count := mini(requested, warehouse_slots.size())
+	if transfer_count <= 0:
+		result["message"] = "当前仓库页空间不足。"
+		return result
+	var normalized_slots: Array[int] = []
+	var seen_slots: Dictionary = {}
+	for slot_offset in range(transfer_count):
+		var warehouse_slot := int(warehouse_slots[slot_offset])
+		if (
+			warehouse_slot < 0
+			or warehouse_slot >= WAREHOUSE_CAPACITY
+			or seen_slots.has(warehouse_slot)
+			or (
+				warehouse_slot < warehouse_inventory.size()
+				and _inventory_slot_is_occupied(warehouse_inventory[warehouse_slot])
+			)
+		):
+			result["message"] = "仓库位置已被占用。"
+			return result
+		seen_slots[warehouse_slot] = true
+		normalized_slots.append(warehouse_slot)
 	var inventory_before := inventory.duplicate(true)
 	var warehouse_before := warehouse_inventory.duplicate(true)
-	while warehouse_inventory.size() <= warehouse_slot:
-		warehouse_inventory.append({})
-	var target: Variant = warehouse_inventory[warehouse_slot]
-	if _inventory_slot_is_occupied(target):
-		result["message"] = "仓库位置已被占用。"
-		return result
-	warehouse_inventory[warehouse_slot] = inventory[inventory_index].duplicate(true) if inventory[inventory_index] is Dictionary else inventory[inventory_index]
-	_clear_inventory_slot(inventory, inventory_index)
+	var working_inventory := inventory_before.duplicate(true)
+	var working_warehouse := warehouse_before.duplicate(true)
+	var records_to_move: Array = []
+	for source_offset in range(transfer_count):
+		var source_index := normalized_indices[source_offset]
+		var source_record: Variant = working_inventory[source_index]
+		records_to_move.append(source_record.duplicate(true) if source_record is Dictionary else source_record)
+	for target_slot: int in normalized_slots:
+		while working_warehouse.size() <= target_slot:
+			working_warehouse.append({})
+	for move_offset in range(transfer_count):
+		working_warehouse[normalized_slots[move_offset]] = records_to_move[move_offset]
+	for source_offset in range(transfer_count - 1, -1, -1):
+		_clear_inventory_slot(working_inventory, normalized_indices[source_offset])
+	inventory = working_inventory
+	warehouse_inventory = working_warehouse
 	if not _warehouse_transfer_commit(inventory_before, warehouse_before):
 		inventory = inventory_before
 		warehouse_inventory = warehouse_before
@@ -3376,29 +3438,86 @@ func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictiona
 		return result
 	inventory_changed.emit()
 	result["success"] = true
-	result["message"] = "已存入仓库。"
+	result["complete"] = transfer_count == requested
+	result["transferred"] = transfer_count
+	result["remaining"] = requested - transfer_count
+	result["completed_source_indices"] = normalized_indices.slice(0, transfer_count)
+	result["completed_warehouse_slots"] = normalized_slots.duplicate()
+	result["message"] = (
+		"已存入仓库，共%d件物品。" % transfer_count
+		if transfer_count == requested
+		else "已存入%d件；当前仓库页空间不足。" % transfer_count
+	)
 	return result
 
 
 func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
-	var result := {"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID, "success": false, "message": "仓库存取失败。"}
+	var result := withdraw_from_warehouse_batch([warehouse_slot])
+	if bool(result.get("complete", false)):
+		result["message"] = "已取出仓库物品。"
+	return result
+
+
+## Moves the largest valid prefix with one two-file persistence transaction.
+func withdraw_from_warehouse_batch(warehouse_slots: Array) -> Dictionary:
+	var requested := warehouse_slots.size()
+	var result := {
+		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
+		"operation": "withdraw",
+		"success": false,
+		"complete": false,
+		"requested": requested,
+		"transferred": 0,
+		"remaining": requested,
+		"completed_warehouse_slots": [],
+		"message": "仓库存取失败。",
+	}
 	if not (test_mode and not _shared_warehouse_test_isolation_enabled()) and not _ensure_shared_warehouse_ready():
 		result["message"] = "公共仓库不可用，物品未改变。"
 		return result
-	if warehouse_slot < 0 or warehouse_slot >= warehouse_inventory.size() or not warehouse_inventory[warehouse_slot] is Dictionary or (warehouse_inventory[warehouse_slot] as Dictionary).is_empty():
+	if requested <= 0:
 		result["message"] = "仓库位置无效。"
 		return result
-	var record: Dictionary = warehouse_inventory[warehouse_slot]
-	var preview := _build_receive_result_for_record(record, inventory)
-	if not bool(preview.get("success", false)):
-		result["message"] = str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
-		result["reason"] = str(preview.get("reason", "rejected"))
-		return result
+	var normalized_slots: Array[int] = []
+	var seen_slots: Dictionary = {}
+	for raw_slot: Variant in warehouse_slots:
+		var warehouse_slot := int(raw_slot)
+		if (
+			warehouse_slot < 0
+			or warehouse_slot >= warehouse_inventory.size()
+			or not _inventory_slot_is_occupied(warehouse_inventory[warehouse_slot])
+			or seen_slots.has(warehouse_slot)
+		):
+			result["message"] = "仓库位置无效。"
+			return result
+		seen_slots[warehouse_slot] = true
+		normalized_slots.append(warehouse_slot)
 	var inventory_before := inventory.duplicate(true)
 	var warehouse_before := warehouse_inventory.duplicate(true)
-	inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
-	warehouse_inventory[warehouse_slot] = {}
-	_trim_warehouse_empty_tail()
+	var working_inventory := inventory_before.duplicate(true)
+	var working_warehouse := warehouse_before.duplicate(true)
+	var completed_slots: Array[int] = []
+	var failure_message := ""
+	var failure_reason := ""
+	for warehouse_slot: int in normalized_slots:
+		var record: Dictionary = working_warehouse[warehouse_slot]
+		var preview := _build_receive_result_for_record(record, working_inventory)
+		if not bool(preview.get("success", false)):
+			failure_message = str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
+			failure_reason = str(preview.get("reason", "rejected"))
+			break
+		working_inventory = (preview.get("inventory", working_inventory) as Array).duplicate(true)
+		working_warehouse[warehouse_slot] = {}
+		completed_slots.append(warehouse_slot)
+	if completed_slots.is_empty():
+		result["message"] = failure_message if not failure_message.is_empty() else "仓库存取失败。"
+		if not failure_reason.is_empty():
+			result["reason"] = failure_reason
+		return result
+	while not working_warehouse.is_empty() and not _inventory_slot_is_occupied(working_warehouse.back()):
+		working_warehouse.pop_back()
+	inventory = working_inventory
+	warehouse_inventory = working_warehouse
 	if not _warehouse_transfer_commit(inventory_before, warehouse_before):
 		inventory = inventory_before
 		warehouse_inventory = warehouse_before
@@ -3406,7 +3525,17 @@ func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
 		return result
 	inventory_changed.emit()
 	result["success"] = true
-	result["message"] = "已取出仓库物品。"
+	result["complete"] = completed_slots.size() == requested
+	result["transferred"] = completed_slots.size()
+	result["remaining"] = requested - completed_slots.size()
+	result["completed_warehouse_slots"] = completed_slots.duplicate()
+	if not failure_reason.is_empty():
+		result["reason"] = failure_reason
+	result["message"] = (
+		"已取出仓库物品，共%d件。" % completed_slots.size()
+		if completed_slots.size() == requested
+		else "已取出%d件；%s" % [completed_slots.size(), failure_message]
+	)
 	return result
 
 
@@ -4515,6 +4644,8 @@ func _warehouse_transfer_commit(inventory_before: Array, warehouse_before: Array
 	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
 	after_profile.erase("warehouse_inventory")
 	var after_shared := _shared_document_for_records(warehouse_inventory)
+	if not _validate_shared_warehouse_document(after_shared):
+		return false
 	var prepared := {
 		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
 		"state": "PREPARED",

@@ -687,25 +687,18 @@ func _deposit() -> void:
 	var source_indices := _sorted_selection_indices(selected_bag_indices)
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(deposit_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.deposit")
-	var transferred := 0
-	var failure_message := ""
-	for source_index: int in source_indices:
-		var target_slot := _first_free_slot_on_current_page()
-		if target_slot < 0:
-			failure_message = "当前仓库页空间不足。"
-			break
-		var result: Dictionary = PlayerState.deposit_to_warehouse(source_index, target_slot)
-		if not bool(result.get("success", false)):
-			failure_message = str(result.get("message", "仓库存取失败。"))
-			break
-		transferred += 1
-		selected_bag_indices.erase(source_index)
+	var target_slots := _free_slots_on_current_page(source_indices.size())
+	var result: Dictionary = PlayerState.deposit_to_warehouse_batch(source_indices, target_slots)
+	var transferred := int(result.get("transferred", 0))
+	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
+	for raw_index: Variant in result.get("completed_source_indices", []):
+		selected_bag_indices.erase(int(raw_index))
 	if selected_bag_indices.is_empty():
 		_active_selection_side = ""
 	_sync_primary_selection_indices()
 	refresh()
 	_finish_transfer_batch("deposit", "已存入", source_indices.size(), transferred, failure_message)
-	_show_transfer_result(deposit_button, transferred == source_indices.size(), "warehouse.deposit")
+	_show_transfer_result(deposit_button, bool(result.get("complete", false)), "warehouse.deposit")
 
 
 func _withdraw() -> void:
@@ -715,21 +708,17 @@ func _withdraw() -> void:
 	var source_indices := _sorted_selection_indices(selected_stash_indices)
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(withdraw_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.withdraw")
-	var transferred := 0
-	var failure_message := ""
-	for source_index: int in source_indices:
-		var result: Dictionary = PlayerState.withdraw_from_warehouse(source_index)
-		if not bool(result.get("success", false)):
-			failure_message = str(result.get("message", "仓库存取失败。"))
-			break
-		transferred += 1
-		selected_stash_indices.erase(source_index)
+	var result: Dictionary = PlayerState.withdraw_from_warehouse_batch(source_indices)
+	var transferred := int(result.get("transferred", 0))
+	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
+	for raw_index: Variant in result.get("completed_warehouse_slots", []):
+		selected_stash_indices.erase(int(raw_index))
 	if selected_stash_indices.is_empty():
 		_active_selection_side = ""
 	_sync_primary_selection_indices()
 	refresh()
 	_finish_transfer_batch("withdraw", "已取出", source_indices.size(), transferred, failure_message)
-	_show_transfer_result(withdraw_button, transferred == source_indices.size(), "warehouse.withdraw")
+	_show_transfer_result(withdraw_button, bool(result.get("complete", false)), "warehouse.withdraw")
 
 
 func _sorted_selection_indices(selection: Dictionary) -> Array[int]:
@@ -850,11 +839,20 @@ func _warehouse_occupied_count() -> int:
 
 
 func _first_free_slot_on_current_page() -> int:
+	var free_slots := _free_slots_on_current_page(1)
+	return int(free_slots[0]) if not free_slots.is_empty() else -1
+
+
+func _free_slots_on_current_page(limit: int = WAREHOUSE_PAGE_CAPACITY) -> Array[int]:
+	var free_slots: Array[int] = []
 	var page_start := warehouse_page * WAREHOUSE_PAGE_CAPACITY
 	for slot_index in range(page_start, page_start + WAREHOUSE_PAGE_CAPACITY):
-		if not _warehouse_slot_has_item(slot_index):
-			return slot_index
-	return -1
+		if _warehouse_slot_has_item(slot_index):
+			continue
+		free_slots.append(slot_index)
+		if free_slots.size() >= limit:
+			break
+	return free_slots
 
 
 func _ensure_warehouse_slot(slot_index: int) -> void:
