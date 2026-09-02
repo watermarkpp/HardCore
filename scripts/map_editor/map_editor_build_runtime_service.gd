@@ -18,6 +18,9 @@ const RuntimeBridge := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
 const JsonCodec := preload("res://scripts/map_editor/map_editor_json_codec.gd")
+const MapUIPresentationProjectionScript := preload(
+	"res://scripts/map_editor/map_ui_presentation_projection.gd"
+)
 
 const LEGACY_RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.LEGACY_RUNTIME_SCHEMA_VERSION
 const RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.RUNTIME_SCHEMA_VERSION
@@ -92,6 +95,17 @@ static func publish_runtime_release(
 	var approved_hash := str(runtime.get("build_sha256", ""))
 	if approved_hash.is_empty():
 		return {"success": false, "reason": "runtime_build_hash_missing"}
+	var ui_presentation := MapUIPresentationProjectionScript.from_runtime(runtime)
+	var ui_presentation_errors := MapUIPresentationProjectionScript.validate(
+		ui_presentation,
+		approved_hash
+	)
+	if not ui_presentation_errors.is_empty():
+		return {
+			"success": false,
+			"reason": "map_ui_projection_invalid",
+			"errors": ui_presentation_errors,
+		}
 	var registry_read := _read_registry(registry_path)
 	if not registry_read.ok:
 		return {
@@ -131,7 +145,8 @@ static func publish_runtime_release(
 				release_display_name,
 				approved_hash,
 				formal_path,
-				previous_revision
+				previous_revision,
+				ui_presentation
 			)
 			updated = true
 			break
@@ -148,7 +163,8 @@ static func publish_runtime_release(
 				authored_display_name,
 				approved_hash,
 				formal_path,
-				0
+				0,
+				ui_presentation
 			)
 		)
 	registry["maps"] = maps
@@ -218,7 +234,8 @@ static func _release_entry(
 	display_name: String,
 	approved_hash: String,
 	runtime_path: String,
-	previous_revision: int
+	previous_revision: int,
+	ui_presentation: Dictionary
 ) -> Dictionary:
 	return {
 		"runtime_map_id": runtime_map_id,
@@ -229,6 +246,7 @@ static func _release_entry(
 		"approved_build_sha256": approved_hash,
 		"approval_source": "published_via_publish_runtime_release",
 		"approval_revision": previous_revision + 1,
+		"ui_presentation": ui_presentation.duplicate(true),
 	}
 
 

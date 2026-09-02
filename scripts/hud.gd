@@ -202,6 +202,11 @@ var _skill_button_modes: Dictionary = {}
 var _panel_prewarm_in_progress := false
 var _all_panels_prewarmed := false
 var _panel_prewarm_diagnostic: Dictionary = {}
+var _background_prewarm_requested := false
+var _catalog_icon_prewarm_in_progress := false
+var _catalog_icon_prewarm_complete := false
+var _panel_prewarm_user_interaction := false
+var _panel_script_warm_refs: Array[Script] = []
 
 
 func _ready() -> void:
@@ -1554,7 +1559,18 @@ func _ensure_skill_panel() -> void:
 	add_child(skill_panel)
 
 
+func start_budgeted_panel_prewarm(system_menu_panel: Control = null) -> void:
+	if _background_prewarm_requested or _all_panels_prewarmed:
+		return
+	_background_prewarm_requested = true
+	_run_panel_prewarm.call_deferred(system_menu_panel, true)
+
+
 func prewarm_all_panels(system_menu_panel: Control = null) -> void:
+	await _run_panel_prewarm(system_menu_panel, false)
+
+
+func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool = false) -> void:
 	if _all_panels_prewarmed:
 		return
 	if _panel_prewarm_in_progress:
@@ -1566,18 +1582,60 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	_panel_prewarm_diagnostic = {
 		"started_at_usec": prewarm_started_usec,
 		"completed": false,
+		"construction_ms_by_panel": {},
+		"background_mode": background_mode,
 	}
+	_panel_prewarm_diagnostic["script_prefetch"] = await _prefetch_panel_scripts()
+	_start_catalog_icon_prewarm.call_deferred()
+	var panel_started_usec := Time.get_ticks_usec()
 	_ensure_inventory_panel()
-	_ensure_shop_panel()
-	_ensure_skill_panel()
-	_ensure_quest_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["inventory"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	panel_started_usec = Time.get_ticks_usec()
 	_ensure_map_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["map"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_skill_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["skill"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_quest_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["quest"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	panel_started_usec = Time.get_ticks_usec()
 	_ensure_warehouse_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["warehouse"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_shop_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["shop"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	panel_started_usec = Time.get_ticks_usec()
 	_ensure_death_revival_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["death_revival"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
 	# SkillPanel intentionally refreshes only when opened. Run the same public
 	# refresh once while hidden so its dynamic cards, icons and saved profile are
-	# part of the Loading-phase warm-up as well.
+	# ready before the first interaction as well.
 	skill_panel.refresh()
+	if inventory_panel.has_method("wait_until_runtime_ready"):
+		await inventory_panel.wait_until_runtime_ready()
+	if warehouse_panel.has_method("wait_until_runtime_ready"):
+		await warehouse_panel.wait_until_runtime_ready()
 	_panel_prewarm_diagnostic["construction_ms"] = (
 		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
 	)
@@ -1592,8 +1650,9 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	]
 	if is_instance_valid(system_menu_panel):
 		panels.append(system_menu_panel)
-	for panel: Control in panels:
-		panel.hide()
+	if not background_mode:
+		for panel: Control in panels:
+			panel.hide()
 	# Each layout profile runs multiple frame-separated passes. Keep every
 	# reusable panel hidden until its initial contract has reached the final
 	# geometry pass, so first-open can only expose the finished frame.
@@ -1615,12 +1674,20 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	)
 	# The shop owns two independent saved layouts. Warm the sell layout without
 	# requesting quotes or changing its business state, then restore buy.
-	shop_panel.call("_apply_layout_profile_once", "shop_sell")
-	var shop_sell_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
-	shop_panel.call("_apply_layout_profile_once", "shop_buy")
-	var shop_buy_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
+	var shop_sell_wait_frames := 0
+	var shop_buy_wait_frames := 0
+	var may_warm_alternate_shop: bool = (
+		not background_mode
+		or (not _panel_prewarm_user_interaction and not shop_panel.visible)
+	)
+	if may_warm_alternate_shop:
+		shop_panel.call("_apply_layout_profile_once", "shop_sell")
+		shop_sell_wait_frames = await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
+		shop_panel.call("_apply_layout_profile_once", "shop_buy")
+		shop_buy_wait_frames = await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
 	_panel_prewarm_diagnostic["shop_sell_wait_frames"] = shop_sell_wait_frames
 	_panel_prewarm_diagnostic["shop_buy_wait_frames"] = shop_buy_wait_frames
+	_panel_prewarm_diagnostic["shop_alternate_profile_warmed"] = may_warm_alternate_shop
 	_panel_prewarm_diagnostic["shop_profiles_elapsed_ms"] = (
 		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
 	)
@@ -1634,18 +1701,104 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	_panel_prewarm_diagnostic["confirmation_wait_frames"] = confirmation_wait_frames
 	# Flush deferred grid/list stabilizers once more while hidden.
 	await get_tree().process_frame
-	for panel: Control in panels:
-		panel.hide()
-	_all_panels_prewarmed = _profiles_are_ready(
-		initial_profiles
-		+ [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
-		+ confirmation_profiles
-	)
+	if not background_mode:
+		for panel: Control in panels:
+			panel.hide()
+	var readiness_profiles := initial_profiles + confirmation_profiles
+	if may_warm_alternate_shop:
+		readiness_profiles += [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
+	_all_panels_prewarmed = _profiles_are_ready(readiness_profiles)
 	_panel_prewarm_diagnostic["completed"] = _all_panels_prewarmed
+	_panel_prewarm_diagnostic["catalog_icon_prewarm_complete"] = _catalog_icon_prewarm_complete
+	_panel_prewarm_diagnostic["catalog_icon_pending"] = UIItemTextureCacheScript.threaded_pending_count()
 	_panel_prewarm_diagnostic["total_ms"] = (
 		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
 	)
 	_panel_prewarm_in_progress = false
+	if OS.is_debug_build():
+		print("[UIPanelPrewarmProfile] ", JSON.stringify(_panel_prewarm_diagnostic))
+
+
+func _prefetch_panel_scripts() -> Dictionary:
+	var paths: Array[String] = [
+		INVENTORY_PANEL_SCRIPT_PATH,
+		MAP_PANEL_SCRIPT_PATH,
+		SKILL_PANEL_SCRIPT_PATH,
+		QUEST_PANEL_SCRIPT_PATH,
+		WAREHOUSE_PANEL_SCRIPT_PATH,
+		SHOP_PANEL_SCRIPT_PATH,
+	]
+	var pending: Dictionary = {}
+	var request_failures: Array[String] = []
+	for path: String in paths:
+		var error := ResourceLoader.load_threaded_request(path)
+		if error == OK:
+			pending[path] = true
+		elif ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_LOADED:
+			pending[path] = true
+		else:
+			request_failures.append("%s:%d" % [path, error])
+	var waited_frames := 0
+	while not pending.is_empty() and waited_frames < 120 and is_inside_tree():
+		for path: String in pending.keys().duplicate():
+			var status := ResourceLoader.load_threaded_get_status(path)
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				var panel_script := ResourceLoader.load_threaded_get(path) as Script
+				if panel_script != null:
+					_panel_script_warm_refs.append(panel_script)
+				else:
+					request_failures.append("%s:null" % path)
+				pending.erase(path)
+			elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				request_failures.append("%s:%d" % [path, status])
+				pending.erase(path)
+		if not pending.is_empty():
+			await get_tree().process_frame
+			waited_frames += 1
+	return {
+		"requested": paths.size(),
+		"loaded": _panel_script_warm_refs.size(),
+		"pending": pending.keys(),
+		"failures": request_failures,
+		"waited_frames": waited_frames,
+	}
+
+
+func _start_catalog_icon_prewarm() -> void:
+	if _catalog_icon_prewarm_complete or _catalog_icon_prewarm_in_progress:
+		return
+	_catalog_icon_prewarm_in_progress = true
+	var paths: Array[String] = []
+	var seen: Dictionary = {}
+	for raw_record: Variant in GameData.item_catalog:
+		if not raw_record is Dictionary:
+			continue
+		var art: Variant = (raw_record as Dictionary).get("art", {})
+		if not art is Dictionary:
+			continue
+		var raw_icon: Variant = (art as Dictionary).get("inventoryIcon", {})
+		var path := str(raw_icon.get("path", "")) if raw_icon is Dictionary else str(raw_icon)
+		if path.is_empty() or seen.has(path):
+			continue
+		seen[path] = true
+		paths.append(path)
+	const REQUEST_BATCH := 12
+	for start_index in range(0, paths.size(), REQUEST_BATCH):
+		var batch: Array[String] = []
+		for path_index in range(start_index, mini(start_index + REQUEST_BATCH, paths.size())):
+			batch.append(paths[path_index])
+		UIItemTextureCacheScript.request_threaded_paths(batch)
+		UIItemTextureCacheScript.poll_threaded_paths()
+		await get_tree().process_frame
+	for _frame in 120:
+		UIItemTextureCacheScript.poll_threaded_paths()
+		if UIItemTextureCacheScript.threaded_pending_count() == 0:
+			break
+		await get_tree().process_frame
+	_catalog_icon_prewarm_complete = UIItemTextureCacheScript.threaded_pending_count() == 0
+	_catalog_icon_prewarm_in_progress = false
+	_panel_prewarm_diagnostic["catalog_icon_prewarm_complete"] = _catalog_icon_prewarm_complete
+	_panel_prewarm_diagnostic["catalog_icon_pending"] = UIItemTextureCacheScript.threaded_pending_count()
 
 
 func _wait_for_layout_profiles(profiles: Array) -> int:
@@ -1852,6 +2005,7 @@ func _request_system_menu() -> void:
 
 
 func _toggle_skill_book() -> void:
+	_panel_prewarm_user_interaction = true
 	_ensure_skill_panel()
 	if skill_panel.visible:
 		skill_panel.hide()
@@ -2025,6 +2179,7 @@ func _on_special_action_button() -> void:
 
 
 func _toggle_inventory() -> void:
+	_panel_prewarm_user_interaction = true
 	_ensure_inventory_panel()
 	if inventory_panel.visible:
 		inventory_panel.hide()
@@ -2034,6 +2189,7 @@ func _toggle_inventory() -> void:
 
 
 func _toggle_map_panel() -> void:
+	_panel_prewarm_user_interaction = true
 	_ensure_map_panel()
 	if map_panel.visible:
 		map_panel.hide()
@@ -2059,6 +2215,7 @@ func set_zone_name(zone_name: String) -> void:
 
 
 func open_shop(display_name: String, stock: Array, merchant_context: Dictionary = {}) -> void:
+	_panel_prewarm_user_interaction = true
 	_close_modal_panels()
 	_ensure_shop_panel()
 	shop_panel.open_for(display_name, stock, merchant_context)
@@ -2085,6 +2242,7 @@ func apply_shop_sell_result(result: Dictionary) -> void:
 
 
 func open_skill_trainer(display_name: String) -> void:
+	_panel_prewarm_user_interaction = true
 	_close_modal_panels()
 	_ensure_skill_panel()
 	skill_panel.open_for(display_name)
@@ -2099,6 +2257,7 @@ func set_skill_button_assignments(assignments: Dictionary, interaction_modes := 
 
 
 func show_death_screen(context := {}) -> void:
+	_panel_prewarm_user_interaction = true
 	_ensure_death_revival_panel()
 	_close_modal_panels()
 	if death_revival_panel != null:
@@ -2130,6 +2289,7 @@ func close_death_screen() -> void:
 
 
 func open_quest(display_name: String) -> void:
+	_panel_prewarm_user_interaction = true
 	_close_modal_panels()
 	_ensure_quest_panel()
 	quest_panel.open_for(display_name)
@@ -2141,6 +2301,7 @@ func apply_quest_abandon_result(result: Dictionary) -> void:
 
 
 func open_warehouse() -> void:
+	_panel_prewarm_user_interaction = true
 	_close_modal_panels()
 	_ensure_warehouse_panel()
 	warehouse_panel.open_panel()

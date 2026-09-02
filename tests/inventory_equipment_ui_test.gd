@@ -21,6 +21,7 @@ func _run() -> void:
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
+	await panel.wait_until_runtime_ready()
 	var fixed_cell_zero := panel.item_grid.get_child(0)
 	var fixed_cell_last := panel.item_grid.get_child(InventoryPanel.BAG_CAPACITY - 1)
 	var created_cells := panel._bag_cell_creation_count

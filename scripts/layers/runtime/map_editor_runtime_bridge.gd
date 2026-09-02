@@ -5,6 +5,9 @@ const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd
 const MonsterRespawnPolicyScript := preload(
 	"res://scripts/monster_respawn_policy.gd"
 )
+const MapUIPresentationProjectionScript := preload(
+	"res://scripts/map_editor/map_ui_presentation_projection.gd"
+)
 const BICH_MAP_ID := 910001
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
@@ -179,6 +182,17 @@ static func validate_release_registry(registry: Dictionary) -> Array[String]:
 			errors.append("missing_runtime_path")
 		if approved.is_empty():
 			errors.append("missing_approved_hash")
+		var ui_projection: Variant = entry.get("ui_presentation", null)
+		if ui_projection != null:
+			if not ui_projection is Dictionary:
+				errors.append("map_ui_projection_invalid")
+			else:
+				errors.append_array(
+					MapUIPresentationProjectionScript.validate(
+						ui_projection as Dictionary,
+						approved
+					)
+				)
 		if (
 			release_state != str(RELEASE_STATE_IMPLEMENTED_PLAYABLE)
 			and release_state != str(RELEASE_STATE_IMPLEMENTED_STAGING)
@@ -358,6 +372,42 @@ static func load_map(runtime_map_id: int) -> Dictionary:
 		runtime["runtime_map_id"] = runtime_map_id
 	_runtime_cache[runtime_map_id] = runtime
 	return runtime
+
+
+## Lightweight, build-bound map information for UI presentation. This reads
+## only the already-loaded release registry and never opens a full runtime map.
+static func map_ui_content_for_map(runtime_map_id: int) -> Dictionary:
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
+		return {}
+	var raw_projection: Variant = entry.get("ui_presentation", null)
+	if not raw_projection is Dictionary:
+		return {}
+	var projection: Dictionary = raw_projection
+	if not MapUIPresentationProjectionScript.validate(
+		projection,
+		str(entry.get("approved_build_sha256", ""))
+	).is_empty():
+		return {}
+	return MapUIPresentationProjectionScript.content_from_projection(projection)
+
+
+static func map_ui_presentation_snapshot_key() -> String:
+	_load_release_registry()
+	if not _registry_load_valid:
+		return "invalid"
+	var parts: Array[String] = []
+	for runtime_map_id: int in released_map_ids():
+		var entry: Dictionary = _registry_cache.get(runtime_map_id, {})
+		parts.append("%d:%s" % [
+			runtime_map_id,
+			str(entry.get("approved_build_sha256", "")),
+		])
+	return "|".join(parts)
+
+
+static func debug_runtime_cache_size() -> int:
+	return _runtime_cache.size()
 
 
 static func load_bich() -> Dictionary:

@@ -1428,8 +1428,9 @@ func _run_map_transition(
 		return
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
 	if _check_world_ready_contract():
-		# Initial reusable panels are intentionally on-demand; do not reintroduce
-		# the full hidden warm-up here after the world has reached FINALIZE.
+		# Release the world first. Reusable UI then warms invisibly in small,
+		# frame-separated batches; this keeps Loading and gameplay input responsive
+		# while removing the one-time cost from the player's first panel click.
 		hud.finish_loading_transition()
 		if PlayerState.test_mode and hud.loading_transition_overlay != null:
 			# Test-mode fast path hides the fade overlay immediately so tests
@@ -1454,6 +1455,8 @@ func _run_map_transition(
 		# release delivered during the lock as well as a release lost entirely.
 		_cancel_map_transition_movement_input()
 		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+		if not PlayerState.test_mode and hud.has_method("start_budgeted_panel_prewarm"):
+			hud.start_budgeted_panel_prewarm(_system_menu_panel)
 	else:
 		# READY contract failed: keep the input lock and Loading overlay so the
 		# player never acts on an incomplete world.

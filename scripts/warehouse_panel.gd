@@ -19,6 +19,7 @@ const WAREHOUSE_PAGE_COUNT := 5
 const WAREHOUSE_DISPLAY_CAPACITY := WAREHOUSE_PAGE_CAPACITY * WAREHOUSE_PAGE_COUNT
 const GRID_COLUMNS := 6
 const GRID_VISIBLE_SLOTS := 30
+const GRID_BACKGROUND_CELL_BATCH := 10
 const ITEM_CELL_SIZE := Vector2(56, 64)
 const GRID_HORIZONTAL_SEPARATION := 1.0
 const GRID_VERTICAL_SEPARATION := 4.0
@@ -62,6 +63,8 @@ var _layout_apply_count := 0
 var _bag_cells: Array[Control] = []
 var _stash_cells: Array[Control] = []
 var _grid_cell_creation_count := 0
+var _grid_cells_ready := false
+var _grid_cell_initialization_running := false
 var _action_feedback_serial := 0
 
 
@@ -93,8 +96,9 @@ func _ready() -> void:
 	GothicFrameFactoryScript.seal_modal_rings(self)
 	visibility_changed.connect(_on_visibility_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
-	_initialize_grid_cells()
+	_initialize_grid_cells(GRID_VISIBLE_SLOTS)
 	refresh()
+	_continue_grid_cell_initialization.call_deferred()
 
 
 func _build_modal_surface() -> void:
@@ -288,6 +292,12 @@ func _build_compatibility_lists() -> void:
 
 
 func open_panel() -> void:
+	# Preserve the complete two-grid presentation even when the player opens the
+	# warehouse during the short background construction window.
+	if not _grid_cells_ready:
+		var first_new_index := mini(_bag_cells.size(), _stash_cells.size())
+		_initialize_grid_cells(WAREHOUSE_PAGE_CAPACITY)
+		_populate_grid_cells_from(first_new_index)
 	show()
 	# A hidden inventory signal is normally consumed synchronously by
 	# visibility_changed. Keep the explicit guard for callers opening an already
@@ -385,28 +395,79 @@ func _fill_grid(
 	side: String,
 	selected_index: int
 ) -> void:
-	_initialize_grid_cells()
+	if _bag_cells.is_empty() or _stash_cells.is_empty():
+		_initialize_grid_cells(GRID_VISIBLE_SLOTS)
 	var cells := _bag_cells if side == "bag" else _stash_cells
-	for display_index in range(slot_count):
+	for display_index in range(mini(slot_count, cells.size())):
 		var data_index := start_index + display_index
 		var record: Dictionary = records[data_index] if data_index < records.size() and records[data_index] is Dictionary and not (records[data_index] as Dictionary).is_empty() else {}
 		_update_item_cell(cells[display_index], side, data_index, display_index, record, data_index == selected_index)
 	grid.queue_sort()
 
 
-func _initialize_grid_cells() -> void:
-	if _bag_cells.is_empty():
-		for display_index in range(BAG_CAPACITY):
+func _initialize_grid_cells(target_count := WAREHOUSE_PAGE_CAPACITY) -> void:
+	var bounded_target := mini(WAREHOUSE_PAGE_CAPACITY, maxi(0, target_count))
+	if _bag_cells.size() < bounded_target:
+		for display_index in range(_bag_cells.size(), bounded_target):
 			var cell := _create_item_cell("bag", display_index, display_index, {}, false)
 			bag_grid.add_child(cell)
 			_bag_cells.append(cell)
 			_grid_cell_creation_count += 1
-	if _stash_cells.is_empty():
-		for display_index in range(WAREHOUSE_PAGE_CAPACITY):
+	if _stash_cells.size() < bounded_target:
+		for display_index in range(_stash_cells.size(), bounded_target):
 			var cell := _create_item_cell("stash", display_index, display_index, {}, false)
 			stash_grid.add_child(cell)
 			_stash_cells.append(cell)
 			_grid_cell_creation_count += 1
+	_grid_cells_ready = (
+		_bag_cells.size() >= BAG_CAPACITY
+		and _stash_cells.size() >= WAREHOUSE_PAGE_CAPACITY
+	)
+
+
+func _continue_grid_cell_initialization() -> void:
+	if _grid_cells_ready or _grid_cell_initialization_running:
+		return
+	_grid_cell_initialization_running = true
+	while is_inside_tree() and not _grid_cells_ready:
+		var first_new_index := mini(_bag_cells.size(), _stash_cells.size())
+		_initialize_grid_cells(first_new_index + GRID_BACKGROUND_CELL_BATCH)
+		_populate_grid_cells_from(first_new_index)
+		await get_tree().process_frame
+	_grid_cell_initialization_running = false
+
+
+func _populate_grid_cells_from(first_index: int) -> void:
+	var page_start := warehouse_page * WAREHOUSE_PAGE_CAPACITY
+	for display_index in range(first_index, _bag_cells.size()):
+		var bag_record := _bag_record(display_index)
+		_update_item_cell(
+			_bag_cells[display_index],
+			"bag",
+			display_index,
+			display_index,
+			bag_record,
+			display_index == selected_bag_index
+		)
+		var stash_index := page_start + display_index
+		var stash_record := _warehouse_record(stash_index)
+		_update_item_cell(
+			_stash_cells[display_index],
+			"stash",
+			stash_index,
+			display_index,
+			stash_record,
+			stash_index == selected_stash_index
+		)
+	bag_grid.queue_sort()
+	stash_grid.queue_sort()
+
+
+func wait_until_runtime_ready() -> void:
+	if not _grid_cells_ready:
+		_continue_grid_cell_initialization()
+	while is_inside_tree() and not _grid_cells_ready:
+		await get_tree().process_frame
 
 
 func _create_item_cell(

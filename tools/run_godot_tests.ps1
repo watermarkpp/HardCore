@@ -167,6 +167,7 @@ $Suites = @{
 		'tests/inventory_weight_authority_test.tscn',
 		'tests/loot_pickup_ground_unit_test.tscn',
 		'tests/hud_authority_integration_test.tscn',
+		'tests/hud_background_prewarm_test.tscn',
 		'tests/complete_item_system_test.tscn',
 		'tests/inventory_equipment_ui_test.tscn',
 		'tests/multi_character_save_test.tscn',
@@ -414,6 +415,7 @@ $Suites.formal_map_projection_critical = @(
 
 $Suites.map_runtime_release_critical = @(
     'tests/map_runtime_release_registry_contract_test.tscn',
+    'tests/map_ui_presentation_projection_test.tscn',
     'tests/map_persistent_boss_spawn_identity_test.tscn',
     'tests/release_registry_current_maps_test.tscn',
     'tests/map_runtime_release_gate_test.tscn'

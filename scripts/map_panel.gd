@@ -64,7 +64,17 @@ var _formal_identity_by_map_key: Dictionary = {}
 var _hub_owner_by_map_key: Dictionary = {}
 var _last_entry_ids: Array[int] = []
 var _layout_profile_applied := false
-var _debug_operation_counters := {"snapshot_scans": 0, "snapshot_builds": 0, "content_resolves": 0, "world_tree_rebuilds": 0, "card_rebuilds": 0, "layout_applies": 0}
+var _debug_operation_counters := {
+	"snapshot_scans": 0,
+	"snapshot_builds": 0,
+	"content_resolves": 0,
+	"presentation_catalog_hits": 0,
+	"presentation_catalog_misses": 0,
+	"runtime_content_resolves": 0,
+	"world_tree_rebuilds": 0,
+	"card_rebuilds": 0,
+	"layout_applies": 0,
+}
 
 
 func _ready() -> void:
@@ -205,7 +215,7 @@ func _build_runtime_catalog() -> Array:
 
 func _ensure_presentation_snapshot() -> bool:
 	var released_ids := MapEditorRuntimeBridgeScript.released_map_ids()
-	var key := "formal:%s" % str(released_ids)
+	var key := "formal:%s" % MapEditorRuntimeBridgeScript.map_ui_presentation_snapshot_key()
 	if key == _presentation_snapshot_key and not _presentation_maps.is_empty():
 		return false
 	_debug_operation_counters["snapshot_scans"] += 1
@@ -248,10 +258,12 @@ func _ensure_presentation_snapshot() -> bool:
 		map_data["formalMapKey"] = map_key
 		map_data["series"] = str(identity.get("series", ""))
 		map_data["hubMapKey"] = str(_hub_owner_by_map_key.get(map_key, ""))
-		var content := MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+		var content := MapEditorRuntimeBridgeScript.map_ui_content_for_map(map_id)
 		_debug_operation_counters["content_resolves"] += 1
 		if content.is_empty():
-			content = RegionContent.get_map_content(map_id)
+			_debug_operation_counters["presentation_catalog_misses"] += 1
+		else:
+			_debug_operation_counters["presentation_catalog_hits"] += 1
 		var summary := "探索区域"
 		for boss: Variant in content.get("bosses", []):
 			if boss is Dictionary and not str(boss.get("name", "")).strip_edges().is_empty():
@@ -609,10 +621,19 @@ func _show_selected(index: int) -> void:
 
 func _player_map_content(map_id: int) -> Dictionary:
 	var dto: Dictionary = _presentation_by_id.get(map_id, {})
-	if not dto.has("content"):
-		return {}
-	var cached: Variant = dto["content"]
-	return cached if cached is Dictionary else {}
+	var cached: Variant = dto.get("content", {})
+	if cached is Dictionary and not (cached as Dictionary).is_empty():
+		return cached
+	# A missing or stale presentation projection must never trigger an all-map
+	# scan. Resolve only the map the player actually selected, then retain it.
+	var content := MapEditorRuntimeBridgeScript.game_content_for_map(map_id)
+	_debug_operation_counters["runtime_content_resolves"] += 1
+	if content.is_empty() and RegionContent.has_map(map_id):
+		content = RegionContent.get_map_content(map_id)
+	if not dto.is_empty() and not content.is_empty():
+		dto["content"] = content
+		_presentation_by_id[map_id] = dto
+	return content
 
 
 func _map_card_summary(map_data: Dictionary) -> String:

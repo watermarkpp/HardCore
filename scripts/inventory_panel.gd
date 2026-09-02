@@ -19,6 +19,7 @@ const BAG_COLUMNS := 6
 ## Six columns x five 64px rows (with 4px separation) fit the 340px viewport.
 const BAG_VISIBLE_CAPACITY := 30
 const BAG_CAPACITY := 100
+const BAG_BACKGROUND_CELL_BATCH := 10
 const EQUIPMENT_SLOT_LAYOUT_REVISION := 1
 const ITEM_DETAIL_LAYOUT_REVISION := 1
 const BAG_CELL_SIZE := Vector2(56, 64)
@@ -72,6 +73,8 @@ var _layout_apply_count := 0
 var _bag_cells: Array[Control] = []
 var _bag_cell_creation_count := 0
 var _bag_cell_update_count := 0
+var _bag_cells_ready := false
+var _bag_cell_initialization_running := false
 var _selection_cell_update_count := 0
 var _action_feedback_serial := 0
 # Production policy: the long-press context menu is intentionally suppressed.
@@ -109,8 +112,9 @@ func _ready() -> void:
 	PlayerState.inventory_changed.connect(_on_inventory_data_changed)
 	PlayerState.equipment_changed.connect(_on_equipment_data_changed)
 	PlayerState.profile_changed.connect(_refresh_character_stats)
-	_initialize_bag_cells()
+	_initialize_bag_cells(BAG_VISIBLE_CAPACITY)
 	refresh()
+	_continue_bag_cell_initialization.call_deferred()
 
 
 func _build_modal_surface() -> void:
@@ -401,6 +405,12 @@ func _on_equipment_data_changed() -> void:
 func _on_visibility_changed() -> void:
 	if not visible:
 		return
+	# The background builder normally finishes before the first interaction. If
+	# the player opens the panel immediately after READY, preserve the visible
+	# 100-slot contract rather than exposing a partially constructed grid.
+	if not _bag_cells_ready:
+		_initialize_bag_cells(BAG_CAPACITY)
+		_refresh_pending = true
 	if _refresh_pending:
 		refresh()
 	# A panel can be kept alive while HUD toggles it.  Action feedback (for
@@ -516,7 +526,8 @@ func _character_stats_text(stats: Dictionary) -> String:
 
 
 func _refresh_bag_grid() -> void:
-	_initialize_bag_cells()
+	if _bag_cells.is_empty():
+		_initialize_bag_cells(BAG_VISIBLE_CAPACITY)
 	if selected_inventory_index >= PlayerState.inventory.size() or _inventory_record(selected_inventory_index).is_empty():
 		selected_inventory_index = -1
 	var stale_selection_indices: Array = []
@@ -525,7 +536,7 @@ func _refresh_bag_grid() -> void:
 			stale_selection_indices.append(selected_index)
 	for selected_index: Variant in stale_selection_indices:
 		selected_inventory_indices.erase(selected_index)
-	for inventory_index in range(BAG_CAPACITY):
+	for inventory_index in range(_bag_cells.size()):
 		_update_bag_cell(inventory_index, _inventory_record(inventory_index))
 	_stabilize_bag_layout()
 	bag_summary_label.text = "金币 %d　%d/%d格" % [PlayerState.gold, PlayerState.inventory_occupied_count(), BAG_CAPACITY]
@@ -535,14 +546,36 @@ func _refresh_bag_grid() -> void:
 		detail_label.text = "[color=#d9c09a]单击物品查看属性，双击使用或装备。[/color]"
 
 
-func _initialize_bag_cells() -> void:
-	if not _bag_cells.is_empty():
-		return
-	for index in range(BAG_CAPACITY):
+func _initialize_bag_cells(target_count := BAG_CAPACITY) -> void:
+	var bounded_target := mini(BAG_CAPACITY, maxi(0, target_count))
+	for index in range(_bag_cells.size(), bounded_target):
 		var cell := _create_bag_cell(index, {})
 		item_grid.add_child(cell)
 		_bag_cells.append(cell)
 		_bag_cell_creation_count += 1
+	_bag_cells_ready = _bag_cells.size() >= BAG_CAPACITY
+
+
+func _continue_bag_cell_initialization() -> void:
+	if _bag_cells_ready or _bag_cell_initialization_running:
+		return
+	_bag_cell_initialization_running = true
+	while is_inside_tree() and _bag_cells.size() < BAG_CAPACITY:
+		var first_new_index := _bag_cells.size()
+		_initialize_bag_cells(first_new_index + BAG_BACKGROUND_CELL_BATCH)
+		for index in range(first_new_index, _bag_cells.size()):
+			_update_bag_cell(index, _inventory_record(index))
+		item_grid.queue_sort()
+		await get_tree().process_frame
+	_bag_cells_ready = _bag_cells.size() >= BAG_CAPACITY
+	_bag_cell_initialization_running = false
+
+
+func wait_until_runtime_ready() -> void:
+	if not _bag_cells_ready:
+		_continue_bag_cell_initialization()
+	while is_inside_tree() and not _bag_cells_ready:
+		await get_tree().process_frame
 
 
 func _create_bag_cell(index: int, stack: Dictionary) -> Control:
