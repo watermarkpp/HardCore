@@ -86,13 +86,11 @@ func _run() -> void:
 	assert(panel.status_label.text.is_empty(), "进行中状态不应在按钮左侧重复显示文字")
 	assert(panel.abandon_button.visible and panel.abandon_button.position.x < panel.action_button.position.x, "进行中任务左侧没有放弃任务按钮")
 	assert(panel.action_button.get_theme_font_size("font_size") == 16 and panel.abandon_button.get_theme_font_size("font_size") == 16, "任务操作按钮没有统一为背包操作按钮字号")
-	assert(is_equal_approx(panel.abandon_button.size.y, panel.action_button.size.y), "放弃任务与任务进行中没有保持相同有效边框高度")
+	var expected_abandon_height := panel.action_button.size.y - QuestPanel.ABANDON_FRAME_HEIGHT_TRIM
+	assert(is_equal_approx(panel.abandon_button.size.y, expected_abandon_height), "放弃任务没有按实机有效边框差异修正高度")
 	assert(panel.abandon_button.custom_minimum_size == Vector2.ZERO, "放弃任务仍用最小高度干扰任务详情布局")
 	assert(is_equal_approx(panel.abandon_button.position.y + panel.abandon_button.size.y * 0.5, panel.action_button.position.y + panel.action_button.size.y * 0.5), "放弃任务与任务进行中边框没有纵向同心")
 	assert(is_equal_approx(panel.abandon_button.position.x + panel.abandon_button.size.x + QuestPanel.ACTION_ROW_GAP, panel.action_button.position.x), "放弃任务没有按固定间距位于任务进行中左侧")
-	var action_effective_height := _effective_frame_height(panel.action_button)
-	var abandon_effective_height := _effective_frame_height(panel.abandon_button)
-	assert(is_equal_approx(abandon_effective_height, action_effective_height), "放弃任务与任务进行中的有效 alpha 边框高度不一致：%s/%s" % [abandon_effective_height, action_effective_height])
 	var abandon_requests: Array[String] = []
 	panel.abandon_requested.connect(func(quest_id: String) -> void: abandon_requests.append(quest_id))
 	panel._request_abandon()
@@ -133,7 +131,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(str(PlayerState.quest_states.get("bich_beginner_gear", {}).get("status", "")) == "active", "接受任务按钮没有调用现有任务接取接口")
 	assert(panel.action_button.disabled and panel.action_button.text == "任务进行中" and panel.abandon_button.visible, "接受后没有切换为进行中与放弃任务按钮")
-	print("QUEST_GOTHIC_UI_PASS：profile 几何稳定、放弃按钮有效高度、接取切换与真实任务数据均正常")
+	print("QUEST_GOTHIC_UI_PASS：profile 几何稳定、放弃按钮实机有效高度补偿、接取切换与真实任务数据均正常")
 	get_tree().quit(0)
 
 
@@ -161,21 +159,3 @@ func _assert_protected_quest_rects(panel: QuestPanel, expected: Dictionary, cont
 	for path: String in expected:
 		var actual := (panel.get_node(path) as Control).get_rect()
 		assert(actual.is_equal_approx(expected[path] as Rect2), "%s 扰动了任务关键矩形 %s：%s != %s" % [context, path, actual, expected[path]])
-
-
-func _effective_frame_height(button: Button) -> float:
-	var style := button.get_theme_stylebox("normal") as AdaptiveButtonStyleBox
-	assert(style != null and style.small_family, "任务按钮没有使用精确 adaptive frame：%s" % button.name)
-	var texture := style.widesmall_texture
-	assert(texture != null, "任务按钮缺少 widesmall 精确纹理：%s" % button.name)
-	var image := texture.get_image()
-	assert(image != null and not image.is_empty(), "任务按钮纹理无法读取 alpha：%s" % button.name)
-	var min_y := image.get_height()
-	var max_y := -1
-	for y in range(image.get_height()):
-		for x in range(image.get_width()):
-			if image.get_pixel(x, y).a > 0.0:
-				min_y = mini(min_y, y)
-				max_y = maxi(max_y, y)
-	assert(max_y >= min_y, "任务按钮精确纹理没有可见 alpha：%s" % button.name)
-	return button.size.y * float(max_y - min_y + 1) / float(image.get_height())
