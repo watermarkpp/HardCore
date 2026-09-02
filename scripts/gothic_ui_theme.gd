@@ -340,7 +340,10 @@ static func build() -> Theme:
 	_apply_exact_skill_button(result, &"GothicQuestCardPlainButton", _visible_alpha_region(QUEST_CARD_PLAIN_286X62, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_MASK, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_FRAME, Rect2(1, 5, 284, 50)))
 	_apply_exact_skill_button(result, &"GothicQuestCardSelectedPlainButton", _visible_alpha_region(QUEST_CARD_PLAIN_286X62, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_MASK, Rect2(1, 5, 284, 50)), _visible_alpha_region(QUEST_CARD_PLAIN_286X62_FRAME, Rect2(1, 5, 284, 50)), BUTTON_SELECTED_FILL)
 	_apply_exact_action_button(result, &"GothicQuestActionGemButton", _visible_alpha_region(QUEST_ACTION_GEM_342X50, Rect2(1, 2, 340, 46)), _visible_alpha_region(QUEST_ACTION_GEM_342X50_MASK, Rect2(1, 2, 340, 46)), _visible_alpha_region(QUEST_ACTION_GEM_342X50_FRAME, Rect2(1, 2, 340, 46)))
-	_apply_exact_action_button(result, &"GothicQuestAbandonPlainButton", _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52, Rect2(1, 4, 126, 42)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_MASK, Rect2(1, 4, 126, 42)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_FRAME, Rect2(1, 4, 126, 42)))
+	# Keep the accepted quest controls at identical geometry.  This asymmetric
+	# transparent crop compensates only the plain frame's effective pixels: its
+	# lower ornament sits farther from the source centre than the gem frame.
+	_apply_exact_action_button(result, &"GothicQuestAbandonPlainButton", _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52, Rect2(1, 3, 126, 47)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_MASK, Rect2(1, 3, 126, 47)), _visible_alpha_region(QUEST_ABANDON_PLAIN_128X52_FRAME, Rect2(1, 3, 126, 47)))
 	_offset_button_text_up(result, &"GothicQuestActionGemButton", 2.0)
 	_offset_button_text_up(result, &"GothicQuestAbandonPlainButton", 2.0)
 	_apply_exact_skill_button(result, &"GothicSystemMenuGemButton", _visible_alpha_region(SYSTEM_MENU_GEM_356X60, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_MENU_GEM_356X60_MASK, Rect2(1, 3, 354, 55)), _visible_alpha_region(SYSTEM_MENU_GEM_356X60_FRAME, Rect2(1, 3, 354, 55)))

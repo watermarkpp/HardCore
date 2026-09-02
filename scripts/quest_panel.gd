@@ -15,12 +15,6 @@ const QUEST_CARD_SIZE := Vector2(286, 62)
 const QUEST_CARD_SEPARATION := 7
 const QUEST_LIST_LAYOUT_REVISION := 1
 const ACTION_ROW_GAP := 12.0
-const ABANDON_BUTTON_SIZE := Vector2(128, 52)
-## The compact plain frame renders about three physical pixels taller than the
-## gem action frame when both controls are 52 logical pixels high on the device
-## profile.  Trim only the abandon control's draw height; never feed this value
-## into custom_minimum_size or any parent/profile geometry.
-const ABANDON_FRAME_HEIGHT_TRIM := 2.0
 
 var title_label: Label
 var description_label: RichTextLabel
@@ -233,8 +227,7 @@ func _build_quest_detail() -> void:
 	abandon_button.name = "AbandonButton"
 	abandon_button.text = "放弃任务"
 	abandon_button.position = Vector2(204, 436)
-	abandon_button.size = ABANDON_BUTTON_SIZE
-	abandon_button.custom_minimum_size = Vector2.ZERO
+	abandon_button.size = Vector2(128, 52)
 	abandon_button.theme_type_variation = "GothicQuestAbandonPlainButton"
 	abandon_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	abandon_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
@@ -514,29 +507,23 @@ func _set_abandon_available(enabled: bool) -> void:
 	# replace the user's saved action-button geometry with procedural presets
 	# after the profile has been applied.
 	var profile_ready := UIRuntimeLayoutOverridesScript.profile_is_ready(self, "quest")
-	# Restore the accepted quest layout contract: once profile replay starts,
-	# ActionButton and every other quest node are read-only here.  Only the
-	# otherwise-unprofiled AbandonButton is positioned from the live action rect.
-	var profile_owns_action_geometry := _layout_initialized or profile_ready
-	if not profile_owns_action_geometry:
-		if enabled:
+	if enabled:
+		if not profile_ready:
 			action_button.position = Vector2(344, 436)
 			action_button.size = Vector2(260, 52)
-		else:
-			action_button.position = Vector2(204, 436)
-			action_button.size = Vector2(400, 52)
-	if enabled:
-		_layout_abandon_button_from_action()
-
-
-func _layout_abandon_button_from_action() -> void:
-	var abandon_height := maxf(1.0, action_button.size.y - ABANDON_FRAME_HEIGHT_TRIM)
-	abandon_button.custom_minimum_size = Vector2.ZERO
-	abandon_button.position = Vector2(
-		maxf(0.0, action_button.position.x - ACTION_ROW_GAP - ABANDON_BUTTON_SIZE.x),
-		action_button.position.y + (action_button.size.y - abandon_height) * 0.5,
-	)
-	abandon_button.size = Vector2(ABANDON_BUTTON_SIZE.x, abandon_height)
+		# The action rectangle may come from the saved calibration profile while
+		# AbandonButton was hidden and therefore absent from that profile.  Derive
+		# the secondary control from the live action rectangle so both always form
+		# one row without replacing the calibrated action geometry.
+		abandon_button.position = Vector2(
+			maxf(0.0, action_button.position.x - ACTION_ROW_GAP - abandon_button.size.x),
+			action_button.position.y,
+		)
+		abandon_button.custom_minimum_size.y = action_button.size.y
+		abandon_button.size.y = action_button.size.y
+	elif not profile_ready:
+		action_button.position = Vector2(204, 436)
+		action_button.size = Vector2(400, 52)
 
 
 func _request_abandon() -> void:
