@@ -33,8 +33,6 @@ func _run() -> void:
 	var list_scroll := panel.get_node("QuestListPanel/QuestListScroll") as ScrollContainer
 	assert(list_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "任务人物列表外仍有多余细框")
 	var divider := panel.get_node("QuestDetailPanel/StoryDivider") as HSeparator
-	var detail_panel := panel.get_node("QuestDetailPanel") as Control
-	assert(divider.position.x == 20.0 and is_equal_approx(divider.size.x, detail_panel.size.x - 40.0), "任务详情横线没有在二级框内左右各留20像素")
 	assert(divider.get_meta("calibration_layer", "") == "quest_story_divider", "任务详情横线仍无法独立选中")
 	var rewards_panel := panel.get_node("QuestDetailPanel/RewardsPanel") as Panel
 	assert(rewards_panel.theme_type_variation == "GothicInfoPanel", "任务奖励没有使用简洁公共信息框")
@@ -57,8 +55,11 @@ func _run() -> void:
 	assert(UIRuntimeLayoutOverrides.profile_is_ready(panel, "quest"), "任务面板没有完成最新人工存档布局加载")
 	var saved_contract := JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/ui/manual_layout_overrides.json")) as Dictionary
 	var saved_action: Array = saved_contract.get("profiles", {}).get("quest", {}).get("nodes", {}).get("QuestDetailPanel/ActionButton", {}).get("logicalRect", [])
+	var saved_divider: Array = saved_contract.get("profiles", {}).get("quest", {}).get("nodes", {}).get("QuestDetailPanel/StoryDivider", {}).get("logicalRect", [])
 	assert(saved_action.size() == 4, "任务面板人工存档缺少操作按钮布局")
+	assert(saved_divider.size() == 4, "任务面板人工存档缺少详情分隔线布局")
 	assert(panel.action_button.position.is_equal_approx(Vector2(float(saved_action[0]), float(saved_action[1]))) and panel.action_button.size.is_equal_approx(Vector2(float(saved_action[2]), float(saved_action[3]))), "任务状态刷新覆盖了人工存档的操作按钮布局")
+	assert(divider.position.is_equal_approx(Vector2(float(saved_divider[0]), float(saved_divider[1]))) and divider.size.is_equal_approx(Vector2(float(saved_divider[2]), float(saved_divider[3]))), "任务页代码覆盖了人工存档的详情分隔线布局")
 	var protected_profile_rects := _protected_quest_rects(panel)
 	UIRuntimeLayoutOverrides.apply_profile(panel, "quest")
 	await get_tree().process_frame
@@ -85,7 +86,8 @@ func _run() -> void:
 	assert(panel.action_button.disabled and panel.action_button.text == "任务进行中", "进行中任务不应重复接取或提交")
 	assert(panel.status_label.text.is_empty(), "进行中状态不应在按钮左侧重复显示文字")
 	assert(panel.abandon_button.visible and panel.abandon_button.position.x < panel.action_button.position.x, "进行中任务左侧没有放弃任务按钮")
-	assert(panel.action_button.get_theme_font_size("font_size") == 16 and panel.abandon_button.get_theme_font_size("font_size") == 16, "任务操作按钮没有统一为背包操作按钮字号")
+	var saved_action_font := int(saved_contract.get("profiles", {}).get("quest", {}).get("nodes", {}).get("QuestDetailPanel/ActionButton", {}).get("logicalFontSize", 0))
+	assert(panel.action_button.get_theme_font_size("font_size") == saved_action_font and panel.abandon_button.get_theme_font_size("font_size") == saved_action_font, "任务操作按钮没有统一采用人工校准字号")
 	assert(is_equal_approx(panel.abandon_button.position.y, panel.action_button.position.y), "放弃任务与任务进行中没有处于同一纵坐标")
 	assert(is_equal_approx(panel.abandon_button.size.y, panel.action_button.size.y), "放弃任务与任务进行中控件高度不一致")
 	assert(is_equal_approx(panel.abandon_button.custom_minimum_size.y, panel.action_button.size.y), "放弃任务的最小高度没有恢复到错乱前的布局合同")

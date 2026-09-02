@@ -307,7 +307,6 @@ func _flush_queued_refresh() -> void:
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:
 	if profile_id == "quest" and abandon_button != null:
 		_stabilize_quest_list_layout()
-		_stabilize_story_divider()
 		_set_abandon_available(abandon_button.visible)
 
 
@@ -322,18 +321,6 @@ func _stabilize_quest_list_layout() -> void:
 		button.custom_minimum_size = QUEST_CARD_SIZE
 		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	quest_list.queue_sort()
-
-
-func _stabilize_story_divider() -> void:
-	if story_divider == null or not is_instance_valid(story_divider):
-		return
-	var detail_panel := story_divider.get_parent() as Control
-	if detail_panel == null:
-		return
-	story_divider.anchor_left = 0.0
-	story_divider.anchor_right = 1.0
-	story_divider.offset_left = 20.0
-	story_divider.offset_right = -20.0
 
 
 func _rebuild_quest_cards(active_quest_id: String) -> void:
@@ -502,6 +489,12 @@ func _act() -> void:
 func _set_abandon_available(enabled: bool) -> void:
 	abandon_button.visible = enabled
 	abandon_button.disabled = not enabled
+	# AbandonButton is intentionally absent from the authored profile. Mirror the
+	# calibrated action label size so the two controls remain one visual row.
+	abandon_button.add_theme_font_size_override(
+		"font_size",
+		action_button.get_theme_font_size("font_size"),
+	)
 	# The authored quest profile owns the action button rectangle. Refreshes
 	# and state transitions still toggle the abandon control, but must not
 	# replace the user's saved action-button geometry with procedural presets
