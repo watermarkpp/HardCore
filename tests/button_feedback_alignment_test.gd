@@ -5,6 +5,7 @@ const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 
 func _ready() -> void:
 	var theme := GothicUIThemeScript.build()
+	assert(GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE == 16, "执行按钮字号没有以自动整理/丢弃的16号为统一标准")
 	for variation: StringName in [
 		&"GothicInventoryActionGemButton",
 		&"GothicShopBuyActionGemButton",

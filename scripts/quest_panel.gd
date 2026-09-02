@@ -15,6 +15,11 @@ const QUEST_CARD_SIZE := Vector2(286, 62)
 const QUEST_CARD_SEPARATION := 7
 const QUEST_LIST_LAYOUT_REVISION := 1
 const ACTION_ROW_GAP := 12.0
+## Pixel inspection of the rendered alpha bounds shows the compact plain frame
+## one logical pixel taller at both edges than the disabled gem action frame.
+## Keep the controls centred on the same row while compensating only that
+## effective border height; their authored x/width remain untouched.
+const ABANDON_FRAME_VERTICAL_COMPENSATION := 2.0
 
 var title_label: Label
 var description_label: RichTextLabel
@@ -515,12 +520,13 @@ func _set_abandon_available(enabled: bool) -> void:
 		# AbandonButton was hidden and therefore absent from that profile.  Derive
 		# the secondary control from the live action rectangle so both always form
 		# one row without replacing the calibrated action geometry.
+		var abandon_frame_height := maxf(1.0, action_button.size.y - ABANDON_FRAME_VERTICAL_COMPENSATION)
 		abandon_button.position = Vector2(
 			maxf(0.0, action_button.position.x - ACTION_ROW_GAP - abandon_button.size.x),
-			action_button.position.y,
+			action_button.position.y + (action_button.size.y - abandon_frame_height) * 0.5,
 		)
-		abandon_button.custom_minimum_size.y = action_button.size.y
-		abandon_button.size.y = action_button.size.y
+		abandon_button.custom_minimum_size.y = abandon_frame_height
+		abandon_button.size.y = abandon_frame_height
 	elif not profile_ready:
 		action_button.position = Vector2(204, 436)
 		action_button.size = Vector2(400, 52)

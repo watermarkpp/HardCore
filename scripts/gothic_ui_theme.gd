@@ -175,7 +175,9 @@ const BUTTON_SELECTED_BORDER := Color(0.78, 0.26, 0.28, 0.90)
 const BUTTON_SELECTED_SHADOW := Color(0.76, 0.16, 0.24, 0.76)
 const BUTTON_ACTION_IDLE_FILL := Color(0.36, 0.28, 0.075, 0.28)
 const BUTTON_ACTION_DISABLED_FILL := Color(0.095, 0.09, 0.085, 0.82)
-const BUTTON_ACTION_FONT_SIZE := 18
+## Accepted inventory actions (AutoSortButton / DiscardButton) are the font
+## authority for every executable action button.
+const BUTTON_ACTION_FONT_SIZE := 16
 const BUTTON_SUCCESS_FILL := Color(0.36, 0.28, 0.075, 0.28)
 const BUTTON_SUCCESS_BORDER := Color(0.93, 0.82, 0.38, 0.96)
 const BUTTON_SUCCESS_SHADOW := Color(0.94, 0.68, 0.18, 0.74)

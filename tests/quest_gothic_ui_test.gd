@@ -73,9 +73,11 @@ func _run() -> void:
 	assert(panel.action_button.disabled and panel.action_button.text == "任务进行中", "进行中任务不应重复接取或提交")
 	assert(panel.status_label.text.is_empty(), "进行中状态不应在按钮左侧重复显示文字")
 	assert(panel.abandon_button.visible and panel.abandon_button.position.x < panel.action_button.position.x, "进行中任务左侧没有放弃任务按钮")
-	assert(is_equal_approx(panel.abandon_button.position.y, panel.action_button.position.y), "放弃任务与任务进行中没有处于同一纵坐标")
-	assert(is_equal_approx(panel.abandon_button.size.y, panel.action_button.size.y), "放弃任务与任务进行中按钮高度不一致")
-	assert(is_equal_approx(panel.abandon_button.custom_minimum_size.y, panel.action_button.size.y), "放弃任务的最小高度没有锁定到领取任务高度")
+	assert(panel.action_button.get_theme_font_size("font_size") == 16 and panel.abandon_button.get_theme_font_size("font_size") == 16, "任务操作按钮没有统一为背包操作按钮字号")
+	var expected_abandon_frame_height := panel.action_button.size.y - QuestPanel.ABANDON_FRAME_VERTICAL_COMPENSATION
+	assert(is_equal_approx(panel.abandon_button.size.y, expected_abandon_frame_height), "放弃任务没有按有效像素补偿边框高度")
+	assert(is_equal_approx(panel.abandon_button.custom_minimum_size.y, expected_abandon_frame_height), "放弃任务最小高度没有保留有效像素补偿")
+	assert(is_equal_approx(panel.abandon_button.position.y + panel.abandon_button.size.y * 0.5, panel.action_button.position.y + panel.action_button.size.y * 0.5), "放弃任务与任务进行中边框没有纵向同心")
 	assert(is_equal_approx(panel.abandon_button.position.x + panel.abandon_button.size.x + QuestPanel.ACTION_ROW_GAP, panel.action_button.position.x), "放弃任务没有按固定间距位于任务进行中左侧")
 	var abandon_requests: Array[String] = []
 	panel.abandon_requested.connect(func(quest_id: String) -> void: abandon_requests.append(quest_id))

@@ -384,6 +384,7 @@ func _on_inventory_data_changed() -> void:
 	# semantic selection after their mutation completes.
 	selected_inventory_index = -1
 	selected_inventory_indices.clear()
+	_refresh_inventory_action_states()
 	if not visible:
 		_refresh_pending = true
 		return
@@ -436,6 +437,7 @@ func refresh() -> void:
 		_layout_apply_count += 1
 		UIRuntimeLayoutOverridesScript.apply_profile(self, "inventory")
 	_stabilize_bag_layout()
+	_refresh_inventory_action_states()
 
 
 func _queue_refresh() -> void:
@@ -670,6 +672,7 @@ func _select_inventory_item(index: int) -> void:
 	_refresh_equipment_slots()
 	for cell_index: int in [old_selected_index, index]:
 		_refresh_bag_cell_selection(cell_index)
+	_refresh_inventory_action_states()
 
 
 func _refresh_bag_cell_selection(index: int) -> void:
@@ -688,6 +691,15 @@ func _clear_inventory_selection_styles() -> void:
 	selected_inventory_indices.clear()
 	for raw_index: Variant in changed_indices:
 		_refresh_bag_cell_selection(int(raw_index))
+	_refresh_inventory_action_states()
+
+
+func _refresh_inventory_action_states() -> void:
+	if discard_button == null:
+		return
+	# Discard is a selection-scoped transaction.  An empty selection must use
+	# the shared unavailable (grey) state and must not accept pointer input.
+	discard_button.disabled = selected_inventory_indices.is_empty()
 
 
 func _select_equipment_slot(slot: String) -> void:
@@ -953,6 +965,8 @@ func _on_auto_sort_pressed() -> void:
 
 
 func _on_discard_pressed() -> void:
+	if discard_button == null or discard_button.disabled or selected_inventory_indices.is_empty():
+		return
 	var indices: Array = selected_inventory_indices.keys()
 	_clear_inventory_action_feedback()
 	GothicUIThemeScript.set_button_feedback(discard_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "inventory.discard")

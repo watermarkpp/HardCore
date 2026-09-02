@@ -398,19 +398,30 @@ func _run() -> void:
 	PlayerState.add_item("布衣(男)")
 	panel.refresh()
 	await get_tree().process_frame
+	panel._clear_inventory_selection_styles()
+	assert(panel.auto_sort_button.get_theme_font_size("font_size") == 16 and panel.discard_button.get_theme_font_size("font_size") == 16, "背包操作按钮字号基准不是16")
+	assert(panel.discard_button.disabled, "未选择物品时丢弃按钮没有进入灰色禁用状态")
+	var inventory_before_empty_discard: Array = PlayerState.inventory.duplicate(true)
+	panel._on_discard_pressed()
+	assert(PlayerState.inventory == inventory_before_empty_discard, "空选择仍触发了丢弃交易")
+	assert(not panel.discard_button.has_meta("gothic_feedback_state"), "空选择仍启动了丢弃按钮动画")
 	var selected_for_sort := 0
 	panel.selected_inventory_indices = {selected_for_sort: true}
 	panel.selected_inventory_index = selected_for_sort
+	panel._refresh_inventory_action_states()
 	assert(panel.selected_inventory_index == selected_for_sort, "整理前未建立选择")
 	panel._on_auto_sort_pressed()
 	await get_tree().process_frame
 	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "整理后保留了陈旧选择")
 	panel.selected_inventory_indices = {0: true, 1: true}
 	panel.selected_inventory_index = 1
+	panel._refresh_inventory_action_states()
 	assert(not panel.selected_inventory_indices.is_empty(), "丢弃前未建立多选")
+	assert(not panel.discard_button.disabled, "已有物品选择时丢弃按钮仍被禁用")
 	panel._on_discard_pressed()
 	await get_tree().process_frame
 	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "丢弃后保留了陈旧选择")
+	assert(panel.discard_button.disabled, "丢弃清空选择后按钮没有恢复灰色禁用状态")
 	assert(panel.selected_inventory_index < PlayerState.inventory.size(), "丢弃后选择索引越界")
 	get_tree().quit(0)
 
