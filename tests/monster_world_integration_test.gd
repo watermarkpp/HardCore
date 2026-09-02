@@ -87,6 +87,7 @@ func _run() -> void:
 
 	_test_runtime_no_drop_rejection()
 	_test_overflow_telemetry_death_entry()
+	_test_same_frame_death_batch()
 
 	for rejected: Variant in [0, -1, "", "64", "abc", "64x", 999999]:
 		var monster_id := GameData.canonical_monster_id(rejected)
@@ -274,6 +275,7 @@ func _test_overflow_telemetry_death_entry() -> void:
 	var monster_data := GameData.get_monster_by_id(145).duplicate(true)
 	assert(int(monster_data.get("monster_id", -1)) == 145)
 	game._on_enemy_died(enemy, monster_data)
+	game._flush_enemy_deaths()
 	assert(
 		LootRuntime.overflow_telemetry_snapshot().is_empty(),
 		"disabled-drop death must not create overflow telemetry"
@@ -293,6 +295,38 @@ func _test_overflow_telemetry_death_entry() -> void:
 		)
 	game.free()
 	enemy.free()
+
+
+func _test_same_frame_death_batch() -> void:
+	var game := GameRootScript.new()
+	var monster_data := GameData.get_monster_by_id(34).duplicate(true)
+	var experience_each := int(
+		(monster_data.get("combat", {}) as Dictionary).get("stats", {}).get("exp", 0)
+	)
+	assert(experience_each > 0, "AOE death fixture has no experience")
+	PlayerState.level = 1
+	PlayerState.experience = 0
+	PlayerState.test_transaction_debug_reset()
+	var enemies: Array[EnemyActor] = []
+	for index in range(2):
+		var enemy := EnemyActor.new()
+		enemy.global_position = Vector2(index * 8, 0)
+		enemy.set_meta("respawn_enabled", false)
+		enemies.append(enemy)
+		game._on_enemy_died(enemy, monster_data)
+	assert(game._pending_enemy_deaths.size() == 2, "same-frame deaths were not queued together")
+	assert(
+		PlayerState.test_transaction_debug_snapshot().commit_attempts == 0,
+		"death callback committed before the same-frame batch closed"
+	)
+	game._flush_enemy_deaths()
+	var counters := PlayerState.test_transaction_debug_snapshot()
+	assert(counters.commit_attempts == 1, "two same-frame deaths did not share one save")
+	assert(PlayerState.experience == experience_each * 2, "AOE batch lost experience")
+	assert(game._pending_enemy_deaths.is_empty(), "AOE death queue did not drain")
+	game.free()
+	for enemy: EnemyActor in enemies:
+		enemy.free()
 
 
 func _test_region_content_contract() -> void:

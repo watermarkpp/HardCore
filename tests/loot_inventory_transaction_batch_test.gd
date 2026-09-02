@@ -25,6 +25,12 @@ func _run() -> void:
 	assert(loot_debug.occupied_scans == 1, "pickup repeated the fixed-slot occupied scan")
 	assert(loot_debug.catalog_lookups == 1, "pickup repeated the catalog lookup for one item kind")
 	assert(bool(PlayerState._last_runtime_commit_profile.get("profile_index_skipped", false)), "pickup rewrote the unrelated character index")
+	var repeat_pickup := PlayerState.receive_loot_batch_partial([{"item_name": stack_item}])
+	assert(repeat_pickup.success, "repeat pickup failed")
+	assert(
+		PlayerState.loot_batch_debug_snapshot().catalog_lookups == 1,
+		"repeat pickup rebuilt an immutable catalog record"
+	)
 	var before := PlayerState.inventory.duplicate(true)
 	var gold_before := PlayerState.gold
 	PlayerState._test_force_atomic_write_failure = true
@@ -100,6 +106,23 @@ func _run() -> void:
 	PlayerState.experience = 0
 	var death := PlayerState.record_kill_and_experience("不存在的怪物", PlayerState.experience_to_next_level())
 	assert(death.success and PlayerState.test_transaction_debug_snapshot().commit_attempts == 1, "death transaction failed")
+	PlayerState.test_transaction_debug_reset()
+	PlayerState.level = 1
+	PlayerState.experience = 0
+	var aoe_death := PlayerState.record_kills_and_experience_batch([
+		{"monster_name": "不存在的怪物甲", "experience": 3},
+		{"monster_name": "不存在的怪物乙", "experience": 4},
+	])
+	var aoe_counters := PlayerState.test_transaction_debug_snapshot()
+	assert(
+		aoe_death.success
+		and int(aoe_death.get("kill_count", 0)) == 2
+		and int(aoe_death.get("save_count", 0)) == 1
+		and PlayerState.experience == 7
+		and aoe_counters.commit_attempts == 1
+		and aoe_counters.profile_signals == 1,
+		"same-frame AOE deaths were not one settlement/save/signal transaction"
+	)
 	PlayerState.test_transaction_debug_reset()
 	var death_before := [PlayerState.level, PlayerState.experience, PlayerState.computed_stats.duplicate(true)]
 	PlayerState._test_force_atomic_write_failure = true

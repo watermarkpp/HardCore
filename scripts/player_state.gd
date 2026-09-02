@@ -189,6 +189,7 @@ var _loot_batch_debug: Dictionary = {
 var _last_runtime_commit_profile: Dictionary = {}
 var _last_loot_batch_profile: Dictionary = {}
 var _last_death_settlement_profile: Dictionary = {}
+var _loot_inventory_catalog_cache: Dictionary = {}
 var _item_instance_serial := 0
 var _test_transaction_counters: Dictionary = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
 var _consumed_shop_buy_quote_ids: Dictionary = {}
@@ -1040,6 +1041,7 @@ func sell_inventory_items(requests: Array) -> Dictionary:
 
 func test_transaction_debug_reset() -> void:
 	_test_transaction_counters = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
+	_loot_inventory_catalog_cache.clear()
 	_loot_batch_debug = {
 		"plan_scans": 0,
 		"initial_weight_scans": 0,
@@ -1402,32 +1404,57 @@ func add_experience(amount: int) -> void:
 	_commit_save()
 
 
-## Atomic death settlement: quest progress and experience share one save.
-## This is intentionally separate from the legacy single-purpose entry points.
+## Compatibility entrypoint for one death. Runtime callers should batch every
+## death emitted in the same frame through record_kills_and_experience_batch so
+## AOE kills never multiply synchronous save commits.
 func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary:
+	return record_kills_and_experience_batch([{
+		"monster_name": monster_name,
+		"experience": amount,
+	}])
+
+
+## Atomic same-frame death settlement: every kill advances quests in stable
+## event order, all experience is applied, and the complete result is persisted
+## by exactly one save commit.
+func record_kills_and_experience_batch(kills: Array) -> Dictionary:
 	var profile_started_usec := Time.get_ticks_usec()
 	var quests_before := quest_states.duplicate(true)
 	var experience_before := experience
 	var level_before := level
 	var quest_changed := false
-	for quest_id: String in quest_states.keys():
-		var state: Dictionary = quest_states[quest_id]
-		if str(state.get("status", "")) != "active":
+	var gained := 0
+	var accepted_kill_count := 0
+	for raw_kill: Variant in kills:
+		if not raw_kill is Dictionary:
 			continue
-		var quest := GameData.get_bich_quest(quest_id)
-		if quest.is_empty():
+		var kill: Dictionary = raw_kill
+		var monster_name := str(kill.get("monster_name", ""))
+		var kill_experience := maxi(0, int(kill.get("experience", 0)))
+		if monster_name.is_empty() and kill_experience <= 0:
 			continue
-		var progress: Dictionary = state.get("progress", {})
-		var requirements: Dictionary = quest.get("objectives", {}).get("kills", {})
-		for objective_name: String in requirements.keys():
-			if not _quest_monster_matches(monster_name, objective_name):
+		accepted_kill_count += 1
+		gained += kill_experience
+		for quest_id: String in quest_states.keys():
+			var state: Dictionary = quest_states[quest_id]
+			if str(state.get("status", "")) != "active":
 				continue
-			progress[objective_name] = mini(int(requirements[objective_name]), int(progress.get(objective_name, 0)) + 1)
-			quest_changed = true
-		state["progress"] = progress
-		if _quest_objectives_complete(quest, state):
-			state["status"] = "ready"
-	var gained := maxi(0, amount)
+			var quest := GameData.get_bich_quest(quest_id)
+			if quest.is_empty():
+				continue
+			var progress: Dictionary = state.get("progress", {})
+			var requirements: Dictionary = quest.get("objectives", {}).get("kills", {})
+			for objective_name: String in requirements.keys():
+				if not _quest_monster_matches(monster_name, objective_name):
+					continue
+				progress[objective_name] = mini(
+					int(requirements[objective_name]),
+					int(progress.get(objective_name, 0)) + 1
+				)
+				quest_changed = true
+			state["progress"] = progress
+			if _quest_objectives_complete(quest, state):
+				state["status"] = "ready"
 	if gained > 0:
 		experience += gained
 		while experience >= experience_to_next_level():
@@ -1435,7 +1462,13 @@ func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary
 			level += 1
 			recalculate_stats(false)
 	if not quest_changed and gained <= 0:
-		return {"success": true, "quest_changed": false, "experience_gained": 0}
+		return {
+			"success": true,
+			"quest_changed": false,
+			"experience_gained": 0,
+			"kill_count": accepted_kill_count,
+			"save_count": 0,
+		}
 	var save_started_usec := Time.get_ticks_usec()
 	if not _commit_save(level != level_before):
 		_last_death_settlement_profile = {
@@ -1447,7 +1480,14 @@ func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary
 		experience = experience_before
 		level = level_before
 		recalculate_stats(false)
-		return {"success": false, "quest_changed": false, "experience_gained": 0, "reason": "save_failed"}
+		return {
+			"success": false,
+			"quest_changed": false,
+			"experience_gained": 0,
+			"kill_count": accepted_kill_count,
+			"save_count": 1,
+			"reason": "save_failed",
+		}
 	if quest_changed:
 		if test_mode:
 			_test_transaction_counters["quest_signals"] = int(_test_transaction_counters.get("quest_signals", 0)) + 1
@@ -1462,8 +1502,16 @@ func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary
 		"success": true,
 		"quest_changed": quest_changed,
 		"experience_gained": gained,
+		"kill_count": accepted_kill_count,
+		"save_count": 1,
 	}
-	return {"success": true, "quest_changed": quest_changed, "experience_gained": gained}
+	return {
+		"success": true,
+		"quest_changed": quest_changed,
+		"experience_gained": gained,
+		"kill_count": accepted_kill_count,
+		"save_count": 1,
+	}
 
 
 ## Applies the formal-death experience penalty exactly as a level-local
@@ -2200,9 +2248,28 @@ func current_wear_weight(excluded_slot := "") -> int:
 ## Weight is derived from the primary item catalog on every query. Currency
 ## records intentionally contribute zero so picking up gold never gets blocked
 ## by a full or legacy-overweight bag.
+func _loot_inventory_catalog_record(item_name: String) -> Dictionary:
+	if item_name.is_empty():
+		return {}
+	if _loot_inventory_catalog_cache.has(item_name):
+		return _loot_inventory_catalog_cache.get(item_name, {})
+	var catalog := GameData.get_item_record(item_name)
+	_loot_inventory_catalog_cache[item_name] = catalog
+	_loot_batch_debug["catalog_lookups"] = int(
+		_loot_batch_debug.get("catalog_lookups", 0)
+	) + 1
+	return catalog
+
+
+func _prewarm_loot_inventory_catalog(records: Array) -> void:
+	for raw_record: Variant in records:
+		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+			continue
+		_loot_inventory_catalog_record(str((raw_record as Dictionary).get("name", "")))
+
+
 func inventory_weight(records: Array = inventory) -> int:
 	var total := 0
-	var catalog_by_name: Dictionary = {}
 	for raw_record: Variant in records:
 		if not raw_record is Dictionary:
 			continue
@@ -2212,9 +2279,7 @@ func inventory_weight(records: Array = inventory) -> int:
 		var item_name := str(record.get("name", ""))
 		if item_name.is_empty():
 			continue
-		if not catalog_by_name.has(item_name):
-			catalog_by_name[item_name] = GameData.get_item_record(item_name)
-		var item: Dictionary = catalog_by_name.get(item_name, {})
+		var item: Dictionary = _loot_inventory_catalog_record(item_name)
 		if item.is_empty() or str(item.get("kind", "")) == "currency":
 			continue
 		var unit_weight := maxi(0, int(item.get("weight", 0)))
@@ -3676,6 +3741,9 @@ func load_save() -> void:
 	equipment = migrate_equipment_slots(saved_equipment)
 	_migrate_item_collection_durability(inventory)
 	_migrate_item_collection_durability(warehouse_inventory)
+	# Pay the immutable catalog lookup cost during profile loading instead of on
+	# the first combat pickup. Runtime weight checks then read the session cache.
+	_prewarm_loot_inventory_catalog(inventory)
 	learned_skills = parsed.get("learned_skills", {})
 	var progression_load: Dictionary = _skill_progression.load_snapshot(
 		parsed.get("skill_progression", learned_skills)
@@ -4746,7 +4814,9 @@ func _warehouse_transfer_commit(inventory_before: Array, warehouse_before: Array
 ## failures do not prevent later candidates from being attempted.
 func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 	var profile_started_usec := Time.get_ticks_usec()
-	var inventory_before := inventory.duplicate(true)
+	# working_inventory is the only copy mutated during planning. Keep the live
+	# array itself as the rollback snapshot; it remains untouched until commit.
+	var inventory_before := inventory
 	var gold_before := gold
 	var working_inventory := inventory.duplicate(true)
 	var working_gold := gold
@@ -4762,7 +4832,6 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		if not _inventory_slot_is_occupied(working_inventory[slot_index]):
 			free_slots.append(slot_index)
 	var free_slot_cursor := 0
-	var catalog_by_name: Dictionary = {}
 	var merge_slots_by_name: Dictionary = {}
 	var outcomes: Array = []
 	var changed := false
@@ -4778,10 +4847,7 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 			outcomes.append({"success": amount > 0, "gold": true, "amount": amount})
 			continue
 		var item_name := str(candidate.get("item_name", ""))
-		if not catalog_by_name.has(item_name):
-			catalog_by_name[item_name] = GameData.get_item_record(item_name)
-			_loot_batch_debug["catalog_lookups"] = int(_loot_batch_debug.get("catalog_lookups", 0)) + 1
-		var catalog: Dictionary = catalog_by_name.get(item_name, {})
+		var catalog: Dictionary = _loot_inventory_catalog_record(item_name)
 		if catalog.is_empty():
 			outcomes.append({"success": false, "item_name": item_name, "message": "物品无效。", "reason": "unknown_item"})
 			continue

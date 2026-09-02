@@ -265,6 +265,8 @@ var _stealth_alpha_restore: Dictionary = {}
 var _last_taoist_buff_hint_text := ""
 var _melee_diagnostic_serial := 0
 var _pending_melee_diagnostic: Dictionary = {}
+var _pending_enemy_deaths: Array[Dictionary] = []
+var _enemy_death_flush_queued := false
 var _pending_loot_collections: Array = []
 var _loot_collection_flush_queued := false
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
@@ -8785,7 +8787,7 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
-	var profile_started_usec := Time.get_ticks_usec()
+	var queued_at_usec := Time.get_ticks_usec()
 	if _combat_spatial_index != null:
 		_combat_spatial_index.unregister(
 			int(enemy.get_meta("spawn_serial", 0))
@@ -8809,11 +8811,78 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		return
 	var combat: Dictionary = canonical_monster.get("combat", {})
 	var stats: Dictionary = combat.get("stats", {})
-	PlayerState.record_kill_and_experience(
-		str(canonical_monster.get("canonical_name", "")),
-		int(stats.get("exp", 0))
-	)
+	_pending_enemy_deaths.append({
+		"queued_at_usec": queued_at_usec,
+		"death_position": death_position,
+		"spawn_position": spawn_position,
+		"was_boss": was_boss,
+		"generation": generation,
+		"configured_respawn": configured_respawn,
+		"respawn_enabled": respawn_enabled,
+		"spawn_context": spawn_context,
+		"monster_id": monster_id,
+		"canonical_monster": canonical_monster,
+		"monster_name": str(canonical_monster.get("canonical_name", "")),
+		"experience": int(stats.get("exp", 0)),
+	})
+	if not _enemy_death_flush_queued:
+		_enemy_death_flush_queued = true
+		call_deferred("_flush_enemy_deaths")
+
+
+func _flush_enemy_deaths() -> void:
+	_enemy_death_flush_queued = false
+	if _pending_enemy_deaths.is_empty():
+		return
+	var profile_started_usec := Time.get_ticks_usec()
+	var pending := _pending_enemy_deaths
+	_pending_enemy_deaths = []
+	var settlements: Array = []
+	for death: Dictionary in pending:
+		settlements.append({
+			"monster_name": str(death.get("monster_name", "")),
+			"experience": int(death.get("experience", 0)),
+		})
+	var settlement := PlayerState.record_kills_and_experience_batch(settlements)
 	var settlement_finished_usec := Time.get_ticks_usec()
+	var death_profiles: Array = []
+	var total_item_count := 0
+	var total_gold_drop_count := 0
+	for death: Dictionary in pending:
+		var death_profile := _resolve_queued_enemy_death(death)
+		death_profiles.append(death_profile)
+		total_item_count += int(death_profile.get("item_count", 0))
+		total_gold_drop_count += int(death_profile.get("gold_drop_count", 0))
+	var finished_usec := Time.get_ticks_usec()
+	if OS.is_debug_build():
+		print("[LootDeathBatchProfile] ", JSON.stringify({
+			"death_count": pending.size(),
+			"settlement_ms": float(settlement_finished_usec - profile_started_usec) / 1000.0,
+			"resolve_ms": float(finished_usec - settlement_finished_usec) / 1000.0,
+			"total_ms": float(finished_usec - profile_started_usec) / 1000.0,
+			"oldest_queue_delay_ms": (
+				float(profile_started_usec - int(pending[0].get("queued_at_usec", profile_started_usec))) / 1000.0
+				if not pending.is_empty()
+				else 0.0
+			),
+			"item_count": total_item_count,
+			"gold_drop_count": total_gold_drop_count,
+			"settlement": settlement,
+			"deaths": death_profiles,
+		}))
+
+
+func _resolve_queued_enemy_death(death: Dictionary) -> Dictionary:
+	var started_usec := Time.get_ticks_usec()
+	var monster_id := int(death.get("monster_id", -1))
+	var canonical_monster: Dictionary = death.get("canonical_monster", {})
+	var death_position: Vector2 = death.get("death_position", Vector2.ZERO)
+	var spawn_position: Vector2 = death.get("spawn_position", death_position)
+	var was_boss := bool(death.get("was_boss", false))
+	var generation := int(death.get("generation", _zone_generation))
+	var configured_respawn := float(death.get("configured_respawn", -1.0))
+	var respawn_enabled := bool(death.get("respawn_enabled", true))
+	var spawn_context: Dictionary = (death.get("spawn_context", {}) as Dictionary).duplicate(true)
 	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, false)
 	var roll_finished_usec := Time.get_ticks_usec()
 	var overflow_discarded_count := int(
@@ -8854,17 +8923,17 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 				death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18))
 			)
 	var spawn_finished_usec := Time.get_ticks_usec()
+	var result := {
+		"monster_id": monster_id,
+		"roll_ms": float(roll_finished_usec - started_usec) / 1000.0,
+		"spawn_ms": float(spawn_finished_usec - roll_finished_usec) / 1000.0,
+		"item_count": (drop_roll.get("items", []) as Array).size(),
+		"gold_drop_count": (drop_roll.get("gold_drops", []) as Array).size(),
+		"respawn_scheduled": false,
+	}
 	if not respawn_enabled:
-		_print_loot_death_profile(
-			monster_id,
-			profile_started_usec,
-			settlement_finished_usec,
-			roll_finished_usec,
-			spawn_finished_usec,
-			(drop_roll.get("items", []) as Array).size(),
-			(drop_roll.get("gold_drops", []) as Array).size()
-		)
-		return
+		result["total_ms"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
+		return result
 	var classification := str(canonical_monster.get("classification", ""))
 	var spawn_classification := str(
 		canonical_monster.get("spawn_classification", "")
@@ -8880,7 +8949,9 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 			"Monster death respawn policy rejected monster_id=%d reason=%s"
 			% [monster_id, str(policy.get("reason", "invalid_policy"))]
 		)
-		return
+		result["reason"] = "invalid_respawn_policy"
+		result["total_ms"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
+		return result
 	var respawn_wait_seconds := float(policy.get("seconds", 0.0))
 	var respawn_runtime_map_id := int(
 		spawn_context.get("respawn_runtime_map_id", current_map_id)
@@ -8900,7 +8971,9 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 			"Monster respawn state rejected unstable slot monster_id=%d map_id=%d slot=%s"
 			% [monster_id, respawn_runtime_map_id, spawn_slot_id]
 		)
-		return
+		result["reason"] = "unstable_respawn_slot"
+		result["total_ms"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
+		return result
 	spawn_context["respawn_policy_id"] = str(policy.get("policy_id", ""))
 	spawn_context["spawn_classification"] = spawn_classification
 	spawn_context["respawn_base_seconds"] = respawn_wait_seconds
@@ -8913,39 +8986,9 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		generation,
 		spawn_context
 	)
-	_print_loot_death_profile(
-		monster_id,
-		profile_started_usec,
-		settlement_finished_usec,
-		roll_finished_usec,
-		spawn_finished_usec,
-		(drop_roll.get("items", []) as Array).size(),
-		(drop_roll.get("gold_drops", []) as Array).size()
-	)
-
-
-func _print_loot_death_profile(
-	monster_id: int,
-	started_usec: int,
-	settlement_finished_usec: int,
-	roll_finished_usec: int,
-	spawn_finished_usec: int,
-	item_count: int,
-	gold_drop_count: int
-) -> void:
-	if not OS.is_debug_build():
-		return
-	print("[LootDeathProfile] ", JSON.stringify({
-		"monster_id": monster_id,
-		"settlement_ms": float(settlement_finished_usec - started_usec) / 1000.0,
-		"roll_ms": float(roll_finished_usec - settlement_finished_usec) / 1000.0,
-		"spawn_ms": float(spawn_finished_usec - roll_finished_usec) / 1000.0,
-		"tail_ms": float(Time.get_ticks_usec() - spawn_finished_usec) / 1000.0,
-		"total_ms": float(Time.get_ticks_usec() - started_usec) / 1000.0,
-		"item_count": item_count,
-		"gold_drop_count": gold_drop_count,
-		"settlement": PlayerState._last_death_settlement_profile.duplicate(true),
-	}))
+	result["respawn_scheduled"] = true
+	result["total_ms"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
+	return result
 
 
 func _spawn_loot(item_name: String, position: Vector2) -> void:
