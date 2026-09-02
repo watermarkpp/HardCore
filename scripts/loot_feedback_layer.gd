@@ -22,6 +22,8 @@ var rare_detail: Label
 var failure_panel: Panel
 var failure_label: Label
 var toast_entries: Array[Dictionary] = []
+var toast_panels: Array[Panel] = []
+var toast_labels: Array[Label] = []
 var rare_remaining := 0.0
 var failure_remaining := 0.0
 
@@ -56,6 +58,25 @@ func _build_toasts() -> void:
 	toast_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(toast_container)
 	_layout_centered_control(toast_container, 280.0, 108.0, 102.0)
+	for index in range(MAX_TOASTS):
+		var panel := Panel.new()
+		panel.name = "PickupToast%d" % (index + 1)
+		panel.position.y = index * 34
+		panel.size.y = 30
+		panel.theme_type_variation = "GothicLootToastPanel"
+		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		panel.set_meta("stable_id", "loot.feedback.normal")
+		panel.hide()
+		toast_container.add_child(panel)
+		var label := Label.new()
+		label.name = "Text"
+		label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 3)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 13)
+		panel.add_child(label)
+		toast_panels.append(panel)
+		toast_labels.append(label)
 
 
 func _build_rare_banner() -> void:
@@ -117,6 +138,21 @@ func show_feedback(event: Dictionary) -> void:
 			_show_pickup_success(event)
 
 
+func show_feedback_batch(events: Array) -> void:
+	var pickup_changed := false
+	for raw_event: Variant in events:
+		if not raw_event is Dictionary:
+			continue
+		var event: Dictionary = raw_event
+		if str(event.get("event_type", "pickup_success")) == "pickup_success":
+			_show_pickup_success(event, false)
+			pickup_changed = true
+		else:
+			show_feedback(event)
+	if pickup_changed:
+		_rebuild_toasts()
+
+
 func clear_feedback() -> void:
 	toast_entries.clear()
 	_rebuild_toasts()
@@ -126,13 +162,14 @@ func clear_feedback() -> void:
 	failure_panel.hide()
 
 
-func _show_pickup_success(event: Dictionary) -> void:
+func _show_pickup_success(event: Dictionary, rebuild := true) -> void:
 	var entry := event.duplicate(true)
 	entry["remaining"] = maxf(0.5, float(event.get("duration", DEFAULT_DURATION)))
 	toast_entries.push_front(entry)
 	if toast_entries.size() > MAX_TOASTS:
 		toast_entries.resize(MAX_TOASTS)
-	_rebuild_toasts()
+	if rebuild:
+		_rebuild_toasts()
 
 
 func _show_rare_drop(event: Dictionary) -> void:
@@ -179,25 +216,13 @@ func _set_centered_width(control: Control, width: float) -> void:
 
 
 func _rebuild_toasts() -> void:
-	for child: Node in toast_container.get_children():
-		toast_container.remove_child(child)
-		child.queue_free()
-	for index in range(toast_entries.size()):
+	for index in range(MAX_TOASTS):
+		var panel: Panel = toast_panels[index]
+		if index >= toast_entries.size():
+			panel.hide()
+			continue
 		var entry: Dictionary = toast_entries[index]
-		var panel := Panel.new()
-		panel.name = "PickupToast%d" % (index + 1)
-		panel.position.y = index * 34
-		panel.size.y = 30
-		panel.theme_type_variation = "GothicLootToastPanel"
-		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		panel.set_meta("stable_id", "loot.feedback.normal")
-		toast_container.add_child(panel)
-		var label := Label.new()
-		label.name = "Text"
-		label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 3)
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.add_theme_font_size_override("font_size", 13)
+		var label: Label = toast_labels[index]
 		var item_name := str(entry.get("item_name", "物品"))
 		var count := maxi(1, int(entry.get("count", 1)))
 		var display_text := "获得　%s%s" % [item_name, " ×%d" % count if count > 1 else ""]
@@ -206,4 +231,4 @@ func _rebuild_toasts() -> void:
 		panel.size.x = toast_width
 		label.text = display_text
 		label.add_theme_color_override("font_color", KIND_COLORS.get(str(entry.get("item_kind", "material")), Color("dfccb0")))
-		panel.add_child(label)
+		panel.show()

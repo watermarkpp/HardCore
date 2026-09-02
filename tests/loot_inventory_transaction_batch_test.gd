@@ -20,7 +20,11 @@ func _run() -> void:
 	assert(result.success and result.success_count == 32, "pickup batch failed")
 	assert(PlayerState.has_item(stack_item, 32), "pickup quantity incorrect")
 	var counters := PlayerState.test_transaction_debug_snapshot()
-	assert(counters.commit_attempts == 1 and PlayerState.loot_batch_debug_snapshot().plan_scans == 1, "pickup was not one transaction")
+	var loot_debug := PlayerState.loot_batch_debug_snapshot()
+	assert(counters.commit_attempts == 1 and loot_debug.plan_scans == 1, "pickup was not one transaction")
+	assert(loot_debug.occupied_scans == 1, "pickup repeated the fixed-slot occupied scan")
+	assert(loot_debug.catalog_lookups == 1, "pickup repeated the catalog lookup for one item kind")
+	assert(bool(PlayerState._last_runtime_commit_profile.get("profile_index_skipped", false)), "pickup rewrote the unrelated character index")
 	var before := PlayerState.inventory.duplicate(true)
 	var gold_before := PlayerState.gold
 	PlayerState._test_force_atomic_write_failure = true

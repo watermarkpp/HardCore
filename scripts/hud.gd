@@ -2107,6 +2107,22 @@ func show_loot(item_name: String) -> void:
 	})
 
 
+func show_loot_batch(item_names: Array) -> void:
+	if loot_feedback_layer == null:
+		return
+	var events: Array = []
+	for raw_name: Variant in item_names:
+		var item_name := str(raw_name)
+		events.append({
+			"event_type": "pickup_success",
+			"item_name": item_name,
+			"count": 1,
+			"item_kind": GameData.get_item_kind(item_name),
+			"emphasis": "normal",
+		})
+	loot_feedback_layer.show_feedback_batch(events)
+
+
 func show_loot_feedback(event: Dictionary) -> void:
 	if loot_feedback_layer != null:
 		loot_feedback_layer.show_feedback(event)

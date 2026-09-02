@@ -127,6 +127,7 @@ var warehouse_inventory: Array = []
 var shared_warehouse_path := SHARED_WAREHOUSE_DEFAULT_PATH
 var shared_warehouse_transaction_log_path := SHARED_WAREHOUSE_TRANSACTION_LOG_PATH
 var _shared_warehouse_initialized := false
+var _active_profile_legacy_warehouse_pending := false
 var _warehouse_transaction_locked := false
 var _persistence_transaction_in_progress := false
 var _test_fail_shared_write := false
@@ -178,7 +179,13 @@ var last_load_result: Dictionary = {
 	"reason": "not_attempted",
 }
 var _consumed_shop_sell_quote_ids: Dictionary = {}
-var _loot_batch_debug: Dictionary = {"plan_scans": 0, "initial_weight_scans": 0, "save_commits": 0}
+var _loot_batch_debug: Dictionary = {
+	"plan_scans": 0,
+	"initial_weight_scans": 0,
+	"occupied_scans": 0,
+	"catalog_lookups": 0,
+	"save_commits": 0,
+}
 var _last_runtime_commit_profile: Dictionary = {}
 var _last_loot_batch_profile: Dictionary = {}
 var _last_death_settlement_profile: Dictionary = {}
@@ -261,6 +268,7 @@ func reset_progress(emit_updates := true) -> void:
 	durability_event_commit_count = 0
 	temporary_item_buffs = {}
 	temporary_item_buff_revision = 0
+	_active_profile_legacy_warehouse_pending = false
 	if _shop_pricing_session_nonce.is_empty():
 		_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	saved_map_id = 910001
@@ -1032,6 +1040,13 @@ func sell_inventory_items(requests: Array) -> Dictionary:
 
 func test_transaction_debug_reset() -> void:
 	_test_transaction_counters = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
+	_loot_batch_debug = {
+		"plan_scans": 0,
+		"initial_weight_scans": 0,
+		"occupied_scans": 0,
+		"catalog_lookups": 0,
+		"save_commits": 0,
+	}
 
 
 func test_transaction_debug_snapshot() -> Dictionary:
@@ -1422,7 +1437,7 @@ func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary
 	if not quest_changed and gained <= 0:
 		return {"success": true, "quest_changed": false, "experience_gained": 0}
 	var save_started_usec := Time.get_ticks_usec()
-	if not _commit_save():
+	if not _commit_save(level != level_before):
 		_last_death_settlement_profile = {
 			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
 			"save_ms": float(Time.get_ticks_usec() - save_started_usec) / 1000.0,
@@ -2187,11 +2202,19 @@ func current_wear_weight(excluded_slot := "") -> int:
 ## by a full or legacy-overweight bag.
 func inventory_weight(records: Array = inventory) -> int:
 	var total := 0
+	var catalog_by_name: Dictionary = {}
 	for raw_record: Variant in records:
 		if not raw_record is Dictionary:
 			continue
 		var record: Dictionary = raw_record
-		var item := GameData.get_item_record(str(record.get("name", "")))
+		if record.is_empty():
+			continue
+		var item_name := str(record.get("name", ""))
+		if item_name.is_empty():
+			continue
+		if not catalog_by_name.has(item_name):
+			catalog_by_name[item_name] = GameData.get_item_record(item_name)
+		var item: Dictionary = catalog_by_name.get(item_name, {})
 		if item.is_empty() or str(item.get("kind", "")) == "currency":
 			continue
 		var unit_weight := maxi(0, int(item.get("weight", 0)))
@@ -3203,7 +3226,7 @@ func _write_shared_warehouse(records: Array) -> bool:
 	return _write_shared_warehouse_document_atomic(document)
 
 
-func save_game() -> bool:
+func save_game(update_profile_index := true) -> bool:
 	if _warehouse_transaction_locked and not _persistence_transaction_in_progress:
 		last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked"}
 		return false
@@ -3234,8 +3257,7 @@ func save_game() -> bool:
 		return false
 	if (
 		not legacy_isolated_profile_fixture
-		and FileAccess.file_exists(profile_path)
-		and _read_json(profile_path).has("warehouse_inventory")
+		and _active_profile_legacy_warehouse_pending
 		and not _revalidate_shared_warehouse_authority()
 	):
 		last_save_result = {
@@ -3294,13 +3316,15 @@ func save_game() -> bool:
 			"path": profile_path,
 		}
 		return false
-	var index_updated := _update_profile_index()
+	_active_profile_legacy_warehouse_pending = false
+	var index_updated := _update_profile_index() if update_profile_index else true
 	last_save_result = {
 		"contract_id": SAVE_RESULT_CONTRACT_ID,
 		"success": true,
 		"reason": "",
 		"path": profile_path,
 		"profile_index_updated": index_updated,
+		"profile_index_skipped": not update_profile_index,
 	}
 	if not index_updated:
 		push_warning("角色存档已写入，但角色索引更新失败：%s" % active_profile_id)
@@ -3615,6 +3639,9 @@ func load_save() -> void:
 	var legacy_isolated_profile_fixture := (
 		profile_directory != PROFILE_DIRECTORY
 		and not _shared_warehouse_test_isolation_enabled()
+	)
+	_active_profile_legacy_warehouse_pending = (
+		not legacy_isolated_profile_fixture and parsed.has("warehouse_inventory")
 	)
 	if legacy_isolated_profile_fixture:
 		# Isolated profile fixtures retain their historical in-memory warehouse
@@ -4728,6 +4755,15 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 	_loot_batch_debug["initial_weight_scans"] = int(_loot_batch_debug.get("initial_weight_scans", 0)) + 1
 	var working_weight := initial_weight
 	var maximum_weight := max_inventory_weight()
+	var occupied_count := inventory_occupied_count(working_inventory)
+	_loot_batch_debug["occupied_scans"] = int(_loot_batch_debug.get("occupied_scans", 0)) + 1
+	var free_slots: Array[int] = []
+	for slot_index in range(mini(working_inventory.size(), INVENTORY_CAPACITY)):
+		if not _inventory_slot_is_occupied(working_inventory[slot_index]):
+			free_slots.append(slot_index)
+	var free_slot_cursor := 0
+	var catalog_by_name: Dictionary = {}
+	var merge_slots_by_name: Dictionary = {}
 	var outcomes: Array = []
 	var changed := false
 	for raw_candidate: Variant in candidates:
@@ -4742,7 +4778,10 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 			outcomes.append({"success": amount > 0, "gold": true, "amount": amount})
 			continue
 		var item_name := str(candidate.get("item_name", ""))
-		var catalog := GameData.get_item_record(item_name)
+		if not catalog_by_name.has(item_name):
+			catalog_by_name[item_name] = GameData.get_item_record(item_name)
+			_loot_batch_debug["catalog_lookups"] = int(_loot_batch_debug.get("catalog_lookups", 0)) + 1
+		var catalog: Dictionary = catalog_by_name.get(item_name, {})
 		if catalog.is_empty():
 			outcomes.append({"success": false, "item_name": item_name, "message": "物品无效。", "reason": "unknown_item"})
 			continue
@@ -4756,21 +4795,53 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		var merged := false
 		if stackable:
 			var max_stack := _max_stack_for_item(catalog)
-			for existing: Variant in working_inventory:
-				if not existing is Dictionary or str(existing.get("name", "")) != item_name:
+			if not merge_slots_by_name.has(item_name):
+				var merge_slots: Array[int] = []
+				for existing_index in range(working_inventory.size()):
+					var existing_value: Variant = working_inventory[existing_index]
+					if not existing_value is Dictionary:
+						continue
+					var existing: Dictionary = existing_value
+					if (
+						str(existing.get("name", "")) == item_name
+						and existing.keys().all(func(key: Variant) -> bool: return str(key) in ["name", "count"])
+						and int(existing.get("count", 0)) < max_stack
+					):
+						merge_slots.append(existing_index)
+				merge_slots_by_name[item_name] = merge_slots
+			var merge_slots: Array = merge_slots_by_name.get(item_name, [])
+			while not merge_slots.is_empty():
+				var merge_index := int(merge_slots[0])
+				var existing: Dictionary = working_inventory[merge_index]
+				if int(existing.get("count", 0)) >= max_stack:
+					merge_slots.pop_front()
 					continue
-				if _inventory_records_mergeable(existing, {"name": item_name, "count": 1}) and int(existing.get("count", 0)) < max_stack:
-					existing["count"] = int(existing.get("count", 0)) + 1
-					merged = true
-					break
+				existing["count"] = int(existing.get("count", 0)) + 1
+				if int(existing.get("count", 0)) >= max_stack:
+					merge_slots.pop_front()
+				merged = true
+				break
 		if not merged:
-			if inventory_occupied_count(working_inventory) >= INVENTORY_CAPACITY:
+			if occupied_count >= INVENTORY_CAPACITY:
 				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
 				continue
 			var new_record: Dictionary = _make_item_instance(item_name, catalog, Time.get_ticks_usec() + working_inventory.size() + outcomes.size()) if kind == "equipment" else {"name": item_name, "count": 1}
-			if not _place_inventory_record_in_first_free_slot(working_inventory, new_record):
+			var placed_slot := -1
+			if free_slot_cursor < free_slots.size():
+				placed_slot = free_slots[free_slot_cursor]
+				free_slot_cursor += 1
+				working_inventory[placed_slot] = new_record
+			elif working_inventory.size() < INVENTORY_CAPACITY:
+				placed_slot = working_inventory.size()
+				working_inventory.append(new_record)
+			if placed_slot < 0:
 				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
 				continue
+			occupied_count += 1
+			if stackable and int(new_record.get("count", 1)) < _max_stack_for_item(catalog):
+				var merge_slots: Array = merge_slots_by_name.get(item_name, [])
+				merge_slots.append(placed_slot)
+				merge_slots_by_name[item_name] = merge_slots
 		working_weight = prospective_weight
 		changed = true
 		outcomes.append({"success": true, "item_name": item_name})
@@ -4780,7 +4851,7 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 	inventory = working_inventory
 	gold = working_gold
 	_loot_batch_debug["save_commits"] = int(_loot_batch_debug.get("save_commits", 0)) + 1
-	if not _commit_save():
+	if not _commit_save(false):
 		_last_loot_batch_profile = {
 			"candidate_count": candidates.size(),
 			"plan_ms": float(planning_finished_usec - profile_started_usec) / 1000.0,
@@ -5442,13 +5513,14 @@ func _migrate_single_save_to_profile() -> void:
 	character_name = ""
 
 
-func _commit_save() -> bool:
+func _commit_save(update_profile_index := true) -> bool:
 	var started_usec := Time.get_ticks_usec()
 	if test_mode:
 		_test_transaction_counters["commit_attempts"] = int(_test_transaction_counters.get("commit_attempts", 0)) + 1
-	var success := save_game() if not test_mode else not _test_force_atomic_write_failure
+	var success := save_game(update_profile_index) if not test_mode else not _test_force_atomic_write_failure
 	_last_runtime_commit_profile = {
 		"duration_ms": float(Time.get_ticks_usec() - started_usec) / 1000.0,
 		"success": success,
+		"profile_index_skipped": not update_profile_index,
 	}
 	return success

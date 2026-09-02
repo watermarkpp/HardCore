@@ -10,6 +10,7 @@ func _run() -> void:
 		if value is Dictionary:
 			ids.append(int(value.get("id", -1)))
 			if ids.size() >= 8: break
+	LootRuntime.clear_runtime_resolution_cache_for_test()
 	var names := LootRuntime.possible_item_names_for_monster_ids(ids)
 	assert(names == LootRuntime.possible_item_names_for_monster_ids(ids), "possible set is nondeterministic")
 	assert(names.size() == names.duplicate().size(), "possible set contains duplicates")
@@ -19,6 +20,14 @@ func _run() -> void:
 	lean_rng.seed = 918273
 	var detailed := LootRuntime.roll_monster_drops(31, detailed_rng, true)
 	var lean := LootRuntime.roll_monster_drops(31, lean_rng, false)
+	var cache_after_first_roll := LootRuntime.runtime_resolution_cache_debug_snapshot()
+	var repeated_rng := RandomNumberGenerator.new()
+	repeated_rng.seed = 918273
+	LootRuntime.roll_monster_drops(31, repeated_rng, false)
+	assert(
+		LootRuntime.runtime_resolution_cache_debug_snapshot().misses == cache_after_first_roll.misses,
+		"lean drop roll repeated static profile/probability/reward resolution",
+	)
 	for field in ["items", "gold_drops", "successful_roll_count", "ground_output_count", "overflow_discarded_count", "protected_overflow_count"]:
 		assert(detailed.get(field) == lean.get(field), "lean parity mismatch: %s" % field)
 	assert(lean.attempts.is_empty() and lean.slot_attempts.is_empty() and lean.debug.is_empty(), "lean retained audit views")

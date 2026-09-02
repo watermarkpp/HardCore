@@ -8996,17 +8996,23 @@ func _flush_loot_collections() -> void:
 	var result := PlayerState.receive_loot_batch_partial(candidates)
 	var transaction_finished_usec := Time.get_ticks_usec()
 	var outcomes: Array = result.get("outcomes", [])
+	var loot_feedback_names: Array = []
 	for index in range(mini(pending.size(), outcomes.size())):
 		var candidate: Dictionary = pending[index]
 		var outcome: Dictionary = outcomes[index]
 		var pickup: Variant = candidate.get("pickup")
 		if bool(outcome.get("success", false)):
-			if hud != null:
-				hud.show_loot("金币 +%d" % int(candidate.get("amount", 0)) if bool(candidate.get("gold", false)) else str(candidate.get("item_name", "")))
+			loot_feedback_names.append(
+				"金币 +%d" % int(candidate.get("amount", 0))
+				if bool(candidate.get("gold", false))
+				else str(candidate.get("item_name", ""))
+			)
 			if is_instance_valid(pickup):
 				pickup.confirm_collect()
 		elif is_instance_valid(pickup):
 			pickup.reject_collection(str(outcome.get("message", "超过负重，无法拾取。")))
+	if hud != null and not loot_feedback_names.is_empty():
+		hud.show_loot_batch(loot_feedback_names)
 	if OS.is_debug_build():
 		print("[LootPickupProfile] ", JSON.stringify({
 			"candidate_count": pending.size(),

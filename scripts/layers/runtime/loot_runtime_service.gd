@@ -3,6 +3,64 @@ extends Node
 const DROP_CONTRACT_ID := "monster.loot.dpv2_direct_baseline.v2"
 
 var _overflow_telemetry_by_monster_id: Dictionary = {}
+var _lean_profile_by_monster_id: Dictionary = {}
+var _lean_probability_by_key: Dictionary = {}
+var _lean_reward_by_slot_uid: Dictionary = {}
+var _lean_cache_misses := {"profile": 0, "probability": 0, "reward": 0}
+
+
+func _lean_profile(monster_id: int) -> Dictionary:
+	if not _lean_profile_by_monster_id.has(monster_id):
+		_lean_cache_misses["profile"] = int(_lean_cache_misses.get("profile", 0)) + 1
+		_lean_profile_by_monster_id[monster_id] = GameData.dpv2_direct_profile(monster_id)
+	return _lean_profile_by_monster_id.get(monster_id, {})
+
+
+func _lean_probability(monster_id: int, slot_uid: String) -> Dictionary:
+	var production: Variant = GameData.dpv2_single_player_drop_boost.get("production", {})
+	var boost_enabled := bool((production as Dictionary).get("enabled", false)) if production is Dictionary else false
+	var scale := GameData.dpv2_active_global_drop_rate()
+	var cache_key := "%d|%s|%s|%d|%d|%d" % [
+		monster_id,
+		slot_uid,
+		str(scale.get("preset", "")),
+		int(scale.get("numerator", 0)),
+		int(scale.get("denominator", 0)),
+		int(boost_enabled),
+	]
+	if not _lean_probability_by_key.has(cache_key):
+		_lean_cache_misses["probability"] = int(_lean_cache_misses.get("probability", 0)) + 1
+		_lean_probability_by_key[cache_key] = GameData.dpv2_effective_slot_probability(
+			monster_id,
+			slot_uid,
+		)
+	return _lean_probability_by_key.get(cache_key, {})
+
+
+func _lean_reward(slot: Dictionary) -> Dictionary:
+	var slot_uid := str(slot.get("slot_uid", ""))
+	if slot_uid.is_empty():
+		return GameData.dpv2_direct_resolve_slot_reward(slot)
+	if not _lean_reward_by_slot_uid.has(slot_uid):
+		_lean_cache_misses["reward"] = int(_lean_cache_misses.get("reward", 0)) + 1
+		_lean_reward_by_slot_uid[slot_uid] = GameData.dpv2_direct_resolve_slot_reward(slot)
+	return _lean_reward_by_slot_uid.get(slot_uid, {})
+
+
+func clear_runtime_resolution_cache_for_test() -> void:
+	_lean_profile_by_monster_id.clear()
+	_lean_probability_by_key.clear()
+	_lean_reward_by_slot_uid.clear()
+	_lean_cache_misses = {"profile": 0, "probability": 0, "reward": 0}
+
+
+func runtime_resolution_cache_debug_snapshot() -> Dictionary:
+	return {
+		"profile_count": _lean_profile_by_monster_id.size(),
+		"probability_count": _lean_probability_by_key.size(),
+		"reward_count": _lean_reward_by_slot_uid.size(),
+		"misses": _lean_cache_misses.duplicate(true),
+	}
 
 
 func possible_item_names_for_monster_ids(monster_ids: Array) -> Array[String]:
@@ -12,11 +70,15 @@ func possible_item_names_for_monster_ids(monster_ids: Array) -> Array[String]:
 		var resolved_id := GameData.canonical_monster_id(int(raw_id))
 		if resolved_id <= 0:
 			continue
-		var profile := GameData.dpv2_direct_profile(resolved_id)
+		var profile := _lean_profile(resolved_id)
 		for raw_slot: Variant in profile.get("slots", []):
 			if not raw_slot is Dictionary:
 				continue
-			var reward := GameData.dpv2_direct_resolve_slot_reward(raw_slot)
+			# Map bootstrap already enumerates possible ground icons. Compile the
+			# matching probability row here as well so the first death does not pay
+			# the authoritative mirror-validation cost on the gameplay frame.
+			_lean_probability(resolved_id, str(raw_slot.get("slot_uid", "")))
+			var reward := _lean_reward(raw_slot)
 			var item_name := str(reward.get("item_name", "")) if bool(reward.get("ok", false)) else ""
 			if str(reward.get("kind", "")) == "gold" or item_name.is_empty() or seen.has(item_name):
 				continue
@@ -91,7 +153,11 @@ func roll_monster_drops(
 
 	# The direct profile is joined by canonical_monster_id. Its display/profile
 	# token is telemetry only and is never used to locate a runtime drop table.
-	var profile := GameData.dpv2_direct_profile(resolved_id)
+	var profile := (
+		GameData.dpv2_direct_profile(resolved_id)
+		if include_audit
+		else _lean_profile(resolved_id)
+	)
 	if profile.is_empty():
 		result.reason = "dpv2_direct_profile_unresolved"
 		return result
@@ -136,9 +202,10 @@ func roll_monster_drops(
 			continue
 		var slot: Dictionary = raw_slot
 		var slot_uid := str(slot.get("slot_uid", ""))
-		var probability := GameData.dpv2_effective_slot_probability(
-			resolved_id,
-			slot_uid,
+		var probability := (
+			GameData.dpv2_effective_slot_probability(resolved_id, slot_uid)
+			if include_audit
+			else _lean_probability(resolved_id, slot_uid)
 		)
 		if not bool(probability.get("ok", false)):
 			_append_rejection(
@@ -148,7 +215,11 @@ func roll_monster_drops(
 			)
 			continue
 		result.probability_resolved_enabled_slots += 1
-		var reward := GameData.dpv2_direct_resolve_slot_reward(slot)
+		var reward := (
+			GameData.dpv2_direct_resolve_slot_reward(slot)
+			if include_audit
+			else _lean_reward(slot)
+		)
 		if not bool(reward.get("ok", false)):
 			_append_rejection(
 				result,
