@@ -179,6 +179,9 @@ var last_load_result: Dictionary = {
 }
 var _consumed_shop_sell_quote_ids: Dictionary = {}
 var _loot_batch_debug: Dictionary = {"plan_scans": 0, "initial_weight_scans": 0, "save_commits": 0}
+var _last_runtime_commit_profile: Dictionary = {}
+var _last_loot_batch_profile: Dictionary = {}
+var _last_death_settlement_profile: Dictionary = {}
 var _item_instance_serial := 0
 var _test_transaction_counters: Dictionary = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
 var _consumed_shop_buy_quote_ids: Dictionary = {}
@@ -1387,6 +1390,7 @@ func add_experience(amount: int) -> void:
 ## Atomic death settlement: quest progress and experience share one save.
 ## This is intentionally separate from the legacy single-purpose entry points.
 func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary:
+	var profile_started_usec := Time.get_ticks_usec()
 	var quests_before := quest_states.duplicate(true)
 	var experience_before := experience
 	var level_before := level
@@ -1417,7 +1421,13 @@ func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary
 			recalculate_stats(false)
 	if not quest_changed and gained <= 0:
 		return {"success": true, "quest_changed": false, "experience_gained": 0}
+	var save_started_usec := Time.get_ticks_usec()
 	if not _commit_save():
+		_last_death_settlement_profile = {
+			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+			"save_ms": float(Time.get_ticks_usec() - save_started_usec) / 1000.0,
+			"success": false,
+		}
 		quest_states = quests_before
 		experience = experience_before
 		level = level_before
@@ -1431,6 +1441,13 @@ func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary
 		if test_mode:
 			_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
 		profile_changed.emit()
+	_last_death_settlement_profile = {
+		"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+		"save_ms": float(_last_runtime_commit_profile.get("duration_ms", 0.0)),
+		"success": true,
+		"quest_changed": quest_changed,
+		"experience_gained": gained,
+	}
 	return {"success": true, "quest_changed": quest_changed, "experience_gained": gained}
 
 
@@ -4701,6 +4718,7 @@ func _warehouse_transfer_commit(inventory_before: Array, warehouse_before: Array
 ## Partial atomic pickup transaction. Each candidate is simulated in order;
 ## failures do not prevent later candidates from being attempted.
 func receive_loot_batch_partial(candidates: Array) -> Dictionary:
+	var profile_started_usec := Time.get_ticks_usec()
 	var inventory_before := inventory.duplicate(true)
 	var gold_before := gold
 	var working_inventory := inventory.duplicate(true)
@@ -4758,10 +4776,18 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		outcomes.append({"success": true, "item_name": item_name})
 	if not changed:
 		return {"success": true, "saved": false, "outcomes": outcomes, "success_count": 0}
+	var planning_finished_usec := Time.get_ticks_usec()
 	inventory = working_inventory
 	gold = working_gold
 	_loot_batch_debug["save_commits"] = int(_loot_batch_debug.get("save_commits", 0)) + 1
 	if not _commit_save():
+		_last_loot_batch_profile = {
+			"candidate_count": candidates.size(),
+			"plan_ms": float(planning_finished_usec - profile_started_usec) / 1000.0,
+			"save_ms": float(_last_runtime_commit_profile.get("duration_ms", 0.0)),
+			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+			"success": false,
+		}
 		inventory = inventory_before
 		gold = gold_before
 		for outcome: Dictionary in outcomes:
@@ -4783,6 +4809,14 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 	for outcome: Dictionary in outcomes:
 		if bool(outcome.get("success", false)):
 			success_count += 1
+	_last_loot_batch_profile = {
+		"candidate_count": candidates.size(),
+		"success_count": success_count,
+		"plan_ms": float(planning_finished_usec - profile_started_usec) / 1000.0,
+		"save_ms": float(_last_runtime_commit_profile.get("duration_ms", 0.0)),
+		"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+		"success": true,
+	}
 	return {"success": true, "saved": true, "outcomes": outcomes, "success_count": success_count}
 
 
@@ -5409,8 +5443,12 @@ func _migrate_single_save_to_profile() -> void:
 
 
 func _commit_save() -> bool:
+	var started_usec := Time.get_ticks_usec()
 	if test_mode:
 		_test_transaction_counters["commit_attempts"] = int(_test_transaction_counters.get("commit_attempts", 0)) + 1
-	if not test_mode:
-		return save_game()
-	return not _test_force_atomic_write_failure
+	var success := save_game() if not test_mode else not _test_force_atomic_write_failure
+	_last_runtime_commit_profile = {
+		"duration_ms": float(Time.get_ticks_usec() - started_usec) / 1000.0,
+		"success": success,
+	}
+	return success

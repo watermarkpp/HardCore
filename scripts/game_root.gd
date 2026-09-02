@@ -8785,6 +8785,7 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
+	var profile_started_usec := Time.get_ticks_usec()
 	if _combat_spatial_index != null:
 		_combat_spatial_index.unregister(
 			int(enemy.get_meta("spawn_serial", 0))
@@ -8812,7 +8813,9 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		str(canonical_monster.get("canonical_name", "")),
 		int(stats.get("exp", 0))
 	)
+	var settlement_finished_usec := Time.get_ticks_usec()
 	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, false)
+	var roll_finished_usec := Time.get_ticks_usec()
 	var overflow_discarded_count := int(
 		drop_roll.get("overflow_discarded_count", 0)
 	)
@@ -8850,7 +8853,17 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 				amount,
 				death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18))
 			)
+	var spawn_finished_usec := Time.get_ticks_usec()
 	if not respawn_enabled:
+		_print_loot_death_profile(
+			monster_id,
+			profile_started_usec,
+			settlement_finished_usec,
+			roll_finished_usec,
+			spawn_finished_usec,
+			(drop_roll.get("items", []) as Array).size(),
+			(drop_roll.get("gold_drops", []) as Array).size()
+		)
 		return
 	var classification := str(canonical_monster.get("classification", ""))
 	var spawn_classification := str(
@@ -8900,6 +8913,39 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		generation,
 		spawn_context
 	)
+	_print_loot_death_profile(
+		monster_id,
+		profile_started_usec,
+		settlement_finished_usec,
+		roll_finished_usec,
+		spawn_finished_usec,
+		(drop_roll.get("items", []) as Array).size(),
+		(drop_roll.get("gold_drops", []) as Array).size()
+	)
+
+
+func _print_loot_death_profile(
+	monster_id: int,
+	started_usec: int,
+	settlement_finished_usec: int,
+	roll_finished_usec: int,
+	spawn_finished_usec: int,
+	item_count: int,
+	gold_drop_count: int
+) -> void:
+	if not OS.is_debug_build():
+		return
+	print("[LootDeathProfile] ", JSON.stringify({
+		"monster_id": monster_id,
+		"settlement_ms": float(settlement_finished_usec - started_usec) / 1000.0,
+		"roll_ms": float(roll_finished_usec - settlement_finished_usec) / 1000.0,
+		"spawn_ms": float(spawn_finished_usec - roll_finished_usec) / 1000.0,
+		"tail_ms": float(Time.get_ticks_usec() - spawn_finished_usec) / 1000.0,
+		"total_ms": float(Time.get_ticks_usec() - started_usec) / 1000.0,
+		"item_count": item_count,
+		"gold_drop_count": gold_drop_count,
+		"settlement": PlayerState._last_death_settlement_profile.duplicate(true),
+	}))
 
 
 func _spawn_loot(item_name: String, position: Vector2) -> void:
@@ -8938,6 +8984,7 @@ func _queue_loot_collection(candidate: Dictionary) -> void:
 
 
 func _flush_loot_collections() -> void:
+	var profile_started_usec := Time.get_ticks_usec()
 	_loot_collection_flush_queued = false
 	if _pending_loot_collections.is_empty():
 		return
@@ -8947,6 +8994,7 @@ func _flush_loot_collections() -> void:
 	for candidate: Dictionary in pending:
 		candidates.append(candidate.duplicate(true))
 	var result := PlayerState.receive_loot_batch_partial(candidates)
+	var transaction_finished_usec := Time.get_ticks_usec()
 	var outcomes: Array = result.get("outcomes", [])
 	for index in range(mini(pending.size(), outcomes.size())):
 		var candidate: Dictionary = pending[index]
@@ -8959,6 +9007,14 @@ func _flush_loot_collections() -> void:
 				pickup.confirm_collect()
 		elif is_instance_valid(pickup):
 			pickup.reject_collection(str(outcome.get("message", "超过负重，无法拾取。")))
+	if OS.is_debug_build():
+		print("[LootPickupProfile] ", JSON.stringify({
+			"candidate_count": pending.size(),
+			"transaction_ms": float(transaction_finished_usec - profile_started_usec) / 1000.0,
+			"feedback_ms": float(Time.get_ticks_usec() - transaction_finished_usec) / 1000.0,
+			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+			"transaction": PlayerState._last_loot_batch_profile.duplicate(true),
+		}))
 
 
 func _on_loot_collection_rejected(_item_name: String, message: String) -> void:
