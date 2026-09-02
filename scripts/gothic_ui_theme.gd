@@ -373,6 +373,7 @@ static func build() -> Theme:
 	)
 	# Circular controls keep their source aspect and are never nine-slice stretched.
 	_apply_texture_button_variation(result, "GothicComponentCloseButton", COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, COMPONENT_CLOSE_RING, Vector4.ZERO, 8)
+	_prewarm_action_feedback_styles(result)
 	_shared_full_theme = result
 	return _shared_full_theme
 
@@ -544,7 +545,7 @@ static func set_button_feedback(button: BaseButton, state: StringName, selection
 		_clear_character_transition_font_feedback(button)
 	if not button.has_meta(BUTTON_FEEDBACK_META_BACKUP):
 		var backup := {"styles": {}}
-		for state_name: StringName in [&"normal", &"hover", &"focus"]:
+		for state_name: StringName in [&"normal", &"hover", &"focus", &"disabled"]:
 			var key := str(state_name)
 			backup["styles"][key] = {
 				"overridden": button.has_theme_stylebox_override(state_name),
@@ -571,7 +572,7 @@ static func set_button_feedback(button: BaseButton, state: StringName, selection
 			flat.shadow_color = BUTTON_FAILURE_SHADOW
 			flat.shadow_size = 5
 		feedback_style = flat
-	for state_name: StringName in [&"normal", &"hover", &"focus"]:
+	for state_name: StringName in [&"normal", &"hover", &"focus", &"disabled"]:
 		button.add_theme_stylebox_override(state_name, feedback_style)
 	button.set_meta(BUTTON_FEEDBACK_META_STATE, state)
 	if selection_group.is_empty():
@@ -639,7 +640,7 @@ static func clear_button_feedback(button: BaseButton) -> void:
 		return
 	var backup: Dictionary = button.get_meta(BUTTON_FEEDBACK_META_BACKUP, {})
 	var style_backup: Dictionary = backup.get("styles", {})
-	for state_name: StringName in [&"normal", &"hover", &"focus"]:
+	for state_name: StringName in [&"normal", &"hover", &"focus", &"disabled"]:
 		var key := str(state_name)
 		var entry: Dictionary = style_backup.get(key, {})
 		if bool(entry.get("overridden", false)):
@@ -744,6 +745,27 @@ static func _set_button_horizontal_padding(theme: Theme, variation: StringName, 
 		var style := theme.get_stylebox(state, variation)
 		style.content_margin_left = pixels
 		style.content_margin_right = pixels
+
+
+static func _prewarm_action_feedback_styles(theme: Theme) -> void:
+	# Transaction/result feedback is shown immediately after a tap.  Build the
+	# two result styles once with the shared Theme so a first transaction does
+	# not allocate layered StyleBoxes in the input frame.
+	for variation: StringName in [
+		&"GothicInventoryActionGemButton",
+		&"GothicShopBuyActionGemButton",
+		&"GothicShopSellActionGemButton",
+		&"GothicQuestActionGemButton",
+		&"GothicQuestAbandonPlainButton",
+		&"GothicDeathRevivalGemButton",
+		&"GothicConfirmationGemButton",
+		&"GothicCharacterHallEnterGemButton",
+	]:
+		var pressed := theme.get_stylebox("pressed", variation) as AdaptiveButtonStyleBox
+		if pressed == null:
+			continue
+		pressed.clone_with_feedback(BUTTON_SUCCESS_FILL, BUTTON_SUCCESS_BORDER, BUTTON_SUCCESS_SHADOW, 5, 10, 1)
+		pressed.clone_with_feedback(BUTTON_FAILURE_FILL, BUTTON_FAILURE_BORDER, BUTTON_FAILURE_SHADOW, 5, 10, 1)
 
 
 static func _visible_alpha_region(texture: Texture2D, region: Rect2) -> Texture2D:

@@ -73,6 +73,9 @@ func _run() -> void:
 	assert(panel.action_button.disabled and panel.action_button.text == "任务进行中", "进行中任务不应重复接取或提交")
 	assert(panel.status_label.text.is_empty(), "进行中状态不应在按钮左侧重复显示文字")
 	assert(panel.abandon_button.visible and panel.abandon_button.position.x < panel.action_button.position.x, "进行中任务左侧没有放弃任务按钮")
+	assert(is_equal_approx(panel.abandon_button.position.y, panel.action_button.position.y), "放弃任务与任务进行中没有处于同一纵坐标")
+	assert(is_equal_approx(panel.abandon_button.size.y, panel.action_button.size.y), "放弃任务与任务进行中按钮高度不一致")
+	assert(is_equal_approx(panel.abandon_button.position.x + panel.abandon_button.size.x + QuestPanel.ACTION_ROW_GAP, panel.action_button.position.x), "放弃任务没有按固定间距位于任务进行中左侧")
 	var abandon_requests: Array[String] = []
 	panel.abandon_requested.connect(func(quest_id: String) -> void: abandon_requests.append(quest_id))
 	panel._request_abandon()
@@ -106,9 +109,10 @@ func _run() -> void:
 	assert(panel.status_label.text.is_empty(), "可接任务不应在接受按钮左侧重复显示尚未接受")
 	assert(not panel.abandon_button.visible, "未接受任务不应显示放弃任务按钮")
 	panel._act()
-	assert(panel.action_button.theme_type_variation == "GothicComponentButton", "任务操作不应伪装为持久任务选择")
-	assert(panel.action_button.get_meta("gothic_feedback_state", "") == "success", "接取任务成功没有进入一秒成功反馈")
+	assert(panel.action_button.theme_type_variation == "GothicQuestActionGemButton", "任务操作按钮没有保留已验收的有宝石框")
+	assert(panel.action_button.get_meta("gothic_feedback_state", "") == "busy", "接取任务的忙碌反馈没有完整保留一个渲染帧")
 	await get_tree().process_frame
+	assert(panel.action_button.get_meta("gothic_feedback_state", "") == "success", "接取任务成功没有进入一秒成功反馈")
 	await get_tree().process_frame
 	assert(str(PlayerState.quest_states.get("bich_beginner_gear", {}).get("status", "")) == "active", "接受任务按钮没有调用现有任务接取接口")
 	assert(panel.action_button.disabled and panel.action_button.text == "任务进行中" and panel.abandon_button.visible, "接受后没有切换为进行中与放弃任务按钮")

@@ -14,6 +14,7 @@ const PANEL_SIZE := Vector2(1020, 636)
 const QUEST_CARD_SIZE := Vector2(286, 62)
 const QUEST_CARD_SEPARATION := 7
 const QUEST_LIST_LAYOUT_REVISION := 1
+const ACTION_ROW_GAP := 12.0
 
 var title_label: Label
 var description_label: RichTextLabel
@@ -505,12 +506,21 @@ func _set_abandon_available(enabled: bool) -> void:
 	# and state transitions still toggle the abandon control, but must not
 	# replace the user's saved action-button geometry with procedural presets
 	# after the profile has been applied.
-	if UIRuntimeLayoutOverridesScript.profile_is_ready(self, "quest"):
-		return
+	var profile_ready := UIRuntimeLayoutOverridesScript.profile_is_ready(self, "quest")
 	if enabled:
-		action_button.position = Vector2(344, 436)
-		action_button.size = Vector2(260, 52)
-	else:
+		if not profile_ready:
+			action_button.position = Vector2(344, 436)
+			action_button.size = Vector2(260, 52)
+		# The action rectangle may come from the saved calibration profile while
+		# AbandonButton was hidden and therefore absent from that profile.  Derive
+		# the secondary control from the live action rectangle so both always form
+		# one row without replacing the calibrated action geometry.
+		abandon_button.position = Vector2(
+			maxf(0.0, action_button.position.x - ACTION_ROW_GAP - abandon_button.size.x),
+			action_button.position.y,
+		)
+		abandon_button.size.y = action_button.size.y
+	elif not profile_ready:
 		action_button.position = Vector2(204, 436)
 		action_button.size = Vector2(400, 52)
 
@@ -581,9 +591,12 @@ func _clear_action_feedback() -> void:
 
 
 func _show_action_result_feedback(success: bool) -> void:
-	_clear_action_feedback()
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
+	if is_inside_tree():
+		await get_tree().process_frame
+	if serial != _action_feedback_serial or not is_instance_valid(action_button) or not action_button.is_inside_tree():
+		return
 	GothicUIThemeScript.set_button_feedback(
 		action_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
@@ -598,9 +611,12 @@ func _show_action_result_feedback(success: bool) -> void:
 
 
 func _show_abandon_result_feedback(success: bool) -> void:
-	_clear_action_feedback()
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
+	if is_inside_tree():
+		await get_tree().process_frame
+	if serial != _action_feedback_serial or not is_instance_valid(abandon_button) or not abandon_button.is_inside_tree():
+		return
 	GothicUIThemeScript.set_button_feedback(
 		abandon_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,

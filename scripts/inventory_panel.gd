@@ -967,6 +967,12 @@ func _on_discard_pressed() -> void:
 func _show_inventory_action_result(button: Button, success: bool, group: String) -> void:
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
+	# Synchronous inventory mutations can finish in the same input frame.  Keep
+	# the busy cue on screen for one rendered frame before presenting the result.
+	if is_inside_tree():
+		await get_tree().process_frame
+	if serial != _action_feedback_serial or not is_instance_valid(button) or not button.is_inside_tree():
+		return
 	GothicUIThemeScript.set_button_feedback(
 		button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,

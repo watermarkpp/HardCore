@@ -67,11 +67,13 @@ func _run() -> void:
 	panel.open_for("测试商店", STOCK)
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	await get_tree().process_frame
-	assert(panel.buy_tab_button.theme_type_variation == "GothicComponentSelectedButton", "购买页签没有保持持久选中")
-	assert(panel.sell_tab_button.theme_type_variation == "GothicComponentButton", "未选中的出售页签错误高亮")
+	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "购买页签没有保持持久选中")
+	assert(panel.sell_tab_button.theme_type_variation == "GothicShopTradeTabGemButton", "未选中的出售页签错误高亮")
 	var repair_gold_before := PlayerState.gold
 	panel._repair_all()
 	assert(PlayerState.gold == repair_gold_before, "无需维修时错误扣除了金币")
+	assert(panel.repair_button.get_meta("gothic_feedback_state", "") == "busy", "维修忙碌反馈没有完整保留一个渲染帧")
+	await get_tree().process_frame
 	assert(panel.repair_button.get_meta("gothic_feedback_state", "") == "failure", "无需维修时错误显示成功反馈")
 	assert(panel.size == Vector2(1080, 620), "商店没有使用横屏安全尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "商店没有复用公共哥特外框")
@@ -99,11 +101,13 @@ func _run() -> void:
 	panel._buy_selected()
 	assert(buy_requests.size() == 1 and panel.buy_button.disabled, "购买提交后没有立即锁定按钮")
 	assert(panel.buy_button.get_meta("gothic_feedback_state", "") == "busy", "购买请求没有进入事务忙碌反馈")
-	assert(panel.buy_tab_button.theme_type_variation == "GothicComponentSelectedButton", "购买事务错误清除了购买页签选中")
+	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "购买事务错误清除了购买页签选中")
 	var buy_result := PlayerState.buy_shop_item(buy_requests[-1], STOCK)
 	panel.apply_buy_result(buy_result)
+	assert(panel.buy_button.get_meta("gothic_feedback_state", "") == "busy", "购买结果在同一帧覆盖了忙碌反馈")
+	await get_tree().process_frame
 	assert(panel.buy_button.get_meta("gothic_feedback_state", "") == "success", "购买成功没有进入一秒成功反馈")
-	assert(panel.buy_tab_button.theme_type_variation == "GothicComponentSelectedButton", "购买完成错误清除了购买页签选中")
+	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "购买完成错误清除了购买页签选中")
 	assert(PlayerState.gold == gold_before - int(buy_quote.get("unit_price", 0)) and PlayerState.has_item("匕首"), "商品卡购买闭环失败")
 	assert(panel._selected_buy_index == 0 and panel.item_list.get_selected_items() == PackedInt32Array([0]), "购买刷新报价后丢失当前商品选择")
 	assert(panel.goods_buttons[0].theme_type_variation == "GothicComponentSelectedShopCard", "购买刷新报价后丢失商品卡高亮")
@@ -145,8 +149,8 @@ func _run() -> void:
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	PlayerState.inventory.insert(1, {})
 	panel._set_trade_mode("sell")
-	assert(panel.sell_tab_button.theme_type_variation == "GothicComponentSelectedButton", "出售页签没有保持持久选中")
-	assert(panel.buy_tab_button.theme_type_variation == "GothicComponentButton", "切到出售后购买页签仍保持高亮")
+	assert(panel.sell_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "出售页签没有保持持久选中")
+	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabGemButton", "切到出售后购买页签仍保持高亮")
 	assert(panel.get_node_or_null("DetailPanel/SellOneButton") == null, "已退役 SellOneButton 仍存在")
 	assert("UI不会自行计算" not in panel.detail_label.text and "玩法层报价" not in panel.detail_label.text, "出售页仍显示无意义的内部报价备注")
 	assert(panel.sell_quantity_button.name == "SellQuantityButton" and panel.sell_quantity_button.text == "出售", "出售按钮文案或唯一稳定节点错误")
@@ -228,9 +232,9 @@ func _run() -> void:
 	assert(panel.sell_quantity_row.get_node_or_null("DecreaseQuantity/QuantityDecoration") == null, "减号按钮不应恢复旧角饰")
 	assert(panel.sell_quantity_row.get_node_or_null("IncreaseQuantity/QuantityDecoration") == null, "加号按钮不应恢复旧角饰")
 	assert(
-		panel.sell_quantity_row.get_node("DecreaseQuantity").theme_type_variation == "GothicPanelTransparentButton"
-		and panel.sell_quantity_row.get_node("IncreaseQuantity").theme_type_variation == "GothicPanelTransparentButton",
-		"数量按钮仍使用未镜像的不透明背景"
+		panel.sell_quantity_row.get_node("DecreaseQuantity").theme_type_variation == "GothicShopSellQuantityPlainButton"
+		and panel.sell_quantity_row.get_node("IncreaseQuantity").theme_type_variation == "GothicShopSellQuantityPlainButton",
+		"数量按钮没有保留已验收的无宝石框"
 	)
 	var bg := panel.sell_quantity_row.get_node("QuantityCenterBackground") as Panel
 	assert(Rect2(Vector2.ZERO, panel.sell_quantity_row.size).encloses(Rect2(bg.position, bg.size)), "中心背景越出数量行")
