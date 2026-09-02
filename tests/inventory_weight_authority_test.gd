@@ -46,6 +46,19 @@ func _run() -> void:
 	}, stock)
 	assert(bool(bought.get("success", false)) and PlayerState.item_count("金创药(小量)") == 20, "购买packCount未按20瓶直接叠加")
 	assert(PlayerState.inventory_weight() == 20, "购买packCount重量未按实际瓶数计算")
+	PlayerState.inventory = [{"name": "强效太阳水", "count": 220}]
+	var overweight_quotes := PlayerState.shop_buy_quotes(stock)
+	var overweight_quote: Dictionary = overweight_quotes[0]
+	var overweight_buy := PlayerState.buy_shop_item({
+		"stock_index": 0,
+		"quote_id": overweight_quote.get("quote_id", ""),
+		"item_name": overweight_quote.get("item_name", ""),
+		"stock_key": overweight_quote.get("stock_key", ""),
+		"merchant_id": overweight_quote.get("merchant_id", ""),
+		"quantity": 20,
+	}, stock)
+	assert(not bool(overweight_buy.get("success", true)), "超负重购买没有被拒绝")
+	assert(str(overweight_buy.get("message", "")) == "背包空间不足或者超过最大负重。", "购买失败提示没有说明空间或负重")
 
 	PlayerState.reset_progress()
 	PlayerState.level = 50

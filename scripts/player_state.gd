@@ -880,7 +880,7 @@ func buy_shop_item(request: Dictionary, stock: Array, context := {}) -> Dictiona
 	if not _add_item_without_commit(str(quote.get("item_name", "")), quantity):
 		gold = gold_before
 		inventory = inventory_before
-		return _shop_buy_result(false, "背包空间不足或商品无效。", stock, context)
+		return _shop_buy_result(false, "背包空间不足或者超过最大负重。", stock, context)
 	inventory_changed.emit()
 	profile_changed.emit()
 	if not _commit_save():

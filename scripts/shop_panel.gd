@@ -19,6 +19,10 @@ const PANEL_SIZE := Vector2(1080, 620)
 const CARD_SIZE := Vector2(286, 72)
 const CARD_COLUMNS := 2
 const SHARED_SHOP_LAYOUT_REVISION := 1
+const QUANTITY_HOLD_INITIAL_DELAY := 0.42
+const QUANTITY_HOLD_REPEAT_INTERVAL := 0.16
+const QUANTITY_HOLD_MIN_INTERVAL := 0.035
+const QUANTITY_HOLD_ACCELERATION := 0.82
 
 var shop_title: Label
 var gold_label: Label
@@ -36,6 +40,9 @@ var sell_one_button: Button
 var sell_quantity_button: Button
 var decrease_quantity_button: Button
 var increase_quantity_button: Button
+var _quantity_hold_timer: Timer
+var _quantity_hold_delta := 0
+var _quantity_hold_interval := QUANTITY_HOLD_REPEAT_INTERVAL
 var sell_confirmation: Control
 var stock: Array = []
 var _merchant_context: Dictionary = {}
@@ -248,7 +255,8 @@ func _build_detail_section() -> void:
 	minus_button.theme_type_variation = "GothicShopSellQuantityPlainButton"
 	minus_button.clip_contents = true
 	_add_quantity_symbol(minus_button, false)
-	minus_button.pressed.connect(_change_sell_quantity.bind(-1))
+	minus_button.button_down.connect(_start_quantity_hold.bind(-1))
+	minus_button.button_up.connect(_stop_quantity_hold)
 	sell_quantity_row.add_child(minus_button)
 	var quantity_background := Panel.new()
 	quantity_background.name = "QuantityCenterBackground"
@@ -278,8 +286,14 @@ func _build_detail_section() -> void:
 	plus_button.theme_type_variation = "GothicShopSellQuantityPlainButton"
 	plus_button.clip_contents = true
 	_add_quantity_symbol(plus_button, true)
-	plus_button.pressed.connect(_change_sell_quantity.bind(1))
+	plus_button.button_down.connect(_start_quantity_hold.bind(1))
+	plus_button.button_up.connect(_stop_quantity_hold)
 	sell_quantity_row.add_child(plus_button)
+	_quantity_hold_timer = Timer.new()
+	_quantity_hold_timer.name = "QuantityHoldTimer"
+	_quantity_hold_timer.one_shot = true
+	_quantity_hold_timer.timeout.connect(_on_quantity_hold_timeout)
+	sell_quantity_row.add_child(_quantity_hold_timer)
 	sell_quantity_button = Button.new()
 	sell_quantity_button.name = "SellQuantityButton"
 	sell_quantity_button.text = "出售"
@@ -344,6 +358,7 @@ func _section_title(node_name: String, text_value: String, section_width: float)
 
 
 func open_for(display_name: String, new_stock: Array, merchant_context: Dictionary = {}) -> void:
+	_stop_quantity_hold()
 	stock = new_stock
 	_merchant_context = merchant_context.duplicate(true) if not merchant_context.is_empty() else {}
 	_buy_quotes.clear()
@@ -555,6 +570,7 @@ func _select_shop_item(index: int) -> void:
 
 
 func _set_trade_mode(mode: String) -> void:
+	_stop_quantity_hold()
 	_clear_transaction_feedback()
 	_trade_mode = "sell" if mode == "sell" else "buy"
 	var buying := _trade_mode == "buy"
@@ -789,6 +805,47 @@ func _change_sell_quantity(delta: int) -> void:
 	_update_sell_quantity_label()
 
 
+func _start_quantity_hold(delta: int) -> void:
+	_stop_quantity_hold()
+	var button := increase_quantity_button if delta > 0 else decrease_quantity_button
+	if button == null or button.disabled:
+		return
+	_quantity_hold_delta = 1 if delta > 0 else -1
+	_quantity_hold_interval = QUANTITY_HOLD_REPEAT_INTERVAL
+	_change_sell_quantity(_quantity_hold_delta)
+	button = increase_quantity_button if _quantity_hold_delta > 0 else decrease_quantity_button
+	if button == null or button.disabled or _quantity_hold_timer == null:
+		_stop_quantity_hold()
+		return
+	_quantity_hold_timer.start(QUANTITY_HOLD_INITIAL_DELAY)
+
+
+func _on_quantity_hold_timeout() -> void:
+	if _quantity_hold_delta == 0:
+		return
+	var button := increase_quantity_button if _quantity_hold_delta > 0 else decrease_quantity_button
+	if button == null or button.disabled or not visible or _trade_mode != "sell":
+		_stop_quantity_hold()
+		return
+	_change_sell_quantity(_quantity_hold_delta)
+	_quantity_hold_interval = maxf(
+		QUANTITY_HOLD_MIN_INTERVAL,
+		_quantity_hold_interval * QUANTITY_HOLD_ACCELERATION,
+	)
+	button = increase_quantity_button if _quantity_hold_delta > 0 else decrease_quantity_button
+	if button == null or button.disabled or _quantity_hold_timer == null:
+		_stop_quantity_hold()
+		return
+	_quantity_hold_timer.start(_quantity_hold_interval)
+
+
+func _stop_quantity_hold() -> void:
+	_quantity_hold_delta = 0
+	_quantity_hold_interval = QUANTITY_HOLD_REPEAT_INTERVAL
+	if _quantity_hold_timer != null:
+		_quantity_hold_timer.stop()
+
+
 func _update_sell_quantity_label() -> void:
 	if sell_quantity_label == null:
 		return
@@ -918,6 +975,9 @@ func _on_inventory_changed() -> void:
 
 
 func _on_visibility_changed() -> void:
+	if not visible:
+		_stop_quantity_hold()
+		return
 	if visible and _inventory_refresh_pending and _trade_mode == "sell":
 		_apply_inventory_change()
 
@@ -1197,6 +1257,7 @@ func _value(value: Variant) -> String:
 
 
 func _close() -> void:
+	_stop_quantity_hold()
 	_clear_transaction_feedback()
 	sell_confirmation.close_confirmation()
 	_pending_sell_request.clear()
