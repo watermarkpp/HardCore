@@ -168,8 +168,8 @@ func _process(delta: float) -> void:
 func _startup_document_path() -> String:
 	var recent_path := _load_last_document_path()
 	if not recent_path.is_empty() and FileAccess.file_exists(recent_path):
-		return recent_path
-	var bich_path := MapEditorSaveService.default_path("bich_province")
+		return MapEditorSaveService.canonical_workspace_path(recent_path)
+	var bich_path := MapEditorSaveService.default_path("world_bich_province")
 	if FileAccess.file_exists(bich_path):
 		return bich_path
 	return MapEditorSaveService.default_path("sandbox_64")
@@ -973,7 +973,7 @@ func _on_open_template_pressed() -> void:
 
 
 func _open_workspace_map(meta: Dictionary) -> void:
-	var path := str(meta.get("path", ""))
+	var path := MapEditorSaveService.canonical_workspace_path(str(meta.get("path", "")))
 	if path.is_empty() or not FileAccess.file_exists(path):
 		status_label.text = "自建地图文件不存在：%s" % path
 		return
@@ -1036,6 +1036,7 @@ func _open_template_by_id(template_id: String, document_path := "", workspace_ov
 		status_label.text = "地图模板不存在：%s" % template_id
 		return false
 	var path := document_path if not document_path.is_empty() else MapEditorSaveService.default_path(str(template.get("map_id", "")))
+	path = MapEditorSaveService.canonical_workspace_path(path)
 	if FileAccess.file_exists(path):
 		return _open_document_path(path)
 	var document := MapEditorTypes.new_map_from_blank_template(template_id)

@@ -40,13 +40,15 @@
     "phase1_map_production_complete": true,
     "phase1_network_version_id": "phase1_finished_map_network_v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 7,
+    "revision": 7.0,
     "route_version_id": "wooma_temple_user_route_v3_unified_portals",
     "runtime_approved": true,
     "runtime_approved_revision": 6.0,
+    "source_editor_schema_version": 4,
     "template_kind": "empty_map",
     "template_status": "user_authored_official",
     "template_version_id": "world_wooma_forest_blank_v1",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/world_wooma_forest"
   },
   "ground": {
@@ -59,14 +61,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1792.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/world_wooma_forest.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/world_wooma_forest.ground_paint_state.json",
@@ -156,7 +158,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_wooma_forest.boss_spawn.000002",
@@ -201,7 +202,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_wooma_forest.boss_spawn.000003",
@@ -246,7 +246,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_wooma_forest.boss_spawn.000004",
@@ -5551,14 +5550,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 915001,
+        "target_map_id": 915001.0,
         "target_map_key": "wooma_temple_f1",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
@@ -5594,14 +5593,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 910005,
+        "target_map_id": 910005.0,
         "target_map_key": "world_fengmo_valley",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -5637,14 +5636,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 910006,
+        "target_map_id": 910006.0,
         "target_map_key": "world_white_day_gate",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -5679,14 +5678,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000004",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 910001,
+        "target_map_id": 910001.0,
         "target_map_key": "world_bich_province",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -5718,14 +5717,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000005",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 918003,
+        "target_map_id": 918003.0,
         "target_map_key": "hidden_fallen_graveyard",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -5757,14 +5756,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000006",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 918005,
+        "target_map_id": 918005.0,
         "target_map_key": "hidden_abyss_domain",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -5820,8 +5819,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          46,
-          41
+          46.0,
+          41.0
         ]
       },
       {
@@ -5864,8 +5863,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000002",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          24,
-          52
+          24.0,
+          52.0
         ]
       },
       {
@@ -5908,8 +5907,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          49,
-          12
+          49.0,
+          12.0
         ]
       },
       {
@@ -5996,8 +5995,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000005",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          41,
-          42
+          41.0,
+          42.0
         ]
       },
       {
@@ -6034,7 +6033,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6042,8 +6040,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000006",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          3,
-          34
+          3.0,
+          34.0
         ]
       },
       {
@@ -6080,7 +6078,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6088,8 +6085,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000007",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          41,
-          48
+          41.0,
+          48.0
         ]
       },
       {
@@ -6126,7 +6123,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6134,8 +6130,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000008",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          11,
-          6
+          11.0,
+          6.0
         ]
       },
       {
@@ -6172,7 +6168,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6180,8 +6175,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000009",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          38,
-          34
+          38.0,
+          34.0
         ]
       },
       {
@@ -6218,7 +6213,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6226,8 +6220,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000010",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          41,
-          4
+          41.0,
+          4.0
         ]
       },
       {
@@ -6264,7 +6258,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6272,8 +6265,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          7,
-          15
+          7.0,
+          15.0
         ]
       },
       {
@@ -6310,7 +6303,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6318,8 +6310,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000012",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          29,
-          52
+          29.0,
+          52.0
         ]
       },
       {
@@ -6356,7 +6348,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6364,8 +6355,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000013",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          8,
-          34
+          8.0,
+          34.0
         ]
       },
       {
@@ -6402,7 +6393,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6410,8 +6400,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000014",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          15,
-          13
+          15.0,
+          13.0
         ]
       },
       {
@@ -6448,7 +6438,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6456,8 +6445,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000015",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          36,
-          9
+          36.0,
+          9.0
         ]
       },
       {
@@ -6494,7 +6483,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6502,8 +6490,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000016",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          48,
-          19
+          48.0,
+          19.0
         ]
       },
       {
@@ -6540,7 +6528,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6548,8 +6535,8 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000017",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          35,
-          44
+          35.0,
+          44.0
         ]
       },
       {
@@ -6586,7 +6573,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6632,7 +6618,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6640,7 +6625,277 @@
         "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000019",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          10,
+          10.0,
+          39.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36.0,
+          38.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          39.0,
+          16.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          16.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000001",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6,
           39
         ]
       },
@@ -6658,7 +6913,7 @@
         "display_name": "半兽人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": 34.0,
+        "monster_id": 34,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -6678,16 +6933,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000020",
-        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000020",
+        "semantic_id": "monster_spawn_000002",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          36,
-          38
+          19,
+          52
         ]
       },
       {
@@ -6704,7 +6958,7 @@
         "display_name": "半兽人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": 34.0,
+        "monster_id": 34,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -6724,16 +6978,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000021",
-        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000021",
+        "semantic_id": "monster_spawn_000003",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          39,
-          16
+          22,
+          46
         ]
       },
       {
@@ -6741,16 +6994,16 @@
           "map_id": "world_wooma_forest",
           "source_category_role": "ordinary",
           "source_line": 158.0,
-          "source_token_index": 4.0
+          "source_token_index": 1.0
         },
         "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
         "content_layer": "personal_expansion",
         "count": 1.0,
-        "display_name": "半兽战士",
+        "display_name": "半兽人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": 36.0,
+        "monster_id": 34,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -6761,25 +7014,24 @@
           "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0.0,
-            28.0,
-            22.0,
-            18.0,
+            38.0,
+            5.0,
+            1.0,
             2233.0,
-            -37.0,
-            -36.0
+            -6.0,
+            -1.0
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000022",
-        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000022",
+        "semantic_id": "monster_spawn_000004",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          1,
-          16
+          21,
+          40
         ]
       },
       {
@@ -6787,16 +7039,16 @@
           "map_id": "world_wooma_forest",
           "source_category_role": "ordinary",
           "source_line": 158.0,
-          "source_token_index": 4.0
+          "source_token_index": 1.0
         },
         "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
         "content_layer": "personal_expansion",
         "count": 1.0,
-        "display_name": "半兽战士",
+        "display_name": "半兽人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": 36.0,
+        "monster_id": 34,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -6807,24 +7059,878 @@
           "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0.0,
-            28.0,
-            22.0,
-            18.0,
+            38.0,
+            5.0,
+            1.0,
             2233.0,
-            -37.0,
-            -36.0
+            -6.0,
+            -1.0
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000023",
-        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000023",
+        "semantic_id": "monster_spawn_000005",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          9,
+          21,
+          35
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000006",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27,
+          35
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000007",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          32,
+          29
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000008",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34,
+          35
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000009",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          44,
+          16
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000010",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36,
+          4
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000011",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000012",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20,
+          48
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000013",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          53
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000014",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36,
+          52
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000015",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43,
+          53
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000016",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          38,
+          48
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000017",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          52,
+          40
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000018",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48,
+          33
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000019",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000020",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34,
+          12
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000021",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          47,
+          22
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000022",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          53,
+          16
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000023",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000024",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6,
           11
         ]
       },
@@ -6833,16 +7939,16 @@
           "map_id": "world_wooma_forest",
           "source_category_role": "ordinary",
           "source_line": 158.0,
-          "source_token_index": 4.0
+          "source_token_index": 5.0
         },
         "auto_placement_status": "AUTO_POSITIONED",
         "classification": "ordinary",
         "content_layer": "personal_expansion",
         "count": 1.0,
-        "display_name": "半兽战士",
+        "display_name": "森林雪人",
         "kind": "monster_spawn",
         "max_alive": 1.0,
-        "monster_id": 36.0,
+        "monster_id": 28,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -6853,25 +7959,69 @@
           "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
           "selection_score": [
             0.0,
-            28.0,
-            22.0,
-            18.0,
+            39.0,
+            8.0,
+            1.0,
             2233.0,
-            -37.0,
-            -36.0
+            -8.0,
+            -54.0
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_seconds": 60.0,
+        "respawn_seconds": 60,
         "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000024",
-        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000024",
+        "semantic_id": "monster_spawn_000025",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          13,
-          35
+          11,
+          1
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "monster_spawn_000026",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          20
         ]
       }
     ],
@@ -6941,12 +8091,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          42.0
+          18,
+          42
         ],
         "tile_anchor": [
-          18.0,
-          42.0
+          18,
+          42
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -7017,12 +8167,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          19.0
+          10,
+          19
         ],
         "tile_anchor": [
-          10.0,
-          15.0
+          10,
+          19
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -7093,12 +8243,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          46.0,
-          25.0
+          46,
+          25
         ],
         "tile_anchor": [
-          46.0,
-          25.0
+          46,
+          25
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -7169,12 +8319,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          8.0
+          24,
+          8
         ],
         "tile_anchor": [
-          28.0,
-          9.0
+          24,
+          8
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -7245,12 +8395,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          32.0
+          16,
+          32
         ],
         "tile_anchor": [
-          24.0,
-          27.0
+          16,
+          32
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -7319,12 +8469,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
-          43.0
+          34,
+          43
         ],
         "tile_anchor": [
-          40.0,
-          41.0
+          34,
+          43
         ]
       },
       {
@@ -7391,12 +8541,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          8.0,
-          46.0
+          8,
+          46
         ],
         "tile_anchor": [
-          8.0,
-          46.0
+          8,
+          46
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -7467,12 +8617,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28.0,
-          38.0
+          28,
+          38
         ],
         "tile_anchor": [
-          28.0,
-          38.0
+          28,
+          38
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -7543,12 +8693,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          14.0,
-          9.0
+          14,
+          9
         ],
         "tile_anchor": [
-          14.0,
-          9.0
+          14,
+          9
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -7621,8 +8771,8 @@
           19.0
         ],
         "tile_anchor": [
-          20.0,
-          21.0
+          20,
+          19
         ]
       },
       {
@@ -7688,12 +8838,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          48.0
+          0,
+          48
         ],
         "tile_anchor": [
-          0.0,
-          48.0
+          0,
+          48
         ]
       },
       {
@@ -7759,12 +8909,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          47.0
+          2,
+          47
         ],
         "tile_anchor": [
-          2.0,
-          47.0
+          2,
+          47
         ]
       },
       {
@@ -7832,12 +8982,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3.0,
-          53.0
+          3,
+          53
         ],
         "tile_anchor": [
-          3.0,
-          53.0
+          3,
+          53
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -7909,12 +9059,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          51.0
+          6,
+          51
         ],
         "tile_anchor": [
-          6.0,
-          51.0
+          6,
+          51
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7984,12 +9134,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          53.0
+          5,
+          53
         ],
         "tile_anchor": [
-          5.0,
-          53.0
+          5,
+          53
         ]
       },
       {
@@ -8057,12 +9207,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          42.0
+          1,
+          42
         ],
         "tile_anchor": [
-          1.0,
-          42.0
+          1,
+          42
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -8134,12 +9284,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3.0,
-          42.0
+          3,
+          42
         ],
         "tile_anchor": [
-          3.0,
-          42.0
+          3,
+          42
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -8209,12 +9359,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          8.0,
-          44.0
+          8,
+          44
         ],
         "tile_anchor": [
-          8.0,
-          44.0
+          8,
+          44
         ]
       },
       {
@@ -8280,12 +9430,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3.0,
-          45.0
+          3,
+          45
         ],
         "tile_anchor": [
-          3.0,
-          45.0
+          3,
+          45
         ]
       },
       {
@@ -8351,12 +9501,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          54.0
+          10,
+          54
         ],
         "tile_anchor": [
-          10.0,
-          54.0
+          10,
+          54
         ]
       },
       {
@@ -8422,12 +9572,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          43.0
+          5,
+          43
         ],
         "tile_anchor": [
-          5.0,
-          43.0
+          5,
+          43
         ]
       },
       {
@@ -8495,12 +9645,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          53.0
+          10,
+          53
         ],
         "tile_anchor": [
-          10.0,
-          53.0
+          10,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8572,12 +9722,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          9.0,
-          45.0
+          9,
+          45
         ],
         "tile_anchor": [
-          9.0,
-          45.0
+          9,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8649,12 +9799,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          45.0
+          10,
+          45
         ],
         "tile_anchor": [
-          10.0,
-          45.0
+          10,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8726,12 +9876,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          46.0
+          5,
+          46
         ],
         "tile_anchor": [
-          5.0,
-          46.0
+          5,
+          46
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8803,12 +9953,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          9.0,
-          46.0
+          9,
+          46
         ],
         "tile_anchor": [
-          9.0,
-          46.0
+          9,
+          46
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8880,12 +10030,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3.0,
-          46.0
+          3,
+          46
         ],
         "tile_anchor": [
-          3.0,
-          46.0
+          3,
+          46
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8957,12 +10107,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          55.0
+          11,
+          55
         ],
         "tile_anchor": [
-          11.0,
-          55.0
+          11,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9034,12 +10184,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          48.0
+          2,
+          48
         ],
         "tile_anchor": [
-          2.0,
-          48.0
+          2,
+          48
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9111,12 +10261,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          55.0
+          5,
+          55
         ],
         "tile_anchor": [
-          5.0,
-          55.0
+          5,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9188,12 +10338,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3.0,
-          50.0
+          3,
+          50
         ],
         "tile_anchor": [
-          3.0,
-          50.0
+          3,
+          50
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9265,12 +10415,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          55.0
+          10,
+          55
         ],
         "tile_anchor": [
-          10.0,
-          55.0
+          10,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9342,12 +10492,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          47.0
+          6,
+          47
         ],
         "tile_anchor": [
-          6.0,
-          47.0
+          6,
+          47
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9419,12 +10569,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          46.0
+          6,
+          46
         ],
         "tile_anchor": [
-          6.0,
-          46.0
+          6,
+          46
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9496,12 +10646,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          9.0,
-          55.0
+          9,
+          55
         ],
         "tile_anchor": [
-          9.0,
-          55.0
+          9,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9573,12 +10723,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          54.0
+          11,
+          54
         ],
         "tile_anchor": [
-          11.0,
-          54.0
+          11,
+          54
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9650,12 +10800,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          47.0
+          7,
+          47
         ],
         "tile_anchor": [
-          7.0,
-          47.0
+          7,
+          47
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9727,12 +10877,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          9.0,
-          47.0
+          9,
+          47
         ],
         "tile_anchor": [
-          9.0,
-          47.0
+          9,
+          47
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9804,12 +10954,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          53.0
+          6,
+          53
         ],
         "tile_anchor": [
-          6.0,
-          53.0
+          6,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9881,12 +11031,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          9.0,
-          28.0
+          9,
+          28
         ],
         "tile_anchor": [
-          9.0,
-          28.0
+          9,
+          28
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9958,12 +11108,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          21.0
+          11,
+          21
         ],
         "tile_anchor": [
-          11.0,
-          21.0
+          11,
+          21
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10033,12 +11183,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          26.0
+          13,
+          26
         ],
         "tile_anchor": [
-          13.0,
-          26.0
+          13,
+          26
         ]
       },
       {
@@ -10104,12 +11254,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          43.0
+          24,
+          43
         ],
         "tile_anchor": [
-          24.0,
-          43.0
+          24,
+          43
         ]
       },
       {
@@ -10175,12 +11325,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          36.0
+          22,
+          36
         ],
         "tile_anchor": [
-          22.0,
-          36.0
+          22,
+          36
         ]
       },
       {
@@ -10246,12 +11396,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29.0,
-          47.0
+          29,
+          47
         ],
         "tile_anchor": [
-          29.0,
-          47.0
+          29,
+          47
         ]
       },
       {
@@ -10319,12 +11469,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          36.0,
-          28.0
+          36,
+          28
         ],
         "tile_anchor": [
-          36.0,
-          28.0
+          36,
+          28
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -10394,12 +11544,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          41.0,
-          22.0
+          41,
+          22
         ],
         "tile_anchor": [
-          41.0,
-          22.0
+          41,
+          22
         ]
       },
       {
@@ -10467,12 +11617,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          11.0
+          22,
+          11
         ],
         "tile_anchor": [
-          22.0,
-          11.0
+          22,
+          11
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -10542,12 +11692,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          27.0,
-          12.0
+          27,
+          12
         ],
         "tile_anchor": [
-          27.0,
-          12.0
+          27,
+          12
         ]
       },
       {
@@ -10615,12 +11765,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          3.0
+          22,
+          3
         ],
         "tile_anchor": [
-          22.0,
-          3.0
+          22,
+          3
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -10692,12 +11842,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          27.0,
-          5.0
+          27,
+          5
         ],
         "tile_anchor": [
-          27.0,
-          5.0
+          27,
+          5
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -10767,12 +11917,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          36.0
+          43,
+          36
         ],
         "tile_anchor": [
-          43.0,
-          36.0
+          43,
+          36
         ]
       },
       {
@@ -10838,12 +11988,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28.0,
-          38.0
+          28,
+          38
         ],
         "tile_anchor": [
-          28.0,
-          38.0
+          28,
+          38
         ]
       },
       {
@@ -10911,12 +12061,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          9.0,
-          24.0
+          9,
+          24
         ],
         "tile_anchor": [
-          9.0,
-          24.0
+          9,
+          24
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10988,12 +12138,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29.0,
-          41.0
+          29,
+          41
         ],
         "tile_anchor": [
-          29.0,
-          41.0
+          29,
+          41
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11065,12 +12215,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          35.0,
-          23.0
+          35,
+          23
         ],
         "tile_anchor": [
-          35.0,
-          23.0
+          35,
+          23
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11142,12 +12292,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          34.0
+          43,
+          34
         ],
         "tile_anchor": [
-          43.0,
-          34.0
+          43,
+          34
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11219,12 +12369,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29.0,
-          44.0
+          29,
+          44
         ],
         "tile_anchor": [
-          29.0,
-          44.0
+          29,
+          44
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11296,12 +12446,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          5.0
+          24,
+          5
         ],
         "tile_anchor": [
-          24.0,
-          5.0
+          24,
+          5
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11373,12 +12523,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          38.0,
-          27.0
+          38,
+          27
         ],
         "tile_anchor": [
-          38.0,
-          27.0
+          38,
+          27
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11450,12 +12600,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          40.0,
-          24.0
+          40,
+          24
         ],
         "tile_anchor": [
-          40.0,
-          24.0
+          40,
+          24
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11527,12 +12677,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          41.0
+          31,
+          41
         ],
         "tile_anchor": [
-          31.0,
-          41.0
+          31,
+          41
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11604,12 +12754,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          45.0,
-          36.0
+          45,
+          36
         ],
         "tile_anchor": [
-          45.0,
-          36.0
+          45,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11681,12 +12831,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          11.0
+          24,
+          11
         ],
         "tile_anchor": [
-          24.0,
-          11.0
+          24,
+          11
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11758,12 +12908,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          27.0,
-          7.0
+          27,
+          7
         ],
         "tile_anchor": [
-          27.0,
-          7.0
+          27,
+          7
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11835,12 +12985,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          14.0,
-          30.0
+          14,
+          30
         ],
         "tile_anchor": [
-          14.0,
-          30.0
+          14,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11912,12 +13062,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          43.0
+          31,
+          43
         ],
         "tile_anchor": [
-          31.0,
-          43.0
+          31,
+          43
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11989,12 +13139,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          44.0,
-          34.0
+          44,
+          34
         ],
         "tile_anchor": [
-          44.0,
-          34.0
+          44,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12066,12 +13216,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          12.0
+          25,
+          12
         ],
         "tile_anchor": [
-          25.0,
-          12.0
+          25,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12143,12 +13293,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          30.0
+          13,
+          30
         ],
         "tile_anchor": [
-          13.0,
-          30.0
+          13,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12220,12 +13370,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          14.0,
-          26.0
+          14,
+          26
         ],
         "tile_anchor": [
-          14.0,
-          26.0
+          14,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12297,12 +13447,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          31.0
+          13,
+          31
         ],
         "tile_anchor": [
-          13.0,
-          31.0
+          13,
+          31
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12374,12 +13524,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          32.0,
-          45.0
+          32,
+          45
         ],
         "tile_anchor": [
-          32.0,
-          45.0
+          32,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12451,12 +13601,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          42.0,
-          25.0
+          42,
+          25
         ],
         "tile_anchor": [
-          42.0,
-          25.0
+          42,
+          25
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12528,12 +13678,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          36.0,
-          25.0
+          36,
+          25
         ],
         "tile_anchor": [
-          36.0,
-          25.0
+          36,
+          25
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12605,12 +13755,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          10.0
+          26,
+          10
         ],
         "tile_anchor": [
-          26.0,
-          10.0
+          26,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12682,12 +13832,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          30.0
+          13,
+          30
         ],
         "tile_anchor": [
-          13.0,
-          30.0
+          13,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12759,12 +13909,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          44.0
+          31,
+          44
         ],
         "tile_anchor": [
-          31.0,
-          44.0
+          31,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12836,12 +13986,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          44.0,
-          34.0
+          44,
+          34
         ],
         "tile_anchor": [
-          44.0,
-          34.0
+          44,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12913,12 +14063,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          40.0,
-          25.0
+          40,
+          25
         ],
         "tile_anchor": [
-          40.0,
-          25.0
+          40,
+          25
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12990,12 +14140,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          37.0,
-          24.0
+          37,
+          24
         ],
         "tile_anchor": [
-          37.0,
-          24.0
+          37,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13067,12 +14217,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          12.0
+          26,
+          12
         ],
         "tile_anchor": [
-          26.0,
-          12.0
+          26,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13144,12 +14294,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          6.0
+          25,
+          6
         ],
         "tile_anchor": [
-          25.0,
-          6.0
+          25,
+          6
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13221,12 +14371,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          5.0
+          26,
+          5
         ],
         "tile_anchor": [
-          26.0,
-          5.0
+          26,
+          5
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13298,12 +14448,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          41.0,
-          25.0
+          41,
+          25
         ],
         "tile_anchor": [
-          41.0,
-          25.0
+          41,
+          25
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -13375,12 +14525,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          24.0
+          5,
+          24
         ],
         "tile_anchor": [
-          5.0,
-          24.0
+          5,
+          24
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -13452,12 +14602,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          3.0
+          26,
+          3
         ],
         "tile_anchor": [
-          26.0,
-          3.0
+          26,
+          3
         ],
         "visual_footprint_tiles": [
           8.0,
@@ -13527,12 +14677,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          41.0,
-          27.0
+          41,
+          27
         ],
         "tile_anchor": [
-          41.0,
-          27.0
+          41,
+          27
         ]
       },
       {
@@ -13600,12 +14750,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          46.0,
-          38.0
+          46,
+          38
         ],
         "tile_anchor": [
-          46.0,
-          38.0
+          46,
+          38
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13677,12 +14827,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          46.0
+          31,
+          46
         ],
         "tile_anchor": [
-          31.0,
-          46.0
+          31,
+          46
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13754,12 +14904,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          32.0
+          11,
+          32
         ],
         "tile_anchor": [
-          11.0,
-          32.0
+          11,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13831,12 +14981,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          13.0
+          24,
+          13
         ],
         "tile_anchor": [
-          24.0,
-          13.0
+          24,
+          13
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13908,12 +15058,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          13.0
+          25,
+          13
         ],
         "tile_anchor": [
-          25.0,
-          13.0
+          25,
+          13
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13985,12 +15135,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          38.0,
-          26.0
+          38,
+          26
         ],
         "tile_anchor": [
-          38.0,
-          26.0
+          38,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14066,12 +15216,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          49.0,
-          1.0
+          49,
+          1
         ],
         "tile_anchor": [
-          49.0,
-          1.0
+          49,
+          1
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -14147,12 +15297,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "tile_anchor": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -14226,12 +15376,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          48.0,
-          48.0
+          48,
+          48
         ],
         "tile_anchor": [
-          48.0,
-          48.0
+          48,
+          48
         ],
         "visual_footprint_tiles": [
           7.0,
@@ -14307,12 +15457,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          51.0,
-          26.0
+          51,
+          26
         ],
         "tile_anchor": [
-          51.0,
-          26.0
+          51,
+          26
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14388,12 +15538,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          28.0
+          1,
+          28
         ],
         "tile_anchor": [
-          1.0,
-          28.0
+          1,
+          28
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14411,10 +15561,10 @@
     "terrain_front": []
   },
   "legacy_map_id": "wooma_forest",
-  "legacy_runtime_map_id": 268,
+  "legacy_runtime_map_id": 268.0,
   "map_id": "world_wooma_forest",
-  "runtime_map_id": 910004,
-  "schema_version": 4.0,
+  "runtime_map_id": 910004.0,
+  "schema_version": 5,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "ok",

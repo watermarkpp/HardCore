@@ -684,7 +684,7 @@ func _player_map_detail(map_data: Dictionary, content: Dictionary, boss_names: A
 		entrance_sources.append(str(source_value))
 	var entrance_text := "可从%s进入。" % "、".join(entrance_sources) if not entrance_sources.is_empty() else "入口线索暂无记录，需要继续探索。"
 	var exit_text := "；".join(portal_lines) if not portal_lines.is_empty() else "未发现通往其他区域的出口。"
-	var access_text := "主城区传送将在后续版本开放。" if _is_main_city_map(map_id) else "获得并使用该地图对应的怪物掉落传送卷轴后，可从地图界面传送。"
+	var access_text := "传送按钮仅依据左侧当前地图及其玩法条件开放。"
 	return "[color=#d8c8ae]地图说明：%s\n\n营地：%s\n\n常见怪物：%s\n\n首领：%s\n\n入口：%s\n\n出口：%s\n\n传送条件：%s[/color]" % [description, camp_text, monster_text, boss_text, entrance_text, exit_text, access_text]
 
 
@@ -712,7 +712,7 @@ func _refresh_teleport_button() -> void:
 	teleport_button.disabled = _teleport_request_locked or not enabled
 	teleport_button.text = "传送" if enabled else "传送未开放"
 	var destination_label := str(rule.get("destination_label", ""))
-	var default_reason := "主城区传送将在后续版本开放" if _is_main_city_map(_selected_map_id) else "需要获得该地图对应的怪物掉落传送卷轴"
+	var default_reason := "尚未满足该地图的传送条件"
 	var reason := str(rule.get("reason", default_reason))
 	teleport_button.tooltip_text = destination_label if enabled and not destination_label.is_empty() else reason
 	var status_text := "[color=#78a87c]传送开放：%s[/color]" % destination_label if enabled else "[color=#8f7d6a]传送状态：%s[/color]" % reason
@@ -742,8 +742,11 @@ func _teleport_selected() -> void:
 		"destination_map_id": destination_map_id,
 		"arrival_anchor_id": str(rule.get("arrival_anchor_id", "")),
 		"rule_id": str(rule.get("rule_id", "")),
-		"unlock_contract_id": "map.teleport.main_city.future.v1" if _is_main_city_map(_selected_map_id) else "map.teleport.scroll_drop.v1",
-		"requires_map_scroll": not _is_main_city_map(_selected_map_id),
+		"unlock_contract_id": str(rule.get("unlock_contract_id", "")),
+		"requires_map_scroll": bool(rule.get("requires_map_scroll", false)),
+		"required_item_id": int(rule.get("required_item_id", -1)),
+		"required_item_count": int(rule.get("required_item_count", 0)),
+		"consume_on_success": bool(rule.get("consume_on_success", false)),
 	}
 	teleport_requested.emit(request.duplicate(true))
 	map_selected.emit(destination_map_id)

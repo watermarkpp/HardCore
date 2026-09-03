@@ -97,7 +97,18 @@ func _ready() -> void:
 	editor.load_default_workspace_on_ready = false
 	editor.persist_last_document_path = false
 	add_child(editor)
-	assert(editor._startup_document_path() == MapEditorSaveService.default_path("bich_province"))
+	assert(editor._startup_document_path() == MapEditorSaveService.default_path("world_bich_province"))
+	assert(
+		MapEditorSaveService.canonical_workspace_path(
+			MapEditorSaveService.default_path("cyd_1")
+		)
+		== MapEditorSaveService.default_path("world_cangyue_island")
+	)
+	assert(MapEditorSaveService.has_formal_workspace_for_legacy_map("cyd_1"))
+	assert(not MapEditorSaveService.has_formal_workspace_for_legacy_map("sandbox_64"))
+	var workspace_maps := MapEditorSaveService.list_workspace_maps()
+	assert(workspace_maps.any(func(entry: Dictionary) -> bool: return str(entry.get("map_id", "")) == "world_cangyue_island"))
+	assert(not workspace_maps.any(func(entry: Dictionary) -> bool: return str(entry.get("map_id", "")) == "cyd_1"))
 	var sandbox_test_root := "user://mse_stage0_sandbox"
 	var sandbox_test_document := sandbox_test_root.path_join("sandbox_64.editor.json")
 	var sandbox_test_workspace := sandbox_test_root.path_join("ground_workspace")

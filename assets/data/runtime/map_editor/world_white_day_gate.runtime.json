@@ -1,5 +1,5 @@
 {
-  "build_sha256": "df27f5c418b39e30feba27846aada8492459122ad306c44e81703ca06dc97ed7",
+  "build_sha256": "78888596cf8966c8f4b5b605036bd952572f23d4ca7741a36fa44ffbcb5fc0eb",
   "collision": {
     "blocked_count": 167.0,
     "blocked_tiles": [
@@ -4643,17 +4643,81 @@
       }
     ],
     "region_trigger": [],
-    "respawn_points": [],
-    "safe_area": []
+    "respawn_points": [
+      {
+        "content_layer": "personal_expansion",
+        "is_birth_point": true,
+        "is_default": true,
+        "is_respawn_point": true,
+        "kind": "respawn_point",
+        "respawn_id": "respawn_point_000001",
+        "runtime_export": true,
+        "semantic_id": "respawn_point_000001",
+        "semantic_role": "birth_and_respawn",
+        "tile": [
+          9.0,
+          38.0
+        ]
+      }
+    ],
+    "safe_area": [
+      {
+        "area_id": "safe_area_000001",
+        "blocks_monster_damage": true,
+        "blocks_pvp": true,
+        "content_layer": "personal_expansion",
+        "display_name": "安全区",
+        "kind": "safe_area",
+        "polygon_ground_gu": [
+          [
+            21.0,
+            47.0
+          ],
+          [
+            16.0,
+            38.0
+          ],
+          [
+            9.0,
+            30.0
+          ],
+          [
+            3.0,
+            25.0
+          ],
+          [
+            0.0,
+            25.0
+          ],
+          [
+            0.0,
+            47.0
+          ],
+          [
+            21.0,
+            47.0
+          ]
+        ],
+        "radius_gu": 0.0,
+        "return_anchor": false,
+        "runtime_export": true,
+        "semantic_id": "safe_area_000001",
+        "shape": "polygon",
+        "tile": [
+          10.0,
+          37.0
+        ]
+      }
+    ]
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "27ebf534fbecee7ceb256d54cf7102963aac43cdb0e4c438497f58eff1d378f6",
+      "authoring_sha256": "ec31e1239be4b776fc47f6950005d87aa2b645ede485b91e63a16ae7bfb25ba5",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 2.0,
-      "document_sha256": "0b33923251727b60a4c33bb5f2470b4f4b63ce1166f15f9822bdbf4ffd6b3c0f",
-      "ground_manifest_sha256": "dfd4c9c3b8d93593d4e32c33a674e05cb158d9738fd8084fe00ca61a934c7629",
-      "ground_state_sha256": "1b6a292ab7f8ce2d3beb5c9163b707d0b821793a166e4dd00e935571f19a7f3e",
+      "document_sha256": "5e474734908ff572b7d978bfe4ab94449377365b09ece8850178b747e738f6e7",
+      "ground_manifest_sha256": "83cd2fcbcb56986390a894caac3caf57b31cf121b8bc9bbaf823679b1d1207b2",
+      "ground_state_sha256": "bf353a8225d1f7d915512b1f649004f23222b7dbed6e582a8a3299c05ad46d63",
       "map_key": "world_white_day_gate",
       "runtime_map_id": 910006.0
     },

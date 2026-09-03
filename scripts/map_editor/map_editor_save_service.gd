@@ -2,10 +2,41 @@ class_name MapEditorSaveService
 extends RefCounted
 
 const EDITOR_ROOT := "res://map_editor_workspace/"
+const FORMAL_IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
 
 
 static func default_path(map_id: String) -> String:
 	return EDITOR_ROOT + map_id + "/" + map_id + ".editor.json"
+
+
+static func canonical_workspace_path(path: String) -> String:
+	var normalized := path.strip_edges().replace("\\", "/")
+	if normalized.is_empty():
+		return normalized
+	for identity: Dictionary in _formal_identity_rows():
+		var legacy_map_id := str(identity.get("legacy_map_id", ""))
+		var formal_map_id := str(identity.get("map_id", ""))
+		if legacy_map_id.is_empty() or formal_map_id.is_empty():
+			continue
+		if normalized != default_path(legacy_map_id):
+			continue
+		var formal_path := default_path(formal_map_id)
+		return formal_path if FileAccess.file_exists(formal_path) else normalized
+	return normalized
+
+
+static func has_formal_workspace_for_legacy_map(map_id: String) -> bool:
+	if map_id.is_empty():
+		return false
+	for identity: Dictionary in _formal_identity_rows():
+		if str(identity.get("legacy_map_id", "")) != map_id:
+			continue
+		var formal_map_id := str(identity.get("map_id", ""))
+		return (
+			not formal_map_id.is_empty()
+			and FileAccess.file_exists(default_path(formal_map_id))
+		)
+	return false
 
 
 static func save_document(document: Dictionary, path := "") -> Dictionary:
@@ -53,10 +84,15 @@ static func list_workspace_maps() -> Array:
 	var static_ids := {}
 	for template: Dictionary in MapDesignCatalogService.blank_templates():
 		static_ids[str(template.get("map_id", ""))] = true
+	var superseded_legacy_ids := _superseded_legacy_map_ids()
 	dir.list_dir_begin()
 	var entry := dir.get_next()
 	while entry != "":
-		if dir.current_is_dir() and not static_ids.has(entry):
+		if (
+			dir.current_is_dir()
+			and not static_ids.has(entry)
+			and not superseded_legacy_ids.has(entry)
+		):
 			var editor_path := EDITOR_ROOT + entry + "/" + entry + ".editor.json"
 			if FileAccess.file_exists(editor_path):
 				var summary := _read_document_summary(editor_path)
@@ -64,6 +100,31 @@ static func list_workspace_maps() -> Array:
 					result.append(summary)
 		entry = dir.get_next()
 	dir.list_dir_end()
+	return result
+
+
+static func _formal_identity_rows() -> Array:
+	if not FileAccess.file_exists(FORMAL_IDENTITY_PATH):
+		return []
+	var file := FileAccess.open(FORMAL_IDENTITY_PATH, FileAccess.READ)
+	if file == null:
+		return []
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if not parsed is Dictionary:
+		return []
+	var rows: Variant = parsed.get("maps", [])
+	return rows if rows is Array else []
+
+
+static func _superseded_legacy_map_ids() -> Dictionary:
+	var result := {}
+	for identity: Dictionary in _formal_identity_rows():
+		var legacy_map_id := str(identity.get("legacy_map_id", ""))
+		var formal_map_id := str(identity.get("map_id", ""))
+		if legacy_map_id.is_empty() or formal_map_id.is_empty():
+			continue
+		if FileAccess.file_exists(default_path(formal_map_id)):
+			result[legacy_map_id] = true
 	return result
 
 

@@ -1,17 +1,18 @@
 {
   "maps": [
     {
-      "approval_revision": 2.0,
+      "approval_revision": 4.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "0ac3ca663cbffdf13a21268c67282bb801d8f17a0507b0e96fd81ad5437d6915",
+      "approved_build_sha256": "c171e7f76974250f1371b6726cd944b01510cbfdeb096f6a4f5d4534d8b6075c",
       "display_name": "比奇省（单机重制）",
       "map_key": "world_bich_province",
       "release_state": "implemented_playable",
       "runtime_map_id": 910001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/world_bich_province.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "0ac3ca663cbffdf13a21268c67282bb801d8f17a0507b0e96fd81ad5437d6915",
+        "has_safe_area": true,
         "monster_names": [
           "毒蜘蛛",
           "蛤蟆",
@@ -22,41 +23,40 @@
           "半兽人",
           "食人花"
         ],
-        "boss_names": [],
         "npc_kinds": [
           "shop",
           "trainer",
           "quest",
           "warehouse"
         ],
-        "has_safe_area": true,
         "portals": [
           {
-            "target_map_id": 910004,
-            "target_map_key": "world_wooma_forest",
-            "label": "前往沃玛森林"
+            "label": "前往沃玛森林",
+            "target_map_id": 910004.0,
+            "target_map_key": "world_wooma_forest"
           },
           {
-            "target_map_id": 911001,
-            "target_map_key": "bich_orc_tomb_f1",
-            "label": "兽人古墓"
+            "label": "兽人古墓",
+            "target_map_id": 911001.0,
+            "target_map_key": "bich_orc_tomb_f1"
           },
           {
-            "target_map_id": 911101,
-            "target_map_key": "bich_mine_f1",
-            "label": "比奇矿区"
+            "label": "比奇矿区",
+            "target_map_id": 911101.0,
+            "target_map_key": "bich_mine_f1"
           },
           {
-            "target_map_id": 918002,
-            "target_map_key": "hidden_hellfire",
-            "label": "地狱烈焰"
+            "label": "地狱烈焰",
+            "target_map_id": 918002.0,
+            "target_map_key": "hidden_hellfire"
           },
           {
-            "target_map_id": 910002,
-            "target_map_key": "world_snake_valley",
-            "label": "进入毒蛇山谷"
+            "label": "进入毒蛇山谷",
+            "target_map_id": 910002.0,
+            "target_map_key": "world_snake_valley"
           }
-        ]
+        ],
+        "runtime_build_sha256": "c171e7f76974250f1371b6726cd944b01510cbfdeb096f6a4f5d4534d8b6075c"
       }
     },
     {
@@ -69,8 +69,11 @@
       "runtime_map_id": 910002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/world_snake_valley.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "半兽勇士"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "5e00a439db2ff1e043d83ed71adaacec74d9efe887bf1f05af0ba6f1a7a36662",
+        "has_safe_area": false,
         "monster_names": [
           "毒蜘蛛",
           "食人花",
@@ -78,42 +81,40 @@
           "红蛇",
           "虎蛇"
         ],
-        "boss_names": [
-          "半兽勇士"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910001,
-            "target_map_key": "world_bich_province",
-            "label": "比奇"
+            "label": "比奇",
+            "target_map_id": 910001.0,
+            "target_map_key": "world_bich_province"
           },
           {
-            "target_map_id": 910003,
-            "target_map_key": "world_mengzhong_province",
-            "label": "盟重"
+            "label": "盟重",
+            "target_map_id": 910003.0,
+            "target_map_key": "world_mengzhong_province"
           },
           {
-            "target_map_id": 912001,
-            "target_map_key": "snake_mine_passage_1",
-            "label": "山谷矿区"
+            "label": "山谷矿区",
+            "target_map_id": 912001.0,
+            "target_map_key": "snake_mine_passage_1"
           }
-        ]
+        ],
+        "runtime_build_sha256": "5e00a439db2ff1e043d83ed71adaacec74d9efe887bf1f05af0ba6f1a7a36662"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",
       "approved_build_sha256": "699262d5bf53406f751244430fa21dfac4d6e790e67a8c9410077bf81a28013d",
       "display_name": "盟重省",
       "map_key": "world_mengzhong_province",
       "release_state": "implemented_playable",
-      "runtime_map_id": 910003,
+      "runtime_map_id": 910003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/world_mengzhong_province.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "699262d5bf53406f751244430fa21dfac4d6e790e67a8c9410077bf81a28013d",
+        "has_safe_area": true,
         "monster_names": [
           "羊",
           "猎鹰",
@@ -124,55 +125,57 @@
           "多角虫",
           "巨型多角虫"
         ],
-        "boss_names": [],
         "npc_kinds": [
           "shop",
           "warehouse",
           "quest",
           "trainer"
         ],
-        "has_safe_area": true,
         "portals": [
           {
-            "target_map_id": 910002,
-            "target_map_key": "world_snake_valley",
-            "label": "毒蛇山谷"
+            "label": "毒蛇山谷",
+            "target_map_id": 910002.0,
+            "target_map_key": "world_snake_valley"
           },
           {
-            "target_map_id": 913001,
-            "target_map_key": "mengzhong_stone_tomb_f1",
-            "label": "石墓"
+            "label": "石墓",
+            "target_map_id": 913001.0,
+            "target_map_key": "mengzhong_stone_tomb_f1"
           },
           {
-            "target_map_id": 913101,
-            "target_map_key": "mengzhong_zuma_temple_f1",
-            "label": "祖玛寺庙"
+            "label": "祖玛寺庙",
+            "target_map_id": 913101.0,
+            "target_map_key": "mengzhong_zuma_temple_f1"
           },
           {
-            "target_map_id": 910007,
-            "target_map_key": "world_cangyue_island",
-            "label": "苍月岛"
+            "label": "苍月岛",
+            "target_map_id": 910007.0,
+            "target_map_key": "world_cangyue_island"
           },
           {
-            "target_map_id": 913201,
-            "target_map_key": "mengzhong_death_valley_dungeon",
-            "label": "死亡山谷"
+            "label": "死亡山谷",
+            "target_map_id": 913201.0,
+            "target_map_key": "mengzhong_death_valley_dungeon"
           }
-        ]
+        ],
+        "runtime_build_sha256": "699262d5bf53406f751244430fa21dfac4d6e790e67a8c9410077bf81a28013d"
       }
     },
     {
-      "approval_revision": 2.0,
+      "approval_revision": 4.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "b117939a0547ad942687ec011e5c45eb5da1e83d5fcb86d5e15de5c0033e626c",
+      "approved_build_sha256": "03a2c5333e024d804c739a53935af5c4545c8b1800d07f9e65c9eab12b077c39",
       "display_name": "沃玛森林",
       "map_key": "world_wooma_forest",
       "release_state": "implemented_playable",
       "runtime_map_id": 910004.0,
       "runtime_path": "res://assets/data/runtime/map_editor/world_wooma_forest.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "半兽勇士"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "b117939a0547ad942687ec011e5c45eb5da1e83d5fcb86d5e15de5c0033e626c",
+        "has_safe_area": false,
         "monster_names": [
           "多钩猫",
           "钉耙猫",
@@ -180,57 +183,60 @@
           "半兽人",
           "半兽战士"
         ],
-        "boss_names": [
-          "半兽勇士"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 915001,
-            "target_map_key": "wooma_temple_f1",
-            "label": "沃玛寺庙"
+            "label": "沃玛寺庙",
+            "target_map_id": 915001.0,
+            "target_map_key": "wooma_temple_f1"
           },
           {
-            "target_map_id": 910005,
-            "target_map_key": "world_fengmo_valley",
-            "label": "封魔谷"
+            "label": "封魔谷",
+            "target_map_id": 910005.0,
+            "target_map_key": "world_fengmo_valley"
           },
           {
-            "target_map_id": 910006,
-            "target_map_key": "world_white_day_gate",
-            "label": "白日门"
+            "label": "白日门",
+            "target_map_id": 910006.0,
+            "target_map_key": "world_white_day_gate"
           },
           {
-            "target_map_id": 910001,
-            "target_map_key": "world_bich_province",
-            "label": "返回比奇省"
+            "label": "返回比奇省",
+            "target_map_id": 910001.0,
+            "target_map_key": "world_bich_province"
           },
           {
-            "target_map_id": 918003,
-            "target_map_key": "hidden_fallen_graveyard",
-            "label": "堕落坟场"
+            "label": "堕落坟场",
+            "target_map_id": 918003.0,
+            "target_map_key": "hidden_fallen_graveyard"
           },
           {
-            "target_map_id": 918005,
-            "target_map_key": "hidden_abyss_domain",
-            "label": "深渊魔域"
+            "label": "深渊魔域",
+            "target_map_id": 918005.0,
+            "target_map_key": "hidden_abyss_domain"
           }
-        ]
+        ],
+        "runtime_build_sha256": "03a2c5333e024d804c739a53935af5c4545c8b1800d07f9e65c9eab12b077c39"
       }
     },
     {
-      "approval_revision": 2.0,
+      "approval_revision": 4.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "4e982b7e27214b1c3ad28f3f34667483fa2bb2abde44d93edd394377f1d07459",
+      "approved_build_sha256": "8c0a3214145c856ec55d9f23bdc9e14ceb126a84ded7fcc99f8315e8cd6fa2bd",
       "display_name": "封魔谷",
       "map_key": "world_fengmo_valley",
       "release_state": "implemented_playable",
       "runtime_map_id": 910005.0,
       "runtime_path": "res://assets/data/runtime/map_editor/world_fengmo_valley.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "半兽勇士",
+          "骷髅战将",
+          "千年树妖",
+          "骷髅精灵"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "4e982b7e27214b1c3ad28f3f34667483fa2bb2abde44d93edd394377f1d07459",
+        "has_safe_area": true,
         "monster_names": [
           "半兽战士",
           "骷髅",
@@ -242,97 +248,92 @@
           "僵尸4",
           "僵尸5"
         ],
-        "boss_names": [
-          "半兽勇士",
-          "骷髅战将",
-          "千年树妖",
-          "骷髅精灵"
-        ],
         "npc_kinds": [
           "shop",
           "warehouse"
         ],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910004,
-            "target_map_key": "world_wooma_forest",
-            "label": "沃玛森林"
+            "label": "沃玛森林",
+            "target_map_id": 910004.0,
+            "target_map_key": "world_wooma_forest"
           },
           {
-            "target_map_id": 914001,
-            "target_map_key": "fengmo_forked_path",
-            "label": "封魔矿区"
+            "label": "封魔矿区",
+            "target_map_id": 914001.0,
+            "target_map_key": "fengmo_forked_path"
           },
           {
-            "target_map_id": 918004,
-            "target_map_key": "hidden_death_temple",
-            "label": "死亡神殿"
+            "label": "死亡神殿",
+            "target_map_id": 918004.0,
+            "target_map_key": "hidden_death_temple"
           }
-        ]
+        ],
+        "runtime_build_sha256": "8c0a3214145c856ec55d9f23bdc9e14ceb126a84ded7fcc99f8315e8cd6fa2bd"
       }
     },
     {
-      "approval_revision": 2.0,
+      "approval_revision": 4,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "df27f5c418b39e30feba27846aada8492459122ad306c44e81703ca06dc97ed7",
+      "approved_build_sha256": "78888596cf8966c8f4b5b605036bd952572f23d4ca7741a36fa44ffbcb5fc0eb",
       "display_name": "白日门",
       "map_key": "world_white_day_gate",
       "release_state": "implemented_playable",
-      "runtime_map_id": 910006.0,
+      "runtime_map_id": 910006,
       "runtime_path": "res://assets/data/runtime/map_editor/world_white_day_gate.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "df27f5c418b39e30feba27846aada8492459122ad306c44e81703ca06dc97ed7",
-        "monster_names": [
-          "森林雪人",
-          "半兽战士",
-          "天狼蜘蛛",
-          "剧毒蜘蛛"
-        ],
         "boss_names": [
           "半兽勇士",
           "多钩猫王",
           "钉耙猫王",
           "半兽统领"
         ],
+        "contract_id": "ui.map.presentation_projection.v1",
+        "has_safe_area": true,
+        "monster_names": [
+          "森林雪人",
+          "半兽战士",
+          "天狼蜘蛛",
+          "剧毒蜘蛛"
+        ],
         "npc_kinds": [
           "shop",
           "warehouse",
           "trainer"
         ],
-        "has_safe_area": false,
         "portals": [
           {
+            "label": "沃玛森林",
             "target_map_id": 910004,
-            "target_map_key": "world_wooma_forest",
-            "label": "沃玛森林"
+            "target_map_key": "world_wooma_forest"
           },
           {
+            "label": "赤月峡谷",
             "target_map_id": 916001,
-            "target_map_key": "chiyue_valley",
-            "label": "赤月峡谷"
+            "target_map_key": "chiyue_valley"
           },
           {
+            "label": "钳虫巢穴",
             "target_map_id": 918006,
-            "target_map_key": "hidden_pincer_nest",
-            "label": "钳虫巢穴"
+            "target_map_key": "hidden_pincer_nest"
           }
-        ]
+        ],
+        "runtime_build_sha256": "78888596cf8966c8f4b5b605036bd952572f23d4ca7741a36fa44ffbcb5fc0eb"
       }
     },
     {
-      "approval_revision": 2.0,
+      "approval_revision": 4.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "860e901a41114245636742eb41266e72c2c9ba9c1f9d679864f3bf98f0af4876",
+      "approved_build_sha256": "0c79d52f4452a59660440988656dff868751045e40c54fe1e42c395765bb96d9",
       "display_name": "苍月岛",
       "map_key": "world_cangyue_island",
       "release_state": "implemented_playable",
       "runtime_map_id": 910007.0,
       "runtime_path": "res://assets/data/runtime/map_editor/world_cangyue_island.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "860e901a41114245636742eb41266e72c2c9ba9c1f9d679864f3bf98f0af4876",
+        "has_safe_area": true,
         "monster_names": [
           "毒蜘蛛",
           "稻草人",
@@ -341,44 +342,44 @@
           "食人花",
           "半兽人"
         ],
-        "boss_names": [],
         "npc_kinds": [
           "shop",
           "warehouse",
           "trainer"
         ],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 917101,
-            "target_map_key": "cangyue_bull_temple_f1",
-            "label": "牛魔寺庙"
+            "label": "牛魔寺庙",
+            "target_map_id": 917101.0,
+            "target_map_key": "cangyue_bull_temple_f1"
           },
           {
-            "target_map_id": 917001,
-            "target_map_key": "cangyue_bone_cave_f1",
-            "label": "骨魔洞"
+            "label": "骨魔洞",
+            "target_map_id": 917001.0,
+            "target_map_key": "cangyue_bone_cave_f1"
           },
           {
-            "target_map_id": 910003,
-            "target_map_key": "world_mengzhong_province",
-            "label": "盟重"
+            "label": "盟重",
+            "target_map_id": 910003.0,
+            "target_map_key": "world_mengzhong_province"
           }
-        ]
+        ],
+        "runtime_build_sha256": "0c79d52f4452a59660440988656dff868751045e40c54fe1e42c395765bb96d9"
       }
     },
     {
-      "approval_revision": 2.0,
+      "approval_revision": 4.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "495a7c27b7320e60abc7ad1fa175d006784fe7daec8345c7cf98d168173398c8",
+      "approved_build_sha256": "9c4398e64708fa5315e5482677b47f41e12fdb82a5ae3ccdcbfa8cba4816afc3",
       "display_name": "兽人古墓一层",
       "map_key": "bich_orc_tomb_f1",
       "release_state": "implemented_playable",
       "runtime_map_id": 911001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/bich_orc_tomb_f1.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "495a7c27b7320e60abc7ad1fa175d006784fe7daec8345c7cf98d168173398c8",
+        "has_safe_area": false,
         "monster_names": [
           "山洞蝙蝠",
           "蝎子",
@@ -387,21 +388,20 @@
           "掷斧骷髅",
           "骷髅战士"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 911002,
-            "target_map_key": "bich_orc_tomb_f2",
-            "label": "前往兽人古墓二层"
+            "label": "前往兽人古墓二层",
+            "target_map_id": 911002.0,
+            "target_map_key": "bich_orc_tomb_f2"
           },
           {
-            "target_map_id": 910001,
-            "target_map_key": "world_bich_province",
-            "label": "返回比奇省"
+            "label": "返回比奇省",
+            "target_map_id": 910001.0,
+            "target_map_key": "world_bich_province"
           }
-        ]
+        ],
+        "runtime_build_sha256": "9c4398e64708fa5315e5482677b47f41e12fdb82a5ae3ccdcbfa8cba4816afc3"
       }
     },
     {
@@ -414,8 +414,11 @@
       "runtime_map_id": 911002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/bich_orc_tomb_f2.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "骷髅战将"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "07ee1dfe218d2b80dbcd58be1af5b3f1277fd02b9cba2acb00a361c9950befba",
+        "has_safe_area": false,
         "monster_names": [
           "山洞蝙蝠",
           "蝎子",
@@ -424,25 +427,22 @@
           "骷髅战士",
           "掷斧骷髅"
         ],
-        "boss_names": [
-          "骷髅战将"
-        ],
         "npc_kinds": [
           "shop"
         ],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 911003,
-            "target_map_key": "bich_orc_tomb_f3",
-            "label": "前往兽人古墓三层"
+            "label": "前往兽人古墓三层",
+            "target_map_id": 911003.0,
+            "target_map_key": "bich_orc_tomb_f3"
           },
           {
-            "target_map_id": 911001,
-            "target_map_key": "bich_orc_tomb_f1",
-            "label": "返回兽人古墓一层"
+            "label": "返回兽人古墓一层",
+            "target_map_id": 911001.0,
+            "target_map_key": "bich_orc_tomb_f1"
           }
-        ]
+        ],
+        "runtime_build_sha256": "07ee1dfe218d2b80dbcd58be1af5b3f1277fd02b9cba2acb00a361c9950befba"
       }
     },
     {
@@ -455,8 +455,12 @@
       "runtime_map_id": 911003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/bich_orc_tomb_f3.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "骷髅战将",
+          "骷髅精灵"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "427c7d093117aecb710a1b09cf5b8ee6a36bdca5f3f5579accf03d664cbf8ff6",
+        "has_safe_area": false,
         "monster_names": [
           "山洞蝙蝠",
           "蝎子",
@@ -465,19 +469,15 @@
           "掷斧骷髅",
           "骷髅战士"
         ],
-        "boss_names": [
-          "骷髅战将",
-          "骷髅精灵"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 911002,
-            "target_map_key": "bich_orc_tomb_f2",
-            "label": "返回兽人古墓二层"
+            "label": "返回兽人古墓二层",
+            "target_map_id": 911002.0,
+            "target_map_key": "bich_orc_tomb_f2"
           }
-        ]
+        ],
+        "runtime_build_sha256": "427c7d093117aecb710a1b09cf5b8ee6a36bdca5f3f5579accf03d664cbf8ff6"
       }
     },
     {
@@ -490,8 +490,11 @@
       "runtime_map_id": 911101.0,
       "runtime_path": "res://assets/data/runtime/map_editor/bich_mine_f1.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "尸王"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "2fde6a233f88235692827a32bf532d4df0a279e5bcc8c72b40147e3bcc57f8a7",
+        "has_safe_area": false,
         "monster_names": [
           "洞蛆",
           "僵尸1",
@@ -500,23 +503,20 @@
           "僵尸4",
           "僵尸5"
         ],
-        "boss_names": [
-          "尸王"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910001,
-            "target_map_key": "world_bich_province",
-            "label": "返回比奇省"
+            "label": "返回比奇省",
+            "target_map_id": 910001.0,
+            "target_map_key": "world_bich_province"
           },
           {
-            "target_map_id": 911102,
-            "target_map_key": "bich_mine_f2",
-            "label": "前往矿区二层"
+            "label": "前往矿区二层",
+            "target_map_id": 911102.0,
+            "target_map_key": "bich_mine_f2"
           }
-        ]
+        ],
+        "runtime_build_sha256": "2fde6a233f88235692827a32bf532d4df0a279e5bcc8c72b40147e3bcc57f8a7"
       }
     },
     {
@@ -529,8 +529,11 @@
       "runtime_map_id": 911102.0,
       "runtime_path": "res://assets/data/runtime/map_editor/bich_mine_f2.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "尸王"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "b5bd186a2883948b5a8fa987485260f1c7710eb820fe98cac4739665c80e6363",
+        "has_safe_area": false,
         "monster_names": [
           "洞蛆",
           "僵尸1",
@@ -539,23 +542,20 @@
           "僵尸4",
           "僵尸5"
         ],
-        "boss_names": [
-          "尸王"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 911101,
-            "target_map_key": "bich_mine_f1",
-            "label": "返回矿区一层"
+            "label": "返回矿区一层",
+            "target_map_id": 911101.0,
+            "target_map_key": "bich_mine_f1"
           },
           {
-            "target_map_id": 911103,
-            "target_map_key": "bich_corpse_king_hall",
-            "label": "进入尸王殿"
+            "label": "进入尸王殿",
+            "target_map_id": 911103.0,
+            "target_map_key": "bich_corpse_king_hall"
           }
-        ]
+        ],
+        "runtime_build_sha256": "b5bd186a2883948b5a8fa987485260f1c7710eb820fe98cac4739665c80e6363"
       }
     },
     {
@@ -568,15 +568,15 @@
       "runtime_map_id": 911103.0,
       "runtime_path": "res://assets/data/runtime/map_editor/bich_corpse_king_hall.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "7973406b08820e208692e50e39fb40b44571493f741f19a65c59c2d24f625a08",
-        "monster_names": [],
         "boss_names": [
           "尸王"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
-        "portals": []
+        "monster_names": [],
+        "npc_kinds": [],
+        "portals": [],
+        "runtime_build_sha256": "7973406b08820e208692e50e39fb40b44571493f741f19a65c59c2d24f625a08"
       }
     },
     {
@@ -589,8 +589,11 @@
       "runtime_map_id": 912001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/snake_mine_passage_1.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "尸王"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "7eb9183e018de5cedc4e6022bdf992cb9bc9059dc25434eba4abb817096c8536",
+        "has_safe_area": false,
         "monster_names": [
           "洞蛆",
           "僵尸1",
@@ -599,23 +602,20 @@
           "僵尸4",
           "僵尸5"
         ],
-        "boss_names": [
-          "尸王"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910002,
-            "target_map_key": "world_snake_valley",
-            "label": "毒蛇山谷"
+            "label": "毒蛇山谷",
+            "target_map_id": 910002.0,
+            "target_map_key": "world_snake_valley"
           },
           {
-            "target_map_id": 912002,
-            "target_map_key": "snake_mine_passage_2",
-            "label": "连接通道2层"
+            "label": "连接通道2层",
+            "target_map_id": 912002.0,
+            "target_map_key": "snake_mine_passage_2"
           }
-        ]
+        ],
+        "runtime_build_sha256": "7eb9183e018de5cedc4e6022bdf992cb9bc9059dc25434eba4abb817096c8536"
       }
     },
     {
@@ -628,8 +628,11 @@
       "runtime_map_id": 912002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/snake_mine_passage_2.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "尸王"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "aac62b638250b097e2540ed455f6c1de490e4dbaae6e681fb1e2e44521a4a9be",
+        "has_safe_area": false,
         "monster_names": [
           "洞蛆",
           "僵尸1",
@@ -638,23 +641,20 @@
           "僵尸4",
           "僵尸5"
         ],
-        "boss_names": [
-          "尸王"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 912003,
-            "target_map_key": "snake_unknown_dark_palace",
-            "label": "未知暗殿"
+            "label": "未知暗殿",
+            "target_map_id": 912003.0,
+            "target_map_key": "snake_unknown_dark_palace"
           },
           {
-            "target_map_id": 912001,
-            "target_map_key": "snake_mine_passage_1",
-            "label": "连接通道1层"
+            "label": "连接通道1层",
+            "target_map_id": 912001.0,
+            "target_map_key": "snake_mine_passage_1"
           }
-        ]
+        ],
+        "runtime_build_sha256": "aac62b638250b097e2540ed455f6c1de490e4dbaae6e681fb1e2e44521a4a9be"
       }
     },
     {
@@ -667,8 +667,9 @@
       "runtime_map_id": 912003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/snake_unknown_dark_palace.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "62dde98773a218e9b9dd7c1e030893463b9b5da8ab9eb1107f2e511e52b26032",
+        "has_safe_area": false,
         "monster_names": [
           "半兽勇士1",
           "骷髅精灵1",
@@ -679,10 +680,9 @@
           "白野猪1",
           "邪恶毒蛇1"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
-        "portals": []
+        "portals": [],
+        "runtime_build_sha256": "62dde98773a218e9b9dd7c1e030893463b9b5da8ab9eb1107f2e511e52b26032"
       }
     },
     {
@@ -695,29 +695,29 @@
       "runtime_map_id": 913001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_stone_tomb_f1.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "46c262bad02dd578b90d2584692a9bc4f07d1ff5ad4875b5ecae6f656cbd7bef",
+        "has_safe_area": false,
         "monster_names": [
           "黑色恶蛆",
           "楔蛾",
           "红野猪",
           "黑野猪"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910003,
-            "target_map_key": "world_mengzhong_province",
-            "label": "盟重"
+            "label": "盟重",
+            "target_map_id": 910003.0,
+            "target_map_key": "world_mengzhong_province"
           },
           {
-            "target_map_id": 913002,
-            "target_map_key": "mengzhong_stone_tomb_f2",
-            "label": "石墓二层"
+            "label": "石墓二层",
+            "target_map_id": 913002.0,
+            "target_map_key": "mengzhong_stone_tomb_f2"
           }
-        ]
+        ],
+        "runtime_build_sha256": "46c262bad02dd578b90d2584692a9bc4f07d1ff5ad4875b5ecae6f656cbd7bef"
       }
     },
     {
@@ -730,31 +730,31 @@
       "runtime_map_id": 913002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_stone_tomb_f2.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "白野猪"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "1c0fae202de3d785e84255fdaa4843837e4048370775e6c58c1adbe714b9cd90",
+        "has_safe_area": false,
         "monster_names": [
           "黑色恶蛆",
           "楔蛾",
           "红野猪",
           "黑野猪"
         ],
-        "boss_names": [
-          "白野猪"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913001,
-            "target_map_key": "mengzhong_stone_tomb_f1",
-            "label": "石墓一层"
+            "label": "石墓一层",
+            "target_map_id": 913001.0,
+            "target_map_key": "mengzhong_stone_tomb_f1"
           },
           {
-            "target_map_id": 913003,
-            "target_map_key": "mengzhong_stone_tomb_f3",
-            "label": "石墓三层"
+            "label": "石墓三层",
+            "target_map_id": 913003.0,
+            "target_map_key": "mengzhong_stone_tomb_f3"
           }
-        ]
+        ],
+        "runtime_build_sha256": "1c0fae202de3d785e84255fdaa4843837e4048370775e6c58c1adbe714b9cd90"
       }
     },
     {
@@ -767,8 +767,11 @@
       "runtime_map_id": 913003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_stone_tomb_f3.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "白野猪"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "d9a4d6e46a2633cc9a810a380d049006d877c555b86ccfc509b4ec3644ff5d5c",
+        "has_safe_area": false,
         "monster_names": [
           "黑色恶蛆",
           "角蝇",
@@ -777,23 +780,20 @@
           "楔蛾",
           "黑野猪"
         ],
-        "boss_names": [
-          "白野猪"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913002,
-            "target_map_key": "mengzhong_stone_tomb_f2",
-            "label": "石墓二层"
+            "label": "石墓二层",
+            "target_map_id": 913002.0,
+            "target_map_key": "mengzhong_stone_tomb_f2"
           },
           {
-            "target_map_id": 913004,
-            "target_map_key": "mengzhong_stone_tomb_f4",
-            "label": "石墓四层"
+            "label": "石墓四层",
+            "target_map_id": 913004.0,
+            "target_map_key": "mengzhong_stone_tomb_f4"
           }
-        ]
+        ],
+        "runtime_build_sha256": "d9a4d6e46a2633cc9a810a380d049006d877c555b86ccfc509b4ec3644ff5d5c"
       }
     },
     {
@@ -806,8 +806,13 @@
       "runtime_map_id": 913004.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_stone_tomb_f4.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "石墓尸王",
+          "白野猪",
+          "邪恶毒蛇"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "c97ca307e5b3519de7b6b2504a24de2cf342a91ef1e83f4ac8b5e7ccba7f0e78",
+        "has_safe_area": false,
         "monster_names": [
           "黑色恶蛆",
           "角蝇",
@@ -816,25 +821,20 @@
           "黑野猪",
           "蝎蛇"
         ],
-        "boss_names": [
-          "石墓尸王",
-          "白野猪",
-          "邪恶毒蛇"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913003,
-            "target_map_key": "mengzhong_stone_tomb_f3",
-            "label": "石墓三层"
+            "label": "石墓三层",
+            "target_map_id": 913003.0,
+            "target_map_key": "mengzhong_stone_tomb_f3"
           },
           {
-            "target_map_id": 918001,
-            "target_map_key": "hidden_confusion_hall",
-            "label": "困惑殿堂"
+            "label": "困惑殿堂",
+            "target_map_id": 918001.0,
+            "target_map_key": "hidden_confusion_hall"
           }
-        ]
+        ],
+        "runtime_build_sha256": "c97ca307e5b3519de7b6b2504a24de2cf342a91ef1e83f4ac8b5e7ccba7f0e78"
       }
     },
     {
@@ -847,8 +847,9 @@
       "runtime_map_id": 913101.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "38129ae39c37eef123965f69d79dab32bc10e7cbaf6ab65e2cc8caeb12cc98b0",
+        "has_safe_area": false,
         "monster_names": [
           "角蝇",
           "楔蛾",
@@ -857,21 +858,20 @@
           "祖玛雕像",
           "祖玛卫士"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910003,
-            "target_map_key": "world_mengzhong_province",
-            "label": "盟重"
+            "label": "盟重",
+            "target_map_id": 910003.0,
+            "target_map_key": "world_mengzhong_province"
           },
           {
-            "target_map_id": 913102,
-            "target_map_key": "mengzhong_zuma_temple_f2",
-            "label": "祖玛2层"
+            "label": "祖玛2层",
+            "target_map_id": 913102.0,
+            "target_map_key": "mengzhong_zuma_temple_f2"
           }
-        ]
+        ],
+        "runtime_build_sha256": "38129ae39c37eef123965f69d79dab32bc10e7cbaf6ab65e2cc8caeb12cc98b0"
       }
     },
     {
@@ -884,8 +884,13 @@
       "runtime_map_id": 913102.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "祖玛弓箭手3",
+          "祖玛卫士3",
+          "祖玛雕像3"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "ac91ee59752caae81c7ed5a18410c7dec5457fd18328a2316b9924f85a0983ee",
+        "has_safe_area": false,
         "monster_names": [
           "角蝇",
           "楔蛾",
@@ -894,25 +899,20 @@
           "祖玛雕像",
           "祖玛弓箭手"
         ],
-        "boss_names": [
-          "祖玛弓箭手3",
-          "祖玛卫士3",
-          "祖玛雕像3"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913101,
-            "target_map_key": "mengzhong_zuma_temple_f1",
-            "label": "祖玛1层"
+            "label": "祖玛1层",
+            "target_map_id": 913101.0,
+            "target_map_key": "mengzhong_zuma_temple_f1"
           },
           {
-            "target_map_id": 913103,
-            "target_map_key": "mengzhong_zuma_temple_f3",
-            "label": "祖玛3层"
+            "label": "祖玛3层",
+            "target_map_id": 913103.0,
+            "target_map_key": "mengzhong_zuma_temple_f3"
           }
-        ]
+        ],
+        "runtime_build_sha256": "ac91ee59752caae81c7ed5a18410c7dec5457fd18328a2316b9924f85a0983ee"
       }
     },
     {
@@ -925,8 +925,13 @@
       "runtime_map_id": 913103.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "祖玛弓箭手3",
+          "祖玛卫士3",
+          "祖玛雕像3"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "2a90ab8a8b317541d8e3146c0ef80174a208cfdcc7f47fce7ed79ca695403b79",
+        "has_safe_area": false,
         "monster_names": [
           "角蝇",
           "楔蛾",
@@ -935,25 +940,20 @@
           "祖玛雕像",
           "祖玛弓箭手"
         ],
-        "boss_names": [
-          "祖玛弓箭手3",
-          "祖玛卫士3",
-          "祖玛雕像3"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913102,
-            "target_map_key": "mengzhong_zuma_temple_f2",
-            "label": "祖玛2层"
+            "label": "祖玛2层",
+            "target_map_id": 913102.0,
+            "target_map_key": "mengzhong_zuma_temple_f2"
           },
           {
-            "target_map_id": 913104,
-            "target_map_key": "mengzhong_zuma_temple_f4",
-            "label": "祖玛4层"
+            "label": "祖玛4层",
+            "target_map_id": 913104.0,
+            "target_map_key": "mengzhong_zuma_temple_f4"
           }
-        ]
+        ],
+        "runtime_build_sha256": "2a90ab8a8b317541d8e3146c0ef80174a208cfdcc7f47fce7ed79ca695403b79"
       }
     },
     {
@@ -966,8 +966,13 @@
       "runtime_map_id": 913104.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "祖玛弓箭手3",
+          "祖玛卫士3",
+          "祖玛雕像3"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "4298344ea8394b90dd929723aa49d1eba8b4c29a9e3554d7094f61e6af18da59",
+        "has_safe_area": false,
         "monster_names": [
           "角蝇",
           "楔蛾",
@@ -976,25 +981,20 @@
           "祖玛雕像",
           "祖玛弓箭手"
         ],
-        "boss_names": [
-          "祖玛弓箭手3",
-          "祖玛卫士3",
-          "祖玛雕像3"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913103,
-            "target_map_key": "mengzhong_zuma_temple_f3",
-            "label": "祖玛3层"
+            "label": "祖玛3层",
+            "target_map_id": 913103.0,
+            "target_map_key": "mengzhong_zuma_temple_f3"
           },
           {
-            "target_map_id": 913105,
-            "target_map_key": "mengzhong_zuma_pavilion",
-            "label": "祖玛阁"
+            "label": "祖玛阁",
+            "target_map_id": 913105.0,
+            "target_map_key": "mengzhong_zuma_pavilion"
           }
-        ]
+        ],
+        "runtime_build_sha256": "4298344ea8394b90dd929723aa49d1eba8b4c29a9e3554d7094f61e6af18da59"
       }
     },
     {
@@ -1007,8 +1007,14 @@
       "runtime_map_id": 913105.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_pavilion.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "祖玛弓箭手3",
+          "祖玛雕像3",
+          "祖玛卫士3",
+          "祖玛卫士00"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "78236a96fe2ee74d18fb7d78a4d3feaef71229eee6a40db97e7def281f99cf82",
+        "has_safe_area": false,
         "monster_names": [
           "角蝇",
           "楔蛾",
@@ -1016,26 +1022,20 @@
           "祖玛雕像",
           "祖玛卫士"
         ],
-        "boss_names": [
-          "祖玛弓箭手3",
-          "祖玛雕像3",
-          "祖玛卫士3",
-          "祖玛卫士00"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913104,
-            "target_map_key": "mengzhong_zuma_temple_f4",
-            "label": "祖玛4层"
+            "label": "祖玛4层",
+            "target_map_id": 913104.0,
+            "target_map_key": "mengzhong_zuma_temple_f4"
           },
           {
-            "target_map_id": 913106,
-            "target_map_key": "mengzhong_zuma_leader_home",
-            "label": "祖玛教主之家"
+            "label": "祖玛教主之家",
+            "target_map_id": 913106.0,
+            "target_map_key": "mengzhong_zuma_leader_home"
           }
-        ]
+        ],
+        "runtime_build_sha256": "78236a96fe2ee74d18fb7d78a4d3feaef71229eee6a40db97e7def281f99cf82"
       }
     },
     {
@@ -1048,18 +1048,18 @@
       "runtime_map_id": 913106.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_leader_home.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "祖玛教主"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "96eeefa398a228c663a40df3560bff10a6e469f932fc02e95f0dccf2e2feab03",
+        "has_safe_area": false,
         "monster_names": [
           "角蝇",
           "楔蛾"
         ],
-        "boss_names": [
-          "祖玛教主"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
-        "portals": []
+        "portals": [],
+        "runtime_build_sha256": "96eeefa398a228c663a40df3560bff10a6e469f932fc02e95f0dccf2e2feab03"
       }
     },
     {
@@ -1072,29 +1072,29 @@
       "runtime_map_id": 913201.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "59984f667985ceb3607b9093b1829254f71ea54299acd44fd90bebafa4d2d1e7",
+        "has_safe_area": false,
         "monster_names": [
           "蜈蚣",
           "黑色恶蛆",
           "跳跳蜂",
           "巨型蠕虫"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910003,
-            "target_map_key": "world_mengzhong_province",
-            "label": "盟重"
+            "label": "盟重",
+            "target_map_id": 910003.0,
+            "target_map_key": "world_mengzhong_province"
           },
           {
-            "target_map_id": 913202,
-            "target_map_key": "mengzhong_stone_coffin_room",
-            "label": "石棺材屋"
+            "label": "石棺材屋",
+            "target_map_id": 913202.0,
+            "target_map_key": "mengzhong_stone_coffin_room"
           }
-        ]
+        ],
+        "runtime_build_sha256": "59984f667985ceb3607b9093b1829254f71ea54299acd44fd90bebafa4d2d1e7"
       }
     },
     {
@@ -1107,8 +1107,9 @@
       "runtime_map_id": 913202.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_stone_coffin_room.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "571d936275cf621bf4ebeb1753a7db1754059a34f31d70ee2105b584e236f06f",
+        "has_safe_area": false,
         "monster_names": [
           "蜈蚣",
           "黑色恶蛆",
@@ -1116,21 +1117,20 @@
           "巨型蠕虫",
           "钳虫"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913203,
-            "target_map_key": "mengzhong_dark_area",
-            "label": "黑暗地带"
+            "label": "黑暗地带",
+            "target_map_id": 913203.0,
+            "target_map_key": "mengzhong_dark_area"
           },
           {
-            "target_map_id": 913201,
-            "target_map_key": "mengzhong_death_valley_dungeon",
-            "label": "死亡山谷地牢"
+            "label": "死亡山谷地牢",
+            "target_map_id": 913201.0,
+            "target_map_key": "mengzhong_death_valley_dungeon"
           }
-        ]
+        ],
+        "runtime_build_sha256": "571d936275cf621bf4ebeb1753a7db1754059a34f31d70ee2105b584e236f06f"
       }
     },
     {
@@ -1143,8 +1143,11 @@
       "runtime_map_id": 913203.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_dark_area.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "邪恶钳虫"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "f63d81d826cf9ea854622d3eb1112e7650739d5fe525c3edad7f3a4952aa8bc8",
+        "has_safe_area": false,
         "monster_names": [
           "蜈蚣",
           "黑色恶蛆",
@@ -1152,23 +1155,20 @@
           "巨型蠕虫",
           "钳虫"
         ],
-        "boss_names": [
-          "邪恶钳虫"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913202,
-            "target_map_key": "mengzhong_stone_coffin_room",
-            "label": "石棺材屋"
+            "label": "石棺材屋",
+            "target_map_id": 913202.0,
+            "target_map_key": "mengzhong_stone_coffin_room"
           },
           {
-            "target_map_id": 913204,
-            "target_map_key": "mengzhong_between_life_and_death",
-            "label": "生死之间"
+            "label": "生死之间",
+            "target_map_id": 913204.0,
+            "target_map_key": "mengzhong_between_life_and_death"
           }
-        ]
+        ],
+        "runtime_build_sha256": "f63d81d826cf9ea854622d3eb1112e7650739d5fe525c3edad7f3a4952aa8bc8"
       }
     },
     {
@@ -1181,8 +1181,11 @@
       "runtime_map_id": 913204.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_between_life_and_death.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "邪恶钳虫"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "f8f5d4c2b7d03ae24152c0e65ca8a82cd7ad4aa2972b9f743bcc478b45237e4c",
+        "has_safe_area": false,
         "monster_names": [
           "蜈蚣",
           "黑色恶蛆",
@@ -1190,23 +1193,20 @@
           "巨型蠕虫",
           "钳虫"
         ],
-        "boss_names": [
-          "邪恶钳虫"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913203,
-            "target_map_key": "mengzhong_dark_area",
-            "label": "黑暗地带"
+            "label": "黑暗地带",
+            "target_map_id": 913203.0,
+            "target_map_key": "mengzhong_dark_area"
           },
           {
-            "target_map_id": 913205,
-            "target_map_key": "mengzhong_terror_space",
-            "label": "恐怖空间"
+            "label": "恐怖空间",
+            "target_map_id": 913205.0,
+            "target_map_key": "mengzhong_terror_space"
           }
-        ]
+        ],
+        "runtime_build_sha256": "f8f5d4c2b7d03ae24152c0e65ca8a82cd7ad4aa2972b9f743bcc478b45237e4c"
       }
     },
     {
@@ -1219,8 +1219,11 @@
       "runtime_map_id": 913205.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_terror_space.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "邪恶钳虫"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "042b8bb1f4485c40f466b8972e624b1cf7a8eaf2afaab449d4768991acf93a70",
+        "has_safe_area": false,
         "monster_names": [
           "蜈蚣",
           "黑色恶蛆",
@@ -1228,23 +1231,20 @@
           "巨型蠕虫",
           "钳虫"
         ],
-        "boss_names": [
-          "邪恶钳虫"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913204,
-            "target_map_key": "mengzhong_between_life_and_death",
-            "label": "生死之间"
+            "label": "生死之间",
+            "target_map_id": 913204.0,
+            "target_map_key": "mengzhong_between_life_and_death"
           },
           {
-            "target_map_id": 913206,
-            "target_map_key": "mengzhong_thin_sky_passage",
-            "label": "一线天"
+            "label": "一线天",
+            "target_map_id": 913206.0,
+            "target_map_key": "mengzhong_thin_sky_passage"
           }
-        ]
+        ],
+        "runtime_build_sha256": "042b8bb1f4485c40f466b8972e624b1cf7a8eaf2afaab449d4768991acf93a70"
       }
     },
     {
@@ -1257,8 +1257,11 @@
       "runtime_map_id": 913206.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_thin_sky_passage.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "邪恶钳虫"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "f63d075c347cad84c737b0d52de7bc8332cd8011df23b66c49132c422edc5ab3",
+        "has_safe_area": false,
         "monster_names": [
           "蜈蚣",
           "黑色恶蛆",
@@ -1266,23 +1269,20 @@
           "巨型蠕虫",
           "钳虫"
         ],
-        "boss_names": [
-          "邪恶钳虫"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 913205,
-            "target_map_key": "mengzhong_terror_space",
-            "label": "恐怖空间"
+            "label": "恐怖空间",
+            "target_map_id": 913205.0,
+            "target_map_key": "mengzhong_terror_space"
           },
           {
-            "target_map_id": 913207,
-            "target_map_key": "mengzhong_death_coffin",
-            "label": "死亡棺材"
+            "label": "死亡棺材",
+            "target_map_id": 913207.0,
+            "target_map_key": "mengzhong_death_coffin"
           }
-        ]
+        ],
+        "runtime_build_sha256": "f63d075c347cad84c737b0d52de7bc8332cd8011df23b66c49132c422edc5ab3"
       }
     },
     {
@@ -1295,8 +1295,12 @@
       "runtime_map_id": 913207.0,
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_death_coffin.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "触龙神",
+          "邪恶钳虫"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "f57d571ffd3a7a28f32b14dbba54bdbb7499802d78918c67abe6caff7017cb18",
+        "has_safe_area": false,
         "monster_names": [
           "黑色恶蛆",
           "巨型蠕虫",
@@ -1304,13 +1308,9 @@
           "钳虫",
           "跳跳蜂"
         ],
-        "boss_names": [
-          "触龙神",
-          "邪恶钳虫"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
-        "portals": []
+        "portals": [],
+        "runtime_build_sha256": "f57d571ffd3a7a28f32b14dbba54bdbb7499802d78918c67abe6caff7017cb18"
       }
     },
     {
@@ -1323,8 +1323,11 @@
       "runtime_map_id": 914001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/fengmo_forked_path.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "尸王"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "61207a44e216b739e646aaa154332beacba7569ba2ebb3a6dd15682c5730e2df",
+        "has_safe_area": false,
         "monster_names": [
           "洞蛆",
           "僵尸1",
@@ -1333,23 +1336,20 @@
           "僵尸4",
           "僵尸5"
         ],
-        "boss_names": [
-          "尸王"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 914002,
-            "target_map_key": "fengmo_light_corridor",
-            "label": "光芒回廊"
+            "label": "光芒回廊",
+            "target_map_id": 914002.0,
+            "target_map_key": "fengmo_light_corridor"
           },
           {
-            "target_map_id": 910005,
-            "target_map_key": "world_fengmo_valley",
-            "label": "封魔谷"
+            "label": "封魔谷",
+            "target_map_id": 910005.0,
+            "target_map_key": "world_fengmo_valley"
           }
-        ]
+        ],
+        "runtime_build_sha256": "61207a44e216b739e646aaa154332beacba7569ba2ebb3a6dd15682c5730e2df"
       }
     },
     {
@@ -1362,29 +1362,29 @@
       "runtime_map_id": 914002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/fengmo_light_corridor.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "02829556e3289a4d7be1575a502c5ecdc49e558c7a3df07b8fc1052d8bbca027",
+        "has_safe_area": false,
         "monster_names": [
           "黑色恶蛆",
           "角蝇",
           "红野猪",
           "黑野猪"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 914003,
-            "target_map_key": "fengmo_thunder_road",
-            "label": "雷霆之路"
+            "label": "雷霆之路",
+            "target_map_id": 914003.0,
+            "target_map_key": "fengmo_thunder_road"
           },
           {
-            "target_map_id": 914001,
-            "target_map_key": "fengmo_forked_path",
-            "label": "崎路"
+            "label": "崎路",
+            "target_map_id": 914001.0,
+            "target_map_key": "fengmo_forked_path"
           }
-        ]
+        ],
+        "runtime_build_sha256": "02829556e3289a4d7be1575a502c5ecdc49e558c7a3df07b8fc1052d8bbca027"
       }
     },
     {
@@ -1397,31 +1397,31 @@
       "runtime_map_id": 914003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/fengmo_thunder_road.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "白野猪"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "bbd7c1ceb77548b350363e9dd851580723360615fea307d604f91609aa5464df",
+        "has_safe_area": false,
         "monster_names": [
           "黑色恶蛆",
           "角蝇",
           "红野猪",
           "黑野猪"
         ],
-        "boss_names": [
-          "白野猪"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 914004,
-            "target_map_key": "fengmo_bazhe_hall",
-            "label": "霸者大厅"
+            "label": "霸者大厅",
+            "target_map_id": 914004.0,
+            "target_map_key": "fengmo_bazhe_hall"
           },
           {
-            "target_map_id": 914002,
-            "target_map_key": "fengmo_light_corridor",
-            "label": "光芒回廊"
+            "label": "光芒回廊",
+            "target_map_id": 914002.0,
+            "target_map_key": "fengmo_light_corridor"
           }
-        ]
+        ],
+        "runtime_build_sha256": "bbd7c1ceb77548b350363e9dd851580723360615fea307d604f91609aa5464df"
       }
     },
     {
@@ -1434,8 +1434,12 @@
       "runtime_map_id": 914004.0,
       "runtime_path": "res://assets/data/runtime/map_editor/fengmo_bazhe_hall.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "虹魔猪卫",
+          "白野猪"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "fbe264cc8d0f5726799cf56630d81400e9eaace710ebd38a5062eb5a043f1280",
+        "has_safe_area": false,
         "monster_names": [
           "角蝇",
           "红野猪",
@@ -1444,24 +1448,20 @@
           "楔蛾",
           "蝎蛇"
         ],
-        "boss_names": [
-          "虹魔猪卫",
-          "白野猪"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 914005,
-            "target_map_key": "fengmo_zonghengdao",
-            "label": "纵横道"
+            "label": "纵横道",
+            "target_map_id": 914005.0,
+            "target_map_key": "fengmo_zonghengdao"
           },
           {
-            "target_map_id": 914003,
-            "target_map_key": "fengmo_thunder_road",
-            "label": "雷霆之路"
+            "label": "雷霆之路",
+            "target_map_id": 914003.0,
+            "target_map_key": "fengmo_thunder_road"
           }
-        ]
+        ],
+        "runtime_build_sha256": "fbe264cc8d0f5726799cf56630d81400e9eaace710ebd38a5062eb5a043f1280"
       }
     },
     {
@@ -1474,8 +1474,12 @@
       "runtime_map_id": 914005.0,
       "runtime_path": "res://assets/data/runtime/map_editor/fengmo_zonghengdao.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "白野猪",
+          "邪恶毒蛇"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "7ce67eafe045271316a7a48dcc3a5721d390f981b7ed7ea4b67f70dd8170286d",
+        "has_safe_area": false,
         "monster_names": [
           "黑色恶蛆",
           "角蝇",
@@ -1484,24 +1488,20 @@
           "楔蛾",
           "蝎蛇"
         ],
-        "boss_names": [
-          "白野猪",
-          "邪恶毒蛇"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 914006,
-            "target_map_key": "fengmo_mohun_hall",
-            "label": "魔魂殿"
+            "label": "魔魂殿",
+            "target_map_id": 914006.0,
+            "target_map_key": "fengmo_mohun_hall"
           },
           {
-            "target_map_id": 914004,
-            "target_map_key": "fengmo_bazhe_hall",
-            "label": "霸者大厅"
+            "label": "霸者大厅",
+            "target_map_id": 914004.0,
+            "target_map_key": "fengmo_bazhe_hall"
           }
-        ]
+        ],
+        "runtime_build_sha256": "7ce67eafe045271316a7a48dcc3a5721d390f981b7ed7ea4b67f70dd8170286d"
       }
     },
     {
@@ -1514,30 +1514,30 @@
       "runtime_map_id": 914006.0,
       "runtime_path": "res://assets/data/runtime/map_editor/fengmo_mohun_hall.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "0df0af01582eb75a0ade5039e1453e7444ee3af951b82021953e6ead142e1094",
-        "monster_names": [
-          "蝎蛇"
-        ],
         "boss_names": [
           "白野猪",
           "邪恶毒蛇",
           "虹魔蝎卫"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
+        "monster_names": [
+          "蝎蛇"
+        ],
+        "npc_kinds": [],
         "portals": [
           {
-            "target_map_id": 914005,
-            "target_map_key": "fengmo_zonghengdao",
-            "label": "纵横道"
+            "label": "纵横道",
+            "target_map_id": 914005.0,
+            "target_map_key": "fengmo_zonghengdao"
           },
           {
-            "target_map_id": 914007,
-            "target_map_key": "fengmo_purgatory_corridor",
-            "label": "炼狱回廊"
+            "label": "炼狱回廊",
+            "target_map_id": 914007.0,
+            "target_map_key": "fengmo_purgatory_corridor"
           }
-        ]
+        ],
+        "runtime_build_sha256": "0df0af01582eb75a0ade5039e1453e7444ee3af951b82021953e6ead142e1094"
       }
     },
     {
@@ -1550,13 +1550,6 @@
       "runtime_map_id": 914007.0,
       "runtime_path": "res://assets/data/runtime/map_editor/fengmo_purgatory_corridor.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "fea4194bbcf57142cc487fb916f2ee8f9ddce1f0781443e9bd7f6af43cebce83",
-        "monster_names": [
-          "祖玛雕像",
-          "祖玛卫士",
-          "祖玛弓箭手"
-        ],
         "boss_names": [
           "祖玛弓箭手3",
           "祖玛雕像3",
@@ -1564,20 +1557,27 @@
           "邪恶毒蛇",
           "祖玛卫士3"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
+        "monster_names": [
+          "祖玛雕像",
+          "祖玛卫士",
+          "祖玛弓箭手"
+        ],
+        "npc_kinds": [],
         "portals": [
           {
-            "target_map_id": 914006,
-            "target_map_key": "fengmo_mohun_hall",
-            "label": "魔魂殿"
+            "label": "魔魂殿",
+            "target_map_id": 914006.0,
+            "target_map_key": "fengmo_mohun_hall"
           },
           {
-            "target_map_id": 914008,
-            "target_map_key": "fengmo_final_hall",
-            "label": "封魔殿"
+            "label": "封魔殿",
+            "target_map_id": 914008.0,
+            "target_map_key": "fengmo_final_hall"
           }
-        ]
+        ],
+        "runtime_build_sha256": "fea4194bbcf57142cc487fb916f2ee8f9ddce1f0781443e9bd7f6af43cebce83"
       }
     },
     {
@@ -1590,15 +1590,6 @@
       "runtime_map_id": 914008.0,
       "runtime_path": "res://assets/data/runtime/map_editor/fengmo_final_hall.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "679d382ba6b87d06151c82ace67a8e6c3273f26feff9de693934fd02e1673a8b",
-        "monster_names": [
-          "角蝇",
-          "楔蛾",
-          "祖玛弓箭手",
-          "祖玛雕像",
-          "祖玛卫士"
-        ],
         "boss_names": [
           "虹魔教主",
           "祖玛弓箭手3",
@@ -1607,9 +1598,18 @@
           "虹魔蝎卫",
           "虹魔猪卫"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
-        "portals": []
+        "monster_names": [
+          "角蝇",
+          "楔蛾",
+          "祖玛弓箭手",
+          "祖玛雕像",
+          "祖玛卫士"
+        ],
+        "npc_kinds": [],
+        "portals": [],
+        "runtime_build_sha256": "679d382ba6b87d06151c82ace67a8e6c3273f26feff9de693934fd02e1673a8b"
       }
     },
     {
@@ -1622,8 +1622,9 @@
       "runtime_map_id": 915001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/wooma_temple_f1.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "fbdac155352d5a8ac6af32fbc78887954ac385bf65c2a0c037d33853ca99a4db",
+        "has_safe_area": false,
         "monster_names": [
           "山洞蝙蝠",
           "粪虫",
@@ -1632,21 +1633,20 @@
           "沃玛战将",
           "火焰沃玛"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 915002,
-            "target_map_key": "wooma_temple_f2",
-            "label": "前往沃玛寺庙二层"
+            "label": "前往沃玛寺庙二层",
+            "target_map_id": 915002.0,
+            "target_map_key": "wooma_temple_f2"
           },
           {
-            "target_map_id": 910004,
-            "target_map_key": "world_wooma_forest",
-            "label": "返回沃玛森林"
+            "label": "返回沃玛森林",
+            "target_map_id": 910004.0,
+            "target_map_key": "world_wooma_forest"
           }
-        ]
+        ],
+        "runtime_build_sha256": "fbdac155352d5a8ac6af32fbc78887954ac385bf65c2a0c037d33853ca99a4db"
       }
     },
     {
@@ -1659,8 +1659,11 @@
       "runtime_map_id": 915002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/wooma_temple_f2.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "沃玛卫士"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "ec5257bbf83acba60d599d799a3acb2bd7f98d19588dd6516b3d9ad21e60e244",
+        "has_safe_area": false,
         "monster_names": [
           "山洞蝙蝠",
           "粪虫",
@@ -1670,25 +1673,22 @@
           "沃玛战将",
           "火焰沃玛"
         ],
-        "boss_names": [
-          "沃玛卫士"
-        ],
         "npc_kinds": [
           "shop"
         ],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 915003,
-            "target_map_key": "wooma_temple_boss_hall",
-            "label": "进入沃玛教主大厅"
+            "label": "进入沃玛教主大厅",
+            "target_map_id": 915003.0,
+            "target_map_key": "wooma_temple_boss_hall"
           },
           {
-            "target_map_id": 915001,
-            "target_map_key": "wooma_temple_f1",
-            "label": "返回沃玛寺庙一层"
+            "label": "返回沃玛寺庙一层",
+            "target_map_id": 915001.0,
+            "target_map_key": "wooma_temple_f1"
           }
-        ]
+        ],
+        "runtime_build_sha256": "ec5257bbf83acba60d599d799a3acb2bd7f98d19588dd6516b3d9ad21e60e244"
       }
     },
     {
@@ -1701,8 +1701,12 @@
       "runtime_map_id": 915003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/wooma_temple_boss_hall.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "沃玛教主",
+          "沃玛卫士"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "f20a2db0396f4c878400676d2ac82f9e4cec381b4e44faf4f0fb929817d6fa8c",
+        "has_safe_area": false,
         "monster_names": [
           "暗黑战士",
           "沃玛战士",
@@ -1710,19 +1714,15 @@
           "沃玛战将",
           "火焰沃玛"
         ],
-        "boss_names": [
-          "沃玛教主",
-          "沃玛卫士"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 915002,
-            "target_map_key": "wooma_temple_f2",
-            "label": "返回沃玛寺庙二层"
+            "label": "返回沃玛寺庙二层",
+            "target_map_id": 915002.0,
+            "target_map_key": "wooma_temple_f2"
           }
-        ]
+        ],
+        "runtime_build_sha256": "f20a2db0396f4c878400676d2ac82f9e4cec381b4e44faf4f0fb929817d6fa8c"
       }
     },
     {
@@ -1735,8 +1735,9 @@
       "runtime_map_id": 916001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/chiyue_valley.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "1d2521512441e466c2bc5dae227a923328e71754211fa7c61d0c0ba7e40f231d",
+        "has_safe_area": false,
         "monster_names": [
           "月魔蜘蛛",
           "黑锷蜘蛛",
@@ -1745,21 +1746,20 @@
           "天狼蜘蛛",
           "花吻蜘蛛"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910006,
-            "target_map_key": "world_white_day_gate",
-            "label": "白日门"
+            "label": "白日门",
+            "target_map_id": 910006.0,
+            "target_map_key": "world_white_day_gate"
           },
           {
-            "target_map_id": 916002,
-            "target_map_key": "chiyue_valley_square",
-            "label": "赤月峡谷广场"
+            "label": "赤月峡谷广场",
+            "target_map_id": 916002.0,
+            "target_map_key": "chiyue_valley_square"
           }
-        ]
+        ],
+        "runtime_build_sha256": "1d2521512441e466c2bc5dae227a923328e71754211fa7c61d0c0ba7e40f231d"
       }
     },
     {
@@ -1772,8 +1772,9 @@
       "runtime_map_id": 916002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/chiyue_valley_square.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "15d2f44b8243e9051dadd56804ec920fae0cd13cddf2136e324ef657d6b3ab0e",
+        "has_safe_area": false,
         "monster_names": [
           "月魔蜘蛛",
           "黑锷蜘蛛",
@@ -1783,21 +1784,20 @@
           "花吻蜘蛛",
           "幻影蜘蛛"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 916001,
-            "target_map_key": "chiyue_valley",
-            "label": "赤月峡谷"
+            "label": "赤月峡谷",
+            "target_map_id": 916001.0,
+            "target_map_key": "chiyue_valley"
           },
           {
-            "target_map_id": 916003,
-            "target_map_key": "chiyue_choice_land",
-            "label": "抉择之地"
+            "label": "抉择之地",
+            "target_map_id": 916003.0,
+            "target_map_key": "chiyue_choice_land"
           }
-        ]
+        ],
+        "runtime_build_sha256": "15d2f44b8243e9051dadd56804ec920fae0cd13cddf2136e324ef657d6b3ab0e"
       }
     },
     {
@@ -1810,8 +1810,9 @@
       "runtime_map_id": 916003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/chiyue_choice_land.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "702c14b404005916fc4ec8a6822b485b0f262cf266b1ffd72eb164d3ae83ca08",
+        "has_safe_area": false,
         "monster_names": [
           "血巨人",
           "血僵尸",
@@ -1823,28 +1824,27 @@
           "花吻蜘蛛",
           "幻影蜘蛛"
         ],
-        "boss_names": [],
         "npc_kinds": [
           "shop"
         ],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 916002,
-            "target_map_key": "chiyue_valley_square",
-            "label": "赤月峡谷广场"
+            "label": "赤月峡谷广场",
+            "target_map_id": 916002.0,
+            "target_map_key": "chiyue_valley_square"
           },
           {
-            "target_map_id": 916004,
-            "target_map_key": "chiyue_valley_secret_passage_a",
-            "label": "山谷密道A"
+            "label": "山谷密道A",
+            "target_map_id": 916004.0,
+            "target_map_key": "chiyue_valley_secret_passage_a"
           },
           {
-            "target_map_id": 916005,
-            "target_map_key": "chiyue_valley_secret_passage_b",
-            "label": "山谷密道B"
+            "label": "山谷密道B",
+            "target_map_id": 916005.0,
+            "target_map_key": "chiyue_valley_secret_passage_b"
           }
-        ]
+        ],
+        "runtime_build_sha256": "702c14b404005916fc4ec8a6822b485b0f262cf266b1ffd72eb164d3ae83ca08"
       }
     },
     {
@@ -1857,8 +1857,9 @@
       "runtime_map_id": 916004.0,
       "runtime_path": "res://assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "537ad1555f317a0ac9ecbc4d0eee813ecb6e7930b14c25ee03914e3edffb7756",
+        "has_safe_area": false,
         "monster_names": [
           "月魔蜘蛛",
           "黑锷蜘蛛",
@@ -1870,21 +1871,20 @@
           "血僵尸",
           "幻影蜘蛛"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 916003,
-            "target_map_key": "chiyue_choice_land",
-            "label": "抉择之地"
+            "label": "抉择之地",
+            "target_map_id": 916003.0,
+            "target_map_key": "chiyue_choice_land"
           },
           {
-            "target_map_id": 916006,
-            "target_map_key": "chiyue_demon_altar",
-            "label": "恶魔祭坛"
+            "label": "恶魔祭坛",
+            "target_map_id": 916006.0,
+            "target_map_key": "chiyue_demon_altar"
           }
-        ]
+        ],
+        "runtime_build_sha256": "537ad1555f317a0ac9ecbc4d0eee813ecb6e7930b14c25ee03914e3edffb7756"
       }
     },
     {
@@ -1897,8 +1897,9 @@
       "runtime_map_id": 916005.0,
       "runtime_path": "res://assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "78ac5d81a015e76d882bf59c680a549805f07933347f3ee5364e8c115196a750",
+        "has_safe_area": false,
         "monster_names": [
           "月魔蜘蛛",
           "黑锷蜘蛛",
@@ -1910,21 +1911,20 @@
           "血僵尸",
           "幻影蜘蛛"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 916003,
-            "target_map_key": "chiyue_choice_land",
-            "label": "抉择之地"
+            "label": "抉择之地",
+            "target_map_id": 916003.0,
+            "target_map_key": "chiyue_choice_land"
           },
           {
-            "target_map_id": 916007,
-            "target_map_key": "chiyue_red_moon_lair",
-            "label": "赤月魔穴"
+            "label": "赤月魔穴",
+            "target_map_id": 916007.0,
+            "target_map_key": "chiyue_red_moon_lair"
           }
-        ]
+        ],
+        "runtime_build_sha256": "78ac5d81a015e76d882bf59c680a549805f07933347f3ee5364e8c115196a750"
       }
     },
     {
@@ -1937,8 +1937,12 @@
       "runtime_map_id": 916006.0,
       "runtime_path": "res://assets/data/runtime/map_editor/chiyue_demon_altar.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "双头血魔",
+          "双头金刚"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "ccdea7b77688ac7a6a3e875500ed039ca3af51b0250a62d99bbda892a2bdaa0b",
+        "has_safe_area": false,
         "monster_names": [
           "血巨人",
           "血僵尸",
@@ -1948,13 +1952,9 @@
           "暴牙蜘蛛",
           "花吻蜘蛛"
         ],
-        "boss_names": [
-          "双头血魔",
-          "双头金刚"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
-        "portals": []
+        "portals": [],
+        "runtime_build_sha256": "ccdea7b77688ac7a6a3e875500ed039ca3af51b0250a62d99bbda892a2bdaa0b"
       }
     },
     {
@@ -1967,8 +1967,11 @@
       "runtime_map_id": 916007.0,
       "runtime_path": "res://assets/data/runtime/map_editor/chiyue_red_moon_lair.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "赤月恶魔"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "09e9ea125dddb389bc98788dc738c9733b435d41e2669547569c2b1a51e55787",
+        "has_safe_area": false,
         "monster_names": [
           "血巨人",
           "血僵尸",
@@ -1978,12 +1981,9 @@
           "暴牙蜘蛛",
           "花吻蜘蛛"
         ],
-        "boss_names": [
-          "赤月恶魔"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
-        "portals": []
+        "portals": [],
+        "runtime_build_sha256": "09e9ea125dddb389bc98788dc738c9733b435d41e2669547569c2b1a51e55787"
       }
     },
     {
@@ -1996,8 +1996,9 @@
       "runtime_map_id": 917001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f1.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "ad432fe864b0ac1293a69f497921ea38654b3a9ff147494497b78fa3548bf512",
+        "has_safe_area": false,
         "monster_names": [
           "骷髅长枪兵",
           "骷髅刀斧手",
@@ -2011,21 +2012,20 @@
           "宝箱2",
           "骷髅锤兵"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910007,
-            "target_map_key": "world_cangyue_island",
-            "label": "苍月岛"
+            "label": "苍月岛",
+            "target_map_id": 910007.0,
+            "target_map_key": "world_cangyue_island"
           },
           {
-            "target_map_id": 917002,
-            "target_map_key": "cangyue_bone_cave_f2",
-            "label": "骨魔洞2层"
+            "label": "骨魔洞2层",
+            "target_map_id": 917002.0,
+            "target_map_key": "cangyue_bone_cave_f2"
           }
-        ]
+        ],
+        "runtime_build_sha256": "ad432fe864b0ac1293a69f497921ea38654b3a9ff147494497b78fa3548bf512"
       }
     },
     {
@@ -2038,8 +2038,9 @@
       "runtime_map_id": 917002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f2.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "749807c92e9c23a34ee175ef153ca83745492db11c8045f341874e4513082e49",
+        "has_safe_area": false,
         "monster_names": [
           "骷髅长枪兵",
           "骷髅刀斧手",
@@ -2053,21 +2054,20 @@
           "宝箱2",
           "骷髅锤兵"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 917001,
-            "target_map_key": "cangyue_bone_cave_f1",
-            "label": "骨魔洞1层"
+            "label": "骨魔洞1层",
+            "target_map_id": 917001.0,
+            "target_map_key": "cangyue_bone_cave_f1"
           },
           {
-            "target_map_id": 917003,
-            "target_map_key": "cangyue_bone_cave_f3",
-            "label": "骨魔洞3层"
+            "label": "骨魔洞3层",
+            "target_map_id": 917003.0,
+            "target_map_key": "cangyue_bone_cave_f3"
           }
-        ]
+        ],
+        "runtime_build_sha256": "749807c92e9c23a34ee175ef153ca83745492db11c8045f341874e4513082e49"
       }
     },
     {
@@ -2080,8 +2080,9 @@
       "runtime_map_id": 917003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f3.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "d01bbf0f9a2df61d4e255fda1652fc2cef07f75c6cd6f74f5e63f3f79701c411",
+        "has_safe_area": false,
         "monster_names": [
           "骷髅长枪兵",
           "骷髅刀斧手",
@@ -2095,21 +2096,20 @@
           "宝箱2",
           "骷髅锤兵"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 917002,
-            "target_map_key": "cangyue_bone_cave_f2",
-            "label": "骨魔洞2层"
+            "label": "骨魔洞2层",
+            "target_map_id": 917002.0,
+            "target_map_key": "cangyue_bone_cave_f2"
           },
           {
-            "target_map_id": 917004,
-            "target_map_key": "cangyue_bone_cave_f4",
-            "label": "骨魔洞4层"
+            "label": "骨魔洞4层",
+            "target_map_id": 917004.0,
+            "target_map_key": "cangyue_bone_cave_f4"
           }
-        ]
+        ],
+        "runtime_build_sha256": "d01bbf0f9a2df61d4e255fda1652fc2cef07f75c6cd6f74f5e63f3f79701c411"
       }
     },
     {
@@ -2122,8 +2122,9 @@
       "runtime_map_id": 917004.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f4.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "8ff5950b8181ccdcfbcb4932800c6edf2b463d6d4e37747fd8d67a79fc9c5fb2",
+        "has_safe_area": false,
         "monster_names": [
           "骷髅长枪兵",
           "骷髅刀斧手",
@@ -2137,21 +2138,20 @@
           "宝箱2",
           "骷髅锤兵"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 917003,
-            "target_map_key": "cangyue_bone_cave_f3",
-            "label": "骨魔洞3层"
+            "label": "骨魔洞3层",
+            "target_map_id": 917003.0,
+            "target_map_key": "cangyue_bone_cave_f3"
           },
           {
-            "target_map_id": 917005,
-            "target_map_key": "cangyue_bone_cave_f5",
-            "label": "骨魔洞5层"
+            "label": "骨魔洞5层",
+            "target_map_id": 917005.0,
+            "target_map_key": "cangyue_bone_cave_f5"
           }
-        ]
+        ],
+        "runtime_build_sha256": "8ff5950b8181ccdcfbcb4932800c6edf2b463d6d4e37747fd8d67a79fc9c5fb2"
       }
     },
     {
@@ -2164,8 +2164,11 @@
       "runtime_map_id": 917005.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f5.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "黄泉教主"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "9862cb3e608c85801db4549a0b32445fc2778bbabc18969f76db18dea8dc8e7f",
+        "has_safe_area": false,
         "monster_names": [
           "骷髅锤兵",
           "骷髅长枪兵",
@@ -2175,12 +2178,9 @@
           "宝箱7",
           "宝箱6"
         ],
-        "boss_names": [
-          "黄泉教主"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
-        "portals": []
+        "portals": [],
+        "runtime_build_sha256": "9862cb3e608c85801db4549a0b32445fc2778bbabc18969f76db18dea8dc8e7f"
       }
     },
     {
@@ -2193,8 +2193,9 @@
       "runtime_map_id": 917101.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f1.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "9f0b3e0aab8299b7adc5204c2e6c59c51b12f79da36e785f87ffcd2da14a7f14",
+        "has_safe_area": false,
         "monster_names": [
           "牛头魔",
           "牛魔战士",
@@ -2205,21 +2206,20 @@
           "牛魔斗士",
           "宝箱5"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 910007,
-            "target_map_key": "world_cangyue_island",
-            "label": "苍月岛"
+            "label": "苍月岛",
+            "target_map_id": 910007.0,
+            "target_map_key": "world_cangyue_island"
           },
           {
-            "target_map_id": 917102,
-            "target_map_key": "cangyue_bull_temple_f2",
-            "label": "牛魔寺庙2层"
+            "label": "牛魔寺庙2层",
+            "target_map_id": 917102.0,
+            "target_map_key": "cangyue_bull_temple_f2"
           }
-        ]
+        ],
+        "runtime_build_sha256": "9f0b3e0aab8299b7adc5204c2e6c59c51b12f79da36e785f87ffcd2da14a7f14"
       }
     },
     {
@@ -2232,8 +2232,9 @@
       "runtime_map_id": 917102.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f2.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "4a8cce7dbc58f8000abb33ac1841372826d462f9408dcf83c6cc934cf89fdd36",
+        "has_safe_area": false,
         "monster_names": [
           "牛头魔",
           "牛魔战士",
@@ -2244,21 +2245,20 @@
           "牛魔斗士",
           "宝箱5"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 917101,
-            "target_map_key": "cangyue_bull_temple_f1",
-            "label": "牛魔寺庙1层"
+            "label": "牛魔寺庙1层",
+            "target_map_id": 917101.0,
+            "target_map_key": "cangyue_bull_temple_f1"
           },
           {
-            "target_map_id": 917103,
-            "target_map_key": "cangyue_bull_temple_f3",
-            "label": "牛魔寺庙3层"
+            "label": "牛魔寺庙3层",
+            "target_map_id": 917103.0,
+            "target_map_key": "cangyue_bull_temple_f3"
           }
-        ]
+        ],
+        "runtime_build_sha256": "4a8cce7dbc58f8000abb33ac1841372826d462f9408dcf83c6cc934cf89fdd36"
       }
     },
     {
@@ -2271,8 +2271,9 @@
       "runtime_map_id": 917103.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f3.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "76fabb91a2cd940bd616fbf2f455b3fccfbc801129171f93a1eee6132acb885c",
+        "has_safe_area": false,
         "monster_names": [
           "牛头魔",
           "牛魔战士",
@@ -2284,21 +2285,20 @@
           "宝箱5",
           "牛魔法师"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 917102,
-            "target_map_key": "cangyue_bull_temple_f2",
-            "label": "牛魔寺庙2层"
+            "label": "牛魔寺庙2层",
+            "target_map_id": 917102.0,
+            "target_map_key": "cangyue_bull_temple_f2"
           },
           {
-            "target_map_id": 917104,
-            "target_map_key": "cangyue_bull_temple_f4",
-            "label": "牛魔寺庙4层"
+            "label": "牛魔寺庙4层",
+            "target_map_id": 917104.0,
+            "target_map_key": "cangyue_bull_temple_f4"
           }
-        ]
+        ],
+        "runtime_build_sha256": "76fabb91a2cd940bd616fbf2f455b3fccfbc801129171f93a1eee6132acb885c"
       }
     },
     {
@@ -2311,8 +2311,9 @@
       "runtime_map_id": 917104.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_f4.runtime.json",
       "ui_presentation": {
+        "boss_names": [],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "256fb6c01d58025f57e8d8b7c276df81eda4ede3bcda9af1ef77cfb4778ab09c",
+        "has_safe_area": false,
         "monster_names": [
           "牛头魔",
           "牛魔战士",
@@ -2325,21 +2326,20 @@
           "牛魔将军",
           "牛魔法师"
         ],
-        "boss_names": [],
         "npc_kinds": [],
-        "has_safe_area": false,
         "portals": [
           {
-            "target_map_id": 917103,
-            "target_map_key": "cangyue_bull_temple_f3",
-            "label": "牛魔寺庙3层"
+            "label": "牛魔寺庙3层",
+            "target_map_id": 917103.0,
+            "target_map_key": "cangyue_bull_temple_f3"
           },
           {
-            "target_map_id": 917105,
-            "target_map_key": "cangyue_bull_temple_hall",
-            "label": "牛魔寺庙大厅"
+            "label": "牛魔寺庙大厅",
+            "target_map_id": 917105.0,
+            "target_map_key": "cangyue_bull_temple_hall"
           }
-        ]
+        ],
+        "runtime_build_sha256": "256fb6c01d58025f57e8d8b7c276df81eda4ede3bcda9af1ef77cfb4778ab09c"
       }
     },
     {
@@ -2352,8 +2352,11 @@
       "runtime_map_id": 917105.0,
       "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bull_temple_hall.runtime.json",
       "ui_presentation": {
+        "boss_names": [
+          "牛魔王"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "afa57edeec2e42cc10ab70dcf463b548f906ba43a1348705ec82c21391784a9c",
+        "has_safe_area": false,
         "monster_names": [
           "牛头魔",
           "牛魔战士",
@@ -2363,12 +2366,9 @@
           "牛魔法师",
           "牛魔祭司"
         ],
-        "boss_names": [
-          "牛魔王"
-        ],
         "npc_kinds": [],
-        "has_safe_area": false,
-        "portals": []
+        "portals": [],
+        "runtime_build_sha256": "afa57edeec2e42cc10ab70dcf463b548f906ba43a1348705ec82c21391784a9c"
       }
     },
     {
@@ -2381,15 +2381,15 @@
       "runtime_map_id": 918001.0,
       "runtime_path": "res://assets/data/runtime/map_editor/hidden_confusion_hall.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "5ef77842392619a63c730d41dd41d2e5f9728ad8bba8322d01d35958633ec2d1",
-        "monster_names": [],
         "boss_names": [
           "暗之双头血魔"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
-        "portals": []
+        "monster_names": [],
+        "npc_kinds": [],
+        "portals": [],
+        "runtime_build_sha256": "5ef77842392619a63c730d41dd41d2e5f9728ad8bba8322d01d35958633ec2d1"
       }
     },
     {
@@ -2402,15 +2402,15 @@
       "runtime_map_id": 918002.0,
       "runtime_path": "res://assets/data/runtime/map_editor/hidden_hellfire.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "b067899f2604a2ffa69726610aa82eb493329093151d5d9cb3715ec73d38dcb0",
-        "monster_names": [],
         "boss_names": [
           "暗之骷髅精灵"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
-        "portals": []
+        "monster_names": [],
+        "npc_kinds": [],
+        "portals": [],
+        "runtime_build_sha256": "b067899f2604a2ffa69726610aa82eb493329093151d5d9cb3715ec73d38dcb0"
       }
     },
     {
@@ -2423,15 +2423,15 @@
       "runtime_map_id": 918003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/hidden_fallen_graveyard.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "776af12683de5c80fe2beac03f6ec91370286543a8af91e6863f08860f67f1e0",
-        "monster_names": [],
         "boss_names": [
           "暗之黄泉教主"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
-        "portals": []
+        "monster_names": [],
+        "npc_kinds": [],
+        "portals": [],
+        "runtime_build_sha256": "776af12683de5c80fe2beac03f6ec91370286543a8af91e6863f08860f67f1e0"
       }
     },
     {
@@ -2444,15 +2444,15 @@
       "runtime_map_id": 918004.0,
       "runtime_path": "res://assets/data/runtime/map_editor/hidden_death_temple.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "8908904da20238e72dc9fec5bb2cafeb9aba78a71f3fb34297eb02e16f0029a1",
-        "monster_names": [],
         "boss_names": [
           "暗之虹魔教主"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
-        "portals": []
+        "monster_names": [],
+        "npc_kinds": [],
+        "portals": [],
+        "runtime_build_sha256": "8908904da20238e72dc9fec5bb2cafeb9aba78a71f3fb34297eb02e16f0029a1"
       }
     },
     {
@@ -2465,36 +2465,36 @@
       "runtime_map_id": 918005.0,
       "runtime_path": "res://assets/data/runtime/map_editor/hidden_abyss_domain.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "848e8e90603b1d3c50b3a2e91fc1e8c97d6c6c1713fd66e7d51ee7f5699c8b04",
-        "monster_names": [],
         "boss_names": [
           "暗之双头金刚"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
-        "portals": []
+        "monster_names": [],
+        "npc_kinds": [],
+        "portals": [],
+        "runtime_build_sha256": "848e8e90603b1d3c50b3a2e91fc1e8c97d6c6c1713fd66e7d51ee7f5699c8b04"
       }
     },
     {
-      "approval_revision": 2,
+      "approval_revision": 2.0,
       "approval_source": "published_via_publish_runtime_release",
       "approved_build_sha256": "fd6dcc402dc1c350eff62b731cf3ba75cc7439c77a8a62796d1e3235b635187f",
       "display_name": "钳虫巢穴",
       "map_key": "hidden_pincer_nest",
       "release_state": "implemented_playable",
-      "runtime_map_id": 918006,
+      "runtime_map_id": 918006.0,
       "runtime_path": "res://assets/data/runtime/map_editor/hidden_pincer_nest.runtime.json",
       "ui_presentation": {
-        "contract_id": "ui.map.presentation_projection.v1",
-        "runtime_build_sha256": "fd6dcc402dc1c350eff62b731cf3ba75cc7439c77a8a62796d1e3235b635187f",
-        "monster_names": [],
         "boss_names": [
           "暗之沃玛教主"
         ],
-        "npc_kinds": [],
+        "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
-        "portals": []
+        "monster_names": [],
+        "npc_kinds": [],
+        "portals": [],
+        "runtime_build_sha256": "fd6dcc402dc1c350eff62b731cf3ba75cc7439c77a8a62796d1e3235b635187f"
       }
     }
   ],

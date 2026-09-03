@@ -14,11 +14,17 @@
     "method": "set_teleport_availability(rules)",
     "hudForwardMethod": "GameHUD.set_map_teleport_availability(rules)",
     "key": "runtime map ID as integer or string",
-    "ruleFields": ["enabled", "destination_map_id", "arrival_anchor_id", "destination_label", "reason", "rule_id"]
+    "ruleFields": ["enabled", "destination_map_id", "arrival_anchor_id", "destination_label", "reason", "rule_id", "unlock_contract_id", "requires_map_scroll", "required_item_id", "required_item_count", "consume_on_success"]
   },
   "teleportRequest": {
     "signal": "teleport_requested(request)",
     "hudForwardSignal": "GameHUD.map_teleport_requested(request)",
-    "requestFields": ["contract_id", "selected_map_id", "destination_map_id", "arrival_anchor_id", "rule_id"]
+    "requestFields": ["contract_id", "selected_map_id", "destination_map_id", "arrival_anchor_id", "rule_id", "unlock_contract_id", "requires_map_scroll", "required_item_id", "required_item_count", "consume_on_success"]
+  },
+  "gameplayPolicy": {
+    "contractId": "gameplay.map.teleport.policy.v1",
+    "directCityRuleId": "map.teleport.direct_city.v1",
+    "scrollRequirementRuleId": "map.teleport.scroll_requirement.v1",
+    "description": "The selected left-column map is the sole teleport target. Exact item-ID scroll requirements are fail-closed until configured."
   }
 }

@@ -2234,8 +2234,51 @@
     "object_front": [],
     "region_semantics": [],
     "region_trigger": [],
-    "respawn_points": [],
-    "safe_area": [],
+    "respawn_points": [
+      {
+        "content_layer": "personal_expansion",
+        "is_birth_point": true,
+        "is_default": true,
+        "is_respawn_point": true,
+        "kind": "respawn_point",
+        "respawn_id": "respawn_point_000001",
+        "runtime_export": true,
+        "semantic_id": "respawn_point_000001",
+        "semantic_role": "birth_and_respawn",
+        "tile": [
+          9.0,
+          38.0
+        ]
+      }
+    ],
+    "safe_area": [
+      {
+        "area_id": "safe_area_000001",
+        "blocks_monster_damage": true,
+        "blocks_pvp": true,
+        "content_layer": "personal_expansion",
+        "display_name": "安全区",
+        "kind": "safe_area",
+        "polygon_ground_gu": [
+          [21.0, 47.0],
+          [16.0, 38.0],
+          [9.0, 30.0],
+          [3.0, 25.0],
+          [0.0, 25.0],
+          [0.0, 47.0],
+          [21.0, 47.0]
+        ],
+        "radius_gu": 0.0,
+        "return_anchor": false,
+        "runtime_export": true,
+        "semantic_id": "safe_area_000001",
+        "shape": "polygon",
+        "tile": [
+          10.0,
+          37.0
+        ]
+      }
+    ],
     "shadow": [],
     "terrain_base": [],
     "terrain_front": []

@@ -1,5 +1,5 @@
 {
-  "build_sha256": "4e982b7e27214b1c3ad28f3f34667483fa2bb2abde44d93edd394377f1d07459",
+  "build_sha256": "8c0a3214145c856ec55d9f23bdc9e14ceb126a84ded7fcc99f8315e8cd6fa2bd",
   "collision": {
     "blocked_count": 223.0,
     "blocked_tiles": [
@@ -6237,17 +6237,81 @@
       }
     ],
     "region_trigger": [],
-    "respawn_points": [],
-    "safe_area": []
+    "respawn_points": [
+      {
+        "content_layer": "personal_expansion",
+        "is_birth_point": true,
+        "is_default": true,
+        "is_respawn_point": true,
+        "kind": "respawn_point",
+        "respawn_id": "respawn_point_000001",
+        "runtime_export": true,
+        "semantic_id": "respawn_point_000001",
+        "semantic_role": "birth_and_respawn",
+        "tile": [
+          12.0,
+          38.0
+        ]
+      }
+    ],
+    "safe_area": [
+      {
+        "area_id": "safe_area_000001",
+        "blocks_monster_damage": true,
+        "blocks_pvp": true,
+        "content_layer": "personal_expansion",
+        "display_name": "安全区",
+        "kind": "safe_area",
+        "polygon_ground_gu": [
+          [
+            20.0,
+            47.0
+          ],
+          [
+            17.0,
+            34.0
+          ],
+          [
+            11.0,
+            29.0
+          ],
+          [
+            2.0,
+            26.0
+          ],
+          [
+            0.0,
+            27.0
+          ],
+          [
+            0.0,
+            47.0
+          ],
+          [
+            20.0,
+            47.0
+          ]
+        ],
+        "radius_gu": 0.0,
+        "return_anchor": false,
+        "runtime_export": true,
+        "semantic_id": "safe_area_000001",
+        "shape": "polygon",
+        "tile": [
+          10.0,
+          37.0
+        ]
+      }
+    ]
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "3d706ce6d35fc319bebffc60679e37778ff7eba9f49a0c5a632bb8677c3131f0",
+      "authoring_sha256": "2fb578227959a066869f0ee1c9a1286918187bc66238fadb97bdf01bd06a2abb",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 2.0,
-      "document_sha256": "248ea1501c62ab250a44e6bda0084a10baf581d855ebec688ceb1a020f88b117",
-      "ground_manifest_sha256": "6adfcd470cbcaab3c7d205f20cc66b9abe7998742a4ebb28e7bc8497063a66c4",
-      "ground_state_sha256": "c1bc25feb500cef141f569e62991d49722c602db3be1bc7142aebca54164238d",
+      "document_sha256": "8bbe4a4f682d6abf67c60da213800e827f7b344fa70aade2724b78427445f65b",
+      "ground_manifest_sha256": "238301f21e160ec5bfe213fdf7816f1cc71ceac979f11ad710c4cd8c894735c9",
+      "ground_state_sha256": "22c99c976d9168e5a7e049f19eff419adc74d41f7ab00130bfb6bc75e109ffea",
       "map_key": "world_fengmo_valley",
       "runtime_map_id": 910005.0
     },

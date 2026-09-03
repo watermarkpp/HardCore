@@ -9,6 +9,9 @@ const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_ru
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
+const MapTeleportRuntimePolicyScript := preload(
+	"res://scripts/layers/runtime/map_teleport_runtime_policy.gd"
+)
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
 const MapDiamondCameraConstraintScript := preload("res://scripts/map_editor/map_diamond_camera_constraint_service.gd")
@@ -514,7 +517,10 @@ func _ready() -> void:
 	hud.skill_input_cancelled.connect(_on_skill_input_cancelled)
 	hud.interact_pressed.connect(_try_interact)
 	hud.skill_slot_pressed.connect(_use_skill_slot)
-	hud.map_travel_requested.connect(travel_to_map)
+	hud.map_teleport_availability_requested.connect(
+		_on_map_teleport_availability_requested
+	)
+	hud.map_teleport_requested.connect(_on_map_teleport_requested)
 	hud.target_switch_pressed.connect(_cycle_target)
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
 	hud.special_action_pressed.connect(_on_special_action_pressed)
@@ -1119,6 +1125,84 @@ func _travel_to_service_home_immediate(
 
 func travel_to_map(map_id: int) -> void:
 	_request_map_travel(map_id)
+
+
+func _on_map_teleport_availability_requested(map_ids: Array) -> void:
+	if not is_instance_valid(hud):
+		return
+	hud.set_map_teleport_availability(
+		MapTeleportRuntimePolicyScript.rules_for_maps(
+			map_ids,
+			Callable(self, "_map_teleport_item_count_by_id"),
+		)
+	)
+
+
+func _on_map_teleport_requested(request: Dictionary) -> void:
+	if not gameplay_input_is_enabled() or _map_transition_in_progress:
+		return
+	var selected_map_id := int(request.get("selected_map_id", -1))
+	var rule := MapTeleportRuntimePolicyScript.rule_for_map(
+		selected_map_id,
+		Callable(self, "_map_teleport_item_count_by_id"),
+	)
+	if not MapTeleportRuntimePolicyScript.request_matches_rule(request, rule):
+		if is_instance_valid(hud):
+			hud.set_map_teleport_availability({selected_map_id: rule})
+			hud.show_message(str(rule.get("reason", "传送条件已经失效")))
+		return
+	var destination_map_id := int(rule.get("destination_map_id", -1))
+	var travel_profile := _resolve_projection_profile_for_map(destination_map_id)
+	if not bool(travel_profile.get("success", false)):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = str(travel_profile.get("reason", ""))
+		hud.show_message("map_projection_unavailable:%d" % destination_map_id)
+		return
+	var map_data := GameData.get_map_by_id(destination_map_id)
+	if map_data.is_empty():
+		hud.show_message("地图数据不存在：%d" % destination_map_id)
+		return
+	var operation := Callable(self, "_teleport_to_map_immediate").bind(
+		destination_map_id,
+		str(rule.get("arrival_anchor_id", "")),
+	)
+	if not _begin_map_transition(operation, destination_map_id):
+		hud.show_message("当前无法开始传送")
+
+
+func _teleport_to_map_immediate(map_id: int, arrival_anchor_id: String) -> bool:
+	var arrival := MapTeleportRuntimePolicyScript.resolve_arrival(
+		map_id,
+		arrival_anchor_id,
+	)
+	if not bool(arrival.get("valid", false)):
+		return false
+	var map_data := GameData.get_map_by_id(map_id)
+	if map_data.is_empty():
+		return false
+	map_data = _runtime_named_map_data(map_data)
+	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
+	if current_map_id != map_id:
+		return false
+	player.global_position = arrival.get("position_px", Vector2.ZERO) as Vector2
+	player.velocity = Vector2.ZERO
+	background.set_focus_position(player.global_position)
+	_record_player_world_location()
+	return true
+
+
+func _map_teleport_item_count_by_id(item_id: int) -> int:
+	if item_id <= 0:
+		return 0
+	var total := 0
+	for raw_record: Variant in PlayerState.inventory:
+		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+			continue
+		var record: Dictionary = raw_record
+		var catalog_item := GameData.get_item_record(record)
+		if int(catalog_item.get("itemId", -1)) == item_id:
+			total += maxi(0, int(record.get("count", 1)))
+	return total
 
 
 func _request_map_travel(map_id: int) -> bool:
