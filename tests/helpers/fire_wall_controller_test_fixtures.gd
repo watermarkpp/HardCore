@@ -92,17 +92,9 @@ static func make_enemy(
 	hp := 10000
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{
-			"name": "q2c_enemy_%d" % serial,
-			"hp": hp,
-			"attackMin": 1,
-			"attackMax": 1,
-			"level": 1,
-		},
-		null,
-		false
-	)
+	enemy.setup(GameData.get_monster_by_id(19), null, false)
+	enemy.max_hp = hp
+	enemy.current_hp = hp
 	enemy.configure_runtime_map_projection(
 		map_id,
 		Callable(host, "_ground_to_screen")

@@ -70,9 +70,28 @@ func _run() -> void:
 		visual.play_hit()
 		visual._process(0.02)
 		assert(visual.current_state == "hit", "%s 受击状态错误" % monster_name)
-		visual.play_death()
+		enemy._dying = true
+		var death_duration := visual.play_death()
+		var death_frame_count := MonsterAnimationPolicy.frame_count(
+			visual.active_resources,
+			&"death"
+		)
+		assert(
+			death_duration >= maxf(
+				0.62,
+				float(death_frame_count) / MonsterVisual.DEATH_ANIMATION_FPS
+			),
+			"%s 死亡动画仍被压缩到不足完整播放时长" % monster_name
+		)
 		visual._process(0.02)
 		assert(visual.current_state == "death", "%s 死亡状态错误" % monster_name)
+		visual._process(death_duration)
+		assert(
+			visual.current_state == "death"
+			and visual.current_frame == death_frame_count - 1
+			and sprite.texture == visual.active_resources.get("death"),
+			"%s 尸体没有保持在死亡末帧" % monster_name
+		)
 		enemy.queue_free()
 
 	var catalog_file := FileAccess.open("res://assets/data/runtime/monster_animation_catalog.json", FileAccess.READ)

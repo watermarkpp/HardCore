@@ -82,9 +82,21 @@ func _run() -> void:
 	assert(not boss._boss_skill_enabled and not boss._boss_phase_enabled, "骷髅精灵项目技能开关未关闭")
 
 	var hp_before := player.current_hp
+	# This fixture validates attack timing, not target-acquisition staggering.
+	# Pin the already-authorized player target so an unrelated acquisition policy
+	# cannot prevent the attack from reaching its hit-frame assertions.
+	boss.target = player
 	boss._attack_timer = 0.0
 	boss._physics_process(0.01)
-	assert(boss._pending_attack_time > 0.0 and player.current_hp == hp_before, "骷髅精灵伤害没有等待客户端命中帧")
+	assert(
+		boss._pending_attack_time > 0.0 and player.current_hp == hp_before,
+		"骷髅精灵伤害没有等待客户端命中帧 pending=%.3f hp=%d/%d target_valid=%s" % [
+			boss._pending_attack_time,
+			player.current_hp,
+			hp_before,
+			str(is_instance_valid(boss.target)),
+		]
+	)
 	var expected_attack_facing_px := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT).normalized()
 	assert(boss.facing.dot(expected_attack_facing_px) > 0.99 and boss.velocity == Vector2.ZERO, "骷髅精灵攻击时未面对目标或仍在移动")
 	visual._process(0.05)
@@ -99,9 +111,18 @@ func _run() -> void:
 	boss.take_damage(251)
 	assert(not boss._boss_phase_two and boss.move_speed_gu_per_sec == speed_before, "骷髅精灵仍触发无来源半血狂暴")
 	boss.take_damage(999)
+	assert(boss._death_pending and not boss._dying, "致死伤害没有等待对象周期结束")
+	boss._physics_process(0.0)
 	visual._process(0.02)
 	assert(boss._dying and visual.current_state == "death", "骷髅精灵死亡动画未触发")
-	await get_tree().create_timer(0.68).timeout
-	assert(not is_instance_valid(boss), "骷髅精灵死亡动画后未移除")
-	print("SKELETON_SPIRIT_BOSS_PASS：Race89/TATMonster、2秒攻击、命中帧、朝向、无伪技能与死亡正常")
+	await get_tree().create_timer(0.90).timeout
+	assert(
+		is_instance_valid(boss)
+		and visual.current_state == "death"
+		and visual._death_pose_held,
+		"骷髅精灵死亡末帧没有作为尸体保留"
+	)
+	await get_tree().create_timer(2.10).timeout
+	assert(not is_instance_valid(boss), "骷髅精灵尸体保留期结束后未移除")
+	print("SKELETON_SPIRIT_BOSS_PASS：Race89/TATMonster、2秒攻击、命中帧、朝向、无伪技能、延迟死亡与尸体保留正常")
 	get_tree().quit(0)

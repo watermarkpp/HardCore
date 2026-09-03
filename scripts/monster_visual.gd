@@ -32,6 +32,7 @@ const VISUAL_ACTIVATION_DISTANCE_PX := 1600.0
 const VISUAL_RELEASE_DISTANCE_PX := 2000.0
 const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 const MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC := 5.0 / 32.0
+const DEATH_ANIMATION_FPS := 12.0
 const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
@@ -77,6 +78,7 @@ var _last_state := ""
 var _attack_remaining := 0.0
 var _hit_remaining := 0.0
 var _death_remaining := 0.0
+var _death_pose_held := false
 var _action_duration := 0.0
 var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
@@ -263,9 +265,14 @@ func ground_shadow_layout_snapshot() -> Dictionary:
 func _process(delta: float) -> void:
 	if not is_instance_valid(actor):
 		return
+	var death_was_playing := _death_remaining > 0.0
 	_attack_remaining = maxf(0.0, _attack_remaining - delta)
 	_hit_remaining = maxf(0.0, _hit_remaining - delta)
 	_death_remaining = maxf(0.0, _death_remaining - delta)
+	if death_was_playing and _death_remaining <= 0.0 and actor._dying:
+		# Keep the final frame continuously. The owner timer later extends this as
+		# the corpse hold; there must never be a one-frame idle flash in between.
+		_death_pose_held = true
 	_resource_residency_timer -= delta
 	if _resource_residency_timer <= 0.0:
 		_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
@@ -276,7 +283,7 @@ func _process(delta: float) -> void:
 			_release_resources()
 	if active_resources.is_empty() or not visible:
 		return
-	if _death_remaining > 0.0:
+	if _death_remaining > 0.0 or _death_pose_held:
 		current_state = "death"
 	elif _attack_remaining > 0.0:
 		current_state = "attack"
@@ -296,7 +303,9 @@ func _process(delta: float) -> void:
 		_last_state = current_state
 	_elapsed += delta
 	var frame_count := MonsterAnimationPolicy.frame_count(active_resources, StringName(current_state))
-	if current_state in ["attack", "hit", "death"]:
+	if _death_pose_held and current_state == "death":
+		current_frame = maxi(0, frame_count - 1)
+	elif current_state in ["attack", "hit", "death"]:
 		var progress := clampf(_elapsed / maxf(_action_duration, 0.001), 0.0, 0.999)
 		current_frame = mini(frame_count - 1, int(floor(progress * frame_count)))
 	else:
@@ -809,12 +818,48 @@ func play_hit(duration := 0.22) -> void:
 	_elapsed = 0.0
 
 
-func play_death(duration := 0.62) -> void:
-	_death_remaining = duration
+func death_animation_duration() -> float:
+	var frame_count := MonsterAnimationPolicy.frame_count(
+		active_resources,
+		&"death"
+	)
+	return maxf(0.62, float(maxi(1, frame_count)) / DEATH_ANIMATION_FPS)
+
+
+func play_death(duration := -1.0) -> float:
+	var resolved_duration := (
+		death_animation_duration()
+		if duration <= 0.0
+		else float(duration)
+	)
+	_death_pose_held = false
+	_death_remaining = resolved_duration
 	_hit_remaining = 0.0
 	_attack_remaining = 0.0
-	_action_duration = duration
+	_action_duration = resolved_duration
 	_elapsed = 0.0
+	return resolved_duration
+
+
+func hold_death_pose() -> void:
+	if active_resources.is_empty() or not visible:
+		return
+	_death_remaining = 0.0
+	_death_pose_held = true
+	current_state = "death"
+	_last_state = "death"
+	var frame_count := MonsterAnimationPolicy.frame_count(
+		active_resources,
+		&"death"
+	)
+	current_frame = maxi(0, frame_count - 1)
+	var next_region := Rect2(
+		current_frame * frame_size.x,
+		current_direction * frame_size.y,
+		frame_size.x,
+		frame_size.y
+	)
+	_apply_render_state(active_resources["death"], next_region)
 
 
 func uses_final_art() -> bool:

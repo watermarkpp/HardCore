@@ -45,11 +45,43 @@ func _run() -> void:
 	_run_case("boundary_target", Vector2(0, 0), Vector2.RIGHT, 8.0, [
 		[Vector2(8.0, 0.25), 0.25],
 	])
+	_run_pending_front_target_case()
 	assert(_hit_difference_count == 0, "new path must match legacy hit parity")
 	_cleanup()
 	await get_tree().process_frame
 	print("PROJECTILE_BROADPHASE_HIT_PARITY_PASS cases=%d" % _case_count)
 	get_tree().quit(0)
+
+
+func _run_pending_front_target_case() -> void:
+	_case_count += 1
+	_index = SpatialIndexScript.new()
+	_enemies.clear()
+	_projectiles.clear()
+	var pending_front := _make_enemy(Vector2(1, 0), 0.25, 1)
+	var live_behind := _make_enemy(Vector2(3, 0), 0.25, 2)
+	pending_front._death_pending = true
+	var front_hp_before := pending_front.current_hp
+	var behind_hp_before := live_behind.current_hp
+	var projectile := _make_projectile(
+		Vector2.ZERO,
+		GroundUnit.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT),
+		8.0,
+		25
+	)
+	for _step in range(120):
+		if not is_instance_valid(projectile) or projectile.is_queued_for_deletion():
+			break
+		projectile._physics_process(1.0 / 60.0)
+	assert(
+		pending_front.current_hp == front_hp_before,
+		"pending-death front target must reject projectile damage"
+	)
+	assert(
+		live_behind.current_hp < behind_hp_before,
+		"pending-death front target must not consume the projectile"
+	)
+	_cleanup()
 
 
 func _run_case(
@@ -123,11 +155,9 @@ func _make_enemy(
 	serial: int
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{"name": "parity_%d" % serial, "hp": 1000, "attackMin": 1, "attackMax": 1, "level": 1},
-		null,
-		false
-	)
+	enemy.setup(GameData.get_monster_by_id(19), null, false)
+	enemy.max_hp = 1000
+	enemy.current_hp = 1000
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_ground_to_screen")

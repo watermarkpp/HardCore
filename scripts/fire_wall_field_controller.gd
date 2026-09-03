@@ -233,7 +233,11 @@ func _apply_field_tick() -> void:
 		if not raw_node is EnemyActor:
 			continue
 		var enemy := raw_node as EnemyActor
-		if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+		if (
+			not is_instance_valid(enemy)
+			or enemy.is_queued_for_deletion()
+			or not enemy.can_receive_damage()
+		):
 			continue
 		# One canonical 2x2 Snapshot-V2 exact test per candidate per tick.
 		controller_exact_test_count += 1

@@ -267,6 +267,8 @@ var _melee_diagnostic_serial := 0
 var _pending_melee_diagnostic: Dictionary = {}
 var _pending_enemy_deaths: Array[Dictionary] = []
 var _enemy_death_flush_queued := false
+var _enemy_death_pipeline_running := false
+var _enemy_death_target_refresh_pending := false
 var _pending_loot_collections: Array = []
 var _loot_collection_flush_queued := false
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
@@ -2449,6 +2451,10 @@ func _spawn_enemy(
 	enemy.set_meta("spawn_slot_id", slot_id)
 	enemy.set_meta("spawn_group_id", str(context.get("spawn_group_id", slot_id)))
 	enemy.set_meta("spawn_context", context)
+	enemy.set_meta(
+		"death_runtime_snapshot",
+		_build_enemy_death_runtime_snapshot(canonical_monster)
+	)
 	enemy.set_meta("summoner_spawn_slot", str(context.get("summoner_spawn_slot", "")))
 	enemy.set_meta("zone_generation", _zone_generation)
 	enemy.set_meta("safe_zones", _active_safe_zones.duplicate(true))
@@ -2488,6 +2494,23 @@ func _strict_runtime_monster_id(monster_data: Dictionary) -> int:
 		):
 			return int(numeric_id)
 	return -1
+
+
+func _build_enemy_death_runtime_snapshot(canonical_monster: Dictionary) -> Dictionary:
+	var monster_id := _strict_runtime_monster_id(canonical_monster)
+	if monster_id <= 0:
+		return {}
+	var combat: Dictionary = canonical_monster.get("combat", {})
+	var stats: Dictionary = combat.get("stats", {})
+	return {
+		"monster_id": monster_id,
+		"canonical_name": str(canonical_monster.get("canonical_name", "")),
+		"experience": int(stats.get("exp", 0)),
+		"classification": str(canonical_monster.get("classification", "")),
+		"spawn_classification": str(
+			canonical_monster.get("spawn_classification", "")
+		),
+	}
 
 
 func _request_mobile_attack() -> bool:
@@ -2980,6 +3003,9 @@ func _on_mobile_attack_released() -> void:
 
 
 func _ensure_attack_locked_target(excluded: EnemyActor = null) -> EnemyActor:
+	if not is_instance_valid(locked_target):
+		locked_target = null
+		manual_target_lock = false
 	if _is_attack_target_in_range(locked_target) and locked_target != excluded:
 		return locked_target
 	if locked_target != null:
@@ -3622,9 +3648,15 @@ func _cancel_all_combat_targets() -> void:
 
 
 func _validate_locked_target() -> void:
-	if locked_target != null and not _is_attack_target_in_range(locked_target):
+	if not is_instance_valid(locked_target):
+		locked_target = null
+		manual_target_lock = false
+	elif not _is_attack_target_in_range(locked_target):
 		_cancel_target()
-	if magic_locked_target != null and not _is_magic_target_in_range(magic_locked_target):
+	if not is_instance_valid(magic_locked_target):
+		magic_locked_target = null
+		manual_magic_target_lock = false
+	elif not _is_magic_target_in_range(magic_locked_target):
 		_cancel_magic_target()
 
 
@@ -3644,6 +3676,11 @@ func _face_locked_target() -> Vector2:
 
 func _ensure_skill_cast_target(excluded: EnemyActor = null) -> EnemyActor:
 	_activate_magic_skill_domain()
+	if not is_instance_valid(magic_locked_target):
+		magic_locked_target = null
+		manual_magic_target_lock = false
+	if not is_instance_valid(_skill_cast_target):
+		_skill_cast_target = null
 	if _is_magic_target_in_range(magic_locked_target) and magic_locked_target != excluded:
 		_skill_cast_target = magic_locked_target
 		return _skill_cast_target
@@ -3676,6 +3713,9 @@ func _face_skill_cast_target() -> Vector2:
 
 
 func _select_wild_rush_target() -> EnemyActor:
+	if not is_instance_valid(locked_target):
+		locked_target = null
+		manual_target_lock = false
 	if _is_attack_target_in_range(locked_target):
 		# A live lock is authoritative. An ineligible, over-level, boss, or
 		# out-of-reach lock must make this cast invalid instead of silently
@@ -3940,11 +3980,15 @@ func _update_target_hud() -> void:
 		return
 	var magic_domain := _magic_target_domain_is_active()
 	var active_target := magic_locked_target if magic_domain else locked_target
-	var target_valid := (
-		_is_magic_target_in_range(active_target)
-		if magic_domain
-		else _is_attack_target_in_range(active_target)
-	)
+	# A target can be freed by a test/world teardown without emitting the normal
+	# death signal. Never pass that stale Object through a typed range helper.
+	var target_valid := false
+	if is_instance_valid(active_target) and active_target is EnemyActor:
+		target_valid = (
+			_is_magic_target_in_range(active_target as EnemyActor)
+			if magic_domain
+			else _is_attack_target_in_range(active_target as EnemyActor)
+		)
 	if target_valid:
 		hud.update_target(
 			active_target.display_name,
@@ -4444,6 +4488,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	)
 	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
 	var hit_any := false
+	var primary_hit := false
 	var canonical_resolution := "rejected"
 	if effect_mode in ["thrust", "half_moon", "fire"]:
 		var melee_resolution := _execute_canonical_melee(
@@ -4464,6 +4509,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			true
 		)
 		hit_any = bool(melee_resolution.get("hit_any", false))
+		primary_hit = bool(melee_resolution.get("primary_hit", false))
 		canonical_resolution = str(melee_resolution.get("resolution", "rejected"))
 	elif effect_mode == "normal":
 		if not primary_targets.is_empty():
@@ -4473,7 +4519,16 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				modified_base_damage + post_body_damage_bonus,
 				accuracy_bonus
 			)
+			primary_hit = hit_any
 			canonical_resolution = "hit" if hit_any else "miss"
+	# Weapon wear belongs to the physical swing, not to each target struck by
+	# that swing. Besides matching the original server, this prevents Half Moon,
+	# Thrusting and any future multi-target melee release from performing one
+	# synchronous save per victim.
+	if primary_hit and is_instance_valid(player):
+		player.apply_confirmed_physical_hit_durability(
+			maxi(1, modified_base_damage + post_body_damage_bonus)
+		)
 	_spawn_target_aligned_melee_visual(
 		melee_release_snapshot,
 		effect_mode,
@@ -5311,6 +5366,7 @@ func _execute_canonical_melee(
 	if not bool(result.get("accepted", false)):
 		return {"accepted": false, "hit_any": false, "resolution": "rejected"}
 	var hit_any := false
+	var primary_hit := false
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
 			continue
@@ -5323,20 +5379,25 @@ func _execute_canonical_melee(
 					else thrust_secondaries
 				)
 				for target: EnemyActor in targets:
-					hit_any = _apply_physical_hit(
+					var target_hit := _apply_physical_hit(
 						target,
 						roundi(float(base_damage) * float(effect.get("multiplier", 1.0)))
 						+ post_body_damage_bonus,
 						accuracy_bonus
-					) or hit_any
+					)
+					hit_any = target_hit or hit_any
+					if int(effect.get("cell", 1)) == 1:
+						primary_hit = target_hit or primary_hit
 			"melee_arc":
 				for primary: EnemyActor in primary_targets:
-					hit_any = _apply_physical_hit(
+					var target_hit := _apply_physical_hit(
 						primary,
 						roundi(float(base_damage) * float(effect.get("primary_multiplier", 1.0)))
 						+ post_body_damage_bonus,
 						accuracy_bonus
-					) or hit_any
+					)
+					primary_hit = target_hit or primary_hit
+					hit_any = target_hit or hit_any
 				for secondary: EnemyActor in half_moon_secondaries:
 					hit_any = _apply_physical_hit(
 						secondary,
@@ -5347,15 +5408,17 @@ func _execute_canonical_melee(
 			"next_melee_charge":
 				if not primary_targets.is_empty():
 					var target := primary_targets[0]
-					hit_any = _apply_physical_hit(
+					primary_hit = _apply_physical_hit(
 						target,
 						roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0)))
 						+ post_body_damage_bonus,
 						accuracy_bonus
 					)
+					hit_any = primary_hit
 	return {
 		"accepted": true,
 		"hit_any": hit_any,
+		"primary_hit": primary_hit,
 		"resolution": "hit" if hit_any else "miss",
 	}
 
@@ -6387,6 +6450,8 @@ func _record_skill_footprint_release_diagnostic(
 	eligible_target_count: int,
 	damage_applied: bool
 ) -> void:
+	if not SkillFootprintDiagnosticLogScript.capture_enabled():
+		return
 	var raw_snapshot: Variant = skill_release_snapshot
 	if not _snapshot_strict_ok(skill_release_snapshot):
 		raw_snapshot = skill_release_snapshot.get("skill_footprint_snapshot", {})
@@ -8492,7 +8557,11 @@ func _sort_melee_targets(
 	release_geometry: Dictionary
 ) -> void:
 	var locked_instance_id := int(release_geometry.get("locked_target_instance_id", 0))
-	if locked_instance_id <= 0 and _is_attack_target_in_range(locked_target):
+	if (
+		locked_instance_id <= 0
+		and is_instance_valid(locked_target)
+		and _is_attack_target_in_range(locked_target)
+	):
 		locked_instance_id = locked_target.get_instance_id()
 	targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
 		var a_locked := a.get_instance_id() == locked_instance_id
@@ -8580,17 +8649,43 @@ func _is_primary_melee_candidate(
 
 
 func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) -> bool:
-	if enemy == null or enemy.is_queued_for_deletion():
+	if (
+		enemy == null
+		or enemy.is_queued_for_deletion()
+		or not enemy.can_receive_damage()
+	):
 		return false
 	var accuracy := int(
 		PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT)
 	) + accuracy_bonus
 	var target_agility := maxi(1, enemy.agility)
+	var diagnostics_enabled := CombatDiagnosticLogScript.capture_enabled()
 	var hit_roll := -1
-	var hit_probability := WarriorCombatMath.hit_probability(accuracy, target_agility)
+	var hit_probability := (
+		WarriorCombatMath.hit_probability(accuracy, target_agility)
+		if diagnostics_enabled
+		else 0.0
+	)
 	if not PlayerState.test_mode:
 		hit_roll = _rng.randi_range(0, target_agility - 1)
 		if not WarriorCombatMath.hit_succeeds(accuracy, target_agility, hit_roll):
+			if diagnostics_enabled:
+				_active_physical_hit_diagnostics.append({
+					"target_id": enemy.get_instance_id(),
+					"target_name": enemy.display_name,
+					"accuracy": accuracy,
+					"accuracy_bonus": accuracy_bonus,
+					"target_agility": target_agility,
+					"hit_roll": hit_roll,
+					"hit_probability": hit_probability,
+					"test_mode_bypass": false,
+					"requested_damage": maxi(1, damage),
+					"result_code": "ACCURACY_MISS",
+				})
+			return false
+	var hp_before := enemy.current_hp
+	if not _combat_runtime.apply_enemy_physical_damage(enemy, maxi(1, damage), player):
+		if diagnostics_enabled:
 			_active_physical_hit_diagnostics.append({
 				"target_id": enemy.get_instance_id(),
 				"target_name": enemy.display_name,
@@ -8599,13 +8694,14 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 				"target_agility": target_agility,
 				"hit_roll": hit_roll,
 				"hit_probability": hit_probability,
-				"test_mode_bypass": false,
+				"test_mode_bypass": PlayerState.test_mode,
 				"requested_damage": maxi(1, damage),
-				"result_code": "ACCURACY_MISS",
+				"hp_before": hp_before,
+				"hp_after": enemy.current_hp,
+				"result_code": "DAMAGE_COMMIT_FAILED",
 			})
-			return false
-	var hp_before := enemy.current_hp
-	if not _combat_runtime.apply_enemy_physical_damage(enemy, maxi(1, damage), player):
+		return false
+	if diagnostics_enabled:
 		_active_physical_hit_diagnostics.append({
 			"target_id": enemy.get_instance_id(),
 			"target_name": enemy.display_name,
@@ -8618,31 +8714,9 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 			"requested_damage": maxi(1, damage),
 			"hp_before": hp_before,
 			"hp_after": enemy.current_hp,
-			"result_code": "DAMAGE_COMMIT_FAILED",
+			"actual_hp_delta": maxi(0, hp_before - enemy.current_hp),
+			"result_code": "HIT_COMMITTED",
 		})
-		return false
-	_active_physical_hit_diagnostics.append({
-		"target_id": enemy.get_instance_id(),
-		"target_name": enemy.display_name,
-		"accuracy": accuracy,
-		"accuracy_bonus": accuracy_bonus,
-		"target_agility": target_agility,
-		"hit_roll": hit_roll,
-		"hit_probability": hit_probability,
-		"test_mode_bypass": PlayerState.test_mode,
-		"requested_damage": maxi(1, damage),
-		"hp_before": hp_before,
-		"hp_after": enemy.current_hp,
-		"actual_hp_delta": maxi(0, hp_before - enemy.current_hp),
-		"result_code": "HIT_COMMITTED",
-	})
-	# Durability is committed only after the authoritative physical damage
-	# transaction succeeds. Misses, empty swings, spell routes and rejected
-	# damage never reach this point.
-	if is_instance_valid(player):
-		player.apply_confirmed_physical_hit_durability(
-			maxi(0, hp_before - enemy.current_hp)
-		)
 	var life_steal_percent := int(PlayerState.computed_stats.get("life_steal_percent", 0))
 	var recovered := int(float(maxi(1, damage)) * float(life_steal_percent) / 100.0)
 	if recovered >= 2:
@@ -8792,88 +8866,170 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		_combat_spatial_index.unregister(
 			int(enemy.get_meta("spawn_serial", 0))
 		)
+	# Clearing references is cheap and must be immediate, but refreshing every
+	# enemy highlight and the HUD here would run inside the death signal and can
+	# interrupt a multi-target release. Coalesce that presentation work into the
+	# deferred death pipeline.
 	if enemy == locked_target:
-		_cancel_target()
+		locked_target = null
+		manual_target_lock = false
+		_enemy_death_target_refresh_pending = true
 	if enemy == magic_locked_target:
-		_cancel_magic_target()
+		magic_locked_target = null
+		manual_magic_target_lock = false
+		_enemy_death_target_refresh_pending = true
 	if enemy == _skill_cast_target:
 		_skill_cast_target = null
+		_enemy_death_target_refresh_pending = true
 	var death_position := enemy.global_position
-	var spawn_position: Vector2 = enemy.get_meta("spawn_position", death_position)
-	var was_boss: bool = enemy.get_meta("spawn_is_boss", false)
-	var generation: int = enemy.get_meta("zone_generation", _zone_generation)
-	var configured_respawn := float(enemy.get_meta("respawn_seconds", -1.0))
-	var respawn_enabled := bool(enemy.get_meta("respawn_enabled", true))
-	var spawn_context: Dictionary = enemy.get_meta("spawn_context", {}).duplicate(true)
 	var monster_id := _strict_runtime_monster_id(monster_data)
-	var canonical_monster := GameData.get_monster_by_id(monster_id)
-	if canonical_monster.is_empty():
+	var death_runtime_snapshot: Dictionary = enemy.get_meta(
+		"death_runtime_snapshot", {}
+	)
+	if int(death_runtime_snapshot.get("monster_id", -1)) != monster_id:
+		var canonical_monster := GameData.get_monster_by_id(monster_id)
+		death_runtime_snapshot = _build_enemy_death_runtime_snapshot(
+			canonical_monster
+		)
+	if death_runtime_snapshot.is_empty():
+		if (
+			_enemy_death_target_refresh_pending
+			and not _enemy_death_flush_queued
+			and not _enemy_death_pipeline_running
+		):
+			_enemy_death_flush_queued = true
+			call_deferred("_flush_enemy_deaths", true)
 		return
-	var combat: Dictionary = canonical_monster.get("combat", {})
-	var stats: Dictionary = combat.get("stats", {})
 	_pending_enemy_deaths.append({
 		"queued_at_usec": queued_at_usec,
 		"death_position": death_position,
-		"spawn_position": spawn_position,
-		"was_boss": was_boss,
-		"generation": generation,
-		"configured_respawn": configured_respawn,
-		"respawn_enabled": respawn_enabled,
-		"spawn_context": spawn_context,
+		"spawn_position": enemy.get_meta("spawn_position", death_position),
+		"was_boss": enemy.get_meta("spawn_is_boss", false),
+		"generation": enemy.get_meta("zone_generation", _zone_generation),
+		"configured_respawn": enemy.get_meta("respawn_seconds", -1.0),
+		"respawn_enabled": enemy.get_meta("respawn_enabled", true),
+		# Keep the already-owned metadata reference until the deferred resolver.
+		# It is copied only if that resolver needs to extend the respawn context.
+		"spawn_context": enemy.get_meta("spawn_context", {}),
 		"monster_id": monster_id,
-		"canonical_monster": canonical_monster,
-		"monster_name": str(canonical_monster.get("canonical_name", "")),
-		"experience": int(stats.get("exp", 0)),
-	})
-	if not _enemy_death_flush_queued:
-		_enemy_death_flush_queued = true
-		call_deferred("_flush_enemy_deaths")
-
-
-func _flush_enemy_deaths() -> void:
-	_enemy_death_flush_queued = false
-	if _pending_enemy_deaths.is_empty():
-		return
-	var profile_started_usec := Time.get_ticks_usec()
-	var pending := _pending_enemy_deaths
-	_pending_enemy_deaths = []
-	var settlements: Array = []
-	for death: Dictionary in pending:
-		settlements.append({
-			"monster_name": str(death.get("monster_name", "")),
-			"experience": int(death.get("experience", 0)),
-		})
-	var settlement := PlayerState.record_kills_and_experience_batch(settlements)
-	var settlement_finished_usec := Time.get_ticks_usec()
-	var death_profiles: Array = []
-	var total_item_count := 0
-	var total_gold_drop_count := 0
-	for death: Dictionary in pending:
-		var death_profile := _resolve_queued_enemy_death(death)
-		death_profiles.append(death_profile)
-		total_item_count += int(death_profile.get("item_count", 0))
-		total_gold_drop_count += int(death_profile.get("gold_drop_count", 0))
-	var finished_usec := Time.get_ticks_usec()
-	if OS.is_debug_build():
-		print("[LootDeathBatchProfile] ", JSON.stringify({
-			"death_count": pending.size(),
-			"settlement_ms": float(settlement_finished_usec - profile_started_usec) / 1000.0,
-			"resolve_ms": float(finished_usec - settlement_finished_usec) / 1000.0,
-			"total_ms": float(finished_usec - profile_started_usec) / 1000.0,
-			"oldest_queue_delay_ms": (
-				float(profile_started_usec - int(pending[0].get("queued_at_usec", profile_started_usec))) / 1000.0
-				if not pending.is_empty()
-				else 0.0
+		"canonical_monster": {
+			"monster_id": monster_id,
+			"classification": str(
+				death_runtime_snapshot.get("classification", "")
 			),
-			"item_count": total_item_count,
-			"gold_drop_count": total_gold_drop_count,
-			"settlement": settlement,
-			"deaths": death_profiles,
-		}))
+			"spawn_classification": str(
+				death_runtime_snapshot.get("spawn_classification", "")
+			),
+		},
+		"monster_name": str(
+			death_runtime_snapshot.get("canonical_name", "")
+		),
+		"experience": int(death_runtime_snapshot.get("experience", 0)),
+	})
+	if not _enemy_death_flush_queued and not _enemy_death_pipeline_running:
+		_enemy_death_flush_queued = true
+		call_deferred("_flush_enemy_deaths", true)
 
 
-func _resolve_queued_enemy_death(death: Dictionary) -> Dictionary:
+func _flush_enemy_deaths(spread_across_frames := true) -> void:
+	if _enemy_death_pipeline_running:
+		return
+	_enemy_death_pipeline_running = true
+	_enemy_death_flush_queued = false
+	if spread_across_frames and is_inside_tree():
+		# Let MonsterVisual present the first death frame before persistence or
+		# drop-node construction can consume the next frame's main-thread budget.
+		await get_tree().process_frame
+	while not _pending_enemy_deaths.is_empty():
+		if _enemy_death_target_refresh_pending:
+			_enemy_death_target_refresh_pending = false
+			_refresh_target_highlights()
+			_update_target_hud()
+		var profile_started_usec := Time.get_ticks_usec()
+		var pending := _pending_enemy_deaths
+		_pending_enemy_deaths = []
+		var settlements: Array = []
+		var respawn_state_before: Dictionary = (
+			PlayerState.monster_respawn_state_for_restore()
+		)
+		for death: Dictionary in pending:
+			death["respawn_preparation"] = _prepare_queued_enemy_respawn(death)
+			settlements.append({
+				"monster_name": str(death.get("monster_name", "")),
+				"experience": int(death.get("experience", 0)),
+			})
+		var settlement_started_usec := Time.get_ticks_usec()
+		var settlement := PlayerState.record_kills_and_experience_batch(settlements)
+		if not bool(settlement.get("success", false)):
+			# Keep the respawn state in the same atomic save boundary as kill,
+			# quest and experience settlement.
+			PlayerState.world_monster_respawn_state = respawn_state_before
+		var settlement_finished_usec := Time.get_ticks_usec()
+		var resolve_active_usec := 0
+		var death_profiles: Array = []
+		var total_item_count := 0
+		var total_gold_drop_count := 0
+		if spread_across_frames and is_inside_tree():
+			await get_tree().process_frame
+		for index: int in range(pending.size()):
+			var death_profile := await _resolve_queued_enemy_death(
+				pending[index], spread_across_frames
+			)
+			resolve_active_usec += roundi(
+				float(death_profile.get("total_ms", 0.0)) * 1000.0
+			)
+			death_profiles.append(death_profile)
+			total_item_count += int(death_profile.get("item_count", 0))
+			total_gold_drop_count += int(death_profile.get("gold_drop_count", 0))
+			if (
+				spread_across_frames
+				and is_inside_tree()
+				and index + 1 < pending.size()
+			):
+				await get_tree().process_frame
+		var finished_usec := Time.get_ticks_usec()
+		if CombatDiagnosticLogScript.capture_enabled():
+			var settlement_usec := (
+				settlement_finished_usec - settlement_started_usec
+			)
+			print("[LootDeathBatchProfile] ", JSON.stringify({
+				"death_count": pending.size(),
+				"settlement_ms": float(settlement_usec) / 1000.0,
+				"resolve_ms": float(resolve_active_usec) / 1000.0,
+				# total_ms remains active main-thread work so profiles stay
+				# comparable after the resolver is distributed across frames.
+				"total_ms": float(settlement_usec + resolve_active_usec) / 1000.0,
+				"pipeline_elapsed_ms": float(finished_usec - profile_started_usec) / 1000.0,
+				"spread_across_frames": spread_across_frames,
+				"oldest_queue_delay_ms": (
+					float(profile_started_usec - int(pending[0].get("queued_at_usec", profile_started_usec))) / 1000.0
+					if not pending.is_empty()
+					else 0.0
+				),
+				"item_count": total_item_count,
+				"gold_drop_count": total_gold_drop_count,
+				"settlement": settlement,
+				"deaths": death_profiles,
+			}))
+	# A malformed death snapshot can still clear a selected target without
+	# entering the settlement queue. Never leave its presentation refresh flag
+	# stranded merely because no further death was queued.
+	if _enemy_death_target_refresh_pending:
+		_enemy_death_target_refresh_pending = false
+		_refresh_target_highlights()
+		_update_target_hud()
+	_enemy_death_pipeline_running = false
+	if not _pending_enemy_deaths.is_empty() and not _enemy_death_flush_queued:
+		_enemy_death_flush_queued = true
+		call_deferred("_flush_enemy_deaths", spread_across_frames)
+
+
+func _resolve_queued_enemy_death(
+	death: Dictionary,
+	spread_across_frames := false
+) -> Dictionary:
 	var started_usec := Time.get_ticks_usec()
+	var yielded_usec := 0
 	var monster_id := int(death.get("monster_id", -1))
 	var canonical_monster: Dictionary = death.get("canonical_monster", {})
 	var death_position: Vector2 = death.get("death_position", Vector2.ZERO)
@@ -8913,15 +9069,45 @@ func _resolve_queued_enemy_death(death: Dictionary) -> Dictionary:
 					overflow_telemetry.get("protected_overflow_count", 0)
 				),
 			})
+	var ground_drop_requests: Array[Dictionary] = []
 	for item_name: String in drop_roll.get("items", []):
-		_spawn_loot(item_name, death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18)))
+		ground_drop_requests.append({
+			"item_name": item_name,
+			"position": death_position + Vector2(
+				_rng.randf_range(-34, 34),
+				_rng.randf_range(-18, 18)
+			),
+		})
 	for raw_gold: Variant in drop_roll.get("gold_drops", []):
 		var amount := int(raw_gold)
 		if amount > 0:
+			ground_drop_requests.append({
+				"gold_amount": amount,
+				"position": death_position + Vector2(
+					_rng.randf_range(-34, 34),
+					_rng.randf_range(-18, 18)
+				),
+			})
+	for drop_index: int in range(ground_drop_requests.size()):
+		var request: Dictionary = ground_drop_requests[drop_index]
+		if request.has("gold_amount"):
 			_spawn_gold_loot(
-				amount,
-				death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18))
+				int(request.get("gold_amount", 0)),
+				request.get("position", death_position)
 			)
+		else:
+			_spawn_loot(
+				str(request.get("item_name", "")),
+				request.get("position", death_position)
+			)
+		if (
+			spread_across_frames
+			and is_inside_tree()
+			and drop_index + 1 < ground_drop_requests.size()
+		):
+			var yield_started_usec := Time.get_ticks_usec()
+			await get_tree().process_frame
+			yielded_usec += Time.get_ticks_usec() - yield_started_usec
 	var spawn_finished_usec := Time.get_ticks_usec()
 	var result := {
 		"monster_id": monster_id,
@@ -8932,52 +9118,27 @@ func _resolve_queued_enemy_death(death: Dictionary) -> Dictionary:
 		"respawn_scheduled": false,
 	}
 	if not respawn_enabled:
-		result["total_ms"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
+		result["total_ms"] = float(
+			Time.get_ticks_usec() - started_usec - yielded_usec
+		) / 1000.0
 		return result
-	var classification := str(canonical_monster.get("classification", ""))
-	var spawn_classification := str(
-		canonical_monster.get("spawn_classification", "")
+	var respawn_preparation: Dictionary = death.get(
+		"respawn_preparation", {}
 	)
-	var policy := MonsterRespawnPolicyScript.resolve(
-		str(spawn_context.get("respawn_policy_id", "")),
-		classification,
-		configured_respawn,
-		spawn_classification
-	)
-	if not bool(policy.get("valid", false)):
-		push_error(
-			"Monster death respawn policy rejected monster_id=%d reason=%s"
-			% [monster_id, str(policy.get("reason", "invalid_policy"))]
+	if respawn_preparation.is_empty():
+		respawn_preparation = _prepare_queued_enemy_respawn(death)
+	if not bool(respawn_preparation.get("valid", false)):
+		result["reason"] = str(
+			respawn_preparation.get("reason", "invalid_respawn_policy")
 		)
-		result["reason"] = "invalid_respawn_policy"
-		result["total_ms"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
+		result["total_ms"] = float(
+			Time.get_ticks_usec() - started_usec - yielded_usec
+		) / 1000.0
 		return result
-	var respawn_wait_seconds := float(policy.get("seconds", 0.0))
-	var respawn_runtime_map_id := int(
-		spawn_context.get("respawn_runtime_map_id", current_map_id)
+	var respawn_wait_seconds := float(
+		respawn_preparation.get("wait_seconds", 0.0)
 	)
-	var spawn_slot_id := str(spawn_context.get("spawn_slot_id", ""))
-	var respawn_at_unix := (
-		Time.get_unix_time_from_system() + respawn_wait_seconds
-	)
-	if not PlayerState.mark_monster_respawn_dead(
-		respawn_runtime_map_id,
-		spawn_slot_id,
-		monster_id,
-		str(policy.get("policy_id", "")),
-		respawn_at_unix
-	):
-		push_error(
-			"Monster respawn state rejected unstable slot monster_id=%d map_id=%d slot=%s"
-			% [monster_id, respawn_runtime_map_id, spawn_slot_id]
-		)
-		result["reason"] = "unstable_respawn_slot"
-		result["total_ms"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
-		return result
-	spawn_context["respawn_policy_id"] = str(policy.get("policy_id", ""))
-	spawn_context["spawn_classification"] = spawn_classification
-	spawn_context["respawn_base_seconds"] = respawn_wait_seconds
-	spawn_context["respawn_random_seconds"] = 0.0
+	spawn_context = respawn_preparation.get("spawn_context", spawn_context)
 	_respawn_later(
 		canonical_monster,
 		spawn_position,
@@ -8987,8 +9148,62 @@ func _resolve_queued_enemy_death(death: Dictionary) -> Dictionary:
 		spawn_context
 	)
 	result["respawn_scheduled"] = true
-	result["total_ms"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
+	result["total_ms"] = float(
+		Time.get_ticks_usec() - started_usec - yielded_usec
+	) / 1000.0
 	return result
+
+
+func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
+	if not bool(death.get("respawn_enabled", true)):
+		return {"valid": true, "enabled": false}
+	var monster_id := int(death.get("monster_id", -1))
+	var canonical_monster: Dictionary = death.get("canonical_monster", {})
+	var spawn_context: Dictionary = (
+		(death.get("spawn_context", {}) as Dictionary).duplicate(true)
+	)
+	var spawn_classification := str(
+		canonical_monster.get("spawn_classification", "")
+	)
+	var policy := MonsterRespawnPolicyScript.resolve(
+		str(spawn_context.get("respawn_policy_id", "")),
+		str(canonical_monster.get("classification", "")),
+		float(death.get("configured_respawn", -1.0)),
+		spawn_classification
+	)
+	if not bool(policy.get("valid", false)):
+		push_error(
+			"Monster death respawn policy rejected monster_id=%d reason=%s"
+			% [monster_id, str(policy.get("reason", "invalid_policy"))]
+		)
+		return {"valid": false, "reason": "invalid_respawn_policy"}
+	var respawn_wait_seconds := float(policy.get("seconds", 0.0))
+	var respawn_runtime_map_id := int(
+		spawn_context.get("respawn_runtime_map_id", current_map_id)
+	)
+	var spawn_slot_id := str(spawn_context.get("spawn_slot_id", ""))
+	if not PlayerState.mark_monster_respawn_dead(
+		respawn_runtime_map_id,
+		spawn_slot_id,
+		monster_id,
+		str(policy.get("policy_id", "")),
+		Time.get_unix_time_from_system() + respawn_wait_seconds
+	):
+		push_error(
+			"Monster respawn state rejected unstable slot monster_id=%d map_id=%d slot=%s"
+			% [monster_id, respawn_runtime_map_id, spawn_slot_id]
+		)
+		return {"valid": false, "reason": "unstable_respawn_slot"}
+	spawn_context["respawn_policy_id"] = str(policy.get("policy_id", ""))
+	spawn_context["spawn_classification"] = spawn_classification
+	spawn_context["respawn_base_seconds"] = respawn_wait_seconds
+	spawn_context["respawn_random_seconds"] = 0.0
+	return {
+		"valid": true,
+		"enabled": true,
+		"wait_seconds": respawn_wait_seconds,
+		"spawn_context": spawn_context,
+	}
 
 
 func _spawn_loot(item_name: String, position: Vector2) -> void:
@@ -9056,7 +9271,7 @@ func _flush_loot_collections() -> void:
 			pickup.reject_collection(str(outcome.get("message", "超过负重，无法拾取。")))
 	if hud != null and not loot_feedback_names.is_empty():
 		hud.show_loot_batch(loot_feedback_names)
-	if OS.is_debug_build():
+	if CombatDiagnosticLogScript.capture_enabled():
 		print("[LootPickupProfile] ", JSON.stringify({
 			"candidate_count": pending.size(),
 			"transaction_ms": float(transaction_finished_usec - profile_started_usec) / 1000.0,

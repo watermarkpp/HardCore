@@ -28,7 +28,16 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	ProjectSettings.set_setting(&"hardcore/debug/diagnostics/enabled", false)
+	var diagnostics_enabled_before: Variant = ProjectSettings.get_setting(
+		&"hardcore/debug/diagnostics/enabled",
+		false
+	)
+	var geometry_diagnostics_before: Variant = ProjectSettings.get_setting(
+		&"hardcore/debug/diagnostics/skill_geometry",
+		false
+	)
+	ProjectSettings.set_setting(&"hardcore/debug/diagnostics/enabled", true)
+	ProjectSettings.set_setting(&"hardcore/debug/diagnostics/skill_geometry", true)
 	SkillFootprintDiagnosticLog.clear_recent_events()
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
@@ -529,6 +538,14 @@ func _run() -> void:
 
 	game.queue_free()
 	await get_tree().process_frame
+	ProjectSettings.set_setting(
+		&"hardcore/debug/diagnostics/enabled",
+		diagnostics_enabled_before
+	)
+	ProjectSettings.set_setting(
+		&"hardcore/debug/diagnostics/skill_geometry",
+		geometry_diagnostics_before
+	)
 	print("GAME_ROOT_WIZARD_GEOMETRY_INTEGRATION_PASS")
 	get_tree().quit(0)
 
@@ -541,6 +558,7 @@ func _make_enemy(
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	enemy.setup({
+		"monster_id": 19,
 		"name": display_name,
 		"hp": 9999,
 		"attackMin": 1,
@@ -550,6 +568,11 @@ func _make_enemy(
 		"magic_defense_min": 0,
 		"magic_defense_max": 0,
 	}, caster, false)
+	# setup is canonical-ID authoritative; keep this geometry fixture durable by
+	# overriding only its test-local health/name after the valid catalog setup.
+	enemy.display_name = display_name
+	enemy.max_hp = 9999
+	enemy.current_hp = 9999
 	enemy.control_time = 60.0
 	game.add_child(enemy)
 	# Enemy._ready() repairs player overlap for production spawns. Tests place

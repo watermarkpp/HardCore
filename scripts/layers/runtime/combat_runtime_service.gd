@@ -17,14 +17,22 @@ func face_target_screen_px(actor: Node2D, target: Node2D) -> Vector2:
 
 
 func apply_damage(target: Node, amount: int) -> bool:
-	if not is_instance_valid(target) or not target.has_method("take_damage"):
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
 		return false
 	target.take_damage(maxi(1, amount))
 	return true
 
 
 func apply_enemy_physical_damage(target: Node, amount: int, source_actor: Node2D = null) -> bool:
-	if not is_instance_valid(target) or not target.has_method("take_damage"):
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
 		return false
 	target.call("take_damage", maxi(1, amount), source_actor)
 	return true
@@ -38,7 +46,11 @@ func apply_enemy_direct_spell_damage(
 	rng: RandomNumberGenerator,
 	magic_defense_adapter: Callable
 ) -> Dictionary:
-	if not is_instance_valid(target) or not target.has_method("take_damage"):
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
 		return {
 			"success": false,
 			"failure_reason": "target_missing_damage_pipeline",
@@ -58,6 +70,13 @@ func apply_enemy_direct_spell_damage(
 	var result := resolution.duplicate(true)
 	result["success"] = final_damage > 0
 	return result
+
+
+func _target_rejects_damage(target: Node) -> bool:
+	return (
+		target.has_method("can_receive_damage")
+		and not bool(target.call("can_receive_damage"))
+	)
 
 
 func _target_stats_with_runtime_buffs(target: Node) -> Dictionary:

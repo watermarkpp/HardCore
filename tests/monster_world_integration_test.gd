@@ -275,7 +275,7 @@ func _test_overflow_telemetry_death_entry() -> void:
 	var monster_data := GameData.get_monster_by_id(145).duplicate(true)
 	assert(int(monster_data.get("monster_id", -1)) == 145)
 	game._on_enemy_died(enemy, monster_data)
-	game._flush_enemy_deaths()
+	game._flush_enemy_deaths(false)
 	assert(
 		LootRuntime.overflow_telemetry_snapshot().is_empty(),
 		"disabled-drop death must not create overflow telemetry"
@@ -319,11 +319,12 @@ func _test_same_frame_death_batch() -> void:
 		PlayerState.test_transaction_debug_snapshot().commit_attempts == 0,
 		"death callback committed before the same-frame batch closed"
 	)
-	game._flush_enemy_deaths()
+	game._flush_enemy_deaths(false)
 	var counters := PlayerState.test_transaction_debug_snapshot()
 	assert(counters.commit_attempts == 1, "two same-frame deaths did not share one save")
 	assert(PlayerState.experience == experience_each * 2, "AOE batch lost experience")
 	assert(game._pending_enemy_deaths.is_empty(), "AOE death queue did not drain")
+	assert(not game._enemy_death_pipeline_running, "AOE death pipeline remained active")
 	game.free()
 	for enemy: EnemyActor in enemies:
 		enemy.free()

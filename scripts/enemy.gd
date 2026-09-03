@@ -101,6 +101,7 @@ const CROWD_SEPARATION_GAP_GU := 0.375
 const LAST_SAFE_REFRESH_DISTANCE_GU := 2.0
 const PROJECTILE_OBSTACLE_SAMPLE_STEP_GU := 0.25
 const ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU := PROJECTILE_OBSTACLE_SAMPLE_STEP_GU
+const CORPSE_HOLD_SECONDS := 2.0
 
 static var _crowd_grid_physics_frame := -1
 static var _crowd_grid: Dictionary = {}
@@ -207,6 +208,7 @@ var combat_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_r
 var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS_PX)
 var environment_blocker: Node
 var _dying := false
+var _death_pending := false
 var boss_rule: Dictionary = {}
 var behavior_profile: Dictionary = {}
 var service_ai_code := -1
@@ -1358,6 +1360,13 @@ func _update_natural_regen(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if _dying:
 		return
+	# Match the original server's object-cycle boundary: damage may reduce HP to
+	# zero during a multi-target release, but death teardown must not interrupt
+	# that release's remaining targets. Resolve the queued death on the next
+	# actor tick instead.
+	if _death_pending or current_hp <= 0:
+		_begin_death()
+		return
 	# actual_ground_motion_gu describes this physics tick only. A monster that
 	# does not move this tick must never retain the previous tick's motion.
 	actual_ground_motion_gu = Vector2.ZERO
@@ -1367,7 +1376,7 @@ func _physics_process(delta: float) -> void:
 	# Poison/status damage and natural regeneration are independent. Resolve
 	# status first, but never allow a lethal status tick to be resurrected by
 	# a natural-regeneration tick in the same physics frame.
-	if _dying:
+	if _dying or _death_pending:
 		return
 	_update_natural_regen(delta)
 	_update_entrapment_state(delta)
@@ -3635,7 +3644,7 @@ func apply_life_steal(dealt_damage: int) -> void:
 
 
 func take_damage(amount: int, attacker: Node2D = null) -> void:
-	if _dying:
+	if _dying or _death_pending:
 		return
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
@@ -3658,10 +3667,43 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 		_boss_skill_cooldown = minf(_boss_skill_cooldown, float(phase.get("skillCooldownSeconds", _boss_skill_cooldown)))
 	queue_redraw()
 	if current_hp == 0:
-		_begin_death()
+		_mark_death_pending()
+
+
+func can_receive_damage() -> bool:
+	return (
+		current_hp > 0
+		and not _death_pending
+		and not _dying
+		and not is_queued_for_deletion()
+	)
+
+
+func _mark_death_pending() -> void:
+	if _dying or _death_pending:
+		return
+	_death_pending = true
+	# The heavyweight death signal/persistence/drop work is deferred, but a
+	# zero-HP actor must stop participating in collision and target queries now.
+	# Otherwise a second projectile in the same frame can be consumed by this
+	# already-dead actor before its next physics tick.
+	input_pickable = false
+	collision_layer = 0
+	collision_mask = 0
+	remove_from_group("enemies")
+	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
+		combat_spatial_index.unregister(spatial_actor_runtime_id)
+	# Tests, paused actors and temporarily disabled physics processing must still
+	# commit death after the current damage/AOE call stack has fully unwound.
+	call_deferred("_begin_death")
 
 
 func _begin_death() -> void:
+	if _dying:
+		return
+	_death_pending = false
+	if current_hp > 0:
+		return
 	clear_entrapment("death")
 	_dying = true
 	_cancel_autonomous_step(true)
@@ -3682,17 +3724,22 @@ func _begin_death() -> void:
 	if overhead != null:
 		overhead.visible = false
 	var has_death_art := visual != null and visual.uses_final_art()
+	var death_animation_seconds := 0.0
 	if has_death_art:
-		visual.play_death()
+		death_animation_seconds = visual.play_death()
 	died.emit(self, monster_data)
 	if has_death_art:
-		_finish_death_after_animation()
+		_finish_death_after_animation(death_animation_seconds)
 	else:
 		queue_free()
 
 
-func _finish_death_after_animation() -> void:
-	await get_tree().create_timer(0.64).timeout
+func _finish_death_after_animation(animation_seconds: float) -> void:
+	await get_tree().create_timer(maxf(0.01, animation_seconds)).timeout
+	if not is_instance_valid(self):
+		return
+	visual.hold_death_pose()
+	await get_tree().create_timer(CORPSE_HOLD_SECONDS).timeout
 	if is_instance_valid(self):
 		queue_free()
 

@@ -255,7 +255,11 @@ func _dispatch_tick(entry: Dictionary) -> void:
 		if not raw_node is EnemyActor:
 			continue
 		var enemy := raw_node as EnemyActor
-		if enemy.is_queued_for_deletion() or not is_instance_valid(enemy):
+		if (
+			not is_instance_valid(enemy)
+			or enemy.is_queued_for_deletion()
+			or not enemy.can_receive_damage()
+		):
 			continue
 		exact_intersection_test_count += 1
 		if not ground_effect.runtime_target_is_inside(enemy):

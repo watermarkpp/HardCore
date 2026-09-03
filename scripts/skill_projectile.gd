@@ -449,7 +449,11 @@ func _physics_process(delta: float) -> void:
 			if not candidate_node is EnemyActor:
 				continue
 			var node := candidate_node as EnemyActor
-			if node.is_queued_for_deletion() or not is_instance_valid(node):
+			if (
+				not is_instance_valid(node)
+				or node.is_queued_for_deletion()
+				or not node.can_receive_damage()
+			):
 				_broadphase_stale_candidate_count += 1
 				continue
 			_broadphase_exact_test_count += 1

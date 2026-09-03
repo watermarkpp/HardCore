@@ -335,10 +335,17 @@ func _make_enemy(
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	enemy.setup(
-		{"name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level},
+		{"monster_id": 19, "name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level},
 		player,
 		is_boss
 	)
+	# Keep this fixture canonical-ID valid while preserving its local level/name,
+	# health and boss flags for the state-machine assertions.
+	enemy.display_name = display_name
+	enemy.level = enemy_level
+	enemy.max_hp = 9999
+	enemy.current_hp = 9999
+	enemy.is_boss = is_boss
 	enemy.global_position = position
 	game.add_child(enemy)
 	# EnemyActor._ready() initializes its runtime control state. Freeze the
