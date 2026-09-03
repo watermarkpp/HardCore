@@ -1,12 +1,13 @@
 {
   "contractId": "ui.loading.transition.v1",
-  "policy": "The overlay only displays the exact text Loading...... on a clean translucent dark-gray shade. Atmosphere is limited to a low-opacity game-icon watermark, subtle red breathing glow, sparse embers, text breathing, and an edge vignette. It never displays a map name, region description, tip, progress bar, or gameplay status.",
+  "policy": "The overlay only displays the exact text Loading...... over an opaque monochrome battlefield. Atmosphere is limited to a low-opacity game-icon watermark, subtle red breathing glow, sparse embers, text breathing, smoke and dust in the battlefield art, and an edge vignette. The complete overlay never fades transparently and never reveals gameplay or HUD pixels while visible. It never displays a map name, region description, tip, progress bar, or gameplay status.",
   "stableVisualId": "ui.loading.overlay",
   "stableAtmosphereIds": [
     "ui.loading.game_icon_watermark",
     "ui.loading.red_breathing_glow",
     "ui.loading.edge_vignette",
-    "ui.loading.safe_content"
+    "ui.loading.safe_content",
+    "ui.loading.battlefield_background"
   ],
   "exactVisibleText": "Loading......",
   "atmosphere": {
@@ -20,7 +21,8 @@
       1.0
     ],
     "maximumEmberCount": 16,
-    "background": "cool near-black charcoal blue at approximately 90 percent coverage and 10 percent scene visibility",
+    "background": "fully opaque monochrome battlefield with smoke, airborne dust, and zero gameplay or HUD visibility",
+    "backgroundArtPath": "res://assets/ui/gothic_theme/v1/loading_battlefield_background.jpg",
     "blackBackgroundRemoval": "brightness mask plus elliptical edge feathering in the watermark shader"
   },
   "viewportCoverage": {
@@ -51,7 +53,7 @@
   ],
   "integrationLifecycle": [
     "Call GameHUD.begin_loading_transition(transition_id) before changing the active map.",
-    "Wait for GameHUD.loading_transition_covered(request) with the same transition_id before unloading or loading gameplay content.",
+    "Wait for GameHUD.loading_transition_covered(request) with the same transition_id after the opaque overlay has rendered before unloading or loading gameplay content.",
     "After the new map has produced its first process and render frame, call GameHUD.finish_loading_transition().",
     "Ignore stale callbacks and prevent overlapping map transitions in the gameplay coordinator."
   ],

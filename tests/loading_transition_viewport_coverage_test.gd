@@ -44,6 +44,7 @@ func _run() -> void:
 		overlay.apply_layout(viewport_size, margins)
 		_assert_full_viewport_rect(overlay, viewport_size, "%s overlay" % entry.name)
 		_assert_full_viewport_rect(overlay.shade, viewport_size, "%s shade" % entry.name)
+		_assert_full_viewport_rect(overlay.battlefield_background, viewport_size, "%s battlefield background" % entry.name)
 		_assert_full_viewport_rect(overlay.vignette, viewport_size, "%s vignette" % entry.name)
 		var expected_safe_position := Vector2(margins.x, margins.y)
 		var expected_safe_size := viewport_size - Vector2(margins.x + margins.z, margins.y + margins.w)

@@ -62,8 +62,10 @@ func _run() -> void:
 	launcher._enter_selected_character()
 	assert(launcher._launch_in_progress, "launch must enter busy state synchronously")
 	assert(not launcher.enter_button.disabled, "expensive button feedback must wait until Loading has been drawn")
-	assert(launcher.enter_button.theme_type_variation == "GothicCharacterLaunchButton", "launch action must use the character-specific transition frame")
+	assert(launcher.enter_button.theme_type_variation == "GothicCharacterHallEnterGemButton", "launch action must keep the accepted character-hall enter frame")
 	assert(launcher.launch_loading_overlay.visible, "Loading must be visible in the click frame")
+	assert(is_equal_approx(launcher.launch_loading_overlay.modulate.a, 1.0), "Loading root must be opaque in the launch click frame")
+	assert(is_equal_approx(launcher.launch_loading_overlay.shade.color.a, 1.0), "Loading shade must fully hide the character hall")
 	assert(PlayerState.active_profile_id.is_empty(), "profile hydration ran before the Loading frame")
 
 	# A duplicate activation during the yielded frame must not submit again.
