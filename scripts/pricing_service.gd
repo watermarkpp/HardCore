@@ -20,10 +20,15 @@ static func policy_version(policy_override := {}) -> String:
 
 
 static func adjusted_database_price(price_record: Dictionary, policy_override := {}) -> int:
+	return _adjusted_database_price_resolved(price_record, _policy(policy_override))
+
+
+static func _adjusted_database_price_resolved(
+	price_record: Dictionary, active: Dictionary
+) -> int:
 	var base_price := maxi(0, int(price_record.get("base_price", 0)))
 	if base_price <= 0:
 		return 0
-	var active := _policy(policy_override)
 	var modifiers: Dictionary = active.get("modifiers", {})
 	var value := _apply_bps(base_price, int(modifiers.get("globalBps", BPS_DENOMINATOR)))
 	var category := str(price_record.get("category", ""))
@@ -56,7 +61,14 @@ static func merchant_accepts_service_type(
 static func merchant_accepts_sell_item(
 	context: Dictionary, price_record: Dictionary, policy_override := {}
 ) -> bool:
-	var active := _policy(policy_override)
+	return _merchant_accepts_sell_item_resolved(
+		context, price_record, _policy(policy_override)
+	)
+
+
+static func _merchant_accepts_sell_item_resolved(
+	context: Dictionary, price_record: Dictionary, active: Dictionary
+) -> bool:
 	var sell_policy: Dictionary = active.get("sell", {})
 	if str(sell_policy.get("merchantTypeGate", "source_types")) == "all_shop_merchants":
 		# PlayerState still reconstructs and validates merchant_id at the
@@ -106,29 +118,9 @@ static func quote_buy(
 	context := {},
 	policy_override := {}
 ) -> Dictionary:
-	var active := _policy(policy_override)
-	var rejection := _quote_base("buy", price_record, quantity, active)
-	if quantity <= 0:
-		rejection["reason"] = "购买数量无效。"
-		return rejection
-	var adjusted := adjusted_database_price(price_record, active)
-	if adjusted <= 0:
-		rejection["reason"] = "该物品没有有效的主数据库价格。"
-		return rejection
-	var merchant: Dictionary = active.get("merchant", {})
-	var markup_bps := int(context.get("stock_markup_bps", merchant.get("stockMarkupBps", 11000)))
-	var merchant_rate_bps := int(context.get("merchant_rate_bps", merchant.get("defaultPriceRateBps", BPS_DENOMINATOR)))
-	var unit_price := _apply_bps(_apply_bps(adjusted, markup_bps), merchant_rate_bps)
-	if unit_price <= 0:
-		rejection["reason"] = "商人物价倍率无效。"
-		return rejection
-	return _complete_quote(rejection, unit_price, quantity, {
-		"database_price": int(price_record.get("base_price", 0)),
-		"adjusted_database_price": adjusted,
-		"stock_markup_bps": markup_bps,
-		"merchant_rate_bps": merchant_rate_bps,
-		"merchant_id": str(context.get("merchant_id", "")),
-	})
+	return _quote_buy_resolved(
+		price_record, quantity, context, _policy(policy_override)
+	)
 
 
 static func quote_sell(
@@ -145,7 +137,7 @@ static func quote_sell(
 	if quantity <= 0:
 		rejection["reason"] = "出售数量无效。"
 		return rejection
-	if not merchant_accepts_sell_item(context, price_record, active):
+	if not _merchant_accepts_sell_item_resolved(context, price_record, active):
 		rejection["reason"] = "该商人不回收此类物品。"
 		return rejection
 	if str(price_record.get("kind", "unknown")) in sell_policy.get("nonTradableKinds", []):
@@ -156,7 +148,7 @@ static func quote_sell(
 	):
 		rejection["reason"] = "绑定物品不能出售。"
 		return rejection
-	var buy_basis := quote_buy(price_record, 1, context, active)
+	var buy_basis := _quote_buy_resolved(price_record, 1, context, active)
 	if not bool(buy_basis.get("valid", false)):
 		rejection["reason"] = str(buy_basis.get("reason", "该物品无法估值。"))
 		return rejection
@@ -172,6 +164,36 @@ static func quote_sell(
 		"sell_rate_bps": sell_rate_bps,
 		"durability": int(instance.get("durability", instance.get("max_durability", 0))),
 		"maximum_durability": int(instance.get("max_durability", catalog.get("maxDurability", 0))),
+	})
+
+
+static func _quote_buy_resolved(
+	price_record: Dictionary,
+	quantity: int,
+	context: Dictionary,
+	active: Dictionary,
+) -> Dictionary:
+	var rejection := _quote_base("buy", price_record, quantity, active)
+	if quantity <= 0:
+		rejection["reason"] = "购买数量无效。"
+		return rejection
+	var adjusted := _adjusted_database_price_resolved(price_record, active)
+	if adjusted <= 0:
+		rejection["reason"] = "该物品没有有效的主数据库价格。"
+		return rejection
+	var merchant: Dictionary = active.get("merchant", {})
+	var markup_bps := int(context.get("stock_markup_bps", merchant.get("stockMarkupBps", 11000)))
+	var merchant_rate_bps := int(context.get("merchant_rate_bps", merchant.get("defaultPriceRateBps", BPS_DENOMINATOR)))
+	var unit_price := _apply_bps(_apply_bps(adjusted, markup_bps), merchant_rate_bps)
+	if unit_price <= 0:
+		rejection["reason"] = "商人物价倍率无效。"
+		return rejection
+	return _complete_quote(rejection, unit_price, quantity, {
+		"database_price": int(price_record.get("base_price", 0)),
+		"adjusted_database_price": adjusted,
+		"stock_markup_bps": markup_bps,
+		"merchant_rate_bps": merchant_rate_bps,
+		"merchant_id": str(context.get("merchant_id", "")),
 	})
 
 
