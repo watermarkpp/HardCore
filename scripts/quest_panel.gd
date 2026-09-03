@@ -11,7 +11,7 @@ signal closed
 signal abandon_requested(quest_id: String)
 
 const PANEL_SIZE := Vector2(1020, 636)
-const QUEST_CARD_SIZE := Vector2(286, 62)
+const QUEST_CARD_SIZE := Vector2(266, 62)
 const QUEST_CARD_SEPARATION := 7
 const QUEST_LIST_LAYOUT_REVISION := 1
 const ACTION_ROW_GAP := 12.0
@@ -111,16 +111,13 @@ func _build_quest_list() -> void:
 	var scroll := ScrollContainer.new()
 	scroll.name = "QuestListScroll"
 	scroll.position = Vector2(18, 84)
-	scroll.size = Vector2(290, 418)
-	# The approved secondary frame owns the list boundary.  The scroll viewport
-	# must not draw an extra one-pixel outline around the task cards.
-	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	scroll.size = Vector2(270, 418)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
 	quest_list = VBoxContainer.new()
 	quest_list.name = "QuestList"
-	quest_list.custom_minimum_size = Vector2(286, 0)
+	quest_list.custom_minimum_size = Vector2(QUEST_CARD_SIZE.x, 0)
 	quest_list.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	quest_list.add_theme_constant_override("separation", QUEST_CARD_SEPARATION)
 	scroll.add_child(quest_list)
@@ -361,8 +358,8 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		var name_label := Label.new()
 		name_label.name = "QuestName"
 		name_label.text = str(quest.get("name", "任务"))
-		name_label.position = Vector2(54, 7)
-		name_label.size = Vector2(212, 25)
+		name_label.position = Vector2(0, 7)
+		name_label.size = Vector2(QUEST_CARD_SIZE.x, 25)
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -371,8 +368,8 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		var state_label := Label.new()
 		state_label.name = "QuestState"
 		state_label.text = state_text
-		state_label.position = Vector2(54, 32)
-		state_label.size = Vector2(212, 22)
+		state_label.position = Vector2(0, 32)
+		state_label.size = Vector2(QUEST_CARD_SIZE.x, 22)
 		state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		state_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE

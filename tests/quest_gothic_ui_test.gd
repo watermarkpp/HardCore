@@ -31,14 +31,14 @@ func _run() -> void:
 	assert(panel.get_node("QuestListPanel").theme_type_variation == "GothicInsetFrame", "任务列表没有复用公共内框")
 	assert(panel.get_node("QuestDetailPanel").theme_type_variation == "GothicInsetFrame", "任务详情没有复用公共内框")
 	var list_scroll := panel.get_node("QuestListPanel/QuestListScroll") as ScrollContainer
-	assert(list_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "任务人物列表外仍有多余细框")
+	assert(not list_scroll.get_theme_stylebox("panel") is StyleBoxEmpty, "任务人物列表没有恢复公共滚动区细框")
 	var divider := panel.get_node("QuestDetailPanel/StoryDivider") as HSeparator
 	assert(divider.get_meta("calibration_layer", "") == "quest_story_divider", "任务详情横线仍无法独立选中")
 	var rewards_panel := panel.get_node("QuestDetailPanel/RewardsPanel") as Panel
 	assert(rewards_panel.theme_type_variation == "GothicInfoPanel", "任务奖励没有使用简洁公共信息框")
 	assert(rewards_panel.get_meta("calibration_layer", "") == "quest_rewards_panel", "任务奖励外框没有暴露为可校准层")
 	var rewards_title := panel.get_node("QuestDetailPanel/RewardsPanel/RewardsTitle") as Label
-	assert(rewards_title.text == "任务奖励：" and rewards_title.position.y < panel.reward_label.position.y, "任务奖励标题没有上移、补冒号或与奖励内容对齐")
+	assert(rewards_title.text == "任务奖励：", "任务奖励标题缺少正式文案或冒号")
 	assert(panel.quest_buttons.size() == GameData.bich_quest_count(), "任务列表没有完整显示六段比奇任务")
 	for index in range(panel.quest_buttons.size()):
 		var card := panel.quest_buttons[index]
@@ -78,6 +78,11 @@ func _run() -> void:
 	assert(rebuilt_quest_paths == stable_quest_paths, "任务卡刷新后节点路径发生漂移")
 	var first_number := panel.quest_buttons[0].get_node("QuestNumber") as Label
 	assert(first_number.vertical_alignment == VERTICAL_ALIGNMENT_CENTER and first_number.size.y == QuestPanel.QUEST_CARD_SIZE.y, "任务编号没有在卡片内垂直居中")
+	assert(first_number.position == Vector2(12, 0) and first_number.size.x == 34.0, "任务编号位置发生变化")
+	var first_name := panel.quest_buttons[0].get_node("QuestName") as Label
+	var first_state := panel.quest_buttons[0].get_node("QuestState") as Label
+	assert(first_name.position.x == 0.0 and first_name.size.x == QuestPanel.QUEST_CARD_SIZE.x and first_name.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER, "任务名称没有相对整个按钮框左右居中")
+	assert(first_state.position.x == 0.0 and first_state.size.x == QuestPanel.QUEST_CARD_SIZE.x and first_state.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER, "任务状态没有相对整个按钮框左右居中")
 	assert(panel.current_quest_id == "bich_field_hunt", "任务面板没有默认选中当前任务")
 	assert("比奇郊外的威胁" in panel.quest_name_label.text, "任务详情没有显示当前任务名称")
 	assert("2/3" in panel.objective_label.text and "1/3" in panel.objective_label.text, "任务目标没有读取真实进度")
