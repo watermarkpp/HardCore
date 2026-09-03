@@ -3068,8 +3068,32 @@ func _update_area_attack(delta: float) -> bool:
 				)
 			_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
 			if visual != null:
-				visual.play_attack(maxf(_attack_animation_duration, _area_attack_warning))
+				visual.play_attack(maxf(
+					_area_attack_visual_duration(),
+					_area_attack_warning,
+				))
 	return true
+
+
+func _area_attack_visual_duration() -> float:
+	# Fixed-body full-area attackers have no populated boss timing rule. Their
+	# exact client action still carries the authored frame cadence, so do not
+	# collapse six 120 ms frames into the generic 460 ms fallback.
+	var appearance := MonsterIdentityScript.appearance_profile(monster_id)
+	var actions: Variant = appearance.get("actions", {})
+	if not actions is Dictionary:
+		return _attack_animation_duration
+	var attack: Variant = (actions as Dictionary).get("attack", {})
+	if not attack is Dictionary:
+		return _attack_animation_duration
+	var frame_count := int((attack as Dictionary).get("framesPerDirection", 0))
+	var frame_ms := int((attack as Dictionary).get("frameMs", 0))
+	if frame_count <= 0 or frame_ms <= 0:
+		return _attack_animation_duration
+	return maxf(
+		_attack_animation_duration,
+		float(frame_count * frame_ms) / 1000.0,
+	)
 
 
 func _create_area_attack_footprint_snapshot() -> Dictionary:

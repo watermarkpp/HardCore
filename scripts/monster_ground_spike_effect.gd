@@ -45,6 +45,7 @@ var _source_texture: Texture2D
 var _elapsed_seconds := 0.0
 var _current_frame := 0
 var _finished := false
+static var _cached_source_texture: Texture2D
 
 
 static func create_visual(descriptor: Dictionary) -> Node2D:
@@ -131,13 +132,16 @@ func _install_animation() -> void:
 
 
 func _load_source_texture() -> Texture2D:
-	# The effect asset may be newly staged before Godot's editor importer has
-	# generated a .import sidecar. Image.load keeps the runtime/headless path
-	# deterministic while still consuming the exact authored PNG bytes.
-	var image := Image.new()
-	if image.load(SOURCE_TEXTURE_PATH) != OK:
-		return null
-	return ImageTexture.create_from_image(image)
+	# Runtime/export builds contain the imported Texture2D, not the source PNG
+	# bytes required by Image.load(). Keep one strong reference so an area hit on
+	# several actors never decodes the same effect once per victim.
+	if _cached_source_texture != null and is_instance_valid(_cached_source_texture):
+		return _cached_source_texture
+	_cached_source_texture = ResourceLoader.load(
+		SOURCE_TEXTURE_PATH,
+		"Texture2D",
+	) as Texture2D
+	return _cached_source_texture
 
 
 func _process(delta: float) -> void:

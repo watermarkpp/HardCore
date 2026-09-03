@@ -25,6 +25,7 @@ func _ready() -> void:
 	var service := LootRuntimeScript.new()
 	_test_female_equipment_output(service)
 	_test_small_monster_probability(service)
+	_test_elite_boss_solar_probability(service)
 	_test_prewarm_uses_output_identity(service)
 	_test_lean_runtime_cache_stays_hot(service)
 	print("LOOT_RUNTIME_ITEM_POLICY_PASS female_pairs=12 small_monster=ordinary")
@@ -113,7 +114,53 @@ func _test_small_monster_probability(service: Node) -> void:
 	var boss_roll: Dictionary = service.roll_monster_drops(76, rng)
 	assert(bool(boss_roll.get("configured", false)), str(boss_roll))
 	for attempt: Dictionary in boss_roll.get("attempts", []):
-		assert(int(attempt.get("small_monster_denominator_multiplier", 1)) == 1)
+		var item_id := int(attempt.get("canonical_item_id", -1))
+		if item_id in [920014, 920016]:
+			assert(int(attempt.get("elite_boss_solar_denominator_multiplier", 1)) == 2)
+		else:
+			assert(int(attempt.get("drop_denominator_multiplier", 1)) == 1)
+
+
+func _test_elite_boss_solar_probability(service: Node) -> void:
+	for classification: String in ["elite", "boss"]:
+		for item_id: int in [920014, 920016]:
+			var source := {
+				"canonical_item_id": item_id,
+				"final_numerator": 1,
+				"final_denominator": 4,
+				"final_probability": 0.25,
+			}
+			var adjusted: Dictionary = service._apply_drop_probability_policy(
+				source,
+				classification,
+			)
+			assert(int(adjusted.final_numerator) == 1)
+			assert(int(adjusted.final_denominator) == 8)
+			assert(
+				int(adjusted.elite_boss_solar_denominator_multiplier) == 2
+			)
+			assert(int(source.final_denominator) == 4)
+
+	var ordinary_solar := {
+		"canonical_item_id": 920014,
+		"final_numerator": 1,
+		"final_denominator": 4,
+		"final_probability": 0.25,
+	}
+	assert(
+		service._apply_drop_probability_policy(ordinary_solar, "ordinary")
+		== ordinary_solar
+	)
+	var boss_other_item := {
+		"canonical_item_id": 116,
+		"final_numerator": 1,
+		"final_denominator": 4,
+		"final_probability": 0.25,
+	}
+	assert(
+		service._apply_drop_probability_policy(boss_other_item, "boss")
+		== boss_other_item
+	)
 
 
 func _test_prewarm_uses_output_identity(service: Node) -> void:

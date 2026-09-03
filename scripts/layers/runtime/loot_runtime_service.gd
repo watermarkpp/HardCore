@@ -4,6 +4,15 @@ const DROP_CONTRACT_ID := "monster.loot.dpv2_direct_baseline.v2"
 const SMALL_MONSTER_CLASSIFICATION := "ordinary"
 const SMALL_MONSTER_EQUIPMENT_DENOMINATOR_MULTIPLIER := 3
 const SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER := 6
+const ELITE_BOSS_SOLAR_DENOMINATOR_MULTIPLIER := 2
+const ELITE_BOSS_CLASSIFICATIONS := {
+	"elite": true,
+	"boss": true,
+}
+const ELITE_BOSS_SOLAR_ITEM_IDS := {
+	920014: true,
+	920016: true,
+}
 const SMALL_MONSTER_SHENSHUI_ITEM_IDS := {
 	910001: true,
 	910002: true,
@@ -293,12 +302,12 @@ func roll_monster_drops(
 		var resolved: Dictionary = raw_resolved
 		var slot: Dictionary = resolved.get("slot", {})
 		var probability: Dictionary = resolved.get("probability", {})
-		var small_monster_multiplier := _small_monster_denominator_multiplier(
+		var denominator_multiplier := _drop_denominator_multiplier(
 			probability,
 			monster_classification,
 		)
-		if include_audit and small_monster_multiplier > 1:
-			probability = _apply_small_monster_probability_policy(
+		if include_audit and denominator_multiplier > 1:
+			probability = _apply_drop_probability_policy(
 				probability,
 				monster_classification,
 			)
@@ -306,8 +315,8 @@ func roll_monster_drops(
 		var slot_uid := str(slot.get("slot_uid", ""))
 		var denominator := (
 			int(probability.get("final_denominator", 0))
-			if include_audit and small_monster_multiplier > 1
-			else int(probability.get("final_denominator", 0)) * small_monster_multiplier
+			if include_audit and denominator_multiplier > 1
+			else int(probability.get("final_denominator", 0)) * denominator_multiplier
 		)
 		var numerator := int(probability.get("final_numerator", 0))
 		result.rng_roll_count += 1
@@ -379,6 +388,49 @@ func _drop_output_item_name(canonical_item_id: int, original_name: String) -> St
 	))
 
 
+func _apply_drop_probability_policy(
+	probability: Dictionary,
+	monster_classification: String,
+) -> Dictionary:
+	var multiplier := _drop_denominator_multiplier(
+		probability,
+		monster_classification,
+	)
+	if multiplier == 1:
+		return probability
+	var adjusted := _apply_denominator_multiplier(
+		probability,
+		multiplier,
+	)
+	if adjusted == probability:
+		return probability
+	if monster_classification == SMALL_MONSTER_CLASSIFICATION:
+		var reason := (
+			"small_monster_shenshui_denominator_x6"
+			if multiplier == SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER
+			else "small_monster_equipment_denominator_x3"
+		)
+		adjusted["pre_small_monster_numerator"] = int(
+			probability.get("final_numerator", 0)
+		)
+		adjusted["pre_small_monster_denominator"] = int(
+			probability.get("final_denominator", 0)
+		)
+		adjusted["small_monster_denominator_multiplier"] = multiplier
+		adjusted["small_monster_probability_policy"] = reason
+		adjusted["drop_denominator_policy"] = reason
+	else:
+		adjusted["elite_boss_solar_denominator_multiplier"] = multiplier
+		adjusted["elite_boss_solar_probability_policy"] = (
+			"elite_boss_solar_consumable_denominator_x2"
+		)
+		adjusted["drop_denominator_policy"] = (
+			"elite_boss_solar_consumable_denominator_x2"
+		)
+	adjusted["drop_denominator_multiplier"] = multiplier
+	return adjusted
+
+
 func _apply_small_monster_probability_policy(
 	probability: Dictionary,
 	monster_classification: String,
@@ -389,26 +441,59 @@ func _apply_small_monster_probability_policy(
 	)
 	if multiplier == 1:
 		return probability
-	var reason := ""
-	if multiplier == SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER:
-		reason = "small_monster_shenshui_denominator_x6"
-	else:
-		reason = "small_monster_equipment_denominator_x3"
-	var numerator := int(probability.get("final_numerator", 0))
-	var denominator := int(probability.get("final_denominator", 0))
-	if numerator <= 0 or denominator <= 0:
+	var adjusted := _apply_denominator_multiplier(probability, multiplier)
+	if adjusted == probability:
 		return probability
-	var adjusted := probability.duplicate(true)
-	adjusted["pre_small_monster_numerator"] = numerator
-	adjusted["pre_small_monster_denominator"] = denominator
+	var reason := (
+		"small_monster_shenshui_denominator_x6"
+		if multiplier == SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER
+		else "small_monster_equipment_denominator_x3"
+	)
+	adjusted["pre_small_monster_numerator"] = int(
+		probability.get("final_numerator", 0)
+	)
+	adjusted["pre_small_monster_denominator"] = int(
+		probability.get("final_denominator", 0)
+	)
 	adjusted["small_monster_denominator_multiplier"] = multiplier
 	adjusted["small_monster_probability_policy"] = reason
+	return adjusted
+
+
+func _apply_denominator_multiplier(
+	probability: Dictionary,
+	multiplier: int,
+) -> Dictionary:
+	var numerator := int(probability.get("final_numerator", 0))
+	var denominator := int(probability.get("final_denominator", 0))
+	if numerator <= 0 or denominator <= 0 or multiplier <= 1:
+		return probability
+	var adjusted := probability.duplicate(true)
 	adjusted["final_denominator"] = denominator * multiplier
 	adjusted["probability_denominator"] = denominator * multiplier
 	adjusted["final_probability"] = (
 		float(numerator) / float(denominator * multiplier)
 	)
 	return adjusted
+
+
+func _drop_denominator_multiplier(
+	probability: Dictionary,
+	monster_classification: String,
+) -> int:
+	var small_monster_multiplier := _small_monster_denominator_multiplier(
+		probability,
+		monster_classification,
+	)
+	if small_monster_multiplier > 1:
+		return small_monster_multiplier
+	var item_id := int(probability.get("canonical_item_id", -1))
+	if (
+		ELITE_BOSS_CLASSIFICATIONS.has(monster_classification)
+		and ELITE_BOSS_SOLAR_ITEM_IDS.has(item_id)
+	):
+		return ELITE_BOSS_SOLAR_DENOMINATOR_MULTIPLIER
+	return 1
 
 
 func _small_monster_denominator_multiplier(
@@ -482,6 +567,18 @@ func _build_attempt(
 		),
 		"small_monster_denominator_multiplier": int(
 			probability.get("small_monster_denominator_multiplier", 1)
+		),
+		"elite_boss_solar_probability_policy": str(
+			probability.get("elite_boss_solar_probability_policy", "")
+		),
+		"elite_boss_solar_denominator_multiplier": int(
+			probability.get("elite_boss_solar_denominator_multiplier", 1)
+		),
+		"drop_denominator_policy": str(
+			probability.get("drop_denominator_policy", "")
+		),
+		"drop_denominator_multiplier": int(
+			probability.get("drop_denominator_multiplier", 1)
 		),
 		"draw": draw,
 		"draw_success": success,

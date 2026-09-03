@@ -47,7 +47,6 @@ func _run() -> void:
 	await get_tree().process_frame
 	_attacker.attack_min = 7
 	_attacker.attack_max = 7
-	_attacker._attack_animation_duration = 0.62
 
 	var second := _make_player(Vector2(-128.0, 0.0), 10000)
 	var out_of_range := _make_player(Vector2(1200.0, 0.0), 10000)
@@ -76,6 +75,10 @@ func _run() -> void:
 	var primary_hp_before := primary.current_hp
 	var second_hp_before := second.current_hp
 	_attacker._physics_process(0.05)
+	assert(
+		is_equal_approx(_attacker.visual._action_duration, 0.72),
+		"fixed-area body attack must preserve the authored 6x120ms timing",
+	)
 	assert(_descriptors.size() == 2, "N frozen victims must produce N immediate spike descriptors")
 	assert(primary.current_hp == primary_hp_before)
 	_attacker._physics_process(0.14)
@@ -168,6 +171,10 @@ func _run() -> void:
 	add_child(effect)
 	await get_tree().process_frame
 	assert(effect.frame_count() == 8)
+	assert(
+		effect._source_texture is CompressedTexture2D,
+		"ground-spike runtime must consume the export-safe imported Texture2D",
+	)
 	assert(not effect.has_method("take_damage"), "visual effect must not own damage")
 	assert(effect.source_texture_path().ends_with("fixed_area_ground_spike_rgba_v1.png"))
 	assert(
