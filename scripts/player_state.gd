@@ -1098,7 +1098,8 @@ func _shop_sell_merchant_context(
 		if merchant_cache.has(merchant_stock_key):
 			return (merchant_cache[merchant_stock_key] as Dictionary).duplicate(true)
 		var by_stock := GameData.merchant_context(merchant_stock_key)
-		_shop_quote_debug["merchant_context_lookups"] = int(_shop_quote_debug.get("merchant_context_lookups", 0)) + 1
+		if test_mode:
+			_shop_quote_debug["merchant_context_lookups"] = int(_shop_quote_debug.get("merchant_context_lookups", 0)) + 1
 		merchant_cache[merchant_stock_key] = by_stock.duplicate(true)
 		lookup_cache["merchant_by_stock"] = merchant_cache
 		return by_stock
@@ -1106,7 +1107,8 @@ func _shop_sell_merchant_context(
 	if id_cache.has(merchant_id):
 		return (id_cache[merchant_id] as Dictionary).duplicate(true)
 	var by_id := GameData.merchant_context_by_id(merchant_id)
-	_shop_quote_debug["merchant_context_lookups"] = int(_shop_quote_debug.get("merchant_context_lookups", 0)) + 1
+	if test_mode:
+		_shop_quote_debug["merchant_context_lookups"] = int(_shop_quote_debug.get("merchant_context_lookups", 0)) + 1
 	id_cache[merchant_id] = by_id.duplicate(true)
 	lookup_cache["merchant_by_id"] = id_cache
 	return by_id
@@ -1117,7 +1119,8 @@ func _shop_sell_catalog(item_name: String, lookup_cache: Dictionary) -> Dictiona
 	if cache.has(item_name):
 		return (cache[item_name] as Dictionary).duplicate(true)
 	var catalog := GameData.get_item_record(item_name)
-	_shop_quote_debug["catalog_lookups"] = int(_shop_quote_debug.get("catalog_lookups", 0)) + 1
+	if test_mode:
+		_shop_quote_debug["catalog_lookups"] = int(_shop_quote_debug.get("catalog_lookups", 0)) + 1
 	cache[item_name] = catalog.duplicate(true)
 	lookup_cache["catalog_by_name"] = cache
 	return catalog
@@ -1128,20 +1131,22 @@ func _shop_sell_price_record(item_name: String, lookup_cache: Dictionary) -> Dic
 	if cache.has(item_name):
 		return (cache[item_name] as Dictionary).duplicate(true)
 	var price_record := GameData.get_item_price_record(item_name)
-	_shop_quote_debug["price_record_lookups"] = int(_shop_quote_debug.get("price_record_lookups", 0)) + 1
+	if test_mode:
+		_shop_quote_debug["price_record_lookups"] = int(_shop_quote_debug.get("price_record_lookups", 0)) + 1
 	cache[item_name] = price_record.duplicate(true)
 	lookup_cache["price_by_name"] = cache
 	return price_record
 
 
 func _shop_sell_base_price_cached(
-	item_name: String, catalog: Dictionary, lookup_cache: Dictionary
+	item_name: String, price_record: Dictionary, lookup_cache: Dictionary
 ) -> int:
 	var cache: Dictionary = lookup_cache.get("base_price_by_name", {})
 	if cache.has(item_name):
 		return int(cache[item_name])
-	var base_price := _shop_sell_base_price(item_name, catalog)
-	_shop_quote_debug["base_price_lookups"] = int(_shop_quote_debug.get("base_price_lookups", 0)) + 1
+	var base_price := PricingServiceScript.adjusted_database_price(price_record)
+	if test_mode:
+		_shop_quote_debug["base_price_lookups"] = int(_shop_quote_debug.get("base_price_lookups", 0)) + 1
 	cache[item_name] = base_price
 	lookup_cache["base_price_by_name"] = cache
 	return base_price
@@ -1199,11 +1204,13 @@ func _shop_sell_quote(request: Dictionary, lookup_cache := {}) -> Dictionary:
 	):
 		return rejection
 	var catalog := _shop_sell_catalog(item_name, cache)
-	var base_price := _shop_sell_base_price_cached(item_name, catalog, cache)
+	var price_record := _shop_sell_price_record(item_name, cache)
+	var base_price := _shop_sell_base_price_cached(item_name, price_record, cache)
 	var count := maxi(1, int(record.get("count", 1)))
-	_shop_quote_debug["pricing_quote_calls"] = int(_shop_quote_debug.get("pricing_quote_calls", 0)) + 1
+	if test_mode:
+		_shop_quote_debug["pricing_quote_calls"] = int(_shop_quote_debug.get("pricing_quote_calls", 0)) + 1
 	var pricing_quote := PricingServiceScript.quote_sell(
-		_shop_sell_price_record(item_name, cache), catalog, record, 1, merchant_context
+		price_record, catalog, record, 1, merchant_context
 	)
 	if not bool(pricing_quote.get("valid", false)):
 		rejection["reason"] = str(pricing_quote.get("reason", "该物品不能出售。"))

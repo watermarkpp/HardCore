@@ -443,7 +443,6 @@ func _rebuild_goods_cards() -> void:
 		var display_name := "%s ×%d" % [catalog_name, pack_count]
 		_build_card_contents(
 			card,
-			catalog_name,
 			display_name,
 			_item_texture(GameData.get_item_record(catalog_name)),
 			"%d 金币" % int(quote.get("total_price", 0)),
@@ -480,7 +479,7 @@ func _build_sell_quote_key_sequence(occupied_indices: Array[int]) -> Array[Strin
 	return quote_keys
 
 
-func _ensure_sell_card_capacity(required_count: int) -> void:
+func _ensure_goods_card_capacity(required_count: int) -> void:
 	while _goods_card_pool.size() < required_count:
 		var card := Button.new()
 		card.custom_minimum_size = CARD_SIZE
@@ -492,17 +491,19 @@ func _ensure_sell_card_capacity(required_count: int) -> void:
 		card.pressed.connect(_on_goods_card_pressed.bind(card))
 		goods_grid.add_child(card)
 		_goods_card_pool.append(card)
-		_goods_card_creation_count += 1
+		if PlayerState.test_mode:
+			_goods_card_creation_count += 1
 
 
 func _set_active_sell_card_count(required_count: int) -> void:
-	_ensure_sell_card_capacity(required_count)
+	_ensure_goods_card_capacity(required_count)
 	for index in range(_goods_card_pool.size()):
 		var card := _goods_card_pool[index]
 		var should_show := index < required_count
 		if card.visible != should_show:
 			card.visible = should_show
-			_sell_visibility_change_count += 1
+			if PlayerState.test_mode:
+				_sell_visibility_change_count += 1
 	goods_buttons.clear()
 	for index in range(required_count):
 		goods_buttons.append(_goods_card_pool[index])
@@ -512,7 +513,6 @@ func _bind_sell_card_identity(
 	card: Button,
 	inventory_index: int,
 	record: Dictionary,
-	catalog: Dictionary,
 	texture: Texture2D,
 	quote_key: String,
 ) -> void:
@@ -525,12 +525,15 @@ func _bind_sell_card_identity(
 	card.set_meta("quote_key", quote_key)
 	card.set_meta("catalog_name", catalog_name)
 	_set_shop_card_selected(card, _selected_sell_indices.has(inventory_index))
-	_build_card_contents(card, catalog_name, display_name, texture, "", false)
+	_build_card_contents(card, display_name, texture, "", false)
 
 
 func _apply_sell_quote_to_card(card: Button, quote: Dictionary) -> void:
 	var sellable := bool(quote.get("sellable", false))
 	card.tooltip_text = str(quote.get("reason", "等待玩法层提供出售报价"))
+	var name_label := card.get_node_or_null("ItemName") as Label
+	if name_label != null:
+		name_label.position.y = 11.0 if sellable else 22.0
 	var price_label := card.get_node_or_null("Price") as Label
 	if sellable:
 		if price_label == null:
@@ -549,11 +552,12 @@ func _apply_sell_quote_to_card(card: Button, quote: Dictionary) -> void:
 
 
 func _rebind_sell_structure(
-	occupied_indices: Array[int], quote_keys: Array[String]
+	occupied_indices: Array[int], quote_keys: Array[String], structure_tokens: Array[String]
 ) -> void:
-	_sell_structure_bind_count += 1
+	if PlayerState.test_mode:
+		_sell_structure_bind_count += 1
 	_sell_structure_indices = occupied_indices.duplicate()
-	_sell_structure_tokens = _build_sell_structure_tokens(occupied_indices)
+	_sell_structure_tokens = structure_tokens.duplicate()
 	_set_active_sell_card_count(occupied_indices.size())
 	var catalog_cache: Dictionary = {}
 	var texture_cache: Dictionary = {}
@@ -567,21 +571,24 @@ func _rebind_sell_structure(
 		else:
 			catalog = GameData.get_item_record(catalog_name)
 			catalog_cache[catalog_name] = catalog
-			_sell_catalog_lookup_count += 1
+			if PlayerState.test_mode:
+				_sell_catalog_lookup_count += 1
 		var texture: Texture2D = null
 		if texture_cache.has(catalog_name):
 			texture = texture_cache[catalog_name] as Texture2D
 		else:
 			texture = _item_texture(catalog)
 			texture_cache[catalog_name] = texture
-			_sell_texture_lookup_count += 1
+			if PlayerState.test_mode:
+				_sell_texture_lookup_count += 1
 		var card: Button = goods_buttons[display_index]
-		_bind_sell_card_identity(card, inventory_index, record, catalog, texture, quote_keys[display_index])
+		_bind_sell_card_identity(card, inventory_index, record, texture, quote_keys[display_index])
 		_apply_sell_quote_to_card(card, _sell_quotes.get(quote_keys[display_index], {}))
 
 
 func _patch_sell_quotes_only() -> void:
-	_sell_quote_patch_count += 1
+	if PlayerState.test_mode:
+		_sell_quote_patch_count += 1
 	for display_index in range(goods_buttons.size()):
 		var inventory_index := _sell_structure_indices[display_index]
 		var record := _inventory_record(inventory_index)
@@ -594,30 +601,21 @@ func _clear_goods_cards() -> void:
 	for card: Button in _goods_card_pool:
 		if card.visible:
 			card.hide()
-			_sell_visibility_change_count += 1
+			if PlayerState.test_mode:
+				_sell_visibility_change_count += 1
 	goods_buttons.clear()
 
 
 func _acquire_goods_cards(count: int) -> Array[Button]:
 	_clear_goods_cards()
-	while _goods_card_pool.size() < count:
-		var card := Button.new()
-		card.custom_minimum_size = CARD_SIZE
-		card.size = CARD_SIZE
-		card.hide()
-		card.toggle_mode = true
-		card.focus_mode = Control.FOCUS_NONE
-		card.theme_type_variation = "GothicComponentShopCard"
-		card.pressed.connect(_on_goods_card_pressed.bind(card))
-		goods_grid.add_child(card)
-		_goods_card_pool.append(card)
-		_goods_card_creation_count += 1
+	_ensure_goods_card_capacity(count)
 	var active: Array[Button] = []
 	for index in range(count):
 		var card := _goods_card_pool[index]
 		if not card.visible:
 			card.show()
-			_sell_visibility_change_count += 1
+			if PlayerState.test_mode:
+				_sell_visibility_change_count += 1
 		active.append(card)
 	goods_buttons = active
 	return active
@@ -632,13 +630,13 @@ func _on_goods_card_pressed(card: Button) -> void:
 
 func _build_card_contents(
 	card: Button,
-	catalog_name: String,
 	display_name: String,
 	texture: Texture2D,
 	price_text := "",
 	show_price := true,
 ) -> void:
-	_goods_card_content_update_count += 1
+	if PlayerState.test_mode:
+		_goods_card_content_update_count += 1
 	var icon := card.get_node_or_null("ItemIcon") as TextureRect
 	if texture != null:
 		if icon == null:
@@ -753,7 +751,7 @@ func _refresh_sell_card_contents() -> void:
 		or structure_tokens != _sell_structure_tokens
 		or goods_buttons.size() != occupied_indices.size()
 	):
-		_rebind_sell_structure(occupied_indices, quote_keys)
+		_rebind_sell_structure(occupied_indices, quote_keys, structure_tokens)
 	else:
 		_patch_sell_quotes_only()
 
@@ -1092,7 +1090,8 @@ func _on_visibility_changed() -> void:
 func _apply_inventory_change() -> void:
 	_inventory_refresh_pending = false
 	_inventory_refresh_scheduled = false
-	_inventory_refresh_execution_count += 1
+	if PlayerState.test_mode:
+		_inventory_refresh_execution_count += 1
 	_reclamp_sell_quantities()
 	_selected_sell_index = -1
 	_sell_quotes.clear()

@@ -194,6 +194,18 @@ func _run() -> void:
 			"warning": "测试高风险物品",
 		}
 	panel.set_sell_quotes(quotes)
+	PlayerState.test_shop_quote_debug_reset()
+	panel.debug_reset_operation_counters()
+	PlayerState.test_mode = false
+	PlayerState.shop_sell_quotes(quote_batches[-1])
+	panel.set_sell_quotes(quotes)
+	var production_quote_debug := PlayerState.test_shop_quote_debug_snapshot()
+	var production_panel_debug := panel.debug_operation_counters()
+	PlayerState.test_mode = true
+	for quote_counter_value: Variant in production_quote_debug.values():
+		assert(int(quote_counter_value) == 0, "正式运行仍在累计出售报价诊断计数")
+	for panel_counter_value: Variant in production_panel_debug.values():
+		assert(int(panel_counter_value) == 0, "正式运行仍在累计出售面板诊断计数")
 	var synchronous_sell_quotes := [false]
 	panel.sell_quotes_requested.connect(func(items: Array) -> void:
 		if bool(synchronous_sell_quotes[0]):
@@ -264,6 +276,10 @@ func _run() -> void:
 	for card: Button in panel.goods_buttons:
 		assert(card.get_theme_stylebox("normal") is StyleBoxFlat, "出售商品卡没有使用背包格清晰代码边框")
 		assert(card.has_node("Price"), "可出售商品卡缺少单件售价")
+		var sell_name := card.get_node("ItemName") as Label
+		var sell_price := card.get_node("Price") as Label
+		assert(sell_name.position.y == 11.0 and sell_price.position.y == 39.0, "可售卡片名称与价格没有使用双行安全位置")
+		assert(sell_name.position.y + sell_name.size.y <= sell_price.position.y, "可售卡片名称与价格发生垂直重叠")
 	var safe_indices: Array[int] = []
 	var risky_index := -1
 	for inventory_index in range(PlayerState.inventory.size()):
@@ -384,6 +400,7 @@ func _run() -> void:
 	)[0] as Button
 	var blocked_price := blocked_card.get_node_or_null("Price") as Label
 	assert(blocked_price == null or not blocked_price.visible, "不可出售原因不应显示在物品列表")
+	assert((blocked_card.get_node("ItemName") as Label).position.y == 22.0, "不可售卡片隐藏价格后名称没有恢复单行居中")
 	panel._select_sell_item(risky_index)
 	assert(decrease.disabled and increase.disabled, "不可售/count1物品数量按钮未禁用")
 	assert(panel._selected_sell_indices.size() == 2, "点击不可售物品破坏了已有多选")

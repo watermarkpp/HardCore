@@ -20,6 +20,8 @@ static func policy_version(policy_override := {}) -> String:
 
 
 static func adjusted_database_price(price_record: Dictionary, policy_override := {}) -> int:
+	if maxi(0, int(price_record.get("base_price", 0))) <= 0:
+		return 0
 	return _adjusted_database_price_resolved(price_record, _policy(policy_override))
 
 
