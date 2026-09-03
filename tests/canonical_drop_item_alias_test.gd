@@ -364,8 +364,7 @@ func _run() -> void:
 	)
 
 	# --------------------------------------------------
-	# 5. ITEM-P0C-FULL: 33 skill books are stackable
-	#    via runtime authority policies.
+# 5. Every skill book is non-stackable and carries the level-up explanation.
 	# --------------------------------------------------
 
 	var skill_book_stackable_count := 0
@@ -380,12 +379,36 @@ func _run() -> void:
 			skill_book_stackable_count += 1
 		else:
 			skill_book_non_stackable_count += 1
+		assert(int(record.get("maxStack", 0)) == 1, str(record))
+		assert(
+			"使用技能书可以使对应技能等级+1，技能最高3级。"
+			in str(record.get("description", "")),
+			"skill book description missing: %s" % str(record.get("name", "")),
+		)
 
 	assert(
-		skill_book_stackable_count == 33,
-		"expected 33 stackable skill books, got %d"
-		% skill_book_stackable_count
+		skill_book_stackable_count == 0,
+		"skill books must not stack, got %d stackable records"
+		% skill_book_stackable_count,
 	)
+	assert(
+		skill_book_non_stackable_count == 106,
+		"expected 106 non-stackable skill books, got %d"
+		% skill_book_non_stackable_count,
+	)
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	PlayerState.add_item("基本剑术", 2)
+	var basic_sword_book_slots := 0
+	for inventory_record: Variant in PlayerState.inventory:
+		if (
+			inventory_record is Dictionary
+			and str((inventory_record as Dictionary).get("name", "")) == "基本剑术"
+		):
+			basic_sword_book_slots += 1
+			assert(int((inventory_record as Dictionary).get("count", 0)) == 1)
+	assert(basic_sword_book_slots == 2, "two skill books must occupy two slots")
+	PlayerState.reset_progress()
 
 	# --------------------------------------------------
 	# 6. 万年雪霜 is stackable via authority policy.
@@ -525,8 +548,8 @@ func _run() -> void:
 		+ "drop_rows=%d unresolved=0 " % total_drop_rows
 		+ "authority_items=13 aliases=%d "
 		% alias_count
-		+ "stackable_skill_books=%d "
-		% skill_book_stackable_count
+		+ "non_stackable_skill_books=%d "
+		% skill_book_non_stackable_count
 		+ "spawnable=153"
 	)
 

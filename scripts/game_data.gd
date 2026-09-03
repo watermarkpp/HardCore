@@ -1157,7 +1157,7 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 		or _dpv2_json_integer(multiplier_value.get("denominator", null)) != 1
 		or _dpv2_json_integer(ceiling_value.get("numerator", null)) != 1
 		or _dpv2_json_integer(ceiling_value.get("denominator", null)) != 20
-		or _dpv2_json_integer(gold_multiplier_value.get("numerator", null)) != 10
+		or _dpv2_json_integer(gold_multiplier_value.get("numerator", null)) != 5
 		or _dpv2_json_integer(gold_multiplier_value.get("denominator", null)) != 1
 		or str(production.get("required_global_drop_rate_preset", "")) != "1x"
 		or _dpv2_json_integer(global_value.get("numerator", null)) != 1
@@ -1268,7 +1268,7 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 		var summary_gold_multiplier: Variant = summary.get("gold_amount_multiplier", null)
 		if (
 			not summary_gold_multiplier is Dictionary
-			or _dpv2_json_integer(summary_gold_multiplier.get("numerator", null)) != 10
+			or _dpv2_json_integer(summary_gold_multiplier.get("numerator", null)) != 5
 			or _dpv2_json_integer(summary_gold_multiplier.get("denominator", null)) != 1
 		):
 			load_error = "spb_gold_amount_summary_invalid"
@@ -1349,7 +1349,7 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 			)
 			if (
 				base_gold_amount != _dpv2_json_integer(direct_slot.get("gold_amount", null))
-				or effective_gold_amount != base_gold_amount * 10
+				or effective_gold_amount != base_gold_amount * 5
 			):
 				load_error = "spb_effective_gold_amount_mismatch"
 				return false
@@ -2384,20 +2384,28 @@ func _build_canonical_monster_runtime_drop_closure() -> void:
 
 
 
-func _apply_item_runtime_authority_overrides(record: Dictionary, skill_names: Dictionary) -> Dictionary:
+func _apply_item_runtime_authority_overrides(record: Dictionary, _skill_names: Dictionary) -> Dictionary:
 	var result: Dictionary = record.duplicate(true)
-	var name := str(result.get("name", ""))
 	var kind := str(result.get("kind", ""))
 	var service_index := int(result.get("serviceIndex", result.get("service_index", -1)))
 	var policies: Dictionary = item_runtime_authority.get("policies", {})
 
-	if kind == "skill_book" and skill_names.has(name):
+	if kind == "skill_book":
 		var book_policy: Variant = policies.get("vanillaSkillBook", {})
 		if book_policy is Dictionary:
 			if book_policy.has("stackable"):
 				result["stackable"] = book_policy["stackable"]
 			if book_policy.has("maxStack"):
 				result["maxStack"] = book_policy["maxStack"]
+			var description_suffix := str(book_policy.get("descriptionSuffix", ""))
+			if not description_suffix.is_empty():
+				var description := str(result.get("description", "")).strip_edges()
+				if description_suffix not in description:
+					result["description"] = (
+						description_suffix
+						if description.is_empty()
+						else "%s\n%s" % [description, description_suffix]
+					)
 
 	var overrides_by_index: Variant = policies.get("serviceOverridesByIndex", {})
 	if overrides_by_index is Dictionary:
@@ -2568,7 +2576,14 @@ func _register_catalog_item(record: Dictionary) -> void:
 func _make_runtime_item(item_name: String, skill_names: Dictionary) -> Dictionary:
 	var record := {"name": item_name, "stackable": true, "maxStack": 999}
 	if skill_names.has(item_name):
-		record.merge({"kind": "skill_book", "category": "技能书", "maxStack": 20, "useEffect": "learn_skill"})
+		record.merge({
+			"kind": "skill_book",
+			"category": "技能书",
+			"stackable": false,
+			"maxStack": 1,
+			"useEffect": "learn_skill",
+			"description": "使用技能书可以使对应技能等级+1，技能最高3级。",
+		})
 	elif item_name.begins_with("金币"):
 		var parts := item_name.split(" ", false)
 		var amount := int(parts[1]) if parts.size() > 1 else 10
@@ -2649,6 +2664,14 @@ func get_canonical_monster_entry(
 
 func get_monster_by_id(monster_id: int) -> Dictionary:
 	return get_canonical_monster_entry(monster_id, "runtime")
+
+
+func canonical_monster_classification(monster_id: int) -> String:
+	var resolved_id := canonical_monster_id(monster_id)
+	var entry: Variant = _monsters_by_id.get(resolved_id, null)
+	if not entry is Dictionary:
+		return ""
+	return str((entry as Dictionary).get("classification", ""))
 
 
 func get_monster(_monster_name: String) -> Dictionary:
@@ -3193,7 +3216,7 @@ func dpv2_effective_slot_probability(
 		)
 		if (
 			base_gold_amount <= 0
-			or effective_gold_amount != base_gold_amount * 10
+			or effective_gold_amount != base_gold_amount * 5
 			or base_gold_amount != _dpv2_json_integer(effective.get("gold_amount", null))
 		):
 			return {"ok": false, "reason": "spb_effective_gold_amount_mismatch"}
@@ -3604,6 +3627,13 @@ func get_skill(skill_name: String, skill_level := 0) -> Dictionary:
 		if entry is Dictionary and entry.get("skillName", "") == skill_name and int(entry.get("skillLevel", -1)) == skill_level:
 			return entry
 	return {}
+
+
+func canonical_item_kind(item_id: int) -> String:
+	var record: Variant = _catalog_by_item_id.get(item_id, null)
+	if not record is Dictionary:
+		return ""
+	return str((record as Dictionary).get("kind", ""))
 
 
 func get_bich_quest(quest_id: String) -> Dictionary:

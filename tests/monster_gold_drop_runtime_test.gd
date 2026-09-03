@@ -61,11 +61,11 @@ func _run() -> void:
 	assert(int(spb_gold_probability.get("effective_numerator", 0)) == 1)
 	assert(int(spb_gold_probability.get("effective_denominator", 0)) == 4)
 	assert(int(spb_gold_probability.get("base_gold_amount", 0)) == 30)
-	assert(int(spb_gold_probability.get("effective_gold_amount", 0)) == 300)
-	assert(int(spb_gold_probability.get("final_gold_amount", 0)) == 300)
+	assert(int(spb_gold_probability.get("effective_gold_amount", 0)) == 150)
+	assert(int(spb_gold_probability.get("final_gold_amount", 0)) == 150)
 
 	# The production roll uses the same direct slot and keeps gold separate from
-	# item output. SPB changes reward amount only: 30 base becomes 300 effective.
+	# item output. SPB changes reward amount only: 30 base becomes 150 effective.
 	var hit := false
 	for seed: int in range(4096):
 		var rng := RandomNumberGenerator.new()
@@ -73,7 +73,7 @@ func _run() -> void:
 		var roll := LootRuntimeScript.new().roll_monster_drops(19, rng)
 		if int(roll.get("resolved_entry_count", 0)) > 0:
 			var gold_drops: Array = roll.get("gold_drops", [])
-			if gold_drops.has(300):
+			if gold_drops.has(150):
 				hit = true
 				break
 	assert(hit, "no deterministic seed produced the ID 19 SPB gold roll")
@@ -86,7 +86,7 @@ func _run() -> void:
 	)
 	assert(bool(disabled_gold.get("ok", false)))
 	assert(int(disabled_gold.get("base_gold_amount", 0)) == 30)
-	assert(int(disabled_gold.get("effective_gold_amount", 0)) == 300)
+	assert(int(disabled_gold.get("effective_gold_amount", 0)) == 150)
 	assert(int(disabled_gold.get("final_gold_amount", 0)) == 30)
 	production["enabled"] = original_enabled
 

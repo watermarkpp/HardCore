@@ -95,7 +95,7 @@ def test_authority_contract_and_exact_id_freeze(documents) -> None:
         "enabled": True,
         "boost_multiplier": {"numerator": 25, "denominator": 1},
         "auto_boost_ceiling": {"numerator": 1, "denominator": 20},
-        "gold_amount_multiplier": {"numerator": 10, "denominator": 1},
+        "gold_amount_multiplier": {"numerator": 5, "denominator": 1},
         "required_global_drop_rate_preset": "1x",
         "required_global_drop_rate_multiplier": {"numerator": 1, "denominator": 1},
         "disabled_mode": "SELECT_BASE_NUMERATOR_AND_DENOMINATOR",
@@ -311,7 +311,7 @@ def test_common_recovery_gold_boss_and_blessing_populations(documents) -> None:
         and (row["effective_numerator"], row["effective_denominator"])
         == (row["base_numerator"], row["base_denominator"])
         and row["base_gold_amount"] == row["gold_amount"]
-        and row["effective_gold_amount"] == row["gold_amount"] * 10
+        and row["effective_gold_amount"] == row["gold_amount"] * 5
         for row in gold
     )
     assert all(
@@ -321,7 +321,7 @@ def test_common_recovery_gold_boss_and_blessing_populations(documents) -> None:
     )
     assert effective["summary"]["gold_amount_slots"] == 134
     assert effective["summary"]["gold_amount_multiplier"] == {
-        "numerator": 10,
+        "numerator": 5,
         "denominator": 1,
     }
     assert effective["summary"]["gold_amount_mismatch"] == 0

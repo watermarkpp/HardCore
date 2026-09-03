@@ -75,7 +75,7 @@ EXPECTED_EFFECTIVE_POLICY_COUNTS = {
 
 MULTIPLIER = (25, 1)
 CEILING = (1, 20)
-GOLD_AMOUNT_MULTIPLIER = (10, 1)
+GOLD_AMOUNT_MULTIPLIER = (5, 1)
 COMMON_RECOVERY_IDS = (
     920045,
     920044,
@@ -566,7 +566,10 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             )
             record["base_gold_amount"] = base_gold_amount
             record["effective_gold_amount"] = effective_gold_amount
-            if effective_gold_amount != base_gold_amount * 10:
+            if effective_gold_amount != (
+                base_gold_amount * GOLD_AMOUNT_MULTIPLIER[0]
+                // GOLD_AMOUNT_MULTIPLIER[1]
+            ):
                 gold_amount_mismatches += 1
             if base_gold_amount != int(row["gold_amount"]):
                 disabled_gold_amount_mismatches += 1
@@ -624,7 +627,10 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             "enabled": True,
             "boost_multiplier": {"numerator": 25, "denominator": 1},
             "auto_boost_ceiling": {"numerator": 1, "denominator": 20},
-            "gold_amount_multiplier": {"numerator": 10, "denominator": 1},
+            "gold_amount_multiplier": {
+                "numerator": GOLD_AMOUNT_MULTIPLIER[0],
+                "denominator": GOLD_AMOUNT_MULTIPLIER[1],
+            },
             "required_global_drop_rate_preset": "1x",
             "required_global_drop_rate_multiplier": {
                 "numerator": 1,
@@ -644,7 +650,7 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
         },
         "reward_amount_contract": {
             "gold_probability_policy": "BYPASS_GOLD_BASE_PROBABILITY",
-            "enabled_gold_amount": "base_gold_amount_times_10",
+            "enabled_gold_amount": "base_gold_amount_times_5",
             "disabled_gold_amount": "base_gold_amount",
             "direct_baseline_gold_amount_mutation_forbidden": True,
             "non_gold_reward_amount_overlay_forbidden": True,
@@ -678,7 +684,10 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             "effective_policy_counts": dict(sorted(policy_counts.items())),
             "ceiling_applied_slots": ceiling_count,
             "disabled_counterfactual_mismatch": disabled_mismatch,
-            "gold_amount_multiplier": {"numerator": 10, "denominator": 1},
+            "gold_amount_multiplier": {
+                "numerator": GOLD_AMOUNT_MULTIPLIER[0],
+                "denominator": GOLD_AMOUNT_MULTIPLIER[1],
+            },
             "gold_amount_slots": overlap_counts["gold_slots"],
             "gold_amount_mismatch": gold_amount_mismatches,
             "disabled_gold_amount_mismatch": disabled_gold_amount_mismatches,
@@ -710,7 +719,10 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
             "ceiling_applied_slots": ceiling_count,
             "disabled_counterfactual_records": len(effective_records),
             "disabled_counterfactual_mismatch": disabled_mismatch,
-            "gold_amount_multiplier": {"numerator": 10, "denominator": 1},
+            "gold_amount_multiplier": {
+                "numerator": GOLD_AMOUNT_MULTIPLIER[0],
+                "denominator": GOLD_AMOUNT_MULTIPLIER[1],
+            },
             "gold_amount_slots": overlap_counts["gold_slots"],
             "gold_amount_mismatch": gold_amount_mismatches,
             "disabled_gold_amount_mismatch": disabled_gold_amount_mismatches,
@@ -758,7 +770,11 @@ def validate_documents(
             base_gold_amount = int(source["gold_amount"])
             if (
                 row.get("base_gold_amount") != base_gold_amount
-                or row.get("effective_gold_amount") != base_gold_amount * 10
+                or row.get("effective_gold_amount")
+                != (
+                    base_gold_amount * GOLD_AMOUNT_MULTIPLIER[0]
+                    // GOLD_AMOUNT_MULTIPLIER[1]
+                )
             ):
                 raise BoostBuildError(f"effective gold amount mismatch {uid}")
         elif "base_gold_amount" in row or "effective_gold_amount" in row:

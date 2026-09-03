@@ -74,7 +74,7 @@ func _test_authority_and_complete_ledger() -> void:
 	assert(int(multiplier.get("denominator", 0)) == 1)
 	assert(int(ceiling.get("numerator", 0)) == 1)
 	assert(int(ceiling.get("denominator", 0)) == 20)
-	assert(int(gold_multiplier.get("numerator", 0)) == 10)
+	assert(int(gold_multiplier.get("numerator", 0)) == 5)
 	assert(int(gold_multiplier.get("denominator", 0)) == 1)
 	assert(str(production.get("required_global_drop_rate_preset", "")) == "1x")
 	var records: Array = effective.get("records", [])
@@ -232,7 +232,7 @@ func _test_gold_amount_overlay() -> void:
 			continue
 		gold_records.append(record)
 		assert(int(record.get("base_gold_amount", 0)) == int(record.get("gold_amount", -1)))
-		assert(int(record.get("effective_gold_amount", 0)) == int(record.get("gold_amount", -1)) * 10)
+		assert(int(record.get("effective_gold_amount", 0)) == int(record.get("gold_amount", -1)) * 5)
 		var probability := GameData.dpv2_effective_slot_probability(
 			int(record.get("canonical_monster_id", -1)),
 			str(record.get("slot_uid", "")),
@@ -241,8 +241,8 @@ func _test_gold_amount_overlay() -> void:
 		assert(Vector2i(probability.base_numerator, probability.base_denominator) == Vector2i(record.base_numerator, record.base_denominator))
 		assert(Vector2i(probability.effective_numerator, probability.effective_denominator) == Vector2i(record.base_numerator, record.base_denominator))
 		assert(int(probability.get("base_gold_amount", 0)) == int(record.gold_amount))
-		assert(int(probability.get("effective_gold_amount", 0)) == int(record.gold_amount) * 10)
-		assert(int(probability.get("final_gold_amount", 0)) == int(record.gold_amount) * 10)
+		assert(int(probability.get("effective_gold_amount", 0)) == int(record.gold_amount) * 5)
+		assert(int(probability.get("final_gold_amount", 0)) == int(record.gold_amount) * 5)
 	assert(gold_records.size() == 134)
 	production["enabled"] = false
 	for raw_record: Variant in gold_records:
@@ -254,7 +254,7 @@ func _test_gold_amount_overlay() -> void:
 		assert(bool(disabled.get("ok", false)), str(disabled))
 		assert(int(disabled.get("final_gold_amount", 0)) == int(record.gold_amount))
 	production["enabled"] = original_enabled
-	_assert_service_gold_amount(30000)
+	_assert_service_gold_amount(15000)
 	production["enabled"] = false
 	_assert_service_gold_amount(3000)
 	production["enabled"] = original_enabled
@@ -374,7 +374,7 @@ func _assert_service_gold_amount(expected_amount: int) -> void:
 			assert(gold_drops == [expected_amount], str(roll))
 			var attempt: Dictionary = (roll.get("attempts", []) as Array)[0]
 			assert(int(attempt.get("base_gold_amount", 0)) == 3000)
-			assert(int(attempt.get("effective_gold_amount", 0)) == 30000)
+			assert(int(attempt.get("effective_gold_amount", 0)) == 15000)
 			assert(int(attempt.get("final_gold_amount", 0)) == expected_amount)
 			found = true
 			break

@@ -1,6 +1,31 @@
 extends Node
 
 const DROP_CONTRACT_ID := "monster.loot.dpv2_direct_baseline.v2"
+const SMALL_MONSTER_CLASSIFICATION := "ordinary"
+const SMALL_MONSTER_EQUIPMENT_DENOMINATOR_MULTIPLIER := 3
+const SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER := 6
+const SMALL_MONSTER_SHENSHUI_ITEM_IDS := {
+	910001: true,
+	910002: true,
+	910003: true,
+	910004: true,
+	910005: true,
+	910006: true,
+}
+const FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID := {
+	117: "布衣(男)",
+	119: "轻型盔甲(男)",
+	121: "中型盔甲(男)",
+	123: "重盔甲(男)",
+	125: "魔法长袍(男)",
+	127: "灵魂战衣(男)",
+	129: "战神盔甲(男)",
+	131: "恶魔长袍(男)",
+	133: "幽灵战衣(男)",
+	141: "天魔神甲",
+	143: "法神披风",
+	145: "天尊道袍",
+}
 
 var _overflow_telemetry_by_monster_id: Dictionary = {}
 var _lean_profile_by_monster_id: Dictionary = {}
@@ -79,7 +104,14 @@ func possible_item_names_for_monster_ids(monster_ids: Array) -> Array[String]:
 			# the authoritative mirror-validation cost on the gameplay frame.
 			_lean_probability(resolved_id, str(raw_slot.get("slot_uid", "")))
 			var reward := _lean_reward(raw_slot)
-			var item_name := str(reward.get("item_name", "")) if bool(reward.get("ok", false)) else ""
+			var item_name := (
+				_drop_output_item_name(
+					int(raw_slot.get("canonical_item_id", -1)),
+					str(reward.get("item_name", "")),
+				)
+				if bool(reward.get("ok", false))
+				else ""
+			)
 			if str(reward.get("kind", "")) == "gold" or item_name.is_empty() or seen.has(item_name):
 				continue
 			seen[item_name] = true
@@ -256,13 +288,27 @@ func roll_monster_drops(
 		return result
 
 	var successful_rewards: Array = []
+	var monster_classification := GameData.canonical_monster_classification(resolved_id)
 	for raw_resolved: Variant in resolved_slots:
 		var resolved: Dictionary = raw_resolved
 		var slot: Dictionary = resolved.get("slot", {})
 		var probability: Dictionary = resolved.get("probability", {})
+		var small_monster_multiplier := _small_monster_denominator_multiplier(
+			probability,
+			monster_classification,
+		)
+		if include_audit and small_monster_multiplier > 1:
+			probability = _apply_small_monster_probability_policy(
+				probability,
+				monster_classification,
+			)
 		var reward: Dictionary = resolved.get("reward", {})
 		var slot_uid := str(slot.get("slot_uid", ""))
-		var denominator := int(probability.get("final_denominator", 0))
+		var denominator := (
+			int(probability.get("final_denominator", 0))
+			if include_audit and small_monster_multiplier > 1
+			else int(probability.get("final_denominator", 0)) * small_monster_multiplier
+		)
 		var numerator := int(probability.get("final_numerator", 0))
 		result.rng_roll_count += 1
 		var draw := rng.randi_range(1, denominator)
@@ -307,7 +353,10 @@ func roll_monster_drops(
 			result.resolved_gold_count += 1
 			result.gold_drops.append(int(reward.get("gold_amount", 0)))
 		else:
-			result.items.append(str(reward.get("item_name", "")))
+			result.items.append(_drop_output_item_name(
+				int(selected.get("canonical_item_id", -1)),
+				str(reward.get("item_name", "")),
+			))
 	result.overflow_discarded = selection.get("discarded", [])
 	result.ground_output_count = result.items.size() + result.gold_drops.size()
 	result.overflow_discarded_count = result.overflow_discarded.size()
@@ -321,6 +370,59 @@ func roll_monster_drops(
 	if include_audit:
 		_sync_attempt_views(result)
 	return result
+
+
+func _drop_output_item_name(canonical_item_id: int, original_name: String) -> String:
+	return str(FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID.get(
+		canonical_item_id,
+		original_name,
+	))
+
+
+func _apply_small_monster_probability_policy(
+	probability: Dictionary,
+	monster_classification: String,
+) -> Dictionary:
+	var multiplier := _small_monster_denominator_multiplier(
+		probability,
+		monster_classification,
+	)
+	if multiplier == 1:
+		return probability
+	var reason := ""
+	if multiplier == SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER:
+		reason = "small_monster_shenshui_denominator_x6"
+	else:
+		reason = "small_monster_equipment_denominator_x3"
+	var numerator := int(probability.get("final_numerator", 0))
+	var denominator := int(probability.get("final_denominator", 0))
+	if numerator <= 0 or denominator <= 0:
+		return probability
+	var adjusted := probability.duplicate(true)
+	adjusted["pre_small_monster_numerator"] = numerator
+	adjusted["pre_small_monster_denominator"] = denominator
+	adjusted["small_monster_denominator_multiplier"] = multiplier
+	adjusted["small_monster_probability_policy"] = reason
+	adjusted["final_denominator"] = denominator * multiplier
+	adjusted["probability_denominator"] = denominator * multiplier
+	adjusted["final_probability"] = (
+		float(numerator) / float(denominator * multiplier)
+	)
+	return adjusted
+
+
+func _small_monster_denominator_multiplier(
+	probability: Dictionary,
+	monster_classification: String,
+) -> int:
+	if monster_classification != SMALL_MONSTER_CLASSIFICATION:
+		return 1
+	var item_id := int(probability.get("canonical_item_id", -1))
+	if SMALL_MONSTER_SHENSHUI_ITEM_IDS.has(item_id):
+		return SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER
+	if item_id > 0 and GameData.canonical_item_kind(item_id) == "equipment":
+		return SMALL_MONSTER_EQUIPMENT_DENOMINATOR_MULTIPLIER
+	return 1
 
 
 func _build_attempt(
@@ -375,6 +477,12 @@ func _build_attempt(
 		"final_probability": float(probability.get("final_probability", 0.0)),
 		"probability_numerator": int(probability.get("final_numerator", 0)),
 		"probability_denominator": int(probability.get("final_denominator", 0)),
+		"small_monster_probability_policy": str(
+			probability.get("small_monster_probability_policy", "")
+		),
+		"small_monster_denominator_multiplier": int(
+			probability.get("small_monster_denominator_multiplier", 1)
+		),
 		"draw": draw,
 		"draw_success": success,
 		"success": success,

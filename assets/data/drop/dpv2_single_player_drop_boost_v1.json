@@ -13,7 +13,7 @@
       "denominator": 20
     },
     "gold_amount_multiplier": {
-      "numerator": 10,
+      "numerator": 5,
       "denominator": 1
     },
     "required_global_drop_rate_preset": "1x",
@@ -35,7 +35,7 @@
   },
   "reward_amount_contract": {
     "gold_probability_policy": "BYPASS_GOLD_BASE_PROBABILITY",
-    "enabled_gold_amount": "base_gold_amount_times_10",
+    "enabled_gold_amount": "base_gold_amount_times_5",
     "disabled_gold_amount": "base_gold_amount",
     "direct_baseline_gold_amount_mutation_forbidden": true,
     "non_gold_reward_amount_overlay_forbidden": true
@@ -2254,7 +2254,7 @@
     "ceiling_applied_slots": 2203,
     "disabled_counterfactual_mismatch": 0,
     "gold_amount_multiplier": {
-      "numerator": 10,
+      "numerator": 5,
       "denominator": 1
     },
     "gold_amount_slots": 134,
