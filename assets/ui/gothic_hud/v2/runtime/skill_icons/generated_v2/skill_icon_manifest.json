@@ -1,0 +1,1712 @@
+{
+  "schema_version": 4,
+  "contract_id": "ui.skill_icons.gothic_physical.approved_grid_import.v1",
+  "generation_mode": "deterministic_approved_grid_sheet_import",
+  "generation_policy": "exact_grid_crop_alpha_threshold_8_bbox_fit_118_centered_lanczos3",
+  "script": "tools/import_approved_skill_icon_sheets.mjs",
+  "source_sheets": [
+    {
+      "id": "A",
+      "file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "grid": {
+        "columns": 3,
+        "rows": 3
+      },
+      "cell_size": [
+        418,
+        418
+      ],
+      "shared_grid_edge_touch_pairs": [
+        {
+          "axis": "horizontal",
+          "first": [
+            2,
+            1
+          ],
+          "second": [
+            2,
+            2
+          ]
+        }
+      ],
+      "unused_cells": []
+    },
+    {
+      "id": "B",
+      "file": "ChatGPT Image 2026年9月4日 00_08_13 (1).png",
+      "sha256": "80547a832a8ee3fd3923caff13241ac3ad56822f58c0807ddbb027e160380195",
+      "width": 1536,
+      "height": 1024,
+      "channels": 4,
+      "grid": {
+        "columns": 3,
+        "rows": 2
+      },
+      "cell_size": [
+        512,
+        512
+      ],
+      "shared_grid_edge_touch_pairs": [
+        {
+          "axis": "horizontal",
+          "first": [
+            2,
+            0
+          ],
+          "second": [
+            2,
+            1
+          ]
+        }
+      ],
+      "unused_cells": []
+    },
+    {
+      "id": "C",
+      "file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "grid": {
+        "columns": 3,
+        "rows": 3
+      },
+      "cell_size": [
+        418,
+        418
+      ],
+      "shared_grid_edge_touch_pairs": [],
+      "unused_cells": []
+    },
+    {
+      "id": "D",
+      "file": "ChatGPT Image 2026年9月4日 00_08_15 (5).png",
+      "sha256": "bb6ecbaa9344c90fec323290d94205ede5d61cfa32a494403e32f4a7a5f8e275",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "grid": {
+        "columns": 2,
+        "rows": 2
+      },
+      "cell_size": [
+        627,
+        627
+      ],
+      "shared_grid_edge_touch_pairs": [],
+      "unused_cells": []
+    },
+    {
+      "id": "E",
+      "file": "ChatGPT Image 2026年9月4日 00_08_14 (3).png",
+      "sha256": "3f15f6ca6b3e5f2d722653aae23753d4ea7d352e1670f630a93ba3376f77cf0a",
+      "width": 1536,
+      "height": 1024,
+      "channels": 4,
+      "grid": {
+        "columns": 3,
+        "rows": 2
+      },
+      "cell_size": [
+        512,
+        512
+      ],
+      "shared_grid_edge_touch_pairs": [],
+      "unused_cells": [
+        {
+          "column": 2,
+          "row": 1,
+          "index": 5
+        }
+      ]
+    }
+  ],
+  "final_asset_contract": {
+    "width": 128,
+    "height": 128,
+    "channels": 4,
+    "format": "PNG",
+    "background": "true RGBA transparency",
+    "alpha_threshold": 8,
+    "max_visible_content": [
+      118,
+      118
+    ],
+    "resize_kernel": "lanczos3",
+    "placement": "centered",
+    "interpolation": "preserve_aspect_ratio_no_stretch"
+  },
+  "output_root": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2",
+  "skill_count": 33,
+  "edge_risk_count": 6,
+  "icons": [
+    {
+      "skill_id": "taoist.healing",
+      "display_name": "治愈术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_healing.png",
+      "sha256": "beab3fce2bd4e5cd48dae4eeb86c76c4b590b9d3cf1c48add8e84a13ca72ba32",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 0,
+        "row": 0,
+        "index": 0
+      },
+      "source_region": [
+        0,
+        0,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        28,
+        25,
+        368,
+        377
+      ],
+      "resized_content_size": [
+        115,
+        118
+      ],
+      "final_visible_bbox": [
+        6,
+        5,
+        115,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.spiritual_warfare",
+      "display_name": "精神力战法",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_spiritual_warfare.png",
+      "sha256": "61bea5cf8b5b7618eda6b602bb8c375e9078fe3d04af0387dfbccde27bc87acf",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 1,
+        "row": 0,
+        "index": 1
+      },
+      "source_region": [
+        418,
+        0,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        25,
+        14,
+        359,
+        385
+      ],
+      "resized_content_size": [
+        110,
+        118
+      ],
+      "final_visible_bbox": [
+        9,
+        5,
+        110,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.poison",
+      "display_name": "施毒术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_poison.png",
+      "sha256": "f9547a69b17d4c46134984eb333203f37020dc6f1b83ed020a64c2ddcc93e331",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 2,
+        "row": 0,
+        "index": 2
+      },
+      "source_region": [
+        836,
+        0,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        27,
+        16,
+        368,
+        386
+      ],
+      "resized_content_size": [
+        112,
+        118
+      ],
+      "final_visible_bbox": [
+        8,
+        5,
+        112,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.soul_fire_talisman",
+      "display_name": "灵魂火符",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_soul_fire_talisman.png",
+      "sha256": "a1169ef572f09abee78ab5ad0f62d77c04b62877210bf48665ca0f2823a68e10",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 0,
+        "row": 1,
+        "index": 3
+      },
+      "source_region": [
+        0,
+        418,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        17,
+        21,
+        383,
+        371
+      ],
+      "resized_content_size": [
+        118,
+        114
+      ],
+      "final_visible_bbox": [
+        5,
+        7,
+        118,
+        114
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.summon_skeleton",
+      "display_name": "召唤骷髅",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_skeleton.png",
+      "sha256": "03fc0949bfe47abd745f252f8cbac54e350c1d23197b3d69d6e4e53145bad084",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 1,
+        "row": 1,
+        "index": 4
+      },
+      "source_region": [
+        418,
+        418,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        22,
+        9,
+        381,
+        389
+      ],
+      "resized_content_size": [
+        116,
+        118
+      ],
+      "final_visible_bbox": [
+        6,
+        5,
+        116,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.invisibility",
+      "display_name": "隐身术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_invisibility.png",
+      "sha256": "995a4d31c63c7b79cb9a3d2625660ef9d0b10b8df2e1c0080d4b6151c3caf161",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 2,
+        "row": 1,
+        "index": 5
+      },
+      "source_region": [
+        836,
+        418,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        18,
+        20,
+        379,
+        398
+      ],
+      "resized_content_size": [
+        112,
+        118
+      ],
+      "final_visible_bbox": [
+        8,
+        5,
+        112,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [
+          "bottom"
+        ],
+        "flagged": true
+      }
+    },
+    {
+      "skill_id": "taoist.mass_invisibility",
+      "display_name": "集体隐身术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_invisibility.png",
+      "sha256": "4797cb3fa181f2d2d7257d6c16c7facbe88b6f2c24a92aad0a802c4b7b0918a9",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 0,
+        "row": 2,
+        "index": 6
+      },
+      "source_region": [
+        0,
+        836,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        18,
+        5,
+        377,
+        393
+      ],
+      "resized_content_size": [
+        113,
+        118
+      ],
+      "final_visible_bbox": [
+        7,
+        5,
+        113,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.magic_defense",
+      "display_name": "幽灵盾",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_magic_defense.png",
+      "sha256": "cd56306d6d66ad61566e8210b7137e282341fec8bdd22ad56a52865cc261d761",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 1,
+        "row": 2,
+        "index": 7
+      },
+      "source_region": [
+        418,
+        836,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        7,
+        4,
+        401,
+        390
+      ],
+      "resized_content_size": [
+        118,
+        115
+      ],
+      "final_visible_bbox": [
+        5,
+        6,
+        118,
+        115
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.defense",
+      "display_name": "神圣战甲术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_defense.png",
+      "sha256": "7784646c30c470dff54182d7586b6c735efbcd0b64c902df26b807be0a55dbbf",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "A",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (4).png",
+      "source_sha256": "1fc5bb7a2138959d386e669367054e52d5978a5b3e4a7d9e5917b2fbf76bdb8c",
+      "source_grid": {
+        "column": 2,
+        "row": 2,
+        "index": 8
+      },
+      "source_region": [
+        836,
+        836,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        6,
+        0,
+        395,
+        398
+      ],
+      "resized_content_size": [
+        117,
+        118
+      ],
+      "final_visible_bbox": [
+        5,
+        5,
+        117,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [
+          "top"
+        ],
+        "flagged": true
+      }
+    },
+    {
+      "skill_id": "warrior.basic_swordsmanship",
+      "display_name": "基本剑术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_basic_swordsmanship.png",
+      "sha256": "7c24eacc41177166a4f39f466ffe681baa01108c511f09cbda25e2f3db90616c",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "B",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (1).png",
+      "source_sha256": "80547a832a8ee3fd3923caff13241ac3ad56822f58c0807ddbb027e160380195",
+      "source_grid": {
+        "column": 0,
+        "row": 0,
+        "index": 0
+      },
+      "source_region": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        20,
+        8,
+        464,
+        498
+      ],
+      "resized_content_size": [
+        110,
+        118
+      ],
+      "final_visible_bbox": [
+        9,
+        5,
+        110,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "display_name": "攻杀剑术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_slaying_swordsmanship.png",
+      "sha256": "e6f7e4bc9601e5099fc987204aaa329a3e99dbd7e12438a5749c1199818ac9ad",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "B",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (1).png",
+      "source_sha256": "80547a832a8ee3fd3923caff13241ac3ad56822f58c0807ddbb027e160380195",
+      "source_grid": {
+        "column": 1,
+        "row": 0,
+        "index": 1
+      },
+      "source_region": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        28,
+        14,
+        464,
+        477
+      ],
+      "resized_content_size": [
+        115,
+        118
+      ],
+      "final_visible_bbox": [
+        6,
+        5,
+        115,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "warrior.thrusting",
+      "display_name": "刺杀剑术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_thrusting.png",
+      "sha256": "658c4b690cd175a9c3de297d6813fcc8aa696dae10b57b49ea6fc6550d0596ef",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "B",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (1).png",
+      "source_sha256": "80547a832a8ee3fd3923caff13241ac3ad56822f58c0807ddbb027e160380195",
+      "source_grid": {
+        "column": 2,
+        "row": 0,
+        "index": 2
+      },
+      "source_region": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        29,
+        29,
+        464,
+        483
+      ],
+      "resized_content_size": [
+        113,
+        118
+      ],
+      "final_visible_bbox": [
+        7,
+        5,
+        113,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [
+          "bottom"
+        ],
+        "flagged": true
+      }
+    },
+    {
+      "skill_id": "warrior.half_moon",
+      "display_name": "半月弯刀",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_half_moon.png",
+      "sha256": "42ce2173d138842d60919afcf1be95892de238a0a6d3d9b58c47d24c1a274277",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "B",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (1).png",
+      "source_sha256": "80547a832a8ee3fd3923caff13241ac3ad56822f58c0807ddbb027e160380195",
+      "source_grid": {
+        "column": 0,
+        "row": 1,
+        "index": 3
+      },
+      "source_region": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        13,
+        17,
+        480,
+        475
+      ],
+      "resized_content_size": [
+        118,
+        117
+      ],
+      "final_visible_bbox": [
+        5,
+        5,
+        118,
+        117
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "warrior.wild_rush",
+      "display_name": "野蛮冲撞",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_wild_rush.png",
+      "sha256": "94760c2a3c22713a395282d1a2190cf3265e32c5a2cb475b2d97b4351b060239",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "B",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (1).png",
+      "source_sha256": "80547a832a8ee3fd3923caff13241ac3ad56822f58c0807ddbb027e160380195",
+      "source_grid": {
+        "column": 1,
+        "row": 1,
+        "index": 4
+      },
+      "source_region": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        17,
+        8,
+        477,
+        481
+      ],
+      "resized_content_size": [
+        117,
+        118
+      ],
+      "final_visible_bbox": [
+        5,
+        5,
+        117,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "warrior.fire_sword",
+      "display_name": "烈火剑法",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_fire_sword.png",
+      "sha256": "ba4eb4ddffd1aca4603490a1b1b4243e426731a077fd6aad69a151a728cda585",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "B",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (1).png",
+      "source_sha256": "80547a832a8ee3fd3923caff13241ac3ad56822f58c0807ddbb027e160380195",
+      "source_grid": {
+        "column": 2,
+        "row": 1,
+        "index": 5
+      },
+      "source_region": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        21,
+        0,
+        478,
+        497
+      ],
+      "resized_content_size": [
+        113,
+        118
+      ],
+      "final_visible_bbox": [
+        7,
+        5,
+        113,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [
+          "top"
+        ],
+        "flagged": true
+      }
+    },
+    {
+      "skill_id": "wizard.fireball",
+      "display_name": "火球术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fireball.png",
+      "sha256": "842e55410dd64f4b66e77ad1873ede99f30c7b7b2c49b6fcfde02c5b9a9cf994",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 0,
+        "row": 0,
+        "index": 0
+      },
+      "source_region": [
+        0,
+        0,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        31,
+        31,
+        383,
+        357
+      ],
+      "resized_content_size": [
+        118,
+        110
+      ],
+      "final_visible_bbox": [
+        5,
+        9,
+        118,
+        110
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.repulsion_ring",
+      "display_name": "抗拒火环",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_repulsion_ring.png",
+      "sha256": "40d0ab4cb0b043459e46ee2be41e2bfc35aae52d71a211e964ab7c1656ba1037",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 1,
+        "row": 0,
+        "index": 1
+      },
+      "source_region": [
+        418,
+        0,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        12,
+        15,
+        392,
+        385
+      ],
+      "resized_content_size": [
+        118,
+        116
+      ],
+      "final_visible_bbox": [
+        5,
+        6,
+        118,
+        116
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.temptation_light",
+      "display_name": "诱惑之光",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_temptation_light.png",
+      "sha256": "26699f9f834e0cd462f1ad5e292fc366182d005aa35d1c399820995ff5fd72ee",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 2,
+        "row": 0,
+        "index": 2
+      },
+      "source_region": [
+        836,
+        0,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        4,
+        8,
+        402,
+        396
+      ],
+      "resized_content_size": [
+        118,
+        116
+      ],
+      "final_visible_bbox": [
+        5,
+        6,
+        118,
+        116
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.hellfire",
+      "display_name": "地狱火",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hellfire.png",
+      "sha256": "159c0cea7ea1a8f2caa77bbdcd58f6af5197021f1d51b9b7efcdc1fe17c8cfcc",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 0,
+        "row": 1,
+        "index": 3
+      },
+      "source_region": [
+        0,
+        418,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        10,
+        3,
+        401,
+        404
+      ],
+      "resized_content_size": [
+        117,
+        118
+      ],
+      "final_visible_bbox": [
+        5,
+        5,
+        117,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.lightning",
+      "display_name": "雷电术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_lightning.png",
+      "sha256": "0c8baeafaabd208c2360e4873a415c874f990ace0f65ebd2bdd2696f12314927",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 1,
+        "row": 1,
+        "index": 4
+      },
+      "source_region": [
+        418,
+        418,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        23,
+        1,
+        365,
+        405
+      ],
+      "resized_content_size": [
+        106,
+        118
+      ],
+      "final_visible_bbox": [
+        11,
+        5,
+        106,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.teleport",
+      "display_name": "瞬息移动",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_teleport.png",
+      "sha256": "82b5cdb3f62c52f159c37b838a8e42eb491d252a8ac1b071130bc64b346fbba3",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 2,
+        "row": 1,
+        "index": 5
+      },
+      "source_region": [
+        836,
+        418,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        18,
+        13,
+        387,
+        384
+      ],
+      "resized_content_size": [
+        118,
+        117
+      ],
+      "final_visible_bbox": [
+        6,
+        5,
+        117,
+        117
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.great_fireball",
+      "display_name": "大火球",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_great_fireball.png",
+      "sha256": "890b5fd42a954994c39f58abf1422bdb6021731fd4a43e83d70d541790efac5e",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 0,
+        "row": 2,
+        "index": 6
+      },
+      "source_region": [
+        0,
+        836,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        11,
+        5,
+        395,
+        386
+      ],
+      "resized_content_size": [
+        118,
+        115
+      ],
+      "final_visible_bbox": [
+        5,
+        6,
+        118,
+        115
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.exploding_flame",
+      "display_name": "爆裂火焰",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_exploding_flame.png",
+      "sha256": "0a12bf2714d162c7d9785a63d6d269f8f6adda5a52c88e0a08a9cc96085782cc",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 1,
+        "row": 2,
+        "index": 7
+      },
+      "source_region": [
+        418,
+        836,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        13,
+        3,
+        396,
+        395
+      ],
+      "resized_content_size": [
+        118,
+        118
+      ],
+      "final_visible_bbox": [
+        5,
+        5,
+        118,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.fire_wall",
+      "display_name": "火墙",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fire_wall.png",
+      "sha256": "08a088d56b798cf2761c09c220059381bc90397c02bacb8f8191fa29c865047a",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "C",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_13 (2).png",
+      "source_sha256": "c22e69acf884a24396089ee5f08c4b1f7c6030891027a25af2abddf484c17e49",
+      "source_grid": {
+        "column": 2,
+        "row": 2,
+        "index": 8
+      },
+      "source_region": [
+        836,
+        836,
+        418,
+        418
+      ],
+      "source_cell_size": [
+        418,
+        418
+      ],
+      "source_visible_bbox": [
+        5,
+        4,
+        397,
+        395
+      ],
+      "resized_content_size": [
+        118,
+        117
+      ],
+      "final_visible_bbox": [
+        5,
+        5,
+        118,
+        117
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.revelation",
+      "display_name": "心灵启示",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_revelation.png",
+      "sha256": "9cfdeda77b8fd129a1680d65f8862da0c6e5497ae854945cfae9abd02d98d6d3",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "D",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (5).png",
+      "source_sha256": "bb6ecbaa9344c90fec323290d94205ede5d61cfa32a494403e32f4a7a5f8e275",
+      "source_grid": {
+        "column": 0,
+        "row": 0,
+        "index": 0
+      },
+      "source_region": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "source_cell_size": [
+        627,
+        627
+      ],
+      "source_visible_bbox": [
+        17,
+        13,
+        594,
+        600
+      ],
+      "resized_content_size": [
+        117,
+        118
+      ],
+      "final_visible_bbox": [
+        5,
+        5,
+        117,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.entrapment",
+      "display_name": "困魔咒",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_entrapment.png",
+      "sha256": "d2a62e08fc6c3871b22ef3c3a5069a1824534f3ac198275f811c2f3d93bb7a1d",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "D",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (5).png",
+      "source_sha256": "bb6ecbaa9344c90fec323290d94205ede5d61cfa32a494403e32f4a7a5f8e275",
+      "source_grid": {
+        "column": 1,
+        "row": 0,
+        "index": 1
+      },
+      "source_region": [
+        627,
+        0,
+        627,
+        627
+      ],
+      "source_cell_size": [
+        627,
+        627
+      ],
+      "source_visible_bbox": [
+        28,
+        12,
+        577,
+        601
+      ],
+      "resized_content_size": [
+        113,
+        118
+      ],
+      "final_visible_bbox": [
+        7,
+        5,
+        113,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "taoist.mass_healing",
+      "display_name": "群体治疗术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_healing.png",
+      "sha256": "4686fbda9e1bf164d6153eb53ac3fcc9c9bdcbfd87409b08b1433bcdfbb0b539",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "D",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (5).png",
+      "source_sha256": "bb6ecbaa9344c90fec323290d94205ede5d61cfa32a494403e32f4a7a5f8e275",
+      "source_grid": {
+        "column": 0,
+        "row": 1,
+        "index": 2
+      },
+      "source_region": [
+        0,
+        627,
+        627,
+        627
+      ],
+      "source_cell_size": [
+        627,
+        627
+      ],
+      "source_visible_bbox": [
+        16,
+        0,
+        597,
+        612
+      ],
+      "resized_content_size": [
+        115,
+        118
+      ],
+      "final_visible_bbox": [
+        6,
+        5,
+        115,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [
+          "top"
+        ],
+        "flagged": true
+      }
+    },
+    {
+      "skill_id": "taoist.summon_divine_beast",
+      "display_name": "召唤神兽",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_divine_beast.png",
+      "sha256": "029d70f67404614aa18f1a14c0e0b5f96701a78f47d28c9fe93a47c2fbac83ed",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "D",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_15 (5).png",
+      "source_sha256": "bb6ecbaa9344c90fec323290d94205ede5d61cfa32a494403e32f4a7a5f8e275",
+      "source_grid": {
+        "column": 1,
+        "row": 1,
+        "index": 3
+      },
+      "source_region": [
+        627,
+        627,
+        627,
+        627
+      ],
+      "source_cell_size": [
+        627,
+        627
+      ],
+      "source_visible_bbox": [
+        9,
+        11,
+        606,
+        592
+      ],
+      "resized_content_size": [
+        118,
+        115
+      ],
+      "final_visible_bbox": [
+        5,
+        6,
+        118,
+        115
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.laser",
+      "display_name": "疾光电影",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_laser.png",
+      "sha256": "b5127a1e45e4f247e53e8710f77e38254fa93467423b4fc31cd556072d76cffb",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "E",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_14 (3).png",
+      "source_sha256": "3f15f6ca6b3e5f2d722653aae23753d4ea7d352e1670f630a93ba3376f77cf0a",
+      "source_grid": {
+        "column": 0,
+        "row": 0,
+        "index": 0
+      },
+      "source_region": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        13,
+        20,
+        499,
+        471
+      ],
+      "resized_content_size": [
+        118,
+        111
+      ],
+      "final_visible_bbox": [
+        5,
+        8,
+        118,
+        111
+      ],
+      "edge_risk": {
+        "source_touches": [
+          "right"
+        ],
+        "flagged": true
+      }
+    },
+    {
+      "skill_id": "wizard.hell_lightning",
+      "display_name": "地狱雷光",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hell_lightning.png",
+      "sha256": "f7a1fdf3868fceb2371646e4854fd9353bc3f4f808e4eb088dcc7e7f7c6719ea",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "E",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_14 (3).png",
+      "source_sha256": "3f15f6ca6b3e5f2d722653aae23753d4ea7d352e1670f630a93ba3376f77cf0a",
+      "source_grid": {
+        "column": 1,
+        "row": 0,
+        "index": 1
+      },
+      "source_region": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        20,
+        7,
+        482,
+        494
+      ],
+      "resized_content_size": [
+        115,
+        118
+      ],
+      "final_visible_bbox": [
+        6,
+        5,
+        114,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.magic_shield",
+      "display_name": "魔法盾",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_magic_shield.png",
+      "sha256": "94239ed7dd215950dccd012fe016e0eaf77c03d170ca050b20af43ba7cbb59d2",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "E",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_14 (3).png",
+      "source_sha256": "3f15f6ca6b3e5f2d722653aae23753d4ea7d352e1670f630a93ba3376f77cf0a",
+      "source_grid": {
+        "column": 2,
+        "row": 0,
+        "index": 2
+      },
+      "source_region": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        26,
+        10,
+        467,
+        490
+      ],
+      "resized_content_size": [
+        112,
+        118
+      ],
+      "final_visible_bbox": [
+        8,
+        5,
+        112,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.holy_word",
+      "display_name": "圣言术",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_holy_word.png",
+      "sha256": "dc04d3d9b1d8b37ab14c0d15c41b879f4fd62898a831a46fcb1642059310e9dd",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "E",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_14 (3).png",
+      "source_sha256": "3f15f6ca6b3e5f2d722653aae23753d4ea7d352e1670f630a93ba3376f77cf0a",
+      "source_grid": {
+        "column": 0,
+        "row": 1,
+        "index": 3
+      },
+      "source_region": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        10,
+        11,
+        501,
+        480
+      ],
+      "resized_content_size": [
+        118,
+        113
+      ],
+      "final_visible_bbox": [
+        5,
+        7,
+        118,
+        113
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    },
+    {
+      "skill_id": "wizard.ice_storm",
+      "display_name": "冰咆哮",
+      "output": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_ice_storm.png",
+      "sha256": "35feadc7d6039b8b3256e638e89a624adb26a1ebb08edffd7606143a7412577b",
+      "width": 128,
+      "height": 128,
+      "has_alpha": true,
+      "source_sheet": "E",
+      "source_file": "ChatGPT Image 2026年9月4日 00_08_14 (3).png",
+      "source_sha256": "3f15f6ca6b3e5f2d722653aae23753d4ea7d352e1670f630a93ba3376f77cf0a",
+      "source_grid": {
+        "column": 1,
+        "row": 1,
+        "index": 4
+      },
+      "source_region": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "source_cell_size": [
+        512,
+        512
+      ],
+      "source_visible_bbox": [
+        22,
+        11,
+        481,
+        485
+      ],
+      "resized_content_size": [
+        117,
+        118
+      ],
+      "final_visible_bbox": [
+        5,
+        5,
+        117,
+        118
+      ],
+      "edge_risk": {
+        "source_touches": [],
+        "flagged": false
+      }
+    }
+  ]
+}

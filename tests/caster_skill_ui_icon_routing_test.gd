@@ -1,6 +1,10 @@
 extends Node
 
 const Catalog := preload("res://scripts/hud_skill_icon_catalog.gd")
+const EXPECTED_SKILL_COUNT := 33
+const GENERATED_ICON_ROOT := (
+	"res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/"
+)
 
 
 func _ready() -> void:
@@ -10,102 +14,83 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
-	_assert_warrior_catalog_is_locked()
-	var caster_ids := CasterSkillVisualRegistry.active_skill_ids()
-	assert(caster_ids.size() == 26, "法师/道士主资料主动技能图标覆盖必须为26项")
-	for skill_id: String in caster_ids:
-		_assert_caster_catalog_entry(skill_id)
-	_assert_passive_keeps_compatibility_fallback()
-
-	var hud := GameHUD.new()
-	add_child(hud)
-	await get_tree().process_frame
-	for skill_id: String in caster_ids:
-		_assert_hud_uses_caster_icon(hud, skill_id)
-	for skill_name: String in ["攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"]:
-		_assert_hud_keeps_warrior_icon(hud, skill_name)
-	for profession_id: String in ["wizard", "taoist"]:
-		await _assert_skill_panel_uses_caster_icons(profession_id)
-
-	print("CASTER_SKILL_UI_ICON_ROUTING_PASS: 26个法师/道士主动技能使用主资料动画选帧图标；战士4图标保持不变；被动精神力战法不伪造施法图标")
+	_assert_complete_native_icon_catalog()
+	await _assert_skill_panel_uses_generated_icons()
+	_assert_hud_uses_generated_icons()
+	print(
+		"SKILL_UI_ICON_ROUTING_PASS: 33/33技能使用独立128x128透明图标；"
+		+ "无施法帧或技能书缩略图回退"
+	)
 	get_tree().quit(0)
 
 
-func _assert_warrior_catalog_is_locked() -> void:
-	var expected := {
-		"攻杀剑术": "ui.hud.skill_icon.warrior.power_hit",
-		"刺杀剑术": "ui.hud.skill_icon.warrior.long_hit",
-		"半月弯刀": "ui.hud.skill_icon.warrior.wide_hit",
-		"烈火剑法": "ui.hud.skill_icon.warrior.fire_hit",
-	}
-	assert(Catalog.SKILL_TEXTURES.size() == 4, "战士HUD图标目录不得扩写或替换")
-	for skill_name: String in expected:
-		assert(Catalog.texture_for(skill_name) == Catalog.SKILL_TEXTURES[skill_name], "%s战士图标优先级发生回归" % skill_name)
-		assert(Catalog.source_id_for(skill_name) == expected[skill_name], "%s战士稳定图标ID发生回归" % skill_name)
-		assert(Catalog.source_path_for(skill_name).begins_with("res://assets/ui/gothic_hud/v2/runtime/skill_icons/"), "%s战士图标路径发生回归" % skill_name)
+func _assert_complete_native_icon_catalog() -> void:
+	var skill_ids := SkillDataLoader.skill_ids()
+	assert(skill_ids.size() == EXPECTED_SKILL_COUNT, "正式技能清单必须为33项")
+	assert(Catalog.SKILL_TEXTURES.size() == EXPECTED_SKILL_COUNT, "技能图标目录必须完整覆盖33项")
+	var seen_paths := {}
+	for skill_id: String in skill_ids:
+		var skill_name := SkillDataLoader.display_name(skill_id)
+		var texture := Catalog.texture_for(skill_name)
+		var source_id := Catalog.source_id_for(skill_name)
+		var source_path := Catalog.source_path_for(skill_name)
+		assert(texture != null, "%s缺少专用图标" % skill_id)
+		assert(texture.get_width() == 128 and texture.get_height() == 128, "%s图标不是128x128" % skill_id)
+		assert(not source_id.is_empty(), "%s缺少稳定图标ID" % skill_id)
+		assert(source_path.begins_with(GENERATED_ICON_ROOT), "%s未使用generated_v2专用图标" % skill_id)
+		assert(source_path.ends_with("%s.png" % skill_id.replace(".", "_")), "%s图标文件名未绑定稳定ID" % skill_id)
+		assert(not seen_paths.has(source_path), "%s与其他技能共用图标文件" % skill_id)
+		seen_paths[source_path] = skill_id
+		_assert_png_alpha_contract(skill_id, source_path)
 
 
-func _assert_caster_catalog_entry(skill_id: String) -> void:
-	var skill_name := ProfessionRules.skill_display_name(skill_id)
-	var profile := CasterSkillVisualRegistry.profile(skill_id)
-	var expected_path := "res://%s" % str(profile.get("icon_path", ""))
-	var icon := Catalog.texture_for(skill_name)
-	assert(not skill_name.is_empty() and icon != null, "%s未得到主资料动画选帧图标" % skill_id)
-	assert(Catalog.source_id_for(skill_name) == "ui.hud.skill_icon.caster.%s" % skill_id, "%s没有声明稳定caster HUD图标ID" % skill_id)
-	assert(Catalog.source_path_for(skill_name) == expected_path, "%s没有使用主资料图标路径" % skill_id)
-	assert(expected_path.contains("/assets/art/characters/") and expected_path.contains("/skill_icons/"), "%s错误回退为物品图标" % skill_id)
+func _assert_png_alpha_contract(skill_id: String, source_path: String) -> void:
+	var image := Image.load_from_file(ProjectSettings.globalize_path(source_path))
+	assert(not image.is_empty(), "%s图标PNG无法读取" % skill_id)
+	assert(image.get_width() == 128 and image.get_height() == 128, "%s源PNG不是128x128" % skill_id)
+	for corner: Vector2i in [Vector2i.ZERO, Vector2i(127, 0), Vector2i(0, 127), Vector2i(127, 127)]:
+		assert(image.get_pixelv(corner).a == 0.0, "%s图标四角必须透明" % skill_id)
+	var has_visible := false
+	var has_partial_alpha := false
+	for y in range(image.get_height()):
+		for x in range(image.get_width()):
+			var alpha := image.get_pixel(x, y).a
+			has_visible = has_visible or alpha > 0.0
+			has_partial_alpha = has_partial_alpha or (alpha > 0.0 and alpha < 1.0)
+	assert(has_visible, "%s图标没有可见像素" % skill_id)
+	assert(has_partial_alpha, "%s图标缺少抗锯齿透明边缘" % skill_id)
 
 
-func _assert_passive_keeps_compatibility_fallback() -> void:
-	var passive_name := ProfessionRules.skill_display_name("taoist.spiritual_warfare")
-	assert(CasterSkillVisualRegistry.profile(passive_name).get("status", "") == "no_runtime_visual")
-	assert(Catalog.texture_for(passive_name) == null, "精神力战法不得伪造主资料施法动画图标")
-	assert(Catalog.source_id_for(passive_name).is_empty() and Catalog.source_path_for(passive_name).is_empty(), "精神力战法不得标记为主资料施法图标")
+func _assert_skill_panel_uses_generated_icons() -> void:
+	for profession_id: String in ["warrior", "wizard", "taoist"]:
+		PlayerState.profession = ProfessionRules.profession_display_name(profession_id)
+		var panel := SkillPanel.new()
+		add_child(panel)
+		await get_tree().process_frame
+		panel.open_for("技能导师")
+		for index in range(panel.skill_entries.size()):
+			var skill_name := str(panel.skill_entries[index].get("skillName", ""))
+			var skill_id := ProfessionRules.skill_id(skill_name)
+			panel._on_skill_selected(index)
+			assert(panel.skill_icon.texture == Catalog.texture_for(skill_name), "%s技能面板未使用专用图标" % skill_id)
+			assert(str(panel.skill_icon.get_meta("skill_icon_id", "")) == Catalog.source_id_for(skill_name), "%s技能面板图标ID错误" % skill_id)
+			assert(str(panel.skill_icon.get_meta("skill_icon_path", "")) == Catalog.source_path_for(skill_name), "%s技能面板图标路径错误" % skill_id)
+		panel.queue_free()
+		await get_tree().process_frame
 
 
-func _assert_hud_uses_caster_icon(hud: GameHUD, skill_id: String) -> void:
-	var skill_name := ProfessionRules.skill_display_name(skill_id)
-	var expected_id := Catalog.source_id_for(skill_name)
-	var expected_path := Catalog.source_path_for(skill_name)
-	PlayerState.quick_slots = [skill_name, "", "", ""]
-	hud.set_skill_button_assignments({
-		"attack": [skill_name],
-		"attack_ring": [skill_name, "", "", "", "", ""],
-	})
-	hud.update_quick_slots()
-	for icon: TextureRect in [hud.attack_slot_icon, hud.attack_ring_skill_icons[0]]:
-		assert(icon.texture != null and icon.visible, "%s在HUD快捷栏或攻击环回退为空/物品图标" % skill_id)
-		assert(str(icon.get_meta("skill_icon_id", "")) == expected_id, "%s HUD图标ID错误" % skill_id)
-		assert(str(icon.get_meta("skill_icon_path", "")) == expected_path, "%s HUD没有使用主资料图标路径" % skill_id)
-
-
-func _assert_hud_keeps_warrior_icon(hud: GameHUD, skill_name: String) -> void:
-	PlayerState.quick_slots = [skill_name, "", "", ""]
-	hud.set_skill_button_assignments({
-		"attack": [skill_name],
-		"attack_ring": [skill_name, "", "", "", "", ""],
-	})
-	hud.update_quick_slots()
-	for icon: TextureRect in [hud.attack_slot_icon, hud.attack_ring_skill_icons[0]]:
-		assert(icon.texture == Catalog.SKILL_TEXTURES[skill_name], "%s HUD战士图标被caster接线覆盖" % skill_name)
-		assert(str(icon.get_meta("skill_icon_id", "")) == Catalog.source_id_for(skill_name), "%s HUD战士图标ID发生回归" % skill_name)
-
-
-func _assert_skill_panel_uses_caster_icons(profession_id: String) -> void:
-	PlayerState.profession = ProfessionRules.profession_display_name(profession_id)
-	var panel := SkillPanel.new()
-	add_child(panel)
-	await get_tree().process_frame
-	panel.open_for("技能导师")
-	for index in range(panel.skill_entries.size()):
-		var skill_name := str(panel.skill_entries[index].get("skillName", ""))
-		var skill_id := ProfessionRules.skill_id(skill_name)
-		panel._on_skill_selected(index)
-		if skill_id == "taoist.spiritual_warfare":
-			assert(str(panel.skill_icon.get_meta("skill_icon_id", "")).is_empty(), "精神力战法详情不得伪造施法图标来源")
-			continue
-		assert(skill_id in CasterSkillVisualRegistry.active_skill_ids(), "%s不应离开法师/道士主动技能主资料范围" % skill_name)
-		assert(panel.skill_icon.texture != null, "%s技能面板回退为物品图标/空图标" % skill_id)
-		assert(str(panel.skill_icon.get_meta("skill_icon_id", "")) == Catalog.source_id_for(skill_name), "%s技能面板没有使用caster图标ID" % skill_id)
-		assert(str(panel.skill_icon.get_meta("skill_icon_path", "")) == Catalog.source_path_for(skill_name), "%s技能面板没有使用主资料图标路径" % skill_id)
-	panel.queue_free()
+func _assert_hud_uses_generated_icons() -> void:
+	var hud := GameHUD.new()
+	add_child(hud)
+	for skill_name: String in ["烈火剑法", "雷电术", "灵魂火符"]:
+		PlayerState.quick_slots = [skill_name, "", "", ""]
+		hud.set_skill_button_assignments({
+			"attack": [skill_name],
+			"attack_ring": [skill_name, "", "", "", "", ""],
+		})
+		hud.update_quick_slots()
+		for icon: TextureRect in [hud.attack_slot_icon, hud.attack_ring_skill_icons[0]]:
+			assert(icon.texture == Catalog.texture_for(skill_name), "%s HUD未使用专用图标" % skill_name)
+			assert(str(icon.get_meta("skill_icon_id", "")) == Catalog.source_id_for(skill_name), "%s HUD图标ID错误" % skill_name)
+			assert(str(icon.get_meta("skill_icon_path", "")) == Catalog.source_path_for(skill_name), "%s HUD图标路径错误" % skill_name)
+	hud.queue_free()
