@@ -181,7 +181,7 @@ func _run() -> void:
 	assert(is_equal_approx(float(level_50_restore.get("recovery_per_second", 0.0)), 50.0), "药水每秒恢复量计算错误")
 	assert(is_equal_approx(float(level_1_restore.get("duration_seconds", 0.0)), 2.95) and is_equal_approx(float(level_50_restore.get("duration_seconds", 0.0)), 0.6), "药水首次立即跳与后续持续时间计算错误")
 	assert(str(potion_summary.get("effect_type", "")) == "delayed_restore" and int(potion_summary.get("tick_amount", 0)) > 0, "正式药水被错误投影为即时恢复")
-	var bich_content := MapEditorRuntimeBridge.game_content_for_map(4)
+	var bich_content := MapEditorRuntimeBridge.game_content()
 	var pharmacist_rows: Array = (bich_content.get("npcs", []) as Array).filter(
 		func(entry: Dictionary) -> bool:
 			return str(entry.get("npc_id", "")) == "npc.expansion.bich_pharmacist"
