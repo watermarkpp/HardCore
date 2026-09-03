@@ -142,17 +142,19 @@ const SKILL_TIMING_OVERRIDES := {
 # 客户端则将 SM_STRUCK 排在当前动作之后，并以三帧表现受击。用户明确要求
 # 小额擦伤不能触发硬反应，因此下列阈值是 HardCore 的数据化平衡策略。
 const COMBAT_REACTION_POLICY := {
-	"policy_id": "hardcore_player_hit_reaction_v2",
+	"policy_id": "hardcore_player_hit_reaction_v3",
 	"origin": "hardcore_custom_balance_not_original_176",
 	"max_hp_ratio": 0.02,
 	"minimum_actual_damage": 3,
 	"comparison": "actual_damage_gte_threshold",
 	"server_action_lock_seconds": 0.10,
-	"reaction_animation_seconds": 0.24,
 	"reaction_frame_count": 3,
+	"reaction_frame_base_ms": 140,
+	"reaction_frame_level_step_ms": 2,
+	"reaction_frame_floor_ms": 100,
 	"reaction_queue_policy": "after_current_action",
 	"balance_basis": "Bich baseline: scarecrow 1-2; rake/hook cats 2-4; level-1 warrior HP 120",
-	"reaction_basis": "mobile fixed 3x80ms, using the floor of modified-1.5 client max(80, 200-level*5) per-frame timing",
+	"reaction_basis": "HardCore tuned 3-frame curve: frame_ms=max(100,140-level*2), preserving level scaling within a 300-414ms total range",
 	"evidence": [
 		{"confidence": "B", "scope": "modified_1.5_2002_not_verified_1.76", "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas:5468-5521,25225-25243", "finding": "nPower>0 sends SM_STRUCK; CheckActionStatus uses configured StruckTime"},
 		{"confidence": "B", "scope": "modified_1.5_2002_not_verified_1.76", "path": "dev_art_sources/reference/original_gameofmir/Client/Actor.pas:75-90,1407-1414,1536-1546,1617-1634", "finding": "three struck frames; frame_ms=max(80,200-level*5); SM_STRUCK waits for current action to finish"},
@@ -383,9 +385,30 @@ static func player_struck_action_lock_seconds() -> float:
 	return maxf(0.0, float(policy.get("server_action_lock_seconds", COMBAT_REACTION_POLICY.server_action_lock_seconds)))
 
 
-static func player_struck_reaction_seconds() -> float:
+static func player_struck_reaction_frame_milliseconds(character_level: int) -> int:
 	var policy: Dictionary = _data().get("combatReactionPolicy", COMBAT_REACTION_POLICY)
-	return maxf(0.0, float(policy.get("reaction_animation_seconds", COMBAT_REACTION_POLICY.reaction_animation_seconds)))
+	var frame_base_ms := maxi(1, int(policy.get(
+		"reaction_frame_base_ms",
+		COMBAT_REACTION_POLICY.reaction_frame_base_ms
+	)))
+	var level_step_ms := maxi(0, int(policy.get(
+		"reaction_frame_level_step_ms",
+		COMBAT_REACTION_POLICY.reaction_frame_level_step_ms
+	)))
+	var frame_floor_ms := maxi(1, int(policy.get(
+		"reaction_frame_floor_ms",
+		COMBAT_REACTION_POLICY.reaction_frame_floor_ms
+	)))
+	return maxi(frame_floor_ms, frame_base_ms - maxi(1, character_level) * level_step_ms)
+
+
+static func player_struck_reaction_seconds(character_level: int) -> float:
+	var policy: Dictionary = _data().get("combatReactionPolicy", COMBAT_REACTION_POLICY)
+	var frame_count := maxi(1, int(policy.get(
+		"reaction_frame_count",
+		COMBAT_REACTION_POLICY.reaction_frame_count
+	)))
+	return float(player_struck_reaction_frame_milliseconds(character_level) * frame_count) / 1000.0
 
 
 static func missing_runtime_skills(skill_rows: Array) -> PackedStringArray:

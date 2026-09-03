@@ -1017,7 +1017,7 @@ func _finish_combat_action(action_id: int) -> void:
 
 
 func _start_struck_reaction() -> void:
-	var duration := ProfessionRules.player_struck_reaction_seconds()
+	var duration := ProfessionRules.player_struck_reaction_seconds(PlayerState.level)
 	_struck_reaction_lock_remaining = maxf(_struck_reaction_lock_remaining, duration)
 	reset_locomotion()
 	visual.play_hit(duration)
