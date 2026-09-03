@@ -147,7 +147,7 @@ func _run() -> void:
 			and "confidence" not in panel.detail_label.text,
 			"正式武器详情没有完整解析玩家可读属性",
 		)
-	panel.open_for("测试商店", STOCK)
+	panel.open_for("测试商店", STOCK, GameData.merchant_context("general"))
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	PlayerState.inventory.insert(1, {})
 	panel._set_trade_mode("sell")
@@ -205,8 +205,45 @@ func _run() -> void:
 	assert(panel.goods_buttons.size() == PlayerState.inventory_occupied_count(), "出售成功同步报价回调绑定的新卡被再次清空")
 	panel.set_sell_quotes(quotes)
 	var sell_card_creation_count := panel._goods_card_creation_count
+	var sell_refresh_before: Dictionary = panel.debug_operation_counters()
 	panel.set_sell_quotes(quotes)
+	var sell_refresh_after: Dictionary = panel.debug_operation_counters()
 	assert(panel._goods_card_creation_count == sell_card_creation_count, "出售报价刷新重复创建商品卡")
+	assert(
+		int(sell_refresh_after.get("sell_structure_bind_count", 0))
+			== int(sell_refresh_before.get("sell_structure_bind_count", 0)),
+		"相同背包结构的报价刷新不应重新绑定出售卡片结构",
+	)
+	assert(
+		int(sell_refresh_after.get("sell_quote_patch_count", 0))
+			== int(sell_refresh_before.get("sell_quote_patch_count", 0)) + 1,
+		"相同背包结构的报价刷新必须走局部报价更新",
+	)
+	assert(
+		int(sell_refresh_after.get("goods_card_visibility_change_count", 0))
+			== int(sell_refresh_before.get("goods_card_visibility_change_count", 0))
+			and int(sell_refresh_after.get("goods_card_content_update_count", 0))
+			== int(sell_refresh_before.get("goods_card_content_update_count", 0))
+			and int(sell_refresh_after.get("sell_catalog_lookup_count", 0))
+			== int(sell_refresh_before.get("sell_catalog_lookup_count", 0))
+			and int(sell_refresh_after.get("sell_texture_lookup_count", 0))
+			== int(sell_refresh_before.get("sell_texture_lookup_count", 0)),
+		"报价局部更新不应触发布局、内容绑定或 GameData/纹理查表",
+	)
+	var stable_sell_card_count := panel.goods_buttons.size()
+	var visibility_before_structure_change: Dictionary = panel.debug_operation_counters()
+	PlayerState.inventory.append({"name": "太阳水", "count": 1, "instance_id": "shop-structure-probe"})
+	panel.set_sell_quotes(quotes)
+	assert(panel.goods_buttons.size() == stable_sell_card_count + 1, "出售背包结构增加后没有只追加一张活动卡")
+	PlayerState.inventory.pop_back()
+	panel.set_sell_quotes(quotes)
+	var visibility_after_structure_change: Dictionary = panel.debug_operation_counters()
+	assert(panel.goods_buttons.size() == stable_sell_card_count, "出售背包结构恢复后活动卡数量错误")
+	assert(
+		int(visibility_after_structure_change.get("goods_card_visibility_change_count", 0))
+			== int(visibility_before_structure_change.get("goods_card_visibility_change_count", 0)) + 2,
+		"出售卡片池结构增减没有只变更新增/移除卡片的可见性",
+	)
 	for card: Button in panel.goods_buttons:
 		assert(not _record_at(int(card.get_meta("inventory_index", -1))).is_empty(), "出售卡错误映射到背包空洞")
 	for card: Button in panel.goods_buttons:
