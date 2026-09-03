@@ -192,6 +192,13 @@ var _last_death_settlement_profile: Dictionary = {}
 var _loot_inventory_catalog_cache: Dictionary = {}
 var _item_instance_serial := 0
 var _test_transaction_counters: Dictionary = {"commit_attempts": 0, "profile_signals": 0, "inventory_signals": 0, "quest_signals": 0}
+var _shop_quote_debug: Dictionary = {
+	"merchant_context_lookups": 0,
+	"catalog_lookups": 0,
+	"price_record_lookups": 0,
+	"base_price_lookups": 0,
+	"pricing_quote_calls": 0,
+}
 var _consumed_shop_buy_quote_ids: Dictionary = {}
 var _shop_buy_quote_serial := 0
 var _shop_pricing_session_nonce := ""
@@ -809,11 +816,12 @@ func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
 
 func shop_sell_quotes(items: Array) -> Dictionary:
 	var quotes: Dictionary = {}
+	var lookup_cache := _new_shop_quote_lookup_cache()
 	for raw_item: Variant in items:
 		if not raw_item is Dictionary:
 			continue
 		var request: Dictionary = raw_item
-		var quote := _shop_sell_quote(request)
+		var quote := _shop_sell_quote(request, lookup_cache)
 		var quote_key := str(request.get("quote_key", ""))
 		if quote_key.is_empty():
 			quote_key = str(quote.get("quote_key", ""))
@@ -988,6 +996,7 @@ func sell_inventory_items(requests: Array) -> Dictionary:
 	var working_inventory := inventory.duplicate(true)
 	var total_gold := 0
 	var used_quotes: Array[String] = []
+	var lookup_cache := _new_shop_quote_lookup_cache()
 	for raw_request: Variant in ordered:
 		if not raw_request is Dictionary:
 			result["message"] = "出售请求无效。"
@@ -996,7 +1005,7 @@ func sell_inventory_items(requests: Array) -> Dictionary:
 		if str(request.get("merchant_id", "")) != merchant_id:
 			result["message"] = "不能跨商人批量出售。"
 			return result
-		var quote := _shop_sell_quote(request)
+		var quote := _shop_sell_quote(request, lookup_cache)
 		var quote_id := str(request.get("quote_id", ""))
 		if not bool(quote.get("sellable", false)) or quote_id.is_empty() or quote_id != str(quote.get("quote_id", "")) or _consumed_shop_sell_quote_ids.has(quote_id) or quote_id in used_quotes:
 			result["message"] = "出售报价已失效，请重新选择物品。"
@@ -1055,7 +1064,93 @@ func test_transaction_debug_snapshot() -> Dictionary:
 	return _test_transaction_counters.duplicate(true)
 
 
-func _shop_sell_quote(request: Dictionary) -> Dictionary:
+func test_shop_quote_debug_reset() -> void:
+	_shop_quote_debug = {
+		"merchant_context_lookups": 0,
+		"catalog_lookups": 0,
+		"price_record_lookups": 0,
+		"base_price_lookups": 0,
+		"pricing_quote_calls": 0,
+	}
+
+
+func test_shop_quote_debug_snapshot() -> Dictionary:
+	return _shop_quote_debug.duplicate(true)
+
+
+func _new_shop_quote_lookup_cache() -> Dictionary:
+	return {
+		"merchant_by_stock": {},
+		"merchant_by_id": {},
+		"catalog_by_name": {},
+		"price_by_name": {},
+		"base_price_by_name": {},
+	}
+
+
+func _shop_sell_merchant_context(
+	request: Dictionary, lookup_cache: Dictionary
+) -> Dictionary:
+	var merchant_stock_key := str(request.get("merchant_stock_key", ""))
+	var merchant_id := str(request.get("merchant_id", ""))
+	var merchant_cache: Dictionary = lookup_cache.get("merchant_by_stock", {})
+	if not merchant_stock_key.is_empty():
+		if merchant_cache.has(merchant_stock_key):
+			return (merchant_cache[merchant_stock_key] as Dictionary).duplicate(true)
+		var by_stock := GameData.merchant_context(merchant_stock_key)
+		_shop_quote_debug["merchant_context_lookups"] = int(_shop_quote_debug.get("merchant_context_lookups", 0)) + 1
+		merchant_cache[merchant_stock_key] = by_stock.duplicate(true)
+		lookup_cache["merchant_by_stock"] = merchant_cache
+		return by_stock
+	var id_cache: Dictionary = lookup_cache.get("merchant_by_id", {})
+	if id_cache.has(merchant_id):
+		return (id_cache[merchant_id] as Dictionary).duplicate(true)
+	var by_id := GameData.merchant_context_by_id(merchant_id)
+	_shop_quote_debug["merchant_context_lookups"] = int(_shop_quote_debug.get("merchant_context_lookups", 0)) + 1
+	id_cache[merchant_id] = by_id.duplicate(true)
+	lookup_cache["merchant_by_id"] = id_cache
+	return by_id
+
+
+func _shop_sell_catalog(item_name: String, lookup_cache: Dictionary) -> Dictionary:
+	var cache: Dictionary = lookup_cache.get("catalog_by_name", {})
+	if cache.has(item_name):
+		return (cache[item_name] as Dictionary).duplicate(true)
+	var catalog := GameData.get_item_record(item_name)
+	_shop_quote_debug["catalog_lookups"] = int(_shop_quote_debug.get("catalog_lookups", 0)) + 1
+	cache[item_name] = catalog.duplicate(true)
+	lookup_cache["catalog_by_name"] = cache
+	return catalog
+
+
+func _shop_sell_price_record(item_name: String, lookup_cache: Dictionary) -> Dictionary:
+	var cache: Dictionary = lookup_cache.get("price_by_name", {})
+	if cache.has(item_name):
+		return (cache[item_name] as Dictionary).duplicate(true)
+	var price_record := GameData.get_item_price_record(item_name)
+	_shop_quote_debug["price_record_lookups"] = int(_shop_quote_debug.get("price_record_lookups", 0)) + 1
+	cache[item_name] = price_record.duplicate(true)
+	lookup_cache["price_by_name"] = cache
+	return price_record
+
+
+func _shop_sell_base_price_cached(
+	item_name: String, catalog: Dictionary, lookup_cache: Dictionary
+) -> int:
+	var cache: Dictionary = lookup_cache.get("base_price_by_name", {})
+	if cache.has(item_name):
+		return int(cache[item_name])
+	var base_price := _shop_sell_base_price(item_name, catalog)
+	_shop_quote_debug["base_price_lookups"] = int(_shop_quote_debug.get("base_price_lookups", 0)) + 1
+	cache[item_name] = base_price
+	lookup_cache["base_price_by_name"] = cache
+	return base_price
+
+
+func _shop_sell_quote(request: Dictionary, lookup_cache := {}) -> Dictionary:
+	var cache: Dictionary = lookup_cache
+	if cache.is_empty():
+		cache = _new_shop_quote_lookup_cache()
 	var inventory_index := int(request.get("inventory_index", -1))
 	var requested_key := str(request.get("quote_key", ""))
 	var rejection := {
@@ -1078,9 +1173,9 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 	var record: Dictionary = raw_record
 	var merchant_id := str(request.get("merchant_id", ""))
 	var merchant_stock_key := str(request.get("merchant_stock_key", ""))
-	var merchant_context := GameData.merchant_context(merchant_stock_key) if not merchant_stock_key.is_empty() else {}
+	var merchant_context := _shop_sell_merchant_context(request, cache)
 	if merchant_context.is_empty():
-		merchant_context = GameData.merchant_context_by_id(merchant_id)
+		merchant_context = _shop_sell_merchant_context({"merchant_id": merchant_id}, cache)
 	var authoritative_merchant_id := str(merchant_context.get("merchant_id", ""))
 	if (
 		merchant_id.is_empty()
@@ -1103,11 +1198,12 @@ func _shop_sell_quote(request: Dictionary) -> Dictionary:
 		or str(request.get("instance_id", instance_id)) != instance_id
 	):
 		return rejection
-	var catalog := GameData.get_item_record(item_name)
-	var base_price := _shop_sell_base_price(item_name, catalog)
+	var catalog := _shop_sell_catalog(item_name, cache)
+	var base_price := _shop_sell_base_price_cached(item_name, catalog, cache)
 	var count := maxi(1, int(record.get("count", 1)))
+	_shop_quote_debug["pricing_quote_calls"] = int(_shop_quote_debug.get("pricing_quote_calls", 0)) + 1
 	var pricing_quote := PricingServiceScript.quote_sell(
-		GameData.get_item_price_record(item_name), catalog, record, 1, merchant_context
+		_shop_sell_price_record(item_name, cache), catalog, record, 1, merchant_context
 	)
 	if not bool(pricing_quote.get("valid", false)):
 		rejection["reason"] = str(pricing_quote.get("reason", "该物品不能出售。"))
@@ -1193,6 +1289,7 @@ func _shop_sell_result(success: bool, message: String, merchant_id := "") -> Dic
 
 func _current_shop_sell_quote_items(merchant_id := "") -> Array:
 	var items: Array = []
+	var merchant_stock_key := str(GameData.merchant_context_by_id(merchant_id).get("stock_key", ""))
 	for inventory_index in range(inventory.size()):
 		var raw_record: Variant = inventory[inventory_index]
 		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
@@ -1210,7 +1307,7 @@ func _current_shop_sell_quote_items(merchant_id := "") -> Array:
 			"item_name": str(record.get("name", "")),
 			"count": int(record.get("count", 1)),
 			"merchant_id": merchant_id,
-			"merchant_stock_key": str(GameData.merchant_context_by_id(merchant_id).get("stock_key", "")),
+			"merchant_stock_key": merchant_stock_key,
 		})
 	return items
 

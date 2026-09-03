@@ -162,6 +162,21 @@ func _run() -> void:
 	assert(not quote_batches.is_empty() and quote_batches[-1].size() == PlayerState.inventory_occupied_count(), "出售页没有跳过空洞并保持绝对背包索引报价")
 	assert(panel.goods_buttons.is_empty(), "出售页请求报价前不应提前构建物品卡片")
 	assert(panel.sell_quantity_button.disabled, "没有报价时出售按钮没有禁用")
+	PlayerState.test_shop_quote_debug_reset()
+	var measured_sell_quotes := PlayerState.shop_sell_quotes(quote_batches[-1])
+	var quote_debug: Dictionary = PlayerState.test_shop_quote_debug_snapshot()
+	var unique_sell_names := {}
+	for raw_sell_item: Variant in quote_batches[-1]:
+		if raw_sell_item is Dictionary:
+			unique_sell_names[str((raw_sell_item as Dictionary).get("item_name", ""))] = true
+	assert(not measured_sell_quotes.is_empty(), "局部报价缓存测量没有返回出售报价")
+	assert(int(quote_debug.get("merchant_context_lookups", 0)) == 1, "同一批次出售报价重复解析了商人上下文")
+	assert(
+		int(quote_debug.get("catalog_lookups", 0)) == unique_sell_names.size()
+		and int(quote_debug.get("price_record_lookups", 0)) == unique_sell_names.size()
+		and int(quote_debug.get("base_price_lookups", 0)) == unique_sell_names.size(),
+		"出售报价批次没有使用局部物品/价格缓存：%s names=%s" % [quote_debug, unique_sell_names.keys()],
+	)
 	var quotes := {}
 	for inventory_index in range(PlayerState.inventory.size()):
 		var record: Dictionary = PlayerState.inventory[inventory_index] if PlayerState.inventory[inventory_index] is Dictionary else {}
