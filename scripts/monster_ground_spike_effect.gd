@@ -7,16 +7,20 @@ extends Node2D
 
 const EFFECT_ID := "monster.fixed_area_ground_spike.v1"
 const SOURCE_TEXTURE_PATH := (
-	"res://assets/art/monsters/effects/fixed_area_ground_spike_rgba_v1.png"
+	"res://assets/art/monsters/effects/fixed_area_ground_spike_runtime_384x256_v1.png"
 )
 const FRAME_COLUMNS := 4
 const FRAME_ROWS := 2
 const FRAME_COUNT := FRAME_COLUMNS * FRAME_ROWS
-const FRAME_SIZE := Vector2i(384, 512)
+const SOURCE_FRAME_SIZE := Vector2i(384, 512)
+const IMPORTED_ATLAS_SIZE := Vector2i(384, 256)
+const IMPORTED_FRAME_SIZE := Vector2i(96, 128)
+const SOURCE_TO_IMPORTED_SCALE := 0.25
+const FRAME_SIZE := IMPORTED_FRAME_SIZE
 const FRAME_FPS := 12.0
 const FRAME_ANIMATION := &"fixed_area_ground_spike"
 const ACTOR_VISIBILITY_Z_INDEX := 0
-const DISPLAY_SCALE := 0.18
+const DISPLAY_SCALE := 1.0
 ## User-approved visual correction: the atlas contact was authored at the
 ## extreme bottom pixel, unlike ordinary actor sprites. Move the rendered
 ## effect one player-calf south without changing the approved target point.
@@ -173,7 +177,7 @@ func frame_anchor_offset_px(frame_index: int) -> Vector2:
 	return Vector2(
 		FRAME_ANCHOR_X_PX[resolved_frame],
 		FRAME_ANCHOR_Y_PX[resolved_frame],
-	) * DISPLAY_SCALE + Vector2(0.0, ANCHOR_SOUTH_NUDGE_PX)
+	) * SOURCE_TO_IMPORTED_SCALE + Vector2(0.0, ANCHOR_SOUTH_NUDGE_PX)
 
 
 func frame_count() -> int:
@@ -201,6 +205,9 @@ func visual_descriptor() -> Dictionary:
 		"frame_columns": FRAME_COLUMNS,
 		"frame_rows": FRAME_ROWS,
 		"frame_size": FRAME_SIZE,
+		"source_frame_size": SOURCE_FRAME_SIZE,
+		"imported_atlas_size": IMPORTED_ATLAS_SIZE,
+		"source_to_imported_scale": SOURCE_TO_IMPORTED_SCALE,
 		"frame_fps": FRAME_FPS,
 		"display_scale": DISPLAY_SCALE,
 		"anchor_south_nudge_px": ANCHOR_SOUTH_NUDGE_PX,

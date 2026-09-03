@@ -195,6 +195,7 @@ var charm_time := 0.0:
 var dormant := false
 var life_steal_ratio := 0.0
 var control_on_hit_seconds := 0.0
+var control_chance_denominator_base := 0
 var is_targeted := false
 var facing := Vector2.DOWN
 var movement_facing := Vector2.DOWN
@@ -422,6 +423,10 @@ func _apply_behavior_profile() -> void:
 	dormant = bool(behavior_profile.get("dormant", dormant))
 	var on_hit: Dictionary = behavior_profile.get("onHit", {})
 	control_on_hit_seconds = float(on_hit.get("controlSeconds", control_on_hit_seconds))
+	control_chance_denominator_base = maxi(
+		0,
+		int(on_hit.get("controlChanceDenominatorBase", control_chance_denominator_base)),
+	)
 
 
 func _apply_source_locked_special_delivery_override() -> void:
@@ -2636,19 +2641,51 @@ func _apply_attack_damage(
 	dealt_damage: int,
 	use_accuracy := true,
 	forced_roll := -1,
+	force_struck_reaction := false,
+	forced_control_roll := -1,
 ) -> void:
 	if use_accuracy and not _monster_physical_hit_succeeds(hit_target, forced_roll):
 		# A miss consumes the existing attack event/timer and damage roll but
 		# submits no damage or on-hit side effects.
 		return
-	hit_target.take_damage(dealt_damage)
+	if force_struck_reaction and hit_target is PlayerCharacter:
+		(hit_target as PlayerCharacter).take_damage(dealt_damage, true, {}, true)
+	else:
+		hit_target.take_damage(dealt_damage)
 	apply_life_steal(dealt_damage)
-	if control_on_hit_seconds > 0.0 and hit_target.has_method("apply_control"):
-		hit_target.apply_control(control_on_hit_seconds)
+	_apply_on_hit_control(hit_target, forced_control_roll)
 	var on_hit: Dictionary = behavior_profile.get("onHit", {})
 	var poison_damage_value := int(on_hit.get("poisonDamage", 0))
 	if poison_damage_value > 0 and hit_target.has_method("apply_poison"):
 		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
+
+
+func _apply_on_hit_control(hit_target: Node2D, forced_control_roll := -1) -> void:
+	if control_on_hit_seconds <= 0.0 or not hit_target.has_method("apply_control"):
+		return
+	var denominator := control_chance_denominator_base
+	if denominator > 0:
+		denominator += _target_anti_poison_for_control(hit_target)
+		var roll := (
+			clampi(forced_control_roll, 0, denominator - 1)
+			if forced_control_roll >= 0
+			else _rng.randi_range(0, denominator - 1)
+		)
+		if roll != 0:
+			return
+	hit_target.apply_control(control_on_hit_seconds)
+
+
+func _target_anti_poison_for_control(hit_target: Node2D) -> int:
+	if hit_target is PlayerCharacter:
+		# The original server reads the struck target's m_btAntiPoison here.
+		# HardCore does not yet project a player equipment anti-poison stat, so
+		# the missing-key default deliberately preserves the original base 0.
+		return maxi(0, int(PlayerState.computed_stats.get("anti_poison", 0)))
+	for property: Dictionary in hit_target.get_property_list():
+		if str(property.get("name", "")) == "anti_poison":
+			return maxi(0, int(hit_target.get("anti_poison")))
+	return 0
 
 
 func configure_runtime_map_projection(
@@ -3269,7 +3306,13 @@ func _settle_area_attack_release_records() -> void:
 			continue
 		# Fixed-area magic is a separate delivery path; preserve its existing
 		# damage semantics and do not apply physical accuracy to it.
-		_apply_attack_damage(victim, int(release_record.get("damage", 0)), false)
+		_apply_attack_damage(
+			victim,
+			int(release_record.get("damage", 0)),
+			false,
+			-1,
+			_uses_fixed_area_ground_spike_effect(),
+		)
 
 
 func _area_attack_release_target_is_valid(

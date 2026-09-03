@@ -121,7 +121,7 @@
         "obstaclePolicy": "none_no_los",
         "targetMode": "all_combat_targets",
         "scope": "same_map_visible_actors",
-        "status": {"statusChance": 0.25, "poisonWeight": 2, "controlWeight": 1, "poisonDamage": 4, "poisonSeconds": 8.0, "controlSeconds": 1.2},
+        "status": {"statusChance": 0.25, "poisonWeight": 2, "controlWeight": 1, "poisonDamage": 4, "poisonSeconds": 8.0, "controlSeconds": 5.0},
         "visualRule": "body-only; no independently proven WIL effect or warning circle"
       },
       "clientEvidence": {

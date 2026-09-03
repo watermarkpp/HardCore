@@ -601,14 +601,23 @@ func apply_confirmed_physical_hit_durability(damage: int, context := {}) -> Dict
 	)
 
 
-func take_damage(amount: int, causes_struck: bool = true, durability_context := {}) -> void:
+func take_damage(
+	amount: int,
+	causes_struck: bool = true,
+	durability_context := {},
+	force_struck_reaction := false,
+) -> void:
 	if _dead:
 		return
 	if amount <= 0:
 		return
 	var absorbed := (_rng.randi_range(defense_min, defense_max) if defense_max >= defense_min else defense_min) + defense_buff
 	_apply_resolved_damage(
-		maxi(1, amount - absorbed), causes_struck, "physical", durability_context
+		maxi(1, amount - absorbed),
+		causes_struck,
+		"physical",
+		durability_context,
+		force_struck_reaction,
 	)
 
 
@@ -699,7 +708,8 @@ func _apply_resolved_damage(
 	amount: int,
 	causes_struck: bool,
 	damage_type := "physical",
-	durability_context := {}
+	durability_context := {},
+	force_struck_reaction := false,
 ) -> void:
 	# Death is a single lifecycle transition.  Damage arriving while the death
 	# animation/UI selection/respawn transition is active must not repeat
@@ -757,7 +767,15 @@ func _apply_resolved_damage(
 			PlayerState.DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK,
 			event_context
 		)
-	if causes_struck and ProfessionRules.should_player_stagger(final_damage, max_hp) and current_hp > 0:
+	if (
+		causes_struck
+		and final_damage > 0
+		and current_hp > 0
+		and (
+			force_struck_reaction
+			or ProfessionRules.should_player_stagger(final_damage, max_hp)
+		)
+	):
 		_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
 		velocity = Vector2.ZERO
 		movement_input_active = false

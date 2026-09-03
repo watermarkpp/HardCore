@@ -19,6 +19,15 @@
       "evidence_command": "magick identify -format channels/opaque/fx:minima.a/fx:maxima.a"
     }
   },
+  "runtime_derivative": {
+    "distribution": "project.deterministic_image_resize",
+    "original_path": "assets/art/monsters/effects/fixed_area_ground_spike_runtime_384x256_v1.png",
+    "sha256": "0D8D0EED3B7460D0DDFF78106334110FF1BE42497FECE42C7849687D9701AD4A",
+    "hash_normalization": "raw_file",
+    "format": "PNG RGBA",
+    "dimensions_px": [384, 256],
+    "derivation": "ImageMagick Lanczos exact resize from the immutable 1536x1024 source to 384x256"
+  },
   "attachment_source": {
     "distribution": "HardCore Android debug APK",
     "apk_file_name": "HardCore-1.18.3-runtime-fix-9d6435bc-debug.apk",
@@ -40,8 +49,12 @@
     "frame_size_px": [384, 512],
     "playback": "once",
     "fps": 12.0,
-    "runtime_display_scale": 0.18,
+    "runtime_imported_atlas_size_px": [384, 256],
+    "runtime_imported_frame_size_px": [96, 128],
+    "source_to_imported_scale": 0.25,
+    "runtime_display_scale": 1.0,
     "runtime_anchor_south_nudge_px": 12.0,
-    "anchor_policy": "per_frame_ground_contact_xy plus one-player-calf south correction; approved player footpoint remains unchanged"
+    "anchor_policy": "source-space per-frame ground contact scaled by the deterministic import ratio, plus one-player-calf south correction; approved player footpoint remains unchanged",
+    "runtime_size_policy": "keep the original RGBA source immutable; load the tracked 384x256 mobile derivative and draw its 96x128 frames at 1:1 so fresh exports do not depend on ignored local import metadata"
   }
 }

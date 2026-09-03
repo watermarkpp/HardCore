@@ -35,8 +35,14 @@ func _run() -> void:
 	moth.setup(GameData.get_monster("楔蛾"), game.player, false)
 	moth.global_position = game.player.global_position
 	add_child(moth)
-	moth._physics_process(0.1)
-	assert(game.player.control_time > 0.0, "楔蛾麻痹效果未生效")
+	assert(
+		moth.control_on_hit_seconds == 5.0
+		and moth.control_chance_denominator_base == 20,
+		"楔蛾必须保留原版5秒、基础1/20麻痹规则",
+	)
+	game.player.control_time = 0.0
+	moth._apply_attack_damage(game.player, 1, false, -1, false, 0)
+	assert(game.player.control_time == 5.0, "楔蛾麻痹成功分支未生效")
 	moth.queue_free()
 	assert(RegionContent.MAPS.size() == 41, "手工地图总数应为41")
 	print("STONE_TOMB_PASS：石墓入口至七层、石墓阵、桃源之门、白野猪、尸王和楔蛾麻痹正常")

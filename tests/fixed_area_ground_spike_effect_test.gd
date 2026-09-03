@@ -109,6 +109,14 @@ func _run() -> void:
 		% [primary.current_hp, primary_hp_before, str(_attacker._area_attack_release_records)],
 	)
 	assert(second.current_hp < second_hp_before)
+	assert(
+		float(primary.struck_reaction_snapshot().get("server_action_lock_remaining", 0.0)) > 0.0,
+		"fixed-area ground spike must force the brief struck reaction below the global damage threshold",
+	)
+	assert(
+		primary.control_time <= 0.0,
+		"ground spike struck reaction must not become paralysis or a persistent movement control",
+	)
 	assert(out_of_range.current_hp == out_of_range.max_hp)
 	assert(dead.current_hp == 0)
 	assert(safe.current_hp == safe.max_hp)
@@ -176,17 +184,30 @@ func _run() -> void:
 		"ground-spike runtime must consume the export-safe imported Texture2D",
 	)
 	assert(not effect.has_method("take_damage"), "visual effect must not own damage")
-	assert(effect.source_texture_path().ends_with("fixed_area_ground_spike_rgba_v1.png"))
+	assert(
+		effect.source_texture_path().ends_with(
+			"fixed_area_ground_spike_runtime_384x256_v1.png"
+		)
+	)
 	assert(
 		is_equal_approx(
 			float(effect.visual_descriptor().get("display_scale", 0.0)),
-			0.18,
+			1.0,
 		),
-		"source-sized atlas must be scaled to a player-footpoint effect",
+		"mobile-sized imported atlas must render at 1:1",
+	)
+	assert(
+		effect._source_texture.get_size() == Vector2(384.0, 256.0),
+		"ground-spike import must produce the compact 384x256 runtime atlas",
+	)
+	assert(
+		effect.visual_descriptor().get("frame_size", Vector2i.ZERO)
+		== Vector2i(96, 128),
+		"compact atlas must expose exact 96x128 runtime frames",
 	)
 	assert(
 		effect.frame_anchor_offset_px(0).is_equal_approx(
-			Vector2(14.5, -146.0) * 0.18 + Vector2(0.0, 12.0)
+			Vector2(14.5, -146.0) * 0.25 + Vector2(0.0, 12.0)
 		),
 		"atlas anchor must receive the approved one-calf south correction",
 	)
