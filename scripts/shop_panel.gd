@@ -59,8 +59,6 @@ var _sell_quantity := 1
 var _selected_sell_indices: Dictionary = {}
 var _sell_quantities: Dictionary = {}
 var _pending_sell_request: Dictionary = {}
-var _batch_sell_queue: Array = []
-var _batch_sell_active := false
 var _inventory_refresh_pending := false
 var _inventory_refresh_execution_count := 0
 var _inventory_refresh_scheduled := false
@@ -782,22 +780,6 @@ func _reclamp_sell_quantities() -> void:
 func apply_sell_result(result: Dictionary) -> void:
 	var message := str(result.get("message", "出售请求已处理。"))
 	detail_label.text = "[color=#e8c277]%s[/color]" % message
-	if _batch_sell_active:
-		if result.get("quotes", null) is Dictionary:
-			_sell_quotes = result.get("quotes", {}).duplicate(true)
-		_refresh_gold()
-		if not bool(result.get("success", false)):
-			_batch_sell_queue.clear()
-			_batch_sell_active = false
-			_show_transaction_result_feedback(sell_quantity_button, false, "shop.sell")
-			_selected_sell_indices.clear()
-			_sell_quantities.clear()
-			_apply_inventory_change()
-			return
-		if not _batch_sell_queue.is_empty():
-			_emit_next_batch_request()
-			return
-		_batch_sell_active = false
 	if result.get("quotes", null) is Dictionary:
 		_sell_quotes = result.get("quotes", {}).duplicate(true)
 	_refresh_gold()
@@ -805,7 +787,6 @@ func apply_sell_result(result: Dictionary) -> void:
 		_selected_sell_index = -1
 		_selected_sell_indices.clear()
 		_sell_quantities.clear()
-		_batch_sell_queue.clear()
 		if result.get("quotes", null) is Dictionary:
 			_refresh_sell_card_contents()
 		else:
@@ -816,8 +797,6 @@ func apply_sell_result(result: Dictionary) -> void:
 		_selected_sell_index = -1
 		_selected_sell_indices.clear()
 		_sell_quantities.clear()
-		_batch_sell_queue.clear()
-		_batch_sell_active = false
 		if result.get("quotes", null) is Dictionary:
 			_refresh_sell_card_contents()
 		else:
@@ -1013,8 +992,6 @@ func _request_selected_quantity() -> void:
 
 
 func _request_sell_batch() -> void:
-	if _batch_sell_active:
-		return
 	if _selected_sell_indices.is_empty() and _selected_sell_index >= 0:
 		_selected_sell_indices[_selected_sell_index] = true
 		_sell_quantities[_selected_sell_index] = _sell_quantity
@@ -1040,15 +1017,7 @@ func _request_sell_batch() -> void:
 		_pending_sell_request = {"batch": requests}
 		sell_confirmation.open_confirmation({"action_id": "shop.sell.risky_item", "title": "确认批量出售", "message": "批量出售 %d 件物品，其中包含稀有物品。" % requests.size(), "confirm_label": "确认出售", "cancel_label": "取消", "tone": "danger", "context": {"quote_id": requests[0].get("quote_id", "")}})
 		return
-	_batch_sell_queue.clear()
-	_batch_sell_active = false
 	_emit_sell_request({"batch": requests, "merchant_id": str(requests[0].get("merchant_id", ""))})
-
-func _emit_next_batch_request() -> void:
-	if _batch_sell_queue.is_empty():
-		_batch_sell_active = false
-		return
-	_emit_sell_request(_batch_sell_queue.pop_front())
 
 func _request_sell() -> void:
 	_request_sell_batch()
@@ -1060,8 +1029,6 @@ func _on_sell_confirmation_confirmed(_confirmation: Dictionary) -> void:
 
 func _cancel_pending_sell(_confirmation: Dictionary) -> void:
 	_pending_sell_request.clear()
-	_batch_sell_queue.clear()
-	_batch_sell_active = false
 
 
 func _confirm_pending_sell() -> void:
@@ -1070,8 +1037,6 @@ func _confirm_pending_sell() -> void:
 	if _pending_sell_request.has("batch"):
 		var confirmed_batch: Array = _pending_sell_request.get("batch", []).duplicate(true)
 		_pending_sell_request.clear()
-		_batch_sell_queue.clear()
-		_batch_sell_active = false
 		_emit_sell_request({"batch": confirmed_batch, "merchant_id": str(confirmed_batch[0].get("merchant_id", "")) if not confirmed_batch.is_empty() else ""})
 		return
 	var request := _pending_sell_request.duplicate(true)
@@ -1110,9 +1075,6 @@ func _sell_risk_text(quote: Dictionary) -> String:
 func _on_inventory_changed() -> void:
 	if _trade_mode != "sell":
 		return
-	if _batch_sell_active:
-		_inventory_refresh_pending = true
-		return
 	if not visible:
 		_inventory_refresh_pending = true
 		return
@@ -1128,9 +1090,6 @@ func _on_visibility_changed() -> void:
 
 
 func _apply_inventory_change() -> void:
-	if _batch_sell_active:
-		_inventory_refresh_pending = true
-		return
 	_inventory_refresh_pending = false
 	_inventory_refresh_scheduled = false
 	_inventory_refresh_execution_count += 1

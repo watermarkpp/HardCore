@@ -404,7 +404,6 @@ func _run() -> void:
 	assert(int(amounts_by_index.get(safe_indices[0], 0)) == 2, "批量出售丢失第一个物品的独立数量")
 	assert(int(amounts_by_index.get(safe_indices[1], 0)) == 1, "批量出售错误复用了其他物品数量")
 	panel.apply_sell_result({"success": true, "message": "批量全部完成", "quotes": quotes})
-	assert(not panel._batch_sell_active and panel._batch_sell_queue.is_empty(), "批量完成后队列没有清空")
 	assert(panel._selected_sell_indices.is_empty() and panel.sell_quantity_button.disabled, "批量完成后选择状态没有清空")
 	assert("批量全部完成" in panel.detail_label.text, "最终成功消息被提交提示覆盖")
 
@@ -415,7 +414,6 @@ func _run() -> void:
 	panel._request_sell()
 	assert(sell_requests.size() == 1 and sell_requests[0].get("batch", null) is Array, "失败路径没有提交batch请求")
 	panel.apply_sell_result({"success": false, "message": "测试失败停止", "quotes": quotes})
-	assert(not panel._batch_sell_active and panel._batch_sell_queue.is_empty(), "批量失败后队列仍在活动")
 	assert(panel._selected_sell_indices.is_empty() and "测试失败停止" in panel.detail_label.text, "批量失败后状态或消息没有收口")
 
 	panel.set_sell_quotes(quotes)
@@ -428,13 +426,13 @@ func _run() -> void:
 	assert(panel.sell_confirmation.get_meta("stable_id", "") == "ui.confirmation.dialog", "商店没有复用公共确认组件")
 	assert(panel.sell_confirmation.current_request.action_id == "shop.sell.risky_item", "商店确认操作 ID 错误")
 	panel.sell_confirmation.cancel_button.pressed.emit()
-	assert(panel._pending_sell_request.is_empty() and panel._batch_sell_queue.is_empty() and sell_requests.is_empty(), "取消高风险批量后仍保留待处理交易")
+	assert(panel._pending_sell_request.is_empty() and sell_requests.is_empty(), "取消高风险批量后仍保留待处理交易")
 	panel._request_sell()
 	panel.sell_confirmation.confirm_button.pressed.emit()
 	assert(sell_requests.size() == 1 and sell_requests[0].get("batch", null) is Array, "确认后没有一次提交风险批量")
 	assert((sell_requests[0].get("batch", []) as Array).size() == 2, "风险批量缺少选中物品")
 	panel.apply_sell_result({"success": true, "message": "风险批量完成", "quotes": quotes})
-	assert(panel._selected_sell_indices.is_empty() and not panel._batch_sell_active, "风险批量完成后状态没有清空")
+	assert(panel._selected_sell_indices.is_empty(), "风险批量完成后状态没有清空")
 	print("SHOP_GOTHIC_UI_PASS：单击多选/取消、独立数量、降序批量、失败停止、风险确认与镜像布局均正常")
 	get_tree().quit(0)
 
