@@ -4,6 +4,9 @@ const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const OpenTerrainFixture := preload(
+	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
+)
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -29,7 +32,10 @@ func _run() -> void:
 	player.current_mp = 0
 	player.defense_min = 0
 	player.defense_max = 0
-	player.global_position = Vector2(400, 0)
+	var open_field_center_px := _test_ground_to_screen(
+		OpenTerrainFixture.CENTER_GROUND_GU
+	)
+	player.global_position = open_field_center_px + Vector2(400, 0)
 	add_child(player)
 	player.set_physics_process(false)
 	# _ready() applies the persisted profile, so pin the combat fixture after it.
@@ -98,7 +104,7 @@ func _run() -> void:
 	assert(player.current_hp < hp_before, "触龙神范围攻击没有结算主目标伤害")
 	assert(str(dragon.last_magic_attack_resolution.get("delivery_kind", "")) == "area_magic")
 
-	player.global_position = Vector2(400, 0)
+	player.global_position = open_field_center_px + Vector2(400, 0)
 	var zuma := _boss(160, "本地化祖玛首领", player)
 	await get_tree().process_frame
 	assert(zuma.visual.uses_final_art() and zuma.dormant, "祖玛教主未以石化动画状态出生")
@@ -134,7 +140,10 @@ func _boss(monster_id: int, renamed: String, player: PlayerCharacter) -> EnemyAc
 		1,
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
-	boss.global_position = Vector2.ZERO
+	boss.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
+	boss.global_position = _test_ground_to_screen(
+		OpenTerrainFixture.CENTER_GROUND_GU
+	)
 	add_child(boss)
 	boss.set_physics_process(false)
 	return boss

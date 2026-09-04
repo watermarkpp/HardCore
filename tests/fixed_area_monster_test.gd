@@ -5,6 +5,9 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const OpenTerrainFixture := preload(
+	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
+)
 const FIXED_AREA_IDS := [180, 195]
 const STATIONARY_SPECIAL_IDS := [30, 124, 126, 180, 182, 195]
 var _last_summon: Dictionary = {}
@@ -19,6 +22,7 @@ func _configure_enemy_map(enemy: EnemyActor) -> void:
 		1,
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
+	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
 
 
 func _ready() -> void:
@@ -50,7 +54,10 @@ func _run() -> void:
 		assert(int(profile.get("areaAttack", {}).get("rangeTiles", 0)) == 16, "monsterId=%d 未使用原服16格可见范围" % monster_id)
 
 		var player := PlayerCharacter.new()
-		player.global_position = Vector2(480, 0)
+		var open_field_center_px := _test_ground_to_screen(
+			OpenTerrainFixture.CENTER_GROUND_GU
+		)
+		player.global_position = open_field_center_px + Vector2(480, 0)
 		add_child(player)
 		player.set_physics_process(false)
 		# Keep this mechanics test away from death/revival equipment paths.
@@ -62,7 +69,7 @@ func _run() -> void:
 		var data: Dictionary = GameData.get_monster_by_id(monster_id).duplicate(true)
 		data["name"] = "运行时改名固定怪"
 		var enemy := EnemyActor.new()
-		enemy.global_position = Vector2.ZERO
+		enemy.global_position = open_field_center_px
 		enemy.setup(data, player, true)
 		_configure_enemy_map(enemy)
 		add_child(enemy)
@@ -103,13 +110,17 @@ func _run() -> void:
 		await get_tree().process_frame
 
 	var summoner_player := PlayerCharacter.new()
-	summoner_player.global_position = Vector2(120, 0)
+	var summon_field_center_px := _test_ground_to_screen(
+		OpenTerrainFixture.CENTER_GROUND_GU
+	)
+	summoner_player.global_position = summon_field_center_px + Vector2(120, 0)
 	add_child(summoner_player)
 	summoner_player.set_physics_process(false)
 	for summoner_id: int in [126, 182]:
 		var summoner_data: Dictionary = GameData.get_monster_by_id(summoner_id).duplicate(true)
 		summoner_data["name"] = "运行时改名固定召唤怪"
 		var summoner := EnemyActor.new()
+		summoner.global_position = summon_field_center_px
 		summoner.setup(summoner_data, summoner_player, false)
 		_configure_enemy_map(summoner)
 		add_child(summoner)
@@ -117,6 +128,11 @@ func _run() -> void:
 		summoner.summon_requested.connect(_capture_summon)
 		await get_tree().process_frame
 		_last_summon.clear()
+		# This fixture verifies summon delivery, not the ordinary-monster startup
+		# staggering budget. Trigger the same explicit target-set decision path
+		# used when a combat target enters the runtime grid.
+		summoner._retarget_timer = 0.0
+		summoner._retarget(0.0)
 		summoner._physics_process(0.01)
 		summoner._physics_process(0.51)
 		assert(is_zero_approx(summoner.move_speed_gu_per_sec), "monsterId=%d 固定召唤怪发生移动" % summoner_id)

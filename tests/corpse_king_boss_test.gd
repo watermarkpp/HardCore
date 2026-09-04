@@ -3,6 +3,9 @@ extends Node
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const OpenTerrainFixture := preload(
+	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
+)
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -30,8 +33,15 @@ func _run() -> void:
 	player.current_mp = 0
 	player.defense_min = 0
 	player.defense_max = 0
-	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 1.5)
+	var open_field_center_px := _test_ground_to_screen(
+		OpenTerrainFixture.CENTER_GROUND_GU
+	)
+	player.global_position = (
+		open_field_center_px
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 1.5)
+	)
 	var boss := EnemyActor.new()
+	boss.global_position = open_field_center_px
 	var canonical_monster: Dictionary = GameData.get_monster_by_id(89)
 	assert(not canonical_monster.is_empty(), "尸王 canonical monster_id=89 未加载")
 	boss.setup(canonical_monster, player, true)
@@ -51,6 +61,7 @@ func _run() -> void:
 		1,
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
+	boss.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
 	add_child(boss)
 	boss.set_physics_process(false)
 	await get_tree().process_frame
@@ -76,7 +87,10 @@ func _run() -> void:
 	var hp_before := player.current_hp
 	boss._physics_process(0.01)
 	assert(boss._pending_attack_time > 0.0 and player.current_hp == hp_before, "尸王伤害没有等待命中帧")
-	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN * 1.5)
+	player.global_position = (
+		boss.global_position
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN * 1.5)
+	)
 	boss._physics_process(0.12)
 	var expected_attack_facing_px := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN).normalized()
 	assert(boss.facing.dot(expected_attack_facing_px) > 0.99 and boss.velocity == Vector2.ZERO, "尸王追击/攻击时没有持续面对玩家")

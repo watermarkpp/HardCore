@@ -4,6 +4,9 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const OpenTerrainFixture := preload(
+	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
+)
 const START_DISTANCE_GU := 3.0
 const SETTLED_POSITION_EPSILON_GU := 0.002
 
@@ -17,6 +20,7 @@ func _configure_enemy_map(enemy: EnemyActor) -> void:
 		1,
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
+	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
 
 
 func _force_enemy_cadence_ready(enemy: EnemyActor) -> void:
@@ -39,7 +43,9 @@ func _run() -> void:
 
 	var player := PlayerCharacter.new()
 	player.name = "StaticContactPlayer"
-	player.global_position = Vector2.ZERO
+	player.global_position = _test_ground_to_screen(
+		OpenTerrainFixture.CENTER_GROUND_GU
+	)
 	add_child(player)
 	player.set_physics_process(false)
 	player.visual.set_process(false)
@@ -54,11 +60,14 @@ func _run() -> void:
 	ranged_probe.setup(GameData.get_monster_by_id(150), player, false)
 	assert(is_equal_approx(ranged_probe.attack_range_gu, 205.0 / 32.0), "弓箭手旧PX范围未在adapter边界转换为GU")
 	assert(not ranged_probe._uses_player_melee_contact_contract(player))
-	ranged_probe.global_position = Vector2.ZERO
+	ranged_probe.global_position = player.global_position
 	ranged_probe.set_physics_process(false)
 	add_child(ranged_probe)
-	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-		Vector2(4.0, 0.0)
+	player.global_position = (
+		ranged_probe.global_position
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			Vector2(4.0, 0.0)
+		)
 	)
 	var ranged_hp_before := player.current_hp
 	_configure_enemy_map(ranged_probe)
@@ -90,7 +99,9 @@ func _run() -> void:
 		),
 		"ranged sweep does not end at the selected target footpoint",
 	)
-	player.global_position = Vector2.ZERO
+	player.global_position = _test_ground_to_screen(
+		OpenTerrainFixture.CENTER_GROUND_GU
+	)
 	ranged_probe.free()
 
 	var final_distances_gu: Array[float] = []
@@ -105,8 +116,11 @@ func _run() -> void:
 		# ordinary-melee 沃玛战士 fixture so the eight-direction collision probe
 		# exercises the production actor instead of a rejected placeholder.
 		enemy.setup(GameData.get_monster_by_id(64), player, false)
-		enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-			direction_ground * START_DISTANCE_GU
+		enemy.global_position = (
+			player.global_position
+			+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				direction_ground * START_DISTANCE_GU
+			)
 		)
 		enemy.set_meta("spawn_position", enemy.global_position)
 		enemy.set_meta("safe_zones", [])
@@ -204,7 +218,10 @@ func _run() -> void:
 
 	var minimum: float = float(final_distances_gu.min())
 	var maximum: float = float(final_distances_gu.max())
-	assert(maximum - minimum <= 0.025, "GU melee contact remains direction dependent: %s" % final_distances_gu)
+	assert(
+		maximum - minimum <= 0.025,
+		"GU melee contact remains direction dependent: %s" % [final_distances_gu],
+	)
 
 	player.queue_free()
 	print(

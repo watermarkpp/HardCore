@@ -2,6 +2,9 @@ extends Node2D
 
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const OpenTerrainFixture := preload(
+	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
+)
 const RUNTIME_TEST_MONSTER_ID := 21
 
 
@@ -39,13 +42,14 @@ func _run() -> void:
 		1,
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
-	enemy.global_position = Vector2.ZERO
-	enemy.set_meta("spawn_position", Vector2.ZERO)
+	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
+	enemy.global_position = _test_ground_to_screen(OpenTerrainFixture.CENTER_GROUND_GU)
+	enemy.set_meta("spawn_position", enemy.global_position)
 	enemy.set_meta("safe_zones", [])
 	add_child(enemy)
 	enemy.set_physics_process(false)
 
-	_verify_aggro_and_leash_in_32_ground_directions(enemy)
+	_verify_exact_acquisition_in_32_ground_directions(enemy)
 	_verify_fixed_area_range_in_32_ground_directions(enemy)
 	_verify_boss_circle_range_in_32_ground_directions(enemy)
 	_verify_boss_cone_uses_ground_direction(enemy)
@@ -55,28 +59,41 @@ func _run() -> void:
 	_verify_visual_streaming_does_not_own_attack_state(enemy)
 	_verify_runtime_source_has_no_screen_distance_fallback()
 
-	print("MONSTER_GROUND_UNIT_RUNTIME_PASS aggro/leash/fixed-area/boss-circle/cone are direction-invariant GU geometry")
+	print("MONSTER_GROUND_UNIT_RUNTIME_PASS exact-acquisition/fixed-area/boss-circle/cone are direction-invariant GU geometry")
 	get_tree().quit(0)
 
 
-func _verify_aggro_and_leash_in_32_ground_directions(enemy: EnemyActor) -> void:
+func _verify_exact_acquisition_in_32_ground_directions(enemy: EnemyActor) -> void:
+	var exact_view_range_gu := float(
+		enemy._target_acquisition_policy.view_range_cells
+	)
+	assert(exact_view_range_gu > 0.0, "canonical exact acquisition range missing")
 	for direction_index in range(32):
 		var direction_ground := Vector2.from_angle(TAU * float(direction_index) / 32.0)
+		var square_axis := maxf(absf(direction_ground.x), absf(direction_ground.y))
+		var exact_boundary_distance_gu := exact_view_range_gu / square_axis
 		var probe := CombatTarget.new()
 		add_child(probe)
 		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-			direction_ground * (enemy.aggro_radius_gu - 0.001)
-		)
+			direction_ground * (exact_boundary_distance_gu - 0.001)
+		) + enemy.global_position
 		enemy._retarget_timer = 0.0
 		enemy._retarget(0.0)
-		assert(enemy.target == probe, "aggro rejected inside GU boundary at direction %d" % direction_index)
+		assert(
+			enemy.target == probe,
+			"exact acquisition rejected inside GU boundary at direction %d" % direction_index,
+		)
 
 		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-			direction_ground * (enemy.aggro_radius_gu + 0.01)
-		)
+			direction_ground * (exact_boundary_distance_gu + 0.01)
+		) + enemy.global_position
+		enemy.target = null
 		enemy._retarget_timer = 0.0
 		enemy._retarget(0.0)
-		assert(enemy.target == null, "aggro accepted outside GU boundary at direction %d" % direction_index)
+		assert(
+			enemy.target == null,
+			"exact acquisition accepted outside GU boundary at direction %d" % direction_index,
+		)
 		probe.free()
 
 
@@ -95,11 +112,11 @@ func _verify_fixed_area_range_in_32_ground_directions(enemy: EnemyActor) -> void
 		var square_boundary_distance_gu := 4.0 / chebyshev_axis
 		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 			direction_ground * (square_boundary_distance_gu - 0.001)
-		)
+		) + enemy.global_position
 		assert(enemy._area_attack_targets().has(probe), "fixed-area rejected inside GU boundary at direction %d" % direction_index)
 		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 			direction_ground * (square_boundary_distance_gu + 0.001)
-		)
+		) + enemy.global_position
 		assert(not enemy._area_attack_targets().has(probe), "fixed-area accepted outside GU boundary at direction %d" % direction_index)
 		probe.free()
 
@@ -112,11 +129,11 @@ func _verify_boss_circle_range_in_32_ground_directions(enemy: EnemyActor) -> voi
 		var target_radius_gu := enemy._target_combat_radius_gu(probe)
 		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 			direction_ground * (6.0 + target_radius_gu - 0.001)
-		)
+		) + enemy.global_position
 		assert(enemy._boss_skill_targets(6.0).has(probe), "boss circle rejected inside GU boundary at direction %d" % direction_index)
 		probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 			direction_ground * (6.0 + target_radius_gu + 0.001)
-		)
+		) + enemy.global_position
 		assert(not enemy._boss_skill_targets(6.0).has(probe), "boss circle accepted outside GU boundary at direction %d" % direction_index)
 		probe.free()
 
@@ -147,8 +164,18 @@ func _verify_boss_cone_uses_ground_direction(enemy: EnemyActor) -> void:
 		var outside_direction_ground := center_direction_ground.rotated(
 			HALF_ANGLE + footprint_angular_margin + 0.01
 		)
-		inside_probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(inside_direction_ground * 4.9)
-		outside_probe.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(outside_direction_ground * 4.9)
+		inside_probe.global_position = (
+			enemy.global_position
+			+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				inside_direction_ground * 4.9
+			)
+		)
+		outside_probe.global_position = (
+			enemy.global_position
+			+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				outside_direction_ground * 4.9
+			)
+		)
 		enemy._boss_skill_direction_ground = center_direction_ground
 		enemy.target = inside_probe
 		enemy._boss_warning = 0.001
