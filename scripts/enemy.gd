@@ -527,18 +527,24 @@ func _direct_spell_alias_value(
 
 func _compile_direct_spell_runtime_stats(canonical_entry: Dictionary) -> void:
 	_reset_direct_spell_runtime_stats()
+	var runtime_allowed: Variant = canonical_entry.get("runtime_allowed", null)
+	var status: Variant = canonical_entry.get("status", null)
 	if (
 		canonical_entry.is_empty()
-		or not bool(canonical_entry.get("runtime_allowed", false))
-		or str(canonical_entry.get("status", "")) != "formal"
+		or not runtime_allowed is bool
+		or not bool(runtime_allowed)
+		or not status is String
+		or status != "formal"
 	):
 		set_meta("direct_spell_stats_rejection_reason", "canonical_entry_disabled_or_nonformal")
 		return
 	var capability_value: Variant = canonical_entry.get("runtime_capability", {})
-	if (
-		not capability_value is Dictionary
-		or not bool((capability_value as Dictionary).get("allowed", false))
-	):
+	if not capability_value is Dictionary:
+		set_meta("direct_spell_stats_rejection_reason", "canonical_runtime_capability_rejected")
+		return
+	var capability := capability_value as Dictionary
+	var capability_allowed: Variant = capability.get("allowed", null)
+	if not capability_allowed is bool or not bool(capability_allowed):
 		set_meta("direct_spell_stats_rejection_reason", "canonical_runtime_capability_rejected")
 		return
 	var combat_value: Variant = canonical_entry.get("combat", {})
@@ -580,7 +586,9 @@ func _compile_direct_spell_runtime_stats(canonical_entry: Dictionary) -> void:
 			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_malformed")
 			return
 		defense_min = maxi(0, defense_min)
-		defense_max = maxi(defense_min, defense_max)
+		if defense_max < defense_min:
+			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_reversed")
+			return
 	var anti_magic_points := 0
 	var anti_magic_source := _direct_spell_alias_value(
 		stats,

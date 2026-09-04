@@ -5,6 +5,24 @@ const CombatRuntimeService := preload(
 	"res://scripts/layers/runtime/combat_runtime_service.gd"
 )
 
+class StatsReturnTarget extends Node:
+	var stats_result: Variant = null
+	var damage_calls := 0
+
+	func direct_spell_runtime_stats_into(output: Dictionary) -> Variant:
+		output.clear()
+		output["anti_magic_points"] = 0
+		output["magic_defense_min"] = 0
+		output["magic_defense_max"] = 0
+		return stats_result
+
+	func can_receive_damage() -> bool:
+		return true
+
+	func take_damage(_amount: int, _attacker: Node2D = null) -> void:
+		damage_calls += 1
+
+
 var _checks := 0
 var _failures: Array[String] = []
 var _owned_enemies: Array[EnemyActor] = []
@@ -23,6 +41,7 @@ func _run() -> void:
 	_assert_runtime_aliases_and_red_poison()
 	_assert_reference_rng_parity()
 	_assert_projectile_resolves_once()
+	_assert_strict_runtime_stats_return()
 	_assert_fail_closed_compilation()
 	var counters := RuntimeDiagnostics.performance_counters()
 	_assert(
@@ -148,6 +167,15 @@ func _assert_compiled_alias_inputs() -> void:
 	]:
 		var alias_entry: Dictionary = base_entry.duplicate(true)
 		var alias_stats: Dictionary = alias_entry["combat"]["stats"]
+		for mac_key: String in [
+			"magic_defense_min",
+			"magic_defense_max",
+			"mdefMin",
+			"mdefMax",
+			"MinMAC",
+			"MaxMAC",
+		]:
+			alias_stats.erase(mac_key)
 		alias_stats[str(alias_pair[0])] = 4
 		alias_stats[str(alias_pair[1])] = 6
 		var alias_enemy := EnemyActor.new()
@@ -261,6 +289,43 @@ func _assert_projectile_resolves_once() -> void:
 	projectile.free()
 
 
+func _assert_strict_runtime_stats_return() -> void:
+	var target := StatsReturnTarget.new()
+	add_child(target)
+	var runtime := CombatRuntimeService.new()
+	for invalid_result: Variant in [null, false, "true", 1]:
+		target.stats_result = invalid_result
+		var rejected: Dictionary = runtime.apply_enemy_direct_spell_damage(
+			target,
+			"wizard.fireball",
+			5,
+			null,
+			null,
+			Callable(self, "_zero_magic_defense"),
+			0,
+			{},
+		)
+		_assert(
+			not bool(rejected.get("success", false))
+			and str(rejected.get("failure_reason", "")) == "target_direct_spell_stats_invalid",
+			"non-true direct spell stats API result was accepted: %s" % str(invalid_result),
+		)
+	target.stats_result = true
+	var accepted: Dictionary = runtime.apply_enemy_direct_spell_damage(
+		target,
+		"wizard.fireball",
+		5,
+		null,
+		null,
+		Callable(self, "_zero_magic_defense"),
+		0,
+		{},
+	)
+	_assert(bool(accepted.get("success", false)) and target.damage_calls == 1, "true direct spell stats result was rejected")
+	runtime.free()
+	target.free()
+
+
 func _resolve_mac(
 	_skill_id: String,
 	damage_after_anti_magic: int,
@@ -299,6 +364,39 @@ func _assert_fail_closed_compilation() -> void:
 		== "canonical_magic_defense_malformed",
 		"malformed canonical MAC did not fail closed",
 	)
+	var valid_entry: Dictionary = GameData.get_monster_by_id(74)
+	var runtime_allowed_malformed: Dictionary = valid_entry.duplicate(true)
+	runtime_allowed_malformed["runtime_allowed"] = "true"
+	var runtime_allowed_enemy := EnemyActor.new()
+	runtime_allowed_enemy._compile_direct_spell_runtime_stats(runtime_allowed_malformed)
+	_assert(not runtime_allowed_enemy.direct_spell_stats_valid, "string runtime_allowed was accepted")
+	runtime_allowed_enemy.free()
+	var status_malformed: Dictionary = valid_entry.duplicate(true)
+	status_malformed["status"] = true
+	var status_enemy := EnemyActor.new()
+	status_enemy._compile_direct_spell_runtime_stats(status_malformed)
+	_assert(not status_enemy.direct_spell_stats_valid, "boolean canonical status was accepted")
+	status_enemy.free()
+	var capability_malformed: Dictionary = valid_entry.duplicate(true)
+	var malformed_capability: Dictionary = capability_malformed["runtime_capability"]
+	malformed_capability["allowed"] = "true"
+	var capability_enemy := EnemyActor.new()
+	capability_enemy._compile_direct_spell_runtime_stats(capability_malformed)
+	_assert(not capability_enemy.direct_spell_stats_valid, "string runtime_capability.allowed was accepted")
+	capability_enemy.free()
+	var reversed_entry: Dictionary = valid_entry.duplicate(true)
+	var reversed_stats: Dictionary = reversed_entry["combat"]["stats"]
+	reversed_stats.erase("magic_defense")
+	reversed_stats["MinMAC"] = 7
+	reversed_stats["MaxMAC"] = 3
+	var reversed_enemy := EnemyActor.new()
+	reversed_enemy._compile_direct_spell_runtime_stats(reversed_entry)
+	_assert(
+		not reversed_enemy.direct_spell_stats_valid
+		and str(reversed_enemy.get_meta("direct_spell_stats_rejection_reason", "")) == "canonical_magic_defense_reversed",
+		"reverse MAC alias range was silently normalized",
+	)
+	reversed_enemy.free()
 
 
 func _make_enemy(monster_id: int) -> EnemyActor:

@@ -137,7 +137,9 @@ func _target_stats_with_runtime_buffs_into(
 			"direct_spell_runtime_stats_into",
 			output,
 		)
-		return not (raw_result is bool) or bool(raw_result)
+		if not raw_result is bool or not bool(raw_result):
+			return false
+		return true
 	return _legacy_target_stats_with_runtime_buffs_into(target, output)
 
 
