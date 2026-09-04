@@ -23,11 +23,12 @@ func _ready() -> void:
 	_test_target_runtime_contract()
 	_test_repaired_formal_runtime_contracts()
 	_test_workspace_identity_audit()
+	_test_backup_directory_fixture()
 	_test_new_and_copied_spawn_identities()
 	_test_missing_and_duplicate_fail_closed()
 	print(
 		"WORLD_BICH_SPAWN_IDENTITY_CONTRACT_PASS "
-		+ "workspace_maps=132 formal_runtime_maps=4 "
+		+ "workspace_editor_audit=all backup_fixture=pass formal_runtime_maps=4 "
 		+ "target_monster_spawn=82 target_boss_spawn=0 "
 		+ "new_and_copy=unique save_build_publish=fail_closed"
 	)
@@ -96,23 +97,55 @@ func _test_repaired_formal_runtime_contracts() -> void:
 
 
 func _test_workspace_identity_audit() -> void:
-	var root := DirAccess.open("res://map_editor_workspace")
-	assert(root != null, "map editor workspace missing")
-	var audited := 0
-	for directory: String in root.get_directories():
-		var map_path := "res://map_editor_workspace/%s/%s.editor.json" % [directory, directory]
-		if not FileAccess.file_exists(map_path):
-			continue
+	var editor_paths := _collect_editor_paths("res://map_editor_workspace")
+	assert(editor_paths.size() >= 132, "workspace editor document count shrank: %d" % editor_paths.size())
+	for map_path: String in editor_paths:
 		var document := _read_json(map_path)
-		audited += 1
-		var map_key := str(document.get("map_id", ""))
-		assert(map_key == directory, "workspace map identity mismatch: %s" % map_path)
-		var errors := SpawnIdentity.validate_document(
-			document,
-			SpawnIdentity.requires_formal_semantic_ids(document)
-		)
-		assert(errors.is_empty(), "%s spawn identity invalid: %s" % [map_key, str(errors)])
-	assert(audited == 132, "workspace map count changed: %d" % audited)
+		_assert_editor_identity(document, map_path)
+
+
+func _test_backup_directory_fixture() -> void:
+	# A legal backup may live in a directory whose name is not its document
+	# map_id (for example bich_province_auto_backup/... with map_id bich_province).
+	# Validate the document identity without requiring path-derived equality.
+	var backup_fixture := _read_json(
+		"res://map_editor_workspace/bich_province/bich_province.editor.json"
+	)
+	_assert_editor_identity(
+		backup_fixture,
+		"res://map_editor_workspace/bich_province_auto_backup/bich_province_auto_backup.editor.json"
+	)
+
+
+func _assert_editor_identity(document: Dictionary, source_path: String) -> void:
+	var map_key := str(document.get("map_id", "")).strip_edges()
+	assert(not map_key.is_empty(), "editor map_id missing: %s" % source_path)
+	var errors := SpawnIdentity.validate_document(
+		document,
+		SpawnIdentity.requires_formal_semantic_ids(document)
+	)
+	assert(errors.is_empty(), "%s spawn identity invalid: %s" % [source_path, str(errors)])
+
+
+func _collect_editor_paths(root_path: String) -> Array[String]:
+	var result: Array[String] = []
+	var directory := DirAccess.open(root_path)
+	assert(directory != null, "map editor workspace missing: %s" % root_path)
+	directory.list_dir_begin()
+	while true:
+		var name := directory.get_next()
+		if name.is_empty():
+			break
+		if name in [".", ".."]:
+			continue
+		var child := root_path.path_join(name)
+		if directory.current_is_dir():
+			result.append_array(_collect_editor_paths(child))
+		elif name.ends_with(".editor.json"):
+			result.append(child)
+	directory.list_dir_end()
+	result.sort()
+	return result
 
 
 func _test_new_and_copied_spawn_identities() -> void:
