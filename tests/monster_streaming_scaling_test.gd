@@ -52,6 +52,20 @@ func _run() -> void:
 				<= FRAMES * _coordinator.MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL,
 			"subscriber cleanup work scaled beyond frames x fixed budget"
 		)
+		assert(
+			int(report.get("residency_max_per_poll", 0))
+				<= _coordinator.MAX_VISUAL_RESIDENCY_VISITS_PER_POLL,
+			"visual residency exceeded its fixed per-frame budget",
+		)
+		assert(
+			int(report.get("residency_visits", 0))
+				<= FRAMES * _coordinator.MAX_VISUAL_RESIDENCY_VISITS_PER_POLL,
+			"visual residency work scaled beyond frames x fixed budget",
+		)
+		assert(
+			int(report.get("local_residency_timers", -1)) == 0,
+			"coordinated visuals retained per-monster wake timers",
+		)
 	assert(
 		int(_per_size_reports[2].get("coordinator_polls", 0)) == FRAMES,
 		"300-monster global poll calls must not grow (600, not 180000)"
@@ -81,6 +95,10 @@ func _run_size(monster_count: int) -> void:
 		_coordinator.poll_once(frame_id)
 		await get_tree().process_frame
 	var diag: Dictionary = _coordinator.monster_streaming_diagnostics()
+	var local_residency_timers := 0
+	for enemy: EnemyActor in _enemies:
+		if is_instance_valid(enemy) and enemy.visual._residency_wakeup_timer != null:
+			local_residency_timers += 1
 	_per_size_reports.append({
 		"monster_count": monster_count,
 		"per_instance_poll_calls": int(
@@ -92,6 +110,11 @@ func _run_size(monster_count: int) -> void:
 		"cleanup_max_per_poll": int(
 			diag.get("subscriber_cleanup_max_visits_per_poll", 0)
 		),
+		"residency_visits": int(diag.get("visual_residency_visit_count", 0)),
+		"residency_max_per_poll": int(
+			diag.get("visual_residency_max_visits_per_poll", 0)
+		),
+		"local_residency_timers": local_residency_timers,
 	})
 	print(
 		"MONSTER_STREAMING_SCALING_SIZE monsters=%d coordinator_polls=%d heavy=%d"

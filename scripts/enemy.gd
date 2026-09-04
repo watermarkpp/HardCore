@@ -75,6 +75,7 @@ const BOSS_TARGET_REEVALUATION_STAGGER_SECONDS := 0.013
 const SUMMON_INTERCEPT_CONTACT_EPSILON_GU := 0.25
 const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
 const BACKGROUND_AI_MIN_DISTANCE_GU := 37.5
+const BACKGROUND_WAKE_PHASE_SLOTS := 15
 ## The acquisition broadphase is screen-space only.  The exact phase below
 ## still evaluates canonical Ground GU deltas, so this rectangle can only add
 ## candidates; it must never decide whether a target is in range.
@@ -136,6 +137,8 @@ static var _target_grid_candidate_count := 0
 static var _background_ai_evaluation_count := 0
 static var _background_fast_path_skip_count := 0
 static var _foreground_ai_tick_count := 0
+static var _background_deep_sleep_entry_count := 0
+static var _background_deep_sleep_wakeup_count := 0
 static var _physics_move_count := 0
 static var _environment_guard_check_count := 0
 
@@ -191,6 +194,8 @@ var target: Node2D:
 			_target_focus_tick_ms = 0
 		elif changed:
 			_refresh_target_focus()
+			if not _background_maintenance_running:
+				_leave_background_deep_sleep()
 var primary_target: PlayerCharacter
 var is_boss := false
 var runtime_map_id: int = -1
@@ -259,6 +264,10 @@ var _target_stable_remaining_seconds := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
 var _background_ai_timer := 0.0
+var _background_wakeup_timer: Timer
+var _background_deep_sleeping := false
+var _background_last_wakeup_msec := 0
+var _background_maintenance_running := false
 var _background_accumulated_delta := 0.0
 var _boss_skill_cooldown := 3.0
 var _boss_warning := 0.0
@@ -1325,6 +1334,13 @@ func _ready() -> void:
 	)
 	collision.shape = WorldSpatialRules.actor_footprint_shape_px(collision_radius_px)
 	add_child(collision)
+	if not is_boss:
+		_background_wakeup_timer = Timer.new()
+		_background_wakeup_timer.name = "BackgroundAIWakeupTimer"
+		_background_wakeup_timer.one_shot = true
+		_background_wakeup_timer.process_callback = Timer.TIMER_PROCESS_PHYSICS
+		_background_wakeup_timer.timeout.connect(_on_background_wakeup_timeout)
+		add_child(_background_wakeup_timer)
 	_resolve_invalid_spawn_overlap()
 	_last_environment_safe_position_px = global_position
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS * float(posmod(get_instance_id(), 11)) / 11.0
@@ -1354,6 +1370,8 @@ func _ready() -> void:
 		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 		_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS * float(posmod(get_instance_id(), 13)) / 13.0
+		if _can_use_background_ai():
+			_enter_background_deep_sleep(true)
 	queue_redraw()
 
 
@@ -1419,19 +1437,20 @@ func _physics_process(delta: float) -> void:
 	var physics_delta := delta
 	var use_background_ai := _can_use_background_ai()
 	if use_background_ai:
+		if _background_wakeup_timer != null:
+			_background_fast_path_skip_count += 1
+			_enter_background_deep_sleep(false)
+			return
+		# Lightweight fixtures that intentionally override _ready() have no wake
+		# timer. Preserve the first-pass cadence path for those isolated actors.
 		_background_ai_timer -= delta
 		_background_accumulated_delta += delta
 		if _background_ai_timer > 0.0:
 			_background_fast_path_skip_count += 1
 			return
-		# Preserve elapsed timer/status/regen time while avoiding 60 identical
-		# script passes per second for a distant, inactive actor.
 		delta = _background_accumulated_delta
 		_background_accumulated_delta = 0.0
 	else:
-		# Damage, a live close target, status, or combat work exits the background
-		# tier on the next physics callback. Catch its deferred elapsed time up in
-		# that same callback before normal foreground decisions resume.
 		delta += _background_accumulated_delta
 		_background_accumulated_delta = 0.0
 	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - delta)
@@ -1455,6 +1474,8 @@ func _physics_process(delta: float) -> void:
 		return
 	_background_ai_timer = 0.0
 	_foreground_ai_tick_count += 1
+	if _handle_safe_zone_target_return(physics_delta):
+		return
 	_retarget(delta)
 	if _update_area_attack(delta):
 		if _movement_step_active:
@@ -1487,33 +1508,6 @@ func _physics_process(delta: float) -> void:
 	_control_anchor_ground_gu = Vector2.INF
 	if not is_instance_valid(target):
 		_return_to_spawn(physics_delta)
-		return
-	if target is PlayerCharacter and _point_inside_safe_zone(target.global_position):
-		_pending_attack_time = -1.0
-		_pending_attack_target = null
-		_pending_attack_damage = 0
-		_pending_attack_release_record = {}
-		if _movement_step_active:
-			_cancel_autonomous_step(true)
-		velocity = Vector2.ZERO
-		var spawn_position:Vector2=get_meta("spawn_position",global_position)
-		var spawn_delta_ground_gu := _ground_delta_gu_between_screen_positions(
-			global_position,
-			spawn_position,
-		)
-		if _point_inside_safe_zone(global_position) and spawn_delta_ground_gu.length() > SAFE_ZONE_RETURN_EPSILON_GU:
-			var started := _request_autonomous_step(
-				spawn_delta_ground_gu,
-				1.0,
-				false,
-				&"safe_zone_return"
-			)
-			if started:
-				_advance_autonomous_step(physics_delta)
-			else:
-				velocity = Vector2.ZERO
-				actual_ground_motion_gu = Vector2.ZERO
-		queue_redraw()
 		return
 	var offset_px := target.global_position - global_position
 	var offset_ground_gu := GroundUnitSpace.screen_delta_px_to_ground_delta_gu(offset_px)
@@ -1660,6 +1654,122 @@ func _physics_process(delta: float) -> void:
 			facing = _screen_facing_for_ground_direction(fresh_offset_ground_gu)
 	if visual != null and visual.is_fallback_attacking():
 		queue_redraw()
+
+
+func _handle_safe_zone_target_return(physics_delta: float) -> bool:
+	if not (
+		is_instance_valid(target)
+		and target is PlayerCharacter
+		and _point_inside_safe_zone(target.global_position)
+	):
+		return false
+	_pending_attack_time = -1.0
+	_pending_attack_target = null
+	_pending_attack_damage = 0
+	_pending_attack_release_record = {}
+	if _movement_step_active:
+		_cancel_autonomous_step(true)
+	velocity = Vector2.ZERO
+	var spawn_position: Vector2 = get_meta("spawn_position", global_position)
+	var spawn_delta_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		spawn_position,
+	)
+	if (
+		_point_inside_safe_zone(global_position)
+		and spawn_delta_ground_gu.length() > SAFE_ZONE_RETURN_EPSILON_GU
+	):
+		var started := _request_autonomous_step(
+			spawn_delta_ground_gu,
+			1.0,
+			false,
+			&"safe_zone_return"
+		)
+		if started:
+			_advance_autonomous_step(physics_delta)
+		else:
+			velocity = Vector2.ZERO
+			actual_ground_motion_gu = Vector2.ZERO
+	queue_redraw()
+	return true
+
+
+func _enter_background_deep_sleep(initial_phase: bool) -> void:
+	if is_boss or _background_wakeup_timer == null:
+		return
+	if not _background_deep_sleeping:
+		_background_deep_sleeping = true
+		_background_deep_sleep_entry_count += 1
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_background_last_wakeup_msec = Time.get_ticks_msec()
+	var delay_seconds := BACKGROUND_AI_INTERVAL_SECONDS
+	if initial_phase:
+		var phase_slot := _background_wakeup_phase_slot()
+		delay_seconds = (
+			BACKGROUND_AI_INTERVAL_SECONDS
+			* float(phase_slot + 1)
+			/ float(BACKGROUND_WAKE_PHASE_SLOTS)
+		)
+	_background_ai_timer = delay_seconds
+	_background_wakeup_timer.start(delay_seconds)
+
+
+func _background_wakeup_phase_slot() -> int:
+	var stable_serial := int(get_meta("spawn_serial", get_instance_id()))
+	return posmod(stable_serial * 7 + monster_id * 11, BACKGROUND_WAKE_PHASE_SLOTS)
+
+
+func _leave_background_deep_sleep() -> void:
+	if not _background_deep_sleeping:
+		return
+	_background_deep_sleeping = false
+	_background_ai_timer = 0.0
+	if _background_wakeup_timer != null:
+		_background_wakeup_timer.stop()
+	set_physics_process(true)
+
+
+func _on_background_wakeup_timeout() -> void:
+	if not _background_deep_sleeping or _dying:
+		return
+	_background_deep_sleep_wakeup_count += 1
+	var now_msec := Time.get_ticks_msec()
+	var elapsed_seconds := clampf(
+		float(maxi(1, now_msec - _background_last_wakeup_msec)) / 1000.0,
+		1.0 / 120.0,
+		BACKGROUND_AI_INTERVAL_SECONDS * 2.0,
+	)
+	_background_last_wakeup_msec = now_msec
+	if _death_pending or current_hp <= 0:
+		_leave_background_deep_sleep()
+		return
+	if not _can_use_background_ai():
+		_leave_background_deep_sleep()
+		return
+	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - elapsed_seconds)
+	_spatial_index_update()
+	_attack_timer = maxf(0.0, _attack_timer - elapsed_seconds)
+	_update_status_effects(elapsed_seconds)
+	if _dying or _death_pending:
+		_leave_background_deep_sleep()
+		return
+	_update_natural_regen(elapsed_seconds)
+	_update_entrapment_state(elapsed_seconds)
+	_update_pending_attack(elapsed_seconds)
+	_background_ai_evaluation_count += 1
+	_background_maintenance_running = true
+	_retarget(elapsed_seconds)
+	_background_maintenance_running = false
+	if not is_instance_valid(target):
+		_return_to_spawn(1.0 / 60.0)
+	if _can_use_background_ai():
+		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
+		_background_last_wakeup_msec = Time.get_ticks_msec()
+		_background_wakeup_timer.start(BACKGROUND_AI_INTERVAL_SECONDS)
+	else:
+		_leave_background_deep_sleep()
 
 
 func _spatial_index_update() -> void:
@@ -3722,6 +3832,8 @@ static func reset_performance_diagnostics() -> void:
 	_background_ai_evaluation_count = 0
 	_background_fast_path_skip_count = 0
 	_foreground_ai_tick_count = 0
+	_background_deep_sleep_entry_count = 0
+	_background_deep_sleep_wakeup_count = 0
 	_physics_move_count = 0
 	_environment_guard_check_count = 0
 
@@ -3739,6 +3851,8 @@ static func performance_diagnostics() -> Dictionary:
 		"background_ai_evaluations": _background_ai_evaluation_count,
 		"background_fast_path_skips": _background_fast_path_skip_count,
 		"foreground_ai_ticks": _foreground_ai_tick_count,
+		"background_deep_sleep_entries": _background_deep_sleep_entry_count,
+		"background_deep_sleep_wakeups": _background_deep_sleep_wakeup_count,
 		"physics_moves": _physics_move_count,
 		"environment_guard_checks": _environment_guard_check_count,
 	}
@@ -3746,6 +3860,12 @@ static func performance_diagnostics() -> Dictionary:
 
 func _can_use_background_ai() -> bool:
 	if is_boss or not is_instance_valid(primary_target):
+		return false
+	if (
+		is_instance_valid(target)
+		and target is PlayerCharacter
+		and _point_inside_safe_zone(target.global_position)
+	):
 		return false
 	# Movement/collision must continue at physics rate. Only truly idle actors
 	# may use the low-frequency background maintenance path.
@@ -3788,6 +3908,7 @@ func apply_life_steal(dealt_damage: int) -> void:
 func take_damage(amount: int, attacker: Node2D = null) -> void:
 	if _dying or _death_pending:
 		return
+	_leave_background_deep_sleep()
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
@@ -3891,6 +4012,7 @@ func apply_poison(
 	seconds: float,
 	interval_seconds := 1.0
 ) -> void:
+	_leave_background_deep_sleep()
 	poison_damage = maxi(poison_damage, maxi(1, tick_damage))
 	poison_time = maxf(poison_time, seconds)
 	poison_tick_interval_seconds = maxf(0.01, float(interval_seconds))
@@ -3898,6 +4020,8 @@ func apply_poison(
 
 
 func apply_control(seconds: float) -> void:
+	if seconds > 0.0:
+		_leave_background_deep_sleep()
 	# Re-applying control after a scripted relocation must pin the new position,
 	# not an obsolete anchor captured before teleport/knockback resolution.
 	if seconds > 0.0:
@@ -3916,6 +4040,7 @@ func apply_entrapment(
 	boundary_snapshot: Dictionary,
 	caster_actor: Node2D
 ) -> Dictionary:
+	_leave_background_deep_sleep()
 	var immunity := control_immunity_snapshot()
 	if bool(immunity.get("immune", false)):
 		_entrapment_last_end_reason = "target_control_immune"
@@ -4056,6 +4181,8 @@ func _update_entrapment_state(delta: float) -> void:
 
 
 func apply_charm(seconds: float) -> void:
+	if seconds > 0.0:
+		_leave_background_deep_sleep()
 	charm_time = maxf(charm_time, seconds)
 	queue_redraw()
 
@@ -4339,6 +4466,7 @@ func _retarget(delta := 0.0) -> void:
 func _add_threat(source:Node2D,amount:float)->void:
 	if not _target_candidate_is_live(source):
 		return
+	_leave_background_deep_sleep()
 	var key:=source.get_instance_id()
 	_threat_table[key]={"node":weakref(source),"score":float(_threat_table.get(key,{}).get("score",0.0))+maxf(0.0,amount)}
 	# Damage records participation only. Target changes are resolved by the

@@ -46,27 +46,79 @@ func _run() -> void:
 	)
 	enemy.target = null
 	enemy._threat_table.clear()
-	enemy._background_ai_timer = EnemyActor.BACKGROUND_AI_INTERVAL_SECONDS
 	assert(enemy._can_use_background_ai(), "far idle actor did not enter background tier")
+	enemy._enter_background_deep_sleep(true)
+	assert(enemy._background_deep_sleeping, "far idle actor did not enter deep sleep")
+	assert(
+		not enemy.is_physics_processing(),
+		"far idle actor still owns a 60 Hz physics callback",
+	)
 	EnemyActor.reset_performance_diagnostics()
 	var index_checks_before := spatial_index.index_update_check_count
-	for _frame in range(120):
-		enemy._physics_process(1.0 / 60.0)
+	for _tick in range(8):
+		enemy._background_last_wakeup_msec = (
+			Time.get_ticks_msec()
+			- int(EnemyActor.BACKGROUND_AI_INTERVAL_SECONDS * 1000.0)
+		)
+		enemy._on_background_wakeup_timeout()
 	var background_metrics := EnemyActor.performance_diagnostics()
 	var background_index_checks := spatial_index.index_update_check_count - index_checks_before
 	assert(
-		int(background_metrics.background_fast_path_skips) >= 110,
-		"far idle actor still ran full physics work every frame: %s" % background_metrics,
+		int(background_metrics.background_fast_path_skips) == 0,
+		"deep-sleep actor unexpectedly re-entered the 60 Hz fast path: %s"
+		% background_metrics,
 	)
 	assert(
-		int(background_metrics.background_ai_evaluations) <= 9,
-		"background maintenance exceeded the 4 Hz cadence: %s" % background_metrics,
+		int(background_metrics.background_ai_evaluations) == 8,
+		"background maintenance did not remain one evaluation per 4 Hz wake: %s"
+		% background_metrics,
 	)
 	assert(
 		background_index_checks <= 1,
 		"unchanged background position was resubmitted to the spatial index: %d"
 		% background_index_checks,
 	)
+
+	# A production-sized density is distributed over every available physics
+	# phase slot. No far actor keeps a per-frame physics callback, while each
+	# explicit 4 Hz wake performs exactly one maintenance evaluation.
+	var sleeping_enemies: Array[EnemyActor] = []
+	var phase_counts := {}
+	for serial: int in range(1, 61):
+		var sleeper := EnemyActor.new()
+		sleeper.setup(GameData.get_monster_by_id(18), player, false)
+		sleeper.configure_runtime_map_projection(
+			MAP_ID,
+			Callable(self, "_ground_to_screen"),
+			Callable(self, "_screen_to_ground"),
+		)
+		sleeper.set_meta("spawn_serial", serial)
+		sleeper.global_position = Vector2(float(serial), 0.0)
+		sleeper.set_meta("spawn_position", sleeper.global_position)
+		sleeper.set_meta("safe_zones", [])
+		add_child(sleeper)
+		assert(sleeper._background_deep_sleeping)
+		assert(not sleeper.is_physics_processing())
+		var phase_slot := sleeper._background_wakeup_phase_slot()
+		phase_counts[phase_slot] = int(phase_counts.get(phase_slot, 0)) + 1
+		sleeping_enemies.append(sleeper)
+	assert(
+		phase_counts.size() == EnemyActor.BACKGROUND_WAKE_PHASE_SLOTS,
+		"60 actors did not use every deterministic wake phase: %s" % phase_counts,
+	)
+	for count: int in phase_counts.values():
+		assert(count <= 4, "background wake phase remained batched: %s" % phase_counts)
+	EnemyActor.reset_performance_diagnostics()
+	for sleeper: EnemyActor in sleeping_enemies:
+		sleeper._background_last_wakeup_msec = (
+			Time.get_ticks_msec()
+			- int(EnemyActor.BACKGROUND_AI_INTERVAL_SECONDS * 1000.0)
+		)
+		sleeper._on_background_wakeup_timeout()
+	var density_metrics := EnemyActor.performance_diagnostics()
+	assert(int(density_metrics.background_ai_evaluations) == sleeping_enemies.size())
+	assert(int(density_metrics.background_deep_sleep_wakeups) == sleeping_enemies.size())
+	assert(int(density_metrics.foreground_ai_ticks) == 0)
 
 	# Threat/status participation must leave the sleep path on the very next
 	# physics callback; no background timer is allowed to pin a combatant asleep.
@@ -138,8 +190,8 @@ func _run() -> void:
 	assert(not visual_enemy.visual.is_processing(), "released off-screen visual did not sleep")
 
 	print(
-		"MONSTER_RUNTIME_DENSITY_PERFORMANCE_PASS background=%s index_checks=%d crowd=%s"
-		% [background_metrics, background_index_checks, crowd_metrics]
+		"MONSTER_RUNTIME_DENSITY_PERFORMANCE_PASS background=%s density=%s phases=%s index_checks=%d crowd=%s"
+		% [background_metrics, density_metrics, phase_counts, background_index_checks, crowd_metrics]
 	)
 	get_tree().quit(0)
 
