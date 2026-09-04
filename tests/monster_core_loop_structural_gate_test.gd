@@ -29,6 +29,16 @@ func _run() -> void:
 		source.contains("aoe_query_plan_invalid_or_spatial_index_unavailable"),
 		"mapped gameplay must fail closed when the spatial plan is unavailable",
 	)
+	var fallback_body := _function_body(
+		source,
+		"_aoe_reference_fallback_allowed",
+	)
+	assert(
+		not fallback_body.contains("PlayerState.test_mode")
+		and source.contains("set_aoe_reference_fallback_for_test")
+		and source.contains("_aoe_reference_fallback_test_enabled"),
+		"legacy group fallback must require an explicit audit/test flag",
+	)
 	for resolver_name: String in FORMAL_TARGET_RESOLVERS:
 		var body := _function_body(source, resolver_name)
 		assert(not body.is_empty(), "missing formal resolver: %s" % resolver_name)

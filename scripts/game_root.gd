@@ -246,6 +246,10 @@ var projection_rejection_reason := &""
 ## projections are used - allowed ONLY for migration tools, import/reference
 ## audits and test/dev preview, never for normal gameplay.
 var reference_audit_mode := false
+## R3X-2: an explicit test-only escape hatch for the legacy group authority.
+## PlayerState.test_mode is intentionally not consulted here: ordinary tests
+## must exercise the mapped spatial path and fail closed when it is absent.
+var _aoe_reference_fallback_test_enabled := false
 ## FREEZE-P0.2R: projection profiles contain closures and must be reused during
 ## actor/location updates. Formal profiles also retain the exact runtime
 ## Dictionary that their closures captured, so a bridge cache invalidation can
@@ -319,8 +323,15 @@ func _clear_aoe_query_scratch() -> void:
 ## hostile target resolution.  Group enumeration remains available solely for
 ## explicit reference/test callers so parity fixtures can exercise the old
 ## authority without creating a gameplay fallback.
+func set_aoe_reference_fallback_for_test(enabled: bool) -> void:
+	if not OS.is_debug_build():
+		_aoe_reference_fallback_test_enabled = false
+		return
+	_aoe_reference_fallback_test_enabled = enabled
+
+
 func _aoe_reference_fallback_allowed() -> bool:
-	return reference_audit_mode or PlayerState.test_mode
+	return reference_audit_mode or _aoe_reference_fallback_test_enabled
 
 
 func _aoe_reference_enemy_nodes_into(output: Array[EnemyActor]) -> bool:

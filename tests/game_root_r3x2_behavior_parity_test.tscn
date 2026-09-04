@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/game_root_r3x2_behavior_parity_test.gd" id="1_behavior"]
+
+[node name="GameRootR3X2BehaviorParityTest" type="Node2D"]
+script = ExtResource("1_behavior")
