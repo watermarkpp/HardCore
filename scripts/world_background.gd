@@ -8,7 +8,6 @@ const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
 const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
 const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
-const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 # P1-004: texture atlases are now lazy-loaded.  Only the target map's
 # atlases are loaded when a map is built.  Old const names remain as
@@ -418,6 +417,15 @@ func is_environment_segment_blocked_ground(
 	var sample_count := maxi(1, int(ceil(distance_gu / float(step_gu))))
 	if _editor_runtime_collision_invalid:
 		return true
+	var legacy_source_size := Vector2i.ZERO
+	if _editor_runtime_size == Vector2i.ZERO:
+		var legacy_profile := environment_profile()
+		var raw_source_size: Variant = legacy_profile.get("source_size", null)
+		if not raw_source_size is Vector2i:
+			return true
+		legacy_source_size = raw_source_size
+		if legacy_source_size.x <= 0 or legacy_source_size.y <= 0:
+			return true
 	for sample_index: int in range(sample_count + 1):
 		var progress := float(sample_index) / float(sample_count)
 		var sample_ground_gu := source_ground_gu.lerp(target_ground_gu, progress)
@@ -429,8 +437,9 @@ func is_environment_segment_blocked_ground(
 				sample_ground_gu,
 			)
 		else:
-			var sample_world_px := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-				sample_ground_gu
+			var sample_world_px := MapCoordinateMapperScript.ground_position_gu_to_screen_position_px(
+				sample_ground_gu,
+				legacy_source_size,
 			)
 			if not sample_world_px.is_finite():
 				return true
@@ -1460,6 +1469,13 @@ func build_one_map_item(descriptor: Dictionary) -> Node:
 # ── HC-P1-004 collision descriptors ──
 
 func build_collision_descriptors(map_data: Dictionary) -> Array:
+	# This public rebuild entry can be called independently of clear_environment()
+	# by tests/tools. Invalidate the old authority before resolving the new map so
+	# a missing or invalid replacement can never keep serving stale occupancy.
+	_environment_collision_revision += 1
+	_editor_runtime_collision_snapshot.clear()
+	_editor_runtime_size = Vector2i.ZERO
+	_editor_runtime_collision_invalid = false
 	var map_id := _map_id_from_data(map_data)
 	var runtime := _runtime_data_for(map_id)
 	var generation := _generation_token()

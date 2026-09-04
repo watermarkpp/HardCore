@@ -8,8 +8,13 @@ const EditorCoordinate := preload(
 )
 const WorldBackgroundScript := preload("res://scripts/world_background.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
+const MapEditorRuntimeBridgeScript := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
 
 const TEST_RUNTIME_MAP_ID := 991001
+const TEST_REGISTERED_RUNTIME_MAP_ID := 911103
 const TEST_SIZE := Vector2i(4, 4)
 const TEST_BUILD_SHA := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
@@ -76,6 +81,24 @@ class SegmentEnemy:
 		return null
 
 
+class CollisionBuildProbe:
+	extends WorldBackground
+
+	var runtime_override: Dictionary = {}
+
+	func _runtime_data_for(_map_id: int) -> Dictionary:
+		return runtime_override
+
+
+class ReferenceProfileProbe:
+	extends WorldBackground
+
+	var profile_override: Dictionary = {}
+
+	func environment_profile() -> Dictionary:
+		return profile_override
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -98,6 +121,8 @@ func _run() -> void:
 	_assert_segment_parity(runtime, compiled)
 	_assert_formal_invalid_fail_closed(runtime)
 	_assert_manual_shapes_are_not_authority(runtime)
+	_assert_reference_segment_uses_absolute_projection()
+	_assert_build_rebuild_invalidates_collision_authority()
 	_assert_actor_batch_priority()
 	_assert_actor_legacy_order()
 	_assert_background_actor_and_segment(compiled)
@@ -128,6 +153,12 @@ func _make_runtime() -> Dictionary:
 			"erased_cells": [],
 		},
 	}
+
+
+func _make_runtime_for_map(runtime_map_id: int) -> Dictionary:
+	var runtime := _make_runtime()
+	runtime["source"]["runtime_map_id"] = runtime_map_id
+	return runtime
 
 
 func _assert_real_formal_runtime_compiles() -> void:
@@ -422,6 +453,104 @@ func _assert_background_actor_and_segment(compiled: Dictionary) -> void:
 			0.25,
 		),
 		"compiled background segment missed blocked cell",
+	)
+	background.free()
+
+
+func _assert_reference_segment_uses_absolute_projection() -> void:
+	var background := WorldBackgroundScript.new()
+	background.zone_data = {"mapId": 401}
+	var source_size := Vector2i(200, 200)
+	var source_mask := Image.create(
+		source_size.x,
+		source_size.y,
+		false,
+		Image.FORMAT_RGBA8,
+	)
+	source_mask.fill(Color.WHITE)
+	source_mask.set_pixel(100, 100, Color.BLACK)
+	background._source_mask_image = source_mask
+	# Keep the legacy clearance cache non-empty without clearing the probe cell;
+	# otherwise the profile's route/Content clearance fallback can mask it.
+	background._source_clear_cell_cache[Vector2i(-1, -1)] = false
+	var center_ground := Vector2(99.5, 99.5)
+	var center_world := MapCoordinateMapperScript.ground_position_gu_to_screen_position_px(
+		center_ground,
+		source_size,
+	)
+	assert(
+		center_world.is_equal_approx(Vector2.ZERO),
+		"reference profile center did not map to absolute world origin",
+	)
+	assert(
+		background.is_environment_segment_blocked_ground(
+			center_ground,
+			center_ground,
+			0.25,
+		),
+		"reference segment did not use source-size absolute projection",
+	)
+	background.free()
+
+	var invalid_profile := ReferenceProfileProbe.new()
+	invalid_profile.profile_override = {"source_size": Vector2i.ZERO}
+	assert(
+		invalid_profile.is_environment_segment_blocked_ground(
+			Vector2.ZERO,
+			Vector2.ZERO,
+			0.25,
+		),
+		"invalid reference source_size did not fail closed",
+	)
+	invalid_profile.profile_override = {}
+	assert(
+		invalid_profile.is_environment_segment_blocked_ground(
+			Vector2.ZERO,
+			Vector2.ZERO,
+			0.25,
+		),
+		"missing reference source_size did not fail closed",
+	)
+	invalid_profile.free()
+
+
+func _assert_build_rebuild_invalidates_collision_authority() -> void:
+	var bridge_path := MapEditorRuntimeBridgeScript.runtime_path(
+		TEST_REGISTERED_RUNTIME_MAP_ID
+	)
+	assert(not bridge_path.is_empty(), "registered rebuild test map is unavailable")
+	var background := CollisionBuildProbe.new()
+	background.runtime_override = _make_runtime_for_map(
+		TEST_REGISTERED_RUNTIME_MAP_ID
+	)
+	var initial_revision := background.environment_collision_revision()
+	var successful_descriptors := background.build_collision_descriptors({
+		"mapId": TEST_REGISTERED_RUNTIME_MAP_ID,
+	})
+	var success_revision := background.environment_collision_revision()
+	assert(success_revision > initial_revision)
+	assert(not successful_descriptors.is_empty())
+	assert(not background._editor_runtime_collision_snapshot.is_empty())
+	assert(background._editor_runtime_size == TEST_SIZE)
+
+	background.runtime_override = {}
+	var failed_descriptors := background.build_collision_descriptors({
+		"mapId": TEST_REGISTERED_RUNTIME_MAP_ID,
+	})
+	var failure_revision := background.environment_collision_revision()
+	assert(failure_revision > success_revision)
+	assert(failed_descriptors.is_empty())
+	assert(background._editor_runtime_collision_snapshot.is_empty())
+	assert(background._editor_runtime_size == Vector2i.ZERO)
+	assert(background._editor_runtime_collision_invalid)
+	assert(background.is_environment_point_blocked(Vector2.ZERO))
+	assert(
+		background.is_environment_segment_blocked_ground(
+			Vector2.ZERO,
+			Vector2.ZERO,
+			0.25,
+		),
+		"failed rebuild did not remain fail closed",
 	)
 	background.free()
 
