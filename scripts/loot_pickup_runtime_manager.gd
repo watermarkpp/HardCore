@@ -199,10 +199,25 @@ func flush_for_logout() -> Dictionary:
 	# node generated immediately before the close request cannot be silently
 	# left behind by the low-frequency scheduler.
 	if not _refresh_player_ground():
+		var retry_blocked_ids := _logout_retry_blocked_ids_snapshot()
+		var pending_count := _pending_logout_candidate_count()
+		var registered_count := _registered_pickups.size()
+		var unsettled := (
+			registered_count > 0
+			or pending_count > 0
+			or not retry_blocked_ids.is_empty()
+		)
 		return {
-			"success": true,
-			"reason": "loot_manager_projection_unavailable_no_candidates",
-			"pending_candidates": 0,
+			"success": not unsettled,
+			"reason": (
+				"loot_manager_projection_unavailable_with_unsettled_loot"
+				if unsettled
+				else "loot_manager_projection_unavailable_no_candidates"
+			),
+			"pending_candidates": pending_count,
+			"logout_retry_blocked_count": retry_blocked_ids.size(),
+			"logout_retry_blocked_pickup_ids": retry_blocked_ids,
+			"registered_pickup_count": registered_count,
 		}
 	_run_collection_pass(0.0)
 	return {
@@ -422,3 +437,23 @@ func _pending_logout_candidate_count() -> int:
 			if not (pickup as LootPickup).is_queued_for_deletion() and (pickup as LootPickup).collection_pending():
 				count += 1
 	return count
+
+
+func _logout_retry_blocked_ids_snapshot() -> Array[int]:
+	var result: Array[int] = _logout_blocked_pickup_ids.duplicate()
+	for raw_ref: Variant in _registered_pickups.values():
+		if not raw_ref is WeakRef:
+			continue
+		var pickup: Variant = (raw_ref as WeakRef).get_ref()
+		if not pickup is LootPickup or not is_instance_valid(pickup):
+			continue
+		var pickup_object := pickup as LootPickup
+		if (
+			not pickup_object.is_queued_for_deletion()
+			and not pickup_object.collection_pending()
+			and pickup_object.retry_cooldown_remaining() > 0.0
+		):
+			var pickup_id := pickup_object.get_instance_id()
+			if not result.has(pickup_id):
+				result.append(pickup_id)
+	return result

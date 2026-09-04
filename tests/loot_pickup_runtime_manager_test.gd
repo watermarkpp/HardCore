@@ -219,6 +219,25 @@ func _run() -> void:
 	_manager.clear_map(7)
 	assert(_manager.diagnostics_snapshot().registered_pickup_count == 0)
 	assert(_manager.diagnostics_snapshot().spatial_index.index_query_count > 0)
+	assert(
+		not _manager.configure_map(7, 1, Callable(), Callable()),
+		"invalid empty-manager projection unexpectedly configured",
+	)
+	var empty_projection_logout: Dictionary = _manager.flush_for_logout()
+	assert(bool(empty_projection_logout.get("success", false)))
+	assert(
+		str(empty_projection_logout.get("reason", ""))
+		== "loot_manager_projection_unavailable_no_candidates",
+	)
+	assert(
+		_manager.configure_map(
+			7,
+			1,
+			Callable(self, "_screen_to_ground"),
+			Callable(self, "_ground_to_screen"),
+		),
+		"manager projection restore failed after empty logout check",
+	)
 
 	await _run_game_root_collection_and_logout()
 	for child: Node in get_children():
@@ -377,6 +396,34 @@ func _run_game_root_collection_and_logout() -> void:
 	assert(not bool(failed.get("success", true)), "loot save failure must reject safe logout")
 	assert(str(failed.get("reason", "")) == "safe_logout_loot_collection_failed")
 	assert(PlayerState.inventory.is_empty(), "failed loot transaction changed inventory")
+	var failed_map_id := int(game.current_map_id)
+	var failed_generation := int(game._zone_generation)
+	assert(
+		not manager.configure_map(
+			failed_map_id,
+			failed_generation,
+			Callable(),
+			Callable(),
+		),
+		"invalid retry projection unexpectedly configured",
+	)
+	var projection_failure: Dictionary = manager.flush_for_logout()
+	assert(not bool(projection_failure.get("success", true)))
+	assert(
+		str(projection_failure.get("reason", ""))
+		== "loot_manager_projection_unavailable_with_unsettled_loot",
+	)
+	assert(int(projection_failure.get("registered_pickup_count", 0)) > 0)
+	assert(int(projection_failure.get("logout_retry_blocked_count", 0)) > 0)
+	assert(
+		manager.configure_map(
+			failed_map_id,
+			failed_generation,
+			Callable(game, "_canonical_screen_px_to_ground_gu"),
+			Callable(game, "_canonical_ground_gu_to_screen_px"),
+		),
+		"retry projection restore failed",
+	)
 	var immediate_logout_retry: Dictionary = game._prepare_safe_logout()
 	assert(not bool(immediate_logout_retry.get("success", true)))
 	assert(str(immediate_logout_retry.get("reason", "")) == "safe_logout_loot_retry_pending")
