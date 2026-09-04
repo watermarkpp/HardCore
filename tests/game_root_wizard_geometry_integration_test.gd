@@ -21,6 +21,9 @@ const CasterSkillVisualRegistry := preload(
 const CasterSkillVisualEffect := preload(
 	"res://scripts/caster_skill_visual_effect.gd"
 )
+const RuntimeCombatSpatialIndex := preload(
+	"res://scripts/runtime_combat_spatial_index.gd"
+)
 
 
 func _ready() -> void:
@@ -49,6 +52,10 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	# Freeze unrelated world/bootstrap maintenance while this test owns the
+	# manually-created combat fixtures and invokes release resolvers directly.
+	game.set_process(false)
+	game.set_physics_process(false)
 	var generated_release_a: String = game._next_skill_footprint_release_id(
 		"wizard.laser"
 	)
@@ -59,7 +66,13 @@ func _run() -> void:
 	assert(generated_release_a != generated_release_b)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
-			(value as EnemyActor).global_position = game.player.global_position + Vector2(4000, 4000)
+			var existing_enemy := value as EnemyActor
+			existing_enemy.set_combat_position(
+				game.player.global_position + Vector2(4000, 4000),
+				&"integration_fixture_relocate",
+			)
+			existing_enemy.set_process(false)
+			existing_enemy.set_physics_process(false)
 
 	var origin_tile: Vector2i = game._canonical_screen_px_to_grid_cell(
 		game.player.global_position
@@ -209,10 +222,19 @@ func _run() -> void:
 	assert(game._canonical_screen_px_to_grid_cell(ring_target.global_position) == origin_tile + Vector2i(2, 0))
 	assert(game._canonical_screen_px_to_grid_cell(center_target.global_position) == origin_tile)
 	assert(game._canonical_screen_px_to_grid_cell(outside_target.global_position) == origin_tile + Vector2i(3, 0))
+	var ring_snapshot := SkillFootprintSnapshot.create_cell_union(
+		"wizard.hell_lightning",
+		"test:hell_lightning:ring",
+		origin_ground_gu,
+		ring_cells,
+		game._canonical_snapshot_absolute_context(origin_ground_gu),
+	)
 	var ring_targets: Array[EnemyActor] = game._canonical_spell_geometry_targets(
 		"wizard.hell_lightning",
 		ring_cells,
-		{"maximum_targets": 24, "exclude_center": true, "radius_grid_steps": 2}
+		{"maximum_targets": 24, "exclude_center": true, "radius_grid_steps": 2},
+		{},
+		ring_snapshot,
 	)
 	assert(ring_targets.has(ring_target), "地狱雷光正式外环未选择环内目标")
 	assert(not ring_targets.has(center_target), "地狱雷光正式外环错误选择中心目标")
@@ -225,7 +247,9 @@ func _run() -> void:
 		"caster_centered_area_damage",
 		null,
 		ring_cells,
-		{"maximum_targets": 24, "exclude_center": true, "radius_grid_steps": 2}
+		{"maximum_targets": 24, "exclude_center": true, "radius_grid_steps": 2},
+		{},
+		ring_snapshot,
 	)
 	assert(lightning_hit and ring_target.current_hp < ring_hp, "地狱雷光未命中正式半径二格外环目标")
 	assert(center_target.current_hp == center_hp, "地狱雷光错误命中施法者脚下中心格")
@@ -414,13 +438,16 @@ func _run() -> void:
 			"疾光电影错误保留八目标上限：第%d个附加目标未受伤" % stacked_index
 		)
 	var line_diagnostics := SkillFootprintDiagnosticLog.recent_events()
-	assert(line_diagnostics.size() == 2)
-	assert(line_diagnostics[1].release_id == "test:laser:release:1")
-	assert(int(line_diagnostics[1].eligible_target_count) == 9)
-	assert(bool(line_diagnostics[1].damage_applied))
 	assert(
-		line_diagnostics[1].expected_projected_polygon_px
-		== line_diagnostics[1].actual_visual_core_polygon_px
+		line_diagnostics.size() == 3,
+		"expected hellfire+hell lightning+laser diagnostics, got %d" % line_diagnostics.size(),
+	)
+	assert(line_diagnostics[2].release_id == "test:laser:release:1")
+	assert(int(line_diagnostics[2].eligible_target_count) == 9)
+	assert(bool(line_diagnostics[2].damage_applied))
+	assert(
+		line_diagnostics[2].expected_projected_polygon_px
+		== line_diagnostics[2].actual_visual_core_polygon_px
 	)
 
 	near_laser_target.queue_free()
@@ -574,11 +601,11 @@ func _make_enemy(
 	enemy.max_hp = 9999
 	enemy.current_hp = 9999
 	enemy.control_time = 60.0
-	game.add_child(enemy)
-	# Enemy._ready() repairs player overlap for production spawns. Tests place
-	# exact footpoints after that one-time repair and then freeze AI movement.
-	enemy.global_position = game._canonical_grid_cell_to_screen_px(tile)
-	enemy.set_physics_process(false)
+	_register_enemy_with_runtime_index(
+		game,
+		enemy,
+		game._canonical_grid_cell_to_screen_px(tile),
+	)
 	return enemy
 
 
@@ -594,5 +621,42 @@ func _make_enemy_at_fractional_tile(
 		Vector2i(roundi(tile.x), roundi(tile.y)),
 		display_name
 	)
-	enemy.global_position = game._canonical_ground_gu_to_screen_px(tile)
+	enemy.set_combat_position(
+		game._canonical_ground_gu_to_screen_px(tile),
+		&"integration_fixture_fractional_position",
+	)
 	return enemy
+
+
+func _register_enemy_with_runtime_index(
+	game: Node,
+	enemy: EnemyActor,
+	position_px: Vector2,
+) -> void:
+	var runtime_map_id := int(game.get("current_map_id"))
+	var spatial_index: RuntimeCombatSpatialIndex = game.get("_combat_spatial_index")
+	var spawn_serial := int(game.get("_runtime_spawn_serial")) + 1
+	game.set("_runtime_spawn_serial", spawn_serial)
+	enemy.configure_runtime_map_projection(
+		runtime_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	enemy.configure_spatial_index(spatial_index, spawn_serial)
+	enemy.set_meta("spawn_serial", spawn_serial)
+	enemy.set_combat_position(position_px, &"integration_fixture_spawn")
+	spatial_index.register(
+		spawn_serial,
+		runtime_map_id,
+		game._canonical_screen_px_to_ground_gu(position_px),
+		enemy.combat_radius_gu,
+		spawn_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position"),
+	)
+	game.add_child(enemy)
+	# Enemy._ready() may perform its one-time overlap repair. Restore the
+	# fixture's intended footpoint through the same authoritative position API.
+	enemy.set_combat_position(position_px, &"integration_fixture_position")
+	enemy.set_process(false)
+	enemy.set_physics_process(false)
