@@ -213,6 +213,11 @@ var locked_target: EnemyActor
 var manual_target_lock := false
 var magic_locked_target: EnemyActor
 var manual_magic_target_lock := false
+## Target presentation keeps only the previous displayed actor.  Enemy group
+## enumeration is not needed to update one changed highlight; the WeakRef also
+## lets map/death teardown clear a stale presentation without retaining it.
+var _presented_target_instance_id := 0
+var _presented_target_ref: WeakRef
 ## Presentation/selection follows the latest combat action. Caster
 ## professions still own an independent magic lock, but an empty primary slot
 ## temporarily presents and consumes the physical lock just like a warrior.
@@ -272,6 +277,11 @@ var _active_enemy_cache: Dictionary = {}
 var _active_boss_cache: Dictionary = {}
 var _safe_zone_enforcement_remaining := 0.0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+## Shared caller-owned scratch for player-facing enemy broadphase queries.  All
+## production consumers filter the current map generation after the index
+## query; no SceneTree group fallback is permitted when this contract is not
+## ready.
+var _target_spatial_query_scratch: Array[EnemyActor] = []
 var _aoe_candidate_scratch: Array[EnemyActor] = []
 var _aoe_target_scratch: Array[EnemyActor] = []
 var _aoe_distance_scratch: Array[float] = []
@@ -528,6 +538,120 @@ func _aoe_reference_enemy_nodes_into(output: Array[EnemyActor]) -> bool:
 		&"aoe_spatial_candidates",
 		output.size(),
 	)
+	return true
+
+
+func _target_spatial_query_ready() -> bool:
+	## Player target/occupancy paths are formal mapped-world consumers.  A
+	## missing index or projection is a rejection, never an implicit group scan.
+	if (
+		_combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+		or current_map_id < 0
+	):
+		projection_rejection_reason = &"target_spatial_index_unavailable"
+		return false
+	var profile := _resolve_projection_profile_for_map(current_map_id)
+	if not bool(profile.get("success", false)):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = str(profile.get(
+			"reason",
+			GroundUnitSpaceScript.REASON_INVALID_RUNTIME_PROJECTION,
+		))
+		return false
+	var screen_to_ground: Variant = profile.get("screen_to_ground", Callable())
+	var ground_to_screen: Variant = profile.get("ground_to_screen", Callable())
+	if (
+		not screen_to_ground is Callable
+		or not (screen_to_ground as Callable).is_valid()
+		or not ground_to_screen is Callable
+		or not (ground_to_screen as Callable).is_valid()
+	):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = &"target_spatial_projection_unavailable"
+		return false
+	return true
+
+
+func _target_spatial_enemy_is_current(enemy: EnemyActor) -> bool:
+	return (
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and not enemy._dying
+		and not enemy._death_pending
+		and enemy.current_hp > 0
+		and enemy.runtime_map_id == current_map_id
+		and enemy.projection_ready()
+		and int(enemy.get_meta("zone_generation", -1)) == _zone_generation
+	)
+
+
+func _target_spatial_query_aabb_into(
+	bounds_ground_gu: Rect2,
+	output: Array[EnemyActor],
+) -> bool:
+	output.clear()
+	if (
+		not _target_spatial_query_ready()
+		or not bounds_ground_gu.position.is_finite()
+		or not bounds_ground_gu.size.is_finite()
+		or bounds_ground_gu.size.x < 0.0
+		or bounds_ground_gu.size.y < 0.0
+	):
+		if bounds_ground_gu.size.x < 0.0 or bounds_ground_gu.size.y < 0.0:
+			projection_rejection_reason = &"target_spatial_query_bounds_invalid"
+		return false
+	_combat_spatial_index.query_enemy_nodes_aabb_into(
+		current_map_id,
+		bounds_ground_gu,
+		output,
+	)
+	var write_index := 0
+	for raw_enemy: Variant in output:
+		if not raw_enemy is EnemyActor:
+			continue
+		var enemy := raw_enemy as EnemyActor
+		if not _target_spatial_enemy_is_current(enemy):
+			continue
+		output[write_index] = enemy
+		write_index += 1
+	output.resize(write_index)
+	return true
+
+
+func _target_spatial_query_segment_into(
+	start_ground_gu: Vector2,
+	end_ground_gu: Vector2,
+	expansion_gu: float,
+	output: Array[EnemyActor],
+) -> bool:
+	output.clear()
+	if (
+		not _target_spatial_query_ready()
+		or not start_ground_gu.is_finite()
+		or not end_ground_gu.is_finite()
+		or not is_finite(expansion_gu)
+	):
+		if not is_finite(expansion_gu):
+			projection_rejection_reason = &"target_spatial_query_expansion_invalid"
+		return false
+	_combat_spatial_index.query_enemy_nodes_segment_into(
+		current_map_id,
+		start_ground_gu,
+		end_ground_gu,
+		expansion_gu,
+		output,
+	)
+	var write_index := 0
+	for raw_enemy: Variant in output:
+		if not raw_enemy is EnemyActor:
+			continue
+		var enemy := raw_enemy as EnemyActor
+		if not _target_spatial_enemy_is_current(enemy):
+			continue
+		output[write_index] = enemy
+		write_index += 1
+	output.resize(write_index)
 	return true
 
 
@@ -4413,10 +4537,17 @@ func _attack_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		player.global_position
 	)
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if not value is EnemyActor:
-			continue
-		var enemy := value as EnemyActor
+	if not origin_ground_gu.is_finite():
+		return []
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			origin_ground_gu - Vector2.ONE * ATTACK_LOCK_RANGE_GU,
+			Vector2.ONE * ATTACK_LOCK_RANGE_GU * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return []
+	for enemy: EnemyActor in _target_spatial_query_scratch:
 		if enemy == excluded or not _is_attack_target_in_range(enemy):
 			continue
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(
@@ -4523,10 +4654,17 @@ func _is_magic_target_in_range(target: EnemyActor) -> bool:
 func _spell_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 	var raw_candidates: Array[Dictionary] = []
 	var origin_ground_gu := _spell_lock_ground_gu(player.global_position)
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if not value is EnemyActor:
-			continue
-		var enemy := value as EnemyActor
+	if not origin_ground_gu.is_finite():
+		return []
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			origin_ground_gu - Vector2.ONE * SpellTargetLockPolicyScript.LOCK_RANGE_GU,
+			Vector2.ONE * SpellTargetLockPolicyScript.LOCK_RANGE_GU * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return []
+	for enemy: EnemyActor in _target_spatial_query_scratch:
 		if enemy == excluded or not _is_magic_target_in_range(enemy):
 			continue
 		raw_candidates.append({
@@ -4558,9 +4696,31 @@ func _active_display_target() -> EnemyActor:
 
 func _refresh_target_highlights() -> void:
 	var active_target := _active_display_target()
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if value is EnemyActor and is_instance_valid(value):
-			(value as EnemyActor).set_targeted(value == active_target)
+	var next_instance_id := (
+		active_target.get_instance_id()
+		if is_instance_valid(active_target)
+		else 0
+	)
+	var previous_target: EnemyActor = null
+	if _presented_target_ref != null:
+		var previous_value: Variant = _presented_target_ref.get_ref()
+		if previous_value is EnemyActor and is_instance_valid(previous_value):
+			previous_target = previous_value as EnemyActor
+	if (
+		next_instance_id == _presented_target_instance_id
+		and previous_target == active_target
+	):
+		return
+	if previous_target != null and previous_target != active_target:
+		previous_target.set_targeted(false)
+	if is_instance_valid(active_target):
+		active_target.set_targeted(true)
+	_presented_target_instance_id = next_instance_id
+	_presented_target_ref = (
+		weakref(active_target)
+		if is_instance_valid(active_target)
+		else null
+	)
 
 
 func _attack_lock_distance_gu(target: EnemyActor) -> float:
@@ -5083,12 +5243,19 @@ func _select_wild_rush_target() -> EnemyActor:
 		# redirecting the charge to a different nearby monster.
 		return locked_target if _wild_rush_target_is_eligible(locked_target) else null
 	var player_ground_gu := _canonical_screen_px_to_ground_gu(player.global_position)
+	if not player_ground_gu.is_finite():
+		return null
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			player_ground_gu - Vector2.ONE * WarriorMeleeGeometryScript.WILD_RUSH_TARGET_REACH_GU,
+			Vector2.ONE * WarriorMeleeGeometryScript.WILD_RUSH_TARGET_REACH_GU * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return null
 	var best: EnemyActor
 	var best_distance_gu := INF
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor:
-			continue
-		var enemy: EnemyActor = node
+	for enemy: EnemyActor in _target_spatial_query_scratch:
 		if not _wild_rush_target_is_eligible(enemy):
 			continue
 		var enemy_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
@@ -5096,7 +5263,13 @@ func _select_wild_rush_target() -> EnemyActor:
 			player_ground_gu,
 			enemy_ground_gu
 		)
-		if distance_gu < best_distance_gu:
+		# The no-lock contract is strict at 1.5 GU.  The index result is kept in
+		# the established stable spawn/group order, so equal distances retain the
+		# first legacy candidate instead of introducing an instance-id tie-break.
+		if (
+			distance_gu < WarriorMeleeGeometryScript.WILD_RUSH_TARGET_REACH_GU
+			and distance_gu < best_distance_gu
+		):
 			best = enemy
 			best_distance_gu = distance_gu
 	return best
@@ -5199,10 +5372,23 @@ func _wild_rush_has_dynamic_blocker(
 	var forward_ground_gu := direction_ground_gu.normalized()
 	var side_ground_gu := Vector2(-forward_ground_gu.y, forward_ground_gu.x)
 	var target_radius_gu := target.combat_radius_gu
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node == target:
+	if (
+		not target_ground_gu.is_finite()
+		or forward_ground_gu.length_squared()
+		<= WarriorMeleeGeometryScript.EPSILON * WarriorMeleeGeometryScript.EPSILON
+	):
+		return false
+	if not _target_spatial_query_segment_into(
+		target_ground_gu,
+		target_ground_gu
+			+ forward_ground_gu * WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_GU,
+		target_radius_gu,
+		_target_spatial_query_scratch,
+	):
+		return false
+	for other: EnemyActor in _target_spatial_query_scratch:
+		if other == target:
 			continue
-		var other: EnemyActor = node
 		if other.is_queued_for_deletion() or other.current_hp <= 0:
 			continue
 		var delta_ground_gu := (
@@ -6086,6 +6272,9 @@ func _melee_candidate_diagnostics(
 	mode: String,
 	primary_targets: Array[EnemyActor]
 ) -> Array[Dictionary]:
+	# Explicit diagnostic-only candidate evidence still uses the same mapped
+	# broadphase.  Diagnostics must not reintroduce a SceneTree full-group scan
+	# into an attack release just because the log is enabled.
 	var result: Array[Dictionary] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var resolved_mode := (
@@ -6098,10 +6287,29 @@ func _melee_candidate_diagnostics(
 		]
 		else WarriorMeleeGeometryScript.SKILL_NORMAL
 	)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
-			continue
-		var enemy := node as EnemyActor
+	if not origin_ground_gu.is_finite():
+		return result
+	var diagnostic_radius_gu := (
+		WarriorMeleeGeometryScript.reach_gu(resolved_mode) + 1.0
+	)
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			origin_ground_gu - Vector2.ONE * diagnostic_radius_gu,
+			Vector2.ONE * diagnostic_radius_gu * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return result
+	# A selected target is authoritative release evidence. Preserve it in the
+	# diagnostic record even if a malformed fixture placed it outside the
+	# conservative diagnostic envelope, without broadening the production query.
+	for selected: EnemyActor in primary_targets:
+		if (
+			_target_spatial_enemy_is_current(selected)
+			and not _target_spatial_query_scratch.has(selected)
+		):
+			_target_spatial_query_scratch.append(selected)
+	for enemy: EnemyActor in _target_spatial_query_scratch:
 		var explanation := WarriorMeleeDiagnosticScript.explain_footprint_candidate(
 			origin_ground_gu,
 			_canonical_screen_px_to_ground_gu(enemy.global_position),
@@ -7100,6 +7308,12 @@ func _canonical_target_context(
 				)
 			)
 		)
+	var exact_snapshot_valid := false
+	if (
+		not bool(context.get("hostile_targets_pre_resolved", false))
+		or friendly_cast
+	):
+		exact_snapshot_valid = _snapshot_strict_ok(exact_release_snapshot)
 	var nearby: Array[Dictionary] = []
 	var adjacent_ring_cells: Array[Vector2i] = []
 	if str(definition.get("geometry", {}).get("shape", "")) == "adjacent_ring":
@@ -7111,56 +7325,75 @@ func _canonical_target_context(
 						caster_tile + Vector2i(ring_x, ring_y)
 					)
 	if not bool(context.get("hostile_targets_pre_resolved", false)):
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if (
-				not node is EnemyActor
-				or node.is_queued_for_deletion()
-				or (
-					_snapshot_strict_ok(exact_release_snapshot)
-					and not _skill_snapshot_intersects_enemy(
-						exact_release_snapshot, node as EnemyActor
-					)
+		# The broadphase envelope is deliberately conservative; the exact
+		# snapshot/range/adjacent-ring checks below remain authoritative.
+		var target_query_bounds := Rect2(
+			origin_ground_gu - Vector2.ONE * search_range_gu,
+			Vector2.ONE * search_range_gu * 2.0,
+		)
+		if exact_snapshot_valid:
+			var snapshot_aabb := SkillFootprintSnapshotScript.ground_aabb(
+				exact_release_snapshot
+			)
+			if bool(snapshot_aabb.get("valid", false)):
+				target_query_bounds = snapshot_aabb.get(
+					"bounds_ground_gu",
+					target_query_bounds
 				)
-				or (
-					not _snapshot_strict_ok(exact_release_snapshot)
+		if _target_spatial_query_aabb_into(
+			target_query_bounds,
+			_target_spatial_query_scratch,
+		):
+			for node: EnemyActor in _target_spatial_query_scratch:
+				if (
+					exact_snapshot_valid
+					and not SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+						exact_release_snapshot,
+						_canonical_screen_px_to_ground_gu(node.global_position),
+						node.combat_radius_gu,
+					)
+				):
+					continue
+				if (
+					not exact_snapshot_valid
 					and not GroundUnitSpaceScript.is_within_range_gu(
 						origin_ground_gu,
 						_canonical_screen_px_to_ground_gu(node.global_position),
 						search_range_gu
 					)
+				):
+					continue
+				if (
+					not adjacent_ring_cells.is_empty()
+					and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
+						adjacent_ring_cells,
+						_canonical_screen_px_to_ground_gu(node.global_position),
+						node.combat_radius_gu
+					).get("intersects", false))
+				):
+					continue
+				var node_ground_gu := _canonical_screen_px_to_ground_gu(
+					node.global_position
 				)
-			):
-				continue
-			if (
-				not adjacent_ring_cells.is_empty()
-				and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
-					adjacent_ring_cells,
-					_canonical_screen_px_to_ground_gu(node.global_position),
-					node.combat_radius_gu
-				).get("intersects", false))
-			):
-				continue
-			nearby.append({
-				"instance_id": node.get_instance_id(),
-				"target_instance_id": node.get_instance_id(),
-				"level": node.level,
-				"is_boss": node.is_boss,
-				"immovable": node.is_boss,
-				"path_blocked": background.is_environment_point_blocked(
-					_canonical_ground_gu_to_screen_px(
-						_canonical_screen_px_to_ground_gu(node.global_position)
-						+ (
-							_canonical_screen_px_to_ground_gu(node.global_position)
-							- origin_ground_gu
-						).normalized()
-					)
-				),
-				"hostile_monster": true,
-				"control_immune": node.is_boss,
-				"within_level_gate": node.level <= PlayerState.level,
-			})
+				nearby.append({
+					"instance_id": node.get_instance_id(),
+					"target_instance_id": node.get_instance_id(),
+					"level": node.level,
+					"is_boss": node.is_boss,
+					"immovable": node.is_boss,
+					"path_blocked": background.is_environment_point_blocked(
+						_canonical_ground_gu_to_screen_px(
+							node_ground_gu + (
+								node_ground_gu - origin_ground_gu
+							).normalized()
+						)
+					),
+					"hostile_monster": true,
+					"control_immune": node.is_boss,
+					"within_level_gate": node.level <= PlayerState.level,
+				})
 	context["targets"] = nearby
-	if friendly_cast and _snapshot_strict_ok(exact_release_snapshot):
+	if friendly_cast and exact_snapshot_valid:
 		var friendly_targets: Array[Dictionary] = []
 		var friendly_missing_hp: Array[int] = []
 		var friendly_actors: Array[Node2D] = [player]
@@ -9517,31 +9750,53 @@ func _canonical_summon_position_is_valid(
 		)
 	):
 		return false
-	var actors: Array = []
-	if is_instance_valid(player):
-		actors.append(player)
-	actors.append_array(get_tree().get_nodes_in_group("enemies"))
-	actors.append_array(get_tree().get_nodes_in_group("summons"))
-	var seen: Dictionary = {}
-	for raw_actor: Variant in actors:
-		if (
-			not raw_actor is Node2D
-			or not is_instance_valid(raw_actor)
-			or raw_actor == ignored_summon
-			or (raw_actor as Node2D).is_queued_for_deletion()
-		):
-			continue
-		var actor := raw_actor as Node2D
-		var actor_id := actor.get_instance_id()
-		if seen.has(actor_id):
-			continue
-		seen[actor_id] = true
+	if is_instance_valid(player) and player != ignored_summon:
 		if GroundUnitSpaceScript.distance_gu(
-			_canonical_screen_px_to_ground_gu(actor.global_position),
+			_canonical_screen_px_to_ground_gu(player.global_position),
 			candidate_ground_gu
 		) < (
 			summon_radius_gu
-			+ _actor_combat_radius_gu(actor)
+			+ _actor_combat_radius_gu(player)
+			+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
+		):
+			return false
+	var enemy_query_radius_gu := (
+		summon_radius_gu
+		+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
+	)
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			candidate_ground_gu - Vector2.ONE * enemy_query_radius_gu,
+			Vector2.ONE * enemy_query_radius_gu * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return false
+	for enemy: EnemyActor in _target_spatial_query_scratch:
+		if GroundUnitSpaceScript.distance_gu(
+			_canonical_screen_px_to_ground_gu(enemy.global_position),
+			candidate_ground_gu
+		) < (
+			summon_radius_gu
+			+ enemy.combat_radius_gu
+			+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
+		):
+			return false
+	for raw_summon: Variant in get_tree().get_nodes_in_group("summons"):
+		if (
+			not raw_summon is Node2D
+			or not is_instance_valid(raw_summon)
+			or raw_summon == ignored_summon
+			or raw_summon.is_queued_for_deletion()
+		):
+			continue
+		var summon := raw_summon as Node2D
+		if GroundUnitSpaceScript.distance_gu(
+			_canonical_screen_px_to_ground_gu(summon.global_position),
+			candidate_ground_gu
+		) < (
+			summon_radius_gu
+			+ _actor_combat_radius_gu(summon)
 			+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
 		):
 			return false
@@ -11905,6 +12160,8 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		origin_screen_px
 	)
+	if not origin_ground_gu.is_finite() or not _target_spatial_query_ready():
+		return origin_screen_px
 	var player_combat_radius_gu := (
 		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
 			ArtSpec.PLAYER_COLLISION_RADIUS_PX
@@ -11929,10 +12186,18 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 		):
 			continue
 		var occupied := false
-		for enemy_value: Variant in get_tree().get_nodes_in_group("enemies"):
-			if not enemy_value is EnemyActor:
-				continue
-			var enemy := enemy_value as EnemyActor
+		var enemy_query_radius_gu := (
+			player_combat_radius_gu + RANDOM_TELEPORT_ACTOR_CLEARANCE_GU
+		)
+		if not _target_spatial_query_aabb_into(
+			Rect2(
+				candidate_ground_gu - Vector2.ONE * enemy_query_radius_gu,
+				Vector2.ONE * enemy_query_radius_gu * 2.0,
+			),
+			_target_spatial_query_scratch,
+		):
+			return origin_screen_px
+		for enemy: EnemyActor in _target_spatial_query_scratch:
 			if GroundUnitSpaceScript.distance_gu(
 				_canonical_screen_px_to_ground_gu(enemy.global_position),
 				candidate_ground_gu

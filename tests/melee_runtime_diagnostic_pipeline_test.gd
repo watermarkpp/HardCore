@@ -93,9 +93,9 @@ func _run() -> void:
 	game._active_safe_zones.clear()
 	enemy.velocity = Vector2.ZERO
 	enemy.control_time = 0.0
-	enemy.global_position = game.player.global_position + (
+	_move_enemy(enemy, game.player.global_position + (
 		DirectionSpace.ground_delta_gu_to_screen_delta_px(Vector2(-0.56, -1.31))
-	)
+	))
 	enemy.apply_control(60.0)
 	var measured_delta: Vector2 = (
 		game._canonical_screen_px_to_ground_gu(enemy.global_position) - origin_tile
@@ -145,11 +145,14 @@ func _run() -> void:
 			forward_support,
 			absf(MeleeGeometry.line_coordinates(point, footprint_direction_index).x)
 		)
-	enemy.global_position = game._canonical_ground_gu_to_screen_px(
-		origin_tile
-		+ footprint_step * (
-			MeleeGeometry.reach_tiles(MeleeGeometry.SKILL_THRUST) + forward_support
-		)
+	_move_enemy(
+		enemy,
+		game._canonical_ground_gu_to_screen_px(
+			origin_tile
+			+ footprint_step * (
+				MeleeGeometry.reach_tiles(MeleeGeometry.SKILL_THRUST) + forward_support
+			)
+		),
 	)
 	enemy.velocity = Vector2.ZERO
 	enemy.apply_control(60.0)
@@ -232,6 +235,7 @@ func _make_enemy(game: Node, position: Vector2) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	enemy.setup(
 		{
+			"monster_id": 38,
 			"name": "diagnostic_target",
 			"hp": 200,
 			"attackMin": 1,
@@ -244,7 +248,31 @@ func _make_enemy(game: Node, position: Vector2) -> EnemyActor:
 		game.player,
 		false
 	)
-	enemy.global_position = position
 	enemy.control_time = 60.0
+	game._runtime_spawn_serial += 1
+	var spawn_serial := int(game._runtime_spawn_serial)
+	enemy.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	enemy.configure_spatial_index(game._combat_spatial_index, spawn_serial)
+	enemy.set_meta("spawn_serial", spawn_serial)
+	enemy.set_meta("zone_generation", int(game._zone_generation))
+	enemy.set_combat_position(position, &"melee_diagnostic_fixture_spawn")
+	game._combat_spatial_index.register(
+		spawn_serial,
+		game.current_map_id,
+		game._canonical_screen_px_to_ground_gu(position),
+		enemy.combat_radius_gu,
+		spawn_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position"),
+	)
 	game.add_child(enemy)
+	enemy.set_physics_process(false)
 	return enemy
+
+
+func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
+	enemy.set_combat_position(position, &"melee_diagnostic_fixture_move")

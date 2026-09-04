@@ -3,6 +3,7 @@ extends Node
 const SpellLockPolicy := preload("res://scripts/skills/spell_target_lock_policy.gd")
 const SkillDataLoader := preload("res://scripts/skills/skill_data_loader.gd")
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const SkillFootprintSnapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 
 var _skill_request_probe_count := 0
 
@@ -78,20 +79,14 @@ func _test_idle_cycle_and_lock_range(
 	assert(game.player.current_mp == mana_before)
 	assert(game.player._combat_action_sequence == action_sequence_before)
 
-	far_target.global_position = game._canonical_ground_gu_to_screen_px(
-		origin_tile + Vector2(12.0, 0.0)
-	)
+	_move_enemy(game, far_target, origin_tile + Vector2(12.0, 0.0))
 	game._validate_locked_target()
 	assert(game.magic_locked_target == far_target)
-	far_target.global_position = game._canonical_ground_gu_to_screen_px(
-		origin_tile + Vector2(12.01, 0.0)
-	)
+	_move_enemy(game, far_target, origin_tile + Vector2(12.01, 0.0))
 	game._validate_locked_target()
 	assert(game.magic_locked_target == null)
 	assert(SpellLockPolicy.LOCK_RANGE_GU == 12.0)
-	far_target.global_position = game._canonical_ground_gu_to_screen_px(
-		origin_tile + Vector2(8, 0)
-	)
+	_move_enemy(game, far_target, origin_tile + Vector2(8, 0))
 
 
 func _test_spell_range_is_not_lock_range(
@@ -198,9 +193,7 @@ func _test_target_centered_release_rejects_lost_lock(
 		"locked_target_instance_id": near_target.get_instance_id(),
 		"locked_target_valid_at_release": true,
 	}
-	near_target.global_position = game._canonical_ground_gu_to_screen_px(
-		origin_tile + Vector2(12.01, 0.0)
-	)
+	_move_enemy(game, near_target, origin_tile + Vector2(12.01, 0.0))
 	assert(game._combat_release_target(release_geometry) == near_target)
 	assert(not game._is_magic_target_in_range(near_target))
 	var serial_before: int = game._canonical_cast_serial
@@ -218,9 +211,7 @@ func _test_target_centered_release_rejects_lost_lock(
 	)
 	assert(game.player.current_mp == mana_before)
 	assert(game._skill_cast_target == null)
-	near_target.global_position = game._canonical_ground_gu_to_screen_px(
-		origin_tile + Vector2(2, 0)
-	)
+	_move_enemy(game, near_target, origin_tile + Vector2(2, 0))
 	game._set_magic_locked_target(near_target, true)
 
 
@@ -235,11 +226,31 @@ func _test_footprint_geometry_contact(game: Node, origin_tile: Vector2) -> void:
 		game._canonical_screen_px_to_grid_cell(edge_target.global_position) != affected_cell,
 		"fixture center must stay outside the affected cell"
 	)
+	var release_id := "spell-lock:footprint-contact"
+	var snapshot := SkillFootprintSnapshot.create_cell_union(
+		"wizard.laser",
+		release_id,
+		origin_tile,
+		[affected_cell],
+		game._canonical_snapshot_absolute_context(origin_tile),
+	)
+	var plan: Dictionary = game._aoe_spell_query_plan(
+		"wizard.laser",
+		[affected_cell],
+		{"maximum_targets": 8, "pierces_units": true},
+		{},
+		snapshot,
+		origin_tile,
+		{},
+	)
 	assert(
 		game._canonical_spell_geometry_targets(
 			"wizard.laser",
 			[affected_cell],
-			{"maximum_targets": 8, "pierces_units": true}
+			{"maximum_targets": 8, "pierces_units": true},
+			{},
+			snapshot,
+			plan,
 		).has(edge_target),
 		"monster footprint touching the laser cell was reduced to a center point"
 	)
@@ -817,6 +828,7 @@ func _capture_skill_request(
 func _make_enemy(game: Node, tile: Vector2, display_name: String) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	enemy.setup({
+		"monster_id": 38,
 		"name": display_name,
 		"hp": 9999,
 		"attackMin": 1,
@@ -832,7 +844,31 @@ func _make_enemy(game: Node, tile: Vector2, display_name: String) -> EnemyActor:
 		Callable(game, "_canonical_ground_gu_to_screen_px"),
 		Callable(game, "_canonical_screen_px_to_ground_gu")
 	)
+	game._runtime_spawn_serial += 1
+	var spawn_serial := int(game._runtime_spawn_serial)
+	enemy.configure_spatial_index(game._combat_spatial_index, spawn_serial)
+	enemy.set_meta("spawn_serial", spawn_serial)
+	enemy.set_meta("zone_generation", int(game._zone_generation))
+	enemy.set_combat_position(
+		game._canonical_ground_gu_to_screen_px(tile),
+		&"spell_lock_fixture_spawn",
+	)
+	game._combat_spatial_index.register(
+		spawn_serial,
+		game.current_map_id,
+		game._canonical_screen_px_to_ground_gu(enemy.global_position),
+		enemy.combat_radius_gu,
+		spawn_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position"),
+	)
 	game.add_child(enemy)
-	enemy.global_position = game._canonical_ground_gu_to_screen_px(tile)
 	enemy.set_physics_process(false)
 	return enemy
+
+
+func _move_enemy(game: Node, enemy: EnemyActor, tile: Vector2) -> void:
+	enemy.set_combat_position(
+		game._canonical_ground_gu_to_screen_px(tile),
+		&"spell_lock_fixture_move",
+	)

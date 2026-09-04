@@ -58,8 +58,8 @@ func _run() -> void:
 	assert(locked.current_hp == locked.max_hp and near.current_hp == near.max_hp, "烈火对无效锁定发生回退命中")
 
 	# A valid in-range lock owns the continuous axis and single-target priority.
-	locked.global_position = origin + _screen_offset_gu(axis_gu)
-	near.global_position = locked.global_position
+	_move_enemy(locked, origin + _screen_offset_gu(axis_gu))
+	_move_enemy(near, locked.global_position)
 	game.locked_target = locked
 	game.player.fire_sword_enabled = false
 	_reset_hp([locked, near, lateral])
@@ -70,9 +70,9 @@ func _run() -> void:
 	assert(near.current_hp == near.max_hp, "普通攻击错误命中同位置未锁定目标")
 
 	# Thrust uses the same continuous axis for its near and far slots.
-	locked.global_position = origin + _screen_offset_gu(axis_gu * 2.25)
-	near.global_position = origin + _screen_offset_gu(axis_gu)
-	lateral.global_position = origin + _screen_offset_gu(axis_gu.rotated(PI / 2.0))
+	_move_enemy(locked, origin + _screen_offset_gu(axis_gu * 2.25))
+	_move_enemy(near, origin + _screen_offset_gu(axis_gu))
+	_move_enemy(lateral, origin + _screen_offset_gu(axis_gu.rotated(PI / 2.0)))
 	game.locked_target = locked
 	_reset_hp([locked, near, lateral])
 	game.player.thrusting_enabled = true
@@ -85,9 +85,9 @@ func _run() -> void:
 	assert(lateral.current_hp == lateral.max_hp, "刺杀错误命中连续轴外目标")
 
 	# Half moon rotates its side sectors around the same locked-target axis.
-	locked.global_position = origin + _screen_offset_gu(axis_gu)
-	near.global_position = origin + _screen_offset_gu(axis_gu.rotated(-PI / 4.0))
-	lateral.global_position = origin + _screen_offset_gu(axis_gu.rotated(PI / 4.0))
+	_move_enemy(locked, origin + _screen_offset_gu(axis_gu))
+	_move_enemy(near, origin + _screen_offset_gu(axis_gu.rotated(-PI / 4.0)))
+	_move_enemy(lateral, origin + _screen_offset_gu(axis_gu.rotated(PI / 4.0)))
 	var behind := _make_enemy(
 		game,
 		"半月背后",
@@ -109,7 +109,7 @@ func _run() -> void:
 	game.player.half_moon_enabled = false
 	var moved_origin := origin + Vector2(18, -11)
 	game.player.global_position = moved_origin
-	locked.global_position = moved_origin + _screen_offset_gu(axis_gu * 1.25)
+	_move_enemy(locked, moved_origin + _screen_offset_gu(axis_gu * 1.25))
 	locked.current_hp = locked.max_hp
 	game.locked_target = locked
 	var moving_release := _release(moved_origin, locked, Vector2.RIGHT)
@@ -161,10 +161,15 @@ func _screen_offset_gu(delta_ground_gu: Vector2) -> Vector2:
 	return GroundUnitSpace.ground_delta_gu_to_screen_delta_px(delta_ground_gu)
 
 
+func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
+	enemy.set_combat_position(position, &"melee_lock_fixture_move")
+
+
 func _make_enemy(game: Node, display_name: String, position: Vector2) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	enemy.setup(
 		{
+			"monster_id": 38,
 			"name": display_name,
 			"hp": 200,
 			"attackMin": 1,
@@ -177,7 +182,26 @@ func _make_enemy(game: Node, display_name: String, position: Vector2) -> EnemyAc
 		game.player,
 		false
 	)
-	enemy.global_position = position
 	enemy.control_time = 60.0
+	game._runtime_spawn_serial += 1
+	var spawn_serial := int(game._runtime_spawn_serial)
+	enemy.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	enemy.configure_spatial_index(game._combat_spatial_index, spawn_serial)
+	enemy.set_meta("spawn_serial", spawn_serial)
+	enemy.set_meta("zone_generation", int(game._zone_generation))
+	enemy.set_combat_position(position, &"melee_lock_fixture_spawn")
+	game._combat_spatial_index.register(
+		spawn_serial,
+		game.current_map_id,
+		game._canonical_screen_px_to_ground_gu(position),
+		enemy.combat_radius_gu,
+		spawn_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position"),
+	)
 	game.add_child(enemy)
 	return enemy
