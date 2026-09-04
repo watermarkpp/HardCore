@@ -4,6 +4,9 @@ extends RefCounted
 const ConnectionPolicyService := preload(
 	"res://scripts/map_editor/map_editor_connection_policy_service.gd"
 )
+const SpawnIdentityService := preload(
+	"res://scripts/map_editor/map_editor_spawn_identity_service.gd"
+)
 
 const KIND_TO_LAYER := {
 	"npc": "npc_points", "monster_spawn": "monster_spawn", "boss_spawn": "boss_spawn", "door": "door_points",
@@ -24,7 +27,12 @@ static func add_entry(document: Dictionary, kind: String, tile: Vector2i, proper
 	if kind == "respawn_point" and bool(entry.get("is_default", true)):
 		for existing: Dictionary in entries:
 			existing["is_default"] = false
-	entry["semantic_id"] = _next_semantic_id(entries, kind)
+	if kind in SpawnIdentityService.SPAWN_KINDS:
+		var identity := SpawnIdentityService.assign_new_identity(document, entry)
+		if not bool(identity.get("ok", false)):
+			return identity
+	else:
+		entry["semantic_id"] = _next_semantic_id(entries, kind)
 	match kind:
 		"map_entrance":
 			if str(entry.get("entrance_id", "")).ends_with(".unassigned"):
@@ -63,9 +71,14 @@ static func repair_duplicate_ids(document: Dictionary) -> int:
 		for index in entries.size():
 			var semantic_id := str(entries[index].get("semantic_id", ""))
 			if semantic_id.is_empty() or used.has(semantic_id):
-				while used.has("%s_%06d" % [kind, next_number]): next_number += 1
-				semantic_id = "%s_%06d" % [kind, next_number]
+				if kind in SpawnIdentityService.SPAWN_KINDS:
+					semantic_id = SpawnIdentityService.next_semantic_id(document, kind)
+				else:
+					while used.has("%s_%06d" % [kind, next_number]): next_number += 1
+					semantic_id = "%s_%06d" % [kind, next_number]
 				entries[index]["semantic_id"] = semantic_id
+				if kind in SpawnIdentityService.SPAWN_KINDS:
+					entries[index]["spawn_group_id"] = SpawnIdentityService.group_id_for_semantic(semantic_id)
 				repaired += 1
 			used[semantic_id] = true
 		document.layers[layer] = entries
@@ -126,7 +139,7 @@ static func duplicate_entry_snapshot(
 	for identity_key: String in [
 		"semantic_id", "door_id", "entrance_id", "exit_id", "respawn_id",
 		"area_id", "light_id", "trigger_id", "placeholder_instance_id",
-		"linked_visual_instance_id",
+		"linked_visual_instance_id", "spawn_group_id", "spawn_slot_id",
 	]:
 		properties.erase(identity_key)
 	properties.erase("tile")
