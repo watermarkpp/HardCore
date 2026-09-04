@@ -7,6 +7,7 @@ const MonsterGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/monster_ground_runtime_diagnostic_overlay.gd"
 )
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd")
 const SkillFootprintSnapshotScript := preload(
@@ -196,6 +197,13 @@ var attack_min := 1
 var attack_max := 2
 var defense := 0
 var magic_defense := 0
+## Direct-spell target data is compiled once from the accepted canonical entry.
+## Keep this small, primitive cache separate from monster_data: direct spell
+## resolution must not clone the actor's full canonical payload per target.
+var direct_spell_stats_valid := false
+var direct_spell_anti_magic_points := 0
+var direct_spell_magic_defense_min := 0
+var direct_spell_magic_defense_max := 0
 var agility := WarriorCombatMath.BASE_AGILITY
 var accuracy := WarriorCombatMath.BASE_HIT
 var life_type := ""
@@ -391,6 +399,7 @@ var _terrain_failed_cell_until_ms := 0
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
+	_reset_direct_spell_runtime_stats()
 	var requested_id := MonsterIdentityScript.monster_id(data)
 	if requested_id in RETIRED_SOURCE_ONLY_MONSTER_IDS:
 		monster_data = {"monster_id": requested_id}
@@ -431,6 +440,7 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	_natural_regen = MonsterNaturalRegenPolicyScript.new()
 	defense = maxi(0, int(stats.get("defense", 0)))
 	magic_defense = maxi(0, int(stats.get("magic_defense", 0)))
+	_compile_direct_spell_runtime_stats(canonical_entry)
 	attack_min = maxi(1, int(stats.get("attack_min", 0)))
 	attack_max = maxi(attack_min, int(stats.get("attack_max", attack_min)))
 	agility = maxi(1, int(runtime_projection.get("agility", WarriorCombatMath.BASE_AGILITY)))
@@ -474,6 +484,194 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 		move_speed_gu_per_sec = 0.0
 	_configure_target_acquisition()
 	_configure_movement_cadence()
+
+
+func _reset_direct_spell_runtime_stats() -> void:
+	direct_spell_stats_valid = false
+	direct_spell_anti_magic_points = 0
+	direct_spell_magic_defense_min = 0
+	direct_spell_magic_defense_max = 0
+	remove_meta("direct_spell_stats_rejection_reason")
+
+
+func _direct_spell_integer(value: Variant) -> int:
+	if value is bool:
+		return -1
+	if value is int:
+		return int(value)
+	if value is float:
+		var numeric_value := float(value)
+		if is_finite(numeric_value) and numeric_value == floorf(numeric_value):
+			return int(numeric_value)
+	return -1
+
+
+func _direct_spell_integer_value_valid(value: Variant) -> bool:
+	if value is int:
+		return true
+	if value is float:
+		var numeric_value := float(value)
+		return is_finite(numeric_value) and numeric_value == floorf(numeric_value)
+	return false
+
+
+func _direct_spell_alias_value(
+	source: Dictionary,
+	keys: Array[String],
+) -> Dictionary:
+	for key: String in keys:
+		if source.has(key):
+			return {"found": true, "value": source.get(key)}
+	return {"found": false}
+
+
+func _compile_direct_spell_runtime_stats(canonical_entry: Dictionary) -> void:
+	_reset_direct_spell_runtime_stats()
+	if (
+		canonical_entry.is_empty()
+		or not bool(canonical_entry.get("runtime_allowed", false))
+		or str(canonical_entry.get("status", "")) != "formal"
+	):
+		set_meta("direct_spell_stats_rejection_reason", "canonical_entry_disabled_or_nonformal")
+		return
+	var capability_value: Variant = canonical_entry.get("runtime_capability", {})
+	if (
+		not capability_value is Dictionary
+		or not bool((capability_value as Dictionary).get("allowed", false))
+	):
+		set_meta("direct_spell_stats_rejection_reason", "canonical_runtime_capability_rejected")
+		return
+	var combat_value: Variant = canonical_entry.get("combat", {})
+	if not combat_value is Dictionary:
+		set_meta("direct_spell_stats_rejection_reason", "canonical_combat_missing")
+		return
+	var combat := combat_value as Dictionary
+	var stats_value: Variant = combat.get("stats", {})
+	if not stats_value is Dictionary:
+		set_meta("direct_spell_stats_rejection_reason", "canonical_combat_stats_missing")
+		return
+	var stats := stats_value as Dictionary
+	var defense_min := -1
+	var defense_max := -1
+	var scalar_value := _direct_spell_alias_value(stats, ["magic_defense"])
+	if bool(scalar_value.get("found", false)):
+		var scalar_raw: Variant = scalar_value.get("value")
+		if not _direct_spell_integer_value_valid(scalar_raw):
+			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_malformed")
+			return
+		var scalar := _direct_spell_integer(scalar_raw)
+		defense_min = maxi(0, scalar)
+		defense_max = defense_min
+	else:
+		var min_value := _direct_spell_alias_value(
+			stats,
+			["magic_defense_min", "mdefMin", "MinMAC"],
+		)
+		var max_value := _direct_spell_alias_value(
+			stats,
+			["magic_defense_max", "mdefMax", "MaxMAC"],
+		)
+		if not bool(min_value.get("found", false)) or not bool(max_value.get("found", false)):
+			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_missing")
+			return
+		defense_min = _direct_spell_integer(min_value.get("value"))
+		defense_max = _direct_spell_integer(max_value.get("value"))
+		if defense_min < 0 or defense_max < 0:
+			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_malformed")
+			return
+		defense_min = maxi(0, defense_min)
+		defense_max = maxi(defense_min, defense_max)
+	var anti_magic_points := 0
+	var anti_magic_source := _direct_spell_alias_value(
+		stats,
+		[
+			"anti_magic_points",
+			"magicEvasionPoints",
+			"antiMagicPoints",
+			"antiMagic",
+		],
+	)
+	if not bool(anti_magic_source.get("found", false)):
+		anti_magic_source = _direct_spell_alias_value(
+			stats,
+			["magic_evasion_percent", "magicEvasionPercent"],
+		)
+		if bool(anti_magic_source.get("found", false)):
+			var display_percent := _direct_spell_integer(anti_magic_source.get("value"))
+			if display_percent < 0:
+				set_meta("direct_spell_stats_rejection_reason", "canonical_anti_magic_malformed")
+				return
+			anti_magic_points = CombatResolutionRules.anti_magic_points_from_display_percent(
+				display_percent
+			)
+		else:
+			anti_magic_points = 0
+	else:
+		anti_magic_points = _direct_spell_integer(anti_magic_source.get("value"))
+		if anti_magic_points < 0:
+			set_meta("direct_spell_stats_rejection_reason", "canonical_anti_magic_malformed")
+			return
+	direct_spell_anti_magic_points = clampi(
+		anti_magic_points,
+		0,
+		CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES,
+	)
+	direct_spell_magic_defense_min = defense_min
+	direct_spell_magic_defense_max = defense_max
+	direct_spell_stats_valid = true
+	remove_meta("direct_spell_stats_rejection_reason")
+
+
+func direct_spell_runtime_stats_into(output: Dictionary) -> bool:
+	output.clear()
+	_record_performance_counter(&"direct_spell_stats_snapshot_count")
+	if not direct_spell_stats_valid:
+		return false
+	output["anti_magic_points"] = direct_spell_anti_magic_points
+	output["magicEvasionPoints"] = direct_spell_anti_magic_points
+	output["antiMagicPoints"] = direct_spell_anti_magic_points
+	output["antiMagic"] = direct_spell_anti_magic_points
+	output["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(
+		direct_spell_anti_magic_points
+	)
+	output["magicEvasionPercent"] = output["magic_evasion_percent"]
+	output["magic_defense_min"] = direct_spell_magic_defense_min
+	output["magic_defense_max"] = direct_spell_magic_defense_max
+	output["mdefMin"] = direct_spell_magic_defense_min
+	output["mdefMax"] = direct_spell_magic_defense_max
+	output["MinMAC"] = direct_spell_magic_defense_min
+	output["MaxMAC"] = direct_spell_magic_defense_max
+	var red_poison_value: Variant = get_meta("canonical_red_poison", {})
+	if not red_poison_value is Dictionary:
+		return true
+	var red_poison := red_poison_value as Dictionary
+	if Time.get_ticks_msec() >= int(red_poison.get("expires_at_ms", 0)):
+		remove_meta("canonical_red_poison")
+		return true
+	var flat_ac_reduction := maxi(0, int(red_poison.get("flat_ac_reduction", 0)))
+	var flat_mac_reduction := 0
+	if red_poison.has("flat_mac_reduction"):
+		flat_mac_reduction = maxi(0, int(red_poison.get("flat_mac_reduction", 0)))
+	elif bool(red_poison.get("legacy_metadata_fallback", false)):
+		flat_mac_reduction = maxi(0, int(red_poison.get("flat_reduction", 0)))
+	output["flat_ac_reduction"] = flat_ac_reduction
+	output["flat_mac_reduction"] = flat_mac_reduction
+	output["magic_defense_min"] = maxi(
+		0,
+		direct_spell_magic_defense_min - flat_mac_reduction,
+	)
+	output["magic_defense_max"] = maxi(
+		output["magic_defense_min"],
+		direct_spell_magic_defense_max - flat_mac_reduction,
+	)
+	output["mdefMin"] = output["magic_defense_min"]
+	output["mdefMax"] = output["magic_defense_max"]
+	output["MinMAC"] = output["magic_defense_min"]
+	output["MaxMAC"] = output["magic_defense_max"]
+	output["runtime_buff_contract"] = str(
+		red_poison.get("contract_id", "buff.taoist.red_poison.v1")
+	)
+	return true
 
 
 func _apply_behavior_profile() -> void:

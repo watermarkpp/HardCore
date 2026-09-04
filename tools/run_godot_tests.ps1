@@ -98,6 +98,8 @@ $Suites = @{
 		'tests/monster_target_magic_primary_visual_test.tscn',
 		'tests/monster_special_delivery_contract_test.tscn',
 		'tests/monster_special_delivery_runtime_test.tscn',
+		'tests/direct_spell_compiled_stats_parity_test.tscn',
+		'tests/multi_target_damage_transaction_test.tscn',
 		'tests/placeholder_attack_animation_test.tscn'
 	)
     warrior = @(

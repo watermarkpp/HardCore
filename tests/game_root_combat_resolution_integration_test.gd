@@ -56,9 +56,10 @@ func _run() -> void:
 	# combat fixture state, not a production data override.
 	target.max_hp = 100
 	target.current_hp = 100
-	target.monster_data["anti_magic_points"] = 10
-	target.monster_data["mdefMin"] = 3
-	target.monster_data["mdefMax"] = 3
+	target.direct_spell_anti_magic_points = 10
+	target.direct_spell_magic_defense_min = 3
+	target.direct_spell_magic_defense_max = 3
+	target.direct_spell_stats_valid = true
 	target.control_time = 60.0
 	var target_position: Vector2 = game.player.global_position + Vector2(60, 0)
 	_register_enemy_with_runtime_index(game, target, target_position)
@@ -76,7 +77,7 @@ func _run() -> void:
 	)
 	assert(not evaded and target.current_hp == hp_before, "雷电术未先执行100% AntiMagic")
 
-	target.monster_data["anti_magic_points"] = 0
+	target.direct_spell_anti_magic_points = 0
 	var connected: bool = game._damage_enemies(
 		game.player.global_position,
 		Vector2.RIGHT,

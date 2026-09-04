@@ -259,6 +259,7 @@ var _aoe_candidate_scratch: Array[EnemyActor] = []
 var _aoe_target_scratch: Array[EnemyActor] = []
 var _aoe_distance_scratch: Array[float] = []
 var _aoe_id_scratch: Array[int] = []
+var _direct_spell_target_stats_scratch: Dictionary = {}
 var _aoe_cell_stamp := 0
 var _ground_effect_manager: PersistentGroundEffectManagerScript
 ## FREEZE-P0.1: fail-closed canonical projection diagnostics.
@@ -774,6 +775,8 @@ func _aoe_apply_legacy_damage_candidates(
 				player,
 				_rng,
 				Callable(self, "_resolve_magic_defense"),
+				-1,
+				_direct_spell_target_stats_scratch,
 			)
 			resolved_damage = int(resolution.get("final_damage", 0))
 			if resolved_damage > 0:
@@ -7731,7 +7734,9 @@ func _apply_canonical_spell_damage(
 			raw_power,
 			player,
 			_rng,
-			Callable(self, "_resolve_magic_defense")
+			Callable(self, "_resolve_magic_defense"),
+			-1,
+			_direct_spell_target_stats_scratch,
 		)
 		hit_any = bool(resolution.get("success", false)) or hit_any
 	RuntimeDiagnostics.record_timing_usec(&"aoe_exact_phase_usec", aoe_exact_started_usec)
@@ -8564,7 +8569,9 @@ func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skil
 		raw_power,
 		player,
 		_rng,
-		Callable(self, "_resolve_magic_defense")
+		Callable(self, "_resolve_magic_defense"),
+		-1,
+		_direct_spell_target_stats_scratch,
 	)
 
 

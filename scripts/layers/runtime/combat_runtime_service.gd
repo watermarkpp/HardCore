@@ -2,6 +2,8 @@ extends Node
 
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 
+var _direct_spell_stats_scratch: Dictionary = {}
+
 func face_target_screen_px(actor: Node2D, target: Node2D) -> Vector2:
 	if not is_instance_valid(actor) or not is_instance_valid(target):
 		return Vector2.ZERO
@@ -47,8 +49,10 @@ func apply_enemy_direct_spell_damage(
 	stable_skill_id: String,
 	raw_damage: int,
 	source_actor: Node2D,
-	rng: RandomNumberGenerator,
-	magic_defense_adapter: Callable
+	rng: RandomNumberGenerator = null,
+	magic_defense_adapter := Callable(),
+	anti_magic_roll := -1,
+	target_stats_scratch: Dictionary = {},
 ) -> Dictionary:
 	if (
 		not is_instance_valid(target)
@@ -62,12 +66,38 @@ func apply_enemy_direct_spell_damage(
 		}
 	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_resolution_count")
 	var resolution_started_usec := RuntimeDiagnostics.timing_start()
-	var target_stats: Dictionary = _target_stats_with_runtime_buffs(target)
+	var target_stats: Dictionary = (
+		target_stats_scratch
+		if target_stats_scratch != null
+		else _direct_spell_stats_scratch
+	)
+	if not _target_stats_with_runtime_buffs_into(target, target_stats):
+		RuntimeDiagnostics.record_timing_usec(
+			&"direct_spell_resolution_usec",
+			resolution_started_usec,
+		)
+		return {
+			"success": false,
+			"failure_reason": "target_direct_spell_stats_invalid",
+			"final_damage": 0,
+		}
+	var checked_anti_magic_roll := anti_magic_roll
+	if checked_anti_magic_roll < 0:
+		if rng != null:
+			checked_anti_magic_roll = rng.randi_range(
+				0,
+				CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1,
+			)
+		else:
+			checked_anti_magic_roll = randi_range(
+				0,
+				CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1,
+			)
 	var resolution := CombatResolutionRulesScript.resolve_direct_spell_damage(
 		stable_skill_id,
 		maxi(0, raw_damage),
 		target_stats,
-		rng.randi_range(0, CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1),
+		checked_anti_magic_roll,
 		magic_defense_adapter
 	)
 	var final_damage := int(resolution.get("final_damage", 0))
@@ -79,7 +109,7 @@ func apply_enemy_direct_spell_damage(
 		&"direct_spell_resolution_usec",
 		resolution_started_usec,
 	)
-	var result := resolution.duplicate(true)
+	var result: Dictionary = resolution
 	result["success"] = final_damage > 0
 	return result
 
@@ -92,23 +122,53 @@ func _target_rejects_damage(target: Node) -> bool:
 
 
 func _target_stats_with_runtime_buffs(target: Node) -> Dictionary:
+	var result: Dictionary = {}
+	_target_stats_with_runtime_buffs_into(target, result)
+	return result
+
+
+func _target_stats_with_runtime_buffs_into(
+	target: Node,
+	output: Dictionary,
+) -> bool:
+	output.clear()
+	if target.has_method("direct_spell_runtime_stats_into"):
+		var raw_result: Variant = target.call(
+			"direct_spell_runtime_stats_into",
+			output,
+		)
+		return not (raw_result is bool) or bool(raw_result)
+	return _legacy_target_stats_with_runtime_buffs_into(target, output)
+
+
+func _legacy_target_stats_with_runtime_buffs_into(
+	target: Node,
+	output: Dictionary,
+) -> bool:
 	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_stats_snapshot_count")
 	var raw_stats: Variant = target.get("monster_data")
 	if raw_stats is Dictionary:
 		RuntimeDiagnostics.increment_performance_counter(&"direct_spell_full_monster_data_duplicates")
-	var result: Dictionary = raw_stats.duplicate(true) if raw_stats is Dictionary else {}
+	if raw_stats is Dictionary:
+		output.merge(raw_stats as Dictionary, true)
 	var red_poison: Variant = target.get_meta("canonical_red_poison", {})
 	if not red_poison is Dictionary:
-		return result
+		return true
 	if Time.get_ticks_msec() >= int(red_poison.get("expires_at_ms", 0)):
 		target.remove_meta("canonical_red_poison")
-		return result
-	var reduction := maxi(0, int(red_poison.get("flat_reduction", 0)))
+		return true
+	var reduction := 0
+	if red_poison.has("flat_mac_reduction"):
+		reduction = maxi(0, int(red_poison.get("flat_mac_reduction", 0)))
+	elif bool(red_poison.get("legacy_metadata_fallback", false)):
+		reduction = maxi(0, int(red_poison.get("flat_reduction", 0)))
 	for field: String in ["magic_defense_min", "magic_defense_max", "mdefMin", "mdefMax", "MinMAC", "MaxMAC"]:
-		if result.has(field):
-			result[field] = maxi(0, int(result[field]) - reduction)
-	result["runtime_buff_contract"] = "buff.taoist.red_poison.v1"
-	return result
+		if output.has(field):
+			output[field] = maxi(0, int(output[field]) - reduction)
+	output["runtime_buff_contract"] = str(
+		red_poison.get("contract_id", "buff.taoist.red_poison.v1")
+	)
+	return true
 
 
 func apply_player_direct_spell_damage(

@@ -14,6 +14,9 @@ const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const CombatRuntimeServiceScript := preload(
+	"res://scripts/layers/runtime/combat_runtime_service.gd"
+)
 
 const FOOTPRINT_HIT_CONTRACT_ID := (
 	"skills.projectile.ground_gu_swept_footprint_contact.v2"
@@ -70,6 +73,8 @@ var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 var resolution_skill_id := ""
 var source_actor: Node2D
 var magic_defense_adapter := Callable()
+var _combat_runtime: Node
+var _direct_spell_target_stats_scratch: Dictionary = {}
 var anti_magic_roll_override := -1
 var anti_poison_roll_override := -1
 var last_resolution: Dictionary = {}
@@ -642,17 +647,21 @@ func _apply_hit(enemy: EnemyActor) -> void:
 			return
 	elif effect == "damage" and CombatResolutionRules.anti_magic_eligible(resolution_skill_id):
 		var anti_magic_roll := anti_magic_roll_override if anti_magic_roll_override >= 0 else randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
-		last_resolution = CombatResolutionRules.resolve_direct_spell_damage(
+		if _combat_runtime == null or not is_instance_valid(_combat_runtime):
+			_combat_runtime = CombatRuntimeServiceScript.new()
+			add_child(_combat_runtime)
+		last_resolution = _combat_runtime.apply_enemy_direct_spell_damage(
+			enemy,
 			resolution_skill_id,
 			damage,
-			enemy.monster_data,
+			source_actor,
+			null,
+			magic_defense_adapter,
 			anti_magic_roll,
-			magic_defense_adapter
+			_direct_spell_target_stats_scratch,
 		)
-		var resolved_damage := int(last_resolution.final_damage)
-		if resolved_damage <= 0:
+		if int(last_resolution.get("final_damage", 0)) <= 0:
 			return
-		enemy.take_damage(resolved_damage, source_actor)
 	elif damage > 0:
 		enemy.take_damage(damage, source_actor)
 	if not is_instance_valid(enemy):

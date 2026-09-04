@@ -76,6 +76,8 @@ static func anti_magic_points_from_context(context: Dictionary) -> int:
 static func anti_magic_points_from_target_stats(target_stats: Dictionary) -> int:
 	if target_stats.has("anti_magic_points"):
 		return clampi(int(target_stats.anti_magic_points), 0, ANTI_MAGIC_ROLL_SIDES)
+	if target_stats.has("antiMagicPoints"):
+		return clampi(int(target_stats.antiMagicPoints), 0, ANTI_MAGIC_ROLL_SIDES)
 	if target_stats.has("magicEvasionPoints"):
 		return clampi(int(target_stats.magicEvasionPoints), 0, ANTI_MAGIC_ROLL_SIDES)
 	if target_stats.has("antiMagic"):
