@@ -13,6 +13,7 @@ const CONTRACT_ID := "skills.footprint_query_plan.v1"
 const PLAN_VERSION := 1
 const QUERY_KIND_AABB := "aabb"
 const QUERY_KIND_SEGMENT := "segment"
+const UNLIMITED_TARGETS := -1
 const ORDERING_STABLE_COMBAT_INSTANCE := (
 	"stable_combat_order_instance_id"
 )
@@ -149,9 +150,15 @@ static func build(
 	)
 	if not raw_maximum_targets is int and not raw_maximum_targets is float:
 		return _freeze_plan(invalid_plan, "maximum_targets_invalid")
-	var maximum_targets := int(raw_maximum_targets)
+	var maximum_targets := 0
+	if raw_maximum_targets is int:
+		maximum_targets = raw_maximum_targets
+	else:
+		if not is_finite(float(raw_maximum_targets)):
+			return _freeze_plan(invalid_plan, "maximum_targets_invalid")
+		maximum_targets = int(raw_maximum_targets)
 	if (
-		maximum_targets < 0
+		maximum_targets < UNLIMITED_TARGETS
 		or not is_finite(float(raw_maximum_targets))
 		or not is_equal_approx(
 			float(raw_maximum_targets), float(maximum_targets)
@@ -235,6 +242,12 @@ static func _base_plan(
 ) -> Dictionary:
 	var empty_cells: Array[Vector2i] = []
 	empty_cells.make_read_only()
+	var raw_maximum_targets: Variant = options.get("maximum_targets", 0)
+	var base_maximum_targets := 0
+	if raw_maximum_targets is int:
+		base_maximum_targets = raw_maximum_targets
+	elif raw_maximum_targets is float and is_finite(float(raw_maximum_targets)):
+		base_maximum_targets = int(raw_maximum_targets)
 	return {
 		"contract": CONTRACT_ID,
 		"plan_version": PLAN_VERSION,
@@ -247,7 +260,7 @@ static func _base_plan(
 		"ground_aabb": Rect2(),
 		"query_kind": str(options.get("query_kind", "")),
 		"ordering_policy": str(options.get("ordering_policy", "")),
-		"maximum_targets": int(options.get("maximum_targets", 0)),
+		"maximum_targets": base_maximum_targets,
 		"cell_sequence": empty_cells,
 		"line_origin_ground_gu": Vector2.ZERO,
 		"line_direction_ground_gu": Vector2.ZERO,

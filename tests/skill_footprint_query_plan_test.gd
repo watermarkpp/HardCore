@@ -16,6 +16,7 @@ func _run() -> void:
 	_verify_ground_aabbs_for_all_shapes()
 	_verify_cell_union_fallback_and_fail_closed_screen_geometry()
 	_verify_one_plan_per_release_and_reference_identity()
+	_verify_maximum_target_sentinel_contract()
 	_verify_invalid_plan_is_fail_closed()
 	print(
 		"SKILL_FOOTPRINT_QUERY_PLAN_PASS immutable_plan=1 ground_aabb_shapes=6 "
@@ -293,3 +294,54 @@ func _verify_invalid_plan_is_fail_closed() -> void:
 	)
 	assert(not missing.get("valid", true))
 	assert(missing.get("failure_reason", "") == "snapshot_missing")
+
+
+func _verify_maximum_target_sentinel_contract() -> void:
+	var unlimited := _build_with_maximum_targets(
+		Plan.UNLIMITED_TARGETS,
+		"release-unlimited",
+	)
+	assert(unlimited.get("valid", false))
+	assert(
+		unlimited.get("maximum_targets", 0) == Plan.UNLIMITED_TARGETS,
+		"unlimited sentinel must remain -1 in the plan"
+	)
+
+	var zero := _build_with_maximum_targets(0, "release-zero")
+	assert(zero.get("valid", false))
+	assert(zero.get("maximum_targets", -1) == 0)
+
+	var negative := _build_with_maximum_targets(-2, "release-negative")
+	assert(not negative.get("valid", true))
+	assert(negative.get("failure_reason", "") == "maximum_targets_invalid")
+
+	var fractional := _build_with_maximum_targets(1.5, "release-fractional")
+	assert(not fractional.get("valid", true))
+	assert(fractional.get("failure_reason", "") == "maximum_targets_invalid")
+
+	var non_finite := _build_with_maximum_targets(NAN, "release-non-finite")
+	assert(not non_finite.get("valid", true))
+	assert(non_finite.get("failure_reason", "") == "maximum_targets_invalid")
+
+
+func _build_with_maximum_targets(
+	maximum_targets: Variant,
+	release_id: String,
+) -> Dictionary:
+	var context := _local_context()
+	var snapshot := Snapshot.create_circle(
+		"test.maximum_targets",
+		release_id,
+		Vector2.ZERO,
+		1.0,
+		16,
+		context,
+	)
+	return Plan.build(
+		release_id,
+		"test.maximum_targets",
+		RUNTIME_MAP_ID,
+		snapshot,
+		context,
+		{"maximum_targets": maximum_targets},
+	)
