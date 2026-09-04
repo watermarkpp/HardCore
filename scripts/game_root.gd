@@ -123,6 +123,7 @@ const SKILL_HOLD_REPEAT_THRESHOLD_MS := 300
 const MAGIC_SHIELD_AUTO_REFRESH_CHECK_SECONDS := 0.10
 const MAGIC_SHIELD_AUTO_REFRESH_EXPIRY_LEAD_SECONDS := 0.60
 const SAFE_ZONE_ACTOR_PADDING_GU := 0.05
+const SAFE_ZONE_ENFORCEMENT_INTERVAL_SECONDS := 0.10
 const BOSS_SURROUNDED_NEIGHBOR_RADIUS_GU := 1.65
 const ACTOR_LANDING_CLEARANCE_GU := 0.25
 const ENEMY_LANDING_CLEARANCE_GU := 0.125
@@ -221,6 +222,12 @@ var _movement_target_refresh_remaining := 0.0
 var _bich_camp_layout: Dictionary = {}
 var _active_safe_zones: Array = []
 var _runtime_spawn_serial := 0
+var _collecting_staged_actor_plan := false
+var _staged_actor_source_index := 0
+var _staged_actor_spawn_failure_reason := ""
+var _active_enemy_cache: Dictionary = {}
+var _active_boss_cache: Dictionary = {}
+var _safe_zone_enforcement_remaining := 0.0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 var _ground_effect_manager: PersistentGroundEffectManagerScript
 ## FREEZE-P0.1: fail-closed canonical projection diagnostics.
@@ -642,7 +649,7 @@ func _process(delta: float) -> void:
 	background.set_focus_position(player.global_position)
 	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
-	_enforce_bich_safe_zone()
+	_tick_bich_safe_zone_enforcement(delta)
 	_update_boss_world_mechanics(delta)
 	_record_player_world_location()
 	_validate_locked_target()
@@ -1507,7 +1514,39 @@ func _run_map_transition(
 	var built_ok := await _run_world_build_pipeline(target_map_id, transition_id)
 	if not built_ok or not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
+	_collecting_staged_actor_plan = true
+	_staged_actor_source_index = 0
+	_staged_actor_spawn_failure_reason = ""
 	operation.call()
+	_collecting_staged_actor_plan = false
+	if PlayerState.test_mode:
+		# Preserve the established deterministic synchronous travel hook while
+		# exercising the identical descriptor handler and slice accounting.
+		_world_bootstrap_coordinator.process_actor_queue_blocking(
+			Callable(self, "_spawn_staged_actor_descriptor"),
+			_bootstrap_max_items_per_frame(),
+			_bootstrap_slice_budget_ms()
+		)
+	else:
+		await _world_bootstrap_coordinator.process_actor_queue(
+			Callable(self, "_spawn_staged_actor_descriptor"),
+			_bootstrap_max_items_per_frame(),
+			_bootstrap_slice_budget_ms()
+		)
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
+	var actor_summary := _world_bootstrap_coordinator.ready_contract_summary()
+	if (
+		int(actor_summary.get("failed_actors", 0)) != 0
+		or int(actor_summary.get("duplicate_actors", 0)) != 0
+		or int(actor_summary.get("planned_actors", 0))
+		!= int(actor_summary.get("spawned_actors", 0))
+		+ int(actor_summary.get("deferred_actors", 0))
+	):
+		_active_map_transition_id = ""
+		_map_transition_in_progress = false
+		_world_bootstrap_coordinator.finish(false, "actor_spawn_plan_failed")
+		return
 	if not PlayerState.test_mode:
 		await get_tree().process_frame
 		if DisplayServer.get_name() != "headless":
@@ -1536,6 +1575,15 @@ func _run_map_transition(
 				"stages_ms": bootstrap_profile.get("stage_elapsed_ms", {}),
 				"map_slices": int(bootstrap_profile.get("map_slice_count", 0)),
 				"collision_slices": int(bootstrap_profile.get("collision_slice_count", 0)),
+				"actor_slices": int(bootstrap_profile.get("actor_slice_count", 0)),
+				"planned_actors": int(bootstrap_profile.get("planned_actors", 0)),
+				"spawned_actors": int(bootstrap_profile.get("spawned_actors", 0)),
+				"deferred_actors": int(bootstrap_profile.get("deferred_actors", 0)),
+				"failed_actors": int(bootstrap_profile.get("failed_actors", 0)),
+				"duplicate_actors": int(bootstrap_profile.get("duplicate_actors", 0)),
+				"actor_total_ms": float(bootstrap_profile.get("actor_total_ms", 0.0)),
+				"actor_max_item_ms": float(bootstrap_profile.get("actor_max_item_ms", 0.0)),
+				"actor_max_slice_ms": float(bootstrap_profile.get("actor_max_slice_ms", 0.0)),
 				"max_slice_ms": float(bootstrap_profile.get("max_slice_ms", 0.0)),
 				"hud": hud.panel_prewarm_diagnostic(),
 			}))
@@ -1638,8 +1686,9 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 		coordinator.finish(false, "collision_count_mismatch")
 		return false
 
-	# 6) SPAWN_ACTORS: gameplay actors are spawned by the arrival operation
-	# while the coordinator is in this stage.
+	# 6) SPAWN_ACTORS: the arrival operation records production actor
+	# descriptors after this pipeline returns. GameRoot then drains that exact
+	# plan with the same frame budget before FINALIZE/READY.
 	coordinator.advance(WorldBootstrapCoordinator.Stage.SPAWN_ACTORS)
 	background.finish_map_build()
 	return true
@@ -1694,6 +1743,16 @@ func _check_world_ready_contract() -> bool:
 	if int(summary.get("planned_collision_count", 0)) != int(summary.get("built_collision_count", 0)):
 		return false
 	if int(summary.get("failed_collision_count", 0)) != 0:
+		return false
+	if (
+		int(summary.get("planned_actors", 0))
+		!= int(summary.get("spawned_actors", 0))
+		+ int(summary.get("deferred_actors", 0))
+	):
+		return false
+	if int(summary.get("failed_actors", 0)) != 0:
+		return false
+	if int(summary.get("duplicate_actors", 0)) != 0:
 		return false
 	if int(summary.get("unexpected_sync_load_count", 0)) != 0:
 		return false
@@ -1945,6 +2004,9 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 			return
 	_zone_generation += 1
 	_active_safe_zones.clear()
+	_active_enemy_cache.clear()
+	_active_boss_cache.clear()
+	_safe_zone_enforcement_remaining = 0.0
 	_cancel_all_combat_targets()
 	# Preserve the live summon before zone_content is queued for deletion. The
 	# destination map restores the same gameplay state beside the owner.
@@ -2259,30 +2321,51 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 			_spawn_map_portal(portal.get("position", Vector2.ZERO), int(portal.get("target_map_id", -1)), str(portal.get("label", "地图入口")))
 
 
+func _tick_bich_safe_zone_enforcement(delta: float) -> void:
+	if current_map_id != BICH_RUNTIME_MAP_ID:
+		_safe_zone_enforcement_remaining = 0.0
+		return
+	_safe_zone_enforcement_remaining -= delta
+	if _safe_zone_enforcement_remaining > 0.0:
+		return
+	_safe_zone_enforcement_remaining = SAFE_ZONE_ENFORCEMENT_INTERVAL_SECONDS
+	_enforce_bich_safe_zone()
+
+
+func _enforce_enemy_outside_bich_safe_zone(enemy: EnemyActor) -> void:
+	if (
+		current_map_id != BICH_RUNTIME_MAP_ID
+		or not is_instance_valid(enemy)
+		or enemy.is_queued_for_deletion()
+	):
+		return
+	var current_ground_gu := _canonical_screen_px_to_ground_gu(
+		enemy.global_position
+	)
+	var padding_gu: float = (
+		float(enemy.combat_radius_gu) + SAFE_ZONE_ACTOR_PADDING_GU
+	)
+	var legal_ground_gu := (
+		WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
+			current_ground_gu,
+			_active_safe_zones,
+			padding_gu
+		)
+	)
+	if not legal_ground_gu.is_equal_approx(current_ground_gu):
+		enemy.global_position = _canonical_ground_gu_to_screen_px(
+			legal_ground_gu
+		)
+		enemy.velocity = Vector2.ZERO
+
+
 func _enforce_bich_safe_zone() -> void:
 	if current_map_id != BICH_RUNTIME_MAP_ID:
 		return
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or not is_instance_valid(node):
+	for value: Variant in _active_enemy_cache.values():
+		if not value is EnemyActor or not is_instance_valid(value):
 			continue
-		var current_ground_gu := _canonical_screen_px_to_ground_gu(
-			node.global_position
-		)
-		var padding_gu: float = (
-			float(node.combat_radius_gu) + SAFE_ZONE_ACTOR_PADDING_GU
-		)
-		var legal_ground_gu := (
-			WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
-				current_ground_gu,
-				_active_safe_zones,
-				padding_gu
-			)
-		)
-		if not legal_ground_gu.is_equal_approx(current_ground_gu):
-			node.global_position = _canonical_ground_gu_to_screen_px(
-				legal_ground_gu
-			)
-			node.velocity = Vector2.ZERO
+		_enforce_enemy_outside_bich_safe_zone(value as EnemyActor)
 
 
 func _general_shop_stock() -> Array:
@@ -2352,7 +2435,91 @@ func _build_skill_book_stock(profession: String) -> Array:
 	return stock
 
 
+func _submit_staged_actor_descriptor(
+	actor_type: String,
+	payload: Dictionary,
+	stable_actor_id := ""
+) -> bool:
+	var source_index := _staged_actor_source_index
+	_staged_actor_source_index += 1
+	var actor_id := stable_actor_id
+	if actor_id.is_empty():
+		actor_id = "%s:%d:%06d" % [actor_type, current_map_id, source_index]
+	return _world_bootstrap_coordinator.submit_actor_descriptor({
+		"actor_id": actor_id,
+		"actor_type": actor_type,
+		"source_index": source_index,
+		"payload": payload,
+	})
+
+
+func _spawn_staged_actor_descriptor(descriptor: Dictionary) -> Dictionary:
+	var actor_type := str(descriptor.get("actor_type", ""))
+	var payload: Dictionary = descriptor.get("payload", {})
+	match actor_type:
+		"enemy":
+			var monster_id := int(payload.get("monster_id", -1))
+			var monster := GameData.get_monster_by_id(monster_id)
+			if monster.is_empty():
+				return {"ok": false, "reason": "missing_monster"}
+			_staged_actor_spawn_failure_reason = ""
+			var enemy := _spawn_enemy(
+				monster,
+				payload.get("position", Vector2.ZERO),
+				bool(payload.get("is_boss", false)),
+				float(payload.get("respawn_seconds", -1.0)),
+				payload.get("spawn_context", {})
+			)
+			if not _staged_actor_spawn_failure_reason.is_empty():
+				return {
+					"ok": false,
+					"reason": _staged_actor_spawn_failure_reason,
+				}
+			# A persisted death may deliberately schedule this slot for later. The
+			# descriptor was still handled successfully even though no node exists yet.
+			return {"ok": true, "materialized": enemy != null}
+		"npc":
+			_spawn_npc(
+				payload.get("position", Vector2.ZERO),
+				str(payload.get("display_name", "NPC")),
+				str(payload.get("kind", "dialogue")),
+				payload.get("stock", []),
+				str(payload.get("stock_key", "")),
+				int(payload.get("appearance", -1)),
+				payload.get("map_center_override", null)
+			)
+			return {"ok": true, "materialized": true}
+		"zone_portal":
+			_spawn_portal(
+				payload.get("position", Vector2.ZERO),
+				str(payload.get("target_zone", "")),
+				str(payload.get("label_text", ""))
+			)
+			return {"ok": true, "materialized": true}
+		"map_portal":
+			_spawn_map_portal(
+				payload.get("position", Vector2.ZERO),
+				int(payload.get("target_map_id", -1)),
+				str(payload.get("label_text", "")),
+				payload.get("portal_data", {})
+			)
+			return {"ok": true, "materialized": true}
+		_:
+			return {"ok": false, "reason": "unknown_actor_type"}
+
+
 func _spawn_npc(position: Vector2, display_name: String, kind: String, stock: Array = [], stock_key := "", appearance := -1, map_center_override: Variant = null) -> void:
+	if _collecting_staged_actor_plan:
+		_submit_staged_actor_descriptor("npc", {
+			"position": position,
+			"display_name": display_name,
+			"kind": kind,
+			"stock": stock,
+			"stock_key": stock_key,
+			"appearance": appearance,
+			"map_center_override": map_center_override,
+		})
+		return
 	var npc := NPCActor.new()
 	var map_center := _current_map_center_screen_position_px() if map_center_override == null else Vector2(map_center_override)
 	npc.setup(display_name, kind, stock, stock_key, appearance, map_center)
@@ -2372,6 +2539,13 @@ func _current_map_center_screen_position_px() -> Vector2:
 
 
 func _spawn_portal(position: Vector2, target_zone: String, label_text: String) -> void:
+	if _collecting_staged_actor_plan:
+		_submit_staged_actor_descriptor("zone_portal", {
+			"position": position,
+			"target_zone": target_zone,
+			"label_text": label_text,
+		})
+		return
 	var portal := ZonePortal.new()
 	portal.setup(target_zone, label_text)
 	portal.global_position = position
@@ -2384,6 +2558,14 @@ func _spawn_map_portal(
 	label_text: String,
 	portal_data: Dictionary = {}
 ) -> void:
+	if _collecting_staged_actor_plan:
+		_submit_staged_actor_descriptor("map_portal", {
+			"position": position,
+			"target_map_id": target_map_id,
+			"label_text": label_text,
+			"portal_data": portal_data,
+		})
+		return
 	var portal := ZonePortal.new()
 	portal.setup_map(target_map_id, label_text, portal_data)
 	portal.global_position = position
@@ -2397,9 +2579,28 @@ func _spawn_enemy(
 	respawn_seconds := -1.0,
 	spawn_context: Dictionary = {}
 ) -> EnemyActor:
+	if _collecting_staged_actor_plan:
+		var monster_id_for_plan := _strict_runtime_monster_id(monster_data)
+		var slot_id_for_plan := str(spawn_context.get(
+			"spawn_slot_id",
+			spawn_context.get("spawn_group_id", "")
+		))
+		_submit_staged_actor_descriptor(
+			"enemy",
+			{
+				"monster_id": monster_id_for_plan,
+				"position": spawn_position,
+				"is_boss": is_boss,
+				"respawn_seconds": respawn_seconds,
+				"spawn_context": spawn_context,
+			},
+			"enemy:%s" % slot_id_for_plan if not slot_id_for_plan.is_empty() else ""
+		)
+		return null
 	var monster_id := _strict_runtime_monster_id(monster_data)
 	var canonical_monster := GameData.get_monster_by_id(monster_id)
 	if canonical_monster.is_empty():
+		_staged_actor_spawn_failure_reason = "missing_canonical_monster"
 		return null
 	monster_data = canonical_monster
 	# Classification is canonical data, never a caller-controlled flag.
@@ -2412,6 +2613,7 @@ func _spawn_enemy(
 			# FREEZE-P0.1: mapped world without a loadable runtime projection
 			# must never register an enemy at fake/delta coordinates.
 			missing_projection_rejection_count += 1
+			_staged_actor_spawn_failure_reason = "missing_spawn_projection"
 			return null
 	_runtime_spawn_serial += 1
 	var context := spawn_context.duplicate(true)
@@ -2423,6 +2625,7 @@ func _spawn_enemy(
 				"Monster respawn authority rejected unstable formal slot: monster_id=%d map_id=%d"
 				% [monster_id, current_map_id]
 			)
+			_staged_actor_spawn_failure_reason = "unstable_spawn_slot"
 			return null
 		slot_id = "runtime:%d:%d" % [_zone_generation, _runtime_spawn_serial]
 	context["spawn_slot_id"] = slot_id
@@ -2448,6 +2651,7 @@ func _spawn_enemy(
 					str(policy.get("reason", "invalid_policy")),
 				]
 			)
+			_staged_actor_spawn_failure_reason = "invalid_respawn_policy"
 			return null
 		effective_respawn = float(policy.get("seconds", 0.0))
 		context["respawn_policy_id"] = str(policy.get("policy_id", ""))
@@ -2552,9 +2756,26 @@ func _spawn_enemy(
 		_on_enemy_fixed_area_ground_spike_requested.bind(enemy)
 	)
 	add_child(enemy)
+	var enemy_instance_id := enemy.get_instance_id()
+	_active_enemy_cache[enemy_instance_id] = enemy
+	if enemy.is_boss:
+		_active_boss_cache[enemy_instance_id] = enemy
+	enemy.tree_exiting.connect(
+		_on_cached_enemy_tree_exiting.bind(enemy_instance_id),
+		CONNECT_ONE_SHOT
+	)
+	# Authored placement is corrected before the first rendered frame. Runtime
+	# movement also enforces safe-zone targeting/motion; the 10 Hz cache sweep is
+	# a bounded safety net rather than an all-enemy scan on every render frame.
+	_enforce_enemy_outside_bich_safe_zone(enemy)
 	if clear_persisted_respawn_after_spawn:
 		PlayerState.clear_monster_respawn_slot(current_map_id, slot_id)
 	return enemy
+
+
+func _on_cached_enemy_tree_exiting(enemy_instance_id: int) -> void:
+	_active_enemy_cache.erase(enemy_instance_id)
+	_active_boss_cache.erase(enemy_instance_id)
 
 
 func _strict_runtime_monster_id(monster_data: Dictionary) -> int:
@@ -3332,7 +3553,9 @@ func _on_enemy_target_requested(enemy: EnemyActor) -> void:
 
 
 func _update_boss_world_mechanics(delta: float) -> void:
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+	# Only bosses can own these mechanics. The spawn/exit cache keeps this
+	# per-frame path independent of the total number of ordinary monsters.
+	for value: Variant in _active_boss_cache.values():
 		if not value is EnemyActor:
 			continue
 		var enemy := value as EnemyActor

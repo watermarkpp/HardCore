@@ -34,6 +34,8 @@ func _ready() -> void:
 
 	# Verify coordinator is directly usable (not just test-only)
 	assert(coord.has_method("process_queue_with_budget"))
+	assert(coord.has_method("submit_actor_descriptor"))
+	assert(coord.has_method("process_actor_queue"))
 	assert(coord.has_method("_register_resource"))
 	assert(coord.has_method("finish"))
 
