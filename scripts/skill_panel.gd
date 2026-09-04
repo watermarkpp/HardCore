@@ -799,7 +799,25 @@ func _assignment_value_skill_name(value: Variant) -> String:
 func _set_assignment_button_content(button: Button, slot_label_text: String, skill_name: String) -> void:
 	var old_content := button.get_node_or_null("Content")
 	if old_content != null:
-		old_content.free()
+		# The saved skill profile owns the calibrated geometry of these children.
+		# Rebuilding them after the profile has been applied restores the original
+		# unscaled code offsets, which makes phone refreshes shift every child left
+		# while the calibration workbench still looks correct.  Keep the calibrated
+		# nodes alive and update only their runtime-owned content.
+		var old_icon := old_content.get_node_or_null("SkillIcon") as TextureRect
+		if old_icon != null:
+			old_icon.texture = _skill_texture(skill_name)
+			old_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+			old_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
+		var old_slot_label := old_content.get_node_or_null("SlotLabel") as Label
+		if old_slot_label != null:
+			old_slot_label.text = slot_label_text
+		var old_name_label := old_content.get_node_or_null("SkillName") as Label
+		if old_name_label != null:
+			old_name_label.text = skill_name if not skill_name.is_empty() else "空"
+		button.set_meta("skill_name", skill_name)
+		button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
+		return
 	var content := Control.new()
 	content.name = "Content"
 	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
