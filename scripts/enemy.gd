@@ -57,6 +57,14 @@ const FAR_RETARGET_MIN_SECONDS := 0.28
 const FAR_RETARGET_STAGGER_SECONDS := 0.017
 const NEAR_RETARGET_MIN_SECONDS := 0.18
 const NEAR_RETARGET_STAGGER_SECONDS := 0.011
+## Source targetSearch values describe the legacy service loop, where a Boss
+## could retain one valid target for up to eight seconds.  Runtime movement is
+## continuous now, so target *re-evaluation* is capped separately without
+## changing source-authoritative attack or movement intervals.  The per-instance
+## phase keeps a room of bosses from evaluating on one physics frame.
+const BOSS_TARGET_REEVALUATION_MAX_SECONDS := 0.35
+const BOSS_TARGET_REEVALUATION_STAGGER_SECONDS := 0.013
+const SUMMON_INTERCEPT_CONTACT_EPSILON_GU := 0.25
 const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
 const BACKGROUND_AI_MIN_DISTANCE_GU := 37.5
 ## The acquisition broadphase is screen-space only.  The exact phase below
@@ -80,6 +88,7 @@ const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_G
 const TARGET_RING_FOOTPRINT_SCALE := 1.25
 const PLAYER_MELEE_CONTACT_CONTRACT_ID := "monster.melee_player_contact.ground_gu.v2"
 const BOSS_WARNING_PROJECTION_CONTRACT_ID := "monster.boss.warning.ground_projection.v1"
+const BOSS_PHASE_GROUND_RING_VISIBLE := false
 const SAFE_ZONE_REFERENCE_CONTRACT_ID := "monster.safe_zone.relative_ground_reference.v1"
 const ATTACK_FOOTPRINT_CONTRACT_ID := (
 	"monster.attack.release_footpoint_projection.v1"
@@ -110,6 +119,7 @@ static var _crowd_grid_actor_scan_count := 0
 static var _crowd_query_candidate_count := 0
 static var _crowd_steering_evaluation_count := 0
 static var _retarget_full_scan_count := 0
+static var _retarget_decision_count := 0
 static var _target_grid_last_refresh_msec := -1
 static var _target_grid: Dictionary = {}
 static var _target_grid_node_ids: Dictionary = {}
@@ -1163,7 +1173,15 @@ func _advance_autonomous_step(delta: float) -> void:
 		else:
 			blocked = true
 	if blocked:
+		# A live summon that physically intercepts pursuit is a combat decision,
+		# not terrain.  Consume only the slide-collision set already produced by
+		# move_and_slide(); never add a combat-target group scan to this hot path.
+		var intercepting_summon := _slide_collision_intercepting_summon()
 		_fail_autonomous_step_blocked()
+		if intercepting_summon != null:
+			target = intercepting_summon
+			_retarget_timer = 0.0
+			_refresh_target_focus()
 		return
 	if after_ground_gu.distance_squared_to(_movement_step_target_ground_gu) <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		var exact_target_screen := _ground_gu_to_screen_position_px(_movement_step_target_ground_gu)
@@ -1313,6 +1331,13 @@ func _ready() -> void:
 		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 		_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS * float(posmod(get_instance_id(), 13)) / 13.0
+	else:
+		# Bound the first Boss decision to the same small per-instance phase as
+		# later decisions so a room spawn cannot create a one-frame retarget spike.
+		_retarget_timer = (
+			BOSS_TARGET_REEVALUATION_STAGGER_SECONDS
+			* float(posmod(get_instance_id(), 11))
+		)
 	queue_redraw()
 
 
@@ -3657,6 +3682,7 @@ static func reset_performance_diagnostics() -> void:
 	_crowd_query_candidate_count = 0
 	_crowd_steering_evaluation_count = 0
 	_retarget_full_scan_count = 0
+	_retarget_decision_count = 0
 	_target_grid_group_scan_count = 0
 	_target_grid_candidate_count = 0
 	_background_ai_evaluation_count = 0
@@ -3671,6 +3697,7 @@ static func performance_diagnostics() -> Dictionary:
 		"crowd_query_candidates": _crowd_query_candidate_count,
 		"crowd_steering_evaluations": _crowd_steering_evaluation_count,
 		"retarget_full_scans": _retarget_full_scan_count,
+		"retarget_decisions": _retarget_decision_count,
 		"retarget_target_group_scans": _target_grid_group_scan_count,
 		"retarget_target_candidates": _target_grid_candidate_count,
 		"background_ai_evaluations": _background_ai_evaluation_count,
@@ -4056,6 +4083,14 @@ func _retarget(delta := 0.0) -> void:
 		return
 	_decay_threat(delta)
 	_retarget_timer = maxf(0.0, _retarget_timer - delta)
+	# Dead/expired targets remain valid Godot Objects during their death
+	# presentation.  Reject them before the timer gate so an eight-second Boss
+	# retention interval can never pin combat to a non-combatant.
+	if is_instance_valid(target) and not _target_candidate_is_live(target):
+		target = null
+		_retarget_timer = 0.0
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 	if not boss_rule.is_empty():
 		if is_instance_valid(target) and _retarget_timer > 0.0:
 			return
@@ -4074,9 +4109,29 @@ func _retarget(delta := 0.0) -> void:
 		if _movement_step_active:
 			_cancel_autonomous_step(true)
 	var acquiring_without_current_target := not is_instance_valid(target)
+	var reevaluating_player_pursuit := (
+		is_instance_valid(target) and target is PlayerCharacter
+	)
 	var chosen: Node2D
 	var best_score := -INF
 	var best_initial_manhattan_gu := INF
+	var intercepting_summon: SummonActor
+	var intercepting_summon_distance_gu := INF
+	# Once a real blocker has taken over pursuit, retain it only while it remains
+	# inside the same live/contact contract. This prevents a high player threat
+	# from flipping the target back every decision tick.
+	if target is SummonActor:
+		var current_summon := target as SummonActor
+		var current_summon_distance_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			current_summon.global_position,
+		).length()
+		if _summon_intercepts_current_pursuit(
+			current_summon,
+			current_summon_distance_gu,
+		):
+			intercepting_summon = current_summon
+			intercepting_summon_distance_gu = current_summon_distance_gu
 	var chose_threat_candidate := false
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
 	var leash_radius_gu := aggro_radius_gu * _leash_multiplier
@@ -4113,6 +4168,7 @@ func _retarget(delta := 0.0) -> void:
 		if raw_ref is WeakRef:
 			_append_live_target_candidate(candidates, raw_ref.get_ref())
 	for node:Node2D in candidates:
+		if not _target_candidate_is_live(node):continue
 		if _point_inside_safe_zone(node.global_position):continue
 		var distance_gu := _ground_delta_gu_between_screen_positions(
 			global_position,
@@ -4123,6 +4179,14 @@ func _retarget(delta := 0.0) -> void:
 			node.global_position,
 		).length()
 		var threat:=_threat_for(node)
+		if (
+			reevaluating_player_pursuit
+			and node is SummonActor
+			and _summon_intercepts_current_pursuit(node, distance_gu)
+			and distance_gu < intercepting_summon_distance_gu
+		):
+			intercepting_summon = node
+			intercepting_summon_distance_gu = distance_gu
 		var retaining_current_target := (
 			not acquiring_without_current_target
 			and is_instance_valid(target)
@@ -4177,10 +4241,30 @@ func _retarget(delta := 0.0) -> void:
 			chosen=node
 			if acquiring_without_current_target and threat > 0.0:
 				chose_threat_candidate = true
+	# Threat remains authoritative at ordinary distances.  Only a live summon
+	# already inside the monster's physical contact envelope may intercept a
+	# current player pursuit, matching the actual blocker seen by physics.
+	if intercepting_summon != null:
+		chosen = intercepting_summon
 	target = chosen
+	_retarget_decision_count += 1
 	if not boss_rule.is_empty():
 		var search: Dictionary = boss_rule.get("targetSearch", {})
-		_retarget_timer = float(search.get("withTargetMs" if is_instance_valid(target) else "withoutTargetMs", 1000)) / 1000.0
+		var authored_interval_seconds := (
+			float(search.get(
+				"withTargetMs" if is_instance_valid(target) else "withoutTargetMs",
+				1000,
+			)) / 1000.0
+		)
+		_retarget_timer = (
+			clampf(
+				authored_interval_seconds,
+				NEAR_RETARGET_MIN_SECONDS,
+				BOSS_TARGET_REEVALUATION_MAX_SECONDS,
+			)
+			+ BOSS_TARGET_REEVALUATION_STAGGER_SECONDS
+			* float(posmod(get_instance_id(), 11))
+		)
 	elif is_instance_valid(target):
 		_retarget_timer = NEAR_RETARGET_MIN_SECONDS + NEAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 7))
 	else:
@@ -4188,10 +4272,71 @@ func _retarget(delta := 0.0) -> void:
 
 
 func _add_threat(source:Node2D,amount:float)->void:
+	if not _target_candidate_is_live(source):
+		return
 	var key:=source.get_instance_id()
 	_threat_table[key]={"node":weakref(source),"score":float(_threat_table.get(key,{}).get("score",0.0))+maxf(0.0,amount)}
 	target=source
 	_refresh_target_focus()
+
+
+func _target_candidate_is_live(candidate: Node2D) -> bool:
+	if not is_instance_valid(candidate) or candidate.is_queued_for_deletion():
+		return false
+	# Production combat targets have explicit typed life-state contracts. Avoid
+	# Object.get() probes for optional properties: generic test/runtime target
+	# nodes are valid candidates and missing-property probes emit engine errors.
+	if candidate is PlayerCharacter and (candidate._dead or candidate.current_hp <= 0):
+		return false
+	if candidate is EnemyActor and (candidate._dying or candidate.current_hp <= 0):
+		return false
+	if candidate is SummonActor and (
+		candidate.current_hp <= 0
+		or candidate.state in [SummonActor.SummonState.DEAD, SummonActor.SummonState.EXPIRED]
+	):
+		return false
+	return _runtime_map_id_for_area_target(candidate) == runtime_map_id
+
+
+func _summon_intercepts_current_pursuit(
+	candidate: SummonActor,
+	distance_gu: float,
+) -> bool:
+	return (
+		_target_candidate_is_live(candidate)
+		and candidate.is_in_group("combat_targets")
+		and candidate.has_method("take_damage")
+		and not _point_inside_safe_zone(candidate.global_position)
+		and distance_gu
+			<= _contact_distance_gu_to_target(candidate)
+			+ SUMMON_INTERCEPT_CONTACT_EPSILON_GU
+	)
+
+
+func _slide_collision_intercepting_summon() -> SummonActor:
+	if _movement_step_reason != &"pursuit" or not target is PlayerCharacter:
+		return null
+	var closest: SummonActor
+	var closest_distance_gu := INF
+	for collision_index in range(get_slide_collision_count()):
+		var collision := get_slide_collision(collision_index)
+		if collision == null:
+			continue
+		var raw_collider: Variant = collision.get_collider()
+		if not raw_collider is SummonActor:
+			continue
+		var candidate := raw_collider as SummonActor
+		var distance_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			candidate.global_position,
+		).length()
+		if (
+			_summon_intercepts_current_pursuit(candidate, distance_gu)
+			and distance_gu < closest_distance_gu
+		):
+			closest = candidate
+			closest_distance_gu = distance_gu
+	return closest
 
 
 func _threat_for(source:Node2D)->float:
@@ -4274,8 +4419,17 @@ func _draw() -> void:
 			var progress:=visual.fallback_attack_progress();var tip_px:=body_center_px+facing.normalized()*(radius_px+6.0+sin(progress*PI)*10.0)
 			draw_arc(tip_px, radius_px + 8.0, strike_angle - 0.82, strike_angle + 0.82, 12, Color(1.0, 0.78, 0.26, 0.90), 4.0)
 			draw_circle(tip_px,4.0+sin(progress*PI)*3.0,Color(1.0,0.9,0.5,0.82))
-	if is_boss and _boss_phase_two:
-		draw_circle(Vector2(0, -5), radius_px + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
+	# Phase two remains fully active for stats, skills and AI. Its former
+	# persistent red ground outline is controlled independently and permanently
+	# disabled; temporary attack telegraphs and the selected-target ring remain.
+	if BOSS_PHASE_GROUND_RING_VISIBLE and is_boss and _boss_phase_two:
+		draw_circle(
+			Vector2(0, -5),
+			radius_px + 7.0,
+			Color(0.90, 0.15, 0.05, 0.22),
+			false,
+			4.0,
+		)
 	if poison_time > 0.0:
 		# One compact green dot denotes the damage-over-time poison. Keeping it
 		# below the HP bar avoids both the former three-diamond cluster and any
