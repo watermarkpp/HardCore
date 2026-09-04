@@ -288,6 +288,7 @@ func _process(delta: float) -> void:
 			_update_resource_residency()
 	if active_resources.is_empty() or not visible:
 		return
+	RuntimeDiagnostics.increment_performance_counter(&"visual_animation_updates")
 	_update_animation_frame(delta)
 
 
@@ -679,6 +680,7 @@ func _refresh_actor_ground_indicator() -> void:
 	# Resource activation/release changes whether the procedural ground shadow
 	# is legal even for an unselected actor, so every transition must invalidate
 	# that cached list.
+	RuntimeDiagnostics.increment_performance_counter(&"actor_redraw_requests")
 	actor.queue_redraw()
 	queue_redraw()
 
@@ -845,6 +847,7 @@ func _apply_render_state(texture: Texture2D, region: Rect2) -> void:
 		changed = true
 	if changed:
 		_render_state_update_count += 1
+		RuntimeDiagnostics.increment_performance_counter(&"visual_render_state_changes")
 		_refresh_actor_ground_indicator()
 
 

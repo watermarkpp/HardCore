@@ -633,13 +633,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	var physics_started_usec := RuntimeDiagnostics.timing_start()
 	# Q2-B: generic persistent ground effects are scheduled once per physics
 	# frame by the shared manager (old per-effect _physics_process cadence).
 	if _ground_effect_manager != null:
 		_ground_effect_manager.tick_frame(delta)
+	RuntimeDiagnostics.record_timing_ms(&"physics_process_ms", physics_started_usec)
 
 
 func _process(delta: float) -> void:
+	var process_started_usec := RuntimeDiagnostics.timing_start()
 	UIItemTextureCacheScript.poll_threaded_paths()
 	# Q2-D: the single formal MonsterVisual streaming poll (once per frame).
 	if _streaming_coordinator != null:
@@ -701,6 +704,7 @@ func _process(delta: float) -> void:
 	for index in range(4):
 		if Input.is_action_just_pressed("skill_%d" % (index + 1)):
 			_use_quick_slot(index)
+	RuntimeDiagnostics.record_timing_ms(&"process_ms", process_started_usec)
 
 
 func _constrain_player_foot_to_runtime_ground() -> bool:
@@ -2333,11 +2337,14 @@ func _tick_bich_safe_zone_enforcement(delta: float) -> void:
 
 
 func _enforce_enemy_outside_bich_safe_zone(enemy: EnemyActor) -> void:
+	var safe_zone_started_usec := RuntimeDiagnostics.timing_start()
+	RuntimeDiagnostics.increment_performance_counter(&"safe_zone_queries")
 	if (
 		current_map_id != BICH_RUNTIME_MAP_ID
 		or not is_instance_valid(enemy)
 		or enemy.is_queued_for_deletion()
 	):
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
 		return
 	var current_ground_gu := _canonical_screen_px_to_ground_gu(
 		enemy.global_position
@@ -2357,12 +2364,14 @@ func _enforce_enemy_outside_bich_safe_zone(enemy: EnemyActor) -> void:
 			legal_ground_gu
 		)
 		enemy.velocity = Vector2.ZERO
+	RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
 
 
 func _enforce_bich_safe_zone() -> void:
 	if current_map_id != BICH_RUNTIME_MAP_ID:
 		return
 	for value: Variant in _active_enemy_cache.values():
+		RuntimeDiagnostics.increment_performance_counter(&"safe_zone_global_actor_scans")
 		if not value is EnemyActor or not is_instance_valid(value):
 			continue
 		_enforce_enemy_outside_bich_safe_zone(value as EnemyActor)
@@ -6676,6 +6685,28 @@ func _apply_canonical_spell_damage(
 	continuous_line_strip_ground_gu: Dictionary = {},
 	skill_release_snapshot: Dictionary = {}
 ) -> bool:
+	var context_release_id := str(skill_release_snapshot.get("release_id", ""))
+	if context_release_id.is_empty():
+		context_release_id = str(continuous_line_strip_ground_gu.get("release_id", ""))
+	if context_release_id.is_empty():
+		var context_line_snapshot: Variant = continuous_line_strip_ground_gu.get(
+			"skill_footprint_snapshot",
+			{}
+		)
+		if context_line_snapshot is Dictionary:
+			context_release_id = str((context_line_snapshot as Dictionary).get("release_id", ""))
+	var context_skill_id := stable_skill_id if not stable_skill_id.is_empty() else "canonical_aoe"
+	if context_release_id.is_empty():
+		context_release_id = context_skill_id
+	RuntimeDiagnostics.set_performance_release_context(
+		context_release_id,
+		context_skill_id,
+	)
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_release_count")
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_query_plan_builds")
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_queries")
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_snapshot_validation_calls")
+	var aoe_candidate_started_usec := RuntimeDiagnostics.timing_start()
 	if not _snapshot_strict_ok(skill_release_snapshot):
 		var raw_line_snapshot: Variant = continuous_line_strip_ground_gu.get(
 			"skill_footprint_snapshot", {}
@@ -6714,11 +6745,15 @@ func _apply_canonical_spell_damage(
 		var radial: bool = effect_type in ["area_damage", "caster_centered_area_damage"]
 		var radius_gu := maxf(0.0, float(effect.get("radius_gu", 0.0)))
 		if not radial or radius_gu <= 0.0:
+			_record_aoe_candidate_timing(aoe_candidate_started_usec)
 			return false
+		RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
 		for node: Node in get_tree().get_nodes_in_group("enemies"):
 			if not node is EnemyActor or node.is_queued_for_deletion():
 				continue
 			var enemy := node as EnemyActor
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
 			if (
 				_skill_snapshot_intersects_enemy(skill_release_snapshot, enemy)
 				or (
@@ -6731,6 +6766,10 @@ func _apply_canonical_spell_damage(
 				)
 			):
 				targets.append(enemy)
+	_record_aoe_candidate_timing(aoe_candidate_started_usec)
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_selected_targets", targets.size())
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_damage_target_count", targets.size())
+	var aoe_exact_started_usec := RuntimeDiagnostics.timing_start()
 	var hit_any := false
 	for enemy: EnemyActor in targets:
 		var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
@@ -6742,6 +6781,7 @@ func _apply_canonical_spell_damage(
 			Callable(self, "_resolve_magic_defense")
 		)
 		hit_any = bool(resolution.get("success", false)) or hit_any
+	RuntimeDiagnostics.record_timing_usec(&"aoe_exact_phase_usec", aoe_exact_started_usec)
 	_record_skill_footprint_release_diagnostic(
 		stable_skill_id,
 		skill_release_snapshot,
@@ -6749,6 +6789,17 @@ func _apply_canonical_spell_damage(
 		hit_any
 	)
 	return hit_any
+
+
+func _record_aoe_candidate_timing(started_usec: int) -> void:
+	var elapsed_usec := RuntimeDiagnostics.timing_elapsed_usec(started_usec)
+	if elapsed_usec <= 0:
+		return
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_candidate_usec", elapsed_usec)
+	RuntimeDiagnostics.record_performance_max(
+		&"aoe_max_single_release_candidate_usec",
+		float(elapsed_usec),
+	)
 
 
 func _record_skill_footprint_release_diagnostic(
@@ -7037,6 +7088,8 @@ func _canonical_spell_geometry_targets(
 			if raw_cell is Vector2i:
 				geometry_cells.append(raw_cell)
 	var targets: Array[EnemyActor] = []
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_queries")
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_snapshot_validation_calls")
 	# Hellfire is a five-tile, one-tile-wide area line. `pierces_units` controls
 	# whether units stop the visual/line traversal; it must not turn the area
 	# damage into a single-target spell. A negative limit means every hostile
@@ -7069,6 +7122,7 @@ func _canonical_spell_geometry_targets(
 			"direction_ground_gu", Vector2.DOWN
 		)
 		var candidates: Array[Dictionary] = []
+		RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
 		for node: Node in get_tree().get_nodes_in_group("enemies"):
 			if (
 				not node is EnemyActor
@@ -7077,6 +7131,8 @@ func _canonical_spell_geometry_targets(
 			):
 				continue
 			var enemy := node as EnemyActor
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
 			if (
 				_snapshot_strict_ok(skill_release_snapshot)
 				and not _skill_snapshot_intersects_enemy(
@@ -7123,7 +7179,10 @@ func _canonical_spell_geometry_targets(
 		and str(skill_release_snapshot.get("shape_type", ""))
 		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
 	):
+		RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
 		for node: Node in get_tree().get_nodes_in_group("enemies"):
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
 			if (
 				node is EnemyActor
 				and not node.is_queued_for_deletion()
@@ -7141,6 +7200,8 @@ func _canonical_spell_geometry_targets(
 		return targets
 	var selected_instance_ids := {}
 	for cell: Vector2i in geometry_cells:
+		RuntimeDiagnostics.increment_performance_counter(&"aoe_nested_cell_enemy_scans")
+		RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
 		var cell_targets: Array[EnemyActor] = []
 		for node: Node in get_tree().get_nodes_in_group("enemies"):
 			if not node is EnemyActor or node.is_queued_for_deletion():
@@ -7148,6 +7209,8 @@ func _canonical_spell_geometry_targets(
 			var enemy := node as EnemyActor
 			if selected_instance_ids.has(enemy.get_instance_id()):
 				continue
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
 			var contact := CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
 				[cell],
 				_canonical_screen_px_to_ground_gu(enemy.global_position),
@@ -7533,6 +7596,7 @@ func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
 			Time.get_ticks_msec() + roundi(duration * 1000.0)
 		)
 		target.set_meta("canonical_red_poison", merged)
+		RuntimeDiagnostics.increment_performance_counter(&"actor_redraw_requests")
 		target.queue_redraw()
 
 
@@ -8659,6 +8723,16 @@ func _damage_enemies(
 	physical_accuracy := false,
 	source_skill_id := ""
 ) -> bool:
+	var context_skill_id := source_skill_id if not source_skill_id.is_empty() else "legacy_damage"
+	RuntimeDiagnostics.set_performance_release_context(
+		"legacy_damage",
+		context_skill_id,
+	)
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_release_count")
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_query_plan_builds")
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_queries")
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
+	var aoe_candidate_started_usec := RuntimeDiagnostics.timing_start()
 	var hit_any := false
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin_screen_px)
 	var direction_ground_gu := (
@@ -8669,6 +8743,8 @@ func _damage_enemies(
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
 			continue
+		RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
+		RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(
 			node.global_position
 		)
@@ -8686,6 +8762,8 @@ func _damage_enemies(
 			)
 			and (radial or in_arc)
 		):
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_selected_targets")
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_damage_target_count")
 			if physical_accuracy and not PlayerState.test_mode:
 				var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
 				if not WarriorCombatMath.roll_hit(accuracy, node.agility, _rng):
@@ -8707,6 +8785,7 @@ func _damage_enemies(
 			if resolved_damage <= 0:
 				continue
 			hit_any = _combat_runtime.apply_enemy_physical_damage(node, resolved_damage, player) or hit_any
+	_record_aoe_candidate_timing(aoe_candidate_started_usec)
 	return hit_any
 
 
@@ -9233,6 +9312,10 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		),
 		"experience": int(death_runtime_snapshot.get("experience", 0)),
 	})
+	RuntimeDiagnostics.record_performance_max(
+		&"drop_queue_depth_max",
+		float(_pending_enemy_deaths.size()),
+	)
 	if not _enemy_death_flush_queued and not _enemy_death_pipeline_running:
 		_enemy_death_flush_queued = true
 		call_deferred("_flush_enemy_deaths", true)
@@ -9250,11 +9333,23 @@ func _flush_enemy_deaths(spread_across_frames := true) -> void:
 	while not _pending_enemy_deaths.is_empty():
 		if _enemy_death_target_refresh_pending:
 			_enemy_death_target_refresh_pending = false
+			RuntimeDiagnostics.increment_performance_counter(&"death_target_refresh_count")
 			_refresh_target_highlights()
 			_update_target_hud()
 		var profile_started_usec := Time.get_ticks_usec()
 		var pending := _pending_enemy_deaths
 		_pending_enemy_deaths = []
+		RuntimeDiagnostics.increment_performance_counter(&"death_batch_count")
+		RuntimeDiagnostics.record_performance_max(
+			&"death_batch_size_max",
+			float(pending.size()),
+		)
+		if not pending.is_empty():
+			var oldest_queued_usec := int(pending[0].get("queued_at_usec", 0))
+			RuntimeDiagnostics.record_performance_max(
+				&"drop_queue_oldest_age_ms",
+				float(RuntimeDiagnostics.timing_elapsed_usec(oldest_queued_usec)) / 1000.0,
+			)
 		var settlements: Array = []
 		var respawn_state_before: Dictionary = (
 			PlayerState.monster_respawn_state_for_restore()
@@ -9294,7 +9389,10 @@ func _flush_enemy_deaths(spread_across_frames := true) -> void:
 				and index + 1 < pending.size()
 			):
 				await get_tree().process_frame
+		RuntimeDiagnostics.increment_performance_counter(&"death_resolve_active_usec", resolve_active_usec)
 		var finished_usec := Time.get_ticks_usec()
+		var settlement_window_usec := maxi(0, settlement_finished_usec - settlement_started_usec)
+		RuntimeDiagnostics.increment_performance_counter(&"death_settlement_usec", settlement_window_usec)
 		if CombatDiagnosticLogScript.capture_enabled():
 			var settlement_usec := (
 				settlement_finished_usec - settlement_started_usec
@@ -9323,6 +9421,7 @@ func _flush_enemy_deaths(spread_across_frames := true) -> void:
 	# stranded merely because no further death was queued.
 	if _enemy_death_target_refresh_pending:
 		_enemy_death_target_refresh_pending = false
+		RuntimeDiagnostics.increment_performance_counter(&"death_target_refresh_count")
 		_refresh_target_highlights()
 		_update_target_hud()
 	_enemy_death_pipeline_running = false
@@ -9346,8 +9445,11 @@ func _resolve_queued_enemy_death(
 	var configured_respawn := float(death.get("configured_respawn", -1.0))
 	var respawn_enabled := bool(death.get("respawn_enabled", true))
 	var spawn_context: Dictionary = (death.get("spawn_context", {}) as Dictionary).duplicate(true)
+	RuntimeDiagnostics.increment_performance_counter(&"drop_roll_count")
+	var drop_roll_started_usec := RuntimeDiagnostics.timing_start()
 	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, false)
 	var roll_finished_usec := Time.get_ticks_usec()
+	RuntimeDiagnostics.record_timing_usec(&"drop_roll_usec", drop_roll_started_usec)
 	var overflow_discarded_count := int(
 		drop_roll.get("overflow_discarded_count", 0)
 	)
@@ -9412,10 +9514,12 @@ func _resolve_queued_enemy_death(
 			and is_inside_tree()
 			and drop_index + 1 < ground_drop_requests.size()
 		):
+			RuntimeDiagnostics.increment_performance_counter(&"drop_work_frames")
 			var yield_started_usec := Time.get_ticks_usec()
 			await get_tree().process_frame
 			yielded_usec += Time.get_ticks_usec() - yield_started_usec
 	var spawn_finished_usec := Time.get_ticks_usec()
+	RuntimeDiagnostics.increment_performance_counter(&"drop_request_count", ground_drop_requests.size())
 	var result := {
 		"monster_id": monster_id,
 		"roll_ms": float(roll_finished_usec - started_usec) / 1000.0,
@@ -9489,18 +9593,20 @@ func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
 		spawn_context.get("respawn_runtime_map_id", current_map_id)
 	)
 	var spawn_slot_id := str(spawn_context.get("spawn_slot_id", ""))
-	if not PlayerState.mark_monster_respawn_dead(
+	var respawn_marked := PlayerState.mark_monster_respawn_dead(
 		respawn_runtime_map_id,
 		spawn_slot_id,
 		monster_id,
 		str(policy.get("policy_id", "")),
 		Time.get_unix_time_from_system() + respawn_wait_seconds
-	):
+	)
+	if not respawn_marked:
 		push_error(
 			"Monster respawn state rejected unstable slot monster_id=%d map_id=%d slot=%s"
 			% [monster_id, respawn_runtime_map_id, spawn_slot_id]
 		)
 		return {"valid": false, "reason": "unstable_respawn_slot"}
+	RuntimeDiagnostics.increment_performance_counter(&"respawn_state_updates")
 	spawn_context["respawn_policy_id"] = str(policy.get("policy_id", ""))
 	spawn_context["spawn_classification"] = spawn_classification
 	spawn_context["respawn_base_seconds"] = respawn_wait_seconds
@@ -9520,7 +9626,10 @@ func _spawn_loot(item_name: String, position: Vector2) -> void:
 	loot.add_to_group("zone_content")
 	loot.collected.connect(_on_loot_collected)
 	loot.collection_rejected.connect(_on_loot_collection_rejected)
+	var spawn_started_usec := RuntimeDiagnostics.timing_start()
 	add_child(loot)
+	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
+	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
 
 
 func _spawn_gold_loot(amount: int, position: Vector2) -> void:
@@ -9530,7 +9639,10 @@ func _spawn_gold_loot(amount: int, position: Vector2) -> void:
 	loot.add_to_group("zone_content")
 	loot.gold_collected.connect(_on_gold_loot_collected)
 	loot.collection_rejected.connect(_on_loot_collection_rejected)
+	var spawn_started_usec := RuntimeDiagnostics.timing_start()
 	add_child(loot)
+	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
+	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
 
 
 func _on_gold_loot_collected(amount: int, pickup: LootPickup) -> void:
@@ -9560,6 +9672,7 @@ func _flush_loot_collections() -> void:
 		candidates.append(candidate.duplicate(true))
 	var result := PlayerState.receive_loot_batch_partial(candidates)
 	var transaction_finished_usec := Time.get_ticks_usec()
+	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_authority_checks", pending.size())
 	var outcomes: Array = result.get("outcomes", [])
 	var loot_feedback_names: Array = []
 	for index in range(mini(pending.size(), outcomes.size())):

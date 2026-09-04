@@ -68,6 +68,7 @@ func setup_gold(amount: int, player_target: PlayerCharacter) -> void:
 
 
 func _ready() -> void:
+	add_to_group("loot_pickups")
 	var descriptor := ground_visual_descriptor(item_name)
 	var icon_path := str(descriptor.get("path", ""))
 	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
@@ -89,20 +90,27 @@ func _ready() -> void:
 	label.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(label)
 	if icon_sprite == null:
+		RuntimeDiagnostics.increment_performance_counter(&"loot_fallback_redraw_requests")
 		queue_redraw()
 
 
 func _process(delta: float) -> void:
+	RuntimeDiagnostics.increment_performance_counter(&"loot_pickup_process_calls")
 	_bob_time += delta
 	_overweight_retry_remaining = maxf(0.0, _overweight_retry_remaining - delta)
 	if icon_sprite != null:
 		icon_sprite.position.y = -5.0 + sin(_bob_time * 3.0) * 2.0
+		RuntimeDiagnostics.increment_performance_counter(&"loot_visual_updates")
 	if icon_sprite == null:
+		RuntimeDiagnostics.increment_performance_counter(&"loot_fallback_redraw_requests")
 		queue_redraw()
 	if not is_instance_valid(target):
 		return
 	if _collection_pending:
 		return
+	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_global_checks")
+	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_spatial_queries")
+	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_candidates")
 	var in_range := target_is_within_collection_range_screen_px(global_position, target.global_position)
 	if not in_range:
 		# Leaving the pickup radius is a new attempt context, so don't carry a
@@ -112,6 +120,7 @@ func _process(delta: float) -> void:
 	if _overweight_retry_remaining > 0.0:
 		return
 	_collection_authority_check_count += 1
+	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_authority_checks")
 	if gold_amount > 0:
 		# Gold does not enter inventory: no weight / capacity gate.
 		_collection_pending = true

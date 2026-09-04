@@ -142,6 +142,40 @@ static var _background_deep_sleep_wakeup_count := 0
 static var _physics_move_count := 0
 static var _environment_guard_check_count := 0
 
+static func _record_performance_counter(field: StringName, amount := 1) -> void:
+	RuntimeDiagnostics.increment_performance_counter(field, amount)
+	match field:
+		&"crowd_grid_builds":
+			_crowd_grid_build_count += amount
+		&"crowd_grid_actor_scans":
+			_crowd_grid_actor_scan_count += amount
+		&"crowd_query_candidates":
+			_crowd_query_candidate_count += amount
+		&"crowd_steering_evaluations":
+			_crowd_steering_evaluation_count += amount
+		&"retarget_full_scans":
+			_retarget_full_scan_count += amount
+		&"retarget_decisions":
+			_retarget_decision_count += amount
+		&"retarget_target_group_scans":
+			_target_grid_group_scan_count += amount
+		&"retarget_target_candidates":
+			_target_grid_candidate_count += amount
+		&"background_ai_evaluations":
+			_background_ai_evaluation_count += amount
+		&"background_fast_path_skips":
+			_background_fast_path_skip_count += amount
+		&"foreground_ai_ticks":
+			_foreground_ai_tick_count += amount
+		&"background_deep_sleep_entries":
+			_background_deep_sleep_entry_count += amount
+		&"background_deep_sleep_wakeups":
+			_background_deep_sleep_wakeup_count += amount
+		&"physics_moves":
+			_physics_move_count += amount
+		&"environment_guard_checks":
+			_environment_guard_check_count += amount
+
 static var _movement_authority_loaded := false
 static var _movement_authority_load_failed := false
 static var _movement_authority_by_id: Dictionary = {}
@@ -1372,6 +1406,7 @@ func _ready() -> void:
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS * float(posmod(get_instance_id(), 13)) / 13.0
 		if _can_use_background_ai():
 			_enter_background_deep_sleep(true)
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
@@ -1401,6 +1436,7 @@ func _resolve_invalid_spawn_overlap() -> void:
 
 func set_targeted(value: bool) -> void:
 	is_targeted = value
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 	if visual != null:
 		visual.refresh_target_ring()
@@ -1423,7 +1459,9 @@ func _update_natural_regen(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if _dying:
+		_record_performance_counter(&"death_physics_process_calls_after_begin")
 		return
+	_record_performance_counter(&"active_enemy_physics_count")
 	# Match the original server's object-cycle boundary: damage may reduce HP to
 	# zero during a multi-target release, but death teardown must not interrupt
 	# that release's remaining targets. Resolve the queued death on the next
@@ -1438,7 +1476,7 @@ func _physics_process(delta: float) -> void:
 	var use_background_ai := _can_use_background_ai()
 	if use_background_ai:
 		if _background_wakeup_timer != null:
-			_background_fast_path_skip_count += 1
+			_record_performance_counter(&"background_fast_path_skips")
 			_enter_background_deep_sleep(false)
 			return
 		# Lightweight fixtures that intentionally override _ready() have no wake
@@ -1446,7 +1484,7 @@ func _physics_process(delta: float) -> void:
 		_background_ai_timer -= delta
 		_background_accumulated_delta += delta
 		if _background_ai_timer > 0.0:
-			_background_fast_path_skip_count += 1
+			_record_performance_counter(&"background_fast_path_skips")
 			return
 		delta = _background_accumulated_delta
 		_background_accumulated_delta = 0.0
@@ -1467,13 +1505,15 @@ func _physics_process(delta: float) -> void:
 	_update_pending_attack(delta)
 	if use_background_ai:
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
-		_background_ai_evaluation_count += 1
+		_record_performance_counter(&"background_ai_evaluations")
 		_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
 		if not is_instance_valid(target):
 			_return_to_spawn(physics_delta)
 		return
 	_background_ai_timer = 0.0
-	_foreground_ai_tick_count += 1
+	_record_performance_counter(&"foreground_ai_ticks")
+	if is_instance_valid(target):
+		_record_performance_counter(&"engaged_enemy_count")
 	if _handle_safe_zone_target_return(physics_delta):
 		return
 	_retarget(delta)
@@ -1481,13 +1521,13 @@ func _physics_process(delta: float) -> void:
 		if _movement_step_active:
 			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw()
 		return
 	if _update_behavior_summon(delta):
 		if _movement_step_active:
 			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw()
 		return
 	# Keep the established retarget/attack/summon timing, but immobilization must
 	# win over the no-target return path after an actor is relocated beyond its
@@ -1503,7 +1543,7 @@ func _physics_process(delta: float) -> void:
 				&"control_anchor"
 			)
 		velocity = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw()
 		return
 	_control_anchor_ground_gu = Vector2.INF
 	if not is_instance_valid(target):
@@ -1535,7 +1575,7 @@ func _physics_process(delta: float) -> void:
 			return
 	if _movement_step_active:
 		_advance_autonomous_step(physics_delta)
-		queue_redraw()
+		_request_actor_redraw()
 		return
 	var contact_distance_gu := _contact_distance_gu_to_target(target)
 	var engagement_distance_gu := maxf(attack_range_gu, contact_distance_gu)
@@ -1550,7 +1590,7 @@ func _physics_process(delta: float) -> void:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	if _pending_attack_time >= 0.0:
 		velocity = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw()
 		return
 	if dormant:
 		var wake_range_gu := MonsterUnitAdapterScript.range_gu(
@@ -1570,7 +1610,7 @@ func _physics_process(delta: float) -> void:
 			dormant = false
 		else:
 			velocity = Vector2.ZERO
-			queue_redraw()
+			_request_actor_redraw()
 			return
 	if (
 		target.has_method("is_stealthed")
@@ -1584,7 +1624,7 @@ func _physics_process(delta: float) -> void:
 		_update_area_magic_delivery(delta)
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw()
 		return
 	if is_boss and _boss_skill_enabled:
 		_update_boss_skill(delta, distance_gu)
@@ -1653,7 +1693,7 @@ func _physics_process(delta: float) -> void:
 		if fresh_offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 			facing = _screen_facing_for_ground_direction(fresh_offset_ground_gu)
 	if visual != null and visual.is_fallback_attacking():
-		queue_redraw()
+		_request_actor_redraw()
 
 
 func _handle_safe_zone_target_return(physics_delta: float) -> bool:
@@ -1690,6 +1730,7 @@ func _handle_safe_zone_target_return(physics_delta: float) -> bool:
 		else:
 			velocity = Vector2.ZERO
 			actual_ground_motion_gu = Vector2.ZERO
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 	return true
 
@@ -1699,7 +1740,7 @@ func _enter_background_deep_sleep(initial_phase: bool) -> void:
 		return
 	if not _background_deep_sleeping:
 		_background_deep_sleeping = true
-		_background_deep_sleep_entry_count += 1
+		_record_performance_counter(&"background_deep_sleep_entries")
 	set_physics_process(false)
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
@@ -1734,7 +1775,7 @@ func _leave_background_deep_sleep() -> void:
 func _on_background_wakeup_timeout() -> void:
 	if not _background_deep_sleeping or _dying:
 		return
-	_background_deep_sleep_wakeup_count += 1
+	_record_performance_counter(&"background_deep_sleep_wakeups")
 	var now_msec := Time.get_ticks_msec()
 	var elapsed_seconds := clampf(
 		float(maxi(1, now_msec - _background_last_wakeup_msec)) / 1000.0,
@@ -1758,7 +1799,7 @@ func _on_background_wakeup_timeout() -> void:
 	_update_natural_regen(elapsed_seconds)
 	_update_entrapment_state(elapsed_seconds)
 	_update_pending_attack(elapsed_seconds)
-	_background_ai_evaluation_count += 1
+	_record_performance_counter(&"background_ai_evaluations")
 	_background_maintenance_running = true
 	_retarget(elapsed_seconds)
 	_background_maintenance_running = false
@@ -1940,6 +1981,8 @@ static func _packed_vector2_array_from_variant(raw_points: Variant) -> PackedVec
 
 
 func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
+	var safe_zone_started_usec := RuntimeDiagnostics.timing_start()
+	RuntimeDiagnostics.increment_performance_counter(&"safe_zone_queries")
 	var zones: Array = get_meta("safe_zones", [])
 	for zone_variant: Variant in zones:
 		if not zone_variant is Dictionary:
@@ -1964,18 +2007,27 @@ func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
 				zone.get("polygon_ground_gu", [])
 			)
 		if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(point_ground_gu, formal_zone):
+			RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
 			return true
+	RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
 	return false
 
 
 func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	var position_before_move := global_position
+	var move_started_usec := RuntimeDiagnostics.timing_start()
 	move_and_slide()
+	RuntimeDiagnostics.record_timing_usec(&"move_and_slide_usec", move_started_usec)
 	actual_ground_motion_gu = GroundUnitSpace.actual_ground_motion_gu_from_screen_positions(
 		position_before_move,
 		global_position,
 	)
-	_physics_move_count += 1
+	_record_performance_counter(&"physics_moves")
+	if (
+		actual_ground_motion_gu.length_squared() > GroundUnitSpace.EPSILON_GU
+		or velocity.length_squared() > GroundUnitSpace.EPSILON_GU
+	):
+		_record_performance_counter(&"moving_enemy_count")
 	if entrapment_active():
 		var before_ground_gu := _screen_position_px_to_ground_position_gu(
 			position_before_move
@@ -2020,7 +2072,7 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	if _environment_guard_timer > 0.0:
 		return
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS
-	_environment_guard_check_count += 1
+	_record_performance_counter(&"environment_guard_checks")
 	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 		environment_blocker,
 		global_position,
@@ -2075,6 +2127,7 @@ func _attack_engagement_ready(
 
 
 func _attack_world_path_is_clear_for_target(hit_target: Node2D) -> bool:
+	_record_performance_counter(&"attack_los_requests")
 	if not is_instance_valid(hit_target):
 		return false
 	var source_ground_gu := _screen_position_px_to_ground_position_gu(
@@ -2099,8 +2152,10 @@ func _world_attack_path_is_clear(
 	source_world_px: Vector2 = Vector2.INF,
 	target_world_px: Vector2 = Vector2.INF,
 ) -> bool:
+	_record_performance_counter(&"attack_los_evaluations")
+	var los_started_usec := RuntimeDiagnostics.timing_start()
 	if not source_ground_gu.is_finite() or not target_ground_gu.is_finite():
-		return false
+		return _finish_attack_los_diagnostic(los_started_usec, false)
 	var has_map_query := (
 		is_instance_valid(environment_blocker)
 		and environment_blocker.has_method("is_environment_point_blocked")
@@ -2110,7 +2165,7 @@ func _world_attack_path_is_clear(
 	# provide the second, authoritative WORLD-layer path check. Never turn a
 	# missing environment hookup into an open attack corridor.
 	if not has_map_query and physics_space == null:
-		return false
+		return _finish_attack_los_diagnostic(los_started_usec, false)
 	if has_map_query:
 		var distance_gu := source_ground_gu.distance_to(target_ground_gu)
 		var sample_count := maxi(
@@ -2123,14 +2178,15 @@ func _world_attack_path_is_clear(
 				source_ground_gu.lerp(target_ground_gu, progress)
 			)
 			if not sample_world_px.is_finite():
-				return false
+				return _finish_attack_los_diagnostic(los_started_usec, false)
+			_record_performance_counter(&"attack_los_map_samples")
 			if bool(environment_blocker.call(
 				"is_environment_point_blocked",
 				sample_world_px,
 			)):
-				return false
+				return _finish_attack_los_diagnostic(los_started_usec, false)
 	if physics_space == null:
-		return true
+		return _finish_attack_los_diagnostic(los_started_usec, true)
 	var ray_source_px := source_world_px
 	var ray_target_px := target_world_px
 	if not ray_source_px.is_finite():
@@ -2138,7 +2194,7 @@ func _world_attack_path_is_clear(
 	if not ray_target_px.is_finite():
 		ray_target_px = _ground_gu_to_screen_position_px(target_ground_gu)
 	if not ray_source_px.is_finite() or not ray_target_px.is_finite():
-		return false
+		return _finish_attack_los_diagnostic(los_started_usec, false)
 	var query := PhysicsRayQueryParameters2D.create(
 		ray_source_px,
 		ray_target_px,
@@ -2146,7 +2202,16 @@ func _world_attack_path_is_clear(
 	)
 	query.collide_with_bodies = true
 	query.collide_with_areas = true
-	return physics_space.intersect_ray(query).is_empty()
+	_record_performance_counter(&"attack_los_physics_rays")
+	return _finish_attack_los_diagnostic(
+		los_started_usec,
+		physics_space.intersect_ray(query).is_empty(),
+	)
+
+
+func _finish_attack_los_diagnostic(started_usec: int, result: bool) -> bool:
+	RuntimeDiagnostics.record_timing_usec(&"attack_los_usec", started_usec)
+	return result
 
 
 func _world_direct_space_state() -> PhysicsDirectSpaceState2D:
@@ -2159,6 +2224,7 @@ func _world_direct_space_state() -> PhysicsDirectSpaceState2D:
 func _world_attack_path_is_clear_for_release(
 	release_record: Dictionary,
 ) -> bool:
+	_record_performance_counter(&"attack_los_requests")
 	var source_ground_value: Variant = release_record.get(
 		"source_ground_gu",
 		Vector2.INF,
@@ -3658,7 +3724,8 @@ func _crowd_separation() -> Vector2:
 		for offset_x in range(-1, 2):
 			var bucket: Array = _crowd_grid.get(center_cell + Vector2i(offset_x, offset_y), [])
 			for value: Variant in bucket:
-				_crowd_query_candidate_count += 1
+				_record_performance_counter(&"crowd_query_candidates")
+				_record_performance_counter(&"crowd_index_candidates")
 				if not is_instance_valid(value):
 					continue
 				var node := value as Node
@@ -3692,8 +3759,11 @@ func _crowd_separation_for_motion(delta: float) -> Vector2:
 	if _crowd_steering_timer > 0.0:
 		return _cached_crowd_separation
 	_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS
-	_crowd_steering_evaluation_count += 1
+	_record_performance_counter(&"crowd_steering_evaluations")
+	_record_performance_counter(&"crowd_queries")
+	var crowd_started_usec := RuntimeDiagnostics.timing_start()
 	_cached_crowd_separation = _crowd_separation()
+	RuntimeDiagnostics.record_timing_usec(&"crowd_usec", crowd_started_usec)
 	return _cached_crowd_separation
 
 
@@ -3703,11 +3773,12 @@ func _ensure_crowd_grid() -> void:
 		return
 	_crowd_grid_physics_frame = physics_frame
 	_crowd_grid.clear()
-	_crowd_grid_build_count += 1
+	_record_performance_counter(&"crowd_grid_builds")
+	_record_performance_counter(&"crowd_full_group_scans")
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if not node is EnemyActor or node.is_queued_for_deletion():
 			continue
-		_crowd_grid_actor_scan_count += 1
+		_record_performance_counter(&"crowd_grid_actor_scans")
 		var enemy := node as EnemyActor
 		var cell := _crowd_grid_cell(enemy.global_position)
 		var bucket: Array = _crowd_grid.get(cell, [])
@@ -3731,8 +3802,8 @@ func _ensure_target_grid(force_refresh := false) -> void:
 	_target_grid_node_ids.clear()
 	# Keep the established diagnostic name, but count actual group walks now;
 	# per-actor candidate decisions are no longer misreported as full scans.
-	_retarget_full_scan_count += 1
-	_target_grid_group_scan_count += 1
+	_record_performance_counter(&"retarget_full_scans")
+	_record_performance_counter(&"retarget_target_group_scans")
 	# One shared group walk per 250 ms window replaces one group walk per
 	# retargeting actor.  Group order is retained in each record because equal
 	# Manhattan-distance first acquisitions are order-stable by contract.
@@ -3746,7 +3817,7 @@ func _ensure_target_grid(force_refresh := false) -> void:
 				bucket.append({"node": target_node, "order": group_order})
 				_target_grid[cell] = bucket
 				_target_grid_node_ids[target_node.get_instance_id()] = true
-				_target_grid_candidate_count += 1
+				_record_performance_counter(&"retarget_target_candidates")
 		group_order += 1
 
 
@@ -3836,10 +3907,11 @@ static func reset_performance_diagnostics() -> void:
 	_background_deep_sleep_wakeup_count = 0
 	_physics_move_count = 0
 	_environment_guard_check_count = 0
+	RuntimeDiagnostics.reset_performance_window()
 
 
 static func performance_diagnostics() -> Dictionary:
-	return {
+	var result := {
 		"crowd_grid_builds": _crowd_grid_build_count,
 		"crowd_grid_actor_scans": _crowd_grid_actor_scan_count,
 		"crowd_query_candidates": _crowd_query_candidate_count,
@@ -3856,6 +3928,12 @@ static func performance_diagnostics() -> Dictionary:
 		"physics_moves": _physics_move_count,
 		"environment_guard_checks": _environment_guard_check_count,
 	}
+	if RuntimeDiagnostics.performance_enabled():
+		var merged_counters := RuntimeDiagnostics.performance_counters()
+		for field: String in RuntimeDiagnostics.PERFORMANCE_FIELDS:
+			if merged_counters.has(field):
+				result[field] = merged_counters[field]
+	return result
 
 
 func _can_use_background_ai() -> bool:
@@ -3908,6 +3986,7 @@ func apply_life_steal(dealt_damage: int) -> void:
 func take_damage(amount: int, attacker: Node2D = null) -> void:
 	if _dying or _death_pending:
 		return
+	_record_performance_counter(&"take_damage_calls")
 	_leave_background_deep_sleep()
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
@@ -3928,6 +4007,12 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 			attack_range_gu,
 		)
 		_boss_skill_cooldown = minf(_boss_skill_cooldown, float(phase.get("skillCooldownSeconds", _boss_skill_cooldown)))
+	if current_hp == 0:
+		_record_performance_counter(&"lethal_damage_count")
+	if visual != null and current_hp > 0:
+		_record_performance_counter(&"hit_animation_requests")
+	_record_performance_counter(&"actor_redraw_requests")
+	_record_performance_counter(&"actor_redraw_requests_from_damage")
 	queue_redraw()
 	if current_hp == 0:
 		_mark_death_pending()
@@ -3945,6 +4030,7 @@ func can_receive_damage() -> bool:
 func _mark_death_pending() -> void:
 	if _dying or _death_pending:
 		return
+	_record_performance_counter(&"death_pending_marks")
 	_death_pending = true
 	# The heavyweight death signal/persistence/drop work is deferred, but a
 	# zero-HP actor must stop participating in collision and target queries now.
@@ -3955,6 +4041,7 @@ func _mark_death_pending() -> void:
 	collision_mask = 0
 	remove_from_group("enemies")
 	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
+		_record_performance_counter(&"death_same_release_unregistrations")
 		combat_spatial_index.unregister(spatial_actor_runtime_id)
 	# Tests, paused actors and temporarily disabled physics processing must still
 	# commit death after the current damage/AOE call stack has fully unwound.
@@ -3964,6 +4051,7 @@ func _mark_death_pending() -> void:
 func _begin_death() -> void:
 	if _dying:
 		return
+	_record_performance_counter(&"death_begin_calls")
 	_death_pending = false
 	if current_hp > 0:
 		return
@@ -4016,6 +4104,7 @@ func apply_poison(
 	poison_damage = maxi(poison_damage, maxi(1, tick_damage))
 	poison_time = maxf(poison_time, seconds)
 	poison_tick_interval_seconds = maxf(0.01, float(interval_seconds))
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
@@ -4032,6 +4121,7 @@ func apply_control(seconds: float) -> void:
 		_pending_attack_release_record = {}
 		velocity = Vector2.ZERO
 	control_time = maxf(control_time, seconds)
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
@@ -4184,6 +4274,7 @@ func apply_charm(seconds: float) -> void:
 	if seconds > 0.0:
 		_leave_background_deep_sleep()
 	charm_time = maxf(charm_time, seconds)
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
@@ -4223,9 +4314,11 @@ func _update_status_effects(delta: float) -> void:
 		poison_tick_elapsed_seconds = 0.0
 	var has_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
 	if had_visible_status != has_visible_status:
+		_record_performance_counter(&"actor_redraw_requests")
 		queue_redraw()
 	if has_meta("canonical_red_poison") and not canonical_red_poison_active():
 		remove_meta("canonical_red_poison")
+		_record_performance_counter(&"actor_redraw_requests")
 		queue_redraw()
 
 
@@ -4439,7 +4532,7 @@ func _retarget(delta := 0.0) -> void:
 	):
 		chosen = target
 	target = chosen
-	_retarget_decision_count += 1
+	_record_performance_counter(&"retarget_decisions")
 	if not boss_rule.is_empty():
 		var search: Dictionary = boss_rule.get("targetSearch", {})
 		var authored_interval_seconds := (
@@ -4598,6 +4691,7 @@ func _return_to_spawn(
 	else:
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
@@ -4771,8 +4865,14 @@ func refresh_name_label_position() -> void:
 
 
 func _refresh_overhead_health() -> void:
+	_record_performance_counter(&"overhead_health_refreshes")
 	if overhead != null:
 		overhead.set_health(current_hp, max_hp)
+
+
+func _request_actor_redraw() -> void:
+	_record_performance_counter(&"actor_redraw_requests")
+	queue_redraw()
 
 
 func poison_indicator_anchor_y() -> float:
@@ -4866,6 +4966,7 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 	if _boss_phase_two:
 		damage_multiplier = int(phase.get("skillDamageMultiplier", damage_multiplier))
 	if _boss_warning > 0.0:
+		_record_performance_counter(&"actor_redraw_requests")
 		queue_redraw()
 		_boss_warning -= delta
 		if _boss_warning <= 0.0:

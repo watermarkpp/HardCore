@@ -23,7 +23,9 @@ func apply_damage(target: Node, amount: int) -> bool:
 		or _target_rejects_damage(target)
 	):
 		return false
+	var damage_started_usec := RuntimeDiagnostics.timing_start()
 	target.take_damage(maxi(1, amount))
+	RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
 	return true
 
 
@@ -34,7 +36,9 @@ func apply_enemy_physical_damage(target: Node, amount: int, source_actor: Node2D
 		or _target_rejects_damage(target)
 	):
 		return false
+	var damage_started_usec := RuntimeDiagnostics.timing_start()
 	target.call("take_damage", maxi(1, amount), source_actor)
+	RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
 	return true
 
 
@@ -56,6 +60,8 @@ func apply_enemy_direct_spell_damage(
 			"failure_reason": "target_missing_damage_pipeline",
 			"final_damage": 0,
 		}
+	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_resolution_count")
+	var resolution_started_usec := RuntimeDiagnostics.timing_start()
 	var target_stats: Dictionary = _target_stats_with_runtime_buffs(target)
 	var resolution := CombatResolutionRulesScript.resolve_direct_spell_damage(
 		stable_skill_id,
@@ -66,7 +72,13 @@ func apply_enemy_direct_spell_damage(
 	)
 	var final_damage := int(resolution.get("final_damage", 0))
 	if final_damage > 0:
+		var damage_started_usec := RuntimeDiagnostics.timing_start()
 		target.call("take_damage", final_damage, source_actor)
+		RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
+	RuntimeDiagnostics.record_timing_usec(
+		&"direct_spell_resolution_usec",
+		resolution_started_usec,
+	)
 	var result := resolution.duplicate(true)
 	result["success"] = final_damage > 0
 	return result
@@ -80,7 +92,10 @@ func _target_rejects_damage(target: Node) -> bool:
 
 
 func _target_stats_with_runtime_buffs(target: Node) -> Dictionary:
+	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_stats_snapshot_count")
 	var raw_stats: Variant = target.get("monster_data")
+	if raw_stats is Dictionary:
+		RuntimeDiagnostics.increment_performance_counter(&"direct_spell_full_monster_data_duplicates")
 	var result: Dictionary = raw_stats.duplicate(true) if raw_stats is Dictionary else {}
 	var red_poison: Variant = target.get_meta("canonical_red_poison", {})
 	if not red_poison is Dictionary:

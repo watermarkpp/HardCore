@@ -103,22 +103,31 @@ static func environment_blocks_actor_screen_px(
 	position_screen_px: Vector2,
 	collision_radius_px: float
 ) -> bool:
+	var environment_started_usec := RuntimeDiagnostics.timing_start()
+	RuntimeDiagnostics.increment_performance_counter(&"environment_guard_batches")
 	if not is_instance_valid(provider) or not provider.has_method("is_environment_point_blocked"):
+		RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
 		return false
+	RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
 	if bool(provider.call("is_environment_point_blocked", position_screen_px)):
+		RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
 		return true
 	# Physics remains authoritative for sliding.  These samples are the common
 	# deterministic fallback used by both player and monsters when collision
 	# chunks are rebuilt or a spawn/teleport bypasses move_and_slide().
 	var sample_radius_px := maxf(0.0, collision_radius_px - 1.0)
 	if sample_radius_px <= 0.0:
+		RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
 		return false
 	for offset_px: Vector2 in actor_footprint_polygon_px(sample_radius_px):
+		RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
 		if bool(provider.call(
 			"is_environment_point_blocked",
 			position_screen_px + offset_px
 		)):
+			RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
 			return true
+	RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
 	return false
 
 

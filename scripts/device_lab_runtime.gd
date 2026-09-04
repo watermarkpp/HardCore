@@ -49,6 +49,9 @@ const COMMON_COMMAND_FIELDS := {
 const ACTION_COMMAND_FIELDS := {
 	"status": {},
 	"snapshot": {},
+	"reset_diagnostics": {},
+	"read_diagnostics": {},
+	"stop_diagnostics": {},
 	"repair_diagnostics": {},
 	"export_player_state": {},
 	"ensure_chiyue_test_roster": {},
@@ -88,16 +91,7 @@ const PROFILE_SCRIPT_SUFFIXES := {
 	"warehouse": "/warehouse_panel.gd",
 }
 
-const ENEMY_DIAGNOSTIC_FIELDS := [
-	"crowd_grid_builds",
-	"crowd_grid_actor_scans",
-	"crowd_query_candidates",
-	"crowd_steering_evaluations",
-	"retarget_full_scans",
-	"background_ai_evaluations",
-	"physics_moves",
-	"environment_guard_checks",
-]
+const ENEMY_DIAGNOSTIC_FIELDS := RuntimeDiagnostics.PERFORMANCE_FIELDS
 
 const MONSTER_STREAMING_DIAGNOSTIC_FIELDS := [
 	"registered_visual_count",
@@ -280,7 +274,7 @@ static func validate_command(command: Dictionary) -> Dictionary:
 	if nonce.is_empty() or nonce.length() > MAX_NONCE_LENGTH or not _is_safe_token(nonce):
 		return {"ok": false, "error": "nonce"}
 	var action := str(command.get("action", ""))
-	if action not in ["status", "snapshot", "repair_diagnostics", "export_player_state", "ensure_chiyue_test_roster", "list_checkpoints", "apply_ui_profile", "apply_player_state", "rollback_player_state", "rollback_ui_profile"]:
+	if action not in ["status", "snapshot", "reset_diagnostics", "read_diagnostics", "stop_diagnostics", "repair_diagnostics", "export_player_state", "ensure_chiyue_test_roster", "list_checkpoints", "apply_ui_profile", "apply_player_state", "rollback_player_state", "rollback_ui_profile"]:
 		return {"ok": false, "error": "unknown_action"}
 	var allowed_fields: Dictionary = COMMON_COMMAND_FIELDS.duplicate()
 	var action_fields: Dictionary = ACTION_COMMAND_FIELDS.get(action, {})
@@ -364,6 +358,29 @@ func _execute(command: Dictionary) -> Dictionary:
 			return {"ok": true, "action": action, "status": status_snapshot()}
 		"snapshot":
 			return {"ok": true, "action": action, "snapshot": build_snapshot(_game_root)}
+		"reset_diagnostics":
+			if not RuntimeDiagnostics.set_device_lab_performance_enabled(true):
+				return {"ok": false, "action": action, "error": "performance_unavailable"}
+			RuntimeDiagnostics.reset_performance_window()
+			return {
+				"ok": true,
+				"action": action,
+				"performance_diagnostics": _performance_window_snapshot(_game_root),
+			}
+		"read_diagnostics":
+			return {
+				"ok": true,
+				"action": action,
+				"performance_diagnostics": _performance_window_snapshot(_game_root),
+			}
+		"stop_diagnostics":
+			if not RuntimeDiagnostics.set_device_lab_performance_enabled(false):
+				return {"ok": false, "action": action, "error": "performance_unavailable"}
+			return {
+				"ok": true,
+				"action": action,
+				"performance_diagnostics": _performance_window_snapshot(_game_root),
+			}
 		"repair_diagnostics":
 			return _repair_diagnostics()
 		"export_player_state":
@@ -403,7 +420,7 @@ func status_snapshot() -> Dictionary:
 		"inbox": PENDING_PATH,
 		"outbox": OUTBOX_DIR,
 		"lastCommandNonce": _last_command_nonce,
-		"capabilities": ["ui_profile", "player_state", "chiyue_test_roster", "checkpoints", "snapshot", "repair_diagnostics", "resource_patch"],
+		"capabilities": ["ui_profile", "player_state", "chiyue_test_roster", "checkpoints", "snapshot", "reset_diagnostics", "read_diagnostics", "stop_diagnostics", "repair_diagnostics", "resource_patch"],
 		"resourcePatch": patch_status,
 	}
 
@@ -697,6 +714,8 @@ func _control_matches_profile(control: Control, profile_id: String) -> bool:
 
 ## Builds the bounded, content-redacted runtime snapshot requested by the host.
 static func build_snapshot(root: Node) -> Dictionary:
+	_record_engine_window_sample()
+	var enemy_activity := _enemy_activity_snapshot(root)
 	var snapshot := {
 		"timestamp": Time.get_unix_time_from_system(),
 		"frame": Engine.get_process_frames(),
@@ -706,7 +725,8 @@ static func build_snapshot(root: Node) -> Dictionary:
 		"scene": _scene_snapshot(root),
 		"map": _map_snapshot(root),
 		"player": _player_snapshot(root),
-		"enemy_activity": _enemy_activity_snapshot(root),
+		"enemy_activity": enemy_activity,
+		"performance_diagnostics": _performance_window_snapshot(root, enemy_activity),
 		"monster_streaming": _monster_streaming_snapshot(root),
 		"controls": [],
 		"node2d": [],
@@ -722,6 +742,83 @@ static func build_snapshot(root: Node) -> Dictionary:
 	var state := {"nodes": 0, "controls": 0, "node2d": 0}
 	_collect_snapshot(root, root, 0, snapshot, state)
 	return snapshot
+
+
+static func _record_engine_window_sample() -> void:
+	RuntimeDiagnostics.add_performance_value(
+		&"draw_calls",
+		_performance_value(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+	)
+	RuntimeDiagnostics.add_performance_value(
+		&"render_primitives",
+		_performance_value(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),
+	)
+	RuntimeDiagnostics.add_performance_value(
+		&"texture_mem",
+		_performance_value(Performance.RENDER_TEXTURE_MEM_USED),
+	)
+	RuntimeDiagnostics.add_performance_value(
+		&"video_mem",
+		_performance_value(Performance.RENDER_VIDEO_MEM_USED),
+	)
+
+
+static func _performance_window_snapshot(
+	root: Node,
+	enemy_activity: Dictionary = {},
+) -> Dictionary:
+	var activity := enemy_activity
+	if activity.is_empty():
+		activity = _enemy_activity_snapshot(root)
+	return RuntimeDiagnostics.read_performance_window(
+		_performance_context(root, activity)
+	)
+
+
+static func _performance_context(root: Node, activity: Dictionary) -> Dictionary:
+	var player_position := Vector2.ZERO
+	var player_profession := ""
+	var raw_player: Variant = root.get("player") if root != null else null
+	if raw_player is Node2D and is_instance_valid(raw_player):
+		player_position = (raw_player as Node2D).global_position
+		player_profession = str((raw_player as Node).get("profession_id"))
+	var map := _map_snapshot(root)
+	var scene := _scene_snapshot(root)
+	var nearby_1600 := int(activity.get("within_1600_px", 0))
+	var nearby_2000 := int(activity.get("within_2000_px", 0))
+	var nearby_8gu := int(activity.get("within_8gu", 0))
+	var nearby_16gu := int(activity.get("within_16gu", 0))
+	var active_ground_loot_count := int(activity.get("active_ground_loot_count", 0))
+	var active_corpse_count := int(activity.get("active_corpse_count", 0))
+	var release_context := RuntimeDiagnostics.performance_release_context()
+	RuntimeDiagnostics.set_performance_value(
+		&"active_loot_pickups",
+		float(active_ground_loot_count),
+	)
+	var counters := RuntimeDiagnostics.performance_counters()
+	return {
+		"map_id": int(map.get("mapId", -1)),
+		"commit": str(root.get_meta("build_commit", "unknown")) if root != null else "unknown",
+		"total_monster_count": int(activity.get("total", 0)),
+		"nearby_1600_px": nearby_1600,
+		"nearby_2000_px": nearby_2000,
+		"moving_count": int(activity.get("moving_count", 0)),
+		"engaged_count": int(activity.get("engaged_count", 0)),
+		"active_visual_count": int(activity.get("visual_resources_active", 0)),
+		"player_position": _vec2(player_position),
+		"camera_zoom": float(scene.get("camera_zoom", 1.0)),
+		"release_id": str(release_context.get("release_id", "")),
+		"skill_id": str(release_context.get("skill_id", "")),
+		"player_profession": player_profession,
+		"nearby_enemy_count_8gu": nearby_8gu,
+		"nearby_enemy_count_16gu": nearby_16gu,
+		"engaged_enemy_count": int(activity.get("engaged_count", 0)),
+		"moving_enemy_count": int(activity.get("moving_count", 0)),
+		"aoe_selected_target_count": int(counters.get("aoe_selected_targets", 0)),
+		"lethal_target_count": int(counters.get("lethal_damage_count", 0)),
+		"active_ground_loot_count": active_ground_loot_count,
+		"active_corpse_count": active_corpse_count,
+	}
 
 
 ## Returns only a fixed set of numeric engine monitors.  This is intentionally
@@ -767,7 +864,13 @@ static func _enemy_activity_snapshot(root: Node) -> Dictionary:
 		"visible": 0,
 		"within_1600_px": 0,
 		"within_2000_px": 0,
+		"within_8gu": 0,
+		"within_16gu": 0,
 		"visual_resources_active": 0,
+		"moving_count": 0,
+		"engaged_count": 0,
+		"active_ground_loot_count": 0,
+		"active_corpse_count": 0,
 		"background_ai_eligible": 0,
 		"inspected": 0,
 		"enemy_diagnostics": _enemy_diagnostics_snapshot(),
@@ -778,6 +881,14 @@ static func _enemy_activity_snapshot(root: Node) -> Dictionary:
 	var player := raw_player as Node2D if raw_player is Node2D and is_instance_valid(raw_player) else null
 	var enemies: Array[Node] = root.get_tree().get_nodes_in_group("enemies")
 	result["total"] = enemies.size()
+	result["active_ground_loot_count"] = root.get_tree().get_nodes_in_group("loot_pickups").size()
+	var active_enemy_cache: Variant = root.get("_active_enemy_cache")
+	if active_enemy_cache is Dictionary:
+		for raw_enemy: Variant in (active_enemy_cache as Dictionary).values():
+			if not raw_enemy is EnemyActor or not is_instance_valid(raw_enemy):
+				continue
+			if bool((raw_enemy as EnemyActor).get("_death_pending")) or bool((raw_enemy as EnemyActor).get("_dying")):
+				result["active_corpse_count"] = int(result["active_corpse_count"]) + 1
 	var inspected := mini(enemies.size(), MAX_SNAPSHOT_ENEMY_ACTIVITY_SCAN)
 	result["inspected"] = inspected
 	for index in range(inspected):
@@ -789,6 +900,12 @@ static func _enemy_activity_snapshot(root: Node) -> Dictionary:
 			result["visible"] = int(result["visible"]) + 1
 		if player != null and enemy is Node2D:
 			var distance_squared := (enemy as Node2D).global_position.distance_squared_to(player.global_position)
+			var eight_gu_px := GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(8.0, 0.0)).length()
+			var sixteen_gu_px := GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(16.0, 0.0)).length()
+			if distance_squared <= eight_gu_px * eight_gu_px:
+				result["within_8gu"] = int(result["within_8gu"]) + 1
+			if distance_squared <= sixteen_gu_px * sixteen_gu_px:
+				result["within_16gu"] = int(result["within_16gu"]) + 1
 			if distance_squared <= 1600.0 * 1600.0:
 				result["within_1600_px"] = int(result["within_1600_px"]) + 1
 			if distance_squared <= 2000.0 * 2000.0:
@@ -796,13 +913,16 @@ static func _enemy_activity_snapshot(root: Node) -> Dictionary:
 		if not enemy is EnemyActor:
 			continue
 		var enemy_actor := enemy as EnemyActor
+		var enemy_velocity: Variant = enemy_actor.get("velocity")
+		if enemy_velocity is Vector2 and (enemy_velocity as Vector2).length_squared() > 0.000001:
+			result["moving_count"] = int(result.get("moving_count", 0)) + 1
+		if is_instance_valid(enemy_actor.get("target")):
+			result["engaged_count"] = int(result.get("engaged_count", 0)) + 1
 		var visual: Variant = enemy_actor.get("visual")
 		if visual is Node and is_instance_valid(visual):
 			var active_resources: Variant = (visual as Node).get("active_resources")
 			if active_resources is Dictionary and not (active_resources as Dictionary).is_empty():
 				result["visual_resources_active"] = int(result["visual_resources_active"]) + 1
-		if enemy_actor.has_method("_can_use_background_ai") and bool(enemy_actor.call("_can_use_background_ai")):
-			result["background_ai_eligible"] = int(result["background_ai_eligible"]) + 1
 	return result
 
 
