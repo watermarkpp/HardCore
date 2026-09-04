@@ -1124,6 +1124,123 @@ static func ground_polygon_gu(snapshot: Dictionary) -> PackedVector2Array:
 	)
 
 
+## R3X-1: derive the broadphase envelope only from authoritative ground-GU
+## geometry. Screen-space visual bounds are intentionally never consulted.
+static func ground_aabb(snapshot: Dictionary) -> Dictionary:
+	if snapshot.is_empty():
+		return _ground_aabb_failure("snapshot_missing")
+	if not has_legacy_base_contract(snapshot):
+		return _ground_aabb_failure("contract_invalid")
+	var shape_type := str(snapshot.get("shape_type", ""))
+	if shape_type not in SUPPORTED_SHAPE_TYPES:
+		return _ground_aabb_failure("shape_type_invalid")
+	if shape_type == SHAPE_CELL_UNION:
+		return _ground_aabb_cell_union(snapshot)
+	if shape_type == SHAPE_CIRCLE and (
+		snapshot.has("center_ground_gu")
+		or snapshot.has("radius_gu")
+	):
+		if not snapshot.has("center_ground_gu") or not snapshot.has("radius_gu"):
+			return _ground_aabb_failure("circle_fields_incomplete")
+		var raw_center: Variant = snapshot.get("center_ground_gu", null)
+		var raw_radius: Variant = snapshot.get("radius_gu", null)
+		if (
+			not raw_center is Vector2
+			or not _vector2_is_finite(raw_center as Vector2)
+			or (not raw_radius is int and not raw_radius is float)
+		):
+			return _ground_aabb_failure("circle_fields_invalid")
+		var radius_gu := float(raw_radius)
+		if not is_finite(radius_gu) or radius_gu < 0.0:
+			return _ground_aabb_failure("circle_radius_invalid")
+		var center_ground_gu: Vector2 = raw_center
+		return _ground_aabb_from_min_max(
+			center_ground_gu - Vector2.ONE * radius_gu,
+			center_ground_gu + Vector2.ONE * radius_gu,
+		)
+	return _ground_aabb_from_polygon_value(
+		snapshot.get("polygon_ground_gu", null)
+	)
+
+
+static func _ground_aabb_cell_union(snapshot: Dictionary) -> Dictionary:
+	var raw_polygons: Variant = snapshot.get("polygons_ground_gu", null)
+	if raw_polygons is Array and not (raw_polygons as Array).is_empty():
+		var min_ground_gu := Vector2(INF, INF)
+		var max_ground_gu := Vector2(-INF, -INF)
+		for raw_polygon: Variant in raw_polygons as Array:
+			if not raw_polygon is PackedVector2Array:
+				return _ground_aabb_failure("cell_union_polygon_invalid")
+			var polygon: PackedVector2Array = raw_polygon
+			if polygon.size() < 3 or not _polygon_is_finite(polygon):
+				return _ground_aabb_failure("cell_union_polygon_invalid")
+			for point_ground_gu: Vector2 in polygon:
+				min_ground_gu = min_ground_gu.min(point_ground_gu)
+				max_ground_gu = max_ground_gu.max(point_ground_gu)
+		return _ground_aabb_from_min_max(min_ground_gu, max_ground_gu)
+	if raw_polygons != null and not raw_polygons is Array:
+		return _ground_aabb_failure("cell_union_polygons_invalid")
+	var raw_cells: Variant = snapshot.get("geometry_cells_grid_steps", null)
+	if not raw_cells is Array or (raw_cells as Array).is_empty():
+		return _ground_aabb_failure("cell_union_geometry_missing")
+	var min_ground_gu := Vector2(INF, INF)
+	var max_ground_gu := Vector2(-INF, -INF)
+	for raw_cell: Variant in raw_cells as Array:
+		if not raw_cell is Vector2i:
+			return _ground_aabb_failure("cell_union_cell_invalid")
+		var center_ground_gu := Vector2(raw_cell as Vector2i)
+		min_ground_gu = min_ground_gu.min(
+			center_ground_gu - Vector2.ONE * 0.5
+		)
+		max_ground_gu = max_ground_gu.max(
+			center_ground_gu + Vector2.ONE * 0.5
+		)
+	return _ground_aabb_from_min_max(min_ground_gu, max_ground_gu)
+
+
+static func _ground_aabb_from_polygon_value(raw_polygon: Variant) -> Dictionary:
+	if not raw_polygon is PackedVector2Array:
+		return _ground_aabb_failure("polygon_missing")
+	var polygon: PackedVector2Array = raw_polygon
+	if polygon.size() < 3 or not _polygon_is_finite(polygon):
+		return _ground_aabb_failure("polygon_invalid")
+	var min_ground_gu := polygon[0]
+	var max_ground_gu := polygon[0]
+	for point_ground_gu: Vector2 in polygon:
+		min_ground_gu = min_ground_gu.min(point_ground_gu)
+		max_ground_gu = max_ground_gu.max(point_ground_gu)
+	return _ground_aabb_from_min_max(min_ground_gu, max_ground_gu)
+
+
+static func _ground_aabb_from_min_max(
+	min_ground_gu: Vector2,
+	max_ground_gu: Vector2
+) -> Dictionary:
+	if (
+		not _vector2_is_finite(min_ground_gu)
+		or not _vector2_is_finite(max_ground_gu)
+		or min_ground_gu.x > max_ground_gu.x
+		or min_ground_gu.y > max_ground_gu.y
+	):
+		return _ground_aabb_failure("aabb_non_finite")
+	return {
+		"valid": true,
+		"bounds_ground_gu": Rect2(
+			min_ground_gu,
+			max_ground_gu - min_ground_gu
+		),
+		"reason": "",
+	}
+
+
+static func _ground_aabb_failure(reason: String) -> Dictionary:
+	return {
+		"valid": false,
+		"bounds_ground_gu": Rect2(),
+		"reason": reason,
+	}
+
+
 static func ground_polygons_gu(
 	snapshot: Dictionary
 ) -> Array[PackedVector2Array]:

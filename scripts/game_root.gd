@@ -229,6 +229,11 @@ var _active_enemy_cache: Dictionary = {}
 var _active_boss_cache: Dictionary = {}
 var _safe_zone_enforcement_remaining := 0.0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+var _aoe_candidate_scratch: Array[EnemyActor] = []
+var _aoe_target_scratch: Array[EnemyActor] = []
+var _aoe_distance_scratch: Array[float] = []
+var _aoe_id_scratch: Array[int] = []
+var _aoe_cell_stamp := 0
 var _ground_effect_manager: PersistentGroundEffectManagerScript
 ## FREEZE-P0.1: fail-closed canonical projection diagnostics.
 var missing_projection_rejection_count := 0
@@ -297,6 +302,14 @@ var _device_lab_runtime: DeviceLabRuntimeScript
 ## profile and is called out explicitly in the emitted record.
 var _loading_handoff_init_usec := 0
 var _loading_handoff_enter_tree_usec := 0
+
+
+func _clear_aoe_query_scratch() -> void:
+	_aoe_candidate_scratch.clear()
+	_aoe_target_scratch.clear()
+	_aoe_distance_scratch.clear()
+	_aoe_id_scratch.clear()
+	_aoe_cell_stamp = 0
 
 # --- P1-A: Gameplay Input Gate (counted runtime locks) ---
 

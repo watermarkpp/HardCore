@@ -35,6 +35,9 @@ var index_total_candidate_count := 0
 var index_max_candidate_count := 0
 var index_neighbor_query_count := 0
 var index_neighbor_candidate_count := 0
+var index_enemy_node_aabb_query_count := 0
+var index_enemy_node_segment_query_count := 0
+var index_enemy_node_candidate_count := 0
 
 # The neighbor API receives a caller-owned Array, so it only needs a stable
 # order lookup while inserting candidates.  Keeping this side table on the
@@ -43,6 +46,7 @@ var index_neighbor_candidate_count := 0
 # consumers.
 var _stable_order_by_node_instance_id: Dictionary = {}
 var _neighbor_stale_actor_ids: Array[int] = []
+var _enemy_query_stamp_serial := 0
 
 
 func _init() -> void:
@@ -185,6 +189,157 @@ func query_aabb_candidates(
 			bounds_ground_gu.size + Vector2.ONE * expansion * 2.0
 		)
 	)
+
+
+## R3X-1: caller-owned, allocation-free enemy-node AABB broadphase.  The
+## service expands the requested envelope by the largest registered actor
+## footprint so the result is conservative for every enemy.  It emits only
+## live EnemyActor nodes, never the Dictionary records used by legacy callers.
+func query_enemy_nodes_aabb_into(
+	runtime_map_id: int,
+	bounds_ground_gu: Rect2,
+	output: Array,
+) -> void:
+	output.clear()
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_enemy_node_aabb_query_count += 1
+	var query_stamp := _next_enemy_query_stamp()
+	if (
+		runtime_map_id < 0
+		or not bounds_ground_gu.position.is_finite()
+		or not bounds_ground_gu.size.is_finite()
+		or bounds_ground_gu.size.x < 0.0
+		or bounds_ground_gu.size.y < 0.0
+	):
+		return
+	var expansion := maxf(0.0, _max_actor_bounds_gu)
+	_query_enemy_nodes_in_aabb(
+		runtime_map_id,
+		Rect2(
+			bounds_ground_gu.position - Vector2.ONE * expansion,
+			bounds_ground_gu.size + Vector2.ONE * expansion * 2.0,
+		),
+		output,
+		query_stamp,
+	)
+	_finish_enemy_node_query(output)
+
+
+## R3X-1: segment broadphase expressed as one expanded AABB over the complete
+## segment.  Narrow geometry remains the caller's authority.
+func query_enemy_nodes_segment_into(
+	runtime_map_id: int,
+	start_ground_gu: Vector2,
+	end_ground_gu: Vector2,
+	expansion_gu: float,
+	output: Array,
+) -> void:
+	output.clear()
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_enemy_node_segment_query_count += 1
+	var query_stamp := _next_enemy_query_stamp()
+	if (
+		runtime_map_id < 0
+		or not start_ground_gu.is_finite()
+		or not end_ground_gu.is_finite()
+		or not is_finite(expansion_gu)
+	):
+		return
+	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
+	var min_gu := Vector2(
+		minf(start_ground_gu.x, end_ground_gu.x),
+		minf(start_ground_gu.y, end_ground_gu.y)
+	) - Vector2.ONE * expansion
+	var max_gu := Vector2(
+		maxf(start_ground_gu.x, end_ground_gu.x),
+		maxf(start_ground_gu.y, end_ground_gu.y)
+	) + Vector2.ONE * expansion
+	_query_enemy_nodes_in_aabb(
+		runtime_map_id,
+		Rect2(min_gu, max_gu - min_gu),
+		output,
+		query_stamp,
+	)
+	_finish_enemy_node_query(output)
+
+
+func _query_enemy_nodes_in_aabb(
+	runtime_map_id: int,
+	bounds_ground_gu: Rect2,
+	output: Array,
+	query_stamp: int,
+) -> void:
+	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
+	if map_buckets.is_empty():
+		return
+	var min_bucket := _bucket_key(bounds_ground_gu.position)
+	var max_bucket := _bucket_key(bounds_ground_gu.end)
+	for bucket_y: int in range(min_bucket.y, max_bucket.y + 1):
+		for bucket_x: int in range(min_bucket.x, max_bucket.x + 1):
+			var query_bucket := Vector2i(bucket_x, bucket_y)
+			var bucket: Dictionary = map_buckets.get(query_bucket, {})
+			if bucket.is_empty():
+				continue
+			for raw_id: Variant in bucket:
+				var actor_id := int(raw_id)
+				var raw_entry: Variant = _entries.get(actor_id, null)
+				if not raw_entry is Dictionary:
+					continue
+				var entry := raw_entry as Dictionary
+				if int(entry.get("_enemy_query_stamp", 0)) == query_stamp:
+					continue
+				entry["_enemy_query_stamp"] = query_stamp
+				var node_ref: WeakRef = bucket.get(actor_id)
+				var node: Node = (
+					node_ref.get_ref()
+					if node_ref != null
+					else null
+				)
+				if node == null or not is_instance_valid(node):
+					_neighbor_stale_actor_ids.append(actor_id)
+					continue
+				if not node is EnemyActor:
+					continue
+				var enemy := node as EnemyActor
+				if (
+					enemy.is_queued_for_deletion()
+					or
+					enemy._dying
+					or enemy._death_pending
+					or enemy.current_hp <= 0
+				):
+					_neighbor_stale_actor_ids.append(actor_id)
+					continue
+				_append_neighbor_node_sorted(
+					output,
+					enemy,
+					int(entry.get("stable_combat_order", actor_id)),
+				)
+
+
+func _finish_enemy_node_query(output: Array) -> void:
+	for actor_id: int in _neighbor_stale_actor_ids:
+		_erase_entry(actor_id)
+		index_stale_cleanup_count += 1
+	_neighbor_stale_actor_ids.clear()
+	index_enemy_node_candidate_count += output.size()
+	index_total_candidate_count += output.size()
+	index_max_candidate_count = maxi(
+		index_max_candidate_count,
+		output.size()
+	)
+
+
+func _next_enemy_query_stamp() -> int:
+	_enemy_query_stamp_serial += 1
+	if _enemy_query_stamp_serial <= 0:
+		_enemy_query_stamp_serial = 1
+		for raw_entry: Variant in _entries.values():
+			if raw_entry is Dictionary:
+				(raw_entry as Dictionary)["_enemy_query_stamp"] = 0
+	return _enemy_query_stamp_serial
 
 
 ## Lightweight crowd broadphase. The output array belongs to the caller and
@@ -384,6 +539,9 @@ func diagnostics() -> Dictionary:
 		"index_max_candidate_count": index_max_candidate_count,
 		"index_neighbor_query_count": index_neighbor_query_count,
 		"index_neighbor_candidate_count": index_neighbor_candidate_count,
+		"index_enemy_node_aabb_query_count": index_enemy_node_aabb_query_count,
+		"index_enemy_node_segment_query_count": index_enemy_node_segment_query_count,
+		"index_enemy_node_candidate_count": index_enemy_node_candidate_count,
 	}
 
 
