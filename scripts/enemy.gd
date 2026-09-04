@@ -1148,6 +1148,9 @@ func _terrain_neighbor_for_pursuit(
 		return direct_neighbor
 	if now_ms < _terrain_no_path_until_ms:
 		return Vector2i.ZERO
+	var terrain_path_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_terrain_path_calls"
+	)
 	var path_result := MonsterTerrainNavigationPolicyScript.find_bounded_path(
 		_terrain_navigation_context,
 		current_cell,
@@ -1155,6 +1158,30 @@ func _terrain_neighbor_for_pursuit(
 		combat_radius_gu,
 		_terrain_failed_cell if _terrain_has_failed_cell else Vector2i(-2147483648, -2147483648),
 	)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_terrain_path_usec",
+		terrain_path_started_usec,
+	)
+	if terrain_path_started_usec > 0:
+		if bool(path_result.get("accepted", false)):
+			RuntimeDiagnostics.increment_performance_counter(
+				&"enemy_terrain_path_accepted"
+			)
+		elif str(path_result.get("reason", "")) == "frame_budget_exhausted":
+			RuntimeDiagnostics.increment_performance_counter(
+				&"enemy_terrain_path_budget_rejections"
+			)
+		if path_result.has("expansions"):
+			var expansions := int(path_result.get("expansions", 0))
+			if expansions > 0:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"enemy_terrain_path_expansions",
+					expansions,
+				)
+			RuntimeDiagnostics.record_performance_max(
+				&"enemy_terrain_path_expansions_max",
+				float(expansions),
+			)
 	if not bool(path_result.get("accepted", false)):
 		# Frame budget exhaustion is not a path failure. Another actor gets the
 		# next frame; no animation starts while this actor waits.
@@ -1344,6 +1371,19 @@ func _fail_autonomous_step_blocked() -> void:
 
 
 func _advance_autonomous_step(delta: float) -> void:
+	var movement_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_movement_strategy_calls"
+	)
+	_advance_autonomous_step_internal(delta)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_movement_strategy_usec",
+		movement_started_usec,
+	)
+
+
+## Inclusive movement-strategy body. The move and environment probes inside it
+## are nested in this segment and in the actor physics total.
+func _advance_autonomous_step_internal(delta: float) -> void:
 	if not _movement_step_active:
 		return
 	if stationary:
@@ -1670,6 +1710,19 @@ func _update_natural_regen(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	var physics_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_physics_calls"
+	)
+	_physics_process_internal(delta)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_physics_usec",
+		physics_started_usec,
+	)
+
+
+## Inclusive actor physics body. The outer wrapper above deliberately measures
+## every early return, including death and background fast paths.
+func _physics_process_internal(delta: float) -> void:
 	if _dying:
 		_record_performance_counter(&"death_physics_process_calls_after_begin")
 		return
@@ -1718,9 +1771,16 @@ func _physics_process(delta: float) -> void:
 	if use_background_ai:
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
 		_record_performance_counter(&"background_ai_evaluations")
+		var background_started_usec := RuntimeDiagnostics.begin_timed_segment(
+			&"enemy_background_tick_calls"
+		)
 		_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
 		if not is_instance_valid(target):
 			_return_to_spawn(physics_delta)
+		RuntimeDiagnostics.end_timed_segment(
+			&"enemy_background_tick_usec",
+			background_started_usec,
+		)
 		return
 	_background_ai_timer = 0.0
 	_record_performance_counter(&"foreground_ai_ticks")
@@ -2013,11 +2073,18 @@ func _on_background_wakeup_timeout() -> void:
 	_update_entrapment_state(elapsed_seconds)
 	_update_pending_attack(elapsed_seconds)
 	_record_performance_counter(&"background_ai_evaluations")
+	var background_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_background_tick_calls"
+	)
 	_background_maintenance_running = true
 	_retarget(elapsed_seconds)
 	_background_maintenance_running = false
 	if not is_instance_valid(target):
 		_return_to_spawn(1.0 / 60.0)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_background_tick_usec",
+		background_started_usec,
+	)
 	if _can_use_background_ai():
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
 		_background_last_wakeup_msec = Time.get_ticks_msec()
@@ -2109,6 +2176,24 @@ func projection_ready() -> bool:
 
 
 func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+	var projection_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_projection_calls"
+	)
+	var ground_position_gu := _screen_position_px_to_ground_position_gu_internal(
+		screen_position_px
+	)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_projection_usec",
+		projection_started_usec,
+	)
+	return ground_position_gu
+
+
+## Preserve the fail-closed projection result while the public helper above
+## supplies one inclusive projection probe for enemy runtime diagnosis.
+func _screen_position_px_to_ground_position_gu_internal(
+	screen_position_px: Vector2
+) -> Vector2:
 	var result := try_screen_position_px_to_ground_position_gu(screen_position_px)
 	if bool(result.get("success", false)):
 		return result.get("value", Vector2.ZERO)
@@ -2343,12 +2428,20 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	if _environment_guard_timer > 0.0:
 		return
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS
+	var environment_guard_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_environment_guard_calls"
+	)
 	_record_performance_counter(&"environment_guard_checks")
-	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+	var environment_blocks := WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 		environment_blocker,
 		global_position,
 		collision_radius_px,
-	):
+	)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_environment_guard_usec",
+		environment_guard_started_usec,
+	)
+	if environment_blocks:
 		set_combat_position(
 			_last_environment_safe_position_px,
 			&"environment_revert"
@@ -4791,6 +4884,19 @@ func _apply_health_stage_mechanics() -> void:
 
 
 func _retarget(delta := 0.0) -> void:
+	var retarget_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_retarget_calls"
+	)
+	_retarget_internal(delta)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_retarget_usec",
+		retarget_started_usec,
+	)
+
+
+## Inclusive target maintenance/selection body. Its duration is nested in the
+## actor physics or background-tick total when called from those paths.
+func _retarget_internal(delta := 0.0) -> void:
 	_target_stable_remaining_seconds = maxf(
 		0.0,
 		_target_stable_remaining_seconds - delta,
@@ -5323,6 +5429,20 @@ func _request_actor_redraw() -> void:
 ## redraw ownership; stateful one-shot callers above still use the explicit
 ## _request_actor_redraw() path.
 func _request_actor_redraw_if_dynamic() -> void:
+	var visual_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_visual_update_calls"
+	)
+	_request_actor_redraw_if_dynamic_internal()
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_visual_update_usec",
+		visual_started_usec,
+	)
+
+
+## Enemy-owned visual invalidation gate. MonsterVisual's separate `_process`
+## remains outside this file; this probe covers only redraw work requested by
+## EnemyActor physics/state transitions.
+func _request_actor_redraw_if_dynamic_internal() -> void:
 	var has_formal_visual := visual != null and visual.uses_final_art()
 	var draws_procedural_fallback := should_draw_synthetic_ground_shadow()
 	var fallback_attack_active := visual != null and visual.is_fallback_attacking()

@@ -32,6 +32,22 @@ func _run() -> void:
 	RuntimeDiagnostics.record_frame_time_ms(99.0)
 	assert(int(RuntimeDiagnostics.frame_sampling_snapshot().get("frame_count", -1)) == 0)
 	RuntimeDiagnostics.reset_performance_window()
+	var disabled_counter_snapshot := RuntimeDiagnostics.performance_counters()
+	for field: String in RuntimeDiagnostics.PERFORMANCE_FIELDS:
+		assert(disabled_counter_snapshot.has(field), "disabled reset missing field: %s" % field)
+		assert(int(disabled_counter_snapshot.get(field, -1)) == 0)
+	var disabled_segment_started := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_physics_calls"
+	)
+	assert(disabled_segment_started == 0)
+	assert(
+		RuntimeDiagnostics.end_timed_segment(
+			&"enemy_physics_usec",
+			disabled_segment_started,
+		) == 0
+	)
+	assert(RuntimeDiagnostics.performance_counter(&"enemy_physics_calls") == 0)
+	assert(RuntimeDiagnostics.performance_counter(&"enemy_physics_usec") == 0)
 
 	set_meta("build_commit", "diagnostics-test")
 	var runtime := DeviceLabRuntime.new().configure(self)
@@ -49,6 +65,18 @@ func _run() -> void:
 	assert(bool(reset_window.get("diagnostics_enabled", false)))
 	assert(bool(reset_window.get("timing_enabled", false)))
 	var reset_window_id := int(reset_window.get("window_id", -1))
+	var segment_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_physics_calls"
+	)
+	assert(segment_started_usec > 0)
+	await get_tree().process_frame
+	var segment_elapsed_usec := RuntimeDiagnostics.end_timed_segment(
+		&"enemy_physics_usec",
+		segment_started_usec,
+	)
+	assert(segment_elapsed_usec > 0)
+	assert(RuntimeDiagnostics.performance_counter(&"enemy_physics_calls") == 1)
+	assert(RuntimeDiagnostics.performance_counter(&"enemy_physics_usec") == segment_elapsed_usec)
 	runtime.call("_process", 0.016)
 	var process_sample_window := RuntimeDiagnostics.read_performance_window()
 	assert(int(process_sample_window.get("frame_count", -1)) == 1)
@@ -186,6 +214,8 @@ func _run() -> void:
 	)
 	var reset_again_window: Dictionary = reset_again_result.get("performance_diagnostics", {})
 	assert(int(reset_again_window.get("foreground_ai_ticks", -1)) == 0)
+	assert(int(reset_again_window.get("enemy_physics_calls", -1)) == 0)
+	assert(int(reset_again_window.get("enemy_physics_usec", -1)) == 0)
 	assert(int(reset_again_window.get("frame_count", -1)) == 0)
 	assert(int(reset_again_window.get("frames_over_100ms", -1)) == 0)
 	assert(int(reset_again_window.get("window_id", -1)) > reset_window_id)
@@ -212,6 +242,16 @@ func _run() -> void:
 	var stopped_count := int(stop_window.get("frame_count", -1))
 	RuntimeDiagnostics.record_frame_time_ms(1000.0)
 	assert(int(RuntimeDiagnostics.frame_sampling_snapshot().get("frame_count", -1)) == stopped_count)
+	var stopped_segment_started := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_physics_calls"
+	)
+	assert(stopped_segment_started == 0)
+	assert(
+		RuntimeDiagnostics.end_timed_segment(
+			&"enemy_physics_usec",
+			stopped_segment_started,
+		) == 0
+	)
 	runtime.queue_free()
 
 	ProjectSettings.set_setting(RuntimeDiagnostics.SETTING_ENABLED, old_enabled)

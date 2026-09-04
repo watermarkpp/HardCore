@@ -13,6 +13,9 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	var old_device_lab_override := RuntimeDiagnostics.device_lab_performance_override_enabled()
+	assert(RuntimeDiagnostics.set_device_lab_performance_enabled(true))
+	RuntimeDiagnostics.reset_performance_window()
 	MonsterVisual.set_synchronous_loading_for_tests(true)
 	var player := PlayerCharacter.new()
 	add_child(player)
@@ -74,6 +77,22 @@ func _run() -> void:
 		% background_metrics,
 	)
 	assert(
+		int(background_metrics.enemy_background_tick_calls) == 8,
+		"background timing probe did not follow wake count: %s" % background_metrics,
+	)
+	assert(
+		int(background_metrics.enemy_background_tick_usec) > 0,
+		"background timing probe did not record work: %s" % background_metrics,
+	)
+	assert(
+		int(background_metrics.enemy_retarget_calls) == 8,
+		"retarget timing probe did not follow background wakes: %s" % background_metrics,
+	)
+	assert(
+		int(background_metrics.enemy_retarget_usec) > 0,
+		"retarget timing probe did not record work: %s" % background_metrics,
+	)
+	assert(
 		background_index_checks <= 1,
 		"unchanged background position was resubmitted to the spatial index: %d"
 		% background_index_checks,
@@ -130,11 +149,17 @@ func _run() -> void:
 	assert(not enemy._can_use_background_ai(), "damage threat did not wake the actor")
 	var foreground_before := int(background_metrics.foreground_ai_ticks)
 	enemy._physics_process(1.0 / 60.0)
+	var projection_probe := enemy._screen_position_px_to_ground_position_gu(enemy.global_position)
+	assert(projection_probe.is_finite())
 	var wake_metrics := EnemyActor.performance_diagnostics()
 	assert(
 		int(wake_metrics.foreground_ai_ticks) == foreground_before + 1,
 		"damage wake did not resume foreground AI immediately: %s" % wake_metrics,
 	)
+	assert(int(wake_metrics.enemy_physics_calls) == 1)
+	assert(int(wake_metrics.enemy_physics_usec) > 0)
+	assert(int(wake_metrics.enemy_projection_calls) > 0)
+	assert(int(wake_metrics.enemy_projection_usec) > 0)
 	enemy._threat_table.clear()
 	enemy.target = null
 	enemy.poison_time = 1.0
@@ -193,6 +218,8 @@ func _run() -> void:
 		"MONSTER_RUNTIME_DENSITY_PERFORMANCE_PASS background=%s density=%s phases=%s index_checks=%d crowd=%s"
 		% [background_metrics, density_metrics, phase_counts, background_index_checks, crowd_metrics]
 	)
+	RuntimeDiagnostics.set_device_lab_performance_enabled(old_device_lab_override)
+	RuntimeDiagnostics.refresh_performance_gate()
 	get_tree().quit(0)
 
 

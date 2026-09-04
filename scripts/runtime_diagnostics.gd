@@ -32,10 +32,17 @@ const GPU_FRAME_METRIC_UNAVAILABLE_REASON := "godot_performance_api_has_no_relia
 
 # Stable Device Lab/Android telemetry contract. Values are window deltas:
 # event fields are integer counts, *_usec and *_ms fields are accumulated
-# active time, and *_max fields are maxima for the window.
+# active time, and *_max fields are maxima for the window. The enemy segment
+# totals are inclusive: physics contains background/retarget/movement/visual
+# work, movement contains the environment guard, and terrain path time is
+# nested in movement when a fallback path is requested; do not sum them.
 const PERFORMANCE_COUNTER_FIELDS: Array[String] = [
 	"foreground_ai_ticks",
 	"active_enemy_physics_count",
+	"enemy_physics_calls",
+	"enemy_physics_usec",
+	"enemy_projection_calls",
+	"enemy_projection_usec",
 	"moving_enemy_count",
 	"engaged_enemy_count",
 	"attack_los_requests",
@@ -46,6 +53,8 @@ const PERFORMANCE_COUNTER_FIELDS: Array[String] = [
 	"attack_los_usec",
 	"physics_moves",
 	"move_and_slide_usec",
+	"enemy_movement_strategy_calls",
+	"enemy_movement_strategy_usec",
 	"crowd_queries",
 	"crowd_index_candidates",
 	"crowd_full_group_scans",
@@ -53,10 +62,20 @@ const PERFORMANCE_COUNTER_FIELDS: Array[String] = [
 	"environment_guard_batches",
 	"environment_point_samples",
 	"environment_query_usec",
+	"enemy_environment_guard_calls",
+	"enemy_environment_guard_usec",
+	"enemy_terrain_path_calls",
+	"enemy_terrain_path_usec",
+	"enemy_terrain_path_expansions",
+	"enemy_terrain_path_expansions_max",
+	"enemy_terrain_path_accepted",
+	"enemy_terrain_path_budget_rejections",
 	"safe_zone_queries",
 	"safe_zone_global_actor_scans",
 	"safe_zone_usec",
 	"actor_redraw_requests",
+	"enemy_visual_update_calls",
+	"enemy_visual_update_usec",
 	"visual_animation_updates",
 	"visual_render_state_changes",
 	"process_ms",
@@ -71,9 +90,13 @@ const PERFORMANCE_COUNTER_FIELDS: Array[String] = [
 	"crowd_steering_evaluations",
 	"retarget_full_scans",
 	"retarget_decisions",
+	"enemy_retarget_calls",
+	"enemy_retarget_usec",
 	"retarget_target_group_scans",
 	"retarget_target_candidates",
 	"background_ai_evaluations",
+	"enemy_background_tick_calls",
+	"enemy_background_tick_usec",
 	"background_fast_path_skips",
 	"background_deep_sleep_entries",
 	"background_deep_sleep_wakeups",
@@ -164,6 +187,7 @@ static var _device_lab_performance_override := false
 static var _device_lab_performance_override_set := false
 static var _performance_gate_initialized := false
 static var _performance_gate_enabled := false
+static var _performance_fields_initialized := false
 static var _performance_release_context := {
 	"release_id": "",
 	"skill_id": "",
@@ -263,9 +287,11 @@ static func device_lab_performance_override_enabled() -> bool:
 static func _ensure_performance_window() -> void:
 	if _performance_window_started_msec <= 0:
 		_performance_window_started_msec = Time.get_ticks_msec()
+	if _performance_fields_initialized:
+		return
 	for field: String in PERFORMANCE_COUNTER_FIELDS:
-		if not _performance_counters.has(field):
-			_performance_counters[field] = 0
+		_performance_counters[field] = 0
+	_performance_fields_initialized = true
 
 
 static func increment_performance_counter(field: StringName, amount := 1) -> void:
@@ -441,6 +467,28 @@ static func record_timing_usec(field: StringName, started_usec: int) -> int:
 	return elapsed
 
 
+## Starts one inclusive runtime segment and records its call in the same
+## cached-gate branch. A zero token is the disabled fast path; the matching
+## end call then returns without reading the clock or touching the window.
+static func begin_timed_segment(call_field: StringName) -> int:
+	if not performance_timing_enabled():
+		return 0
+	_ensure_performance_window()
+	var key := str(call_field)
+	_performance_counters[key] = int(_performance_counters.get(key, 0)) + 1
+	return Time.get_ticks_usec()
+
+
+static func end_timed_segment(duration_field: StringName, started_usec: int) -> int:
+	if started_usec <= 0 or not performance_timing_enabled():
+		return 0
+	var elapsed := maxi(0, Time.get_ticks_usec() - started_usec)
+	if elapsed > 0:
+		var key := str(duration_field)
+		_performance_counters[key] = int(_performance_counters.get(key, 0)) + elapsed
+	return elapsed
+
+
 static func record_timing_ms(field: StringName, started_usec: int) -> float:
 	var elapsed := timing_elapsed_usec(started_usec)
 	if elapsed > 0:
@@ -491,6 +539,7 @@ static func performance_counters() -> Dictionary:
 
 static func reset_performance_window() -> Dictionary:
 	_performance_counters.clear()
+	_performance_fields_initialized = false
 	_performance_values.clear()
 	_performance_maxima.clear()
 	_frame_samples.clear()
