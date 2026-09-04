@@ -10104,6 +10104,7 @@ func _aoe_collect_thrust_secondary_candidates(
 				)
 				if (
 					query_plan.is_empty()
+					or not _aoe_plan_is_ready(query_plan)
 					or _aoe_validated_snapshot_intersects(query_plan, enemy)
 				)
 				else 0
@@ -10143,6 +10144,7 @@ func _aoe_collect_half_moon_secondary_candidates(
 		else:
 			if (
 				query_plan.is_empty()
+				or not _aoe_plan_is_ready(query_plan)
 				or _aoe_validated_snapshot_intersects(query_plan, enemy)
 			):
 				sector = WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(

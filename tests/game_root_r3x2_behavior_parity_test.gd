@@ -34,9 +34,16 @@ const SPECIAL_GROUND_POSITIONS: Array[Vector2] = [
 ]
 
 var _fixture: Array[EnemyActor] = []
+var _failed := false
+var _failure_messages: Array[String] = []
 
 
 func _ready() -> void:
+	# This fixture owns no player/background presentation. Keep the production
+	# GameRoot frame hooks out of the test while its six resolver entrypoints are
+	# exercised, including after fixture teardown on a failed comparison.
+	set_process(false)
+	set_physics_process(false)
 	_run.call_deferred()
 
 
@@ -52,31 +59,34 @@ func _run() -> void:
 		ProjectSettings.set_setting(key, false)
 	RuntimeDiagnosticsScript.set_device_lab_performance_enabled(false)
 	RuntimeDiagnosticsScript.refresh_performance_gate()
-	assert(
+	_expect(
 		not RuntimeDiagnosticsScript.performance_enabled(),
 		"the behavior fixture must start with every performance setting disabled",
 	)
 	# Device Lab/test code explicitly opens the measurement window. The ordinary
 	# PlayerState test mode below must not open the group-scan escape hatch.
 	RuntimeDiagnosticsScript.set_device_lab_performance_enabled(true)
-	assert(RuntimeDiagnosticsScript.performance_enabled())
+	_expect(RuntimeDiagnosticsScript.performance_enabled(), "performance window did not open")
 	RuntimeDiagnosticsScript.reset_performance_window()
 	var previous_test_mode := PlayerState.test_mode
 	PlayerState.test_mode = true
 	current_map_id = RUNTIME_MAP_ID
 	reference_audit_mode = false
 	set_aoe_reference_fallback_for_test(false)
-	assert(not _aoe_reference_fallback_allowed())
+	_expect(
+		not _aoe_reference_fallback_allowed(),
+		"ordinary PlayerState.test_mode must not enable reference fallback",
+	)
 
 	_run_pure_index_parity_samples()
 	var production := _run_real_game_root_pass(false)
 	var reference := _run_real_game_root_pass(true)
 	_assert_pass_parity(production, reference)
-	assert(
+	_expect(
 		int(production.get("group_scans", -1)) == 0,
 		"production GameRoot resolvers must not scan the enemies group",
 	)
-	assert(
+	_expect(
 		int(reference.get("group_scans", 0)) > 0,
 		"reference pass must exercise the explicit legacy group authority",
 	)
@@ -88,6 +98,13 @@ func _run() -> void:
 	for key: StringName in setting_keys:
 		ProjectSettings.set_setting(key, previous_settings[key])
 	RuntimeDiagnosticsScript.refresh_performance_gate()
+	if _failed:
+		push_error(
+			"GAME_ROOT_R3X2_BEHAVIOR_PARITY_FAIL: %s"
+			% "; ".join(_failure_messages)
+		)
+		get_tree().quit(1)
+		return
 	print(
 		"GAME_ROOT_R3X2_BEHAVIOR_PARITY_PASS samples=%d production_group_scans=%d reference_group_scans=%d"
 		% [
@@ -224,7 +241,7 @@ func _run_pure_index_parity_samples() -> void:
 			)
 		var broadphase_ids := _exact_fixture_ids(snapshot, candidates)
 		var naive_ids := _exact_fixture_ids(snapshot, actors)
-		assert(
+		_expect(
 			broadphase_ids == naive_ids,
 			"random broadphase parity failed at sample %d: %s != %s"
 			% [sample_index, broadphase_ids, naive_ids],
@@ -559,8 +576,16 @@ func _assert_pass_parity(production: Dictionary, reference: Dictionary) -> void:
 		"death_pending",
 		"next_rng",
 	]:
-		assert(
+		_expect(
 			production.get(key) == reference.get(key),
 			"GameRoot production/reference mismatch for %s: %s != %s"
 			% [key, production.get(key), reference.get(key)],
 		)
+
+
+func _expect(condition: bool, message: String) -> bool:
+	if condition:
+		return true
+	_failed = true
+	_failure_messages.append(message)
+	return false
