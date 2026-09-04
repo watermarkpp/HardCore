@@ -57,6 +57,14 @@ const FAR_RETARGET_MIN_SECONDS := 0.28
 const FAR_RETARGET_STAGGER_SECONDS := 0.017
 const NEAR_RETARGET_MIN_SECONDS := 0.18
 const NEAR_RETARGET_STAGGER_SECONDS := 0.011
+## Damage contributes to the shared threat competition, but one hit must never
+## rewrite the current target. A challenger may win only after the current
+## target has remained stable briefly and the challenger's accumulated threat
+## exceeds both an absolute and relative hysteresis margin. Physical summon
+## interception remains an explicit override below.
+const TARGET_SWITCH_MIN_STABLE_SECONDS := 0.45
+const TARGET_SWITCH_MIN_THREAT_ADVANTAGE := 100.0
+const TARGET_SWITCH_THREAT_ADVANTAGE_RATIO := 0.20
 ## Source targetSearch values describe the legacy service loop, where a Boss
 ## could retain one valid target for up to eight seconds.  Runtime movement is
 ## continuous now, so target *re-evaluation* is capped separately without
@@ -172,6 +180,11 @@ var target: Node2D:
 		target = value
 		if changed:
 			_reset_terrain_navigation_state()
+			_target_stable_remaining_seconds = (
+				TARGET_SWITCH_MIN_STABLE_SECONDS
+				if is_instance_valid(target)
+				else 0.0
+			)
 		if not is_instance_valid(target):
 			_target_focus_tick_ms = 0
 		elif changed:
@@ -240,6 +253,7 @@ var _pending_attack_release_record: Dictionary = {}
 var last_magic_attack_resolution: Dictionary = {}
 var last_physical_hit_resolution: Dictionary = {}
 var _retarget_timer := 0.0
+var _target_stable_remaining_seconds := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
 var _background_ai_timer := 0.0
@@ -4072,14 +4086,22 @@ func _apply_health_stage_mechanics() -> void:
 
 
 func _retarget(delta := 0.0) -> void:
+	_target_stable_remaining_seconds = maxf(
+		0.0,
+		_target_stable_remaining_seconds - delta,
+	)
 	if charm_time > 0.0:
 		return
 	_decay_threat(delta)
 	_retarget_timer = maxf(0.0, _retarget_timer - delta)
-	# Dead/expired targets remain valid Godot Objects during their death
-	# presentation.  Reject them before the timer gate so an eight-second Boss
-	# retention interval can never pin combat to a non-combatant.
-	if is_instance_valid(target) and not _target_candidate_is_live(target):
+	# Release invalid, protected, or disengaged targets before the cadence gate.
+	# They can remain valid Godot Objects during a death presentation, and a
+	# Boss timer must never pin combat to an unusable target for several seconds.
+	if is_instance_valid(target) and (
+		not _target_candidate_is_live(target)
+		or _point_inside_safe_zone(target.global_position)
+		or _target_should_disengage(target)
+	):
 		target = null
 		_retarget_timer = 0.0
 		if _movement_step_active:
@@ -4097,10 +4119,6 @@ func _retarget(delta := 0.0) -> void:
 		# always pass delta and remain rate-limited.
 		if _retarget_timer > 0.0 and delta > 0.0:
 			return
-	if is_instance_valid(target) and _target_should_disengage(target):
-		target = null
-		if _movement_step_active:
-			_cancel_autonomous_step(true)
 	var acquiring_without_current_target := not is_instance_valid(target)
 	var reevaluating_player_pursuit := (
 		is_instance_valid(target) and target is PlayerCharacter
@@ -4185,6 +4203,12 @@ func _retarget(delta := 0.0) -> void:
 			and is_instance_valid(target)
 			and node == target
 		)
+		# A damage record keeps an attacker in the candidate set between shared
+		# grid refreshes, but it does not grant unlimited pursuit. Ranged summons
+		# participate without body contact only while they remain inside the
+		# existing leash-sized combat engagement envelope.
+		if threat > 0.0 and not retaining_current_target and distance_gu > leash_radius_gu:
+			continue
 		if threat <= 0.0:
 			if acquiring_without_current_target:
 				var acquisition_delta_ground_gu := (
@@ -4234,11 +4258,18 @@ func _retarget(delta := 0.0) -> void:
 			chosen=node
 			if acquiring_without_current_target and threat > 0.0:
 				chose_threat_candidate = true
-	# Threat remains authoritative at ordinary distances.  Only a live summon
-	# already inside the monster's physical contact envelope may intercept a
-	# current player pursuit, matching the actual blocker seen by physics.
+	# Threat remains authoritative at ordinary distances, with target stability
+	# and a score-independent threat margin preventing alternating hits from
+	# ping-ponging the actor. Only a live summon already inside the monster's
+	# physical contact envelope may bypass that hysteresis and intercept pursuit.
 	if intercepting_summon != null:
 		chosen = intercepting_summon
+	elif (
+		is_instance_valid(target)
+		and chosen != target
+		and not _target_switch_challenge_wins(target, chosen)
+	):
+		chosen = target
 	target = chosen
 	_retarget_decision_count += 1
 	if not boss_rule.is_empty():
@@ -4269,8 +4300,30 @@ func _add_threat(source:Node2D,amount:float)->void:
 		return
 	var key:=source.get_instance_id()
 	_threat_table[key]={"node":weakref(source),"score":float(_threat_table.get(key,{}).get("score",0.0))+maxf(0.0,amount)}
-	target=source
-	_refresh_target_focus()
+	# Damage records participation only. Target changes are resolved by the
+	# existing bounded retarget cadence so one low hit cannot steal focus.
+	if source == target:
+		_refresh_target_focus()
+
+
+func _target_switch_challenge_wins(
+	current_target: Node2D,
+	challenger: Node2D,
+) -> bool:
+	if (
+		not _target_candidate_is_live(current_target)
+		or not _target_candidate_is_live(challenger)
+	):
+		return true
+	if _target_stable_remaining_seconds > 0.0:
+		return false
+	var current_threat := maxf(0.0, _threat_for(current_target))
+	var challenger_threat := maxf(0.0, _threat_for(challenger))
+	var required_advantage := maxf(
+		TARGET_SWITCH_MIN_THREAT_ADVANTAGE,
+		current_threat * TARGET_SWITCH_THREAT_ADVANTAGE_RATIO,
+	)
+	return challenger_threat >= current_threat + required_advantage
 
 
 func _target_candidate_is_live(candidate: Node2D) -> bool:

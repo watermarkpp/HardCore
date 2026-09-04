@@ -26,6 +26,8 @@ func _run() -> void:
 	await _test_grant_consumed_no_free_retry()
 	await _test_blocking_summon_becomes_target_without_scan()
 	await _test_contact_summon_reclaims_player_pursuit()
+	await _test_alternating_damage_does_not_ping_pong()
+	await _test_remote_divine_beast_builds_bounded_threat()
 	await _test_boss_retarget_budget_and_phase_ring_contract()
 
 	print("MONSTER_CADENCE_BLOCKED_STEP_PASS checks=%d" % _checks)
@@ -327,6 +329,7 @@ func _test_contact_summon_reclaims_player_pursuit() -> void:
 	enemy.set_physics_process(false)
 
 	enemy._threat_table.clear()
+	enemy.target = player
 	enemy._add_threat(player, 10000.0)
 	enemy._retarget_timer = 0.0
 	enemy._retarget(0.0)
@@ -365,7 +368,160 @@ func _test_contact_summon_reclaims_player_pursuit() -> void:
 
 
 # ---------------------------------------------------------------------------
-# Test 5: phase-two combat remains independent from its retired cosmetic ring,
+# Test 5: alternating low damage accumulates threat without every hit stealing
+#         the target. Equal participation must not ping-pong on later decisions.
+# ---------------------------------------------------------------------------
+
+func _test_alternating_damage_does_not_ping_pong() -> void:
+	var player := PlayerCharacter.new()
+	add_child(player)
+	player.set_physics_process(false)
+	player.global_position = _ground_gu_to_screen_px(Vector2(5.0, 0.0))
+	var enemy := await _make_enemy(18)
+	enemy.max_hp = 100000
+	enemy.current_hp = 100000
+
+	var summon := SummonActor.new()
+	summon.setup(
+		player,
+		"神兽",
+		10,
+		0,
+		"divine_beast",
+		1,
+		7,
+	)
+	summon.global_position = _ground_gu_to_screen_px(Vector2(3.0, 0.0))
+	add_child(summon)
+	summon.set_physics_process(false)
+	await get_tree().physics_frame
+	enemy.set_physics_process(false)
+
+	enemy._threat_table.clear()
+	enemy.target = player
+	for _exchange in range(4):
+		enemy.take_damage(1, summon)
+		assert(
+			enemy.target == player,
+			"one low summon hit stole the target before a bounded decision",
+		)
+		enemy.take_damage(1, player)
+		assert(enemy.target == player, "alternating hit immediately rewrote target")
+		enemy._retarget_timer = 0.0
+		enemy._retarget(0.2)
+		assert(
+			enemy.target == player,
+			"equal alternating threat ping-ponged during target re-evaluation",
+		)
+	_checks += 12
+
+	summon.queue_free()
+	enemy.queue_free()
+	player.queue_free()
+	await get_tree().physics_frame
+
+
+# ---------------------------------------------------------------------------
+# Test 6: a ranged divine beast never needs physical interception. Repeated
+#         valid hits inside the engagement range must win accumulated threat in
+#         bounded decisions, then survive one ordinary player hit.
+# ---------------------------------------------------------------------------
+
+func _test_remote_divine_beast_builds_bounded_threat() -> void:
+	var player := PlayerCharacter.new()
+	add_child(player)
+	player.set_physics_process(false)
+	player.global_position = _ground_gu_to_screen_px(Vector2(6.0, 0.0))
+	var enemy := await _make_enemy(18)
+	enemy.max_hp = 100000
+	enemy.current_hp = 100000
+
+	var divine_beast := SummonActor.new()
+	divine_beast.setup(
+		player,
+		"神兽",
+		10,
+		0,
+		"divine_beast",
+		1,
+		7,
+	)
+	divine_beast.global_position = _ground_gu_to_screen_px(Vector2(3.0, 0.0))
+	add_child(divine_beast)
+	divine_beast.set_physics_process(false)
+	await get_tree().physics_frame
+	enemy.set_physics_process(false)
+	var summon_distance_gu := _screen_px_to_ground_gu(
+		divine_beast.global_position - enemy.global_position
+	).length()
+	assert(
+		summon_distance_gu
+			> enemy._contact_distance_gu_to_target(divine_beast)
+				+ EnemyActor.SUMMON_INTERCEPT_CONTACT_EPSILON_GU,
+		"divine beast fixture accidentally entered physical interception range",
+	)
+	assert(
+		not enemy._summon_intercepts_current_pursuit(
+			divine_beast,
+			summon_distance_gu,
+		),
+		"ranged divine beast fixture accidentally depends on collision interception",
+	)
+
+	enemy._threat_table.clear()
+	enemy.target = player
+	enemy.take_damage(10, player)
+	enemy.take_damage(1, divine_beast)
+	assert(enemy.target == player, "one low ranged hit unconditionally stole target")
+	EnemyActor.reset_performance_diagnostics()
+	var elapsed_decision_seconds := 0.0
+	enemy._retarget_timer = 0.0
+	for _hit in range(4):
+		enemy.take_damage(10, divine_beast)
+		# Advance the production decision clock without forcing each evaluation.
+		# Four 50 ms physics slices model one ranged attack interval while the
+		# existing 0.18-0.25 s retarget cadence remains authoritative.
+		for _physics_slice in range(4):
+			enemy._retarget(0.05)
+			elapsed_decision_seconds += 0.05
+			if enemy.target == divine_beast:
+				break
+		if enemy.target == divine_beast:
+			break
+	assert(
+		enemy.target == divine_beast,
+		"sustained ranged divine beast threat did not win within bounded decisions",
+	)
+	assert(
+		elapsed_decision_seconds
+			<= EnemyActor.TARGET_SWITCH_MIN_STABLE_SECONDS + 0.4,
+		"ranged summon switch exceeded the stable-period decision bound",
+	)
+	enemy.take_damage(10, player)
+	assert(
+		enemy.target == divine_beast,
+		"first player hit after switch immediately stole the target",
+	)
+	enemy._retarget_timer = 0.0
+	enemy._retarget(0.2)
+	assert(
+		enemy.target == divine_beast,
+		"first post-switch decision ignored target stability",
+	)
+	assert(
+		int(EnemyActor.performance_diagnostics().retarget_target_group_scans) <= 1,
+		"ranged threat participation caused repeated combat-target group scans",
+	)
+	_checks += 8
+
+	divine_beast.queue_free()
+	enemy.queue_free()
+	player.queue_free()
+	await get_tree().physics_frame
+
+
+# ---------------------------------------------------------------------------
+# Test 7: phase-two combat remains independent from its retired cosmetic ring,
 #         while legacy 8-second Boss retention is bounded and staggered.
 # ---------------------------------------------------------------------------
 
