@@ -103,6 +103,7 @@ $Suites = @{
 		'tests/game_root_combat_resolution_integration_test.tscn',
 		'tests/enemy_mass_death_batch_pipeline_test.tscn',
 		'tests/death_drop_budget_queue_test.tscn',
+		'tests/death_queue_lifecycle_rework_test.tscn',
 		'tests/placeholder_attack_animation_test.tscn'
 	)
     warrior = @(

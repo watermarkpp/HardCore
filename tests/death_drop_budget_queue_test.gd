@@ -27,6 +27,7 @@ func _run() -> void:
 	_test_save_failure_is_no_reward()
 	_test_generation_guards()
 	_test_materialization_failure_is_terminal()
+	_test_terminal_ledger_is_bounded()
 	_finish()
 
 
@@ -49,6 +50,14 @@ func _queue_death(game: Node, position := Vector2.ZERO) -> void:
 	var canonical := GameData.get_monster_by_id(MONSTER_ID)
 	var snapshot: Dictionary = game._build_enemy_death_runtime_snapshot(canonical)
 	enemy.set_meta("death_runtime_snapshot", snapshot)
+	enemy.set_meta("death_origin", {
+		"captured": true,
+		"map_id": game.current_map_id,
+		"generation": game._zone_generation,
+		"death_position": position,
+		"spawn_position": position,
+		"spawn_context": {},
+	})
 	game._on_enemy_died(enemy, canonical)
 	enemy.free()
 
@@ -172,6 +181,15 @@ func _test_materialization_failure_is_terminal() -> void:
 	_queue_death(game)
 	_expect(game._settle_pending_enemy_death_batch(), "materialization fixture did not settle")
 	_set_fixed_plan(game, 2)
+	_expect(game.set_death_drop_work_limits_for_test(1000000, 4, 1), "materialization budget override rejected")
+	_expect(game.set_loot_materialization_failure_count_for_test(0), "materialization success hook rejected")
+	game._pump_enemy_death_work_queue()
+	_expect(
+		game._pending_enemy_deaths.size() == 1
+		and int(game._pending_enemy_deaths[0].get("materialized_node_index", 0)) == 1
+		and game.get_child_count() == 1,
+		"first materialization node did not commit before the injected failure",
+	)
 	_expect(game.set_loot_materialization_failure_count_for_test(99), "failure hook rejected")
 	game._flush_enemy_deaths(false)
 	game.set_loot_materialization_failure_count_for_test(0)
@@ -180,10 +198,40 @@ func _test_materialization_failure_is_terminal() -> void:
 		and str(game._enemy_death_terminal_jobs[0].get("state", "")) == "FAILED",
 		"materialization failure was not terminal after retries",
 	)
-	_expect(game.get_child_count() == 0, "failed materialization duplicated loot")
+	_expect(game.get_child_count() == 1, "failed materialization duplicated the successful node")
 	_expect(
 		RuntimeDiagnostics.performance_counter(&"death_queue_materialization_failures") == 3,
 		"materialization failure retry count was not observable",
+	)
+	var terminal: Dictionary = game._enemy_death_terminal_jobs[0]
+	var remaining: Variant = terminal.get("remaining_requests", [])
+	_expect(
+		remaining is Array
+		and remaining.size() == 1
+		and int(terminal.get("materialized_node_index", 0)) == 1
+		and int(terminal.get("remaining_request_count", 0)) == 1
+		and str(terminal.get("reward_status", "")) == "materialization_failed",
+		"partial materialization lost explicit remaining request evidence",
+	)
+	game.clear_death_drop_work_limits_for_test()
+
+
+func _test_terminal_ledger_is_bounded() -> void:
+	var game := _new_game(1006)
+	for index: int in range(80):
+		game._pending_enemy_deaths.append({
+			"state": "COMMITTED",
+			"death_key": "ledger:%d" % index,
+		})
+	game._compact_enemy_death_queue()
+	_expect(
+		game._enemy_death_terminal_jobs.size() == GameRootScript.DEATH_TERMINAL_LEDGER_MAX,
+		"terminal ledger exceeded its bounded retention window",
+	)
+	_expect(
+		int(game._enemy_death_terminal_total_count) == 80
+		and str(game._enemy_death_terminal_jobs[-1].get("death_key", "")) == "ledger:79",
+		"terminal ledger did not retain latest record and total count",
 	)
 
 

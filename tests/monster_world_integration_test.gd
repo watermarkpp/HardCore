@@ -274,6 +274,14 @@ func _test_overflow_telemetry_death_entry() -> void:
 	enemy.set_meta("respawn_enabled", false)
 	var monster_data := GameData.get_monster_by_id(145).duplicate(true)
 	assert(int(monster_data.get("monster_id", -1)) == 145)
+	enemy.set_meta("death_origin", {
+		"captured": true,
+		"map_id": game.current_map_id,
+		"generation": game._zone_generation,
+		"death_position": enemy.global_position,
+		"spawn_position": enemy.global_position,
+		"spawn_context": {},
+	})
 	game._on_enemy_died(enemy, monster_data)
 	game._flush_enemy_deaths(false)
 	assert(
@@ -312,6 +320,14 @@ func _test_same_frame_death_batch() -> void:
 		var enemy := EnemyActor.new()
 		enemy.global_position = Vector2(index * 8, 0)
 		enemy.set_meta("respawn_enabled", false)
+		enemy.set_meta("death_origin", {
+			"captured": true,
+			"map_id": game.current_map_id,
+			"generation": game._zone_generation,
+			"death_position": enemy.global_position,
+			"spawn_position": enemy.global_position,
+			"spawn_context": {},
+		})
 		enemies.append(enemy)
 		game._on_enemy_died(enemy, monster_data)
 	assert(game._pending_enemy_deaths.size() == 2, "same-frame deaths were not queued together")

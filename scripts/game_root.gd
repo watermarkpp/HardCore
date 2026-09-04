@@ -147,6 +147,7 @@ const DEATH_JOBS_MAX_PER_FRAME := 4
 const DROP_NODES_MAX_PER_FRAME := 8
 const DEATH_QUEUE_MAX_RETRIES := 3
 const DEATH_QUEUE_RETRY_DELAY_MSEC := 100
+const DEATH_TERMINAL_LEDGER_MAX := 64
 const DEATH_STATE_QUEUED := "QUEUED"
 const DEATH_STATE_SETTLING := "SETTLING"
 const DEATH_STATE_PLANNED := "PLANNED"
@@ -330,6 +331,8 @@ var _enemy_death_pipeline_running := false
 var _enemy_death_target_refresh_pending := false
 var _enemy_death_sequence := 0
 var _enemy_death_terminal_jobs: Array[Dictionary] = []
+var _enemy_death_terminal_total_count := 0
+var _last_death_logout_failure: Dictionary = {}
 var _death_settled_jobs_last_batch := 0
 var _death_drop_work_budget_usec_override := -1
 var _death_jobs_max_per_frame_override := -1
@@ -1691,6 +1694,9 @@ func _on_warehouse_sort_requested() -> void:
 
 
 func _prepare_safe_logout() -> Dictionary:
+	var death_queue_result := _drain_enemy_death_queue_for_logout()
+	if not bool(death_queue_result.get("success", false)):
+		return death_queue_result
 	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 	PlayerState.apply_taoist_main_pet_runtime_states(
 		_capture_taoist_main_pet_runtime_states()
@@ -1738,6 +1744,89 @@ func _prepare_safe_logout() -> Dictionary:
 		"save_performed": true,
 		"reason": "",
 		"home_source": str(resolved.get("source", "")),
+	}
+
+
+func _flush_pending_enemy_death_signals_for_logout() -> void:
+	# A lethal hit queues Enemy._begin_death() through call_deferred().  A WM
+	# close can arrive before that deferred callback, so explicitly finish the
+	# actor-side death boundary before draining the GameRoot queue.  This is an
+	# exit-only scan; it is never part of gameplay or per-frame processing.
+	var pending_actors: Array[EnemyActor] = []
+	var seen_instance_ids: Dictionary = {}
+	var candidates: Array = []
+	if is_inside_tree():
+		candidates.append_array(get_tree().get_nodes_in_group("death_pending"))
+	for raw_actor: Variant in _active_enemy_cache.values():
+		candidates.append(raw_actor)
+	for raw_actor: Variant in candidates:
+		if not raw_actor is EnemyActor or not is_instance_valid(raw_actor):
+			continue
+		var enemy := raw_actor as EnemyActor
+		var instance_id := enemy.get_instance_id()
+		if seen_instance_ids.has(instance_id):
+			continue
+		seen_instance_ids[instance_id] = true
+		if enemy._death_pending and not enemy._dying:
+			pending_actors.append(enemy)
+	for enemy: EnemyActor in pending_actors:
+		if is_instance_valid(enemy) and enemy._death_pending and not enemy._dying:
+			enemy._begin_death()
+
+
+func _drain_enemy_death_queue_for_logout() -> Dictionary:
+	# Exit actions are the one deliberate synchronous boundary for the deferred
+	# death pipeline.  A queued death must finish (or become an explicit,
+	# diagnosable terminal failure) before PlayerState writes its logout record;
+	# otherwise a successful logout can silently lose XP, respawn state, or loot.
+	if not _last_death_logout_failure.is_empty():
+		var early_latched_failure := _last_death_logout_failure.duplicate(true)
+		early_latched_failure["death_queue"] = death_work_queue_snapshot()
+		return early_latched_failure
+	_flush_pending_enemy_death_signals_for_logout()
+	var terminal_count_before := _enemy_death_terminal_jobs.size()
+	var guard := 0
+	while not _pending_enemy_deaths.is_empty() and guard < 4096:
+		var progressed := _pump_enemy_death_work_queue(true)
+		guard += 1
+		if not progressed:
+			break
+	if not _pending_enemy_deaths.is_empty():
+		var pending_result := {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_death_queue_pending",
+			"pending_deaths": _pending_enemy_deaths.size(),
+			"death_queue": death_work_queue_snapshot(),
+		}
+		_last_death_logout_failure = pending_result.duplicate(true)
+		return pending_result
+	# A bounded terminal ledger can evict the just-created record when it was
+	# already full.  The failure latch is therefore authoritative for this
+	# drain; do not rely only on array indices below.
+	if not _last_death_logout_failure.is_empty():
+		var latched_failure := _last_death_logout_failure.duplicate(true)
+		latched_failure["death_queue"] = death_work_queue_snapshot()
+		return latched_failure
+	for index: int in range(terminal_count_before, _enemy_death_terminal_jobs.size()):
+		var terminal: Dictionary = _enemy_death_terminal_jobs[index]
+		if str(terminal.get("state", "")) != DEATH_STATE_FAILED:
+			continue
+		var failed_result := {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_death_queue_failed",
+			"death_key": str(terminal.get("death_key", "")),
+			"death_error": str(terminal.get("last_error", "")),
+			"death_queue": death_work_queue_snapshot(),
+		}
+		_last_death_logout_failure = failed_result.duplicate(true)
+		return failed_result
+	return {
+		"success": true,
+		"save_performed": false,
+		"reason": "",
+		"death_queue_drained": true,
 	}
 
 
@@ -10563,7 +10652,6 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	if enemy == _skill_cast_target:
 		_skill_cast_target = null
 		_enemy_death_target_refresh_pending = true
-	var death_position := enemy.global_position
 	var monster_id := _strict_runtime_monster_id(monster_data)
 	var raw_snapshot: Variant = enemy.get_meta("death_runtime_snapshot", {})
 	var death_runtime_snapshot: Dictionary = (
@@ -10577,15 +10665,56 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	if death_runtime_snapshot.is_empty():
 		_schedule_enemy_death_work()
 		return
-	var raw_spawn_position: Variant = enemy.get_meta(
-		"spawn_position", death_position
+	# The callback can run after a deferred death animation and even after a
+	# map transition.  Runtime map/generation and positions therefore come only
+	# from the lethal-time actor snapshot, never from current_map_id or the
+	# current zone generation.
+	var raw_death_origin: Variant = enemy.get_meta("death_origin", {})
+	var death_origin: Dictionary = (
+		raw_death_origin.duplicate(true)
+		if raw_death_origin is Dictionary
+		else {}
+	)
+	var origin_captured := bool(death_origin.get("captured", false))
+	var origin_map_id := int(death_origin.get("map_id", -1))
+	var origin_generation := int(death_origin.get("generation", -1))
+	if not origin_captured:
+		var snapshot_map_id := int(
+			death_runtime_snapshot.get("death_runtime_map_id", -1)
+		)
+		var snapshot_generation := int(
+			death_runtime_snapshot.get("death_zone_generation", -1)
+		)
+		if snapshot_map_id >= 0 or snapshot_generation >= 0:
+			origin_map_id = snapshot_map_id
+			origin_generation = snapshot_generation
+			origin_captured = true
+	if not origin_captured:
+		var actor_map_id := int(enemy.runtime_map_id)
+		var actor_generation := int(enemy.get_meta("zone_generation", -1))
+		if actor_map_id >= 0 or actor_generation >= 0:
+			origin_map_id = actor_map_id
+			origin_generation = actor_generation
+			origin_captured = true
+	var raw_death_position: Variant = death_origin.get(
+		"death_position", enemy.global_position
+	)
+	var death_position := (
+		raw_death_position as Vector2
+		if raw_death_position is Vector2
+		else enemy.global_position
+	)
+	var raw_spawn_position: Variant = death_origin.get(
+		"spawn_position", enemy.get_meta("spawn_position", death_position)
 	)
 	var spawn_position := (
 		raw_spawn_position as Vector2
 		if raw_spawn_position is Vector2
 		else death_position
 	)
-	var raw_spawn_context: Variant = enemy.get_meta("spawn_context", {})
+	var raw_spawn_context: Variant = death_origin.get(
+		"spawn_context", enemy.get_meta("spawn_context", {})
+	)
 	var spawn_context: Dictionary = (
 		raw_spawn_context.duplicate(true)
 		if raw_spawn_context is Dictionary
@@ -10593,8 +10722,6 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 	)
 	_enemy_death_sequence += 1
 	var sequence := _enemy_death_sequence
-	var origin_map_id := current_map_id
-	var origin_generation := _zone_generation
 	var canonical_snapshot := death_runtime_snapshot.duplicate(true)
 	var canonical_monster := {
 		"monster_id": monster_id,
@@ -10618,6 +10745,7 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		},
 		"origin_map_id": origin_map_id,
 		"origin_generation": origin_generation,
+		"origin_captured": origin_captured,
 		"queued_at_usec": queued_at_usec,
 		"death_position": death_position,
 		"spawn_position": spawn_position,
@@ -10647,6 +10775,9 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		"materialization_retry_count": 0,
 		"materialized_node_index": 0,
 		"materialized_node_count": 0,
+		"remaining_requests": [],
+		"remaining_request_count": 0,
+		"reward_status": "queued",
 		"respawn_scheduled": false,
 		"last_error": "",
 	})
@@ -10722,7 +10853,14 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 			_set_enemy_death_state(retry_item, DEATH_STATE_QUEUED)
 			progressed = true
 	if str(_pending_enemy_deaths[0].get("state", "")) == DEATH_STATE_QUEUED:
-		if force_synchronous or _death_retry_ready(_pending_enemy_deaths[0]):
+		if (
+			(force_synchronous or _death_retry_ready(_pending_enemy_deaths[0]))
+			and (
+				force_synchronous
+				or jobs_processed == 0
+				or RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) < budget_usec
+			)
+		):
 			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed):
 				jobs_processed += _death_settled_jobs_last_batch
 				progressed = true
@@ -10879,6 +11017,8 @@ func death_work_queue_snapshot() -> Dictionary:
 	return {
 		"pending": _pending_enemy_deaths.duplicate(true),
 		"terminal": _enemy_death_terminal_jobs.duplicate(true),
+		"terminal_count": _enemy_death_terminal_total_count,
+		"terminal_ledger_limit": DEATH_TERMINAL_LEDGER_MAX,
 	}
 
 
@@ -10903,6 +11043,17 @@ func _compact_enemy_death_queue() -> void:
 	for death: Dictionary in _pending_enemy_deaths:
 		var state := str(death.get("state", ""))
 		if state in [DEATH_STATE_FAILED, DEATH_STATE_CANCELLED, DEATH_STATE_COMMITTED]:
+			if state == DEATH_STATE_FAILED and _last_death_logout_failure.is_empty():
+				_last_death_logout_failure = {
+					"success": false,
+					"save_performed": false,
+					"reason": "safe_logout_death_queue_failed",
+					"death_key": str(death.get("death_key", "")),
+					"death_error": str(death.get("last_error", "")),
+				}
+			_enemy_death_terminal_total_count += 1
+			if _enemy_death_terminal_jobs.size() >= DEATH_TERMINAL_LEDGER_MAX:
+				_enemy_death_terminal_jobs.pop_front()
 			_enemy_death_terminal_jobs.append(death.duplicate(true))
 		else:
 			retained.append(death)
@@ -10911,6 +11062,8 @@ func _compact_enemy_death_queue() -> void:
 
 func _death_origin_matches_current(death: Dictionary) -> bool:
 	return (
+		bool(death.get("origin_captured", false))
+		and
 		int(death.get("origin_map_id", -1)) == current_map_id
 		and int(death.get("origin_generation", -1)) == _zone_generation
 	)
@@ -10920,7 +11073,11 @@ func _cancel_pending_enemy_deaths_for_generation_change() -> void:
 	if _pending_enemy_deaths.is_empty():
 		return
 	for death: Dictionary in _pending_enemy_deaths:
-		if int(death.get("origin_generation", -1)) == _zone_generation:
+		if (
+			bool(death.get("origin_captured", false))
+			and int(death.get("origin_generation", -1)) == _zone_generation
+			and int(death.get("origin_map_id", -1)) == current_map_id
+		):
 			continue
 		death["last_error"] = "origin_map_generation_changed_before_settlement"
 		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
@@ -10944,6 +11101,21 @@ func _settle_pending_enemy_death_batch(
 		return false
 	if not _death_retry_ready(first):
 		return false
+	# Reject stale/unidentified deaths before touching PlayerState.  This guard
+	# is intentionally before the batched save so an old actor can never grant
+	# XP, quest progress, respawn state, or a drop after a map transition.
+	if not _death_origin_matches_current(first):
+		first["last_error"] = (
+			"origin_map_generation_mismatch_before_settlement"
+			if bool(first.get("origin_captured", false))
+			else "death_origin_missing"
+		)
+		_set_enemy_death_state(first, DEATH_STATE_CANCELLED)
+		_death_settled_jobs_last_batch = 1
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_cancelled_count"
+		)
+		return true
 	var batch: Array[Dictionary] = []
 	for death: Dictionary in _pending_enemy_deaths:
 		if batch.size() >= max_deaths:
@@ -10951,6 +11123,8 @@ func _settle_pending_enemy_death_batch(
 		if str(death.get("state", "")) != DEATH_STATE_QUEUED:
 			break
 		if not _death_retry_ready(death):
+			break
+		if not _death_origin_matches_current(death):
 			break
 		_set_enemy_death_state(death, DEATH_STATE_SETTLING)
 		batch.append(death)
@@ -11090,6 +11264,9 @@ func _plan_enemy_death_item(death: Dictionary) -> bool:
 		"gold_drop_count": raw_gold_drops.size() if raw_gold_drops is Array else 0,
 		"materialized": false,
 	}
+	death["remaining_requests"] = requests.duplicate(true)
+	death["remaining_request_count"] = requests.size()
+	death["reward_status"] = "planned"
 	death["materialized_node_index"] = 0
 	death["materialized_node_count"] = 0
 	death["materialization_retry_count"] = 0
@@ -11111,6 +11288,9 @@ func _materialize_enemy_death_nodes(
 	var raw_plan: Variant = death.get("drop_plan", {})
 	if not raw_plan is Dictionary:
 		death["last_error"] = "drop_plan_invalid"
+		death["remaining_requests"] = []
+		death["remaining_request_count"] = 0
+		death["reward_status"] = "materialization_failed"
 		_set_enemy_death_state(death, DEATH_STATE_FAILED)
 		RuntimeDiagnostics.increment_performance_counter(
 			&"death_queue_materialization_failures"
@@ -11123,6 +11303,9 @@ func _materialize_enemy_death_nodes(
 	var raw_requests: Variant = plan.get("requests", [])
 	if not raw_requests is Array:
 		death["last_error"] = "drop_plan_requests_invalid"
+		death["remaining_requests"] = []
+		death["remaining_request_count"] = 0
+		death["reward_status"] = "materialization_failed"
 		_set_enemy_death_state(death, DEATH_STATE_FAILED)
 		RuntimeDiagnostics.increment_performance_counter(
 			&"death_queue_materialization_failures"
@@ -11133,6 +11316,9 @@ func _materialize_enemy_death_nodes(
 		return {"complete": true, "progressed": true, "nodes": 0}
 	if not _death_origin_matches_current(death):
 		death["last_error"] = "origin_map_generation_mismatch_after_roll"
+		death["remaining_requests"] = raw_requests.duplicate(true)
+		death["remaining_request_count"] = raw_requests.size()
+		death["reward_status"] = "cancelled_after_roll"
 		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
 		RuntimeDiagnostics.increment_performance_counter(
 			&"death_queue_cancelled_count"
@@ -11153,6 +11339,9 @@ func _materialize_enemy_death_nodes(
 			break
 		if not _death_origin_matches_current(death):
 			death["last_error"] = "origin_map_generation_mismatch_after_roll"
+			death["remaining_requests"] = requests.slice(request_index)
+			death["remaining_request_count"] = requests.size() - request_index
+			death["reward_status"] = "cancelled_after_roll"
 			_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
 			RuntimeDiagnostics.increment_performance_counter(
 				&"death_queue_cancelled_count"
@@ -11161,6 +11350,9 @@ func _materialize_enemy_death_nodes(
 		var request_value: Variant = requests[request_index]
 		if not request_value is Dictionary:
 			death["last_error"] = "drop_request_invalid"
+			death["remaining_requests"] = requests.slice(request_index)
+			death["remaining_request_count"] = requests.size() - request_index
+			death["reward_status"] = "materialization_failed"
 			_set_enemy_death_state(death, DEATH_STATE_FAILED)
 			RuntimeDiagnostics.increment_performance_counter(
 				&"death_queue_materialization_failures"
@@ -11182,6 +11374,9 @@ func _materialize_enemy_death_nodes(
 				request.get("position", death.get("death_position", Vector2.ZERO)),
 			)
 		if not materialized:
+			death["remaining_requests"] = requests.slice(request_index)
+			death["remaining_request_count"] = requests.size() - request_index
+			death["reward_status"] = "materialization_retry"
 			death["materialization_retry_count"] = (
 				int(death.get("materialization_retry_count", 0)) + 1
 			)
@@ -11190,6 +11385,7 @@ func _materialize_enemy_death_nodes(
 				&"death_queue_materialization_failures"
 			)
 			if int(death["materialization_retry_count"]) >= DEATH_QUEUE_MAX_RETRIES:
+				death["reward_status"] = "materialization_failed"
 				_set_enemy_death_state(death, DEATH_STATE_FAILED)
 				RuntimeDiagnostics.increment_performance_counter(
 					&"death_queue_failed_count"
@@ -11210,6 +11406,9 @@ func _materialize_enemy_death_nodes(
 	plan["next_request_index"] = request_index
 	if request_index >= requests.size():
 		plan["materialized"] = true
+		death["remaining_requests"] = []
+		death["remaining_request_count"] = 0
+		death["reward_status"] = "materialized"
 		death["drop_plan"] = plan
 		return {"complete": true, "progressed": progressed, "nodes": nodes}
 	return {"complete": false, "progressed": progressed, "nodes": nodes}
@@ -11217,6 +11416,7 @@ func _materialize_enemy_death_nodes(
 
 func _commit_enemy_death_item(death: Dictionary) -> void:
 	_schedule_queued_enemy_respawn(death)
+	death["reward_status"] = "committed"
 	_set_enemy_death_state(death, DEATH_STATE_COMMITTED)
 	RuntimeDiagnostics.increment_performance_counter(
 		&"death_queue_committed_count"
@@ -11256,8 +11456,12 @@ func _resolve_queued_enemy_death(
 	# observable and budgeted.
 	var started_usec := RuntimeDiagnostics.timing_start()
 	if not death.has("origin_map_id"):
-		death["origin_map_id"] = current_map_id
-		death["origin_generation"] = _zone_generation
+		# Compatibility callers must provide a frozen origin explicitly.  Never
+		# manufacture one from the current world here, since this helper may be
+		# invoked after a delayed death signal.
+		death["origin_map_id"] = -1
+		death["origin_generation"] = -1
+		death["origin_captured"] = false
 	if str(death.get("state", "")) == "":
 		death["state"] = DEATH_STATE_SETTLING
 	var raw_plan: Variant = death.get("drop_plan", {})

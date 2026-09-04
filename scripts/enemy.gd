@@ -4430,6 +4430,44 @@ func _mark_death_pending() -> void:
 	if _dying or _death_pending:
 		return
 	_record_performance_counter(&"death_pending_marks")
+	# Freeze the actor's runtime identity at the lethal boundary.  The death
+	# signal is emitted after the deferred death-art handoff, so reading the
+	# owning GameRoot's current map there would attribute an old corpse to a
+	# newly loaded zone.  Keep this metadata deliberately small; the canonical
+	# monster snapshot itself is already owned by the actor.
+	var origin_map_id := runtime_map_id
+	var origin_generation := int(get_meta("zone_generation", -1))
+	var raw_spawn_position: Variant = get_meta("spawn_position", global_position)
+	var spawn_position := (
+		raw_spawn_position as Vector2
+		if raw_spawn_position is Vector2
+		else global_position
+	)
+	var raw_spawn_context: Variant = get_meta("spawn_context", {})
+	var spawn_context: Dictionary = (
+		raw_spawn_context.duplicate(true)
+		if raw_spawn_context is Dictionary
+		else {}
+	)
+	var death_origin := {
+		"captured": true,
+		"map_id": origin_map_id,
+		"generation": origin_generation,
+		"death_position": global_position,
+		"spawn_position": spawn_position,
+		"spawn_context": spawn_context,
+	}
+	set_meta("death_origin", death_origin)
+	set_meta("death_runtime_map_id", origin_map_id)
+	set_meta("death_zone_generation", origin_generation)
+	set_meta("death_world_position", global_position)
+	var raw_snapshot: Variant = get_meta("death_runtime_snapshot", {})
+	if raw_snapshot is Dictionary and not (raw_snapshot as Dictionary).is_empty():
+		var frozen_snapshot: Dictionary = (raw_snapshot as Dictionary).duplicate(true)
+		frozen_snapshot["death_runtime_map_id"] = origin_map_id
+		frozen_snapshot["death_zone_generation"] = origin_generation
+		frozen_snapshot["death_world_position"] = global_position
+		set_meta("death_runtime_snapshot", frozen_snapshot)
 	_death_pending = true
 	# The heavyweight death signal/persistence/drop work is deferred, but a
 	# zero-HP actor must stop participating in collision and target queries now.
@@ -4439,6 +4477,7 @@ func _mark_death_pending() -> void:
 	collision_layer = 0
 	collision_mask = 0
 	remove_from_group("enemies")
+	add_to_group("death_pending")
 	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
 		_record_performance_counter(&"death_same_release_unregistrations")
 		combat_spatial_index.unregister(spatial_actor_runtime_id)
@@ -4476,6 +4515,7 @@ func _begin_death() -> void:
 	collision_layer = 0
 	collision_mask = 0
 	remove_from_group("enemies")
+	remove_from_group("death_pending")
 	if overhead != null:
 		overhead.visible = false
 	var has_death_art := visual != null and visual.uses_final_art()
