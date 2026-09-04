@@ -42,6 +42,16 @@ func _run() -> void:
 			int(report.get("heavy_polls", 0)) <= FRAMES,
 			"heavy polls must never exceed the frame count"
 		)
+		assert(
+			int(report.get("cleanup_max_per_poll", 0))
+				<= _coordinator.MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL,
+			"subscriber cleanup exceeded its fixed per-frame budget"
+		)
+		assert(
+			int(report.get("cleanup_visits", 0))
+				<= FRAMES * _coordinator.MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL,
+			"subscriber cleanup work scaled beyond frames x fixed budget"
+		)
 	assert(
 		int(_per_size_reports[2].get("coordinator_polls", 0)) == FRAMES,
 		"300-monster global poll calls must not grow (600, not 180000)"
@@ -78,6 +88,10 @@ func _run_size(monster_count: int) -> void:
 		),
 		"coordinator_polls": int(diag.get("coordinator_poll_count", 0)),
 		"heavy_polls": int(diag.get("heavy_poll_execution_count", 0)),
+		"cleanup_visits": int(diag.get("subscriber_cleanup_visit_count", 0)),
+		"cleanup_max_per_poll": int(
+			diag.get("subscriber_cleanup_max_visits_per_poll", 0)
+		),
 	})
 	print(
 		"MONSTER_STREAMING_SCALING_SIZE monsters=%d coordinator_polls=%d heavy=%d"

@@ -16,6 +16,10 @@ const CLIENT_RESOURCE_CACHE_CAPACITY := 12
 const CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES := 64 * 1024 * 1024
 const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
 const MAX_CONCURRENT_PROFILE_LOADS := 2
+## Subscriber expiry is housekeeping, not resource-completion work. Keep the
+## loader/status path per-frame, but visit a fixed number of weak subscriptions
+## so a dense map cannot add one full visual walk to every rendered frame.
+const MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL := 8
 const ACTIONS := ["idle", "walk", "attack", "hit", "death"]
 const JOB_LANE_MAP_PREFETCH := "map_prefetch"
 const JOB_LANE_RUNTIME_DEMAND := "runtime_demand"
@@ -44,6 +48,8 @@ var _last_streaming_poll_frame := -1
 var _request_sequence := 0
 
 var _visual_subscriptions: Dictionary = {}
+var _visual_cleanup_order: Array[int] = []
+var _visual_cleanup_cursor := 0
 var _sync_load_count := 0
 var _sync_load_paths: Array[String] = []
 var _request_order: Array[String] = []
@@ -75,6 +81,8 @@ var status_poll_count := 0
 var resource_apply_count := 0
 var stale_completion_count := 0
 var invalid_subscriber_cleanup_count := 0
+var subscriber_cleanup_visit_count := 0
+var subscriber_cleanup_max_visits_per_poll := 0
 var max_waiting_visuals_per_resource := 0
 var pin_rejection_count := 0
 var immediate_eviction_count := 0
@@ -673,12 +681,14 @@ func register_visual(
 		"stable_visual_order": stable_visual_order,
 		"resource_state": "registered",
 	}
+	_visual_cleanup_order.append(visual_id)
 
 
 func unregister_visual(visual_id: int) -> void:
 	# Unregister is the final U transition and is safe after _exit_tree has
 	# already released the same visual. Clear every reverse-indexed key so a
 	# stale actor can never keep a new generation's profile protected.
+	_forget_visual_cleanup_id(visual_id)
 	_release_all_visual_resources(visual_id)
 	if not _visual_subscriptions.has(visual_id):
 		_evict_client_resource_profiles()
@@ -1060,8 +1070,21 @@ func pending_request_count() -> int:
 
 
 func _cleanup_invalid_subscribers() -> void:
-	for raw_id: Variant in _visual_subscriptions.keys():
-		var sub: Dictionary = _visual_subscriptions.get(raw_id, {})
+	var visits_this_poll := 0
+	var visit_budget := mini(
+		MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL,
+		_visual_cleanup_order.size(),
+	)
+	while visits_this_poll < visit_budget and not _visual_cleanup_order.is_empty():
+		if _visual_cleanup_cursor >= _visual_cleanup_order.size():
+			_visual_cleanup_cursor = 0
+		var visual_id := _visual_cleanup_order[_visual_cleanup_cursor]
+		visits_this_poll += 1
+		subscriber_cleanup_visit_count += 1
+		if not _visual_subscriptions.has(visual_id):
+			_visual_cleanup_order.remove_at(_visual_cleanup_cursor)
+			continue
+		var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
 		var visual_ref: WeakRef = sub.get("visual_ref")
 		var visual: Object = (
 			visual_ref.get_ref()
@@ -1073,8 +1096,25 @@ func _cleanup_invalid_subscribers() -> void:
 			or not is_instance_valid(visual)
 			or (visual is Node and (visual as Node).is_queued_for_deletion())
 		):
-			unregister_visual(int(raw_id))
+			unregister_visual(visual_id)
 			invalid_subscriber_cleanup_count += 1
+		else:
+			_visual_cleanup_cursor += 1
+	subscriber_cleanup_max_visits_per_poll = maxi(
+		subscriber_cleanup_max_visits_per_poll,
+		visits_this_poll,
+	)
+
+
+func _forget_visual_cleanup_id(visual_id: int) -> void:
+	var order_index := _visual_cleanup_order.find(visual_id)
+	if order_index < 0:
+		return
+	_visual_cleanup_order.remove_at(order_index)
+	if order_index < _visual_cleanup_cursor:
+		_visual_cleanup_cursor -= 1
+	if _visual_cleanup_order.is_empty() or _visual_cleanup_cursor >= _visual_cleanup_order.size():
+		_visual_cleanup_cursor = 0
 
 
 func record_sync_load(path: String) -> void:
@@ -1136,6 +1176,8 @@ func reset_for_tests() -> void:
 	_request_order.clear()
 	_apply_order.clear()
 	_visual_subscriptions.clear()
+	_visual_cleanup_order.clear()
+	_visual_cleanup_cursor = 0
 	_resource_waiters.clear()
 	_resource_leases.clear()
 	_visual_waiting_resources.clear()
@@ -1159,6 +1201,8 @@ func reset_for_tests() -> void:
 	resource_apply_count = 0
 	stale_completion_count = 0
 	invalid_subscriber_cleanup_count = 0
+	subscriber_cleanup_visit_count = 0
+	subscriber_cleanup_max_visits_per_poll = 0
 	max_waiting_visuals_per_resource = 0
 	pin_rejection_count = 0
 	immediate_eviction_count = 0
@@ -1211,6 +1255,8 @@ func monster_streaming_diagnostics() -> Dictionary:
 		"resource_apply_count": resource_apply_count,
 		"stale_completion_count": stale_completion_count,
 		"invalid_subscriber_cleanup_count": invalid_subscriber_cleanup_count,
+		"subscriber_cleanup_visit_count": subscriber_cleanup_visit_count,
+		"subscriber_cleanup_max_visits_per_poll": subscriber_cleanup_max_visits_per_poll,
 		"sync_load_count": _sync_load_count,
 		"sync_load_paths": _sync_load_paths.duplicate(),
 		"max_waiting_visuals_per_resource": max_waiting_visuals_per_resource,
