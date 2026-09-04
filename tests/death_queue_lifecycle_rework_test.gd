@@ -7,6 +7,12 @@ const LootRuntimeScript := preload(
 	"res://scripts/layers/runtime/loot_runtime_service.gd"
 )
 
+class FixtureGameRoot extends GameRootScript:
+	## Keep the real GameRoot._ready lifecycle (including the loot manager), but
+	## do not start the production world bootstrap for the isolated async queue.
+	func _begin_initial_world_bootstrap() -> void:
+		return
+
 const MAP_ID := 6317
 const GENERATION := 17
 const MONSTER_ID := 34
@@ -160,20 +166,43 @@ func _test_in_tree_logout_and_origin_guard() -> void:
 	_in_tree_game.current_map_id = origin_map
 	_in_tree_game._zone_generation = origin_generation
 	_in_tree_game._enemy_death_flush_queued = true
-	_in_tree_game.queue_free()
-	await get_tree().process_frame
-	_in_tree_game = null
+	# Keep this single real GameRoot alive for the async phase.  Constructing a
+	# second GameRoot in the same viewport reconnects the global HUD safe-area
+	# signal and obscures queue failures with duplicate-connection errors.
 
 
 func _test_async_real_deaths_and_rng_parity() -> void:
 	RuntimeDiagnostics.reset_performance_window()
 	PlayerState.test_transaction_debug_reset()
-	_async_game = GameRootScript.new()
+	_async_game = _in_tree_game
+	_async_game._pending_enemy_deaths.clear()
+	_async_game._enemy_death_terminal_jobs.clear()
+	_async_game._enemy_death_terminal_total_count = 0
+	_async_game._enemy_death_sequence = 0
+	_async_game._last_death_logout_failure.clear()
+	_async_game._enemy_death_pipeline_running = false
+	_async_game._enemy_death_target_refresh_pending = false
 	_async_game.current_map_id = MAP_ID
 	_async_game._zone_generation = GENERATION
+	_async_game._enemy_death_flush_queued = true
+	_async_game.set_process(false)
+	_async_game.set_physics_process(false)
 	_async_game._combat_spatial_index = SpatialIndexScript.new()
 	_async_game._rng.seed = ASYNC_RNG_SEED
-	_async_game._enemy_death_flush_queued = true
+	if is_instance_valid(_async_game.player):
+		_async_game.player.set_process(false)
+		_async_game.player.set_physics_process(false)
+	if _async_game._loot_pickup_runtime_manager != null:
+		_async_game._loot_pickup_runtime_manager.configure_map(
+			MAP_ID,
+			GENERATION,
+			Callable(self, "_identity_position"),
+			Callable(self, "_identity_position"),
+		)
+		_async_game._loot_pickup_runtime_manager.set_process(false)
+	if is_instance_valid(_async_game.background):
+		_async_game.background.set_process(false)
+		_async_game.background.set_physics_process(false)
 	var canonical := GameData.get_monster_by_id(MONSTER_ID)
 	_expect(not canonical.is_empty(), "async death canonical fixture missing")
 	for index: int in range(ASYNC_DEATH_COUNT):
@@ -292,7 +321,7 @@ func _make_runtime_enemy(index: int, canonical: Dictionary) -> EnemyActor:
 		Callable(self, "_identity_position"),
 	)
 	enemy.configure_spatial_index(_async_game._combat_spatial_index, serial)
-	add_child(enemy)
+	_async_game.add_child(enemy)
 	enemy.set_process(false)
 	enemy.set_physics_process(false)
 	_async_game._combat_spatial_index.register(

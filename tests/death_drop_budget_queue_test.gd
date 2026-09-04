@@ -1,9 +1,16 @@
 extends Node
 
 const GameRootScript := preload("res://scripts/game_root.gd")
+const SpatialIndexScript := preload("res://scripts/runtime_combat_spatial_index.gd")
 const LootRuntimeScript := preload(
 	"res://scripts/layers/runtime/loot_runtime_service.gd"
 )
+
+class FixtureGameRoot extends GameRootScript:
+	## Keep the real GameRoot._ready lifecycle (including the loot manager), but
+	## do not start the production world bootstrap for this queue-only fixture.
+	func _begin_initial_world_bootstrap() -> void:
+		return
 
 const MAP_ID := 5317
 const GENERATION := 11
@@ -33,13 +40,52 @@ func _run() -> void:
 
 func _new_game(seed_value: int) -> Node:
 	RuntimeDiagnostics.reset_performance_window()
-	var game: Node = GameRootScript.new()
+	var game: Node
+	if _games.is_empty() or not is_instance_valid(_games[0]):
+		game = FixtureGameRoot.new()
+		game.current_map_id = MAP_ID
+		game._zone_generation = GENERATION
+		add_child(game)
+		game.set_process(false)
+		game.set_physics_process(false)
+		if is_instance_valid(game.player):
+			game.player.set_process(false)
+			game.player.set_physics_process(false)
+		_games.append(game)
+	else:
+		game = _games[0]
+		for child: Node in game.get_children():
+			if child is LootPickup:
+				child.free()
+		game._pending_enemy_deaths.clear()
+		game._enemy_death_terminal_jobs.clear()
+		game._enemy_death_terminal_total_count = 0
+		game._enemy_death_sequence = 0
+		game._last_death_logout_failure.clear()
+		game._enemy_death_pipeline_running = false
+		game._enemy_death_target_refresh_pending = false
+		game._pending_loot_collections.clear()
+		game._loot_collection_flush_queued = false
+		if game._loot_pickup_runtime_manager != null:
+			game._loot_pickup_runtime_manager.clear_all()
 	game.current_map_id = MAP_ID
 	game._zone_generation = GENERATION
 	game._rng.seed = seed_value
 	game._enemy_death_flush_queued = true
-	_games.append(game)
+	game._combat_spatial_index = SpatialIndexScript.new()
+	if game._loot_pickup_runtime_manager != null:
+		game._loot_pickup_runtime_manager.configure_map(
+			MAP_ID,
+			GENERATION,
+			Callable(self, "_identity_position"),
+			Callable(self, "_identity_position"),
+		)
+		game._loot_pickup_runtime_manager.set_process(false)
 	return game
+
+
+func _identity_position(position: Vector2) -> Vector2:
+	return position
 
 
 func _queue_death(game: Node, position := Vector2.ZERO) -> void:
@@ -132,7 +178,7 @@ func _test_save_failure_is_no_reward() -> void:
 		RuntimeDiagnostics.performance_counter(&"drop_roll_count") == 0,
 		"save failure consumed drop RNG",
 	)
-	_expect(game.get_child_count() == 0, "save failure materialized loot")
+	_expect(_loot_child_count(game) == 0, "save failure materialized loot")
 	_expect(
 		int(PlayerState.test_transaction_debug_snapshot().get("commit_attempts", 0))
 		== 3,
@@ -187,7 +233,7 @@ func _test_materialization_failure_is_terminal() -> void:
 	_expect(
 		game._pending_enemy_deaths.size() == 1
 		and int(game._pending_enemy_deaths[0].get("materialized_node_index", 0)) == 1
-		and game.get_child_count() == 1,
+		and _loot_child_count(game) == 1,
 		"first materialization node did not commit before the injected failure",
 	)
 	_expect(game.set_loot_materialization_failure_count_for_test(99), "failure hook rejected")
@@ -198,7 +244,7 @@ func _test_materialization_failure_is_terminal() -> void:
 		and str(game._enemy_death_terminal_jobs[0].get("state", "")) == "FAILED",
 		"materialization failure was not terminal after retries",
 	)
-	_expect(game.get_child_count() == 1, "failed materialization duplicated the successful node")
+	_expect(_loot_child_count(game) == 1, "failed materialization duplicated the successful node")
 	_expect(
 		RuntimeDiagnostics.performance_counter(&"death_queue_materialization_failures") == 3,
 		"materialization failure retry count was not observable",
@@ -239,6 +285,14 @@ func _expect(condition: bool, message: String) -> void:
 	_checks += 1
 	if not condition:
 		_failures.append(message)
+
+
+func _loot_child_count(game: Node) -> int:
+	var count := 0
+	for child: Node in game.get_children():
+		if child is LootPickup:
+			count += 1
+	return count
 
 
 func _finish() -> void:

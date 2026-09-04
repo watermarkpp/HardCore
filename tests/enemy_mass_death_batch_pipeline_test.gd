@@ -6,6 +6,12 @@ const LootRuntimeScript := preload(
 	"res://scripts/layers/runtime/loot_runtime_service.gd"
 )
 
+class FixtureGameRoot extends GameRootScript:
+	## Keep the real GameRoot._ready lifecycle (including the loot manager), but
+	## do not start the production world bootstrap for this queue-only fixture.
+	func _begin_initial_world_bootstrap() -> void:
+		return
+
 const MAP_ID := 4317
 const GENERATION := 7
 const MONSTER_ID := 34
@@ -28,12 +34,26 @@ func _run() -> void:
 	PlayerState.test_transaction_debug_reset()
 	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
 	RuntimeDiagnostics.reset_performance_window()
-	_game = GameRootScript.new()
+	_game = FixtureGameRoot.new()
 	_game.current_map_id = MAP_ID
 	_game._zone_generation = GENERATION
+	var loot_runtime := LootRuntimeScript.new()
+	add_child(_game)
+	_game.set_process(false)
+	_game.set_physics_process(false)
 	_game._combat_spatial_index = SpatialIndexScript.new()
 	_game._rng.seed = RNG_SEED
-	var loot_runtime := LootRuntimeScript.new()
+	if is_instance_valid(_game.player):
+		_game.player.set_process(false)
+		_game.player.set_physics_process(false)
+	if _game._loot_pickup_runtime_manager != null:
+		_game._loot_pickup_runtime_manager.configure_map(
+			MAP_ID,
+			GENERATION,
+			Callable(self, "_ground_to_screen"),
+			Callable(self, "_screen_to_ground"),
+		)
+		_game._loot_pickup_runtime_manager.set_process(false)
 	# Block the automatic deferred pump so the assertions cover the queued
 	# boundary before the test explicitly drains the same state machine.
 	_game._enemy_death_flush_queued = true
@@ -129,7 +149,7 @@ func _make_enemy(canonical: Dictionary, index: int) -> EnemyActor:
 		_game._combat_spatial_index,
 		serial,
 	)
-	add_child(enemy)
+	_game.add_child(enemy)
 	enemy.set_process(false)
 	enemy.set_physics_process(false)
 	_game._combat_spatial_index.register(
