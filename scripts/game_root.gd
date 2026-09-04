@@ -2012,6 +2012,10 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 	_active_boss_cache.clear()
 	_safe_zone_enforcement_remaining = 0.0
 	_cancel_all_combat_targets()
+	if _combat_spatial_index != null and current_map_id >= 0:
+		# Actors are queued for deletion below; clear the old map partition now so
+		# a transition cannot expose stale candidates before their exit callbacks.
+		_combat_spatial_index.clear_map(current_map_id)
 	# Preserve the live summon before zone_content is queued for deletion. The
 	# destination map restores the same gameplay state beside the owner.
 	PlayerState.apply_taoist_main_pet_runtime_states(
@@ -2360,8 +2364,9 @@ func _enforce_enemy_outside_bich_safe_zone(enemy: EnemyActor) -> void:
 		)
 	)
 	if not legal_ground_gu.is_equal_approx(current_ground_gu):
-		enemy.global_position = _canonical_ground_gu_to_screen_px(
-			legal_ground_gu
+		enemy.set_combat_position(
+			_canonical_ground_gu_to_screen_px(legal_ground_gu),
+			&"safe_zone_enforcement",
 		)
 		enemy.velocity = Vector2.ZERO
 	RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
@@ -4284,7 +4289,7 @@ func _apply_wild_rush_displacement(
 		return false
 	# Both destinations were preflighted before either actor is mutated. This is
 	# one coupled transaction: partial single-actor movement is forbidden.
-	target.global_position = target_destination
+	target.set_combat_position(target_destination, &"wild_rush_displacement")
 	player.global_position = player_destination
 	player.velocity = Vector2.ZERO
 	player.movement_performed.emit(player.global_position, player.facing)
@@ -7538,7 +7543,13 @@ func _apply_canonical_displacement_screen_px(
 		collision_radius_px
 	):
 		return false
-	actor.global_position = destination_screen_px
+	if actor is EnemyActor:
+		(actor as EnemyActor).set_combat_position(
+			destination_screen_px,
+			&"canonical_displacement",
+		)
+	else:
+		actor.global_position = destination_screen_px
 	return true
 
 

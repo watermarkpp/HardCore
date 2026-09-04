@@ -2,9 +2,14 @@ extends Node
 
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SpatialIndexScript := preload("res://scripts/runtime_combat_spatial_index.gd")
+const OpenTerrainFixture := preload("res://tests/helpers/monster_open_terrain_test_fixture.gd")
 const ENEMY_COUNT := 96
 const GROUP_COUNT := 4
 const ENEMIES_PER_GROUP := ENEMY_COUNT / GROUP_COUNT
+const CROWD_MAP_ID := 1
+
+var _index: SpatialIndexScript
 
 
 func _ready() -> void:
@@ -14,6 +19,7 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	_index = SpatialIndexScript.new()
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
@@ -28,9 +34,15 @@ func _run() -> void:
 		var naive := _naive_separation(enemy, enemies)
 		assert(indexed.distance_to(naive) < 0.001, "spatial crowd result changed separation behavior")
 	var crowd_metrics := EnemyActor.performance_diagnostics()
-	assert(int(crowd_metrics.crowd_grid_builds) == 1, "crowd grid rebuilt for each enemy")
-	assert(int(crowd_metrics.crowd_grid_actor_scans) == ENEMY_COUNT, "crowd grid did not scan the active set exactly once")
+	assert(int(crowd_metrics.crowd_grid_builds) == 0, "crowd retained a private grid build")
+	assert(int(crowd_metrics.crowd_grid_actor_scans) == 0, "crowd retained a full actor scan")
+	assert(RuntimeDiagnostics.performance_counter(&"crowd_full_group_scans") == 0, "crowd scanned the enemies group")
 	assert(int(crowd_metrics.crowd_query_candidates) <= ENEMY_COUNT * 28, "crowd queries regressed toward O(N^2): %s" % crowd_metrics)
+	assert(_index.index_neighbor_query_count == ENEMY_COUNT, "crowd did not use one shared neighbor query per actor")
+	assert(_index.index_neighbor_candidate_count <= ENEMY_COUNT * 28, "crowd candidate count regressed toward full-map work")
+	var ordered_a := _query_neighbor_instance_ids(Vector2.ZERO)
+	var ordered_b := _query_neighbor_instance_ids(Vector2.ZERO)
+	assert(ordered_a == ordered_b, "shared crowd query order was not deterministic")
 	print("MONSTER_CROWD_STAGE indexed %s" % crowd_metrics)
 
 	# Retargeting is a decision tick, not a render/physics tick. Existing targets
@@ -64,7 +76,7 @@ func _run() -> void:
 			enemy._crowd_separation_for_motion(1.0 / 60.0)
 	var dense_metrics := EnemyActor.performance_diagnostics()
 	assert(int(dense_metrics.crowd_steering_evaluations) <= ENEMY_COUNT * 12, "dense steering still ran per actor per frame: %s" % dense_metrics)
-	assert(int(dense_metrics.crowd_grid_actor_scans) <= ENEMY_COUNT * 22, "dense crowd grid still rebuilt every physics frame: %s" % dense_metrics)
+	assert(int(dense_metrics.crowd_grid_actor_scans) == 0, "dense crowd retained full actor scans")
 	print("MONSTER_CROWD_STAGE dense %s" % dense_metrics)
 
 	# Action budget: all 96 monsters advance for half a second, while imported
@@ -82,11 +94,22 @@ func _run() -> void:
 		assert(enemy.collision_mask == EnemyActor.ENEMY_MOTION_MASK and enemy.collision_mask == 3, "dense actor still participates in enemy mutual physics")
 	print("MONSTER_CROWD_STAGE moving %s" % movement_metrics)
 
-	# A stale/null bucket value can exist between a death queue and the next grid
-	# rebuild; it must be ignored instead of aborting the shared crowd decision.
-	var stale_cell := enemies[0]._crowd_grid_cell(enemies[0].global_position)
-	EnemyActor._crowd_grid[stale_cell] = [null, enemies[0]]
-	enemies[0]._crowd_separation()
+	# A forced relocation crosses buckets before another physics tick. The
+	# caller-owned neighbor query must see the new bucket immediately and stop
+	# returning the old one.
+	var moved_enemy := enemies[0]
+	var old_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		moved_enemy.global_position
+	)
+	var new_ground_gu := old_ground_gu + Vector2(8.0, 8.0)
+	moved_enemy.set_combat_position(
+		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(new_ground_gu),
+		&"crowd_cross_bucket",
+	)
+	var moved_ids := _query_neighbor_instance_ids(new_ground_gu)
+	var old_ids := _query_neighbor_instance_ids(old_ground_gu)
+	assert(moved_ids.has(moved_enemy.get_instance_id()), "cross-bucket crowd move was not immediately indexed")
+	assert(not old_ids.has(moved_enemy.get_instance_id()), "cross-bucket crowd move remained in the old bucket")
 
 	# Actors without an active target only wake four times per second, even when
 	# near the player. The background decision tick still acquires the player,
@@ -105,6 +128,9 @@ func _run() -> void:
 		Time.get_ticks_msec()
 		- int(EnemyActor.BACKGROUND_AI_INTERVAL_SECONDS * 1000.0)
 	)
+	# Force the shared target-grid fixture to observe the deliberate player move;
+	# this test is about crowd/index lifecycle, not target-grid refresh timing.
+	EnemyActor._target_grid_last_refresh_msec = -1
 	background_enemy._on_background_wakeup_timeout()
 	assert(background_enemy.target == player, "background decision tick did not acquire the nearby player")
 	assert(not background_enemy._can_use_background_ai(), "near acquired player target did not resume foreground AI")
@@ -129,13 +155,16 @@ func _run() -> void:
 	var respawned := _spawn_groups(player, 1000, ENEMY_COUNT / 4)
 	await get_tree().process_frame
 	survivors.append_array(respawned)
+	assert(_index.registered_actor_count() == ENEMY_COUNT, "death/unregister/respawn left stale crowd entries")
 	EnemyActor.reset_performance_diagnostics()
 	for enemy: EnemyActor in survivors:
 		enemy._crowd_separation()
 	var respawn_metrics := EnemyActor.performance_diagnostics()
-	assert(int(respawn_metrics.crowd_grid_builds) == 1, "respawned crowd rebuilt the index more than once")
-	assert(int(respawn_metrics.crowd_grid_actor_scans) == ENEMY_COUNT, "dead actors remained in the rebuilt crowd index")
+	assert(int(respawn_metrics.crowd_grid_builds) == 0, "respawned crowd rebuilt a private grid")
+	assert(int(respawn_metrics.crowd_grid_actor_scans) == 0, "dead actors triggered a full crowd scan")
 	assert(int(respawn_metrics.crowd_query_candidates) <= ENEMY_COUNT * 32, "respawned crowd query count became unbounded")
+	_index.clear_map(CROWD_MAP_ID)
+	assert(_index.registered_actor_count() == 0, "map clear retained old crowd entries")
 
 	print("MONSTER_CROWD_PERFORMANCE_PASS 96 moving enemies use crowd authority; occupancy guard <=10Hz; retarget/respawn bounded")
 	get_tree().quit(0)
@@ -151,12 +180,29 @@ func _spawn_groups(player: PlayerCharacter, id_offset: int, count := ENEMY_COUNT
 			float(local_index / 6) * 1.125
 		)
 		var position: Vector2 = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(ground_position_gu)
+		var serial := id_offset + index + 1
 		var enemy := EnemyActor.new()
-		enemy.setup({"monsterId": 18, "name": "crowd_perf_%d" % (id_offset + index), "hp": 10}, player, false)
-		enemy.global_position = position
+		enemy.setup({"monsterId": 18, "name": "crowd_perf_%d" % serial, "hp": 10}, player, false)
+		enemy.configure_runtime_map_projection(
+			CROWD_MAP_ID,
+			Callable(self, "_ground_to_screen"),
+			Callable(self, "_screen_to_ground"),
+		)
+		enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(CROWD_MAP_ID))
+		enemy.configure_spatial_index(_index, serial)
+		enemy.set_combat_position(position, &"crowd_spawn")
 		enemy.set_meta("spawn_position", position)
 		add_child(enemy)
 		enemy.set_physics_process(false)
+		_index.register(
+			serial,
+			CROWD_MAP_ID,
+			ground_position_gu,
+			enemy.combat_radius_gu,
+			serial,
+			enemy,
+			Callable(enemy, "spatial_index_position"),
+		)
 		result.append(enemy)
 	return result
 
@@ -177,3 +223,26 @@ func _naive_separation(enemy: EnemyActor, enemies: Array[EnemyActor]) -> Vector2
 			distance = 1.0
 		separation += away.normalized() * (1.0 - distance / desired)
 	return separation.limit_length(1.0)
+
+
+func _query_neighbor_instance_ids(center_ground_gu: Vector2) -> Array[int]:
+	var nodes: Array[Node] = []
+	_index.query_neighbor_enemy_nodes_into(
+		CROWD_MAP_ID,
+		center_ground_gu,
+		2.0,
+		nodes,
+	)
+	var result: Array[int] = []
+	for node: Node in nodes:
+		if is_instance_valid(node):
+			result.append(node.get_instance_id())
+	return result
+
+
+func _ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(value)
+
+
+func _screen_to_ground(value: Vector2) -> Vector2:
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(value)

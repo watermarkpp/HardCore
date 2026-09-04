@@ -33,6 +33,16 @@ var index_stale_cleanup_count := 0
 var index_query_count := 0
 var index_total_candidate_count := 0
 var index_max_candidate_count := 0
+var index_neighbor_query_count := 0
+var index_neighbor_candidate_count := 0
+
+# The neighbor API receives a caller-owned Array, so it only needs a stable
+# order lookup while inserting candidates.  Keeping this side table on the
+# index avoids allocating records or a sort/seen collection in each crowd
+# query, while preserving the stable combat order already used by broadphase
+# consumers.
+var _stable_order_by_node_instance_id: Dictionary = {}
+var _neighbor_stale_actor_ids: Array[int] = []
 
 
 func _init() -> void:
@@ -68,10 +78,13 @@ func register(
 		"absolute_ground_gu": absolute_ground_gu,
 		"bounds_gu": safe_bounds,
 		"stable_combat_order": stable_combat_order,
+		"node_instance_id": node.get_instance_id() if is_instance_valid(node) else 0,
 		"position_provider": (
 			position_provider if position_provider is Callable else Callable()
 		),
 	}
+	if is_instance_valid(node):
+		_stable_order_by_node_instance_id[node.get_instance_id()] = stable_combat_order
 	_max_actor_bounds_gu = maxf(_max_actor_bounds_gu, safe_bounds)
 	_bucket_set(runtime_map_id, _entries[actor_runtime_id]["bucket_key"])[
 		actor_runtime_id
@@ -83,6 +96,9 @@ func unregister(actor_runtime_id: int) -> void:
 	var entry: Dictionary = _entries.get(actor_runtime_id, {})
 	if entry.is_empty():
 		return
+	var node_instance_id := int(entry.get("node_instance_id", 0))
+	if node_instance_id > 0:
+		_stable_order_by_node_instance_id.erase(node_instance_id)
 	var runtime_map_id := int(entry.get("runtime_map_id", -1))
 	var bucket_key: Vector2i = entry.get("bucket_key", Vector2i.ZERO)
 	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
@@ -123,6 +139,9 @@ func clear_map(runtime_map_id: int) -> void:
 	for raw_id: Variant in _entries.keys():
 		var entry: Dictionary = _entries.get(raw_id, {})
 		if int(entry.get("runtime_map_id", -1)) == runtime_map_id:
+			var node_instance_id := int(entry.get("node_instance_id", 0))
+			if node_instance_id > 0:
+				_stable_order_by_node_instance_id.erase(node_instance_id)
 			_entries.erase(raw_id)
 			removed += 1
 	index_unregister_count += removed
@@ -166,6 +185,106 @@ func query_aabb_candidates(
 			bounds_ground_gu.size + Vector2.ONE * expansion * 2.0
 		)
 	)
+
+
+## Lightweight crowd broadphase. The output array belongs to the caller and
+## is cleared/reused in place; this path intentionally emits live Nodes rather
+## than Dictionary records. Each registered actor is owned by exactly one
+## bucket, so no per-query seen set is necessary. Exact distance and footprint
+## math remains in EnemyActor.
+func query_neighbor_enemy_nodes_into(
+	runtime_map_id: int,
+	center_ground_gu: Vector2,
+	query_radius_gu: float,
+	output: Array,
+) -> void:
+	output.clear()
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_neighbor_query_count += 1
+	if (
+		runtime_map_id < 0
+		or not center_ground_gu.is_finite()
+		or not is_finite(query_radius_gu)
+	):
+		return
+	var radius := maxf(0.0, query_radius_gu)
+	var min_bucket := _bucket_key(
+		center_ground_gu - Vector2.ONE * radius
+	)
+	var max_bucket := _bucket_key(
+		center_ground_gu + Vector2.ONE * radius
+	)
+	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
+	if map_buckets.is_empty():
+		return
+	for bucket_y: int in range(min_bucket.y, max_bucket.y + 1):
+		for bucket_x: int in range(min_bucket.x, max_bucket.x + 1):
+			var query_bucket := Vector2i(bucket_x, bucket_y)
+			var bucket: Dictionary = map_buckets.get(query_bucket, {})
+			if bucket.is_empty():
+				continue
+			for raw_id: Variant in bucket:
+				var actor_id := int(raw_id)
+				var entry: Dictionary = _entries.get(actor_id, {})
+				if entry.is_empty():
+					continue
+				var node_ref: WeakRef = bucket.get(actor_id)
+				var node: Node = (
+					node_ref.get_ref()
+					if node_ref != null
+					else null
+				)
+				if node == null or not is_instance_valid(node):
+					_neighbor_stale_actor_ids.append(actor_id)
+					continue
+				# The EnemyActor position transaction updates this bucket before
+				# callers can issue the next query. Do not invoke a live provider or
+				# re-home here: that would add script calls and dictionary mutation to
+				# every crowd query.
+				_append_neighbor_node_sorted(
+					output,
+					node,
+					int(entry.get("stable_combat_order", actor_id)),
+				)
+	for actor_id: int in _neighbor_stale_actor_ids:
+		_erase_entry(actor_id)
+		index_stale_cleanup_count += 1
+	_neighbor_stale_actor_ids.clear()
+	index_neighbor_candidate_count += output.size()
+	index_total_candidate_count += output.size()
+	index_max_candidate_count = maxi(
+		index_max_candidate_count,
+		output.size()
+	)
+
+
+func _append_neighbor_node_sorted(
+	output: Array,
+	node: Node,
+	stable_combat_order: int,
+) -> void:
+	var insert_at := output.size()
+	while insert_at > 0:
+		var previous: Variant = output[insert_at - 1]
+		if not previous is Node:
+			break
+		var previous_node := previous as Node
+		var previous_order := int(
+			_stable_order_by_node_instance_id.get(
+				previous_node.get_instance_id(),
+				previous_node.get_instance_id(),
+			)
+		)
+		if previous_order < stable_combat_order:
+			break
+		if (
+			previous_order == stable_combat_order
+			and previous_node.get_instance_id() < node.get_instance_id()
+		):
+			break
+		insert_at -= 1
+	output.insert(insert_at, node)
 
 
 func _query_aabb_candidates(
@@ -263,6 +382,8 @@ func diagnostics() -> Dictionary:
 		"index_query_count": index_query_count,
 		"index_total_candidate_count": index_total_candidate_count,
 		"index_max_candidate_count": index_max_candidate_count,
+		"index_neighbor_query_count": index_neighbor_query_count,
+		"index_neighbor_candidate_count": index_neighbor_candidate_count,
 	}
 
 
@@ -330,6 +451,9 @@ func _erase_entry(actor_runtime_id: int) -> void:
 	var entry: Dictionary = _entries.get(actor_runtime_id, {})
 	if entry.is_empty():
 		return
+	var node_instance_id := int(entry.get("node_instance_id", 0))
+	if node_instance_id > 0:
+		_stable_order_by_node_instance_id.erase(node_instance_id)
 	var runtime_map_id := int(entry.get("runtime_map_id", -1))
 	var bucket_key: Vector2i = entry.get("bucket_key", Vector2i.ZERO)
 	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})

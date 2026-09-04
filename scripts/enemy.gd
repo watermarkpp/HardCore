@@ -116,15 +116,12 @@ const SPAWN_RETURN_EPSILON_GU := 0.1875
 const SAFE_ZONE_RETURN_EPSILON_GU := 0.125
 const CONTACT_RETREAT_EPSILON_GU := 0.09375
 const CROWD_SEPARATION_GAP_GU := 0.375
+const CROWD_NEIGHBOR_QUERY_RADIUS_GU := 2.0
 const LAST_SAFE_REFRESH_DISTANCE_GU := 2.0
 const PROJECTILE_OBSTACLE_SAMPLE_STEP_GU := 0.25
 const ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU := PROJECTILE_OBSTACLE_SAMPLE_STEP_GU
 const CORPSE_HOLD_SECONDS := 2.0
 
-static var _crowd_grid_physics_frame := -1
-static var _crowd_grid: Dictionary = {}
-static var _crowd_grid_build_count := 0
-static var _crowd_grid_actor_scan_count := 0
 static var _crowd_query_candidate_count := 0
 static var _crowd_steering_evaluation_count := 0
 static var _retarget_full_scan_count := 0
@@ -145,10 +142,6 @@ static var _environment_guard_check_count := 0
 static func _record_performance_counter(field: StringName, amount := 1) -> void:
 	RuntimeDiagnostics.increment_performance_counter(field, amount)
 	match field:
-		&"crowd_grid_builds":
-			_crowd_grid_build_count += amount
-		&"crowd_grid_actor_scans":
-			_crowd_grid_actor_scan_count += amount
 		&"crowd_query_candidates":
 			_crowd_query_candidate_count += amount
 		&"crowd_steering_evaluations":
@@ -298,6 +291,7 @@ var _retarget_timer := 0.0
 var _target_stable_remaining_seconds := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
+var _crowd_neighbor_scratch: Array[Node] = []
 var _background_ai_timer := 0.0
 var _background_wakeup_timer: Timer
 var _background_deep_sleeping := false
@@ -2028,6 +2022,9 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	var position_before_move := global_position
 	var move_started_usec := RuntimeDiagnostics.timing_start()
 	move_and_slide()
+	# Keep the shared bucket authoritative before any same-frame projectile or
+	# crowd query can run after normal physics movement.
+	_spatial_index_update()
 	RuntimeDiagnostics.record_timing_usec(&"move_and_slide_usec", move_started_usec)
 	actual_ground_motion_gu = GroundUnitSpace.actual_ground_motion_gu_from_screen_positions(
 		position_before_move,
@@ -3878,40 +3875,49 @@ func _uses_player_melee_contact_contract(target_node: Node2D) -> bool:
 
 
 func _crowd_separation() -> Vector2:
-	_ensure_crowd_grid()
 	var separation_ground := Vector2.ZERO
-	var center_cell := _crowd_grid_cell(global_position)
-	for offset_y in range(-1, 2):
-		for offset_x in range(-1, 2):
-			var bucket: Array = _crowd_grid.get(center_cell + Vector2i(offset_x, offset_y), [])
-			for value: Variant in bucket:
-				_record_performance_counter(&"crowd_query_candidates")
-				_record_performance_counter(&"crowd_index_candidates")
-				if not is_instance_valid(value):
-					continue
-				var node := value as Node
-				if node == self or not node is EnemyActor or node.is_queued_for_deletion():
-					continue
-				var other := node as EnemyActor
-				var away_ground_gu := _ground_delta_gu_between_screen_positions(
-					other.global_position,
-					global_position,
-				)
-				var desired_gu := (
-					combat_radius_gu
-					+ other.combat_radius_gu
-					+ CROWD_SEPARATION_GAP_GU
-				)
-				var distance_gu := away_ground_gu.length()
-				if distance_gu >= desired_gu:
-					continue
-				if distance_gu < GroundUnitSpace.EPSILON_GU:
-					var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
-					away_ground_gu = Vector2.from_angle(angle)
-					distance_gu = GroundUnitSpace.EPSILON_GU
-				separation_ground += away_ground_gu.normalized() * (
-					1.0 - distance_gu / desired_gu
-				)
+	if (
+		combat_spatial_index == null
+		or not is_instance_valid(combat_spatial_index)
+		or runtime_map_id < 0
+	):
+		return separation_ground
+	var center_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if not center_ground_gu.is_finite():
+		return separation_ground
+	combat_spatial_index.query_neighbor_enemy_nodes_into(
+		runtime_map_id,
+		center_ground_gu,
+		CROWD_NEIGHBOR_QUERY_RADIUS_GU,
+		_crowd_neighbor_scratch,
+	)
+	for value: Variant in _crowd_neighbor_scratch:
+		_record_performance_counter(&"crowd_query_candidates")
+		_record_performance_counter(&"crowd_index_candidates")
+		if not is_instance_valid(value) or not value is EnemyActor:
+			continue
+		var other := value as EnemyActor
+		if other == self or other.is_queued_for_deletion():
+			continue
+		var away_ground_gu := _ground_delta_gu_between_screen_positions(
+			other.global_position,
+			global_position,
+		)
+		var desired_gu := (
+			combat_radius_gu
+			+ other.combat_radius_gu
+			+ CROWD_SEPARATION_GAP_GU
+		)
+		var distance_gu := away_ground_gu.length()
+		if distance_gu >= desired_gu:
+			continue
+		if distance_gu < GroundUnitSpace.EPSILON_GU:
+			var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
+			away_ground_gu = Vector2.from_angle(angle)
+			distance_gu = GroundUnitSpace.EPSILON_GU
+		separation_ground += away_ground_gu.normalized() * (
+			1.0 - distance_gu / desired_gu
+		)
 	return separation_ground.limit_length(1.0)
 
 
@@ -3926,25 +3932,6 @@ func _crowd_separation_for_motion(delta: float) -> Vector2:
 	_cached_crowd_separation = _crowd_separation()
 	RuntimeDiagnostics.record_timing_usec(&"crowd_usec", crowd_started_usec)
 	return _cached_crowd_separation
-
-
-func _ensure_crowd_grid() -> void:
-	var physics_frame := Engine.get_physics_frames()
-	if _crowd_grid_physics_frame >= 0 and physics_frame - _crowd_grid_physics_frame < CROWD_GRID_REFRESH_FRAMES:
-		return
-	_crowd_grid_physics_frame = physics_frame
-	_crowd_grid.clear()
-	_record_performance_counter(&"crowd_grid_builds")
-	_record_performance_counter(&"crowd_full_group_scans")
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion():
-			continue
-		_record_performance_counter(&"crowd_grid_actor_scans")
-		var enemy := node as EnemyActor
-		var cell := _crowd_grid_cell(enemy.global_position)
-		var bucket: Array = _crowd_grid.get(cell, [])
-		bucket.append(enemy)
-		_crowd_grid[cell] = bucket
 
 
 func _ensure_target_grid(force_refresh := false) -> void:
@@ -4039,22 +4026,10 @@ func _append_live_target_candidate(candidates: Array, raw_candidate: Variant) ->
 	candidates.append(candidate)
 
 
-func _crowd_grid_cell(world_position: Vector2) -> Vector2i:
-	var ground_position_gu := _screen_position_px_to_ground_position_gu(world_position)
-	return Vector2i(
-		floori(ground_position_gu.x / CROWD_GRID_CELL_SIZE_GU),
-		floori(ground_position_gu.y / CROWD_GRID_CELL_SIZE_GU),
-	)
-
-
 static func reset_performance_diagnostics() -> void:
-	_crowd_grid_physics_frame = -1
-	_crowd_grid.clear()
 	_target_grid_last_refresh_msec = -1
 	_target_grid.clear()
 	_target_grid_node_ids.clear()
-	_crowd_grid_build_count = 0
-	_crowd_grid_actor_scan_count = 0
 	_crowd_query_candidate_count = 0
 	_crowd_steering_evaluation_count = 0
 	_retarget_full_scan_count = 0
@@ -4073,8 +4048,8 @@ static func reset_performance_diagnostics() -> void:
 
 static func performance_diagnostics() -> Dictionary:
 	var result := {
-		"crowd_grid_builds": _crowd_grid_build_count,
-		"crowd_grid_actor_scans": _crowd_grid_actor_scan_count,
+		"crowd_grid_builds": 0,
+		"crowd_grid_actor_scans": 0,
 		"crowd_query_candidates": _crowd_query_candidate_count,
 		"crowd_steering_evaluations": _crowd_steering_evaluation_count,
 		"retarget_full_scans": _retarget_full_scan_count,
