@@ -224,6 +224,29 @@ var _system_menu_pause_owned := false
 var _movement_target_refresh_remaining := 0.0
 var _bich_camp_layout: Dictionary = {}
 var _active_safe_zones: Array = []
+var _safe_zone_context: Dictionary = {
+	"contract_id": WorldSpatialRulesScript.SAFE_ZONE_CONTEXT_CONTRACT_ID,
+	"map_id": -1,
+	"revision": 0,
+	"generation": 0,
+	"valid": true,
+	"failure_reason": "",
+	"zones": [],
+	"aabb_ground_gu": Rect2(),
+}
+var _safe_zone_revision := 0
+var _safe_zone_candidate_scratch: Array[EnemyActor] = []
+var _safe_zone_query_scratch: Array[EnemyActor] = []
+var _safe_zone_candidate_stamp_serial := 0
+var _player_safe_zone_cache: Dictionary = {
+	"player_instance_id": 0,
+	"map_id": -1,
+	"revision": -1,
+	"generation": -1,
+	"ground_position_gu": Vector2.INF,
+	"inside": false,
+	"valid": false,
+}
 var _runtime_spawn_serial := 0
 var _collecting_staged_actor_plan := false
 var _staged_actor_source_index := 0
@@ -317,6 +340,121 @@ func _clear_aoe_query_scratch() -> void:
 	_aoe_distance_scratch.clear()
 	_aoe_id_scratch.clear()
 	_aoe_cell_stamp = 0
+
+
+func _begin_safe_zone_context(runtime_map_id: int) -> void:
+	_safe_zone_revision += 1
+	_safe_zone_context = {
+		"contract_id": WorldSpatialRulesScript.SAFE_ZONE_CONTEXT_CONTRACT_ID,
+		"map_id": runtime_map_id,
+		"revision": _safe_zone_revision,
+		"generation": _zone_generation,
+		"valid": true,
+		"failure_reason": "",
+		"zones": [],
+		"aabb_ground_gu": Rect2(),
+	}
+	_active_safe_zones = _safe_zone_context["zones"]
+	_safe_zone_candidate_scratch.clear()
+	_safe_zone_query_scratch.clear()
+	_safe_zone_candidate_stamp_serial = 0
+	_invalidate_player_safe_zone_cache()
+
+
+func _compile_active_safe_zones(raw_zones: Variant) -> void:
+	_safe_zone_context = WorldSpatialRulesScript.compile_safe_zone_context(
+		current_map_id,
+		_safe_zone_revision,
+		_zone_generation,
+		raw_zones,
+	)
+	_active_safe_zones = _safe_zone_context.get("zones", []) as Array
+	if not bool(_safe_zone_context.get("valid", false)):
+		# Invalid formal authored geometry is a map-data error. Keep the active
+		# set empty and let all safe-zone consumers fail closed; never reinterpret
+		# a malformed polygon as a circle or infer a shape from screen bounds.
+		_active_safe_zones.clear()
+		_safe_zone_context["zones"] = _active_safe_zones
+	_invalidate_player_safe_zone_cache()
+
+
+func _invalidate_player_safe_zone_cache() -> void:
+	_player_safe_zone_cache = {
+		"player_instance_id": (
+			player.get_instance_id()
+			if is_instance_valid(player)
+			else 0
+		),
+		"map_id": current_map_id,
+		"revision": int(_safe_zone_context.get("revision", -1)),
+		"generation": _zone_generation,
+		"ground_position_gu": Vector2.INF,
+		"inside": false,
+		"valid": false,
+	}
+
+
+func _refresh_player_safe_zone_cache(force := false) -> bool:
+	if not is_instance_valid(player):
+		_invalidate_player_safe_zone_cache()
+		return false
+	var context_valid := bool(_safe_zone_context.get("valid", false))
+	var ground_position_gu := _canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	var context_revision := int(_safe_zone_context.get("revision", -1))
+	var player_instance_id := player.get_instance_id()
+	if (
+		not force
+		and int(_player_safe_zone_cache.get("player_instance_id", 0)) == player_instance_id
+		and int(_player_safe_zone_cache.get("map_id", -1)) == current_map_id
+		and int(_player_safe_zone_cache.get("revision", -1)) == context_revision
+		and int(_player_safe_zone_cache.get("generation", -1)) == _zone_generation
+		and _player_safe_zone_cache.get("ground_position_gu", Vector2.INF) is Vector2
+		and (_player_safe_zone_cache["ground_position_gu"] as Vector2).is_equal_approx(ground_position_gu)
+	):
+		return bool(_player_safe_zone_cache.get("inside", false))
+	var inside := (
+		true
+		if not context_valid
+		else WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			ground_position_gu,
+			_active_safe_zones,
+		)
+	)
+	_player_safe_zone_cache = {
+		"player_instance_id": player_instance_id,
+		"map_id": current_map_id,
+		"revision": context_revision,
+		"generation": _zone_generation,
+		"ground_position_gu": ground_position_gu,
+		"inside": inside,
+		"valid": context_valid and ground_position_gu.is_finite(),
+	}
+	return inside
+
+
+func _player_inside_active_safe_zone() -> bool:
+	return _refresh_player_safe_zone_cache()
+
+
+func _set_player_world_position(position_px: Vector2) -> void:
+	if not is_instance_valid(player):
+		return
+	player.global_position = position_px
+	_refresh_player_safe_zone_cache(true)
+
+
+func _safe_zone_runtime_zones() -> Array:
+	return _active_safe_zones
+
+
+func _safe_zone_context_is_valid() -> bool:
+	return bool(_safe_zone_context.get("valid", false))
+
+
+func safe_zone_runtime_context() -> Dictionary:
+	return _safe_zone_context.duplicate(true)
 
 
 ## R3X-2: the broadphase is the only production candidate source for player
@@ -1269,6 +1407,7 @@ func _process(delta: float) -> void:
 		_streaming_coordinator.poll_once(Engine.get_process_frames())
 	_expire_canonical_fire_charge_if_needed()
 	_constrain_player_foot_to_runtime_ground()
+	_refresh_player_safe_zone_cache()
 	background.set_focus_position(player.global_position)
 	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
@@ -1345,7 +1484,7 @@ func _constrain_player_foot_to_runtime_ground() -> bool:
 	)
 	if corrected.is_equal_approx(player.global_position):
 		return false
-	player.global_position = corrected
+	_set_player_world_position(corrected)
 	player.velocity = Vector2.ZERO
 	PlayerState.update_world_location(
 		current_map_id,
@@ -1690,7 +1829,7 @@ func _change_zone_immediate(zone_name: String, initial := false) -> void:
 			_handle_home_resolution_failure(&"change_zone_bich", home)
 			return
 		_load_zone(str(bich_map.get("name", "比奇省")), initial, bich_map)
-		player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
+		_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 		player.velocity = Vector2.ZERO
 		background.set_focus_position(player.global_position)
 		return
@@ -1743,7 +1882,7 @@ func _travel_to_service_home_immediate(
 		_load_zone(str(map_data.get("name", "比奇省")), initial, map_data)
 		if not red_name and service_map_id == 0:
 			# 服务端(289,618)直接进入700×700原MAP统一坐标，不再压缩到场景中心。
-			player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
+			_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 			player.velocity = Vector2.ZERO
 			background.set_focus_position(player.global_position)
 	else:
@@ -1815,7 +1954,7 @@ func _teleport_to_map_immediate(map_id: int, arrival_anchor_id: String) -> bool:
 	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
 	if current_map_id != map_id:
 		return false
-	player.global_position = arrival.get("position_px", Vector2.ZERO) as Vector2
+	_set_player_world_position(arrival.get("position_px", Vector2.ZERO) as Vector2)
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
 	_record_player_world_location()
@@ -1869,7 +2008,7 @@ func _travel_to_map_immediate(map_id: int) -> bool:
 	var source_map_id := current_map_id
 	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
 	if current_map_id == map_id:
-		player.global_position = route_arrival_position(map_id, source_map_id)
+		_set_player_world_position(route_arrival_position(map_id, source_map_id))
 		player.velocity = Vector2.ZERO
 		background.set_focus_position(player.global_position)
 	return current_map_id == map_id
@@ -1968,7 +2107,7 @@ func _complete_portal_travel(
 			arrival_ground_gu
 		)
 	)
-	player.global_position = arrival_position
+	_set_player_world_position(arrival_position)
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
 	MapPortalTravelGuardScript.finish_arrival(
@@ -2657,6 +2796,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# map 4). Snapshot consumers receive a formal runtime map id instead of
 		# -1, so STRICT_V2 absolute snapshots stay valid.
 		current_map_id = GameData.service_runtime_map_id(0)
+	_begin_safe_zone_context(current_map_id)
 	_monster_terrain_navigation_context = (
 		MonsterTerrainNavigationPolicyScript.build_context(
 			current_map_id,
@@ -2671,23 +2811,24 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		else zone_name
 	)
 	if zone_name == "比奇城":
-		player.global_position = Vector2(0, 80)
+		_set_player_world_position(Vector2(0, 80))
 		_spawn_city_content()
 	elif zone_name == "比奇郊外":
-		player.global_position = Vector2.ZERO
+		_set_player_world_position(Vector2.ZERO)
 		_spawn_outskirts_content()
 	else:
 		if current_map_id == BICH_RUNTIME_MAP_ID:
 			var home := _resolve_bich_home()
 			if bool(home.get("valid", false)):
-				player.global_position = home.get(
+				_set_player_world_position(home.get(
 					"position_px", Vector2.ZERO
-				) as Vector2
+				) as Vector2)
 			else:
 				_handle_home_resolution_failure(&"load_zone_arrival", home)
 		else:
-			player.global_position = Vector2.ZERO
+			_set_player_world_position(Vector2.ZERO)
 		_spawn_database_zone_content(current_map_data)
+	_refresh_player_safe_zone_cache(true)
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
 	_restore_persisted_taoist_main_pet_if_needed()
@@ -2741,7 +2882,7 @@ func _spawn_database_zone_content(map_data: Dictionary) -> void:
 
 
 func _spawn_editor_runtime_content(content: Dictionary) -> void:
-	_active_safe_zones = content.get("safe_areas", []).duplicate(true)
+	_compile_active_safe_zones(content.get("safe_areas", []))
 	var editor_spawn_index := -1
 	for spawn: Dictionary in content.get("spawns", []):
 		editor_spawn_index += 1
@@ -2839,6 +2980,8 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 
 
 func _spawn_authored_map_content(content: Dictionary) -> void:
+	if content.has("safe_areas"):
+		_compile_active_safe_zones(content.get("safe_areas", []))
 	var camp_layout := (
 		_bich_camp_layout if current_map_id == BICH_RUNTIME_MAP_ID else {}
 	)
@@ -2993,13 +3136,64 @@ func _enforce_enemy_outside_bich_safe_zone(enemy: EnemyActor) -> void:
 
 
 func _enforce_bich_safe_zone() -> void:
-	if current_map_id != BICH_RUNTIME_MAP_ID:
+	if (
+		current_map_id != BICH_RUNTIME_MAP_ID
+		or not _safe_zone_context_is_valid()
+		or _active_safe_zones.is_empty()
+		or _combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+	):
 		return
-	for value: Variant in _active_enemy_cache.values():
-		RuntimeDiagnostics.increment_performance_counter(&"safe_zone_global_actor_scans")
-		if not value is EnemyActor or not is_instance_valid(value):
+	_safe_zone_candidate_scratch.clear()
+	_safe_zone_candidate_stamp_serial += 1
+	if _safe_zone_candidate_stamp_serial <= 0:
+		_safe_zone_candidate_stamp_serial = 1
+	for zone_variant: Variant in _active_safe_zones:
+		if not zone_variant is Dictionary:
 			continue
-		_enforce_enemy_outside_bich_safe_zone(value as EnemyActor)
+		var zone := zone_variant as Dictionary
+		var zone_aabb: Variant = zone.get("aabb_ground_gu", null)
+		if not zone_aabb is Rect2:
+			continue
+		_combat_spatial_index.query_enemy_nodes_aabb_into(
+			current_map_id,
+			zone_aabb as Rect2,
+			_safe_zone_query_scratch,
+		)
+		for value: Variant in _safe_zone_query_scratch:
+			if not value is EnemyActor:
+				continue
+			var enemy := value as EnemyActor
+			if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+				continue
+			if enemy._safe_zone_candidate_stamp == _safe_zone_candidate_stamp_serial:
+				continue
+			enemy._safe_zone_candidate_stamp = _safe_zone_candidate_stamp_serial
+			_append_safe_zone_candidate_sorted(enemy)
+	for enemy: EnemyActor in _safe_zone_candidate_scratch:
+		_enforce_enemy_outside_bich_safe_zone(enemy)
+	_safe_zone_query_scratch.clear()
+
+
+func _append_safe_zone_candidate_sorted(enemy: EnemyActor) -> void:
+	var candidate_order := int(
+		enemy.get_meta("spawn_serial", enemy.get_instance_id())
+	)
+	var insert_at := _safe_zone_candidate_scratch.size()
+	while insert_at > 0:
+		var previous := _safe_zone_candidate_scratch[insert_at - 1]
+		var previous_order := int(
+			previous.get_meta("spawn_serial", previous.get_instance_id())
+		)
+		if previous_order < candidate_order:
+			break
+		if (
+			previous_order == candidate_order
+			and previous.get_instance_id() < enemy.get_instance_id()
+		):
+			break
+		insert_at -= 1
+	_safe_zone_candidate_scratch.insert(insert_at, enemy)
 
 
 func _general_shop_stock() -> Array:
@@ -3379,7 +3573,11 @@ func _spawn_enemy(
 	)
 	enemy.set_meta("summoner_spawn_slot", str(context.get("summoner_spawn_slot", "")))
 	enemy.set_meta("zone_generation", _zone_generation)
-	enemy.set_meta("safe_zones", _active_safe_zones.duplicate(true))
+	# All actors on a loaded map share the compiled context. Do not deep-copy
+	# polygon geometry per EnemyActor; realtime checks remain actor-owned while
+	# consuming this map-lifetime immutable value.
+	enemy.set_meta("safe_zone_context", _safe_zone_context)
+	enemy.set_meta("safe_zones", _active_safe_zones)
 	enemy.environment_blocker = background
 	enemy.add_to_group("zone_content")
 	enemy.died.connect(_on_enemy_died)
@@ -4472,6 +4670,7 @@ func _set_auto_target_enabled(enabled: bool) -> void:
 
 
 func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
+	_refresh_player_safe_zone_cache()
 	_validate_locked_target()
 
 
@@ -4571,7 +4770,7 @@ func _finish_death_revival() -> void:
 				"revival_options": _death_revival_context().get("revival_options", []),
 			})
 		return
-	player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
+	_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 	player.velocity = Vector2.ZERO
 	player.complete_death_revival()
 	background.set_focus_position(player.global_position)
@@ -4717,10 +4916,7 @@ func _wild_rush_target_is_eligible(target: EnemyActor) -> bool:
 	):
 		return false
 	if (
-		WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
-			_canonical_screen_px_to_ground_gu(player.global_position),
-			_active_safe_zones
-		)
+		_player_inside_active_safe_zone()
 		or WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
 			_canonical_screen_px_to_ground_gu(target.global_position),
 			_active_safe_zones
@@ -4934,7 +5130,7 @@ func _apply_wild_rush_displacement(
 	# Both destinations were preflighted before either actor is mutated. This is
 	# one coupled transaction: partial single-actor movement is forbidden.
 	target.set_combat_position(target_destination, &"wild_rush_displacement")
-	player.global_position = player_destination
+	_set_player_world_position(player_destination)
 	player.velocity = Vector2.ZERO
 	player.movement_performed.emit(player.global_position, player.facing)
 	return true
@@ -8403,7 +8599,7 @@ func _apply_canonical_displacement_screen_px(
 func _apply_canonical_player_teleport(destination: Vector2) -> bool:
 	if destination == Vector2.ZERO or WorldSpatialRulesScript.environment_blocks_actor_screen_px(background, destination, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
 		return false
-	player.global_position = destination
+	_set_player_world_position(destination)
 	player.velocity = Vector2.ZERO
 	player.movement_performed.emit(player.global_position, player.facing)
 	return true
@@ -10835,7 +11031,7 @@ func _on_scroll_used(item_name: String) -> void:
 		if destination == player.global_position:
 			hud.show_message("附近没有可用传送落点")
 			return
-		player.global_position = destination
+		_set_player_world_position(destination)
 	elif effect == "blessing_oil":
 		hud.show_message(PlayerState.apply_blessing_oil(_rng))
 		return

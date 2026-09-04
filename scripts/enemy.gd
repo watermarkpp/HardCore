@@ -292,6 +292,7 @@ var _target_stable_remaining_seconds := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
 var _crowd_neighbor_scratch: Array[Node] = []
+var _safe_zone_candidate_stamp := 0
 var _background_ai_timer := 0.0
 var _background_wakeup_timer: Timer
 var _background_deep_sleeping := false
@@ -1526,13 +1527,13 @@ func _physics_process(delta: float) -> void:
 		if _movement_step_active:
 			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
-		_request_actor_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	if _update_behavior_summon(delta):
 		if _movement_step_active:
 			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
-		_request_actor_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	# Keep the established retarget/attack/summon timing, but immobilization must
 	# win over the no-target return path after an actor is relocated beyond its
@@ -1548,7 +1549,7 @@ func _physics_process(delta: float) -> void:
 				&"control_anchor"
 			)
 		velocity = Vector2.ZERO
-		_request_actor_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	_control_anchor_ground_gu = Vector2.INF
 	if not is_instance_valid(target):
@@ -1580,7 +1581,7 @@ func _physics_process(delta: float) -> void:
 			return
 	if _movement_step_active:
 		_advance_autonomous_step(physics_delta)
-		_request_actor_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	var contact_distance_gu := _contact_distance_gu_to_target(target)
 	var engagement_distance_gu := maxf(attack_range_gu, contact_distance_gu)
@@ -1595,7 +1596,7 @@ func _physics_process(delta: float) -> void:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	if _pending_attack_time >= 0.0:
 		velocity = Vector2.ZERO
-		_request_actor_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	if dormant:
 		var wake_range_gu := MonsterUnitAdapterScript.range_gu(
@@ -1615,7 +1616,7 @@ func _physics_process(delta: float) -> void:
 			dormant = false
 		else:
 			velocity = Vector2.ZERO
-			_request_actor_redraw()
+			_request_actor_redraw_if_dynamic()
 			return
 	if (
 		target.has_method("is_stealthed")
@@ -1629,7 +1630,7 @@ func _physics_process(delta: float) -> void:
 		_update_area_magic_delivery(delta)
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
-		_request_actor_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	if is_boss and _boss_skill_enabled:
 		_update_boss_skill(delta, distance_gu)
@@ -1698,7 +1699,7 @@ func _physics_process(delta: float) -> void:
 		if fresh_offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 			facing = _screen_facing_for_ground_direction(fresh_offset_ground_gu)
 	if visual != null and visual.is_fallback_attacking():
-		_request_actor_redraw()
+		_request_actor_redraw_if_dynamic()
 
 
 func _handle_safe_zone_target_return(physics_delta: float) -> bool:
@@ -1735,8 +1736,9 @@ func _handle_safe_zone_target_return(physics_delta: float) -> bool:
 		else:
 			velocity = Vector2.ZERO
 			actual_ground_motion_gu = Vector2.ZERO
-	_record_performance_counter(&"actor_redraw_requests")
-	queue_redraw()
+	# Returning from a protected area is a stateful one-shot parent redraw path;
+	# keep it explicit even for formal textured actors.
+	_request_actor_redraw()
 	return true
 
 
@@ -1988,7 +1990,58 @@ static func _packed_vector2_array_from_variant(raw_points: Variant) -> PackedVec
 func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
 	var safe_zone_started_usec := RuntimeDiagnostics.timing_start()
 	RuntimeDiagnostics.increment_performance_counter(&"safe_zone_queries")
-	var zones: Array = get_meta("safe_zones", [])
+	var zones: Array = []
+	var uses_compiled_context := false
+	var context_valid := true
+	var context: Variant = get_meta("safe_zone_context", {})
+	if context is Dictionary and not (context as Dictionary).is_empty():
+		uses_compiled_context = true
+		context_valid = bool((context as Dictionary).get("valid", false))
+		var context_zones: Variant = (context as Dictionary).get("zones", [])
+		if context_zones is Array:
+			zones = context_zones as Array
+	else:
+		var runtime_parent := get_parent()
+		if runtime_parent != null and runtime_parent.has_method("_safe_zone_runtime_zones"):
+			var runtime_zones: Variant = runtime_parent.call(
+				"_safe_zone_runtime_zones"
+			)
+			if runtime_zones is Array:
+				zones = runtime_zones as Array
+			uses_compiled_context = true
+			if runtime_parent.has_method("_safe_zone_context_is_valid"):
+				context_valid = bool(
+					runtime_parent.call("_safe_zone_context_is_valid")
+				)
+		else:
+			var legacy_zones: Variant = get_meta("safe_zones", [])
+			if legacy_zones is Array:
+				zones = legacy_zones as Array
+	if not context_valid:
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return true
+	if zones.is_empty():
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return false
+	if uses_compiled_context:
+		var point_ground_gu := _screen_position_px_to_ground_position_gu(
+			point_screen_px
+		)
+		if not point_ground_gu.is_finite():
+			RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+			return true
+		for zone_variant: Variant in zones:
+			if (
+				zone_variant is Dictionary
+				and WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(
+					point_ground_gu,
+					zone_variant as Dictionary,
+				)
+			):
+				RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+				return true
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return false
 	for zone_variant: Variant in zones:
 		if not zone_variant is Dictionary:
 			continue
@@ -1999,19 +2052,23 @@ func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
 		)
 		var has_formal_shape := zone.has("radius_gu")
 		if str(zone.get("shape", "circle")) == "polygon":
+			var polygon_variant: Variant = zone.get("polygon_ground_gu", [])
 			has_formal_shape = (
-				_packed_vector2_array_from_variant(zone.get("polygon_ground_gu", [])).size()
-				>= 3
+				(
+					polygon_variant is PackedVector2Array
+					and (polygon_variant as PackedVector2Array).size() >= 3
+				)
+				or (
+					polygon_variant is Array
+					and (polygon_variant as Array).size() >= 3
+				)
 			)
 		if point_ground_gu == Vector2.INF or not has_formal_shape:
 			continue
-		var formal_zone := zone
-		if str(zone.get("shape", "circle")) == "polygon":
-			formal_zone = zone.duplicate(false)
-			formal_zone["polygon_ground_gu"] = _packed_vector2_array_from_variant(
-				zone.get("polygon_ground_gu", [])
-			)
-		if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(point_ground_gu, formal_zone):
+		if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(
+			point_ground_gu,
+			zone,
+		):
 			RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
 			return true
 	RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
@@ -4827,8 +4884,7 @@ func _return_to_spawn(
 	else:
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
-	_record_performance_counter(&"actor_redraw_requests")
-	queue_redraw()
+	_request_actor_redraw_if_dynamic()
 
 
 func _draw() -> void:
@@ -5009,6 +5065,19 @@ func _refresh_overhead_health() -> void:
 func _request_actor_redraw() -> void:
 	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
+
+
+## Parent CanvasItem redraw is only needed when this actor owns procedural
+## fallback geometry. Final textured actors keep their Sprite2D/MonsterVisual
+## redraw ownership; stateful one-shot callers above still use the explicit
+## _request_actor_redraw() path.
+func _request_actor_redraw_if_dynamic() -> void:
+	var has_formal_visual := visual != null and visual.uses_final_art()
+	var draws_procedural_fallback := should_draw_synthetic_ground_shadow()
+	var fallback_attack_active := visual != null and visual.is_fallback_attacking()
+	if has_formal_visual or (not draws_procedural_fallback and not fallback_attack_active):
+		return
+	_request_actor_redraw()
 
 
 func poison_indicator_anchor_y() -> float:
