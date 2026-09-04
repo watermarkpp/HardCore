@@ -142,6 +142,19 @@ const RANDOM_TELEPORT_MAX_DISTANCE_GU := 16.25
 const RANDOM_TELEPORT_ACTOR_CLEARANCE_GU := 0.25
 const CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU := 2.0
 const CANONICAL_SUMMON_ACTOR_CLEARANCE_GU := 0.05
+const DEATH_DROP_WORK_BUDGET_USEC := 1200
+const DEATH_JOBS_MAX_PER_FRAME := 4
+const DROP_NODES_MAX_PER_FRAME := 8
+const DEATH_QUEUE_MAX_RETRIES := 3
+const DEATH_QUEUE_RETRY_DELAY_MSEC := 100
+const DEATH_STATE_QUEUED := "QUEUED"
+const DEATH_STATE_SETTLING := "SETTLING"
+const DEATH_STATE_PLANNED := "PLANNED"
+const DEATH_STATE_MATERIALIZING := "MATERIALIZING"
+const DEATH_STATE_COMMITTED := "COMMITTED"
+const DEATH_STATE_RETRY := "RETRY"
+const DEATH_STATE_FAILED := "FAILED"
+const DEATH_STATE_CANCELLED := "CANCELLED"
 const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
 	"wizard.hellfire",
 	"wizard.hell_lightning",
@@ -315,6 +328,13 @@ var _pending_enemy_deaths: Array[Dictionary] = []
 var _enemy_death_flush_queued := false
 var _enemy_death_pipeline_running := false
 var _enemy_death_target_refresh_pending := false
+var _enemy_death_sequence := 0
+var _enemy_death_terminal_jobs: Array[Dictionary] = []
+var _death_settled_jobs_last_batch := 0
+var _death_drop_work_budget_usec_override := -1
+var _death_jobs_max_per_frame_override := -1
+var _drop_nodes_max_per_frame_override := -1
+var _test_force_loot_materialization_failure_count := 0
 var _pending_loot_collections: Array = []
 var _loot_collection_flush_queued := false
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
@@ -1404,6 +1424,10 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	var process_started_usec := RuntimeDiagnostics.timing_start()
+	# R3X-4: advance deferred death settlement/materialization in bounded main
+	# thread slices.  The queue is deliberately pumped before ordinary world
+	# presentation so a non-empty queue cannot starve behind unrelated UI work.
+	_pump_enemy_death_work_queue()
 	UIItemTextureCacheScript.poll_threaded_paths()
 	# Q2-D: the single formal MonsterVisual streaming poll (once per frame).
 	if _streaming_coordinator != null:
@@ -2769,6 +2793,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		if map_data.is_empty() or int(map_data.get("mapId", -1)) == current_map_id:
 			return
 	_zone_generation += 1
+	_cancel_pending_enemy_deaths_for_generation_change()
 	_active_safe_zones.clear()
 	_active_enemy_cache.clear()
 	_active_boss_cache.clear()
@@ -10518,7 +10543,7 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
-	var queued_at_usec := Time.get_ticks_usec()
+	var queued_at_usec := RuntimeDiagnostics.timing_start()
 	if _combat_spatial_index != null:
 		_combat_spatial_index.unregister(
 			int(enemy.get_meta("spawn_serial", 0))
@@ -10540,8 +10565,9 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 		_enemy_death_target_refresh_pending = true
 	var death_position := enemy.global_position
 	var monster_id := _strict_runtime_monster_id(monster_data)
-	var death_runtime_snapshot: Dictionary = enemy.get_meta(
-		"death_runtime_snapshot", {}
+	var raw_snapshot: Variant = enemy.get_meta("death_runtime_snapshot", {})
+	var death_runtime_snapshot: Dictionary = (
+		raw_snapshot as Dictionary if raw_snapshot is Dictionary else {}
 	)
 	if int(death_runtime_snapshot.get("monster_id", -1)) != monster_id:
 		var canonical_monster := GameData.get_monster_by_id(monster_id)
@@ -10549,178 +10575,485 @@ func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
 			canonical_monster
 		)
 	if death_runtime_snapshot.is_empty():
-		if (
-			_enemy_death_target_refresh_pending
-			and not _enemy_death_flush_queued
-			and not _enemy_death_pipeline_running
-		):
-			_enemy_death_flush_queued = true
-			call_deferred("_flush_enemy_deaths", true)
+		_schedule_enemy_death_work()
 		return
+	var raw_spawn_position: Variant = enemy.get_meta(
+		"spawn_position", death_position
+	)
+	var spawn_position := (
+		raw_spawn_position as Vector2
+		if raw_spawn_position is Vector2
+		else death_position
+	)
+	var raw_spawn_context: Variant = enemy.get_meta("spawn_context", {})
+	var spawn_context: Dictionary = (
+		raw_spawn_context.duplicate(true)
+		if raw_spawn_context is Dictionary
+		else {}
+	)
+	_enemy_death_sequence += 1
+	var sequence := _enemy_death_sequence
+	var origin_map_id := current_map_id
+	var origin_generation := _zone_generation
+	var canonical_snapshot := death_runtime_snapshot.duplicate(true)
+	var canonical_monster := {
+		"monster_id": monster_id,
+		"classification": str(canonical_snapshot.get("classification", "")),
+		"spawn_classification": str(
+			canonical_snapshot.get("spawn_classification", "")
+		),
+	}
 	_pending_enemy_deaths.append({
+		"death_key": "death:%d:%d:%d:%d" % [
+			origin_map_id,
+			origin_generation,
+			sequence,
+			enemy.get_instance_id(),
+		],
+		"sequence": sequence,
+		"state": DEATH_STATE_QUEUED,
+		"origin": {
+			"map_id": origin_map_id,
+			"generation": origin_generation,
+		},
+		"origin_map_id": origin_map_id,
+		"origin_generation": origin_generation,
 		"queued_at_usec": queued_at_usec,
 		"death_position": death_position,
-		"spawn_position": enemy.get_meta("spawn_position", death_position),
-		"was_boss": enemy.get_meta("spawn_is_boss", false),
-		"generation": enemy.get_meta("zone_generation", _zone_generation),
-		"configured_respawn": enemy.get_meta("respawn_seconds", -1.0),
-		"respawn_enabled": enemy.get_meta("respawn_enabled", true),
-		# Keep the already-owned metadata reference until the deferred resolver.
-		# It is copied only if that resolver needs to extend the respawn context.
-		"spawn_context": enemy.get_meta("spawn_context", {}),
+		"spawn_position": spawn_position,
+		"monster_snapshot": canonical_snapshot,
+		"canonical_monster": canonical_monster,
 		"monster_id": monster_id,
-		"canonical_monster": {
-			"monster_id": monster_id,
-			"classification": str(
-				death_runtime_snapshot.get("classification", "")
+		"monster_name": str(canonical_snapshot.get("canonical_name", "")),
+		"experience": int(canonical_snapshot.get("experience", 0)),
+		"respawn": {
+			"enabled": bool(enemy.get_meta("respawn_enabled", true)),
+			"configured_seconds": float(
+				enemy.get_meta("respawn_seconds", -1.0)
 			),
-			"spawn_classification": str(
-				death_runtime_snapshot.get("spawn_classification", "")
-			),
+			"was_boss": bool(enemy.get_meta("spawn_is_boss", false)),
+			"spawn_context": spawn_context,
 		},
-		"monster_name": str(
-			death_runtime_snapshot.get("canonical_name", "")
-		),
-		"experience": int(death_runtime_snapshot.get("experience", 0)),
+		"was_boss": bool(enemy.get_meta("spawn_is_boss", false)),
+		"generation": origin_generation,
+		"configured_respawn": float(enemy.get_meta("respawn_seconds", -1.0)),
+		"respawn_enabled": bool(enemy.get_meta("respawn_enabled", true)),
+		"spawn_context": spawn_context,
+		"drop_plan": {},
+		"transaction_result": {},
+		"respawn_preparation": {},
+		"retry_count": 0,
+		"retry_at_msec": 0,
+		"materialization_retry_count": 0,
+		"materialized_node_index": 0,
+		"materialized_node_count": 0,
+		"respawn_scheduled": false,
+		"last_error": "",
 	})
 	RuntimeDiagnostics.record_performance_max(
 		&"drop_queue_depth_max",
 		float(_pending_enemy_deaths.size()),
 	)
-	if not _enemy_death_flush_queued and not _enemy_death_pipeline_running:
-		_enemy_death_flush_queued = true
-		call_deferred("_flush_enemy_deaths", true)
+	_schedule_enemy_death_work()
+
+
+func _schedule_enemy_death_work() -> void:
+	if _enemy_death_flush_queued or _enemy_death_pipeline_running:
+		return
+	_enemy_death_flush_queued = true
+	call_deferred("_flush_enemy_deaths", true)
 
 
 func _flush_enemy_deaths(spread_across_frames := true) -> void:
-	if _enemy_death_pipeline_running:
-		return
-	_enemy_death_pipeline_running = true
 	_enemy_death_flush_queued = false
-	if spread_across_frames and is_inside_tree():
-		# Let MonsterVisual present the first death frame before persistence or
-		# drop-node construction can consume the next frame's main-thread budget.
-		await get_tree().process_frame
-	while not _pending_enemy_deaths.is_empty():
-		if _enemy_death_target_refresh_pending:
-			_enemy_death_target_refresh_pending = false
-			RuntimeDiagnostics.increment_performance_counter(&"death_target_refresh_count")
-			_refresh_target_highlights()
-			_update_target_hud()
-		var profile_started_usec := Time.get_ticks_usec()
-		var pending := _pending_enemy_deaths
-		_pending_enemy_deaths = []
-		RuntimeDiagnostics.increment_performance_counter(&"death_batch_count")
-		RuntimeDiagnostics.record_performance_max(
-			&"death_batch_size_max",
-			float(pending.size()),
-		)
-		if not pending.is_empty():
-			var oldest_queued_usec := int(pending[0].get("queued_at_usec", 0))
-			RuntimeDiagnostics.record_performance_max(
-				&"drop_queue_oldest_age_ms",
-				float(RuntimeDiagnostics.timing_elapsed_usec(oldest_queued_usec)) / 1000.0,
+	if spread_across_frames:
+		_pump_enemy_death_work_queue()
+		return
+	# Tests and a few synchronous compatibility callers explicitly request the
+	# old completion boundary.  Use the same state machine without yielding.
+	var guard := 0
+	while not _pending_enemy_deaths.is_empty() and guard < 4096:
+		var progressed := _pump_enemy_death_work_queue(true)
+		guard += 1
+		if not progressed and not _pending_enemy_deaths.is_empty():
+			# A future retry deadline is ignored by the synchronous compatibility
+			# path; a malformed item is terminally observable rather than silently
+			# stranded in the queue.
+			var head: Dictionary = _pending_enemy_deaths[0]
+			_set_enemy_death_state(head, DEATH_STATE_FAILED)
+			head["last_error"] = "death_queue_no_progress"
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_failed_count"
 			)
-		var settlements: Array = []
-		var respawn_state_before: Dictionary = (
-			PlayerState.monster_respawn_state_for_restore()
-		)
-		for death: Dictionary in pending:
-			death["respawn_preparation"] = _prepare_queued_enemy_respawn(death)
-			settlements.append({
-				"monster_name": str(death.get("monster_name", "")),
-				"experience": int(death.get("experience", 0)),
-			})
-		var settlement_started_usec := Time.get_ticks_usec()
-		var settlement := PlayerState.record_kills_and_experience_batch(settlements)
-		if not bool(settlement.get("success", false)):
-			# Keep the respawn state in the same atomic save boundary as kill,
-			# quest and experience settlement.
-			PlayerState.world_monster_respawn_state = respawn_state_before
-		var settlement_finished_usec := Time.get_ticks_usec()
-		var resolve_active_usec := 0
-		var death_profiles: Array = []
-		var total_item_count := 0
-		var total_gold_drop_count := 0
-		if spread_across_frames and is_inside_tree():
-			await get_tree().process_frame
-		for index: int in range(pending.size()):
-			var death_profile := await _resolve_queued_enemy_death(
-				pending[index], spread_across_frames
-			)
-			resolve_active_usec += roundi(
-				float(death_profile.get("total_ms", 0.0)) * 1000.0
-			)
-			death_profiles.append(death_profile)
-			total_item_count += int(death_profile.get("item_count", 0))
-			total_gold_drop_count += int(death_profile.get("gold_drop_count", 0))
-			if (
-				spread_across_frames
-				and is_inside_tree()
-				and index + 1 < pending.size()
-			):
-				await get_tree().process_frame
-		RuntimeDiagnostics.increment_performance_counter(&"death_resolve_active_usec", resolve_active_usec)
-		var finished_usec := Time.get_ticks_usec()
-		var settlement_window_usec := maxi(0, settlement_finished_usec - settlement_started_usec)
-		RuntimeDiagnostics.increment_performance_counter(&"death_settlement_usec", settlement_window_usec)
-		if CombatDiagnosticLogScript.capture_enabled():
-			var settlement_usec := (
-				settlement_finished_usec - settlement_started_usec
-			)
-			print("[LootDeathBatchProfile] ", JSON.stringify({
-				"death_count": pending.size(),
-				"settlement_ms": float(settlement_usec) / 1000.0,
-				"resolve_ms": float(resolve_active_usec) / 1000.0,
-				# total_ms remains active main-thread work so profiles stay
-				# comparable after the resolver is distributed across frames.
-				"total_ms": float(settlement_usec + resolve_active_usec) / 1000.0,
-				"pipeline_elapsed_ms": float(finished_usec - profile_started_usec) / 1000.0,
-				"spread_across_frames": spread_across_frames,
-				"oldest_queue_delay_ms": (
-					float(profile_started_usec - int(pending[0].get("queued_at_usec", profile_started_usec))) / 1000.0
-					if not pending.is_empty()
-					else 0.0
-				),
-				"item_count": total_item_count,
-				"gold_drop_count": total_gold_drop_count,
-				"settlement": settlement,
-				"deaths": death_profiles,
-			}))
-	# A malformed death snapshot can still clear a selected target without
-	# entering the settlement queue. Never leave its presentation refresh flag
-	# stranded merely because no further death was queued.
+			_compact_enemy_death_queue()
+
+
+func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
+	if _enemy_death_pipeline_running:
+		return false
+	_enemy_death_pipeline_running = true
+	var progressed := false
+	var slice_started_usec := RuntimeDiagnostics.timing_start()
+	var budget_usec := _death_drop_work_budget_usec()
+	var jobs_limit := _death_jobs_max_per_frame()
+	var nodes_limit := _drop_nodes_max_per_frame()
+	if force_synchronous:
+		budget_usec = 2147483647
+		jobs_limit = 2147483647
+		nodes_limit = 2147483647
 	if _enemy_death_target_refresh_pending:
 		_enemy_death_target_refresh_pending = false
 		RuntimeDiagnostics.increment_performance_counter(&"death_target_refresh_count")
-		_refresh_target_highlights()
-		_update_target_hud()
+		if is_inside_tree():
+			_refresh_target_highlights()
+			if is_instance_valid(hud):
+				_update_target_hud()
+		progressed = true
+	_compact_enemy_death_queue()
+	if _pending_enemy_deaths.is_empty():
+		_enemy_death_pipeline_running = false
+		return progressed
+	var jobs_processed := 0
+	var nodes_processed := 0
+	if str(_pending_enemy_deaths[0].get("state", "")) == DEATH_STATE_RETRY:
+		var retry_item: Dictionary = _pending_enemy_deaths[0]
+		if force_synchronous or _death_retry_ready(retry_item):
+			retry_item["retry_at_msec"] = 0
+			_set_enemy_death_state(retry_item, DEATH_STATE_QUEUED)
+			progressed = true
+	if str(_pending_enemy_deaths[0].get("state", "")) == DEATH_STATE_QUEUED:
+		if force_synchronous or _death_retry_ready(_pending_enemy_deaths[0]):
+			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed):
+				jobs_processed += _death_settled_jobs_last_batch
+				progressed = true
+				_compact_enemy_death_queue()
+	while not _pending_enemy_deaths.is_empty():
+		if (
+			not force_synchronous
+			and progressed
+			and RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) >= budget_usec
+		):
+			break
+		var death: Dictionary = _pending_enemy_deaths[0]
+		var state := str(death.get("state", ""))
+		if state in [DEATH_STATE_FAILED, DEATH_STATE_CANCELLED, DEATH_STATE_COMMITTED]:
+			_compact_enemy_death_queue()
+			progressed = true
+			continue
+		if state == DEATH_STATE_RETRY:
+			if not force_synchronous and not _death_retry_ready(death):
+				break
+			death["retry_at_msec"] = 0
+			_set_enemy_death_state(death, DEATH_STATE_QUEUED)
+			progressed = true
+			continue
+		if state == DEATH_STATE_QUEUED:
+			if not force_synchronous and not _death_retry_ready(death):
+				break
+			if jobs_processed >= jobs_limit:
+				break
+			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed):
+				jobs_processed += _death_settled_jobs_last_batch
+				progressed = true
+				_compact_enemy_death_queue()
+				continue
+			break
+		if state == DEATH_STATE_SETTLING:
+			if jobs_processed >= jobs_limit:
+				break
+			jobs_processed += 1
+			if _plan_enemy_death_item(death):
+				progressed = true
+				continue
+			break
+		if state == DEATH_STATE_PLANNED:
+			if jobs_processed >= jobs_limit:
+				break
+			_set_enemy_death_state(death, DEATH_STATE_MATERIALIZING)
+			jobs_processed += 1
+			progressed = true
+		elif state == DEATH_STATE_MATERIALIZING:
+			if jobs_processed >= jobs_limit:
+				break
+			if not force_synchronous and not _death_retry_ready(death):
+				break
+			jobs_processed += 1
+		var materialization := _materialize_enemy_death_nodes(
+			death,
+			slice_started_usec,
+			budget_usec,
+			nodes_limit - nodes_processed,
+			force_synchronous,
+		)
+		nodes_processed += int(materialization.get("nodes", 0))
+		if bool(materialization.get("progressed", false)):
+			progressed = true
+		if bool(materialization.get("complete", false)):
+			if str(death.get("state", "")) == DEATH_STATE_MATERIALIZING:
+				_commit_enemy_death_item(death)
+			elif str(death.get("state", "")) == DEATH_STATE_FAILED:
+				# The XP/quest/respawn transaction already committed before node
+				# materialization. A terminal node failure must not strand a valid
+				# respawn, but it must never retry or duplicate a reward node.
+				_schedule_queued_enemy_respawn(death)
+			progressed = true
+			_compact_enemy_death_queue()
+			continue
+		break
+	if progressed:
+		RuntimeDiagnostics.increment_performance_counter(&"death_work_frames")
+		RuntimeDiagnostics.increment_performance_counter(&"drop_work_frames")
+	RuntimeDiagnostics.record_performance_max(
+		&"death_jobs_per_frame_max", float(jobs_processed)
+	)
+	RuntimeDiagnostics.record_performance_max(
+		&"drop_nodes_per_frame_max", float(nodes_processed)
+	)
 	_enemy_death_pipeline_running = false
-	if not _pending_enemy_deaths.is_empty() and not _enemy_death_flush_queued:
-		_enemy_death_flush_queued = true
-		call_deferred("_flush_enemy_deaths", spread_across_frames)
+	return progressed
 
 
-func _resolve_queued_enemy_death(
-	death: Dictionary,
-	spread_across_frames := false
-) -> Dictionary:
-	var started_usec := Time.get_ticks_usec()
-	var yielded_usec := 0
+func _death_drop_work_budget_usec() -> int:
+	if _death_drop_work_budget_usec_override >= 0:
+		return maxi(1, _death_drop_work_budget_usec_override)
+	return maxi(
+		1,
+		int(ProjectSettings.get_setting(
+			"hardcore/performance/death_drop_work_budget_usec",
+			DEATH_DROP_WORK_BUDGET_USEC,
+		)),
+	)
+
+
+func _death_jobs_max_per_frame() -> int:
+	if _death_jobs_max_per_frame_override >= 0:
+		return maxi(1, _death_jobs_max_per_frame_override)
+	return maxi(
+		1,
+		int(ProjectSettings.get_setting(
+			"hardcore/performance/death_jobs_max_per_frame",
+			DEATH_JOBS_MAX_PER_FRAME,
+		)),
+	)
+
+
+func _drop_nodes_max_per_frame() -> int:
+	if _drop_nodes_max_per_frame_override >= 0:
+		return maxi(1, _drop_nodes_max_per_frame_override)
+	return maxi(
+		1,
+		int(ProjectSettings.get_setting(
+			"hardcore/performance/drop_nodes_max_per_frame",
+			DROP_NODES_MAX_PER_FRAME,
+		)),
+	)
+
+
+func set_death_drop_work_limits_for_test(
+	budget_usec: int,
+	jobs_per_frame: int,
+	nodes_per_frame: int,
+) -> bool:
+	if not PlayerState.test_mode:
+		return false
+	_death_drop_work_budget_usec_override = budget_usec
+	_death_jobs_max_per_frame_override = jobs_per_frame
+	_drop_nodes_max_per_frame_override = nodes_per_frame
+	return true
+
+
+func clear_death_drop_work_limits_for_test() -> void:
+	_death_drop_work_budget_usec_override = -1
+	_death_jobs_max_per_frame_override = -1
+	_drop_nodes_max_per_frame_override = -1
+
+
+func set_loot_materialization_failure_count_for_test(count: int) -> bool:
+	if not PlayerState.test_mode:
+		return false
+	_test_force_loot_materialization_failure_count = maxi(0, count)
+	return true
+
+
+func death_work_queue_snapshot() -> Dictionary:
+	return {
+		"pending": _pending_enemy_deaths.duplicate(true),
+		"terminal": _enemy_death_terminal_jobs.duplicate(true),
+	}
+
+
+func _death_retry_ready(death: Dictionary) -> bool:
+	return Time.get_ticks_msec() >= int(death.get("retry_at_msec", 0))
+
+
+func _set_enemy_death_state(death: Dictionary, next_state: String) -> void:
+	var previous := str(death.get("state", ""))
+	if previous == next_state:
+		return
+	death["state"] = next_state
+	RuntimeDiagnostics.increment_performance_counter(
+		&"death_queue_state_transitions"
+	)
+
+
+func _compact_enemy_death_queue() -> void:
+	if _pending_enemy_deaths.is_empty():
+		return
+	var retained: Array[Dictionary] = []
+	for death: Dictionary in _pending_enemy_deaths:
+		var state := str(death.get("state", ""))
+		if state in [DEATH_STATE_FAILED, DEATH_STATE_CANCELLED, DEATH_STATE_COMMITTED]:
+			_enemy_death_terminal_jobs.append(death.duplicate(true))
+		else:
+			retained.append(death)
+	_pending_enemy_deaths = retained
+
+
+func _death_origin_matches_current(death: Dictionary) -> bool:
+	return (
+		int(death.get("origin_map_id", -1)) == current_map_id
+		and int(death.get("origin_generation", -1)) == _zone_generation
+	)
+
+
+func _cancel_pending_enemy_deaths_for_generation_change() -> void:
+	if _pending_enemy_deaths.is_empty():
+		return
+	for death: Dictionary in _pending_enemy_deaths:
+		if int(death.get("origin_generation", -1)) == _zone_generation:
+			continue
+		death["last_error"] = "origin_map_generation_changed_before_settlement"
+		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_cancelled_count"
+		)
+	_compact_enemy_death_queue()
+
+
+
+func _settle_pending_enemy_death_batch(
+	max_deaths := DEATH_JOBS_MAX_PER_FRAME,
+) -> bool:
+	_death_settled_jobs_last_batch = 0
+	if _pending_enemy_deaths.is_empty():
+		return false
+	if max_deaths <= 0:
+		return false
+	var first: Dictionary = _pending_enemy_deaths[0]
+	if str(first.get("state", "")) != DEATH_STATE_QUEUED:
+		return false
+	if not _death_retry_ready(first):
+		return false
+	var batch: Array[Dictionary] = []
+	for death: Dictionary in _pending_enemy_deaths:
+		if batch.size() >= max_deaths:
+			break
+		if str(death.get("state", "")) != DEATH_STATE_QUEUED:
+			break
+		if not _death_retry_ready(death):
+			break
+		_set_enemy_death_state(death, DEATH_STATE_SETTLING)
+		batch.append(death)
+	if batch.is_empty():
+		return false
+	_death_settled_jobs_last_batch = batch.size()
+	RuntimeDiagnostics.increment_performance_counter(&"death_batch_count")
+	RuntimeDiagnostics.record_performance_max(
+		&"death_batch_size_max", float(batch.size())
+	)
+	var oldest_queued_usec := int(batch[0].get("queued_at_usec", 0))
+	RuntimeDiagnostics.record_performance_max(
+		&"drop_queue_oldest_age_ms",
+		float(RuntimeDiagnostics.timing_elapsed_usec(oldest_queued_usec)) / 1000.0,
+	)
+	var settlements: Array = []
+	var respawn_state_before: Dictionary = (
+		PlayerState.monster_respawn_state_for_restore()
+	)
+	for death: Dictionary in batch:
+		var respawn_preparation := _prepare_queued_enemy_respawn(death)
+		death["respawn_preparation"] = respawn_preparation
+		var respawn: Dictionary = death.get("respawn", {})
+		respawn["preparation"] = respawn_preparation
+		death["respawn"] = respawn
+		settlements.append({
+			"monster_name": str(death.get("monster_name", "")),
+			"experience": int(death.get("experience", 0)),
+		})
+	var settlement_started_usec := RuntimeDiagnostics.timing_start()
+	var settlement := PlayerState.record_kills_and_experience_batch(
+		settlements,
+		true,
+	)
+	RuntimeDiagnostics.record_timing_usec(
+		&"death_settlement_usec", settlement_started_usec
+	)
+	if not bool(settlement.get("success", false)):
+		# Respawn state, quest progress and experience are one save boundary. A
+		# failed save restores the pre-attempt state, and the death item remains
+		# observable for retry/terminal handling; no drop roll is performed.
+		PlayerState.world_monster_respawn_state = respawn_state_before
+		for death: Dictionary in batch:
+			death["transaction_result"] = settlement.duplicate(true)
+			death["last_error"] = str(settlement.get("reason", "save_failed"))
+			death["retry_count"] = int(death.get("retry_count", 0)) + 1
+			if int(death["retry_count"]) >= DEATH_QUEUE_MAX_RETRIES:
+				_set_enemy_death_state(death, DEATH_STATE_FAILED)
+				RuntimeDiagnostics.increment_performance_counter(
+					&"death_queue_failed_count"
+				)
+			else:
+				death["retry_at_msec"] = (
+					Time.get_ticks_msec() + DEATH_QUEUE_RETRY_DELAY_MSEC
+				)
+				_set_enemy_death_state(death, DEATH_STATE_RETRY)
+				RuntimeDiagnostics.increment_performance_counter(
+					&"death_queue_retry_count"
+				)
+		_compact_enemy_death_queue()
+		return true
+	for death: Dictionary in batch:
+		death["transaction_result"] = settlement.duplicate(true)
+		_plan_enemy_death_item(death)
+	return true
+
+
+func _plan_enemy_death_item(death: Dictionary) -> bool:
+	if not _death_origin_matches_current(death):
+		death["last_error"] = "origin_map_generation_mismatch_before_roll"
+		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_cancelled_count"
+		)
+		return true
+	var started_usec := RuntimeDiagnostics.timing_start()
 	var monster_id := int(death.get("monster_id", -1))
-	var canonical_monster: Dictionary = death.get("canonical_monster", {})
-	var death_position: Vector2 = death.get("death_position", Vector2.ZERO)
-	var spawn_position: Vector2 = death.get("spawn_position", death_position)
-	var was_boss := bool(death.get("was_boss", false))
-	var generation := int(death.get("generation", _zone_generation))
-	var configured_respawn := float(death.get("configured_respawn", -1.0))
-	var respawn_enabled := bool(death.get("respawn_enabled", true))
-	var spawn_context: Dictionary = (death.get("spawn_context", {}) as Dictionary).duplicate(true)
 	RuntimeDiagnostics.increment_performance_counter(&"drop_roll_count")
-	var drop_roll_started_usec := RuntimeDiagnostics.timing_start()
 	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, false)
-	var roll_finished_usec := Time.get_ticks_usec()
-	RuntimeDiagnostics.record_timing_usec(&"drop_roll_usec", drop_roll_started_usec)
+	var death_position: Vector2 = death.get("death_position", Vector2.ZERO)
+	var requests: Array[Dictionary] = []
+	var raw_items: Variant = drop_roll.get("items", [])
+	if raw_items is Array:
+		for item_name: String in raw_items:
+			requests.append({
+				"item_name": item_name,
+				"position": death_position + Vector2(
+					_rng.randf_range(-34, 34),
+					_rng.randf_range(-18, 18)
+				),
+			})
+	var raw_gold_drops: Variant = drop_roll.get("gold_drops", [])
+	if raw_gold_drops is Array:
+		for raw_gold: Variant in raw_gold_drops:
+			var amount := int(raw_gold)
+			if amount > 0:
+				requests.append({
+					"gold_amount": amount,
+					"position": death_position + Vector2(
+						_rng.randf_range(-34, 34),
+						_rng.randf_range(-18, 18)
+					),
+				})
 	var overflow_discarded_count := int(
 		drop_roll.get("overflow_discarded_count", 0)
 	)
@@ -10749,91 +11082,207 @@ func _resolve_queued_enemy_death(
 					overflow_telemetry.get("protected_overflow_count", 0)
 				),
 			})
-	var ground_drop_requests: Array[Dictionary] = []
-	for item_name: String in drop_roll.get("items", []):
-		ground_drop_requests.append({
-			"item_name": item_name,
-			"position": death_position + Vector2(
-				_rng.randf_range(-34, 34),
-				_rng.randf_range(-18, 18)
-			),
-		})
-	for raw_gold: Variant in drop_roll.get("gold_drops", []):
-		var amount := int(raw_gold)
-		if amount > 0:
-			ground_drop_requests.append({
-				"gold_amount": amount,
-				"position": death_position + Vector2(
-					_rng.randf_range(-34, 34),
-					_rng.randf_range(-18, 18)
-				),
-			})
-	for drop_index: int in range(ground_drop_requests.size()):
-		var request: Dictionary = ground_drop_requests[drop_index]
+	death["drop_plan"] = {
+		"roll": drop_roll.duplicate(true),
+		"requests": requests,
+		"next_request_index": 0,
+		"item_count": raw_items.size() if raw_items is Array else 0,
+		"gold_drop_count": raw_gold_drops.size() if raw_gold_drops is Array else 0,
+		"materialized": false,
+	}
+	death["materialized_node_index"] = 0
+	death["materialized_node_count"] = 0
+	death["materialization_retry_count"] = 0
+	_set_enemy_death_state(death, DEATH_STATE_PLANNED)
+	RuntimeDiagnostics.increment_performance_counter(
+		&"drop_request_count", requests.size()
+	)
+	RuntimeDiagnostics.record_timing_usec(&"drop_roll_usec", started_usec)
+	return true
+
+
+func _materialize_enemy_death_nodes(
+	death: Dictionary,
+	slice_started_usec: int,
+	budget_usec: int,
+	node_budget: int,
+	force_synchronous: bool,
+) -> Dictionary:
+	var raw_plan: Variant = death.get("drop_plan", {})
+	if not raw_plan is Dictionary:
+		death["last_error"] = "drop_plan_invalid"
+		_set_enemy_death_state(death, DEATH_STATE_FAILED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_materialization_failures"
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_failed_count"
+		)
+		return {"complete": true, "progressed": true, "nodes": 0}
+	var plan: Dictionary = raw_plan
+	var raw_requests: Variant = plan.get("requests", [])
+	if not raw_requests is Array:
+		death["last_error"] = "drop_plan_requests_invalid"
+		_set_enemy_death_state(death, DEATH_STATE_FAILED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_materialization_failures"
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_failed_count"
+		)
+		return {"complete": true, "progressed": true, "nodes": 0}
+	if not _death_origin_matches_current(death):
+		death["last_error"] = "origin_map_generation_mismatch_after_roll"
+		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_cancelled_count"
+		)
+		return {"complete": true, "progressed": true, "nodes": 0}
+	var requests: Array = raw_requests
+	var request_index := int(death.get("materialized_node_index", 0))
+	var nodes := 0
+	var progressed := false
+	while request_index < requests.size():
+		if node_budget <= nodes:
+			break
+		if (
+			not force_synchronous
+			and progressed
+			and RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) >= budget_usec
+		):
+			break
+		if not _death_origin_matches_current(death):
+			death["last_error"] = "origin_map_generation_mismatch_after_roll"
+			_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_cancelled_count"
+			)
+			return {"complete": true, "progressed": true, "nodes": nodes}
+		var request_value: Variant = requests[request_index]
+		if not request_value is Dictionary:
+			death["last_error"] = "drop_request_invalid"
+			_set_enemy_death_state(death, DEATH_STATE_FAILED)
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_materialization_failures"
+			)
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_failed_count"
+			)
+			return {"complete": true, "progressed": true, "nodes": nodes}
+		var request: Dictionary = request_value
+		var materialized := false
 		if request.has("gold_amount"):
-			_spawn_gold_loot(
+			materialized = _spawn_gold_loot(
 				int(request.get("gold_amount", 0)),
-				request.get("position", death_position)
+				request.get("position", death.get("death_position", Vector2.ZERO)),
 			)
 		else:
-			_spawn_loot(
+			materialized = _spawn_loot(
 				str(request.get("item_name", "")),
-				request.get("position", death_position)
+				request.get("position", death.get("death_position", Vector2.ZERO)),
 			)
-		if (
-			spread_across_frames
-			and is_inside_tree()
-			and drop_index + 1 < ground_drop_requests.size()
-		):
-			RuntimeDiagnostics.increment_performance_counter(&"drop_work_frames")
-			var yield_started_usec := Time.get_ticks_usec()
-			await get_tree().process_frame
-			yielded_usec += Time.get_ticks_usec() - yield_started_usec
-	var spawn_finished_usec := Time.get_ticks_usec()
-	RuntimeDiagnostics.increment_performance_counter(&"drop_request_count", ground_drop_requests.size())
-	var result := {
-		"monster_id": monster_id,
-		"roll_ms": float(roll_finished_usec - started_usec) / 1000.0,
-		"spawn_ms": float(spawn_finished_usec - roll_finished_usec) / 1000.0,
-		"item_count": (drop_roll.get("items", []) as Array).size(),
-		"gold_drop_count": (drop_roll.get("gold_drops", []) as Array).size(),
-		"respawn_scheduled": false,
-	}
-	if not respawn_enabled:
-		result["total_ms"] = float(
-			Time.get_ticks_usec() - started_usec - yielded_usec
-		) / 1000.0
-		return result
-	var respawn_preparation: Dictionary = death.get(
-		"respawn_preparation", {}
-	)
-	if respawn_preparation.is_empty():
-		respawn_preparation = _prepare_queued_enemy_respawn(death)
-	if not bool(respawn_preparation.get("valid", false)):
-		result["reason"] = str(
-			respawn_preparation.get("reason", "invalid_respawn_policy")
+		if not materialized:
+			death["materialization_retry_count"] = (
+				int(death.get("materialization_retry_count", 0)) + 1
+			)
+			death["last_error"] = "loot_node_materialization_failed"
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_materialization_failures"
+			)
+			if int(death["materialization_retry_count"]) >= DEATH_QUEUE_MAX_RETRIES:
+				_set_enemy_death_state(death, DEATH_STATE_FAILED)
+				RuntimeDiagnostics.increment_performance_counter(
+					&"death_queue_failed_count"
+				)
+				return {"complete": true, "progressed": true, "nodes": nodes}
+			death["retry_at_msec"] = (
+				Time.get_ticks_msec() + DEATH_QUEUE_RETRY_DELAY_MSEC
+			)
+			return {"complete": false, "progressed": true, "nodes": nodes}
+		request_index += 1
+		nodes += 1
+		progressed = true
+		death["materialized_node_index"] = request_index
+		death["materialized_node_count"] = (
+			int(death.get("materialized_node_count", 0)) + 1
 		)
-		result["total_ms"] = float(
-			Time.get_ticks_usec() - started_usec - yielded_usec
-		) / 1000.0
-		return result
-	var respawn_wait_seconds := float(
-		respawn_preparation.get("wait_seconds", 0.0)
+		death["retry_at_msec"] = 0
+	plan["next_request_index"] = request_index
+	if request_index >= requests.size():
+		plan["materialized"] = true
+		death["drop_plan"] = plan
+		return {"complete": true, "progressed": progressed, "nodes": nodes}
+	return {"complete": false, "progressed": progressed, "nodes": nodes}
+
+
+func _commit_enemy_death_item(death: Dictionary) -> void:
+	_schedule_queued_enemy_respawn(death)
+	_set_enemy_death_state(death, DEATH_STATE_COMMITTED)
+	RuntimeDiagnostics.increment_performance_counter(
+		&"death_queue_committed_count"
 	)
-	spawn_context = respawn_preparation.get("spawn_context", spawn_context)
+
+
+func _schedule_queued_enemy_respawn(death: Dictionary) -> void:
+	if bool(death.get("respawn_scheduled", false)):
+		return
+	var preparation: Dictionary = death.get("respawn_preparation", {})
+	if preparation.is_empty() or not bool(preparation.get("valid", false)):
+		return
+	if not bool(preparation.get("enabled", false)):
+		return
+	var canonical_monster: Dictionary = death.get("canonical_monster", {})
+	var respawn: Dictionary = death.get("respawn", {})
+	var spawn_context: Dictionary = preparation.get(
+		"spawn_context", respawn.get("spawn_context", {})
+	)
 	_respawn_later(
 		canonical_monster,
-		spawn_position,
-		was_boss,
-		respawn_wait_seconds,
-		generation,
-		spawn_context
+		death.get("spawn_position", death.get("death_position", Vector2.ZERO)),
+		bool(respawn.get("was_boss", death.get("was_boss", false))),
+		float(preparation.get("wait_seconds", 0.0)),
+		int(death.get("origin_generation", _zone_generation)),
+		spawn_context,
 	)
-	result["respawn_scheduled"] = true
-	result["total_ms"] = float(
-		Time.get_ticks_usec() - started_usec - yielded_usec
-	) / 1000.0
-	return result
+	death["respawn_scheduled"] = true
+
+
+func _resolve_queued_enemy_death(
+	death: Dictionary,
+	_spread_across_frames := false,
+) -> Dictionary:
+	# Compatibility helper retained for focused tests/tools.  Production uses
+	# _pump_enemy_death_work_queue so scheduling and state transitions remain
+	# observable and budgeted.
+	var started_usec := RuntimeDiagnostics.timing_start()
+	if not death.has("origin_map_id"):
+		death["origin_map_id"] = current_map_id
+		death["origin_generation"] = _zone_generation
+	if str(death.get("state", "")) == "":
+		death["state"] = DEATH_STATE_SETTLING
+	var raw_plan: Variant = death.get("drop_plan", {})
+	if not raw_plan is Dictionary or (raw_plan as Dictionary).is_empty():
+		_plan_enemy_death_item(death)
+	if str(death.get("state", "")) == DEATH_STATE_PLANNED:
+		_set_enemy_death_state(death, DEATH_STATE_MATERIALIZING)
+	var result := _materialize_enemy_death_nodes(
+		death,
+		RuntimeDiagnostics.timing_start(),
+		2147483647,
+		2147483647,
+		true,
+	)
+	if bool(result.get("complete", false)) and str(death.get("state", "")) == DEATH_STATE_MATERIALIZING:
+		_commit_enemy_death_item(death)
+	return {
+		"monster_id": int(death.get("monster_id", -1)),
+		"item_count": int((death.get("drop_plan", {}) as Dictionary).get("item_count", 0)),
+		"gold_drop_count": int((death.get("drop_plan", {}) as Dictionary).get("gold_drop_count", 0)),
+		"respawn_scheduled": bool(death.get("respawn_scheduled", false)),
+		"state": str(death.get("state", "")),
+		"reason": str(death.get("last_error", "")),
+		"total_ms": float(RuntimeDiagnostics.timing_elapsed_usec(started_usec)) / 1000.0,
+	}
 
 
 func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
@@ -10890,7 +11339,10 @@ func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
 	}
 
 
-func _spawn_loot(item_name: String, position: Vector2) -> void:
+func _spawn_loot(item_name: String, position: Vector2) -> bool:
+	if _test_force_loot_materialization_failure_count > 0:
+		_test_force_loot_materialization_failure_count -= 1
+		return false
 	var loot := LootPickup.new()
 	loot.setup(item_name, player)
 	loot.global_position = position
@@ -10901,9 +11353,13 @@ func _spawn_loot(item_name: String, position: Vector2) -> void:
 	add_child(loot)
 	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
 	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
+	return is_instance_valid(loot)
 
 
-func _spawn_gold_loot(amount: int, position: Vector2) -> void:
+func _spawn_gold_loot(amount: int, position: Vector2) -> bool:
+	if _test_force_loot_materialization_failure_count > 0:
+		_test_force_loot_materialization_failure_count -= 1
+		return false
 	var loot := LootPickup.new()
 	loot.setup_gold(amount, player)
 	loot.global_position = position
@@ -10914,6 +11370,7 @@ func _spawn_gold_loot(amount: int, position: Vector2) -> void:
 	add_child(loot)
 	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
 	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
+	return is_instance_valid(loot)
 
 
 func _on_gold_loot_collected(amount: int, pickup: LootPickup) -> void:

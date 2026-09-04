@@ -28,7 +28,12 @@ func _run() -> void:
 	await get_tree().process_frame
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
-			(value as EnemyActor).global_position = game.player.global_position + Vector2(3000, 3000)
+			(value as EnemyActor).set_combat_position(
+				game.player.global_position + Vector2(3000, 3000),
+				&"test_fixture_relocation",
+			)
+	game.set_process(false)
+	game.set_physics_process(false)
 
 	var origin: Vector2 = game.player.global_position
 	var axis_gu := Vector2(1.0, 0.35).normalized()
@@ -110,6 +115,26 @@ func _make_enemy(game: Node, position: Vector2) -> EnemyActor:
 	enemy.setup(GameData.get_monster_by_id(34), game.player, false)
 	enemy.global_position = position
 	enemy.control_time = 60.0
+	var serial: int = 700000 + game._combat_spatial_index.registered_actor_count()
+	enemy.configure_runtime_map_projection(
+		int(game.current_map_id),
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	enemy.configure_spatial_index(game._combat_spatial_index, serial)
+	enemy.set_meta("spawn_serial", serial)
+	enemy.set_meta("respawn_enabled", false)
+	enemy.set_meta("spawn_position", position)
+	enemy.set_meta("zone_generation", int(game._zone_generation))
 	game.add_child(enemy)
 	enemy.set_physics_process(false)
+	game._combat_spatial_index.register(
+		serial,
+		int(game.current_map_id),
+		game._canonical_screen_px_to_ground_gu(enemy.global_position),
+		enemy.combat_radius_gu,
+		serial,
+		enemy,
+		Callable(enemy, "spatial_index_position"),
+	)
 	return enemy

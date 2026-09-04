@@ -4456,6 +4456,11 @@ func _begin_death() -> void:
 		return
 	clear_entrapment("death")
 	_dying = true
+	# A corpse is a presentation/persistence job, not an active physics actor.
+	# Disable the callback at the formal death boundary so a long corpse hold
+	# cannot keep entering _physics_process every frame.
+	set_physics_process(false)
+	velocity = Vector2.ZERO
 	_cancel_autonomous_step(true)
 	_pending_attack_time = -1.0
 	_pending_attack_target = null

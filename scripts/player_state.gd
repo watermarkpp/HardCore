@@ -1521,7 +1521,10 @@ func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary
 ## Atomic same-frame death settlement: every kill advances quests in stable
 ## event order, all experience is applied, and the complete result is persisted
 ## by exactly one save commit.
-func record_kills_and_experience_batch(kills: Array) -> Dictionary:
+func record_kills_and_experience_batch(
+	kills: Array,
+	force_save := false,
+) -> Dictionary:
 	var profile_started_usec := Time.get_ticks_usec()
 	var quests_before := quest_states.duplicate(true)
 	var experience_before := experience
@@ -1565,7 +1568,7 @@ func record_kills_and_experience_batch(kills: Array) -> Dictionary:
 			experience -= experience_to_next_level()
 			level += 1
 			recalculate_stats(false)
-	if not quest_changed and gained <= 0:
+	if not quest_changed and gained <= 0 and not force_save:
 		return {
 			"success": true,
 			"quest_changed": false,
