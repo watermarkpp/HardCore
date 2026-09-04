@@ -33,6 +33,17 @@ func _test_protocol_rejection() -> void:
 		"allowlist": ["device_lab.v1", "status"],
 	}
 	assert(DeviceLabRuntimeScript.validate_command(status).get("ok", false), "valid status command rejected")
+	for action: String in ["reset_diagnostics", "read_diagnostics", "stop_diagnostics"]:
+		var diagnostics_command := {
+			"schemaVersion": DeviceLabRuntimeScript.PROTOCOL_VERSION,
+			"nonce": "diagnostics_%s" % action,
+			"action": action,
+			"allowlist": [DeviceLabRuntimeScript.ALLOWLIST_ID, action],
+		}
+		assert(
+			DeviceLabRuntimeScript.validate_command(diagnostics_command).get("ok", false),
+			"valid diagnostics command rejected: %s" % action,
+		)
 	var traversal := status.duplicate(true)
 	traversal["path"] = "user://device_lab/inbox/../save.json"
 	traversal["size"] = 1
@@ -626,6 +637,12 @@ func _test_powershell_contract() -> void:
 	assert(source.contains("'export_player_state' { $result.document; break }"), "PS player-state export routing missing")
 	assert(source.contains("'ensure_chiyue_test_roster'"), "PS Chiyue roster action missing")
 	assert(source.contains("'repair_diagnostics' { $result; break }"), "PS repair diagnostics export routing missing")
+	assert(source.contains("'reset_diagnostics'"), "PS reset diagnostics action missing")
+	assert(source.contains("'read_diagnostics'"), "PS read diagnostics action missing")
+	assert(source.contains("'stop_diagnostics'"), "PS stop diagnostics action missing")
+	assert(source.contains("'reset_diagnostics' { $result.performance_diagnostics; break }"), "PS reset diagnostics output routing missing")
+	assert(source.contains("'read_diagnostics' { $result.performance_diagnostics; break }"), "PS read diagnostics output routing missing")
+	assert(source.contains("'stop_diagnostics' { $result.performance_diagnostics; break }"), "PS stop diagnostics output routing missing")
 	assert(source.contains("ConvertTo-Json -Depth 100"), "PS structured export must preserve nested save data")
 
 

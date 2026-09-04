@@ -163,7 +163,14 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if not _debug_enabled() or _busy:
+	if not _debug_enabled():
+		return
+	# DeviceLab is the sole per-frame sampling owner. RuntimeDiagnostics still
+	# applies the explicit Debug/performance gate, so a normal Debug build and
+	# every Release build remain free of frame-sample work unless a diagnostics
+	# window was deliberately opened by the lab command.
+	RuntimeDiagnostics.record_frame_time_ms(maxf(delta, 0.0) * 1000.0)
+	if _busy:
 		return
 	_poll_elapsed += maxf(delta, 0.0)
 	if _poll_elapsed < POLL_INTERVAL_SECONDS:
@@ -420,7 +427,7 @@ func status_snapshot() -> Dictionary:
 		"inbox": PENDING_PATH,
 		"outbox": OUTBOX_DIR,
 		"lastCommandNonce": _last_command_nonce,
-		"capabilities": ["ui_profile", "player_state", "chiyue_test_roster", "checkpoints", "snapshot", "reset_diagnostics", "read_diagnostics", "stop_diagnostics", "repair_diagnostics", "resource_patch"],
+		"capabilities": ["ui_profile", "player_state", "chiyue_test_roster", "checkpoints", "snapshot", "reset_diagnostics", "read_diagnostics", "stop_diagnostics", "frame_sampling", "repair_diagnostics", "resource_patch"],
 		"resourcePatch": patch_status,
 	}
 

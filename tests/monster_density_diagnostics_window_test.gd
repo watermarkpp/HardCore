@@ -29,6 +29,8 @@ func _run() -> void:
 	RuntimeDiagnostics.refresh_performance_gate()
 	assert(not RuntimeDiagnostics.performance_enabled())
 	assert(RuntimeDiagnostics.timing_start() == 0)
+	RuntimeDiagnostics.record_frame_time_ms(99.0)
+	assert(int(RuntimeDiagnostics.frame_sampling_snapshot().get("frame_count", -1)) == 0)
 	RuntimeDiagnostics.reset_performance_window()
 
 	set_meta("build_commit", "diagnostics-test")
@@ -47,6 +49,10 @@ func _run() -> void:
 	assert(bool(reset_window.get("diagnostics_enabled", false)))
 	assert(bool(reset_window.get("timing_enabled", false)))
 	var reset_window_id := int(reset_window.get("window_id", -1))
+	runtime.call("_process", 0.016)
+	var process_sample_window := RuntimeDiagnostics.read_performance_window()
+	assert(int(process_sample_window.get("frame_count", -1)) == 1)
+	assert(is_equal_approx(float(process_sample_window.get("frame_ms_p50", -1.0)), 16.0))
 	assert(RuntimeDiagnostics.timing_start() > 0)
 	RuntimeDiagnostics.set_performance_release_context(
 		"release.diagnostics.test",
@@ -84,6 +90,37 @@ func _run() -> void:
 	assert(int(second_window.get("foreground_ai_ticks", -1)) == 7)
 	assert(int(second_window.get("window_id", -1)) == reset_window_id)
 
+	# A fresh sample set makes the percentile and threshold assertions
+	# deterministic; no frame from the process-lifetime startup period may leak
+	# into this measured window.
+	RuntimeDiagnostics.reset_performance_window()
+	RuntimeDiagnostics.set_performance_release_context(
+		"release.diagnostics.test",
+		"skill.diagnostics.test",
+	)
+	for frame_ms: float in [10.0, 16.67, 16.68, 33.33, 33.34, 50.01, 100.01]:
+		RuntimeDiagnostics.record_frame_time_ms(frame_ms)
+	var frame_window := RuntimeDiagnostics.read_performance_window()
+	assert(int(frame_window.get("frame_count", -1)) == 7)
+	assert(is_equal_approx(float(frame_window.get("frame_ms_p50", -1.0)), 33.33))
+	assert(is_equal_approx(float(frame_window.get("frame_ms_p95", -1.0)), 100.01))
+	assert(is_equal_approx(float(frame_window.get("frame_ms_p99", -1.0)), 100.01))
+	assert(int(frame_window.get("frames_over_16_67ms", -1)) == 5)
+	assert(is_equal_approx(float(frame_window.get("frames_over_16_67_ratio", -1.0)), 5.0 / 7.0))
+	assert(int(frame_window.get("frames_over_33_33ms", -1)) == 3)
+	assert(is_equal_approx(float(frame_window.get("frames_over_33_33_ratio", -1.0)), 3.0 / 7.0))
+	assert(int(frame_window.get("frames_over_50ms", -1)) == 2)
+	assert(is_equal_approx(float(frame_window.get("frames_over_50_ratio", -1.0)), 2.0 / 7.0))
+	assert(int(frame_window.get("frames_over_100ms", -1)) == 1)
+	assert(is_equal_approx(float(frame_window.get("frames_over_100_ratio", -1.0)), 1.0 / 7.0))
+	var frame_timing: Dictionary = frame_window.get("frame_timing", {})
+	assert(int(frame_timing.get("frame_count", -1)) == 7)
+	assert(int(frame_timing.get("retained_sample_count", -1)) == 7)
+	assert(bool(frame_timing.get("percentiles_exact", false)))
+	var gpu: Dictionary = frame_timing.get("gpu", {})
+	assert(not bool(gpu.get("available", true)))
+	assert(not str(gpu.get("reason", "")).is_empty())
+
 	var snapshot := DeviceLabRuntime.build_snapshot(self)
 	var window: Dictionary = snapshot.get("performance_diagnostics", {})
 	assert(window.get("schema", "") == RuntimeDiagnostics.PERFORMANCE_SCHEMA_ID)
@@ -118,6 +155,30 @@ func _run() -> void:
 	for field: String in RuntimeDiagnostics.PERFORMANCE_FIELDS:
 		assert(window.has(field), "missing performance field: %s" % field)
 		assert(window.get(field) is int or window.get(field) is float)
+	for field: String in [
+		"frame_count",
+		"frame_samples_retained",
+		"frame_sample_capacity",
+		"frame_samples_dropped",
+		"frame_percentiles_exact",
+		"frame_ms_p50",
+		"frame_ms_p95",
+		"frame_ms_p99",
+		"frames_over_16_67ms",
+		"frames_over_16_67_ratio",
+		"frames_over_33_33ms",
+		"frames_over_33_33_ratio",
+		"frames_over_50ms",
+		"frames_over_50_ratio",
+		"frames_over_100ms",
+		"frames_over_100_ratio",
+		"frame_timing",
+		"gpu_frame_ms",
+	]:
+		assert(window.has(field), "missing frame sampling field: %s" % field)
+	var snapshot_gpu: Dictionary = window.get("gpu_frame_ms", {})
+	assert(not bool(snapshot_gpu.get("available", true)))
+	assert(not str(snapshot_gpu.get("reason", "")).is_empty())
 
 	var reset_again_result: Dictionary = await runtime.call(
 		"_execute",
@@ -125,8 +186,18 @@ func _run() -> void:
 	)
 	var reset_again_window: Dictionary = reset_again_result.get("performance_diagnostics", {})
 	assert(int(reset_again_window.get("foreground_ai_ticks", -1)) == 0)
+	assert(int(reset_again_window.get("frame_count", -1)) == 0)
+	assert(int(reset_again_window.get("frames_over_100ms", -1)) == 0)
 	assert(int(reset_again_window.get("window_id", -1)) > reset_window_id)
 	assert(str((reset_again_window.get("context", {}) as Dictionary).get("release_id", "")).is_empty())
+	for index: int in range(RuntimeDiagnostics.FRAME_SAMPLE_CAPACITY + 2):
+		RuntimeDiagnostics.record_frame_time_ms(float(index))
+	var bounded_window := RuntimeDiagnostics.read_performance_window()
+	assert(int(bounded_window.get("frame_count", -1)) == RuntimeDiagnostics.FRAME_SAMPLE_CAPACITY + 2)
+	assert(int(bounded_window.get("frame_samples_retained", -1)) == RuntimeDiagnostics.FRAME_SAMPLE_CAPACITY)
+	assert(int(bounded_window.get("frame_samples_dropped", -1)) == 2)
+	assert(bool(bounded_window.get("frame_sample_overflowed", false)))
+	assert(not bool(bounded_window.get("frame_percentiles_exact", true)))
 	var stop_command := {
 		"schemaVersion": DeviceLabRuntime.PROTOCOL_VERSION,
 		"nonce": "diagnostics-window-stop",
@@ -138,6 +209,9 @@ func _run() -> void:
 	assert(bool(stop_result.get("ok", false)))
 	var stop_window: Dictionary = stop_result.get("performance_diagnostics", {})
 	assert(not bool(stop_window.get("diagnostics_enabled", true)))
+	var stopped_count := int(stop_window.get("frame_count", -1))
+	RuntimeDiagnostics.record_frame_time_ms(1000.0)
+	assert(int(RuntimeDiagnostics.frame_sampling_snapshot().get("frame_count", -1)) == stopped_count)
 	runtime.queue_free()
 
 	ProjectSettings.set_setting(RuntimeDiagnostics.SETTING_ENABLED, old_enabled)

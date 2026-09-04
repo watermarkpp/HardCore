@@ -18,6 +18,17 @@ const SETTING_PERFORMANCE := &"hardcore/debug/diagnostics/performance"
 const SETTING_DEVICE_LAB_PERFORMANCE := &"hardcore/debug/diagnostics/device_lab_performance"
 
 const PERFORMANCE_SCHEMA_ID := "hardcore.monster_density_diagnostics.v1"
+## Frame samples are only retained while the explicit Debug/Device Lab gate is
+## enabled.  A 4096-entry ring covers the report's 20-30 second windows at
+## normal frame rates without allowing a long-running process to grow memory.
+const FRAME_SAMPLE_CAPACITY := 4096
+const FRAME_THRESHOLD_MS := {
+	"over_16_67": 16.67,
+	"over_33_33": 33.33,
+	"over_50": 50.0,
+	"over_100": 100.0,
+}
+const GPU_FRAME_METRIC_UNAVAILABLE_REASON := "godot_performance_api_has_no_reliable_gpu_frame_time_monitor"
 
 # Stable Device Lab/Android telemetry contract. Values are window deltas:
 # event fields are integer counts, *_usec and *_ms fields are accumulated
@@ -157,6 +168,16 @@ static var _performance_release_context := {
 	"release_id": "",
 	"skill_id": "",
 }
+static var _frame_samples: Array = []
+static var _frame_sample_write_index := 0
+static var _frame_sample_count := 0
+static var _frame_sample_dropped_count := 0
+static var _frame_threshold_counts := {
+	"over_16_67": 0,
+	"over_33_33": 0,
+	"over_50": 0,
+	"over_100": 0,
+}
 
 
 static func is_enabled(category := &"") -> bool:
@@ -278,6 +299,123 @@ static func record_performance_max(field: StringName, value: float) -> void:
 	_performance_maxima[key] = maxf(float(_performance_maxima.get(key, 0.0)), value)
 
 
+## Records one total idle-frame duration in milliseconds.  This is deliberately
+## separate from process/physics timings: the reports require the total frame
+## pacing seen by the player, including rendering and scheduling.  Callers must
+## already be on the explicit Debug/Device Lab path; this method repeats the
+## gate check so an accidental Release caller is a no-op.
+static func record_frame_time_ms(frame_ms: float) -> void:
+	if not performance_enabled() or not is_finite(frame_ms) or frame_ms < 0.0:
+		return
+	_ensure_performance_window()
+	var sample := maxf(frame_ms, 0.0)
+	if _frame_samples.size() < FRAME_SAMPLE_CAPACITY:
+		_frame_samples.append(sample)
+	else:
+		_frame_samples[_frame_sample_write_index] = sample
+		_frame_sample_write_index = (_frame_sample_write_index + 1) % FRAME_SAMPLE_CAPACITY
+		_frame_sample_dropped_count += 1
+	_frame_sample_count += 1
+	if sample > float(FRAME_THRESHOLD_MS["over_16_67"]):
+		_frame_threshold_counts["over_16_67"] = int(_frame_threshold_counts["over_16_67"]) + 1
+	if sample > float(FRAME_THRESHOLD_MS["over_33_33"]):
+		_frame_threshold_counts["over_33_33"] = int(_frame_threshold_counts["over_33_33"]) + 1
+	if sample > float(FRAME_THRESHOLD_MS["over_50"]):
+		_frame_threshold_counts["over_50"] = int(_frame_threshold_counts["over_50"]) + 1
+	if sample > float(FRAME_THRESHOLD_MS["over_100"]):
+		_frame_threshold_counts["over_100"] = int(_frame_threshold_counts["over_100"]) + 1
+
+
+static func _frame_percentile(samples: Array, fraction: float) -> float:
+	if samples.is_empty():
+		return 0.0
+	var sorted: Array = samples.duplicate()
+	sorted.sort()
+	var index := clampi(int(ceil(float(sorted.size()) * fraction)) - 1, 0, sorted.size() - 1)
+	return float(sorted[index])
+
+
+static func _frame_ratio(count: int) -> float:
+	if _frame_sample_count <= 0:
+		return 0.0
+	return float(count) / float(_frame_sample_count)
+
+
+static func frame_sampling_snapshot() -> Dictionary:
+	var samples: Array = _frame_samples.duplicate()
+	var p50 := _frame_percentile(samples, 0.50)
+	var p95 := _frame_percentile(samples, 0.95)
+	var p99 := _frame_percentile(samples, 0.99)
+	var over_16_67 := int(_frame_threshold_counts["over_16_67"])
+	var over_33_33 := int(_frame_threshold_counts["over_33_33"])
+	var over_50 := int(_frame_threshold_counts["over_50"])
+	var over_100 := int(_frame_threshold_counts["over_100"])
+	var thresholds := {
+		"over_16_67_ms": {
+			"threshold_ms": float(FRAME_THRESHOLD_MS["over_16_67"]),
+			"count": over_16_67,
+			"ratio": _frame_ratio(over_16_67),
+		},
+		"over_33_33_ms": {
+			"threshold_ms": float(FRAME_THRESHOLD_MS["over_33_33"]),
+			"count": over_33_33,
+			"ratio": _frame_ratio(over_33_33),
+		},
+		"over_50_ms": {
+			"threshold_ms": float(FRAME_THRESHOLD_MS["over_50"]),
+			"count": over_50,
+			"ratio": _frame_ratio(over_50),
+		},
+		"over_100_ms": {
+			"threshold_ms": float(FRAME_THRESHOLD_MS["over_100"]),
+			"count": over_100,
+			"ratio": _frame_ratio(over_100),
+		},
+	}
+	var gpu := {
+		"available": false,
+		"frame_ms": null,
+		"reason": GPU_FRAME_METRIC_UNAVAILABLE_REASON,
+	}
+	# Keep the simple top-level aliases for CSV/PowerShell consumers while the
+	# nested object is the versioned, self-describing contract.
+	return {
+		"frame_count": _frame_sample_count,
+		"frame_samples_retained": samples.size(),
+		"frame_sample_capacity": FRAME_SAMPLE_CAPACITY,
+		"frame_samples_dropped": _frame_sample_dropped_count,
+		"frame_sample_overflowed": _frame_sample_dropped_count > 0,
+		"frame_percentiles_exact": _frame_sample_count > 0 and _frame_sample_dropped_count == 0,
+		"frame_ms_p50": p50,
+		"frame_ms_p95": p95,
+		"frame_ms_p99": p99,
+		"p50_ms": p50,
+		"p95_ms": p95,
+		"p99_ms": p99,
+		"frames_over_16_67ms": over_16_67,
+		"frames_over_16_67_ratio": _frame_ratio(over_16_67),
+		"frames_over_33_33ms": over_33_33,
+		"frames_over_33_33_ratio": _frame_ratio(over_33_33),
+		"frames_over_50ms": over_50,
+		"frames_over_50_ratio": _frame_ratio(over_50),
+		"frames_over_100ms": over_100,
+		"frames_over_100_ratio": _frame_ratio(over_100),
+		"frame_timing": {
+			"frame_count": _frame_sample_count,
+			"retained_sample_count": samples.size(),
+			"sample_capacity": FRAME_SAMPLE_CAPACITY,
+			"dropped_sample_count": _frame_sample_dropped_count,
+			"percentiles_exact": _frame_sample_count > 0 and _frame_sample_dropped_count == 0,
+			"p50_ms": p50,
+			"p95_ms": p95,
+			"p99_ms": p99,
+			"thresholds": thresholds,
+			"gpu": gpu,
+		},
+		"gpu_frame_ms": gpu,
+	}
+
+
 static func timing_start() -> int:
 	if not performance_timing_enabled():
 		return 0
@@ -355,6 +493,16 @@ static func reset_performance_window() -> Dictionary:
 	_performance_counters.clear()
 	_performance_values.clear()
 	_performance_maxima.clear()
+	_frame_samples.clear()
+	_frame_sample_write_index = 0
+	_frame_sample_count = 0
+	_frame_sample_dropped_count = 0
+	_frame_threshold_counts = {
+		"over_16_67": 0,
+		"over_33_33": 0,
+		"over_50": 0,
+		"over_100": 0,
+	}
 	_performance_release_context = {
 		"release_id": "",
 		"skill_id": "",
@@ -371,6 +519,9 @@ static func reset_window() -> Dictionary:
 
 static func read_performance_window(context: Dictionary = {}) -> Dictionary:
 	var result := performance_counters()
+	var frame_sampling := frame_sampling_snapshot()
+	for key: Variant in frame_sampling.keys():
+		result[str(key)] = frame_sampling[key]
 	result["schema"] = PERFORMANCE_SCHEMA_ID
 	result["window_id"] = _performance_window_id
 	result["window_started_ms"] = _performance_window_started_msec
