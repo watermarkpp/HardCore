@@ -28,7 +28,7 @@ func _ready() -> void:
 	_test_missing_and_duplicate_fail_closed()
 	print(
 		"WORLD_BICH_SPAWN_IDENTITY_CONTRACT_PASS "
-		+ "workspace_editor_audit=all backup_fixture=pass formal_runtime_maps=4 "
+		+ "workspace_authoritative_editor_audit=all backup_fixture=ignored formal_runtime_maps=4 "
 		+ "target_monster_spawn=82 target_boss_spawn=0 "
 		+ "new_and_copy=unique save_build_publish=fail_closed"
 	)
@@ -99,22 +99,46 @@ func _test_repaired_formal_runtime_contracts() -> void:
 func _test_workspace_identity_audit() -> void:
 	var editor_paths := _collect_editor_paths("res://map_editor_workspace")
 	assert(editor_paths.size() >= 132, "workspace editor document count shrank: %d" % editor_paths.size())
+	var authoritative_count := 0
 	for map_path: String in editor_paths:
 		var document := _read_json(map_path)
+		if not _is_authoritative_editor_path(document, map_path):
+			continue
+		authoritative_count += 1
 		_assert_editor_identity(document, map_path)
+	assert(
+		authoritative_count >= 132,
+		"authoritative editor document count shrank: %d" % authoritative_count
+	)
 
 
 func _test_backup_directory_fixture() -> void:
-	# A legal backup may live in a directory whose name is not its document
-	# map_id (for example bich_province_auto_backup/... with map_id bich_province).
-	# Validate the document identity without requiring path-derived equality.
+	# A legal old-format backup may live in a directory whose name and basename
+	# are not its document map_id (for example bich_province_auto_backup/... with
+	# map_id bich_province). It is not an authoritative editor document, so its
+	# historical missing groups must not fail the workspace audit.
 	var backup_fixture := _read_json(
 		"res://map_editor_workspace/bich_province/bich_province.editor.json"
 	)
-	_assert_editor_identity(
-		backup_fixture,
-		"res://map_editor_workspace/bich_province_auto_backup/bich_province_auto_backup.editor.json"
+	var old_rows: Array = []
+	for index in 25:
+		old_rows.append({
+			"kind": "monster_spawn",
+			"semantic_id": "monster_spawn_%06d" % (index + 1),
+			"monster_id": 18,
+			"count": 1,
+			"max_alive": 1,
+			"respawn_seconds": 60,
+		})
+	backup_fixture.layers.monster_spawn = old_rows
+	backup_fixture.layers.boss_spawn = []
+	var backup_path := (
+		"res://map_editor_workspace/bich_province_auto_backup/"
+		+ "bich_province_auto_backup.editor.json"
 	)
+	assert(not _is_authoritative_editor_path(backup_fixture, backup_path))
+	var backup_errors := SpawnIdentity.validate_document(backup_fixture, false)
+	assert(_has_prefix(backup_errors, "spawn_group_id_missing:"))
 
 
 func _assert_editor_identity(document: Dictionary, source_path: String) -> void:
@@ -127,6 +151,15 @@ func _assert_editor_identity(document: Dictionary, source_path: String) -> void:
 	assert(errors.is_empty(), "%s spawn identity invalid: %s" % [source_path, str(errors)])
 
 
+func _is_authoritative_editor_path(document: Dictionary, source_path: String) -> bool:
+	var basename := source_path.get_file()
+	if not basename.ends_with(".editor.json"):
+		return false
+	var filename_map_id := basename.trim_suffix(".editor.json").strip_edges()
+	var document_map_id := str(document.get("map_id", "")).strip_edges()
+	return not document_map_id.is_empty() and filename_map_id == document_map_id
+
+
 func _collect_editor_paths(root_path: String) -> Array[String]:
 	var result: Array[String] = []
 	var directory := DirAccess.open(root_path)
@@ -137,6 +170,9 @@ func _collect_editor_paths(root_path: String) -> Array[String]:
 		if name.is_empty():
 			break
 		if name in [".", ".."]:
+			continue
+		var lower_name := name.to_lower()
+		if lower_name.contains("auto_backup") or lower_name.ends_with(".bak"):
 			continue
 		var child := root_path.path_join(name)
 		if directory.current_is_dir():
@@ -223,10 +259,12 @@ func _test_missing_and_duplicate_fail_closed() -> void:
 	var document := _read_json(TARGET_EDITOR)
 	var missing := document.duplicate(true)
 	missing.layers.monster_spawn[0].erase("spawn_group_id")
+	assert(_is_authoritative_editor_path(missing, TARGET_EDITOR))
 	var missing_errors := SpawnIdentity.validate_document(missing, true)
 	assert(_has_prefix(missing_errors, "spawn_group_id_missing:"))
 	var duplicate := document.duplicate(true)
 	duplicate.layers.monster_spawn[1].spawn_group_id = duplicate.layers.monster_spawn[0].spawn_group_id
+	assert(_is_authoritative_editor_path(duplicate, TARGET_EDITOR))
 	var duplicate_errors := SpawnIdentity.validate_document(duplicate, true)
 	assert(_has_prefix(duplicate_errors, "duplicate_spawn_group_id:"))
 	var missing_runtime_validation := BuildService.validate_for_runtime(missing)
