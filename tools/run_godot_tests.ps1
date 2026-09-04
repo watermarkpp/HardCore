@@ -174,6 +174,7 @@ $Suites = @{
 		'tests/pricing_authority_test.tscn',
 		'tests/inventory_weight_authority_test.tscn',
 		'tests/loot_pickup_ground_unit_test.tscn',
+		'tests/loot_pickup_runtime_manager_test.tscn',
 		'tests/hud_authority_integration_test.tscn',
 		'tests/hud_background_prewarm_test.tscn',
 		'tests/complete_item_system_test.tscn',

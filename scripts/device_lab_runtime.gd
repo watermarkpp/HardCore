@@ -726,6 +726,7 @@ static func build_snapshot(root: Node) -> Dictionary:
 		"map": _map_snapshot(root),
 		"player": _player_snapshot(root),
 		"enemy_activity": enemy_activity,
+		"loot_runtime": _loot_runtime_snapshot(root),
 		"performance_diagnostics": _performance_window_snapshot(root, enemy_activity),
 		"monster_streaming": _monster_streaming_snapshot(root),
 		"controls": [],
@@ -790,6 +791,8 @@ static func _performance_context(root: Node, activity: Dictionary) -> Dictionary
 	var nearby_16gu := int(activity.get("within_16gu", 0))
 	var active_ground_loot_count := int(activity.get("active_ground_loot_count", 0))
 	var active_corpse_count := int(activity.get("active_corpse_count", 0))
+	var loot_runtime := _loot_runtime_snapshot(root)
+	var loot_index: Dictionary = loot_runtime.get("spatial_index", {})
 	var release_context := RuntimeDiagnostics.performance_release_context()
 	RuntimeDiagnostics.set_performance_value(
 		&"active_loot_pickups",
@@ -818,7 +821,22 @@ static func _performance_context(root: Node, activity: Dictionary) -> Dictionary
 		"lethal_target_count": int(counters.get("lethal_damage_count", 0)),
 		"active_ground_loot_count": active_ground_loot_count,
 		"active_corpse_count": active_corpse_count,
+		"loot_registered_pickup_count": int(loot_runtime.get("registered_pickup_count", active_ground_loot_count)),
+		"loot_spatial_query_count": int(loot_index.get("index_query_count", 0)),
+		"loot_spatial_candidate_count": int(loot_index.get("index_candidate_count", 0)),
+		"loot_full_scan_count": int(loot_runtime.get("manager_full_scan_count", 0)) + int(loot_index.get("index_full_scan_count", 0)),
 	}
+
+
+static func _loot_runtime_snapshot(root: Node) -> Dictionary:
+	if root == null or not is_instance_valid(root):
+		return {}
+	var manager: Variant = root.get("_loot_pickup_runtime_manager")
+	if manager is Node and is_instance_valid(manager) and manager.has_method("diagnostics_snapshot"):
+		var snapshot: Variant = manager.call("diagnostics_snapshot")
+		if snapshot is Dictionary:
+			return snapshot as Dictionary
+	return {}
 
 
 ## Returns only a fixed set of numeric engine monitors.  This is intentionally
@@ -881,7 +899,10 @@ static func _enemy_activity_snapshot(root: Node) -> Dictionary:
 	var player := raw_player as Node2D if raw_player is Node2D and is_instance_valid(raw_player) else null
 	var enemies: Array[Node] = root.get_tree().get_nodes_in_group("enemies")
 	result["total"] = enemies.size()
-	result["active_ground_loot_count"] = root.get_tree().get_nodes_in_group("loot_pickups").size()
+	var loot_runtime := _loot_runtime_snapshot(root)
+	result["active_ground_loot_count"] = int(
+		loot_runtime.get("registered_pickup_count", 0)
+	)
 	var active_enemy_cache: Variant = root.get("_active_enemy_cache")
 	if active_enemy_cache is Dictionary:
 		for raw_enemy: Variant in (active_enemy_cache as Dictionary).values():

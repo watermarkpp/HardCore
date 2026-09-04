@@ -21,10 +21,10 @@ func _ready() -> void:
 	add_child(retry_b)
 	retry_a._arm_collection_retry_cooldown()
 	assert(is_equal_approx(retry_a.retry_cooldown_remaining(), 5.0), "拾取失败冷却必须为5秒")
-	retry_a._process(4.99)
+	retry_a.manager_advance_time(4.99)
 	assert(retry_a.retry_cooldown_remaining() > 0.0, "5秒内不应再次重试同一地物")
 	assert(is_zero_approx(retry_b.retry_cooldown_remaining()), "不同地物不应共享拾取冷却")
-	retry_a._process(0.01)
+	retry_a.manager_advance_time(0.01)
 	assert(is_zero_approx(retry_a.retry_cooldown_remaining()), "5秒后应解除同一地物冷却")
 	retry_a._collection_pending = true
 	assert(retry_a.collection_pending(), "拾取两阶段确认未登记pending")
@@ -43,17 +43,18 @@ func _ready() -> void:
 	overweight_pickup.collection_rejected.connect(_on_rejected)
 	overweight_pickup.global_position = Vector2.ZERO
 	target.global_position = Vector2.ZERO
-	overweight_pickup._process(0.0)
+	overweight_pickup.manager_evaluate_collection(true, 0.0)
 	assert(overweight_pickup.collection_authority_check_count() == 1 and overweight_pickup.collection_pending(), "拾取候选未进入统一批处理")
 	overweight_pickup.reject_collection("超过负重，无法拾取。")
 	assert(_rejection_count == 1 and not overweight_pickup.is_queued_for_deletion(), "批处理失败反馈未保留地物")
-	overweight_pickup._process(4.99)
+	overweight_pickup.manager_advance_time(4.99)
 	assert(overweight_pickup.collection_authority_check_count() == 1 and _rejection_count == 1, "5秒内重复检查/提示同一地物")
-	overweight_pickup._process(0.01)
+	overweight_pickup.manager_advance_time(0.01)
+	overweight_pickup.manager_evaluate_collection(true, 0.0)
 	assert(overweight_pickup.collection_authority_check_count() == 2 and overweight_pickup.collection_pending(), "5秒后未重新进入统一批处理")
 	overweight_pickup.reject_collection("超过负重，无法拾取。")
 	target.global_position = Vector2(1000, 1000)
-	overweight_pickup._process(0.01)
+	overweight_pickup.manager_evaluate_collection(false, 0.01)
 	assert(is_zero_approx(overweight_pickup.retry_cooldown_remaining()), "离开拾取范围未立即解除冷却")
 	assert(not overweight_pickup.is_queued_for_deletion(), "失败拾取地物被错误删除")
 
@@ -62,7 +63,7 @@ func _ready() -> void:
 	accepted.setup("金币", target)
 	target.global_position = accepted.global_position
 	accepted.collected.connect(_confirm_collected)
-	accepted._process(0.0)
+	accepted.manager_evaluate_collection(true, 0.0)
 	assert(accepted.is_queued_for_deletion(), "只有权威接收成功才应删除地物")
 	for node: Node in [retry_a, retry_b, overweight_pickup, accepted]:
 		if is_instance_valid(node):

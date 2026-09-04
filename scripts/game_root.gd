@@ -78,6 +78,9 @@ const RuntimeCombatSpatialIndexScript := preload(
 const PersistentGroundEffectManagerScript := preload(
 	"res://scripts/persistent_ground_effect_manager.gd"
 )
+const LootPickupRuntimeManagerScript := preload(
+	"res://scripts/loot_pickup_runtime_manager.gd"
+)
 const SpellTargetLockPolicyScript := preload(
 	"res://scripts/skills/spell_target_lock_policy.gd"
 )
@@ -276,6 +279,7 @@ var _aoe_id_scratch: Array[int] = []
 var _direct_spell_target_stats_scratch: Dictionary = {}
 var _aoe_cell_stamp := 0
 var _ground_effect_manager: PersistentGroundEffectManagerScript
+var _loot_pickup_runtime_manager: LootPickupRuntimeManagerScript
 ## FREEZE-P0.1: fail-closed canonical projection diagnostics.
 var missing_projection_rejection_count := 0
 var projection_rejection_reason := &""
@@ -467,6 +471,8 @@ func _set_player_world_position(position_px: Vector2) -> void:
 		return
 	player.global_position = position_px
 	_refresh_player_safe_zone_cache(true)
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.player_position_changed(position_px)
 
 
 func _safe_zone_runtime_zones() -> Array:
@@ -1262,6 +1268,10 @@ func _ready() -> void:
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
 	add_child(player)
+	_loot_pickup_runtime_manager = LootPickupRuntimeManagerScript.new()
+	_loot_pickup_runtime_manager.name = "LootPickupRuntimeManager"
+	_loot_pickup_runtime_manager.configure_player(player)
+	add_child(_loot_pickup_runtime_manager)
 	PlayerState.configure_taoist_main_pets_persistence_provider(
 		Callable(self, "_capture_taoist_main_pet_runtime_states")
 	)
@@ -1697,6 +1707,9 @@ func _prepare_safe_logout() -> Dictionary:
 	var death_queue_result := _drain_enemy_death_queue_for_logout()
 	if not bool(death_queue_result.get("success", false)):
 		return death_queue_result
+	var loot_queue_result := _drain_loot_collection_queue_for_logout()
+	if not bool(loot_queue_result.get("success", false)):
+		return loot_queue_result
 	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 	PlayerState.apply_taoist_main_pet_runtime_states(
 		_capture_taoist_main_pet_runtime_states()
@@ -1744,6 +1757,49 @@ func _prepare_safe_logout() -> Dictionary:
 		"save_performed": true,
 		"reason": "",
 		"home_source": str(resolved.get("source", "")),
+	}
+
+
+func _drain_loot_collection_queue_for_logout() -> Dictionary:
+	# A close request may arrive after a pickup emitted its signal but before
+	# the deferred transaction flush.  Force the manager's final nearby query
+	# and consume the deferred collection synchronously before logout save.
+	if _loot_pickup_runtime_manager != null:
+		var manager_result := _loot_pickup_runtime_manager.flush_for_logout()
+		if not bool(manager_result.get("success", false)):
+			return {
+				"success": false,
+				"save_performed": false,
+				"reason": "safe_logout_loot_manager_failed",
+				"loot_queue": manager_result,
+			}
+	if _pending_loot_collections.is_empty():
+		return {
+			"success": true,
+			"save_performed": false,
+			"reason": "",
+			"loot_queue_drained": true,
+		}
+	var result := _flush_loot_collections()
+	if not bool(result.get("success", false)):
+		return {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_loot_collection_failed",
+			"loot_queue": result,
+		}
+	if not _pending_loot_collections.is_empty():
+		return {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_loot_queue_pending",
+			"loot_queue": result,
+		}
+	return {
+		"success": true,
+		"save_performed": false,
+		"reason": "",
+		"loot_queue_drained": true,
 	}
 
 
@@ -2883,6 +2939,8 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 			return
 	_zone_generation += 1
 	_cancel_pending_enemy_deaths_for_generation_change()
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.clear_map(current_map_id)
 	_active_safe_zones.clear()
 	_active_enemy_cache.clear()
 	_active_boss_cache.clear()
@@ -2913,6 +2971,13 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# map 4). Snapshot consumers receive a formal runtime map id instead of
 		# -1, so STRICT_V2 absolute snapshots stay valid.
 		current_map_id = GameData.service_runtime_map_id(0)
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.configure_map(
+			current_map_id,
+			_zone_generation,
+			Callable(self, "_canonical_screen_px_to_ground_gu"),
+			Callable(self, "_canonical_ground_gu_to_screen_px"),
+		)
 	_begin_safe_zone_context(current_map_id)
 	_monster_terrain_navigation_context = (
 		MonsterTerrainNavigationPolicyScript.build_context(
@@ -4788,6 +4853,8 @@ func _set_auto_target_enabled(enabled: bool) -> void:
 
 func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 	_refresh_player_safe_zone_cache()
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.player_position_changed(_position)
 	_validate_locked_target()
 
 
@@ -11555,6 +11622,8 @@ func _spawn_loot(item_name: String, position: Vector2) -> bool:
 	loot.collection_rejected.connect(_on_loot_collection_rejected)
 	var spawn_started_usec := RuntimeDiagnostics.timing_start()
 	add_child(loot)
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.register_pickup(loot)
 	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
 	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
 	return is_instance_valid(loot)
@@ -11572,6 +11641,8 @@ func _spawn_gold_loot(amount: int, position: Vector2) -> bool:
 	loot.collection_rejected.connect(_on_loot_collection_rejected)
 	var spawn_started_usec := RuntimeDiagnostics.timing_start()
 	add_child(loot)
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.register_pickup(loot)
 	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
 	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
 	return is_instance_valid(loot)
@@ -11586,29 +11657,59 @@ func _on_loot_collected(item_name: String, pickup: LootPickup) -> void:
 
 
 func _queue_loot_collection(candidate: Dictionary) -> void:
-	_pending_loot_collections.append(candidate)
+	var queued_candidate := candidate.duplicate(true)
+	var pickup: Variant = queued_candidate.get("pickup")
+	if pickup is LootPickup and is_instance_valid(pickup):
+		queued_candidate["origin_map_id"] = int(
+			(pickup as LootPickup).get_meta("loot_runtime_map_id", current_map_id)
+		)
+		queued_candidate["origin_generation"] = int(
+			(pickup as LootPickup).get_meta("loot_zone_generation", _zone_generation)
+		)
+	else:
+		queued_candidate["origin_map_id"] = current_map_id
+		queued_candidate["origin_generation"] = _zone_generation
+	_pending_loot_collections.append(queued_candidate)
 	if not _loot_collection_flush_queued:
 		_loot_collection_flush_queued = true
 		call_deferred("_flush_loot_collections")
 
 
-func _flush_loot_collections() -> void:
+func _flush_loot_collections() -> Dictionary:
 	var profile_started_usec := Time.get_ticks_usec()
 	_loot_collection_flush_queued = false
 	if _pending_loot_collections.is_empty():
-		return
+		return {"success": true, "candidate_count": 0, "saved": false}
 	var pending := _pending_loot_collections
 	_pending_loot_collections = []
 	var candidates: Array = []
+	var transaction_pending: Array[Dictionary] = []
+	var stale_count := 0
 	for candidate: Dictionary in pending:
+		var origin_matches := (
+			int(candidate.get("origin_map_id", -1)) == current_map_id
+			and int(candidate.get("origin_generation", -1)) == _zone_generation
+		)
+		var pickup: Variant = candidate.get("pickup")
+		if not origin_matches:
+			stale_count += 1
+			if pickup is LootPickup and is_instance_valid(pickup):
+				(pickup as LootPickup).reject_collection("地图已切换，无法拾取。")
+			continue
+		transaction_pending.append(candidate)
 		candidates.append(candidate.duplicate(true))
-	var result := PlayerState.receive_loot_batch_partial(candidates)
+	var result: Dictionary = (
+		PlayerState.receive_loot_batch_partial(candidates)
+		if not candidates.is_empty()
+		else {"success": true, "saved": false, "outcomes": [], "success_count": 0}
+	)
 	var transaction_finished_usec := Time.get_ticks_usec()
 	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_authority_checks", pending.size())
 	var outcomes: Array = result.get("outcomes", [])
 	var loot_feedback_names: Array = []
-	for index in range(mini(pending.size(), outcomes.size())):
-		var candidate: Dictionary = pending[index]
+	var processed_count := mini(transaction_pending.size(), outcomes.size())
+	for index in range(processed_count):
+		var candidate: Dictionary = transaction_pending[index]
 		var outcome: Dictionary = outcomes[index]
 		var pickup: Variant = candidate.get("pickup")
 		if bool(outcome.get("success", false)):
@@ -11617,10 +11718,21 @@ func _flush_loot_collections() -> void:
 				if bool(candidate.get("gold", false))
 				else str(candidate.get("item_name", ""))
 			)
-			if is_instance_valid(pickup):
+			if pickup is LootPickup and is_instance_valid(pickup) and (pickup as LootPickup).collection_pending():
 				pickup.confirm_collect()
-		elif is_instance_valid(pickup):
+		elif pickup is LootPickup and is_instance_valid(pickup) and (pickup as LootPickup).collection_pending():
 			pickup.reject_collection(str(outcome.get("message", "超过负重，无法拾取。")))
+	var outcomes_complete := processed_count == transaction_pending.size()
+	if not outcomes_complete:
+		# Keep unacknowledged candidates pending for a diagnosable retry instead
+		# of silently dropping them when a malformed/partial transaction result
+		# is returned.
+		_pending_loot_collections.append_array(
+			transaction_pending.slice(processed_count)
+		)
+		if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
+			_loot_collection_flush_queued = true
+			call_deferred("_flush_loot_collections")
 	if hud != null and not loot_feedback_names.is_empty():
 		hud.show_loot_batch(loot_feedback_names)
 	if CombatDiagnosticLogScript.capture_enabled():
@@ -11631,6 +11743,20 @@ func _flush_loot_collections() -> void:
 			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
 			"transaction": PlayerState._last_loot_batch_profile.duplicate(true),
 		}))
+	return {
+		"success": bool(result.get("success", false)) and outcomes_complete,
+		"saved": bool(result.get("saved", false)),
+		"candidate_count": pending.size(),
+		"success_count": int(result.get("success_count", 0)),
+		"stale_count": stale_count,
+		"outcomes_count": outcomes.size(),
+		"remaining_count": _pending_loot_collections.size(),
+		"reason": (
+			"loot_collection_outcomes_incomplete"
+			if not outcomes_complete
+			else str(result.get("reason", ""))
+		),
+	}
 
 
 func _on_loot_collection_rejected(_item_name: String, message: String) -> void:

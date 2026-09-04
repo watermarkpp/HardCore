@@ -31,7 +31,7 @@ func _run() -> void:
 
 	loot.gold_collected.connect(_on_gold_collected)
 	# Player in pickup range: gold path must collect without inventory/weight gate.
-	loot._process(0.0)
+	loot.manager_evaluate_collection(true, 0.0)
 
 	assert(PlayerState.gold == gold_before + 3000, "gold was not added to PlayerState")
 	assert(PlayerState.inventory == inventory_before, "gold pickup must not change inventory")

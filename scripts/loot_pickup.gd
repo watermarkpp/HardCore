@@ -18,6 +18,8 @@ var icon_sprite: Sprite2D
 var _overweight_retry_remaining := 0.0
 var _collection_pending := false
 var _collection_authority_check_count := 0
+var _collection_manager: Node
+var _visual_descriptor: Dictionary = {}
 static var _descriptor_cache: Dictionary = {}
 static var _descriptor_build_count := 0
 
@@ -59,17 +61,21 @@ func setup(label_text: String, player_target: PlayerCharacter) -> void:
 	item_name = label_text
 	gold_amount = 0
 	target = player_target
+	_visual_descriptor = ground_visual_descriptor(item_name)
 
 
 func setup_gold(amount: int, player_target: PlayerCharacter) -> void:
 	item_name = "金币"
 	gold_amount = maxi(1, amount)
 	target = player_target
+	_visual_descriptor = ground_visual_descriptor(item_name)
 
 
 func _ready() -> void:
 	add_to_group("loot_pickups")
-	var descriptor := ground_visual_descriptor(item_name)
+	if _visual_descriptor.is_empty():
+		_visual_descriptor = ground_visual_descriptor(item_name)
+	var descriptor: Dictionary = _visual_descriptor
 	var icon_path := str(descriptor.get("path", ""))
 	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
 		icon_sprite = Sprite2D.new()
@@ -94,40 +100,63 @@ func _ready() -> void:
 		queue_redraw()
 
 
-func _process(delta: float) -> void:
-	RuntimeDiagnostics.increment_performance_counter(&"loot_pickup_process_calls")
-	_bob_time += delta
-	_overweight_retry_remaining = maxf(0.0, _overweight_retry_remaining - delta)
+
+func set_collection_manager(manager: Node) -> void:
+	_collection_manager = manager
+
+
+## Called only by LootPickupRuntimeManager.  The manager owns candidate
+## selection; this object retains the old pending/confirm/reject authority and
+## emits the same signals in the same stable candidate order.
+func manager_evaluate_collection(in_range: bool, delta_seconds: float) -> bool:
+	manager_advance_time(delta_seconds)
+	if is_queued_for_deletion():
+		return false
+	if not in_range:
+		manager_reset_attempt_context()
+		return false
+	if (
+		_collection_pending
+		or _overweight_retry_remaining > 0.0
+		or not is_instance_valid(target)
+	):
+		return false
+	_collection_authority_check_count += 1
+	RuntimeDiagnostics.increment_performance_counter(
+		&"loot_collection_authority_checks"
+	)
+	_collection_pending = true
+	if gold_amount > 0:
+		# Gold does not enter inventory: no weight / capacity gate.
+		gold_collected.emit(gold_amount, self)
+	else:
+		collected.emit(item_name, self)
+	return true
+
+
+func manager_advance_time(delta_seconds: float) -> void:
+	_overweight_retry_remaining = maxf(
+		0.0,
+		_overweight_retry_remaining - maxf(0.0, delta_seconds),
+	)
+
+
+func manager_reset_attempt_context() -> void:
+	if not _collection_pending:
+		# Leaving the pickup radius starts a fresh attempt context.
+		_overweight_retry_remaining = 0.0
+
+
+func manager_visual_tick(delta_seconds: float) -> void:
+	_bob_time += maxf(0.0, delta_seconds)
 	if icon_sprite != null:
 		icon_sprite.position.y = -5.0 + sin(_bob_time * 3.0) * 2.0
 		RuntimeDiagnostics.increment_performance_counter(&"loot_visual_updates")
-	if icon_sprite == null:
-		RuntimeDiagnostics.increment_performance_counter(&"loot_fallback_redraw_requests")
+	else:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"loot_fallback_redraw_requests"
+		)
 		queue_redraw()
-	if not is_instance_valid(target):
-		return
-	if _collection_pending:
-		return
-	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_global_checks")
-	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_spatial_queries")
-	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_candidates")
-	var in_range := target_is_within_collection_range_screen_px(global_position, target.global_position)
-	if not in_range:
-		# Leaving the pickup radius is a new attempt context, so don't carry a
-		# stale failure cooldown back when the player returns.
-		_overweight_retry_remaining = 0.0
-		return
-	if _overweight_retry_remaining > 0.0:
-		return
-	_collection_authority_check_count += 1
-	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_authority_checks")
-	if gold_amount > 0:
-		# Gold does not enter inventory: no weight / capacity gate.
-		_collection_pending = true
-		gold_collected.emit(gold_amount, self)
-		return
-	_collection_pending = true
-	collected.emit(item_name, self)
 
 
 func _arm_collection_retry_cooldown() -> void:
@@ -154,6 +183,8 @@ func confirm_collect() -> void:
 
 
 func reject_collection(message := "超过负重，无法拾取。") -> void:
+	if not _collection_pending:
+		return
 	_collection_pending = false
 	_arm_collection_retry_cooldown()
 	collection_rejected.emit(item_name, message)
@@ -178,6 +209,8 @@ func _draw() -> void:
 	if icon_sprite != null:
 		return
 	var bob := sin(_bob_time * 3.0) * 3.0
-	var color: Color = ground_visual_descriptor(item_name).get("fallback_draw_color", Color(0.95, 0.67, 0.12))
+	var color: Color = _visual_descriptor.get(
+		"fallback_draw_color", Color(0.95, 0.67, 0.12)
+	)
 	draw_colored_polygon(PackedVector2Array([Vector2(0, -11 + bob), Vector2(10, bob), Vector2(0, 11 + bob), Vector2(-10, bob)]), color)
 	draw_polyline(PackedVector2Array([Vector2(0, -11 + bob), Vector2(10, bob), Vector2(0, 11 + bob), Vector2(-10, bob), Vector2(0, -11 + bob)]), Color(1.0, 0.93, 0.55), 2.0)
