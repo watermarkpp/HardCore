@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 2,
+  "contract_id": "test.characters.full_skills.v2",
+  "skill_level": 3,
+  "minimum_character_level": 40,
+  "profile_id_pattern": "test.character.<profession>.<equipment_tier>.v2",
+  "non_destructive_policy": "new v2 IDs only; never overwrite v1 profiles or user-created profiles",
+  "source": {
+    "lane": "skills",
+    "tier": "primary",
+    "distribution": "project.hardcore.mir2_176_skill_sot.v1.0.1",
+    "contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
+    "path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+    "sha256": "275555E9F879969E4BB4BECFC268E0ED0912B7D79EF6DEA89731FE43DB0562F7",
+    "fallback_used": false
+  },
+  "equipment_tiers": [
+    "woma",
+    "zuma",
+    "chiyue"
+  ],
+  "equipment_tier_names": {
+    "woma": "沃玛",
+    "zuma": "祖玛",
+    "chiyue": "赤月"
+  },
+  "templates": {
+    "warrior": {
+      "template_id": "test.skills.warrior.full.v2",
+      "skill_ids": [
+        "warrior.basic_swordsmanship",
+        "warrior.slaying_swordsmanship",
+        "warrior.thrusting",
+        "warrior.half_moon",
+        "warrior.wild_rush",
+        "warrior.fire_sword"
+      ],
+      "center_slot_ids": [
+        "warrior.slaying_swordsmanship",
+        "warrior.thrusting",
+        "warrior.half_moon",
+        "warrior.fire_sword"
+      ],
+      "attack_ring_slot_ids": [
+        "warrior.wild_rush",
+        "warrior.fire_sword",
+        "warrior.half_moon"
+      ],
+      "runtime_defaults": {
+        "contract_id": "gameplay.warrior.skill_runtime.v2",
+        "toggles": {
+          "warrior.thrusting": false,
+          "warrior.half_moon": false
+        },
+        "cooldowns": {}
+      }
+    },
+    "wizard": {
+      "template_id": "test.skills.wizard.full.v2",
+      "skill_ids": [
+        "wizard.fireball",
+        "wizard.repulsion_ring",
+        "wizard.temptation_light",
+        "wizard.hellfire",
+        "wizard.lightning",
+        "wizard.teleport",
+        "wizard.great_fireball",
+        "wizard.exploding_flame",
+        "wizard.fire_wall",
+        "wizard.laser",
+        "wizard.hell_lightning",
+        "wizard.magic_shield",
+        "wizard.holy_word",
+        "wizard.ice_storm"
+      ],
+      "center_slot_ids": [
+        "wizard.lightning",
+        "wizard.fire_wall",
+        "wizard.magic_shield",
+        "wizard.ice_storm"
+      ],
+      "attack_ring_slot_ids": [
+        "wizard.fireball",
+        "wizard.hellfire",
+        "wizard.teleport"
+      ],
+      "runtime_defaults": {
+        "contract_id": "caster_profession_state.v1",
+        "cooldowns": {}
+      }
+    },
+    "taoist": {
+      "template_id": "test.skills.taoist.full.v2",
+      "skill_ids": [
+        "taoist.healing",
+        "taoist.spiritual_warfare",
+        "taoist.poison",
+        "taoist.soul_fire_talisman",
+        "taoist.summon_skeleton",
+        "taoist.invisibility",
+        "taoist.mass_invisibility",
+        "taoist.magic_defense",
+        "taoist.defense",
+        "taoist.revelation",
+        "taoist.entrapment",
+        "taoist.mass_healing",
+        "taoist.summon_divine_beast"
+      ],
+      "center_slot_ids": [
+        "taoist.healing",
+        "taoist.poison",
+        "taoist.soul_fire_talisman",
+        "taoist.summon_divine_beast"
+      ],
+      "attack_ring_slot_ids": [
+        "taoist.summon_skeleton",
+        "taoist.invisibility",
+        "taoist.mass_healing"
+      ],
+      "runtime_defaults": {
+        "contract_id": "caster_profession_state.v1",
+        "cooldowns": {},
+        "test_material_grants": {
+          "amulet": 999,
+          "poison_powder": 999
+        }
+      }
+    }
+  }
+}

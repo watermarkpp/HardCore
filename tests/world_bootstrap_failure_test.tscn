@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://failure"]
+[ext_resource type="Script" path="res://tests/world_bootstrap_failure_test.gd" id="1"]
+[node name="Failure" type="Node"]
+script = ExtResource("1")

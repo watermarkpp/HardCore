@@ -68,10 +68,11 @@ func _run() -> void:
 	player.current_hp = player.max_hp
 	var gold_before := PlayerState.gold
 	var dura_before := int(revival_ring.get("durability", 0))
-	player.take_damage(999999)
+	var no_ring_wear := {"slot_rolls": {"左戒指": 1}}
+	player.take_damage(999999, true, no_ring_wear)
 	assert(player.current_hp == player.max_hp and PlayerState.gold == gold_before, "复活戒指首次触发没有原地满血复活")
 	assert(int(revival_ring.get("durability", 0)) == dura_before - 1, "复活触发没有损耗戒指耐久")
-	player.take_damage(999999)
+	player.take_damage(999999, true, no_ring_wear)
 	assert(PlayerState.gold < gold_before, "复活戒指60秒冷却没有阻止连续触发")
 	assert(int(revival_ring.get("durability", 0)) == dura_before - 1, "冷却中的复活戒指被再次损耗")
 

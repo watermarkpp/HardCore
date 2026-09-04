@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q1a_strict_reject"]
+[ext_resource type="Script" path="res://tests/snapshot_strict_consumer_rejection_test.gd" id="1"]
+[node name="SnapshotStrictConsumerRejection" type="Node"]
+script = ExtResource("1")

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "status": "PASS",
+  "skill_count": 33,
+  "class_counts": {
+    "warrior": 6,
+    "wizard": 14,
+    "taoist": 13
+  },
+  "unique_skill_ids": 33,
+  "global_test_count": 19,
+  "skill_test_count": 150,
+  "errors": [],
+  "warnings": [
+    "所有MP数组为project_canonical_mp_v1；尚未证明为盛大官方原始Magic.DB。",
+    "诱惑之光精确驯服概率、魔法盾四档减伤、双盾点数/时长、红毒耐久压力属于project_canonical。",
+    "火墙2×2按CN 1.76文字冻结；部分开源源码使用十字布局，已明确拒绝覆盖。",
+    "半月弧形三个侧格需由项目现有视觉方向映射做一次8方向金样回归，倍率已冻结。",
+    "诱惑之光概率来自被2020修改过的源码及旧代码注释，已明确标为project_canonical，不宣称为盛大官方原值。",
+    "GetPower13已按Pascal源码修正为最终只ROUND一次。"
+  ],
+  "formula_patch": "GetPower13 exact single-final-rounding applied",
+  "temptation_patch": "pre-2020 classic-intent branch reconstructed and explicitly marked project_canonical"
+}

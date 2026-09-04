@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "contractId": "combat.unit.gu_gs_px.v1",
+  "authority": {
+    "kind": "explicit_user_primary_override",
+    "approvedDate": "2026-08-02",
+    "documentPath": "docs/COMBAT-UNIT-V1.md",
+    "evidenceSha256": "9CA9328169EB92F2925BE5A8DD5D0592C979C807BFA92EA62C1307407AC66DC0"
+  },
+  "projection": {
+    "contractId": "world.ground_projection.iso_64x32.v1",
+    "tileWidthPx": 64.0,
+    "tileHeightPx": 32.0,
+    "halfTileWidthPx": 32.0,
+    "halfTileHeightPx": 16.0
+  },
+  "units": {
+    "ground": {
+      "symbol": "GU",
+      "metric": "euclidean",
+      "runtimeSuffix": "_gu"
+    },
+    "gridStep": {
+      "symbol": "GS",
+      "metric": "discrete_adjacency_count",
+      "runtimeSuffix": "_grid_steps"
+    },
+    "screenPixel": {
+      "symbol": "PX",
+      "scope": "rendering_only",
+      "runtimeSuffix": "_px"
+    }
+  },
+  "rangesGu": {
+    "normalMelee": 1.5,
+    "fireSword": 1.5,
+    "halfMoon": 1.5,
+    "thrust": 2.5,
+    "hellfire": 5.0,
+    "laser": 8.0,
+    "attackLock": 10.0,
+    "spellLock": 12.0
+  },
+  "pathCostsGu": {
+    "axisNeighbor": 1.0,
+    "diagonalNeighbor": 1.4142135623730951
+  },
+  "legacyPolicy": {
+    "untypedRuntimeFieldsForbidden": true,
+    "chebyshevForbiddenForEqualLengthGeometry": true,
+    "screenPixelsForbiddenForGameplayDistance": true,
+    "versionedAdaptersRequired": true
+  },
+  "frozenBoundaries": [
+    "player_manual_footpoints",
+    "monster_manual_footpoints",
+    "monster_footprints",
+    "release_frame_footpoint_resampling",
+    "geometry_before_accuracy_resolution",
+    "wizard_hellfire_source_pixels_and_playback",
+    "wizard_laser_accepted_visual_width_px",
+    "equipment_and_helmet_calibrations"
+  ]
+}

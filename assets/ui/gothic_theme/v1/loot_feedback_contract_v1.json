@@ -1,0 +1,56 @@
+{
+  "contractId": "ui.loot.feedback.v1",
+  "policy": "Gameplay owns inventory capacity, item classification, rarity, value, boss provenance, pickup success, and item mutation. UI only renders supplied feedback and never removes a ground drop.",
+  "confirmedInventoryCapacitySlots": 100,
+  "eventTypes": [
+    "pickup_success",
+    "pickup_failed",
+    "rare_drop"
+  ],
+  "eventFields": [
+    "event_type",
+    "drop_id",
+    "item_id",
+    "item_name",
+    "count",
+    "item_kind",
+    "emphasis",
+    "source_name",
+    "source_is_boss",
+    "reason",
+    "message",
+    "duration"
+  ],
+  "itemKinds": [
+    "currency",
+    "quest_item",
+    "equipment",
+    "skill_book",
+    "consumable",
+    "material"
+  ],
+  "emphasisValues": [
+    "normal",
+    "rare",
+    "high_value",
+    "boss"
+  ],
+  "stableVisualIds": [
+    "loot.ground_label",
+    "loot.feedback.normal",
+    "loot.feedback.inventory_full",
+    "loot.feedback.rare_drop"
+  ],
+  "hudMethod": "GameHUD.show_loot_feedback(event)",
+  "compatibilityMethod": "GameHUD.show_loot(item_name)",
+  "groundLabelComponent": {
+    "script": "res://scripts/loot_ground_label.gd",
+    "setupMethod": "setup(data)",
+    "requiredFields": [
+      "item_name",
+      "count",
+      "item_kind",
+      "emphasis"
+    ]
+  }
+}

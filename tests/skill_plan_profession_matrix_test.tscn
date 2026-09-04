@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q3a_matrix"]
+[ext_resource type="Script" path="res://tests/skill_plan_profession_matrix_test.gd" id="1"]
+[node name="SkillPlanProfessionMatrix" type="Node"]
+script = ExtResource("1")

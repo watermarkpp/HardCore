@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/loading_transition_viewport_coverage_test.gd" type="Script" id="1"]
+
+[node name="LoadingTransitionViewportCoverageTest" type="Node"]
+script = ExtResource("1")

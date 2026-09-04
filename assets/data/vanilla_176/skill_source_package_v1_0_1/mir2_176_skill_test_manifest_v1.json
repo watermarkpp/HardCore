@@ -1,0 +1,1011 @@
+{
+  "schema_version": "1.0.0",
+  "source_of_truth": "mir2_176_skills_source_of_truth_v1.json",
+  "global_tests": [
+    {
+      "id": "global_skill_count_33",
+      "assert": "len(skills)==33",
+      "priority": "P0"
+    },
+    {
+      "id": "global_class_counts",
+      "assert": "warrior=6,wizard=14,taoist=13",
+      "priority": "P0"
+    },
+    {
+      "id": "global_unique_skill_ids",
+      "assert": "all skill_id unique",
+      "priority": "P0"
+    },
+    {
+      "id": "global_vanilla_content_layer",
+      "assert": "all content_layer=vanilla",
+      "priority": "P0"
+    },
+    {
+      "id": "global_no_expansion_skill_in_vanilla",
+      "assert": "excluded skill aliases absent",
+      "priority": "P0"
+    },
+    {
+      "id": "global_four_ranks_each",
+      "assert": "each skill has ranks 0..3",
+      "priority": "P0"
+    },
+    {
+      "id": "global_rank_up_requires_level_and_proficiency",
+      "assert": "both gates required",
+      "priority": "P0"
+    },
+    {
+      "id": "global_proficiency_gain_1_to_3",
+      "assert": "eligible success gains deterministic RNG 1..3",
+      "priority": "P0"
+    },
+    {
+      "id": "global_failed_action_no_proficiency",
+      "assert": "invalid/cancelled/failed action gains 0",
+      "priority": "P0"
+    },
+    {
+      "id": "global_proficiency_persists",
+      "assert": "save-load preserves rank and proficiency",
+      "priority": "P0"
+    },
+    {
+      "id": "global_rank_up_resets_proficiency",
+      "assert": "current-rank proficiency resets to 0",
+      "priority": "P0"
+    },
+    {
+      "id": "global_single_runtime_entry",
+      "assert": "all skill effects route through SkillRuntimeRouter",
+      "priority": "P0"
+    },
+    {
+      "id": "global_no_game_root_direct_effect",
+      "assert": "_on_player_skill contains no authoritative damage/buff/resource logic",
+      "priority": "P0"
+    },
+    {
+      "id": "global_server_authoritative",
+      "assert": "client packet cannot choose damage/result",
+      "priority": "P0"
+    },
+    {
+      "id": "global_legacy_delay_audit_only",
+      "assert": "legacy_delay never drives runtime timing",
+      "priority": "P0"
+    },
+    {
+      "id": "global_cast_animation_600ms",
+      "assert": "active wizard/taoist casts use 6x100ms body action unless explicit non-vanilla override",
+      "priority": "P0"
+    },
+    {
+      "id": "global_raw_pixel_ranges_forbidden",
+      "assert": "gameplay geometry uses tiles",
+      "priority": "P0"
+    },
+    {
+      "id": "global_multiplier_not_overridden_to_1",
+      "assert": "skill rank formulas survive profession rule merge",
+      "priority": "P0"
+    },
+    {
+      "id": "global_deterministic_rng_tests",
+      "assert": "all probability tests accept injected seeded RNG",
+      "priority": "P0"
+    }
+  ],
+  "skill_tests": [
+    {
+      "id": "warrior.basic_swordsmanship::basic_swordsmanship_accuracy_by_rank",
+      "skill_id": "warrior.basic_swordsmanship",
+      "priority": "P1",
+      "assert": "basic_swordsmanship_accuracy_by_rank"
+    },
+    {
+      "id": "warrior.basic_swordsmanship::basic_swordsmanship_never_casts",
+      "skill_id": "warrior.basic_swordsmanship",
+      "priority": "P1",
+      "assert": "basic_swordsmanship_never_casts"
+    },
+    {
+      "id": "warrior.basic_swordsmanship::basic_swordsmanship_physical_only",
+      "skill_id": "warrior.basic_swordsmanship",
+      "priority": "P1",
+      "assert": "basic_swordsmanship_physical_only"
+    },
+    {
+      "id": "warrior.slaying_swordsmanship::slaying_proc_table_exact",
+      "skill_id": "warrior.slaying_swordsmanship",
+      "priority": "P1",
+      "assert": "slaying_proc_table_exact"
+    },
+    {
+      "id": "warrior.slaying_swordsmanship::slaying_dc_bonus_exact",
+      "skill_id": "warrior.slaying_swordsmanship",
+      "priority": "P1",
+      "assert": "slaying_dc_bonus_exact"
+    },
+    {
+      "id": "warrior.slaying_swordsmanship::slaying_accuracy_bonus_exact",
+      "skill_id": "warrior.slaying_swordsmanship",
+      "priority": "P1",
+      "assert": "slaying_accuracy_bonus_exact"
+    },
+    {
+      "id": "warrior.slaying_swordsmanship::slaying_training_only_on_proc",
+      "skill_id": "warrior.slaying_swordsmanship",
+      "priority": "P1",
+      "assert": "slaying_training_only_on_proc"
+    },
+    {
+      "id": "warrior.thrusting::thrusting_two_cell_line",
+      "skill_id": "warrior.thrusting",
+      "priority": "P1",
+      "assert": "thrusting_two_cell_line"
+    },
+    {
+      "id": "warrior.thrusting::thrusting_second_cell_multiplier",
+      "skill_id": "warrior.thrusting",
+      "priority": "P1",
+      "assert": "thrusting_second_cell_multiplier"
+    },
+    {
+      "id": "warrior.thrusting::thrusting_second_cell_ignores_ac",
+      "skill_id": "warrior.thrusting",
+      "priority": "P1",
+      "assert": "thrusting_second_cell_ignores_ac"
+    },
+    {
+      "id": "warrior.thrusting::thrusting_one_training_event_per_swing",
+      "skill_id": "warrior.thrusting",
+      "priority": "P1",
+      "assert": "thrusting_one_training_event_per_swing"
+    },
+    {
+      "id": "warrior.half_moon::half_moon_primary_full_damage",
+      "skill_id": "warrior.half_moon",
+      "priority": "P1",
+      "assert": "half_moon_primary_full_damage"
+    },
+    {
+      "id": "warrior.half_moon::half_moon_side_multiplier",
+      "skill_id": "warrior.half_moon",
+      "priority": "P1",
+      "assert": "half_moon_side_multiplier"
+    },
+    {
+      "id": "warrior.half_moon::half_moon_rotates_all_8_directions",
+      "skill_id": "warrior.half_moon",
+      "priority": "P1",
+      "assert": "half_moon_rotates_all_8_directions"
+    },
+    {
+      "id": "warrior.half_moon::half_moon_mp_once_per_swing",
+      "skill_id": "warrior.half_moon",
+      "priority": "P1",
+      "assert": "half_moon_mp_once_per_swing"
+    },
+    {
+      "id": "warrior.half_moon::half_moon_training_once_per_swing",
+      "skill_id": "warrior.half_moon",
+      "priority": "P1",
+      "assert": "half_moon_training_once_per_swing"
+    },
+    {
+      "id": "warrior.wild_rush::wild_rush_lower_level_only",
+      "skill_id": "warrior.wild_rush",
+      "priority": "P1",
+      "assert": "wild_rush_lower_level_only"
+    },
+    {
+      "id": "warrior.wild_rush::wild_rush_probability_formula",
+      "skill_id": "warrior.wild_rush",
+      "priority": "P1",
+      "assert": "wild_rush_probability_formula"
+    },
+    {
+      "id": "warrior.wild_rush::wild_rush_distance_by_rank",
+      "skill_id": "warrior.wild_rush",
+      "priority": "P1",
+      "assert": "wild_rush_distance_by_rank"
+    },
+    {
+      "id": "warrior.wild_rush::wild_rush_collision_self_damage",
+      "skill_id": "warrior.wild_rush",
+      "priority": "P1",
+      "assert": "wild_rush_collision_self_damage"
+    },
+    {
+      "id": "warrior.wild_rush::wild_rush_boss_immune",
+      "skill_id": "warrior.wild_rush",
+      "priority": "P1",
+      "assert": "wild_rush_boss_immune"
+    },
+    {
+      "id": "warrior.wild_rush::wild_rush_training_only_on_displacement",
+      "skill_id": "warrior.wild_rush",
+      "priority": "P1",
+      "assert": "wild_rush_training_only_on_displacement"
+    },
+    {
+      "id": "warrior.fire_sword::fire_sword_never_auto_casts",
+      "skill_id": "warrior.fire_sword",
+      "priority": "P1",
+      "assert": "fire_sword_never_auto_casts"
+    },
+    {
+      "id": "warrior.fire_sword::fire_sword_multiplier_exact",
+      "skill_id": "warrior.fire_sword",
+      "priority": "P1",
+      "assert": "fire_sword_multiplier_exact"
+    },
+    {
+      "id": "warrior.fire_sword::fire_sword_charge_expires",
+      "skill_id": "warrior.fire_sword",
+      "priority": "P1",
+      "assert": "fire_sword_charge_expires"
+    },
+    {
+      "id": "warrior.fire_sword::fire_sword_consumed_once",
+      "skill_id": "warrior.fire_sword",
+      "priority": "P1",
+      "assert": "fire_sword_consumed_once"
+    },
+    {
+      "id": "warrior.fire_sword::fire_sword_cooldown_independent_from_charge_lifetime",
+      "skill_id": "warrior.fire_sword",
+      "priority": "P1",
+      "assert": "fire_sword_cooldown_independent_from_charge_lifetime"
+    },
+    {
+      "id": "wizard.fireball::fireball_uses_target_and_los",
+      "skill_id": "wizard.fireball",
+      "priority": "P1",
+      "assert": "fireball_uses_target_and_los"
+    },
+    {
+      "id": "wizard.fireball::fireball_power_formula",
+      "skill_id": "wizard.fireball",
+      "priority": "P1",
+      "assert": "fireball_power_formula"
+    },
+    {
+      "id": "wizard.fireball::fireball_rank_increases_expected_power",
+      "skill_id": "wizard.fireball",
+      "priority": "P1",
+      "assert": "fireball_rank_increases_expected_power"
+    },
+    {
+      "id": "wizard.fireball::fireball_mac_defence",
+      "skill_id": "wizard.fireball",
+      "priority": "P1",
+      "assert": "fireball_mac_defence"
+    },
+    {
+      "id": "wizard.repulsion_ring::repulsion_no_damage",
+      "skill_id": "wizard.repulsion_ring",
+      "priority": "P1",
+      "assert": "repulsion_no_damage"
+    },
+    {
+      "id": "wizard.repulsion_ring::repulsion_lower_level_only",
+      "skill_id": "wizard.repulsion_ring",
+      "priority": "P1",
+      "assert": "repulsion_lower_level_only"
+    },
+    {
+      "id": "wizard.repulsion_ring::repulsion_probability",
+      "skill_id": "wizard.repulsion_ring",
+      "priority": "P1",
+      "assert": "repulsion_probability"
+    },
+    {
+      "id": "wizard.repulsion_ring::repulsion_push_distance",
+      "skill_id": "wizard.repulsion_ring",
+      "priority": "P1",
+      "assert": "repulsion_push_distance"
+    },
+    {
+      "id": "wizard.repulsion_ring::repulsion_collision",
+      "skill_id": "wizard.repulsion_ring",
+      "priority": "P1",
+      "assert": "repulsion_collision"
+    },
+    {
+      "id": "wizard.temptation_light::temptation_monster_only",
+      "skill_id": "wizard.temptation_light",
+      "priority": "P1",
+      "assert": "temptation_monster_only"
+    },
+    {
+      "id": "wizard.temptation_light::temptation_boss_immune",
+      "skill_id": "wizard.temptation_light",
+      "priority": "P1",
+      "assert": "temptation_boss_immune"
+    },
+    {
+      "id": "wizard.temptation_light::temptation_pet_cap",
+      "skill_id": "wizard.temptation_light",
+      "priority": "P1",
+      "assert": "temptation_pet_cap"
+    },
+    {
+      "id": "wizard.temptation_light::temptation_tame_probability_deterministic",
+      "skill_id": "wizard.temptation_light",
+      "priority": "P1",
+      "assert": "temptation_tame_probability_deterministic"
+    },
+    {
+      "id": "wizard.temptation_light::temptation_failure_control",
+      "skill_id": "wizard.temptation_light",
+      "priority": "P1",
+      "assert": "temptation_failure_control"
+    },
+    {
+      "id": "wizard.temptation_light::temptation_not_six_second_generic_charm",
+      "skill_id": "wizard.temptation_light",
+      "priority": "P1",
+      "assert": "temptation_not_six_second_generic_charm"
+    },
+    {
+      "id": "wizard.hellfire::hellfire_exact_five_tile_line",
+      "skill_id": "wizard.hellfire",
+      "priority": "P1",
+      "assert": "hellfire_exact_five_tile_line"
+    },
+    {
+      "id": "wizard.hellfire::hellfire_width_one",
+      "skill_id": "wizard.hellfire",
+      "priority": "P1",
+      "assert": "hellfire_width_one"
+    },
+    {
+      "id": "wizard.hellfire::hellfire_stops_on_terrain",
+      "skill_id": "wizard.hellfire",
+      "priority": "P1",
+      "assert": "hellfire_stops_on_terrain"
+    },
+    {
+      "id": "wizard.hellfire::hellfire_power_formula",
+      "skill_id": "wizard.hellfire",
+      "priority": "P1",
+      "assert": "hellfire_power_formula"
+    },
+    {
+      "id": "wizard.lightning::lightning_is_sky_strike",
+      "skill_id": "wizard.lightning",
+      "priority": "P1",
+      "assert": "lightning_is_sky_strike"
+    },
+    {
+      "id": "wizard.lightning::lightning_no_horizontal_projectile",
+      "skill_id": "wizard.lightning",
+      "priority": "P1",
+      "assert": "lightning_no_horizontal_projectile"
+    },
+    {
+      "id": "wizard.lightning::lightning_undead_multiplier",
+      "skill_id": "wizard.lightning",
+      "priority": "P1",
+      "assert": "lightning_undead_multiplier"
+    },
+    {
+      "id": "wizard.lightning::lightning_power_formula",
+      "skill_id": "wizard.lightning",
+      "priority": "P1",
+      "assert": "lightning_power_formula"
+    },
+    {
+      "id": "wizard.great_fireball::great_fireball_los",
+      "skill_id": "wizard.great_fireball",
+      "priority": "P1",
+      "assert": "great_fireball_los"
+    },
+    {
+      "id": "wizard.great_fireball::great_fireball_power_formula",
+      "skill_id": "wizard.great_fireball",
+      "priority": "P1",
+      "assert": "great_fireball_power_formula"
+    },
+    {
+      "id": "wizard.great_fireball::great_fireball_expected_power_exceeds_or_differs_from_fireball",
+      "skill_id": "wizard.great_fireball",
+      "priority": "P1",
+      "assert": "great_fireball_expected_power_exceeds_or_differs_from_fireball"
+    },
+    {
+      "id": "wizard.teleport::teleport_never_forward_dash",
+      "skill_id": "wizard.teleport",
+      "priority": "P1",
+      "assert": "teleport_never_forward_dash"
+    },
+    {
+      "id": "wizard.teleport::teleport_probability_exact",
+      "skill_id": "wizard.teleport",
+      "priority": "P1",
+      "assert": "teleport_probability_exact"
+    },
+    {
+      "id": "wizard.teleport::teleport_failure_stays_in_place",
+      "skill_id": "wizard.teleport",
+      "priority": "P1",
+      "assert": "teleport_failure_stays_in_place"
+    },
+    {
+      "id": "wizard.teleport::teleport_destination_valid",
+      "skill_id": "wizard.teleport",
+      "priority": "P1",
+      "assert": "teleport_destination_valid"
+    },
+    {
+      "id": "wizard.teleport::teleport_server_authoritative",
+      "skill_id": "wizard.teleport",
+      "priority": "P1",
+      "assert": "teleport_server_authoritative"
+    },
+    {
+      "id": "wizard.exploding_flame::exploding_flame_target_centered",
+      "skill_id": "wizard.exploding_flame",
+      "priority": "P1",
+      "assert": "exploding_flame_target_centered"
+    },
+    {
+      "id": "wizard.exploding_flame::exploding_flame_exact_3x3",
+      "skill_id": "wizard.exploding_flame",
+      "priority": "P1",
+      "assert": "exploding_flame_exact_3x3"
+    },
+    {
+      "id": "wizard.exploding_flame::exploding_flame_power_formula",
+      "skill_id": "wizard.exploding_flame",
+      "priority": "P1",
+      "assert": "exploding_flame_power_formula"
+    },
+    {
+      "id": "wizard.fire_wall::fire_wall_exact_2x2",
+      "skill_id": "wizard.fire_wall",
+      "priority": "P1",
+      "assert": "fire_wall_exact_2x2"
+    },
+    {
+      "id": "wizard.fire_wall::fire_wall_duration_scales",
+      "skill_id": "wizard.fire_wall",
+      "priority": "P1",
+      "assert": "fire_wall_duration_scales"
+    },
+    {
+      "id": "wizard.fire_wall::fire_wall_tick_once_per_caster",
+      "skill_id": "wizard.fire_wall",
+      "priority": "P1",
+      "assert": "fire_wall_tick_once_per_caster"
+    },
+    {
+      "id": "wizard.fire_wall::fire_wall_refresh_not_stack",
+      "skill_id": "wizard.fire_wall",
+      "priority": "P1",
+      "assert": "fire_wall_refresh_not_stack"
+    },
+    {
+      "id": "wizard.fire_wall::fire_wall_not_circle_or_cross",
+      "skill_id": "wizard.fire_wall",
+      "priority": "P1",
+      "assert": "fire_wall_not_circle_or_cross"
+    },
+    {
+      "id": "wizard.laser::laser_exact_eight_tile_line",
+      "skill_id": "wizard.laser",
+      "priority": "P1",
+      "assert": "laser_exact_eight_tile_line"
+    },
+    {
+      "id": "wizard.laser::laser_width_one",
+      "skill_id": "wizard.laser",
+      "priority": "P1",
+      "assert": "laser_width_one"
+    },
+    {
+      "id": "wizard.laser::laser_pierces_units",
+      "skill_id": "wizard.laser",
+      "priority": "P1",
+      "assert": "laser_pierces_units"
+    },
+    {
+      "id": "wizard.laser::laser_stops_on_terrain",
+      "skill_id": "wizard.laser",
+      "priority": "P1",
+      "assert": "laser_stops_on_terrain"
+    },
+    {
+      "id": "wizard.laser::laser_no_undead_bonus",
+      "skill_id": "wizard.laser",
+      "priority": "P1",
+      "assert": "laser_no_undead_bonus"
+    },
+    {
+      "id": "wizard.hell_lightning::hell_lightning_max_24",
+      "skill_id": "wizard.hell_lightning",
+      "priority": "P1",
+      "assert": "hell_lightning_max_24"
+    },
+    {
+      "id": "wizard.hell_lightning::hell_lightning_caster_centered_radius_2",
+      "skill_id": "wizard.hell_lightning",
+      "priority": "P1",
+      "assert": "hell_lightning_caster_centered_radius_2"
+    },
+    {
+      "id": "wizard.hell_lightning::hell_lightning_excludes_center",
+      "skill_id": "wizard.hell_lightning",
+      "priority": "P1",
+      "assert": "hell_lightning_excludes_center"
+    },
+    {
+      "id": "wizard.hell_lightning::hell_lightning_power_formula",
+      "skill_id": "wizard.hell_lightning",
+      "priority": "P1",
+      "assert": "hell_lightning_power_formula"
+    },
+    {
+      "id": "wizard.magic_shield::magic_shield_reduction_increases_by_rank",
+      "skill_id": "wizard.magic_shield",
+      "priority": "P1",
+      "assert": "magic_shield_reduction_increases_by_rank"
+    },
+    {
+      "id": "wizard.magic_shield::magic_shield_reduces_physical_and_magic",
+      "skill_id": "wizard.magic_shield",
+      "priority": "P1",
+      "assert": "magic_shield_reduces_physical_and_magic"
+    },
+    {
+      "id": "wizard.magic_shield::magic_shield_duration_uses_mc",
+      "skill_id": "wizard.magic_shield",
+      "priority": "P1",
+      "assert": "magic_shield_duration_uses_mc"
+    },
+    {
+      "id": "wizard.magic_shield::magic_shield_refresh_not_stack",
+      "skill_id": "wizard.magic_shield",
+      "priority": "P1",
+      "assert": "magic_shield_refresh_not_stack"
+    },
+    {
+      "id": "wizard.holy_word::holy_word_undead_only",
+      "skill_id": "wizard.holy_word",
+      "priority": "P1",
+      "assert": "holy_word_undead_only"
+    },
+    {
+      "id": "wizard.holy_word::holy_word_boss_immune",
+      "skill_id": "wizard.holy_word",
+      "priority": "P1",
+      "assert": "holy_word_boss_immune"
+    },
+    {
+      "id": "wizard.holy_word::holy_word_probability_exact",
+      "skill_id": "wizard.holy_word",
+      "priority": "P1",
+      "assert": "holy_word_probability_exact"
+    },
+    {
+      "id": "wizard.holy_word::holy_word_success_kills",
+      "skill_id": "wizard.holy_word",
+      "priority": "P1",
+      "assert": "holy_word_success_kills"
+    },
+    {
+      "id": "wizard.holy_word::holy_word_failure_no_damage",
+      "skill_id": "wizard.holy_word",
+      "priority": "P1",
+      "assert": "holy_word_failure_no_damage"
+    },
+    {
+      "id": "wizard.holy_word::holy_word_training_on_success_only",
+      "skill_id": "wizard.holy_word",
+      "priority": "P1",
+      "assert": "holy_word_training_on_success_only"
+    },
+    {
+      "id": "wizard.ice_storm::ice_storm_target_centered",
+      "skill_id": "wizard.ice_storm",
+      "priority": "P1",
+      "assert": "ice_storm_target_centered"
+    },
+    {
+      "id": "wizard.ice_storm::ice_storm_exact_3x3",
+      "skill_id": "wizard.ice_storm",
+      "priority": "P1",
+      "assert": "ice_storm_exact_3x3"
+    },
+    {
+      "id": "wizard.ice_storm::ice_storm_power_formula",
+      "skill_id": "wizard.ice_storm",
+      "priority": "P1",
+      "assert": "ice_storm_power_formula"
+    },
+    {
+      "id": "taoist.healing::healing_self_or_friendly",
+      "skill_id": "taoist.healing",
+      "priority": "P1",
+      "assert": "healing_self_or_friendly"
+    },
+    {
+      "id": "taoist.healing::healing_rejects_hostile",
+      "skill_id": "taoist.healing",
+      "priority": "P1",
+      "assert": "healing_rejects_hostile"
+    },
+    {
+      "id": "taoist.healing::healing_formula",
+      "skill_id": "taoist.healing",
+      "priority": "P1",
+      "assert": "healing_formula"
+    },
+    {
+      "id": "taoist.healing::healing_training_only_if_hp_restored",
+      "skill_id": "taoist.healing",
+      "priority": "P1",
+      "assert": "healing_training_only_if_hp_restored"
+    },
+    {
+      "id": "taoist.spiritual_warfare::spiritual_warfare_accuracy_exact",
+      "skill_id": "taoist.spiritual_warfare",
+      "priority": "P1",
+      "assert": "spiritual_warfare_accuracy_exact"
+    },
+    {
+      "id": "taoist.spiritual_warfare::spiritual_warfare_never_casts",
+      "skill_id": "taoist.spiritual_warfare",
+      "priority": "P1",
+      "assert": "spiritual_warfare_never_casts"
+    },
+    {
+      "id": "taoist.spiritual_warfare::spiritual_warfare_no_cooldown",
+      "skill_id": "taoist.spiritual_warfare",
+      "priority": "P1",
+      "assert": "spiritual_warfare_no_cooldown"
+    },
+    {
+      "id": "taoist.spiritual_warfare::spiritual_warfare_physical_only",
+      "skill_id": "taoist.spiritual_warfare",
+      "priority": "P1",
+      "assert": "spiritual_warfare_physical_only"
+    },
+    {
+      "id": "taoist.poison::poison_consumes_selected_powder",
+      "skill_id": "taoist.poison",
+      "priority": "P1",
+      "assert": "poison_consumes_selected_powder"
+    },
+    {
+      "id": "taoist.poison::poison_green_and_red_separate",
+      "skill_id": "taoist.poison",
+      "priority": "P1",
+      "assert": "poison_green_and_red_separate"
+    },
+    {
+      "id": "taoist.poison::poison_resist_formula",
+      "skill_id": "taoist.poison",
+      "priority": "P1",
+      "assert": "poison_resist_formula"
+    },
+    {
+      "id": "taoist.poison::poison_green_ticks",
+      "skill_id": "taoist.poison",
+      "priority": "P1",
+      "assert": "poison_green_ticks"
+    },
+    {
+      "id": "taoist.poison::poison_red_reduces_ac_mac",
+      "skill_id": "taoist.poison",
+      "priority": "P1",
+      "assert": "poison_red_reduces_ac_mac"
+    },
+    {
+      "id": "taoist.poison::poison_same_type_refreshes",
+      "skill_id": "taoist.poison",
+      "priority": "P1",
+      "assert": "poison_same_type_refreshes"
+    },
+    {
+      "id": "taoist.soul_fire_talisman::soul_fire_requires_one_amulet",
+      "skill_id": "taoist.soul_fire_talisman",
+      "priority": "P1",
+      "assert": "soul_fire_requires_one_amulet"
+    },
+    {
+      "id": "taoist.soul_fire_talisman::soul_fire_requires_los",
+      "skill_id": "taoist.soul_fire_talisman",
+      "priority": "P1",
+      "assert": "soul_fire_requires_los"
+    },
+    {
+      "id": "taoist.soul_fire_talisman::soul_fire_power_formula",
+      "skill_id": "taoist.soul_fire_talisman",
+      "priority": "P1",
+      "assert": "soul_fire_power_formula"
+    },
+    {
+      "id": "taoist.soul_fire_talisman::soul_fire_no_material_loss_on_invalid_target",
+      "skill_id": "taoist.soul_fire_talisman",
+      "priority": "P1",
+      "assert": "soul_fire_no_material_loss_on_invalid_target"
+    },
+    {
+      "id": "taoist.summon_skeleton::summon_skeleton_consumes_one_amulet_only_on_new_spawn",
+      "skill_id": "taoist.summon_skeleton",
+      "priority": "P1",
+      "assert": "summon_skeleton_consumes_one_amulet_only_on_new_spawn"
+    },
+    {
+      "id": "taoist.summon_skeleton::summon_skeleton_recast_recalls",
+      "skill_id": "taoist.summon_skeleton",
+      "priority": "P1",
+      "assert": "summon_skeleton_recast_recalls"
+    },
+    {
+      "id": "taoist.summon_skeleton::taoist_main_pet_limit_one",
+      "skill_id": "taoist.summon_skeleton",
+      "priority": "P1",
+      "assert": "taoist_main_pet_limit_one"
+    },
+    {
+      "id": "taoist.summon_skeleton::summon_skill_rank_separate_pet_level",
+      "skill_id": "taoist.summon_skeleton",
+      "priority": "P1",
+      "assert": "summon_skill_rank_separate_pet_level"
+    },
+    {
+      "id": "taoist.summon_skeleton::summon_skeleton_no_forced_delete",
+      "skill_id": "taoist.summon_skeleton",
+      "priority": "P1",
+      "assert": "summon_skeleton_no_forced_delete"
+    },
+    {
+      "id": "taoist.invisibility::invisibility_consumes_amulet",
+      "skill_id": "taoist.invisibility",
+      "priority": "P1",
+      "assert": "invisibility_consumes_amulet"
+    },
+    {
+      "id": "taoist.invisibility::invisibility_monster_aggro_only",
+      "skill_id": "taoist.invisibility",
+      "priority": "P1",
+      "assert": "invisibility_monster_aggro_only"
+    },
+    {
+      "id": "taoist.invisibility::invisibility_not_pvp_untargetable",
+      "skill_id": "taoist.invisibility",
+      "priority": "P1",
+      "assert": "invisibility_not_pvp_untargetable"
+    },
+    {
+      "id": "taoist.invisibility::invisibility_duration_formula",
+      "skill_id": "taoist.invisibility",
+      "priority": "P1",
+      "assert": "invisibility_duration_formula"
+    },
+    {
+      "id": "taoist.invisibility::invisibility_breaks_on_move",
+      "skill_id": "taoist.invisibility",
+      "priority": "P1",
+      "assert": "invisibility_breaks_on_move"
+    },
+    {
+      "id": "taoist.invisibility::invisibility_spell_cast_does_not_break",
+      "skill_id": "taoist.invisibility",
+      "priority": "P1",
+      "assert": "invisibility_spell_cast_does_not_break"
+    },
+    {
+      "id": "taoist.mass_invisibility::mass_invisibility_exact_3x3",
+      "skill_id": "taoist.mass_invisibility",
+      "priority": "P1",
+      "assert": "mass_invisibility_exact_3x3"
+    },
+    {
+      "id": "taoist.mass_invisibility::mass_invisibility_affects_friendlies",
+      "skill_id": "taoist.mass_invisibility",
+      "priority": "P1",
+      "assert": "mass_invisibility_affects_friendlies"
+    },
+    {
+      "id": "taoist.mass_invisibility::mass_invisibility_not_self_only",
+      "skill_id": "taoist.mass_invisibility",
+      "priority": "P1",
+      "assert": "mass_invisibility_not_self_only"
+    },
+    {
+      "id": "taoist.mass_invisibility::mass_invisibility_consumes_one_amulet_on_success",
+      "skill_id": "taoist.mass_invisibility",
+      "priority": "P1",
+      "assert": "mass_invisibility_consumes_one_amulet_on_success"
+    },
+    {
+      "id": "taoist.magic_defense::soul_shield_modifies_mac_only",
+      "skill_id": "taoist.magic_defense",
+      "priority": "P1",
+      "assert": "soul_shield_modifies_mac_only"
+    },
+    {
+      "id": "taoist.magic_defense::soul_shield_area_radius_3",
+      "skill_id": "taoist.magic_defense",
+      "priority": "P1",
+      "assert": "soul_shield_area_radius_3"
+    },
+    {
+      "id": "taoist.magic_defense::soul_shield_coexists_with_blessed_armour",
+      "skill_id": "taoist.magic_defense",
+      "priority": "P1",
+      "assert": "soul_shield_coexists_with_blessed_armour"
+    },
+    {
+      "id": "taoist.magic_defense::soul_shield_consumes_amulet_on_success",
+      "skill_id": "taoist.magic_defense",
+      "priority": "P1",
+      "assert": "soul_shield_consumes_amulet_on_success"
+    },
+    {
+      "id": "taoist.defense::blessed_armour_modifies_ac_only",
+      "skill_id": "taoist.defense",
+      "priority": "P1",
+      "assert": "blessed_armour_modifies_ac_only"
+    },
+    {
+      "id": "taoist.defense::blessed_armour_area_radius_3",
+      "skill_id": "taoist.defense",
+      "priority": "P1",
+      "assert": "blessed_armour_area_radius_3"
+    },
+    {
+      "id": "taoist.defense::blessed_armour_coexists_with_soul_shield",
+      "skill_id": "taoist.defense",
+      "priority": "P1",
+      "assert": "blessed_armour_coexists_with_soul_shield"
+    },
+    {
+      "id": "taoist.defense::blessed_armour_consumes_amulet_on_success",
+      "skill_id": "taoist.defense",
+      "priority": "P1",
+      "assert": "blessed_armour_consumes_amulet_on_success"
+    },
+    {
+      "id": "taoist.revelation::revelation_manual_target",
+      "skill_id": "taoist.revelation",
+      "priority": "P1",
+      "assert": "revelation_manual_target"
+    },
+    {
+      "id": "taoist.revelation::revelation_targets_player_or_monster",
+      "skill_id": "taoist.revelation",
+      "priority": "P1",
+      "assert": "revelation_targets_player_or_monster"
+    },
+    {
+      "id": "taoist.revelation::revelation_probability_exact",
+      "skill_id": "taoist.revelation",
+      "priority": "P1",
+      "assert": "revelation_probability_exact"
+    },
+    {
+      "id": "taoist.revelation::revelation_duration_formula",
+      "skill_id": "taoist.revelation",
+      "priority": "P1",
+      "assert": "revelation_duration_formula"
+    },
+    {
+      "id": "taoist.revelation::revelation_no_damage",
+      "skill_id": "taoist.revelation",
+      "priority": "P1",
+      "assert": "revelation_no_damage"
+    },
+    {
+      "id": "taoist.entrapment::entrapment_monsters_only",
+      "skill_id": "taoist.entrapment",
+      "priority": "P1",
+      "assert": "entrapment_monsters_only"
+    },
+    {
+      "id": "taoist.entrapment::entrapment_boss_immune",
+      "skill_id": "taoist.entrapment",
+      "priority": "P1",
+      "assert": "entrapment_boss_immune"
+    },
+    {
+      "id": "taoist.entrapment::entrapment_boundary_prevents_exit",
+      "skill_id": "taoist.entrapment",
+      "priority": "P1",
+      "assert": "entrapment_boundary_prevents_exit"
+    },
+    {
+      "id": "taoist.entrapment::entrapment_breaks_on_player_entry",
+      "skill_id": "taoist.entrapment",
+      "priority": "P1",
+      "assert": "entrapment_breaks_on_player_entry"
+    },
+    {
+      "id": "taoist.entrapment::entrapment_consumes_amulet_only_on_success",
+      "skill_id": "taoist.entrapment",
+      "priority": "P1",
+      "assert": "entrapment_consumes_amulet_only_on_success"
+    },
+    {
+      "id": "taoist.entrapment::entrapment_not_generic_root",
+      "skill_id": "taoist.entrapment",
+      "priority": "P1",
+      "assert": "entrapment_not_generic_root"
+    },
+    {
+      "id": "taoist.mass_healing::mass_healing_exact_3x3",
+      "skill_id": "taoist.mass_healing",
+      "priority": "P1",
+      "assert": "mass_healing_exact_3x3"
+    },
+    {
+      "id": "taoist.mass_healing::mass_healing_friendlies_not_self_only",
+      "skill_id": "taoist.mass_healing",
+      "priority": "P1",
+      "assert": "mass_healing_friendlies_not_self_only"
+    },
+    {
+      "id": "taoist.mass_healing::mass_healing_formula",
+      "skill_id": "taoist.mass_healing",
+      "priority": "P1",
+      "assert": "mass_healing_formula"
+    },
+    {
+      "id": "taoist.mass_healing::mass_healing_training_only_if_actual_heal",
+      "skill_id": "taoist.mass_healing",
+      "priority": "P1",
+      "assert": "mass_healing_training_only_if_actual_heal"
+    },
+    {
+      "id": "taoist.mass_healing::mass_healing_not_negative_damage",
+      "skill_id": "taoist.mass_healing",
+      "priority": "P1",
+      "assert": "mass_healing_not_negative_damage"
+    },
+    {
+      "id": "taoist.summon_divine_beast::summon_divine_beast_consumes_five_amulets_only_on_new_spawn",
+      "skill_id": "taoist.summon_divine_beast",
+      "priority": "P1",
+      "assert": "summon_divine_beast_consumes_five_amulets_only_on_new_spawn"
+    },
+    {
+      "id": "taoist.summon_divine_beast::summon_divine_beast_recast_recalls",
+      "skill_id": "taoist.summon_divine_beast",
+      "priority": "P1",
+      "assert": "summon_divine_beast_recast_recalls"
+    },
+    {
+      "id": "taoist.summon_divine_beast::taoist_main_pet_limit_one",
+      "skill_id": "taoist.summon_divine_beast",
+      "priority": "P1",
+      "assert": "taoist_main_pet_limit_one"
+    },
+    {
+      "id": "taoist.summon_divine_beast::divine_beast_skill_rank_separate_pet_level",
+      "skill_id": "taoist.summon_divine_beast",
+      "priority": "P1",
+      "assert": "divine_beast_skill_rank_separate_pet_level"
+    },
+    {
+      "id": "taoist.summon_divine_beast::summon_divine_beast_no_forced_delete",
+      "skill_id": "taoist.summon_divine_beast",
+      "priority": "P1",
+      "assert": "summon_divine_beast_no_forced_delete"
+    }
+  ],
+  "execution_policy": {
+    "phase_0": "run current tests read-only and archive baseline",
+    "phase_1": "add data/schema tests",
+    "phase_2": "add proficiency/save tests",
+    "phase_3": "switch authoritative runtime behind feature flag",
+    "phase_4": "enable class skills incrementally",
+    "all_p0_required_before_apk": true
+  }
+}

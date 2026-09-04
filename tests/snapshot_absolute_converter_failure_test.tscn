@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q1a_abs_converter_fail"]
+[ext_resource type="Script" path="res://tests/snapshot_absolute_converter_failure_test.gd" id="1"]
+[node name="SnapshotAbsoluteConverterFailure" type="Node"]
+script = ExtResource("1")

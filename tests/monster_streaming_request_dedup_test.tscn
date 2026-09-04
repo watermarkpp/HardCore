@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2d_dedup"]
+[ext_resource type="Script" path="res://tests/monster_streaming_request_dedup_test.gd" id="1"]
+[node name="MonsterStreamingRequestDedup" type="Node"]
+script = ExtResource("1")

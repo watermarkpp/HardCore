@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q0b_csguard"]
+[ext_resource type="Script" path="res://tests/safe_logout_character_select_guard_test.gd" id="1"]
+[node name="SafeLogoutCharacterSelectGuard" type="Node"]
+script = ExtResource("1")

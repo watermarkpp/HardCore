@@ -1,0 +1,94 @@
+extends Node
+
+const CONTRACT_PATH := "res://assets/ui/gothic_theme/v1/system_menu_audio_contract_v1.json"
+const SystemMenuPanelScript := preload("res://scripts/system_menu_panel.gd")
+const GothicFrameFillScript := preload("res://scripts/gothic_frame_fill.gd")
+
+
+func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	var contract: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONTRACT_PATH))
+	assert(contract is Dictionary, "系统菜单音频契约无法解析")
+	assert(contract.get("menuContractId", "") == "ui.system_menu.action.v1", "系统菜单契约 ID 不稳定")
+	assert(contract.get("audioContractId", "") == "ui.audio.setting.v1", "音频设置契约 ID 不稳定")
+	var menu: Control = SystemMenuPanelScript.new()
+	add_child(menu)
+	await get_tree().process_frame
+
+	assert(menu.process_mode == Node.PROCESS_MODE_WHEN_PAUSED, "暂停菜单不能在游戏暂停时工作")
+	assert(menu.modal.theme_type_variation == "GothicModalFrame", "暂停菜单没有使用公共哥特外框")
+	assert(menu.modal.get_node("ModalSurface").get_script() == GothicFrameFillScript, "暂停菜单一级框没有使用代码背景")
+	assert(menu.modal.has_node("ModalFrameSafetyOverlay"), "暂停菜单缺少双圈安全覆盖层")
+	var layout_contract: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/ui/manual_layout_overrides.json"))
+	var modal_saved: Array = layout_contract["profiles"]["system_menu"]["nodes"]["SystemMenuModal"]["logicalRect"] if layout_contract["profiles"]["system_menu"]["nodes"].has("SystemMenuModal") else []
+	assert(modal_saved.size() == 4, "系统菜单正式布局合同缺少 Modal")
+	var modal_center: Vector2 = menu.modal.get_global_rect().get_center()
+	assert(absf(modal_center.x - menu.size.x * 0.5) <= 1.0 and absf(modal_center.y - menu.size.y * 0.5) <= 1.0, "暂停菜单数学上未相对完整屏幕居中")
+	assert(menu.current_page == "main" and menu.main_page.visible and not menu.settings_page.visible, "暂停菜单默认页面错误")
+	assert(menu.continue_button.size.y >= 56, "继续游戏按钮触控区不足")
+	assert(menu.continue_button.theme_type_variation == &"GothicComponentButton", "继续游戏动作不应伪装为持久选择")
+	assert(menu.character_select_button.size.y >= 56, "返回人物选择按钮触控区不足")
+	assert(menu.save_exit_button.size.y >= 56, "保存并退出按钮触控区不足")
+	assert(menu.settings_button.size.y >= 56, "游戏设置按钮触控区不足")
+	assert(menu.settings_button.text == "游戏设置", "主菜单没有用游戏设置替代安全回城说明")
+	assert(not _tree_contains_text(menu, "安全回城"), "暂停菜单仍显示已删除的安全回城说明")
+
+	menu.show_settings_page()
+	assert(menu.current_page == "settings" and menu.settings_page.visible and not menu.main_page.visible, "游戏设置页面没有打开")
+	assert(menu.music_toggle.get_meta("setting_id", "") == "audio.music.enabled", "游戏音乐稳定设置 ID 错误")
+	assert(menu.sfx_toggle.get_meta("setting_id", "") == "audio.sfx.enabled", "游戏音效稳定设置 ID 错误")
+	var music_frame: Button = menu.settings_page.get_node("MusicFrame")
+	var sfx_frame: Button = menu.settings_page.get_node("SFXFrame")
+	var music_title: Label = menu.settings_page.get_node("MusicTitle")
+	var sfx_title: Label = menu.settings_page.get_node("SFXTitle")
+	assert(music_frame.theme_type_variation == &"GothicComponentButton", "游戏音乐背景未使用公共大按钮")
+	assert(sfx_frame.theme_type_variation == &"GothicComponentButton", "游戏音效背景未使用公共大按钮")
+	assert(music_frame.mouse_filter == Control.MOUSE_FILTER_IGNORE and sfx_frame.mouse_filter == Control.MOUSE_FILTER_IGNORE, "声音背景仍会响应悬停")
+	assert(menu.music_toggle.theme_type_variation == &"GothicSettingsSwitch" and menu.sfx_toggle.theme_type_variation == &"GothicSettingsSwitch", "声音开关未使用透明独立样式")
+	assert(menu.music_toggle.get_theme_stylebox("hover") is StyleBoxEmpty, "声音开关悬停仍会覆盖背景")
+	assert(menu.music_toggle.position == menu.sfx_toggle.position - Vector2(0, 92), "两行声音设置没有使用同一布局")
+	assert(music_frame.size == Vector2(356, 68) and sfx_frame.size == Vector2(356, 68), "声音设置大按钮尺寸不一致")
+	assert(music_title.text == "游戏音乐" and sfx_title.text == "游戏音效", "声音标题错误")
+	var music_frame_local := Rect2(Vector2.ZERO, music_frame.size)
+	assert(music_frame_local.encloses(Rect2(music_title.position - music_frame.position, music_title.size)), "游戏音乐标题越出背景安全区")
+	assert(music_frame_local.encloses(Rect2(menu.music_status_label.position - music_frame.position, menu.music_status_label.size)), "游戏音乐状态越出背景安全区")
+	assert(music_frame_local.encloses(Rect2(menu.music_toggle.position - music_frame.position, menu.music_toggle.size)), "游戏音乐开关越出背景安全区")
+	assert(menu.music_status_label.position.x == menu.sfx_status_label.position.x, "声音状态文字没有对齐")
+	menu.set_audio_settings(true, true)
+	assert(menu.music_status_label.text == "已开启" and menu.sfx_status_label.text == "已开启", "音频开关初始状态没有同步")
+	var requests: Array[Dictionary] = []
+	menu.audio_setting_changed.connect(func(request: Dictionary) -> void: requests.append(request.duplicate(true)))
+	menu.music_toggle.set_pressed(false)
+	menu.sfx_toggle.set_pressed(false)
+	assert(requests.size() == 2, "音乐和音效开关没有分别发出请求")
+	assert(requests[0].contract_id == "ui.audio.setting.v1" and requests[0].setting_id == "audio.music.enabled", "音乐设置请求错误")
+	assert(requests[1].setting_id == "audio.sfx.enabled" and not requests[1].enabled, "音效设置请求错误")
+	assert(menu.music_status_label.text == "已关闭" and menu.sfx_status_label.text == "已关闭", "关闭音频后状态文字没有更新")
+	menu.settings_back_button.pressed.emit()
+	assert(menu.current_page == "main", "设置返回按钮没有回到游戏菜单")
+	assert(menu.settings_back_button.theme_type_variation == &"GothicComponentButton", "设置返回动作不应伪装为持久选择")
+
+	var action_counts := {"continue": 0, "character": 0, "exit": 0}
+	menu.continue_requested.connect(func() -> void: action_counts["continue"] += 1)
+	menu.return_to_character_select_requested.connect(func() -> void: action_counts["character"] += 1)
+	menu.save_and_exit_requested.connect(func() -> void: action_counts["exit"] += 1)
+	menu.continue_button.pressed.emit()
+	menu.character_select_button.pressed.emit()
+	menu.save_exit_button.pressed.emit()
+	assert(action_counts == {"continue": 1, "character": 1, "exit": 1}, "暂停菜单动作信号不完整")
+	print("SYSTEM_MENU_GOTHIC_UI_PASS：哥特暂停菜单、游戏设置和音乐/音效双开关均正常")
+	get_tree().quit(0)
+
+
+func _tree_contains_text(root: Node, value: String) -> bool:
+	if root is Label and value in root.text:
+		return true
+	if root is Button and value in root.text:
+		return true
+	for child in root.get_children():
+		if _tree_contains_text(child, value):
+			return true
+	return false

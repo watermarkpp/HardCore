@@ -1,0 +1,153 @@
+{
+  "blank_chunk_policy": "transparent_until_painted",
+  "chunk_grid_size": [
+    4,
+    2
+  ],
+  "chunk_size_px": [
+    1024,
+    1024
+  ],
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "fill_asset_id": "",
+      "grid": [
+        0,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        0,
+        0,
+        1024,
+        1024
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "fill_asset_id": "",
+      "grid": [
+        1,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        1024,
+        0,
+        1024,
+        1024
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "fill_asset_id": "",
+      "grid": [
+        2,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        2048,
+        0,
+        1024,
+        1024
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_3_0",
+      "fill_asset_id": "",
+      "grid": [
+        3,
+        0
+      ],
+      "materialized": false,
+      "rect_px": [
+        3072,
+        0,
+        128,
+        1024
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "fill_asset_id": "",
+      "grid": [
+        0,
+        1
+      ],
+      "materialized": false,
+      "rect_px": [
+        0,
+        1024,
+        1024,
+        576
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "fill_asset_id": "",
+      "grid": [
+        1,
+        1
+      ],
+      "materialized": false,
+      "rect_px": [
+        1024,
+        1024,
+        1024,
+        576
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "fill_asset_id": "",
+      "grid": [
+        2,
+        1
+      ],
+      "materialized": false,
+      "rect_px": [
+        2048,
+        1024,
+        1024,
+        576
+      ],
+      "state": "virtual"
+    },
+    {
+      "chunk_id": "c_3_1",
+      "fill_asset_id": "",
+      "grid": [
+        3,
+        1
+      ],
+      "materialized": false,
+      "rect_px": [
+        3072,
+        1024,
+        128,
+        576
+      ],
+      "state": "virtual"
+    }
+  ],
+  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "default_fill_asset_id": "",
+  "design_size": [
+    50,
+    50
+  ],
+  "ground_pixel_size": [
+    3200,
+    1600
+  ],
+  "map_id": "boss_catalog_runtime",
+  "schema_version": 1
+}

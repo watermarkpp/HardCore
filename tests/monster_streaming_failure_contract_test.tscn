@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2d_failure"]
+[ext_resource type="Script" path="res://tests/monster_streaming_failure_contract_test.gd" id="1"]
+[node name="MonsterStreamingFailureContract" type="Node"]
+script = ExtResource("1")

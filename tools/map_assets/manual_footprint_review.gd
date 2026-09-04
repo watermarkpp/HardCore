@@ -17,6 +17,7 @@ const REVIEW_CONTRACT_ID := (
 
 const STATUS_VERIFIED := "verified"
 const STATUS_REWORK := "rework"
+const DEFAULT_FILTER := 1
 
 
 var assets: Array[Dictionary] = []
@@ -43,9 +44,11 @@ var search_edit: LineEdit
 var draft_anchor_px := Vector2.ZERO
 var delete_dialog: ConfirmationDialog
 var pending_delete_asset_id := ""
+var asset_id_prefix_filter := ""
 
 
 func _ready() -> void:
+	_load_scope_from_args()
 	_build_ui()
 	_load_review_state()
 	_load_assets()
@@ -58,6 +61,13 @@ func _ready() -> void:
 
 	_seek_first_matching()
 	_show_current()
+
+
+func _load_scope_from_args() -> void:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with("--asset-prefix="):
+			asset_id_prefix_filter = argument.trim_prefix("--asset-prefix=").strip_edges()
+			return
 
 
 func _build_ui() -> void:
@@ -117,6 +127,7 @@ func _build_ui() -> void:
 		"仅需返工",
 		2
 	)
+	filter_option.select(DEFAULT_FILTER)
 	filter_option.item_selected.connect(
 		_on_filter_changed
 	)
@@ -377,6 +388,14 @@ func _load_assets() -> void:
 	for raw: Dictionary in (
 		MapAssetCatalogService.all_assets()
 	):
+		var asset_id := str(raw.get("asset_id", ""))
+
+		if (
+			not asset_id_prefix_filter.is_empty()
+			and not asset_id.begins_with(asset_id_prefix_filter)
+		):
+			continue
+
 		if not bool(
 			raw.get(
 				"placeable",

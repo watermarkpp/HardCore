@@ -1,18 +1,34 @@
 class_name MapEditorCoordinate
 extends RefCounted
 
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
 const HALF_TILE_W := 32.0
 const HALF_TILE_H := 16.0
-const GROUND_COORDINATE_CONTRACT_ID := "isometric_cell_center_64x32_v1"
+## Ground rasterization is centered on the same cell-center lattice consumed by
+## runtime actors.  v2 removes the historical one-half-cell canvas edge drift:
+## the authored tile union is [0, design_size], while cell (0, 0) still has
+## its center at (0.5, 0.5) in GU.
+const GROUND_COORDINATE_CONTRACT_ID := "isometric_cell_center_64x32_v2"
 const GROUND_TILE_SIZE_PX := Vector2(64.0, 32.0)
 
 
 static func origin_px(design_size: Vector2i) -> Vector2:
-	return Vector2(design_size.y * HALF_TILE_W, HALF_TILE_H)
+	return Vector2(design_size.y * HALF_TILE_W, 0.0)
 
 
 static func ground_image_size(design_size: Vector2i) -> Vector2i:
 	return Vector2i((design_size.x + design_size.y) * int(HALF_TILE_W), (design_size.x + design_size.y) * int(HALF_TILE_H))
+
+
+static func ground_pixel_center(design_size: Vector2i) -> Vector2:
+	## This is the raster canvas anchor, not the arithmetic midpoint of the
+	## canvas.  The isometric cell union has an intentional half-tile vertical
+	## asymmetry: for 80x80 it is (2560, 1264), while the canvas is 5120x2560.
+	return tile_to_ground_px(
+		(Vector2(design_size) - Vector2.ONE) * 0.5,
+		design_size
+	)
 
 
 static func tile_to_ground_px(tile: Vector2, design_size: Vector2i) -> Vector2:
@@ -62,38 +78,83 @@ static func contains_grid_vertex(vertex: Vector2i, design_size: Vector2i) -> boo
 	return vertex.x >= 0 and vertex.y >= 0 and vertex.x <= design_size.x and vertex.y <= design_size.y
 
 
-static func tile_to_world(tile: Vector2, design_size: Vector2i) -> Vector2:
+static func ground_position_gu_to_screen_position_px(
+	ground_position_gu: Vector2,
+	design_size: Vector2i
+) -> Vector2:
 	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
-	var local := tile - center
-	return Vector2((local.x - local.y) * HALF_TILE_W, (local.x + local.y) * HALF_TILE_H)
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		ground_position_gu - center
+	)
 
 
-static func cell_center_to_world(cell: Vector2, design_size: Vector2i) -> Vector2:
-	return tile_to_world(cell + Vector2(0.5, 0.5), design_size)
+static func grid_cell_to_screen_position_px(
+	cell: Vector2,
+	design_size: Vector2i
+) -> Vector2:
+	return ground_position_gu_to_screen_position_px(
+		cell + Vector2(0.5, 0.5), design_size
+	)
 
 
-static func cell_polygon_world(
+static func grid_cell_polygon_screen_px(
 	cell: Vector2i,
 	design_size: Vector2i
 ) -> PackedVector2Array:
 	return PackedVector2Array([
-		tile_to_world(Vector2(cell), design_size),
-		tile_to_world(Vector2(cell + Vector2i(1, 0)), design_size),
-		tile_to_world(Vector2(cell + Vector2i(1, 1)), design_size),
-		tile_to_world(Vector2(cell + Vector2i(0, 1)), design_size),
+		ground_position_gu_to_screen_position_px(Vector2(cell), design_size),
+		ground_position_gu_to_screen_position_px(
+			Vector2(cell + Vector2i(1, 0)), design_size
+		),
+		ground_position_gu_to_screen_position_px(
+			Vector2(cell + Vector2i(1, 1)), design_size
+		),
+		ground_position_gu_to_screen_position_px(
+			Vector2(cell + Vector2i(0, 1)), design_size
+		),
 	])
 
 
-static func world_to_tile(world: Vector2, design_size: Vector2i) -> Vector2:
-	var horizontal := world.x / HALF_TILE_W
-	var vertical := world.y / HALF_TILE_H
+static func screen_position_px_to_ground_position_gu(
+	screen_position_px: Vector2,
+	design_size: Vector2i
+) -> Vector2:
 	var center := (Vector2(design_size) - Vector2.ONE) * 0.5
-	return center + Vector2((horizontal + vertical) * 0.5, (vertical - horizontal) * 0.5)
+	return center + GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_position_px
+	)
 
 
-static func world_to_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
-	var tile := world_to_tile(world, design_size)
-	return Vector2i(floori(tile.x), floori(tile.y))
+static func ground_delta_gu_to_screen_delta_px(
+	ground_delta_gu: Vector2
+) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		ground_delta_gu
+	)
+
+
+static func screen_delta_px_to_ground_delta_gu(
+	screen_delta_px: Vector2
+) -> Vector2:
+	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		screen_delta_px
+	)
+
+
+static func path_step_cost_gu(step: Vector2i) -> float:
+	return GroundUnitSpaceScript.path_step_cost_gu(step)
+
+
+static func screen_position_px_to_grid_cell(
+	screen_position_px: Vector2,
+	design_size: Vector2i
+) -> Vector2i:
+	var ground_position_gu := screen_position_px_to_ground_position_gu(
+		screen_position_px, design_size
+	)
+	return Vector2i(
+		floori(ground_position_gu.x), floori(ground_position_gu.y)
+	)
 
 
 static func contains_tile(tile: Vector2, design_size: Vector2i) -> bool:

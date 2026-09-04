@@ -1,0 +1,93 @@
+{
+  "assetSetId": "ui.theme.gothic.v1.sample.v3",
+  "revision": "v3-approved-masters",
+  "sourcePolicy": "approved imagegen masters with local chroma removal soft-matte despill",
+  "components": [
+    {
+      "id": "ui.theme.gothic.v1.button.v3.normal",
+      "file": "button_bg_v3.png",
+      "ornamentFile": "button_ornament_v3.png",
+      "size": [
+        69,
+        120
+      ],
+      "patchMargins": [
+        34,
+        8,
+        34,
+        8
+      ],
+      "centerSampleX": 700,
+      "stretchPolicy": "fixed-end-caps-silent-middle-centered-ornament",
+      "ornamentSize": [
+        44,
+        72
+      ],
+      "renderContract": "custom-stylebox-independent-centered-ornament-no-button-icon-layout"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.v3.pressed",
+      "file": "button_bg_pressed_v3.png",
+      "ornamentFile": "button_ornament_v3.png",
+      "size": [
+        69,
+        120
+      ],
+      "patchMargins": [
+        34,
+        8,
+        34,
+        8
+      ],
+      "ornamentSize": [
+        44,
+        72
+      ],
+      "renderContract": "custom-stylebox-independent-centered-ornament-no-button-icon-layout"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.v3.disabled",
+      "file": "button_bg_disabled_v3.png",
+      "ornamentFile": "button_ornament_v3.png",
+      "size": [
+        69,
+        120
+      ],
+      "patchMargins": [
+        34,
+        8,
+        34,
+        8
+      ],
+      "ornamentSize": [
+        44,
+        72
+      ],
+      "renderContract": "custom-stylebox-independent-centered-ornament-no-button-icon-layout"
+    },
+    {
+      "id": "ui.theme.gothic.v1.inset_frame.v3",
+      "file": "inset_frame_v3.png",
+      "size": [
+        604,
+        327
+      ],
+      "patchMargins": [
+        64,
+        58,
+        64,
+        58
+      ],
+      "ringCount": 1,
+      "stretchPolicy": "fixed-corners-stretch-edges-code-fill",
+      "renderContract": "fixed-corners-stretchable-edges-transparent-center-code-fill",
+      "compactMinimumSize": [
+        129,
+        117
+      ]
+    }
+  ],
+  "scopeExclusions": [
+    "HUD skill, attack, item, target, navigation, utility controls remain unchanged"
+  ]
+}\n

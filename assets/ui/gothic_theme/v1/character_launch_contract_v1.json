@@ -1,0 +1,26 @@
+{
+  "contractId": "ui.character.launch.v1",
+  "creationContractId": "ui.character.creation.v1",
+  "professionIds": [
+    "warrior",
+    "wizard",
+    "taoist"
+  ],
+  "fixedCharacterGender": "男",
+  "launchFields": {
+    "main_profile_id": "Required profile selected as the player-controlled character.",
+    "ai_teammate_enabled": "True only when a distinct teammate profile is selected and the feature is enabled.",
+    "ai_teammate_profile_id": "Optional second profile. It must differ from main_profile_id.",
+    "ai_control_mode": "companion_ai or disabled."
+  },
+  "policy": [
+    "Every character profile can be selected as the main character.",
+    "At most one different profile can be selected as the AI teammate.",
+    "Disabling AI teammate ignores the remembered teammate selection.",
+    "The launch request is transient and must not change the save schema.",
+    "Runtime integration must load the teammate as a read-only companion snapshot without replacing PlayerState.active_profile_id.",
+    "AI movement, combat, inventory ownership, death and persistence are gameplay-owned rules.",
+    "Character creation UI exposes warrior, wizard and taoist and always requests the fixed male character model. PlayerState creation must validate and create all three professions."
+  ],
+  "rootMetaKey": "pending_character_launch_context"
+}

@@ -681,13 +681,16 @@
       "range": 105.0,
       "service_magic_id": 26,
       "service_mode": "arm_next_hit",
+      "ui_interaction_mode": "click",
+      "runtime_activation_mode": "explicit_charge",
+      "charge_state_id": "warrior.fire_sword.charge_armed",
       "profession_id": "warrior",
       "skill_id": "warrior.fire_sword",
       "display_name": "烈火剑法",
       "formula_id": "warrior.fire_sword.v1",
       "source_trace": {
         "runtime_profile": {
-          "source": "legacy_verified_adapter",
+          "source": "skills_source_of_truth_v1.json",
           "confidence": "A"
         },
         "cooldown": {
@@ -870,11 +873,12 @@
     },
     "野蛮冲撞": {
       "cast_type": "dash",
-      "multiplier": 0.8,
+      "multiplier": 0.0,
       "profession": "战士",
       "range": 115.0,
       "service_magic_id": 27,
-      "service_mode": "rush",
+      "service_mode": "atomic_tile_push",
+      "runtime_override_id": "gameplay.warrior.wild_rush.atomic_tile_push.v1",
       "profession_id": "warrior",
       "skill_id": "warrior.wild_rush",
       "display_name": "野蛮冲撞",
@@ -991,6 +995,40 @@
       }
     }
   },
+  "combatReactionPolicy": {
+    "policy_id": "hardcore_player_hit_reaction_v3",
+    "origin": "hardcore_custom_balance_not_original_176",
+    "max_hp_ratio": 0.02,
+    "minimum_actual_damage": 3,
+    "comparison": "actual_damage_gte_threshold",
+    "server_action_lock_seconds": 0.1,
+    "reaction_frame_count": 3,
+    "reaction_frame_base_ms": 140,
+    "reaction_frame_level_step_ms": 2,
+    "reaction_frame_floor_ms": 100,
+    "reaction_queue_policy": "after_current_action",
+    "balance_basis": "Bich baseline: scarecrow 1-2; rake/hook cats 2-4; level-1 warrior HP 120",
+    "reaction_basis": "HardCore tuned 3-frame curve: frame_ms=max(100,140-level*2), preserving level scaling within a 300-414ms total range",
+    "evidence": [
+      {
+        "confidence": "B",
+        "scope": "modified_1.5_2002_not_verified_1.76",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas:5468-5521,25225-25243",
+        "finding": "nPower>0 sends SM_STRUCK; CheckActionStatus uses configured StruckTime"
+      },
+      {
+        "confidence": "B",
+        "scope": "modified_1.5_2002_not_verified_1.76",
+        "path": "dev_art_sources/reference/original_gameofmir/Client/Actor.pas:75-90,1407-1414,1536-1546,1617-1634",
+        "finding": "three struck frames; frame_ms=max(80,200-level*5); SM_STRUCK waits for current action to finish"
+      },
+      {
+        "confidence": "C_corroboration_only",
+        "url": "https://github.com/miniPizza/mir2/blob/e8859977462558a09bf3fb2278dd07be7269a4f4/Client/MirScenes/GameScene.cs#L2920-L2971",
+        "finding": "later community client also appends Struck to ActionFeed"
+      }
+    ]
+  },
   "skillTimingOverrides": {
     "刺杀剑术": {
       "action_duration": 0.51,
@@ -1015,7 +1053,7 @@
       "action_duration": 0.51,
       "cooldown": 0.85,
       "hit_frame": 2,
-      "service_arm_cooldown": 10.0,
+      "charge_lifetime": 10.0,
       "windup": 0.17
     },
     "野蛮冲撞": {

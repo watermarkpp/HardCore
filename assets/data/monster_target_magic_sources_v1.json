@@ -1,0 +1,4113 @@
+{
+  "schema_version": 1,
+  "source_priority_policy": "assets/data/source_priority_policy.json; client_assets and client_rules lanes; primary-first with exact-object missing evidence required before auxiliary fallback",
+  "common_server_contract": {
+    "service_race": 200,
+    "service_class": "TElectronicScolpionMon",
+    "race_mapping_source": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+    "race_mapping_lines": [
+      1928,
+      1928
+    ],
+    "attack_source": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+    "attack_lines": [
+      1820,
+      1880
+    ],
+    "damage_rule": "MC roll -> GetMagStruckDamage -> StruckDamage; RM_STRUCK delayed 200 ms; RM_LIGHTING presentation message",
+    "activation_rule": "within Chebyshev 2 tiles; below half HP or either axis exactly at boundary 2",
+    "primary_monster_db": {
+      "path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+      "sha256": "A8A2919B2F05F95459C01A67C9326F3D86FB954ECDC5DBB095E96CBA237515B0",
+      "distribution": "source.original_gameofmir.monster_db_176",
+      "tier": "primary",
+      "exact_records": {
+        "220": {
+          "monster_id": 220,
+          "source_name": "牛魔法师",
+          "level": 40,
+          "exp": 440,
+          "hp": 360,
+          "defense": 12,
+          "magic_defense": 15,
+          "attack_min": 14,
+          "attack_max": 28,
+          "ai_code": 200,
+          "view_range": 0,
+          "image": 70,
+          "appearance": 205,
+          "undead": 1,
+          "attack_interval_ms": 2000,
+          "move_interval_ms": 1200,
+          "hit": 18,
+          "speed": 18,
+          "cross_verified_21cq": true,
+          "binding": "exact_name"
+        },
+        "221": {
+          "monster_id": 221,
+          "source_name": "牛魔法师0",
+          "level": 40,
+          "exp": 440,
+          "hp": 360,
+          "defense": 12,
+          "magic_defense": 15,
+          "attack_min": 14,
+          "attack_max": 35,
+          "ai_code": 81,
+          "view_range": 0,
+          "image": 70,
+          "appearance": 205,
+          "undead": 1,
+          "attack_interval_ms": 2000,
+          "move_interval_ms": 1200,
+          "hit": 18,
+          "speed": 18,
+          "cross_verified_21cq": true,
+          "binding": "exact_name"
+        },
+        "222": {
+          "monster_id": 222,
+          "source_name": "牛魔祭司",
+          "level": 45,
+          "exp": 750,
+          "hp": 750,
+          "defense": 16,
+          "magic_defense": 16,
+          "attack_min": 25,
+          "attack_max": 42,
+          "ai_code": 200,
+          "view_range": 1,
+          "image": 71,
+          "appearance": 206,
+          "undead": 1,
+          "attack_interval_ms": 2000,
+          "move_interval_ms": 1200,
+          "hit": 17,
+          "speed": 22,
+          "cross_verified_21cq": true,
+          "binding": "exact_name"
+        },
+        "223": {
+          "monster_id": 223,
+          "source_name": "牛魔祭司0",
+          "level": 45,
+          "exp": 750,
+          "hp": 750,
+          "defense": 16,
+          "magic_defense": 16,
+          "attack_min": 25,
+          "attack_max": 45,
+          "ai_code": 81,
+          "view_range": 1,
+          "image": 71,
+          "appearance": 206,
+          "undead": 1,
+          "attack_interval_ms": 1300,
+          "move_interval_ms": 1000,
+          "hit": 17,
+          "speed": 22,
+          "cross_verified_21cq": true,
+          "binding": "exact_name"
+        }
+      }
+    },
+    "race_mapping_source_sha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+    "attack_source_sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2"
+  },
+  "effects_by_monster_id": {
+    "220": {
+      "canonical_name": "牛魔法师",
+      "record_status": "formal",
+      "service_ai_code": 200,
+      "race_img": 70,
+      "delivery_effect_id": "monster.target_lightning.v1",
+      "presentation_effect_id": "monster.cow_mage.thunder.primary.v1",
+      "client_actor_class": "TBanyaGuardMon",
+      "client_action": "SM_LIGHTING -> ActCritical; frame 4 -> mtThunder",
+      "client_rule_sources": [
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/PlayScn.pas",
+          "lines": [
+            2219,
+            2219
+          ],
+          "rule": "RaceImg 70 creates TBanyaGuardMon",
+          "sha256": "6C9D1D191368EBC841BB10E51D248E8BFE7E344013E866D30F70A775CC9694D4",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/AxeMon.pas",
+          "lines": [
+            1416,
+            1432
+          ],
+          "rule": "SM_LIGHTING consumes ActCritical; effect overlay is enabled only for RaceImg 71",
+          "sha256": "7676D0F09B32817E3CAFEF3048526CD15FD8D311E1A47F96BEEE75A6EDF02186",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/AxeMon.pas",
+          "lines": [
+            1567,
+            1572
+          ],
+          "rule": "RaceImg 70 creates mtThunder on ActCritical frame 4",
+          "sha256": "7676D0F09B32817E3CAFEF3048526CD15FD8D311E1A47F96BEEE75A6EDF02186",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/PlayScn.pas",
+          "lines": [
+            1683,
+            1688
+          ],
+          "rule": "mtThunder creates TThuderEffect base 10 with 6 frames and g_WMagic2Images",
+          "sha256": "6C9D1D191368EBC841BB10E51D248E8BFE7E344013E866D30F70A775CC9694D4",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+          "lines": [
+            1210,
+            1234
+          ],
+          "rule": "TThuderEffect draws EffectBase + curframe at target using WIL offsets",
+          "sha256": "66606A4E495790F83E8A6FCE3809EC54963882FF0B55CA390D1442B4E4699F3C",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        }
+      ],
+      "assets": [
+        {
+          "role": "target_thunder",
+          "source_lane": "client_assets",
+          "distribution": "client.classic_raw_complete",
+          "tier": "primary",
+          "order": 0,
+          "primary_lookup": {
+            "exact_object": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.wil",
+            "query_result": "found_and_parsed",
+            "compatible": true
+          },
+          "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.wil",
+          "source_library_sha256": "398E5376F19638DF063CD6299199BF5C2365FA8525FE0C9E639EB3BB6C955D07",
+          "source_index_rule": "10 + frame, frame=0..5",
+          "source_indices": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "frame_time_ms": 50,
+          "atlas_path": "res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png",
+          "atlas_sha256": "D78E03A2087F9B1B10432C69BE83E4D510F19EF2B24B9F7654C7D21F4B10BF1F",
+          "atlas_cell_size": [
+            316,
+            997
+          ],
+          "frame_hash_encoding": "SHA256 of decoded RGBA bytes in row-major order",
+          "frames": [
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.wil",
+              "source_library_sha256": "398E5376F19638DF063CD6299199BF5C2365FA8525FE0C9E639EB3BB6C955D07",
+              "source_index": 10,
+              "direction": 0,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                0,
+                148,
+                958
+              ],
+              "source_offset": [
+                -61,
+                -920
+              ],
+              "source_size": [
+                148,
+                958
+              ],
+              "wil_byte_offset": 126840,
+              "source_frame_rgba_sha256": "2F8994E83AFDAB8FD6F7E921F1FC185805C99B7930E86F2623F58F4955A5317A"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.wil",
+              "source_library_sha256": "398E5376F19638DF063CD6299199BF5C2365FA8525FE0C9E639EB3BB6C955D07",
+              "source_index": 11,
+              "direction": 0,
+              "frame": 1,
+              "atlas_region": [
+                316,
+                0,
+                212,
+                963
+              ],
+              "source_offset": [
+                -89,
+                -923
+              ],
+              "source_size": [
+                212,
+                963
+              ],
+              "wil_byte_offset": 268632,
+              "source_frame_rgba_sha256": "A75336C1950C6593F0AEBBFED2BF8FF23C12CD86EC762CBE4F088E972E4ECF69"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.wil",
+              "source_library_sha256": "398E5376F19638DF063CD6299199BF5C2365FA8525FE0C9E639EB3BB6C955D07",
+              "source_index": 12,
+              "direction": 0,
+              "frame": 2,
+              "atlas_region": [
+                632,
+                0,
+                224,
+                997
+              ],
+              "source_offset": [
+                -96,
+                -923
+              ],
+              "source_size": [
+                224,
+                997
+              ],
+              "wil_byte_offset": 472796,
+              "source_frame_rgba_sha256": "7AED450D0EBC9929244BF0FB025C59BF99B7CA8A7F6F78B3B861C02374FC3800"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.wil",
+              "source_library_sha256": "398E5376F19638DF063CD6299199BF5C2365FA8525FE0C9E639EB3BB6C955D07",
+              "source_index": 13,
+              "direction": 0,
+              "frame": 3,
+              "atlas_region": [
+                948,
+                0,
+                316,
+                993
+              ],
+              "source_offset": [
+                -131,
+                -921
+              ],
+              "source_size": [
+                316,
+                993
+              ],
+              "wil_byte_offset": 696132,
+              "source_frame_rgba_sha256": "B1771F2E5E270F753E8B34E9D74E24D19180F64A3DE07EC6762F24907FF57C62"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.wil",
+              "source_library_sha256": "398E5376F19638DF063CD6299199BF5C2365FA8525FE0C9E639EB3BB6C955D07",
+              "source_index": 14,
+              "direction": 0,
+              "frame": 4,
+              "atlas_region": [
+                1264,
+                0,
+                220,
+                119
+              ],
+              "source_offset": [
+                -84,
+                -46
+              ],
+              "source_size": [
+                220,
+                119
+              ],
+              "wil_byte_offset": 1009928,
+              "source_frame_rgba_sha256": "6C4537C997F13D82FB0E32AAC87E3D0A3892A16D6CF9C09DEDF77CE725B1C7F1"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.wil",
+              "source_library_sha256": "398E5376F19638DF063CD6299199BF5C2365FA8525FE0C9E639EB3BB6C955D07",
+              "source_index": 15,
+              "direction": 0,
+              "frame": 5,
+              "atlas_region": [
+                1580,
+                0,
+                4,
+                1
+              ],
+              "source_offset": [
+                7,
+                -44
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 1036116,
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            }
+          ],
+          "source_index_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic2.WIX",
+          "source_index_library_sha256": "BC57FFA767053C8727CA6DA8D2BE88A0FC3224C36CC1A1285173A0856CF7DF82"
+        }
+      ],
+      "client_magic_release_frame": 4,
+      "client_magic_release_seconds": 0.48
+    },
+    "222": {
+      "canonical_name": "牛魔祭司",
+      "record_status": "formal",
+      "service_ai_code": 200,
+      "race_img": 71,
+      "delivery_effect_id": "monster.target_lightning.v1",
+      "presentation_effect_id": "monster.cow_priest.fly.primary.v1",
+      "client_actor_class": "TBanyaGuardMon",
+      "client_action": "SM_LIGHTING -> ActCritical; frame 4 -> mtFly",
+      "client_rule_sources": [
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/PlayScn.pas",
+          "lines": [
+            2220,
+            2220
+          ],
+          "rule": "RaceImg 71 creates TBanyaGuardMon",
+          "sha256": "6C9D1D191368EBC841BB10E51D248E8BFE7E344013E866D30F70A775CC9694D4",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/AxeMon.pas",
+          "lines": [
+            1416,
+            1432
+          ],
+          "rule": "SM_LIGHTING consumes ActCritical and enables the RaceImg 71 cast overlay",
+          "sha256": "7676D0F09B32817E3CAFEF3048526CD15FD8D311E1A47F96BEEE75A6EDF02186",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/AxeMon.pas",
+          "lines": [
+            1489,
+            1500
+          ],
+          "rule": "RaceImg 71 SM_LIGHTING overlay uses WMon21 index 2960 + direction8*10 + frame",
+          "sha256": "7676D0F09B32817E3CAFEF3048526CD15FD8D311E1A47F96BEEE75A6EDF02186",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/AxeMon.pas",
+          "lines": [
+            1567,
+            1575
+          ],
+          "rule": "RaceImg 71 creates mtFly with magic/effect 1 on ActCritical frame 4",
+          "sha256": "7676D0F09B32817E3CAFEF3048526CD15FD8D311E1A47F96BEEE75A6EDF02186",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/PlayScn.pas",
+          "lines": [
+            1514,
+            1529
+          ],
+          "rule": "magic/effect 1 resolves GetEffectBase index 0 and mtFly retains its selected image library",
+          "sha256": "6C9D1D191368EBC841BB10E51D248E8BFE7E344013E866D30F70A775CC9694D4",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+          "lines": [
+            17,
+            17
+          ],
+          "rule": "mtFly FLYBASE is 10",
+          "sha256": "66606A4E495790F83E8A6FCE3809EC54963882FF0B55CA390D1442B4E4699F3C",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+          "lines": [
+            34,
+            35
+          ],
+          "rule": "EffectBase[0] is 0 for magic/effect 1",
+          "sha256": "66606A4E495790F83E8A6FCE3809EC54963882FF0B55CA390D1442B4E4699F3C",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+          "lines": [
+            334,
+            390
+          ],
+          "rule": "GetEffectBase routes magic/effect 1 to g_WMagicImages",
+          "sha256": "66606A4E495790F83E8A6FCE3809EC54963882FF0B55CA390D1442B4E4699F3C",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+          "lines": [
+            870,
+            885
+          ],
+          "rule": "mtFly draws EffectBase + FLYBASE + direction16*10 + curframe",
+          "sha256": "66606A4E495790F83E8A6FCE3809EC54963882FF0B55CA390D1442B4E4699F3C",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        },
+        {
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/ClFunc.pas",
+          "lines": [
+            545,
+            590
+          ],
+          "rule": "GetFlyDirection16 defines the exact 16-direction selection thresholds",
+          "sha256": "8E6697504314F8287A7C446BF6F575627B576240A5A322EF56ACD8D2DFBD6161",
+          "source_lane": "client_rules",
+          "distribution": "source.original_gameofmir.mirclient",
+          "tier": "primary",
+          "order": 0,
+          "query_result": "found_exact_rule"
+        }
+      ],
+      "assets": [
+        {
+          "role": "caster_directional_overlay",
+          "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+          "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+          "source_index_rule": "2960 + direction8*10 + frame, direction8=0..7, frame=0..5",
+          "source_indices": [
+            2960,
+            2961,
+            2962,
+            2963,
+            2964,
+            2965,
+            2970,
+            2971,
+            2972,
+            2973,
+            2974,
+            2975,
+            2980,
+            2981,
+            2982,
+            2983,
+            2984,
+            2985,
+            2990,
+            2991,
+            2992,
+            2993,
+            2994,
+            2995,
+            3000,
+            3001,
+            3002,
+            3003,
+            3004,
+            3005,
+            3010,
+            3011,
+            3012,
+            3013,
+            3014,
+            3015,
+            3020,
+            3021,
+            3022,
+            3023,
+            3024,
+            3025,
+            3030,
+            3031,
+            3032,
+            3033,
+            3034,
+            3035
+          ],
+          "frame_time_ms": 120,
+          "atlas_path": "res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png",
+          "atlas_sha256": "046E399FBEA013F4256D5EDC515C6209B66CC49DC996DE19DD5A8B255CE82674",
+          "atlas_cell_size": [
+            48,
+            55
+          ],
+          "frames": [
+            {
+              "source_index": 2960,
+              "direction": 0,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                0,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20412596,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "4B6F9DC3D92C601785AC3151EA8EDEC6B87D60788F7E711EF6A0737371418061"
+            },
+            {
+              "source_index": 2961,
+              "direction": 0,
+              "frame": 1,
+              "atlas_region": [
+                48,
+                0,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20412612,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2962,
+              "direction": 0,
+              "frame": 2,
+              "atlas_region": [
+                96,
+                0,
+                44,
+                37
+              ],
+              "source_offset": [
+                17,
+                -72
+              ],
+              "source_size": [
+                44,
+                37
+              ],
+              "wil_byte_offset": 20412628,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "AF9A32DE7706DC6EC877BC420BABE8BAEF0FE860D933354C84837E13641113DB"
+            },
+            {
+              "source_index": 2963,
+              "direction": 0,
+              "frame": 3,
+              "atlas_region": [
+                144,
+                0,
+                44,
+                30
+              ],
+              "source_offset": [
+                1,
+                -111
+              ],
+              "source_size": [
+                44,
+                30
+              ],
+              "wil_byte_offset": 20414268,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "4DE58A7C9867B7F80F05C8FB432FD17EF512902F8DCBA9DF8D4300D4A3621D8A"
+            },
+            {
+              "source_index": 2964,
+              "direction": 0,
+              "frame": 4,
+              "atlas_region": [
+                192,
+                0,
+                20,
+                19
+              ],
+              "source_offset": [
+                0,
+                -97
+              ],
+              "source_size": [
+                20,
+                19
+              ],
+              "wil_byte_offset": 20415600,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "AF92F18AABC192DAA018D5ACAF0FE38B95A11C4BD71E269CCEA1BFE7DDE5C1EB"
+            },
+            {
+              "source_index": 2965,
+              "direction": 0,
+              "frame": 5,
+              "atlas_region": [
+                240,
+                0,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20415992,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2970,
+              "direction": 1,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                55,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20416072,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2971,
+              "direction": 1,
+              "frame": 1,
+              "atlas_region": [
+                48,
+                55,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20416088,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2972,
+              "direction": 1,
+              "frame": 2,
+              "atlas_region": [
+                96,
+                55,
+                36,
+                52
+              ],
+              "source_offset": [
+                3,
+                -77
+              ],
+              "source_size": [
+                36,
+                52
+              ],
+              "wil_byte_offset": 20416104,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "AFFC6C72242B1732566A3EDD15301A3DAEC69244F6F7D946BD270EF6471A93F6"
+            },
+            {
+              "source_index": 2973,
+              "direction": 1,
+              "frame": 3,
+              "atlas_region": [
+                144,
+                55,
+                32,
+                38
+              ],
+              "source_offset": [
+                64,
+                -98
+              ],
+              "source_size": [
+                32,
+                38
+              ],
+              "wil_byte_offset": 20417988,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "2A0285D1489E8934448352965EA9DFEBB34BE6E95F72FC71A93CC82D9B973002"
+            },
+            {
+              "source_index": 2974,
+              "direction": 1,
+              "frame": 4,
+              "atlas_region": [
+                192,
+                55,
+                24,
+                15
+              ],
+              "source_offset": [
+                63,
+                -85
+              ],
+              "source_size": [
+                24,
+                15
+              ],
+              "wil_byte_offset": 20419216,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "42AD71A070E2644D493859DD9AA7F0708384238B6B7BF096A652AE2FE004DCEB"
+            },
+            {
+              "source_index": 2975,
+              "direction": 1,
+              "frame": 5,
+              "atlas_region": [
+                240,
+                55,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20419588,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2980,
+              "direction": 2,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                110,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20419668,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2981,
+              "direction": 2,
+              "frame": 1,
+              "atlas_region": [
+                48,
+                110,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20419684,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2982,
+              "direction": 2,
+              "frame": 2,
+              "atlas_region": [
+                96,
+                110,
+                24,
+                55
+              ],
+              "source_offset": [
+                -8,
+                -85
+              ],
+              "source_size": [
+                24,
+                55
+              ],
+              "wil_byte_offset": 20419700,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "A569DEFFCAB8BA0671E0080C56A90659323F817C252307F80B12F1506A9A66CA"
+            },
+            {
+              "source_index": 2983,
+              "direction": 2,
+              "frame": 3,
+              "atlas_region": [
+                144,
+                110,
+                36,
+                39
+              ],
+              "source_offset": [
+                82,
+                -64
+              ],
+              "source_size": [
+                36,
+                39
+              ],
+              "wil_byte_offset": 20421032,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "C2A949D668E41892E516C844D467BE365C23563A6903E5A19FDF97877BEDACCD"
+            },
+            {
+              "source_index": 2984,
+              "direction": 2,
+              "frame": 4,
+              "atlas_region": [
+                192,
+                110,
+                20,
+                14
+              ],
+              "source_offset": [
+                99,
+                -48
+              ],
+              "source_size": [
+                20,
+                14
+              ],
+              "wil_byte_offset": 20422448,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "A0744D60F69A221B6A8B458EAF515E0DB37B7C58484F293ECA4AFE1992E9B987"
+            },
+            {
+              "source_index": 2985,
+              "direction": 2,
+              "frame": 5,
+              "atlas_region": [
+                240,
+                110,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20422740,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2990,
+              "direction": 3,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                165,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20422820,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2991,
+              "direction": 3,
+              "frame": 1,
+              "atlas_region": [
+                48,
+                165,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20422836,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 2992,
+              "direction": 3,
+              "frame": 2,
+              "atlas_region": [
+                96,
+                165,
+                40,
+                49
+              ],
+              "source_offset": [
+                -20,
+                -95
+              ],
+              "source_size": [
+                40,
+                49
+              ],
+              "wil_byte_offset": 20422852,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "8EFFF646714CF92F94EBE4AD1B65C37AE4B2D0ACDDA0B22189A116E24BC68C9B"
+            },
+            {
+              "source_index": 2993,
+              "direction": 3,
+              "frame": 3,
+              "atlas_region": [
+                144,
+                165,
+                44,
+                39
+              ],
+              "source_offset": [
+                56,
+                -29
+              ],
+              "source_size": [
+                44,
+                39
+              ],
+              "wil_byte_offset": 20424824,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "F123FBD1572021183A8CD8D9CBB7D61459CCEA3A3C7C8302AEB1857B3D5571CB"
+            },
+            {
+              "source_index": 2994,
+              "direction": 3,
+              "frame": 4,
+              "atlas_region": [
+                192,
+                165,
+                20,
+                16
+              ],
+              "source_offset": [
+                83,
+                -6
+              ],
+              "source_size": [
+                20,
+                16
+              ],
+              "wil_byte_offset": 20426552,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "D88B3B795540DB1611D2E2C9EC19AE2FD833C5F8418A6022777B903629135032"
+            },
+            {
+              "source_index": 2995,
+              "direction": 3,
+              "frame": 5,
+              "atlas_region": [
+                240,
+                165,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20426884,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3000,
+              "direction": 4,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                220,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20426964,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3001,
+              "direction": 4,
+              "frame": 1,
+              "atlas_region": [
+                48,
+                220,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20426980,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3002,
+              "direction": 4,
+              "frame": 2,
+              "atlas_region": [
+                96,
+                220,
+                44,
+                38
+              ],
+              "source_offset": [
+                -13,
+                -102
+              ],
+              "source_size": [
+                44,
+                38
+              ],
+              "wil_byte_offset": 20426996,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "30D053C8041E66E272C1D13CDFDCD4A331013CA95054CE07DB9CF0B97E3182E2"
+            },
+            {
+              "source_index": 3003,
+              "direction": 4,
+              "frame": 3,
+              "atlas_region": [
+                144,
+                220,
+                44,
+                48
+              ],
+              "source_offset": [
+                4,
+                -18
+              ],
+              "source_size": [
+                44,
+                48
+              ],
+              "wil_byte_offset": 20428680,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "DB957492E709432975B24642218FFB278B50EDB5BADC8A5440C20A7E975A7E61"
+            },
+            {
+              "source_index": 3004,
+              "direction": 4,
+              "frame": 4,
+              "atlas_region": [
+                192,
+                220,
+                20,
+                17
+              ],
+              "source_offset": [
+                26,
+                17
+              ],
+              "source_size": [
+                20,
+                17
+              ],
+              "wil_byte_offset": 20430804,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "788063AFE34ABBEF5BD9F68A32CDC1C1BB8A9E0205A138A856DE2972F4371494"
+            },
+            {
+              "source_index": 3005,
+              "direction": 4,
+              "frame": 5,
+              "atlas_region": [
+                240,
+                220,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20431156,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3010,
+              "direction": 5,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                275,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20431236,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3011,
+              "direction": 5,
+              "frame": 1,
+              "atlas_region": [
+                48,
+                275,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20431252,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3012,
+              "direction": 5,
+              "frame": 2,
+              "atlas_region": [
+                96,
+                275,
+                36,
+                27
+              ],
+              "source_offset": [
+                9,
+                -99
+              ],
+              "source_size": [
+                36,
+                27
+              ],
+              "wil_byte_offset": 20431268,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "D14329FED253FF8BDF2C3AC502DA5A57E22ECB7DAF0C994E2D81F4ACEBAA37EE"
+            },
+            {
+              "source_index": 3013,
+              "direction": 5,
+              "frame": 3,
+              "atlas_region": [
+                144,
+                275,
+                32,
+                55
+              ],
+              "source_offset": [
+                -47,
+                -36
+              ],
+              "source_size": [
+                32,
+                55
+              ],
+              "wil_byte_offset": 20432252,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "74C94DAA4A4B03C4CB7E3973A5756A53F1816728CAB01713CE83EE0696D9FD0E"
+            },
+            {
+              "source_index": 3014,
+              "direction": 5,
+              "frame": 4,
+              "atlas_region": [
+                192,
+                275,
+                24,
+                17
+              ],
+              "source_offset": [
+                -39,
+                6
+              ],
+              "source_size": [
+                24,
+                17
+              ],
+              "wil_byte_offset": 20434024,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "2457A88A8C730187541999F790C84DC4966AFA12C778C53E91074054FA18EA2B"
+            },
+            {
+              "source_index": 3015,
+              "direction": 5,
+              "frame": 5,
+              "atlas_region": [
+                240,
+                275,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20434444,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3020,
+              "direction": 6,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                330,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20434524,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3021,
+              "direction": 6,
+              "frame": 1,
+              "atlas_region": [
+                48,
+                330,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20434540,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "61A522C8ED439363F955642F4A1822B5D5F3FD52C78BCBDC34BDC55F0E48DF37"
+            },
+            {
+              "source_index": 3022,
+              "direction": 6,
+              "frame": 2,
+              "atlas_region": [
+                96,
+                330,
+                24,
+                23
+              ],
+              "source_offset": [
+                35,
+                -91
+              ],
+              "source_size": [
+                24,
+                23
+              ],
+              "wil_byte_offset": 20434556,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "683F397A8174D26D9436A115E8A4AD7A56CD811FF87E6DE84D3ADA860D9AC36E"
+            },
+            {
+              "source_index": 3023,
+              "direction": 6,
+              "frame": 3,
+              "atlas_region": [
+                144,
+                330,
+                36,
+                49
+              ],
+              "source_offset": [
+                -71,
+                -65
+              ],
+              "source_size": [
+                36,
+                49
+              ],
+              "wil_byte_offset": 20435120,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "9E2AAE9AC59494023FF129FE1A87B6BA6F1CE5B9AAE3F9E78C37C354CB0A96B5"
+            },
+            {
+              "source_index": 3024,
+              "direction": 6,
+              "frame": 4,
+              "atlas_region": [
+                192,
+                330,
+                20,
+                20
+              ],
+              "source_offset": [
+                -70,
+                -32
+              ],
+              "source_size": [
+                20,
+                20
+              ],
+              "wil_byte_offset": 20436896,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "8C8A3A80D6BAE1DDAA767F03529C76A0BB395EAAAAFC8F7889384343218C37EC"
+            },
+            {
+              "source_index": 3025,
+              "direction": 6,
+              "frame": 5,
+              "atlas_region": [
+                240,
+                330,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20437308,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3030,
+              "direction": 7,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                385,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20437388,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3031,
+              "direction": 7,
+              "frame": 1,
+              "atlas_region": [
+                48,
+                385,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20437404,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            },
+            {
+              "source_index": 3032,
+              "direction": 7,
+              "frame": 2,
+              "atlas_region": [
+                96,
+                385,
+                40,
+                25
+              ],
+              "source_offset": [
+                28,
+                -79
+              ],
+              "source_size": [
+                40,
+                25
+              ],
+              "wil_byte_offset": 20437420,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "3B9E95B9B3272759707AF67310CD148708E6E46C3340F42D72BB9BE836A4CBD1"
+            },
+            {
+              "source_index": 3033,
+              "direction": 7,
+              "frame": 3,
+              "atlas_region": [
+                144,
+                385,
+                48,
+                39
+              ],
+              "source_offset": [
+                -54,
+                -97
+              ],
+              "source_size": [
+                48,
+                39
+              ],
+              "wil_byte_offset": 20438432,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "A6C4D4AD18D38D57ACDF9D1D247086406B72FB0FFD1F27E57B30A1B015FF29D4"
+            },
+            {
+              "source_index": 3034,
+              "direction": 7,
+              "frame": 4,
+              "atlas_region": [
+                192,
+                385,
+                20,
+                23
+              ],
+              "source_offset": [
+                -54,
+                -76
+              ],
+              "source_size": [
+                20,
+                23
+              ],
+              "wil_byte_offset": 20440316,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "7DEFC610185578969675D91CDD1DAA807488ADA569F1C3ACEBC1DEDB2493BB06"
+            },
+            {
+              "source_index": 3035,
+              "direction": 7,
+              "frame": 5,
+              "atlas_region": [
+                240,
+                385,
+                4,
+                1
+              ],
+              "source_offset": [
+                0,
+                0
+              ],
+              "source_size": [
+                4,
+                1
+              ],
+              "wil_byte_offset": 20440788,
+              "source_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "source_library_sha256": "948E500FDB4C5677D73C4A500809057A08D858B92F2AA7CB59074F0AC0098106",
+              "source_frame_rgba_sha256": "374708FFF7719DD5979EC875D56CD2286F6D3CF7EC317A3B25632AAB28EC37BB"
+            }
+          ],
+          "source_index_library": "dev_art_sources/external/mir2opensource_full/Data/Mon21.WIX",
+          "source_index_library_sha256": "2B06918172D778E90F1047BB8EF944BE30E32FE13FD764E3E9721AB0743E4C75",
+          "source_lane": "client_assets",
+          "distribution": "client.mir2opensource_2013_complete",
+          "tier": "auxiliary_1",
+          "order": 1,
+          "fallback_evidence": {
+            "required_higher_tier": {
+              "distribution": "client.classic_raw_complete",
+              "tier": "primary",
+              "order": 0
+            },
+            "exact_target": "Mon21 WIL/WIX records 2960 + direction8*10 + frame 0..5",
+            "queries": [
+              {
+                "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon21.wil",
+                "query_result": "missing",
+                "exists": false
+              },
+              {
+                "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon21.WIX",
+                "query_result": "missing",
+                "exists": false
+              }
+            ],
+            "higher_tier_result": "exact_object_missing",
+            "fallback_selected": {
+              "distribution": "client.mir2opensource_2013_complete",
+              "tier": "auxiliary_1",
+              "order": 1,
+              "path": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+              "query_result": "found_and_parsed"
+            }
+          },
+          "frame_hash_encoding": "SHA256 of decoded RGBA bytes in row-major order"
+        },
+        {
+          "role": "flying_spell",
+          "source_lane": "client_assets",
+          "distribution": "client.classic_raw_complete",
+          "tier": "primary",
+          "order": 0,
+          "primary_lookup": {
+            "exact_object": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+            "query_result": "found_and_parsed",
+            "compatible": true
+          },
+          "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+          "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+          "source_index_rule": "EffectBase[0]=0 + FLYBASE(10) + direction16*10 + frame, direction16=0..15, frame=0..5",
+          "source_indices": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165
+          ],
+          "frame_time_ms": 50,
+          "atlas_path": "res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png",
+          "atlas_sha256": "58E20DF7C323FB750C67F2F96F40F50BF341C22BBB0389C13C233B9BE0F05813",
+          "atlas_cell_size": [
+            128,
+            125
+          ],
+          "frame_hash_encoding": "SHA256 of decoded RGBA bytes in row-major order",
+          "frames": [
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 10,
+              "direction": 0,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                0,
+                88,
+                117
+              ],
+              "source_offset": [
+                -19,
+                -83
+              ],
+              "source_size": [
+                88,
+                117
+              ],
+              "wil_byte_offset": 53060,
+              "source_frame_rgba_sha256": "E4824FE1058A9FC0E8D90A3F3BA8E4953BC13818812033186F89A3DB6E057293"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 11,
+              "direction": 0,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                0,
+                88,
+                117
+              ],
+              "source_offset": [
+                -19,
+                -83
+              ],
+              "source_size": [
+                88,
+                117
+              ],
+              "wil_byte_offset": 63364,
+              "source_frame_rgba_sha256": "25A19B0F11D0699656F8C7985CF15832CE160CCF7AD1F7A7F9B7069F61E3DB9C"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 12,
+              "direction": 0,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                0,
+                88,
+                117
+              ],
+              "source_offset": [
+                -19,
+                -83
+              ],
+              "source_size": [
+                88,
+                117
+              ],
+              "wil_byte_offset": 73668,
+              "source_frame_rgba_sha256": "C45D61EF1EC46A20CD1C92FAFB3CE7DD7D742890AC155E37BDD1E14BCE6863B3"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 13,
+              "direction": 0,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                0,
+                88,
+                117
+              ],
+              "source_offset": [
+                -19,
+                -83
+              ],
+              "source_size": [
+                88,
+                117
+              ],
+              "wil_byte_offset": 83972,
+              "source_frame_rgba_sha256": "9C09C135E7A7187687BE169288CED4307D60E94764F573C5EE9E7EC3D84EE02D"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 14,
+              "direction": 0,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                0,
+                88,
+                117
+              ],
+              "source_offset": [
+                -19,
+                -83
+              ],
+              "source_size": [
+                88,
+                117
+              ],
+              "wil_byte_offset": 94276,
+              "source_frame_rgba_sha256": "5220C0661FA6F64FDE61C639B7D8E7304E176B82FA878646F5D25F1A628B1202"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 15,
+              "direction": 0,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                0,
+                88,
+                118
+              ],
+              "source_offset": [
+                -19,
+                -84
+              ],
+              "source_size": [
+                88,
+                118
+              ],
+              "wil_byte_offset": 104580,
+              "source_frame_rgba_sha256": "16F58F8DBE80306537E6AAF372DD596CA1FA24400C3BC7D8FAD262FE663BFF86"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 20,
+              "direction": 1,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                125,
+                100,
+                118
+              ],
+              "source_offset": [
+                -26,
+                -83
+              ],
+              "source_size": [
+                100,
+                118
+              ],
+              "wil_byte_offset": 115020,
+              "source_frame_rgba_sha256": "5929E434DF756B6D0A00BF71DF303E001806460E4B729D3132533D85C05413BA"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 21,
+              "direction": 1,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                125,
+                100,
+                117
+              ],
+              "source_offset": [
+                -26,
+                -82
+              ],
+              "source_size": [
+                100,
+                117
+              ],
+              "wil_byte_offset": 126828,
+              "source_frame_rgba_sha256": "A268DB4C991EA4385A16F8D5D10B5F2CDAAE1D057873AA7F395B89F0BBE331FD"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 22,
+              "direction": 1,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                125,
+                100,
+                117
+              ],
+              "source_offset": [
+                -27,
+                -82
+              ],
+              "source_size": [
+                100,
+                117
+              ],
+              "wil_byte_offset": 138536,
+              "source_frame_rgba_sha256": "FCC56B1BF090E8E38A5C80DF1815C47D374F764080E98C0BEBCC20836D22F63C"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 23,
+              "direction": 1,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                125,
+                100,
+                117
+              ],
+              "source_offset": [
+                -26,
+                -82
+              ],
+              "source_size": [
+                100,
+                117
+              ],
+              "wil_byte_offset": 150244,
+              "source_frame_rgba_sha256": "1B452F882C9EFDB0F111072C0A62FD8820B7440E3784BBA151CF88BBFD722711"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 24,
+              "direction": 1,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                125,
+                100,
+                117
+              ],
+              "source_offset": [
+                -26,
+                -82
+              ],
+              "source_size": [
+                100,
+                117
+              ],
+              "wil_byte_offset": 161952,
+              "source_frame_rgba_sha256": "26F07255E5CF1D02E3759F6A3D95AE85B29DF9D72AB54023F2728ED929648CEA"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 25,
+              "direction": 1,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                125,
+                100,
+                118
+              ],
+              "source_offset": [
+                -26,
+                -83
+              ],
+              "source_size": [
+                100,
+                118
+              ],
+              "wil_byte_offset": 173660,
+              "source_frame_rgba_sha256": "555A872DA2852CD18BECA5B3163C620DC45125328DCE96E475E495EC803AE3ED"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 30,
+              "direction": 2,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                250,
+                116,
+                108
+              ],
+              "source_offset": [
+                -34,
+                -79
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 185516,
+              "source_frame_rgba_sha256": "B7D166AAE739C210553FC4257A7CC19CE39B2A91D598B02E511CFA19E1142DB8"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 31,
+              "direction": 2,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                250,
+                116,
+                108
+              ],
+              "source_offset": [
+                -34,
+                -79
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 198052,
+              "source_frame_rgba_sha256": "3A62FCF9467A356BA8589AF29C5AB4719854DDE94CCC71B45C6C446560DBD126"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 32,
+              "direction": 2,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                250,
+                116,
+                108
+              ],
+              "source_offset": [
+                -34,
+                -79
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 210588,
+              "source_frame_rgba_sha256": "7144125A3E81F9F4ADE172E9B7746D276CA4E5DAE68DA3FF7D90E39B18606A56"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 33,
+              "direction": 2,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                250,
+                116,
+                108
+              ],
+              "source_offset": [
+                -34,
+                -79
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 223124,
+              "source_frame_rgba_sha256": "9D46F34FB0AAA6116017654C63C253B5651279A12FDDEE8F1540C1DBDA18A7C8"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 34,
+              "direction": 2,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                250,
+                116,
+                108
+              ],
+              "source_offset": [
+                -34,
+                -79
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 235660,
+              "source_frame_rgba_sha256": "FF8F5E577E5215A376C0987C641BD47B0DCAC74C5538EB0EF44B6A5D4B47566B"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 35,
+              "direction": 2,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                250,
+                116,
+                108
+              ],
+              "source_offset": [
+                -34,
+                -79
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 248196,
+              "source_frame_rgba_sha256": "FC438252B7FB6C08F6D5D6484E9B3A1D367423964D71181AE70A4CD755CCD4BD"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 40,
+              "direction": 3,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                375,
+                124,
+                99
+              ],
+              "source_offset": [
+                -45,
+                -78
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 260780,
+              "source_frame_rgba_sha256": "ABFD2159F35316F0A07D79F163372EBB2A1142CEA3B82E8DD5CE5ADA731D98B8"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 41,
+              "direction": 3,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                375,
+                124,
+                99
+              ],
+              "source_offset": [
+                -45,
+                -77
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 273064,
+              "source_frame_rgba_sha256": "1D3CE94B969B9C3C091ED84B2F97C72A063183A68D8E3343197656F1E3C18DC6"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 42,
+              "direction": 3,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                375,
+                124,
+                99
+              ],
+              "source_offset": [
+                -45,
+                -77
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 285348,
+              "source_frame_rgba_sha256": "F883193A810BDC02FE77E63A6F607BE28A2D9CD58CBF0D4D3AAEB61D27419667"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 43,
+              "direction": 3,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                375,
+                124,
+                99
+              ],
+              "source_offset": [
+                -45,
+                -78
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 297632,
+              "source_frame_rgba_sha256": "8B76894B998F4B7A3A4F32A368ADDD85A5B37D9A8926E3756FC5B601407F1AF6"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 44,
+              "direction": 3,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                375,
+                124,
+                99
+              ],
+              "source_offset": [
+                -45,
+                -78
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 309916,
+              "source_frame_rgba_sha256": "193F3F043CD6EF85ADCC33327F163EA8E6E075BD360C7A0E77B79E4F4BCF6563"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 45,
+              "direction": 3,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                375,
+                124,
+                99
+              ],
+              "source_offset": [
+                -45,
+                -78
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 322200,
+              "source_frame_rgba_sha256": "E74C5A893EAF1BED16EC75518305B9B2CDC7F628DC414DD582A6A096E579DEE7"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 50,
+              "direction": 4,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                500,
+                128,
+                88
+              ],
+              "source_offset": [
+                -48,
+                -74
+              ],
+              "source_size": [
+                128,
+                88
+              ],
+              "wil_byte_offset": 334532,
+              "source_frame_rgba_sha256": "1D9721E2CC9A21667579B70B44AD0BAEC75097715B8F26F2B5C28CB6C0B48B44"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 51,
+              "direction": 4,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                500,
+                128,
+                88
+              ],
+              "source_offset": [
+                -48,
+                -74
+              ],
+              "source_size": [
+                128,
+                88
+              ],
+              "wil_byte_offset": 345804,
+              "source_frame_rgba_sha256": "18067669E28FB69EF28887F2F35284B2EE30E795C4778C8C59965AC9F7B1C22F"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 52,
+              "direction": 4,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                500,
+                128,
+                87
+              ],
+              "source_offset": [
+                -48,
+                -74
+              ],
+              "source_size": [
+                128,
+                87
+              ],
+              "wil_byte_offset": 357076,
+              "source_frame_rgba_sha256": "330634AC2F2B0C79FB6FEB4A07003B981D18680FA32750B1FEB5D64D3891A21E"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 53,
+              "direction": 4,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                500,
+                128,
+                88
+              ],
+              "source_offset": [
+                -48,
+                -74
+              ],
+              "source_size": [
+                128,
+                88
+              ],
+              "wil_byte_offset": 368220,
+              "source_frame_rgba_sha256": "AB6B67CADEB5ACBB4BB2B310638F7DD50FB24FB6FB3D94364BB96286485E4B7B"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 54,
+              "direction": 4,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                500,
+                128,
+                87
+              ],
+              "source_offset": [
+                -48,
+                -74
+              ],
+              "source_size": [
+                128,
+                87
+              ],
+              "wil_byte_offset": 379492,
+              "source_frame_rgba_sha256": "BDA84711D4D188363EE4ABE3064C40A12219096EC5EA79E50BA78BFA54FE916E"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 55,
+              "direction": 4,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                500,
+                128,
+                87
+              ],
+              "source_offset": [
+                -48,
+                -74
+              ],
+              "source_size": [
+                128,
+                87
+              ],
+              "wil_byte_offset": 390636,
+              "source_frame_rgba_sha256": "11AA9A826D1CFB2DB662350F403EE55636475BA10E9EA00EDBDD25504C2D7AA4"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 60,
+              "direction": 5,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                625,
+                128,
+                100
+              ],
+              "source_offset": [
+                -46,
+                -81
+              ],
+              "source_size": [
+                128,
+                100
+              ],
+              "wil_byte_offset": 401828,
+              "source_frame_rgba_sha256": "6BC16ED5E1656586FA8AED080157ECF0A173EFF1FF3D405D089EED0DBBF6441F"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 61,
+              "direction": 5,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                625,
+                128,
+                100
+              ],
+              "source_offset": [
+                -46,
+                -81
+              ],
+              "source_size": [
+                128,
+                100
+              ],
+              "wil_byte_offset": 414636,
+              "source_frame_rgba_sha256": "2C836DFEC0CB734CA805F2463C31D71A46931DF057CF8615CB44C5BCDDF85D43"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 62,
+              "direction": 5,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                625,
+                128,
+                99
+              ],
+              "source_offset": [
+                -46,
+                -81
+              ],
+              "source_size": [
+                128,
+                99
+              ],
+              "wil_byte_offset": 427444,
+              "source_frame_rgba_sha256": "F62A487BA9FFFA9191B6C071AA383FD9CE09E3D1FDBD62B1366A43307EBABC5E"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 63,
+              "direction": 5,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                625,
+                128,
+                100
+              ],
+              "source_offset": [
+                -46,
+                -81
+              ],
+              "source_size": [
+                128,
+                100
+              ],
+              "wil_byte_offset": 440124,
+              "source_frame_rgba_sha256": "D5987C0FED0EE4759E0CCBD8B1FFA8888FF65793C2C83BD4D6F23DD9AC0FD88E"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 64,
+              "direction": 5,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                625,
+                128,
+                99
+              ],
+              "source_offset": [
+                -46,
+                -81
+              ],
+              "source_size": [
+                128,
+                99
+              ],
+              "wil_byte_offset": 452932,
+              "source_frame_rgba_sha256": "E13041B90233EEBE0B8817958B9324B6802EA6C00EDC89047C4DB9E8473F610A"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 65,
+              "direction": 5,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                625,
+                128,
+                97
+              ],
+              "source_offset": [
+                -46,
+                -80
+              ],
+              "source_size": [
+                128,
+                97
+              ],
+              "wil_byte_offset": 465612,
+              "source_frame_rgba_sha256": "5DF254EB7650F435B36256B78857E1852245E9269C09BB65F346B0B0E1CAD19D"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 70,
+              "direction": 6,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                750,
+                120,
+                114
+              ],
+              "source_offset": [
+                -38,
+                -92
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 478084,
+              "source_frame_rgba_sha256": "C9B4F6BFF2653D3EEC67B4B484BC31AC2521404F1097092D31A8732FC7FD842A"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 71,
+              "direction": 6,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                750,
+                120,
+                114
+              ],
+              "source_offset": [
+                -38,
+                -92
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 491772,
+              "source_frame_rgba_sha256": "BDE746143A6ADF54E5A61E2EC70681103667DDEF0DADF99C519807B04DE28E6B"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 72,
+              "direction": 6,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                750,
+                120,
+                114
+              ],
+              "source_offset": [
+                -38,
+                -92
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 505460,
+              "source_frame_rgba_sha256": "9EAA70961FCDAD9A772E02894B40B39FDC7D6F9AFFE2787D0F6777636B725AD8"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 73,
+              "direction": 6,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                750,
+                120,
+                114
+              ],
+              "source_offset": [
+                -38,
+                -92
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 519148,
+              "source_frame_rgba_sha256": "DA34FB4F47E73D9AC79A43AC5B01FF8D0B8ACF58719D1C46AD50289A299C12A3"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 74,
+              "direction": 6,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                750,
+                120,
+                114
+              ],
+              "source_offset": [
+                -38,
+                -92
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 532836,
+              "source_frame_rgba_sha256": "1DEE0D4BD2EE0B5B10C8456422E356F5C32F1278FF0A87A22C7BCFEFADA76C52"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 75,
+              "direction": 6,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                750,
+                120,
+                114
+              ],
+              "source_offset": [
+                -38,
+                -92
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 546524,
+              "source_frame_rgba_sha256": "505A15549DBD6BC189972417D97F284DF2659607294017C80FCB271D8A4B6E09"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 80,
+              "direction": 7,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                875,
+                104,
+                125
+              ],
+              "source_offset": [
+                -27,
+                -100
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 560260,
+              "source_frame_rgba_sha256": "A552A53CC9A1CFFBC40191BC4F96529137045C13E09C727BAAB310CE861D5069"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 81,
+              "direction": 7,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                875,
+                104,
+                125
+              ],
+              "source_offset": [
+                -27,
+                -100
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 573268,
+              "source_frame_rgba_sha256": "BC73D5B1D61E49B846F24111EDEC5536029476227D72701BA165B81F33AB728F"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 82,
+              "direction": 7,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                875,
+                104,
+                125
+              ],
+              "source_offset": [
+                -26,
+                -100
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 586276,
+              "source_frame_rgba_sha256": "12097172CF07BF259D5E7671089F919F3FED847F3483397FBB8564FA137A1527"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 83,
+              "direction": 7,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                875,
+                104,
+                125
+              ],
+              "source_offset": [
+                -27,
+                -100
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 599284,
+              "source_frame_rgba_sha256": "B06F3B3CE4840B155DE506B55C599C52CDEE5A091E30E08032D394453B5C3C40"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 84,
+              "direction": 7,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                875,
+                104,
+                125
+              ],
+              "source_offset": [
+                -27,
+                -100
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 612292,
+              "source_frame_rgba_sha256": "29A22B538B14CADA0AA86A3201A9E664B2E8254F3BD6FB1FE9E24AF444FED17E"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 85,
+              "direction": 7,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                875,
+                104,
+                123
+              ],
+              "source_offset": [
+                -27,
+                -99
+              ],
+              "source_size": [
+                104,
+                123
+              ],
+              "wil_byte_offset": 625300,
+              "source_frame_rgba_sha256": "3D7EFBB286430E94372039F9D5B1A248F198C7BB9636E3B4A3F823583C55DDC2"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 90,
+              "direction": 8,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                1000,
+                92,
+                125
+              ],
+              "source_offset": [
+                -20,
+                -100
+              ],
+              "source_size": [
+                92,
+                125
+              ],
+              "wil_byte_offset": 638148,
+              "source_frame_rgba_sha256": "13260CA71750B02BD0E9CE2F4D40A4D0A1048C6575D54187540477FC4972849C"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 91,
+              "direction": 8,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                1000,
+                92,
+                125
+              ],
+              "source_offset": [
+                -20,
+                -100
+              ],
+              "source_size": [
+                92,
+                125
+              ],
+              "wil_byte_offset": 649656,
+              "source_frame_rgba_sha256": "0D45FCA22A2B727CFA2895E8B1A8C7891AB31E0278CA90BD8ED321AF0176D2FF"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 92,
+              "direction": 8,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                1000,
+                92,
+                125
+              ],
+              "source_offset": [
+                -20,
+                -100
+              ],
+              "source_size": [
+                92,
+                125
+              ],
+              "wil_byte_offset": 661164,
+              "source_frame_rgba_sha256": "741D8E10E3F3A58ED7933811C97B87548327403B341418C9B1A066B5E1C98B12"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 93,
+              "direction": 8,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                1000,
+                92,
+                125
+              ],
+              "source_offset": [
+                -20,
+                -100
+              ],
+              "source_size": [
+                92,
+                125
+              ],
+              "wil_byte_offset": 672672,
+              "source_frame_rgba_sha256": "F84C0FD377F907BADEE496255CBBD52723DA725B1D48B29E6EAAA0057BDFBC9E"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 94,
+              "direction": 8,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                1000,
+                92,
+                125
+              ],
+              "source_offset": [
+                -20,
+                -100
+              ],
+              "source_size": [
+                92,
+                125
+              ],
+              "wil_byte_offset": 684180,
+              "source_frame_rgba_sha256": "9DD4DEEA12D3F7CF902E9FA15DCB3C68E7ADF80BC942576A4CEF798975E004E4"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 95,
+              "direction": 8,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                1000,
+                92,
+                125
+              ],
+              "source_offset": [
+                -20,
+                -100
+              ],
+              "source_size": [
+                92,
+                125
+              ],
+              "wil_byte_offset": 695688,
+              "source_frame_rgba_sha256": "C7037912BC2BC6B5DFA734F0A442B255B2041B5DE1648B44D2540425F22A8DC8"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 100,
+              "direction": 9,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                1125,
+                104,
+                125
+              ],
+              "source_offset": [
+                -25,
+                -103
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 707244,
+              "source_frame_rgba_sha256": "21B3666CE4AEA05AEB9AC0867E35DE57A7082A8B7FD959D39D969422CAD2C079"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 101,
+              "direction": 9,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                1125,
+                104,
+                125
+              ],
+              "source_offset": [
+                -25,
+                -103
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 720252,
+              "source_frame_rgba_sha256": "F7410ABAF0D3BA98CD89B701F154FD0E5417C09EFC701BB4741B1C8D279556D7"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 102,
+              "direction": 9,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                1125,
+                104,
+                125
+              ],
+              "source_offset": [
+                -25,
+                -103
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 733260,
+              "source_frame_rgba_sha256": "0D7142372EFFA1C081EBB1D6DAE16D871401CC088F65481C70C7A2F2676E4DED"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 103,
+              "direction": 9,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                1125,
+                104,
+                125
+              ],
+              "source_offset": [
+                -25,
+                -103
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 746268,
+              "source_frame_rgba_sha256": "675D81FA17C58EEAF7BDE9A32269CB795533464BBF0276FE8D44574DE06EB758"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 104,
+              "direction": 9,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                1125,
+                104,
+                125
+              ],
+              "source_offset": [
+                -25,
+                -103
+              ],
+              "source_size": [
+                104,
+                125
+              ],
+              "wil_byte_offset": 759276,
+              "source_frame_rgba_sha256": "593D00B8A646BA6F1A7DF6902C13AA21ED3046C0AE90817C22629146701B7417"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 105,
+              "direction": 9,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                1125,
+                104,
+                123
+              ],
+              "source_offset": [
+                -25,
+                -102
+              ],
+              "source_size": [
+                104,
+                123
+              ],
+              "wil_byte_offset": 772284,
+              "source_frame_rgba_sha256": "3EBBF1DD78078FC459DCBA10A0CA3E69F81EBE70D7211A0DB9F85DEF8CC489FF"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 110,
+              "direction": 10,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                1250,
+                120,
+                114
+              ],
+              "source_offset": [
+                -32,
+                -98
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 785132,
+              "source_frame_rgba_sha256": "D350D21312A89A3E3D75B4D30F4C84830C2AE0EE4BBCBAFE637AE84F4560EEFB"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 111,
+              "direction": 10,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                1250,
+                120,
+                114
+              ],
+              "source_offset": [
+                -32,
+                -98
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 798820,
+              "source_frame_rgba_sha256": "0E315035A58CE07B906ACD755E5D0E7C6F8E411E0EE6AAC11898331B65BC72DA"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 112,
+              "direction": 10,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                1250,
+                120,
+                114
+              ],
+              "source_offset": [
+                -32,
+                -98
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 812508,
+              "source_frame_rgba_sha256": "76A817080DF4556CECC31DADC37ADB287B58777D675BF30CA1EDD62FE8582ED0"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 113,
+              "direction": 10,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                1250,
+                120,
+                114
+              ],
+              "source_offset": [
+                -32,
+                -98
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 826196,
+              "source_frame_rgba_sha256": "5A4DB7B4A07A2D3AED81EC44DEAE4829DE5EDAF8B01ACBBF39463272AF36CA0B"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 114,
+              "direction": 10,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                1250,
+                120,
+                114
+              ],
+              "source_offset": [
+                -32,
+                -98
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 839884,
+              "source_frame_rgba_sha256": "ADED0ABAF5620D3938150BFC30250041E926E60FBAD6DC0605CDF6BC6CA9B70A"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 115,
+              "direction": 10,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                1250,
+                120,
+                114
+              ],
+              "source_offset": [
+                -32,
+                -98
+              ],
+              "source_size": [
+                120,
+                114
+              ],
+              "wil_byte_offset": 853572,
+              "source_frame_rgba_sha256": "D060FE4F8DCDA4BCA7A36504BCE1BE8CC0368D7EBF07C8A296D0401BDDA4DA8F"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 120,
+              "direction": 11,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                1375,
+                128,
+                100
+              ],
+              "source_offset": [
+                -33,
+                -86
+              ],
+              "source_size": [
+                128,
+                100
+              ],
+              "wil_byte_offset": 867308,
+              "source_frame_rgba_sha256": "2FC9032938BE379AADAD25F2D5E857B9AB2EB7D42C5421A79A37BB4B3A023EB1"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 121,
+              "direction": 11,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                1375,
+                128,
+                100
+              ],
+              "source_offset": [
+                -33,
+                -86
+              ],
+              "source_size": [
+                128,
+                100
+              ],
+              "wil_byte_offset": 880116,
+              "source_frame_rgba_sha256": "50AF16CB611FB099C5BAFFA826168A545C5291682E183AD0EF2FD2FEF7504FDA"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 122,
+              "direction": 11,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                1375,
+                128,
+                99
+              ],
+              "source_offset": [
+                -33,
+                -86
+              ],
+              "source_size": [
+                128,
+                99
+              ],
+              "wil_byte_offset": 892924,
+              "source_frame_rgba_sha256": "E2C3F616FF0D6530DE86AE843D48E170971393FDE76E7EE21493B98360385A90"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 123,
+              "direction": 11,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                1375,
+                128,
+                100
+              ],
+              "source_offset": [
+                -33,
+                -86
+              ],
+              "source_size": [
+                128,
+                100
+              ],
+              "wil_byte_offset": 905604,
+              "source_frame_rgba_sha256": "EBE4D3FD66E049BD249B562E24573F72EE5297F95F210E88BEF82F8904A0BA3A"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 124,
+              "direction": 11,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                1375,
+                128,
+                99
+              ],
+              "source_offset": [
+                -33,
+                -86
+              ],
+              "source_size": [
+                128,
+                99
+              ],
+              "wil_byte_offset": 918412,
+              "source_frame_rgba_sha256": "4CAB0D12D8A2C7C4D45AD6DEC9D6817A8EA5A9CC990139E078DAC50F91DA1C24"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 125,
+              "direction": 11,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                1375,
+                128,
+                97
+              ],
+              "source_offset": [
+                -33,
+                -85
+              ],
+              "source_size": [
+                128,
+                97
+              ],
+              "wil_byte_offset": 931092,
+              "source_frame_rgba_sha256": "0D25571D7836F9FB29D05CDEB0522D7B0EBDFB36FB7BEB5DC69EB5155FF78A24"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 130,
+              "direction": 12,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                1500,
+                128,
+                88
+              ],
+              "source_offset": [
+                -32,
+                -75
+              ],
+              "source_size": [
+                128,
+                88
+              ],
+              "wil_byte_offset": 943564,
+              "source_frame_rgba_sha256": "310DFE021BA258CB3C7B0E24A17BDA65035E4FC670E7BCD27CAEA8D49F0EDF70"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 131,
+              "direction": 12,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                1500,
+                128,
+                88
+              ],
+              "source_offset": [
+                -32,
+                -75
+              ],
+              "source_size": [
+                128,
+                88
+              ],
+              "wil_byte_offset": 954836,
+              "source_frame_rgba_sha256": "F6DF501BE1B49165BBAF35057687FACA837BAEFAACA5D99953D17B5FE07862FC"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 132,
+              "direction": 12,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                1500,
+                128,
+                87
+              ],
+              "source_offset": [
+                -32,
+                -75
+              ],
+              "source_size": [
+                128,
+                87
+              ],
+              "wil_byte_offset": 966108,
+              "source_frame_rgba_sha256": "54C92897E846A82EEB629554A726AD52FC98EE5D0E82D267D95EE098F8D5E2C8"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 133,
+              "direction": 12,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                1500,
+                128,
+                88
+              ],
+              "source_offset": [
+                -32,
+                -75
+              ],
+              "source_size": [
+                128,
+                88
+              ],
+              "wil_byte_offset": 977252,
+              "source_frame_rgba_sha256": "29280557134E71346722B25BB473EA5F632087F5542B04CF42B5D6D26F8622EE"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 134,
+              "direction": 12,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                1500,
+                128,
+                87
+              ],
+              "source_offset": [
+                -32,
+                -75
+              ],
+              "source_size": [
+                128,
+                87
+              ],
+              "wil_byte_offset": 988524,
+              "source_frame_rgba_sha256": "FC75D6210AC63E4E9FB6B499903216E55BF31F1F2200224FADB59B92D42A053E"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 135,
+              "direction": 12,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                1500,
+                128,
+                87
+              ],
+              "source_offset": [
+                -32,
+                -75
+              ],
+              "source_size": [
+                128,
+                87
+              ],
+              "wil_byte_offset": 999668,
+              "source_frame_rgba_sha256": "B30C7AAACA2C7E20E078AE34E5E5E35D04A2A2D89841785A75D5C126142C315D"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 140,
+              "direction": 13,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                1625,
+                124,
+                99
+              ],
+              "source_offset": [
+                -30,
+                -82
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 1010860,
+              "source_frame_rgba_sha256": "9A0DE3A312263DF38F865EFF8C5F83C125E8051152DA8AAEA9CF8BA709185210"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 141,
+              "direction": 13,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                1625,
+                124,
+                99
+              ],
+              "source_offset": [
+                -30,
+                -81
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 1023144,
+              "source_frame_rgba_sha256": "A641CBFDC34CCD23FD7960B713652C26F339EC7A110F075CE505A42780AC9258"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 142,
+              "direction": 13,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                1625,
+                124,
+                99
+              ],
+              "source_offset": [
+                -30,
+                -81
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 1035428,
+              "source_frame_rgba_sha256": "C94F270728ED898AB5284DD7CE24DC87CF41DB51835FD4106EEF64907786E029"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 143,
+              "direction": 13,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                1625,
+                124,
+                99
+              ],
+              "source_offset": [
+                -30,
+                -82
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 1047712,
+              "source_frame_rgba_sha256": "7F6A8459FA89960A5C1250913756B7B5AA282B419E448FA51203A6C1A315C14B"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 144,
+              "direction": 13,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                1625,
+                124,
+                99
+              ],
+              "source_offset": [
+                -30,
+                -82
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 1059996,
+              "source_frame_rgba_sha256": "AAFC5450658A07615A725CAE1D3F85A1F89ADB2697710272266CF2020D9887C4"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 145,
+              "direction": 13,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                1625,
+                124,
+                99
+              ],
+              "source_offset": [
+                -30,
+                -82
+              ],
+              "source_size": [
+                124,
+                99
+              ],
+              "wil_byte_offset": 1072280,
+              "source_frame_rgba_sha256": "491872FCF499A630DF207439A7FE66B31B7340AAC5B9FCD209401687C80E293F"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 150,
+              "direction": 14,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                1750,
+                116,
+                108
+              ],
+              "source_offset": [
+                -31,
+                -84
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 1084612,
+              "source_frame_rgba_sha256": "4A600921FD7F3031A13B646817EB0C0235A2E3C311E58509466EA2478F0B6487"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 151,
+              "direction": 14,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                1750,
+                116,
+                108
+              ],
+              "source_offset": [
+                -31,
+                -84
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 1097148,
+              "source_frame_rgba_sha256": "96512D76D7E5A352E58EA47BBFBAA43F172B9C6AA8B089406888CEF0A935AB28"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 152,
+              "direction": 14,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                1750,
+                116,
+                108
+              ],
+              "source_offset": [
+                -31,
+                -84
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 1109684,
+              "source_frame_rgba_sha256": "B7AEE34655EF8CB5FB358218C1C68A8180A3F9B5D83D24695D67810F8D69AF1F"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 153,
+              "direction": 14,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                1750,
+                116,
+                108
+              ],
+              "source_offset": [
+                -31,
+                -84
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 1122220,
+              "source_frame_rgba_sha256": "E2BD59390CEE6567AFAFCE96FBFF23101D25B5DE4DED80D72E18FC1A86F27D20"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 154,
+              "direction": 14,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                1750,
+                116,
+                108
+              ],
+              "source_offset": [
+                -31,
+                -84
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 1134756,
+              "source_frame_rgba_sha256": "257B3441BB614FE9F8125FF4BCFE8004C8FBB5562453FFEB59F208F3432D1A61"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 155,
+              "direction": 14,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                1750,
+                116,
+                108
+              ],
+              "source_offset": [
+                -31,
+                -84
+              ],
+              "source_size": [
+                116,
+                108
+              ],
+              "wil_byte_offset": 1147292,
+              "source_frame_rgba_sha256": "9BC589486D738D24A5A7CFDF655C507F45B2F5472E511E04E10AC6127766D888"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 160,
+              "direction": 15,
+              "frame": 0,
+              "atlas_region": [
+                0,
+                1875,
+                100,
+                118
+              ],
+              "source_offset": [
+                -28,
+                -86
+              ],
+              "source_size": [
+                100,
+                118
+              ],
+              "wil_byte_offset": 1159876,
+              "source_frame_rgba_sha256": "987A4A2B70B81EC62EFF20D2F4A4A493359E93253A05A25C15B7829CD979F90B"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 161,
+              "direction": 15,
+              "frame": 1,
+              "atlas_region": [
+                128,
+                1875,
+                100,
+                117
+              ],
+              "source_offset": [
+                -28,
+                -85
+              ],
+              "source_size": [
+                100,
+                117
+              ],
+              "wil_byte_offset": 1171684,
+              "source_frame_rgba_sha256": "4C6CB0DB9F0E788F671B5AB986BBEE72762372DBEF5511FD91B23DA9EE20E4A2"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 162,
+              "direction": 15,
+              "frame": 2,
+              "atlas_region": [
+                256,
+                1875,
+                100,
+                117
+              ],
+              "source_offset": [
+                -28,
+                -86
+              ],
+              "source_size": [
+                100,
+                117
+              ],
+              "wil_byte_offset": 1183392,
+              "source_frame_rgba_sha256": "B390FAC26851BA28CCD390569AD065C70B149474972003DE289599DAF6E82993"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 163,
+              "direction": 15,
+              "frame": 3,
+              "atlas_region": [
+                384,
+                1875,
+                100,
+                117
+              ],
+              "source_offset": [
+                -28,
+                -86
+              ],
+              "source_size": [
+                100,
+                117
+              ],
+              "wil_byte_offset": 1195100,
+              "source_frame_rgba_sha256": "CB8AFBD34CB3A915E0E59DBC1F18465B6B7A7C664E59AF3AC100909C3EB0AED8"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 164,
+              "direction": 15,
+              "frame": 4,
+              "atlas_region": [
+                512,
+                1875,
+                100,
+                117
+              ],
+              "source_offset": [
+                -28,
+                -86
+              ],
+              "source_size": [
+                100,
+                117
+              ],
+              "wil_byte_offset": 1206808,
+              "source_frame_rgba_sha256": "D8443CD6D4EB24DE609E513A4AD4448BF7DB70EE25B7638BDB3E5188B5DC7C92"
+            },
+            {
+              "source_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.wil",
+              "source_library_sha256": "BE46A0258349B26DB9BA7DBA595ABAC1F0767D52FEF11D9F508E704F2F6DEAAC",
+              "source_index": 165,
+              "direction": 15,
+              "frame": 5,
+              "atlas_region": [
+                640,
+                1875,
+                100,
+                118
+              ],
+              "source_offset": [
+                -28,
+                -86
+              ],
+              "source_size": [
+                100,
+                118
+              ],
+              "wil_byte_offset": 1218516,
+              "source_frame_rgba_sha256": "6CDD6B11EA1A0D967625A684CD95A2D768D609D511F0793362503696C1486149"
+            }
+          ],
+          "source_index_library": "dev_art_sources/reference/mir2_client_raw/Data/Magic.WIX",
+          "source_index_library_sha256": "7F95FF7BA4ADD42157E10EB0D43EE7C77FD3C5AC3EA1183E39971066A40DFC91",
+          "fly_speed_px_per_second": 500
+        }
+      ],
+      "client_magic_release_frame": 4,
+      "client_magic_release_seconds": 0.48
+    },
+    "221": {
+      "canonical_name": "牛魔法师0",
+      "record_status": "retired",
+      "service_ai_code": 81,
+      "presentation_effect_id": "",
+      "runtime_policy": "must_not_resolve_to_cow_mage"
+    },
+    "223": {
+      "canonical_name": "牛魔祭司0",
+      "record_status": "retired",
+      "service_ai_code": 81,
+      "presentation_effect_id": "",
+      "runtime_policy": "must_not_resolve_to_cow_priest"
+    }
+  },
+  "source_priority_audit": {
+    "client_assets": {
+      "policy_path": "assets/data/source_priority_policy.json",
+      "selected_primary": {
+        "distribution": "client.classic_raw_complete",
+        "tier": "primary",
+        "order": 0,
+        "root_prefix": "reference/mir2_client_raw"
+      },
+      "eligible_fallback": {
+        "distribution": "client.mir2opensource_2013_complete",
+        "tier": "auxiliary_1",
+        "order": 1,
+        "root_prefix": "external/mir2opensource_full"
+      }
+    },
+    "client_rules": {
+      "policy_path": "assets/data/source_priority_policy.json",
+      "selected_primary": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "tier": "primary",
+        "order": 0,
+        "root_prefix": "reference/original_gameofmir/MirClient"
+      }
+    }
+  }
+}

@@ -1,0 +1,2361 @@
+{
+  "schema": "hardcore.dpv2.single_player_item_boost_classification.v1",
+  "authority_id": "dpv2.single_player_item_boost_classification.v1",
+  "status": "PRODUCTION_CLASSIFICATION_AUTHORITY",
+  "production_active": true,
+  "identity_key": "canonical_item_id",
+  "classification_contract": {
+    "exact_id_only": true,
+    "name_or_type_inference_forbidden": true,
+    "unlisted_item_policy": "FAIL_CLOSED",
+    "classes": [
+      "EQUIPMENT",
+      "RARE_FUNCTIONAL_CONSUMABLE",
+      "COMMON_RECOVERY",
+      "BYPASS_UNCLASSIFIED"
+    ]
+  },
+  "summary": {
+    "canonical_items": 233,
+    "duplicate_canonical_item_ids": 0,
+    "classification_counts": {
+      "BYPASS_UNCLASSIFIED": 42,
+      "COMMON_RECOVERY": 10,
+      "EQUIPMENT": 167,
+      "RARE_FUNCTIONAL_CONSUMABLE": 14
+    },
+    "human_frozen_records": 233
+  },
+  "records": [
+    {
+      "canonical_item_id": 80,
+      "canonical_item_name": "\u6728\u5251",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 81,
+      "canonical_item_name": "\u5315\u9996",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 82,
+      "canonical_item_name": "\u4e4c\u6728\u5251",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 83,
+      "canonical_item_name": "\u9752\u94dc\u5251",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 84,
+      "canonical_item_name": "\u77ed\u5251",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 85,
+      "canonical_item_name": "\u94c1\u5251",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 87,
+      "canonical_item_name": "\u9752\u94dc\u65a7",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 88,
+      "canonical_item_name": "\u7f57\u5239",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 89,
+      "canonical_item_name": "\u516b\u8352",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 90,
+      "canonical_item_name": "\u6d77\u9b42",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 91,
+      "canonical_item_name": "\u534a\u6708",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 92,
+      "canonical_item_name": "\u51cc\u98ce",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 93,
+      "canonical_item_name": "\u7834\u9b42",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 94,
+      "canonical_item_name": "\u65a9\u9a6c\u5200",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 95,
+      "canonical_item_name": "\u5043\u6708",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 96,
+      "canonical_item_name": "\u964d\u9b54",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 97,
+      "canonical_item_name": "\u4fee\u7f57",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 98,
+      "canonical_item_name": "\u51dd\u971c",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 99,
+      "canonical_item_name": "\u70bc\u72f1",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 100,
+      "canonical_item_name": "\u9b54\u6756",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 101,
+      "canonical_item_name": "\u94f6\u86c7",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 102,
+      "canonical_item_name": "\u4e95\u4e2d\u6708",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 104,
+      "canonical_item_name": "\u65e0\u6781\u68cd",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 105,
+      "canonical_item_name": "\u88c1\u51b3\u4e4b\u6756",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 106,
+      "canonical_item_name": "\u9aa8\u7389\u6743\u6756",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 107,
+      "canonical_item_name": "\u9f99\u7eb9\u5251",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 108,
+      "canonical_item_name": "\u5c60\u9f99",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 109,
+      "canonical_item_name": "\u55dc\u9b42\u6cd5\u6756",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 113,
+      "canonical_item_name": "\u6012\u65a9",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 114,
+      "canonical_item_name": "\u9f99\u7259",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 115,
+      "canonical_item_name": "\u900d\u9065\u6247",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 116,
+      "canonical_item_name": "\u5e03\u8863(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 117,
+      "canonical_item_name": "\u5e03\u8863(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 118,
+      "canonical_item_name": "\u8f7b\u578b\u76d4\u7532(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 119,
+      "canonical_item_name": "\u8f7b\u578b\u76d4\u7532(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 120,
+      "canonical_item_name": "\u4e2d\u578b\u76d4\u7532(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 121,
+      "canonical_item_name": "\u4e2d\u578b\u76d4\u7532(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 122,
+      "canonical_item_name": "\u91cd\u76d4\u7532(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 123,
+      "canonical_item_name": "\u91cd\u76d4\u7532(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 124,
+      "canonical_item_name": "\u9b54\u6cd5\u957f\u888d(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 125,
+      "canonical_item_name": "\u9b54\u6cd5\u957f\u888d(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 126,
+      "canonical_item_name": "\u7075\u9b42\u6218\u8863(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 127,
+      "canonical_item_name": "\u7075\u9b42\u6218\u8863(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 128,
+      "canonical_item_name": "\u6218\u795e\u76d4\u7532(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 129,
+      "canonical_item_name": "\u6218\u795e\u76d4\u7532(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 130,
+      "canonical_item_name": "\u6076\u9b54\u957f\u888d(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 131,
+      "canonical_item_name": "\u6076\u9b54\u957f\u888d(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 132,
+      "canonical_item_name": "\u5e7d\u7075\u6218\u8863(\u7537)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 133,
+      "canonical_item_name": "\u5e7d\u7075\u6218\u8863(\u5973)",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 140,
+      "canonical_item_name": "\u5929\u9b54\u795e\u7532",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 141,
+      "canonical_item_name": "\u5723\u6218\u5b9d\u7532",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 142,
+      "canonical_item_name": "\u6cd5\u795e\u62ab\u98ce",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 143,
+      "canonical_item_name": "\u9713\u88f3\u7fbd\u8863",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 144,
+      "canonical_item_name": "\u5929\u5c0a\u9053\u888d",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 145,
+      "canonical_item_name": "\u5929\u5e08\u957f\u888d",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 147,
+      "canonical_item_name": "\u9752\u94dc\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 148,
+      "canonical_item_name": "\u9b54\u6cd5\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 149,
+      "canonical_item_name": "\u9053\u58eb\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 150,
+      "canonical_item_name": "\u9ab7\u9ac5\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 151,
+      "canonical_item_name": "\u9ed1\u94c1\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 153,
+      "canonical_item_name": "\u91d1\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 154,
+      "canonical_item_name": "\u4f20\u7edf\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 155,
+      "canonical_item_name": "\u767d\u91d1\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 156,
+      "canonical_item_name": "\u9ed1\u8272\u6c34\u6676\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 157,
+      "canonical_item_name": "\u9ed1\u6a80\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 158,
+      "canonical_item_name": "\u9ec4\u8272\u6c34\u6676\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 159,
+      "canonical_item_name": "\u767d\u8272\u864e\u9f7f\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 160,
+      "canonical_item_name": "\u8eb2\u907f\u624b\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 161,
+      "canonical_item_name": "\u9b54\u9b3c\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 162,
+      "canonical_item_name": "\u7425\u73c0\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 163,
+      "canonical_item_name": "\u51e4\u51f0\u660e\u73e0",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 164,
+      "canonical_item_name": "\u706f\u7b3c\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 165,
+      "canonical_item_name": "\u84dd\u7fe1\u7fe0\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 166,
+      "canonical_item_name": "\u653e\u5927\u955c",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 167,
+      "canonical_item_name": "\u7af9\u7b1b",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 168,
+      "canonical_item_name": "\u5e7d\u7075\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 169,
+      "canonical_item_name": "\u751f\u547d\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 170,
+      "canonical_item_name": "\u5929\u73e0\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 171,
+      "canonical_item_name": "\u7eff\u8272\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 172,
+      "canonical_item_name": "\u6076\u9b54\u94c3\u94db",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 173,
+      "canonical_item_name": "\u7075\u9b42\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 174,
+      "canonical_item_name": "\u94c1\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 175,
+      "canonical_item_name": "\u5c0f\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 176,
+      "canonical_item_name": "\u94f6\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 177,
+      "canonical_item_name": "\u76ae\u5236\u624b\u5957",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 178,
+      "canonical_item_name": "\u94a2\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 179,
+      "canonical_item_name": "\u5927\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 180,
+      "canonical_item_name": "\u590f\u666e\u513f\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 181,
+      "canonical_item_name": "\u8f9f\u90aa\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 182,
+      "canonical_item_name": "\u575a\u56fa\u624b\u5957",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 183,
+      "canonical_item_name": "\u9b54\u6cd5\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 184,
+      "canonical_item_name": "\u9ed1\u6a80\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 185,
+      "canonical_item_name": "\u9053\u58eb\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 186,
+      "canonical_item_name": "\u9b54\u529b\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 187,
+      "canonical_item_name": "\u6b7b\u795e\u624b\u5957",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 188,
+      "canonical_item_name": "\u91d1\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 189,
+      "canonical_item_name": "\u5e7d\u7075\u624b\u5957",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 190,
+      "canonical_item_name": "\u601d\u8d1d\u513f\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 191,
+      "canonical_item_name": "\u4e09\u773c\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 192,
+      "canonical_item_name": "\u960e\u7f57\u624b\u5957",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 193,
+      "canonical_item_name": "\u9a91\u58eb\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 194,
+      "canonical_item_name": "\u9f99\u4e4b\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 195,
+      "canonical_item_name": "\u5fc3\u7075\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 197,
+      "canonical_item_name": "\u53e4\u94dc\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 198,
+      "canonical_item_name": "\u516d\u89d2\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 199,
+      "canonical_item_name": "\u73bb\u7483\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 200,
+      "canonical_item_name": "\u725b\u89d2\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 201,
+      "canonical_item_name": "\u751f\u94c1\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 202,
+      "canonical_item_name": "\u84dd\u8272\u6c34\u6676\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 203,
+      "canonical_item_name": "\u9ed1\u8272\u6c34\u6676\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 204,
+      "canonical_item_name": "\u86c7\u773c\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 205,
+      "canonical_item_name": "\u73cd\u73e0\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 206,
+      "canonical_item_name": "\u91d1\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 207,
+      "canonical_item_name": "\u9ab7\u9ac5\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 208,
+      "canonical_item_name": "\u9b45\u529b\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 209,
+      "canonical_item_name": "\u9053\u5fb7\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 210,
+      "canonical_item_name": "\u73ca\u745a\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 211,
+      "canonical_item_name": "\u964d\u5996\u9664\u9b54\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 212,
+      "canonical_item_name": "\u9f99\u4e4b\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 213,
+      "canonical_item_name": "\u7ea2\u5b9d\u77f3\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 214,
+      "canonical_item_name": "\u94c2\u91d1\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 215,
+      "canonical_item_name": "\u529b\u91cf\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 216,
+      "canonical_item_name": "\u7d2b\u78a7\u87ba",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 217,
+      "canonical_item_name": "\u6cf0\u5766\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 218,
+      "canonical_item_name": "\u795e\u79d8\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 219,
+      "canonical_item_name": "\u795e\u79d8\u8170\u5e26",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 220,
+      "canonical_item_name": "\u795e\u79d8\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 221,
+      "canonical_item_name": "\u72c2\u98ce\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 222,
+      "canonical_item_name": "\u72c2\u98ce\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 223,
+      "canonical_item_name": "\u7948\u7977\u4e4b\u5203",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 224,
+      "canonical_item_name": "\u7948\u7977\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 225,
+      "canonical_item_name": "\u7948\u7977\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 226,
+      "canonical_item_name": "\u7948\u7977\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 227,
+      "canonical_item_name": "\u7948\u7977\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 228,
+      "canonical_item_name": "\u8bb0\u5fc6\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 229,
+      "canonical_item_name": "\u8bb0\u5fc6\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 230,
+      "canonical_item_name": "\u8bb0\u5fc6\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 231,
+      "canonical_item_name": "\u8bb0\u5fc6\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 232,
+      "canonical_item_name": "\u5723\u6218\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 233,
+      "canonical_item_name": "\u5723\u6218\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 234,
+      "canonical_item_name": "\u5723\u6218\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 235,
+      "canonical_item_name": "\u5723\u6218\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 236,
+      "canonical_item_name": "\u6cd5\u795e\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 237,
+      "canonical_item_name": "\u6cd5\u795e\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 238,
+      "canonical_item_name": "\u6cd5\u795e\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 239,
+      "canonical_item_name": "\u6cd5\u795e\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 240,
+      "canonical_item_name": "\u5929\u5c0a\u5934\u76d4",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 241,
+      "canonical_item_name": "\u5929\u5c0a\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 242,
+      "canonical_item_name": "\u5929\u5c0a\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 243,
+      "canonical_item_name": "\u5929\u5c0a\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 244,
+      "canonical_item_name": "\u9b54\u8840\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 245,
+      "canonical_item_name": "\u9b54\u8840\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 246,
+      "canonical_item_name": "\u9b54\u8840\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 247,
+      "canonical_item_name": "\u8679\u9b54\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 248,
+      "canonical_item_name": "\u8679\u9b54\u624b\u956f",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 249,
+      "canonical_item_name": "\u8679\u9b54\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 250,
+      "canonical_item_name": "\u6280\u5de7\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 251,
+      "canonical_item_name": "\u63a2\u6d4b\u9879\u94fe",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 252,
+      "canonical_item_name": "\u9ebb\u75f9\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 253,
+      "canonical_item_name": "\u9690\u8eab\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 254,
+      "canonical_item_name": "\u4f20\u9001\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 255,
+      "canonical_item_name": "\u9632\u5fa1\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 256,
+      "canonical_item_name": "\u590d\u6d3b\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 257,
+      "canonical_item_name": "\u62a4\u8eab\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 258,
+      "canonical_item_name": "\u8d85\u8d1f\u8f7d\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 259,
+      "canonical_item_name": "\u706b\u7130\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 260,
+      "canonical_item_name": "\u6c42\u5a5a\u6212\u6307",
+      "classification": "EQUIPMENT",
+      "reason": "HUMAN_FROZEN_EQUIPMENT",
+      "evidence": [
+        "Human-frozen exact-ID equipment AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910001,
+      "canonical_item_name": "\u4f53\u529b\u5f3a\u6548\u795e\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910002,
+      "canonical_item_name": "\u9b54\u529b\u5f3a\u6548\u795e\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910003,
+      "canonical_item_name": "\u75be\u98ce\u795e\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910004,
+      "canonical_item_name": "\u653b\u51fb\u795e\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910005,
+      "canonical_item_name": "\u9b54\u529b\u795e\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910006,
+      "canonical_item_name": "\u7cbe\u795e\u795e\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910007,
+      "canonical_item_name": "\u7597\u4f24\u836f",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910008,
+      "canonical_item_name": "HP\u5f3a\u5316\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910009,
+      "canonical_item_name": "MP\u5f3a\u5316\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910010,
+      "canonical_item_name": "\u653b\u51fb\u529b\u836f\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910011,
+      "canonical_item_name": "\u9b54\u6cd5\u529b\u836f\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910012,
+      "canonical_item_name": "\u9053\u672f\u529b\u836f\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 910013,
+      "canonical_item_name": "\u75be\u98ce\u836f\u6c34",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920001,
+      "canonical_item_name": "\u4e07\u5e74\u96ea\u971c",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920002,
+      "canonical_item_name": "\u51b0\u5486\u54ee",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920003,
+      "canonical_item_name": "\u523a\u6740\u5251\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920004,
+      "canonical_item_name": "\u534a\u6708\u5f2f\u5200",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920005,
+      "canonical_item_name": "\u53ec\u5524\u795e\u517d",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920006,
+      "canonical_item_name": "\u53ec\u5524\u9ab7\u9ac5",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920007,
+      "canonical_item_name": "\u56de\u57ce\u5377",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; Return Scroll remains unboosted."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920008,
+      "canonical_item_name": "\u56f0\u9b54\u5492",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920009,
+      "canonical_item_name": "\u5723\u8a00\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920010,
+      "canonical_item_name": "\u5730\u72f1\u706b",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920011,
+      "canonical_item_name": "\u5730\u72f1\u96f7\u5149",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920012,
+      "canonical_item_name": "\u57fa\u672c\u5251\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920013,
+      "canonical_item_name": "\u5927\u706b\u7403",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920014,
+      "canonical_item_name": "\u592a\u9633\u6c34",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920015,
+      "canonical_item_name": "\u5e7d\u7075\u76fe",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920016,
+      "canonical_item_name": "\u5f3a\u6548\u592a\u9633\u6c34",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920017,
+      "canonical_item_name": "\u8d85\u7ea7\u91d1\u521b\u836f",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920018,
+      "canonical_item_name": "\u5fc3\u7075\u542f\u793a",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920019,
+      "canonical_item_name": "\u6218\u795e\u6cb9",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "service item 707; useEffect=war_god_oil; functional oil; human-frozen AUTO boost decision."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920020,
+      "canonical_item_name": "\u6297\u62d2\u706b\u73af",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920021,
+      "canonical_item_name": "\u653b\u6740\u5251\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920022,
+      "canonical_item_name": "\u65bd\u6bd2\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920023,
+      "canonical_item_name": "\u6c83\u739b\u53f7\u89d2",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920024,
+      "canonical_item_name": "\u6cbb\u6108\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920025,
+      "canonical_item_name": "\u706b\u5899",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920026,
+      "canonical_item_name": "\u706b\u7403\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920027,
+      "canonical_item_name": "\u7075\u9b42\u706b\u7b26",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920028,
+      "canonical_item_name": "\u70c8\u706b\u5251\u6cd5",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920029,
+      "canonical_item_name": "\u7206\u88c2\u706b\u7130",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920030,
+      "canonical_item_name": "\u75be\u5149\u7535\u5f71",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920031,
+      "canonical_item_name": "\u77ac\u606f\u79fb\u52a8",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920032,
+      "canonical_item_name": "\u7956\u739b\u5934\u50cf",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920033,
+      "canonical_item_name": "\u795d\u798f\u6cb9",
+      "classification": "RARE_FUNCTIONAL_CONSUMABLE",
+      "reason": "HUMAN_FROZEN_RARE_FUNCTIONAL_CONSUMABLE",
+      "evidence": [
+        "Human-frozen exact-ID rare functional consumable AUTO boost classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920034,
+      "canonical_item_name": "\u795e\u5723\u6218\u7532\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920035,
+      "canonical_item_name": "\u7cbe\u795e\u529b\u6218\u6cd5",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920036,
+      "canonical_item_name": "\u7fa4\u4f53\u6cbb\u7597\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920037,
+      "canonical_item_name": "\u8089",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920038,
+      "canonical_item_name": "\u86c6\u5375",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920039,
+      "canonical_item_name": "\u8718\u86db\u7259",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920040,
+      "canonical_item_name": "\u874e\u5c3e",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920041,
+      "canonical_item_name": "\u8bf1\u60d1\u4e4b\u5149",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920042,
+      "canonical_item_name": "\u8d85\u7ea7\u9b54\u6cd5\u836f",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920043,
+      "canonical_item_name": "\u91ce\u86ee\u51b2\u649e",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920044,
+      "canonical_item_name": "\u91d1\u521b\u836f(\u4e2d\u91cf)",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920045,
+      "canonical_item_name": "\u91d1\u521b\u836f(\u5c0f\u91cf)",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920046,
+      "canonical_item_name": "\u9690\u8eab\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920047,
+      "canonical_item_name": "\u96c6\u4f53\u9690\u8eab\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920048,
+      "canonical_item_name": "\u96f7\u7535\u672f",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920049,
+      "canonical_item_name": "\u98df\u4eba\u82b1\u53f6",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920050,
+      "canonical_item_name": "\u98df\u4eba\u82b1\u679c",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920051,
+      "canonical_item_name": "\u9b54\u6cd5\u76fe",
+      "classification": "BYPASS_UNCLASSIFIED",
+      "reason": "HUMAN_FROZEN_FAIL_SAFE_BYPASS",
+      "evidence": [
+        "Human-frozen exact-ID fail-safe bypass classification; no AUTO boost authority."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920052,
+      "canonical_item_name": "\u9b54\u6cd5\u836f(\u4e2d\u91cf)",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    },
+    {
+      "canonical_item_id": 920053,
+      "canonical_item_name": "\u9b54\u6cd5\u836f(\u5c0f\u91cf)",
+      "classification": "COMMON_RECOVERY",
+      "reason": "HUMAN_FROZEN_COMMON_RECOVERY_PROTECTION",
+      "evidence": [
+        "Human-frozen exact-ID common recovery probability-protection classification."
+      ],
+      "human_frozen": true
+    }
+  ]
+}

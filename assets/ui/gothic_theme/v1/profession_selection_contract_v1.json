@@ -1,0 +1,18 @@
+{
+  "contractId": "ui.profession.selection.v1",
+  "professionIds": [
+    "warrior",
+    "wizard",
+    "taoist"
+  ],
+  "tabIds": [
+    "profession.tab.warrior",
+    "profession.tab.wizard",
+    "profession.tab.taoist"
+  ],
+  "policy": "Tabs only preview. Confirmation delegates the profession change to PlayerState.select_profession. UI reads levels, stats and skill unlock requirements from gameplay data and never calculates profession rules.",
+  "confirmation": {
+    "requiredWhenChangingProfession": true,
+    "warnsAboutEquipmentAndSkills": true
+  }
+}

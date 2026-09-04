@@ -29,6 +29,8 @@ func _run() -> void:
 	enemy.control_time = 60.0
 
 	PlayerState.select_profession("法师")
+	PlayerState.learned_skills = {"火球术": 3, "魔法盾": 3, "火墙": 3}
+	game.player.current_mp = 200
 	enemy.global_position = game.player.global_position + Vector2(75, 0)
 	enemy.apply_control(10.0)
 	var hp_before_fireball := enemy.current_hp
@@ -40,6 +42,16 @@ func _run() -> void:
 	assert(game.player.shield_time > 0.0 and game.player.damage_reduction > 0.0, "魔法盾未生效")
 	enemy.global_position = game.player.global_position + Vector2(175, 0)
 	enemy.apply_control(10.0)
+	# Fire Wall is target-centred in the mobile spell-lock contract. This direct
+	# production-entry test bypasses the HUD input path, so install the same
+	# explicit lock/selected target that the real input path supplies.
+	game._set_magic_locked_target(enemy, true)
+	game._skill_cast_target = enemy
+	assert(
+		game._canonical_screen_px_to_grid_cell(enemy.global_position)
+		== Vector2i(round(game._canonical_screen_px_to_ground_gu(enemy.global_position))),
+		"旧区域整数技能格与怪物浮点脚点格使用了不同坐标系"
+	)
 	var hp_before_firewall := enemy.current_hp
 	game._on_player_skill("火墙", game.player.global_position, Vector2.RIGHT, 10)
 	await get_tree().physics_frame
@@ -47,20 +59,48 @@ func _run() -> void:
 	assert(enemy.current_hp < hp_before_firewall, "火墙持续区域未造成伤害")
 
 	PlayerState.select_profession("道士")
+	PlayerState.learned_skills = {
+		"施毒术": 3,
+		"治愈术": 3,
+		"困魔咒": 3,
+		"隐身术": 3,
+		"召唤骷髅": 3,
+	}
+	PlayerState.inventory = [
+		{"name": "灰色药粉", "count": 10},
+		{"name": "护身符", "count": 20},
+	]
+	game.player.current_mp = 200
 	enemy.global_position = game.player.global_position + Vector2(75, 0)
 	enemy.apply_control(10.0)
 	game._on_player_skill("施毒术", game.player.global_position, Vector2.RIGHT, 12)
 	for frame in range(12):
 		await get_tree().physics_frame
 	assert(enemy.poison_time > 0.0 and enemy.poison_damage > 0, "施毒术状态未生效")
+	assert(enemy.canonical_red_poison_active(), "红毒状态未显示")
 	game.player.take_damage(20)
 	var hp_before_heal: int = game.player.current_hp
 	game._on_player_skill("治愈术", game.player.global_position, Vector2.RIGHT, 12)
 	assert(game.player.current_hp > hp_before_heal, "治愈术未恢复生命")
-	enemy.global_position = game.player.global_position + Vector2(120, 0)
-	enemy.apply_control(10.0)
+	var entrapment_center_cell: Vector2i = (
+		game._canonical_screen_px_to_grid_cell(game.player.global_position)
+		+ Vector2i(2, 0)
+	)
+	enemy.global_position = game._canonical_grid_cell_to_screen_px(
+		entrapment_center_cell
+	)
+	enemy.control_time = 0.0
+	game._set_magic_locked_target(enemy, true)
 	game._on_player_skill("困魔咒", game.player.global_position, Vector2.RIGHT, 1)
-	assert(enemy.control_time > 0.0, "困魔咒未定身")
+	var entrapment_state := enemy.entrapment_state_snapshot()
+	assert(bool(entrapment_state.get("active", false)), "困魔咒未建立边界状态")
+	assert(
+		str(entrapment_state.get("contract_id", ""))
+		== "skills.taoist.entrapment.boundary_controller.v1"
+	)
+	assert(int(entrapment_state.get("boundary_cell_count", 0)) == 8)
+	assert(entrapment_state.get("center_cell", Vector2i.ZERO) == entrapment_center_cell)
+	assert(enemy.control_time == 0.0, "困魔咒不得退化为通用定身")
 	game._on_player_skill("隐身术", game.player.global_position, Vector2.RIGHT, 1)
 	assert(game.player.is_stealthed(), "隐身术未生效")
 	game._on_player_skill("召唤骷髅", game.player.global_position, Vector2.RIGHT, 12)
@@ -69,6 +109,8 @@ func _run() -> void:
 	assert(summons.size() == 1 and summons[0] is SummonActor, "召唤骷髅未生成")
 	var summon: SummonActor = summons[0]
 	summon.global_position = enemy.global_position + Vector2(10, 0)
+	enemy._threat_table.clear()
+	enemy.target = null
 	enemy._retarget()
 	assert(enemy.target == summon, "怪物未将附近召唤物纳入仇恨目标")
 

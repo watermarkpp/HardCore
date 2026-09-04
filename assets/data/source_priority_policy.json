@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "policyId": "MIR-SOURCE-PRIORITY-1",
   "catalogManifest": "outputs/resource_catalog/complete_local_mir_sources/manifest.json",
   "weights": {
@@ -14,19 +14,237 @@
     "singleSourceFirst": true,
     "crossDistributionMergeByDefault": false,
     "fallbackRequiresEvidence": true,
-    "fallbackStatuses": ["missing", "unusable", "incompatible"],
+    "fallbackStatuses": ["missing"],
+    "primaryPresenceBlocksFallback": true,
+    "primaryUnusableOrIncompatibleRequiresRepair": true,
     "fallbackMustRejectEveryHigherPrioritySource": true,
     "sameTierMustFollowOrder": true,
     "derivedAssetMustRecordDistributionAndOriginalPath": true,
+    "projectMasterRequiresTrackedContract": true,
+    "userAuthoritativeOverrideMustRecordEvidenceHash": true,
     "quarantineCannotEnterRuntime": true
   },
   "routing": {
     "pixels_frames_maps_audio": "client_assets",
     "client_animation_offsets_rendering_protocol": "client_rules",
+    "equipment_attributes_requirements_weights_affinity": "equipment_attributes",
+    "vanilla_skill_membership_progression_mp_target_material_formula_geometry_timing_proficiency_state_machine": "skills",
     "npc_items_monsters_spawns_shops_quests_server_config": "server_data",
-    "combat_movement_ai_timing_protocol": "server_rules"
+    "monster_attributes_timing_life_flags": "monster_attributes_21cq",
+    "combat_movement_ai_timing_protocol": "server_rules",
+    "combat_movement_ai_projectile_distance_units": "combat_units",
+    "monster_drop_probability_and_post_rng_overflow": "monster_drop_probability"
   },
   "lanes": {
+    "monster_attributes_21cq": {
+      "description": "User-authoritative 21CQ monster attributes, timing and life flags only",
+      "scopeExclusions": {
+        "server_data": [
+          "monster_spawn",
+          "monster_respawn",
+          "monster_map_placement"
+        ],
+        "server_rules": [
+          "monster_ai",
+          "monster_special_delivery"
+        ],
+        "monster_drop_probability": [
+          "monster_drop_probability",
+          "monster_drop_tables",
+          "post_rng_overflow"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "user.21cq.com.mir.monster_detail",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/monster_21cq_detail_source_v1.json",
+          "contractId": "monster.21cq.detail.user_override.v1",
+          "authority": "user_authoritative_override",
+          "sourceKind": "tracked_exact_id_site_snapshot",
+          "originalPath": "https://www.21cq.com/mir/Monster.Aspx and https://www.21cq.com/mir/Mob.Aspx?ID={monster_id}",
+          "evidenceSha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+          "scope": [
+            "monster_combat_stats",
+            "monster_agility",
+            "monster_accuracy",
+            "monster_attack_interval",
+            "monster_move_interval",
+            "monster_life_type",
+            "monster_anti_stealth"
+          ],
+          "excludedContent": [
+            "drops",
+            "drop_probability",
+            "spawn",
+            "respawn",
+            "map",
+            "spawn_quantity",
+            "respawn_time"
+          ],
+          "reason": "The user explicitly ordered all non-drop and non-refresh monster fields to match 21CQ on 2026-08-28. This dedicated lane overrides Crystal, Monster.DB and Wooma only for the listed exact-ID attribute, timing and life-flag fields; it does not authorize drop, spawn, respawn, map, AI or special-delivery changes."
+        }
+      ]
+    },
+    "monster_drop_probability": {
+      "description": "HardCore direct monster-drop probability and post-RNG nine-slot retention Authority only",
+      "scopeExclusions": {
+        "server_data": [
+          "monster_identity",
+          "monster_stats",
+          "monster_ai",
+          "monster_combat",
+          "monster_respawn",
+          "monster_spawn",
+          "monster_map_placement",
+          "item_identity",
+          "item_attributes"
+        ],
+        "server_rules": [
+          "monster_ai",
+          "monster_combat",
+          "monster_respawn"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.dpv2_21cq_direct_baseline.v2",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/canonical_monster_drop_source_v2.json",
+          "contractId": "dpv2.21cq.direct_baseline.v2",
+          "authority": "user_authoritative_override",
+          "sourceKind": "tracked_user_locked_logical_21cq_artifact",
+          "originalPath": "assets/data/canonical_monster_drop_source_v2.json",
+          "evidenceSha256": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+          "directRuntimeArtifact": "assets/data/drop/dpv2_direct_baseline_v2.json",
+          "reason": "The user explicitly selected the tracked user_locked 217-record/9590-row logical 21CQ artifact as the unique x1 drop-probability baseline on 2026-08-28. This lane does not authorize changes to monster identity, attributes, AI, combat, respawn, spawn, maps, placement, item identity or item attributes."
+        }
+      ]
+    },
+    "combat_units": {
+      "description": "HardCore formal GU/GS/PX unit, metric and 64x32 projection contract for combat, movement, AI and projectiles",
+      "scopeExclusions": {
+        "skills": [
+          "default_distance_metric",
+          "equal_length_geometry_metric",
+          "runtime_distance_units"
+        ],
+        "server_rules": [
+          "runtime_distance_units",
+          "movement_distance_metric",
+          "ai_distance_metric",
+          "projectile_distance_metric"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.combat_unit_contract.v1",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/combat_unit_contract_v1.json",
+          "contractId": "combat.unit.gu_gs_px.v1",
+          "authority": "user_authoritative_override",
+          "sourceKind": "explicit_user_primary_override",
+          "originalPath": "docs/COMBAT-UNIT-V1.md",
+          "evidenceSha256": "9CA9328169EB92F2925BE5A8DD5D0592C979C807BFA92EA62C1307407AC66DC0",
+          "reason": "The user explicitly approved COMBAT-UNIT-V1.0 on 2026-08-02 to replace mixed Chebyshev, grid-step and screen-pixel runtime distance semantics with Euclidean GU while preserving all accepted art and manual anchors."
+        }
+      ]
+    },
+    "skills": {
+      "description": "HardCore formal CN MIR2 1.76 Vanilla 33-skill membership, progression, MP, targeting, resource, formula identity, geometry, timing, proficiency and state-machine contract",
+      "scopeExclusions": {
+        "server_data": [
+          "vanilla_skill_membership",
+          "vanilla_skill_progression",
+          "vanilla_skill_mp",
+          "vanilla_skill_targeting",
+          "vanilla_skill_resources"
+        ],
+        "server_rules": [
+          "vanilla_skill_formula_identity",
+          "vanilla_skill_geometry",
+          "vanilla_skill_timing",
+          "vanilla_skill_proficiency",
+          "vanilla_skill_state_machine"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.mir2_176_skill_sot.v1.0.1",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
+          "contractId": "skills.mir2_176.vanilla_33.v1.0.1",
+          "rulesetId": "cn_mir2_176_vanilla_project_canonical_v1",
+          "authority": "user_authoritative_override",
+          "sourceKind": "explicit_user_primary_override",
+          "originalPath": "user_authorized_attachment/MIR2_176_33技能唯一真源_Codex_v1.0.1.zip",
+          "evidenceSha256": "6C4A4B447787EB6AD9F9F44C6C24CF6CA23C952673797226C66541008B25C516",
+          "packageEvidenceSha256": "2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22",
+          "contractEvidenceSha256": "6C4A4B447787EB6AD9F9F44C6C24CF6CA23C952673797226C66541008B25C516",
+          "eligibleEvidenceStatuses": [
+            "historical_verified",
+            "source_formula_reference",
+            "project_canonical"
+          ],
+          "ineligibleEvidenceStatuses": [
+            "candidate",
+            "unverified",
+            "legacy_project_baseline",
+            "needs_regression_verification",
+            "rejected_version_mismatch",
+            "selected_service_candidate",
+            "project_adapter_C_candidate"
+          ],
+          "reason": "The user supplied, reviewed and explicitly ordered this versioned 33-skill package to become the formal project master. Historical, formula-reference and project-canonical identities remain distinct inside the contract; Crystal, legacy project tables and candidate packages may not override it."
+        }
+      ]
+    },
+    "equipment_attributes": {
+      "description": "HardCore formal equipment attributes, requirements, affinity, gender and weight contract",
+      "scopeExclusions": {
+        "server_data": [
+          "equipment_attributes",
+          "equipment_requirements",
+          "equipment_job_affinity",
+          "equipment_gender_restrictions",
+          "equipment_hand_weight",
+          "equipment_wear_weight"
+        ]
+      },
+      "sources": [
+        {
+          "distribution": "project.hardcore.equipment_attribute_master.v2",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/equipment_attribute_master.json",
+          "contractId": "equipment.attribute.master.v2",
+          "authority": "user_authoritative_override",
+          "sourceKind": "explicit_user_primary_override",
+          "originalPath": "user_authorized_attachment/HardCore_装备系统核对清单_审核修正版_2026-07-25.xlsx",
+          "evidenceSha256": "CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D",
+          "reason": "The user explicitly reviewed and corrected the 114 accessory/headgear records and ordered this workbook-backed v2 project master to replace the previous equipment attribute source. Crystal remains authoritative for other server_data scopes only."
+        }
+      ]
+    },
     "client_assets": {
       "description": "客户端原始像素、WIL/WIX、MAP与声音",
       "sources": [

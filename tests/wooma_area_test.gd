@@ -39,7 +39,7 @@ func _run() -> void:
 	var fire_wooma := GameData.get_monster("火焰沃玛")
 	var ranged_enemy := EnemyActor.new()
 	ranged_enemy.setup(fire_wooma, game.player, false)
-	assert(ranged_enemy.attack_range >= 150.0, "火焰沃玛远程攻击配置未生效")
+	assert(ranged_enemy.attack_range_gu >= 150.0 / 32.0, "火焰沃玛远程攻击配置未生效")
 	ranged_enemy.free()
 	print("WOOMA_AREA_PASS：沃玛森林/自然洞穴/寺庙四层、普通怪物、双Boss和沃玛号角正常")
 	get_tree().quit(0)

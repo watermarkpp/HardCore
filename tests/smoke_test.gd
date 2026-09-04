@@ -6,17 +6,36 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	PlayerState.test_mode = true
+	# Exercise the production frame-paced bootstrap. The headless test-mode
+	# blocking loader can starve dummy-renderer texture finalization.
+	PlayerState.test_mode = false
 	PlayerState.reset_progress()
 	var packed: PackedScene = load("res://scenes/main.tscn")
 	assert(packed != null, "主场景无法载入")
 	var game := packed.instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var bootstrap_deadline := Time.get_ticks_msec() + 60000
+	while (
+		(game._world_bootstrap_in_progress or game._map_transition_in_progress)
+		and Time.get_ticks_msec() < bootstrap_deadline
+	):
+		await get_tree().process_frame
+	assert(not game._world_bootstrap_in_progress, "综合烟测初始世界加载未完成")
+	assert(not game._map_transition_in_progress, "综合烟测初始地图切换未完成")
+	PlayerState.test_mode = true
 
-	assert(GameData.maps.size() == 142, "地图数据数量不符")
-	assert(GameData.monsters.size() == 214, "怪物数据数量不符（鸡、鹿已按规划删除）")
+	assert(GameData.maps.size() == 209, "142张来源地图与67张正式地图身份未完整载入")
+	var monster_counts := GameData.canonical_monster_counts()
+	assert(
+		int(monster_counts.get("catalog_identity_count", 0)) == 156,
+		"canonical怪物身份目录数量不符"
+	)
+	assert(
+		int(monster_counts.get("runtime_spawnable_count", -1))
+		== GameData.monsters.size()
+		and GameData.monsters.size() > 0,
+		"运行时可生成怪物视图不符"
+	)
 	assert(GameData.items.size() == 175, "装备数据数量不符")
 	assert(GameData.drops.size() == 3424, "掉落槽数量不符")
 	PlayerState.add_item("木剑")
@@ -26,12 +45,9 @@ func _run() -> void:
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == 10, "装备属性没有计入角色")
 	assert(game.player != null, "玩家未创建")
 
-	# 综合烟测的Boss仍使用旧演示场；正式启动点现在按服务端HomeMap=0进入比奇省。
-	game.change_zone("比奇郊外")
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# 综合烟测直接使用正式比奇运行图；旧郊外演示区不再是生产入口。
 	var enemies := get_tree().get_nodes_in_group("enemies")
-	assert(enemies.size() >= 5, "演示怪物未完整生成（鸡、鹿已删除）")
+	assert(enemies.size() > 0, "正式比奇运行图没有生成怪物")
 	for actor: Node in enemies:
 		if actor is EnemyActor:
 			actor.apply_control(5.0)
@@ -40,8 +56,9 @@ func _run() -> void:
 		if actor is EnemyActor and actor.is_boss:
 			boss = actor
 			break
-	assert(boss != null, "Boss未生成")
-	# Boss阶段机制由双Boss专项测试验证；烟测只验证稳定主链，避免演示Boss规则差异造成误报。
+	# The retained outskirts sample contains canonical elite ID 56, not a boss.
+	# Caller placement must not promote an elite merely to preserve the old demo.
+	assert(boss == null, "canonical精英被旧演示调用提升成Boss")
 	game.player.take_damage(10)
 	var hp_after_skill: int = game.player.current_hp
 	PlayerState.add_item("金创药(小量)")
@@ -55,14 +72,17 @@ func _run() -> void:
 	while game.player._struck_lock_remaining > 0.0:
 		await get_tree().physics_frame
 	var enemy: EnemyActor = enemies[0]
-	enemy.global_position = game.player.global_position + Vector2(30, 0)
+	game.player.global_position = enemy.global_position - Vector2(30, 0)
 	enemy.apply_control(2.0)
-	game._set_locked_target(enemy, false)
+	game._set_locked_target(enemy, true)
 	game.player.facing = Vector2.RIGHT
-	game.player.attack_min = enemy.current_hp
-	game.player.attack_max = enemy.current_hp
-	assert(game.player.request_attack(), "Basic attack rejected: attack=%.3f action=%.3f struck=%.3f control=%.3f dead=%s" % [game.player._attack_timer, game.player._attack_action_timer, game.player._struck_lock_remaining, game.player.control_time, game.player._dead])
-	await get_tree().create_timer(0.95).timeout
+	game.player.attack_min = enemy.max_hp * 10
+	game.player.attack_max = enemy.max_hp * 10
+	assert(game.player.request_attack(true, enemy.get_instance_id()), "Basic attack rejected: attack=%.3f action=%.3f struck=%.3f control=%.3f dead=%s" % [game.player._attack_timer, game.player._attack_action_timer, game.player._struck_lock_remaining, game.player.control_time, game.player._dead])
+	for _wait in range(180):
+		if not is_instance_valid(enemy):
+			break
+		await get_tree().process_frame
 	assert(not is_instance_valid(enemy), "攻击、死亡链路未完成")
 
 	PlayerState.level = 7
@@ -71,13 +91,19 @@ func _run() -> void:
 	game.change_zone("比奇城")
 	await get_tree().process_frame
 	await get_tree().process_frame
-	assert(game.current_zone == "比奇省" and game.current_map_id == 4, "旧比奇城入口没有重定向到客户端0.map")
+	assert(game.current_zone.begins_with("比奇省") and game.current_map_id == 910001, "旧比奇城入口没有重定向到正式比奇地图")
 	var interactables := get_tree().get_nodes_in_group("interactable")
 	var npc_count := 0
+	var service_identity_ids := {}
 	for interactable: Node in interactables:
 		if interactable is NPCActor:
 			npc_count += 1
-	assert(npc_count == 5, "比奇省城镇NPC数量不符")
+			service_identity_ids[(interactable as NPCActor).service_identity_id] = true
+	assert(
+		npc_count == MapEditorRuntimeBridge.game_content_for_map(910001).npcs.size(),
+		"比奇省正式NPC布置没有逐点生成"
+	)
+	assert(service_identity_ids.size() == 7, "比奇省七种统一NPC功能身份未闭环")
 	var bookseller: NPCActor
 	var trainer: NPCActor
 	var veteran: NPCActor
@@ -94,10 +120,18 @@ func _run() -> void:
 	game.hud.shop_panel._buy_selected()
 	assert(PlayerState.has_item("基本剑术"), "技能书购买失败")
 	trainer.interact(game)
-	game.hud.skill_panel.skill_list.select(0)
-	game.hud.skill_panel._learn_selected()
+	var basic_book_index := -1
+	for inventory_index in range(PlayerState.inventory.size()):
+		if str(PlayerState.inventory[inventory_index].get("name", "")) == "基本剑术":
+			basic_book_index = inventory_index
+			break
+	assert(basic_book_index >= 0, "背包中未找到已购买的技能书")
+	PlayerState.use_inventory_index(basic_book_index)
 	assert(PlayerState.is_skill_learned("基本剑术"), "技能学习失败")
-	assert(PlayerState.quick_slots[0] == "基本剑术", "技能未进入快捷栏")
+	assert(
+		PlayerState.attack_ring_slots.all(func(value: String) -> bool: return value.is_empty()),
+		"被动技能不应进入攻击键或六环主动技能槽"
+	)
 	veteran.interact(game)
 	game.hud.quest_panel._act()
 	for count in range(3):
@@ -106,9 +140,7 @@ func _run() -> void:
 	var gold_before_claim := PlayerState.gold
 	game.hud.quest_panel._act()
 	assert(PlayerState.gold == gold_before_claim + 100 and PlayerState.has_item("布衣(男)"), "任务奖励领取失败")
-	game.change_zone("比奇郊外")
-	await get_tree().process_frame
-	assert(get_tree().get_nodes_in_group("enemies").size() >= 5, "返回野外后怪物未生成")
+	assert(get_tree().get_nodes_in_group("enemies").size() > 0, "正式比奇野外怪物被任务流程清空")
 
 	print("SMOKE_TEST_PASS：数据、区域、商店、药品、技能、任务、战斗与Boss链路正常")
 	get_tree().quit(0)

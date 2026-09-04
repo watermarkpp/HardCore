@@ -16,8 +16,24 @@
     "costFormula": "round((referencePrice div 3) / maxDurability * missingDurability)",
     "zeroDurability": "装备保留在原槽，属性失效",
     "repair": "唯一维修方式；恢复到原maxDurability，最大耐久不下降",
-    "specialRepair": false
+    "specialRepair": false,
+    "rawUnitsPerDisplayPoint": 1000,
+    "weaponPhysicalHitRawLoss": "max(0, Random(5) + 2 - WeaponStrong)",
+    "incomingPhysicalStruckArmorRawLoss": "Random(10) + 5",
+    "incomingPhysicalStruckOtherSlotChance": "each equipped slot independently 1/8; armor participates and may lose twice",
+    "redPoisonMultiplier": 1.2,
+    "noWear": ["miss", "empty_swing", "magic_damage", "zero_damage"],
+    "normalRepairOil": "max durability loses floor(missing raw durability / 30); restore up to 5000 raw",
+    "warGodOil": "restore current raw durability to unchanged maximum raw durability"
   },
+  "projectExtensions": [
+    {
+      "contractId": "project_slots_relic_badge_use_same_one_in_eight_physical_wear.v1",
+      "slots": ["圣物", "徽章"],
+      "policy": "与其他非衣服装备相同，在正物理StruckDamage事件中各自独立1/8损耗同一raw值",
+      "reason": "项目扩展槽不伪造鞋或腰带，采用明确且可测试的统一扩展规则"
+    }
+  ],
   "explicitOverrides": [
     {
       "server": "耐久归零清除wIndex/删除装备",

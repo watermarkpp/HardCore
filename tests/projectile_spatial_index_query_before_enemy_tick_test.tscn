@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2a1_query_order"]
+[ext_resource type="Script" path="res://tests/projectile_spatial_index_query_before_enemy_tick_test.gd" id="1"]
+[node name="ProjectileSpatialIndexQueryBeforeEnemyTick" type="Node"]
+script = ExtResource("1")

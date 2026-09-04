@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "contractId": "equipment.test_loadouts.classic_three_tiers.v1",
+  "sourceCatalog": "res://assets/data/vanilla_176/items.json",
+  "visualSources": [
+    "res://assets/data/equipment_client_art_sources.json",
+    "res://assets/data/warrior_wear_sources.json",
+    "res://assets/data/warrior_paper_doll_sources.json",
+    "res://assets/data/equipment_visual_catalog.json"
+  ],
+  "supportedSlots": [
+    "武器",
+    "衣服",
+    "头盔",
+    "项链",
+    "左手镯",
+    "右手镯",
+    "左戒指",
+    "右戒指"
+  ],
+  "tierPolicy": {
+    "wooma": "沃玛附件为职业专属核心；武器、衣服、头盔使用正式目录中与沃玛阶段相邻且职业可穿的装备。",
+    "zuma": "祖玛武器与三类附件使用职业专属正式件；1.76没有法师、道士专属祖玛头盔，使用职业可穿的正式通用头盔。",
+    "chiyue": "赤月头盔、衣服和三类附件使用职业专属正式件；武器采用正式目录中对应职业的怒斩、龙牙、逍遥扇作为同档测试武器。"
+  },
+  "loadouts": [
+    {
+      "loadoutId": "test.loadout.warrior.wooma.v1",
+      "profileId": "developer_warrior_wooma_50",
+      "characterName": "测试战士·沃玛",
+      "profession": "战士",
+      "gender": "男",
+      "level": 50,
+      "tierId": "wooma",
+      "tierName": "沃玛",
+      "equipment": {
+        "武器": {"itemId": 99, "itemName": "炼狱", "selectionBasis": "正式战士沃玛阶段武器"},
+        "衣服": {"itemId": 122, "itemName": "重盔甲(男)", "selectionBasis": "沃玛附件没有衣服槽；采用职业可穿的同阶段正式重盔甲"},
+        "头盔": {"itemId": 150, "itemName": "骷髅头盔", "selectionBasis": "沃玛附件没有头盔槽；采用同阶段正式通用头盔"},
+        "项链": {"itemId": 168, "itemName": "幽灵项链", "selectionBasis": "正式战士沃玛附件"},
+        "左手镯": {"itemId": 189, "itemName": "幽灵手套", "selectionBasis": "正式战士沃玛附件"},
+        "右手镯": {"itemId": 189, "itemName": "幽灵手套", "selectionBasis": "正式战士沃玛附件的第二件"},
+        "左戒指": {"itemId": 212, "itemName": "龙之戒指", "selectionBasis": "正式战士沃玛附件"},
+        "右戒指": {"itemId": 212, "itemName": "龙之戒指", "selectionBasis": "正式战士沃玛附件的第二件"}
+      }
+    },
+    {
+      "loadoutId": "test.loadout.warrior.zuma.v1",
+      "profileId": "developer_warrior_zuma_50",
+      "characterName": "测试战士·祖玛",
+      "profession": "战士",
+      "gender": "男",
+      "level": 50,
+      "tierId": "zuma",
+      "tierName": "祖玛",
+      "equipment": {
+        "武器": {"itemId": 105, "itemName": "裁决之杖", "selectionBasis": "正式战士祖玛武器"},
+        "衣服": {"itemId": 128, "itemName": "战神盔甲(男)", "selectionBasis": "祖玛附件没有衣服槽；采用职业可穿的同档正式衣服"},
+        "头盔": {"itemId": 151, "itemName": "黑铁头盔", "selectionBasis": "祖玛附件没有头盔槽；采用战士可满足攻击需求的同档正式头盔"},
+        "项链": {"itemId": 171, "itemName": "绿色项链", "selectionBasis": "正式战士祖玛附件"},
+        "左手镯": {"itemId": 193, "itemName": "骑士手镯", "selectionBasis": "正式战士祖玛附件"},
+        "右手镯": {"itemId": 193, "itemName": "骑士手镯", "selectionBasis": "正式战士祖玛附件的第二件"},
+        "左戒指": {"itemId": 215, "itemName": "力量戒指", "selectionBasis": "正式战士祖玛附件"},
+        "右戒指": {"itemId": 215, "itemName": "力量戒指", "selectionBasis": "正式战士祖玛附件的第二件"}
+      }
+    },
+    {
+      "loadoutId": "test.loadout.warrior.chiyue.v1",
+      "profileId": "developer_warrior_chiyue_50",
+      "characterName": "测试战士·赤月",
+      "profession": "战士",
+      "gender": "男",
+      "level": 50,
+      "tierId": "chiyue",
+      "tierName": "赤月",
+      "equipment": {
+        "武器": {"itemId": 113, "itemName": "怒斩", "selectionBasis": "赤月套没有武器槽；采用正式目录中的同档战士武器"},
+        "衣服": {"itemId": 140, "itemName": "天魔神甲", "selectionBasis": "正式男性战士赤月衣服；圣战宝甲为女性款"},
+        "头盔": {"itemId": 232, "itemName": "圣战头盔", "selectionBasis": "正式战士赤月头盔"},
+        "项链": {"itemId": 233, "itemName": "圣战项链", "selectionBasis": "正式战士赤月附件"},
+        "左手镯": {"itemId": 234, "itemName": "圣战手镯", "selectionBasis": "正式战士赤月附件"},
+        "右手镯": {"itemId": 234, "itemName": "圣战手镯", "selectionBasis": "正式战士赤月附件的第二件"},
+        "左戒指": {"itemId": 235, "itemName": "圣战戒指", "selectionBasis": "正式战士赤月附件"},
+        "右戒指": {"itemId": 235, "itemName": "圣战戒指", "selectionBasis": "正式战士赤月附件的第二件"}
+      }
+    },
+    {
+      "loadoutId": "test.loadout.wizard.wooma.v1",
+      "profileId": "developer_wizard_wooma_50",
+      "characterName": "测试法师·沃玛",
+      "profession": "法师",
+      "gender": "男",
+      "level": 50,
+      "tierId": "wooma",
+      "tierName": "沃玛",
+      "equipment": {
+        "武器": {"itemId": 100, "itemName": "魔杖", "selectionBasis": "正式法师沃玛阶段武器"},
+        "衣服": {"itemId": 124, "itemName": "魔法长袍(男)", "selectionBasis": "沃玛附件没有衣服槽；采用职业可穿的同阶段正式衣服"},
+        "头盔": {"itemId": 148, "itemName": "魔法头盔", "selectionBasis": "沃玛附件没有头盔槽；采用同阶段正式通用魔法头盔"},
+        "项链": {"itemId": 169, "itemName": "生命项链", "selectionBasis": "正式法师沃玛附件"},
+        "左手镯": {"itemId": 190, "itemName": "思贝儿手镯", "selectionBasis": "正式法师沃玛附件"},
+        "右手镯": {"itemId": 190, "itemName": "思贝儿手镯", "selectionBasis": "正式法师沃玛附件的第二件"},
+        "左戒指": {"itemId": 213, "itemName": "红宝石戒指", "selectionBasis": "正式法师沃玛附件"},
+        "右戒指": {"itemId": 213, "itemName": "红宝石戒指", "selectionBasis": "正式法师沃玛附件的第二件"}
+      }
+    },
+    {
+      "loadoutId": "test.loadout.wizard.zuma.v1",
+      "profileId": "developer_wizard_zuma_50",
+      "characterName": "测试法师·祖玛",
+      "profession": "法师",
+      "gender": "男",
+      "level": 50,
+      "tierId": "zuma",
+      "tierName": "祖玛",
+      "equipment": {
+        "武器": {"itemId": 106, "itemName": "骨玉权杖", "selectionBasis": "正式法师祖玛武器"},
+        "衣服": {"itemId": 130, "itemName": "恶魔长袍(男)", "selectionBasis": "祖玛附件没有衣服槽；采用职业可穿的同档正式衣服"},
+        "头盔": {"itemId": 149, "itemName": "道士头盔", "selectionBasis": "1.76没有法师专属祖玛头盔；采用重量较低且法师可穿的同档正式通用头盔"},
+        "项链": {"itemId": 172, "itemName": "恶魔铃铛", "selectionBasis": "正式法师祖玛附件"},
+        "左手镯": {"itemId": 194, "itemName": "龙之手镯", "selectionBasis": "正式法师祖玛附件"},
+        "右手镯": {"itemId": 194, "itemName": "龙之手镯", "selectionBasis": "正式法师祖玛附件的第二件"},
+        "左戒指": {"itemId": 216, "itemName": "紫碧螺", "selectionBasis": "正式法师祖玛附件"},
+        "右戒指": {"itemId": 216, "itemName": "紫碧螺", "selectionBasis": "正式法师祖玛附件的第二件"}
+      }
+    },
+    {
+      "loadoutId": "test.loadout.wizard.chiyue.v1",
+      "profileId": "developer_wizard_chiyue_50",
+      "characterName": "测试法师·赤月",
+      "profession": "法师",
+      "gender": "男",
+      "level": 50,
+      "tierId": "chiyue",
+      "tierName": "赤月",
+      "equipment": {
+        "武器": {"itemId": 114, "itemName": "龙牙", "selectionBasis": "赤月套没有武器槽；采用正式目录中的同档法师武器"},
+        "衣服": {"itemId": 142, "itemName": "法神披风", "selectionBasis": "正式法师赤月衣服"},
+        "头盔": {"itemId": 236, "itemName": "法神头盔", "selectionBasis": "正式法师赤月头盔"},
+        "项链": {"itemId": 237, "itemName": "法神项链", "selectionBasis": "正式法师赤月附件"},
+        "左手镯": {"itemId": 238, "itemName": "法神手镯", "selectionBasis": "正式法师赤月附件"},
+        "右手镯": {"itemId": 238, "itemName": "法神手镯", "selectionBasis": "正式法师赤月附件的第二件"},
+        "左戒指": {"itemId": 239, "itemName": "法神戒指", "selectionBasis": "正式法师赤月附件"},
+        "右戒指": {"itemId": 239, "itemName": "法神戒指", "selectionBasis": "正式法师赤月附件的第二件"}
+      }
+    },
+    {
+      "loadoutId": "test.loadout.taoist.wooma.v1",
+      "profileId": "developer_taoist_wooma_50",
+      "characterName": "测试道士·沃玛",
+      "profession": "道士",
+      "gender": "男",
+      "level": 50,
+      "tierId": "wooma",
+      "tierName": "沃玛",
+      "equipment": {
+        "武器": {"itemId": 101, "itemName": "银蛇", "selectionBasis": "正式道士沃玛阶段武器"},
+        "衣服": {"itemId": 126, "itemName": "灵魂战衣(男)", "selectionBasis": "沃玛附件没有衣服槽；采用职业可穿的同阶段正式衣服"},
+        "头盔": {"itemId": 149, "itemName": "道士头盔", "selectionBasis": "沃玛附件没有头盔槽；采用同阶段正式通用道士头盔"},
+        "项链": {"itemId": 170, "itemName": "天珠项链", "selectionBasis": "正式道士沃玛附件"},
+        "左手镯": {"itemId": 191, "itemName": "三眼手镯", "selectionBasis": "正式道士沃玛附件"},
+        "右手镯": {"itemId": 191, "itemName": "三眼手镯", "selectionBasis": "正式道士沃玛附件的第二件"},
+        "左戒指": {"itemId": 214, "itemName": "铂金戒指", "selectionBasis": "正式道士沃玛附件"},
+        "右戒指": {"itemId": 214, "itemName": "铂金戒指", "selectionBasis": "正式道士沃玛附件的第二件"}
+      }
+    },
+    {
+      "loadoutId": "test.loadout.taoist.zuma.v1",
+      "profileId": "developer_taoist_zuma_50",
+      "characterName": "测试道士·祖玛",
+      "profession": "道士",
+      "gender": "男",
+      "level": 50,
+      "tierId": "zuma",
+      "tierName": "祖玛",
+      "equipment": {
+        "武器": {"itemId": 107, "itemName": "龙纹剑", "selectionBasis": "正式道士祖玛武器"},
+        "衣服": {"itemId": 132, "itemName": "幽灵战衣(男)", "selectionBasis": "祖玛附件没有衣服槽；采用职业可穿的同档正式衣服"},
+        "头盔": {"itemId": 149, "itemName": "道士头盔", "selectionBasis": "1.76没有道士专属祖玛头盔；采用职业可穿且道术阶段匹配的正式通用头盔"},
+        "项链": {"itemId": 173, "itemName": "灵魂项链", "selectionBasis": "正式道士祖玛附件"},
+        "左手镯": {"itemId": 195, "itemName": "心灵手镯", "selectionBasis": "正式道士祖玛附件"},
+        "右手镯": {"itemId": 195, "itemName": "心灵手镯", "selectionBasis": "正式道士祖玛附件的第二件"},
+        "左戒指": {"itemId": 217, "itemName": "泰坦戒指", "selectionBasis": "正式道士祖玛附件"},
+        "右戒指": {"itemId": 217, "itemName": "泰坦戒指", "selectionBasis": "正式道士祖玛附件的第二件"}
+      }
+    },
+    {
+      "loadoutId": "test.loadout.taoist.chiyue.v1",
+      "profileId": "developer_taoist_chiyue_50",
+      "characterName": "测试道士·赤月",
+      "profession": "道士",
+      "gender": "男",
+      "level": 50,
+      "tierId": "chiyue",
+      "tierName": "赤月",
+      "equipment": {
+        "武器": {"itemId": 115, "itemName": "逍遥扇", "selectionBasis": "赤月套没有武器槽；采用正式目录中的同档道士武器"},
+        "衣服": {"itemId": 144, "itemName": "天尊道袍", "selectionBasis": "正式道士赤月衣服"},
+        "头盔": {"itemId": 240, "itemName": "天尊头盔", "selectionBasis": "正式道士赤月头盔"},
+        "项链": {"itemId": 241, "itemName": "天尊项链", "selectionBasis": "正式道士赤月附件"},
+        "左手镯": {"itemId": 242, "itemName": "天尊手镯", "selectionBasis": "正式道士赤月附件"},
+        "右手镯": {"itemId": 242, "itemName": "天尊手镯", "selectionBasis": "正式道士赤月附件的第二件"},
+        "左戒指": {"itemId": 243, "itemName": "天尊戒指", "selectionBasis": "正式道士赤月附件"},
+        "右戒指": {"itemId": 243, "itemName": "天尊戒指", "selectionBasis": "正式道士赤月附件的第二件"}
+      }
+    }
+  ]
+}

@@ -3,14 +3,14 @@ extends Node
 
 func _ready() -> void:
 	var radius := 18.0
-	var radii := WorldSpatialRules.actor_footprint_radii(radius)
+	var radii := WorldSpatialRules.actor_footprint_radii_px(radius)
 	assert(radii == Vector2(18.0, 9.0), "actor footprint must preserve a 2:1 isometric ratio")
-	var polygon := WorldSpatialRules.actor_footprint_polygon(radius)
+	var polygon := WorldSpatialRules.actor_footprint_polygon_px(radius)
 	assert(polygon.size() == WorldSpatialRules.ACTOR_FOOTPRINT_SEGMENTS)
 	var bounds := _bounds(polygon)
 	assert(is_equal_approx(bounds.size.x, 36.0), "actor footprint width changed: %s" % bounds)
 	assert(is_equal_approx(bounds.size.y, 18.0), "actor footprint height is not half its width: %s" % bounds)
-	var shape := WorldSpatialRules.actor_footprint_shape(radius)
+	var shape := WorldSpatialRules.actor_footprint_shape_px(radius)
 	assert(shape is ConvexPolygonShape2D and shape.points == polygon)
 	var diamond_normal := Vector2(1.0, 2.0).normalized()
 	var sampled_support := 0.0

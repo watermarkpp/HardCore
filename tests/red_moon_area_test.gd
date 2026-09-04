@@ -35,15 +35,25 @@ func _run() -> void:
 	assert(not GameData.get_drops_for_boss(162).is_empty() and not GameData.get_drops_for_boss(163).is_empty() and not GameData.get_drops_for_boss(180).is_empty(), "赤月三Boss掉落未接入")
 	var moon_spider := EnemyActor.new()
 	moon_spider.setup(GameData.get_monster("月魔蜘蛛"), game.player, false)
-	assert(moon_spider.control_on_hit_seconds >= 1.2, "月魔蜘蛛麻痹能力失效")
+	assert(
+		moon_spider.control_on_hit_seconds == 5.0
+		and moon_spider.control_chance_denominator_base == 20,
+		"月魔蜘蛛必须保留原版5秒、基础1/20麻痹规则",
+	)
 	moon_spider.free()
 	var illusion_spider := EnemyActor.new()
 	illusion_spider.setup(GameData.get_monster("幻影蜘蛛"), game.player, false)
-	assert(illusion_spider.move_speed == 0.0 and illusion_spider.attack_range >= 200.0, "幻影蜘蛛固定远程行为失效")
+	assert(
+		illusion_spider.stationary
+		and illusion_spider.move_speed_gu_per_sec == 0.0
+		and illusion_spider.attack_range_gu == 0.0
+		and bool(illusion_spider.summon_rule.get("enabled", false)),
+		"幻影蜘蛛固定召唤行为失效",
+	)
 	illusion_spider.free()
 	var demon := EnemyActor.new()
 	demon.setup(GameData.get_monster("赤月恶魔"), game.player, true)
-	assert(demon.move_speed == 0.0 and demon.attack_range >= 250.0, "赤月恶魔固定范围攻击失效")
+	assert(demon.move_speed_gu_per_sec == 0.0 and demon.attack_range_gu >= 250.0 / 32.0, "赤月恶魔固定范围攻击失效")
 	demon.free()
 	assert(RegionContent.MAPS.size() + RegionContent.CENTIPEDE_MAPS.size() + RegionContent.ZUMA_MAPS.size() + RegionContent.UNKNOWN_DARK_MAPS.size() + RegionContent.FENGMO_MAPS.size() + RegionContent.RED_MOON_MAPS.size() == 103, "固定区域地图总数应为103")
 	print("RED_MOON_AREA_PASS：白日门赤月13图、蜘蛛行为、祭坛双Boss和赤月恶魔正常")

@@ -1,0 +1,15 @@
+{
+  "contractId": "ui.skill.quick_slot_assignment.v1",
+  "policy": "UI reads learned skills and current quick slots, but never decides skill eligibility or mutates quick-slot gameplay state.",
+  "requestSignal": {
+    "panelSignal": "SkillPanel.quick_slot_assignment_requested(request)",
+    "hudForwardSignal": "GameHUD.skill_quick_slot_assignment_requested(request)",
+    "requestFields": ["contract_id", "profession_id", "skill_id", "skill_name", "slot_index"]
+  },
+  "visibleSlotRange": {
+    "minimum": 0,
+    "maximum": 2,
+    "description": "The three combat skill buttons surrounding the attack button."
+  },
+  "refreshSource": "PlayerState.skills_changed"
+}

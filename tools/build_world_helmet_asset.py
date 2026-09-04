@@ -65,6 +65,7 @@ ACTIONS = {
     "idle": {"start": 0, "frames": 4},
     "walk": {"start": 64, "frames": 6},
     "attack": {"start": 200, "frames": 6},
+    "cast": {"start": 392, "frames": 6},
     "hit": {"start": 472, "frames": 3},
     "death": {"start": 536, "frames": 4},
 }
@@ -481,7 +482,14 @@ def build_action(
         raise AssertionError(f"{action_name} does not contain eight distinct direction rows")
     target = OUTPUT / f"black_iron_helmet_{action_name}.png"
     target.parent.mkdir(parents=True, exist_ok=True)
-    atlas.save(target)
+    if target.exists():
+        accepted = Image.open(target).convert("RGBA")
+        if accepted.size != atlas.size or accepted.tobytes() != atlas.tobytes():
+            raise AssertionError(
+                f"Accepted Black Iron Helmet atlas changed: {target.name}"
+            )
+    else:
+        atlas.save(target)
     return {
         "path": f"res://{target.relative_to(ROOT).as_posix()}",
         "sha256": sha256(target),
@@ -547,7 +555,7 @@ def main() -> None:
         for name in ACTIONS
     }
     payload = {
-        "schemaVersion": 15,
+        "schemaVersion": 16,
         "item": "Black Iron Helmet / 黑铁头盔",
         "classification": "project-generated presentation asset based on verified classic evidence",
         "referenceIcon": f"res://{REFERENCE_ICON.relative_to(ROOT).as_posix()}",
@@ -609,7 +617,7 @@ def main() -> None:
             "authorship": "Project-generated extension; not claimed as an original client world frame.",
             "aiGenerated": True,
             "aiConceptUsed": True,
-            "aiPixelsLimitedTo": ["idle", "walk", "attack", "hit"],
+            "aiPixelsLimitedTo": ["idle", "walk", "attack", "cast", "hit"],
             "runtimePixelGenerator": "Direct approved-design crops with background removal and aspect-preserving resize for standing/action directions; Godot 4.7 orthographic complete-geometry renderer for death poses.",
             "oldDerivedStateItemWorldPixelsUsed": False,
             "scalePolicy": "Choose the aspect-preserving size that stays inside the same-direction client median envelope and most closely matches 1.15x its alpha-weighted visible-area median; no redraw, recolour or quantization.",
@@ -626,7 +634,7 @@ def main() -> None:
     print(
         "BLACK_IRON_HELMET_GENERATED_PASS "
         "runtime_reference=approved_design_direct_resize death_reference=godot_orthographic_complete_geometry "
-        "actions=5 directions=8 death_pose_records=32 old_stateitem_world_pixels=0 anchor_pixels_copied=0"
+        "actions=6 directions=8 death_pose_records=32 old_stateitem_world_pixels=0 anchor_pixels_copied=0"
     )
 
 

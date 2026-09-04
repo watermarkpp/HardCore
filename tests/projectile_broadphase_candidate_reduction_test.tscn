@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2a_candidate_reduction"]
+[ext_resource type="Script" path="res://tests/projectile_broadphase_candidate_reduction_test.gd" id="1"]
+[node name="ProjectileBroadphaseCandidateReduction" type="Node"]
+script = ExtResource("1")

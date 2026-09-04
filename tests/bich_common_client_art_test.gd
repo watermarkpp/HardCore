@@ -1,6 +1,7 @@
 extends Node
 
 
+const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const EXPECTED := {
 	"森林雪人": {"idle": 4, "walk": 6, "attack": 6, "hit": 2, "death": 4},
 	"食人花": {"idle": 4, "walk": 8, "attack": 6, "hit": 2, "death": 10},
@@ -15,6 +16,7 @@ const EXPECTED := {
 	"蛤蟆": {"idle": 4, "walk": 6, "attack": 6, "hit": 2, "death": 10},
 }
 const RUNTIME_SAMPLES := ["毒蜘蛛", "山洞蝙蝠"]
+const RUNTIME_IDS := {"毒蜘蛛": 18, "山洞蝙蝠": 43}
 
 
 func _ready() -> void:
@@ -35,7 +37,7 @@ func _run() -> void:
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
-	player.global_position = Vector2(2000, 0)
+	player.global_position = Vector2.ZERO
 	for monster_name: String in EXPECTED:
 		var mapping: Dictionary = mappings.get(monster_name, {})
 		var expected_confidence := "B" if monster_name in ["半兽人", "毒蜘蛛"] else "A"
@@ -43,7 +45,9 @@ func _run() -> void:
 		assert(int(mapping.get("directions", 0)) == 8, "%s 方向数错误" % monster_name)
 		var frame_size_values: Array = mapping.get("frameSize", [])
 		var foot_values: Array = mapping.get("footAnchor", [])
+		var health_bar_tops: Array = mapping.get("healthBarTopByDirection", [])
 		assert(frame_size_values.size() == 2 and foot_values.size() == 2, "%s 锚点元数据缺失" % monster_name)
+		assert(mapping.get("atlasCellIsolation", "") == "per_frame" and health_bar_tops.size() == 8, "%s 缺少逐帧隔离或八方向血条顶边" % monster_name)
 		var frame_size := Vector2i(int(frame_size_values[0]), int(frame_size_values[1]))
 		var foot_anchor := Vector2i(int(foot_values[0]), int(foot_values[1]))
 		for action_name: String in EXPECTED[monster_name]:
@@ -52,19 +56,38 @@ func _run() -> void:
 			assert(int(action.get("framesPerDirection", 0)) == frame_count, "%s %s 帧数错误" % [monster_name, action_name])
 			assert(action.get("missingFrames", []).is_empty(), "%s %s 存在缺帧" % [monster_name, action_name])
 			assert(ResourceLoader.exists(str(action.get("path", ""))), "%s %s 图集不存在" % [monster_name, action_name])
+			if monster_name == "食人花":
+				assert(int(action.get("sourceDirectionStride", -1)) == 0, "食人花 %s 仍把相邻状态段误当成方向" % action_name)
+				assert(int(action.get("fixedSourceDirection", -1)) == 0, "食人花 %s 未固定到唯一有效源方向" % action_name)
+				_assert_direction_rows_identical(str(action.get("path", "")), frame_size, frame_count, action_name)
+		if monster_name == "食人花":
+			assert(mapping.get("directionPolicy", "") == "fixed_source_direction", "食人花未声明固定体视觉方向策略")
 		if monster_name not in RUNTIME_SAMPLES:
 			continue
 
+		var monster_id := int(RUNTIME_IDS.get(monster_name, -1))
+		var canonical_data := GameData.get_monster_by_id(monster_id)
+		assert(monster_id > 0 and not canonical_data.is_empty(), "%s canonical monster_id 无效" % monster_name)
 		var enemy := EnemyActor.new()
-		enemy.setup({"name": monster_name, "hp": 100, "attackMin": 1, "attackMax": 2}, player, false)
+		enemy.setup(canonical_data, player, false)
 		add_child(enemy)
 		enemy.set_physics_process(false)
 		await get_tree().process_frame
+		player.global_position = enemy.global_position + Vector2(200, 0)
 		var visual: MonsterVisual = enemy.get_node("MonsterVisual")
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		assert(visual.uses_final_art(), "%s 未启用客户端正式资源" % monster_name)
 		assert(visual.frame_size == frame_size, "%s 运行帧尺寸与清单不一致" % monster_name)
-		assert(sprite.position == -Vector2(foot_anchor), "%s 脚底锚点与清单不一致" % monster_name)
+		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 未采用经典客户端角色原点迁移量" % monster_name)
+		assert(sprite.position == -Vector2(foot_anchor + visual.actor_ground_offset), "%s 绘制原点未迁移到统一地面原点" % monster_name)
+		var expected_bar_y := (
+			visual.position.y
+			+ sprite.position.y
+			+ visual.stable_body_top()
+			- MonsterOverheadScript.HEALTH_BAR_HEIGHT
+			- MonsterVisual.HEALTH_BAR_BODY_GAP
+		)
+		assert(is_equal_approx(enemy.health_bar_anchor_y(), expected_bar_y), "%s 血条未固定在完整动画帧单元上方" % monster_name)
 		enemy.facing = Vector2.RIGHT
 		enemy.movement_facing = Vector2.RIGHT
 		enemy.velocity = Vector2.RIGHT * 50.0
@@ -78,3 +101,13 @@ func _run() -> void:
 
 	print("BICH_COMMON_CLIENT_ART_PASS：既有比奇常见怪客户端五动作、八方向、源帧、锚点与证据等级完整")
 	get_tree().quit(0)
+
+
+func _assert_direction_rows_identical(path: String, frame_size: Vector2i, frame_count: int, action_name: String) -> void:
+	var image := Image.load_from_file(ProjectSettings.globalize_path(path))
+	assert(image != null and not image.is_empty(), "食人花 %s 图集无法读取" % action_name)
+	var row_size := Vector2i(frame_size.x * frame_count, frame_size.y)
+	var reference := image.get_region(Rect2i(Vector2i.ZERO, row_size)).get_data()
+	for direction in range(1, 8):
+		var row := image.get_region(Rect2i(Vector2i(0, frame_size.y * direction), row_size)).get_data()
+		assert(row == reference, "食人花 %s 第%d方向没有复用固定体源帧" % [action_name, direction])

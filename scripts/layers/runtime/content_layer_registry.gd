@@ -1,6 +1,7 @@
 extends Node
 
 signal expansion_state_changed(package_id: String, enabled: bool)
+signal initial_load_finished(success: bool)
 
 const MANIFESTS := {
 	"vanilla_core": "res://assets/data/layers/vanilla_core.json",
@@ -15,10 +16,31 @@ var enabled_expansions: Dictionary = {}
 var load_errors: Array[String] = []
 var merged_database: Dictionary = {}
 var merge_diagnostics: Array[String] = []
+var initial_load_deferred := OS.get_name() == "Android"
+var _initial_load_started := false
+var _initial_load_complete := false
 
 
 func _ready() -> void:
-	reload_manifests()
+	if not initial_load_deferred:
+		ensure_loaded()
+
+
+func is_loaded() -> bool:
+	return _initial_load_complete
+
+
+func ensure_loaded() -> bool:
+	if _initial_load_complete:
+		return true
+	if _initial_load_started:
+		return false
+	_initial_load_started = true
+	var success := reload_manifests()
+	_initial_load_complete = success
+	_initial_load_started = false
+	initial_load_finished.emit(success)
+	return success
 
 
 func reload_manifests() -> bool:
@@ -35,7 +57,9 @@ func reload_manifests() -> bool:
 		if package is Dictionary:
 			enabled_expansions[str(package.get("id", ""))] = bool(package.get("defaultEnabled", false))
 	merged_database = build_merged_database()
-	return load_errors.is_empty() and manifests.size() == MANIFESTS.size()
+	var success := load_errors.is_empty() and manifests.size() == MANIFESTS.size()
+	_initial_load_complete = success
+	return success
 
 
 func manifest(layer_id: String) -> Dictionary:
@@ -162,7 +186,8 @@ func _apply_user_override(merged: Dictionary, user_override: Dictionary) -> void
 
 func architecture_status() -> Dictionary:
 	return {
-		"valid": load_errors.is_empty() and manifests.size() == 5,
+		"valid": _initial_load_complete and load_errors.is_empty() and manifests.size() == 5,
+		"loaded": _initial_load_complete,
 		"layers": manifests.keys(),
 		"enabledExpansions": enabled_expansions.duplicate(true),
 		"mergedCounts": {

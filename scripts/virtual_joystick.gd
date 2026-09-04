@@ -22,10 +22,7 @@ func _gui_input(event: InputEvent) -> void:
 			_pointer_id = event.index
 			_update_value(event.position)
 		elif not event.pressed and event.index == _pointer_id:
-			_pointer_id = -1
-			_value = Vector2.ZERO
-			vector_changed.emit(_value)
-			queue_redraw()
+			cancel_input()
 	elif event is InputEventScreenDrag and event.index == _pointer_id:
 		_update_value(event.position)
 	elif event is InputEventMouseButton:
@@ -34,10 +31,7 @@ func _gui_input(event: InputEvent) -> void:
 				_pointer_id = -2
 				_update_value(event.position)
 			elif _pointer_id == -2:
-				_pointer_id = -1
-				_value = Vector2.ZERO
-				vector_changed.emit(_value)
-				queue_redraw()
+				cancel_input()
 	elif event is InputEventMouseMotion and _pointer_id == -2:
 		_update_value(event.position)
 
@@ -47,6 +41,22 @@ func _update_value(local_position: Vector2) -> void:
 	_value = ((local_position - center) / radius).limit_length(1.0)
 	vector_changed.emit(_value)
 	queue_redraw()
+
+
+func cancel_input() -> void:
+	# Idempotent lifecycle boundary: a lost release must never keep ownership or
+	# a non-zero vector alive across a map transition.
+	_pointer_id = -1
+	_value = Vector2.ZERO
+	vector_changed.emit(Vector2.ZERO)
+	queue_redraw()
+
+
+func input_state_snapshot() -> Dictionary:
+	return {
+		"pointer_id": _pointer_id,
+		"value": _value,
+	}
 
 
 func _draw() -> void:

@@ -4,6 +4,78 @@
   "table": "monsters",
   "records": [
     {
+      "monsterId": 14,
+      "name": "鸡",
+      "baseName": "鸡",
+      "variantCode": "",
+      "recordStatus": "retired",
+      "level": 5,
+      "exp": 5,
+      "hp": 5,
+      "defense": 0,
+      "magicDefense": 0,
+      "attackMin": 1,
+      "attackMax": 1,
+      "versionTag": "2003官服1.76基准版",
+      "sourceUrl": "https://www.21cq.com/mir/Mob.Aspx?ID=14",
+      "listSourceUrl": "https://www.21cq.com/mir/Monster.Aspx",
+      "sourceDate": "2026-08-16",
+      "confidence": "B",
+      "verification": "用户Excel 217怪物完整掉落槽版",
+      "contentLayer": "vanilla_core",
+      "source": "vanilla_176",
+      "editable": false,
+      "retirementReason": "用户正式确认取消加入游戏"
+    },
+    {
+      "monsterId": 16,
+      "name": "鹿",
+      "baseName": "鹿",
+      "variantCode": "",
+      "recordStatus": "retired",
+      "level": 12,
+      "exp": 15,
+      "hp": 15,
+      "defense": 0,
+      "magicDefense": 0,
+      "attackMin": 2,
+      "attackMax": 4,
+      "versionTag": "2003官服1.76基准版",
+      "sourceUrl": "https://www.21cq.com/mir/Mob.Aspx?ID=16",
+      "listSourceUrl": "https://www.21cq.com/mir/Monster.Aspx",
+      "sourceDate": "2026-08-16",
+      "confidence": "B",
+      "verification": "用户Excel 217怪物完整掉落槽版",
+      "contentLayer": "vanilla_core",
+      "source": "vanilla_176",
+      "editable": false,
+      "retirementReason": "用户正式确认取消加入游戏"
+    },
+    {
+      "monsterId": 17,
+      "name": "鹿1",
+      "baseName": "鹿",
+      "variantCode": "1",
+      "recordStatus": "retired",
+      "level": 50,
+      "exp": 100,
+      "hp": 1200,
+      "defense": 35,
+      "magicDefense": 35,
+      "attackMin": 0,
+      "attackMax": 100,
+      "versionTag": "2003官服1.76基准版",
+      "sourceUrl": "https://www.21cq.com/mir/Mob.Aspx?ID=17",
+      "listSourceUrl": "https://www.21cq.com/mir/Monster.Aspx",
+      "sourceDate": "2026-08-16",
+      "confidence": "B",
+      "verification": "用户Excel 217怪物完整掉落槽版",
+      "contentLayer": "vanilla_core",
+      "source": "vanilla_176",
+      "editable": false,
+      "retirementReason": "用户正式确认取消加入游戏"
+    },
+    {
       "monsterId": 18,
       "name": "毒蜘蛛",
       "baseName": "毒蜘蛛",
@@ -77,7 +149,7 @@
       "name": "稻草人1",
       "baseName": "稻草人",
       "variantCode": "1",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 50,
       "exp": 100,
       "hp": 1000,
@@ -93,7 +165,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 24,
@@ -123,7 +196,7 @@
       "name": "多钩猫0",
       "baseName": "多钩猫",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 13,
       "exp": 17,
       "hp": 22,
@@ -139,7 +212,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 26,
@@ -169,7 +243,7 @@
       "name": "钉耙猫0",
       "baseName": "钉耙猫",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 13,
       "exp": 18,
       "hp": 23,
@@ -185,7 +259,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 28,
@@ -215,7 +290,7 @@
       "name": "森林雪人0",
       "baseName": "森林雪人",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 16,
       "exp": 30,
       "hp": 36,
@@ -231,7 +306,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 30,
@@ -353,7 +429,7 @@
       "name": "半兽人0",
       "baseName": "半兽人",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 15,
       "exp": 25,
       "hp": 30,
@@ -369,7 +445,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 36,
@@ -399,7 +476,7 @@
       "name": "半兽战士0",
       "baseName": "半兽战士",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 22,
       "exp": 90,
       "hp": 100,
@@ -415,7 +492,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 38,
@@ -537,7 +615,7 @@
       "name": "山洞蝙蝠0",
       "baseName": "山洞蝙蝠",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 20,
       "exp": 25,
       "hp": 25,
@@ -553,7 +631,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 45,
@@ -629,7 +708,7 @@
       "name": "骷髅0",
       "baseName": "骷髅",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 18,
       "exp": 85,
       "hp": 90,
@@ -645,14 +724,15 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 49,
       "name": "掷斧骷髅9",
       "baseName": "掷斧骷髅",
       "variantCode": "9",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 18,
       "exp": 90,
       "hp": 100,
@@ -668,7 +748,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 50,
@@ -698,7 +779,7 @@
       "name": "掷斧骷髅0",
       "baseName": "掷斧骷髅",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 18,
       "exp": 90,
       "hp": 100,
@@ -714,7 +795,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 52,
@@ -744,7 +826,7 @@
       "name": "骷髅战士0",
       "baseName": "骷髅战士",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 19,
       "exp": 95,
       "hp": 105,
@@ -760,7 +842,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 54,
@@ -928,7 +1011,7 @@
       "name": "暗黑战士0",
       "baseName": "暗黑战士",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 26,
       "exp": 200,
       "hp": 165,
@@ -944,7 +1027,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 64,
@@ -974,7 +1058,7 @@
       "name": "沃玛战士0",
       "baseName": "沃玛战士",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 30,
       "exp": 260,
       "hp": 265,
@@ -990,7 +1074,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 66,
@@ -1020,7 +1105,7 @@
       "name": "沃玛勇士0",
       "baseName": "沃玛勇士",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 30,
       "exp": 280,
       "hp": 285,
@@ -1036,7 +1121,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 68,
@@ -1066,7 +1152,7 @@
       "name": "沃玛战将0",
       "baseName": "沃玛战将",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 30,
       "exp": 280,
       "hp": 285,
@@ -1082,7 +1168,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 70,
@@ -1112,7 +1199,7 @@
       "name": "火焰沃玛0",
       "baseName": "火焰沃玛",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 31,
       "exp": 290,
       "hp": 340,
@@ -1128,7 +1215,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 73,
@@ -1296,7 +1384,7 @@
       "name": "僵尸10",
       "baseName": "僵尸",
       "variantCode": "10",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 25,
       "exp": 160,
       "hp": 155,
@@ -1312,7 +1400,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 81,
@@ -1342,7 +1431,7 @@
       "name": "僵尸20",
       "baseName": "僵尸",
       "variantCode": "20",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 25,
       "exp": 160,
       "hp": 155,
@@ -1358,7 +1447,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 83,
@@ -1388,7 +1478,7 @@
       "name": "僵尸30",
       "baseName": "僵尸",
       "variantCode": "30",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 25,
       "exp": 160,
       "hp": 155,
@@ -1404,7 +1494,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 85,
@@ -1434,7 +1525,7 @@
       "name": "僵尸40",
       "baseName": "僵尸",
       "variantCode": "40",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 25,
       "exp": 160,
       "hp": 155,
@@ -1450,7 +1541,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 87,
@@ -1480,7 +1572,7 @@
       "name": "僵尸50",
       "baseName": "僵尸",
       "variantCode": "50",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 25,
       "exp": 160,
       "hp": 155,
@@ -1496,7 +1588,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 89,
@@ -1595,7 +1688,7 @@
       "name": "红蛇0",
       "baseName": "红蛇",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 17,
       "exp": 50,
       "hp": 50,
@@ -1611,7 +1704,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 94,
@@ -1641,7 +1735,7 @@
       "name": "虎蛇0",
       "baseName": "虎蛇",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 18,
       "exp": 53,
       "hp": 53,
@@ -1657,7 +1751,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 96,
@@ -1710,7 +1805,7 @@
       "name": "猎鹰0",
       "baseName": "猎鹰",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 16,
       "exp": 38,
       "hp": 38,
@@ -1726,7 +1821,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 100,
@@ -1779,7 +1875,7 @@
       "name": "盔甲虫0",
       "baseName": "盔甲虫",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 16,
       "exp": 37,
       "hp": 50,
@@ -1795,7 +1891,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 103,
@@ -1871,7 +1968,7 @@
       "name": "多角虫0",
       "baseName": "多角虫",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 16,
       "exp": 32,
       "hp": 52,
@@ -1887,7 +1984,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 107,
@@ -1917,7 +2015,7 @@
       "name": "巨型多角虫1",
       "baseName": "巨型多角虫",
       "variantCode": "1",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 27,
       "exp": 100,
       "hp": 900,
@@ -1933,7 +2031,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 110,
@@ -1963,7 +2062,7 @@
       "name": "蜈蚣0",
       "baseName": "蜈蚣",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 26,
       "exp": 230,
       "hp": 230,
@@ -1979,7 +2078,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 112,
@@ -2009,7 +2109,7 @@
       "name": "黑色恶蛆0",
       "baseName": "黑色恶蛆",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 28,
       "exp": 180,
       "hp": 230,
@@ -2025,7 +2125,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 114,
@@ -2055,7 +2156,7 @@
       "name": "跳跳蜂0",
       "baseName": "跳跳蜂",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 26,
       "exp": 210,
       "hp": 200,
@@ -2071,7 +2172,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 116,
@@ -2101,7 +2203,7 @@
       "name": "巨型蠕虫0",
       "baseName": "巨型蠕虫",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 26,
       "exp": 230,
       "hp": 200,
@@ -2117,7 +2219,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 118,
@@ -2147,7 +2250,7 @@
       "name": "钳虫0",
       "baseName": "钳虫",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 31,
       "exp": 250,
       "hp": 270,
@@ -2163,7 +2266,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 120,
@@ -2377,7 +2481,7 @@
       "name": "红野猪0",
       "baseName": "红野猪",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 32,
       "exp": 320,
       "hp": 330,
@@ -2393,7 +2497,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 131,
@@ -2584,7 +2689,7 @@
       "name": "蝎蛇0",
       "baseName": "蝎蛇",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 35,
       "exp": 360,
       "hp": 330,
@@ -2600,7 +2705,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 140,
@@ -2814,7 +2920,7 @@
       "name": "大老鼠0",
       "baseName": "大老鼠",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 24,
       "exp": 330,
       "hp": 385,
@@ -2830,7 +2936,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 150,
@@ -2860,7 +2967,7 @@
       "name": "祖玛弓箭手0",
       "baseName": "祖玛弓箭手",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 40,
       "exp": 370,
       "hp": 385,
@@ -2876,7 +2983,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 152,
@@ -2929,7 +3037,7 @@
       "name": "祖玛雕像0",
       "baseName": "祖玛雕像",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 42,
       "exp": 450,
       "hp": 495,
@@ -2945,7 +3053,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 155,
@@ -3182,7 +3291,7 @@
       "name": "血巨人0",
       "baseName": "血巨人",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 55,
       "exp": 1000,
       "hp": 1200,
@@ -3198,7 +3307,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 166,
@@ -3228,7 +3338,7 @@
       "name": "血僵尸0",
       "baseName": "血僵尸",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 47,
       "exp": 800,
       "hp": 1200,
@@ -3244,7 +3354,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 168,
@@ -3274,7 +3385,7 @@
       "name": "月魔蜘蛛0",
       "baseName": "月魔蜘蛛",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 52,
       "exp": 700,
       "hp": 850,
@@ -3290,7 +3401,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 170,
@@ -3320,7 +3432,7 @@
       "name": "黑锷蜘蛛0",
       "baseName": "黑锷蜘蛛",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 53,
       "exp": 900,
       "hp": 1200,
@@ -3336,7 +3448,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 172,
@@ -3366,7 +3479,7 @@
       "name": "钢牙蜘蛛0",
       "baseName": "钢牙蜘蛛",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 53,
       "exp": 700,
       "hp": 800,
@@ -3382,7 +3495,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 174,
@@ -3412,7 +3526,7 @@
       "name": "暴牙蜘蛛0",
       "baseName": "暴牙蜘蛛",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 43,
       "exp": 400,
       "hp": 500,
@@ -3428,7 +3542,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 176,
@@ -3458,7 +3573,7 @@
       "name": "天狼蜘蛛0",
       "baseName": "天狼蜘蛛",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 43,
       "exp": 500,
       "hp": 500,
@@ -3474,7 +3589,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 178,
@@ -3504,7 +3620,7 @@
       "name": "花吻蜘蛛0",
       "baseName": "花吻蜘蛛",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 54,
       "exp": 680,
       "hp": 750,
@@ -3520,7 +3636,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 180,
@@ -3596,7 +3713,7 @@
       "name": "爆裂蜘蛛0",
       "baseName": "爆裂蜘蛛",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 52,
       "exp": 7,
       "hp": 10,
@@ -3612,7 +3729,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 185,
@@ -3895,7 +4013,7 @@
       "name": "恶灵僵尸0",
       "baseName": "恶灵僵尸",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 28,
       "exp": 190,
       "hp": 180,
@@ -3911,7 +4029,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 198,
@@ -3987,7 +4106,7 @@
       "name": "骷髅锤兵0",
       "baseName": "骷髅锤兵",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 35,
       "exp": 450,
       "hp": 390,
@@ -4003,7 +4122,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 202,
@@ -4033,7 +4153,7 @@
       "name": "骷髅长枪兵0",
       "baseName": "骷髅长枪兵",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 32,
       "exp": 380,
       "hp": 390,
@@ -4049,7 +4169,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 204,
@@ -4079,7 +4200,7 @@
       "name": "骷髅刀斧手0",
       "baseName": "骷髅刀斧手",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 35,
       "exp": 420,
       "hp": 440,
@@ -4095,7 +4216,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 206,
@@ -4125,7 +4247,7 @@
       "name": "骷髅弓箭手0",
       "baseName": "骷髅弓箭手",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 32,
       "exp": 240,
       "hp": 190,
@@ -4141,7 +4263,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 208,
@@ -4217,7 +4340,7 @@
       "name": "牛头魔0",
       "baseName": "牛头魔",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 32,
       "exp": 360,
       "hp": 330,
@@ -4233,7 +4356,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 212,
@@ -4263,7 +4387,7 @@
       "name": "牛魔战士0",
       "baseName": "牛魔战士",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 33,
       "exp": 400,
       "hp": 420,
@@ -4279,7 +4403,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 214,
@@ -4309,7 +4434,7 @@
       "name": "牛魔斗士0",
       "baseName": "牛魔斗士",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 40,
       "exp": 480,
       "hp": 460,
@@ -4325,7 +4450,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 216,
@@ -4355,7 +4481,7 @@
       "name": "牛魔侍卫0",
       "baseName": "牛魔侍卫",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 40,
       "exp": 580,
       "hp": 500,
@@ -4371,7 +4497,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 218,
@@ -4401,7 +4528,7 @@
       "name": "牛魔将军0",
       "baseName": "牛魔将军",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 45,
       "exp": 780,
       "hp": 750,
@@ -4417,7 +4544,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 220,
@@ -4447,7 +4575,7 @@
       "name": "牛魔法师0",
       "baseName": "牛魔法师",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 40,
       "exp": 440,
       "hp": 360,
@@ -4463,7 +4591,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 222,
@@ -4493,7 +4622,7 @@
       "name": "牛魔祭司0",
       "baseName": "牛魔祭司",
       "variantCode": "0",
-      "recordStatus": "服务端变体·待判定",
+      "recordStatus": "retired",
       "level": 45,
       "exp": 750,
       "hp": 750,
@@ -4509,7 +4638,8 @@
       "verification": "单源·变体待筛选",
       "contentLayer": "vanilla_core",
       "source": "vanilla_176",
-      "editable": false
+      "editable": false,
+      "retirementReason": "用户裁决：普通怪物不保留无独立玩法意义的服务端复制变体；P3C 2026-08-19"
     },
     {
       "monsterId": 224,

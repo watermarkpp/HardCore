@@ -1,0 +1,65 @@
+{
+  "package": "MIR2_176_33技能唯一真源_Codex_v1.0.1",
+  "package_version": "1.0.1",
+  "source_commit_audited": "4b6ea4e0",
+  "validation_status": "PASS",
+  "skill_count": 33,
+  "rank_record_count": 132,
+  "test_count": 169,
+  "patches": [
+    "GetPower13 exact single-final-rounding",
+    "Temptation Light pre-2020 classic-intent state machine"
+  ],
+  "files": [
+    {
+      "path": "CODEX_施工总指令_v1.md",
+      "size_bytes": 2961,
+      "sha256": "db4c5439fbb84f0738f4945c5f96b6d3027b7a9d8af142bd9004fe2b260f07ff"
+    },
+    {
+      "path": "MIR2_176_33技能_Codex施工规格_v1.0.1.md",
+      "size_bytes": 56283,
+      "sha256": "19906276b3d6f88144c3477d0f99c95fd8afe6e17c5753c9b200ac3ebab9612a"
+    },
+    {
+      "path": "MIR2_176_当前差异与迁移清单_4b6ea4e0.md",
+      "size_bytes": 3106,
+      "sha256": "7068f0abf1d5c4a9f14f51192d3166db5595e88e7cd468292d33e76662a9f7de"
+    },
+    {
+      "path": "Mir2SkillFormulaReference.gd",
+      "size_bytes": 2722,
+      "sha256": "6c5776449c575ebc6493ccb78f23bc95e98591750b42bd89d79fa74769f3edd3"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 1113,
+      "sha256": "33b1c42b51f4dc069f7b72a6549125b5cf22b41c214df2b33f9ef080c545c24f"
+    },
+    {
+      "path": "mir2_176_skill_test_manifest_v1.json",
+      "size_bytes": 31891,
+      "sha256": "17d0830b213531e9235b92e800ae071bc6270095a3e8919528ff8d7b6c6f149e"
+    },
+    {
+      "path": "mir2_176_skills_schema_v1.json",
+      "size_bytes": 3178,
+      "sha256": "c1e5f3072c0e50d4c3bedc74534c1e546d39efa0f4f26522e1d7682e2a4a1b64"
+    },
+    {
+      "path": "mir2_176_skills_source_of_truth_v1.json",
+      "size_bytes": 138450,
+      "sha256": "275555e9f879969e4bb4becfc268e0ed0912b7d79ef6dea89731fe43db0562f7"
+    },
+    {
+      "path": "source_evidence_matrix.md",
+      "size_bytes": 1856,
+      "sha256": "3e31e78ad5734faef6d192b656ddf053211866cb0d71a4b976f267d343d91d23"
+    },
+    {
+      "path": "validation_report.json",
+      "size_bytes": 1108,
+      "sha256": "5dee41e849076f7d38141f98e23bd18457ff4e30d642004c64ecedb04aa47e73"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "base_color": "#182018",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/44cf7c23c64a998d5fec9e19e03037bf8a189038a337499d32b42093f00b1c8c.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "44cf7c23c64a998d5fec9e19e03037bf8a189038a337499d32b42093f00b1c8c"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/1d8be9c5cc1dd0b01f45a0f36c9448d080fabeab0a855a0105e152d438f5d6e8.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "1d8be9c5cc1dd0b01f45a0f36c9448d080fabeab0a855a0105e152d438f5d6e8"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/f47c0400ec15f33fdd718abb96646fa8315e5c7f1625a2cadfcc58879bd609c7.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "f47c0400ec15f33fdd718abb96646fa8315e5c7f1625a2cadfcc58879bd609c7"
+    },
+    {
+      "chunk_id": "c_3_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/504aec1db71e739f0f046afe17c86cfc2ef4772aeeecd00971fa37bcf8b55335.png",
+      "rect_px": [
+        3072.0,
+        0.0,
+        512.0,
+        1024.0
+      ],
+      "sha256": "504aec1db71e739f0f046afe17c86cfc2ef4772aeeecd00971fa37bcf8b55335"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/979b26612a8f5c663ce7e46e5f29badc826bc7072bd879e24429724783ccfc6f.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        768.0
+      ],
+      "sha256": "979b26612a8f5c663ce7e46e5f29badc826bc7072bd879e24429724783ccfc6f"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/c95532624172e2d9e749e06c026d1915e3bd3dfa8d34638f0dc3bd8ba6efdcaf.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        768.0
+      ],
+      "sha256": "c95532624172e2d9e749e06c026d1915e3bd3dfa8d34638f0dc3bd8ba6efdcaf"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/da4d03e52a96b98dc53a49b893b8325ae9aa581699c259cc083d6a4eeb43cb50.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        768.0
+      ],
+      "sha256": "da4d03e52a96b98dc53a49b893b8325ae9aa581699c259cc083d6a4eeb43cb50"
+    },
+    {
+      "chunk_id": "c_3_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/7cf7d7ed117ced91a612db9f6270d8917f9e1bedf9c2739f044c3949942018aa.png",
+      "rect_px": [
+        3072.0,
+        1024.0,
+        512.0,
+        768.0
+      ],
+      "sha256": "7cf7d7ed117ced91a612db9f6270d8917f9e1bedf9c2739f044c3949942018aa"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 8,
+    "required_chunk_count": 8,
+    "source_chunk_count": 8
+  },
+  "design_size": [
+    64,
+    48
+  ],
+  "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+  "ground_pixel_center": [
+    1792.0,
+    880.0
+  ],
+  "ground_pixel_size": [
+    3584,
+    1792
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "fengmo_final_hall",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 914008,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "c1fc5e0372140e60da7f0464f0982f1cc3ab0fb42d7600c4334a8da4e19d148f",
+  "source_ground_manifest_sha256": "b11169aca63a7e318f3846e61c8f830eed1030fef505c452056022ce1cdd2bb0",
+  "source_ground_state_sha256": "f3d38ef1eecf0f07362957a658fced633de0eed32e7e38d5d7633dc1fa36f9a5",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

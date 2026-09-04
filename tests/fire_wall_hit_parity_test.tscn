@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2c_hit_parity"]
+[ext_resource type="Script" path="res://tests/fire_wall_hit_parity_test.gd" id="1"]
+[node name="FireWallHitParity" type="Node"]
+script = ExtResource("1")

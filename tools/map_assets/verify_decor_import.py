@@ -24,16 +24,16 @@ warnings = []
 def load_effective_catalogs():
     """Load all catalogs that MapAssetCatalogService loads."""
     catalogs = []
-    
+
     if CATALOG_SERVICE_PATH.exists():
         with open(CATALOG_SERVICE_PATH, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         cat_match = re.search(r'CATALOG_PATH\s*:=\s*"([^"]+)"', content)
         if cat_match:
             main_path = cat_match.group(1).replace('res://', str(REPO) + '/')
             catalogs.append(main_path)
-        
+
         ext_match = re.search(r'EXTENSION_CATALOG_PATHS\s*:=\s*\[(.*?)\]', content, re.DOTALL)
         if ext_match:
             ext_text = ext_match.group(1)
@@ -43,7 +43,7 @@ def load_effective_catalogs():
                 catalogs.append(full_path)
     else:
         catalogs.append(str(REPO / "assets" / "data" / "assets" / "map_asset_catalog.json"))
-    
+
     all_assets = []
     for cat_path in catalogs:
         if os.path.exists(cat_path):
@@ -54,13 +54,13 @@ def load_effective_catalogs():
             print(f"  Loaded {len(assets)} assets from {os.path.basename(cat_path)}")
         else:
             print(f"  WARNING: Missing catalog: {cat_path}")
-    
+
     return all_assets
 
 
 def main():
     print("=== Effective Catalog Validation ===")
-    
+
     # 1. Load all effective catalogs
     try:
         all_assets = load_effective_catalogs()
@@ -172,7 +172,7 @@ def main():
                                 invalid_zip.append(f"Member missing: {member_path} in {zip_path}")
                     except Exception as e:
                         invalid_zip.append(f"ZIP error: {e}")
-    
+
     if temp_paths:
         errors.append(f"Temp source paths: {len(temp_paths)}")
         print(f"  FAIL: {len(temp_paths)} Temp source paths")
@@ -180,7 +180,7 @@ def main():
             print(f"    {t}")
     else:
         print(f"  PASS: No Temp source paths")
-    
+
     if invalid_zip:
         errors.append(f"Invalid ZIP provenance: {len(invalid_zip)}")
         print(f"  FAIL: {len(invalid_zip)} invalid ZIP provenance")
@@ -196,15 +196,15 @@ def main():
             import hashlib
             with open(img_path, 'rb') as f:
                 actual_sha = hashlib.sha256(f.read()).hexdigest()
-            
+
             output_sha = a.get('output_sha256', '')
             thumb_sha = a.get('thumbnail_source_sha256', '')
-            
+
             if output_sha and output_sha != actual_sha:
                 sha_mismatches.append(f"output_sha mismatch: {a.get('asset_id', '')}")
             if thumb_sha and thumb_sha != actual_sha and a.get('thumbnail', '') == a.get('image', ''):
                 sha_mismatches.append(f"thumb_sha mismatch: {a.get('asset_id', '')}")
-    
+
     if sha_mismatches:
         warnings.append(f"SHA mismatches: {len(sha_mismatches)}")
         print(f"  WARN: {len(sha_mismatches)} SHA mismatches")
@@ -258,11 +258,11 @@ def main():
                                     referenced_ids.add(aid)
             except:
                 continue
-        
+
         # Check if all referenced IDs exist in effective catalog
         effective_ids = set(a['asset_id'] for a in all_assets)
         unresolved = referenced_ids - effective_ids
-        
+
         if unresolved:
             errors.append(f"Unresolved map references: {len(unresolved)}")
             print(f"  FAIL: {len(unresolved)} unresolved map references")
@@ -435,7 +435,7 @@ def main():
         print(f"RESULT: PASS ({len(warnings)} warnings)")
     for w in warnings:
         print(f"  WARN: {w}")
-    
+
     return 0 if not errors else 1
 
 

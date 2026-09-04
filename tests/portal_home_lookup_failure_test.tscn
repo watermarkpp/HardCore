@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q0b1_portal"]
+[ext_resource type="Script" path="res://tests/portal_home_lookup_failure_test.gd" id="1"]
+[node name="PortalHomeLookupFailure" type="Node"]
+script = ExtResource("1")

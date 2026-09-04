@@ -1,109 +1,980 @@
 extends Control
 
+const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
+const EquipmentCharacterPreviewScript := preload("res://scripts/equipment_character_preview.gd")
+const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
+const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
+
+signal character_creation_requested(request: Dictionary)
+signal character_launch_requested(request: Dictionary)
+
+const LAUNCH_CONTRACT_ID := "ui.character.launch.v1"
+const CREATION_CONTRACT_ID := "ui.character.creation.v1"
+const DELETE_ACTION_ID := "character.delete"
+const ROSTER_TOUCH_SCROLL_CONTRACT_ID := "ui.character.roster.touch_drag.v1"
+const LAUNCH_CONTEXT_META := &"pending_character_launch_context"
+const FIXED_CHARACTER_GENDER := "男"
+const ROSTER_DRAG_THRESHOLD := 12.0
+const ROSTER_PRESS_SUPPRESSION_MSEC := 220
+const PROFILE_ROW_BUTTON_HEIGHT := 81.0
+const AI_TEAMMATE_AVAILABLE := false
+const LAUNCH_SCENE_PRELOAD_TIMEOUT_MSEC := 30000
+const LAUNCH_PRELOAD_IDLE := &"idle"
+const LAUNCH_PRELOAD_REQUESTED := &"requested"
+const LAUNCH_PRELOAD_READY := &"ready"
+const LAUNCH_PRELOAD_FAILED := &"failed"
+const HALL_TEXTURE := preload("res://assets/ui/gothic_preview/character_hall.png")
+const PROFESSION_PRESENTATION := {
+	"战士": {
+		"id": "warrior",
+		"glyph": "战",
+		"role": "近战 · 爆发",
+		"icon": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/skill_fire_hit.png",
+	},
+	"法师": {
+		"id": "wizard",
+		"glyph": "法",
+		"role": "远程 · 群攻",
+		"icon": "res://assets/art/characters/wizard/effects/area_burst.png",
+	},
+	"道士": {
+		"id": "taoist",
+		"glyph": "道",
+		"role": "治疗 · 召唤",
+		"icon": "res://assets/art/characters/taoist/effects/mass_healing.png",
+	},
+}
+
 var list_box: VBoxContainer
 var name_input: LineEdit
-var gender_select: OptionButton
 var message_label: Label
+var create_button: Button
+var profession_buttons: Dictionary = {}
+var profile_cards: Dictionary = {}
+var profession_button_group: ButtonGroup
+var profile_scroll: ScrollContainer
+var ai_teammate_toggle: CheckButton
+var enter_button: Button
+var delete_button: Button
+var delete_confirmation: GothicConfirmationPanel
+var launch_loading_overlay: Control
+var preview_visual_root: Control
+var preview_name_label: Label
+var preview_detail_label: Label
+var teammate_status_label: Label
+var roster_count_label: Label
+var build_fingerprint_label: Label
+var selected_main_profile_id := ""
+var selected_ai_profile_id := ""
+var selected_creation_profession := "战士"
+var ai_teammate_enabled := false
+var content_root: Control
+var _profiles: Array[Dictionary] = []
+var suppress_scene_change_for_test := false
+var last_launch_request: Dictionary = {}
+var last_creation_request: Dictionary = {}
+var _roster_drag_candidate := false
+var _roster_drag_active := false
+var _roster_drag_start_position := Vector2.ZERO
+var _roster_drag_start_scroll := 0
+var _roster_drag_touch_index := -1
+var _roster_suppress_press_until_msec := 0
+var _launch_in_progress := false
+var launch_scene_path := "res://scenes/main.tscn"
+var _launch_scene_preload_path := ""
+var _launch_scene_preload_state: StringName = LAUNCH_PRELOAD_IDLE
+var _launch_scene_preload_resource: PackedScene
+var _launch_scene_preload_request_count := 0
+var _launch_scene_preload_generation := 0
+@export var force_launch_preload_for_test := false
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	PlayerState.ensure_developer_test_character()
-	PlayerState.ensure_zuma_test_character()
-	_build_ui()
+	theme = GothicUIThemeScript.build_character_hall()
+	_build_background()
+	_build_content_root()
+	_build_header()
+	_build_roster_panel()
+	_build_preview_panel()
+	_build_creation_panel()
+	_build_launch_loading_overlay()
+	_build_delete_confirmation()
 	_refresh_profiles()
+	TouchScrollSupportScript.attach_tree(self)
+	UIRuntimeLayoutOverridesScript.apply_profile(self, "character_hall")
+	_restore_character_action_visual_contract()
+	call_deferred("_restore_character_action_visual_contract")
+	# The request itself is deferred until the complete hall has entered the tree.
+	# Main-scene parsing can then overlap the player's stable hall interaction.
+	if not PlayerState.test_mode or force_launch_preload_for_test:
+		call_deferred("_request_launch_scene_preload")
 
 
-func _build_ui() -> void:
-	var background := ColorRect.new()
-	background.color = Color("120d0b")
+func _request_launch_scene_preload() -> void:
+	var requested_path := launch_scene_path
+	if (
+		requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_state in [LAUNCH_PRELOAD_REQUESTED, LAUNCH_PRELOAD_READY]
+	):
+		return
+	_launch_scene_preload_generation += 1
+	var generation := _launch_scene_preload_generation
+	_launch_scene_preload_path = requested_path
+	_launch_scene_preload_state = LAUNCH_PRELOAD_IDLE
+	_launch_scene_preload_resource = null
+	if requested_path.is_empty() or not ResourceLoader.exists(requested_path, "PackedScene"):
+		_mark_launch_scene_preload_failed(ERR_FILE_NOT_FOUND, generation, requested_path)
+		return
+	_launch_scene_preload_request_count += 1
+	var request_error := ResourceLoader.load_threaded_request(requested_path, "PackedScene")
+	if request_error != OK:
+		var existing_status := ResourceLoader.load_threaded_get_status(requested_path)
+		if existing_status not in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
+			_mark_launch_scene_preload_failed(request_error, generation, requested_path)
+			return
+	_launch_scene_preload_state = LAUNCH_PRELOAD_REQUESTED
+	_monitor_launch_scene_preload.call_deferred(generation, requested_path)
+
+
+func _monitor_launch_scene_preload(generation: int, requested_path: String) -> void:
+	while (
+		is_inside_tree()
+		and generation == _launch_scene_preload_generation
+		and requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_state == LAUNCH_PRELOAD_REQUESTED
+	):
+		var status := ResourceLoader.load_threaded_get_status(requested_path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var resource := ResourceLoader.load_threaded_get(requested_path)
+			if resource is PackedScene:
+				_launch_scene_preload_resource = resource
+				_launch_scene_preload_state = LAUNCH_PRELOAD_READY
+			else:
+				_mark_launch_scene_preload_failed(ERR_FILE_CORRUPT, generation, requested_path)
+			return
+		if status in [ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE]:
+			_mark_launch_scene_preload_failed(ERR_CANT_OPEN, generation, requested_path)
+			return
+		await get_tree().process_frame
+
+
+func _mark_launch_scene_preload_failed(_error: int, generation: int, requested_path: String) -> void:
+	if generation != _launch_scene_preload_generation or requested_path != _launch_scene_preload_path:
+		return
+	_launch_scene_preload_resource = null
+	_launch_scene_preload_state = LAUNCH_PRELOAD_FAILED
+
+
+func _wait_for_launch_scene_preload() -> PackedScene:
+	_request_launch_scene_preload()
+	var requested_path := launch_scene_path
+	var generation := _launch_scene_preload_generation
+	var deadline_msec := Time.get_ticks_msec() + LAUNCH_SCENE_PRELOAD_TIMEOUT_MSEC
+	while (
+		_launch_scene_preload_state == LAUNCH_PRELOAD_REQUESTED
+		and requested_path == _launch_scene_preload_path
+		and generation == _launch_scene_preload_generation
+	):
+		if Time.get_ticks_msec() >= deadline_msec:
+			_mark_launch_scene_preload_failed(ERR_TIMEOUT, generation, requested_path)
+			break
+		await get_tree().process_frame
+	if (
+		_launch_scene_preload_state == LAUNCH_PRELOAD_READY
+		and requested_path == _launch_scene_preload_path
+		and _launch_scene_preload_resource != null
+	):
+		return _launch_scene_preload_resource
+	return null
+
+func _input(event: InputEvent) -> void:
+	if profile_scroll == null or not is_instance_valid(profile_scroll):
+		return
+	if str(profile_scroll.get_meta("touch_scroll_policy", "")) == TouchScrollSupportScript.STABLE_ID:
+		return
+	if event is InputEventScreenTouch:
+		if event.pressed and profile_scroll.get_global_rect().has_point(event.position):
+			_begin_roster_drag(event.position, event.index)
+		elif not event.pressed and _roster_drag_candidate and event.index == _roster_drag_touch_index:
+			_finish_roster_drag()
+	elif event is InputEventScreenDrag:
+		if _roster_drag_candidate and event.index == _roster_drag_touch_index:
+			_update_roster_drag(event.position)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed and profile_scroll.get_global_rect().has_point(event.global_position):
+			_begin_roster_drag(event.global_position, -1)
+		elif not event.pressed and _roster_drag_candidate and _roster_drag_touch_index == -1:
+			_finish_roster_drag()
+	elif event is InputEventMouseMotion:
+		if _roster_drag_candidate and _roster_drag_touch_index == -1 and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+			_update_roster_drag(event.global_position)
+
+
+func _begin_roster_drag(position_value: Vector2, touch_index := -1) -> void:
+	if _roster_drag_candidate:
+		return
+	_roster_drag_candidate = true
+	_roster_drag_active = false
+	_roster_drag_start_position = position_value
+	_roster_drag_start_scroll = profile_scroll.scroll_vertical
+	_roster_drag_touch_index = touch_index
+
+
+func _update_roster_drag(position_value: Vector2) -> void:
+	if not _roster_drag_candidate:
+		return
+	var delta := position_value - _roster_drag_start_position
+	if not _roster_drag_active and absf(delta.y) < ROSTER_DRAG_THRESHOLD:
+		return
+	_roster_drag_active = true
+	profile_scroll.scroll_vertical = maxi(0, _roster_drag_start_scroll - int(round(delta.y)))
+	get_viewport().set_input_as_handled()
+
+
+func _finish_roster_drag() -> bool:
+	if not _roster_drag_candidate:
+		return false
+	var was_dragging := _roster_drag_active
+	if was_dragging:
+		_roster_suppress_press_until_msec = Time.get_ticks_msec() + ROSTER_PRESS_SUPPRESSION_MSEC
+		get_viewport().set_input_as_handled()
+	_roster_drag_candidate = false
+	_roster_drag_active = false
+	_roster_drag_touch_index = -1
+	return was_dragging
+
+
+func _roster_press_is_suppressed() -> bool:
+	return (
+		Time.get_ticks_msec() <= _roster_suppress_press_until_msec
+		or TouchScrollSupportScript.is_drag_active(get_tree())
+	)
+
+
+func _build_content_root() -> void:
+	content_root = Control.new()
+	content_root.name = "CenteredContent"
+	content_root.set_anchors_preset(Control.PRESET_CENTER)
+	content_root.position = Vector2(-640, -360)
+	content_root.size = Vector2(1280, 720)
+	content_root.mouse_filter = Control.MOUSE_FILTER_PASS
+	add_child(content_root)
+
+
+func _build_background() -> void:
+	var background := TextureRect.new()
+	background.name = "CharacterHallBackground"
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	background.texture = HALL_TEXTURE
+	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background.stretch_mode = TextureRect.STRETCH_SCALE
+	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(background)
-	var margin := MarginContainer.new()
-	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 48)
-	add_child(margin)
-	var columns := HBoxContainer.new()
-	columns.add_theme_constant_override("separation", 42)
-	margin.add_child(columns)
-	var left := VBoxContainer.new()
-	left.custom_minimum_size = Vector2(560, 0)
-	columns.add_child(left)
+	var shade := ColorRect.new()
+	shade.name = "HallShade"
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.008, 0.005, 0.004, 0.46)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(shade)
+
+
+func _build_header() -> void:
+	var top_shade := ColorRect.new()
+	top_shade.name = "TopShade"
+	top_shade.position = Vector2.ZERO
+	top_shade.size = Vector2(1280, 92)
+	top_shade.color = Color("080606b8")
+	top_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_root.add_child(top_shade)
 	var title := Label.new()
-	title.text = "玛法离线"
-	title.add_theme_font_size_override("font_size", 42)
-	left.add_child(title)
+	title.name = "HallTitle"
+	title.text = "人物殿堂"
+	title.position = Vector2(48, 15)
+	title.size = Vector2(330, 44)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 34)
+	title.add_theme_color_override("font_color", Color("e7bd76"))
+	content_root.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "选择角色进入比奇"
-	subtitle.add_theme_font_size_override("font_size", 22)
-	left.add_child(subtitle)
+	subtitle.name = "HallSubtitle"
+	subtitle.text = "选择主角色，并决定是否携带一名 AI 队友"
+	subtitle.position = Vector2(50, 56)
+	subtitle.size = Vector2(520, 24)
+	subtitle.theme_type_variation = "GothicMutedLabel"
+	content_root.add_child(subtitle)
+	var archive := Label.new()
+	archive.name = "ArchiveLabel"
+	archive.text = "HardCore · 本地独立档案"
+	archive.position = Vector2(910, 23)
+	archive.size = Vector2(320, 34)
+	archive.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	archive.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	archive.theme_type_variation = "GothicMutedLabel"
+	content_root.add_child(archive)
+	build_fingerprint_label = Label.new()
+	build_fingerprint_label.name = "BuildFingerprint"
+	build_fingerprint_label.text = _build_fingerprint_text()
+	build_fingerprint_label.position = Vector2(760, 56)
+	build_fingerprint_label.size = Vector2(470, 20)
+	build_fingerprint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	build_fingerprint_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	build_fingerprint_label.theme_type_variation = "GothicMutedLabel"
+	build_fingerprint_label.add_theme_font_size_override("font_size", 11)
+	build_fingerprint_label.add_theme_color_override("font_color", Color("8f7a60"))
+	build_fingerprint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	build_fingerprint_label.set_meta("build_fingerprint", true)
+	content_root.add_child(build_fingerprint_label)
+
+
+func _build_fingerprint_text() -> String:
+	var app_name := str(ProjectSettings.get_setting("application/config/name", "HardCore"))
+	if app_name.is_empty():
+		app_name = "HardCore"
+	var version := str(ProjectSettings.get_setting("application/config/version", "dev"))
+	if version.is_empty():
+		version = "dev"
+	var revision := str(ProjectSettings.get_setting("application/config/build_revision", "local"))
+	if revision.is_empty():
+		revision = "local"
+	return "%s · v%s · %s" % [app_name, version, revision.left(12)]
+
+
+func _build_roster_panel() -> void:
+	var panel := _section_panel("RosterPanel", Rect2(38, 108, 326, 574))
+	panel.add_child(_section_title("RosterTitle", "已有角色", 326))
+	roster_count_label = Label.new()
+	roster_count_label.name = "RosterCount"
+	roster_count_label.position = Vector2(24, 46)
+	roster_count_label.size = Vector2(278, 22)
+	roster_count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	roster_count_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	roster_count_label.theme_type_variation = "GothicMutedLabel"
+	panel.add_child(roster_count_label)
+	profile_scroll = ScrollContainer.new()
+	profile_scroll.name = "ProfileScroll"
+	profile_scroll.position = Vector2(18, 76)
+	profile_scroll.size = Vector2(290, 362)
+	profile_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	profile_scroll.scroll_deadzone = 100000
+	profile_scroll.set_meta("touch_scroll_contract", ROSTER_TOUCH_SCROLL_CONTRACT_ID)
+	panel.add_child(profile_scroll)
 	list_box = VBoxContainer.new()
-	list_box.add_theme_constant_override("separation", 12)
-	left.add_child(list_box)
-	var right := VBoxContainer.new()
-	right.custom_minimum_size = Vector2(420, 0)
-	right.add_theme_constant_override("separation", 14)
-	columns.add_child(right)
-	var create_title := Label.new()
-	create_title.text = "创建新角色"
-	create_title.add_theme_font_size_override("font_size", 28)
-	right.add_child(create_title)
+	list_box.name = "ProfileList"
+	list_box.custom_minimum_size = Vector2(270, 0)
+	list_box.add_theme_constant_override("separation", 8)
+	profile_scroll.add_child(list_box)
+	ai_teammate_toggle = CheckButton.new()
+	ai_teammate_toggle.name = "AITeammateToggle"
+	ai_teammate_toggle.text = "携带 AI 队友"
+	ai_teammate_toggle.position = Vector2(26, 484)
+	ai_teammate_toggle.size = Vector2(274, 48)
+	ai_teammate_toggle.theme_type_variation = "GothicContentToggle"
+	ai_teammate_toggle.disabled = not AI_TEAMMATE_AVAILABLE
+	ai_teammate_toggle.set_meta("calibration_layout_revision", 1)
+	ai_teammate_toggle.set_meta("stable_id", "character.ai_teammate.enabled")
+	ai_teammate_toggle.toggled.connect(_set_ai_teammate_enabled)
+	panel.add_child(ai_teammate_toggle)
+	teammate_status_label = Label.new()
+	teammate_status_label.name = "TeammateStatus"
+	teammate_status_label.position = Vector2(24, 522)
+	teammate_status_label.size = Vector2(278, 50)
+	teammate_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	teammate_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	teammate_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	teammate_status_label.theme_type_variation = "GothicMutedLabel"
+	teammate_status_label.set_meta("calibration_layout_revision", 1)
+	panel.add_child(teammate_status_label)
+
+
+func _build_preview_panel() -> void:
+	var panel := _section_panel("CharacterPreviewPanel", Rect2(380, 108, 484, 574))
+	panel.add_child(_section_title("CharacterPreviewTitle", "人物预览", 484))
+	var stage := Control.new()
+	stage.name = "PreviewStage"
+	stage.position = Vector2.ZERO
+	stage.size = panel.size
+	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(stage)
+	preview_visual_root = Control.new()
+	preview_visual_root.name = "PreviewVisualRoot"
+	preview_visual_root.position = Vector2(42, 44)
+	preview_visual_root.size = Vector2(400, 350)
+	preview_visual_root.clip_contents = true
+	stage.add_child(preview_visual_root)
+	preview_name_label = Label.new()
+	preview_name_label.name = "PreviewName"
+	preview_name_label.position = Vector2(54, 392)
+	preview_name_label.size = Vector2(376, 32)
+	preview_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	preview_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	preview_name_label.add_theme_font_size_override("font_size", 23)
+	preview_name_label.add_theme_color_override("font_color", Color("efc67e"))
+	stage.add_child(preview_name_label)
+	preview_detail_label = Label.new()
+	preview_detail_label.name = "PreviewDetail"
+	preview_detail_label.position = Vector2(54, 424)
+	preview_detail_label.size = Vector2(376, 22)
+	preview_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	preview_detail_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	preview_detail_label.theme_type_variation = "GothicMutedLabel"
+	stage.add_child(preview_detail_label)
+	enter_button = Button.new()
+	enter_button.name = "EnterGame"
+	enter_button.text = "进入 HardCore"
+	enter_button.position = Vector2(54, 458)
+	enter_button.size = Vector2(244, 62)
+	enter_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# Retire only the former single-button saved rect.  The new pair is authored
+	# together here so an older character_hall calibration cannot overlap it.
+	enter_button.set_meta("calibration_layout_revision", 1)
+	# Enter is a transition action, not a persistent selection.  The selected
+	# character card owns the persistent selection highlight; this button only
+	# receives an explicit transition cue while the loading surface takes over.
+	enter_button.theme_type_variation = "GothicCharacterHallEnterGemButton"
+	enter_button.add_theme_font_size_override("font_size", 20)
+	enter_button.set_meta("stable_id", "character.launch")
+	enter_button.pressed.connect(_enter_selected_character)
+	panel.add_child(enter_button)
+	delete_button = Button.new()
+	delete_button.name = "DeleteCharacter"
+	delete_button.text = "删除人物"
+	delete_button.position = Vector2(310, 458)
+	delete_button.size = Vector2(120, 62)
+	delete_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	delete_button.theme_type_variation = "GothicCharacterHallDeleteGemButton"
+	delete_button.add_theme_font_size_override("font_size", 16)
+	delete_button.set_meta("stable_id", "character.delete")
+	delete_button.set_meta("calibration_layout_revision", 1)
+	delete_button.pressed.connect(_request_delete_selected_character)
+	panel.add_child(delete_button)
+	var launch_hint := Label.new()
+	launch_hint.name = "LaunchHint"
+	launch_hint.text = "主角色决定世界进度；AI 队友使用自己的角色档案"
+	launch_hint.position = Vector2(38, 524)
+	launch_hint.size = Vector2(408, 30)
+	launch_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	launch_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	launch_hint.theme_type_variation = "GothicMutedLabel"
+	launch_hint.add_theme_font_size_override("font_size", 12)
+	panel.add_child(launch_hint)
+
+
+func _build_launch_loading_overlay() -> void:
+	launch_loading_overlay = LoadingTransitionOverlayScript.new()
+	launch_loading_overlay.name = "CharacterLaunchLoading"
+	launch_loading_overlay.set_meta("stable_id", "character.launch.loading")
+	add_child(launch_loading_overlay)
+
+
+func _build_delete_confirmation() -> void:
+	delete_confirmation = GothicConfirmationPanelScript.new()
+	delete_confirmation.name = "DeleteCharacterConfirmation"
+	delete_confirmation.confirmed.connect(_on_delete_confirmation_confirmed)
+	add_child(delete_confirmation)
+
+
+func _build_creation_panel() -> void:
+	var panel := _section_panel("CreationPanel", Rect2(880, 108, 362, 574))
+	panel.add_child(_section_title("CreationTitle", "创建人物", 362))
+	var name_caption := Label.new()
+	name_caption.name = "CharacterNameCaption"
+	name_caption.text = "角色名称"
+	name_caption.position = Vector2(26, 56)
+	name_caption.size = Vector2(310, 24)
+	name_caption.theme_type_variation = "GothicMutedLabel"
+	panel.add_child(name_caption)
 	name_input = LineEdit.new()
+	name_input.name = "CharacterName"
 	name_input.placeholder_text = "输入角色名（最多12字）"
 	name_input.max_length = 12
-	right.add_child(name_input)
-	var profession := OptionButton.new()
-	profession.add_item("战士")
-	profession.add_item("法师（后续开放）")
-	profession.add_item("道士（后续开放）")
-	profession.set_item_disabled(1, true)
-	profession.set_item_disabled(2, true)
-	right.add_child(profession)
-	gender_select = OptionButton.new()
-	gender_select.add_item("男")
-	gender_select.add_item("女")
-	right.add_child(gender_select)
-	var create_button := Button.new()
-	create_button.text = "创建并进入游戏"
-	create_button.custom_minimum_size.y = 64
+	name_input.position = Vector2(26, 84)
+	name_input.size = Vector2(310, 52)
+	name_input.theme_type_variation = "GothicSearchField"
+	name_input.text_submitted.connect(func(_text: String) -> void: _create_character())
+	panel.add_child(name_input)
+	var profession_caption := Label.new()
+	profession_caption.name = "ProfessionCaption"
+	profession_caption.text = "选择职业"
+	profession_caption.position = Vector2(26, 158)
+	profession_caption.size = Vector2(310, 24)
+	profession_caption.theme_type_variation = "GothicMutedLabel"
+	panel.add_child(profession_caption)
+	profession_button_group = ButtonGroup.new()
+	profession_button_group.allow_unpress = false
+	for index in range(ProfessionRules.PROFESSIONS.size()):
+		var profession_name: String = ProfessionRules.PROFESSIONS[index]
+		var presentation: Dictionary = PROFESSION_PRESENTATION[profession_name]
+		var button := Button.new()
+		button.name = "%sProfession" % str(presentation.id).capitalize()
+		button.toggle_mode = true
+		button.button_group = profession_button_group
+		button.text = "%s\n%s\n%s" % [presentation.glyph, profession_name, presentation.role]
+		button.position = Vector2(20 + index * 110, 222)
+		button.size = Vector2(104, 132)
+		button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.add_theme_font_size_override("font_size", 14)
+		button.theme_type_variation = "GothicCharacterHallProfessionGemButton"
+		button.set_meta("calibration_layout_revision", 1)
+		button.set_meta("calibration_runtime_text", true)
+		button.set_meta("stable_id", "character.profession.%s" % presentation.id)
+		button.set_meta("profession_id", presentation.id)
+		button.pressed.connect(_select_creation_profession.bind(profession_name))
+		panel.add_child(button)
+		profession_buttons[profession_name] = button
+	var create_hint := Label.new()
+	create_hint.name = "CreationHint"
+	create_hint.text = "职业决定初始技能、属性与成长路线"
+	create_hint.position = Vector2(26, 338)
+	create_hint.size = Vector2(310, 24)
+	create_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	create_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	create_hint.theme_type_variation = "GothicMutedLabel"
+	create_hint.add_theme_font_size_override("font_size", 12)
+	panel.add_child(create_hint)
+	create_button = Button.new()
+	create_button.name = "CreateCharacter"
+	create_button.text = "创建角色"
+	create_button.position = Vector2(26, 374)
+	create_button.size = Vector2(310, 58)
+	create_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	create_button.theme_type_variation = "GothicCharacterHallCreateGemButton"
+	create_button.add_theme_font_size_override("font_size", 18)
+	create_button.set_meta("stable_id", "character.create")
 	create_button.pressed.connect(_create_character)
-	right.add_child(create_button)
+	create_button.z_index = 2
+	panel.add_child(create_button)
 	message_label = Label.new()
+	message_label.name = "Message"
+	message_label.position = Vector2(28, 446)
+	message_label.size = Vector2(306, 82)
+	message_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	message_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	right.add_child(message_label)
+	message_label.theme_type_variation = "GothicMutedLabel"
+	message_label.z_index = 1
+	panel.add_child(message_label)
+	_refresh_creation_controls()
 
 
 func _refresh_profiles() -> void:
-	for child: Node in list_box.get_children():
-		child.queue_free()
-	var profiles := PlayerState.list_characters()
-	if profiles.is_empty():
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
+	for child in list_box.get_children():
+		child.free()
+	profile_cards.clear()
+	_profiles = PlayerState.list_characters()
+	roster_count_label.text = "%d 个角色 · 每个角色都可作为主角色" % _profiles.size()
+	if _profiles.is_empty():
+		selected_main_profile_id = ""
+		selected_ai_profile_id = ""
 		var empty := Label.new()
-		empty.text = "暂无角色，请创建第一名战士。"
+		empty.name = "EmptyRoster"
+		empty.text = "暂无角色\n请在右侧创建第一名角色"
+		empty.custom_minimum_size = Vector2(270, 90)
+		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		empty.theme_type_variation = "GothicMutedLabel"
 		list_box.add_child(empty)
+		_refresh_selection_state()
 		return
-	for profile: Dictionary in profiles:
-		var button := Button.new()
-		button.text = "%s　Lv.%d %s%s" % [profile.get("name", "未命名"), int(profile.get("level", 1)), profile.get("gender", "男"), profile.get("profession", "战士")]
-		button.custom_minimum_size.y = 72
-		button.pressed.connect(_enter_character.bind(str(profile.get("id", ""))))
-		list_box.add_child(button)
+	if not _profile_exists(selected_main_profile_id):
+		var active_id := str(PlayerState.active_profile_id)
+		selected_main_profile_id = active_id if _profile_exists(active_id) else str(_profiles[0].get("id", ""))
+	if str(PlayerState.active_profile_id) != selected_main_profile_id:
+		if not PlayerState.select_character(selected_main_profile_id):
+			message_label.text = "默认角色存档不存在或已损坏"
+	if selected_ai_profile_id == selected_main_profile_id or not _profile_exists(selected_ai_profile_id):
+		selected_ai_profile_id = ""
+	for profile: Dictionary in _profiles:
+		_add_profile_card(profile)
+	_refresh_selection_state()
 
 
-func _create_character() -> void:
-	var error := PlayerState.create_character(name_input.text, "战士", gender_select.get_item_text(gender_select.selected))
-	if not error.is_empty():
-		message_label.text = error
+func _add_profile_card(profile: Dictionary) -> void:
+	var profile_id := str(profile.get("id", ""))
+	var card := Control.new()
+	card.name = "Profile_%s" % _safe_node_name(profile_id)
+	card.custom_minimum_size = Vector2(270, 96)
+	card.set_meta("profile_id", profile_id)
+	list_box.add_child(card)
+	var main_button := Button.new()
+	main_button.name = "Main"
+	main_button.text = "%s\nLv.%d  ·  %s" % [
+		str(profile.get("name", "未命名")),
+		int(profile.get("level", 1)),
+		str(profile.get("profession", "战士")),
+	]
+	main_button.position = Vector2(0, 7)
+	main_button.size = Vector2(184, PROFILE_ROW_BUTTON_HEIGHT)
+	main_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	main_button.theme_type_variation = "GothicCharacterHallProfilePlainButton"
+	main_button.add_theme_font_size_override("font_size", 16)
+	main_button.set_meta("calibration_layout_revision", 1)
+	main_button.set_meta("calibration_runtime_text", true)
+	main_button.set_meta("stable_id", "character.profile.%s.main" % profile_id)
+	main_button.pressed.connect(_on_profile_main_pressed.bind(profile_id))
+	card.add_child(main_button)
+	var ai_button := Button.new()
+	ai_button.name = "AITeammate"
+	ai_button.position = Vector2(190, 10)
+	ai_button.size = Vector2(80, PROFILE_ROW_BUTTON_HEIGHT - 6.0)
+	ai_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ai_button.theme_type_variation = "GothicCharacterHallAIPlainButton"
+	ai_button.add_theme_font_size_override("font_size", 12)
+	ai_button.set_meta("calibration_layout_revision", 1)
+	ai_button.set_meta("calibration_runtime_text", true)
+	ai_button.set_meta("stable_id", "character.profile.%s.ai_teammate" % profile_id)
+	ai_button.pressed.connect(_on_profile_ai_pressed.bind(profile_id))
+	card.add_child(ai_button)
+	profile_cards[profile_id] = {
+		"panel": card,
+		"main_button": main_button,
+		"ai_button": ai_button,
+		"profile": profile.duplicate(true),
+	}
+
+
+func _refresh_selection_state() -> void:
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
+	for profile_id: String in profile_cards:
+		var entry: Dictionary = profile_cards[profile_id]
+		var main_button: Button = entry.main_button
+		var ai_button: Button = entry.ai_button
+		var selected := profile_id == selected_main_profile_id
+		GothicUIThemeScript.set_character_selection_feedback(
+			main_button,
+			selected,
+			&"GothicCharacterHallProfilePlainButton",
+			&"GothicCharacterHallSelectedProfilePlainButton",
+			"character.profile",
+		)
+		ai_button.disabled = true
+		ai_button.theme_type_variation = "GothicCharacterHallAIPlainButton"
+		ai_button.text = "AI队友\n暂未开放"
+	if create_button != null:
+		create_button.text = "创建角色"
+	ai_teammate_toggle.disabled = true
+	ai_teammate_toggle.set_pressed_no_signal(false)
+	teammate_status_label.text = "AI队友功能暂未开放"
+	enter_button.disabled = selected_main_profile_id.is_empty()
+	enter_button.text = "选择主角色" if enter_button.disabled else "进入 HardCore"
+	delete_button.disabled = selected_main_profile_id.is_empty()
+	_refresh_character_preview()
+
+
+func _refresh_character_preview() -> void:
+	for child in preview_visual_root.get_children():
+		child.free()
+	var profile := _profile_by_id(selected_main_profile_id)
+	if profile.is_empty():
+		preview_name_label.text = "尚未选择人物"
+		preview_detail_label.text = "从左侧选择主角色"
 		return
-	_enter_game()
+	var profession_name := str(profile.get("profession", "战士"))
+	preview_name_label.text = str(profile.get("name", "未命名"))
+	preview_detail_label.text = "%s · 等级 %d · 主角色" % [
+		profession_name,
+		int(profile.get("level", 1)),
+	]
+	var paper_doll := EquipmentCharacterPreviewScript.new()
+	paper_doll.name = "RuntimePaperDoll"
+	paper_doll.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	paper_doll.center_on_opaque_bounds = false
+	paper_doll.configure_presentation_mode("classic_avatar")
+	paper_doll.configure_profile(
+		profession_name,
+		_profile_equipment_snapshot(selected_main_profile_id)
+	)
+	paper_doll.set_meta("preview_profile_id", selected_main_profile_id)
+	paper_doll.set_meta("preview_source", "selected_profile_save_equipment")
+	paper_doll.set_meta("paper_doll_presentation_mode", "classic_avatar")
+	preview_visual_root.add_child(paper_doll)
+	paper_doll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 
-func _enter_character(profile_id: String) -> void:
+func _profile_equipment_snapshot(profile_id: String) -> Dictionary:
+	if profile_id.is_empty():
+		return {}
+	var profile_path := "%s/%s.json" % [PlayerState.profile_directory, profile_id]
+	if not FileAccess.file_exists(profile_path):
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(profile_path))
+	if not parsed is Dictionary:
+		return {}
+	var saved_equipment: Variant = parsed.get("equipment", {})
+	if not saved_equipment is Dictionary:
+		return {}
+	return PlayerState.migrate_equipment_slots(saved_equipment).duplicate(true)
+
+
+func _on_profile_main_pressed(profile_id: String) -> void:
+	if _roster_press_is_suppressed():
+		return
+	_select_main_profile(profile_id)
+
+
+func _on_profile_ai_pressed(profile_id: String) -> void:
+	if _roster_press_is_suppressed():
+		return
+	_select_ai_profile(profile_id)
+
+
+func _select_main_profile(profile_id: String) -> void:
+	if not _profile_exists(profile_id):
+		return
+	if profile_id == selected_ai_profile_id:
+		selected_ai_profile_id = ""
+	selected_main_profile_id = profile_id
 	if not PlayerState.select_character(profile_id):
 		message_label.text = "角色存档不存在或已损坏"
 		_refresh_profiles()
 		return
-	_enter_game()
+	# The preview already identifies the selected character.  Keep the creation
+	# action's label isolated so a selection message cannot look like button text.
+	message_label.text = "已选择主角色：%s" % PlayerState.character_name
+	_refresh_selection_state()
 
 
-func _enter_game() -> void:
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+func _select_ai_profile(profile_id: String) -> void:
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
+	_refresh_selection_state()
+
+
+func _set_ai_teammate_enabled(enabled: bool) -> void:
+	ai_teammate_enabled = false
+	selected_ai_profile_id = ""
+	_refresh_selection_state()
+
+
+func _select_creation_profession(profession_name: String) -> void:
+	if not ProfessionRules.is_valid_profession(profession_name):
+		return
+	selected_creation_profession = profession_name
+	message_label.text = ""
+	_refresh_creation_controls()
+
+
+func _refresh_creation_controls() -> void:
+	for profession_name: String in profession_buttons:
+		var button: Button = profession_buttons[profession_name]
+		var selected := profession_name == selected_creation_profession
+		GothicUIThemeScript.set_character_selection_feedback(
+			button,
+			selected,
+			&"GothicCharacterHallProfessionGemButton",
+			&"GothicCharacterHallSelectedProfessionGemButton",
+			"character.profession",
+		)
+	if create_button != null:
+		create_button.text = "创建角色"
+		create_button.theme_type_variation = "GothicCharacterHallCreateGemButton"
+		create_button.z_index = 2
+	if message_label != null:
+		message_label.z_index = 1
+
+
+func _restore_character_action_visual_contract() -> void:
+	if create_button != null:
+		create_button.theme_type_variation = "GothicCharacterHallCreateGemButton"
+		create_button.text = "创建角色"
+		create_button.z_index = 2
+	if message_label != null:
+		message_label.z_index = 1
+
+
+func _create_character() -> void:
+	if create_button == null:
+		return
+	last_creation_request = build_creation_request()
+	character_creation_requested.emit(last_creation_request.duplicate(true))
+	var error := PlayerState.create_character(
+		str(last_creation_request.character_name),
+		selected_creation_profession,
+		FIXED_CHARACTER_GENDER
+	)
+	if not error.is_empty():
+		message_label.add_theme_color_override("font_color", Color("d47868"))
+		message_label.text = error
+		return
+	selected_main_profile_id = PlayerState.active_profile_id
+	selected_ai_profile_id = ""
+	message_label.add_theme_color_override("font_color", Color("a8c38f"))
+	message_label.text = "角色创建成功，请选择是否携带 AI 队友"
+	name_input.clear()
+	_refresh_profiles()
+
+
+func _request_delete_selected_character() -> void:
+	var profile := _profile_by_id(selected_main_profile_id)
+	if profile.is_empty():
+		message_label.text = "请先选择要删除的人物"
+		return
+	var profile_name := str(profile.get("name", "未命名"))
+	delete_confirmation.open_confirmation({
+		"action_id": DELETE_ACTION_ID,
+		"tone": "danger",
+		"title": "删除人物",
+		"message": "确定删除人物「%s」吗？\n该人物的存档将被永久删除。" % profile_name,
+		"cancel_label": "取消",
+		"confirm_label": "确认删除",
+		"context": {
+			"profile_id": selected_main_profile_id,
+			"profile_name": profile_name,
+		},
+	})
+
+
+func _on_delete_confirmation_confirmed(request: Dictionary) -> void:
+	if str(request.get("action_id", "")) != DELETE_ACTION_ID:
+		return
+	var context: Dictionary = request.get("context", {})
+	var profile_id := str(context.get("profile_id", ""))
+	var profile_name := str(context.get("profile_name", "未命名"))
+	var result: Dictionary = PlayerState.delete_character_profile(profile_id)
+	if not bool(result.get("success", false)):
+		message_label.add_theme_color_override("font_color", Color("d47868"))
+		message_label.text = "人物删除失败，请重试"
+		return
+	if selected_main_profile_id == profile_id:
+		selected_main_profile_id = ""
+	selected_ai_profile_id = ""
+	_refresh_profiles()
+	message_label.add_theme_color_override("font_color", Color("a8c38f"))
+	message_label.text = "已删除人物：%s" % profile_name
+
+
+func build_creation_request() -> Dictionary:
+	return {
+		"contract_id": CREATION_CONTRACT_ID,
+		"character_name": name_input.text.strip_edges().substr(0, 12),
+		"profession_id": ProfessionRules.profession_id(selected_creation_profession),
+		"profession_name": selected_creation_profession,
+		"gender": FIXED_CHARACTER_GENDER,
+		"ai_teammate_enabled": false,
+		"ai_teammate_profile_id": "",
+	}
+
+
+func _enter_selected_character() -> void:
+	if _launch_in_progress:
+		return
+	if selected_main_profile_id.is_empty():
+		message_label.text = "请先选择主角色"
+		return
+	var launch_started_msec := Time.get_ticks_msec()
+	var profile_hydration_msec := 0
+	var preload_was_ready_at_click := (
+		_launch_scene_preload_state == LAUNCH_PRELOAD_READY
+	)
+	_launch_in_progress = true
+	launch_loading_overlay.show_loading_immediately("character:%s" % selected_main_profile_id)
+	# Global button feedback may perform its first texture preparation on this
+	# activation. Present Loading in a completed draw before that work, profile
+	# hydration, or main-scene construction is allowed to begin.
+	# The first resume happens before that frame is drawn; yielding a second
+	# process frame lets the visible overlay complete one full render cycle.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	enter_button.disabled = true
+	GothicUIThemeScript.set_button_feedback(
+		enter_button,
+		GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION,
+		"character.launch",
+	)
+	# The hall already hydrates a profile when it becomes selected. Do not parse
+	# the same save a second time on launch; only hydrate when the authority no
+	# longer matches the requested profile.
+	var profile_hydration_started_msec := Time.get_ticks_msec()
+	if (
+		PlayerState.active_profile_id != selected_main_profile_id
+		and not PlayerState.select_character(selected_main_profile_id)
+	):
+		profile_hydration_msec = (
+			Time.get_ticks_msec() - profile_hydration_started_msec
+		)
+		_restore_after_launch_failure("角色存档不存在或已损坏")
+		_refresh_profiles()
+		return
+	profile_hydration_msec = (
+		Time.get_ticks_msec() - profile_hydration_started_msec
+	)
+	last_launch_request = build_launch_request()
+	get_tree().root.set_meta(LAUNCH_CONTEXT_META, last_launch_request.duplicate(true))
+	character_launch_requested.emit(last_launch_request.duplicate(true))
+	var preload_wait_started_msec := Time.get_ticks_msec()
+	var launch_scene := await _wait_for_launch_scene_preload()
+	var preload_wait_msec := Time.get_ticks_msec() - preload_wait_started_msec
+	if OS.is_debug_build():
+		print("[CharacterLaunchProfile] ", JSON.stringify({
+			"total_before_handoff_ms": Time.get_ticks_msec() - launch_started_msec,
+			"profile_hydration_ms": profile_hydration_msec,
+			"preload_wait_ms": preload_wait_msec,
+			"preload_was_ready_at_click": preload_was_ready_at_click,
+			"preload_state": _launch_scene_preload_state,
+			"preload_request_count": _launch_scene_preload_request_count,
+		}))
+	if launch_scene == null:
+		_restore_after_launch_failure("暂时无法进入游戏，请重试")
+		return
+	if suppress_scene_change_for_test:
+		return
+	var scene_error := get_tree().change_scene_to_packed(launch_scene)
+	if scene_error != OK:
+		_restore_after_launch_failure("暂时无法进入游戏，请重试")
+
+
+func _restore_after_launch_failure(reason: String) -> void:
+	_launch_in_progress = false
+	launch_loading_overlay.hide()
+	GothicUIThemeScript.clear_button_feedback(enter_button)
+	enter_button.disabled = selected_main_profile_id.is_empty()
+	message_label.text = reason
+
+
+func build_launch_request() -> Dictionary:
+	return {
+		"contract_id": LAUNCH_CONTRACT_ID,
+		"main_profile_id": selected_main_profile_id,
+		"ai_teammate_enabled": false,
+		"ai_teammate_profile_id": "",
+		"ai_control_mode": "disabled",
+	}
+
+
+func _profile_by_id(profile_id: String) -> Dictionary:
+	for profile: Dictionary in _profiles:
+		if str(profile.get("id", "")) == profile_id:
+			return profile
+	return {}
+
+
+func _profile_exists(profile_id: String) -> bool:
+	return not profile_id.is_empty() and not _profile_by_id(profile_id).is_empty()
+
+
+func _safe_node_name(value: String) -> String:
+	return value.replace(".", "_").replace("-", "_").replace(" ", "_")
+
+
+func _section_panel(node_name: String, rect: Rect2) -> Control:
+	return GothicFrameFactoryScript.add_filled_section(content_root, node_name, rect)
+
+
+func _section_title(node_name: String, text_value: String, width: float) -> Label:
+	var title := Label.new()
+	title.name = node_name
+	title.text = text_value
+	title.position = Vector2(18, 12)
+	title.size = Vector2(width - 36.0, 30)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.theme_type_variation = "GothicSectionTitle"
+	return title

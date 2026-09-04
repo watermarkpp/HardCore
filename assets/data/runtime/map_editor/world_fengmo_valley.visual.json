@@ -1,0 +1,105 @@
+{
+  "base_color": "#182018",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/fafb6ced23f96f56c194de3d2ea19db7cde868b9f700d1d889b7c2390846b233.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "fafb6ced23f96f56c194de3d2ea19db7cde868b9f700d1d889b7c2390846b233"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/b61898c76d3589522bb584468dcb64d7abb2dfa157ca26a04a7bbe3386a8c13f.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "b61898c76d3589522bb584468dcb64d7abb2dfa157ca26a04a7bbe3386a8c13f"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/8f90254fa54cdd19ce66b98dc7d7bd45a5195d8d4c4b26c8418145102c389efd.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "8f90254fa54cdd19ce66b98dc7d7bd45a5195d8d4c4b26c8418145102c389efd"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/4781cf951f38cf53fb5a91f40108158547a5f9afee1b1c590ede892e1941a261.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "4781cf951f38cf53fb5a91f40108158547a5f9afee1b1c590ede892e1941a261"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/a0663c41f61868100a4df87319563863101c7ffb74250d76c06b520f2aa3534b.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "a0663c41f61868100a4df87319563863101c7ffb74250d76c06b520f2aa3534b"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/00cf396606c9cc45c0dd8b3bd990ae0bf2fe987f30697f9a05dd4f7539b92155.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "sha256": "00cf396606c9cc45c0dd8b3bd990ae0bf2fe987f30697f9a05dd4f7539b92155"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 6,
+    "required_chunk_count": 6,
+    "source_chunk_count": 6
+  },
+  "design_size": [
+    48,
+    48
+  ],
+  "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+  "ground_pixel_center": [
+    1536.0,
+    752.0
+  ],
+  "ground_pixel_size": [
+    3072,
+    1536
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "world_fengmo_valley",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 910005,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "e37b779db17e99a2f14c50b277dc776dae98efb3e69a4a0517e35d427d89dfe0",
+  "source_ground_manifest_sha256": "238301f21e160ec5bfe213fdf7816f1cc71ceac979f11ad710c4cd8c894735c9",
+  "source_ground_state_sha256": "22c99c976d9168e5a7e049f19eff419adc74d41f7ab00130bfb6bc75e109ffea",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

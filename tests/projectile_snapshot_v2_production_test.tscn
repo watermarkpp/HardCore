@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q1b_projectile_v2"]
+[ext_resource type="Script" path="res://tests/projectile_snapshot_v2_production_test.gd" id="1"]
+[node name="ProjectileSnapshotV2Production" type="Node"]
+script = ExtResource("1")

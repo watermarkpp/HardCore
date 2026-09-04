@@ -1,0 +1,4995 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "record_count": 33,
+  "provenance_verdict": "33_complete_classic_structure_candidates_plus_33_current_Crystal_runtime_candidates_but_no_authenticated_user_current_table",
+  "selection_rule": "Top-level classic fields come from the Paradox candidate and are never silently merged with Crystal values; current runtime candidates are nested separately.",
+  "records": [
+    {
+      "skill_id": 15,
+      "stable_skill_id": "taoist.defense",
+      "name": "神圣战甲术",
+      "job": 2,
+      "effect_type": 9,
+      "effect": 12,
+      "spell": 15,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 40,
+      "train_levels": [
+        25,
+        27,
+        29
+      ],
+      "max_train": [
+        200,
+        500,
+        800
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 25,
+          "training_points": null,
+          "mana_cost": 2,
+          "delay": 40
+        },
+        {
+          "level": 1,
+          "required_character_level": 25,
+          "training_points": 5000,
+          "mana_cost": 4,
+          "delay": 40
+        },
+        {
+          "level": 2,
+          "required_character_level": 27,
+          "training_points": 10000,
+          "mana_cost": 6,
+          "delay": 40
+        },
+        {
+          "level": 3,
+          "required_character_level": 29,
+          "training_points": 15000,
+          "mana_cost": 8,
+          "delay": 40
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 71,
+        "base_mana_cost": 2,
+        "level_mana_cost": 2,
+        "icon": 14,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 16,
+      "stable_skill_id": "taoist.entrapment",
+      "name": "困魔咒",
+      "job": 2,
+      "effect_type": 10,
+      "effect": 14,
+      "spell": 10,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 5,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 50,
+      "train_levels": [
+        28,
+        30,
+        32
+      ],
+      "max_train": [
+        100,
+        500,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 28,
+          "training_points": null,
+          "mana_cost": 7,
+          "delay": 50
+        },
+        {
+          "level": 1,
+          "required_character_level": 28,
+          "training_points": 3000,
+          "mana_cost": 10,
+          "delay": 50
+        },
+        {
+          "level": 2,
+          "required_character_level": 30,
+          "training_points": 6000,
+          "mana_cost": 13,
+          "delay": 50
+        },
+        {
+          "level": 3,
+          "required_character_level": 32,
+          "training_points": 12000,
+          "mana_cost": 16,
+          "delay": 50
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 73,
+        "base_mana_cost": 7,
+        "level_mana_cost": 3,
+        "icon": 15,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 2,
+      "stable_skill_id": "taoist.healing",
+      "name": "治愈术",
+      "job": 2,
+      "effect_type": 2,
+      "effect": 2,
+      "spell": 7,
+      "power": 14,
+      "max_power": 28,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 40,
+      "train_levels": [
+        7,
+        11,
+        16
+      ],
+      "max_train": [
+        20,
+        100,
+        300
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 7,
+          "training_points": null,
+          "mana_cost": 3,
+          "delay": 40
+        },
+        {
+          "level": 1,
+          "required_character_level": 7,
+          "training_points": 500,
+          "mana_cost": 5,
+          "delay": 40
+        },
+        {
+          "level": 2,
+          "required_character_level": 11,
+          "training_points": 1500,
+          "mana_cost": 7,
+          "delay": 40
+        },
+        {
+          "level": 3,
+          "required_character_level": 16,
+          "training_points": 3000,
+          "mana_cost": 9,
+          "delay": 40
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 61,
+        "base_mana_cost": 3,
+        "level_mana_cost": 2,
+        "icon": 1,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 18,
+      "stable_skill_id": "taoist.invisibility",
+      "name": "隐身术",
+      "job": 2,
+      "effect_type": 4,
+      "effect": 16,
+      "spell": 5,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 50,
+      "train_levels": [
+        20,
+        23,
+        26
+      ],
+      "max_train": [
+        100,
+        200,
+        300
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 20,
+          "training_points": null,
+          "mana_cost": 1,
+          "delay": 50
+        },
+        {
+          "level": 1,
+          "required_character_level": 20,
+          "training_points": 3000,
+          "mana_cost": 2,
+          "delay": 50
+        },
+        {
+          "level": 2,
+          "required_character_level": 23,
+          "training_points": 6000,
+          "mana_cost": 3,
+          "delay": 50
+        },
+        {
+          "level": 3,
+          "required_character_level": 26,
+          "training_points": 9000,
+          "mana_cost": 4,
+          "delay": 50
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 67,
+        "base_mana_cost": 1,
+        "level_mana_cost": 1,
+        "icon": 17,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 14,
+      "stable_skill_id": "taoist.magic_defense",
+      "name": "幽灵盾",
+      "job": 2,
+      "effect_type": 9,
+      "effect": 11,
+      "spell": 15,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 40,
+      "train_levels": [
+        22,
+        24,
+        26
+      ],
+      "max_train": [
+        200,
+        500,
+        800
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 22,
+          "training_points": null,
+          "mana_cost": 2,
+          "delay": 40
+        },
+        {
+          "level": 1,
+          "required_character_level": 22,
+          "training_points": 5000,
+          "mana_cost": 4,
+          "delay": 40
+        },
+        {
+          "level": 2,
+          "required_character_level": 24,
+          "training_points": 10000,
+          "mana_cost": 6,
+          "delay": 40
+        },
+        {
+          "level": 3,
+          "required_character_level": 26,
+          "training_points": 15000,
+          "mana_cost": 8,
+          "delay": 40
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 69,
+        "base_mana_cost": 2,
+        "level_mana_cost": 2,
+        "icon": 13,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 29,
+      "stable_skill_id": "taoist.mass_healing",
+      "name": "群体治疗术",
+      "job": 2,
+      "effect_type": 2,
+      "effect": 27,
+      "spell": 12,
+      "power": 10,
+      "max_power": 20,
+      "def_spell": 25,
+      "def_power": 4,
+      "def_max_power": 4,
+      "delay": 40,
+      "train_levels": [
+        33,
+        35,
+        38
+      ],
+      "max_train": [
+        200,
+        500,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 33,
+          "training_points": null,
+          "mana_cost": 28,
+          "delay": 40
+        },
+        {
+          "level": 1,
+          "required_character_level": 33,
+          "training_points": 4000,
+          "mana_cost": 31,
+          "delay": 40
+        },
+        {
+          "level": 2,
+          "required_character_level": 35,
+          "training_points": 8000,
+          "mana_cost": 34,
+          "delay": 40
+        },
+        {
+          "level": 3,
+          "required_character_level": 38,
+          "training_points": 12000,
+          "mana_cost": 37,
+          "delay": 40
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 75,
+        "base_mana_cost": 28,
+        "level_mana_cost": 3,
+        "icon": 28,
+        "power_base": 4,
+        "power_bonus": 0,
+        "magic_power_base": 10,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 19,
+      "stable_skill_id": "taoist.mass_invisibility",
+      "name": "集体隐身术",
+      "job": 2,
+      "effect_type": 8,
+      "effect": 17,
+      "spell": 10,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 50,
+      "train_levels": [
+        21,
+        25,
+        29
+      ],
+      "max_train": [
+        100,
+        300,
+        500
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 21,
+          "training_points": null,
+          "mana_cost": 2,
+          "delay": 50
+        },
+        {
+          "level": 1,
+          "required_character_level": 21,
+          "training_points": 2000,
+          "mana_cost": 4,
+          "delay": 50
+        },
+        {
+          "level": 2,
+          "required_character_level": 25,
+          "training_points": 4000,
+          "mana_cost": 6,
+          "delay": 50
+        },
+        {
+          "level": 3,
+          "required_character_level": 29,
+          "training_points": 8000,
+          "mana_cost": 8,
+          "delay": 50
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 68,
+        "base_mana_cost": 2,
+        "level_mana_cost": 2,
+        "icon": 18,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 6,
+      "stable_skill_id": "taoist.poison",
+      "name": "施毒术",
+      "job": 2,
+      "effect_type": 2,
+      "effect": 4,
+      "spell": 4,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 40,
+      "train_levels": [
+        14,
+        17,
+        20
+      ],
+      "max_train": [
+        100,
+        500,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 14,
+          "training_points": null,
+          "mana_cost": 2,
+          "delay": 40
+        },
+        {
+          "level": 1,
+          "required_character_level": 14,
+          "training_points": 1000,
+          "mana_cost": 3,
+          "delay": 40
+        },
+        {
+          "level": 2,
+          "required_character_level": 17,
+          "training_points": 2000,
+          "mana_cost": 4,
+          "delay": 40
+        },
+        {
+          "level": 3,
+          "required_character_level": 20,
+          "training_points": 4000,
+          "mana_cost": 5,
+          "delay": 40
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 63,
+        "base_mana_cost": 2,
+        "level_mana_cost": 1,
+        "icon": 5,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 28,
+      "stable_skill_id": "taoist.revelation",
+      "name": "心灵启示",
+      "job": 2,
+      "effect_type": 2,
+      "effect": 26,
+      "spell": 16,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 40,
+      "train_levels": [
+        26,
+        30,
+        35
+      ],
+      "max_train": [
+        100,
+        200,
+        300
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 26,
+          "training_points": null,
+          "mana_cost": 4,
+          "delay": 40
+        },
+        {
+          "level": 1,
+          "required_character_level": 26,
+          "training_points": 4000,
+          "mana_cost": 8,
+          "delay": 40
+        },
+        {
+          "level": 2,
+          "required_character_level": 30,
+          "training_points": 8000,
+          "mana_cost": 12,
+          "delay": 40
+        },
+        {
+          "level": 3,
+          "required_character_level": 35,
+          "training_points": 12000,
+          "mana_cost": 16,
+          "delay": 40
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 70,
+        "base_mana_cost": 4,
+        "level_mana_cost": 4,
+        "icon": 27,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 13,
+      "stable_skill_id": "taoist.soul_fire_talisman",
+      "name": "灵魂火符",
+      "job": 2,
+      "effect_type": 8,
+      "effect": 10,
+      "spell": 5,
+      "power": 8,
+      "max_power": 24,
+      "def_spell": 2,
+      "def_power": 3,
+      "def_max_power": 3,
+      "delay": 60,
+      "train_levels": [
+        18,
+        21,
+        24
+      ],
+      "max_train": [
+        150,
+        400,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 18,
+          "training_points": null,
+          "mana_cost": 3,
+          "delay": 60
+        },
+        {
+          "level": 1,
+          "required_character_level": 18,
+          "training_points": 2000,
+          "mana_cost": 4,
+          "delay": 60
+        },
+        {
+          "level": 2,
+          "required_character_level": 21,
+          "training_points": 4000,
+          "mana_cost": 5,
+          "delay": 60
+        },
+        {
+          "level": 3,
+          "required_character_level": 24,
+          "training_points": 6000,
+          "mana_cost": 6,
+          "delay": 60
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 64,
+        "base_mana_cost": 3,
+        "level_mana_cost": 1,
+        "icon": 12,
+        "power_base": 7,
+        "power_bonus": 0,
+        "magic_power_base": 13,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 4,
+      "stable_skill_id": "taoist.spiritual_warfare",
+      "name": "精神力战法",
+      "job": 2,
+      "effect_type": 0,
+      "effect": 0,
+      "spell": 0,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 0,
+      "train_levels": [
+        9,
+        13,
+        19
+      ],
+      "max_train": [
+        20,
+        200,
+        300
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 9,
+          "training_points": null,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 1,
+          "required_character_level": 9,
+          "training_points": 1000,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 2,
+          "required_character_level": 13,
+          "training_points": 4000,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 3,
+          "required_character_level": 19,
+          "training_points": 8000,
+          "mana_cost": 0,
+          "delay": 0
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 62,
+        "base_mana_cost": 0,
+        "level_mana_cost": 0,
+        "icon": 3,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1800,
+          1800,
+          1800,
+          1800
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 30,
+      "stable_skill_id": "taoist.summon_divine_beast",
+      "name": "召唤神兽",
+      "job": 2,
+      "effect_type": 4,
+      "effect": 28,
+      "spell": 16,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 24,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 120,
+      "train_levels": [
+        35,
+        37,
+        40
+      ],
+      "max_train": [
+        500,
+        1000,
+        1500
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 35,
+          "training_points": null,
+          "mana_cost": 28,
+          "delay": 120
+        },
+        {
+          "level": 1,
+          "required_character_level": 35,
+          "training_points": 2000,
+          "mana_cost": 32,
+          "delay": 120
+        },
+        {
+          "level": 2,
+          "required_character_level": 37,
+          "training_points": 4000,
+          "mana_cost": 36,
+          "delay": 120
+        },
+        {
+          "level": 3,
+          "required_character_level": 40,
+          "training_points": 8000,
+          "mana_cost": 40,
+          "delay": 120
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 78,
+        "base_mana_cost": 28,
+        "level_mana_cost": 4,
+        "icon": 29,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 17,
+      "stable_skill_id": "taoist.summon_skeleton",
+      "name": "召唤骷髅",
+      "job": 2,
+      "effect_type": 4,
+      "effect": 15,
+      "spell": 16,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 8,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 50,
+      "train_levels": [
+        19,
+        23,
+        26
+      ],
+      "max_train": [
+        100,
+        200,
+        300
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 19,
+          "training_points": null,
+          "mana_cost": 12,
+          "delay": 50
+        },
+        {
+          "level": 1,
+          "required_character_level": 19,
+          "training_points": 2000,
+          "mana_cost": 16,
+          "delay": 50
+        },
+        {
+          "level": 2,
+          "required_character_level": 23,
+          "training_points": 4000,
+          "mana_cost": 20,
+          "delay": 50
+        },
+        {
+          "level": 3,
+          "required_character_level": 26,
+          "training_points": 8000,
+          "mana_cost": 24,
+          "delay": 50
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 65,
+        "base_mana_cost": 12,
+        "level_mana_cost": 4,
+        "icon": 16,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 3,
+      "stable_skill_id": "warrior.basic_swordsmanship",
+      "name": "基本剑术",
+      "job": 0,
+      "effect_type": 0,
+      "effect": 0,
+      "spell": 0,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 0,
+      "train_levels": [
+        7,
+        11,
+        16
+      ],
+      "max_train": [
+        20,
+        200,
+        500
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 7,
+          "training_points": null,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 1,
+          "required_character_level": 7,
+          "training_points": 1000,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 2,
+          "required_character_level": 11,
+          "training_points": 4000,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 3,
+          "required_character_level": 16,
+          "training_points": 8000,
+          "mana_cost": 0,
+          "delay": 0
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 1,
+        "base_mana_cost": 0,
+        "level_mana_cost": 0,
+        "icon": 2,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1800,
+          1800,
+          1800,
+          1800
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 26,
+      "stable_skill_id": "warrior.fire_sword",
+      "name": "烈火剑法",
+      "job": 0,
+      "effect_type": 0,
+      "effect": 24,
+      "spell": 0,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 7,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 0,
+      "train_levels": [
+        35,
+        37,
+        40
+      ],
+      "max_train": [
+        300,
+        600,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 35,
+          "training_points": null,
+          "mana_cost": 7,
+          "delay": 0
+        },
+        {
+          "level": 1,
+          "required_character_level": 35,
+          "training_points": 2000,
+          "mana_cost": 7,
+          "delay": 0
+        },
+        {
+          "level": 2,
+          "required_character_level": 37,
+          "training_points": 4000,
+          "mana_cost": 7,
+          "delay": 0
+        },
+        {
+          "level": 3,
+          "required_character_level": 40,
+          "training_points": 6000,
+          "mana_cost": 7,
+          "delay": 0
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 8,
+        "base_mana_cost": 7,
+        "level_mana_cost": 0,
+        "icon": 25,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1800,
+          1800,
+          1800,
+          1800
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 25,
+      "stable_skill_id": "warrior.half_moon",
+      "name": "半月弯刀",
+      "job": 0,
+      "effect_type": 0,
+      "effect": 23,
+      "spell": 0,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 3,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 0,
+      "train_levels": [
+        28,
+        31,
+        34
+      ],
+      "max_train": [
+        500,
+        1000,
+        1500
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 28,
+          "training_points": null,
+          "mana_cost": 3,
+          "delay": 0
+        },
+        {
+          "level": 1,
+          "required_character_level": 28,
+          "training_points": 8000,
+          "mana_cost": 3,
+          "delay": 0
+        },
+        {
+          "level": 2,
+          "required_character_level": 31,
+          "training_points": 16000,
+          "mana_cost": 3,
+          "delay": 0
+        },
+        {
+          "level": 3,
+          "required_character_level": 34,
+          "training_points": 24000,
+          "mana_cost": 3,
+          "delay": 0
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 4,
+        "base_mana_cost": 3,
+        "level_mana_cost": 0,
+        "icon": 24,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1800,
+          1800,
+          1800,
+          1800
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 7,
+      "stable_skill_id": "warrior.slaying_swordsmanship",
+      "name": "攻杀剑术",
+      "job": 0,
+      "effect_type": 0,
+      "effect": 5,
+      "spell": 0,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 0,
+      "train_levels": [
+        19,
+        22,
+        24
+      ],
+      "max_train": [
+        100,
+        500,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 19,
+          "training_points": null,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 1,
+          "required_character_level": 19,
+          "training_points": 4000,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 2,
+          "required_character_level": 22,
+          "training_points": 8000,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 3,
+          "required_character_level": 24,
+          "training_points": 16000,
+          "mana_cost": 0,
+          "delay": 0
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 2,
+        "base_mana_cost": 0,
+        "level_mana_cost": 0,
+        "icon": 6,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1800,
+          1800,
+          1800,
+          1800
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 12,
+      "stable_skill_id": "warrior.thrusting",
+      "name": "刺杀剑术",
+      "job": 0,
+      "effect_type": 0,
+      "effect": 13,
+      "spell": 0,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 0,
+      "train_levels": [
+        25,
+        27,
+        29
+      ],
+      "max_train": [
+        150,
+        400,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 25,
+          "training_points": null,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 1,
+          "required_character_level": 25,
+          "training_points": 6000,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 2,
+          "required_character_level": 27,
+          "training_points": 12000,
+          "mana_cost": 0,
+          "delay": 0
+        },
+        {
+          "level": 3,
+          "required_character_level": 29,
+          "training_points": 18000,
+          "mana_cost": 0,
+          "delay": 0
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 3,
+        "base_mana_cost": 0,
+        "level_mana_cost": 0,
+        "icon": 11,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1800,
+          1800,
+          1800,
+          1800
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 27,
+      "stable_skill_id": "warrior.wild_rush",
+      "name": "野蛮冲撞",
+      "job": 0,
+      "effect_type": 0,
+      "effect": 25,
+      "spell": 15,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 0,
+      "train_levels": [
+        30,
+        34,
+        39
+      ],
+      "max_train": [
+        100,
+        300,
+        800
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 30,
+          "training_points": null,
+          "mana_cost": 4,
+          "delay": 0
+        },
+        {
+          "level": 1,
+          "required_character_level": 30,
+          "training_points": 3000,
+          "mana_cost": 8,
+          "delay": 0
+        },
+        {
+          "level": 2,
+          "required_character_level": 34,
+          "training_points": 6000,
+          "mana_cost": 12,
+          "delay": 0
+        },
+        {
+          "level": 3,
+          "required_character_level": 39,
+          "training_points": 9000,
+          "mana_cost": 16,
+          "delay": 0
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 5,
+        "base_mana_cost": 4,
+        "level_mana_cost": 4,
+        "icon": 26,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 4,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          2500,
+          2500,
+          2500,
+          2500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 23,
+      "stable_skill_id": "wizard.exploding_flame",
+      "name": "爆裂火焰",
+      "job": 1,
+      "effect_type": 2,
+      "effect": 21,
+      "spell": 15,
+      "power": 8,
+      "max_power": 8,
+      "def_spell": 10,
+      "def_power": 6,
+      "def_max_power": 6,
+      "delay": 60,
+      "train_levels": [
+        22,
+        27,
+        31
+      ],
+      "max_train": [
+        100,
+        200,
+        600
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 22,
+          "training_points": null,
+          "mana_cost": 14,
+          "delay": 60
+        },
+        {
+          "level": 1,
+          "required_character_level": 22,
+          "training_points": 3000,
+          "mana_cost": 18,
+          "delay": 60
+        },
+        {
+          "level": 2,
+          "required_character_level": 27,
+          "training_points": 6000,
+          "mana_cost": 22,
+          "delay": 60
+        },
+        {
+          "level": 3,
+          "required_character_level": 31,
+          "training_points": 18000,
+          "mana_cost": 26,
+          "delay": 60
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 38,
+        "base_mana_cost": 14,
+        "level_mana_cost": 4,
+        "icon": 22,
+        "power_base": 8,
+        "power_bonus": 0,
+        "magic_power_base": 8,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 22,
+      "stable_skill_id": "wizard.fire_wall",
+      "name": "火墙",
+      "job": 1,
+      "effect_type": 4,
+      "effect": 20,
+      "spell": 20,
+      "power": 3,
+      "max_power": 3,
+      "def_spell": 25,
+      "def_power": 3,
+      "def_max_power": 3,
+      "delay": 120,
+      "train_levels": [
+        24,
+        29,
+        33
+      ],
+      "max_train": [
+        200,
+        500,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 24,
+          "training_points": null,
+          "mana_cost": 30,
+          "delay": 120
+        },
+        {
+          "level": 1,
+          "required_character_level": 24,
+          "training_points": 4000,
+          "mana_cost": 35,
+          "delay": 120
+        },
+        {
+          "level": 2,
+          "required_character_level": 29,
+          "training_points": 12000,
+          "mana_cost": 40,
+          "delay": 120
+        },
+        {
+          "level": 3,
+          "required_character_level": 33,
+          "training_points": 24000,
+          "mana_cost": 45,
+          "delay": 120
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 39,
+        "base_mana_cost": 30,
+        "level_mana_cost": 5,
+        "icon": 21,
+        "power_base": 3,
+        "power_bonus": 0,
+        "magic_power_base": 3,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 1,
+      "stable_skill_id": "wizard.fireball",
+      "name": "火球术",
+      "job": 1,
+      "effect_type": 1,
+      "effect": 1,
+      "spell": 4,
+      "power": 8,
+      "max_power": 8,
+      "def_spell": 1,
+      "def_power": 2,
+      "def_max_power": 2,
+      "delay": 60,
+      "train_levels": [
+        7,
+        11,
+        16
+      ],
+      "max_train": [
+        20,
+        100,
+        300
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 7,
+          "training_points": null,
+          "mana_cost": 3,
+          "delay": 60
+        },
+        {
+          "level": 1,
+          "required_character_level": 7,
+          "training_points": 500,
+          "mana_cost": 5,
+          "delay": 60
+        },
+        {
+          "level": 2,
+          "required_character_level": 11,
+          "training_points": 1500,
+          "mana_cost": 7,
+          "delay": 60
+        },
+        {
+          "level": 3,
+          "required_character_level": 16,
+          "training_points": 3000,
+          "mana_cost": 9,
+          "delay": 60
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 31,
+        "base_mana_cost": 3,
+        "level_mana_cost": 2,
+        "icon": 0,
+        "power_base": 2,
+        "power_bonus": 0,
+        "magic_power_base": 8,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 5,
+      "stable_skill_id": "wizard.great_fireball",
+      "name": "大火球",
+      "job": 1,
+      "effect_type": 1,
+      "effect": 3,
+      "spell": 3,
+      "power": 6,
+      "max_power": 6,
+      "def_spell": 5,
+      "def_power": 10,
+      "def_max_power": 10,
+      "delay": 60,
+      "train_levels": [
+        19,
+        23,
+        25
+      ],
+      "max_train": [
+        80,
+        100,
+        300
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 19,
+          "training_points": null,
+          "mana_cost": 5,
+          "delay": 60
+        },
+        {
+          "level": 1,
+          "required_character_level": 19,
+          "training_points": 8000,
+          "mana_cost": 6,
+          "delay": 60
+        },
+        {
+          "level": 2,
+          "required_character_level": 23,
+          "training_points": 14000,
+          "mana_cost": 7,
+          "delay": 60
+        },
+        {
+          "level": 3,
+          "required_character_level": 25,
+          "training_points": 25000,
+          "mana_cost": 8,
+          "delay": 60
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 34,
+        "base_mana_cost": 5,
+        "level_mana_cost": 1,
+        "icon": 4,
+        "power_base": 10,
+        "power_bonus": 0,
+        "magic_power_base": 6,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 24,
+      "stable_skill_id": "wizard.hell_lightning",
+      "name": "地狱雷光",
+      "job": 1,
+      "effect_type": 4,
+      "effect": 22,
+      "spell": 35,
+      "power": 10,
+      "max_power": 30,
+      "def_spell": 20,
+      "def_power": 10,
+      "def_max_power": 30,
+      "delay": 60,
+      "train_levels": [
+        30,
+        32,
+        34
+      ],
+      "max_train": [
+        200,
+        500,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 30,
+          "training_points": null,
+          "mana_cost": 29,
+          "delay": 60
+        },
+        {
+          "level": 1,
+          "required_character_level": 30,
+          "training_points": 4000,
+          "mana_cost": 38,
+          "delay": 60
+        },
+        {
+          "level": 2,
+          "required_character_level": 32,
+          "training_points": 8000,
+          "mana_cost": 47,
+          "delay": 60
+        },
+        {
+          "level": 3,
+          "required_character_level": 34,
+          "training_points": 12000,
+          "mana_cost": 56,
+          "delay": 60
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 42,
+        "base_mana_cost": 29,
+        "level_mana_cost": 9,
+        "icon": 23,
+        "power_base": 10,
+        "power_bonus": 20,
+        "magic_power_base": 10,
+        "magic_power_bonus": 20,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 9,
+      "stable_skill_id": "wizard.hellfire",
+      "name": "地狱火",
+      "job": 1,
+      "effect_type": 5,
+      "effect": 7,
+      "spell": 10,
+      "power": 14,
+      "max_power": 14,
+      "def_spell": 10,
+      "def_power": 6,
+      "def_max_power": 6,
+      "delay": 60,
+      "train_levels": [
+        16,
+        21,
+        26
+      ],
+      "max_train": [
+        50,
+        100,
+        300
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 16,
+          "training_points": null,
+          "mana_cost": 10,
+          "delay": 60
+        },
+        {
+          "level": 1,
+          "required_character_level": 16,
+          "training_points": 1000,
+          "mana_cost": 13,
+          "delay": 60
+        },
+        {
+          "level": 2,
+          "required_character_level": 21,
+          "training_points": 4000,
+          "mana_cost": 16,
+          "delay": 60
+        },
+        {
+          "level": 3,
+          "required_character_level": 26,
+          "training_points": 8000,
+          "mana_cost": 19,
+          "delay": 60
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 35,
+        "base_mana_cost": 10,
+        "level_mana_cost": 3,
+        "icon": 8,
+        "power_base": 6,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 32,
+      "stable_skill_id": "wizard.holy_word",
+      "name": "圣言术",
+      "job": 1,
+      "effect_type": 2,
+      "effect": 30,
+      "spell": 50,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 40,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 120,
+      "train_levels": [
+        32,
+        35,
+        39
+      ],
+      "max_train": [
+        200,
+        600,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 32,
+          "training_points": null,
+          "mana_cost": 52,
+          "delay": 120
+        },
+        {
+          "level": 1,
+          "required_character_level": 32,
+          "training_points": 4000,
+          "mana_cost": 65,
+          "delay": 120
+        },
+        {
+          "level": 2,
+          "required_character_level": 35,
+          "training_points": 8000,
+          "mana_cost": 78,
+          "delay": 120
+        },
+        {
+          "level": 3,
+          "required_character_level": 39,
+          "training_points": 12000,
+          "mana_cost": 91,
+          "delay": 120
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 44,
+        "base_mana_cost": 52,
+        "level_mana_cost": 13,
+        "icon": 31,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1800,
+          1800,
+          1800,
+          1800
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 33,
+      "stable_skill_id": "wizard.ice_storm",
+      "name": "冰咆哮",
+      "job": 1,
+      "effect_type": 2,
+      "effect": 31,
+      "spell": 12,
+      "power": 12,
+      "max_power": 12,
+      "def_spell": 30,
+      "def_power": 14,
+      "def_max_power": 14,
+      "delay": 60,
+      "train_levels": [
+        35,
+        37,
+        40
+      ],
+      "max_train": [
+        500,
+        1000,
+        1500
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 35,
+          "training_points": null,
+          "mana_cost": 33,
+          "delay": 60
+        },
+        {
+          "level": 1,
+          "required_character_level": 35,
+          "training_points": 4000,
+          "mana_cost": 36,
+          "delay": 60
+        },
+        {
+          "level": 2,
+          "required_character_level": 37,
+          "training_points": 8000,
+          "mana_cost": 39,
+          "delay": 60
+        },
+        {
+          "level": 3,
+          "required_character_level": 40,
+          "training_points": 12000,
+          "mana_cost": 42,
+          "delay": 60
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 46,
+        "base_mana_cost": 33,
+        "level_mana_cost": 3,
+        "icon": 32,
+        "power_base": 14,
+        "power_bonus": 0,
+        "magic_power_base": 12,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 10,
+      "stable_skill_id": "wizard.laser",
+      "name": "疾光电影",
+      "job": 1,
+      "effect_type": 6,
+      "effect": 8,
+      "spell": 30,
+      "power": 12,
+      "max_power": 12,
+      "def_spell": 30,
+      "def_power": 12,
+      "def_max_power": 12,
+      "delay": 100,
+      "train_levels": [
+        26,
+        29,
+        32
+      ],
+      "max_train": [
+        100,
+        500,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 26,
+          "training_points": null,
+          "mana_cost": 38,
+          "delay": 100
+        },
+        {
+          "level": 1,
+          "required_character_level": 26,
+          "training_points": 3000,
+          "mana_cost": 45,
+          "delay": 100
+        },
+        {
+          "level": 2,
+          "required_character_level": 29,
+          "training_points": 6000,
+          "mana_cost": 52,
+          "delay": 100
+        },
+        {
+          "level": 3,
+          "required_character_level": 32,
+          "training_points": 12000,
+          "mana_cost": 59,
+          "delay": 100
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 40,
+        "base_mana_cost": 38,
+        "level_mana_cost": 7,
+        "icon": 9,
+        "power_base": 12,
+        "power_bonus": 0,
+        "magic_power_base": 12,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 11,
+      "stable_skill_id": "wizard.lightning",
+      "name": "雷电术",
+      "job": 1,
+      "effect_type": 7,
+      "effect": 9,
+      "spell": 12,
+      "power": 8,
+      "max_power": 28,
+      "def_spell": 6,
+      "def_power": 9,
+      "def_max_power": 9,
+      "delay": 100,
+      "train_levels": [
+        17,
+        20,
+        23
+      ],
+      "max_train": [
+        100,
+        500,
+        1000
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 17,
+          "training_points": null,
+          "mana_cost": 9,
+          "delay": 100
+        },
+        {
+          "level": 1,
+          "required_character_level": 17,
+          "training_points": 1200,
+          "mana_cost": 11,
+          "delay": 100
+        },
+        {
+          "level": 2,
+          "required_character_level": 20,
+          "training_points": 3000,
+          "mana_cost": 13,
+          "delay": 100
+        },
+        {
+          "level": 3,
+          "required_character_level": 23,
+          "training_points": 5000,
+          "mana_cost": 15,
+          "delay": 100
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 36,
+        "base_mana_cost": 9,
+        "level_mana_cost": 2,
+        "icon": 10,
+        "power_base": 11,
+        "power_bonus": 0,
+        "magic_power_base": 14,
+        "magic_power_bonus": 28,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 31,
+      "stable_skill_id": "wizard.magic_shield",
+      "name": "魔法盾",
+      "job": 1,
+      "effect_type": 4,
+      "effect": 29,
+      "spell": 20,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 30,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 0,
+      "train_levels": [
+        31,
+        34,
+        38
+      ],
+      "max_train": [
+        500,
+        1000,
+        1500
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 31,
+          "training_points": null,
+          "mana_cost": 35,
+          "delay": 0
+        },
+        {
+          "level": 1,
+          "required_character_level": 31,
+          "training_points": 4000,
+          "mana_cost": 40,
+          "delay": 0
+        },
+        {
+          "level": 2,
+          "required_character_level": 34,
+          "training_points": 8000,
+          "mana_cost": 45,
+          "delay": 0
+        },
+        {
+          "level": 3,
+          "required_character_level": 38,
+          "training_points": 12000,
+          "mana_cost": 50,
+          "delay": 0
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 43,
+        "base_mana_cost": 35,
+        "level_mana_cost": 5,
+        "icon": 30,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1800,
+          1800,
+          1800,
+          1800
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 8,
+      "stable_skill_id": "wizard.repulsion_ring",
+      "name": "抗拒火环",
+      "job": 1,
+      "effect_type": 4,
+      "effect": 6,
+      "spell": 8,
+      "power": 1,
+      "max_power": 1,
+      "def_spell": 0,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 30,
+      "train_levels": [
+        12,
+        15,
+        19
+      ],
+      "max_train": [
+        20,
+        100,
+        500
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 12,
+          "training_points": null,
+          "mana_cost": 2,
+          "delay": 30
+        },
+        {
+          "level": 1,
+          "required_character_level": 12,
+          "training_points": 800,
+          "mana_cost": 4,
+          "delay": 30
+        },
+        {
+          "level": 2,
+          "required_character_level": 15,
+          "training_points": 2400,
+          "mana_cost": 6,
+          "delay": 30
+        },
+        {
+          "level": 3,
+          "required_character_level": 19,
+          "training_points": 4000,
+          "mana_cost": 8,
+          "delay": 30
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 32,
+        "base_mana_cost": 2,
+        "level_mana_cost": 2,
+        "icon": 7,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 4,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 21,
+      "stable_skill_id": "wizard.teleport",
+      "name": "瞬息移动",
+      "job": 1,
+      "effect_type": 4,
+      "effect": 19,
+      "spell": 10,
+      "power": 0,
+      "max_power": 0,
+      "def_spell": 8,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 50,
+      "train_levels": [
+        19,
+        22,
+        25
+      ],
+      "max_train": [
+        100,
+        200,
+        400
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 19,
+          "training_points": null,
+          "mana_cost": 10,
+          "delay": 50
+        },
+        {
+          "level": 1,
+          "required_character_level": 19,
+          "training_points": 1000,
+          "mana_cost": 13,
+          "delay": 50
+        },
+        {
+          "level": 2,
+          "required_character_level": 22,
+          "training_points": 2000,
+          "mana_cost": 16,
+          "delay": 50
+        },
+        {
+          "level": 3,
+          "required_character_level": 25,
+          "training_points": 4000,
+          "mana_cost": 19,
+          "delay": 50
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 37,
+        "base_mana_cost": 10,
+        "level_mana_cost": 3,
+        "icon": 20,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    },
+    {
+      "skill_id": 20,
+      "stable_skill_id": "wizard.temptation_light",
+      "name": "诱惑之光",
+      "job": 1,
+      "effect_type": 2,
+      "effect": 18,
+      "spell": 3,
+      "power": 3,
+      "max_power": 3,
+      "def_spell": 3,
+      "def_power": 0,
+      "def_max_power": 0,
+      "delay": 60,
+      "train_levels": [
+        13,
+        18,
+        24
+      ],
+      "max_train": [
+        50,
+        200,
+        500
+      ],
+      "description": "",
+      "classic_extended_levels": [
+        {
+          "level": 4,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 5,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 6,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 7,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 8,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 9,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 10,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 11,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 12,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 13,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 14,
+          "need_character_level": 20,
+          "max_train": 200
+        },
+        {
+          "level": 15,
+          "need_character_level": 20,
+          "max_train": 200
+        }
+      ],
+      "project_level_rows": [
+        {
+          "level": 0,
+          "required_character_level": 13,
+          "training_points": null,
+          "mana_cost": 3,
+          "delay": 60
+        },
+        {
+          "level": 1,
+          "required_character_level": 13,
+          "training_points": 1000,
+          "mana_cost": 4,
+          "delay": 60
+        },
+        {
+          "level": 2,
+          "required_character_level": 18,
+          "training_points": 2000,
+          "mana_cost": 5,
+          "delay": 60
+        },
+        {
+          "level": 3,
+          "required_character_level": 24,
+          "training_points": 4000,
+          "mana_cost": 6,
+          "delay": 60
+        }
+      ],
+      "source": {
+        "classification": "B/C-classic-structure-candidate",
+        "database": "mylgd Paradox Magic.DB",
+        "database_path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+        "database_sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+        "record_semantics": "Complete classic field structure candidate; not authenticated as user's current table or same build as audited source code.",
+        "project_static_source": "assets/data/vanilla_176/skills.json"
+      },
+      "current_runtime_crystal_candidate": {
+        "classification": "B/C-candidate",
+        "database": "Server.MirDB",
+        "database_sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+        "spell": 33,
+        "base_mana_cost": 3,
+        "level_mana_cost": 1,
+        "icon": 19,
+        "power_base": 0,
+        "power_bonus": 0,
+        "magic_power_base": 0,
+        "magic_power_bonus": 0,
+        "range_cells": 9,
+        "cooldown_ms_by_level": [
+          1500,
+          1500,
+          1500,
+          1500
+        ],
+        "warning": "Crystal Spell is not classic MagID and fields must not be silently merged."
+      },
+      "errors": [
+        "MISSING_SOURCE_EVIDENCE",
+        "SKILL_DATABASE_ERROR"
+      ]
+    }
+  ]
+}

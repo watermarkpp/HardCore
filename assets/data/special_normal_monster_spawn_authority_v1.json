@@ -1,0 +1,178 @@
+{
+  "schema": "hardcore.monster_special_normal_spawn_authority.v1",
+  "authority_id": "special_normal.monster_spawn.v1",
+  "status": "FORMAL_SPAWN_AUTHORITY_ACTIVE",
+  "scope": {
+    "identity_key": "monster_id",
+    "selection": "explicit_exact_monster_id_set",
+    "canonical_monster_ids": [
+      39,
+      57,
+      74,
+      77,
+      90,
+      121,
+      137,
+      142
+    ],
+    "classification_field": "spawn_classification",
+    "combat_classification_is_independent": true,
+    "name_or_suffix_resolution_forbidden": true
+  },
+  "authority": {
+    "kind": "user_authoritative_exact_id_set",
+    "decision": "special_normal正式复用；未知暗殿已布置的八个精确monster_id统一使用标准monster_spawn刷新，掉落概率由外部direct-baseline按canonical_monster_id解析",
+    "sources": [
+      {
+        "path": "assets/data/vanilla_176/monsters.json",
+        "sha256": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
+        "role": "canonical identity and exact canonical name evidence"
+      },
+      {
+        "path": "assets/data/canonical_monster_classification_v1.json",
+        "sha256": "0A6DB865644E2B91D972B438B14D51974A32524080A62ED5D30C620421F4B377",
+        "role": "combat classification preservation evidence"
+      }
+    ]
+  },
+  "defaults": {
+    "spawn_classification": "special_normal",
+    "placement_kind": "monster_spawn",
+    "respawn_policy_id": "special_normal",
+    "respawn_seconds": 900,
+    "random_seconds": 0,
+    "count": 1,
+    "max_alive": 1
+  },
+  "spawn_activation": {
+    "production_active": true,
+    "runtime_consumers": [
+      "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+      "scripts/monster_respawn_policy.gd",
+      "scripts/game_root.gd"
+    ],
+    "map_data_mutated": false
+  },
+  "drop_probability": {
+    "authority": "external_direct_baseline",
+    "authority_id": "dpv2.direct_baseline.v2",
+    "source_path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+    "identity_key": "canonical_monster_id",
+    "resolution": "direct_baseline_by_canonical_monster_id",
+    "production_rng_input": false
+  },
+  "records": [
+    {
+      "monster_id": 39,
+      "canonical_name": "半兽勇士1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      }
+    },
+    {
+      "monster_id": 57,
+      "canonical_name": "骷髅精灵1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      }
+    },
+    {
+      "monster_id": 74,
+      "canonical_name": "沃玛卫士1",
+      "combat_classification": "elite",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      }
+    },
+    {
+      "monster_id": 77,
+      "canonical_name": "沃玛教主1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      }
+    },
+    {
+      "monster_id": 90,
+      "canonical_name": "尸王1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      }
+    },
+    {
+      "monster_id": 121,
+      "canonical_name": "邪恶钳虫1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      }
+    },
+    {
+      "monster_id": 137,
+      "canonical_name": "白野猪1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      }
+    },
+    {
+      "monster_id": 142,
+      "canonical_name": "邪恶毒蛇1",
+      "combat_classification": "special",
+      "spawn": {
+        "spawn_classification": "special_normal",
+        "placement_kind": "monster_spawn",
+        "respawn_policy_id": "special_normal",
+        "respawn_seconds": 900,
+        "random_seconds": 0,
+        "count": 1,
+        "max_alive": 1
+      }
+    }
+  ]
+}

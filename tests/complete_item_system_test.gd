@@ -26,6 +26,26 @@ func _run() -> void:
 			if path.is_empty() or not FileAccess.file_exists(path) or not ResourceLoader.exists(path):
 				missing_art.append("%s:%s" % [str(record.get("name", "")), field])
 	assert(missing_art.is_empty(), "运行物品仍有图标或地面外观缺失：%s" % ",".join(missing_art))
+	var shenshui_source_indices := {
+		"体力强效神水": 424,
+		"魔力强效神水": 422,
+		"疾风神水": 420,
+		"攻击神水": 425,
+		"魔力神水": 423,
+		"精神神水": 421,
+	}
+	for item_name: String in shenshui_source_indices:
+		var shenshui := GameData.get_item_record(item_name)
+		assert(not shenshui.is_empty(), "神水物品缺失：%s" % item_name)
+		var shenshui_art: Dictionary = shenshui.get("art", {})
+		for field: String in ["inventoryIcon", "groundIcon"]:
+			var icon: Dictionary = shenshui_art.get(field, {})
+			var icon_path := str(icon.get("path", ""))
+			assert("/fallback/" not in icon_path, "%s仍使用占位图：%s" % [item_name, field])
+			assert(int(icon.get("sourceIndex", -1)) == shenshui_source_indices[item_name])
+			var texture := load(icon_path) as Texture2D
+			assert(texture != null, "%s贴图不能加载：%s" % [item_name, field])
+			assert(texture.get_width() > 1 and texture.get_height() > 1, "%s贴图无有效尺寸：%s" % [item_name, field])
 
 	var small_hp := GameData.get_item_record("金创药(小量)")
 	assert(int(small_hp.get("restoreHealth", 0)) == 30 and int(small_hp.get("restoreMana", 0)) == 0)

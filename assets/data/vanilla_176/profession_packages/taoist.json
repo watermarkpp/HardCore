@@ -406,13 +406,11 @@
         "amulet_cost": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "defense",
         "role": "area_effect",
         "path": "assets/art/characters/taoist/effects/defense.png",
-        "skill_ids": [
-          "taoist.defense"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/defense.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -422,20 +420,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1340,
-        "source_offset": 14689672,
-        "source_draw_offset": [
-          -10,
-          -119
-        ],
-        "pixel_size": [
-          68,
-          71
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "TBujaukGroundEffect magic number 12 uses base 1160 + 18*10",
+        "mapping_rule": "TBujaukGroundEffect magic 12 draws 1160 + 18*10 + curframe; PlayScn sets ExplosionFrame=16 and constructor NextFrameTime=50",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 16,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1347
       }
     },
     "taoist.entrapment": {
@@ -793,13 +785,11 @@
         "amulet_cost": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "binding_circle",
         "role": "area_effect",
         "path": "assets/art/characters/taoist/effects/binding_circle.png",
-        "skill_ids": [
-          "taoist.entrapment"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/binding_circle.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -809,20 +799,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1380,
-        "source_offset": 15846796,
-        "source_draw_offset": [
-          -13,
-          -9
-        ],
-        "pixel_size": [
-          72,
-          29
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 14 explicitly labels ground nail/entrapment at 1380",
-        "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "mapping_rule": "EffectBase[14]=1380 is the primary ground-nail family; Actor draws its DEFSPELLFRAME=10 at HA.ActSpell.ftime=60. PlayScn mtKyulKai detached constructor is explicitly disabled, so no lower-priority runtime is invented.",
+        "mapping_confidence": "B",
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 60,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1389
       }
     },
     "taoist.healing": {
@@ -1178,13 +1162,11 @@
         "apply_delay_ms": 800
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "healing",
         "role": "target_effect",
         "path": "assets/art/characters/taoist/effects/healing.png",
-        "skill_ids": [
-          "taoist.healing"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/healing.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -1194,20 +1176,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 200,
-        "source_offset": 1483760,
-        "source_draw_offset": [
-          -13,
-          -19
-        ],
-        "pixel_size": [
-          76,
-          75
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 2 explicitly labels healing at 200",
+        "mapping_rule": "EffectType=mtExplosion; TMagicEff default MagExplosionBase is EffectBase[2]=200 + EXPLOSIONBASE=170; PlayScn default NextFrameTime=80",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 80,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 374
       }
     },
     "taoist.invisibility": {
@@ -1565,14 +1541,11 @@
         "amulet_cost": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "invisibility",
         "role": "self_area",
         "path": "assets/art/characters/taoist/effects/invisibility.png",
-        "skill_ids": [
-          "taoist.invisibility",
-          "taoist.mass_invisibility"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/invisibility.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -1582,20 +1555,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1520,
-        "source_offset": 16969936,
-        "source_draw_offset": [
-          -8,
-          -39
-        ],
-        "pixel_size": [
-          56,
-          57
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 16 explicitly labels invisibility; group variant reuses the same primary family",
-        "mapping_confidence": "B",
-        "pixel_confidence": "A"
+        "mapping_rule": "EffectType=mtFireWind has no detached TMagicEff; Actor draws EffectBase[16]=1520 with DEFSPELLFRAME=10 and HA.ActSpell.ftime=60",
+        "mapping_confidence": "A",
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 60,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1526
       }
     },
     "taoist.magic_defense": {
@@ -1953,13 +1920,11 @@
         "amulet_cost": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "magic_defense",
         "role": "area_effect",
         "path": "assets/art/characters/taoist/effects/magic_defense.png",
-        "skill_ids": [
-          "taoist.magic_defense"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/magic_defense.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -1969,20 +1934,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1320,
-        "source_offset": 13622984,
-        "source_draw_offset": [
-          -13,
-          -117
-        ],
-        "pixel_size": [
-          68,
-          69
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "TBujaukGroundEffect magic number 11 uses base 1160 + 16*10",
+        "mapping_rule": "TBujaukGroundEffect magic 11 draws 1160 + 16*10 + curframe; PlayScn sets ExplosionFrame=16 and constructor NextFrameTime=50",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 16,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1327
       }
     },
     "taoist.mass_healing": {
@@ -2339,13 +2298,11 @@
         "area_radius_cells": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "mass_healing",
         "role": "area_effect",
         "path": "assets/art/characters/taoist/effects/mass_healing.png",
-        "skill_ids": [
-          "taoist.mass_healing"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/mass_healing.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -2355,20 +2312,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1800,
-        "source_offset": 20218100,
-        "source_draw_offset": [
-          -63,
-          -60
-        ],
-        "pixel_size": [
-          168,
-          116
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic effect 27 explosion base 1800",
+        "mapping_rule": "PlayScn.NewMagic effect 27 sets MagExplosionBase=1800, NextFrameTime=80, ExplosionFrame=10",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 80,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1807
       }
     },
     "taoist.mass_invisibility": {
@@ -2726,14 +2677,11 @@
         "amulet_cost": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
-        "asset_id": "invisibility",
-        "role": "self_area",
-        "path": "assets/art/characters/taoist/effects/invisibility.png",
-        "skill_ids": [
-          "taoist.invisibility",
-          "taoist.mass_invisibility"
-        ],
+        "status": "formal_primary_client_animation",
+        "asset_id": "mass_invisibility",
+        "role": "area_effect",
+        "path": "assets/art/characters/taoist/effects/mass_invisibility.png",
+        "icon_path": "assets/art/characters/taoist/skill_icons/mass_invisibility.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -2743,20 +2691,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1520,
-        "source_offset": 16969936,
-        "source_draw_offset": [
-          -8,
-          -39
-        ],
-        "pixel_size": [
-          56,
-          57
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 16 explicitly labels invisibility; group variant reuses the same primary family",
-        "mapping_confidence": "B",
-        "pixel_confidence": "A"
+        "mapping_rule": "PlayScn mtExploBujauk effect 17 sets MagExplosionBase=1540; TExploBujaukEffect inherits MG_EXPLOSION=10 and NextFrameTime=50",
+        "mapping_confidence": "A",
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 1545
       }
     },
     "taoist.poison": {
@@ -3119,13 +3061,11 @@
         "amy_ounsul_point": 20
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "poison",
         "role": "target_effect",
         "path": "assets/art/characters/taoist/effects/poison.png",
-        "skill_ids": [
-          "taoist.poison"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/poison.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -3135,20 +3075,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 600,
-        "source_offset": 2778944,
-        "source_draw_offset": [
-          20,
-          4
-        ],
-        "pixel_size": [
-          12,
-          10
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "EffectBase effect 4 explicitly labels poison at 600",
+        "mapping_rule": "EffectType=mtExplosion; TMagicEff default MagExplosionBase is EffectBase[4]=600 + EXPLOSIONBASE=170; PlayScn default NextFrameTime=80",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 80,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 775
       }
     },
     "taoist.revelation": {
@@ -3505,13 +3439,11 @@
         "success_formula": "random(6) <= skill_level + 3"
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "revelation",
         "role": "target_effect",
         "path": "assets/art/characters/taoist/effects/revelation.png",
-        "skill_ids": [
-          "taoist.revelation"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/revelation.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -3521,20 +3453,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 3990,
-        "source_offset": 34069240,
-        "source_draw_offset": [
-          0,
-          -89
-        ],
-        "pixel_size": [
-          44,
-          62
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic effect 26 explosion base 3990",
+        "mapping_rule": "PlayScn.NewMagic effect 26 sets MagExplosionBase=3990, NextFrameTime=80, ExplosionFrame=10",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 80,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "once",
+        "icon_selected_source_index": 3999
       }
     },
     "taoist.soul_fire_talisman": {
@@ -3890,13 +3816,11 @@
         "amulet_cost": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "soul_fire_talisman",
         "role": "projectile",
         "path": "assets/art/characters/taoist/effects/soul_fire_talisman.png",
-        "skill_ids": [
-          "taoist.soul_fire_talisman"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/soul_fire_talisman.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -3906,20 +3830,14 @@
         },
         "original_path": "Data/Magic.wil",
         "source_sha256": "be46a0258349b26db9ba7dba595abac1f0767d52fef11d9f508e704f2f6deaac",
-        "source_index": 1160,
-        "source_offset": 13599396,
-        "source_draw_offset": [
-          18,
-          -56
-        ],
-        "pixel_size": [
-          12,
-          20
-        ],
-        "library_image_count": 4010,
-        "mapping_rule": "PlayScn.NewMagic mtExploBujauk constructor base 1160",
+        "mapping_rule": "PlayScn mtExploBujauk constructs TExploBujaukEffect at 1160; DrawEff uses 1160 + Dir16*10 + curframe; constructor frame=3, NextFrameTime=50",
         "mapping_confidence": "A",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 50,
+        "frame_count": 3,
+        "direction_count": 16,
+        "playback": "loop",
+        "icon_selected_source_index": 1172
       }
     },
     "taoist.spiritual_warfare": {
@@ -4275,7 +4193,7 @@
       },
       "visual_profile": {
         "status": "no_runtime_visual",
-        "reason": "Passive accuracy skill; no cast event is emitted by the classic runtime.",
+        "reason": "Passive accuracy skill; the primary server/client emit no cast event.",
         "source_original_path": "M2Server/Magic.pas"
       }
     },
@@ -4647,13 +4565,11 @@
         "amulet_cost": 5
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "summon_divine_beast",
-        "role": "summon",
+        "role": "summon_actor_visual",
         "path": "assets/art/characters/taoist/effects/summon_divine_beast.png",
-        "skill_ids": [
-          "taoist.summon_divine_beast"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/summon_divine_beast.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -4663,20 +4579,14 @@
         },
         "original_path": "Data/Mon18.wil",
         "source_sha256": "eab9850feaecd7a3bf89d3e6274317e3543f5c07ec3e771627e1aa11c4c74bbd",
-        "source_index": 350,
-        "source_offset": 2244624,
-        "source_draw_offset": [
-          5,
-          -45
-        ],
-        "pixel_size": [
-          52,
-          86
-        ],
-        "library_image_count": 3707,
-        "mapping_rule": "PlayScn race 54/55 + Actor/AxeMon divine beast classes select Mon18; standing block 350",
+        "mapping_rule": "Actor/AxeMon divine-beast classes select Mon18; standing block starts at 350. SummonActor owns the full state animation; this exact family supplies the skill icon.",
         "mapping_confidence": "B",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 160,
+        "frame_count": 4,
+        "direction_count": 1,
+        "playback": "loop",
+        "icon_selected_source_index": 353
       }
     },
     "taoist.summon_skeleton": {
@@ -5047,13 +4957,11 @@
         "amulet_cost": 1
       },
       "visual_profile": {
-        "status": "formal_primary_client_pixel",
+        "status": "formal_primary_client_animation",
         "asset_id": "summon_skeleton",
-        "role": "summon",
+        "role": "summon_actor_visual",
         "path": "assets/art/characters/taoist/effects/summon_skeleton.png",
-        "skill_ids": [
-          "taoist.summon_skeleton"
-        ],
+        "icon_path": "assets/art/characters/taoist/skill_icons/summon_skeleton.png",
         "distribution_id": "client.classic_raw_complete",
         "source_priority": {
           "lane": "client_assets",
@@ -5063,20 +4971,14 @@
         },
         "original_path": "Data/Mon3.wil",
         "source_sha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
-        "source_index": 0,
-        "source_offset": 1080,
-        "source_draw_offset": [
-          -1,
-          -59
-        ],
-        "pixel_size": [
-          80,
-          76
-        ],
-        "library_image_count": 3690,
-        "mapping_rule": "Actor.aGetMonImg appearance 20 selects Mon3; skeleton manifest block base 0",
+        "mapping_rule": "Actor.aGetMonImg appearance 20 selects Mon3; skeleton stand block begins at 0. SummonActor owns the state animation; this exact family supplies the skill icon.",
         "mapping_confidence": "B",
-        "pixel_confidence": "A"
+        "animation_contract": "caster_skill_animation.v1",
+        "frame_time_ms": 160,
+        "frame_count": 10,
+        "direction_count": 1,
+        "playback": "loop",
+        "icon_selected_source_index": 0
       }
     }
   },
@@ -5087,7 +4989,7 @@
     },
     "growth": {
       "path": "assets/data/vanilla_176/profession_growth.json",
-      "sha256": "ff5b2e2cfcf03a441b33a04d488aa39c36c753a543954087ef32041992d8a756"
+      "sha256": "7ffcf675558b665da72226575d6cd1d30296835f83ebc36dd6c2948810fda4d2"
     },
     "combat_rules": {
       "path": "assets/data/vanilla_176/profession_combat_rules.json",
@@ -5095,13 +4997,13 @@
     },
     "visuals": {
       "path": "assets/data/caster_skill_visuals.json",
-      "sha256": "a0712488af504bf2e08c0a9a236e102ab6990e91f6115639e804275aac820f25"
+      "sha256": "4cc1f84df610775b240759dda9e79275cc276cb1a211fa1448e13fb87e40a760"
     }
   },
   "source_policy": {
     "stable_ids": "authoritative",
     "display_names": "Chinese display aliases only",
     "magic_info": "server.crystal.cjlaaa B/C candidate retained per level",
-    "visuals": "primary client pixels only; generated fallback forbidden"
+    "visuals": "primary client animation pixels/rules only; generated fallback forbidden"
   }
 }

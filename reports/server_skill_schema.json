@@ -1,0 +1,353 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "verdict": "candidate_schema_not_classic_magic_db",
+  "current_primary_candidate": {
+    "distribution_id": "server.crystal.cjlaaa",
+    "source_priority": {
+      "lane": "server_data",
+      "tier": "primary",
+      "order": 0,
+      "weight": 100
+    },
+    "original_path": "Server.MirDB",
+    "workspace_path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Server.MirDB",
+    "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+    "database_version": 105,
+    "magic_info_block_offset": 443174,
+    "magic_info_block_end": 448441,
+    "magic_info_record_count": 107
+  },
+  "reader_contract": {
+    "distribution_id": "source.minipizza_mir2.server",
+    "source_priority": {
+      "lane": "server_rules",
+      "tier": "auxiliary_1",
+      "order": 1,
+      "weight": 70
+    },
+    "original_path": "Server/MirDatabase/MagicInfo.cs",
+    "workspace_path": "dev_art_sources/reference/mir2_sources/minipizza_mir2/Server/MirDatabase/MagicInfo.cs",
+    "sha256": "dcdca8b2b242698ddbf98b312ea5951768da95bfedc3cf50e998babf77ca4bc4",
+    "binary_layout": "BinaryReader.ReadString + 7B + 3H + 2I + 4H + B + 2f (version > 70)"
+  },
+  "classic_structure_candidate": {
+    "path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Magic.DB",
+    "sha256": "3cff6c5e9d422dc473f10f349344ce0ee2c7ec1e3d318d8b10d2e356bf37e112",
+    "record_size": 170,
+    "header_size": 2048,
+    "record_count": 34,
+    "field_count": 46,
+    "fields": [
+      {
+        "name": "MagID",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "MagName",
+        "type": 1,
+        "size": 12
+      },
+      {
+        "name": "EffectType",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "Effect",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "Spell",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "Power",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "MaxPower",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "DefSpell",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "DefPower",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "DefMaxPower",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "Job",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "NeedL1",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "L1Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL2",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "L2Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL3",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "L3Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "Delay",
+        "type": 3,
+        "size": 2
+      },
+      {
+        "name": "Descr",
+        "type": 1,
+        "size": 8
+      },
+      {
+        "name": "NeedL4",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L4Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL5",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L5Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL6",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L6Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL7",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L7Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL8",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L8Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL9",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L9Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL10",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L10Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL11",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L11Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL12",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L12Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL13",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L13Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL14",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L14Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "NeedL15",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "L15Train",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "MaxTrainLv",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "CanUpgrade",
+        "type": 4,
+        "size": 4
+      },
+      {
+        "name": "MaxUpgradeLv",
+        "type": 4,
+        "size": 4
+      }
+    ],
+    "classification": "B/C-classic-structure-candidate",
+    "warning": "Candidate directory, no import manifest, and includes extended skill MagID 41.",
+    "match_result": "33/33 project skills match uniquely by display_name == MagName; extra record MagID 41 is excluded",
+    "selection_status": "not selected as authenticated user current table"
+  },
+  "classic_expected_source": {
+    "type": "BDE/DBF Magic.DB",
+    "status": "not present in the current evidence set",
+    "reader": "dev_art_sources/reference/original_gameofmir/M2Server/LocalDB.pas",
+    "expected_fields": [
+      "MagicId",
+      "MagicName",
+      "EffectType",
+      "Effect",
+      "Spell",
+      "Power",
+      "MaxPower",
+      "Job",
+      "NeedL1",
+      "NeedL2",
+      "NeedL3",
+      "L1Train",
+      "L2Train",
+      "L3Train",
+      "Delay",
+      "DefSpell",
+      "DefPower",
+      "DefMaxPower",
+      "Descr"
+    ]
+  },
+  "current_crystal_candidate_fields": {
+    "binary_layout": "ReadString + 7B + 3H + 2I + 4H + B + 2f",
+    "decoded_fields": [
+      "Name",
+      "Spell",
+      "BaseManaCost",
+      "LevelManaCost",
+      "Icon",
+      "Level1",
+      "Level2",
+      "Level3",
+      "Need1",
+      "Need2",
+      "Need3",
+      "DelayBase",
+      "DelayReduction",
+      "PowerBase",
+      "PowerBonus",
+      "MagicPowerBase",
+      "MagicPowerBonus",
+      "RangeCells",
+      "MultiplierBase",
+      "MultiplierBonus"
+    ],
+    "not_field_equivalent_to_classic": [
+      "EffectType",
+      "Effect",
+      "Power/MaxPower",
+      "DefSpell",
+      "DefPower/DefMaxPower",
+      "Job",
+      "Descr"
+    ]
+  },
+  "errors": [
+    {
+      "classification": "SKILL_DATABASE_ERROR",
+      "severity": "critical",
+      "finding": "The 33 current records are extracted from Crystal Server.MirDB version 105, not from the classic Magic.DB consumed by the audited Magic.pas/LocalDB.pas server."
+    },
+    {
+      "classification": "MISSING_SOURCE_EVIDENCE",
+      "severity": "critical",
+      "finding": "No authenticated user import manifest or same-distribution database + server code + client code tuple proves all classic fields and semantics end to end. A complete Paradox candidate exists but is not version-certified."
+    }
+  ]
+}

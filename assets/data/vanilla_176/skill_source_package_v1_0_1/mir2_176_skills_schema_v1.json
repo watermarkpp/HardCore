@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mir2_176_skills_schema_v1.json",
+  "title": "MIR2 1.76 Skills Source of Truth",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "document_status",
+    "global_policy",
+    "skills"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "document_status": {
+      "const": "project_canonical_source_of_truth"
+    },
+    "global_policy": {
+      "type": "object"
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 33,
+      "maxItems": 33,
+      "items": {
+        "type": "object",
+        "required": [
+          "order",
+          "class",
+          "skill_id",
+          "display_name",
+          "content_layer",
+          "version_scope",
+          "ranks",
+          "mp_cost_by_rank",
+          "activation",
+          "target",
+          "geometry",
+          "timing",
+          "resource",
+          "mechanics",
+          "proficiency_trigger",
+          "required_tests"
+        ],
+        "properties": {
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 33
+          },
+          "class": {
+            "enum": [
+              "warrior",
+              "wizard",
+              "taoist"
+            ]
+          },
+          "skill_id": {
+            "type": "string",
+            "pattern": "^(warrior|wizard|taoist)\\.[a-z0-9_]+$"
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "content_layer": {
+            "const": "vanilla"
+          },
+          "version_scope": {
+            "const": "CN_MIR2_1_76"
+          },
+          "ranks": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "required": [
+                "rank",
+                "player_level_required",
+                "proficiency_required_to_reach_rank"
+              ],
+              "properties": {
+                "rank": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 3
+                },
+                "player_level_required": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "proficiency_required_to_reach_rank": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "mp_cost_by_rank": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "activation": {
+            "type": "string"
+          },
+          "timing": {
+            "type": "object"
+          },
+          "resource": {
+            "type": "object"
+          },
+          "mechanics": {
+            "type": "object"
+          },
+          "required_tests": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

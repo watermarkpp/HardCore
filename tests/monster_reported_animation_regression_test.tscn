@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/monster_reported_animation_regression_test.gd" type="Script" id="1"]
+
+[node name="MonsterReportedAnimationRegressionTest" type="Node"]
+script = ExtResource("1")

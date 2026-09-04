@@ -1,0 +1,671 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "verdict": "runtime_animation_style_cooldowns_do_not_match_candidate_server_delay_for_most_skills",
+  "records": [
+    {
+      "skill_id": "taoist.defense",
+      "name": "神圣战甲术",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.9,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.9,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.entrapment",
+      "name": "困魔咒",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 1.0,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 1.0,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.healing",
+      "name": "治愈术",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.75,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.75,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.invisibility",
+      "name": "隐身术",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.9,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.9,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.magic_defense",
+      "name": "幽灵盾",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.9,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.9,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_healing",
+      "name": "群体治疗术",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 1.0,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 1.0,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_invisibility",
+      "name": "集体隐身术",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 1.0,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 1.0,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.poison",
+      "name": "施毒术",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.72,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.72,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.revelation",
+      "name": "心灵启示",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.55,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.55,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.soul_fire_talisman",
+      "name": "灵魂火符",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.72,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.72,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.spiritual_warfare",
+      "name": "精神力战法",
+      "server_delay_candidate_seconds": [
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ],
+      "runtime_skill_cooldown_seconds": 0.0,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.0,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_divine_beast",
+      "name": "召唤神兽",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 1.2,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 1.2,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_skeleton",
+      "name": "召唤骷髅",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 1.2,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 1.2,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.basic_swordsmanship",
+      "name": "基本剑术",
+      "server_delay_candidate_seconds": [
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ],
+      "runtime_skill_cooldown_seconds": 0.0,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.0,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.fire_sword",
+      "name": "烈火剑法",
+      "server_delay_candidate_seconds": [
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ],
+      "runtime_skill_cooldown_seconds": 0.85,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.51,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": true,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.half_moon",
+      "name": "半月弯刀",
+      "server_delay_candidate_seconds": [
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ],
+      "runtime_skill_cooldown_seconds": 0.85,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.51,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "name": "攻杀剑术",
+      "server_delay_candidate_seconds": [
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ],
+      "runtime_skill_cooldown_seconds": 0.85,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.51,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.thrusting",
+      "name": "刺杀剑术",
+      "server_delay_candidate_seconds": [
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ],
+      "runtime_skill_cooldown_seconds": 0.85,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.51,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.wild_rush",
+      "name": "野蛮冲撞",
+      "server_delay_candidate_seconds": [
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ],
+      "runtime_skill_cooldown_seconds": 3.0,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.51,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.exploding_flame",
+      "name": "爆裂火焰",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.72,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.72,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fire_wall",
+      "name": "火墙",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.85,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.85,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fireball",
+      "name": "火球术",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.72,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.72,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.great_fireball",
+      "name": "大火球",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.72,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.72,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hell_lightning",
+      "name": "地狱雷光",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.72,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.72,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hellfire",
+      "name": "地狱火",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.62,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.62,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.holy_word",
+      "name": "圣言术",
+      "server_delay_candidate_seconds": [
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ],
+      "runtime_skill_cooldown_seconds": 0.9,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.9,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.ice_storm",
+      "name": "冰咆哮",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.72,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.72,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.laser",
+      "name": "疾光电影",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.62,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.62,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.lightning",
+      "name": "雷电术",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.72,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.72,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.magic_shield",
+      "name": "魔法盾",
+      "server_delay_candidate_seconds": [
+        1.8,
+        1.8,
+        1.8,
+        1.8
+      ],
+      "runtime_skill_cooldown_seconds": 0.9,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.9,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.repulsion_ring",
+      "name": "抗拒火环",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.8,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.8,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.teleport",
+      "name": "瞬息移动",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 1.0,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 1.0,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.temptation_light",
+      "name": "诱惑之光",
+      "server_delay_candidate_seconds": [
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "runtime_skill_cooldown_seconds": 0.9,
+      "public_cast_interval": "PlayerCharacter._attack_timer",
+      "attack_interval": "attack_cooldown / attack_speed",
+      "animation_recovery": 0.9,
+      "button_cooldown_display": "no general authoritative cooldown state",
+      "persisted": false,
+      "matches_server_candidate": false,
+      "errors": [
+        "COOLDOWN_ERROR"
+      ]
+    }
+  ],
+  "mismatch_count": 33
+}

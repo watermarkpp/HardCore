@@ -14,6 +14,190 @@ POLICY_PATH = ROOT / "assets/data/source_priority_policy.json"
 CATALOG_PATH = ROOT / "outputs/resource_catalog/complete_local_mir_sources/manifest.json"
 EXAMPLE_PATH = ROOT / "assets/data/source_priority_fallback_evidence.example.json"
 
+EXPECTED_LANES = {
+    "combat_units",
+    "skills",
+    "equipment_attributes",
+    "client_assets",
+    "client_rules",
+    "server_data",
+    "server_rules",
+    "monster_drop_probability",
+    "monster_attributes_21cq",
+}
+
+MONSTER_ATTRIBUTE_ROUTING_KEY = "monster_attributes_timing_life_flags"
+MONSTER_ATTRIBUTE_PRIMARY = {
+    "distribution": "user.21cq.com.mir.monster_detail",
+    "tier": "primary",
+    "order": 0,
+    "weight": 100,
+    "catalogRequired": False,
+    "rootPrefix": "assets/data/monster_21cq_detail_source_v1.json",
+    "contractId": "monster.21cq.detail.user_override.v1",
+    "authority": "user_authoritative_override",
+    "sourceKind": "tracked_exact_id_site_snapshot",
+    "evidenceSha256": "2F2DC3D1AB733081FD36BFE9608702E13B468A0EE0D8A921DC77501DFA13474F",
+}
+MONSTER_ATTRIBUTE_SCOPE = {
+    "monster_combat_stats",
+    "monster_agility",
+    "monster_accuracy",
+    "monster_attack_interval",
+    "monster_move_interval",
+    "monster_life_type",
+    "monster_anti_stealth",
+}
+MONSTER_ATTRIBUTE_EXCLUDED_CONTENT = {
+    "drops",
+    "drop_probability",
+    "spawn",
+    "respawn",
+    "map",
+    "spawn_quantity",
+    "respawn_time",
+}
+MONSTER_ATTRIBUTE_SCOPE_EXCLUSIONS = {
+    "server_data": {"monster_spawn", "monster_respawn", "monster_map_placement"},
+    "server_rules": {"monster_ai", "monster_special_delivery"},
+    "monster_drop_probability": {
+        "monster_drop_probability",
+        "monster_drop_tables",
+        "post_rng_overflow",
+    },
+}
+
+MONSTER_DROP_ROUTING_KEY = "monster_drop_probability_and_post_rng_overflow"
+MONSTER_DROP_PRIMARY = {
+    "distribution": "project.hardcore.dpv2_21cq_direct_baseline.v2",
+    "tier": "primary",
+    "order": 0,
+    "weight": 100,
+    "catalogRequired": False,
+    "rootPrefix": "assets/data/canonical_monster_drop_source_v2.json",
+    "contractId": "dpv2.21cq.direct_baseline.v2",
+    "authority": "user_authoritative_override",
+    "sourceKind": "tracked_user_locked_logical_21cq_artifact",
+    "originalPath": "assets/data/canonical_monster_drop_source_v2.json",
+    "directRuntimeArtifact": "assets/data/drop/dpv2_direct_baseline_v2.json",
+    "evidenceSha256": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+}
+MONSTER_DROP_SCOPE_EXCLUSIONS = {
+    "server_data": {
+        "monster_identity",
+        "monster_stats",
+        "monster_ai",
+        "monster_combat",
+        "monster_respawn",
+        "monster_spawn",
+        "monster_map_placement",
+        "item_identity",
+        "item_attributes",
+    },
+    "server_rules": {
+        "monster_ai",
+        "monster_combat",
+        "monster_respawn",
+    },
+}
+
+
+def _matches_exact_scope(actual: object, expected: set[str]) -> bool:
+    """Require the drop lane's exclusions to contain no omissions or extras."""
+
+    if not isinstance(actual, list) or not all(isinstance(item, str) for item in actual):
+        return False
+    return len(actual) == len(expected) and set(actual) == expected
+
+
+def _check_monster_drop_lane(policy: dict, checks: dict[str, bool]) -> None:
+    """Validate the DPV2 lane's routing, authority, and drop-only exclusions."""
+
+    lanes = policy.get("lanes", {})
+    routing = policy.get("routing", {})
+    lane = lanes.get("monster_drop_probability") if isinstance(lanes, dict) else None
+    if not isinstance(lane, dict):
+        checks["monsterDropProbabilityRouting"] = False
+        checks["monsterDropProbabilityPrimaryIsProjectMaster"] = False
+        checks["monsterDropProbabilityScopeIsDropOnly"] = False
+        return
+
+    checks["monsterDropProbabilityRouting"] = (
+        isinstance(routing, dict)
+        and routing.get(MONSTER_DROP_ROUTING_KEY) == "monster_drop_probability"
+    )
+
+    scope_exclusions = lane.get("scopeExclusions")
+    checks["monsterDropProbabilityScopeIsDropOnly"] = (
+        isinstance(scope_exclusions, dict)
+        and set(scope_exclusions) == set(MONSTER_DROP_SCOPE_EXCLUSIONS)
+        and all(
+            _matches_exact_scope(scope_exclusions.get(scope), expected)
+            for scope, expected in MONSTER_DROP_SCOPE_EXCLUSIONS.items()
+        )
+    )
+
+    sources = lane.get("sources", [])
+    if not isinstance(sources, list):
+        sources = []
+    eligible_sources = [
+        source
+        for source in sources
+        if isinstance(source, dict) and source.get("eligible", False)
+    ]
+    eligible_sources.sort(
+        key=lambda source: (
+            int(source.get("order", 999)),
+            -int(source.get("weight", 0)),
+        )
+    )
+    primary = eligible_sources[0] if len(eligible_sources) == 1 else {}
+    checks["monsterDropProbabilityPrimaryIsProjectMaster"] = (
+        bool(primary)
+        and all(primary.get(key) == value for key, value in MONSTER_DROP_PRIMARY.items())
+    )
+
+
+def _check_monster_attribute_lane(policy: dict, checks: dict[str, bool]) -> None:
+    """Validate the exact user-authoritative 21CQ attribute-only lane."""
+
+    lanes = policy.get("lanes", {})
+    routing = policy.get("routing", {})
+    lane = lanes.get("monster_attributes_21cq") if isinstance(lanes, dict) else None
+    if not isinstance(lane, dict):
+        checks["monsterAttributeRouting"] = False
+        checks["monsterAttributePrimaryIsUserOverride"] = False
+        checks["monsterAttributeScopeIsExact"] = False
+        return
+
+    checks["monsterAttributeRouting"] = (
+        isinstance(routing, dict)
+        and routing.get(MONSTER_ATTRIBUTE_ROUTING_KEY) == "monster_attributes_21cq"
+    )
+    exclusions = lane.get("scopeExclusions")
+    sources = lane.get("sources", [])
+    primary = sources[0] if isinstance(sources, list) and len(sources) == 1 else {}
+    checks["monsterAttributePrimaryIsUserOverride"] = (
+        bool(primary)
+        and all(primary.get(key) == value for key, value in MONSTER_ATTRIBUTE_PRIMARY.items())
+    )
+    checks["monsterAttributeScopeIsExact"] = all(
+        [
+            isinstance(exclusions, dict),
+            isinstance(exclusions, dict)
+            and set(exclusions) == set(MONSTER_ATTRIBUTE_SCOPE_EXCLUSIONS),
+            isinstance(exclusions, dict)
+            and all(
+                _matches_exact_scope(exclusions.get(scope), expected)
+                for scope, expected in MONSTER_ATTRIBUTE_SCOPE_EXCLUSIONS.items()
+            ),
+            _matches_exact_scope(primary.get("scope"), MONSTER_ATTRIBUTE_SCOPE),
+            _matches_exact_scope(
+                primary.get("excludedContent"), MONSTER_ATTRIBUTE_EXCLUDED_CONTENT
+            ),
+        ]
+    )
+
 
 def main() -> None:
     policy = load_json(POLICY_PATH)
@@ -22,7 +206,7 @@ def main() -> None:
     expected_weights = policy["weights"]
     checks: dict[str, bool] = {}
 
-    checks["fourLanesPresent"] = set(policy["lanes"]) == {"client_assets", "client_rules", "server_data", "server_rules"}
+    checks["requiredLanesPresent"] = set(policy["lanes"]) == EXPECTED_LANES
     checks["strictFallbackRules"] = all([
         policy["rules"].get("singleSourceFirst") is True,
         policy["rules"].get("crossDistributionMergeByDefault") is False,
@@ -36,7 +220,11 @@ def main() -> None:
     order_strict = True
     for lane in policy["lanes"]:
         sources = active_sources(policy, lane)
-        all_cataloged &= all(source["distribution"] in catalog_entries for source in sources)
+        all_cataloged &= all(
+            source.get("catalogRequired", True) is False
+            or source["distribution"] in catalog_entries
+            for source in sources
+        )
         exactly_one_primary &= sum(source["tier"] == "primary" for source in sources) == 1
         weights_match &= all(int(source["weight"]) == int(expected_weights[source["tier"]]) for source in sources)
         orders = [int(source["order"]) for source in sources]
@@ -46,8 +234,60 @@ def main() -> None:
     checks["tierWeightsMatch"] = weights_match
     checks["strictOrderPerLane"] = order_strict
 
+    _check_monster_drop_lane(policy, checks)
+    _check_monster_attribute_lane(policy, checks)
+
     checks["clientPrimaryIsAcceptedClassic"] = active_sources(policy, "client_assets")[0]["distribution"] == "client.classic_raw_complete"
     checks["serverPrimaryIsCleanDatabase"] = active_sources(policy, "server_data")[0]["distribution"] == "server.crystal.cjlaaa"
+    equipment_primary = active_sources(policy, "equipment_attributes")[0]
+    checks["equipmentPrimaryIsProjectMaster"] = (
+        equipment_primary["distribution"] == "project.hardcore.equipment_attribute_master.v2"
+        and equipment_primary.get("catalogRequired") is False
+        and equipment_primary.get("contractId") == "equipment.attribute.master.v2"
+        and equipment_primary.get("sourceKind") == "explicit_user_primary_override"
+        and equipment_primary.get("evidenceSha256")
+        == "CEEB2E68D07E2FFA112C46A954D04AAB68A95A576634199E05AB98FF23ABF83D"
+        and len(str(equipment_primary.get("evidenceSha256", ""))) == 64
+    )
+    checks["equipmentAttributesExcludedFromServerData"] = set(
+        policy["lanes"]["equipment_attributes"]["scopeExclusions"]["server_data"]
+    ) == {
+        "equipment_attributes",
+        "equipment_requirements",
+        "equipment_job_affinity",
+        "equipment_gender_restrictions",
+        "equipment_hand_weight",
+        "equipment_wear_weight",
+    }
+    skill_primary = active_sources(policy, "skills")[0]
+    checks["skillsPrimaryIsUserAuthorizedContract"] = all([
+        skill_primary["distribution"] == "project.hardcore.mir2_176_skill_sot.v1.0.1",
+        skill_primary.get("catalogRequired") is False,
+        skill_primary.get("contractId") == "skills.mir2_176.vanilla_33.v1.0.1",
+        skill_primary.get("sourceKind") == "explicit_user_primary_override",
+        skill_primary.get("packageEvidenceSha256")
+        == "2DAC78D285DFF8D5F1BA36A8B83E0E8F11C70B76ACE15A34EE7FBFB802862A22",
+        skill_primary.get("contractEvidenceSha256")
+        == "6C4A4B447787EB6AD9F9F44C6C24CF6CA23C952673797226C66541008B25C516",
+        len(str(skill_primary.get("packageEvidenceSha256", ""))) == 64,
+        len(str(skill_primary.get("contractEvidenceSha256", ""))) == 64,
+    ])
+    checks["skillsExcludedFromGenericSources"] = all([
+        set(policy["lanes"]["skills"]["scopeExclusions"]["server_data"]) == {
+            "vanilla_skill_membership",
+            "vanilla_skill_progression",
+            "vanilla_skill_mp",
+            "vanilla_skill_targeting",
+            "vanilla_skill_resources",
+        },
+        set(policy["lanes"]["skills"]["scopeExclusions"]["server_rules"]) == {
+            "vanilla_skill_formula_identity",
+            "vanilla_skill_geometry",
+            "vanilla_skill_timing",
+            "vanilla_skill_proficiency",
+            "vanilla_skill_state_machine",
+        },
+    ])
     checks["rulePrimariesAreARated"] = all(
         catalog_entries[active_sources(policy, lane)[0]["distribution"]]["confidence"] == "A-rule-source"
         for lane in ["client_rules", "server_rules"]

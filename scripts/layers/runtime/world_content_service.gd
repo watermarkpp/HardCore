@@ -1,5 +1,7 @@
 extends Node
 
+signal initial_load_finished(success: bool)
+
 const PATHS := {
 	"map": "res://assets/data/vanilla_176/map_content.json",
 	"spawn": "res://assets/data/runtime/region_spawn_runtime_catalog.json",
@@ -10,10 +12,31 @@ const PATHS := {
 
 var maps: Dictionary = {}
 var drops: Dictionary = {}
+var initial_load_deferred := OS.get_name() == "Android"
+var _initial_load_started := false
+var _initial_load_complete := false
 
 
 func _ready() -> void:
+	if not initial_load_deferred:
+		ensure_loaded()
+
+
+func is_loaded() -> bool:
+	return _initial_load_complete
+
+
+func ensure_loaded() -> bool:
+	if _initial_load_complete:
+		return true
+	if _initial_load_started:
+		return false
+	_initial_load_started = true
 	reload()
+	_initial_load_complete = not maps.is_empty()
+	_initial_load_started = false
+	initial_load_finished.emit(_initial_load_complete)
+	return _initial_load_complete
 
 
 func reload() -> void:
@@ -36,6 +59,7 @@ func reload() -> void:
 	for row: Variant in _records(PATHS.drops):
 		if row is Dictionary:
 			drops[str(row.get("monsterName", ""))] = _decode(row.get("drops", []))
+	_initial_load_complete = not maps.is_empty()
 
 
 func has_map(map_id: int) -> bool:

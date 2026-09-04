@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "contractId": "gameplay.pricing.authority.v1",
+  "policyVersion": "2026-08-14.3",
+  "currencyId": "gold",
+  "source": {
+    "distribution": "server.crystal.cjlaaa",
+    "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Server.MirDB",
+    "field": "StdItem.Price",
+    "parser": "tools/build_complete_item_system.py:ItemInfo.price:uint32_le",
+    "originalRules": "dev_art_sources/reference/original_gameofmir/M2Server/ObjNpc.pas:GetItemPrice/GetUserPrice/GetUserItemPrice/GetSellItemPrice/RepairItem"
+  },
+  "rounding": "half_up_integer",
+  "merchant": {
+    "stockMarkupBps": 11000,
+    "defaultPriceRateBps": 10000
+  },
+  "modifiers": {
+    "globalBps": 10000,
+    "categoryBps": {},
+    "itemBps": {}
+  },
+  "sell": {
+    "rateBps": 5000,
+    "minimumPositivePrice": 1,
+    "nonTradableKinds": ["currency", "quest_item"],
+    "rejectBoundItems": true,
+    "merchantTypeGate": "all_shop_merchants",
+    "projectOverrideReason": "all_shop_npcs_buy_all_tradable_player_items",
+    "durabilityValuation": "original_get_user_item_price"
+  },
+  "repair": {
+    "contractId": "gameplay.repair.batch_all_equipment.v1",
+    "priceDivisor": 3,
+    "partialRepair": "deterministic_per_instance_delta_minimum_positive_price_1",
+    "batchOrderOwner": "player_state_equipment_slot_priority",
+    "batchPrioritySlots": ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"],
+    "authorizedFullEquipmentMerchantIds": ["merchant.server.crystal.cjlaaa.46"],
+    "merchantCapabilityGate": "authoritative_merchant_id_and_supports_repair",
+    "sourceTypesApplyToRepair": false,
+    "sourceTypesMeaning": "trade_catalog_categories_only",
+    "insufficientGoldPolicy": "weapon_first_then_stable_slot_order_maximum_affordable_raw_delta",
+    "transactionPolicy": "single_save_commit_with_equipment_and_gold_rollback",
+    "preserveMaximumDurability": true,
+    "specialRepairEnabled": false,
+    "projectOverrideReason": "user_accepted_normal_repair_preserves_maximum_durability_and_blacksmith_repairs_all_equipped_items"
+  },
+  "forge": {
+    "valuationOnly": true,
+    "recipeCostPolicy": "not_defined"
+  }
+}

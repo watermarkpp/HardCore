@@ -5,7 +5,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]; DATA=ROOT/"assets/data/map_design"
-ALLOWED={"remake_compact","shrink_and_recompose","preserve_function","preserve_route","reduce_duplicates","preserve_arena","exact_clone_of_orc_tomb_1","exact_clone_of_wooma_temple_1","exact_clone_of_stone_tomb_1"}
+ALLOWED={"remake_compact","shrink_and_recompose","preserve_function","preserve_route","reduce_duplicates","preserve_arena","exact_clone_of_orc_tomb_1","exact_clone_of_wooma_temple_1","exact_clone_of_stone_tomb_1","exact_clone_of_zuma_temple_1"}
 def main():
     catalog=json.loads((DATA/"map_design_catalog.json").read_text(encoding="utf-8")); errors=[]; warnings=[]
     blank=json.loads((DATA/"map_blank_templates.json").read_text(encoding="utf-8"))
@@ -51,6 +51,12 @@ def main():
         if clone.get("size_status")!="user_confirmed_exact_clone": errors.append(f"acceptance: {mid} clone size status")
         if clone.get("source_audit_status")!="workspace_clone": errors.append(f"acceptance: {mid} clone audit status")
         if clone.get("design_size")!=lookup.get("stone_tomb_1",{}).get("design_size"): errors.append(f"acceptance: {mid} clone size differs from floor 1")
+    for mid in ("zuma_temple_2", "zuma_temple_3", "zuma_temple_4"):
+        clone=lookup.get(mid,{})
+        if clone.get("clone_source_map_id")!="zuma_temple_1": errors.append(f"acceptance: {mid} clone source")
+        if clone.get("size_status")!="user_confirmed_exact_clone": errors.append(f"acceptance: {mid} clone size status")
+        if clone.get("source_audit_status")!="workspace_clone": errors.append(f"acceptance: {mid} clone audit status")
+        if clone.get("design_size")!=lookup.get("zuma_temple_1",{}).get("design_size"): errors.append(f"acceptance: {mid} clone size differs from floor 1")
     if lookup.get("bich_province",{}).get("size_status")!="user_confirmed_final": errors.append("acceptance: bich final size status")
     if factor!=Decimal("0.3125"): errors.append("acceptance: global scale factor")
     if len(blank_templates)!=len(maps): errors.append("acceptance: template count")

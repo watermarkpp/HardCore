@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://wb_scope"]
+[ext_resource type="Script" path="res://tests/world_background_resource_scope_test.gd" id="1"]
+[node name="WBScope" type="Node"]
+script = ExtResource("1")

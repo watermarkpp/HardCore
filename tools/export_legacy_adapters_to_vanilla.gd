@@ -43,6 +43,7 @@ func _run() -> void:
 		"skillProfiles": _encode(ProfessionRules.SKILL_PROFILES),
 		"castDefaults": _encode(ProfessionRules.CAST_DEFAULTS),
 		"skillTimingOverrides": _encode(ProfessionRules.SKILL_TIMING_OVERRIDES),
+		"combatReactionPolicy": _encode(ProfessionRules.COMBAT_REACTION_POLICY),
 	})
 	print("LEGACY_ADAPTER_EXPORT_PASS maps=%d drops=%d" % [map_content.size(), drop_records.size()])
 	get_tree().quit(0)

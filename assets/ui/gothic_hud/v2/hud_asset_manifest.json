@@ -37,16 +37,19 @@
     {
       "id": "ui.hud.gothic.v2.right_controls",
       "path": "res://assets/ui/gothic_hud/v2/runtime/right_controls_v2.png",
-      "pixelSize": [347, 540]
+      "pixelSize": [347, 540],
+      "status": "deprecated_not_loaded",
+      "reason": "isolated alpha contamination between the mana orb and the first skill area"
+    },
+    {
+      "id": "ui.hud.gothic.v3.round_action_frame",
+      "path": "res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png",
+      "pixelSize": [128, 128],
+      "compositionPolicy": "independent_frames_replace_polluted_right_controls_composite"
     }
   ],
   "interactionContracts": {
-    "professionSkillSlots": [
-      "hud.profession_skill.1",
-      "hud.profession_skill.2",
-      "hud.profession_skill.3",
-      "hud.profession_skill.4"
-    ],
+    "attackPrimary": "hud.attack.primary",
     "itemSlots": [
       "hud.item_slot.1",
       "hud.item_slot.2",
@@ -56,7 +59,10 @@
     "attackRingSkills": [
       "hud.attack_ring_skill.1",
       "hud.attack_ring_skill.2",
-      "hud.attack_ring_skill.3"
+      "hud.attack_ring_skill.3",
+      "hud.attack_ring_skill.4",
+      "hud.attack_ring_skill.5",
+      "hud.attack_ring_skill.6"
     ],
     "activationModeSource": "skill.activation_mode",
     "warriorPolicy": "toggle",
@@ -65,7 +71,7 @@
   "skillIconCatalog": {
     "id": "ui.hud.skill_icon.warrior.v1",
     "manifest": "res://assets/ui/gothic_hud/v2/runtime/skill_icons/skill_icon_manifest.json",
-    "binding": "PlayerState.quick_slots",
+    "binding": "PlayerState.skill_button_assignments_snapshot",
     "presentation": "source effect pixels only; gothic framing supplied by HUD V2"
   }
 }

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/game_root_fixed_area_ground_spike_integration_test.gd" type="Script" id="1"]
+
+[node name="GameRootFixedAreaGroundSpikeIntegrationTest" type="Node"]
+script = ExtResource("1")

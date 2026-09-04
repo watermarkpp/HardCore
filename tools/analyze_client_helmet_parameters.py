@@ -28,6 +28,7 @@ ACTIONS = {
     "idle": {"start": 0, "frames": 4},
     "walk": {"start": 64, "frames": 6},
     "attack": {"start": 200, "frames": 6},
+    "cast": {"start": 392, "frames": 6},
     "hit": {"start": 472, "frames": 3},
     "death": {"start": 536, "frames": 4},
 }
@@ -224,7 +225,7 @@ def main() -> None:
             }
         )
     payload = {
-        "schemaVersion": 4,
+        "schemaVersion": 5,
         "source": LIBRARY.relative_to(ROOT).as_posix(),
         "sourceSha256": hashlib.sha256(LIBRARY.read_bytes()).hexdigest(),
         "hairAnchorSource": HAIR_LIBRARY.relative_to(ROOT).as_posix(),

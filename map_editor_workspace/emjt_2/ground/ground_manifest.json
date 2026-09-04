@@ -1,0 +1,151 @@
+{
+  "blank_chunk_policy": "transparent_until_painted",
+  "chunk_grid_size": [
+    3.0,
+    2.0
+  ],
+  "chunk_size_px": [
+    1024.0,
+    1024.0
+  ],
+  "chunks": [
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "",
+      "baked_operation_count": 441,
+      "chunk_id": "c_0_0",
+      "fill_asset_id": "",
+      "grid": [
+        0.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_0_0.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_0_0.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "",
+      "baked_operation_count": 1816,
+      "chunk_id": "c_1_0",
+      "fill_asset_id": "",
+      "grid": [
+        1.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_1_0.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_1_0.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "",
+      "baked_operation_count": 961,
+      "chunk_id": "c_2_0",
+      "fill_asset_id": "",
+      "grid": [
+        2.0,
+        0.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_2_0.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_2_0.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "",
+      "baked_operation_count": 482,
+      "chunk_id": "c_0_1",
+      "fill_asset_id": "",
+      "grid": [
+        0.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_0_1.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_0_1.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "",
+      "baked_operation_count": 557,
+      "chunk_id": "c_1_1",
+      "fill_asset_id": "",
+      "grid": [
+        1.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_1_1.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_1_1.json"
+    },
+    {
+      "baked_coordinate_contract_id": "isometric_cell_center_64x32_v1",
+      "baked_default_fill_asset_id": "",
+      "baked_operation_count": 2,
+      "chunk_id": "c_2_1",
+      "fill_asset_id": "",
+      "grid": [
+        2.0,
+        1.0
+      ],
+      "materialized": true,
+      "preview_png": "ground/baked_preview/c_2_1.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        1024.0,
+        512.0
+      ],
+      "state": "materialized",
+      "workspace_chunk": "ground/chunks/c_2_1.json"
+    }
+  ],
+  "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+  "default_fill_asset_id": "",
+  "design_size": [
+    32.0,
+    64.0
+  ],
+  "ground_pixel_size": [
+    3072.0,
+    1536.0
+  ],
+  "map_id": "emjt_2",
+  "schema_version": 1.0
+}

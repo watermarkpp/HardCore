@@ -35,6 +35,8 @@ var wall_loop_max_y: SpinBox
 var size_label: Label
 var path_label: Label
 var status_label: Label
+var _last_build_candidate: Dictionary = {}
+var _candidate_validation_elapsed := 0.0
 var preview: MapEditorCanvasPreview
 var asset_tree: Tree
 var brush_label: Label
@@ -47,6 +49,8 @@ var calibration_footprint_y: SpinBox
 var calibration_collision: OptionButton
 var calibration_occlusion: CheckBox
 var object_role_option: OptionButton
+var map_portal_note_container: VBoxContainer
+var map_portal_note_edit: LineEdit
 var collision_shape_option: OptionButton
 var collision_draw_toggle: CheckBox
 var collision_erase_toggle: CheckBox
@@ -149,11 +153,23 @@ func _load_default_workspace_deferred() -> void:
 	print("MSE_STARTUP_DOCUMENT_LOAD_FINISHED")
 
 
+func _process(delta: float) -> void:
+	_poll_monster_hover()
+	if _last_build_candidate.is_empty():
+		_candidate_validation_elapsed = 0.0
+		return
+	_candidate_validation_elapsed += delta
+	if _candidate_validation_elapsed < 0.1:
+		return
+	_candidate_validation_elapsed = 0.0
+	_invalidate_last_build_candidate_if_stale()
+
+
 func _startup_document_path() -> String:
 	var recent_path := _load_last_document_path()
 	if not recent_path.is_empty() and FileAccess.file_exists(recent_path):
-		return recent_path
-	var bich_path := MapEditorSaveService.default_path("bich_province")
+		return MapEditorSaveService.canonical_workspace_path(recent_path)
+	var bich_path := MapEditorSaveService.default_path("world_bich_province")
 	if FileAccess.file_exists(bich_path):
 		return bich_path
 	return MapEditorSaveService.default_path("sandbox_64")
@@ -222,6 +238,23 @@ func _build_ui() -> void:
 	sidebar.add_child(wall_loop_button)
 	_build_wall_loop_dialog()
 	var select_button:=Button.new(); select_button.text="选择工具（悬停高亮／左键选取／方向键移动）"; select_button.pressed.connect(_activate_select_tool); sidebar.add_child(select_button)
+	map_portal_note_container = VBoxContainer.new()
+	map_portal_note_container.visible = false
+	var map_portal_note_label := Label.new()
+	map_portal_note_label.text = "选中地图出入口的备注"
+	map_portal_note_container.add_child(map_portal_note_label)
+	map_portal_note_edit = LineEdit.new()
+	map_portal_note_edit.placeholder_text = "例如：N方向连接祖玛寺庙二层 S方向入口"
+	map_portal_note_edit.max_length = 1024
+	map_portal_note_edit.text_submitted.connect(_on_map_portal_note_submitted)
+	map_portal_note_container.add_child(map_portal_note_edit)
+	var save_map_portal_note_button := Button.new()
+	save_map_portal_note_button.text = "保存选中入口备注"
+	save_map_portal_note_button.pressed.connect(
+		_on_save_selected_map_portal_note_pressed
+	)
+	map_portal_note_container.add_child(save_map_portal_note_button)
+	sidebar.add_child(map_portal_note_container)
 	random_region_fill_toggle = CheckBox.new(); random_region_fill_toggle.text = "自由套索选择模式"; random_region_fill_toggle.toggled.connect(_on_lasso_mode_toggled); sidebar.add_child(random_region_fill_toggle)
 	point_erase_toggle = CheckBox.new(); point_erase_toggle.text = "点选/拖动擦除地面和对象"; point_erase_toggle.toggled.connect(_on_point_erase_toggled); sidebar.add_child(point_erase_toggle)
 	var role_label := Label.new(); role_label.text = "对象语义角色"; sidebar.add_child(role_label)
@@ -249,27 +282,28 @@ func _build_ui() -> void:
 		["光效点","light"],["区域触发器","region_trigger"],
 	]:
 		semantic_kind_option.add_item(kind[0]); semantic_kind_option.set_item_metadata(semantic_kind_option.item_count-1,kind[1])
-	semantic_kind_option.item_selected.connect(_on_semantic_kind_selected); semantic_kind_option.pressed.connect(_activate_semantic_placement)
+	semantic_kind_option.alignment = HORIZONTAL_ALIGNMENT_LEFT; semantic_kind_option.item_selected.connect(_on_semantic_kind_selected); semantic_kind_option.pressed.connect(_activate_semantic_placement)
 	sidebar.add_child(semantic_kind_option)
 	var content_label := Label.new(); content_label.text = "NPC / 怪物 / Boss / 特殊地图目录"; sidebar.add_child(content_label)
-	semantic_content_option = OptionButton.new(); semantic_content_option.fit_to_longest_item = false; semantic_content_option.item_selected.connect(_on_semantic_content_selected); semantic_content_option.pressed.connect(_activate_semantic_placement); sidebar.add_child(semantic_content_option)
+	semantic_content_option = OptionButton.new(); semantic_content_option.fit_to_longest_item = false; semantic_content_option.alignment = HORIZONTAL_ALIGNMENT_LEFT; semantic_content_option.item_selected.connect(_on_semantic_content_selected); semantic_content_option.pressed.connect(_activate_semantic_placement); sidebar.add_child(semantic_content_option)
 	_build_monster_picker()
-	semantic_catalog_tree = Tree.new(); semantic_catalog_tree.hide_root = true; semantic_catalog_tree.custom_minimum_size = Vector2(0, 150); semantic_catalog_tree.size_flags_horizontal = Control.SIZE_EXPAND_FILL; semantic_catalog_tree.item_selected.connect(_on_semantic_catalog_selected); semantic_catalog_tree.gui_input.connect(_on_semantic_catalog_gui_input); sidebar.add_child(semantic_catalog_tree); _refresh_semantic_catalog_tree()
+	semantic_catalog_tree = Tree.new(); semantic_catalog_tree.hide_root = true; semantic_catalog_tree.custom_minimum_size.y = 150; semantic_catalog_tree.item_selected.connect(_on_semantic_catalog_selected); semantic_catalog_tree.gui_input.connect(_on_semantic_catalog_gui_input); sidebar.add_child(semantic_catalog_tree); _refresh_semantic_catalog_tree()
 	semantic_detail_scroll = ScrollContainer.new()
 	semantic_detail_scroll.custom_minimum_size = Vector2(0, 180)
-	semantic_detail_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	semantic_detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	semantic_detail_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	semantic_detail_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	semantic_detail_label = Label.new()
+	semantic_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	semantic_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	semantic_detail_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	semantic_detail_label.text = "选择目录条目查看 canonical 属性、贴图、分类与完整掉落。"
 	semantic_detail_scroll.add_child(semantic_detail_label)
 	sidebar.add_child(semantic_detail_scroll)
 	semantic_content_id = _field(sidebar, "内容ID（高级选项，可手工覆盖）", "")
 	semantic_display_name = _field(sidebar, "标注名称", "")
 	semantic_target_map = _field(sidebar, "传送点连接的目标地图 ID（由连接工具配置）", "")
 	semantic_target_entrance = _field(sidebar, "目标传送点 ID（由连接工具配置）", "")
-	semantic_radius = _spin_field(sidebar, "刷新/区域半径（格；Boss 可为 0）", 0, 64); semantic_radius.value = 3
+	semantic_radius = _spin_field(sidebar, "刷新/区域半径（GU；Boss 可为 0）", 0, 64); semantic_radius.value = 3
 	semantic_count = _spin_field(sidebar, "刷新数量", 1, 200); semantic_count.value = 1
 	semantic_respawn = _spin_field(sidebar, "刷新间隔（秒）", 1, 86400); semantic_respawn.value = 60
 	semantic_max_alive = _spin_field(sidebar, "最大存活数", 1, 200); semantic_max_alive.value = 1
@@ -283,7 +317,8 @@ func _build_ui() -> void:
 	var semantic_update_button := Button.new(); semantic_update_button.text = "更新当前选中的功能标注"; semantic_update_button.pressed.connect(_on_update_selected_semantic_pressed); sidebar.add_child(semantic_update_button)
 	var door_note := Label.new(); door_note.text = "入口与出口必须分别手工标注：先摆放墙门美术，再选“地图入口”或“地图出口”点在门的位置。入口美术不会自动生成门点。安全区左键逐点，Enter 闭合，右键取消。"; door_note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART; door_note.modulate=Color("b8c3cf"); sidebar.add_child(door_note)
 	var bake_button := Button.new(); bake_button.text = "烘焙 Dirty Chunk 预览"; bake_button.pressed.connect(_on_bake_dirty_pressed); sidebar.add_child(bake_button)
-	var build_runtime_button := Button.new(); build_runtime_button.text = "批准并构建 Runtime 快照"; build_runtime_button.pressed.connect(_on_approve_and_build_runtime_pressed); sidebar.add_child(build_runtime_button)
+	var build_candidate_button := Button.new(); build_candidate_button.text = "构建 Runtime 候选"; build_candidate_button.pressed.connect(_on_build_candidate_pressed); sidebar.add_child(build_candidate_button)
+	var publish_release_button := Button.new(); publish_release_button.text = "发布为正式地图"; publish_release_button.pressed.connect(_on_publish_runtime_pressed); sidebar.add_child(publish_release_button)
 	var calibration_title := Label.new(); calibration_title.text = "素材校准（Expansion覆盖）"; calibration_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(calibration_title)
 	calibration_anchor_x = _spin_field(sidebar, "锚点 X", 0, 2048)
 	calibration_anchor_y = _spin_field(sidebar, "锚点 Y", 0, 2048)
@@ -304,13 +339,13 @@ func _build_ui() -> void:
 	asset_size_menu = PopupMenu.new(); asset_size_menu.add_item("放大 10%", 1); asset_size_menu.add_item("缩小 10%", 2); asset_size_menu.add_separator(); asset_size_menu.add_item("恢复初始大小", 3); asset_size_menu.add_separator(); asset_size_menu.add_item("删除素材", 4); asset_size_menu.id_pressed.connect(_on_asset_size_menu_pressed); add_child(asset_size_menu)
 	_build_asset_delete_dialog()
 	instance_size_menu = PopupMenu.new(); instance_size_menu.add_item("放大当前地图素材 10%", 1); instance_size_menu.add_item("缩小当前地图素材 10%", 2); instance_size_menu.add_separator(); instance_size_menu.add_item("提高一层（仅素材间）", 3); instance_size_menu.add_item("下降一层（仅素材间）", 4); instance_size_menu.id_pressed.connect(_on_instance_size_menu_pressed); add_child(instance_size_menu)
-	_on_semantic_kind_selected(0)
 	var first_asset := _first_asset_tree_item()
 	if first_asset != null:
 		first_asset.select(0)
 		_activate_asset_tree_item(first_asset)
-	_activate_select_tool()
 	_build_monster_inspector_panel()
+	_on_semantic_kind_selected(0, false)
+	_activate_select_tool()
 
 
 func _field(parent: Control, label_text: String, initial: String) -> LineEdit:
@@ -938,7 +973,7 @@ func _on_open_template_pressed() -> void:
 
 
 func _open_workspace_map(meta: Dictionary) -> void:
-	var path := str(meta.get("path", ""))
+	var path := MapEditorSaveService.canonical_workspace_path(str(meta.get("path", "")))
 	if path.is_empty() or not FileAccess.file_exists(path):
 		status_label.text = "自建地图文件不存在：%s" % path
 		return
@@ -1001,6 +1036,7 @@ func _open_template_by_id(template_id: String, document_path := "", workspace_ov
 		status_label.text = "地图模板不存在：%s" % template_id
 		return false
 	var path := document_path if not document_path.is_empty() else MapEditorSaveService.default_path(str(template.get("map_id", "")))
+	path = MapEditorSaveService.canonical_workspace_path(path)
 	if FileAccess.file_exists(path):
 		return _open_document_path(path)
 	var document := MapEditorTypes.new_map_from_blank_template(template_id)
@@ -1237,6 +1273,8 @@ func _ensure_ground_coordinate_contract(initialized: Dictionary) -> Dictionary:
 
 
 func _reset_document_session_state() -> void:
+	_last_build_candidate = {}
+	_candidate_validation_elapsed = 0.0
 	command_stack.clear()
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
@@ -1248,6 +1286,17 @@ func _reset_document_session_state() -> void:
 	if preview != null:
 		preview.reset_for_document_open()
 	_reset_semantic_draft_fields()
+
+
+func _invalidate_last_build_candidate_if_stale() -> bool:
+	if _last_build_candidate.is_empty():
+		return false
+	if MapEditorBuildRuntimeService.candidate_matches_document(
+		_last_build_candidate, current_document
+	):
+		return false
+	_last_build_candidate = {}
+	return true
 
 
 func _reset_semantic_draft_fields() -> void:
@@ -1620,10 +1669,12 @@ func _activate_semantic_placement() -> void:
 
 func _on_selectable_selected(selectable_id:String,_additive:bool)->void:
 	if selectable_id.is_empty():
+		_hide_map_portal_note_editor()
 		status_label.text = "已清空选择"
 		return
 	var semantic := MapEditorGameplaySemanticService.find_entry(current_document, selectable_id)
 	if not semantic.is_empty():
+		_hide_map_portal_note_editor()
 		_select_semantic_kind(str(semantic.get("kind", "")), false)
 		_sync_semantic_editor_fields(semantic)
 		semantic_display_name.text = str(semantic.get("display_name", ""))
@@ -1631,7 +1682,58 @@ func _on_selectable_selected(selectable_id:String,_additive:bool)->void:
 		semantic_target_entrance.text = str(semantic.get("target_entrance_id", ""))
 		status_label.text = "已选中功能标注：%s；修改参数后点击“更新当前选中的功能标注”" % selectable_id
 		return
-	status_label.text="已选中：%s" % selectable_id
+	if _sync_map_portal_note_editor(selectable_id):
+		status_label.text = "已选中地图出入口：%s；可在左侧填写本入口连接备注" % selectable_id
+	else:
+		status_label.text="已选中：%s" % selectable_id
+
+
+func _sync_map_portal_note_editor(instance_id: String) -> bool:
+	_hide_map_portal_note_editor()
+	if not instance_id.begins_with("inst_"):
+		return false
+	var located := MapEditorInstanceService._locate(current_document, instance_id)
+	if not bool(located.get("ok", false)):
+		return false
+	var instance: Dictionary = located.instance
+	var asset := MapAssetCatalogService.find_asset(
+		str(instance.get("asset_id", ""))
+	)
+	if not PortalAnchorService.is_portal_asset(asset):
+		return false
+	map_portal_note_edit.text = str(
+		instance.get(MapEditorInstanceService.MAP_PORTAL_NOTE_FIELD, "")
+	)
+	map_portal_note_container.visible = true
+	return true
+
+
+func _hide_map_portal_note_editor() -> void:
+	if map_portal_note_edit != null:
+		map_portal_note_edit.text = ""
+	if map_portal_note_container != null:
+		map_portal_note_container.visible = false
+
+
+func _on_save_selected_map_portal_note_pressed() -> void:
+	var instance_id := preview.selected_selectable_id if preview != null else ""
+	if not instance_id.begins_with("inst_"):
+		status_label.text = "请先使用选择工具选中一个已放置的地图出入口"
+		return
+	var result := MapEditorInstanceService.update_map_portal_note(
+		current_document,
+		instance_id,
+		map_portal_note_edit.text
+	)
+	if not bool(result.get("ok", false)):
+		status_label.text = "入口备注保存失败：%s" % result.get("errors", [])
+		return
+	map_portal_note_edit.text = str(result.get("note", ""))
+	status_label.text = "入口备注已更新；点击“保存地图”写入工作文件"
+
+
+func _on_map_portal_note_submitted(_text: String) -> void:
+	_on_save_selected_map_portal_note_pressed()
 
 
 func _select_semantic_kind(kind: String, activate_placement := true) -> void:
@@ -1644,15 +1746,23 @@ func _select_semantic_kind(kind: String, activate_placement := true) -> void:
 
 func _sync_semantic_editor_fields(entry: Dictionary) -> void:
 	var kind := str(entry.get("kind", ""))
+	var content_field := str({
+		"npc": "npc_id",
+		"monster_spawn": "monster_id",
+		"boss_spawn": "monster_id",
+	}.get(kind, "content_id"))
 	var content_id := str(entry.get("content_id", ""))
 	if kind == "npc" and content_id.is_empty():
-		content_id = str(entry.get("npc_id", ""))
+		content_id = str(entry.get(content_field, ""))
 	if kind in ["monster_spawn", "boss_spawn", "special_monster"] and content_id.is_empty():
 		var numeric_id := int(entry.get("monster_id", -1))
 		var catalog_entry := MapEditorContentCatalogService.find_by_monster_id(kind, numeric_id)
-		if catalog_entry.is_empty() and kind != "special_monster":
-			catalog_entry = MapEditorContentCatalogService.find_by_monster_id("special_monster", numeric_id)
-		content_id = str(catalog_entry.get("content_id", ""))
+		if catalog_entry.is_empty() and kind in ["monster_spawn", "boss_spawn"]:
+			catalog_entry = MapEditorContentCatalogService.find_by_monster_id(
+				"special_monster", numeric_id
+			)
+		if not catalog_entry.is_empty():
+			content_id = str(catalog_entry.get("content_id", ""))
 	semantic_content_id.text = content_id
 	var selectable_content_id := content_id
 	if kind == "npc":
@@ -1664,16 +1774,7 @@ func _sync_semantic_editor_fields(entry: Dictionary) -> void:
 		if metadata is Dictionary and str(metadata.get("content_id", "")) == selectable_content_id:
 			semantic_content_option.select(index)
 			break
-	# For monster kinds, also sync the monster picker button to the saved entry
-	# so the UI reflects the correct monster instead of the first list item.
-	if kind in ["monster_spawn", "boss_spawn", "special_monster"] and not content_id.is_empty():
-		var monster_id_val := int(entry.get("monster_id", -1))
-		for idx in monster_picker_entries.size():
-			var m: Dictionary = monster_picker_entries[idx]
-			if str(m.get("content_id", "")) == content_id or int(m.get("monster_id", -1)) == monster_id_val:
-				_apply_monster_picker_selection(idx)
-				break
-	semantic_radius.value = int(entry.get("radius_tiles", semantic_radius.value))
+	semantic_radius.value = float(entry.get("radius_gu", semantic_radius.value))
 	semantic_count.value = int(entry.get("count", semantic_count.value))
 	semantic_respawn.value = int(entry.get("respawn_seconds", semantic_respawn.value))
 	semantic_max_alive.value = int(entry.get("max_alive", semantic_max_alive.value))
@@ -1835,6 +1936,19 @@ func _on_clipboard_paste_requested(tile: Vector2i) -> void:
 			tile
 		)
 	elif element_type == "semantic":
+		# Clipboard snapshots are persisted editor entries, so the new combat
+		# contract intentionally has no content_id/boss_id.  The legacy semantic
+		# service still validates a UI catalog key while cloning; inject that key
+		# only into this temporary copy, then normalize the new entry immediately.
+		snapshot = snapshot.duplicate(true)
+		var snapshot_kind := str(snapshot.get("kind", ""))
+		if snapshot_kind in ["monster_spawn", "boss_spawn"]:
+			var snapshot_id := int(snapshot.get("monster_id", -1))
+			var snapshot_catalog := MapEditorContentCatalogService.find_by_monster_id(snapshot_kind, snapshot_id)
+			if snapshot_catalog.is_empty():
+				snapshot_catalog = MapEditorContentCatalogService.find_by_monster_id("special_monster", snapshot_id)
+			if not snapshot_catalog.is_empty():
+				snapshot["content_id"] = str(snapshot_catalog.get("content_id", ""))
 		result = MapEditorGameplaySemanticService.duplicate_entry_snapshot(
 			current_document,
 			snapshot,
@@ -1851,6 +1965,19 @@ func _on_clipboard_paste_requested(tile: Vector2i) -> void:
 		pasted_id = str(result.instance.instance_id)
 	else:
 		pasted_id = str(result.entry.semantic_id)
+		var pasted_kind := str(result.entry.get("kind", ""))
+		if pasted_kind in ["monster_spawn", "boss_spawn"]:
+			var pasted_id_number := int(result.entry.get("monster_id", -1))
+			var pasted_entries: Array = current_document.layers.get(pasted_kind, [])
+			for pasted_index in pasted_entries.size():
+				if str(pasted_entries[pasted_index].get("semantic_id", "")) != pasted_id:
+					continue
+				pasted_entries[pasted_index]["monster_id"] = pasted_id_number
+				pasted_entries[pasted_index].erase("boss_id")
+				pasted_entries[pasted_index].erase("content_id")
+				pasted_entries[pasted_index].erase("is_boss")
+				current_document.layers[pasted_kind] = pasted_entries
+				break
 		if str(result.entry.get("kind", "")) == "npc":
 			MapEditorNpcPlaceholderService.ensure_entry(current_document, pasted_id)
 	preview.selected_selectable_id = pasted_id
@@ -1960,13 +2087,77 @@ func _on_tile_hovered(tile: Vector2i) -> void:
 		status_label.text = "Tile (%d, %d)｜左键绘制，拖动连续绘制" % [tile.x, tile.y]
 
 
-func _on_approve_and_build_runtime_pressed() -> void:
+## FREEZE-P0.3R step 1: Build Runtime Candidate. Never touches the formal
+## release artifact, the Release Registry or formal playable state.
+func _on_build_candidate_pressed() -> void:
+	if current_document.is_empty():
+		status_label.text = "请先创建或打开地图"
+		return
 	var approval := MapEditorBuildRuntimeService.approve_for_runtime(current_document)
 	if not approval.ok:
 		status_label.text = "Runtime 审核未通过：%s" % approval.get("errors", [])
 		return
-	var build := MapEditorBuildRuntimeService.build(current_document)
-	status_label.text = "Runtime 快照已构建：%s" % build.get("path", "") if build.ok else "Runtime 构建失败：%s" % build.get("errors", [])
+	var candidate := MapEditorBuildRuntimeService.build_candidate(current_document)
+	if not candidate.ok:
+		status_label.text = "Runtime 候选构建失败：%s" % candidate.get("errors", [])
+		return
+	_last_build_candidate = candidate
+	_candidate_validation_elapsed = 0.0
+	status_label.text = (
+		"候选已构建：%s\nbuild hash：%s\n校验通过：%s"
+		% [
+			candidate.get("candidate_path", ""),
+			candidate.get("build_sha256", ""),
+			str(bool(candidate.get("validation", {}).get("ok", false))),
+		]
+	)
+
+
+## FREEZE-P0.3R step 2: Publish Runtime Release. Only enabled by a current
+## valid candidate and always calls the formal publish_runtime_release().
+func _on_publish_runtime_pressed() -> void:
+	if _invalidate_last_build_candidate_if_stale():
+		status_label.text = (
+			"候选已失效：当前地图或内容已变更，请重新构建 Runtime 候选"
+		)
+		return
+	var candidate: Dictionary = _last_build_candidate
+	if candidate.is_empty():
+		status_label.text = "无有效候选：请先构建 Runtime 候选"
+		return
+	var candidate_path := str(candidate.get("candidate_path", ""))
+	if not FileAccess.file_exists(candidate_path):
+		status_label.text = "候选文件不存在：%s" % candidate_path
+		return
+	var runtime_map_id := int(current_document.get("runtime_map_id", -1))
+	var map_key := str(current_document.get("map_id", ""))
+	var current_binding := MapEditorBuildRuntimeService.document_binding(
+		current_document
+	)
+	var result := MapEditorBuildRuntimeService.publish_runtime_release(
+		candidate_path,
+		runtime_map_id,
+		current_binding,
+		MapEditorBuildRuntimeService.DEFAULT_RELEASE_REGISTRY_PATH,
+		map_key
+	)
+	if not result.get("success", false):
+		status_label.text = "发布失败：%s %s" % [
+			result.get("reason", ""),
+			str(result.get("errors", [])),
+		]
+		return
+	_last_build_candidate = {}
+	status_label.text = (
+		"已发布：map_id=%d key=%s\nhash=%s revision=%d formal_playable=%s"
+		% [
+			int(result.get("runtime_map_id", -1)),
+			result.get("map_key", ""),
+			result.get("approved_build_sha256", ""),
+			int(result.get("approval_revision", 0)),
+			str(bool(result.get("formal_playable", false))),
+		]
+	)
 
 
 func _on_bake_dirty_pressed() -> void:
@@ -2171,33 +2362,34 @@ func _monster_catalog_name(kind: String) -> String:
 func _refresh_semantic_catalog_tree() -> void:
 	semantic_catalog_tree.clear()
 	var root := semantic_catalog_tree.create_item()
-	for group: Array in [
-		["NPC目录", "npc", false],
-		["普通怪物", "monster_spawn", true],
-		["精英与Boss", "boss_spawn", true],
-		["特殊怪物", "special_monster", true],
-		["待分类 / 待核验", "unresolved_monster", true],
-	]:
-		var entries := MapEditorContentCatalogService.entries(group[1], 4)
-		var label: String = group[0]
-		if group[2]:
-			label = "%s（%d）" % [group[0], entries.size()]
-		var folder := semantic_catalog_tree.create_item(root)
-		folder.set_text(0, label)
-		folder.set_selectable(0, false)
-		folder.collapsed = true
-		for entry: Dictionary in entries:
+	for group: Array in [["NPC目录", "npc"], ["普通怪物目录", "monster_spawn"], ["精英与Boss目录", "boss_spawn"], ["特殊地图怪物", "special_monster"], ["待分类 / 待核验", "unresolved_monster"]]:
+		var folder := semantic_catalog_tree.create_item(root); folder.set_text(0, group[0]); folder.set_text_alignment(0, HORIZONTAL_ALIGNMENT_LEFT); folder.set_selectable(0, false); folder.collapsed = true
+		for entry: Dictionary in MapEditorContentCatalogService.entries(group[1], 4):
 			var item := semantic_catalog_tree.create_item(folder)
-			item.set_text(0, _semantic_catalog_tree_label(group[1], entry))
+			item.set_text(0, _semantic_catalog_tree_label(group[1], entry)); item.set_text_alignment(0, HORIZONTAL_ALIGNMENT_LEFT)
 			item.set_metadata(0, {"kind": group[1], "entry": entry})
 
 
 func _semantic_catalog_tree_label(kind: String, entry: Dictionary) -> String:
-	var numeric_id := int(entry.get("monster_id", -1))
-	var name := str(entry.get("display_name", entry.get("content_id", "")))
+	var label := str(entry.get("display_name", entry.get("content_id", "")))
 	if kind not in ["monster_spawn", "boss_spawn", "special_monster", "unresolved_monster"]:
-		return name
-	return "[ID %d] %s%s" % [numeric_id, name, _monster_status_suffix(entry)]
+		return label
+	if bool(entry.get("attributes_verified", false)):
+		label += "｜Lv%s HP%s 攻%s-%s 防%s-%s 魔防%s-%s 经验%s" % [
+			entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""),
+			entry.get("defense_min", ""), entry.get("defense_max", ""), entry.get("magic_defense_min", ""),
+			entry.get("magic_defense_max", ""), entry.get("experience", ""),
+		]
+	else:
+		label += "｜属性未通过 canonical 核验"
+	label += "｜%s｜%s｜默认%s秒" % [
+		str(entry.get("classification", "")), str(entry.get("drop_summary", "")), str(entry.get("default_respawn_seconds", 60)),
+	]
+	if not bool(entry.get("runtime_ready", false)):
+		label += "｜可布置｜运行时待闭环：%s" % str(entry.get("runtime_rejection_reason", "待闭环"))
+	if kind == "special_monster":
+		label += "｜实际%s" % ("Boss刷新" if str(entry.get("placement_kind", "")) == "boss_spawn" else "普通刷新")
+	return label
 
 
 func _on_semantic_catalog_selected() -> void:
@@ -2239,10 +2431,6 @@ func _on_semantic_catalog_gui_input(event: InputEvent) -> void:
 		return
 	item.select(0)
 	_activate_semantic_catalog_item(item)
-
-
-func _process(_delta: float) -> void:
-	_poll_monster_hover()
 
 
 func _poll_monster_hover() -> void:
@@ -2315,7 +2503,7 @@ func _activate_semantic_catalog_item(item: TreeItem) -> void:
 		if str(semantic_kind_option.get_item_metadata(index))==kind: semantic_kind_option.select(index); _on_semantic_kind_selected(index); break
 	semantic_content_id.text=str(entry.get("content_id",""))
 	_apply_semantic_combat_entry_defaults(kind, entry)
-	_refresh_semantic_detail(entry)
+	_show_semantic_entry_details(entry)
 	_activate_semantic_placement()
 	var catalog_name := "NPC" if kind == "npc" else "特殊地图怪物" if kind == "special_monster" else "怪物/Boss"
 	status_label.text="已选择%s：%s；请在地图左键放置"%[catalog_name,str(entry.get("display_name",""))]
@@ -2326,9 +2514,8 @@ func _on_semantic_content_selected(index: int) -> void:
 	if entry is Dictionary:
 		semantic_content_id.text = str(entry.get("content_id", ""))
 		var kind := str(semantic_kind_option.get_item_metadata(semantic_kind_option.selected))
-		_close_monster_inspector()
 		_apply_semantic_combat_entry_defaults(kind, entry)
-		_refresh_semantic_detail(entry)
+		_show_semantic_entry_details(entry)
 		if preview != null:
 			_activate_semantic_placement()
 
@@ -2336,15 +2523,47 @@ func _on_semantic_content_selected(index: int) -> void:
 func _apply_semantic_combat_entry_defaults(kind: String, entry: Variant) -> void:
 	if kind not in ["monster_spawn", "boss_spawn", "special_monster"] or not entry is Dictionary:
 		return
-	semantic_respawn.value = int(entry.get(
-		"default_respawn_seconds",
-		60 if kind == "monster_spawn" else 1800
-	))
+	semantic_respawn.value = int(entry.get("default_respawn_seconds", 60 if kind == "monster_spawn" else 1800))
+	if str(entry.get("spawn_classification", "")) == "special_normal":
+		semantic_count.value = 1
+		semantic_max_alive.value = 1
 	var placement_kind := str(entry.get("placement_kind", kind))
 	if placement_kind == "boss_spawn":
 		semantic_radius.value = 0
 	elif placement_kind == "monster_spawn" and semantic_radius.value <= 0:
 		semantic_radius.value = 3
+
+
+func _show_semantic_entry_details(entry: Dictionary) -> void:
+	if semantic_detail_label == null:
+		return
+	if entry.is_empty():
+		semantic_detail_label.text = "选择目录条目查看 canonical 属性、贴图、分类与完整掉落。"
+		return
+	var lines: Array[String] = []
+	lines.append("内容：%s  |  稳定 ID：%s" % [str(entry.get("display_name", "")), str(entry.get("monster_id", entry.get("numeric_id", "")))])
+	lines.append("分类：%s  |  刷新分类：%s  |  实际语义：%s  |  默认刷新：%s 秒" % [str(entry.get("classification", "")), str(entry.get("spawn_classification", "")), str(entry.get("placement_kind", "")), str(entry.get("default_respawn_seconds", 0))])
+	lines.append("作者可布置：%s" % ("是" if bool(entry.get("authoring_allowed", false)) else "否"))
+	lines.append("运行时闭环：%s" % ("是" if bool(entry.get("runtime_ready", false)) else "否"))
+	if not bool(entry.get("runtime_ready", false)):
+		lines.append("运行时待闭环原因：%s" % str(entry.get("runtime_rejection_reason", "待闭环")))
+	if bool(entry.get("attributes_verified", false)):
+		lines.append("属性：Lv%s  HP%s  攻%s-%s  防%s  魔防%s  经验%s" % [entry.get("level", ""), entry.get("hp", ""), entry.get("attack_min", ""), entry.get("attack_max", ""), entry.get("defense_min", ""), entry.get("magic_defense_min", ""), entry.get("experience", "")])
+	else:
+		lines.append("属性：canonical 未闭环")
+	lines.append("贴图：%s（%s）" % [str(entry.get("appearance_profile_id", "")), str(entry.get("appearance_status", "未找到"))])
+	var drop_entries: Array = entry.get("drop_entries", [])
+	var drop_count := int(entry.get("drop_entry_count", drop_entries.size()))
+	lines.append("掉落：%s  |  来源：%s" % [str(entry.get("drop_summary", "主源掉落为空")), str(entry.get("drop_source", ""))])
+	if drop_entries.is_empty():
+		lines.append("主源掉落文件为空或缺失。")
+	else:
+		lines.append("完整掉落（%d 条，滚动查看）：" % drop_count)
+		for drop: Dictionary in drop_entries:
+			var line_number := int(drop.get("line_number", 0))
+			var raw_text := str(drop.get("raw_text", ""))
+			lines.append("  %d. %s" % [line_number, raw_text])
+	semantic_detail_label.text = "\n".join(lines)
 
 
 func _refresh_semantic_detail(entry: Variant) -> void:
@@ -2362,7 +2581,6 @@ func _refresh_semantic_detail(entry: Variant) -> void:
 		str(entry.get("display_name", entry.get("content_id", ""))),
 		_service_role_chinese(str(entry.get("service_role", "dialogue"))),
 	]
-
 
 func _build_monster_detail_text(entry: Dictionary) -> String:
 	var lines: Array[String] = []
@@ -2441,7 +2659,6 @@ func _build_monster_detail_text(entry: Dictionary) -> String:
 		lines.append("完整掉落：无")
 	return "\n".join(lines)
 
-
 func _entry_has_combat_stats(entry: Dictionary) -> bool:
 	for key: String in ["level", "hp", "attack_min", "attack_max", "defense_min", "defense_max", "magic_defense_min", "magic_defense_max", "experience"]:
 		var value: Variant = entry.get(key, null)
@@ -2449,12 +2666,10 @@ func _entry_has_combat_stats(entry: Dictionary) -> bool:
 			return true
 	return false
 
-
 func _fmt_attr(value: Variant) -> String:
 	if value == null or str(value) == "":
 		return "未取得"
 	return str(value)
-
 
 func _build_monster_inspector_panel() -> void:
 	monster_inspector_panel = PanelContainer.new()
@@ -2500,7 +2715,6 @@ func _build_monster_inspector_panel() -> void:
 	add_child(monster_inspector_close_timer)
 	add_child(monster_inspector_panel)
 
-
 func _show_monster_inspector(entry: Dictionary) -> void:
 	if monster_inspector_panel == null:
 		return
@@ -2510,27 +2724,22 @@ func _show_monster_inspector(entry: Dictionary) -> void:
 	_layout_monster_inspector()
 	_cancel_monster_inspector_close()
 
-
 func _close_monster_inspector() -> void:
 	if monster_inspector_panel != null:
 		monster_inspector_panel.visible = false
-
 
 func _schedule_monster_inspector_close() -> void:
 	if monster_inspector_close_timer == null or not monster_inspector_close_timer.is_stopped():
 		return
 	monster_inspector_close_timer.start()
 
-
 func _cancel_monster_inspector_close() -> void:
 	if monster_inspector_close_timer == null:
 		return
 	monster_inspector_close_timer.stop()
 
-
 func _on_monster_inspector_close_timer_timeout() -> void:
 	_close_monster_inspector()
-
 
 func _layout_monster_inspector() -> void:
 	if monster_inspector_panel == null:
@@ -2564,7 +2773,7 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 			status_label.text = "放置拒绝：目录中未找到内容 %s" % content_id
 			return
 		if not bool(combat_entry.get("authoring_allowed", false)):
-			status_label.text = "放置拒绝：该条目不允许在地图编辑器布置"
+			status_label.text = "放置拒绝：该 monster_id 不在正式 active 目录"
 			return
 		if kind == "special_monster":
 			actual_kind = str(combat_entry.get("placement_kind", ""))
@@ -2573,7 +2782,7 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 				return
 	var properties := {}
 	if actual_kind in ["monster_spawn", "boss_spawn", "light", "region_trigger"]:
-		properties["radius_tiles"] = int(semantic_radius.value)
+		properties["radius_gu"] = float(semantic_radius.value)
 	var marker_name := semantic_display_name.text.strip_edges()
 	if not marker_name.is_empty():
 		properties["display_name"] = marker_name
@@ -2586,7 +2795,16 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		properties["service_role"] = str(npc_entry.get("service_role", "dialogue"))
 		properties["service_identity_id"] = str(npc_entry.get("service_identity_id", ""))
 	elif actual_kind in ["monster_spawn", "boss_spawn"]:
-		properties["monster_id"] = int(combat_entry.get("monster_id", -1))
+		var canonical_id := int(combat_entry.get("monster_id", -1))
+		if canonical_id <= 0:
+			status_label.text = "放置拒绝：有效的 canonical monster_id 缺失"
+			return
+		# MapEditorGameplaySemanticService currently validates the UI-only
+		# content key.  It is supplied for that validation and removed again
+		# immediately after insertion; persisted documents carry only the
+		# canonical positive integer monster_id.
+		properties["monster_id"] = canonical_id
+		properties["content_id"] = content_id
 	elif kind == "door":
 		properties["target_map_id"] = semantic_target_map.text.strip_edges()
 	elif kind == "map_exit":
@@ -2597,8 +2815,25 @@ func _on_semantic_tile_clicked(tile: Vector2i) -> void:
 		properties["count"] = int(semantic_count.value)
 		properties["respawn_seconds"] = int(semantic_respawn.value)
 		properties["max_alive"] = int(semantic_max_alive.value)
+		var default_respawn_policy_id := str(
+			combat_entry.get("default_respawn_policy_id", "")
+		)
+		if not default_respawn_policy_id.is_empty():
+			properties["respawn_policy_id"] = default_respawn_policy_id
 	var result := MapEditorGameplaySemanticService.add_entry(current_document, actual_kind, tile, properties)
 	if result.ok:
+		if actual_kind in ["monster_spawn", "boss_spawn"]:
+			var canonical_id := int(combat_entry.get("monster_id", -1))
+			var layer_entries: Array = current_document.layers.get(actual_kind, [])
+			for layer_index in layer_entries.size():
+				if str(layer_entries[layer_index].get("semantic_id", "")) != str(result.entry.get("semantic_id", "")):
+					continue
+				layer_entries[layer_index]["monster_id"] = canonical_id
+				layer_entries[layer_index].erase("boss_id")
+				layer_entries[layer_index].erase("content_id")
+				layer_entries[layer_index].erase("is_boss")
+				current_document.layers[actual_kind] = layer_entries
+				break
 		if actual_kind=="npc": MapEditorNpcPlaceholderService.ensure_entry(current_document,str(result.entry.semantic_id))
 		_select_new_semantic_marker(str(result.entry.semantic_id))
 		preview.queue_redraw()
@@ -2632,8 +2867,8 @@ func _commit_safe_area_polygon() -> void:
 	var center := _polygon_tile_center(safe_polygon_points)
 	var properties := {
 		"shape": "polygon",
-		"polygon_tiles": points,
-		"radius_tiles": 0,
+		"polygon_ground_gu": points,
+		"radius_gu": 0.0,
 		"display_name": semantic_display_name.text.strip_edges() if not semantic_display_name.text.strip_edges().is_empty() else "安全区",
 	}
 	var result := MapEditorGameplaySemanticService.add_entry(current_document, "safe_area", center, properties)

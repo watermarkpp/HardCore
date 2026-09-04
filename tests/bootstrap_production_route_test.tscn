@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://prod_route"]
+[ext_resource type="Script" path="res://tests/bootstrap_production_route_test.gd" id="1"]
+[node name="ProdRoute" type="Node"]
+script = ExtResource("1")

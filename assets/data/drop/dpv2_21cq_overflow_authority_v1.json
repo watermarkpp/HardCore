@@ -1,0 +1,1901 @@
+{
+  "schema": "hardcore.dpv2.21cq_overflow_authority.v1",
+  "authority_id": "dpv2.21cq.overflow.v1",
+  "status": "SIDE_BY_SIDE_DATA_AUTHORITY_COMPLETE",
+  "production_active": false,
+  "policy": {
+    "stage": "AFTER_ALL_SLOT_RNG",
+    "ground_slot_limit": 9,
+    "protected_candidates_before_non_protected": true,
+    "priority_sort": "DESCENDING",
+    "hard_cap_applies_to_protected": true,
+    "protected_overflow_telemetry_required": true,
+    "probability_influence_forbidden": true,
+    "gold": {
+      "overflow_priority": 100,
+      "protected_drop": false
+    }
+  },
+  "migration_seed": {
+    "path": "assets/data/drop/dpv2_drop_runtime_authority_v1.json",
+    "sha256": "4413386A73E04D49687862BF33C59D302EF2EB54EE84EF2A3ACF17CDDBDD5E82",
+    "role": "one_time_post_RNG_retention_seed_not_runtime_dependency"
+  },
+  "summary": {
+    "canonical_item_records": 233,
+    "protected_item_records": 94,
+    "priority_counts": {
+      "200": 14,
+      "300": 125,
+      "600": 79,
+      "800": 13,
+      "1000": 2
+    }
+  },
+  "records": [
+    {
+      "canonical_item_id": 80,
+      "canonical_item_name": "木剑",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 81,
+      "canonical_item_name": "匕首",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 82,
+      "canonical_item_name": "乌木剑",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 83,
+      "canonical_item_name": "青铜剑",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 84,
+      "canonical_item_name": "短剑",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 85,
+      "canonical_item_name": "铁剑",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 87,
+      "canonical_item_name": "青铜斧",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 88,
+      "canonical_item_name": "罗刹",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 89,
+      "canonical_item_name": "八荒",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 90,
+      "canonical_item_name": "海魂",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 91,
+      "canonical_item_name": "半月",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 92,
+      "canonical_item_name": "凌风",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 93,
+      "canonical_item_name": "破魂",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 94,
+      "canonical_item_name": "斩马刀",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 95,
+      "canonical_item_name": "偃月",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 96,
+      "canonical_item_name": "降魔",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 97,
+      "canonical_item_name": "修罗",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 98,
+      "canonical_item_name": "凝霜",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 99,
+      "canonical_item_name": "炼狱",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 100,
+      "canonical_item_name": "魔杖",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 101,
+      "canonical_item_name": "银蛇",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 102,
+      "canonical_item_name": "井中月",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 104,
+      "canonical_item_name": "无极棍",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 105,
+      "canonical_item_name": "裁决之杖",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 106,
+      "canonical_item_name": "骨玉权杖",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 107,
+      "canonical_item_name": "龙纹剑",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 108,
+      "canonical_item_name": "屠龙",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 109,
+      "canonical_item_name": "嗜魂法杖",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 113,
+      "canonical_item_name": "怒斩",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 114,
+      "canonical_item_name": "龙牙",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 115,
+      "canonical_item_name": "逍遥扇",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 116,
+      "canonical_item_name": "布衣(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 117,
+      "canonical_item_name": "布衣(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 118,
+      "canonical_item_name": "轻型盔甲(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 119,
+      "canonical_item_name": "轻型盔甲(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 120,
+      "canonical_item_name": "中型盔甲(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 121,
+      "canonical_item_name": "中型盔甲(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 122,
+      "canonical_item_name": "重盔甲(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 123,
+      "canonical_item_name": "重盔甲(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 124,
+      "canonical_item_name": "魔法长袍(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 125,
+      "canonical_item_name": "魔法长袍(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 126,
+      "canonical_item_name": "灵魂战衣(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 127,
+      "canonical_item_name": "灵魂战衣(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 128,
+      "canonical_item_name": "战神盔甲(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 129,
+      "canonical_item_name": "战神盔甲(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 130,
+      "canonical_item_name": "恶魔长袍(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 131,
+      "canonical_item_name": "恶魔长袍(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 132,
+      "canonical_item_name": "幽灵战衣(男)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 133,
+      "canonical_item_name": "幽灵战衣(女)",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 140,
+      "canonical_item_name": "天魔神甲",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 141,
+      "canonical_item_name": "圣战宝甲",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 142,
+      "canonical_item_name": "法神披风",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 143,
+      "canonical_item_name": "霓裳羽衣",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 144,
+      "canonical_item_name": "天尊道袍",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 145,
+      "canonical_item_name": "天师长袍",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 147,
+      "canonical_item_name": "青铜头盔",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 148,
+      "canonical_item_name": "魔法头盔",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 149,
+      "canonical_item_name": "道士头盔",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 150,
+      "canonical_item_name": "骷髅头盔",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 151,
+      "canonical_item_name": "黑铁头盔",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 153,
+      "canonical_item_name": "金项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 154,
+      "canonical_item_name": "传统项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 155,
+      "canonical_item_name": "白金项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 156,
+      "canonical_item_name": "黑色水晶项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 157,
+      "canonical_item_name": "黑檀项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 158,
+      "canonical_item_name": "黄色水晶项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 159,
+      "canonical_item_name": "白色虎齿项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 160,
+      "canonical_item_name": "躲避手链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 161,
+      "canonical_item_name": "魔鬼项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 162,
+      "canonical_item_name": "琥珀项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 163,
+      "canonical_item_name": "凤凰明珠",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 164,
+      "canonical_item_name": "灯笼项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 165,
+      "canonical_item_name": "蓝翡翠项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 166,
+      "canonical_item_name": "放大镜",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 167,
+      "canonical_item_name": "竹笛",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 168,
+      "canonical_item_name": "幽灵项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 169,
+      "canonical_item_name": "生命项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 170,
+      "canonical_item_name": "天珠项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 171,
+      "canonical_item_name": "绿色项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 172,
+      "canonical_item_name": "恶魔铃铛",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 173,
+      "canonical_item_name": "灵魂项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 174,
+      "canonical_item_name": "铁手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 175,
+      "canonical_item_name": "小手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 176,
+      "canonical_item_name": "银手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 177,
+      "canonical_item_name": "皮制手套",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 178,
+      "canonical_item_name": "钢手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 179,
+      "canonical_item_name": "大手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 180,
+      "canonical_item_name": "夏普儿手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 181,
+      "canonical_item_name": "辟邪手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 182,
+      "canonical_item_name": "坚固手套",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 183,
+      "canonical_item_name": "魔法手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 184,
+      "canonical_item_name": "黑檀手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 185,
+      "canonical_item_name": "道士手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 186,
+      "canonical_item_name": "魔力手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 187,
+      "canonical_item_name": "死神手套",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 188,
+      "canonical_item_name": "金手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 189,
+      "canonical_item_name": "幽灵手套",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 190,
+      "canonical_item_name": "思贝儿手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 191,
+      "canonical_item_name": "三眼手镯",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 192,
+      "canonical_item_name": "阎罗手套",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 193,
+      "canonical_item_name": "骑士手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 194,
+      "canonical_item_name": "龙之手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 195,
+      "canonical_item_name": "心灵手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 197,
+      "canonical_item_name": "古铜戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 198,
+      "canonical_item_name": "六角戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 199,
+      "canonical_item_name": "玻璃戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 200,
+      "canonical_item_name": "牛角戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 201,
+      "canonical_item_name": "生铁戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 202,
+      "canonical_item_name": "蓝色水晶戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 203,
+      "canonical_item_name": "黑色水晶戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 204,
+      "canonical_item_name": "蛇眼戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 205,
+      "canonical_item_name": "珍珠戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 206,
+      "canonical_item_name": "金戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 207,
+      "canonical_item_name": "骷髅戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 208,
+      "canonical_item_name": "魅力戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 209,
+      "canonical_item_name": "道德戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 210,
+      "canonical_item_name": "珊瑚戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 211,
+      "canonical_item_name": "降妖除魔戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 212,
+      "canonical_item_name": "龙之戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 213,
+      "canonical_item_name": "红宝石戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 214,
+      "canonical_item_name": "铂金戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 215,
+      "canonical_item_name": "力量戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 216,
+      "canonical_item_name": "紫碧螺",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 217,
+      "canonical_item_name": "泰坦戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 218,
+      "canonical_item_name": "神秘头盔",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 219,
+      "canonical_item_name": "神秘腰带",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 220,
+      "canonical_item_name": "神秘戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 221,
+      "canonical_item_name": "狂风项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 222,
+      "canonical_item_name": "狂风戒指",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 223,
+      "canonical_item_name": "祈祷之刃",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 224,
+      "canonical_item_name": "祈祷头盔",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 225,
+      "canonical_item_name": "祈祷项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 226,
+      "canonical_item_name": "祈祷手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 227,
+      "canonical_item_name": "祈祷戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 228,
+      "canonical_item_name": "记忆头盔",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 229,
+      "canonical_item_name": "记忆项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 230,
+      "canonical_item_name": "记忆手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 231,
+      "canonical_item_name": "记忆戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 232,
+      "canonical_item_name": "圣战头盔",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 233,
+      "canonical_item_name": "圣战项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 234,
+      "canonical_item_name": "圣战手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 235,
+      "canonical_item_name": "圣战戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 236,
+      "canonical_item_name": "法神头盔",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 237,
+      "canonical_item_name": "法神项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 238,
+      "canonical_item_name": "法神手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 239,
+      "canonical_item_name": "法神戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 240,
+      "canonical_item_name": "天尊头盔",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 241,
+      "canonical_item_name": "天尊项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 242,
+      "canonical_item_name": "天尊手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 243,
+      "canonical_item_name": "天尊戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 244,
+      "canonical_item_name": "魔血戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 245,
+      "canonical_item_name": "魔血手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 246,
+      "canonical_item_name": "魔血项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 247,
+      "canonical_item_name": "虹魔戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 248,
+      "canonical_item_name": "虹魔手镯",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 249,
+      "canonical_item_name": "虹魔项链",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 250,
+      "canonical_item_name": "技巧项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 251,
+      "canonical_item_name": "探测项链",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 252,
+      "canonical_item_name": "麻痹戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 253,
+      "canonical_item_name": "隐身戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 254,
+      "canonical_item_name": "传送戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 255,
+      "canonical_item_name": "防御戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 256,
+      "canonical_item_name": "复活戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 257,
+      "canonical_item_name": "护身戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 258,
+      "canonical_item_name": "超负载戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 259,
+      "canonical_item_name": "火焰戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 260,
+      "canonical_item_name": "求婚戒指",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910001,
+      "canonical_item_name": "体力强效神水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910002,
+      "canonical_item_name": "魔力强效神水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910003,
+      "canonical_item_name": "疾风神水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910004,
+      "canonical_item_name": "攻击神水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910005,
+      "canonical_item_name": "魔力神水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910006,
+      "canonical_item_name": "精神神水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910007,
+      "canonical_item_name": "疗伤药",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910008,
+      "canonical_item_name": "HP强化水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910009,
+      "canonical_item_name": "MP强化水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910010,
+      "canonical_item_name": "攻击力药水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910011,
+      "canonical_item_name": "魔法力药水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910012,
+      "canonical_item_name": "道术力药水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 910013,
+      "canonical_item_name": "疾风药水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920001,
+      "canonical_item_name": "万年雪霜",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920002,
+      "canonical_item_name": "冰咆哮",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920003,
+      "canonical_item_name": "刺杀剑术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920004,
+      "canonical_item_name": "半月弯刀",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920005,
+      "canonical_item_name": "召唤神兽",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920006,
+      "canonical_item_name": "召唤骷髅",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920007,
+      "canonical_item_name": "回城卷",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920008,
+      "canonical_item_name": "困魔咒",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920009,
+      "canonical_item_name": "圣言术",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920010,
+      "canonical_item_name": "地狱火",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920011,
+      "canonical_item_name": "地狱雷光",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920012,
+      "canonical_item_name": "基本剑术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920013,
+      "canonical_item_name": "大火球",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920014,
+      "canonical_item_name": "太阳水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920015,
+      "canonical_item_name": "幽灵盾",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920016,
+      "canonical_item_name": "强效太阳水",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920017,
+      "canonical_item_name": "超级金创药",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920018,
+      "canonical_item_name": "心灵启示",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920019,
+      "canonical_item_name": "战神油",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920020,
+      "canonical_item_name": "抗拒火环",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920021,
+      "canonical_item_name": "攻杀剑术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920022,
+      "canonical_item_name": "施毒术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920023,
+      "canonical_item_name": "沃玛号角",
+      "overflow_priority": 1000,
+      "protected_drop": true,
+      "reason": "Frozen critical/key/progress protection migrated to the highest post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920024,
+      "canonical_item_name": "治愈术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920025,
+      "canonical_item_name": "火墙",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920026,
+      "canonical_item_name": "火球术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920027,
+      "canonical_item_name": "灵魂火符",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920028,
+      "canonical_item_name": "烈火剑法",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920029,
+      "canonical_item_name": "爆裂火焰",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920030,
+      "canonical_item_name": "疾光电影",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920031,
+      "canonical_item_name": "瞬息移动",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920032,
+      "canonical_item_name": "祖玛头像",
+      "overflow_priority": 1000,
+      "protected_drop": true,
+      "reason": "Frozen critical/key/progress protection migrated to the highest post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920033,
+      "canonical_item_name": "祝福油",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920034,
+      "canonical_item_name": "神圣战甲术",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920035,
+      "canonical_item_name": "精神力战法",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920036,
+      "canonical_item_name": "群体治疗术",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920037,
+      "canonical_item_name": "肉",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920038,
+      "canonical_item_name": "蛆卵",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920039,
+      "canonical_item_name": "蜘蛛牙",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920040,
+      "canonical_item_name": "蝎尾",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920041,
+      "canonical_item_name": "诱惑之光",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920042,
+      "canonical_item_name": "超级魔法药",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920043,
+      "canonical_item_name": "野蛮冲撞",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920044,
+      "canonical_item_name": "金创药(中量)",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920045,
+      "canonical_item_name": "金创药(小量)",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920046,
+      "canonical_item_name": "隐身术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920047,
+      "canonical_item_name": "集体隐身术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920048,
+      "canonical_item_name": "雷电术",
+      "overflow_priority": 300,
+      "protected_drop": false,
+      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920049,
+      "canonical_item_name": "食人花叶",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920050,
+      "canonical_item_name": "食人花果",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920051,
+      "canonical_item_name": "魔法盾",
+      "overflow_priority": 800,
+      "protected_drop": true,
+      "reason": "Frozen protected high skill-book decision migrated to post-RNG retention priority.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920052,
+      "canonical_item_name": "魔法药(中量)",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    },
+    {
+      "canonical_item_id": 920053,
+      "canonical_item_name": "魔法药(小量)",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "Frozen potion/material/ordinary reward retention decision.",
+      "probability_effect": "NONE"
+    }
+  ]
+}

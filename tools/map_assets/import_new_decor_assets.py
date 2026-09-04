@@ -108,18 +108,18 @@ stats = Stats()
 def load_effective_catalogs():
     """Load all catalogs that MapAssetCatalogService loads."""
     catalogs = []
-    
+
     # Parse CATALOG_PATH and EXTENSION_CATALOG_PATHS from service script
     if CATALOG_SERVICE_PATH.exists():
         with open(CATALOG_SERVICE_PATH, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         # Extract CATALOG_PATH
         cat_match = re.search(r'CATALOG_PATH\s*:=\s*"([^"]+)"', content)
         if cat_match:
             main_path = cat_match.group(1).replace('res://', str(REPO_ROOT) + '/')
             catalogs.append(main_path)
-        
+
         # Extract EXTENSION_CATALOG_PATHS
         ext_match = re.search(r'EXTENSION_CATALOG_PATHS\s*:=\s*\[(.*?)\]', content, re.DOTALL)
         if ext_match:
@@ -131,7 +131,7 @@ def load_effective_catalogs():
     else:
         # Fallback: just main catalog
         catalogs.append(str(CATALOG_PATH))
-    
+
     # Load all assets
     all_assets = []
     for cat_path in catalogs:
@@ -140,7 +140,7 @@ def load_effective_catalogs():
                 data = json.load(f)
             assets = data.get('assets', [])
             all_assets.extend(assets)
-    
+
     return all_assets
 
 
@@ -157,7 +157,7 @@ def build_effective_index(assets):
         img = a.get('image', '')
         src = a.get('source_external_path', '')
         src_sha = a.get('source_sha256', '')
-        
+
         if aid:
             index['by_id'][aid] = a
         if img:
@@ -166,7 +166,7 @@ def build_effective_index(assets):
             index['by_source'][src] = a
         if src_sha:
             index['by_source_sha'][src_sha] = a
-    
+
     return index
 
 
@@ -521,7 +521,7 @@ def process_single_png(png_path, category_en, category_cn, output_dir, effective
 
     # Compute stable source locator
     stable_locator = compute_stable_source_locator(png_path, source_root, zip_path, zip_member)
-    
+
     # Compute source SHA256
     if zip_path and zip_member:
         # ZIP member SHA
@@ -536,7 +536,7 @@ def process_single_png(png_path, category_en, category_cn, output_dir, effective
         stats.canonical_existing += 1
         stats.canonical_existing_list.append(stable_locator)
         return entries
-    
+
     if source_sha in effective_index.get('by_source_sha', {}):
         stats.canonical_existing += 1
         stats.canonical_existing_list.append(f"sha:{source_sha}")
@@ -862,12 +862,12 @@ def generate_report(base_sha, final_sha, source_root):
         lines.append("")
 
     report_text = "\n".join(lines)
-    
+
     if not (stats.audit_only if hasattr(stats, 'audit_only') else False):
         with open(REPORT_PATH, 'w', encoding='utf-8') as f:
             f.write(report_text)
         print(f"Report written to {REPORT_PATH}")
-    
+
     return report_text
 
 
@@ -879,9 +879,9 @@ def main():
                         help='Only audit, do not write anything')
     parser.add_argument('--dry-run', action='store_true',
                         help='Run full logic but do not modify Catalog or write PNGs')
-    
+
     args = parser.parse_args()
-    
+
     source_root = Path(args.source)
     stats.audit_only = args.audit_only
     stats.dry_run = args.dry_run

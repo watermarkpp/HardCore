@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 2,
+  "contractId": "monster.runtime.units.gu.v1",
+  "parentContractId": "combat.unit.gu_gs_px.v1",
+  "authority": {
+    "kind": "project_primary_contract_adapter",
+    "sourcePolicyId": "MIR-SOURCE-PRIORITY-1",
+    "sourceLane": "combat_units",
+    "sourceTier": "primary",
+    "sourceOrder": 0,
+    "distribution": "project.hardcore.combat_unit_contract.v1",
+    "approvedGroundUnitContract": "assets/data/combat_unit_contract_v1.json",
+    "approvedGroundUnitContractSha256": "1AE52AE5AAA293B56CC9E7360AFD4743C63730BE56A733DE729331A30508CBE6",
+    "originalPath": "docs/COMBAT-UNIT-V1.md",
+    "userEvidenceSha256": "9CA9328169EB92F2925BE5A8DD5D0592C979C807BFA92EA62C1307407AC66DC0",
+    "sourcePriorityPolicySha256": "A30C3B1E239193DB48DFDA3DF6B18475C5B59FA2653F1C4CAC6B49202C4B8242",
+    "legacyDataSources": [
+      {
+        "path": "assets/data/monster_behavior_profiles.json",
+        "sha256": "A176780A3A846DEC1BBC1120FF78A910B70FA6B3A1318A19329145534DCF7297",
+        "role": "read_only_legacy_values"
+      },
+      {
+        "path": "assets/data/boss_service_rules.json",
+        "sha256": "BACA71AE93C277928645EBCD5E4AD6FE23B41D8B153F9224302BE09986844B57",
+        "role": "read_only_legacy_values"
+      }
+    ]
+  },
+  "legacyScalarConversion": {
+    "projectionId": "monster.runtime_projection.screen_scalar_px.v1",
+    "pixelsPerGroundUnit": 32.0,
+    "codeEvidence": [
+      "MapEditorCoordinate.HALF_TILE_W == 32",
+      "EnemyActor legacy aggro_radius 384 is documented as 12 logical tiles",
+      "fixed area profiles pair rangePixels 512 with rangeTiles 16"
+    ],
+    "fields": [
+      "moveSpeed",
+      "attackRange",
+      "aggroRadius",
+      "wakeRange",
+      "emergeRange",
+      "rangePixels",
+      "radius",
+      "triggerRange"
+    ]
+  },
+  "footprintConversion": {
+    "sourceShape": "frozen_screen_ellipse_r_and_r_over_2",
+    "combatRadiusFormula": "combat_radius_gu = radius_px / (32 * sqrt(2))",
+    "screenRadiusFormula": "radius_px = combat_radius_gu * 32 * sqrt(2)",
+    "reason": "Inverse-projecting every point of the frozen 2:1 screen ellipse produces one Euclidean ground circle."
+  },
+  "legacyGridRadiusConversion": {
+    "inputField": "radiusCells",
+    "outputField": "radius_gu",
+    "axisNeighborGroundUnitsPerCell": 1.0,
+    "formalMetric": "euclidean_ground_radius",
+    "policy": "read_only_adapter_boundary"
+  },
+  "formalRuntimeFields": [
+    "move_speed_gu_per_sec",
+    "attack_range_gu",
+    "aggro_radius_gu",
+    "combat_radius_gu"
+  ],
+  "coordinateReferences": [
+    {
+      "contractId": "monster.safe_zone.relative_ground_reference.v1",
+      "screenInput": "point_screen_px",
+      "screenAnchor": "center or polygon[0]",
+      "groundAnchor": "center_ground_gu or polygon_ground_gu[0]",
+      "policy": "inverse_project_screen_delta_then_add_matching_ground_anchor",
+      "reason": "Absolute screen positions include the map design-centre translation; GroundUnitSpace converts deltas and therefore must not inverse-project an absolute position from a zero origin."
+    }
+  ],
+  "renderBoundaries": [
+    {
+      "contractId": "monster.visual.resource_residency.screen_px.v1",
+      "fields": [
+        "VISUAL_ACTIVATION_DISTANCE_PX",
+        "VISUAL_RELEASE_DISTANCE_PX"
+      ],
+      "allowedScope": "render_asset_residency_only",
+      "forbiddenEffects": [
+        "attack_state",
+        "hit_state",
+        "death_state",
+        "combat_geometry",
+        "ai"
+      ]
+    },
+    {
+      "contractId": "monster.boss.warning.ground_projection.v1",
+      "gameplaySource": "radius_gu and direction_ground",
+      "screenOutput": "warning_polygon_px",
+      "allowedScope": "rendering_only"
+    }
+  ],
+  "compatibilityAliases": [],
+  "legacyPolicy": {
+    "readOnly": true,
+    "rewriteSourceProfiles": false,
+    "untypedValuesAllowedAfterAdapter": false,
+    "formalRuntimeAccess": "MonsterUnitAdapter only",
+    "retainedLegacyFieldReason": "Primary monster source JSON remains a hash-traceable read-only input. Unsuffixed values are permitted only before the adapter and cannot be read directly by formal gameplay.",
+    "fallbackStatus": "not_applicable_primary_contract_adapter",
+    "fallbackEvidence": "COMBAT-UNIT-V1 is the primary lane authority; legacy monster values are converted at the versioned adapter boundary and do not select a lower-priority distance contract."
+  },
+  "frozenInputs": [
+    "assets/data/runtime/monster_ground_alignment_manual_v1.json",
+    "assets/data/runtime/monster_ground_contacts.json",
+    "assets/data/runtime/monster_ground_contact_calibrations.json"
+  ]
+}

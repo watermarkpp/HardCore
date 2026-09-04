@@ -1,0 +1,71 @@
+{
+  "schema": "hardcore.redmoon.generated_animation_sources.v1",
+  "monsterId": 180,
+  "appearanceProfileId": "appearance.赤月恶魔_13293a7f7aa2e17b",
+  "authority": "explicit_user_replacement_request_2026-08-23",
+  "generator": "openai_builtin_imagegen",
+  "backgroundPolicy": "native_alpha_only",
+  "identityReference": {
+    "distribution": "client.classic_raw_complete",
+    "tier": "primary",
+    "originalPath": "dev_art_sources/reference/mir2_client_raw/Data/Mon14.wil",
+    "sha256": "18c277042a2d84cd4b002ebe67b1434565e68cbabd5998490153e2bc7d3aaeb2"
+  },
+  "masterSources": {
+    "idle": {
+      "path": "dev_art_sources/generated/redmoon_180/redmoon_idle_native_alpha_2x2.png",
+      "sha256": "BAEB6D0B8E5AFD912154985B2058A11226AD6D4AF6F5F70BD3A1C3AA8429AC87",
+      "grid": [2, 2]
+    },
+    "attack": {
+      "path": "dev_art_sources/generated/redmoon_180/redmoon_attack_native_alpha_3x2.png",
+      "sha256": "059D766801D67F92A6B33C709C4BC4001328756AA630BCADE82941AC8F2DA59F",
+      "grid": [3, 2]
+    },
+    "hit": {
+      "path": "dev_art_sources/generated/redmoon_180/redmoon_hit_native_alpha_2x1.png",
+      "sha256": "CDFE15B89A9593D4537B55A1EDBA63DB0BFD6506F1CE90FCCD1AB9A94FB54F55",
+      "grid": [2, 1]
+    },
+    "death": {
+      "path": "dev_art_sources/generated/redmoon_180/redmoon_death_native_alpha_5x2.png",
+      "sha256": "D2277DF42B2FE571F8322107E5B560E61A3334AE5ED8BDB48FB5E4C774D13576",
+      "grid": [5, 2],
+      "runtimeExpansion": "ten_keyframes_plus_midpoint_blends_to_twenty_frames"
+    }
+  },
+  "runtimeContract": {
+    "cellSize": [288, 208],
+    "footAnchor": [85, 142],
+    "directions": 8,
+    "directionPolicy": "fixed_body_repeated_rows",
+    "framesPerDirection": {
+      "idle": 4,
+      "walk": 4,
+      "attack": 6,
+      "hit": 2,
+      "death": 20
+    }
+  },
+  "anchorAlignment": {
+    "algorithm": "largest alpha-connected body; lower 12% occupied-row median support anchor; median cross-frame reference; integer correction before common resize and two post-palette corrections",
+    "alphaThreshold": 12,
+    "supportBandFraction": 0.12,
+    "maxAbsDeviationPx": {
+      "idle": [0.0, 0.0],
+      "walk": [0.0, 0.0],
+      "attack": [0.5, 0.5],
+      "hit": [0.25, 0.0],
+      "death": [0.5, 0.5]
+    },
+    "maxBackgroundAlphaOutsideBody": 0,
+    "cornerAlpha": [0, 0, 0, 0]
+  },
+  "runtimeSha256": {
+    "idle": "91325E3BDA7BDAB91E09A8456ECFC2CAD7906551CBD78104E19247382975D6AD",
+    "walk": "91325E3BDA7BDAB91E09A8456ECFC2CAD7906551CBD78104E19247382975D6AD",
+    "attack": "69148830BAAF850177E0D993755DFCFFDE37D9A916F0556CEF0E453C8E859C16",
+    "hit": "CB86385ED0096FF0D07BD3503D8C5A46B930A5506210B86FB4938F35355DC268",
+    "death": "CF488BEE2BD4A35A760E6DEEEA70850864986CA0E5E4960630DD5EEA48983901"
+  }
+}

@@ -1,0 +1,762 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "verdict": "mp_is_candidate_based_and_item_consumption_is_not_enforced",
+  "records": [
+    {
+      "skill_id": "taoist.defense",
+      "name": "神圣战甲术",
+      "base_mp": 2,
+      "level_mp_delta": 2,
+      "mp_by_level": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "continuous_cost": null,
+      "item_requirement": "amulet x1",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.entrapment",
+      "name": "困魔咒",
+      "base_mp": 7,
+      "level_mp_delta": 3,
+      "mp_by_level": [
+        7,
+        10,
+        13,
+        16
+      ],
+      "continuous_cost": null,
+      "item_requirement": "amulet x1",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.healing",
+      "name": "治愈术",
+      "base_mp": 3,
+      "level_mp_delta": 2,
+      "mp_by_level": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.invisibility",
+      "name": "隐身术",
+      "base_mp": 1,
+      "level_mp_delta": 1,
+      "mp_by_level": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "continuous_cost": null,
+      "item_requirement": "amulet x1",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.magic_defense",
+      "name": "幽灵盾",
+      "base_mp": 2,
+      "level_mp_delta": 2,
+      "mp_by_level": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "continuous_cost": null,
+      "item_requirement": "amulet x1",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_healing",
+      "name": "群体治疗术",
+      "base_mp": 28,
+      "level_mp_delta": 3,
+      "mp_by_level": [
+        28,
+        31,
+        34,
+        37
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_invisibility",
+      "name": "集体隐身术",
+      "base_mp": 2,
+      "level_mp_delta": 2,
+      "mp_by_level": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "continuous_cost": null,
+      "item_requirement": "amulet x1",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.poison",
+      "name": "施毒术",
+      "base_mp": 2,
+      "level_mp_delta": 1,
+      "mp_by_level": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "continuous_cost": null,
+      "item_requirement": "poison item/amulet shape required by classic source",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.revelation",
+      "name": "心灵启示",
+      "base_mp": 4,
+      "level_mp_delta": 4,
+      "mp_by_level": [
+        4,
+        8,
+        12,
+        16
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.soul_fire_talisman",
+      "name": "灵魂火符",
+      "base_mp": 3,
+      "level_mp_delta": 1,
+      "mp_by_level": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "continuous_cost": null,
+      "item_requirement": "amulet x1",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.spiritual_warfare",
+      "name": "精神力战法",
+      "base_mp": 0,
+      "level_mp_delta": 0,
+      "mp_by_level": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_divine_beast",
+      "name": "召唤神兽",
+      "base_mp": 28,
+      "level_mp_delta": 4,
+      "mp_by_level": [
+        28,
+        32,
+        36,
+        40
+      ],
+      "continuous_cost": null,
+      "item_requirement": "amulet x5",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": 1,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_skeleton",
+      "name": "召唤骷髅",
+      "base_mp": 12,
+      "level_mp_delta": 4,
+      "mp_by_level": [
+        12,
+        16,
+        20,
+        24
+      ],
+      "continuous_cost": null,
+      "item_requirement": "amulet x1",
+      "item_consumption_runtime": "candidate_package_only_not_removed_by_active_game_path",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": 1,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "RESOURCE_CONSUMPTION_ERROR",
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.basic_swordsmanship",
+      "name": "基本剑术",
+      "base_mp": 0,
+      "level_mp_delta": 0,
+      "mp_by_level": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.fire_sword",
+      "name": "烈火剑法",
+      "base_mp": 7,
+      "level_mp_delta": 0,
+      "mp_by_level": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.half_moon",
+      "name": "半月弯刀",
+      "base_mp": 3,
+      "level_mp_delta": 0,
+      "mp_by_level": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "name": "攻杀剑术",
+      "base_mp": 0,
+      "level_mp_delta": 0,
+      "mp_by_level": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.thrusting",
+      "name": "刺杀剑术",
+      "base_mp": 0,
+      "level_mp_delta": 0,
+      "mp_by_level": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.wild_rush",
+      "name": "野蛮冲撞",
+      "base_mp": 4,
+      "level_mp_delta": 4,
+      "mp_by_level": [
+        4,
+        8,
+        12,
+        16
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.exploding_flame",
+      "name": "爆裂火焰",
+      "base_mp": 14,
+      "level_mp_delta": 4,
+      "mp_by_level": [
+        14,
+        18,
+        22,
+        26
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fire_wall",
+      "name": "火墙",
+      "base_mp": 30,
+      "level_mp_delta": 5,
+      "mp_by_level": [
+        30,
+        35,
+        40,
+        45
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fireball",
+      "name": "火球术",
+      "base_mp": 3,
+      "level_mp_delta": 2,
+      "mp_by_level": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.great_fireball",
+      "name": "大火球",
+      "base_mp": 5,
+      "level_mp_delta": 1,
+      "mp_by_level": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hell_lightning",
+      "name": "地狱雷光",
+      "base_mp": 29,
+      "level_mp_delta": 9,
+      "mp_by_level": [
+        29,
+        38,
+        47,
+        56
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hellfire",
+      "name": "地狱火",
+      "base_mp": 10,
+      "level_mp_delta": 3,
+      "mp_by_level": [
+        10,
+        13,
+        16,
+        19
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.holy_word",
+      "name": "圣言术",
+      "base_mp": 52,
+      "level_mp_delta": 13,
+      "mp_by_level": [
+        52,
+        65,
+        78,
+        91
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.ice_storm",
+      "name": "冰咆哮",
+      "base_mp": 33,
+      "level_mp_delta": 3,
+      "mp_by_level": [
+        33,
+        36,
+        39,
+        42
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.laser",
+      "name": "疾光电影",
+      "base_mp": 38,
+      "level_mp_delta": 7,
+      "mp_by_level": [
+        38,
+        45,
+        52,
+        59
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.lightning",
+      "name": "雷电术",
+      "base_mp": 9,
+      "level_mp_delta": 2,
+      "mp_by_level": [
+        9,
+        11,
+        13,
+        15
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.magic_shield",
+      "name": "魔法盾",
+      "base_mp": 35,
+      "level_mp_delta": 5,
+      "mp_by_level": [
+        35,
+        40,
+        45,
+        50
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.repulsion_ring",
+      "name": "抗拒火环",
+      "base_mp": 2,
+      "level_mp_delta": 2,
+      "mp_by_level": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.teleport",
+      "name": "瞬息移动",
+      "base_mp": 10,
+      "level_mp_delta": 3,
+      "mp_by_level": [
+        10,
+        13,
+        16,
+        19
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.temptation_light",
+      "name": "诱惑之光",
+      "base_mp": 3,
+      "level_mp_delta": 1,
+      "mp_by_level": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "continuous_cost": null,
+      "item_requirement": null,
+      "item_consumption_runtime": "not_required_or_not_modeled",
+      "weapon_durability": "1/30 random on request_skill, independent of success",
+      "summon_limit": null,
+      "failed_cast_mp_policy": "MP is deducted before downstream plan/target/special success validation",
+      "interrupted_cast_refund": "no refund path",
+      "errors": [
+        "CAST_VALIDATION_ERROR"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "path": "scripts/player.gd",
+      "lines": "237-266",
+      "finding": "MP deducted before local skill dispatch"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "lines": "1455-1527",
+      "finding": "active legacy dispatch does not validate or remove skill materials"
+    },
+    {
+      "path": "scripts/caster_profession_package.gd",
+      "lines": "210-319",
+      "finding": "candidate package has validate-before-consume material logic but is not integrated"
+    }
+  ]
+}

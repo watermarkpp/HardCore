@@ -74,11 +74,9 @@
     "23": {
       "classification": "special",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)",
-      "runtime_semantics": "enemy_actor",
-      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
+      "notes": "用户裁决"
     },
     "24": {
       "classification": "ordinary",
@@ -95,9 +93,9 @@
     "25": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "26": {
       "classification": "ordinary",
@@ -114,9 +112,9 @@
     "27": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "28": {
       "classification": "ordinary",
@@ -133,9 +131,9 @@
     "29": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "30": {
       "classification": "ordinary",
@@ -152,23 +150,29 @@
     "31": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "32": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "33": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "34": {
       "classification": "ordinary",
@@ -185,23 +189,25 @@
     "35": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "36": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "37": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "38": {
       "classification": "elite",
@@ -213,59 +219,68 @@
       "classification": "special",
       "placement_kind": "boss_spawn",
       "placement_allowed": true,
-      "resolution": "attachment_exact_id_override",
-      "runtime_semantics": "enemy_actor",
-      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
+      "resolution": "attachment_exact_id_override"
     },
     "41": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "原 version_difference 判定被 exact-ID 白日门/封魔谷/苍月岛刷新证据推翻；属性与半兽勇士基准记录一致，分类纠正为 elite；本任务不开放 runtime placement。"
+      "notes": "原 version_difference 判定被 exact-ID 白日门/封魔谷/苍月岛刷新证据推翻；属性与半兽勇士基准记录一致，分类纠正为 elite；本任务不开放 runtime placement。",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "42": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "43": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "44": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "45": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)；R1 correction: re-closed (drop item 蝎子尾巴 unresolved)",
-      "runtime_blocked_reason": "DROP_ITEMS_UNRESOLVED"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "46": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "47": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "48": {
       "classification": "ordinary",
@@ -284,9 +299,11 @@
     "50": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "51": {
       "classification": "ordinary",
@@ -298,9 +315,11 @@
     "52": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "53": {
       "classification": "ordinary",
@@ -312,16 +331,20 @@
     "54": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "55": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "56": {
       "classification": "elite",
@@ -356,28 +379,39 @@
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_internal_variant_no_spawn",
-      "notes": "内部编号变体；无地图刷新，version_difference"
+      "notes": "内部编号变体；无地图刷新，version_difference",
+      "disposition": "quarantine",
+      "evidence": {
+        "basis": "exact_id_internal_variant_no_spawn",
+        "classification": "version_difference",
+        "runtime_allowed": true,
+        "formal_editor_pool": false
+      }
     },
     "60": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "62": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "63": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "64": {
       "classification": "ordinary",
@@ -461,14 +495,24 @@
       "classification": "version_difference",
       "placement_kind": "",
       "placement_allowed": false,
-      "resolution": "attachment_exact_id_override"
+      "resolution": "attachment_exact_id_override",
+      "notes": "用户最新裁决：保留 exact ID、素材与战斗数据并允许运行；不进入正式 map/editor pool",
+      "disposition": "quarantine",
+      "evidence": {
+        "basis": "user_latest_adjudication",
+        "classification": "version_difference",
+        "runtime_allowed": true,
+        "formal_editor_pool": false
+      }
     },
     "79": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "80": {
       "classification": "version_difference",
@@ -480,9 +524,11 @@
     "81": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "82": {
       "classification": "version_difference",
@@ -494,9 +540,11 @@
     "83": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "84": {
       "classification": "version_difference",
@@ -508,9 +556,11 @@
     "85": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "86": {
       "classification": "version_difference",
@@ -522,9 +572,11 @@
     "87": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "88": {
       "classification": "version_difference",
@@ -573,70 +625,78 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "93": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "94": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "95": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "96": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "97": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "98": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "100": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "101": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "102": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "103": {
       "classification": "ordinary",
@@ -650,107 +710,115 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "105": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "106": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "107": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "108": {
       "classification": "special",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)",
-      "runtime_semantics": "enemy_actor",
-      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
+      "notes": "用户裁决"
     },
     "110": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "111": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "112": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "113": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "114": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "115": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "116": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "117": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "118": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "119": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "120": {
       "classification": "elite",
@@ -776,18 +844,16 @@
     "121": {
       "classification": "special",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)",
-      "runtime_semantics": "enemy_actor",
-      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
+      "notes": "用户裁决"
     },
     "122": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "用户裁决"
     },
     "123": {
       "classification": "version_difference",
@@ -820,9 +886,7 @@
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_event_entity",
-      "notes": "事件/召唤/脚本实体；special；R1 correction: re-closed (no EnemyActor runtime handler evidence)",
-      "runtime_semantics": "event_entity",
-      "runtime_semantics_evidence": "exact_service_name aiCode=12; authority notes: event/summon/script entity"
+      "notes": "事件/召唤/脚本实体；special"
     },
     "127": {
       "classification": "ordinary",
@@ -836,49 +900,55 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "129": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "130": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "131": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "132": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "133": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "134": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "135": {
       "classification": "elite",
@@ -890,38 +960,36 @@
       "classification": "special",
       "placement_kind": "",
       "placement_allowed": true,
-      "resolution": "attachment_exact_id_override",
-      "runtime_semantics": "enemy_actor",
-      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
+      "resolution": "attachment_exact_id_override"
     },
     "137": {
       "classification": "special",
       "placement_kind": "",
       "placement_allowed": true,
-      "resolution": "attachment_exact_id_override",
-      "runtime_semantics": "enemy_actor",
-      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
+      "resolution": "attachment_exact_id_override"
     },
     "138": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "139": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "140": {
-      "classification": "ordinary",
+      "classification": "elite",
       "placement_kind": "",
       "placement_allowed": true,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：蝎蛇3为强化精英变体，保留为 elite；P3C 2026-08-19"
     },
     "141": {
       "classification": "elite",
@@ -947,11 +1015,9 @@
     "142": {
       "classification": "special",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_special_map_variant",
-      "notes": "未知暗殿(1571)专用刷新；special 内部变体；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)",
-      "runtime_semantics": "special_map_enemy",
-      "runtime_semantics_evidence": "exact_service_name aiCode=0 normal enemy actor"
+      "notes": "未知暗殿(1571)专用刷新；special 内部变体"
     },
     "143": {
       "classification": "boss",
@@ -1019,56 +1085,62 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "149": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "150": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "151": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "152": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "153": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "154": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "155": {
       "classification": "elite",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "用户裁决"
     },
     "156": {
       "classification": "ordinary",
@@ -1077,10 +1149,20 @@
       "resolution": "attachment_exact_id_override"
     },
     "157": {
-      "classification": "elite",
+      "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
-      "resolution": "attachment_exact_id_override"
+      "placement_allowed": false,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户最新裁决：祖玛卫士0为 ordinary 普通怪内部 subtype；非极品、非独立地图怪种；保留 exact ID 与 runtime 能力；不进入正式 map/editor pool",
+      "disposition": "internal_subtype",
+      "evidence": {
+        "basis": "user_latest_adjudication",
+        "classification": "ordinary",
+        "elite": false,
+        "independent_map_monster": false,
+        "runtime_allowed": true,
+        "formal_editor_pool": false
+      }
     },
     "158": {
       "classification": "elite",
@@ -1118,7 +1200,14 @@
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_internal_variant_no_spawn",
-      "notes": "内部编号变体；无地图刷新，version_difference"
+      "notes": "内部编号变体；无地图刷新，version_difference",
+      "disposition": "quarantine",
+      "evidence": {
+        "basis": "exact_id_internal_variant_no_spawn",
+        "classification": "version_difference",
+        "runtime_allowed": true,
+        "formal_editor_pool": false
+      }
     },
     "162": {
       "classification": "boss",
@@ -1161,16 +1250,16 @@
     "164": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "165": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "166": {
       "classification": "ordinary",
@@ -1191,7 +1280,9 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "169": {
       "classification": "ordinary",
@@ -1205,28 +1296,32 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "171": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "172": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "173": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "174": {
       "classification": "ordinary",
@@ -1247,28 +1342,32 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "177": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "178": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "179": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "180": {
       "classification": "boss",
@@ -1294,7 +1393,9 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "183": {
       "classification": "ordinary",
@@ -1336,14 +1437,23 @@
         "D2079",
         "R001"
       ],
-      "resolution": "offline_unique_exact_name"
+      "resolution": "offline_unique_exact_name",
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "wizard_tameable_entity_no_drop_requirement"
+      },
+      "notes": "用户裁决：鹰卫为法师诱惑之光相关可驯服战斗单位；保留独立 ID/属性/动画，空掉落不阻断 runtime；技能宠物化逻辑后续单独处理。"
     },
     "187": {
       "classification": "special",
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_event_entity",
-      "notes": "事件/召唤/脚本实体；special"
+      "notes": "事件/召唤/脚本实体；special\n用户裁决：虎卫为法师诱惑之光相关可驯服战斗单位；保留独立 ID/属性/动画，空掉落不阻断 runtime；技能宠物化逻辑后续单独处理。",
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "wizard_tameable_entity_no_drop_requirement"
+      }
     },
     "188": {
       "classification": "elite",
@@ -1469,84 +1579,98 @@
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "197": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "198": {
       "classification": "boss",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "199": {
       "classification": "boss",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "200": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "201": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "202": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "203": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "204": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "205": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "206": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "207": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "208": {
       "classification": "boss",
@@ -1570,30 +1694,36 @@
     "209": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "210": {
       "classification": "ordinary",
       "placement_kind": "",
       "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "211": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": true,
+      "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
     },
     "212": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "213": {
       "classification": "ordinary",
@@ -1605,9 +1735,11 @@
     "214": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "215": {
       "classification": "ordinary",
@@ -1619,9 +1751,11 @@
     "216": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "217": {
       "classification": "ordinary",
@@ -1633,9 +1767,11 @@
     "218": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "219": {
       "classification": "ordinary",
@@ -1647,9 +1783,11 @@
     "220": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "221": {
       "classification": "ordinary",
@@ -1661,9 +1799,11 @@
     "222": {
       "classification": "ordinary",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "223": {
       "classification": "ordinary",
@@ -1703,67 +1843,67 @@
       "resolution": "offline_unique_exact_name"
     },
     "226": {
-      "classification": "ordinary",
-      "placement_kind": "",
+      "classification": "special",
+      "placement_kind": "monster_spawn",
       "placement_allowed": true,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录；R1 runtime closure: policy-only unblock (exact-ID combat/AI/timing/art/drop formal)"
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "227": {
-      "classification": "ordinary",
-      "placement_kind": "",
-      "placement_allowed": false,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "classification": "special",
+      "placement_kind": "monster_spawn",
+      "placement_allowed": true,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "228": {
-      "classification": "ordinary",
-      "placement_kind": "",
-      "placement_allowed": false,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "classification": "special",
+      "placement_kind": "monster_spawn",
+      "placement_allowed": true,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "229": {
-      "classification": "elite",
-      "placement_kind": "",
-      "placement_allowed": false,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "classification": "special",
+      "placement_kind": "monster_spawn",
+      "placement_allowed": true,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "230": {
-      "classification": "ordinary",
-      "placement_kind": "",
-      "placement_allowed": false,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "classification": "special",
+      "placement_kind": "monster_spawn",
+      "placement_allowed": true,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "231": {
-      "classification": "ordinary",
-      "placement_kind": "",
-      "placement_allowed": false,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "classification": "special",
+      "placement_kind": "monster_spawn",
+      "placement_allowed": true,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "232": {
-      "classification": "ordinary",
-      "placement_kind": "",
-      "placement_allowed": false,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "classification": "special",
+      "placement_kind": "monster_spawn",
+      "placement_allowed": true,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "233": {
-      "classification": "ordinary",
-      "placement_kind": "",
-      "placement_allowed": false,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "classification": "special",
+      "placement_kind": "monster_spawn",
+      "placement_allowed": true,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "234": {
-      "classification": "ordinary",
-      "placement_kind": "",
-      "placement_allowed": false,
-      "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "classification": "special",
+      "placement_kind": "monster_spawn",
+      "placement_allowed": true,
+      "resolution": "exact_id_user_adjudicated",
+      "notes": "用户裁决：宝箱系列为独立多形态特殊/脚本实体，不属于普通怪物复制变体；P3C 2026-08-19"
     },
     "235": {
       "classification": "boss",
@@ -1787,23 +1927,29 @@
     "236": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "237": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "238": {
       "classification": "boss",
       "placement_kind": "",
-      "placement_allowed": false,
+      "placement_allowed": true,
       "resolution": "exact_id_map_spawn_audit",
-      "notes": "exact-ID 地图刷新证据；正常生态分类"
+      "notes": "exact-ID 地图刷新证据；正常生态分类",
+      "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
     },
     "240": {
       "classification": "boss",

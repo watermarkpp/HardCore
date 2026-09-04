@@ -1,0 +1,637 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "verdict": "unified_visual_action_is_used_but_frame_binding_is_not_proven",
+  "records": [
+    {
+      "skill_id": "taoist.defense",
+      "name": "神圣战甲术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.4,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.entrapment",
+      "name": "困魔咒",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 5,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.45,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.healing",
+      "name": "治愈术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.35,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.invisibility",
+      "name": "隐身术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.35,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.magic_defense",
+      "name": "幽灵盾",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.4,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_healing",
+      "name": "群体治疗术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.42,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.mass_invisibility",
+      "name": "集体隐身术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.42,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.poison",
+      "name": "施毒术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.32,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.revelation",
+      "name": "心灵启示",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 3,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.22,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.soul_fire_talisman",
+      "name": "灵魂火符",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.32,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.spiritual_warfare",
+      "name": "精神力战法",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 0,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.0,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_divine_beast",
+      "name": "召唤神兽",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 5,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.55,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "taoist.summon_skeleton",
+      "name": "召唤骷髅",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 5,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.55,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.basic_swordsmanship",
+      "name": "基本剑术",
+      "cast_action": "基本剑术",
+      "attack_action": "基本剑术",
+      "ready_action": null,
+      "release_frame": 0,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.0,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.fire_sword",
+      "name": "烈火剑法",
+      "cast_action": "烈火剑法",
+      "attack_action": "烈火剑法",
+      "ready_action": "fire_sword_auto_toggle",
+      "release_frame": 2,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.17,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.half_moon",
+      "name": "半月弯刀",
+      "cast_action": "半月弯刀",
+      "attack_action": "半月弯刀",
+      "ready_action": null,
+      "release_frame": 2,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.17,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.slaying_swordsmanship",
+      "name": "攻杀剑术",
+      "cast_action": "攻杀剑术",
+      "attack_action": "攻杀剑术",
+      "ready_action": null,
+      "release_frame": 2,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.17,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.thrusting",
+      "name": "刺杀剑术",
+      "cast_action": "刺杀剑术",
+      "attack_action": "刺杀剑术",
+      "ready_action": null,
+      "release_frame": 2,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.17,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "warrior.wild_rush",
+      "name": "野蛮冲撞",
+      "cast_action": "野蛮冲撞",
+      "attack_action": "野蛮冲撞",
+      "ready_action": null,
+      "release_frame": 2,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.17,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.exploding_flame",
+      "name": "爆裂火焰",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.34,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fire_wall",
+      "name": "火墙",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.38,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.fireball",
+      "name": "火球术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.32,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.great_fireball",
+      "name": "大火球",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.32,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hell_lightning",
+      "name": "地狱雷光",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.34,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.hellfire",
+      "name": "地狱火",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 3,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.28,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.holy_word",
+      "name": "圣言术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.4,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.ice_storm",
+      "name": "冰咆哮",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.34,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.laser",
+      "name": "疾光电影",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 3,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.28,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.lightning",
+      "name": "雷电术",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.32,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.magic_shield",
+      "name": "魔法盾",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.32,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.repulsion_ring",
+      "name": "抗拒火环",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 3,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.25,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.teleport",
+      "name": "瞬息移动",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 2,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.18,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    },
+    {
+      "skill_id": "wizard.temptation_light",
+      "name": "诱惑之光",
+      "cast_action": "cast",
+      "attack_action": null,
+      "ready_action": null,
+      "release_frame": 4,
+      "effect_spawn_frame": null,
+      "runtime_release_seconds": 0.38,
+      "recovery_action": "shared PlayerVisual returns to idle",
+      "unified_character_action_system": true,
+      "active_caster_action_resolution": "PlayerVisual uses the shared cast action key and the integration branch has formal cast textures; release timing is still windup-based",
+      "direct_sprite_frame_mutation_by_skill_runtime": false,
+      "timing_status": "windup timer drives commit; hit_frame is metadata and is not the scheduling authority",
+      "interrupt_status": "pending action commits once; struck reaction queues after current action",
+      "errors": [
+        "EVENT_TIMING_ERROR"
+      ]
+    }
+  ]
+}

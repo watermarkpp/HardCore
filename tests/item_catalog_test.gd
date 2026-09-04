@@ -36,11 +36,12 @@ func _run() -> void:
 	assert(PlayerState.inventory.size() == 2, "穿戴后装备仍错误地留在背包")
 	var weapon: Dictionary = PlayerState.equipment["武器"]
 	var max_durability := int(weapon.get("max_durability", 1))
-	weapon["durability"] = maxi(0, max_durability - 2)
-	var repair_cost := PlayerState.repair_cost()
+	PlayerState.damage_equipment_durability("武器", mini(2, max_durability))
+	var blacksmith_context := GameData.merchant_context("starter_gear")
+	var repair_cost := PlayerState.repair_cost(blacksmith_context)
 	assert(repair_cost > 0, "耐久损耗没有产生维修费")
 	var gold_before := PlayerState.gold
-	var repair_result := PlayerState.repair_all_equipment()
+	var repair_result := PlayerState.repair_all_equipment(blacksmith_context)
 	assert(repair_result.begins_with("全部装备维修完成"), "一键维修失败")
 	assert(int(weapon.get("durability", 0)) == max_durability and PlayerState.gold == gold_before - repair_cost, "维修结果或扣费错误")
 

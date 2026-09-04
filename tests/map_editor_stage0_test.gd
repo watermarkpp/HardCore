@@ -16,14 +16,10 @@ func _ready() -> void:
 	var mengzhong := MapEditorTypes.new_map_from_catalog("mengzhong_province")
 	assert(mengzhong.design.design_size == [88, 88])
 	var blank_templates := MapDesignCatalogService.blank_templates()
-	assert(blank_templates.size() == 28)
+	assert(blank_templates.size() == 24)
 	var passage_1_template := MapDesignCatalogService.find_blank_template("blank.connection_passage_1")
 	var passage_2_template := MapDesignCatalogService.find_blank_template("blank.connection_passage_2")
 	var unknown_dark_template := MapDesignCatalogService.find_blank_template("blank.unknown_dark_palace")
-	var stone_tomb_1_template := MapDesignCatalogService.find_blank_template("blank.stone_tomb_1")
-	var stone_tomb_2_template := MapDesignCatalogService.find_blank_template("blank.stone_tomb_2")
-	var stone_tomb_3_template := MapDesignCatalogService.find_blank_template("blank.stone_tomb_3")
-	var stone_tomb_4_template := MapDesignCatalogService.find_blank_template("blank.stone_tomb_4")
 	assert(passage_1_template.display_name == "连接通道1" and passage_1_template.design_size == [50.0, 50.0])
 	assert(passage_2_template.display_name == "连接通道2" and passage_2_template.design_size == [50.0, 50.0])
 	assert(passage_1_template.runtime_map_id == 1544 and passage_2_template.runtime_map_id == 1545)
@@ -32,51 +28,6 @@ func _ready() -> void:
 	assert(unknown_dark_template.display_name == "未知暗殿")
 	assert(unknown_dark_template.runtime_map_id == 1571 and unknown_dark_template.design_size == [40.0, 40.0])
 	assert(unknown_dark_template.content_policy == "empty_layers")
-	assert(stone_tomb_1_template.display_name == "石墓一层")
-	assert(stone_tomb_1_template.runtime_map_id == 1198)
-	assert(stone_tomb_1_template.design_size == [50.0, 50.0])
-	assert(stone_tomb_1_template.map_type == "dungeon_floor")
-	for clone_template: Dictionary in [stone_tomb_2_template, stone_tomb_3_template, stone_tomb_4_template]:
-		assert(clone_template.design_size == [50.0, 50.0])
-		assert(clone_template.template_kind == "existing_map_or_empty_template")
-		assert(clone_template.content_policy == "open_existing_workspace_first")
-		assert(clone_template.clone_source_map_id == "stone_tomb_1")
-	assert(stone_tomb_2_template.runtime_map_id == 1199)
-	assert(stone_tomb_2_template.display_name == "石墓二层")
-	assert(stone_tomb_3_template.runtime_map_id == 1200)
-	assert(stone_tomb_3_template.display_name == "石墓三层")
-	assert(stone_tomb_4_template.runtime_map_id == 1201)
-	assert(stone_tomb_4_template.display_name == "石墓四层")
-	var stone_tomb_1_saved := MapEditorLoadService.load_document(
-		MapEditorSaveService.default_path("stone_tomb_1")
-	)
-	assert(stone_tomb_1_saved.ok, str(stone_tomb_1_saved.errors))
-	for clone_id: String in ["stone_tomb_2", "stone_tomb_3", "stone_tomb_4"]:
-		var clone_saved := MapEditorLoadService.load_document(
-			MapEditorSaveService.default_path(clone_id)
-		)
-		assert(clone_saved.ok, "%s: %s" % [clone_id, clone_saved.errors])
-		assert(clone_saved.document.design.design_size == [50.0, 50.0])
-		assert(clone_saved.document.editor_meta.clone_source_map_id == "stone_tomb_1")
-		assert(
-			str(clone_saved.document.editor_meta.clone_source_document_sha256).length()
-			== 64
-		)
-		assert(clone_saved.document.layers.map_exit_points.is_empty())
-		for layer_name: String in MapEditorTypes.LAYER_NAMES:
-			if layer_name == "map_exit_points":
-				continue
-			assert(
-				clone_saved.document.layers[layer_name]
-				== stone_tomb_1_saved.document.layers[layer_name],
-				"%s layer differs: %s" % [clone_id, layer_name]
-			)
-	var stone_tomb_1 := MapEditorTypes.new_map_from_blank_template("blank.stone_tomb_1")
-	assert(stone_tomb_1.map_id == "stone_tomb_1")
-	assert(stone_tomb_1.runtime_map_id == 1198)
-	assert(stone_tomb_1.design.design_size == [50, 50])
-	assert(stone_tomb_1.design.source_size == [400.0, 400.0])
-	assert(stone_tomb_1.source_reference.audit_status == "ok")
 	var bich_blank := MapEditorTypes.new_map_from_blank_template("blank.bich_province")
 	assert(bich_blank.design.design_size == [80, 80])
 	assert(bich_blank.editor_meta.blank_template_id == "blank.bich_province")
@@ -146,7 +97,18 @@ func _ready() -> void:
 	editor.load_default_workspace_on_ready = false
 	editor.persist_last_document_path = false
 	add_child(editor)
-	assert(editor._startup_document_path() == MapEditorSaveService.default_path("bich_province"))
+	assert(editor._startup_document_path() == MapEditorSaveService.default_path("world_bich_province"))
+	assert(
+		MapEditorSaveService.canonical_workspace_path(
+			MapEditorSaveService.default_path("cyd_1")
+		)
+		== MapEditorSaveService.default_path("world_cangyue_island")
+	)
+	assert(MapEditorSaveService.has_formal_workspace_for_legacy_map("cyd_1"))
+	assert(not MapEditorSaveService.has_formal_workspace_for_legacy_map("sandbox_64"))
+	var workspace_maps := MapEditorSaveService.list_workspace_maps()
+	assert(workspace_maps.any(func(entry: Dictionary) -> bool: return str(entry.get("map_id", "")) == "world_cangyue_island"))
+	assert(not workspace_maps.any(func(entry: Dictionary) -> bool: return str(entry.get("map_id", "")) == "cyd_1"))
 	var sandbox_test_root := "user://mse_stage0_sandbox"
 	var sandbox_test_document := sandbox_test_root.path_join("sandbox_64.editor.json")
 	var sandbox_test_workspace := sandbox_test_root.path_join("ground_workspace")
@@ -167,10 +129,7 @@ func _ready() -> void:
 	assert(unloaded_asset_item != null and unloaded_asset_item.get_icon(0) == null)
 	editor._ensure_asset_tree_item_icon(unloaded_asset_item)
 	assert(unloaded_asset_item.get_icon(0) != null)
-	assert(editor.map_template_option.item_count == 28)
-	editor._refresh_map_template_options("blank.stone_tomb_1")
-	assert(str(editor.map_template_option.get_item_metadata(editor.map_template_option.selected)) == "blank.stone_tomb_1")
-	assert("50×50" in editor.map_template_option.get_item_text(editor.map_template_option.selected))
+	assert(editor.map_template_option.item_count == 24)
 	editor._refresh_map_template_options("blank.orc_tomb_2")
 	assert(str(editor.map_template_option.get_item_metadata(editor.map_template_option.selected)) == "blank.orc_tomb_2")
 	assert("38×38" in editor.map_template_option.get_item_text(editor.map_template_option.selected))

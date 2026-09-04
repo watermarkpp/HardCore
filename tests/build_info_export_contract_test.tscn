@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://bi_contract"]
+[ext_resource type="Script" path="res://tests/build_info_export_contract_test.gd" id="1"]
+[node name="BIContract" type="Node"]
+script = ExtResource("1")

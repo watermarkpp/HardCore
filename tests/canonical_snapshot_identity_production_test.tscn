@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q1b_identity"]
+[ext_resource type="Script" path="res://tests/canonical_snapshot_identity_production_test.gd" id="1"]
+[node name="CanonicalSnapshotIdentityProduction" type="Node"]
+script = ExtResource("1")

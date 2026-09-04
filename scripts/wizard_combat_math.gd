@@ -2,13 +2,18 @@ class_name WizardCombatMath
 extends RefCounted
 
 const RULES_PATH := "res://assets/data/vanilla_176/profession_combat_rules.json"
+const SkillRankResolverScript := preload(
+	"res://scripts/skills/skill_rank_resolver.gd"
+)
+
+## Base data max rank; effective cast rank extends via skills.rank_extension.v1.
 const MAX_SKILL_LEVEL := 3
 
 static var _rules_cache: Dictionary = {}
 
 
 static func clamp_skill_level(level_value: int) -> int:
-	return clampi(level_value, 0, MAX_SKILL_LEVEL)
+	return SkillRankResolverScript.safe_effective_rank(level_value)
 
 
 static func classic_round(value: float) -> int:
@@ -58,7 +63,10 @@ static func shield_power(level_value: int, magic_stat_roll: int) -> int:
 
 
 static func teleport_succeeds(level_value: int, random_0_to_10: int) -> bool:
-	return random_0_to_10 < clamp_skill_level(level_value) * 2 + 4
+	return random_0_to_10 < SkillRankResolverScript.capped_roll_bound(
+		clamp_skill_level(level_value) * 2 + 4,
+		11
+	)
 
 
 static func repulsion_push_cells(level_value: int, random_0_or_1: int) -> int:
@@ -66,11 +74,23 @@ static func repulsion_push_cells(level_value: int, random_0_or_1: int) -> int:
 
 
 static func repulsion_succeeds(level_value: int, caster_level: int, target_level: int, random_0_to_19: int) -> bool:
-	return random_0_to_19 < 6 + clamp_skill_level(level_value) * 3 + caster_level - target_level
+	return random_0_to_19 < SkillRankResolverScript.capped_roll_bound(
+		6 + clamp_skill_level(level_value) * 3 + caster_level - target_level,
+		20
+	)
 
 
 static func holy_word_succeeds(level_value: int, caster_level: int, target_level: int, random_0_to_99: int, target_is_undead: bool) -> bool:
-	return target_is_undead and random_0_to_99 < clamp_skill_level(level_value) * 7 + 15 + caster_level - target_level
+	return (
+		target_is_undead
+		and random_0_to_99 < SkillRankResolverScript.capped_roll_bound(
+			clamp_skill_level(level_value) * 7
+				+ 15
+				+ caster_level
+				- target_level,
+			100
+		)
+	)
 
 
 static func profile_overrides(skill_id: String, level_value: int) -> Dictionary:
@@ -88,7 +108,17 @@ static func profile_overrides(skill_id: String, level_value: int) -> Dictionary:
 	}
 	for key: String in rule.keys():
 		if key.ends_with("_by_level") and rule[key] is Array:
-			result[key.trim_suffix("_by_level")] = _level_value(rule[key], level)
+			var semantic := SkillRankResolverScript.SEMANTIC_TIMING_CONSTANT
+			if (
+				key.contains("cooldown")
+				or key.contains("lifetime")
+			):
+				semantic = SkillRankResolverScript.SEMANTIC_TIMING_CONSTANT
+			else:
+				semantic = SkillRankResolverScript.SEMANTIC_LINEAR
+			result[key.trim_suffix("_by_level")] = (
+				SkillRankResolverScript.value(rule[key], level, semantic)
+			)
 	for key: String in ["source_anchor", "service_spell_id", "shape", "duration_formula", "tick_interval_ms", "area_radius_cells", "shield_power_formula", "success_formula", "undead_damage_multiplier", "living_damage_divisor"]:
 		if rule.has(key):
 			result[key] = rule[key]

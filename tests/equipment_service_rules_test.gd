@@ -38,8 +38,9 @@ func _run() -> void:
 	assert(EquipmentRulesScript.requirement_error(tao_item, 50, {"tao_max": 15}) == "需要道术16", "服务端道术需求判断错误")
 
 	var wood_sword := GameData.get_item_record("木剑")
-	assert(wood_sword.has("serviceRequirement") and wood_sword.get("concreteStdItemsStatus", "") == "数据库缺失·保留候选值", "装备目录没有区分源码语义与候选数值")
-	assert(str(wood_sword.serviceRequirement.get("source", "")) == "现有目录候选字段", "候选需求被误标为服务端精确值")
+	assert(wood_sword.has("serviceRequirement") and wood_sword.get("concreteStdItemsStatus", "") == "项目装备属性主表已接入", "装备属性主表没有进入运行目录")
+	assert(str(wood_sword.serviceRequirement.get("source", "")) == EquipmentRulesScript.ATTRIBUTE_MASTER_DISTRIBUTION, "装备需求没有使用项目主表")
+	assert(str(wood_sword.serviceRequirement.get("contract_id", "")) == EquipmentRulesScript.ATTRIBUTE_MASTER_CONTRACT_ID, "装备需求合同ID错误")
 
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()

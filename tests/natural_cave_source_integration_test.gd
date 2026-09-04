@@ -53,6 +53,9 @@ func _run() -> void:
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
+	# FREEZE-P0.2R: natural-cave source audit runs in explicit reference mode
+	# (maps 248/249 are planned_unbuilt, not formal gameplay).
+	game.reference_audit_mode = true
 	await get_tree().process_frame
 	await get_tree().process_frame
 	for map_id: int in EXPECTED:

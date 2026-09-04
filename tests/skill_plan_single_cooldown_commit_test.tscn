@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q3a_cooldown_commit"]
+[ext_resource type="Script" path="res://tests/skill_plan_single_cooldown_commit_test.gd" id="1"]
+[node name="SkillPlanSingleCooldownCommit" type="Node"]
+script = ExtResource("1")

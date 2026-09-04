@@ -11044,7 +11044,13 @@
           "validatedSourceFrameCount": 32,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 107,
+            "removedPixels": 392
+          }
         },
         "walk": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_walk.png",
@@ -11056,7 +11062,13 @@
           "validatedSourceFrameCount": 48,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 132,
+            "removedPixels": 398
+          }
         },
         "attack": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_attack.png",
@@ -11068,7 +11080,13 @@
           "validatedSourceFrameCount": 48,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 158,
+            "removedPixels": 713
+          }
         },
         "hit": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_hit.png",
@@ -11080,7 +11098,13 @@
           "validatedSourceFrameCount": 16,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 42,
+            "removedPixels": 161
+          }
         },
         "death": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_death.png",
@@ -11092,8 +11116,28 @@
           "validatedSourceFrameCount": 80,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 523,
+            "removedPixels": 2149
+          }
         }
+      },
+      "alphaIslandCleanup": {
+        "maxPixels": 48,
+        "method": "remove_disconnected_alpha_islands_8_connected_v1"
+      },
+      "lockedUserGeometry": {
+        "frameSize": [
+          272,
+          272
+        ],
+        "footAnchor": [
+          84,
+          143
+        ]
       },
       "monsterId": 218,
       "name": "牛魔将军",
@@ -11136,7 +11180,13 @@
           "validatedSourceFrameCount": 32,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 107,
+            "removedPixels": 392
+          }
         },
         "walk": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_walk.png",
@@ -11148,7 +11198,13 @@
           "validatedSourceFrameCount": 48,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 132,
+            "removedPixels": 398
+          }
         },
         "attack": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_attack.png",
@@ -11160,7 +11216,13 @@
           "validatedSourceFrameCount": 48,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 158,
+            "removedPixels": 713
+          }
         },
         "hit": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_hit.png",
@@ -11172,7 +11234,13 @@
           "validatedSourceFrameCount": 16,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 42,
+            "removedPixels": 161
+          }
         },
         "death": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_death.png",
@@ -11184,8 +11252,28 @@
           "validatedSourceFrameCount": 80,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 523,
+            "removedPixels": 2149
+          }
         }
+      },
+      "alphaIslandCleanup": {
+        "maxPixels": 48,
+        "method": "remove_disconnected_alpha_islands_8_connected_v1"
+      },
+      "lockedUserGeometry": {
+        "frameSize": [
+          272,
+          272
+        ],
+        "footAnchor": [
+          84,
+          143
+        ]
       },
       "monsterId": 219,
       "name": "牛魔将军0",
@@ -24235,7 +24323,13 @@
           "validatedSourceFrameCount": 32,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 107,
+            "removedPixels": 392
+          }
         },
         "walk": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_walk.png",
@@ -24247,7 +24341,13 @@
           "validatedSourceFrameCount": 48,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 132,
+            "removedPixels": 398
+          }
         },
         "attack": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_attack.png",
@@ -24259,7 +24359,13 @@
           "validatedSourceFrameCount": 48,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 158,
+            "removedPixels": 713
+          }
         },
         "hit": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_hit.png",
@@ -24271,7 +24377,13 @@
           "validatedSourceFrameCount": 16,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 42,
+            "removedPixels": 161
+          }
         },
         "death": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_death.png",
@@ -24283,8 +24395,28 @@
           "validatedSourceFrameCount": 80,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 523,
+            "removedPixels": 2149
+          }
         }
+      },
+      "alphaIslandCleanup": {
+        "maxPixels": 48,
+        "method": "remove_disconnected_alpha_islands_8_connected_v1"
+      },
+      "lockedUserGeometry": {
+        "frameSize": [
+          272,
+          272
+        ],
+        "footAnchor": [
+          84,
+          143
+        ]
       },
       "monsterId": 218,
       "name": "牛魔将军",
@@ -24327,7 +24459,13 @@
           "validatedSourceFrameCount": 32,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 107,
+            "removedPixels": 392
+          }
         },
         "walk": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_walk.png",
@@ -24339,7 +24477,13 @@
           "validatedSourceFrameCount": 48,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 132,
+            "removedPixels": 398
+          }
         },
         "attack": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_attack.png",
@@ -24351,7 +24495,13 @@
           "validatedSourceFrameCount": 48,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 158,
+            "removedPixels": 713
+          }
         },
         "hit": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_hit.png",
@@ -24363,7 +24513,13 @@
           "validatedSourceFrameCount": 16,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 42,
+            "removedPixels": 161
+          }
         },
         "death": {
           "path": "res://assets/art/monsters/client_complete/appearance_204_race_19/appearance_204_race_19_death.png",
@@ -24375,8 +24531,28 @@
           "validatedSourceFrameCount": 80,
           "missingFrames": [],
           "confidence": "A",
-          "pngStorageMode": "indexed_lossless"
+          "pngStorageMode": "indexed_lossless",
+          "alphaIslandCleanup": {
+            "maxPixels": 48,
+            "method": "remove_disconnected_alpha_islands_8_connected_v1",
+            "removedComponents": 523,
+            "removedPixels": 2149
+          }
         }
+      },
+      "alphaIslandCleanup": {
+        "maxPixels": 48,
+        "method": "remove_disconnected_alpha_islands_8_connected_v1"
+      },
+      "lockedUserGeometry": {
+        "frameSize": [
+          272,
+          272
+        ],
+        "footAnchor": [
+          84,
+          143
+        ]
       },
       "monsterId": 219,
       "name": "牛魔将军0",

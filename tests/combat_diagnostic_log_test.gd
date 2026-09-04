@@ -1,0 +1,52 @@
+extends Node
+
+const DiagnosticLog := preload("res://scripts/layers/runtime/combat_diagnostic_log.gd")
+const DiagnosticGate := preload("res://scripts/runtime_diagnostics.gd")
+
+
+func _ready() -> void:
+	var previous_enabled: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_ENABLED, false
+	))
+	var previous_combat: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_COMBAT, false
+	))
+	var previous_file_output: bool = bool(ProjectSettings.get_setting(
+		DiagnosticGate.SETTING_FILE_OUTPUT, false
+	))
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, false)
+	DiagnosticLog.clear_recent_events()
+	assert(DiagnosticLog.record({"event": "disabled"}).is_empty())
+	assert(DiagnosticLog.recent_events().is_empty())
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, true)
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_COMBAT, true)
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_FILE_OUTPUT, false)
+	var event := DiagnosticLog.record({
+		"event": "test_attack_release",
+		"origin_screen_px": Vector2(32.5, -16.25),
+		"direction_grid_step": Vector2i(1, -1),
+		"nested": {"target_screen_px": Vector2(-4.0, 8.0)},
+		"candidates": [{"ground_delta_gu": Vector2(1.25, 0.5)}],
+	})
+	assert(str(event.get("schema", "")) == DiagnosticLog.SCHEMA_ID)
+	assert(str(event.get("contract_id", "")) == DiagnosticLog.CONTRACT_ID)
+	assert(event.get("origin_screen_px", {}) == {"x": 32.5, "y": -16.25})
+	assert(event.get("direction_grid_step", {}) == {"x": 1, "y": -1})
+	assert(
+		(event.get("nested", {}) as Dictionary).get("target_screen_px", {})
+		== {"x": -4.0, "y": 8.0}
+	)
+	assert(
+		((event.get("candidates", []) as Array)[0] as Dictionary).get("ground_delta_gu", {})
+		== {"x": 1.25, "y": 0.5}
+	)
+	assert(JSON.stringify(event).contains("test_attack_release"))
+	assert(DiagnosticLog.recent_events().size() == 1)
+	DiagnosticLog.clear_recent_events()
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_ENABLED, previous_enabled)
+	ProjectSettings.set_setting(DiagnosticGate.SETTING_COMBAT, previous_combat)
+	ProjectSettings.set_setting(
+		DiagnosticGate.SETTING_FILE_OUTPUT, previous_file_output
+	)
+	print("COMBAT_DIAGNOSTIC_LOG_PASS：运行时近战诊断事件可JSON序列化且不改变战斗状态")
+	get_tree().quit(0)

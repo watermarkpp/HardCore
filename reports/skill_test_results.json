@@ -1,0 +1,274 @@
+{
+  "audit_id": "MIR2-HUMAN-SKILL-SYSTEM-AUDIT-V1.0",
+  "audit_date": "2026-07-24",
+  "git_commit": "53c614522f729842746e48a17a89c102351d388b",
+  "scope": "first read-only execution",
+  "runtime": "HardCore offline Godot runtime",
+  "command_pattern": "tools/godot-4.7/Godot_v4.7-stable_win64_console.exe --headless --log-file <new audit log> --path . <scene>",
+  "executed": [
+    {
+      "test": "caster_combat_math_test",
+      "scene": "tests/caster_combat_math_test.tscn",
+      "status": "pass",
+      "detail": "CASTER_COMBAT_MATH_PASS: 27 caster skills use Magic.pas formula contracts",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "caster_full_skill_entry_avatar_independence_test",
+      "scene": "tests/caster_full_skill_entry_avatar_independence_test.tscn",
+      "status": "pass",
+      "detail": "CASTER_FULL_SKILL_ENTRY_AVATAR_INDEPENDENCE_PASS: all 27 caster skills enter runtime without paper-doll/wear dependency",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "caster_skill_behavior_test",
+      "scene": "tests/caster_skill_behavior_test.tscn",
+      "status": "pass",
+      "detail": "CASTER_SKILL_BEHAVIOR_PASS: 14 special stable-ID behavior contracts loaded",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "caster_skill_runtime_test",
+      "scene": "tests/caster_skill_runtime_test.tscn",
+      "status": "pass",
+      "detail": "CASTER_SKILL_RUNTIME_PASS: all 27 wizard/taoist skills have stable execution plans and actual visual/node dispatch",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "caster_skill_visual_test",
+      "scene": "tests/caster_skill_visual_test.tscn",
+      "status": "pass",
+      "detail": "CASTER_SKILL_VISUAL_PASS: 25 exact primary-client assets cover 26 active caster skills; one passive has no cast visual; zero generated fallbacks; male-only",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "class_combat_test",
+      "scene": "tests/class_combat_test.tscn",
+      "status": "pass",
+      "detail": "CLASS_COMBAT_PASS：法师投射物/火墙/魔法盾与道士治疗/毒/控制/隐身/召唤正常",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "multi_character_save_test",
+      "scene": "tests/multi_character_save_test.tscn",
+      "status": "pass",
+      "detail": "MULTI_CHARACTER_SAVE_PASS：角色选择、双档隔离、原子写入与备份正常",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "player_attack_interrupt_consistency_test",
+      "scene": "tests/player_attack_interrupt_consistency_test.tscn",
+      "status": "pass",
+      "detail": "PLAYER_ATTACK_INTERRUPT_CONSISTENCY_PASS: threshold=3, struck queued, each attack committed once",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "profession_magic_info_test",
+      "scene": "tests/profession_magic_info_test.tscn",
+      "status": "pass",
+      "detail": "PROFESSION_MAGIC_INFO_PASS: 3 profession IDs, 33 skill IDs, 132 traced level rows",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "profession_skill_id_test",
+      "scene": "tests/profession_skill_id_test.tscn",
+      "status": "pass",
+      "detail": "PROFESSION_SKILL_ID_PASS：3职业、33技能、132等级记录稳定ID与字段追溯完整",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "skill_combat_profile_test",
+      "scene": "tests/skill_combat_profile_test.tscn",
+      "status": "pass",
+      "detail": "SKILL_COMBAT_PROFILE_PASS：33技能目标、距离、倍率、范围、前摇、命中帧和冷却基线正常",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "skill_loadout_rules_test",
+      "scene": "tests/skill_loadout_rules_test.tscn",
+      "status": "pass",
+      "detail": "SKILL_LOADOUT_RULES_PASS：新版/旧版UI请求均可稳定替换任意已学技能槽",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "skill_runtime_integration_test",
+      "scene": "tests/skill_runtime_integration_test.tscn",
+      "status": "pass",
+      "detail": "SKILL_RUNTIME_INTEGRATION_PASS：v2换槽、单路信号、HUD刷新及烈火有目标释放/空挥保留正常",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "taoist_profession_package_test",
+      "scene": "tests/taoist_profession_package_test.tscn",
+      "status": "pass",
+      "detail": "TAOIST_PROFESSION_PACKAGE_PASS: male-only growth, 13 skills, mana, materials, statuses and summons are self-contained",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "test_character_full_skill_profiles_test",
+      "scene": "tests/test_character_full_skill_profiles_test.tscn",
+      "status": "pass",
+      "detail": "TEST_CHARACTER_FULL_SKILL_PROFILES_PASS: 9 profiles reuse 3 complete profession templates covering all 33 formal skills",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "warrior_skill_state_machine_test",
+      "scene": "tests/warrior_skill_state_machine_test.tscn",
+      "status": "pass",
+      "detail": "WARRIOR_SKILL_STATE_MACHINE_PASS：攻杀周期、刺杀/半月开关、烈火自动开关与野蛮冲撞状态机正常",
+      "log_directory": "outputs/skill_audit_20260724"
+    },
+    {
+      "test": "wizard_profession_package_test",
+      "scene": "tests/wizard_profession_package_test.tscn",
+      "status": "pass",
+      "detail": "WIZARD_PROFESSION_PACKAGE_PASS: male-only growth, 14 skills, learning, mana, cooldown and actual casts are self-contained",
+      "log_directory": "outputs/skill_audit_20260724"
+    }
+  ],
+  "executed_counts": {
+    "pass": 17
+  },
+  "requested_coverage": [
+    {
+      "requested_test": "test_skill_database_import",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "profession_magic_info_test",
+        "profession_skill_id_test"
+      ]
+    },
+    {
+      "requested_test": "test_skill_definition_instance_separation",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "multi_character_save_test",
+        "test_character_full_skill_profiles_test",
+        "skill_loadout_rules_test"
+      ]
+    },
+    {
+      "requested_test": "test_skill_protocol_roundtrip",
+      "status": "missing_existing_test",
+      "existing_equivalents": []
+    },
+    {
+      "requested_test": "test_server_authoritative_damage",
+      "status": "missing_existing_test",
+      "existing_equivalents": []
+    },
+    {
+      "requested_test": "test_mp_consumption",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "wizard_profession_package_test",
+        "taoist_profession_package_test"
+      ]
+    },
+    {
+      "requested_test": "test_item_consumption",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "taoist_profession_package_test"
+      ]
+    },
+    {
+      "requested_test": "test_cast_range",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "skill_combat_profile_test",
+        "caster_skill_runtime_test"
+      ]
+    },
+    {
+      "requested_test": "test_target_filter",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "caster_skill_behavior_test",
+        "caster_skill_runtime_test"
+      ]
+    },
+    {
+      "requested_test": "test_damage_formula_golden_cases",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "caster_combat_math_test"
+      ]
+    },
+    {
+      "requested_test": "test_heal_formula",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "caster_combat_math_test"
+      ]
+    },
+    {
+      "requested_test": "test_status_duration",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "caster_skill_behavior_test"
+      ]
+    },
+    {
+      "requested_test": "test_status_stack_policy",
+      "status": "missing_existing_test",
+      "existing_equivalents": []
+    },
+    {
+      "requested_test": "test_cast_action_binding",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "player_attack_interrupt_consistency_test"
+      ]
+    },
+    {
+      "requested_test": "test_effect_resource_binding",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "caster_skill_visual_test"
+      ]
+    },
+    {
+      "requested_test": "test_effect_spawn_frame",
+      "status": "missing_existing_test",
+      "existing_equivalents": []
+    },
+    {
+      "requested_test": "test_cooldown_server_client_sync",
+      "status": "missing_existing_test",
+      "existing_equivalents": []
+    },
+    {
+      "requested_test": "test_skill_interrupt",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "player_attack_interrupt_consistency_test"
+      ]
+    },
+    {
+      "requested_test": "test_skill_proficiency",
+      "status": "missing_existing_test",
+      "existing_equivalents": []
+    },
+    {
+      "requested_test": "test_skill_persistence",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "multi_character_save_test"
+      ]
+    },
+    {
+      "requested_test": "test_no_duplicate_damage",
+      "status": "covered_by_existing_tests",
+      "existing_equivalents": [
+        "player_attack_interrupt_consistency_test"
+      ]
+    },
+    {
+      "requested_test": "test_no_unapproved_skill_patches",
+      "status": "missing_existing_test",
+      "existing_equivalents": []
+    }
+  ],
+  "conclusion": "Passing local tests do not establish a client/server protocol or server authority."
+}

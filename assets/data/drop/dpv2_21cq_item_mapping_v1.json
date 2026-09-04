@@ -1,0 +1,2073 @@
+{
+  "schema": "hardcore.dpv2.21cq_item_mapping.v1",
+  "authority_id": "dpv2.21cq.item_mapping.v1",
+  "status": "SIDE_BY_SIDE_DATA_AUTHORITY_COMPLETE",
+  "production_active": false,
+  "source": {
+    "path": "assets/data/canonical_monster_drop_source_v2.json",
+    "sha256": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+    "hash_normalization": "raw_bytes"
+  },
+  "policy": {
+    "runtime_name_lookup_forbidden": true,
+    "fuzzy_matching_forbidden": true,
+    "unresolved_blocks_cutover": true,
+    "gold_has_no_canonical_item_id": true,
+    "retired_source_only_labels_are_not_compiled": true,
+    "retired_source_only_labels_are_not_aliases": true
+  },
+  "migration_seeds": [
+    {
+      "path": "assets/data/drop/dpv2_item_tier_authority_v1.json",
+      "sha256": "8F7AD07FADE03033C336BDD32633670E5F3224A4A4BE109C41D71ED794235B7A",
+      "role": "one_time_233_canonical_identity_seed_not_probability_authority"
+    },
+    {
+      "path": "assets/data/drop/dpv2_item_identity_authority_v1.json",
+      "sha256": "C2F2F7E2803C7E54C5C096726D14B0E6730CC517DC3D20EE33F0D45BB0E4761C",
+      "role": "formal_project_canonical_identity_and_legacy_names"
+    },
+    {
+      "path": "assets/data/item_runtime_authority_v1.json",
+      "sha256": "2E1E7421895881C773E451514CA1EAA3B7B59ABB4EDDA6B8ED835E3A66A1F874",
+      "role": "five_explicit_item_aliases"
+    }
+  ],
+  "summary": {
+    "source_item_labels": 244,
+    "canonical_item_ids_covered": 233,
+    "mapping_status_counts": {
+      "EXACT": 227,
+      "EXPLICIT_ALIAS": 11,
+      "GOLD_REWARD_KIND": 1,
+      "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG": 5
+    },
+    "mapping_unresolved": 0,
+    "compiled_mapping_unresolved": 0,
+    "retired_source_only_not_in_canonical_catalog": 5
+  },
+  "records": [
+    {
+      "source_item_label": "HP强化水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910008,
+      "canonical_item_name": "HP强化水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "MP强化水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910009,
+      "canonical_item_name": "MP强化水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "万年雪霜",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920001,
+      "canonical_item_name": "万年雪霜",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "三眼手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 191,
+      "canonical_item_name": "三眼手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "中型盔甲(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 121,
+      "canonical_item_name": "中型盔甲(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "中型盔甲(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 120,
+      "canonical_item_name": "中型盔甲(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "乌木剑",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 82,
+      "canonical_item_name": "乌木剑",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "井中月",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 102,
+      "canonical_item_name": "井中月",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "传统项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 154,
+      "canonical_item_name": "传统项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "传送戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 254,
+      "canonical_item_name": "传送戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "体力强效神水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910001,
+      "canonical_item_name": "体力强效神水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "修罗",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 97,
+      "canonical_item_name": "修罗",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "偃月",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 95,
+      "canonical_item_name": "偃月",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "八荒",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 89,
+      "canonical_item_name": "八荒",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "六角戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 198,
+      "canonical_item_name": "六角戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "冰咆哮",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920002,
+      "canonical_item_name": "冰咆哮",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "凌风",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 92,
+      "canonical_item_name": "凌风",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "凝霜",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 98,
+      "canonical_item_name": "凝霜",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "凤凰明珠",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 163,
+      "canonical_item_name": "凤凰明珠",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "刺杀剑术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920003,
+      "canonical_item_name": "刺杀剑术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "力量戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 215,
+      "canonical_item_name": "力量戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "匕首",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 81,
+      "canonical_item_name": "匕首",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "半月",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 91,
+      "canonical_item_name": "半月",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "半月弯刀",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920004,
+      "canonical_item_name": "半月弯刀",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "古铜戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 197,
+      "canonical_item_name": "古铜戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "召唤神兽",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920005,
+      "canonical_item_name": "召唤神兽",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "召唤骷髅",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920006,
+      "canonical_item_name": "召唤骷髅",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "嗜魂法杖",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 109,
+      "canonical_item_name": "嗜魂法杖",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "回城卷",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920007,
+      "canonical_item_name": "回城卷",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "困魔咒",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920008,
+      "canonical_item_name": "困魔咒",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "圣战头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 232,
+      "canonical_item_name": "圣战头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "圣战宝甲",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 141,
+      "canonical_item_name": "圣战宝甲",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "圣战戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 235,
+      "canonical_item_name": "圣战戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "圣战手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 234,
+      "canonical_item_name": "圣战手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "圣战项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 233,
+      "canonical_item_name": "圣战项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "圣言术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920009,
+      "canonical_item_name": "圣言术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "地狱火",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920010,
+      "canonical_item_name": "地狱火",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "地狱雷光",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920011,
+      "canonical_item_name": "地狱雷光",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "坚固手套",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 182,
+      "canonical_item_name": "坚固手套",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "基本剑术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920012,
+      "canonical_item_name": "基本剑术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "复活戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 256,
+      "canonical_item_name": "复活戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "夏普儿手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 180,
+      "canonical_item_name": "夏普儿手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "大手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 179,
+      "canonical_item_name": "大手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "大火球",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920013,
+      "canonical_item_name": "大火球",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "天尊头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 240,
+      "canonical_item_name": "天尊头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "天尊戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 243,
+      "canonical_item_name": "天尊戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "天尊手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 242,
+      "canonical_item_name": "天尊手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "天尊道袍",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 144,
+      "canonical_item_name": "天尊道袍",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "天尊项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 241,
+      "canonical_item_name": "天尊项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "天师长袍",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 145,
+      "canonical_item_name": "天师长袍",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "天珠项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 170,
+      "canonical_item_name": "天珠项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "天魔神甲",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 140,
+      "canonical_item_name": "天魔神甲",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "太阳水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920014,
+      "canonical_item_name": "太阳水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "小手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 175,
+      "canonical_item_name": "小手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "屠龙",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 108,
+      "canonical_item_name": "屠龙",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "布衣(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 117,
+      "canonical_item_name": "布衣(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "布衣(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 116,
+      "canonical_item_name": "布衣(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "幽灵战衣(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 133,
+      "canonical_item_name": "幽灵战衣(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "幽灵战衣(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 132,
+      "canonical_item_name": "幽灵战衣(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "幽灵手套",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 189,
+      "canonical_item_name": "幽灵手套",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "幽灵盾",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920015,
+      "canonical_item_name": "幽灵盾",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "幽灵项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 168,
+      "canonical_item_name": "幽灵项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "强效太阳水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920016,
+      "canonical_item_name": "强效太阳水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "强效金创药",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 920017,
+      "canonical_item_name": "超级金创药",
+      "mapping_reason": "DPV2_ITEM_IDENTITY_LEGACY_NAME"
+    },
+    {
+      "source_item_label": "强效魔法药",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 920042,
+      "canonical_item_name": "超级魔法药",
+      "mapping_reason": "DPV2_ITEM_IDENTITY_LEGACY_NAME"
+    },
+    {
+      "source_item_label": "心灵启示",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920018,
+      "canonical_item_name": "心灵启示",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "心灵手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 195,
+      "canonical_item_name": "心灵手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "怒斩",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 113,
+      "canonical_item_name": "怒斩",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "思贝儿手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 190,
+      "canonical_item_name": "思贝儿手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "恶魔铃铛",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 172,
+      "canonical_item_name": "恶魔铃铛",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "恶魔长袍(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 131,
+      "canonical_item_name": "恶魔长袍(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "恶魔长袍(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 130,
+      "canonical_item_name": "恶魔长袍(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "战神油",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920019,
+      "canonical_item_name": "战神油",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "战神盔甲(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 129,
+      "canonical_item_name": "战神盔甲(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "战神盔甲(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 128,
+      "canonical_item_name": "战神盔甲(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "技巧项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 250,
+      "canonical_item_name": "技巧项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "抗拒火环",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920020,
+      "canonical_item_name": "抗拒火环",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "护身戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 257,
+      "canonical_item_name": "护身戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "探测项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 251,
+      "canonical_item_name": "探测项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "攻击力药水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910010,
+      "canonical_item_name": "攻击力药水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "攻击神水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910004,
+      "canonical_item_name": "攻击神水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "攻杀剑术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920021,
+      "canonical_item_name": "攻杀剑术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "放大镜",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 166,
+      "canonical_item_name": "放大镜",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "斩马刀",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 94,
+      "canonical_item_name": "斩马刀",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "施毒术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920022,
+      "canonical_item_name": "施毒术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "无极棍",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 104,
+      "canonical_item_name": "无极棍",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "木剑",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 80,
+      "canonical_item_name": "木剑",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "极速神水",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 910013,
+      "canonical_item_name": "疾风药水",
+      "mapping_reason": "ITEM_RUNTIME_AUTHORITY_EXPLICIT_ALIAS"
+    },
+    {
+      "source_item_label": "死神手套",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 187,
+      "canonical_item_name": "死神手套",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "毒蜘蛛牙齿",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 920039,
+      "canonical_item_name": "蜘蛛牙",
+      "mapping_reason": "DPV2_ITEM_IDENTITY_LEGACY_NAME"
+    },
+    {
+      "source_item_label": "求婚戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 260,
+      "canonical_item_name": "求婚戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "沃玛号角",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920023,
+      "canonical_item_name": "沃玛号角",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "治愈术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920024,
+      "canonical_item_name": "治愈术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "法神头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 236,
+      "canonical_item_name": "法神头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "法神戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 239,
+      "canonical_item_name": "法神戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "法神手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 238,
+      "canonical_item_name": "法神手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "法神披风",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 142,
+      "canonical_item_name": "法神披风",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "法神项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 237,
+      "canonical_item_name": "法神项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "泰坦戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 217,
+      "canonical_item_name": "泰坦戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "海魂",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 90,
+      "canonical_item_name": "海魂",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "火墙",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920025,
+      "canonical_item_name": "火墙",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "火焰戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 259,
+      "canonical_item_name": "火焰戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "火球术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920026,
+      "canonical_item_name": "火球术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "灯笼项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 164,
+      "canonical_item_name": "灯笼项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "灵魂战衣(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 127,
+      "canonical_item_name": "灵魂战衣(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "灵魂战衣(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 126,
+      "canonical_item_name": "灵魂战衣(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "灵魂火符",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920027,
+      "canonical_item_name": "灵魂火符",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "灵魂项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 173,
+      "canonical_item_name": "灵魂项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "炼狱",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 99,
+      "canonical_item_name": "炼狱",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "烈火剑法",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920028,
+      "canonical_item_name": "烈火剑法",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "爆裂火焰",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920029,
+      "canonical_item_name": "爆裂火焰",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "牛角戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 200,
+      "canonical_item_name": "牛角戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "狂风戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 222,
+      "canonical_item_name": "狂风戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "狂风项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 221,
+      "canonical_item_name": "狂风项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "玻璃戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 199,
+      "canonical_item_name": "玻璃戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "珊瑚戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 210,
+      "canonical_item_name": "珊瑚戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "珍珠戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 205,
+      "canonical_item_name": "珍珠戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "琥珀项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 162,
+      "canonical_item_name": "琥珀项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "生命项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 169,
+      "canonical_item_name": "生命项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "生铁戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 201,
+      "canonical_item_name": "生铁戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "疗伤药",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910007,
+      "canonical_item_name": "疗伤药",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "疾光电影",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920030,
+      "canonical_item_name": "疾光电影",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "疾风神水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910003,
+      "canonical_item_name": "疾风神水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "疾风药水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910013,
+      "canonical_item_name": "疾风药水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "白色虎齿项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 159,
+      "canonical_item_name": "白色虎齿项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "白金项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 155,
+      "canonical_item_name": "白金项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "皮制手套",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 177,
+      "canonical_item_name": "皮制手套",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "瞬息移动",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920031,
+      "canonical_item_name": "瞬息移动",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "短剑",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 84,
+      "canonical_item_name": "短剑",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "破魂",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 93,
+      "canonical_item_name": "破魂",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "祈祷之刃",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 223,
+      "canonical_item_name": "祈祷之刃",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "祈祷头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 224,
+      "canonical_item_name": "祈祷头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "祈祷戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 227,
+      "canonical_item_name": "祈祷戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "祈祷手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 226,
+      "canonical_item_name": "祈祷手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "祈祷项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 225,
+      "canonical_item_name": "祈祷项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "祖玛头像",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920032,
+      "canonical_item_name": "祖玛头像",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "祝福油",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920033,
+      "canonical_item_name": "祝福油",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "神圣战甲术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920034,
+      "canonical_item_name": "神圣战甲术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "神水",
+      "mapping_status": "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG",
+      "reward_kind": "retired_source_only",
+      "canonical_item_id": null,
+      "canonical_item_name": null,
+      "mapping_reason": "The label occurs only on retired source monsters and has no identity in the formal 233-item canonical catalog; no mapping is invented and no row is compiled.",
+      "source_occurrences": [
+        {
+          "source_monster_id": 17,
+          "source_monster_name": "鹿1",
+          "source_line_number": 1,
+          "source_slot_index": "slot_001",
+          "raw_text": "1/3 神水",
+          "source_kind": "RECOVERED_OR_CROSSCHECKED_SLOTS",
+          "source_ref": "GitHub/21cq/同SHA或老编码恢复 :: 鹿1",
+          "source_disposition": "RETIRED_OUT_OF_RUNTIME"
+        },
+        {
+          "source_monster_id": 23,
+          "source_monster_name": "稻草人1",
+          "source_line_number": 4,
+          "source_slot_index": "slot_004",
+          "raw_text": "1/6 神水",
+          "source_kind": "EXISTING_AUDITED_SLOTS",
+          "source_ref": "https://www.21cq.com/mir/Mob.aspx?id=23",
+          "source_disposition": "RETIRED_OUT_OF_RUNTIME"
+        }
+      ]
+    },
+    {
+      "source_item_label": "神秘头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 218,
+      "canonical_item_name": "神秘头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "神秘戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 220,
+      "canonical_item_name": "神秘戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "神秘腰带",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 219,
+      "canonical_item_name": "神秘腰带",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "竹笛",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 167,
+      "canonical_item_name": "竹笛",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "篮翡翠项链",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 165,
+      "canonical_item_name": "蓝翡翠项链",
+      "mapping_reason": "ITEM_RUNTIME_AUTHORITY_EXPLICIT_ALIAS"
+    },
+    {
+      "source_item_label": "精神力战法",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920035,
+      "canonical_item_name": "精神力战法",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "精神神水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910006,
+      "canonical_item_name": "精神神水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "紫碧螺",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 216,
+      "canonical_item_name": "紫碧螺",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "红宝石戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 213,
+      "canonical_item_name": "红宝石戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "绿色项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 171,
+      "canonical_item_name": "绿色项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "罗刹",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 88,
+      "canonical_item_name": "罗刹",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "群体治愈术",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 920036,
+      "canonical_item_name": "群体治疗术",
+      "mapping_reason": "ITEM_RUNTIME_AUTHORITY_EXPLICIT_ALIAS"
+    },
+    {
+      "source_item_label": "群体治疗术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920036,
+      "canonical_item_name": "群体治疗术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "肉",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920037,
+      "canonical_item_name": "肉",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "蓝翡翠项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 165,
+      "canonical_item_name": "蓝翡翠项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "蓝色水晶戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 202,
+      "canonical_item_name": "蓝色水晶戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "虹魔戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 247,
+      "canonical_item_name": "虹魔戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "虹魔手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 248,
+      "canonical_item_name": "虹魔手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "虹魔项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 249,
+      "canonical_item_name": "虹魔项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "蛆卵",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920038,
+      "canonical_item_name": "蛆卵",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "蛇眼戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 204,
+      "canonical_item_name": "蛇眼戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "蝎子的尾巴",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 920040,
+      "canonical_item_name": "蝎尾",
+      "mapping_reason": "DPV2_ITEM_IDENTITY_LEGACY_NAME"
+    },
+    {
+      "source_item_label": "血饮",
+      "mapping_status": "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG",
+      "reward_kind": "retired_source_only",
+      "canonical_item_id": null,
+      "canonical_item_name": null,
+      "mapping_reason": "The label occurs only on retired source monsters and has no identity in the formal 233-item canonical catalog; no mapping is invented and no row is compiled.",
+      "source_occurrences": [
+        {
+          "source_monster_id": 167,
+          "source_monster_name": "血僵尸0",
+          "source_line_number": 16,
+          "source_slot_index": "slot_016",
+          "raw_text": "1/500 血饮",
+          "source_kind": "GITHUB_MONITEMS_PRIMARY",
+          "source_ref": "mrzhqiang/mirserver-1.76 :: Mir200/Envir/MonItems/血僵尸0.txt",
+          "source_disposition": "RETIRED_OUT_OF_RUNTIME"
+        }
+      ]
+    },
+    {
+      "source_item_label": "裁决之杖",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 105,
+      "canonical_item_name": "裁决之杖",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "记忆头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 228,
+      "canonical_item_name": "记忆头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "记忆戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 231,
+      "canonical_item_name": "记忆戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "记忆手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 230,
+      "canonical_item_name": "记忆手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "记忆项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 229,
+      "canonical_item_name": "记忆项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "诱惑之光",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920041,
+      "canonical_item_name": "诱惑之光",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "超负载戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 258,
+      "canonical_item_name": "超负载戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "躲避手链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 160,
+      "canonical_item_name": "躲避手链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "轻型盔甲(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 119,
+      "canonical_item_name": "轻型盔甲(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "轻型盔甲(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 118,
+      "canonical_item_name": "轻型盔甲(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "辟邪手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 181,
+      "canonical_item_name": "辟邪手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "逍遥扇",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 115,
+      "canonical_item_name": "逍遥扇",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "道力神水",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 910006,
+      "canonical_item_name": "精神神水",
+      "mapping_reason": "ITEM_RUNTIME_AUTHORITY_EXPLICIT_ALIAS"
+    },
+    {
+      "source_item_label": "道士头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 149,
+      "canonical_item_name": "道士头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "道士手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 185,
+      "canonical_item_name": "道士手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "道德戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 209,
+      "canonical_item_name": "道德戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "道术力药水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910012,
+      "canonical_item_name": "道术力药水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "重盔甲(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 123,
+      "canonical_item_name": "重盔甲(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "重盔甲(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 122,
+      "canonical_item_name": "重盔甲(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "野蛮冲撞",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920043,
+      "canonical_item_name": "野蛮冲撞",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "金创药(中量)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920044,
+      "canonical_item_name": "金创药(中量)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "金创药(小量)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920045,
+      "canonical_item_name": "金创药(小量)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "金币",
+      "mapping_status": "GOLD_REWARD_KIND",
+      "reward_kind": "gold",
+      "canonical_item_id": null,
+      "canonical_item_name": null,
+      "mapping_reason": "Gold uses quantity authority and has no canonical item identity."
+    },
+    {
+      "source_item_label": "金戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 206,
+      "canonical_item_name": "金戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "金手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 188,
+      "canonical_item_name": "金手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "金项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 153,
+      "canonical_item_name": "金项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "钢手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 178,
+      "canonical_item_name": "钢手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "铁剑",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 85,
+      "canonical_item_name": "铁剑",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "铁手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 174,
+      "canonical_item_name": "铁手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "铂金戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 214,
+      "canonical_item_name": "铂金戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "铂金项链",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 155,
+      "canonical_item_name": "白金项链",
+      "mapping_reason": "ITEM_RUNTIME_AUTHORITY_EXPLICIT_ALIAS"
+    },
+    {
+      "source_item_label": "银手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 176,
+      "canonical_item_name": "银手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "银蛇",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 101,
+      "canonical_item_name": "银蛇",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "阎罗手套",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 192,
+      "canonical_item_name": "阎罗手套",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "防御戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 255,
+      "canonical_item_name": "防御戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "降妖除魔戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 211,
+      "canonical_item_name": "降妖除魔戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "降魔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 96,
+      "canonical_item_name": "降魔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "隐身戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 253,
+      "canonical_item_name": "隐身戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "隐身术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920046,
+      "canonical_item_name": "隐身术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "集体隐身术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920047,
+      "canonical_item_name": "集体隐身术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "雷电术",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920048,
+      "canonical_item_name": "雷电术",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "霓裳羽衣",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 143,
+      "canonical_item_name": "霓裳羽衣",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "青铜剑",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 83,
+      "canonical_item_name": "青铜剑",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "青铜头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 147,
+      "canonical_item_name": "青铜头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "青铜斧",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 87,
+      "canonical_item_name": "青铜斧",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "食人树叶",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 920049,
+      "canonical_item_name": "食人花叶",
+      "mapping_reason": "DPV2_ITEM_IDENTITY_LEGACY_NAME"
+    },
+    {
+      "source_item_label": "食人树的果实",
+      "mapping_status": "EXPLICIT_ALIAS",
+      "reward_kind": "item",
+      "canonical_item_id": 920050,
+      "canonical_item_name": "食人花果",
+      "mapping_reason": "DPV2_ITEM_IDENTITY_LEGACY_NAME"
+    },
+    {
+      "source_item_label": "骑士手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 193,
+      "canonical_item_name": "骑士手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "骨玉权杖",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 106,
+      "canonical_item_name": "骨玉权杖",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "骷髅头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 150,
+      "canonical_item_name": "骷髅头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "骷髅戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 207,
+      "canonical_item_name": "骷髅戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魅力戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 208,
+      "canonical_item_name": "魅力戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔力强效神水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910002,
+      "canonical_item_name": "魔力强效神水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔力手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 186,
+      "canonical_item_name": "魔力手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔力神水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910005,
+      "canonical_item_name": "魔力神水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔杖",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 100,
+      "canonical_item_name": "魔杖",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔法力药水",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 910011,
+      "canonical_item_name": "魔法力药水",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔法头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 148,
+      "canonical_item_name": "魔法头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔法手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 183,
+      "canonical_item_name": "魔法手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔法盾",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920051,
+      "canonical_item_name": "魔法盾",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔法药(中量)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920052,
+      "canonical_item_name": "魔法药(中量)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔法药(小量)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 920053,
+      "canonical_item_name": "魔法药(小量)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔法长袍(女)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 125,
+      "canonical_item_name": "魔法长袍(女)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔法长袍(男)",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 124,
+      "canonical_item_name": "魔法长袍(男)",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔血戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 244,
+      "canonical_item_name": "魔血戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔血手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 245,
+      "canonical_item_name": "魔血手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔血项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 246,
+      "canonical_item_name": "魔血项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "魔鬼项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 161,
+      "canonical_item_name": "魔鬼项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "鸡肉",
+      "mapping_status": "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG",
+      "reward_kind": "retired_source_only",
+      "canonical_item_id": null,
+      "canonical_item_name": null,
+      "mapping_reason": "The label occurs only on retired source monsters and has no identity in the formal 233-item canonical catalog; no mapping is invented and no row is compiled.",
+      "source_occurrences": [
+        {
+          "source_monster_id": 14,
+          "source_monster_name": "鸡",
+          "source_line_number": 1,
+          "source_slot_index": "slot_001",
+          "raw_text": "1/1 鸡肉",
+          "source_kind": "RECOVERED_OR_CROSSCHECKED_SLOTS",
+          "source_ref": "GitHub/21cq/同SHA或老编码恢复 :: 鸡",
+          "source_disposition": "RETIRED_OUT_OF_RUNTIME"
+        }
+      ]
+    },
+    {
+      "source_item_label": "鹿茸",
+      "mapping_status": "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG",
+      "reward_kind": "retired_source_only",
+      "canonical_item_id": null,
+      "canonical_item_name": null,
+      "mapping_reason": "The label occurs only on retired source monsters and has no identity in the formal 233-item canonical catalog; no mapping is invented and no row is compiled.",
+      "source_occurrences": [
+        {
+          "source_monster_id": 17,
+          "source_monster_name": "鹿1",
+          "source_line_number": 2,
+          "source_slot_index": "slot_002",
+          "raw_text": "1/1 鹿茸",
+          "source_kind": "RECOVERED_OR_CROSSCHECKED_SLOTS",
+          "source_ref": "GitHub/21cq/同SHA或老编码恢复 :: 鹿1",
+          "source_disposition": "RETIRED_OUT_OF_RUNTIME"
+        }
+      ]
+    },
+    {
+      "source_item_label": "鹿血",
+      "mapping_status": "RETIRED_SOURCE_ONLY_NOT_IN_CANONICAL_CATALOG",
+      "reward_kind": "retired_source_only",
+      "canonical_item_id": null,
+      "canonical_item_name": null,
+      "mapping_reason": "The label occurs only on retired source monsters and has no identity in the formal 233-item canonical catalog; no mapping is invented and no row is compiled.",
+      "source_occurrences": [
+        {
+          "source_monster_id": 16,
+          "source_monster_name": "鹿",
+          "source_line_number": 3,
+          "source_slot_index": "slot_003",
+          "raw_text": "1/10000 鹿血",
+          "source_kind": "RECOVERED_OR_CROSSCHECKED_SLOTS",
+          "source_ref": "GitHub/21cq/同SHA或老编码恢复 :: 鹿",
+          "source_disposition": "RETIRED_OUT_OF_RUNTIME"
+        }
+      ]
+    },
+    {
+      "source_item_label": "麻痹戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 252,
+      "canonical_item_name": "麻痹戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "黄色水晶项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 158,
+      "canonical_item_name": "黄色水晶项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "黑檀手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 184,
+      "canonical_item_name": "黑檀手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "黑檀项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 157,
+      "canonical_item_name": "黑檀项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "黑色水晶戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 203,
+      "canonical_item_name": "黑色水晶戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "黑色水晶项链",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 156,
+      "canonical_item_name": "黑色水晶项链",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "黑铁头盔",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 151,
+      "canonical_item_name": "黑铁头盔",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "龙之戒指",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 212,
+      "canonical_item_name": "龙之戒指",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "龙之手镯",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 194,
+      "canonical_item_name": "龙之手镯",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "龙牙",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 114,
+      "canonical_item_name": "龙牙",
+      "mapping_reason": "Exact canonical item label."
+    },
+    {
+      "source_item_label": "龙纹剑",
+      "mapping_status": "EXACT",
+      "reward_kind": "item",
+      "canonical_item_id": 107,
+      "canonical_item_name": "龙纹剑",
+      "mapping_reason": "Exact canonical item label."
+    }
+  ]
+}

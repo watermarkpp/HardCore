@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/legacy_map_visual_publishers_ground_v2_contract_test.gd" type="Script" id="1"]
+
+[node name="LegacyMapVisualPublishersGroundV2ContractTest" type="Node"]
+script = ExtResource("1")

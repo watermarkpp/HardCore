@@ -1,6 +1,8 @@
 class_name HUDResourceOrb
 extends Control
 
+const LIQUID_RADIUS_RATIO := 0.49
+
 @export var liquid_color := Color("9e1623"):
 	set(value):
 		liquid_color = value
@@ -13,6 +15,8 @@ var maximum_value := 1
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	set_meta("stable_id", "ui.hud.resource_orb.metal_mask_fit.v2")
+	set_meta("liquid_radius_ratio", LIQUID_RADIUS_RATIO)
 	queue_redraw()
 
 
@@ -24,7 +28,7 @@ func set_values(current: int, maximum: int) -> void:
 
 func _draw() -> void:
 	var center := size * 0.5
-	var radius := minf(size.x, size.y) * 0.43
+	var radius := minf(size.x, size.y) * LIQUID_RADIUS_RATIO
 	var ratio := clampf(float(current_value) / float(maximum_value), 0.0, 1.0)
 	draw_circle(center, radius, Color(0.018, 0.012, 0.012, 0.98))
 	draw_circle(center, radius - 2.0, liquid_color.darkened(0.67))

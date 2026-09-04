@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q1a_v2_no_fallback"]
+[ext_resource type="Script" path="res://tests/snapshot_v2_no_legacy_fallback_test.gd" id="1"]
+[node name="SnapshotV2NoLegacyFallback" type="Node"]
+script = ExtResource("1")

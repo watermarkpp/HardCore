@@ -9,7 +9,7 @@ const CAPTURES := [
 
 
 func _ready() -> void:
-	assert(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/brand_intro.tscn", "审图样板不得替换正式入口")
+	assert(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/startup_loading.tscn", "审图样板不得替换正式入口")
 	var character_select_source := FileAccess.get_file_as_string("res://scenes/character_select.tscn")
 	assert(not "ui_gothic_preview" in character_select_source, "审图样板被提前接入人物选择界面")
 	var preview_source := FileAccess.get_file_as_string("res://tests/ui_gothic_preview.gd")

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://laser_dir_extent"]
+
+[ext_resource type="Script" path="res://tests/laser_direction_visual_extent_test.gd" id="1"]
+
+[node name="LaserDirExtent" type="Node"]
+script = ExtResource("1")

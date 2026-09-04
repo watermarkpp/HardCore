@@ -51,6 +51,7 @@ for monster in DATA.get("monsters", []):
             "status": "formal", "source_type": "classic_client_wil", "source_confidence": profile.get("mappingConfidence", "A"),
             "resource_lookup": lookup,
             "direction_mode": "mir2_north_first", "frame_size": profile["frameSize"],
+            "direction_policy": profile.get("directionPolicy", "mir2_directional"),
             "foot_anchor": profile["footAnchor"], "actions": {k: v["framesPerDirection"] for k, v in profile["actions"].items()},
             "runtime_allowed": True,
         })

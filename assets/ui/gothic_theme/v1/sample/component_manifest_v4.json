@@ -1,0 +1,147 @@
+{
+  "assetSetId": "ui.theme.gothic.v1.sample.v4",
+  "revision": "v4-approved-three-complete-masters",
+  "sourcePolicy": "approved master chroma removed soft matte despill",
+  "aspectSelection": {
+    "compactMax": 3.3333333333333335,
+    "standardMax": 4.67,
+    "boundaryPolicy": "inclusive"
+  },
+  "components": [
+    {
+      "id": "ui.theme.gothic.v1.button.compact.normal",
+      "file": "button_compact_normal_v4.png",
+      "size": [
+        320,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.compact.pressed",
+      "file": "button_compact_pressed_v4.png",
+      "size": [
+        320,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.compact.disabled",
+      "file": "button_compact_disabled_v4.png",
+      "size": [
+        320,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.standard.normal",
+      "file": "button_standard_normal_v4.png",
+      "size": [
+        480,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.standard.pressed",
+      "file": "button_standard_pressed_v4.png",
+      "size": [
+        480,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.standard.disabled",
+      "file": "button_standard_disabled_v4.png",
+      "size": [
+        480,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.wide.normal",
+      "file": "button_wide_normal_v4.png",
+      "size": [
+        640,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.wide.pressed",
+      "file": "button_wide_pressed_v4.png",
+      "size": [
+        640,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    },
+    {
+      "id": "ui.theme.gothic.v1.button.wide.disabled",
+      "file": "button_wide_disabled_v4.png",
+      "size": [
+        640,
+        120
+      ],
+      "patchMargins": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "renderContract": "complete-single-asset-limited-ninepatch-no-composite"
+    }
+  ]
+}

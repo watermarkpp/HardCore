@@ -13,7 +13,7 @@ func _run() -> void:
 		assert(not ContentLayers.manifest(layer_id).is_empty(), "缺少架构层：%s" % layer_id)
 	assert(ContentLayers.vanilla_dataset("maps") == "res://assets/data/vanilla_176/maps.json", "GameData未由拆分基准层定位")
 	var merged := ContentLayers.build_merged_database()
-	assert(merged.get("maps", []).size() == 142 and merged.get("monsters", []).size() == 214, "Merged Game Database基准数量错误")
+	assert(merged.get("maps", []).size() == 142 and merged.get("monsters", []).size() == 217, "Merged Game Database基准数量错误")
 	assert(str(merged.maps[0].get("contentLayer", "")) == "vanilla_core" and not bool(merged.maps[0].get("editable", true)), "基准记录缺少只读层标记")
 	var attack_policy := ContentLayers.policy_override("warrior_basic_attack_mobile")
 	assert(int(attack_policy.get("vanillaValue", 0)) == 600 and int(attack_policy.get("overrideValue", 0)) == 850, "手机战斗调整没有保存为policyOverride")

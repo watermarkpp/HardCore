@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q1a_legacy_explicit"]
+[ext_resource type="Script" path="res://tests/snapshot_legacy_explicit_policy_test.gd" id="1"]
+[node name="SnapshotLegacyExplicitPolicy" type="Node"]
+script = ExtResource("1")

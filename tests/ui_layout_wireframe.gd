@@ -3,11 +3,11 @@ extends Control
 const DESIGN_SIZE := Vector2(1280, 720)
 const SAFE_RECT := Rect2(24, 16, 1232, 688)
 const TOUCH_MIN := 56.0
-const MODES := ["hud", "inventory", "shop", "warehouse", "quest", "map", "skill", "profession"]
+const MODES := ["hud", "inventory", "shop", "warehouse", "quest", "map", "skill"]
 const TOP_CAPTION_NODES := [
 	"AttributeSection", "CharacterSection", "BagSection", "CategorySection", "GoodsSection", "DetailSection",
 	"TransferSection", "StashSection", "QuestList", "QuestDetail", "MapList", "MapCanvas", "MapDetail",
-	"SkillList", "SkillDetail", "Assignment", "ProfessionIdentity", "GrowthPath", "Unlocks",
+	"SkillList", "SkillDetail", "Assignment",
 ]
 
 const COLOR_BG := Color("10141a")
@@ -56,8 +56,6 @@ func _build_canvas() -> void:
 				_build_map()
 			"skill":
 				_build_skill()
-			"profession":
-				_build_profession()
 	_build_safe_guide()
 	_build_legend()
 
@@ -81,43 +79,48 @@ func _build_hud() -> void:
 
 	_add_panel(self, "TargetPanel", Rect2(440, 52, 400, 64), "怪物名称\n目标生命值", COLOR_RED)
 	_add_panel(self, "ZonePanel", Rect2(984, 48, 246, 100), "区域 / 坐标 / 时间", COLOR_SECTION)
-	_add_touch(self, "AutoLockButton", Rect2(984, 156, 246, 56), "自动锁定", COLOR_PURPLE)
-	_add_touch(self, "MapButton", Rect2(984, 220, 116, 56), "地图", COLOR_BLUE)
-	_add_touch(self, "MenuButton", Rect2(1114, 220, 116, 56), "菜单", COLOR_PURPLE)
-	_add_touch(self, "BagButton", Rect2(984, 284, 116, 56), "背包", COLOR_ORANGE)
-	_add_touch(self, "SkillBookButton", Rect2(1114, 284, 116, 56), "技能", COLOR_ORANGE)
+	_add_touch(self, "AutoLockButton", Rect2(1006, 132, 244, 56), "自动锁定", COLOR_PURPLE)
+	_add_touch(self, "MapButton", Rect2(1006, 193, 116, 56), "地图", COLOR_BLUE)
+	_add_touch(self, "MenuButton", Rect2(1134, 193, 116, 56), "菜单", COLOR_PURPLE)
+	_add_touch(self, "BagButton", Rect2(1006, 249, 116, 56), "背包", COLOR_ORANGE)
+	_add_touch(self, "SkillBookButton", Rect2(1134, 249, 116, 56), "技能", COLOR_ORANGE)
 
-	_add_touch(self, "Joystick", Rect2(42, 548, 138, 138), "移动摇杆", COLOR_BLUE)
+	_add_touch(self, "Joystick", Rect2(70, 510, 152, 152), "移动摇杆", COLOR_BLUE)
 	_add_panel(self, "LootNotice", Rect2(460, 390, 360, 56), "拾取与战斗反馈", COLOR_SECTION)
-
-	_add_label(self, "SkillModeHint", Rect2(420, 454, 460, 32), "4个技能槽：按技能属性显示开关或点击施放", 14, COLOR_MUTED, HORIZONTAL_ALIGNMENT_CENTER)
-	for index in range(4):
-		var profession_slot := _add_touch(self, "ProfessionSkillSlot%d" % (index + 1), Rect2(456 + index * 100, 494, 88, 64), "技能槽%d\n开关/施放" % (index + 1), COLOR_PURPLE)
-		profession_slot.add_to_group("hud_profession_skill_slot")
-		profession_slot.set_meta("activation_mode_source", "skill.activation_mode")
-		profession_slot.set_meta("warrior_policy", "toggle")
-		profession_slot.set_meta("mage_tao_policy", "instant_or_toggle")
 
 	var integrated_frame := _add_outline(self, "IntegratedResourceItemFrame", Rect2(310, 574, 690, 124), Color(0.45, 0.92, 0.78, 0.88), 3)
 	integrated_frame.add_to_group("integrated_resource_item_frame")
 	integrated_frame.set_meta("background_alpha", 0.0)
 	integrated_frame.set_meta("contents", ["health_orb", "four_item_slots", "mana_orb"])
 	_add_label(self, "IntegratedFrameHint", Rect2(420, 574, 470, 24), "一体式美术框：生命球 · 4物品 · 魔法球", 13, Color(0.55, 1.0, 0.82), HORIZONTAL_ALIGNMENT_CENTER)
-	_add_touch(self, "HealthOrb", Rect2(326, 584, 112, 104), "生命球", COLOR_RED)
-	_add_touch(self, "ManaOrb", Rect2(872, 584, 112, 104), "魔法球", COLOR_BLUE)
+	_add_touch(self, "HealthOrb", Rect2(357, 579, 110, 110), "生命球", COLOR_RED)
+	_add_touch(self, "ManaOrb", Rect2(813, 579, 110, 110), "魔法球", COLOR_BLUE)
+	var item_centers := [Vector2(514, 638), Vector2(597, 638), Vector2(684, 638), Vector2(768, 638)]
 	for index in range(4):
-		var item_slot := _add_touch(self, "ItemSlot%d" % (index + 1), Rect2(497 + index * 82, 610, 70, 70), "物品%d" % (index + 1), COLOR_GOLD)
+		var item_slot := _add_touch(self, "ItemSlot%d" % (index + 1), Rect2(item_centers[index] - Vector2(36, 36), Vector2(72, 72)), "物品%d" % (index + 1), COLOR_GOLD)
 		item_slot.add_to_group("hud_item_slot")
 
-	var quick_skill_1 := _add_touch(self, "Skill1", Rect2(1068, 612, 72, 72), "技能1", COLOR_GOLD)
-	var quick_skill_2 := _add_touch(self, "Skill2", Rect2(1060, 516, 72, 72), "技能2", COLOR_GOLD)
-	var quick_skill_3 := _add_touch(self, "Skill3", Rect2(1148, 488, 72, 72), "技能3", COLOR_GOLD)
-	quick_skill_1.add_to_group("hud_attack_ring_skill")
-	quick_skill_2.add_to_group("hud_attack_ring_skill")
-	quick_skill_3.add_to_group("hud_attack_ring_skill")
-	_add_touch(self, "AttackButton", Rect2(1148, 588, 104, 104), "攻击", COLOR_RED)
-	_add_touch(self, "InteractButton", Rect2(1186, 346, 68, 68), "交互", COLOR_GREEN)
-	_add_touch(self, "SwitchTarget", Rect2(1146, 422, 108, 56), "切换敌人", COLOR_BLUE)
+	var attack_center := Vector2(1095, 610)
+	for index in range(6):
+		var angle := deg_to_rad(180.0 + 36.0 * index)
+		var ring_center := attack_center + Vector2.from_angle(angle) * 125.0
+		var ring_skill := _add_touch(
+			self,
+			"AttackRingSkill%d" % (index + 1),
+			Rect2(ring_center - Vector2(36, 36), Vector2(72, 72)),
+			"技能%d" % (index + 1),
+			COLOR_GOLD
+		)
+		ring_skill.add_to_group("hud_attack_ring_skill")
+		ring_skill.set_meta("stable_id", "hud.attack_ring_skill.%d" % (index + 1))
+		ring_skill.set_meta("circular_touch", true)
+		ring_skill.set_meta("touch_radius", 36.0)
+	var attack_button := _add_touch(self, "AttackButton", Rect2(attack_center - Vector2(60, 60), Vector2(120, 120)), "攻击", COLOR_RED)
+	attack_button.set_meta("stable_id", "hud.attack.primary")
+	attack_button.set_meta("circular_touch", true)
+	attack_button.set_meta("touch_radius", 60.0)
+	_add_touch(self, "InteractButton", Rect2(1010, 305, 110, 76), "交互", COLOR_GREEN)
+	_add_touch(self, "SwitchTarget", Rect2(1140, 305, 110, 76), "切换敌人", COLOR_BLUE)
 
 
 func _build_inventory() -> void:
@@ -214,22 +217,6 @@ func _build_skill() -> void:
 	_add_panel(panel, "Assignment", Rect2(854, 78, 334, 548), "技能按钮配置", COLOR_SECTION)
 	for index in range(3):
 		_add_touch(panel, "SkillSlot%d" % index, Rect2(876, 144 + index * 136, 290, 112), "技能按钮 %d" % (index + 1), COLOR_RED if index == 0 else COLOR_GOLD)
-
-
-func _build_profession() -> void:
-	var panel := _modal_shell("ProfessionPanel", "职业成长", "职业定位、成长路线与解锁内容", Rect2(90, 48, 1100, 636))
-	_add_panel(panel, "ProfessionTabs", Rect2(20, 78, 1060, 88), "", COLOR_SECTION)
-	for index in range(3):
-		_add_touch(panel, "Profession%d" % index, Rect2(38 + index * 346, 94, 326, 56), ["战士", "法师", "道士"][index], COLOR_RED if index == 0 else COLOR_BLUE)
-	_add_panel(panel, "ProfessionIdentity", Rect2(20, 178, 316, 434), "职业定位", COLOR_SECTION)
-	_add_panel(panel, "ProfessionPortrait", Rect2(44, 228, 268, 180), "职业人物预览", Color("414b58"))
-	_add_panel(panel, "RoleText", Rect2(44, 424, 268, 160), "近战 / 爆发 / 生存\n主属性与推荐装备", Color("414b58"))
-	_add_panel(panel, "GrowthPath", Rect2(348, 178, 440, 434), "成长路线", COLOR_SECTION)
-	for index in range(4):
-		_add_touch(panel, "GrowthNode%d" % index, Rect2(372, 226 + index * 86, 392, 68), "阶段 %d　属性与技能解锁" % (index + 1), COLOR_GOLD)
-	_add_panel(panel, "Unlocks", Rect2(800, 178, 280, 434), "解锁内容", COLOR_SECTION)
-	_add_panel(panel, "UnlockList", Rect2(824, 228, 232, 238), "技能\n装备类型\n职业机制\n成长奖励", Color("414b58"))
-	_add_touch(panel, "ConfirmProfession", Rect2(824, 504, 232, 64), "确认职业", COLOR_GREEN)
 
 
 func _add_shop_item(parent: Control, index: int, at: Vector2) -> void:

@@ -4,12 +4,12 @@
 
 | 用途 | 分支 | 永久工作树目录 |
 | --- | --- | --- |
-| 主整合 | `codex/integration` | `我的刷子游戏`（当前目录） |
-| UI 与 UI 美术 | `codex/ui-art` | `我的刷子游戏-worktrees/ui-art` |
-| 地图与环境 | `codex/maps` | `我的刷子游戏-worktrees/maps` |
-| 怪物与 Boss | `codex/monsters` | `我的刷子游戏-worktrees/monsters` |
-| 装备与物品 | `codex/equipment` | `我的刷子游戏-worktrees/equipment` |
-| 职业与技能 | `codex/professions-skills` | `我的刷子游戏-worktrees/professions-skills` |
+| 主整合 | `codex/integration` | `C:/Users/Administrator/Documents/HardCore` |
+| UI 与 UI 美术 | `codex/ui-art` | `C:/Users/Administrator/Documents/HardCore-worktrees/ui-art` |
+| 地图与环境 | `codex/maps` | `C:/Users/Administrator/Documents/HardCore-worktrees/maps` |
+| 怪物与 Boss | `codex/monsters` | `C:/Users/Administrator/Documents/HardCore-worktrees/monsters` |
+| 装备与物品 | `codex/equipment` | `C:/Users/Administrator/Documents/HardCore-worktrees/equipment` |
+| 职业与技能 | `codex/professions-skills` | `C:/Users/Administrator/Documents/HardCore-worktrees/professions-skills` |
 
 ## 设计原则
 

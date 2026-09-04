@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2d_visual_parity"]
+[ext_resource type="Script" path="res://tests/monster_streaming_visual_parity_test.gd" id="1"]
+[node name="MonsterStreamingVisualParity" type="Node"]
+script = ExtResource("1")

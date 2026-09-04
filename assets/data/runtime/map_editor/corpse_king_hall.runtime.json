@@ -1,5 +1,5 @@
 {
-  "build_sha256": "eab27349b61ae83f6a8398002c29aa00ae4cb42e684d97c8e394f96aa3268b0e",
+  "build_sha256": "ce288588f05fcd66a86a0fab07c4a00cb6e191f6ebbd3714011ec391a8a30b9e",
   "collision": {
     "blocked_count": 132.0,
     "blocked_tiles": [
@@ -4051,226 +4051,10 @@
       ]
     }
   ],
-  "runtime_schema_version": 1.0,
+  "projection_contract_id": "world.ground_projection.iso_64x32.v1",
+  "runtime_schema_version": 2.0,
   "semantics": {
-    "boss_spawn": [
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000001",
-        "spawn_rule": "boss",
-        "tile": [
-          5.0,
-          9.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000002",
-        "spawn_rule": "boss",
-        "tile": [
-          8.0,
-          6.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000003",
-        "spawn_rule": "boss",
-        "tile": [
-          12.0,
-          5.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000004",
-        "spawn_rule": "boss",
-        "tile": [
-          17.0,
-          7.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000005",
-        "spawn_rule": "boss",
-        "tile": [
-          21.0,
-          11.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000006",
-        "spawn_rule": "boss",
-        "tile": [
-          21.0,
-          15.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000007",
-        "spawn_rule": "boss",
-        "tile": [
-          19.0,
-          18.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000008",
-        "spawn_rule": "boss",
-        "tile": [
-          16.0,
-          20.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000009",
-        "spawn_rule": "boss",
-        "tile": [
-          11.0,
-          20.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000010",
-        "spawn_rule": "boss",
-        "tile": [
-          7.0,
-          17.0
-        ]
-      },
-      {
-        "boss_id": "boss.89",
-        "content_id": "boss.89",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000011",
-        "spawn_rule": "boss",
-        "tile": [
-          5.0,
-          12.0
-        ]
-      },
-      {
-        "boss_id": "boss.91",
-        "content_id": "boss.91",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "尸王2",
-        "kind": "boss_spawn",
-        "max_alive": 1.0,
-        "radius_tiles": 0.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "boss_spawn_000012",
-        "spawn_rule": "boss",
-        "tile": [
-          13.0,
-          13.0
-        ]
-      }
-    ],
+    "boss_spawn": [],
     "door_points": [],
     "light": [],
     "map_entrance_points": [],
@@ -4294,7 +4078,7 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_arrival_anchor",
@@ -4315,9 +4099,22 @@
     "safe_area": []
   },
   "source": {
+    "candidate_binding": {
+      "authoring_sha256": "525e5fb2cdb94bc9ad33365188a5c130bd29db993e7ac5301fa6b91fb0861d1c",
+      "contract_id": "mse.map.runtime.candidate_binding.v1",
+      "document_revision": 2.0,
+      "document_sha256": "6a7154735d694a0a2f5f481d86d550367289140cc62959325d651a6fe1cb23d9",
+      "ground_manifest_sha256": "47b43db7e44fd888f1d0a7cef059e13e34aa599d553e1edd984a688f7ec503e4",
+      "ground_state_sha256": "989b06135c1778a5048cc802d0cd28b797ab59bd4c62afb852e039db0e59cce5",
+      "map_key": "corpse_king_hall",
+      "runtime_map_id": 1578.0
+    },
     "content_layer": "personal_expansion",
-    "editor_schema_version": 4.0,
+    "display_name": "尸王殿",
+    "editor_schema_version": 5.0,
     "map_id": "corpse_king_hall",
-    "revision": 2.0
-  }
+    "revision": 2.0,
+    "runtime_map_id": 1578.0
+  },
+  "unit_contract_id": "combat.unit.gu_gs_px.v1"
 }

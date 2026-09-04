@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/projectile_absolute_release_snapshot_test.gd" type="Script" id="1"]
+
+[node name="ProjectileAbsoluteReleaseSnapshotTest" type="Node"]
+script = ExtResource("1")

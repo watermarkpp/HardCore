@@ -1,0 +1,99 @@
+class_name SkillGeometryService
+extends RefCounted
+
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+
+const GEOMETRY_DOMAIN_CONTRACT_ID := "skills.geometry.domain.gu_gs.v1"
+const DOMAIN_DISCRETE_GRID_CELLS := "discrete_grid_cells_gs"
+const DOMAIN_CONTINUOUS_GROUND_GU := "continuous_ground_gu"
+
+
+static func geometry_domain(definition: Dictionary) -> Dictionary:
+	var geometry: Dictionary = definition.get("geometry", {})
+	var shape := str(geometry.get("shape", "none"))
+	var domain := (
+		DOMAIN_CONTINUOUS_GROUND_GU
+		if str(definition.get("skill_id", "")) in [
+			"wizard.hellfire", "wizard.laser"
+		]
+		else DOMAIN_DISCRETE_GRID_CELLS
+	)
+	return {
+		"contract_id": GEOMETRY_DOMAIN_CONTRACT_ID,
+		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
+		"domain": domain,
+		"shape": shape,
+	}
+
+
+static func normalized_facing(value: Vector2i) -> Vector2i:
+	if value == Vector2i.ZERO:
+		return Vector2i.DOWN
+	return Vector2i(signi(value.x), signi(value.y))
+
+
+static func cells(definition: Dictionary, origin: Vector2i, facing: Vector2i, target_tile := Vector2i.ZERO) -> Array[Vector2i]:
+	var geometry: Dictionary = definition.get("geometry", {})
+	var shape := str(geometry.get("shape", "none"))
+	var direction := normalized_facing(facing)
+	var center := target_tile if target_tile != Vector2i.ZERO else origin
+	var result: Array[Vector2i] = []
+	match shape:
+		"line":
+			for distance in range(1, int(geometry.get("effect_length_gu", 1.0)) + 1):
+				result.append(origin + direction * distance)
+		"square":
+			var width := int(geometry.get("width_grid_steps", 1.0))
+			var height := int(geometry.get("height_grid_steps", 1.0))
+			var min_x := -int(floor(float(width - 1) / 2.0))
+			var min_y := -int(floor(float(height - 1) / 2.0))
+			for y in range(min_y, min_y + height):
+				for x in range(min_x, min_x + width):
+					result.append(center + Vector2i(x, y))
+		"adjacent_ring":
+			for y in range(-1, 2):
+				for x in range(-1, 2):
+					if x != 0 or y != 0:
+						result.append(origin + Vector2i(x, y))
+		"chebyshev_ring":
+			var radius := int(geometry.get("radius_grid_steps", 1.0))
+			for y in range(-radius, radius + 1):
+				for x in range(-radius, radius + 1):
+					if x != 0 or y != 0:
+						result.append(origin + Vector2i(x, y))
+		"chebyshev_area":
+			var radius := int(geometry.get("radius_grid_steps", 1.0))
+			for y in range(-radius, radius + 1):
+				for x in range(-radius, radius + 1):
+					result.append(center + Vector2i(x, y))
+		"project_canonical_four_target_arc":
+			var direction_index := _direction_index(direction)
+			for relative_offset: int in [7, 0, 1, 2]:
+				result.append(origin + _direction_step(direction_index + relative_offset))
+		"hexagon_boundary_approximated_on_8dir_grid":
+			for y in range(-1, 2):
+				for x in range(-1, 2):
+					if x != 0 or y != 0:
+						result.append(center + Vector2i(x, y))
+		_:
+			if shape not in ["none", "none_until_next_melee_hit", "targeted", "targeted_light", "projectile", "sky_strike_targeted", "random_valid_map_destination", "nearest_valid_adjacent_tile", "line_push"]:
+				push_warning("未实现的技能几何形状：%s" % shape)
+	return result
+
+
+static func _direction_index(direction: Vector2i) -> int:
+	var steps: Array[Vector2i] = [
+		Vector2i.DOWN, Vector2i(-1, 1), Vector2i.LEFT, Vector2i(-1, -1),
+		Vector2i.UP, Vector2i(1, -1), Vector2i.RIGHT, Vector2i(1, 1),
+	]
+	var normalized := normalized_facing(direction)
+	var index := steps.find(normalized)
+	return index if index >= 0 else 0
+
+
+static func _direction_step(direction_index: int) -> Vector2i:
+	var steps: Array[Vector2i] = [
+		Vector2i.DOWN, Vector2i(-1, 1), Vector2i.LEFT, Vector2i(-1, -1),
+		Vector2i.UP, Vector2i(1, -1), Vector2i.RIGHT, Vector2i(1, 1),
+	]
+	return steps[posmod(direction_index, steps.size())]

@@ -30,7 +30,6 @@ SCRIPT_PURPOSES = {
     "player.gd": "人物移动、850ms攻击、技能状态、动作锁和战斗请求",
     "player_state.gd": "角色等级、背包、装备、技能、任务、奖励、多角色档案与原子自动存档",
     "player_visual.gd": "战士五动作、Weapon/Hum动态穿戴、技能特效与音效",
-    "profession_panel.gd": "职业选择与切换界面",
     "profession_rules.gd": "三职业基础成长和技能战斗配置",
     "quest_panel.gd": "比奇老兵动态任务面板、目标、奖励和来源显示",
     "region_content.gd": "地图门点、怪物/Boss刷新、NPC与候选掉落运行定义",

@@ -34,10 +34,10 @@ func _run() -> void:
 
 	var shape: Shape2D = player.get_node("CollisionShape2D").shape
 	assert(shape is ConvexPolygonShape2D, "player must use the shared isometric footprint shape")
-	assert((shape as ConvexPolygonShape2D).points == WorldSpatialRules.actor_footprint_polygon(ArtSpec.PLAYER_COLLISION_RADIUS))
+	assert((shape as ConvexPolygonShape2D).points == WorldSpatialRules.actor_footprint_polygon_px(ArtSpec.PLAYER_COLLISION_RADIUS_PX))
 
 	for outward: Vector2 in DIRECTIONS:
-		var expected_support := 32.0 + ArtSpec.PLAYER_COLLISION_RADIUS if not is_zero_approx(outward.x) else 16.0 + ArtSpec.PLAYER_COLLISION_RADIUS * WorldSpatialRules.ACTOR_FOOTPRINT_Y_RATIO
+		var expected_support := 32.0 + ArtSpec.PLAYER_COLLISION_RADIUS_PX if not is_zero_approx(outward.x) else 16.0 + ArtSpec.PLAYER_COLLISION_RADIUS_PX * WorldSpatialRules.ACTOR_FOOTPRINT_Y_RATIO
 		player.global_position = outward * 100.0
 		await get_tree().physics_frame
 		var collision := player.move_and_collide(-outward * 200.0)
@@ -47,8 +47,8 @@ func _run() -> void:
 
 		var clear_position := player.global_position + outward * 3.0
 		var penetrating_position := player.global_position - outward * 3.0
-		assert(not WorldSpatialRules.environment_blocks_actor(provider, clear_position, ArtSpec.PLAYER_COLLISION_RADIUS), "software footprint blocks clear %s contact" % outward)
-		assert(WorldSpatialRules.environment_blocks_actor(provider, penetrating_position, ArtSpec.PLAYER_COLLISION_RADIUS), "software footprint missed Physics2D penetration from %s" % outward)
+		assert(not WorldSpatialRules.environment_blocks_actor_screen_px(provider, clear_position, ArtSpec.PLAYER_COLLISION_RADIUS_PX), "software footprint blocks clear %s contact" % outward)
+		assert(WorldSpatialRules.environment_blocks_actor_screen_px(provider, penetrating_position, ArtSpec.PLAYER_COLLISION_RADIUS_PX), "software footprint missed Physics2D penetration from %s" % outward)
 
 		player.global_position = clear_position
 		await get_tree().physics_frame

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/skill_production_no_visual_plan_test.gd" id="1"]
+
+[node name="SkillProductionNoVisualPlanTest" type="Node"]
+script = ExtResource("1")

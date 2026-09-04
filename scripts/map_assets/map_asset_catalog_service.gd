@@ -9,6 +9,7 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_terrain_asset_catalog.json",
 	"res://assets/data/assets/map_cave_dungeon_asset_catalog.json",
 	"res://assets/data/assets/map_exit_asset_catalog.json",
+	"res://assets/data/assets/map_boss_entrance_asset_catalog.json",
 	"res://assets/data/assets/map_deep_forest_asset_catalog.json",
 	"res://assets/data/assets/map_ground_graffiti_asset_catalog.json",
 	"res://assets/data/assets/map_new_carpet_asset_catalog.json",
@@ -16,10 +17,15 @@ const EXTENSION_CATALOG_PATHS := [
 	"res://assets/data/assets/map_new_throne_asset_catalog.json",
 	"res://assets/data/assets/map_wooma_temple_wall_asset_catalog.json",
 	"res://assets/data/assets/map_wooma_temple_warm_wall_asset_catalog.json",
+	"res://assets/data/assets/map_chiyue_valley_wall_asset_catalog.json",
+	"res://assets/data/assets/map_chiyue_valley_ground_asset_catalog.json",
+	"res://assets/data/assets/map_chiyue_valley_floor_asset_catalog.json",
 	"res://assets/data/assets/map_user_gothic_floor_asset_catalog.json",
 	"res://assets/data/assets/map_stone_tomb_floor_asset_catalog.json",
 	"res://assets/data/assets/map_xzsc_cage_asset_catalog.json",
 	"res://assets/data/assets/map_xzsc_sculpture_asset_catalog.json",
+	"res://assets/data/assets/map_chain_roadblock_asset_catalog.json",
+	"res://assets/data/assets/map_small_decoration_asset_catalog.json",
 ]
 const ManualCollisionPolicy := preload("res://scripts/map_assets/map_asset_manual_collision_policy.gd")
 const PlacementAnchorPolicy := preload("res://scripts/map_assets/map_asset_placement_anchor_policy.gd")
@@ -38,10 +44,15 @@ static func load_catalog() -> Dictionary:
 		return {}
 	_ensure_normalized_ground_index()
 	_ensure_v15_asset_index()
+	var override_payload := MapAssetCalibrationService.load_overrides()
+	var overrides: Dictionary = override_payload.get("overrides", {})
 	var effective_assets: Array = []
 	_asset_index.clear()
 	for asset: Dictionary in _raw_assets():
-		var effective := MapAssetCalibrationService.effective_asset(_canonical_editor_asset(asset))
+		var effective := MapAssetCalibrationService.effective_asset_from_overrides(
+			_canonical_editor_asset(asset),
+			overrides
+		)
 		# Ground geometry remains canonical after calibration, while an explicit
 		# user-saved wall calibration is allowed to replace the visual-only
 		# family default.

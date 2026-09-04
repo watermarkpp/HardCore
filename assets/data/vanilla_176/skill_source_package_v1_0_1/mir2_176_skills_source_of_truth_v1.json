@@ -1,0 +1,4535 @@
+{
+  "schema_version": "1.0.0",
+  "document_status": "project_canonical_source_of_truth",
+  "generated_for_project_commit": "4b6ea4e0",
+  "title": "热血传奇1.76三职业33技能唯一真源",
+  "scope": "CN MIR2 1.76 Vanilla Core",
+  "provenance_status_definitions": {
+    "historical_verified": "由明确标注为中国热血传奇1.76的技能资料确认：技能成员、学习等级、熟练度门槛或明确文字机制。",
+    "source_formula_reference": "由开源Mir2 1.5/1.76服务器源码确认的公式/状态机参考；不是盛大官方源码声明。",
+    "project_canonical": "历史资料不能唯一确定时，为本项目冻结的唯一施工值；Codex必须按此实现。",
+    "legacy_project_baseline": "当前4b6ea4e0工程中的现行值，仅用于迁移审计，不自动代表正确。",
+    "needs_regression_verification": "必须通过原版录像/客户端/同版本服务端或项目实机回归后才能升级为historical_verified。",
+    "rejected_version_mismatch": "来自Crystal、Mir3、英雄版、后续版本或私服扩展，禁止覆盖Vanilla Core。"
+  },
+  "sources": [
+    {
+      "source_id": "cn_176_skill_page",
+      "title": "米尔传奇《热血传奇 技能介绍》",
+      "url": "https://www.thelegendofmir2.com/skill/",
+      "role": "1.76技能成员、技能描述、人物等级门槛、熟练度门槛",
+      "trust_scope": "historical_progression_and_text_semantics",
+      "notes": "页面逐职业明确写出“以上为1.76版”。神圣战甲术文字出现疑似把AC误写成MAC的错误，需由服务端逻辑纠正。"
+    },
+    {
+      "source_id": "lzxsz_mir2",
+      "title": "lzxsz/MIR2",
+      "url": "https://github.com/lzxsz/MIR2",
+      "role": "Mir2 1.5/1.76开源服务器技能公式、目标判定、材料、状态机参考",
+      "trust_scope": "source_formula_reference",
+      "notes": "仓库说明数据支持1.5或1.7.6。源码可用于恢复经典机制，但不得把后续修改或分支差异伪装成盛大官方原值。"
+    },
+    {
+      "source_id": "classic_magic_db_reference",
+      "title": "经典/英雄式Magic.DB行",
+      "url": null,
+      "role": "Power/MaxPower/DefPower/DefMaxPower等原始字段的数值参考",
+      "trust_scope": "numeric_reference_only",
+      "notes": "并非已证明的中国盛大1.76原始库；仅保留原始字段与来源身份，不直接覆盖CN 1.76进度表。"
+    },
+    {
+      "source_id": "project_audit_4b6ea4e0",
+      "title": "用户提供的codex/integration @ 4b6ea4e0只读核查",
+      "url": null,
+      "role": "当前工程33技能、132等级记录、MP数组、运行时行为和缺陷",
+      "trust_scope": "legacy_project_baseline",
+      "notes": "该审计是当前迁移起点，不是历史真值。"
+    },
+    {
+      "source_id": "crystal_reference",
+      "title": "Suprcode/Crystal",
+      "url": "https://github.com/Suprcode/Crystal",
+      "role": "英文枚举、人物通用施法帧、被动技能实现参考",
+      "trust_scope": "adapter_reference_only",
+      "notes": "包含大量后续技能和不同进度，不得用枚举顺序或默认数据库生成1.76技能树。"
+    }
+  ],
+  "global_policy": {
+    "ruleset_id": "cn_mir2_176_vanilla_project_canonical_v1",
+    "content_layer": "vanilla",
+    "exact_skill_count": 33,
+    "class_counts": {
+      "warrior": 6,
+      "wizard": 14,
+      "taoist": 13
+    },
+    "rank_model": {
+      "rank_min": 0,
+      "rank_max": 3,
+      "learned_skill_starts_at_rank": 0,
+      "rank_up_requires_player_level_and_proficiency": true,
+      "proficiency_resets_on_rank_up": true,
+      "proficiency_gain_per_eligible_success": {
+        "min": 1,
+        "max": 3,
+        "rng": "pascal_random_exclusive(3)+1"
+      },
+      "failed_or_invalid_action_gains_proficiency": false,
+      "rank_3_is_terminal": true
+    },
+    "authoritative_runtime": {
+      "server_authoritative": true,
+      "single_entrypoint": "SkillRuntimeRouter.execute(request) -> SkillCastResult",
+      "client_may_predict_visuals_only": true,
+      "forbidden_direct_entrypoint": "game_root._on_player_skill() direct effect calculation",
+      "legacy_delay_is_runtime_field": false
+    },
+    "animation": {
+      "source_action": "MirAction.Spell",
+      "frame_size": [
+        192,
+        160
+      ],
+      "directions": [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+      ],
+      "frames_per_direction": 6,
+      "total_frames": 48,
+      "frame_interval_ms": 100,
+      "body_action_duration_ms": 600,
+      "release_frame_index": 5,
+      "loop": false,
+      "legacy_project_360ms_status": "remove_or_keep_only_as_explicit_non_vanilla_override"
+    },
+    "timing": {
+      "ordinary_active_total_lock_ms": 1500,
+      "shield_and_holy_word_total_lock_ms": 1800,
+      "body_cast_ms": 600,
+      "ordinary_recovery_ms": 900,
+      "shield_and_holy_word_recovery_ms": 1200,
+      "note": "1500/1800为项目冻结节奏；源数据legacy delay保留审计但不直接驱动运行时。"
+    },
+    "mp_profile": {
+      "profile_id": "project_canonical_mp_v1",
+      "status": "project_canonical",
+      "reason": "当前33技能MP数组完整，且与工程内嵌服务端候选一致；公开资料无法唯一证明盛大1.76所有MP原值。"
+    },
+    "geometry": {
+      "unit": "tile",
+      "tile_size": [
+        64,
+        32
+      ],
+      "distance_metric": "chebyshev_for_8_direction_grid_unless_skill_overrides",
+      "raw_pixel_ranges_for_gameplay": "forbidden"
+    },
+    "random": {
+      "pascal_random_semantics": "Random(n) returns integer in [0,n-1]; n<=0 returns 0",
+      "deterministic_test_seed_required": true
+    }
+  },
+  "formula_library": {
+    "roll_inclusive": {
+      "expression": "min_value + rng_int_inclusive(0, max(0, max_value - min_value))",
+      "status": "project_canonical"
+    },
+    "pascal_random_exclusive": {
+      "expression": "n <= 0 ? 0 : rng_int_inclusive(0, n - 1)",
+      "status": "source_formula_reference"
+    },
+    "mpow": {
+      "expression": "power + pascal_random_exclusive(max_power - power)",
+      "status": "source_formula_reference",
+      "note": "保持Pascal上界不包含语义。"
+    },
+    "get_power": {
+      "expression": "round(base_input / 4.0 * (rank + 1)) + def_power + pascal_random_exclusive(def_max_power - def_power)",
+      "status": "source_formula_reference",
+      "rank_max": 3
+    },
+    "get_power13": {
+      "expression": "round(((base_input - base_input / 3.0) / (train_rank_max + 1) * (rank + 1)) + (base_input / 3.0) + def_power + pascal_random_exclusive(def_max_power - def_power))",
+      "status": "source_formula_reference",
+      "train_rank_max": 3,
+      "rank_max": 3,
+      "note": "严格对应Pascal源码：先取1/3固定部分，剩余2/3按技能等级缩放，DefPower与随机项一起加入，最后只ROUND一次。"
+    },
+    "skill_damage_standard": {
+      "expression": "get_power(rank, mpow(magic_db), magic_db.def_power, magic_db.def_max_power) + profession_roll",
+      "status": "source_formula_reference"
+    },
+    "physical_hit": {
+      "expression": "use_existing_unified_physical_hit_formula(attacker.accuracy, defender.agility)",
+      "status": "project_canonical",
+      "note": "技能只提供准确修正，禁止在每个技能内复制命中公式。"
+    },
+    "defence_application": {
+      "expression": "use_existing_unified_defence_pipeline(raw_power, defence_type, ignore_defence_flags)",
+      "status": "project_canonical"
+    }
+  },
+  "excluded_from_vanilla_core": [
+    "EnergyRepulsor/气功波",
+    "Purification/净化术",
+    "Hallucination/幻影术",
+    "UltimateEnhancer/无极真气",
+    "Reincarnation/回生术",
+    "SummonHolyDeva/召唤圣兽",
+    "Curse/诅咒术",
+    "Plague/瘟疫",
+    "PoisonCloud/毒云",
+    "EnergyShield/能量盾",
+    "PetEnhancer/宠物强化",
+    "HealingCircle/治疗领域",
+    "Vampirism/噬血术",
+    "所有英雄版、Mir3、韩服后续、手游和私服扩展技能"
+  ],
+  "skills": [
+    {
+      "order": 1,
+      "class": "warrior",
+      "skill_id": "warrior.basic_swordsmanship",
+      "display_name": "基本剑术",
+      "aliases": [
+        "Fencing",
+        "BasicSwordsmanship"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 7,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 7,
+          "proficiency_required_to_reach_rank": 1000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 11,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 16,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "passive",
+      "target": {
+        "mode": "self_stat",
+        "relation": "self"
+      },
+      "geometry": {
+        "shape": "none"
+      },
+      "timing": {
+        "body_action": null,
+        "body_cast_ms": 0,
+        "release_frame_index": null,
+        "recovery_ms": 0,
+        "total_action_lock_ms": 0,
+        "cooldown_policy": "none",
+        "status": "historical_verified"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "passive_stat_modifier",
+        "stat": "accuracy",
+        "flat_bonus_by_rank": [
+          0,
+          3,
+          6,
+          9
+        ],
+        "affects": [
+          "physical_melee_hit_checks"
+        ],
+        "does_not_affect": [
+          "spell_hit",
+          "poison_resist",
+          "holy_word",
+          "soul_fire_talisman"
+        ],
+        "status": "project_canonical"
+      },
+      "proficiency_trigger": {
+        "event": "valid_basic_melee_attack_resolved",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_swing": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": null,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前准确+0/+3/+6/+9，效果基本正确；正常游戏无熟练度成长。",
+        "issue_codes": [
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "basic_swordsmanship_accuracy_by_rank",
+        "basic_swordsmanship_never_casts",
+        "basic_swordsmanship_physical_only"
+      ]
+    },
+    {
+      "order": 2,
+      "class": "warrior",
+      "skill_id": "warrior.slaying_swordsmanship",
+      "display_name": "攻杀剑术",
+      "aliases": [
+        "Slaying",
+        "SlayingSwordsmanship"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 22,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 24,
+          "proficiency_required_to_reach_rank": 16000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "passive_proc",
+      "target": {
+        "mode": "current_melee_target",
+        "relation": "hostile"
+      },
+      "geometry": {
+        "shape": "melee_front",
+        "range_tiles": 1
+      },
+      "timing": {
+        "body_action": null,
+        "body_cast_ms": 0,
+        "release_frame_index": null,
+        "recovery_ms": 0,
+        "total_action_lock_ms": 0,
+        "cooldown_policy": "none",
+        "status": "historical_verified"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "melee_proc_modifier",
+        "proc_chance_by_rank": [
+          0.1,
+          0.125,
+          0.1666666667,
+          0.25
+        ],
+        "flat_dc_bonus_by_rank": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "flat_accuracy_bonus_by_rank": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "damage_type": "physical",
+        "defence_type": "AC",
+        "trigger_order": "after_valid_swing_before_damage_roll",
+        "status": "project_canonical",
+        "evidence_note": "CN 1.76文字确认命中率与破坏力随等级提升；具体四档数值按项目表冻结。"
+      },
+      "proficiency_trigger": {
+        "event": "successful_slaying_proc_on_valid_melee_swing",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_swing": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": null,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "数据表触发1/10、1/8、1/6、1/4；实际代码1/(7-rank)，且说明/汇总未完整体现准确加成。",
+        "issue_codes": [
+          "P0_NO_PROFICIENCY_PIPELINE",
+          "P1_PROC_FORMULA_CONFLICT",
+          "P1_ACCURACY_BONUS_MISSING"
+        ]
+      },
+      "required_tests": [
+        "slaying_proc_table_exact",
+        "slaying_dc_bonus_exact",
+        "slaying_accuracy_bonus_exact",
+        "slaying_training_only_on_proc"
+      ]
+    },
+    {
+      "order": 3,
+      "class": "warrior",
+      "skill_id": "warrior.thrusting",
+      "display_name": "刺杀剑术",
+      "aliases": [
+        "Thrusting",
+        "AssassinationSword"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 25,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 25,
+          "proficiency_required_to_reach_rank": 6000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 27,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 29,
+          "proficiency_required_to_reach_rank": 18000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "toggle_attack_mode",
+      "target": {
+        "mode": "line_melee_targets",
+        "relation": "hostile"
+      },
+      "geometry": {
+        "shape": "line",
+        "length_tiles": 2,
+        "width_tiles": 1,
+        "stop_on_terrain": true
+      },
+      "timing": {
+        "body_action": null,
+        "body_cast_ms": 0,
+        "release_frame_index": null,
+        "recovery_ms": 0,
+        "total_action_lock_ms": 0,
+        "cooldown_policy": "none",
+        "status": "historical_verified"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "two_cell_melee",
+        "first_cell": {
+          "damage_multiplier": 1.0,
+          "defence_type": "AC",
+          "ignore_ac": false
+        },
+        "second_cell": {
+          "damage_multiplier_by_rank": [
+            0.4,
+            0.6,
+            0.8,
+            1.0
+          ],
+          "defence_type": "AC",
+          "ignore_ac": true,
+          "status": "project_canonical"
+        },
+        "same_swing_base_dc_roll": true,
+        "may_hit_first_and_second_cell_in_one_swing": true,
+        "status": "project_canonical",
+        "evidence_note": "CN 1.76确认间隔一身位/两目标成直线触发；第二格破防与倍率由经典玩法+当前项目冻结。"
+      },
+      "proficiency_trigger": {
+        "event": "valid_thrusting_swing_with_at_least_one_eligible_target",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_swing": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": null,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前只有第二格40%/60%/80%/100%倍率，未明确第二格无视AC、双格同击与统一DC掷值。",
+        "issue_codes": [
+          "P0_NO_PROFICIENCY_PIPELINE",
+          "P1_SECOND_CELL_DEFENCE_RULE_MISSING"
+        ]
+      },
+      "required_tests": [
+        "thrusting_two_cell_line",
+        "thrusting_second_cell_multiplier",
+        "thrusting_second_cell_ignores_ac",
+        "thrusting_one_training_event_per_swing"
+      ]
+    },
+    {
+      "order": 4,
+      "class": "warrior",
+      "skill_id": "warrior.half_moon",
+      "display_name": "半月弯刀",
+      "aliases": [
+        "HalfMoon"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 28,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 28,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 31,
+          "proficiency_required_to_reach_rank": 16000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 34,
+          "proficiency_required_to_reach_rank": 24000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "toggle_attack_mode",
+      "target": {
+        "mode": "melee_arc",
+        "relation": "hostile"
+      },
+      "geometry": {
+        "shape": "project_canonical_four_target_arc",
+        "primary_cell": "front_1",
+        "side_cells": "three cells defined by HalfMoonArcResolver; resolver must rotate with 8-direction facing",
+        "maximum_targets": 4,
+        "raw_pixel_geometry_forbidden": true
+      },
+      "timing": {
+        "body_action": null,
+        "body_cast_ms": 0,
+        "release_frame_index": null,
+        "recovery_ms": 0,
+        "total_action_lock_ms": 0,
+        "cooldown_policy": "none",
+        "status": "historical_verified"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mp_consume_timing": "on_valid_half_moon_swing"
+      },
+      "mechanics": {
+        "runtime_family": "melee_arc",
+        "primary_damage_multiplier": 1.0,
+        "side_damage_multiplier_by_rank": [
+          0.15,
+          0.23,
+          0.31,
+          0.3846153846
+        ],
+        "damage_type": "physical",
+        "defence_type": "AC",
+        "max_training_events_per_swing": 1,
+        "status": "project_canonical"
+      },
+      "proficiency_trigger": {
+        "event": "valid_half_moon_swing_with_at_least_one_eligible_target",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_swing": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": null,
+          "power": null,
+          "max_power": null,
+          "def_spell": 3,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "侧面倍率约15%/23%/31%/38%；缺统一四目标弧形偏移定义、MP消耗时点与每刀只训练一次。",
+        "issue_codes": [
+          "P0_NO_PROFICIENCY_PIPELINE",
+          "P2_ARC_OFFSETS_NEED_SINGLE_RESOLVER"
+        ]
+      },
+      "required_tests": [
+        "half_moon_primary_full_damage",
+        "half_moon_side_multiplier",
+        "half_moon_rotates_all_8_directions",
+        "half_moon_mp_once_per_swing",
+        "half_moon_training_once_per_swing"
+      ]
+    },
+    {
+      "order": 5,
+      "class": "warrior",
+      "skill_id": "warrior.wild_rush",
+      "display_name": "野蛮冲撞",
+      "aliases": [
+        "ShoulderDash",
+        "WildRush"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 30,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 30,
+          "proficiency_required_to_reach_rank": 3000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 34,
+          "proficiency_required_to_reach_rank": 6000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 39,
+          "proficiency_required_to_reach_rank": 9000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        4,
+        8,
+        12,
+        16
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "front_adjacent_blocking_target",
+        "relation": "hostile"
+      },
+      "geometry": {
+        "shape": "line_push",
+        "start_distance_tiles": 1,
+        "push_distance_by_rank": [
+          1,
+          1,
+          2,
+          3
+        ],
+        "stop_on_first_blocker": true
+      },
+      "timing": {
+        "body_action": "dash",
+        "body_cast_ms": 0,
+        "release_frame_index": 0,
+        "recovery_ms": 500,
+        "total_action_lock_ms": 500,
+        "cooldown_ms": 3000,
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mp_consume_timing": "after_eligibility_before_push_roll"
+      },
+      "mechanics": {
+        "runtime_family": "level_gated_push",
+        "eligibility": {
+          "caster_level_must_exceed_target_level": true,
+          "boss_immune": true,
+          "immovable_immune": true,
+          "safe_zone_forbidden": true
+        },
+        "success_probability": "clamp((6 + 6 * rank + caster_level - target_level) / 20.0, 0.0, 1.0)",
+        "push_distance_by_rank": [
+          1,
+          1,
+          2,
+          3
+        ],
+        "caster_moves_into_vacated_path": true,
+        "collision_self_damage": {
+          "expression": "max(1, floor(caster.max_hp * 0.01))",
+          "status": "project_canonical",
+          "trigger": "dash path blocked after movement begins"
+        },
+        "status": "mixed_source_and_project_canonical"
+      },
+      "proficiency_trigger": {
+        "event": "target_successfully_displaced_at_least_one_tile",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 15,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前距离3/3/4/5格、成功率(rank*4+6+等级差)/20；与经典源码参考的1/1/2/3和rank*6冲突，且缺撞墙自伤。",
+        "issue_codes": [
+          "P0_NO_PROFICIENCY_PIPELINE",
+          "P1_WRONG_SUCCESS_FORMULA",
+          "P1_DISTANCE_OFF_BY_TWO",
+          "P1_COLLISION_SELF_DAMAGE_MISSING"
+        ]
+      },
+      "required_tests": [
+        "wild_rush_lower_level_only",
+        "wild_rush_probability_formula",
+        "wild_rush_distance_by_rank",
+        "wild_rush_collision_self_damage",
+        "wild_rush_boss_immune",
+        "wild_rush_training_only_on_displacement"
+      ]
+    },
+    {
+      "order": 6,
+      "class": "warrior",
+      "skill_id": "warrior.fire_sword",
+      "display_name": "烈火剑法",
+      "aliases": [
+        "FlamingSword",
+        "FireSword"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 2000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 37,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 40,
+          "proficiency_required_to_reach_rank": 6000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active_charge",
+      "target": {
+        "mode": "self_next_melee_charge",
+        "relation": "self"
+      },
+      "geometry": {
+        "shape": "none_until_next_melee_hit"
+      },
+      "timing": {
+        "body_action": "cast_or_weapon_charge",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 200,
+        "total_action_lock_ms": 800,
+        "cooldown_ms": 8000,
+        "charge_lifetime_ms": 10000,
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mp_consume_timing": "on_successful_charge_creation"
+      },
+      "mechanics": {
+        "runtime_family": "next_melee_charge",
+        "damage_multiplier_by_rank": [
+          1.4,
+          1.8,
+          2.2,
+          2.6
+        ],
+        "consume_on": "next_valid_melee_damage_attempt",
+        "auto_cast": false,
+        "refresh_existing_charge": "replace_and_restart_duration",
+        "stack_count_max": 1,
+        "status": "project_canonical_with_classic_multiplier_reference"
+      },
+      "proficiency_trigger": {
+        "event": "charged_fire_sword_is_consumed_by_valid_melee_attack",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_charge": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": null,
+          "power": null,
+          "max_power": null,
+          "def_spell": 7,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "倍率正确，但当前自动开关/自动释放且CD10秒；应改为主动蓄火、下一次近战消耗。",
+        "issue_codes": [
+          "P0_NO_PROFICIENCY_PIPELINE",
+          "P1_AUTO_CAST_WRONG",
+          "P1_COOLDOWN_AND_CHARGE_DURATION_CONFLATED"
+        ]
+      },
+      "required_tests": [
+        "fire_sword_never_auto_casts",
+        "fire_sword_multiplier_exact",
+        "fire_sword_charge_expires",
+        "fire_sword_consumed_once",
+        "fire_sword_cooldown_independent_from_charge_lifetime"
+      ]
+    },
+    {
+      "order": 7,
+      "class": "wizard",
+      "skill_id": "wizard.fireball",
+      "display_name": "火球术",
+      "aliases": [
+        "FireBall"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 7,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 7,
+          "proficiency_required_to_reach_rank": 500,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 11,
+          "proficiency_required_to_reach_rank": 1500,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 16,
+          "proficiency_required_to_reach_rank": 3000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "hostile_single",
+        "relation": "hostile",
+        "requires_line_of_sight": true
+      },
+      "geometry": {
+        "shape": "projectile",
+        "maximum_range_tiles": 9,
+        "stops_on_terrain": true
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical",
+        "effect_resolve_ms_from_cast_start": 600
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "single_projectile_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "damage_type": "magic",
+        "defence_type": "MAC",
+        "projectile_visual_is_not_authoritative": true,
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_projectile_cast_created",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 1,
+          "effect": 1,
+          "spell": 4,
+          "power": 4,
+          "max_power": 4,
+          "def_spell": 1,
+          "def_power": 1,
+          "def_max_power": 1,
+          "legacy_delay": 60
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "360px弹道、伤害只等于一次MC掷值；技能基础威力和等级成长被覆盖。",
+        "issue_codes": [
+          "P0_SIMPLIFIED_ENTRYPOINT",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "fireball_uses_target_and_los",
+        "fireball_power_formula",
+        "fireball_rank_increases_expected_power",
+        "fireball_mac_defence"
+      ]
+    },
+    {
+      "order": 8,
+      "class": "wizard",
+      "skill_id": "wizard.repulsion_ring",
+      "display_name": "抗拒火环",
+      "aliases": [
+        "Repulsion"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 12,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 12,
+          "proficiency_required_to_reach_rank": 800,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 15,
+          "proficiency_required_to_reach_rank": 2400,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "surrounding_units",
+        "relation": "all_non_self_units"
+      },
+      "geometry": {
+        "shape": "adjacent_ring",
+        "radius_tiles": 1
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "area_push_no_damage",
+        "damage": 0,
+        "eligibility": "target.level < caster.level and not target.boss and not target.immovable",
+        "success_probability": "clamp((6 + 3 * rank + caster_level - target_level) / 20.0, 0.0, 1.0)",
+        "push_distance_formula": "1 + max(0, rank - 1) + pascal_random_exclusive(2)",
+        "path_collision_required": true,
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "at_least_one_target_displaced",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 4,
+          "effect": 6,
+          "spell": 8,
+          "power": 1,
+          "max_power": 1,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 30
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "115px内固定推80px；缺目标等级压制、成功率、按格位移和阻挡。",
+        "issue_codes": [
+          "P1_FIXED_PIXEL_PUSH_WRONG",
+          "P1_LEVEL_GATE_MISSING",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "repulsion_no_damage",
+        "repulsion_lower_level_only",
+        "repulsion_probability",
+        "repulsion_push_distance",
+        "repulsion_collision"
+      ]
+    },
+    {
+      "order": 9,
+      "class": "wizard",
+      "skill_id": "wizard.temptation_light",
+      "display_name": "诱惑之光",
+      "aliases": [
+        "ElectricShock",
+        "TemptationLight"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 13,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 13,
+          "proficiency_required_to_reach_rank": 1000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 18,
+          "proficiency_required_to_reach_rank": 2000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 24,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "hostile_or_neutral_monster_single",
+        "relation": "monster_only"
+      },
+      "geometry": {
+        "shape": "targeted_light",
+        "maximum_range_tiles": 9,
+        "requires_line_of_sight": true
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "monster_tame_or_control",
+        "source_branch_policy": {
+          "selected_branch": "pre_2020_classic_intent_reconstructed_from_commented_code",
+          "status": "project_canonical",
+          "reason": "公开源码明确标注2020-02-04提高成功率并延长宠物判变时间；本项目不采用修改后的Random(1)必过分支，而采用注释中保留的Random(3)经典门槛。"
+        },
+        "eligibility": {
+          "monster_only": true,
+          "target_master_must_be_none_or_self": true,
+          "not_boss": true,
+          "tameable_flag_required_for_tame": true,
+          "undead_can_never_be_tamed": true,
+          "target_level_lte_caster_plus": 2,
+          "target_level_lte_server_cap": 50,
+          "pet_cap_by_rank": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "attempt_state_machine": [
+          {
+            "step": 1,
+            "condition": "pascal_random_exclusive(4 - rank) == 0",
+            "on_fail": "no_effect; cast may still display visual but gains no proficiency"
+          },
+          {
+            "step": 2,
+            "condition": "pascal_random_exclusive(2) == 0",
+            "on_fail": {
+              "effect": "root",
+              "duration_seconds": "pascal_random_exclusive(rank * 5 + 10)"
+            }
+          },
+          {
+            "step": 3,
+            "condition": "target_level <= caster_level + 2",
+            "on_fail": "no_tame; no_control_result"
+          },
+          {
+            "step": 4,
+            "condition": "pascal_random_exclusive(3) == 0",
+            "on_fail": {
+              "non_undead": "confusion",
+              "duration_seconds": "pascal_random_exclusive(20) + 10",
+              "undead": "no_effect"
+            }
+          },
+          {
+            "step": 5,
+            "condition": "pascal_random_exclusive(caster_level + 20 + rank * 5) > target_level + 10",
+            "on_fail": {
+              "non_undead_confusion_chance": "1/20",
+              "confusion_duration_seconds": "pascal_random_exclusive(20) + 10",
+              "undead": "no_effect"
+            }
+          },
+          {
+            "step": 6,
+            "condition": "tameable and not_undead and target_level <= 50 and current_pet_count < rank + 2",
+            "on_fail": {
+              "undead_instant_death_chance": "1/20",
+              "otherwise": "no_tame"
+            }
+          },
+          {
+            "step": 7,
+            "condition": "pascal_random_exclusive(tame_difficulty) == 0",
+            "on_fail": {
+              "instant_death_chance": "1/14",
+              "otherwise": "no_tame"
+            },
+            "on_success": "assign_master_and_pet_slot"
+          }
+        ],
+        "tame_difficulty": {
+          "hp_rate_divisor": 100,
+          "expression": "q = floor(target_max_hp / 100); tame_difficulty = 2 if q <= 2 else q * 2",
+          "lower_is_easier": true
+        },
+        "on_tame_success": {
+          "assign_master": true,
+          "set_tamed_flag": true,
+          "pet_make_level": "rank",
+          "walk_speed_cap_ms": "1500 - rank * 200",
+          "attack_interval_cap_ms": "2000 - rank * 200",
+          "loyalty_duration_ms": "(pascal_random_exclusive(caster_level * 2) + rank * 20 + 20) * 60 * 1000",
+          "loyalty_formula_status": "project_canonical_reconstructed_from_original_commented_formula"
+        },
+        "proficiency_success_events": [
+          "target_tamed",
+          "target_rooted",
+          "target_confused",
+          "eligible_target_instantly_killed_by_temptation_branch"
+        ],
+        "proficiency_failure_events": [
+          "invalid_target",
+          "pet_cap_reached",
+          "all_probability_gates_fail_without_state_change"
+        ],
+        "status": "project_canonical_reconstructed_classic_branch",
+        "evidence_note": "技能的瘫痪、混乱、驯服语义由CN 1.76资料确认；门槛与分支来自公开Pascal源码及其保留的旧代码注释。由于该文件在2020年被明确修改，不能把任何一条概率冒充盛大官方原始值。"
+      },
+      "proficiency_trigger": {
+        "event": "valid_attempt_reaches_tame_or_control_resolution",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": null,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前弹道命中后固定魅惑6秒；未实现瘫痪/混乱/永久驯服、宠物上限和智力/等级资格。",
+        "issue_codes": [
+          "P1_CURRENT_IS_ONLY_6_SECOND_CHARM",
+          "P1_PET_SYSTEM_NOT_CONNECTED",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "temptation_monster_only",
+        "temptation_boss_immune",
+        "temptation_pet_cap",
+        "temptation_tame_probability_deterministic",
+        "temptation_failure_control",
+        "temptation_not_six_second_generic_charm"
+      ]
+    },
+    {
+      "order": 10,
+      "class": "wizard",
+      "skill_id": "wizard.hellfire",
+      "display_name": "地狱火",
+      "aliases": [
+        "HellFire"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 16,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 16,
+          "proficiency_required_to_reach_rank": 1000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 21,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 26,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        10,
+        13,
+        16,
+        19
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "facing_line",
+        "relation": "hostile"
+      },
+      "geometry": {
+        "shape": "line",
+        "length_tiles": 5,
+        "width_tiles": 1,
+        "pierces_units": false,
+        "stops_on_terrain": true
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "line_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "damage_type": "magic",
+        "defence_type": "MAC",
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_cast_releases_line",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 5,
+          "effect": 7,
+          "spell": 10,
+          "power": 14,
+          "max_power": 14,
+          "def_spell": 10,
+          "def_power": 6,
+          "def_max_power": 6,
+          "legacy_delay": 60
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前260px前方宽范围；正确应为面前5格、宽1格、受地形阻挡。",
+        "issue_codes": [
+          "P1_GEOMETRY_WRONG",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "hellfire_exact_five_tile_line",
+        "hellfire_width_one",
+        "hellfire_stops_on_terrain",
+        "hellfire_power_formula"
+      ]
+    },
+    {
+      "order": 11,
+      "class": "wizard",
+      "skill_id": "wizard.lightning",
+      "display_name": "雷电术",
+      "aliases": [
+        "ThunderBolt",
+        "Lightning"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 17,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 17,
+          "proficiency_required_to_reach_rank": 1200,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 20,
+          "proficiency_required_to_reach_rank": 3000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 23,
+          "proficiency_required_to_reach_rank": 5000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        9,
+        11,
+        13,
+        15
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "hostile_single",
+        "relation": "hostile",
+        "requires_line_of_sight": true
+      },
+      "geometry": {
+        "shape": "sky_strike_targeted",
+        "maximum_range_tiles": 9,
+        "horizontal_projectile": false
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical",
+        "effect_resolve_ms_from_cast_start": 600
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "targeted_sky_strike",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "race_multiplier": {
+          "undead": 1.5,
+          "default": 1.0
+        },
+        "damage_type": "lightning_magic",
+        "defence_type": "MAC",
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_targeted_cast_resolves",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 7,
+          "effect": 9,
+          "spell": 12,
+          "power": 10,
+          "max_power": 13,
+          "def_spell": 6,
+          "def_power": 10,
+          "def_max_power": 12,
+          "legacy_delay": 100
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前410px横向弹道、只取一次MC；正确表现为目标上方落雷，并在雷电术处理不死系×1.5。",
+        "issue_codes": [
+          "P1_WRONG_HORIZONTAL_PROJECTILE",
+          "P1_UNDEAD_BONUS_MISSING_OR_MISPLACED",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "lightning_is_sky_strike",
+        "lightning_no_horizontal_projectile",
+        "lightning_undead_multiplier",
+        "lightning_power_formula"
+      ]
+    },
+    {
+      "order": 12,
+      "class": "wizard",
+      "skill_id": "wizard.great_fireball",
+      "display_name": "大火球",
+      "aliases": [
+        "GreatFireBall"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 23,
+          "proficiency_required_to_reach_rank": 14000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 25,
+          "proficiency_required_to_reach_rank": 25000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "hostile_single",
+        "relation": "hostile",
+        "requires_line_of_sight": true
+      },
+      "geometry": {
+        "shape": "projectile",
+        "maximum_range_tiles": 9,
+        "stops_on_terrain": true
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical",
+        "effect_resolve_ms_from_cast_start": 600
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "single_projectile_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "damage_type": "magic",
+        "defence_type": "MAC",
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_projectile_cast_created",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 1,
+          "effect": 3,
+          "spell": 3,
+          "power": 6,
+          "max_power": 6,
+          "def_spell": 5,
+          "def_power": 10,
+          "def_max_power": 10,
+          "legacy_delay": 60
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前390px弹道、伤害只等于一次MC；缺技能自身基础威力和等级成长。",
+        "issue_codes": [
+          "P0_SIMPLIFIED_ENTRYPOINT",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "great_fireball_los",
+        "great_fireball_power_formula",
+        "great_fireball_expected_power_exceeds_or_differs_from_fireball"
+      ]
+    },
+    {
+      "order": 13,
+      "class": "wizard",
+      "skill_id": "wizard.teleport",
+      "display_name": "瞬息移动",
+      "aliases": [
+        "Teleport"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 1000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 22,
+          "proficiency_required_to_reach_rank": 2000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 25,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        10,
+        13,
+        16,
+        19
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "self_random_destination",
+        "relation": "self"
+      },
+      "geometry": {
+        "shape": "random_valid_map_destination",
+        "forward_dash": false
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "random_teleport",
+        "success_probability": "(2 * rank + 4) / 11.0",
+        "success_roll": "pascal_random_exclusive(11) < 2 * rank + 4",
+        "on_success": "select valid random destination according to map teleport policy; optional town-return branch whose weight increases with rank",
+        "on_failure": "remain_in_place",
+        "destination_rules": [
+          "walkable",
+          "not_blocked",
+          "map_allows_random_teleport",
+          "server_authoritative"
+        ],
+        "status": "source_formula_reference_plus_project_destination_policy"
+      },
+      "proficiency_trigger": {
+        "event": "teleport_attempt_passes_eligibility_and_resolves",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": null,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前固定向面朝方向移动220px；完全不是随机传送。",
+        "issue_codes": [
+          "P1_CURRENT_FORWARD_DASH_IS_DIFFERENT_SKILL",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "teleport_never_forward_dash",
+        "teleport_probability_exact",
+        "teleport_failure_stays_in_place",
+        "teleport_destination_valid",
+        "teleport_server_authoritative"
+      ]
+    },
+    {
+      "order": 14,
+      "class": "wizard",
+      "skill_id": "wizard.exploding_flame",
+      "display_name": "爆裂火焰",
+      "aliases": [
+        "FireBang",
+        "ExplodingFlame"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 22,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 22,
+          "proficiency_required_to_reach_rank": 3000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 27,
+          "proficiency_required_to_reach_rank": 6000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 31,
+          "proficiency_required_to_reach_rank": 18000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        14,
+        18,
+        22,
+        26
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "ground_or_target_point",
+        "relation": "hostile_area"
+      },
+      "geometry": {
+        "shape": "square",
+        "width_tiles": 3,
+        "height_tiles": 3,
+        "center": "selected_target_point"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "target_centered_area_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "damage_type": "fire_magic",
+        "defence_type": "MAC",
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_area_cast_created",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 15,
+          "power": 8,
+          "max_power": 8,
+          "def_spell": 10,
+          "def_power": 6,
+          "def_max_power": 6,
+          "legacy_delay": 60
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前以玩家为中心260px全范围；正确为选定目标点中心3×3。",
+        "issue_codes": [
+          "P1_WRONG_CASTER_CENTERED_GEOMETRY",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "exploding_flame_target_centered",
+        "exploding_flame_exact_3x3",
+        "exploding_flame_power_formula"
+      ]
+    },
+    {
+      "order": 15,
+      "class": "wizard",
+      "skill_id": "wizard.fire_wall",
+      "display_name": "火墙",
+      "aliases": [
+        "FireWall"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 24,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 24,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 29,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 33,
+          "proficiency_required_to_reach_rank": 24000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        30,
+        35,
+        40,
+        45
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "ground_point",
+        "relation": "hostile_area"
+      },
+      "geometry": {
+        "shape": "square",
+        "width_tiles": 2,
+        "height_tiles": 2,
+        "center_policy": "snap selected point to canonical 2x2 anchor",
+        "status": "project_canonical",
+        "conflict_note": "CN 1.76文字明确2×2；部分开源源码为十字，Vanilla在本项目冻结为2×2。"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "mixed_source_and_project_canonical",
+        "tick_interval_ms": 1000,
+        "duration_seconds_formula": "max(1, get_power(rank, 10) + floor(roll_mc() / 2.0))"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "persistent_ground_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "damage_type": "fire_magic",
+        "defence_type": "MAC",
+        "stacking_policy": "same_caster_same_tile_refreshes_duration; one target takes at most one tick per caster per tick",
+        "max_active_fields_per_caster": "config_required_default_8",
+        "status": "project_canonical"
+      },
+      "proficiency_trigger": {
+        "event": "valid_fire_wall_field_created",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 20,
+          "power": 3,
+          "max_power": 3,
+          "def_spell": 25,
+          "def_power": 3,
+          "def_max_power": 3,
+          "legacy_delay": 120
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前半径74px圆、持续5秒、0.8秒一跳；另有2×2描述和五格十字公式三套冲突。",
+        "issue_codes": [
+          "P1_THREE_CONFLICTING_GEOMETRIES",
+          "P1_FIXED_5S_DURATION_WRONG",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "fire_wall_exact_2x2",
+        "fire_wall_duration_scales",
+        "fire_wall_tick_once_per_caster",
+        "fire_wall_refresh_not_stack",
+        "fire_wall_not_circle_or_cross"
+      ]
+    },
+    {
+      "order": 16,
+      "class": "wizard",
+      "skill_id": "wizard.laser",
+      "display_name": "疾光电影",
+      "aliases": [
+        "FlameDisruptor",
+        "Laser"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 26,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 26,
+          "proficiency_required_to_reach_rank": 3000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 29,
+          "proficiency_required_to_reach_rank": 6000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 32,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        38,
+        45,
+        52,
+        59
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "facing_line",
+        "relation": "hostile"
+      },
+      "geometry": {
+        "shape": "line",
+        "length_tiles": 8,
+        "width_tiles": 1,
+        "pierces_units": true,
+        "stops_on_terrain": true
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "piercing_line_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "damage_type": "magic",
+        "defence_type": "MAC",
+        "undead_multiplier": 1.0,
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_line_cast_released",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 6,
+          "effect": 8,
+          "spell": 30,
+          "power": 12,
+          "max_power": 12,
+          "def_spell": 30,
+          "def_power": 12,
+          "def_max_power": 12,
+          "legacy_delay": 100
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前430px前方宽范围；应为宽1格、前方8格穿透直线，不带不死系+50%。",
+        "issue_codes": [
+          "P1_GEOMETRY_WRONG",
+          "P1_UNDEAD_BONUS_WRONGLY_ASSIGNED",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "laser_exact_eight_tile_line",
+        "laser_width_one",
+        "laser_pierces_units",
+        "laser_stops_on_terrain",
+        "laser_no_undead_bonus"
+      ]
+    },
+    {
+      "order": 17,
+      "class": "wizard",
+      "skill_id": "wizard.hell_lightning",
+      "display_name": "地狱雷光",
+      "aliases": [
+        "ThunderStorm",
+        "HellLightning"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 30,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 30,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 32,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 34,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        29,
+        38,
+        47,
+        56
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "caster_surrounding_area",
+        "relation": "hostile"
+      },
+      "geometry": {
+        "shape": "chebyshev_ring",
+        "radius_tiles": 2,
+        "exclude_center": true,
+        "maximum_targets": 24
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "caster_centered_area_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "damage_type": "lightning_magic",
+        "defence_type": "MAC",
+        "maximum_targets": 24,
+        "status": "source_formula_reference_plus_cn_text"
+      },
+      "proficiency_trigger": {
+        "event": "valid_area_cast_released",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 35,
+          "power": 5,
+          "max_power": 15,
+          "def_spell": 20,
+          "def_power": 5,
+          "def_max_power": 20,
+          "legacy_delay": 60
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前玩家周围150px全范围、无24目标上限，伤害只等于MC。",
+        "issue_codes": [
+          "P1_TARGET_CAP_MISSING",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "hell_lightning_max_24",
+        "hell_lightning_caster_centered_radius_2",
+        "hell_lightning_excludes_center",
+        "hell_lightning_power_formula"
+      ]
+    },
+    {
+      "order": 18,
+      "class": "wizard",
+      "skill_id": "wizard.magic_shield",
+      "display_name": "魔法盾",
+      "aliases": [
+        "MagicShield"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 31,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 31,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 34,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 38,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        35,
+        40,
+        45,
+        50
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "self",
+        "relation": "self"
+      },
+      "geometry": {
+        "shape": "none"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 1200,
+        "total_action_lock_ms": 1800,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "self_damage_reduction_buff",
+        "duration_seconds_formula": "max(1, get_power(rank, roll_mc() + 15))",
+        "damage_reduction_by_rank": [
+          0.15,
+          0.3,
+          0.45,
+          0.6
+        ],
+        "affected_damage_types": [
+          "physical",
+          "magic"
+        ],
+        "not_affected": [
+          "true_damage",
+          "environmental_unless_tagged"
+        ],
+        "stacking_policy": "refresh_same_buff; no stacking",
+        "status": "project_canonical",
+        "evidence_note": "CN 1.76确认同时减物理与魔法；开源源码确认持续时间受MC/等级影响。精确减伤四档公开资料存在冲突，本项目冻结15/30/45/60%。"
+      },
+      "proficiency_trigger": {
+        "event": "shield_buff_successfully_applied_or_refreshed",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 20,
+          "power": null,
+          "max_power": null,
+          "def_spell": 30,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前固定12秒、固定35%；未接正式公式又存在技能越高减伤越低的反向错误。",
+        "issue_codes": [
+          "P1_FIXED_12S_35_PERCENT_WRONG",
+          "P1_UNCONNECTED_REVERSED_FORMULA",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "magic_shield_reduction_increases_by_rank",
+        "magic_shield_reduces_physical_and_magic",
+        "magic_shield_duration_uses_mc",
+        "magic_shield_refresh_not_stack"
+      ]
+    },
+    {
+      "order": 19,
+      "class": "wizard",
+      "skill_id": "wizard.holy_word",
+      "display_name": "圣言术",
+      "aliases": [
+        "TurnUndead",
+        "HolyWord"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 32,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 32,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 39,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        52,
+        65,
+        78,
+        91
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "hostile_single",
+        "relation": "hostile_monster",
+        "requires_line_of_sight": true
+      },
+      "geometry": {
+        "shape": "targeted",
+        "maximum_range_tiles": 9
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 1200,
+        "total_action_lock_ms": 1800,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "undead_instant_kill_check",
+        "eligibility": {
+          "monster_only": true,
+          "is_undead_required": true,
+          "boss_or_holy_word_immune_rejected": true,
+          "precheck": "pascal_random_exclusive(2) + (caster_level - 1) > target_level",
+          "target_level_cap": "server_config_holy_word_max_target_level"
+        },
+        "kill_probability": "clamp((7 * rank + 15 + caster_level - target_level) / 100.0, 0.0, 1.0)",
+        "on_success": "set_target_hp_to_zero_with_holy_word_reason",
+        "on_failure": "no_normal_damage",
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "instant_kill_success",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 50,
+          "power": null,
+          "max_power": null,
+          "def_spell": 40,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 120
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前是普通MC伤害弹道；正确应只对不死系做一击必杀概率判定，失败无普通伤害。",
+        "issue_codes": [
+          "P1_CURRENT_IS_GENERIC_MC_PROJECTILE",
+          "P1_UNDEAD_CLASSIFICATION_REQUIRED",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "holy_word_undead_only",
+        "holy_word_boss_immune",
+        "holy_word_probability_exact",
+        "holy_word_success_kills",
+        "holy_word_failure_no_damage",
+        "holy_word_training_on_success_only"
+      ]
+    },
+    {
+      "order": 20,
+      "class": "wizard",
+      "skill_id": "wizard.ice_storm",
+      "display_name": "冰咆哮",
+      "aliases": [
+        "IceStorm",
+        "Blizzard"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 37,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 40,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        33,
+        36,
+        39,
+        42
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "ground_or_target_point",
+        "relation": "hostile_area"
+      },
+      "geometry": {
+        "shape": "square",
+        "width_tiles": 3,
+        "height_tiles": 3,
+        "center": "selected_target_point"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "target_centered_area_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_mc()",
+        "damage_type": "ice_magic",
+        "defence_type": "MAC",
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_area_cast_released",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 12,
+          "power": 8,
+          "max_power": 10,
+          "def_spell": 30,
+          "def_power": 10,
+          "def_max_power": 12,
+          "legacy_delay": 60
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前以玩家为中心300px全范围；正确为选定目标区域3×3。",
+        "issue_codes": [
+          "P1_WRONG_CASTER_CENTERED_GEOMETRY",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0"
+        ]
+      },
+      "required_tests": [
+        "ice_storm_target_centered",
+        "ice_storm_exact_3x3",
+        "ice_storm_power_formula"
+      ]
+    },
+    {
+      "order": 21,
+      "class": "taoist",
+      "skill_id": "taoist.healing",
+      "display_name": "治愈术",
+      "aliases": [
+        "Healing"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 7,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 7,
+          "proficiency_required_to_reach_rank": 500,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 11,
+          "proficiency_required_to_reach_rank": 1500,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 16,
+          "proficiency_required_to_reach_rank": 3000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "self_or_friendly_single",
+        "relation": "friendly"
+      },
+      "geometry": {
+        "shape": "targeted",
+        "maximum_range_tiles": 9
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical",
+        "effect_resolve_ms_from_cast_start": 800
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "single_heal",
+        "heal_formula": "get_power(rank, mpow(magic_db)) + 2 * roll_sc()",
+        "cap_at_target_max_hp": true,
+        "friendly_only": true,
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "actual_hp_restored_gt_zero",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 2,
+          "effect": 2,
+          "spell": 7,
+          "power": 14,
+          "max_power": 20,
+          "def_spell": 0,
+          "def_power": 0,
+          "def_max_power": 0,
+          "legacy_delay": 40
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前只治疗自己、治疗量一次SC；正确可治疗自己或友方，技能基础治疗+2×SC。",
+        "issue_codes": [
+          "P1_SELF_ONLY_WRONG",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "healing_self_or_friendly",
+        "healing_rejects_hostile",
+        "healing_formula",
+        "healing_training_only_if_hp_restored"
+      ]
+    },
+    {
+      "order": 22,
+      "class": "taoist",
+      "skill_id": "taoist.spiritual_warfare",
+      "display_name": "精神力战法",
+      "aliases": [
+        "SpiritSword",
+        "SpiritualWarfare"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 9,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 9,
+          "proficiency_required_to_reach_rank": 1000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 13,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "passive",
+      "target": {
+        "mode": "self_stat",
+        "relation": "self"
+      },
+      "geometry": {
+        "shape": "none"
+      },
+      "timing": {
+        "body_action": null,
+        "body_cast_ms": 0,
+        "release_frame_index": null,
+        "recovery_ms": 0,
+        "total_action_lock_ms": 0,
+        "cooldown_policy": "none",
+        "status": "historical_verified"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "passive_stat_modifier",
+        "stat": "accuracy",
+        "flat_bonus_by_rank": [
+          0,
+          3,
+          5,
+          8
+        ],
+        "affects": [
+          "physical_melee_hit_checks"
+        ],
+        "does_not_affect": [
+          "soul_fire_talisman",
+          "spell_hit",
+          "poison_resist"
+        ],
+        "status": "project_canonical_with_open_source_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_taoist_melee_attack_resolved",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_swing": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": null,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": null
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前不增加准确且可进入施法流程；应为永久被动，无MP、无CD、无施法动作。",
+        "issue_codes": [
+          "P1_PASSIVE_HAS_NO_EFFECT",
+          "P1_PASSIVE_CAN_ENTER_CAST_FLOW",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "spiritual_warfare_accuracy_exact",
+        "spiritual_warfare_never_casts",
+        "spiritual_warfare_no_cooldown",
+        "spiritual_warfare_physical_only"
+      ]
+    },
+    {
+      "order": 23,
+      "class": "taoist",
+      "skill_id": "taoist.poison",
+      "display_name": "施毒术",
+      "aliases": [
+        "Poisoning"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 14,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 14,
+          "proficiency_required_to_reach_rank": 1000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 17,
+          "proficiency_required_to_reach_rank": 2000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 20,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "hostile_single",
+        "relation": "hostile",
+        "requires_line_of_sight": true
+      },
+      "geometry": {
+        "shape": "targeted",
+        "maximum_range_tiles": 9
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": "selected_poison_powder",
+        "amount_by_rank": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "variants": {
+          "grey_powder": "green_poison",
+          "yellow_powder": "red_poison"
+        },
+        "consume_timing": "after_target_eligibility_before_resist_roll"
+      },
+      "mechanics": {
+        "runtime_family": "two_type_poison_debuff",
+        "resist_success_condition": "pascal_random_exclusive(target.poison_resist + 7) <= 6",
+        "green_power_formula": "get_power13(rank, 40) + 2 * roll_sc()",
+        "red_power_formula": "get_power13(rank, 30) + 2 * roll_sc()",
+        "duration_seconds": "[8,12,16,20][rank] + floor(roll_sc() / 5.0)",
+        "duration_status": "project_canonical",
+        "green_poison": {
+          "tick_interval_ms": 2000,
+          "damage_per_tick": "max(1, floor(green_power / 10.0))",
+          "damage_type": "poison"
+        },
+        "red_poison": {
+          "flat_ac_reduction": "max(1, floor(red_power / 10.0))",
+          "flat_mac_reduction": "max(1, floor(red_power / 10.0))",
+          "extra_equipment_durability_loss_per_successful_incoming_hit": 1,
+          "durability_status": "project_canonical"
+        },
+        "stacking": "green_and_red_can_coexist; same type refreshes stronger/longer according to BuffMergePolicy",
+        "status": "mixed_source_and_project_canonical"
+      },
+      "proficiency_trigger": {
+        "event": "poison_status_successfully_applied_or_refreshed",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 2,
+          "effect": 4,
+          "spell": 4,
+          "power": 2,
+          "max_power": 2,
+          "def_spell": 0,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 40
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前只有绿毒、固定8秒、约SC/3且不消耗毒粉；缺红毒减防减耐久。",
+        "issue_codes": [
+          "P1_RED_POISON_MISSING",
+          "P1_POWDER_CONSUMPTION_MISSING",
+          "P1_FIXED_8S",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "poison_consumes_selected_powder",
+        "poison_green_and_red_separate",
+        "poison_resist_formula",
+        "poison_green_ticks",
+        "poison_red_reduces_ac_mac",
+        "poison_same_type_refreshes"
+      ]
+    },
+    {
+      "order": 24,
+      "class": "taoist",
+      "skill_id": "taoist.soul_fire_talisman",
+      "display_name": "灵魂火符",
+      "aliases": [
+        "SoulFireBall",
+        "SoulFireTalisman"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 18,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 18,
+          "proficiency_required_to_reach_rank": 2000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 21,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 24,
+          "proficiency_required_to_reach_rank": 6000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "hostile_single",
+        "relation": "hostile",
+        "requires_line_of_sight": true
+      },
+      "geometry": {
+        "shape": "projectile",
+        "maximum_range_tiles": 9,
+        "stops_on_terrain": true
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical",
+        "effect_resolve_ms_from_cast_start": 1200
+      },
+      "resource": {
+        "item": "amulet",
+        "amount_by_rank": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "consume_timing": "after_target_and_los_validation_before_release"
+      },
+      "mechanics": {
+        "runtime_family": "single_projectile_damage",
+        "raw_power_formula": "get_power(rank, mpow(magic_db)) + roll_sc()",
+        "damage_type": "spirit_magic",
+        "defence_type": "MAC",
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "valid_talisman_projectile_created",
+        "requires_hit": false,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": 8,
+          "effect": 10,
+          "spell": 5,
+          "power": 8,
+          "max_power": 12,
+          "def_spell": 2,
+          "def_power": 6,
+          "def_max_power": 6,
+          "legacy_delay": 60
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前370px弹道、伤害一次SC、不消耗护身符；应消耗1张并使用技能基础威力+SC。",
+        "issue_codes": [
+          "P1_AMULET_CONSUMPTION_MISSING",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "soul_fire_requires_one_amulet",
+        "soul_fire_requires_los",
+        "soul_fire_power_formula",
+        "soul_fire_no_material_loss_on_invalid_target"
+      ]
+    },
+    {
+      "order": 25,
+      "class": "taoist",
+      "skill_id": "taoist.summon_skeleton",
+      "display_name": "召唤骷髅",
+      "aliases": [
+        "SummonSkeleton"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 19,
+          "proficiency_required_to_reach_rank": 2000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 23,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 26,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        12,
+        16,
+        20,
+        24
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "self_summon",
+        "relation": "self"
+      },
+      "geometry": {
+        "shape": "nearest_valid_adjacent_tile",
+        "search_radius_tiles": 2
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": "amulet",
+        "amount_by_rank": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "consume_timing": "only_when_creating_new_pet"
+      },
+      "mechanics": {
+        "runtime_family": "persistent_main_pet",
+        "pet_group": "taoist_main_pet",
+        "group_limit": 1,
+        "recast_if_live_pet_exists": "recall_existing_pet_no_material_and_no_proficiency",
+        "new_pet_template": "skeleton",
+        "initial_pet_level_formula": "rank",
+        "max_pet_level_formula": "rank + 4",
+        "skill_rank_is_pet_level": false,
+        "replacement_policy": "never_delete_live_pet_just_to_create_new_one",
+        "status": "source_formula_reference_plus_project_canonical"
+      },
+      "proficiency_trigger": {
+        "event": "new_skeleton_successfully_spawned",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 16,
+          "power": null,
+          "max_power": null,
+          "def_spell": 8,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 50
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前不耗符并强制替换旧召唤物；应已有宠则召回，无宠才耗1符创建。",
+        "issue_codes": [
+          "P1_AMULET_CONSUMPTION_MISSING",
+          "P1_FORCE_REPLACE_WRONG",
+          "P1_SKILL_RANK_PET_LEVEL_CONFLATION",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "summon_skeleton_consumes_one_amulet_only_on_new_spawn",
+        "summon_skeleton_recast_recalls",
+        "taoist_main_pet_limit_one",
+        "summon_skill_rank_separate_pet_level",
+        "summon_skeleton_no_forced_delete"
+      ]
+    },
+    {
+      "order": 26,
+      "class": "taoist",
+      "skill_id": "taoist.invisibility",
+      "display_name": "隐身术",
+      "aliases": [
+        "Hiding",
+        "Invisibility"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 20,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 20,
+          "proficiency_required_to_reach_rank": 3000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 23,
+          "proficiency_required_to_reach_rank": 6000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 26,
+          "proficiency_required_to_reach_rank": 9000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "self",
+        "relation": "self"
+      },
+      "geometry": {
+        "shape": "none"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": "amulet",
+        "amount_by_rank": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "consume_timing": "on_successful_buff_creation"
+      },
+      "mechanics": {
+        "runtime_family": "monster_aggro_stealth",
+        "duration_seconds_formula": "max(1, get_power13(rank, 30) + 3 * roll_sc())",
+        "pvp_invisibility": false,
+        "untargetable": false,
+        "invulnerable": false,
+        "monster_detection": "ignored_by_normal_monsters; true_sight_monsters_ignore_buff",
+        "break_conditions": {
+          "tile_movement": true,
+          "melee_attack": false,
+          "ranged_spell_cast": false,
+          "taking_damage": false
+        },
+        "status": "source_formula_reference_plus_cn_text",
+        "evidence_note": "1.76文字明确隐身后可采用远程魔法攻击，因此施法本身不应自动破隐；移动破除按经典行为冻结。"
+      },
+      "proficiency_trigger": {
+        "event": "invisibility_buff_successfully_applied",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 5,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 50
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前自己固定隐身10秒；缺护身符、SC/等级时长、怪物仇恨语义与破除规则。",
+        "issue_codes": [
+          "P1_FIXED_10S",
+          "P1_AMULET_CONSUMPTION_MISSING",
+          "P1_STEALTH_SEMANTICS_UNCLEAR",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "invisibility_consumes_amulet",
+        "invisibility_monster_aggro_only",
+        "invisibility_not_pvp_untargetable",
+        "invisibility_duration_formula",
+        "invisibility_breaks_on_move",
+        "invisibility_spell_cast_does_not_break"
+      ]
+    },
+    {
+      "order": 27,
+      "class": "taoist",
+      "skill_id": "taoist.mass_invisibility",
+      "display_name": "集体隐身术",
+      "aliases": [
+        "MassHiding",
+        "MassInvisibility"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 21,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 21,
+          "proficiency_required_to_reach_rank": 2000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 25,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 29,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "ground_point_friendly_area",
+        "relation": "friendly_players"
+      },
+      "geometry": {
+        "shape": "square",
+        "width_tiles": 3,
+        "height_tiles": 3,
+        "center": "selected_target_point"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": "amulet",
+        "amount_by_rank": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "consume_timing": "only_if_at_least_one_valid_friendly_affected"
+      },
+      "mechanics": {
+        "runtime_family": "area_monster_aggro_stealth",
+        "duration_seconds_formula": "max(1, get_power13(rank, 30) + 3 * roll_sc())",
+        "affected_entities": [
+          "self",
+          "friendly_players"
+        ],
+        "excluded": [
+          "hostile_players",
+          "monsters",
+          "npcs_unless_explicit"
+        ],
+        "break_conditions": {
+          "tile_movement": true,
+          "melee_attack": false,
+          "ranged_spell_cast": false,
+          "taking_damage": false
+        },
+        "status": "source_formula_reference_plus_cn_text"
+      },
+      "proficiency_trigger": {
+        "event": "at_least_one_valid_friendly_receives_buff",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 5,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 50
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前也只让自己隐身10秒；正确为选定点3×3友方玩家范围。",
+        "issue_codes": [
+          "P1_CURRENT_SELF_ONLY",
+          "P1_AMULET_CONSUMPTION_MISSING",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "mass_invisibility_exact_3x3",
+        "mass_invisibility_affects_friendlies",
+        "mass_invisibility_not_self_only",
+        "mass_invisibility_consumes_one_amulet_on_success"
+      ]
+    },
+    {
+      "order": 28,
+      "class": "taoist",
+      "skill_id": "taoist.magic_defense",
+      "display_name": "幽灵盾",
+      "aliases": [
+        "SoulShield",
+        "MagicDefense"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 22,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 22,
+          "proficiency_required_to_reach_rank": 5000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 24,
+          "proficiency_required_to_reach_rank": 10000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 26,
+          "proficiency_required_to_reach_rank": 15000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "ground_point_friendly_area",
+        "relation": "friendly"
+      },
+      "geometry": {
+        "shape": "chebyshev_area",
+        "radius_tiles": 3,
+        "center": "selected_target_point"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": "amulet",
+        "amount_by_rank": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "consume_timing": "only_if_at_least_one_valid_friendly_affected"
+      },
+      "mechanics": {
+        "runtime_family": "area_friendly_defence_buff",
+        "buff_id": "buff.taoist.soul_shield_mac",
+        "stat": "MAC",
+        "flat_bonus_formula": "max(1, floor(target.level / 7.0))",
+        "duration_seconds_formula": "max(1, floor((get_power13(rank, 60) + 10 * roll_sc()) / 10.0))",
+        "stacking_policy": "refresh_same_buff; coexists_with_blessed_armour",
+        "status": "project_canonical",
+        "evidence_note": "CN 1.76和源码分支一致确认幽灵盾=MAC；精确点数/时长公开资料不唯一，因此冻结此公式。"
+      },
+      "proficiency_trigger": {
+        "event": "at_least_one_valid_friendly_receives_or_refreshes_buff",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 15,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 40
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前只给自己固定15秒、数值人物等级/8，并与神圣战甲术共用简化逻辑。",
+        "issue_codes": [
+          "P1_SELF_ONLY",
+          "P1_AC_MAC_NOT_SEPARATED",
+          "P1_SHARED_SIMPLIFIED_BUFF",
+          "P1_AMULET_CONSUMPTION_MISSING"
+        ]
+      },
+      "required_tests": [
+        "soul_shield_modifies_mac_only",
+        "soul_shield_area_radius_3",
+        "soul_shield_coexists_with_blessed_armour",
+        "soul_shield_consumes_amulet_on_success"
+      ]
+    },
+    {
+      "order": 29,
+      "class": "taoist",
+      "skill_id": "taoist.defense",
+      "display_name": "神圣战甲术",
+      "aliases": [
+        "BlessedArmour",
+        "Defense"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 25,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 25,
+          "proficiency_required_to_reach_rank": 5000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 27,
+          "proficiency_required_to_reach_rank": 10000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 29,
+          "proficiency_required_to_reach_rank": 15000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "ground_point_friendly_area",
+        "relation": "friendly"
+      },
+      "geometry": {
+        "shape": "chebyshev_area",
+        "radius_tiles": 3,
+        "center": "selected_target_point"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": "amulet",
+        "amount_by_rank": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "consume_timing": "only_if_at_least_one_valid_friendly_affected"
+      },
+      "mechanics": {
+        "runtime_family": "area_friendly_defence_buff",
+        "buff_id": "buff.taoist.blessed_armour_ac",
+        "stat": "AC",
+        "flat_bonus_formula": "max(1, floor(target.level / 7.0))",
+        "duration_seconds_formula": "max(1, floor((get_power13(rank, 60) + 10 * roll_sc()) / 10.0))",
+        "stacking_policy": "refresh_same_buff; coexists_with_soul_shield",
+        "status": "project_canonical",
+        "evidence_note": "CN技能页此行疑似误写MAC；经典服务端type=0/1分支确认神圣战甲术对应物防AC。"
+      },
+      "proficiency_trigger": {
+        "event": "at_least_one_valid_friendly_receives_or_refreshes_buff",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 15,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 40
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前与幽灵盾走同一简化逻辑；正确必须只加AC并使用独立Buff。",
+        "issue_codes": [
+          "P1_SELF_ONLY",
+          "P1_AC_MAC_NOT_SEPARATED",
+          "P1_SHARED_SIMPLIFIED_BUFF",
+          "P1_AMULET_CONSUMPTION_MISSING"
+        ]
+      },
+      "required_tests": [
+        "blessed_armour_modifies_ac_only",
+        "blessed_armour_area_radius_3",
+        "blessed_armour_coexists_with_soul_shield",
+        "blessed_armour_consumes_amulet_on_success"
+      ]
+    },
+    {
+      "order": 30,
+      "class": "taoist",
+      "skill_id": "taoist.revelation",
+      "display_name": "心灵启示",
+      "aliases": [
+        "Revelation"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 26,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 26,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 30,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        4,
+        8,
+        12,
+        16
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "player_or_monster_single",
+        "relation": "any_valid_living_target",
+        "requires_line_of_sight": true
+      },
+      "geometry": {
+        "shape": "targeted",
+        "maximum_range_tiles": 9
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical",
+        "effect_resolve_ms_from_cast_start": 1500
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "target_hp_information_reveal",
+        "success_probability": "clamp((rank + 4) / 6.0, 0.0, 1.0)",
+        "success_roll": "pascal_random_exclusive(6) <= rank + 3",
+        "duration_ms_formula": "get_power13(rank, 2 * roll_sc() + 30) * 1000",
+        "reveals": [
+          "current_hp",
+          "max_hp"
+        ],
+        "damage": 0,
+        "does_not_modify_target_stats": true,
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "reveal_successfully_applied",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 16,
+          "power": null,
+          "max_power": null,
+          "def_spell": null,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 40
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前必定显示最近怪物2秒；正确应手动指定玩家/怪物，并按成功率与SC/等级决定时长。",
+        "issue_codes": [
+          "P1_AUTO_TARGET_NEAREST_MONSTER",
+          "P1_FIXED_2S",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "revelation_manual_target",
+        "revelation_targets_player_or_monster",
+        "revelation_probability_exact",
+        "revelation_duration_formula",
+        "revelation_no_damage"
+      ]
+    },
+    {
+      "order": 31,
+      "class": "taoist",
+      "skill_id": "taoist.entrapment",
+      "display_name": "困魔咒",
+      "aliases": [
+        "TrapHexagon",
+        "Entrapment"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 28,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 28,
+          "proficiency_required_to_reach_rank": 3000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 30,
+          "proficiency_required_to_reach_rank": 6000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 32,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        7,
+        10,
+        13,
+        16
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "ground_point_hostile_monster_area",
+        "relation": "hostile_monsters"
+      },
+      "geometry": {
+        "shape": "hexagon_boundary_approximated_on_8dir_grid",
+        "footprint_tiles": "canonical 3x3 boundary around selected point",
+        "break_on_any_player_entry": true
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": "amulet",
+        "amount_by_rank": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "consume_timing": "only_if_at_least_one_eligible_monster_is_trapped"
+      },
+      "mechanics": {
+        "runtime_family": "monster_boundary_control",
+        "duration_seconds_formula": "max(1, get_power13(rank, 40) + 3 * roll_sc())",
+        "eligible": [
+          "hostile_monster",
+          "not_boss",
+          "not_control_immune",
+          "within_level_gate"
+        ],
+        "excluded": [
+          "players",
+          "npcs",
+          "friendly_pets",
+          "bosses"
+        ],
+        "behavior_inside": "monster cannot path outside boundary and circles/retargets internally",
+        "external_attack_behavior": "may evade external attacks according to trapped state",
+        "break_conditions": [
+          "any_player_enters_boundary",
+          "duration_expires",
+          "map_transition",
+          "caster_invalid_if_policy_requires"
+        ],
+        "status": "source_formula_reference_plus_cn_text"
+      },
+      "proficiency_trigger": {
+        "event": "at_least_one_eligible_monster_enters_trapped_state",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 10,
+          "power": null,
+          "max_power": null,
+          "def_spell": 5,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 50
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前前方区域怪物固定定身5秒；缺发光边界、环绕行为、玩家进入破除和外部攻击躲避。",
+        "issue_codes": [
+          "P1_GENERIC_FIXED_ROOT_5S",
+          "P1_HEX_BOUNDARY_BEHAVIOR_MISSING",
+          "P1_BREAK_ON_PLAYER_ENTRY_MISSING",
+          "P1_AMULET_CONSUMPTION_MISSING"
+        ]
+      },
+      "required_tests": [
+        "entrapment_monsters_only",
+        "entrapment_boss_immune",
+        "entrapment_boundary_prevents_exit",
+        "entrapment_breaks_on_player_entry",
+        "entrapment_consumes_amulet_only_on_success",
+        "entrapment_not_generic_root"
+      ]
+    },
+    {
+      "order": 32,
+      "class": "taoist",
+      "skill_id": "taoist.mass_healing",
+      "display_name": "群体治疗术",
+      "aliases": [
+        "MassHealing"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 33,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 33,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 38,
+          "proficiency_required_to_reach_rank": 12000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        28,
+        31,
+        34,
+        37
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "ground_point_friendly_area",
+        "relation": "friendly"
+      },
+      "geometry": {
+        "shape": "square",
+        "width_tiles": 3,
+        "height_tiles": 3,
+        "center": "selected_target_point"
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": null,
+        "amount_by_rank": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "mechanics": {
+        "runtime_family": "area_heal",
+        "heal_formula": "get_power(rank, mpow(magic_db)) + 2 * roll_sc()",
+        "affected": [
+          "self",
+          "friendly_players",
+          "friendly_pets_if_project_policy_enabled"
+        ],
+        "cap_each_target_at_max_hp": true,
+        "must_use_dedicated_heal_pipeline": true,
+        "negative_damage_implementation_forbidden": true,
+        "status": "source_formula_reference"
+      },
+      "proficiency_trigger": {
+        "event": "total_actual_hp_restored_gt_zero",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 12,
+          "power": 10,
+          "max_power": 10,
+          "def_spell": 30,
+          "def_power": 4,
+          "def_max_power": 4,
+          "legacy_delay": 40
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前只治疗自己、治疗量一次SC；正确为选定点3×3友方范围，技能基础治疗+2×SC。",
+        "issue_codes": [
+          "P1_CURRENT_SELF_ONLY",
+          "P1_RANK_POWER_OVERRIDDEN_BY_1_0",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "mass_healing_exact_3x3",
+        "mass_healing_friendlies_not_self_only",
+        "mass_healing_formula",
+        "mass_healing_training_only_if_actual_heal",
+        "mass_healing_not_negative_damage"
+      ]
+    },
+    {
+      "order": 33,
+      "class": "taoist",
+      "skill_id": "taoist.summon_divine_beast",
+      "display_name": "召唤神兽",
+      "aliases": [
+        "SummonShinsu",
+        "SummonDivineBeast"
+      ],
+      "content_layer": "vanilla",
+      "version_scope": "CN_MIR2_1_76",
+      "membership_status": "historical_verified",
+      "progression_status": "historical_verified",
+      "ranks": [
+        {
+          "rank": 0,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 0,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 1,
+          "player_level_required": 35,
+          "proficiency_required_to_reach_rank": 2000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 2,
+          "player_level_required": 37,
+          "proficiency_required_to_reach_rank": 4000,
+          "proficiency_is_per_rank_not_cumulative": true
+        },
+        {
+          "rank": 3,
+          "player_level_required": 40,
+          "proficiency_required_to_reach_rank": 8000,
+          "proficiency_is_per_rank_not_cumulative": true
+        }
+      ],
+      "mp_cost_by_rank": [
+        28,
+        32,
+        36,
+        40
+      ],
+      "mp_cost_status": "project_canonical",
+      "activation": "active",
+      "target": {
+        "mode": "self_summon",
+        "relation": "self"
+      },
+      "geometry": {
+        "shape": "nearest_valid_adjacent_tile",
+        "search_radius_tiles": 2
+      },
+      "timing": {
+        "body_action": "cast_8dir_6f",
+        "body_cast_ms": 600,
+        "release_frame_index": 5,
+        "recovery_ms": 900,
+        "total_action_lock_ms": 1500,
+        "cooldown_policy": "total_action_lock",
+        "status": "project_canonical"
+      },
+      "resource": {
+        "item": "amulet",
+        "amount_by_rank": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "consume_timing": "only_when_creating_new_pet",
+        "status": "source_formula_reference"
+      },
+      "mechanics": {
+        "runtime_family": "persistent_main_pet",
+        "pet_group": "taoist_main_pet",
+        "group_limit": 1,
+        "recast_if_live_pet_exists": "recall_existing_pet_no_material_and_no_proficiency",
+        "new_pet_template": "divine_beast",
+        "initial_pet_level_formula": "rank",
+        "max_pet_level_formula": "1 + 2 * rank",
+        "skill_rank_is_pet_level": false,
+        "replacement_policy": "never_delete_live_pet_just_to_create_new_one",
+        "status": "source_formula_reference_plus_project_canonical"
+      },
+      "proficiency_trigger": {
+        "event": "new_divine_beast_successfully_spawned",
+        "requires_hit": true,
+        "gain_range": [
+          1,
+          3
+        ],
+        "max_gain_per_cast": 1
+      },
+      "magic_db_reference": {
+        "source_id": "classic_magic_db_reference",
+        "status": "source_formula_reference",
+        "raw_fields": {
+          "effect_type": null,
+          "effect": null,
+          "spell": 16,
+          "power": null,
+          "max_power": null,
+          "def_spell": 24,
+          "def_power": null,
+          "def_max_power": null,
+          "legacy_delay": 120
+        },
+        "warning": "原始字段仅作数值/公式参考；不得把该行的等级与熟练度覆盖CN 1.76进度。"
+      },
+      "migration_from_4b6ea4e0": {
+        "current_behavior": "当前不耗5张护身符并强制替换旧召唤物；正确已有神兽则召回，无宠才耗5符创建。",
+        "issue_codes": [
+          "P1_FIVE_AMULET_CONSUMPTION_MISSING",
+          "P1_FORCE_REPLACE_WRONG",
+          "P1_SKILL_RANK_PET_LEVEL_CONFLATION",
+          "P0_NO_PROFICIENCY_PIPELINE"
+        ]
+      },
+      "required_tests": [
+        "summon_divine_beast_consumes_five_amulets_only_on_new_spawn",
+        "summon_divine_beast_recast_recalls",
+        "taoist_main_pet_limit_one",
+        "divine_beast_skill_rank_separate_pet_level",
+        "summon_divine_beast_no_forced_delete"
+      ]
+    }
+  ]
+}
