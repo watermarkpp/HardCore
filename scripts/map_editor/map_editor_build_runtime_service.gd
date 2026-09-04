@@ -21,6 +21,9 @@ const JsonCodec := preload("res://scripts/map_editor/map_editor_json_codec.gd")
 const MapUIPresentationProjectionScript := preload(
 	"res://scripts/map_editor/map_ui_presentation_projection.gd"
 )
+const SpawnIdentityService := preload(
+	"res://scripts/map_editor/map_editor_spawn_identity_service.gd"
+)
 
 const LEGACY_RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.LEGACY_RUNTIME_SCHEMA_VERSION
 const RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.RUNTIME_SCHEMA_VERSION
@@ -79,6 +82,16 @@ static func publish_runtime_release(
 	var map_key := str(runtime.get("source", {}).get("map_id", ""))
 	if map_key.is_empty():
 		return {"success": false, "reason": "runtime_map_key_missing"}
+	var spawn_identity_errors := SpawnIdentityService.validate_runtime(
+		runtime,
+		SpawnIdentityService.requires_formal_semantic_ids(map_key)
+	)
+	if not spawn_identity_errors.is_empty():
+		return {
+			"success": false,
+			"reason": "runtime_spawn_identity_invalid",
+			"errors": spawn_identity_errors,
+		}
 	var binding_check := _validate_candidate_binding(
 		runtime,
 		runtime_map_id,
@@ -185,9 +198,19 @@ static func publish_runtime_release(
 		}
 	var backup_path := str(promote.get("backup_path", ""))
 	# Commit the registry; on failure roll back the formal artifact.
-	if test_fail_registry_commit or not _write_registry_atomic(
-		registry_path, registry
-	):
+	var registry_write_ok := false
+	if not test_fail_registry_commit:
+		if map_key_override.is_empty():
+			registry_write_ok = _write_registry_atomic(registry_path, registry)
+		else:
+			registry_write_ok = _write_registry_atomic_preserving_existing_entries(
+				registry_path,
+				old_registry_bytes,
+				registry,
+				map_key_override,
+				runtime_map_id
+			)
+	if not registry_write_ok:
 		_restore_runtime(formal_path, backup_path)
 		return {"success": false, "reason": "registry_write_failed"}
 	# Cache invalidate then post-publish verification. Publish never returns
@@ -465,8 +488,189 @@ static func _write_registry_atomic(
 	return true
 
 
+static func _write_registry_atomic_preserving_existing_entries(
+	registry_path: String,
+	old_registry_bytes: PackedByteArray,
+	registry: Dictionary,
+	map_key: String,
+	runtime_map_id: int
+) -> bool:
+	## A single-map publish must not reserialize unrelated release entries.  The
+	## parsed registry has already passed schema validation; patch only the
+	## target entry's release revision/build hashes into the previous UTF-8
+	## document so untouched maps retain their exact bytes and numeric style.
+	var old_text := old_registry_bytes.get_string_from_utf8()
+	if old_text.is_empty():
+		return _write_registry_atomic(registry_path, registry)
+	var target_entry: Dictionary = {}
+	for raw_entry: Variant in registry.get("maps", []):
+		if (
+			raw_entry is Dictionary
+			and int(raw_entry.get("runtime_map_id", -1)) == runtime_map_id
+			and str(raw_entry.get("map_key", "")) == map_key
+		):
+			target_entry = raw_entry
+			break
+	if target_entry.is_empty():
+		return _write_registry_atomic(registry_path, registry)
+	var marker := '"map_key": "%s"' % map_key
+	var marker_index := old_text.find(marker)
+	if marker_index < 0:
+		return _write_registry_atomic(registry_path, registry)
+	var object_start := old_text.rfind("{", marker_index)
+	var object_end := _matching_json_object_end(old_text, object_start)
+	if object_start < 0 or object_end < object_start:
+		return _write_registry_atomic(registry_path, registry)
+	var target_text := old_text.substr(object_start, object_end - object_start + 1)
+	var approval_revision := int(target_entry.get("approval_revision", 0))
+	var approved_hash := str(target_entry.get("approved_build_sha256", ""))
+	var approval_replacement := _replace_json_scalar(
+		target_text, '"approval_revision":', str(approval_revision)
+	)
+	if approval_replacement.is_empty():
+		return _write_registry_atomic(registry_path, registry)
+	target_text = approval_replacement
+	var hash_replacement := _replace_json_scalar(
+		target_text, '"approved_build_sha256":', JSON.stringify(approved_hash)
+	)
+	if hash_replacement.is_empty():
+		return _write_registry_atomic(registry_path, registry)
+	target_text = hash_replacement
+	var projection: Dictionary = target_entry.get("ui_presentation", {})
+	var projection_hash := str(projection.get("runtime_build_sha256", ""))
+	var projection_replacement := _replace_json_scalar(
+		target_text, '"runtime_build_sha256":', JSON.stringify(projection_hash)
+	)
+	if projection_replacement.is_empty():
+		return _write_registry_atomic(registry_path, registry)
+	target_text = projection_replacement
+	var preserved_text := (
+		old_text.substr(0, object_start)
+		+ target_text
+		+ old_text.substr(object_end + 1)
+	)
+	var parsed: Variant = JSON.parse_string(preserved_text)
+	if not parsed is Dictionary:
+		return _write_registry_atomic(registry_path, registry)
+	var parsed_errors := RuntimeBridge.validate_release_registry(parsed)
+	if not parsed_errors.is_empty():
+		return _write_registry_atomic(registry_path, registry)
+	return _write_registry_text_atomic(registry_path, preserved_text)
+
+
+static func _replace_json_scalar(
+	text: String,
+	marker: String,
+	replacement: String
+) -> String:
+	var marker_index := text.find(marker)
+	if marker_index < 0:
+		return ""
+	var value_start := marker_index + marker.length()
+	while value_start < text.length() and text[value_start] in [" ", "\t"]:
+		value_start += 1
+	if value_start >= text.length():
+		return ""
+	var value_end := value_start
+	if text[value_start] == '"':
+		value_end += 1
+		var escaped := false
+		while value_end < text.length():
+			var character := text[value_end]
+			if character == '"' and not escaped:
+				value_end += 1
+				break
+			if character == "\\" and not escaped:
+				escaped = true
+			else:
+				escaped = false
+			value_end += 1
+	else:
+		while value_end < text.length() and text[value_end] not in [",", "}", "\n", "\r"]:
+			value_end += 1
+		while value_end > value_start and text[value_end - 1] in [" ", "\t"]:
+			value_end -= 1
+	if value_end <= value_start:
+		return ""
+	return text.substr(0, value_start) + replacement + text.substr(value_end)
+
+
+static func _matching_json_object_end(text: String, start: int) -> int:
+	if start < 0 or start >= text.length() or text[start] != "{":
+		return -1
+	var depth := 0
+	var in_string := false
+	var escaped := false
+	for index in range(start, text.length()):
+		var character := text[index]
+		if in_string:
+			if character == '"' and not escaped:
+				in_string = false
+			elif character == "\\" and not escaped:
+				escaped = true
+			else:
+				escaped = false
+			continue
+		if character == '"':
+			in_string = true
+		elif character == "{":
+			depth += 1
+		elif character == "}":
+			depth -= 1
+			if depth == 0:
+				return index
+	return -1
+
+
+static func _write_registry_text_atomic(registry_path: String, text: String) -> bool:
+	var absolute_dst := (
+		ProjectSettings.globalize_path(registry_path)
+		if registry_path.begins_with("res://") or registry_path.begins_with("user://")
+		else registry_path
+	)
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(absolute_dst.get_base_dir())
+	if mkdir_error != OK:
+		return false
+	var absolute_tmp := absolute_dst + ".tmp"
+	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(text)
+	file.flush()
+	file.close()
+	var verify_file := FileAccess.open(absolute_tmp, FileAccess.READ)
+	if verify_file == null or verify_file.get_as_text() != text:
+		if verify_file != null:
+			verify_file.close()
+		DirAccess.remove_absolute(absolute_tmp)
+		return false
+	verify_file.close()
+	var backup := absolute_dst + ".restore_bak"
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	if FileAccess.file_exists(absolute_dst):
+		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
+		if backup_error != OK:
+			DirAccess.remove_absolute(absolute_tmp)
+			return false
+	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_dst)
+		return false
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	return true
+
+
 static func validate_for_runtime(document: Dictionary) -> Dictionary:
 	var errors := MapEditorTypes.validate_document(document)
+	errors.append_array(
+		SpawnIdentityService.validate_document(
+			document,
+			SpawnIdentityService.requires_formal_semantic_ids(document)
+		)
+	)
 	var warnings: Array[String] = []
 	var initialized := MapEditorGroundService.initialize(document)
 	if not initialized.ok:

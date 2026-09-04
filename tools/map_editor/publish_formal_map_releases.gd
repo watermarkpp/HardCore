@@ -80,17 +80,16 @@ func _ready() -> void:
 		var layers: Dictionary = raw_document.get("layers", {})
 		source_monsters += (layers.get("monster_spawn", []) as Array).size()
 		source_bosses += (layers.get("boss_spawn", []) as Array).size()
-		var document := MapEditorTypes.upgrade_document(raw_document)
-		# The identity registry is the frozen runtime identity authority. Three
-		# legacy v4 Chiyue documents still carry shared source locator IDs; bind
-		# the upgraded in-memory candidate to its canonical ID without rewriting
-		# the user's authoring document.
-		document["runtime_map_id"] = runtime_map_id
-		document["display_name"] = str(entry.get("display_name", ""))
-		_canonicalize_spawn_layers(document)
-		_normalize_portal_units(document)
-		_bind_portal_network(document, identity_maps)
-		ContentCatalog.canonicalize_document_npc_labels(document)
+		var prepared := prepare_formal_document(
+			map_key, runtime_map_id, raw_document, identity_maps
+		)
+		if not bool(prepared.get("ok", false)):
+			_errors.append(
+				"prepare_failed:%s:%s"
+				% [map_key, str(prepared.get("errors", []))]
+			)
+			continue
+		var document: Dictionary = prepared.get("document", {})
 		var approval := BuildService.approve_for_runtime(document)
 		if not bool(approval.get("ok", false)):
 			_errors.append(
@@ -177,6 +176,41 @@ func _ready() -> void:
 		]
 	)
 	get_tree().quit(0)
+
+
+func prepare_formal_document(
+	map_key: String,
+	runtime_map_id: int,
+	raw_document: Dictionary,
+	identity_maps: Array
+) -> Dictionary:
+	## Shared in-memory preparation for full and exact single-map release.
+	## Authoring JSON is never rewritten by this preparation step.
+	if raw_document.is_empty():
+		return {"ok": false, "errors": ["editor_document_empty"]}
+	if str(raw_document.get("map_id", "")) != map_key:
+		return {"ok": false, "errors": ["editor_identity_mismatch"]}
+	var document := MapEditorTypes.upgrade_document(raw_document)
+	# The identity registry is the frozen runtime identity authority. Three
+	# legacy v4 Chiyue documents still carry shared source locator IDs; bind
+	# the upgraded in-memory candidate to its canonical ID without rewriting
+	# the user's authoring document.
+	document["runtime_map_id"] = runtime_map_id
+	var display_name := str(document.get("display_name", ""))
+	for raw_identity: Variant in identity_maps:
+		if not raw_identity is Dictionary:
+			continue
+		if str((raw_identity as Dictionary).get("map_id", "")) == map_key:
+			display_name = str((raw_identity as Dictionary).get("display_name", display_name))
+			break
+	if display_name.is_empty():
+		return {"ok": false, "errors": ["display_name_missing"]}
+	document["display_name"] = display_name
+	_canonicalize_spawn_layers(document)
+	_normalize_portal_units(document)
+	_bind_portal_network(document, identity_maps)
+	ContentCatalog.canonicalize_document_npc_labels(document)
+	return {"ok": true, "document": document}
 
 
 func _publish_formal_visual(

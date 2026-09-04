@@ -3,6 +3,9 @@ extends RefCounted
 
 const EDITOR_ROOT := "res://map_editor_workspace/"
 const FORMAL_IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
+const SpawnIdentityService := preload(
+	"res://scripts/map_editor/map_editor_spawn_identity_service.gd"
+)
 
 
 static func default_path(map_id: String) -> String:
@@ -41,6 +44,12 @@ static func has_formal_workspace_for_legacy_map(map_id: String) -> bool:
 
 static func save_document(document: Dictionary, path := "") -> Dictionary:
 	var errors := MapEditorTypes.validate_document(document)
+	errors.append_array(
+		SpawnIdentityService.validate_document(
+			document,
+			SpawnIdentityService.requires_formal_semantic_ids(document)
+		)
+	)
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors}
 	var target_path := path if not path.is_empty() else default_path(str(document.map_id))
