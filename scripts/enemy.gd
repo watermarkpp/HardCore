@@ -2218,9 +2218,18 @@ func _world_attack_path_is_clear_uncached(
 	var los_started_usec := RuntimeDiagnostics.timing_start()
 	if not source_ground_gu.is_finite() or not target_ground_gu.is_finite():
 		return _finish_attack_los_diagnostic(los_started_usec, false)
-	var has_map_query := (
+	var has_map_segment_query := (
 		is_instance_valid(environment_blocker)
-		and environment_blocker.has_method("is_environment_point_blocked")
+		and environment_blocker.has_method(
+			"is_environment_segment_blocked_ground"
+		)
+	)
+	var has_map_query := (
+		has_map_segment_query
+		or (
+			is_instance_valid(environment_blocker)
+			and environment_blocker.has_method("is_environment_point_blocked")
+		)
 	)
 	var physics_space := _world_direct_space_state()
 	# A missing map provider is only acceptable when the physics server can
@@ -2228,7 +2237,24 @@ func _world_attack_path_is_clear_uncached(
 	# missing environment hookup into an open attack corridor.
 	if not has_map_query and physics_space == null:
 		return _finish_attack_los_diagnostic(los_started_usec, false)
-	if has_map_query:
+	if has_map_segment_query:
+		var distance_gu := source_ground_gu.distance_to(target_ground_gu)
+		var sample_count := maxi(
+			1,
+			int(ceil(distance_gu / ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU)),
+		)
+		_record_performance_counter(
+			&"attack_los_map_samples",
+			sample_count + 1,
+		)
+		if bool(environment_blocker.call(
+			"is_environment_segment_blocked_ground",
+			source_ground_gu,
+			target_ground_gu,
+			ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU,
+		)):
+			return _finish_attack_los_diagnostic(los_started_usec, false)
+	elif has_map_query:
 		var distance_gu := source_ground_gu.distance_to(target_ground_gu)
 		var sample_count := maxi(
 			1,

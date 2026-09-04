@@ -8,6 +8,7 @@ const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
 const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
 const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
+const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 # P1-004: texture atlases are now lazy-loaded.  Only the target map's
 # atlases are loaded when a map is built.  Old const names remain as
@@ -117,7 +118,8 @@ var _full_ground_ready := false
 var _gothic_camp_layout: Dictionary = {}
 var _editor_runtime_visual: Dictionary = {}
 var _editor_runtime_size := Vector2i.ZERO
-var _editor_runtime_blocked_tiles: Dictionary = {}
+var _editor_runtime_collision_snapshot: Dictionary = {}
+var _editor_runtime_collision_invalid := false
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
 var _editor_runtime_fallback_ground := false
 var _editor_runtime_actor_sort_roots: Dictionary = {}
@@ -347,7 +349,96 @@ func is_environment_point_blocked(world_position: Vector2) -> bool:
 	# obsolete collision data into the current map.
 	if _editor_runtime_size != Vector2i.ZERO:
 		return _editor_runtime_blocks_world(world_position)
+	if _editor_runtime_collision_invalid:
+		return true
 	return is_bich_point_blocked(world_position) or is_orc_tomb_point_blocked(world_position) or _source_mask_blocks_world(world_position)
+
+
+## One deterministic environment query for an actor footprint.  Formal runtime
+## collision uses the compiled integer-cell snapshot directly; legacy profiles
+## retain the existing point provider semantics and sample order.
+func is_environment_actor_blocked(
+	center_world_px: Vector2,
+	collision_radius_px: float
+) -> bool:
+	if not center_world_px.is_finite():
+		return true
+	var sample_radius_px := maxf(0.0, collision_radius_px - 1.0)
+	if _editor_runtime_size != Vector2i.ZERO:
+		RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+		if _editor_runtime_blocks_world(center_world_px):
+			return true
+		if sample_radius_px <= 0.0:
+			return false
+		for index: int in range(WorldSpatialRulesScript.ACTOR_FOOTPRINT_SEGMENTS):
+			var offset_px := WorldSpatialRulesScript.actor_footprint_offset_px(
+				index,
+				sample_radius_px,
+			)
+			RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+			if _editor_runtime_blocks_world(center_world_px + offset_px):
+				return true
+		return false
+	if _editor_runtime_collision_invalid:
+		return true
+	RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+	if is_environment_point_blocked(center_world_px):
+		return true
+	if sample_radius_px <= 0.0:
+		return false
+	for index: int in range(WorldSpatialRulesScript.ACTOR_FOOTPRINT_SEGMENTS):
+		var offset_px := WorldSpatialRulesScript.actor_footprint_offset_px(
+			index,
+			sample_radius_px,
+		)
+		RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+		if is_environment_point_blocked(center_world_px + offset_px):
+			return true
+	return false
+
+
+## Ground-GU segment query with the legacy inclusive ceil sample contract.
+## Formal maps use the precompiled snapshot and therefore perform no dynamic
+## provider call per sample; profile maps retain the old point conversion.
+func is_environment_segment_blocked_ground(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	step_gu := 0.25
+) -> bool:
+	if (
+		not source_ground_gu.is_finite()
+		or not target_ground_gu.is_finite()
+		or not is_finite(float(step_gu))
+		or float(step_gu) <= 0.0
+	):
+		return true
+	var distance_gu := source_ground_gu.distance_to(target_ground_gu)
+	if not is_finite(distance_gu):
+		return true
+	var sample_count := maxi(1, int(ceil(distance_gu / float(step_gu))))
+	if _editor_runtime_collision_invalid:
+		return true
+	for sample_index: int in range(sample_count + 1):
+		var progress := float(sample_index) / float(sample_count)
+		var sample_ground_gu := source_ground_gu.lerp(target_ground_gu, progress)
+		var blocked := false
+		if _editor_runtime_size != Vector2i.ZERO:
+			RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+			blocked = RuntimeCollisionGeometryScript.compiled_collision_contains_ground(
+				_editor_runtime_collision_snapshot,
+				sample_ground_gu,
+			)
+		else:
+			var sample_world_px := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				sample_ground_gu
+			)
+			if not sample_world_px.is_finite():
+				return true
+			RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+			blocked = is_environment_point_blocked(sample_world_px)
+		if blocked:
+			return true
+	return false
 
 
 func bich_collision_count() -> int:
@@ -649,7 +740,8 @@ func clear_environment() -> void:
 	_gothic_camp_layout.clear()
 	_editor_runtime_visual.clear()
 	_editor_runtime_size = Vector2i.ZERO
-	_editor_runtime_blocked_tiles.clear()
+	_editor_runtime_collision_snapshot.clear()
+	_editor_runtime_collision_invalid = false
 	_editor_runtime_chunk_draws.clear()
 	_editor_runtime_fallback_ground = false
 	_editor_runtime_actor_sort_roots.clear()
@@ -1372,8 +1464,19 @@ func build_collision_descriptors(map_data: Dictionary) -> Array:
 	var runtime := _runtime_data_for(map_id)
 	var generation := _generation_token()
 	var descriptors: Array[Dictionary] = []
-	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id) and not runtime.is_empty():
-		_append_editor_runtime_collision_descriptors(descriptors, runtime, generation)
+	var formal_runtime_registered := not MapEditorRuntimeBridgeScript.runtime_path(
+		map_id
+	).is_empty()
+	if formal_runtime_registered:
+		if runtime.is_empty():
+			_editor_runtime_collision_invalid = true
+		else:
+			_append_editor_runtime_collision_descriptors(
+				descriptors,
+				runtime,
+				generation,
+				map_id,
+			)
 	elif not environment_profile().is_empty():
 		_append_profile_collision_descriptors(descriptors, map_id, generation)
 	_pending_collision_descriptors = descriptors
@@ -1383,16 +1486,26 @@ func build_collision_descriptors(map_data: Dictionary) -> Array:
 func _append_editor_runtime_collision_descriptors(
 	descriptors: Array,
 	runtime: Dictionary,
-	generation: int
+	generation: int,
+	expected_runtime_map_id: int,
 ) -> void:
-	var raw_size: Array = runtime.design.get("design_size", [256, 256])
-	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	_editor_runtime_size = size
-	_editor_runtime_blocked_tiles = RuntimeCollisionGeometryScript.blocked_cell_set(
-		runtime.collision
+	var compiled_result := RuntimeCollisionGeometryScript.compile_runtime_collision(
+		runtime,
+		expected_runtime_map_id,
 	)
-	var inner := RuntimeCollisionGeometryScript.map_actor_boundary_world(size)
-	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_world(size)
+	if not bool(compiled_result.get("ok", false)):
+		_editor_runtime_collision_invalid = true
+		return
+	var compiled_collision: Dictionary = compiled_result.get("snapshot", {})
+	_editor_runtime_collision_snapshot = compiled_collision
+	_editor_runtime_collision_invalid = false
+	_editor_runtime_size = compiled_collision.get("design_size", Vector2i.ZERO)
+	var inner: PackedVector2Array = compiled_collision.get(
+		"boundary_world", PackedVector2Array()
+	)
+	var outer: PackedVector2Array = compiled_collision.get(
+		"outer_boundary_world", PackedVector2Array()
+	)
 	for side in range(inner.size()):
 		var next := (side + 1) % 4
 		descriptors.append(_collision_descriptor(
@@ -1403,16 +1516,16 @@ func _append_editor_runtime_collision_descriptors(
 				"inner": inner[side],
 				"inner_next": inner[next],
 				"side": side,
-				"size": size,
+				"size": _editor_runtime_size,
 			},
 			generation
 		))
-	for rect: Rect2i in RuntimeCollisionGeometryScript.blocked_cell_runs(
-		runtime.collision
+	for rect: Rect2i in RuntimeCollisionGeometryScript.compiled_collision_blocked_cell_runs(
+		compiled_collision
 	):
 		descriptors.append(_collision_descriptor(
 			"blocked_rect_run", descriptors.size(),
-			{"rect": rect, "size": size},
+			{"rect": rect, "size": _editor_runtime_size},
 			generation
 		))
 
@@ -2439,12 +2552,13 @@ func _static_wall_bridge_empty_stats(generation: int) -> Dictionary:
 
 
 func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
-	if _editor_runtime_size == Vector2i.ZERO:
-		return false
-	return RuntimeCollisionGeometryScript.blocked_cells_contain_world(
-		_editor_runtime_blocked_tiles,
+	if _editor_runtime_collision_invalid:
+		return true
+	if _editor_runtime_collision_snapshot.is_empty():
+		return true
+	return RuntimeCollisionGeometryScript.compiled_collision_contains_world(
+		_editor_runtime_collision_snapshot,
 		world_position,
-		_editor_runtime_size
 	)
 
 

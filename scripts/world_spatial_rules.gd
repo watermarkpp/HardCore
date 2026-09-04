@@ -22,6 +22,33 @@ const ACTOR_FOOTPRINT_SEGMENTS := 16
 const SCREEN_HORIZONTAL_RADIUS_PX_PER_COMBAT_RADIUS_GU := (
 	GroundUnitSpaceScript.HALF_TILE_SIZE_PX.x * sqrt(2.0)
 )
+static var _actor_footprint_unit_directions: PackedVector2Array = PackedVector2Array()
+
+
+static func _actor_footprint_directions() -> PackedVector2Array:
+	if _actor_footprint_unit_directions.is_empty():
+		for index: int in range(ACTOR_FOOTPRINT_SEGMENTS):
+			var angle := TAU * float(index) / float(ACTOR_FOOTPRINT_SEGMENTS)
+			_actor_footprint_unit_directions.append(Vector2(
+				cos(angle),
+				sin(angle),
+			))
+	return _actor_footprint_unit_directions
+
+
+static func actor_footprint_offset_px(
+	index: int,
+	collision_radius_px: float
+) -> Vector2:
+	var sample_radius_px := maxf(0.0, collision_radius_px)
+	if sample_radius_px <= 0.0:
+		return Vector2.ZERO
+	var directions := _actor_footprint_directions()
+	var direction := directions[posmod(index, directions.size())]
+	return Vector2(
+		direction.x * sample_radius_px,
+		direction.y * sample_radius_px * ACTOR_FOOTPRINT_Y_RATIO,
+	)
 
 
 static func point_inside_safe_zone_ground_gu(
@@ -105,7 +132,18 @@ static func environment_blocks_actor_screen_px(
 ) -> bool:
 	var environment_started_usec := RuntimeDiagnostics.timing_start()
 	RuntimeDiagnostics.increment_performance_counter(&"environment_guard_batches")
-	if not is_instance_valid(provider) or not provider.has_method("is_environment_point_blocked"):
+	if not is_instance_valid(provider):
+		RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
+		return false
+	if provider.has_method("is_environment_actor_blocked"):
+		var blocked := bool(provider.call(
+			"is_environment_actor_blocked",
+			position_screen_px,
+			collision_radius_px,
+		))
+		RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
+		return blocked
+	if not provider.has_method("is_environment_point_blocked"):
 		RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
 		return false
 	RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
@@ -119,7 +157,8 @@ static func environment_blocks_actor_screen_px(
 	if sample_radius_px <= 0.0:
 		RuntimeDiagnostics.record_timing_usec(&"environment_query_usec", environment_started_usec)
 		return false
-	for offset_px: Vector2 in actor_footprint_polygon_px(sample_radius_px):
+	for index: int in range(ACTOR_FOOTPRINT_SEGMENTS):
+		var offset_px := actor_footprint_offset_px(index, sample_radius_px)
 		RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
 		if bool(provider.call(
 			"is_environment_point_blocked",
@@ -164,11 +203,15 @@ static func actor_footprint_ground_polygon_gu(
 	var safe_radius_gu := maxf(0.0, combat_radius_gu)
 	var count := maxi(8, segments)
 	var points_ground_gu := PackedVector2Array()
+	var directions := _actor_footprint_directions() if count == ACTOR_FOOTPRINT_SEGMENTS else PackedVector2Array()
 	for index: int in range(count):
-		var angle := TAU * float(index) / float(count)
-		points_ground_gu.append(
-			Vector2.from_angle(angle) * safe_radius_gu
-		)
+		if count == ACTOR_FOOTPRINT_SEGMENTS:
+			points_ground_gu.append(directions[index] * safe_radius_gu)
+		else:
+			var angle := TAU * float(index) / float(count)
+			points_ground_gu.append(
+				Vector2.from_angle(angle) * safe_radius_gu
+			)
 	return points_ground_gu
 
 
@@ -196,6 +239,10 @@ static func actor_footprint_polygon_px(
 	var radii_px := actor_footprint_radii_px(collision_radius_px)
 	var count := maxi(8, segments)
 	var points_px := PackedVector2Array()
+	if count == ACTOR_FOOTPRINT_SEGMENTS:
+		for index: int in range(count):
+			points_px.append(actor_footprint_offset_px(index, radii_px.x))
+		return points_px
 	for index in range(count):
 		var angle := TAU * float(index) / float(count)
 		points_px.append(Vector2(

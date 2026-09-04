@@ -12,6 +12,212 @@ const VISIBLE_BOUNDARY_PROJECTION_ITERATIONS := 32
 const VISIBLE_BOUNDARY_EPSILON_PX := 0.01
 
 
+## Compiles the published collision authority once at map-build time.  The
+## runtime JSON intentionally keeps its historical `x,y` strings; only this
+## build-time boundary is allowed to parse them.  `manual_shapes` is editor
+## provenance and is never consulted by the runtime occupancy query.
+static func compile_runtime_collision(
+	runtime: Dictionary,
+	expected_runtime_map_id := -1
+) -> Dictionary:
+	var errors: Array[String] = []
+	if runtime.is_empty():
+		errors.append("runtime_missing")
+		return {"ok": false, "errors": errors, "snapshot": {}}
+	var raw_build_sha: Variant = runtime.get("build_sha256", "")
+	var build_sha: String = str(raw_build_sha)
+	if not _is_sha256(build_sha):
+		errors.append("build_sha256_invalid")
+	var runtime_map_id := int(runtime.get("runtime_map_id", -1))
+	var source: Variant = runtime.get("source", {})
+	if source is Dictionary:
+		var source_map_id := int((source as Dictionary).get("runtime_map_id", -1))
+		if source_map_id <= 0:
+			errors.append("source_runtime_map_id_invalid")
+		if runtime_map_id <= 0:
+			runtime_map_id = source_map_id
+		elif source_map_id > 0 and source_map_id != runtime_map_id:
+			errors.append("runtime_map_id_mismatch")
+	else:
+		errors.append("source_missing")
+	if runtime_map_id <= 0:
+		errors.append("runtime_map_id_invalid")
+	if expected_runtime_map_id > 0 and runtime_map_id != expected_runtime_map_id:
+		errors.append("expected_runtime_map_id_mismatch")
+
+	var raw_design: Variant = runtime.get("design", {})
+	var design_size := _parse_design_size(
+		raw_design.get("design_size", []) if raw_design is Dictionary else []
+	)
+	if design_size == Vector2i.ZERO:
+		errors.append("design_size_invalid")
+
+	var raw_collision: Variant = runtime.get("collision", {})
+	if not raw_collision is Dictionary:
+		errors.append("collision_missing")
+		return {
+			"ok": false,
+			"errors": errors,
+			"snapshot": {},
+		}
+	var collision: Dictionary = raw_collision
+	if str(collision.get("coordinate_contract_id", "")) != CONTRACT_ID:
+		errors.append("collision_contract_invalid")
+	if str(collision.get("physics_source_id", "")) != PHYSICS_SOURCE_ID:
+		errors.append("physics_source_invalid")
+	var raw_blocked: Variant = collision.get("blocked_tiles", null)
+	if not raw_blocked is Array:
+		errors.append("blocked_tiles_missing")
+		return {
+			"ok": false,
+			"errors": errors,
+			"snapshot": {},
+		}
+	var blocked_tiles: Array = raw_blocked
+	var declared_count := int(collision.get("blocked_count", -1))
+	if declared_count != blocked_tiles.size():
+		errors.append("blocked_count_mismatch")
+	var blocked_cell_ids: Dictionary = {}
+	for raw_key: Variant in blocked_tiles:
+		if not raw_key is String:
+			errors.append("blocked_cell_not_string")
+			continue
+		var parts := (raw_key as String).split(",")
+		if parts.size() != 2 or not parts[0].is_valid_int() or not parts[1].is_valid_int():
+			errors.append("blocked_cell_invalid")
+			continue
+		var cell := Vector2i(int(parts[0]), int(parts[1]))
+		if (
+			design_size == Vector2i.ZERO
+			or cell.x < 0
+			or cell.y < 0
+			or cell.x >= design_size.x
+			or cell.y >= design_size.y
+		):
+			errors.append("blocked_cell_out_of_bounds")
+			continue
+		var cell_id := cell_id_for(cell, design_size)
+		if blocked_cell_ids.has(cell_id):
+			errors.append("blocked_cell_duplicate")
+			continue
+		blocked_cell_ids[cell_id] = true
+	if not errors.is_empty():
+		return {"ok": false, "errors": errors, "snapshot": {}}
+	var boundary_world := map_actor_boundary_world(design_size)
+	var outer_boundary_world := map_outer_boundary_world(design_size)
+	var snapshot := {
+		"contract_id": CONTRACT_ID,
+		"physics_source_id": PHYSICS_SOURCE_ID,
+		"runtime_map_id": runtime_map_id,
+		"build_sha256": build_sha,
+		"design_size": design_size,
+		"boundary_world": boundary_world,
+		"outer_boundary_world": outer_boundary_world,
+		"blocked_cell_ids": blocked_cell_ids,
+		"blocked_count": blocked_cell_ids.size(),
+	}
+	return {"ok": true, "errors": [], "snapshot": snapshot}
+
+
+static func _is_sha256(value: String) -> bool:
+	if value.length() != 64:
+		return false
+	for character: String in value:
+		if character not in "0123456789abcdefABCDEF":
+			return false
+	return true
+
+
+static func _parse_design_size(raw_size: Variant) -> Vector2i:
+	if not raw_size is Array or (raw_size as Array).size() != 2:
+		return Vector2i.ZERO
+	var values: Array = raw_size
+	for raw_value: Variant in values:
+		if not raw_value is int and not raw_value is float:
+			return Vector2i.ZERO
+		var numeric := float(raw_value)
+		if not is_finite(numeric) or numeric <= 0.0 or not is_equal_approx(numeric, round(numeric)):
+			return Vector2i.ZERO
+	return Vector2i(int(values[0]), int(values[1]))
+
+
+static func cell_id_for(cell: Vector2i, design_size: Vector2i) -> int:
+	return cell.y * design_size.x + cell.x
+
+
+static func compiled_collision_cell_blocked(
+	compiled_collision: Dictionary,
+	cell: Vector2i
+) -> bool:
+	var raw_design_size: Variant = compiled_collision.get(
+		"design_size", Vector2i.ZERO
+	)
+	if not raw_design_size is Vector2i:
+		return true
+	var design_size: Vector2i = raw_design_size
+	if design_size.x <= 0 or design_size.y <= 0:
+		return true
+	if (
+		cell.x < 0
+		or cell.y < 0
+		or cell.x >= design_size.x
+		or cell.y >= design_size.y
+	):
+		# The caller has already accepted the fixed boundary polygon.  The
+		# historical query returns open for a boundary vertex whose floor cell
+		# is the exclusive [size] edge; preserve that exact parity here.
+		return false
+	var blocked_cell_ids: Variant = compiled_collision.get("blocked_cell_ids", {})
+	if not blocked_cell_ids is Dictionary:
+		return true
+	return (blocked_cell_ids as Dictionary).has(cell_id_for(cell, design_size))
+
+
+static func compiled_collision_contains_world(
+	compiled_collision: Dictionary,
+	world: Vector2
+) -> bool:
+	if not world.is_finite():
+		return true
+	var boundary: Variant = compiled_collision.get("boundary_world", null)
+	var raw_design_size: Variant = compiled_collision.get(
+		"design_size", Vector2i.ZERO
+	)
+	if not boundary is PackedVector2Array or not raw_design_size is Vector2i:
+		return true
+	var design_size: Vector2i = raw_design_size
+	if design_size.x <= 0 or design_size.y <= 0:
+		return true
+	if not Geometry2D.is_point_in_polygon(world, boundary as PackedVector2Array):
+		return true
+	return compiled_collision_cell_blocked(
+		compiled_collision,
+		world_cell(world, design_size),
+	)
+
+
+static func compiled_collision_contains_ground(
+	compiled_collision: Dictionary,
+	ground_position_gu: Vector2
+) -> bool:
+	if not ground_position_gu.is_finite():
+		return true
+	var raw_design_size: Variant = compiled_collision.get(
+		"design_size", Vector2i.ZERO
+	)
+	if not raw_design_size is Vector2i:
+		return true
+	var design_size: Vector2i = raw_design_size
+	if design_size.x <= 0 or design_size.y <= 0:
+		return true
+	var world := MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+		ground_position_gu, design_size
+	)
+	if not world.is_finite():
+		return true
+	return compiled_collision_contains_world(compiled_collision, world)
+
+
 static func map_inner_boundary_tile_polygon(
 	design_size: Vector2i
 ) -> PackedVector2Array:
@@ -254,6 +460,49 @@ static func blocked_cell_runs(runtime_collision: Dictionary) -> Array[Rect2i]:
 		var y := int(parts[1])
 		var xs: Array = blocked_by_row.get(y, [])
 		xs.append(int(parts[0]))
+		blocked_by_row[y] = xs
+	var rows: Array = blocked_by_row.keys()
+	rows.sort()
+	var result: Array[Rect2i] = []
+	for raw_y: Variant in rows:
+		var y := int(raw_y)
+		var xs: Array = blocked_by_row[y]
+		xs.sort()
+		if xs.is_empty():
+			continue
+		var run_start := int(xs[0])
+		var previous := run_start
+		for index in range(1, xs.size() + 1):
+			if index == xs.size() or int(xs[index]) != previous + 1:
+				result.append(Rect2i(
+					run_start, y, previous - run_start + 1, 1
+				))
+				if index < xs.size():
+					run_start = int(xs[index])
+			if index < xs.size():
+				previous = int(xs[index])
+	return result
+
+
+## Build-time equivalent of blocked_cell_runs() for the integer-id snapshot.
+## This intentionally never converts a cell id back to the published string
+## form; all string parsing belongs exclusively to compile_runtime_collision().
+static func compiled_collision_blocked_cell_runs(
+	compiled_collision: Dictionary
+) -> Array[Rect2i]:
+	var design_size: Vector2i = compiled_collision.get(
+		"design_size", Vector2i.ZERO
+	)
+	var blocked_cell_ids: Variant = compiled_collision.get("blocked_cell_ids", {})
+	if design_size == Vector2i.ZERO or not blocked_cell_ids is Dictionary:
+		return []
+	var blocked_by_row: Dictionary = {}
+	for raw_cell_id: Variant in (blocked_cell_ids as Dictionary).keys():
+		var cell_id := int(raw_cell_id)
+		var y := cell_id / design_size.x
+		var x := posmod(cell_id, design_size.x)
+		var xs: Array = blocked_by_row.get(y, [])
+		xs.append(x)
 		blocked_by_row[y] = xs
 	var rows: Array = blocked_by_row.keys()
 	rows.sort()
