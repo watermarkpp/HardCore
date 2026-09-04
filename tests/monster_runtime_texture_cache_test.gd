@@ -74,16 +74,21 @@ func _run() -> void:
 	assert(coordinator.cached_client_profile_decoded_rgba8_bytes() <= MonsterVisual.CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES, "non-protected pressure cache exceeded 64 MiB: %d" % coordinator.cached_client_profile_decoded_rgba8_bytes())
 	assert(coordinator.cached_client_profile_count() < 40, "pressure cache did not evict old profiles")
 
-	# Actor residency is independent of the bounded cross-zone cache: far actors
-	# release their own five atlas references and reacquire before entering view.
-	player.global_position = Vector2(50000, 50000)
-	var streamed := await _spawn_sample(player)
+	# Actor residency is independent of the bounded cross-zone cache: off-screen
+	# actors release their five atlas references and reacquire before entering the
+	# camera guard. Player distance is intentionally irrelevant to rendering.
+	var viewport_rect := get_viewport().get_visible_rect()
+	var offscreen_position := viewport_rect.end + Vector2(
+		MonsterVisual.VISUAL_RELEASE_DISTANCE_PX + 32.0,
+		MonsterVisual.VISUAL_RELEASE_DISTANCE_PX + 32.0,
+	)
+	var streamed := await _spawn_sample(player, false, offscreen_position)
 	assert(streamed.visual.active_resources.is_empty(), "far spawned actor eagerly retained five atlases")
-	player.global_position = streamed.global_position
+	streamed.global_position = viewport_rect.get_center()
 	streamed.visual._resource_residency_timer = 0.0
 	streamed.visual._process(0.13)
 	assert(not streamed.visual.active_resources.is_empty(), "near actor did not activate visual resources")
-	player.global_position = Vector2(50000, 50000)
+	streamed.global_position = offscreen_position
 	streamed.visual._resource_residency_timer = 0.0
 	streamed.visual._process(0.13)
 	assert(streamed.visual.active_resources.is_empty(), "far actor retained its atlas resources")
@@ -143,7 +148,11 @@ func _run() -> void:
 	get_tree().quit(0)
 
 
-func _spawn_sample(player: PlayerCharacter, expect_final_art := true) -> EnemyActor:
+func _spawn_sample(
+	player: PlayerCharacter,
+	expect_final_art := true,
+	spawn_position := Vector2.ZERO,
+) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	enemy.setup({
 		"monsterId": SAMPLE_MONSTER_ID,
@@ -152,10 +161,11 @@ func _spawn_sample(player: PlayerCharacter, expect_final_art := true) -> EnemyAc
 		"attackMin": 1,
 		"attackMax": 2,
 	}, player, false)
+	enemy.global_position = spawn_position
 	add_child(enemy)
 	enemy.set_physics_process(false)
 	await get_tree().process_frame
-	if expect_final_art and enemy.global_position.distance_to(player.global_position) <= MonsterVisual.VISUAL_ACTIVATION_DISTANCE_PX:
+	if expect_final_art:
 		assert(enemy.visual.uses_final_art(), "cache fixture did not resolve final client art")
 	return enemy
 

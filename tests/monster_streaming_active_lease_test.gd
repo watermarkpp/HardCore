@@ -54,20 +54,31 @@ func _run() -> void:
 	assert(_coordinator.notify_visual_applied(live_visual, live_key, 0))
 	assert(int(_coordinator.monster_streaming_diagnostics().resource_apply_count) == apply_count, "duplicate apply must not duplicate a lease")
 
-	# R does not become W merely because a far-away visual is registered.
-	_player.global_position = Vector2(50000, 50000)
+	# R does not become W merely because an off-screen visual is registered.
+	var viewport_rect := get_viewport().get_visible_rect()
+	var offscreen_position := viewport_rect.end + Vector2(
+		MonsterVisual.VISUAL_RELEASE_DISTANCE_PX + 32.0,
+		MonsterVisual.VISUAL_RELEASE_DISTANCE_PX + 32.0,
+	)
 	var far_enemy := Fixtures.make_enemy(
 		self,
 		_player,
 		Fixtures.catalog_ids()[0],
 		2,
 		1,
-		Vector2.ZERO
+		offscreen_position
 	)
 	_enemies.append(far_enemy)
 	await get_tree().process_frame
 	assert(_coordinator.visual_resource_state(far_enemy.visual) == "registered")
 	assert(_coordinator.waiting_visual_count() == 0, "far registered visual must not be a permanent waiter")
+	live_enemy.global_position = offscreen_position
+	live_visual._resource_residency_timer = 0.0
+	live_visual._process(MonsterVisual.RESOURCE_RESIDENCY_CHECK_SECONDS)
+	assert(
+		_coordinator.visual_resource_state(live_visual) == "registered",
+		"off-screen live visual did not release its active lease",
+	)
 
 	# A profile larger than the hard budget is retained while W protects it even
 	# when map pin admission is rejected; no demanded profile may be immediately

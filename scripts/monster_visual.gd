@@ -28,8 +28,11 @@ const CLIENT_RESOURCE_CACHE_CAPACITY := 12
 const CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES := 64 * 1024 * 1024
 const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
 const RESOURCE_RESIDENCY_CONTRACT_ID := "monster.visual.resource_residency.screen_px.v1"
-const VISUAL_ACTIVATION_DISTANCE_PX := 1600.0
-const VISUAL_RELEASE_DISTANCE_PX := 2000.0
+## Viewport-space guard margins. They include the largest reviewed monster
+## footprint plus more than half a second of camera travel, while avoiding the
+## old 1600/2000 world-radius lease around every off-screen spawn.
+const VISUAL_ACTIVATION_DISTANCE_PX := 320.0
+const VISUAL_RELEASE_DISTANCE_PX := 640.0
 const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 const MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC := 5.0 / 32.0
 const DEATH_ANIMATION_FPS := 12.0
@@ -83,6 +86,7 @@ var _action_duration := 0.0
 var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
 var _resource_residency_timer := 0.0
+var _residency_wakeup_timer: Timer
 var _streaming_resource_key := ""
 var _streaming_world_generation := -1
 var _last_ground_contact_position := Vector2.INF
@@ -125,6 +129,12 @@ func _ready() -> void:
 	_fixed_health_bar_y = position.y + sprite.position.y
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
+	_residency_wakeup_timer = Timer.new()
+	_residency_wakeup_timer.name = "ResidencyWakeupTimer"
+	_residency_wakeup_timer.wait_time = RESOURCE_RESIDENCY_CHECK_SECONDS
+	_residency_wakeup_timer.one_shot = false
+	_residency_wakeup_timer.timeout.connect(_on_residency_wakeup_timeout)
+	add_child(_residency_wakeup_timer)
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
 	# Registration is the R state only. Declare an actual W demand from
 	# _activate_resources after this subscription exists, so a near visual
@@ -132,6 +142,7 @@ func _ready() -> void:
 	_register_with_streaming_coordinator()
 	if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
 		_activate_resources()
+	_sync_process_tier()
 
 
 func _exit_tree() -> void:
@@ -265,6 +276,17 @@ func ground_shadow_layout_snapshot() -> Dictionary:
 func _process(delta: float) -> void:
 	if not is_instance_valid(actor):
 		return
+	_advance_action_timers(delta)
+	_resource_residency_timer -= delta
+	if _resource_residency_timer <= 0.0:
+		_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
+		_update_resource_residency()
+	if active_resources.is_empty() or not visible:
+		return
+	_update_animation_frame(delta)
+
+
+func _advance_action_timers(delta: float) -> void:
 	var death_was_playing := _death_remaining > 0.0
 	_attack_remaining = maxf(0.0, _attack_remaining - delta)
 	_hit_remaining = maxf(0.0, _hit_remaining - delta)
@@ -273,16 +295,17 @@ func _process(delta: float) -> void:
 		# Keep the final frame continuously. The owner timer later extends this as
 		# the corpse hold; there must never be a one-frame idle flash in between.
 		_death_pose_held = true
-	_resource_residency_timer -= delta
-	if _resource_residency_timer <= 0.0:
-		_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
-		if active_resources.is_empty():
-			if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
-				_activate_resources()
-		elif not _inside_visual_distance_px(VISUAL_RELEASE_DISTANCE_PX):
-			_release_resources()
-	if active_resources.is_empty() or not visible:
-		return
+
+
+func _update_resource_residency() -> void:
+	if active_resources.is_empty():
+		if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
+			_activate_resources()
+	elif not _inside_visual_distance_px(VISUAL_RELEASE_DISTANCE_PX):
+		_release_resources()
+
+
+func _update_animation_frame(delta: float) -> void:
 	if _death_remaining > 0.0 or _death_pose_held:
 		current_state = "death"
 	elif _attack_remaining > 0.0:
@@ -317,15 +340,43 @@ func _process(delta: float) -> void:
 
 
 func _inside_visual_distance_px(distance_px: float) -> bool:
-	if not is_instance_valid(actor) or not is_instance_valid(actor.primary_target):
+	if not is_instance_valid(actor):
 		return true
-	# This is intentionally a rendering-residency threshold, not combat/AI
-	# geometry. Screen PX is therefore correct here and is explicitly named so
-	# it cannot be mistaken for a gameplay range.
-	return (
-		actor.global_position.distance_squared_to(actor.primary_target.global_position)
-		<= distance_px * distance_px
+	var viewport := get_viewport()
+	if viewport == null or not actor.is_inside_tree():
+		return true
+	# Rendering residency follows the actual camera/canvas rectangle. A grown
+	# viewport retains every on-screen or soon-to-enter monster irrespective of
+	# device aspect ratio; it is deliberately unrelated to combat Ground GU.
+	var actor_viewport_position := actor.get_global_transform_with_canvas().origin
+	return viewport.get_visible_rect().grow(maxf(0.0, distance_px)).has_point(
+		actor_viewport_position
 	)
+
+
+func _on_residency_wakeup_timeout() -> void:
+	# Inactive authored visuals no longer execute GDScript every render frame.
+	# This low-frequency timer preserves action expiry and retries async residency.
+	_advance_action_timers(RESOURCE_RESIDENCY_CHECK_SECONDS)
+	_update_resource_residency()
+
+
+func _sync_process_tier() -> void:
+	var needs_frame_process := (
+		not _has_authored_client_art
+		or not active_resources.is_empty()
+	)
+	set_process(needs_frame_process)
+	if _residency_wakeup_timer == null:
+		return
+	if needs_frame_process:
+		_residency_wakeup_timer.stop()
+	else:
+		var stagger := (
+			RESOURCE_RESIDENCY_CHECK_SECONDS
+			* (1.0 + float(posmod(get_instance_id(), 7)) / 7.0)
+		)
+		_residency_wakeup_timer.start(stagger)
 
 
 func _activate_resources() -> void:
@@ -367,6 +418,7 @@ func _activate_resources() -> void:
 	# left every asynchronously activated monster permanently at that fallback.
 	actor.refresh_name_label_position()
 	_refresh_actor_ground_indicator()
+	_sync_process_tier()
 
 
 func _release_resources() -> void:
@@ -390,6 +442,7 @@ func _release_resources() -> void:
 	ground_contact_profile = {}
 	position = _runtime_visual_origin()
 	_refresh_actor_ground_indicator()
+	_sync_process_tier()
 
 
 func _resources_for(monster_data: Dictionary) -> Dictionary:

@@ -134,6 +134,8 @@ static var _target_grid_node_ids: Dictionary = {}
 static var _target_grid_group_scan_count := 0
 static var _target_grid_candidate_count := 0
 static var _background_ai_evaluation_count := 0
+static var _background_fast_path_skip_count := 0
+static var _foreground_ai_tick_count := 0
 static var _physics_move_count := 0
 static var _environment_guard_check_count := 0
 
@@ -257,6 +259,7 @@ var _target_stable_remaining_seconds := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
 var _background_ai_timer := 0.0
+var _background_accumulated_delta := 0.0
 var _boss_skill_cooldown := 3.0
 var _boss_warning := 0.0
 var _boss_phase_two := false
@@ -296,6 +299,10 @@ var _summon_cooldown := 0.0
 var _summon_warning := 0.0
 var _environment_guard_timer := 0.0
 var _last_environment_safe_position_px := Vector2.INF
+## The combat index already owns a live-position provider for narrow phase.
+## Re-submit only actual position changes; static/background actors otherwise
+## performed an identical projection + dictionary update on every physics tick.
+var _last_spatial_index_screen_position_px := Vector2.INF
 var actual_ground_motion_gu := Vector2.ZERO
 
 var _movement_cadence
@@ -748,13 +755,15 @@ func _begin_autonomous_step_without_cadence(
 	var pursuit_ground := desired_direction_ground_gu.normalized()
 	var steering_ground := pursuit_ground
 	if use_crowd_steering:
-		var separation_ground := _crowd_separation()
+		# The timer is advanced once from _physics_process. Step creation only
+		# consumes the cached result, so several actors/step retries cannot bypass
+		# the established 10 Hz per-actor steering ceiling.
+		var separation_ground := _crowd_separation_for_motion(0.0)
 		steering_ground = pursuit_ground + separation_ground * 0.72
 		if steering_ground.dot(pursuit_ground) < 0.12:
 			steering_ground += pursuit_ground * (
 				0.12 - steering_ground.dot(pursuit_ground)
 			)
-		_crowd_steering_evaluation_count += 1
 	var neighbor := MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(
 		steering_ground
 	)
@@ -1407,6 +1416,25 @@ func _physics_process(delta: float) -> void:
 	# actual_ground_motion_gu describes this physics tick only. A monster that
 	# does not move this tick must never retain the previous tick's motion.
 	actual_ground_motion_gu = Vector2.ZERO
+	var physics_delta := delta
+	var use_background_ai := _can_use_background_ai()
+	if use_background_ai:
+		_background_ai_timer -= delta
+		_background_accumulated_delta += delta
+		if _background_ai_timer > 0.0:
+			_background_fast_path_skip_count += 1
+			return
+		# Preserve elapsed timer/status/regen time while avoiding 60 identical
+		# script passes per second for a distant, inactive actor.
+		delta = _background_accumulated_delta
+		_background_accumulated_delta = 0.0
+	else:
+		# Damage, a live close target, status, or combat work exits the background
+		# tier on the next physics callback. Catch its deferred elapsed time up in
+		# that same callback before normal foreground decisions resume.
+		delta += _background_accumulated_delta
+		_background_accumulated_delta = 0.0
+	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - delta)
 	_spatial_index_update()
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_update_status_effects(delta)
@@ -1418,20 +1446,15 @@ func _physics_process(delta: float) -> void:
 	_update_natural_regen(delta)
 	_update_entrapment_state(delta)
 	_update_pending_attack(delta)
-	if _can_use_background_ai():
-		_background_ai_timer -= delta
-		if _background_ai_timer <= 0.0:
-			_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
-			_background_ai_evaluation_count += 1
-			_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
-			if not is_instance_valid(target):
-				_return_to_spawn(delta)
-			elif _movement_step_active:
-				_advance_autonomous_step(delta)
-		elif _movement_step_active:
-			_advance_autonomous_step(delta)
+	if use_background_ai:
+		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
+		_background_ai_evaluation_count += 1
+		_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
+		if not is_instance_valid(target):
+			_return_to_spawn(physics_delta)
 		return
 	_background_ai_timer = 0.0
+	_foreground_ai_tick_count += 1
 	_retarget(delta)
 	if _update_area_attack(delta):
 		if _movement_step_active:
@@ -1463,7 +1486,7 @@ func _physics_process(delta: float) -> void:
 		return
 	_control_anchor_ground_gu = Vector2.INF
 	if not is_instance_valid(target):
-		_return_to_spawn(delta)
+		_return_to_spawn(physics_delta)
 		return
 	if target is PlayerCharacter and _point_inside_safe_zone(target.global_position):
 		_pending_attack_time = -1.0
@@ -1486,7 +1509,7 @@ func _physics_process(delta: float) -> void:
 				&"safe_zone_return"
 			)
 			if started:
-				_advance_autonomous_step(delta)
+				_advance_autonomous_step(physics_delta)
 			else:
 				velocity = Vector2.ZERO
 				actual_ground_motion_gu = Vector2.ZERO
@@ -1517,7 +1540,7 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 			return
 	if _movement_step_active:
-		_advance_autonomous_step(delta)
+		_advance_autonomous_step(physics_delta)
 		queue_redraw()
 		return
 	var contact_distance_gu := _contact_distance_gu_to_target(target)
@@ -1585,7 +1608,7 @@ func _physics_process(delta: float) -> void:
 			&"overlap_retreat"
 		)
 		if started:
-			_advance_autonomous_step(delta)
+			_advance_autonomous_step(physics_delta)
 		else:
 			velocity = Vector2.ZERO
 			actual_ground_motion_gu = Vector2.ZERO
@@ -1624,7 +1647,7 @@ func _physics_process(delta: float) -> void:
 			target
 		)
 		if started:
-			_advance_autonomous_step(delta)
+			_advance_autonomous_step(physics_delta)
 		else:
 			velocity = Vector2.ZERO
 			actual_ground_motion_gu = Vector2.ZERO
@@ -1646,10 +1669,13 @@ func _spatial_index_update() -> void:
 		or spatial_actor_runtime_id <= 0
 	):
 		return
+	if _last_spatial_index_screen_position_px == global_position:
+		return
 	combat_spatial_index.update_actor(
 		spatial_actor_runtime_id,
 		_screen_position_px_to_ground_position_gu(global_position)
 	)
+	_last_spatial_index_screen_position_px = global_position
 
 
 func spatial_index_position() -> Vector2:
@@ -2772,6 +2798,7 @@ func configure_spatial_index(
 ) -> void:
 	combat_spatial_index = index
 	spatial_actor_runtime_id = actor_runtime_id
+	_last_spatial_index_screen_position_px = Vector2.INF
 
 
 func _exit_tree() -> void:
@@ -3693,6 +3720,8 @@ static func reset_performance_diagnostics() -> void:
 	_target_grid_group_scan_count = 0
 	_target_grid_candidate_count = 0
 	_background_ai_evaluation_count = 0
+	_background_fast_path_skip_count = 0
+	_foreground_ai_tick_count = 0
 	_physics_move_count = 0
 	_environment_guard_check_count = 0
 
@@ -3708,6 +3737,8 @@ static func performance_diagnostics() -> Dictionary:
 		"retarget_target_group_scans": _target_grid_group_scan_count,
 		"retarget_target_candidates": _target_grid_candidate_count,
 		"background_ai_evaluations": _background_ai_evaluation_count,
+		"background_fast_path_skips": _background_fast_path_skip_count,
+		"foreground_ai_ticks": _foreground_ai_tick_count,
 		"physics_moves": _physics_move_count,
 		"environment_guard_checks": _environment_guard_check_count,
 	}
@@ -3716,11 +3747,21 @@ static func performance_diagnostics() -> Dictionary:
 func _can_use_background_ai() -> bool:
 	if is_boss or not is_instance_valid(primary_target):
 		return false
+	# Movement/collision must continue at physics rate. Only truly idle actors
+	# may use the low-frequency background maintenance path.
+	if _movement_step_active:
+		return false
 	if target != primary_target and is_instance_valid(target):
 		return false
 	if not _threat_table.is_empty() or poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0:
 		return false
-	if _pending_attack_time >= 0.0 or _area_attack_warning > 0.0 or _summon_warning > 0.0:
+	if (
+		_pending_attack_time >= 0.0
+		or _area_attack_warning > 0.0
+		or _area_magic_warning > 0.0
+		or _summon_warning > 0.0
+		or entrapment_active()
+	):
 		return false
 	if not is_instance_valid(target):
 		return true
