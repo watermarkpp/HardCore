@@ -99,8 +99,13 @@ func _run() -> void:
 	background_enemy.target = null
 	background_enemy._retarget_timer = 0.0
 	assert(background_enemy._can_use_background_ai(), "near untargeted ordinary actor did not enter background AI tier")
-	background_enemy._background_ai_timer = 0.0
 	background_enemy._physics_process(1.0 / 60.0)
+	assert(background_enemy._background_deep_sleeping, "background actor did not enter timer sleep")
+	background_enemy._background_last_wakeup_msec = (
+		Time.get_ticks_msec()
+		- int(EnemyActor.BACKGROUND_AI_INTERVAL_SECONDS * 1000.0)
+	)
+	background_enemy._on_background_wakeup_timeout()
 	assert(background_enemy.target == player, "background decision tick did not acquire the nearby player")
 	assert(not background_enemy._can_use_background_ai(), "near acquired player target did not resume foreground AI")
 	background_enemy.target = enemies[2]

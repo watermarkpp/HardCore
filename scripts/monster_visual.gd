@@ -87,6 +87,7 @@ var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
 var _resource_residency_timer := 0.0
 var _residency_wakeup_timer: Timer
+var _inactive_action_last_tick_msec := 0
 var _streaming_resource_key := ""
 var _streaming_world_generation := -1
 var _last_ground_contact_position := Vector2.INF
@@ -129,12 +130,15 @@ func _ready() -> void:
 	_fixed_health_bar_y = position.y + sprite.position.y
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
-	_residency_wakeup_timer = Timer.new()
-	_residency_wakeup_timer.name = "ResidencyWakeupTimer"
-	_residency_wakeup_timer.wait_time = RESOURCE_RESIDENCY_CHECK_SECONDS
-	_residency_wakeup_timer.one_shot = false
-	_residency_wakeup_timer.timeout.connect(_on_residency_wakeup_timeout)
-	add_child(_residency_wakeup_timer)
+	# Production residency is scheduled centrally by the streaming coordinator.
+	# Isolated visual fixtures retain one local fallback timer.
+	if _streaming_coordinator == null or not is_instance_valid(_streaming_coordinator):
+		_residency_wakeup_timer = Timer.new()
+		_residency_wakeup_timer.name = "ResidencyWakeupTimer"
+		_residency_wakeup_timer.wait_time = RESOURCE_RESIDENCY_CHECK_SECONDS
+		_residency_wakeup_timer.one_shot = true
+		_residency_wakeup_timer.timeout.connect(_on_residency_wakeup_timeout)
+		add_child(_residency_wakeup_timer)
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
 	# Registration is the R state only. Declare an actual W demand from
 	# _activate_resources after this subscription exists, so a near visual
@@ -277,10 +281,11 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(actor):
 		return
 	_advance_action_timers(delta)
-	_resource_residency_timer -= delta
-	if _resource_residency_timer <= 0.0:
-		_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
-		_update_resource_residency()
+	if _streaming_coordinator == null or not is_instance_valid(_streaming_coordinator):
+		_resource_residency_timer -= delta
+		if _resource_residency_timer <= 0.0:
+			_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
+			_update_resource_residency()
 	if active_resources.is_empty() or not visible:
 		return
 	_update_animation_frame(delta)
@@ -355,9 +360,28 @@ func _inside_visual_distance_px(distance_px: float) -> bool:
 
 
 func _on_residency_wakeup_timeout() -> void:
-	# Inactive authored visuals no longer execute GDScript every render frame.
-	# This low-frequency timer preserves action expiry and retries async residency.
-	_advance_action_timers(RESOURCE_RESIDENCY_CHECK_SECONDS)
+	streaming_residency_poll(Time.get_ticks_msec())
+	if (
+		_residency_wakeup_timer != null
+		and not is_processing()
+		and _residency_wakeup_timer.is_stopped()
+	):
+		_residency_wakeup_timer.start(RESOURCE_RESIDENCY_CHECK_SECONDS)
+
+
+func streaming_residency_poll(now_msec: int) -> void:
+	if not is_instance_valid(actor):
+		return
+	if not is_processing():
+		var elapsed_seconds := RESOURCE_RESIDENCY_CHECK_SECONDS
+		if _inactive_action_last_tick_msec > 0:
+			elapsed_seconds = clampf(
+				float(maxi(1, now_msec - _inactive_action_last_tick_msec)) / 1000.0,
+				1.0 / 120.0,
+				2.0,
+			)
+		_advance_action_timers(elapsed_seconds)
+		_inactive_action_last_tick_msec = now_msec
 	_update_resource_residency()
 
 
@@ -367,16 +391,24 @@ func _sync_process_tier() -> void:
 		or not active_resources.is_empty()
 	)
 	set_process(needs_frame_process)
-	if _residency_wakeup_timer == null:
-		return
 	if needs_frame_process:
-		_residency_wakeup_timer.stop()
+		_inactive_action_last_tick_msec = 0
+		if _residency_wakeup_timer != null:
+			_residency_wakeup_timer.stop()
 	else:
-		var stagger := (
-			RESOURCE_RESIDENCY_CHECK_SECONDS
-			* (1.0 + float(posmod(get_instance_id(), 7)) / 7.0)
-		)
-		_residency_wakeup_timer.start(stagger)
+		_inactive_action_last_tick_msec = Time.get_ticks_msec()
+		if _residency_wakeup_timer != null:
+			var phase_slot := posmod(
+				int(actor.get_meta("spawn_serial", get_instance_id())) * 7
+				+ actor.monster_id * 11,
+				15,
+			)
+			var stagger := (
+				RESOURCE_RESIDENCY_CHECK_SECONDS
+				* float(phase_slot + 1)
+				/ 15.0
+			)
+			_residency_wakeup_timer.start(stagger)
 
 
 func _activate_resources() -> void:

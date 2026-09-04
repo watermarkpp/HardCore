@@ -20,6 +20,10 @@ const MAX_CONCURRENT_PROFILE_LOADS := 2
 ## loader/status path per-frame, but visit a fixed number of weak subscriptions
 ## so a dense map cannot add one full visual walk to every rendered frame.
 const MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL := 8
+## Camera-residency checks are spread over process frames instead of one Timer
+## per monster. Twelve visits keep an 82-actor map near the existing 120 ms
+## visual boundary at 60 FPS while making per-frame work strictly bounded.
+const MAX_VISUAL_RESIDENCY_VISITS_PER_POLL := 12
 const ACTIONS := ["idle", "walk", "attack", "hit", "death"]
 const JOB_LANE_MAP_PREFETCH := "map_prefetch"
 const JOB_LANE_RUNTIME_DEMAND := "runtime_demand"
@@ -50,6 +54,7 @@ var _request_sequence := 0
 var _visual_subscriptions: Dictionary = {}
 var _visual_cleanup_order: Array[int] = []
 var _visual_cleanup_cursor := 0
+var _visual_residency_cursor := 0
 var _sync_load_count := 0
 var _sync_load_paths: Array[String] = []
 var _request_order: Array[String] = []
@@ -83,6 +88,8 @@ var stale_completion_count := 0
 var invalid_subscriber_cleanup_count := 0
 var subscriber_cleanup_visit_count := 0
 var subscriber_cleanup_max_visits_per_poll := 0
+var visual_residency_visit_count := 0
+var visual_residency_max_visits_per_poll := 0
 var max_waiting_visuals_per_resource := 0
 var pin_rejection_count := 0
 var immediate_eviction_count := 0
@@ -219,7 +226,7 @@ func poll_once(frame_id: int) -> Dictionary:
 	_last_streaming_poll_frame = frame_id
 	coordinator_poll_count += 1
 	heavy_poll_execution_count += 1
-	var helper := MonsterVisualScript.new()
+	var helper: MonsterVisual
 	for cache_key: String in _threaded_profile_requests.keys():
 		var job: Dictionary = _threaded_profile_requests[cache_key]
 		if str(job.get("state", "")) != "loading":
@@ -248,6 +255,8 @@ func poll_once(frame_id: int) -> Dictionary:
 			continue
 		if not ready:
 			continue
+		if helper == null:
+			helper = MonsterVisualScript.new()
 		var mapping: Dictionary = job.get("mapping", {})
 		var result := helper._client_profile_shell(mapping)
 		var expected_sizes: Dictionary = job.get("expected_sizes", {})
@@ -280,7 +289,9 @@ func poll_once(frame_id: int) -> Dictionary:
 		_threaded_profile_requests[cache_key] = job
 	_commit_loaded_profiles()
 	_pump_threaded_profile_queue()
-	helper.free()
+	if helper != null:
+		helper.free()
+	_poll_visual_residency()
 	_cleanup_invalid_subscribers()
 	return map_prefetch_status()
 
@@ -1106,6 +1117,37 @@ func _cleanup_invalid_subscribers() -> void:
 	)
 
 
+func _poll_visual_residency() -> void:
+	var visits_this_poll := 0
+	var visit_budget := mini(
+		MAX_VISUAL_RESIDENCY_VISITS_PER_POLL,
+		_visual_cleanup_order.size(),
+	)
+	while visits_this_poll < visit_budget and not _visual_cleanup_order.is_empty():
+		if _visual_residency_cursor >= _visual_cleanup_order.size():
+			_visual_residency_cursor = 0
+		var visual_id := _visual_cleanup_order[_visual_residency_cursor]
+		_visual_residency_cursor += 1
+		visits_this_poll += 1
+		visual_residency_visit_count += 1
+		var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+		if sub.is_empty():
+			continue
+		var visual_ref: WeakRef = sub.get("visual_ref")
+		var visual: Object = visual_ref.get_ref() if visual_ref != null else null
+		if (
+			visual == null
+			or not is_instance_valid(visual)
+			or not visual.has_method("streaming_residency_poll")
+		):
+			continue
+		visual.call("streaming_residency_poll", Time.get_ticks_msec())
+	visual_residency_max_visits_per_poll = maxi(
+		visual_residency_max_visits_per_poll,
+		visits_this_poll,
+	)
+
+
 func _forget_visual_cleanup_id(visual_id: int) -> void:
 	var order_index := _visual_cleanup_order.find(visual_id)
 	if order_index < 0:
@@ -1113,8 +1155,12 @@ func _forget_visual_cleanup_id(visual_id: int) -> void:
 	_visual_cleanup_order.remove_at(order_index)
 	if order_index < _visual_cleanup_cursor:
 		_visual_cleanup_cursor -= 1
+	if order_index < _visual_residency_cursor:
+		_visual_residency_cursor -= 1
 	if _visual_cleanup_order.is_empty() or _visual_cleanup_cursor >= _visual_cleanup_order.size():
 		_visual_cleanup_cursor = 0
+	if _visual_cleanup_order.is_empty() or _visual_residency_cursor >= _visual_cleanup_order.size():
+		_visual_residency_cursor = 0
 
 
 func record_sync_load(path: String) -> void:
@@ -1178,6 +1224,7 @@ func reset_for_tests() -> void:
 	_visual_subscriptions.clear()
 	_visual_cleanup_order.clear()
 	_visual_cleanup_cursor = 0
+	_visual_residency_cursor = 0
 	_resource_waiters.clear()
 	_resource_leases.clear()
 	_visual_waiting_resources.clear()
@@ -1203,6 +1250,8 @@ func reset_for_tests() -> void:
 	invalid_subscriber_cleanup_count = 0
 	subscriber_cleanup_visit_count = 0
 	subscriber_cleanup_max_visits_per_poll = 0
+	visual_residency_visit_count = 0
+	visual_residency_max_visits_per_poll = 0
 	max_waiting_visuals_per_resource = 0
 	pin_rejection_count = 0
 	immediate_eviction_count = 0
@@ -1257,6 +1306,8 @@ func monster_streaming_diagnostics() -> Dictionary:
 		"invalid_subscriber_cleanup_count": invalid_subscriber_cleanup_count,
 		"subscriber_cleanup_visit_count": subscriber_cleanup_visit_count,
 		"subscriber_cleanup_max_visits_per_poll": subscriber_cleanup_max_visits_per_poll,
+		"visual_residency_visit_count": visual_residency_visit_count,
+		"visual_residency_max_visits_per_poll": visual_residency_max_visits_per_poll,
 		"sync_load_count": _sync_load_count,
 		"sync_load_paths": _sync_load_paths.duplicate(),
 		"max_waiting_visuals_per_resource": max_waiting_visuals_per_resource,
