@@ -344,6 +344,11 @@ var _drop_nodes_max_per_frame_override := -1
 var _test_force_loot_materialization_failure_count := 0
 var _pending_loot_collections: Array = []
 var _loot_collection_flush_queued := false
+## Legacy loot candidates are rejected unless a focused test explicitly opts
+## into the old fixture shape. Formal pickups always carry map/generation
+## metadata from LootPickupRuntimeManager registration.
+var _loot_legacy_reference_fallback_test_enabled := false
+var _loot_collection_origin_rejection_count := 0
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
 var _world_bootstrap_in_progress := false
 var _player_input_enabled := false
@@ -1764,13 +1769,21 @@ func _drain_loot_collection_queue_for_logout() -> Dictionary:
 	# A close request may arrive after a pickup emitted its signal but before
 	# the deferred transaction flush.  Force the manager's final nearby query
 	# and consume the deferred collection synchronously before logout save.
+	var manager_result: Dictionary = {}
 	if _loot_pickup_runtime_manager != null:
-		var manager_result := _loot_pickup_runtime_manager.flush_for_logout()
+		manager_result = _loot_pickup_runtime_manager.flush_for_logout()
 		if not bool(manager_result.get("success", false)):
 			return {
 				"success": false,
 				"save_performed": false,
 				"reason": "safe_logout_loot_manager_failed",
+				"loot_queue": manager_result,
+			}
+		if int(manager_result.get("logout_retry_blocked_count", 0)) > 0:
+			return {
+				"success": false,
+				"save_performed": false,
+				"reason": "safe_logout_loot_retry_pending",
 				"loot_queue": manager_result,
 			}
 	if _pending_loot_collections.is_empty():
@@ -11080,6 +11093,13 @@ func set_loot_materialization_failure_count_for_test(count: int) -> bool:
 	return true
 
 
+func set_loot_legacy_reference_fallback_for_test(enabled: bool) -> bool:
+	if enabled and not PlayerState.test_mode:
+		return false
+	_loot_legacy_reference_fallback_test_enabled = enabled
+	return true
+
+
 func death_work_queue_snapshot() -> Dictionary:
 	return {
 		"pending": _pending_enemy_deaths.duplicate(true),
@@ -11622,8 +11642,15 @@ func _spawn_loot(item_name: String, position: Vector2) -> bool:
 	loot.collection_rejected.connect(_on_loot_collection_rejected)
 	var spawn_started_usec := RuntimeDiagnostics.timing_start()
 	add_child(loot)
-	if _loot_pickup_runtime_manager != null:
-		_loot_pickup_runtime_manager.register_pickup(loot)
+	var registered := (
+		_loot_pickup_runtime_manager != null
+		and _loot_pickup_runtime_manager.register_pickup(loot)
+	)
+	if not registered:
+		# A formal loot node without a map-scoped registration is not collectible;
+		# remove it synchronously so materialization cannot leave dead ground loot.
+		loot.free()
+		return false
 	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
 	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
 	return is_instance_valid(loot)
@@ -11641,8 +11668,13 @@ func _spawn_gold_loot(amount: int, position: Vector2) -> bool:
 	loot.collection_rejected.connect(_on_loot_collection_rejected)
 	var spawn_started_usec := RuntimeDiagnostics.timing_start()
 	add_child(loot)
-	if _loot_pickup_runtime_manager != null:
-		_loot_pickup_runtime_manager.register_pickup(loot)
+	var registered := (
+		_loot_pickup_runtime_manager != null
+		and _loot_pickup_runtime_manager.register_pickup(loot)
+	)
+	if not registered:
+		loot.free()
+		return false
 	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
 	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
 	return is_instance_valid(loot)
@@ -11656,23 +11688,52 @@ func _on_loot_collected(item_name: String, pickup: LootPickup) -> void:
 	_queue_loot_collection({"item_name": item_name, "pickup": pickup})
 
 
-func _queue_loot_collection(candidate: Dictionary) -> void:
+func _queue_loot_collection(candidate: Dictionary) -> bool:
 	var queued_candidate := candidate.duplicate(true)
 	var pickup: Variant = queued_candidate.get("pickup")
-	if pickup is LootPickup and is_instance_valid(pickup):
-		queued_candidate["origin_map_id"] = int(
-			(pickup as LootPickup).get_meta("loot_runtime_map_id", current_map_id)
+	if not pickup is LootPickup or not is_instance_valid(pickup):
+		_loot_collection_origin_rejection_count += 1
+		RuntimeDiagnostics.increment_performance_counter(
+			&"loot_collection_origin_rejections"
 		)
-		queued_candidate["origin_generation"] = int(
-			(pickup as LootPickup).get_meta("loot_zone_generation", _zone_generation)
+		return false
+	var pickup_object := pickup as LootPickup
+	var raw_map_id: Variant = null
+	var raw_generation: Variant = null
+	if pickup_object.has_meta("loot_runtime_map_id"):
+		raw_map_id = pickup_object.get_meta("loot_runtime_map_id")
+	if pickup_object.has_meta("loot_zone_generation"):
+		raw_generation = pickup_object.get_meta("loot_zone_generation")
+	var formal_origin_valid := (
+			raw_map_id is int
+			and raw_generation is int
+			and int(raw_map_id) >= 0
+			and int(raw_generation) >= 0
 		)
-	else:
-		queued_candidate["origin_map_id"] = current_map_id
-		queued_candidate["origin_generation"] = _zone_generation
+	if not formal_origin_valid:
+		if not (PlayerState.test_mode and _loot_legacy_reference_fallback_test_enabled):
+			_loot_collection_origin_rejection_count += 1
+			RuntimeDiagnostics.increment_performance_counter(
+				&"loot_collection_origin_rejections"
+			)
+			pickup_object.reject_collection("拾取来源无效，无法入账。")
+			return false
+		raw_map_id = current_map_id
+		raw_generation = _zone_generation
+	queued_candidate["origin_map_id"] = int(raw_map_id)
+	queued_candidate["origin_generation"] = int(raw_generation)
+	if int(queued_candidate.get("origin_map_id", -1)) < 0 or int(queued_candidate.get("origin_generation", -1)) < 0:
+		_loot_collection_origin_rejection_count += 1
+		RuntimeDiagnostics.increment_performance_counter(
+			&"loot_collection_origin_rejections"
+		)
+		pickup_object.reject_collection("拾取来源无效，无法入账。")
+		return false
 	_pending_loot_collections.append(queued_candidate)
 	if not _loot_collection_flush_queued:
 		_loot_collection_flush_queued = true
 		call_deferred("_flush_loot_collections")
+	return true
 
 
 func _flush_loot_collections() -> Dictionary:

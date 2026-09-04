@@ -4,6 +4,7 @@ const LootPickupScript := preload("res://scripts/loot_pickup.gd")
 const LootManagerScript := preload("res://scripts/loot_pickup_runtime_manager.gd")
 const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd")
 const DeviceLabRuntimeScript := preload("res://scripts/device_lab_runtime.gd")
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 
 var _manager: Node
 var _player: PlayerCharacter
@@ -82,6 +83,23 @@ func _run() -> void:
 	for index in range(118):
 		_new_pickup(Vector2(10.0 + float(index % 20) * 4.0, 10.0 + float(index / 20) * 4.0))
 	assert(_manager.diagnostics_snapshot().registered_pickup_count == 200)
+	# Registration itself performs the same exact-range check as a movement
+	# event.  A rejected in-range candidate must still enter the previous set so
+	# one immediate move out clears its five-second retry context.
+	_player.global_position = Vector2.ZERO
+	var immediate := _new_pickup(Vector2.ZERO)
+	assert(immediate.collection_pending() == false)
+	assert(immediate.retry_cooldown_remaining() > 0.0)
+	_player.global_position = Vector2(100.0, 100.0)
+	_manager.player_position_changed(_player.global_position)
+	assert(
+		is_zero_approx(immediate.retry_cooldown_remaining()),
+		"immediate registration did not seed the leave-range retry context",
+	)
+	immediate.queue_free()
+	await get_tree().process_frame
+	assert(_manager.diagnostics_snapshot().registered_pickup_count == 200)
+	_collection_events.clear()
 
 	_player.global_position = Vector2.ZERO
 	_manager.player_position_changed(_player.global_position)
@@ -162,6 +180,9 @@ func _run() -> void:
 	var visual_count_after := int(
 		_manager.diagnostics_snapshot().manager_visual_update_count
 	)
+	var visual_snapshot: Dictionary = _manager.diagnostics_snapshot()
+	assert(int(visual_snapshot.get("visual_registry_scan_count", 0)) > 0)
+	assert(int(visual_snapshot.get("collection_full_scan_count", -1)) == 0)
 	var visible_registered_count := (
 		int(_manager.diagnostics_snapshot().registered_pickup_count)
 		- near_pickups.size()
@@ -189,16 +210,33 @@ func _run() -> void:
 	near_pickups[1].queue_free()
 	await get_tree().process_frame
 	assert(_manager.diagnostics_snapshot().registered_pickup_count == 201)
+	var before_noncurrent_clear: int = _manager.diagnostics_snapshot().registered_pickup_count
+	_manager.clear_map(999)
+	assert(
+		_manager.diagnostics_snapshot().registered_pickup_count == before_noncurrent_clear,
+		"clearing a non-current map changed the current loot registry",
+	)
 	_manager.clear_map(7)
 	assert(_manager.diagnostics_snapshot().registered_pickup_count == 0)
 	assert(_manager.diagnostics_snapshot().spatial_index.index_query_count > 0)
 
 	await _run_game_root_collection_and_logout()
+	for child: Node in get_children():
+		if is_instance_valid(child):
+			child.free()
+	_manager = null
+	_player = null
+	LootPickupScript.clear_descriptor_cache_for_test()
+	UIItemTextureCacheScript.clear_for_test()
+	for _frame in range(3):
+		await get_tree().process_frame
 
 	RuntimeDiagnosticsScript.set_device_lab_performance_enabled(false)
 	RuntimeDiagnosticsScript.refresh_performance_gate()
 	print("LOOT_PICKUP_RUNTIME_MANAGER_PASS: 200 bucketed pickups, strict radius, FIFO, retries, map clear, safe logout")
-	get_tree().quit(0)
+	var tree := get_tree()
+	call_deferred("free")
+	tree.call_deferred("quit", 0)
 
 
 func _run_game_root_collection_and_logout() -> void:
@@ -230,11 +268,6 @@ func _run_game_root_collection_and_logout() -> void:
 	PlayerState.inventory = []
 	PlayerState.recalculate_stats()
 	var loot_position := Vector2(12000.0, 12000.0)
-	player.global_position = loot_position + Vector2(50.0, 0.0)
-	manager.player_position_changed(player.global_position)
-	assert(game._spawn_loot("强效太阳水", loot_position))
-	player.global_position = loot_position
-	manager.player_position_changed(loot_position)
 	var device_snapshot := DeviceLabRuntimeScript.build_snapshot(game)
 	var loot_runtime: Dictionary = device_snapshot.get("loot_runtime", {})
 	var performance_diagnostics: Dictionary = device_snapshot.get(
@@ -252,12 +285,109 @@ func _run_game_root_collection_and_logout() -> void:
 		and performance_context.has("loot_full_scan_count"),
 		"Device Lab performance context omitted loot spatial fields",
 	)
+	# Collection candidates without formal map/generation identity are rejected;
+	# current GameRoot state is never substituted implicitly.
+	var missing_origin := LootPickupScript.new()
+	missing_origin.setup("强效太阳水", player)
+	game.add_child(missing_origin)
+	missing_origin.global_position = loot_position
+	missing_origin._collection_pending = true
+	var queue_before_missing: int = game._pending_loot_collections.size()
+	assert(
+		not game._queue_loot_collection({"item_name": "强效太阳水", "pickup": missing_origin}),
+		"missing loot origin metadata was accepted",
+	)
+	assert(game._pending_loot_collections.size() == queue_before_missing)
+	assert(not missing_origin.collection_pending())
+	missing_origin.set_meta("loot_runtime_map_id", "7")
+	missing_origin.set_meta("loot_zone_generation", 1)
+	missing_origin._collection_pending = true
+	assert(
+		not game._queue_loot_collection({"item_name": "强效太阳水", "pickup": missing_origin}),
+		"string loot map metadata was accepted",
+	)
+	missing_origin.set_meta("loot_runtime_map_id", 7)
+	missing_origin.set_meta("loot_zone_generation", -1)
+	missing_origin._collection_pending = true
+	assert(
+		not game._queue_loot_collection({"item_name": "强效太阳水", "pickup": missing_origin}),
+		"negative loot generation metadata was accepted",
+	)
+	assert(game.set_loot_legacy_reference_fallback_for_test(true))
+	missing_origin._collection_pending = true
+	assert(
+		game._queue_loot_collection({"item_name": "不存在的测试物品", "pickup": missing_origin}),
+		"explicit legacy fixture gate did not enable its test-only fallback",
+	)
+	var legacy_result: Dictionary = game._flush_loot_collections()
+	assert(
+		bool(legacy_result.get("success", false))
+		and int(legacy_result.get("success_count", -1)) == 0,
+		"test-only legacy fallback unexpectedly changed inventory",
+	)
+	assert(
+		RuntimeDiagnosticsScript.performance_counter(&"loot_collection_origin_rejections") >= 3,
+		"loot origin rejection was not observable in the diagnostics window",
+	)
+	assert(game.set_loot_legacy_reference_fallback_for_test(false))
+	missing_origin.queue_free()
+	await get_tree().process_frame
+
+	# A formally registered candidate must be cancelled when its origin becomes
+	# stale before the transaction boundary; it cannot be credited in the new map.
+	player.global_position = loot_position + Vector2(100.0, 0.0)
+	manager.player_position_changed(player.global_position)
+	assert(game._spawn_loot("强效太阳水", loot_position))
+	var stale_pickup: LootPickup = null
+	for raw_pickup: Variant in game.get_tree().get_nodes_in_group("loot_pickups"):
+		if (
+			raw_pickup is LootPickup
+			and is_instance_valid(raw_pickup)
+			and (raw_pickup as Node2D).global_position == loot_position
+		):
+			stale_pickup = raw_pickup as LootPickup
+	assert(stale_pickup != null, "stale loot fixture was not registered")
+	player.global_position = loot_position
+	manager.player_position_changed(loot_position)
+	assert(game._pending_loot_collections.size() == 1)
+	var stale_map_id := int(game.current_map_id)
+	var stale_generation := int(game._zone_generation)
+	game.current_map_id = stale_map_id + 1
+	game._zone_generation = stale_generation + 1
+	var stale_flush: Dictionary = game._flush_loot_collections()
+	assert(int(stale_flush.get("stale_count", 0)) == 1)
+	assert(PlayerState.inventory.is_empty() and PlayerState.gold == 0)
+	assert(not stale_pickup.collection_pending())
+	game.current_map_id = stale_map_id
+	game._zone_generation = stale_generation
+	stale_pickup.queue_free()
+	await get_tree().process_frame
+
+	# The formal pickup carries both origin fields and is now the only candidate
+	# used by the save-failure/retry sequence below.
+	player.global_position = loot_position + Vector2(50.0, 0.0)
+	manager.player_position_changed(player.global_position)
+	assert(game._spawn_loot("强效太阳水", loot_position))
+	player.global_position = loot_position
+	manager.player_position_changed(loot_position)
+
 	PlayerState._test_force_atomic_write_failure = true
 	var failed: Dictionary = game._prepare_safe_logout()
 	PlayerState._test_force_atomic_write_failure = false
 	assert(not bool(failed.get("success", true)), "loot save failure must reject safe logout")
 	assert(str(failed.get("reason", "")) == "safe_logout_loot_collection_failed")
 	assert(PlayerState.inventory.is_empty(), "failed loot transaction changed inventory")
+	var immediate_logout_retry: Dictionary = game._prepare_safe_logout()
+	assert(not bool(immediate_logout_retry.get("success", true)))
+	assert(str(immediate_logout_retry.get("reason", "")) == "safe_logout_loot_retry_pending")
+	manager._process(5.0)
+	var recovered: Dictionary = game._prepare_safe_logout()
+	assert(bool(recovered.get("success", false)), "loot retry did not recover after deadline")
+	assert(PlayerState.inventory.size() == 1 and PlayerState.has_item("强效太阳水", 1))
+	var recovered_inventory := PlayerState.inventory.duplicate(true)
+	var recovered_repeat: Dictionary = game._prepare_safe_logout()
+	assert(bool(recovered_repeat.get("success", false)))
+	assert(PlayerState.inventory == recovered_inventory, "recovered loot was awarded twice")
 
 	# A partial batch keeps FIFO and confirm/reject semantics: the overweight
 	# item is rejected while the later gold candidate succeeds exactly once.
@@ -276,6 +406,12 @@ func _run_game_root_collection_and_logout() -> void:
 	assert(game._spawn_gold_loot(77, loot_position))
 	player.global_position = loot_position
 	manager.player_position_changed(loot_position)
+	assert(game._pending_loot_collections.size() == 2)
+	assert(
+		not bool(game._pending_loot_collections[0].get("gold", false))
+		and bool(game._pending_loot_collections[1].get("gold", false)),
+		"loot collection candidates lost FIFO order",
+	)
 	var gold_before := PlayerState.gold
 	var success: Dictionary = game._prepare_safe_logout()
 	assert(bool(success.get("success", false)), "safe logout did not flush pending loot")
@@ -283,9 +419,43 @@ func _run_game_root_collection_and_logout() -> void:
 	assert(PlayerState.inventory == partial_inventory_before, "overweight item was incorrectly committed")
 	var gold_after := PlayerState.gold
 	var repeat: Dictionary = game._prepare_safe_logout()
-	assert(bool(repeat.get("success", false)))
+	assert(not bool(repeat.get("success", true)))
+	assert(str(repeat.get("reason", "")) == "safe_logout_loot_retry_pending")
+	player.global_position = loot_position + Vector2(100.0, 0.0)
+	manager.player_position_changed(player.global_position)
+	var repeat_after_leave: Dictionary = game._prepare_safe_logout()
+	assert(bool(repeat_after_leave.get("success", false)))
 	assert(PlayerState.gold == gold_after, "safe logout repeated a confirmed reward")
 	assert(game._pending_loot_collections.is_empty(), "safe logout left deferred loot candidates")
 
-	game.queue_free()
+	# A map without a usable projection cannot register formal loot.  Both spawn
+	# entry points must remove the just-created node instead of leaving an
+	# uncollectible pickup in the world.
+	var loot_group_count_before_rejected_spawn: int = (
+		game.get_tree().get_nodes_in_group("loot_pickups").size()
+	)
+	assert(
+		not manager.configure_map(
+			int(game.current_map_id),
+			int(game._zone_generation),
+			Callable(),
+			Callable(),
+		),
+		"invalid test projection unexpectedly configured",
+	)
+	assert(not game._spawn_loot("强效太阳水", loot_position))
+	assert(not game._spawn_gold_loot(77, loot_position))
+	assert(
+		game.get_tree().get_nodes_in_group("loot_pickups").size()
+		== loot_group_count_before_rejected_spawn,
+		"failed loot registration left a ground pickup node behind",
+	)
+
+	# CombatRuntimeService is a Node-owned helper rather than a child node;
+	# release it explicitly so this integration fixture leaves no ObjectDB node.
+	var game_combat_runtime: Node = game.get("_combat_runtime")
+	if is_instance_valid(game_combat_runtime):
+		game_combat_runtime.free()
+	game.set("_combat_runtime", null)
+	game.free()
 	await get_tree().process_frame

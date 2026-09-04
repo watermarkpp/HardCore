@@ -30,9 +30,11 @@ var _collection_elapsed := 0.0
 var _player_ground_gu := Vector2.INF
 var _player_screen_position_px := Vector2.INF
 var _registered_pickups: Dictionary = {}
+var _registered_pickup_maps: Dictionary = {}
 var _candidate_scratch: Array = []
 var _previous_candidate_ids: Array[int] = []
 var _candidate_ids: Dictionary = {}
+var _logout_blocked_pickup_ids: Array[int] = []
 
 var manager_player_event_count := 0
 var manager_registration_check_count := 0
@@ -42,6 +44,8 @@ var manager_exact_range_check_count := 0
 var manager_collection_request_count := 0
 var manager_visual_update_count := 0
 var manager_full_scan_count := 0
+var manager_visual_registry_scan_count := 0
+var manager_visual_registry_entry_count := 0
 
 
 func _ready() -> void:
@@ -76,12 +80,24 @@ func configure_map(
 	_candidate_scratch.clear()
 	_previous_candidate_ids.clear()
 	_candidate_ids.clear()
+	_logout_blocked_pickup_ids.clear()
 	return _refresh_player_ground()
 
 
 func clear_map(runtime_map_id: int) -> void:
 	if runtime_map_id != _runtime_map_id:
 		_spatial_index.clear_map(runtime_map_id)
+		var removed_ids: Array[int] = []
+		for raw_id: Variant in _registered_pickup_maps.keys():
+			if int(_registered_pickup_maps.get(raw_id, -1)) == runtime_map_id:
+				removed_ids.append(int(raw_id))
+		for pickup_id: int in removed_ids:
+			_registered_pickup_maps.erase(pickup_id)
+			_registered_pickups.erase(pickup_id)
+			_previous_candidate_ids.erase(pickup_id)
+			_candidate_ids.erase(pickup_id)
+			_logout_blocked_pickup_ids.erase(pickup_id)
+		_candidate_scratch.clear()
 		return
 	clear_all()
 
@@ -89,9 +105,11 @@ func clear_map(runtime_map_id: int) -> void:
 func clear_all() -> void:
 	_spatial_index.clear_all()
 	_registered_pickups.clear()
+	_registered_pickup_maps.clear()
 	_candidate_scratch.clear()
 	_previous_candidate_ids.clear()
 	_candidate_ids.clear()
+	_logout_blocked_pickup_ids.clear()
 	_player_ground_gu = Vector2.INF
 
 
@@ -113,6 +131,7 @@ func register_pickup(pickup: LootPickup) -> bool:
 		return false
 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_registers")
 	_registered_pickups[pickup_id] = weakref(pickup)
+	_registered_pickup_maps[pickup_id] = _runtime_map_id
 	pickup.set_collection_manager(self)
 	pickup.set_meta("loot_runtime_map_id", _runtime_map_id)
 	pickup.set_meta("loot_zone_generation", _zone_generation)
@@ -128,8 +147,15 @@ func register_pickup(pickup: LootPickup) -> bool:
 	# A drop generated under the player's feet is eligible immediately; it does
 	# not wait for the next manager timer tick.
 	if is_instance_valid(_player):
-		_refresh_player_ground()
-		_check_registered_pickup(pickup, ground_position, 0.0)
+		if _refresh_player_ground():
+			var in_range := (
+				_player_ground_gu.distance_squared_to(ground_position)
+				< COLLECTION_RADIUS_GU * COLLECTION_RADIUS_GU
+			)
+			_check_registered_pickup(pickup, ground_position, 0.0)
+			if in_range and not pickup.is_queued_for_deletion():
+				if not _previous_candidate_ids.has(pickup_id):
+					_previous_candidate_ids.append(pickup_id)
 	return true
 
 
@@ -144,7 +170,9 @@ func unregister_pickup(pickup_or_id: Variant) -> void:
 	_spatial_index.unregister(pickup_id)
 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_unregisters")
 	_registered_pickups.erase(pickup_id)
+	_registered_pickup_maps.erase(pickup_id)
 	_previous_candidate_ids.erase(pickup_id)
+	_logout_blocked_pickup_ids.erase(pickup_id)
 
 
 func update_pickup_position(pickup: LootPickup) -> bool:
@@ -180,7 +208,9 @@ func flush_for_logout() -> Dictionary:
 	return {
 		"success": true,
 		"reason": "",
-		"pending_candidates": 0,
+		"pending_candidates": _pending_logout_candidate_count(),
+		"logout_retry_blocked_count": _logout_blocked_pickup_ids.size(),
+		"logout_retry_blocked_pickup_ids": _logout_blocked_pickup_ids.duplicate(),
 		"registered_pickup_count": _registered_pickups.size(),
 	}
 
@@ -200,7 +230,15 @@ func diagnostics_snapshot() -> Dictionary:
 		"manager_exact_range_check_count": manager_exact_range_check_count,
 		"manager_collection_request_count": manager_collection_request_count,
 		"manager_visual_update_count": manager_visual_update_count,
+		# `manager_full_scan_count` is deliberately collection-only.  The
+		# presentation path may inspect the registered WeakRef registry at 30 Hz;
+		# expose that separately instead of claiming the whole manager is scan-free.
 		"manager_full_scan_count": manager_full_scan_count,
+		"collection_full_scan_count": manager_full_scan_count,
+		"visual_registry_scan_count": manager_visual_registry_scan_count,
+		"visual_registry_entry_count": manager_visual_registry_entry_count,
+		"logout_retry_blocked_count": _logout_blocked_pickup_ids.size(),
+		"logout_retry_blocked_pickup_ids": _logout_blocked_pickup_ids.duplicate(),
 		"spatial_index": index_snapshot,
 	}
 
@@ -237,6 +275,7 @@ func _run_collection_pass(delta_seconds: float) -> void:
 	if not _player_ground_gu.is_finite():
 		return
 	_candidate_scratch.clear()
+	_logout_blocked_pickup_ids.clear()
 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_queries")
 	RuntimeDiagnosticsScript.increment_performance_counter(
 		&"loot_collection_spatial_queries"
@@ -267,6 +306,12 @@ func _run_collection_pass(delta_seconds: float) -> void:
 			_spatial_index.ground_position_for(pickup_id),
 			delta_seconds,
 		)
+		if (
+			not pickup.is_queued_for_deletion()
+			and not pickup.collection_pending()
+			and pickup.retry_cooldown_remaining() > 0.0
+		):
+			_logout_blocked_pickup_ids.append(pickup_id)
 	for pickup_id: int in _previous_candidate_ids:
 		if _candidate_ids.has(pickup_id):
 			continue
@@ -312,6 +357,15 @@ func _update_visuals(delta_seconds: float) -> void:
 	# Visual motion is intentionally manager-owned and low-frequency.  Invalid
 	# weak refs are cleaned by the index query; no collection work is performed
 	# here and no LootPickup has an individual process callback.
+	manager_visual_registry_scan_count += 1
+	manager_visual_registry_entry_count += _registered_pickups.size()
+	RuntimeDiagnosticsScript.increment_performance_counter(
+		&"loot_manager_visual_registry_scans"
+	)
+	RuntimeDiagnosticsScript.increment_performance_counter(
+		&"loot_manager_visual_registry_entries",
+		_registered_pickups.size(),
+	)
 	for raw_ref: Variant in _registered_pickups.values():
 		if not raw_ref is WeakRef:
 			continue
@@ -348,6 +402,23 @@ func _screen_position_to_ground(position_px: Vector2) -> Vector2:
 
 
 func _on_pickup_tree_exiting(pickup_id: int) -> void:
+	if not _registered_pickups.has(pickup_id):
+		return
 	_spatial_index.unregister(pickup_id)
+	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_unregisters")
 	_registered_pickups.erase(pickup_id)
+	_registered_pickup_maps.erase(pickup_id)
 	_previous_candidate_ids.erase(pickup_id)
+	_logout_blocked_pickup_ids.erase(pickup_id)
+
+
+func _pending_logout_candidate_count() -> int:
+	var count := 0
+	for raw_ref: Variant in _registered_pickups.values():
+		if not raw_ref is WeakRef:
+			continue
+		var pickup: Variant = (raw_ref as WeakRef).get_ref()
+		if pickup is LootPickup and is_instance_valid(pickup):
+			if not (pickup as LootPickup).is_queued_for_deletion() and (pickup as LootPickup).collection_pending():
+				count += 1
+	return count
