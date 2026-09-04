@@ -105,6 +105,7 @@ var _draw_focus_source := Vector2i(-99999, -99999)
 var _collision_focus_source := Vector2i(-99999, -99999)
 var _source_collision_nodes: Array[Node] = []
 var _source_collision_shape_count := 0
+var _environment_collision_revision := 0
 var _collision_rebuild_pending := false
 var _pending_collision_focus := Vector2i.ZERO
 var _source_mask_image: Image
@@ -301,6 +302,14 @@ func environment_theme_id() -> String:
 
 func environment_collision_count() -> int:
 	return _bich_collision_shapes.size() + _tomb_collision_shapes.size()
+
+
+## Monotonic revision for the formal environment collision authority. This is
+## deliberately independent from bootstrap/generation tokens: a focus-window
+## rebuild, map clear, or completed staged build must invalidate attack LOS
+## results even when the surrounding bootstrap generation is unchanged.
+func environment_collision_revision() -> int:
+	return _environment_collision_revision
 
 
 func source_collision_shape_count() -> int:
@@ -634,6 +643,7 @@ func _rebuild_environment() -> void:
 
 
 func clear_environment() -> void:
+	_environment_collision_revision += 1
 	_ground_tile_cache.clear()
 	_full_ground_ready = false
 	_gothic_camp_layout.clear()
@@ -753,6 +763,7 @@ func _finish_map_build() -> void:
 	_build_static_authored_wall_bridge(
 		_editor_runtime_bridge_commands, _editor_runtime_bridge_size
 	)
+	_environment_collision_revision += 1
 	_staged_build_complete = true
 	_staged_build_map_id = _active_map_id()
 	queue_redraw()
@@ -2605,6 +2616,7 @@ func _clear_source_collision_nodes() -> void:
 
 
 func _rebuild_source_collision_chunk(profile: Dictionary, focus_source: Vector2i) -> void:
+	_environment_collision_revision += 1
 	_clear_source_collision_nodes()
 	if _source_mask_image == null:
 		return
@@ -2706,6 +2718,7 @@ void fragment() {
 
 
 func _rebuild_full_source_collision(profile: Dictionary) -> void:
+	_environment_collision_revision += 1
 	_clear_source_collision_nodes()
 	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
 	var body := StaticBody2D.new()

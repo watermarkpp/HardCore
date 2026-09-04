@@ -218,6 +218,7 @@ var target: Node2D:
 		var changed := target != value
 		target = value
 		if changed:
+			_clear_attack_los_cache()
 			_reset_terrain_navigation_state()
 			_target_stable_remaining_seconds = (
 				TARGET_SWITCH_MIN_STABLE_SECONDS
@@ -342,6 +343,16 @@ var _summon_cooldown := 0.0
 var _summon_warning := 0.0
 var _environment_guard_timer := 0.0
 var _last_environment_safe_position_px := Vector2.INF
+var _attack_los_cache: Dictionary = {
+	"target_instance_id": 0,
+	"runtime_map_id": -1,
+	"source_world_px": Vector2.INF,
+	"target_world_px": Vector2.INF,
+	"environment_provider_instance_id": 0,
+	"environment_collision_revision": -1,
+	"result": false,
+	"valid": false,
+}
 ## The combat index already owns a live-position provider for narrow phase.
 ## Re-submit only actual position changes; static/background actors otherwise
 ## performed an identical projection + dictionary update on every physics tick.
@@ -2143,10 +2154,61 @@ func _attack_world_path_is_clear_for_target(hit_target: Node2D) -> bool:
 		target_ground_gu,
 		global_position,
 		hit_target.global_position,
+		true,
+		hit_target.get_instance_id(),
+		false,
 	)
 
 
 func _world_attack_path_is_clear(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	source_world_px: Vector2 = Vector2.INF,
+	target_world_px: Vector2 = Vector2.INF,
+	allow_cache := true,
+	target_instance_id := 0,
+	record_request := true,
+) -> bool:
+	if record_request:
+		_record_performance_counter(&"attack_los_requests")
+	var cache_context := {}
+	var cacheable_endpoints := (
+		source_world_px.is_finite()
+		and target_world_px.is_finite()
+	)
+	if allow_cache and target_instance_id > 0 and cacheable_endpoints:
+		cache_context = _attack_los_cache_context()
+		if cache_context.is_empty():
+			_clear_attack_los_cache()
+		elif _attack_los_cache_matches(
+			cache_context,
+			target_instance_id,
+			source_world_px,
+			target_world_px,
+		):
+			_record_performance_counter(&"attack_los_cache_hits")
+			return bool(_attack_los_cache.get("result", false))
+	var result := _world_attack_path_is_clear_uncached(
+		source_ground_gu,
+		target_ground_gu,
+		source_world_px,
+		target_world_px,
+	)
+	if allow_cache and target_instance_id > 0 and cacheable_endpoints and not cache_context.is_empty():
+		_attack_los_cache = {
+			"target_instance_id": target_instance_id,
+			"runtime_map_id": runtime_map_id,
+			"source_world_px": source_world_px,
+			"target_world_px": target_world_px,
+			"environment_provider_instance_id": int(cache_context.get("provider_instance_id", 0)),
+			"environment_collision_revision": int(cache_context.get("revision", -1)),
+			"result": result,
+			"valid": true,
+		}
+	return result
+
+
+func _world_attack_path_is_clear_uncached(
 	source_ground_gu: Vector2,
 	target_ground_gu: Vector2,
 	source_world_px: Vector2 = Vector2.INF,
@@ -2214,6 +2276,58 @@ func _finish_attack_los_diagnostic(started_usec: int, result: bool) -> bool:
 	return result
 
 
+func _clear_attack_los_cache() -> void:
+	if not bool(_attack_los_cache.get("valid", false)):
+		return
+	_attack_los_cache = {
+		"target_instance_id": 0,
+		"runtime_map_id": -1,
+		"source_world_px": Vector2.INF,
+		"target_world_px": Vector2.INF,
+		"environment_provider_instance_id": 0,
+		"environment_collision_revision": -1,
+		"result": false,
+		"valid": false,
+	}
+
+
+func _attack_los_cache_context() -> Dictionary:
+	if (
+		not is_instance_valid(environment_blocker)
+		or not environment_blocker.has_method("environment_collision_revision")
+	):
+		return {}
+	var raw_revision: Variant = environment_blocker.call(
+		"environment_collision_revision"
+	)
+	if not raw_revision is int or int(raw_revision) < 0:
+		return {}
+	return {
+		"provider_instance_id": environment_blocker.get_instance_id(),
+		"revision": int(raw_revision),
+	}
+
+
+func _attack_los_cache_matches(
+	cache_context: Dictionary,
+	target_instance_id: int,
+	source_world_px: Vector2,
+	target_world_px: Vector2,
+) -> bool:
+	if not bool(_attack_los_cache.get("valid", false)):
+		return false
+	return (
+		int(_attack_los_cache.get("target_instance_id", 0)) == target_instance_id
+		and int(_attack_los_cache.get("runtime_map_id", -1)) == runtime_map_id
+		and _attack_los_cache.get("source_world_px", Vector2.INF) == source_world_px
+		and _attack_los_cache.get("target_world_px", Vector2.INF) == target_world_px
+		and int(_attack_los_cache.get("environment_provider_instance_id", 0))
+		== int(cache_context.get("provider_instance_id", 0))
+		and int(_attack_los_cache.get("environment_collision_revision", -1))
+		== int(cache_context.get("revision", -1))
+	)
+
+
 func _world_direct_space_state() -> PhysicsDirectSpaceState2D:
 	var world := get_world_2d()
 	if world == null:
@@ -2256,6 +2370,9 @@ func _world_attack_path_is_clear_for_release(
 		target_ground_gu,
 		source_world_px,
 		target_world_px,
+		false,
+		0,
+		false,
 	)
 
 
@@ -2385,7 +2502,12 @@ func _update_pending_attack(delta: float) -> void:
 		return
 	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
-	_deal_melee_hit(hit_target, damage, DELAYED_HIT_TOLERANCE_GU)
+	_deal_melee_hit(
+		hit_target,
+		damage,
+		DELAYED_HIT_TOLERANCE_GU,
+		true,
+	)
 
 
 func _uses_physical_projectile_delivery() -> bool:
@@ -2418,6 +2540,7 @@ func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
 		source_ground_gu,
 		target_ground_gu,
 		hit_target.global_position,
+		hit_target.get_instance_id(),
 	):
 		return false
 	var release_id := _next_spatial_release_id("physical_projectile")
@@ -2481,6 +2604,7 @@ func _physical_projectile_path_is_clear(
 	source_ground_gu: Vector2,
 	target_ground_gu: Vector2,
 	target_world_px: Vector2 = Vector2.INF,
+	target_instance_id := 0,
 ) -> bool:
 	if str(attack_delivery_rule.get("obstaclePolicy", "")) != "environment_can_fly_line":
 		return false
@@ -2489,6 +2613,8 @@ func _physical_projectile_path_is_clear(
 		target_ground_gu,
 		global_position,
 		target_world_px,
+		true,
+		target_instance_id,
 	)
 
 
@@ -2576,6 +2702,8 @@ func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
 		target_ground_gu,
 		global_position,
 		hit_target.global_position,
+		true,
+		hit_target.get_instance_id(),
 	):
 		return false
 	var release_id := _next_spatial_release_id("target_magic")
@@ -2718,6 +2846,8 @@ func _deal_special_magic_melee_hit(
 			target_ground_gu,
 			global_position,
 			hit_target.global_position,
+			true,
+			hit_target.get_instance_id(),
 		)
 	):
 		return
@@ -2749,6 +2879,7 @@ func _deal_melee_hit(
 	hit_target: Node2D,
 	dealt_damage: int,
 	center_tolerance_gu := 0.0,
+	force_los_recheck := false,
 ) -> void:
 	if not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
@@ -2775,6 +2906,8 @@ func _deal_melee_hit(
 		target_ground_gu,
 		global_position,
 		hit_target.global_position,
+		not force_los_recheck,
+		hit_target.get_instance_id(),
 	):
 		return
 	var snapshot: Dictionary
@@ -2927,6 +3060,7 @@ func configure_runtime_map_projection(
 	ground_gu_to_screen_position_px: Callable,
 	screen_position_px_to_ground_gu: Callable = Callable()
 ) -> void:
+	_clear_attack_los_cache()
 	runtime_map_id = int(map_id)
 	runtime_ground_gu_to_screen_position_px = (
 		ground_gu_to_screen_position_px
@@ -2978,6 +3112,7 @@ func configure_spatial_index(
 
 
 func _exit_tree() -> void:
+	_clear_attack_los_cache()
 	_cancel_autonomous_step(true)
 	clear_entrapment("exit_tree")
 	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
