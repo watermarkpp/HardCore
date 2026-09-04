@@ -69,6 +69,9 @@ const CasterSpellGeometryScript := preload("res://scripts/skills/caster_spell_ge
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const SkillFootprintQueryPlanScript := preload(
+	"res://scripts/skills/skill_footprint_query_plan.gd"
+)
 const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
@@ -310,6 +313,599 @@ func _clear_aoe_query_scratch() -> void:
 	_aoe_distance_scratch.clear()
 	_aoe_id_scratch.clear()
 	_aoe_cell_stamp = 0
+
+
+## R3X-2: the broadphase is the only production candidate source for player
+## hostile target resolution.  Group enumeration remains available solely for
+## explicit reference/test callers so parity fixtures can exercise the old
+## authority without creating a gameplay fallback.
+func _aoe_reference_fallback_allowed() -> bool:
+	return reference_audit_mode or PlayerState.test_mode
+
+
+func _aoe_reference_enemy_nodes_into(output: Array[EnemyActor]) -> bool:
+	output.clear()
+	if not _aoe_reference_fallback_allowed():
+		return false
+	RuntimeDiagnostics.increment_performance_counter(
+		&"aoe_full_enemy_group_scans"
+	)
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if (
+			value is EnemyActor
+			and is_instance_valid(value)
+			and not (value as EnemyActor).is_queued_for_deletion()
+			and not bool((value as EnemyActor)._dying)
+			and not bool((value as EnemyActor)._death_pending)
+			and (value as EnemyActor).current_hp > 0
+		):
+			output.append(value as EnemyActor)
+	RuntimeDiagnostics.increment_performance_counter(
+		&"aoe_spatial_candidates",
+		output.size(),
+	)
+	return true
+
+
+func _aoe_build_query_plan(
+	skill_id: String,
+	release_id: String,
+	snapshot: Dictionary,
+	validation_context: Dictionary,
+	options: Dictionary,
+	release_cache: Dictionary,
+) -> Dictionary:
+	if snapshot.is_empty() or skill_id.is_empty() or release_id.is_empty():
+		return {}
+	var was_cached := release_cache.has(release_id)
+	var strict_count_before := SkillFootprintQueryPlanScript.strict_validation_count
+	var plan := SkillFootprintQueryPlanScript.build_once(
+		release_cache,
+		release_id,
+		skill_id,
+		current_map_id,
+		snapshot,
+		validation_context,
+		options,
+	)
+	if not was_cached:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_query_plan_builds"
+		)
+		if SkillFootprintQueryPlanScript.strict_validation_count > strict_count_before:
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_snapshot_validation_calls"
+			)
+	return plan
+
+
+func _aoe_plan_snapshot(plan: Dictionary) -> Dictionary:
+	var raw_snapshot: Variant = plan.get("validated_snapshot_reference", {})
+	return raw_snapshot as Dictionary if raw_snapshot is Dictionary else {}
+
+
+func _aoe_plan_is_ready(plan: Dictionary) -> bool:
+	if (
+		plan.is_empty()
+		or not bool(plan.get("valid", false))
+		or _combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+		or current_map_id < 0
+		or int(plan.get("runtime_map_id", -1)) != current_map_id
+	):
+		return false
+	var snapshot := _aoe_plan_snapshot(plan)
+	return str(snapshot.get("coordinate_space", "")) == str(
+		SkillFootprintSnapshotScript.COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU
+	)
+
+
+func _aoe_record_query_rejection(reason: String) -> void:
+	projection_rejection_reason = reason
+
+
+func _aoe_query_enemy_candidates_aabb(
+	plan: Dictionary,
+	bounds_ground_gu: Rect2,
+	allow_reference_fallback := true,
+) -> bool:
+	_aoe_candidate_scratch.clear()
+	if _aoe_plan_is_ready(plan):
+		_combat_spatial_index.query_enemy_nodes_aabb_into(
+			current_map_id,
+			bounds_ground_gu,
+			_aoe_candidate_scratch,
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_queries"
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_candidates",
+			_aoe_candidate_scratch.size(),
+		)
+		return true
+	if allow_reference_fallback and _aoe_reference_fallback_allowed():
+		return _aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+	_aoe_record_query_rejection(
+		"aoe_spatial_index_unavailable_or_runtime_map_mismatch"
+	)
+	return false
+
+
+func _aoe_query_enemy_candidates_segment(
+	plan: Dictionary,
+	start_ground_gu: Vector2,
+	end_ground_gu: Vector2,
+	expansion_gu: float,
+	allow_reference_fallback := true,
+) -> bool:
+	_aoe_candidate_scratch.clear()
+	if _aoe_plan_is_ready(plan):
+		_combat_spatial_index.query_enemy_nodes_segment_into(
+			current_map_id,
+			start_ground_gu,
+			end_ground_gu,
+			expansion_gu,
+			_aoe_candidate_scratch,
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_queries"
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_candidates",
+			_aoe_candidate_scratch.size(),
+		)
+		return true
+	if allow_reference_fallback and _aoe_reference_fallback_allowed():
+		return _aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+	_aoe_record_query_rejection(
+		"aoe_spatial_index_unavailable_or_runtime_map_mismatch"
+	)
+	return false
+
+
+func _aoe_validated_snapshot_intersects(
+	plan: Dictionary,
+	enemy: EnemyActor,
+) -> bool:
+	if not _aoe_plan_is_ready(plan) or not is_instance_valid(enemy):
+		return false
+	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+	if not target_ground_gu.is_finite():
+		return false
+	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+		_aoe_plan_snapshot(plan),
+		target_ground_gu,
+		enemy.combat_radius_gu,
+	)
+
+
+func _aoe_insert_by_instance_id(
+	targets: Array[EnemyActor],
+	ids: Array[int],
+	enemy: EnemyActor,
+) -> void:
+	var enemy_id := enemy.get_instance_id()
+	var insert_at := targets.size()
+	for index: int in range(ids.size()):
+		if enemy_id < ids[index]:
+			insert_at = index
+			break
+	ids.insert(insert_at, enemy_id)
+	targets.insert(insert_at, enemy)
+
+
+func _aoe_insert_by_distance(
+	targets: Array[EnemyActor],
+	distances: Array[float],
+	ids: Array[int],
+	enemy: EnemyActor,
+	distance_along_line_gu: float,
+) -> void:
+	var enemy_id := enemy.get_instance_id()
+	var insert_at := targets.size()
+	for index: int in range(targets.size()):
+		if (
+			distance_along_line_gu < distances[index]
+			or (
+				is_equal_approx(distance_along_line_gu, distances[index])
+				and enemy_id < ids[index]
+			)
+		):
+			insert_at = index
+			break
+	distances.insert(insert_at, distance_along_line_gu)
+	ids.insert(insert_at, enemy_id)
+	targets.insert(insert_at, enemy)
+
+
+func _aoe_geometry_cells_aabb(cells: Array[Vector2i]) -> Rect2:
+	if cells.is_empty():
+		return Rect2()
+	var minimum := Vector2(cells[0]) - Vector2.ONE * 0.5
+	var maximum := Vector2(cells[0]) + Vector2.ONE * 0.5
+	for cell: Vector2i in cells:
+		var center := Vector2(cell)
+		minimum = minimum.min(center - Vector2.ONE * 0.5)
+		maximum = maximum.max(center + Vector2.ONE * 0.5)
+	return Rect2(minimum, maximum - minimum)
+
+
+func _aoe_legacy_damage_query_plan(
+	skill_id: String,
+	origin_ground_gu: Vector2,
+	direction_ground_gu: Vector2,
+	radius_gu: float,
+	release_cache: Dictionary,
+) -> Dictionary:
+	var resolved_skill_id := skill_id if not skill_id.is_empty() else "legacy_damage"
+	var snapshot := SkillFootprintSnapshotScript.create_circle(
+		resolved_skill_id,
+		"legacy_damage",
+		origin_ground_gu,
+		maxf(0.0, radius_gu),
+		32,
+		_canonical_snapshot_absolute_context(origin_ground_gu),
+	)
+	var options := {
+		"maximum_targets": -1,
+		"query_kind": SkillFootprintQueryPlanScript.QUERY_KIND_AABB,
+		"ordering_policy": SkillFootprintQueryPlanScript.ORDERING_STABLE_COMBAT_INSTANCE,
+		"line_origin_ground_gu": origin_ground_gu,
+		"line_direction_ground_gu": direction_ground_gu,
+	}
+	return _aoe_build_query_plan(
+		resolved_skill_id,
+		"legacy_damage",
+		snapshot,
+		_canonical_snapshot_validation_context(origin_ground_gu),
+		options,
+		release_cache,
+	)
+
+
+func _aoe_apply_legacy_damage_candidates(
+	candidates: Array[EnemyActor],
+	origin_screen_px: Vector2,
+	origin_ground_gu: Vector2,
+	direction_ground_gu: Vector2,
+	damage: int,
+	radial: bool,
+	attack_range_gu: float,
+	physical_accuracy: bool,
+	source_skill_id: String,
+) -> Dictionary:
+	var hit_any := false
+	var geometry_matches := 0
+	for enemy: EnemyActor in candidates:
+		if (
+			not is_instance_valid(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+		):
+			continue
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_exact_intersection_tests"
+		)
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(
+			enemy.global_position
+		)
+		var offset_ground_gu := target_ground_gu - origin_ground_gu
+		var in_arc := (
+			offset_ground_gu.length_squared()
+			<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
+			or offset_ground_gu.normalized().dot(direction_ground_gu) > -0.05
+		)
+		if not (
+			_ground_circle_intersects_enemy_footprint_gu(
+				origin_screen_px,
+				attack_range_gu,
+				enemy,
+			)
+			and (radial or in_arc)
+		):
+			continue
+		geometry_matches += 1
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_selected_targets"
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_damage_target_count"
+		)
+		if physical_accuracy and not PlayerState.test_mode:
+			var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
+			if not WarriorCombatMath.roll_hit(accuracy, enemy.agility, _rng):
+				continue
+		var resolved_damage := damage
+		if CombatResolutionRulesScript.anti_magic_eligible(source_skill_id):
+			var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
+				enemy,
+				source_skill_id,
+				damage,
+				player,
+				_rng,
+				Callable(self, "_resolve_magic_defense"),
+			)
+			resolved_damage = int(resolution.get("final_damage", 0))
+			if resolved_damage > 0:
+				hit_any = true
+			continue
+		if resolved_damage <= 0:
+			continue
+		hit_any = _combat_runtime.apply_enemy_physical_damage(
+			enemy,
+			resolved_damage,
+			player,
+		) or hit_any
+	return {
+		"hit_any": hit_any,
+		"geometry_matches": geometry_matches,
+	}
+
+
+func _aoe_melee_query_plan(
+	mode: String,
+	origin_ground_gu: Vector2,
+	direction: Vector2,
+	release_geometry: Dictionary,
+	thrust_damage_axis_plan: Dictionary,
+	melee_release_snapshot: Dictionary,
+	target_aligned_plan: Dictionary,
+	release_cache: Dictionary,
+) -> Dictionary:
+	var snapshot := melee_release_snapshot
+	if snapshot.is_empty():
+		var raw_snapshot: Variant = release_geometry.get(
+			"skill_footprint_snapshot", {}
+		)
+		if raw_snapshot is Dictionary:
+			snapshot = raw_snapshot as Dictionary
+	if snapshot.is_empty() and not target_aligned_plan.is_empty():
+		var raw_target_snapshot: Variant = target_aligned_plan.get(
+			"skill_footprint_snapshot", {}
+		)
+		if raw_target_snapshot is Dictionary:
+			snapshot = raw_target_snapshot as Dictionary
+	if snapshot.is_empty():
+		var raw_axis_snapshot: Variant = thrust_damage_axis_plan.get(
+			"skill_footprint_snapshot", {}
+		)
+		if raw_axis_snapshot is Dictionary:
+			snapshot = raw_axis_snapshot as Dictionary
+	var skill_id: String = {
+		WarriorMeleeGeometryScript.SKILL_THRUST: "warrior.thrusting",
+		WarriorMeleeGeometryScript.SKILL_HALF_MOON: "warrior.half_moon",
+		WarriorMeleeGeometryScript.SKILL_FIRE: "warrior.fire_sword",
+	}.get(mode, "warrior.normal_attack")
+	var release_id := str(release_geometry.get("release_id", ""))
+	if release_id.is_empty() and not snapshot.is_empty():
+		release_id = str(snapshot.get("release_id", ""))
+	if release_id.is_empty():
+		release_id = "melee:preflight:%s" % mode
+	if snapshot.is_empty():
+		var direction_index := _melee_direction_index(direction, release_geometry)
+		snapshot = WarriorMeleeGeometryScript.attack_release_footprint_snapshot_ground_gu(
+			skill_id,
+			release_id,
+			origin_ground_gu,
+			direction_index,
+			mode,
+			0.0,
+			_canonical_snapshot_absolute_context(origin_ground_gu),
+		)
+	var options := {
+		"maximum_targets": -1,
+		"query_kind": SkillFootprintQueryPlanScript.QUERY_KIND_AABB,
+		"ordering_policy": SkillFootprintQueryPlanScript.ORDERING_STABLE_COMBAT_INSTANCE,
+	}
+	var validation_context: Dictionary = release_geometry.get(
+		"snapshot_validation_context",
+		_canonical_snapshot_validation_context(origin_ground_gu),
+	)
+	if validation_context.is_empty():
+		validation_context = _canonical_snapshot_validation_context(origin_ground_gu)
+	return _aoe_build_query_plan(
+		skill_id,
+		release_id,
+		snapshot,
+		validation_context,
+		options,
+		release_cache,
+	)
+
+
+func _aoe_collect_primary_melee_candidates(
+	candidates: Array[EnemyActor],
+	result: Array[EnemyActor],
+	origin_ground_gu: Vector2,
+	direction_index: int,
+	mode: String,
+	thrust_damage_axis_plan: Dictionary,
+	melee_release_snapshot: Dictionary,
+	target_aligned_plan: Dictionary,
+	query_plan: Dictionary,
+) -> void:
+	for enemy: EnemyActor in candidates:
+		if not _is_primary_melee_candidate(
+			enemy,
+			origin_ground_gu,
+			direction_index,
+			mode,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			target_aligned_plan,
+			query_plan,
+		):
+			continue
+		result.append(enemy)
+
+
+func _aoe_target_aligned_melee_sector(
+	target_plan: Dictionary,
+	target_ground_gu: Vector2,
+	target_radius_gu: float,
+	mode: String,
+) -> int:
+	if not bool(target_plan.get("target_axis_eligible", false)):
+		return -1
+	var raw_snapshot: Variant = target_plan.get("skill_footprint_snapshot", {})
+	if not raw_snapshot is Dictionary:
+		return -1
+	var snapshot := raw_snapshot as Dictionary
+	if not SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+		snapshot,
+		target_ground_gu,
+		target_radius_gu,
+	):
+		return -1
+	var origin_ground_gu: Vector2 = target_plan.get(
+		"origin_ground_gu", Vector2.ZERO
+	)
+	var axis_ground_gu: Vector2 = target_plan.get(
+		"continuous_axis_ground_gu", Vector2.ZERO
+	)
+	if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
+		return WarriorMeleeGeometryScript.thrust_footprint_slot_for_direction_ground_gu(
+			origin_ground_gu,
+			target_ground_gu,
+			target_radius_gu,
+			axis_ground_gu,
+		)
+	if mode != WarriorMeleeGeometryScript.SKILL_HALF_MOON:
+		return 0
+	var effective_reach_gu := WarriorMeleeGeometryScript.reach_gu(
+		WarriorMeleeGeometryScript.SKILL_HALF_MOON,
+		float(target_plan.get("range_bonus_gu", 0.0)),
+	)
+	if WarriorMeleeGeometryScript.footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		target_radius_gu,
+		axis_ground_gu,
+		effective_reach_gu,
+	):
+		return 0
+	if WarriorMeleeGeometryScript.footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		target_radius_gu,
+		axis_ground_gu.rotated(-PI / 4.0),
+		effective_reach_gu,
+	):
+		return 7
+	if WarriorMeleeGeometryScript.footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		target_radius_gu,
+		axis_ground_gu.rotated(PI / 4.0),
+		effective_reach_gu,
+	):
+		return 1
+	if WarriorMeleeGeometryScript.footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		target_radius_gu,
+		axis_ground_gu.rotated(PI / 2.0),
+		effective_reach_gu,
+	):
+		return 2
+	return -1
+
+
+func _aoe_spell_snapshot(
+	skill_release_snapshot: Dictionary,
+	continuous_line_strip_ground_gu: Dictionary,
+) -> Dictionary:
+	if not skill_release_snapshot.is_empty():
+		return skill_release_snapshot
+	var raw_snapshot: Variant = continuous_line_strip_ground_gu.get(
+		"skill_footprint_snapshot", {}
+	)
+	return raw_snapshot as Dictionary if raw_snapshot is Dictionary else {}
+
+
+func _aoe_spell_query_plan(
+	stable_skill_id: String,
+	raw_geometry_cells: Variant,
+	effect: Dictionary,
+	continuous_line_strip_ground_gu: Dictionary,
+	skill_release_snapshot: Dictionary,
+	origin_ground_gu: Vector2,
+	release_cache: Dictionary,
+) -> Dictionary:
+	var snapshot := _aoe_spell_snapshot(
+		skill_release_snapshot,
+		continuous_line_strip_ground_gu,
+	)
+	if snapshot.is_empty():
+		return {}
+	var resolved_skill_id := stable_skill_id
+	if resolved_skill_id.is_empty():
+		resolved_skill_id = str(snapshot.get("skill_id", ""))
+	if resolved_skill_id.is_empty():
+		resolved_skill_id = "canonical_aoe"
+	var release_id := str(snapshot.get("release_id", ""))
+	if release_id.is_empty():
+		release_id = str(continuous_line_strip_ground_gu.get("release_id", ""))
+	if release_id.is_empty():
+		return {}
+	var maximum_targets := int(effect.get("maximum_targets", -1))
+	var is_continuous_line := (
+		resolved_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
+		and _is_supported_continuous_line_contract(
+			str(continuous_line_strip_ground_gu.get("contract_id", ""))
+		)
+	)
+	if is_continuous_line and str(effect.get("target_limit_policy", "")) == "all_intersecting_effect_cells":
+		maximum_targets = -1
+	var ordering_policy := SkillFootprintQueryPlanScript.ORDERING_STABLE_COMBAT_INSTANCE
+	if str(snapshot.get("shape_type", "")) == SkillFootprintSnapshotScript.SHAPE_CELL_UNION:
+		ordering_policy = SkillFootprintQueryPlanScript.ORDERING_CELL_INSTANCE
+	elif raw_geometry_cells is Array and not (raw_geometry_cells as Array).is_empty():
+		ordering_policy = SkillFootprintQueryPlanScript.ORDERING_CELL_INSTANCE
+	var options := {
+		"maximum_targets": maximum_targets,
+		"query_kind": (
+			SkillFootprintQueryPlanScript.QUERY_KIND_SEGMENT
+			if is_continuous_line
+			else SkillFootprintQueryPlanScript.QUERY_KIND_AABB
+		),
+		"ordering_policy": (
+			SkillFootprintQueryPlanScript.ORDERING_DISTANCE_INSTANCE
+			if is_continuous_line
+			else ordering_policy
+		),
+	}
+	if raw_geometry_cells is Array and not (raw_geometry_cells as Array).is_empty():
+		var cell_sequence: Array[Vector2i] = []
+		for raw_cell: Variant in raw_geometry_cells as Array:
+			if raw_cell is Vector2i:
+				cell_sequence.append(raw_cell)
+		if not cell_sequence.is_empty():
+			options["cell_sequence"] = cell_sequence
+	if is_continuous_line:
+		var line_origin: Variant = continuous_line_strip_ground_gu.get(
+			"origin_ground_gu", snapshot.get("origin_ground_gu", origin_ground_gu)
+		)
+		var line_direction: Variant = continuous_line_strip_ground_gu.get(
+			"direction_ground_gu", snapshot.get("direction_ground_gu", Vector2.ZERO)
+		)
+		if line_origin is Vector2:
+			options["line_origin_ground_gu"] = line_origin
+		if line_direction is Vector2:
+			options["line_direction_ground_gu"] = line_direction
+	var snapshot_origin: Variant = snapshot.get("origin_ground_gu", origin_ground_gu)
+	var validation_origin := (
+		snapshot_origin as Vector2 if snapshot_origin is Vector2 else origin_ground_gu
+	)
+	return _aoe_build_query_plan(
+		resolved_skill_id,
+		release_id,
+		snapshot,
+		_canonical_snapshot_validation_context(validation_origin),
+		options,
+		release_cache,
+	)
 
 # --- P1-A: Gameplay Input Gate (counted runtime locks) ---
 
@@ -3012,11 +3608,29 @@ func _has_melee_hittable_target(
 	if direction.length_squared() <= 0.01:
 		return false
 	var resolved_mode := mode if not mode.is_empty() else _selected_warrior_melee_mode()
+	var release_origin_ground_gu := _canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	var melee_release_cache: Dictionary = {}
+	var melee_query_plan := _aoe_melee_query_plan(
+		resolved_mode,
+		release_origin_ground_gu,
+		direction.normalized(),
+		release_geometry,
+		{},
+		release_geometry.get("skill_footprint_snapshot", {}),
+		release_geometry.get("target_aligned_plan", {}),
+		melee_release_cache,
+	)
 	var primary_targets := _physical_primary_targets(
 		player.global_position,
 		direction.normalized(),
 		resolved_mode,
-		release_geometry
+		release_geometry,
+		{},
+		release_geometry.get("skill_footprint_snapshot", {}),
+		release_geometry.get("target_aligned_plan", {}),
+		melee_query_plan,
 	)
 	if not primary_targets.is_empty():
 		return true
@@ -3025,14 +3639,20 @@ func _has_melee_hittable_target(
 			player.global_position,
 			direction.normalized(),
 			primary_targets,
-			release_geometry
+			release_geometry,
+			{},
+		release_geometry.get("skill_footprint_snapshot", {}),
+		release_geometry.get("target_aligned_plan", {}),
+		melee_query_plan,
 		).is_empty()
 	if resolved_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		return not _half_moon_secondary_targets(
 			player.global_position,
 			direction.normalized(),
 			primary_targets,
-			release_geometry
+			release_geometry,
+		release_geometry.get("skill_footprint_snapshot", {}),
+		melee_query_plan,
 		).is_empty()
 	return false
 
@@ -4689,13 +5309,26 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			)
 		)
 		thrust_damage_axis_plan["skill_footprint_snapshot"] = melee_release_snapshot
+	var melee_release_cache: Dictionary = {}
+	var melee_query_plan := _aoe_melee_query_plan(
+		selection_mode,
+		release_geometry["origin_ground_gu"],
+		direction,
+		release_geometry,
+		thrust_damage_axis_plan,
+		melee_release_snapshot,
+		release_geometry.get("target_aligned_plan", {}),
+		melee_release_cache,
+	)
 	var primary_targets := _physical_primary_targets(
 		origin,
 		direction,
 		selection_mode,
 		release_geometry,
 		thrust_damage_axis_plan,
-		melee_release_snapshot
+		melee_release_snapshot,
+		release_geometry.get("target_aligned_plan", {}),
+		melee_query_plan,
 	)
 	var thrust_secondary_targets: Array[EnemyActor] = []
 	var half_moon_secondary_targets: Array[EnemyActor] = []
@@ -4707,7 +5340,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			primary_targets,
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			release_geometry.get("target_aligned_plan", {}),
+			melee_query_plan,
 		)
 		eligible_target_count += thrust_secondary_targets.size()
 	elif selection_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
@@ -4716,7 +5351,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			direction,
 			primary_targets,
 			release_geometry,
-			melee_release_snapshot
+			melee_release_snapshot,
+			melee_query_plan,
 		)
 		eligible_target_count += half_moon_secondary_targets.size()
 	var has_eligible_target := eligible_target_count > 0
@@ -4771,13 +5407,26 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				)
 			)
 			thrust_damage_axis_plan["skill_footprint_snapshot"] = melee_release_snapshot
+		melee_release_cache.clear()
+		melee_query_plan = _aoe_melee_query_plan(
+			effect_mode,
+			release_geometry["origin_ground_gu"],
+			direction,
+			release_geometry,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			release_geometry.get("target_aligned_plan", {}),
+			melee_release_cache,
+		)
 		primary_targets = _physical_primary_targets(
 			origin,
 			direction,
 			effect_mode,
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			release_geometry.get("target_aligned_plan", {}),
+			melee_query_plan,
 		)
 		thrust_secondary_targets.clear()
 		half_moon_secondary_targets.clear()
@@ -4789,7 +5438,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				primary_targets,
 				release_geometry,
 				thrust_damage_axis_plan,
-				melee_release_snapshot
+				melee_release_snapshot,
+				release_geometry.get("target_aligned_plan", {}),
+				melee_query_plan,
 			)
 			eligible_target_count += thrust_secondary_targets.size()
 		elif effect_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
@@ -4798,7 +5449,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				direction,
 				primary_targets,
 				release_geometry,
-				melee_release_snapshot
+				melee_release_snapshot,
+				melee_query_plan,
 			)
 			eligible_target_count += half_moon_secondary_targets.size()
 		has_eligible_target = eligible_target_count > 0
@@ -5638,14 +6290,28 @@ func _execute_canonical_melee(
 	var primary_targets: Array[EnemyActor] = resolved_primary_targets
 	var thrust_secondaries: Array[EnemyActor] = resolved_thrust_secondaries
 	var half_moon_secondaries: Array[EnemyActor] = resolved_half_moon_secondaries
+	var melee_query_plan: Dictionary = {}
 	if not targets_resolved_at_release:
+		var release_cache: Dictionary = {}
+		melee_query_plan = _aoe_melee_query_plan(
+			mode,
+			_canonical_screen_px_to_ground_gu(origin),
+			direction,
+			release_geometry,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {}),
+			release_cache,
+		)
 		primary_targets = _physical_primary_targets(
 			origin,
 			direction,
 			mode,
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {}),
+			melee_query_plan,
 		)
 		if mode == "thrust":
 			thrust_secondaries = _thrust_secondary_targets(
@@ -5655,7 +6321,8 @@ func _execute_canonical_melee(
 				release_geometry,
 				thrust_damage_axis_plan,
 				melee_release_snapshot,
-				target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
+				target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {}),
+				melee_query_plan,
 			)
 		elif mode == "half_moon":
 			half_moon_secondaries = _half_moon_secondary_targets(
@@ -5663,7 +6330,8 @@ func _execute_canonical_melee(
 				direction,
 				primary_targets,
 				release_geometry,
-				melee_release_snapshot
+				melee_release_snapshot,
+				melee_query_plan,
 			)
 	var eligible_target_count := (
 		primary_targets.size()
@@ -6201,6 +6869,7 @@ func _apply_canonical_effects_from_plan(
 	var continuous_line_strip_ground_gu: Dictionary = plan.get(
 		"continuous_line_strip_ground_gu", {}
 	)
+	var aoe_release_cache: Dictionary = {}
 	var spawned_nodes: Array[Node2D] = _spawn_canonical_cast_nodes_from_plan(
 		plan,
 		origin,
@@ -6256,7 +6925,9 @@ func _apply_canonical_effects_from_plan(
 					effective_geometry_cells,
 					effect,
 					continuous_line_strip_ground_gu,
-					skill_release_snapshot
+					skill_release_snapshot,
+					{},
+					aoe_release_cache,
 				)
 			"dedicated_heal":
 				var heal_target_id := int(
@@ -6701,18 +7372,17 @@ func _apply_canonical_spell_damage(
 	raw_geometry_cells: Variant = [],
 	effect: Dictionary = {},
 	continuous_line_strip_ground_gu: Dictionary = {},
-	skill_release_snapshot: Dictionary = {}
+	skill_release_snapshot: Dictionary = {},
+	query_plan: Dictionary = {},
+	release_cache: Dictionary = {},
 ) -> bool:
-	var context_release_id := str(skill_release_snapshot.get("release_id", ""))
+	var resolved_snapshot := _aoe_spell_snapshot(
+		skill_release_snapshot,
+		continuous_line_strip_ground_gu,
+	)
+	var context_release_id := str(resolved_snapshot.get("release_id", ""))
 	if context_release_id.is_empty():
 		context_release_id = str(continuous_line_strip_ground_gu.get("release_id", ""))
-	if context_release_id.is_empty():
-		var context_line_snapshot: Variant = continuous_line_strip_ground_gu.get(
-			"skill_footprint_snapshot",
-			{}
-		)
-		if context_line_snapshot is Dictionary:
-			context_release_id = str((context_line_snapshot as Dictionary).get("release_id", ""))
 	var context_skill_id := stable_skill_id if not stable_skill_id.is_empty() else "canonical_aoe"
 	if context_release_id.is_empty():
 		context_release_id = context_skill_id
@@ -6721,16 +7391,24 @@ func _apply_canonical_spell_damage(
 		context_skill_id,
 	)
 	RuntimeDiagnostics.increment_performance_counter(&"aoe_release_count")
-	RuntimeDiagnostics.increment_performance_counter(&"aoe_query_plan_builds")
-	RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_queries")
-	RuntimeDiagnostics.increment_performance_counter(&"aoe_snapshot_validation_calls")
-	var aoe_candidate_started_usec := RuntimeDiagnostics.timing_start()
-	if not _snapshot_strict_ok(skill_release_snapshot):
-		var raw_line_snapshot: Variant = continuous_line_strip_ground_gu.get(
-			"skill_footprint_snapshot", {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_spell_query_plan(
+			stable_skill_id,
+			raw_geometry_cells,
+			effect,
+			continuous_line_strip_ground_gu,
+			resolved_snapshot,
+			_canonical_screen_px_to_ground_gu(origin),
+			release_cache,
 		)
-		if raw_line_snapshot is Dictionary:
-			skill_release_snapshot = raw_line_snapshot as Dictionary
+	var aoe_candidate_started_usec := RuntimeDiagnostics.timing_start()
+	if not _aoe_plan_is_ready(plan) and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"aoe_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		_record_aoe_candidate_timing(aoe_candidate_started_usec)
+		return false
 	var targets: Array[EnemyActor] = []
 	var has_declared_geometry_cells := (
 		raw_geometry_cells is Array
@@ -6742,48 +7420,98 @@ func _apply_canonical_spell_damage(
 			raw_geometry_cells,
 			effect,
 			continuous_line_strip_ground_gu,
-			skill_release_snapshot
+			resolved_snapshot,
+			plan,
 		)
 	elif (
 		effect_type == "targeted_sky_strike"
 		and primary != null
-		and _skill_snapshot_intersects_enemy(skill_release_snapshot, primary)
 	):
-		targets.append(primary)
+		if _aoe_plan_is_ready(plan):
+			if _aoe_query_enemy_candidates_aabb(
+				plan,
+				plan.get("ground_aabb", Rect2()),
+				false,
+			):
+				for node: EnemyActor in _aoe_candidate_scratch:
+					RuntimeDiagnostics.increment_performance_counter(
+						&"aoe_exact_intersection_tests"
+					)
+					if node == primary and _aoe_validated_snapshot_intersects(plan, node):
+						targets.append(node)
+						break
+				if targets.is_empty() and _aoe_validated_snapshot_intersects(plan, primary):
+					# The locked target is already an authoritative identity; the
+					# broadphase only gates unbounded discovery and does not replace
+					# direct identity resolution.
+					targets.append(primary)
+		elif _aoe_reference_fallback_allowed() and _skill_snapshot_intersects_enemy(
+			resolved_snapshot,
+			primary,
+		):
+			targets.append(primary)
 	elif (
 		primary != null
 		and effect_type not in ["area_damage", "caster_centered_area_damage"]
-		and (
-			not _snapshot_strict_ok(skill_release_snapshot)
-			or _skill_snapshot_intersects_enemy(skill_release_snapshot, primary)
-		)
 	):
-		targets.append(primary)
+		if _aoe_plan_is_ready(plan):
+			if _aoe_query_enemy_candidates_aabb(
+				plan,
+				plan.get("ground_aabb", Rect2()),
+				false,
+			):
+				for node: EnemyActor in _aoe_candidate_scratch:
+					RuntimeDiagnostics.increment_performance_counter(
+						&"aoe_exact_intersection_tests"
+					)
+					if node == primary and _aoe_validated_snapshot_intersects(plan, node):
+						targets.append(node)
+						break
+				if targets.is_empty() and _aoe_validated_snapshot_intersects(plan, primary):
+					targets.append(primary)
+		elif _aoe_reference_fallback_allowed() and (
+				resolved_snapshot.is_empty()
+				or _skill_snapshot_intersects_enemy(resolved_snapshot, primary)
+			):
+			targets.append(primary)
 	else:
 		var radial: bool = effect_type in ["area_damage", "caster_centered_area_damage"]
 		var radius_gu := maxf(0.0, float(effect.get("radius_gu", 0.0)))
 		if not radial or radius_gu <= 0.0:
 			_record_aoe_candidate_timing(aoe_candidate_started_usec)
 			return false
-		RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node.is_queued_for_deletion():
-				continue
-			var enemy := node as EnemyActor
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
-			if (
-				_skill_snapshot_intersects_enemy(skill_release_snapshot, enemy)
-				or (
-					not _snapshot_strict_ok(skill_release_snapshot)
-					and _ground_circle_intersects_enemy_footprint_gu(
-						origin,
-						radius_gu,
-						enemy
-					)
+		if _aoe_plan_is_ready(plan):
+			_aoe_query_enemy_candidates_aabb(
+				plan,
+				plan.get("ground_aabb", Rect2()),
+				false,
+			)
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"aoe_exact_intersection_tests"
 				)
-			):
-				targets.append(enemy)
+				if _aoe_validated_snapshot_intersects(plan, enemy):
+					targets.append(enemy)
+		elif _aoe_reference_fallback_allowed():
+			_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"aoe_exact_intersection_tests"
+				)
+				if _ground_circle_intersects_enemy_footprint_gu(
+					origin,
+					radius_gu,
+					enemy,
+				):
+					targets.append(enemy)
+		if targets.is_empty() and _aoe_plan_is_ready(plan) and _aoe_reference_fallback_allowed():
+			_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"aoe_exact_intersection_tests"
+				)
+				if _aoe_validated_snapshot_intersects(plan, enemy):
+					targets.append(enemy)
 	_record_aoe_candidate_timing(aoe_candidate_started_usec)
 	RuntimeDiagnostics.increment_performance_counter(&"aoe_selected_targets", targets.size())
 	RuntimeDiagnostics.increment_performance_counter(&"aoe_damage_target_count", targets.size())
@@ -6802,7 +7530,7 @@ func _apply_canonical_spell_damage(
 	RuntimeDiagnostics.record_timing_usec(&"aoe_exact_phase_usec", aoe_exact_started_usec)
 	_record_skill_footprint_release_diagnostic(
 		stable_skill_id,
-		skill_release_snapshot,
+		resolved_snapshot,
 		targets.size(),
 		hit_any
 	)
@@ -7093,12 +7821,57 @@ func _canonical_spell_cell_is_terrain_blocked(cell: Vector2i) -> bool:
 	)
 
 
+func _aoe_collect_continuous_line_candidates(
+	plan: Dictionary,
+	line_strip: Dictionary,
+	candidates: Array[EnemyActor],
+	targets: Array[EnemyActor],
+	distances: Array[float],
+	ids: Array[int],
+	origin_ground_gu: Vector2,
+	direction_ground_gu: Vector2,
+) -> void:
+	for enemy: EnemyActor in candidates:
+		if (
+			not is_instance_valid(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+		):
+			continue
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_exact_intersection_tests"
+		)
+		var intersects := (
+			_aoe_validated_snapshot_intersects(plan, enemy)
+			if _aoe_plan_is_ready(plan)
+			else CasterSpellGeometryScript.target_footprint_intersects_continuous_line_ground_gu(
+				line_strip,
+				_enemy_footprint_polygon_ground_gu(enemy),
+			)
+		)
+		if not intersects:
+			continue
+		var enemy_ground_gu := _canonical_screen_px_to_ground_gu(
+			enemy.global_position
+		)
+		if not enemy_ground_gu.is_finite():
+			continue
+		_aoe_insert_by_distance(
+			targets,
+			distances,
+			ids,
+			enemy,
+			(enemy_ground_gu - origin_ground_gu).dot(direction_ground_gu),
+		)
+
+
 func _canonical_spell_geometry_targets(
 	stable_skill_id: String,
 	raw_geometry_cells: Variant,
 	effect: Dictionary,
 	continuous_line_strip_ground_gu: Dictionary = {},
-	skill_release_snapshot: Dictionary = {}
+	skill_release_snapshot: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> Array[EnemyActor]:
 	var geometry_cells: Array[Vector2i] = []
 	if raw_geometry_cells is Array:
@@ -7106,8 +7879,31 @@ func _canonical_spell_geometry_targets(
 			if raw_cell is Vector2i:
 				geometry_cells.append(raw_cell)
 	var targets: Array[EnemyActor] = []
-	RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_queries")
-	RuntimeDiagnostics.increment_performance_counter(&"aoe_snapshot_validation_calls")
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_spell_query_plan(
+			stable_skill_id,
+			geometry_cells,
+			effect,
+			continuous_line_strip_ground_gu,
+			skill_release_snapshot,
+			_canonical_screen_px_to_ground_gu(
+				player.global_position if is_instance_valid(player) else Vector2.ZERO
+			),
+			release_cache,
+		)
+		if not _aoe_spell_snapshot(
+			skill_release_snapshot,
+			continuous_line_strip_ground_gu,
+		).is_empty():
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_release_count")
+	var broadphase_ready := _aoe_plan_is_ready(plan)
+	if not broadphase_ready and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"aoe_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		return targets
 	# Hellfire is a five-tile, one-tile-wide area line. `pierces_units` controls
 	# whether units stop the visual/line traversal; it must not turn the area
 	# damage into a single-target spell. A negative limit means every hostile
@@ -7134,116 +7930,143 @@ func _canonical_spell_geometry_targets(
 		]
 	):
 		var origin_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
-			"origin_ground_gu", Vector2.ZERO
+			"origin_ground_gu", plan.get("line_origin_ground_gu", Vector2.ZERO)
 		)
 		var direction_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
-			"direction_ground_gu", Vector2.DOWN
+			"direction_ground_gu", plan.get("line_direction_ground_gu", Vector2.DOWN)
 		)
-		var candidates: Array[Dictionary] = []
-		RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if (
-				not node is EnemyActor
-				or node.is_queued_for_deletion()
-				or (node as EnemyActor).current_hp <= 0
-			):
-				continue
-			var enemy := node as EnemyActor
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
-			if (
-				_snapshot_strict_ok(skill_release_snapshot)
-				and not _skill_snapshot_intersects_enemy(
-					skill_release_snapshot, enemy
-				)
-			):
-				continue
-			if (
-				not _snapshot_strict_ok(skill_release_snapshot)
-				and not CasterSpellGeometryScript.target_footprint_intersects_continuous_line_ground_gu(
-					continuous_line_strip_ground_gu,
-					_enemy_footprint_polygon_ground_gu(enemy)
-				)
-			):
-				continue
-			var enemy_ground_gu := _canonical_screen_px_to_ground_gu(
-				enemy.global_position
+		var line_end_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
+			"strip_end_ground_gu",
+			origin_ground_gu + direction_ground_gu * float(
+				continuous_line_strip_ground_gu.get("effect_length_gu", 0.0)
+			),
+		)
+		var line_width_gu := maxf(
+			0.0,
+			float(continuous_line_strip_ground_gu.get("effect_width_gu", 0.0)) * 0.5,
+		)
+		if not _aoe_query_enemy_candidates_segment(
+			plan,
+			origin_ground_gu,
+			line_end_ground_gu,
+			line_width_gu,
+		):
+			return targets
+		var distances: Array[float] = []
+		var ids: Array[int] = []
+		_aoe_collect_continuous_line_candidates(
+			plan,
+			continuous_line_strip_ground_gu,
+			_aoe_candidate_scratch,
+			targets,
+			distances,
+			ids,
+			origin_ground_gu,
+			direction_ground_gu,
+		)
+		if targets.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+			_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+			_aoe_collect_continuous_line_candidates(
+				plan,
+				continuous_line_strip_ground_gu,
+				_aoe_candidate_scratch,
+				targets,
+				distances,
+				ids,
+				origin_ground_gu,
+				direction_ground_gu,
 			)
-			candidates.append({
-				"enemy": enemy,
-				"distance_along_line_gu": (
-					(enemy_ground_gu - origin_ground_gu).dot(
-						direction_ground_gu
-					)
-				),
-			})
-		candidates.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
-			var left_distance := float(left.get("distance_along_line_gu", INF))
-			var right_distance := float(right.get("distance_along_line_gu", INF))
-			if not is_equal_approx(left_distance, right_distance):
-				return left_distance < right_distance
-			return (
-				(left.get("enemy") as EnemyActor).get_instance_id()
-				< (right.get("enemy") as EnemyActor).get_instance_id()
-			)
-		)
-		for candidate: Dictionary in candidates:
-			targets.append(candidate.get("enemy") as EnemyActor)
-			if maximum_targets > 0 and targets.size() >= maximum_targets:
-				break
-		return targets
-	if (
-		_snapshot_strict_ok(skill_release_snapshot)
-		and str(skill_release_snapshot.get("shape_type", ""))
-		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
-	):
-		RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
-			if (
-				node is EnemyActor
-				and not node.is_queued_for_deletion()
-				and (node as EnemyActor).current_hp > 0
-				and _skill_snapshot_intersects_enemy(
-					skill_release_snapshot, node as EnemyActor
-				)
-			):
-				targets.append(node as EnemyActor)
-		targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
-			return a.get_instance_id() < b.get_instance_id()
-		)
 		if maximum_targets > 0 and targets.size() > maximum_targets:
 			targets.resize(maximum_targets)
 		return targets
-	var selected_instance_ids := {}
-	for cell: Vector2i in geometry_cells:
+	if broadphase_ready and str(plan.get("shape_type", "")) == SkillFootprintSnapshotScript.SHAPE_CELL_UNION:
+		_aoe_query_enemy_candidates_aabb(
+			plan,
+			plan.get("ground_aabb", Rect2()),
+			false,
+		)
+		var target_ids: Array[int] = []
+		for enemy: EnemyActor in _aoe_candidate_scratch:
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_exact_intersection_tests"
+			)
+			if _aoe_validated_snapshot_intersects(plan, enemy):
+				_aoe_insert_by_instance_id(targets, target_ids, enemy)
+		if targets.is_empty() and _aoe_reference_fallback_allowed():
+			_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"aoe_exact_intersection_tests"
+				)
+				if _aoe_validated_snapshot_intersects(plan, enemy):
+					_aoe_insert_by_instance_id(targets, target_ids, enemy)
+		if maximum_targets > 0 and targets.size() > maximum_targets:
+			targets.resize(maximum_targets)
+		return targets
+	var query_bounds: Rect2 = (
+		plan.get("ground_aabb", Rect2()) as Rect2
+		if broadphase_ready
+		else _aoe_geometry_cells_aabb(geometry_cells)
+	)
+	if not _aoe_query_enemy_candidates_aabb(plan, query_bounds):
+		return targets
+	var selected_instance_ids: Array[int] = []
+	var cells_to_visit: Array[Vector2i] = geometry_cells
+	if broadphase_ready:
+		var raw_cells_to_visit: Variant = plan.get(
+			"cell_sequence", geometry_cells
+		)
+		if raw_cells_to_visit is Array:
+			cells_to_visit.clear()
+			for raw_cell: Variant in raw_cells_to_visit as Array:
+				if raw_cell is Vector2i:
+					cells_to_visit.append(raw_cell)
+		if cells_to_visit.is_empty():
+			cells_to_visit = geometry_cells
+	for cell: Vector2i in cells_to_visit:
 		RuntimeDiagnostics.increment_performance_counter(&"aoe_nested_cell_enemy_scans")
-		RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
 		var cell_targets: Array[EnemyActor] = []
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node.is_queued_for_deletion():
-				continue
-			var enemy := node as EnemyActor
+		var cell_target_ids: Array[int] = []
+		for enemy: EnemyActor in _aoe_candidate_scratch:
 			if selected_instance_ids.has(enemy.get_instance_id()):
 				continue
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_exact_intersection_tests"
+			)
 			var contact := CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
 				[cell],
 				_canonical_screen_px_to_ground_gu(enemy.global_position),
 				enemy.combat_radius_gu
 			)
 			if bool(contact.get("intersects", false)):
-				cell_targets.append(enemy)
-		cell_targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
-			return a.get_instance_id() < b.get_instance_id()
-		)
+				_aoe_insert_by_instance_id(cell_targets, cell_target_ids, enemy)
 		for enemy: EnemyActor in cell_targets:
 			targets.append(enemy)
-			selected_instance_ids[enemy.get_instance_id()] = true
+			selected_instance_ids.append(enemy.get_instance_id())
 			if maximum_targets > 0 and targets.size() >= maximum_targets:
 				return targets
+	if targets.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		selected_instance_ids.clear()
+		targets.clear()
+		for cell: Vector2i in cells_to_visit:
+			var cell_targets: Array[EnemyActor] = []
+			var cell_target_ids: Array[int] = []
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				if selected_instance_ids.has(enemy.get_instance_id()):
+					continue
+				var contact := CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
+					[cell],
+					_canonical_screen_px_to_ground_gu(enemy.global_position),
+					enemy.combat_radius_gu
+				)
+				if bool(contact.get("intersects", false)):
+					_aoe_insert_by_instance_id(cell_targets, cell_target_ids, enemy)
+			for enemy: EnemyActor in cell_targets:
+				targets.append(enemy)
+				selected_instance_ids.append(enemy.get_instance_id())
+				if maximum_targets > 0 and targets.size() >= maximum_targets:
+					return targets
 	return targets
 
 
@@ -8745,7 +9568,8 @@ func _damage_enemies(
 	radial: bool,
 	attack_range_gu := 1.5,
 	physical_accuracy := false,
-	source_skill_id := ""
+	source_skill_id := "",
+	query_plan: Dictionary = {},
 ) -> bool:
 	var context_skill_id := source_skill_id if not source_skill_id.is_empty() else "legacy_damage"
 	RuntimeDiagnostics.set_performance_release_context(
@@ -8753,9 +9577,6 @@ func _damage_enemies(
 		context_skill_id,
 	)
 	RuntimeDiagnostics.increment_performance_counter(&"aoe_release_count")
-	RuntimeDiagnostics.increment_performance_counter(&"aoe_query_plan_builds")
-	RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_queries")
-	RuntimeDiagnostics.increment_performance_counter(&"aoe_full_enemy_group_scans")
 	var aoe_candidate_started_usec := RuntimeDiagnostics.timing_start()
 	var hit_any := false
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin_screen_px)
@@ -8764,51 +9585,58 @@ func _damage_enemies(
 			direction_screen_px
 		).normalized()
 	)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion():
-			continue
-		RuntimeDiagnostics.increment_performance_counter(&"aoe_spatial_candidates")
-		RuntimeDiagnostics.increment_performance_counter(&"aoe_exact_intersection_tests")
-		var target_ground_gu := _canonical_screen_px_to_ground_gu(
-			node.global_position
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_legacy_damage_query_plan(
+			context_skill_id,
+			origin_ground_gu,
+			direction_ground_gu,
+			attack_range_gu,
+			release_cache,
 		)
-		var offset_ground_gu := target_ground_gu - origin_ground_gu
-		var in_arc := (
-			offset_ground_gu.length_squared()
-			<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
-			or offset_ground_gu.normalized().dot(direction_ground_gu) > -0.05
+	if not _aoe_plan_is_ready(plan) and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"aoe_query_plan_invalid_or_spatial_index_unavailable"
 		)
-		if (
-			_ground_circle_intersects_enemy_footprint_gu(
-				origin_screen_px,
-				attack_range_gu,
-				node
-			)
-			and (radial or in_arc)
-		):
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_selected_targets")
-			RuntimeDiagnostics.increment_performance_counter(&"aoe_damage_target_count")
-			if physical_accuracy and not PlayerState.test_mode:
-				var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
-				if not WarriorCombatMath.roll_hit(accuracy, node.agility, _rng):
-					continue
-			var resolved_damage := damage
-			if CombatResolutionRulesScript.anti_magic_eligible(source_skill_id):
-				var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
-					node,
-					source_skill_id,
-					damage,
-					player,
-					_rng,
-					Callable(self, "_resolve_magic_defense")
-				)
-				resolved_damage = int(resolution.get("final_damage", 0))
-				if resolved_damage > 0:
-					hit_any = true
-				continue
-			if resolved_damage <= 0:
-				continue
-			hit_any = _combat_runtime.apply_enemy_physical_damage(node, resolved_damage, player) or hit_any
+		_record_aoe_candidate_timing(aoe_candidate_started_usec)
+		return false
+	if not _aoe_query_enemy_candidates_aabb(
+		plan,
+		plan.get("ground_aabb", _aoe_geometry_cells_aabb([])),
+	):
+		_record_aoe_candidate_timing(aoe_candidate_started_usec)
+		return false
+	var pass_result := _aoe_apply_legacy_damage_candidates(
+		_aoe_candidate_scratch,
+		origin_screen_px,
+		origin_ground_gu,
+		direction_ground_gu,
+		damage,
+		radial,
+		attack_range_gu,
+		physical_accuracy,
+		source_skill_id,
+	)
+	hit_any = bool(pass_result.get("hit_any", false))
+	if (
+		int(pass_result.get("geometry_matches", 0)) == 0
+		and _aoe_plan_is_ready(plan)
+		and _aoe_reference_fallback_allowed()
+	):
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		pass_result = _aoe_apply_legacy_damage_candidates(
+			_aoe_candidate_scratch,
+			origin_screen_px,
+			origin_ground_gu,
+			direction_ground_gu,
+			damage,
+			radial,
+			attack_range_gu,
+			physical_accuracy,
+			source_skill_id,
+		)
+		hit_any = bool(pass_result.get("hit_any", false))
 	_record_aoe_candidate_timing(aoe_candidate_started_usec)
 	return hit_any
 
@@ -8913,7 +9741,8 @@ func _physical_primary_target(
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> EnemyActor:
 	var targets := _physical_primary_targets(
 		origin,
@@ -8921,7 +9750,9 @@ func _physical_primary_target(
 		mode,
 		release_geometry,
 		thrust_damage_axis_plan,
-		melee_release_snapshot
+		melee_release_snapshot,
+		target_aligned_plan,
+		query_plan,
 	)
 	return targets[0] if not targets.is_empty() else null
 
@@ -8933,7 +9764,8 @@ func _physical_primary_targets(
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> Array[EnemyActor]:
 	# The attack lock owns facing and priority only. Actual damage rights are
 	# rebuilt from live footpoints and the selected melee geometry at release.
@@ -8942,21 +9774,57 @@ func _physical_primary_targets(
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var direction_index := _melee_direction_index(direction, release_geometry)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
-			continue
-		var enemy := node as EnemyActor
-		if not _is_primary_melee_candidate(
-			enemy,
+	var resolved_target_plan: Dictionary = target_aligned_plan
+	if resolved_target_plan.is_empty():
+		resolved_target_plan = release_geometry.get("target_aligned_plan", {})
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_melee_query_plan(
+			mode,
+			origin_ground_gu,
+			direction,
+			release_geometry,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			resolved_target_plan,
+			release_cache,
+		)
+	var broadphase_ready := _aoe_plan_is_ready(plan)
+	if not broadphase_ready and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"melee_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		return result
+	if not _aoe_query_enemy_candidates_aabb(
+		plan,
+		plan.get("ground_aabb", Rect2()),
+	):
+		return result
+	_aoe_collect_primary_melee_candidates(
+		_aoe_candidate_scratch,
+		result,
+		origin_ground_gu,
+		direction_index,
+		mode,
+		thrust_damage_axis_plan,
+		melee_release_snapshot,
+		resolved_target_plan,
+		plan,
+	)
+	if result.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		_aoe_collect_primary_melee_candidates(
+			_aoe_candidate_scratch,
+			result,
 			origin_ground_gu,
 			direction_index,
 			mode,
 			thrust_damage_axis_plan,
 			melee_release_snapshot,
-			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
-		):
-			continue
-		result.append(enemy)
+			resolved_target_plan,
+			plan,
+		)
 	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
@@ -8973,23 +9841,37 @@ func _sort_melee_targets(
 		and _is_attack_target_in_range(locked_target)
 	):
 		locked_instance_id = locked_target.get_instance_id()
-	targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
-		var a_locked := a.get_instance_id() == locked_instance_id
-		var b_locked := b.get_instance_id() == locked_instance_id
-		if a_locked != b_locked:
-			return a_locked
-		var a_distance_gu := GroundUnitSpaceScript.distance_gu(
+	var ordered: Array[EnemyActor] = []
+	var ordered_distances: Array[float] = []
+	var ordered_ids: Array[int] = []
+	for enemy: EnemyActor in targets:
+		var enemy_id := enemy.get_instance_id()
+		var enemy_distance_gu := GroundUnitSpaceScript.distance_gu(
 			origin_ground_gu,
-			_canonical_screen_px_to_ground_gu(a.global_position)
+			_canonical_screen_px_to_ground_gu(enemy.global_position),
 		)
-		var b_distance_gu := GroundUnitSpaceScript.distance_gu(
-			origin_ground_gu,
-			_canonical_screen_px_to_ground_gu(b.global_position)
-		)
-		if not is_equal_approx(a_distance_gu, b_distance_gu):
-			return a_distance_gu < b_distance_gu
-		return a.get_instance_id() < b.get_instance_id()
-	)
+		var enemy_locked := enemy_id == locked_instance_id
+		var insert_at := ordered.size()
+		for index: int in range(ordered.size()):
+			var existing_locked := ordered_ids[index] == locked_instance_id
+			if enemy_locked != existing_locked:
+				if enemy_locked:
+					insert_at = index
+				break
+			elif (
+				enemy_distance_gu < ordered_distances[index]
+				or (
+					is_equal_approx(enemy_distance_gu, ordered_distances[index])
+					and enemy_id < ordered_ids[index]
+				)
+			):
+				insert_at = index
+				break
+		ordered.insert(insert_at, enemy)
+		ordered_distances.insert(insert_at, enemy_distance_gu)
+		ordered_ids.insert(insert_at, enemy_id)
+	targets.clear()
+	targets.append_array(ordered)
 
 
 func _is_primary_melee_candidate(
@@ -8999,31 +9881,38 @@ func _is_primary_melee_candidate(
 	mode: String,
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> bool:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or enemy.current_hp <= 0:
 		return false
 	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+	var query_context: Dictionary = query_plan.get(
+		"validation_context_reference",
+		_canonical_snapshot_validation_context(origin_ground_gu),
+	)
+	var validated_plan_ready := _aoe_plan_is_ready(query_plan)
 	var target_plan: Dictionary = target_aligned_plan
 	if not target_plan.is_empty():
-		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
 		if not bool(target_plan.get("target_axis_eligible", false)):
 			return false
-		if not WarriorMeleeGeometryScript.target_aligned_release_plan_intersects_target_footprint_ground_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx):
-			return false
-		if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-			return WarriorMeleeGeometryScript.target_aligned_thrust_slot_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 1
-		if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
-			return WarriorMeleeGeometryScript.target_aligned_half_moon_relative_sector_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 0
-		return true
-	if (
-		_snapshot_strict_ok(melee_release_snapshot)
-		and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
-			melee_release_snapshot,
+		var target_aligned_sector := _aoe_target_aligned_melee_sector(
+			target_plan,
 			target_ground_gu,
-			enemy.combat_radius_gu
+			enemy.combat_radius_gu,
+			mode,
 		)
+		if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
+			return target_aligned_sector == 1
+		if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
+			return target_aligned_sector == 0
+		return target_aligned_sector == 0
+	if (
+		validated_plan_ready
+		and not _aoe_validated_snapshot_intersects(query_plan, enemy)
 	):
+		return false
+	if not validated_plan_ready and not _aoe_reference_fallback_allowed():
 		return false
 	if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
 		if thrust_damage_axis_plan.is_empty():
@@ -9031,16 +9920,22 @@ func _is_primary_melee_candidate(
 				WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
 					direction_index,
 					{},
-					_canonical_snapshot_validation_context(origin_ground_gu)
+					query_context
 				)
 			)
-		return WarriorMeleeGeometryScript.thrust_footprint_slot_for_axis_plan_gu(
+		if str(thrust_damage_axis_plan.get("contract_id", "")) != WarriorMeleeGeometryScript.THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID:
+			return false
+		var damage_direction: Variant = thrust_damage_axis_plan.get(
+			"damage_direction_ground_gu", Vector2.ZERO
+		)
+		if not damage_direction is Vector2 or (damage_direction as Vector2).length_squared() <= 0.000001:
+			return false
+		return WarriorMeleeGeometryScript.thrust_footprint_slot_for_direction_ground_gu(
 			origin_ground_gu,
 			target_ground_gu,
 			enemy.combat_radius_gu,
-			thrust_damage_axis_plan,
+			(damage_direction as Vector2),
 			0.0,
-			_canonical_snapshot_validation_context(origin_ground_gu)
 		) == 1
 	if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		return WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
@@ -9136,6 +10031,121 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 	return true
 
 
+func _aoe_collect_thrust_secondary_candidates(
+	candidates: Array[EnemyActor],
+	result: Array[EnemyActor],
+	excluded_targets: Array[EnemyActor],
+	origin_ground_gu: Vector2,
+	target_plan: Dictionary,
+	thrust_damage_axis_plan: Dictionary,
+	melee_release_snapshot: Dictionary,
+	query_plan: Dictionary,
+	direction_index: int,
+	release_geometry: Dictionary,
+) -> void:
+	var query_context: Dictionary = query_plan.get(
+		"validation_context_reference",
+		release_geometry.get(
+			"snapshot_validation_context",
+			_canonical_snapshot_validation_context(origin_ground_gu),
+		),
+	)
+	var axis_plan := thrust_damage_axis_plan
+	if axis_plan.is_empty():
+		axis_plan = WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
+			direction_index,
+			release_geometry,
+			query_context,
+		)
+	if str(axis_plan.get("contract_id", "")) != WarriorMeleeGeometryScript.THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID:
+		return
+	var axis_ground_gu: Vector2 = axis_plan.get(
+		"damage_direction_ground_gu",
+		Vector2(
+			WarriorMeleeGeometryScript.facing_tile_step(direction_index)
+			).normalized(),
+	)
+	if axis_ground_gu.length_squared() <= 0.000001:
+		return
+	for enemy: EnemyActor in candidates:
+		if (
+			not is_instance_valid(enemy)
+			or excluded_targets.has(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+		):
+			continue
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		var slot := (
+			_aoe_target_aligned_melee_sector(
+				target_plan,
+				target_ground_gu,
+				enemy.combat_radius_gu,
+				WarriorMeleeGeometryScript.SKILL_THRUST,
+			)
+			if not target_plan.is_empty()
+			else (
+				WarriorMeleeGeometryScript.thrust_footprint_slot_for_direction_ground_gu(
+					origin_ground_gu,
+					target_ground_gu,
+					enemy.combat_radius_gu,
+					axis_ground_gu,
+				)
+				if (
+					query_plan.is_empty()
+					or _aoe_validated_snapshot_intersects(query_plan, enemy)
+				)
+				else 0
+			)
+		)
+		if slot == 2:
+			result.append(enemy)
+
+
+func _aoe_collect_half_moon_secondary_candidates(
+	candidates: Array[EnemyActor],
+	result: Array[EnemyActor],
+	excluded_targets: Array[EnemyActor],
+	origin_ground_gu: Vector2,
+	direction_index: int,
+	target_plan: Dictionary,
+	query_plan: Dictionary,
+	release_geometry: Dictionary,
+) -> void:
+	for enemy: EnemyActor in candidates:
+		if (
+			not is_instance_valid(enemy)
+			or excluded_targets.has(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+		):
+			continue
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		var sector := -1
+		if not target_plan.is_empty():
+			sector = _aoe_target_aligned_melee_sector(
+				target_plan,
+				target_ground_gu,
+				enemy.combat_radius_gu,
+				WarriorMeleeGeometryScript.SKILL_HALF_MOON,
+			)
+		else:
+			if (
+				query_plan.is_empty()
+				or _aoe_validated_snapshot_intersects(query_plan, enemy)
+			):
+				sector = WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
+					origin_ground_gu,
+					target_ground_gu,
+					enemy.combat_radius_gu,
+					direction_index,
+				)
+			else:
+				sector = -1
+		if sector != -1 and sector != 0:
+			result.append(enemy)
+
+
 func _thrust_secondary_targets(
 	origin: Vector2,
 	direction: Vector2,
@@ -9143,55 +10153,63 @@ func _thrust_secondary_targets(
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var target_plan: Dictionary = target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
-	if not target_plan.is_empty():
-		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
-				continue
-			var enemy := node as EnemyActor
-			var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
-			if WarriorMeleeGeometryScript.target_aligned_thrust_slot_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 2:
-				result.append(enemy)
-		_sort_melee_targets(result, origin_ground_gu, release_geometry)
-		return result
 	var direction_index := _melee_direction_index(direction, release_geometry)
-	if thrust_damage_axis_plan.is_empty():
-		thrust_damage_axis_plan = (
-			WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
-				direction_index,
-				release_geometry,
-				release_geometry.get("snapshot_validation_context", {})
-			)
-		)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
-			continue
-		var enemy := node as EnemyActor
-		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
-		if (
-			_snapshot_strict_ok(melee_release_snapshot)
-			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
-				melee_release_snapshot,
-				target_ground_gu,
-				enemy.combat_radius_gu
-			)
-		):
-			continue
-		if WarriorMeleeGeometryScript.thrust_footprint_slot_for_axis_plan_gu(
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_melee_query_plan(
+			WarriorMeleeGeometryScript.SKILL_THRUST,
 			origin_ground_gu,
-			target_ground_gu,
-			enemy.combat_radius_gu,
+			direction,
+			release_geometry,
 			thrust_damage_axis_plan,
-			0.0,
-			_canonical_snapshot_validation_context(origin_ground_gu)
-		) != 2:
-			continue
-		result.append(enemy)
+			melee_release_snapshot,
+			target_plan,
+			release_cache,
+		)
+	var broadphase_ready := _aoe_plan_is_ready(plan)
+	if not broadphase_ready and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"melee_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		return result
+	if not _aoe_query_enemy_candidates_aabb(
+		plan,
+		plan.get("ground_aabb", Rect2()),
+	):
+		return result
+	_aoe_collect_thrust_secondary_candidates(
+		_aoe_candidate_scratch,
+		result,
+		excluded_targets,
+		origin_ground_gu,
+		target_plan,
+		thrust_damage_axis_plan,
+		melee_release_snapshot,
+		plan,
+		direction_index,
+		release_geometry,
+	)
+	if result.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		_aoe_collect_thrust_secondary_candidates(
+			_aoe_candidate_scratch,
+			result,
+			excluded_targets,
+			origin_ground_gu,
+			target_plan,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			plan,
+			direction_index,
+			release_geometry,
+		)
 	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
@@ -9201,46 +10219,59 @@ func _half_moon_secondary_targets(
 	direction: Vector2,
 	excluded_targets: Array[EnemyActor],
 	release_geometry: Dictionary = {},
-	melee_release_snapshot: Dictionary = {}
+	melee_release_snapshot: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var target_plan: Dictionary = release_geometry.get("target_aligned_plan", {})
-	if not target_plan.is_empty():
-		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
-				continue
-			var enemy := node as EnemyActor
-			var sector := WarriorMeleeGeometryScript.target_aligned_half_moon_relative_sector_for_plan_gu(target_plan, _canonical_screen_px_to_ground_gu(enemy.global_position), enemy.combat_radius_gu, ctx)
-			if sector > 0:
-				result.append(enemy)
-		_sort_melee_targets(result, origin_ground_gu, release_geometry)
-		return result
 	var direction_index := _melee_direction_index(direction, release_geometry)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
-			continue
-		var enemy := node as EnemyActor
-		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
-		if (
-			_snapshot_strict_ok(melee_release_snapshot)
-			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
-				melee_release_snapshot,
-				target_ground_gu,
-				enemy.combat_radius_gu
-			)
-		):
-			continue
-		var relative_sector := WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_melee_query_plan(
+			WarriorMeleeGeometryScript.SKILL_HALF_MOON,
 			origin_ground_gu,
-			target_ground_gu,
-			enemy.combat_radius_gu,
-			direction_index
+			direction,
+			release_geometry,
+			{},
+			melee_release_snapshot,
+			target_plan,
+			release_cache,
 		)
-		if relative_sector == -1 or relative_sector == 0:
-			continue
-		result.append(enemy)
+	var broadphase_ready := _aoe_plan_is_ready(plan)
+	if not broadphase_ready and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"melee_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		return result
+	if not _aoe_query_enemy_candidates_aabb(
+		plan,
+		plan.get("ground_aabb", Rect2()),
+	):
+		return result
+	_aoe_collect_half_moon_secondary_candidates(
+		_aoe_candidate_scratch,
+		result,
+		excluded_targets,
+		origin_ground_gu,
+		direction_index,
+		target_plan,
+		plan,
+		release_geometry,
+	)
+	if result.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		_aoe_collect_half_moon_secondary_candidates(
+			_aoe_candidate_scratch,
+			result,
+			excluded_targets,
+			origin_ground_gu,
+			direction_index,
+			target_plan,
+			plan,
+			release_geometry,
+		)
 	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
