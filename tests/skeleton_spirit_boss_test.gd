@@ -80,6 +80,12 @@ func _run() -> void:
 	assert(boss.max_hp == 500 and boss.attack_min == 7 and boss.attack_max == 24, "骷髅精灵2003候选属性未采用")
 	assert(is_equal_approx(boss._attack_interval, 2.0) and is_equal_approx(boss._attack_animation_duration, 0.6) and is_equal_approx(boss._attack_hit_delay, 0.3), "骷髅精灵速度或命中帧错误")
 	assert(not boss._boss_skill_enabled and not boss._boss_phase_enabled, "骷髅精灵项目技能开关未关闭")
+	var source_target_interval_ms := int(
+		boss.boss_rule.get("targetSearch", {}).get("withTargetMs", 0)
+	)
+	assert(source_target_interval_ms == 8000, "TATMonster来源八秒重新寻敌值被改写")
+	var attack_interval_before_retarget := boss._attack_interval
+	var move_speed_before_retarget := boss.move_speed_gu_per_sec
 
 	var hp_before := player.current_hp
 	# This fixture validates attack timing, not target-acquisition staggering.
@@ -88,6 +94,19 @@ func _run() -> void:
 	boss.target = player
 	boss._attack_timer = 0.0
 	boss._physics_process(0.01)
+	var maximum_runtime_retarget_seconds := (
+		EnemyActor.BOSS_TARGET_REEVALUATION_MAX_SECONDS
+		+ EnemyActor.BOSS_TARGET_REEVALUATION_STAGGER_SECONDS * 10.0
+	)
+	assert(
+		boss._retarget_timer <= maximum_runtime_retarget_seconds + 0.0001,
+		"TATMonster运行时重评仍沿用来源八秒延迟: %.3f" % boss._retarget_timer,
+	)
+	assert(
+		is_equal_approx(boss._attack_interval, attack_interval_before_retarget)
+		and is_equal_approx(boss.move_speed_gu_per_sec, move_speed_before_retarget),
+		"缩短目标重评时改写了攻击或移动权威节拍",
+	)
 	assert(
 		boss._pending_attack_time > 0.0 and player.current_hp == hp_before,
 		"骷髅精灵伤害没有等待客户端命中帧 pending=%.3f hp=%d/%d target_valid=%s" % [
@@ -105,7 +124,6 @@ func _run() -> void:
 	assert(player.current_hp == hp_before, "骷髅精灵命中帧提前")
 	boss._physics_process(0.03)
 	assert(player.current_hp < hp_before and boss._pending_attack_time < 0.0, "骷髅精灵命中帧没有结算伤害")
-	assert(boss._retarget_timer > 7.0, "TATMonster八秒重新寻敌节奏未接入")
 
 	var speed_before := boss.move_speed_gu_per_sec
 	boss.take_damage(251)

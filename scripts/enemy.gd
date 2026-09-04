@@ -1331,13 +1331,6 @@ func _ready() -> void:
 		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 		_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS * float(posmod(get_instance_id(), 13)) / 13.0
-	else:
-		# Bound the first Boss decision to the same small per-instance phase as
-		# later decisions so a room spawn cannot create a one-frame retarget spike.
-		_retarget_timer = (
-			BOSS_TARGET_REEVALUATION_STAGGER_SECONDS
-			* float(posmod(get_instance_id(), 11))
-		)
 	queue_redraw()
 
 
