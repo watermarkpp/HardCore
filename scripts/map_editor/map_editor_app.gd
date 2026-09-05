@@ -734,10 +734,7 @@ func _on_delete_map_confirmed() -> void:
 		expected_document
 	)
 	if not bool(deletion_result.get("ok", false)):
-		status_label.text = (
-			"删除地图模板未完成，原状保留：%s"
-			% _to_string_array(deletion_result.get("errors", []))
-		)
+		status_label.text = _format_delete_map_failure(deletion_result)
 		return
 
 	var template_deleted := bool(deletion_result.get("template_deleted", false))
@@ -797,7 +794,42 @@ func _on_delete_map_confirmed() -> void:
 		status_label.text += "；工作区已移动到可恢复回收区 .recycle_bin/"
 
 
-func _to_string_array(values: Array) -> Array[String]:
+static func _format_delete_map_failure(result: Dictionary) -> String:
+	var errors := _to_string_array(result.get("errors", []))
+	var errors_text := ", ".join(errors)
+	if errors_text.is_empty():
+		errors_text = "未提供错误码"
+
+	var transaction_state := str(result.get("transaction_state", ""))
+	var writes_started := bool(result.get("writes_started", false))
+	var transaction_rolled_back := bool(result.get("transaction_rolled_back", false))
+	if transaction_state == "not_started" and not writes_started:
+		return "删除未开始，未写入模板或工作区：%s" % errors_text
+	if transaction_state == "rolled_back" and transaction_rolled_back:
+		return "删除未完成，已完整回滚，原状已恢复：%s" % errors_text
+	if transaction_state == "rollback_incomplete" or transaction_state == "rolled_back":
+		var locations: Array[String] = []
+		if not bool(result.get("workspace_restored", true)):
+			var recovery_path := str(result.get("recovery_path", "")).strip_edges()
+			if not recovery_path.is_empty():
+				locations.append("工作区回收位置：%s" % recovery_path)
+			var target_path := str(result.get("target_path", "")).strip_edges()
+			if not target_path.is_empty():
+				locations.append("原工作区目标：%s" % target_path)
+		if not bool(result.get("catalog_restored", true)):
+			var catalog_path := str(result.get("catalog_path", "")).strip_edges()
+			if not catalog_path.is_empty():
+				locations.append("模板目录：%s" % catalog_path)
+		if locations.is_empty():
+			locations.append("未提供可恢复位置")
+		return (
+			"删除未完成，回滚不完整；数据保留位置：%s；错误：%s"
+			% ["；".join(locations), errors_text]
+		)
+	return "删除未完成，状态未知；请核查保留位置与错误：%s" % errors_text
+
+
+static func _to_string_array(values: Array) -> Array[String]:
 	var result: Array[String] = []
 
 	for value: Variant in values:

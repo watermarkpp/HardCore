@@ -6,6 +6,9 @@ const SaveService := preload(
 const CatalogService := preload(
 	"res://scripts/map_editor/map_design_catalog_service.gd"
 )
+const MapEditorAppScript := preload(
+	"res://scripts/map_editor/map_editor_app.gd"
+)
 const PathSafety := preload(
 	"res://scripts/map_editor/map_editor_path_safety.gd"
 )
@@ -23,6 +26,7 @@ func _run() -> void:
 	SaveService.test_workspace_root_override = TEST_ROOT
 	CatalogService.test_blank_template_path_override = TEST_CATALOG
 	CatalogService.test_force_blank_template_write_failure = false
+	SaveService.test_force_workspace_restore_failure = false
 	_remove_tree(TEST_ROOT)
 	_remove_file(TEST_CATALOG)
 	DirAccess.make_dir_recursive_absolute(_absolute(TEST_ROOT))
@@ -36,6 +40,8 @@ func _run() -> void:
 	_test_formal_template_is_unchanged()
 	_test_workspace_failure_keeps_catalog()
 	_test_catalog_failure_restores_workspace()
+	_test_incomplete_rollback_keeps_recovery()
+	_test_failure_status_describes_transaction_state()
 	_test_blank_template_without_workspace()
 	_test_failed_operation_keeps_target()
 	_test_link_probe_when_supported()
@@ -44,6 +50,7 @@ func _run() -> void:
 	SaveService.test_workspace_root_override = ""
 	SaveService.test_formal_identity_path_override = ""
 	SaveService.test_runtime_release_registry_path_override = ""
+	SaveService.test_force_workspace_restore_failure = false
 	CatalogService.test_blank_template_path_override = ""
 	CatalogService.test_force_blank_template_write_failure = false
 	_remove_tree(TEST_ROOT)
@@ -222,11 +229,105 @@ func _test_catalog_failure_restores_workspace() -> void:
 	assert(bool(result.get("catalog_restored", false)), str(result))
 	assert(bool(result.get("workspace_restored", false)), str(result))
 	assert(bool(result.get("transaction_rolled_back", false)), str(result))
+	assert(result.get("transaction_state", "") == "rolled_back", str(result))
+	assert(not str(result.get("recovery_path", "")).is_empty(), str(result))
 	assert(_read_text(TEST_CATALOG) == before, "failed catalog commit must preserve catalog")
 	assert(DirAccess.dir_exists_absolute(_absolute(TEST_ROOT.path_join(map_id))))
 	assert(_read_text(sentinel_path) == SENTINEL)
 	_remove_tree(TEST_ROOT.path_join(map_id))
 	_remove_empty_recovery_root()
+
+
+func _test_incomplete_rollback_keeps_recovery() -> void:
+	var map_id := "incomplete_rollback"
+	_write_catalog([
+		{"template_id": "incomplete_template", "map_id": map_id, "display_name": "incomplete"},
+	])
+	_make_map(map_id)
+	var sentinel_path := TEST_ROOT.path_join(map_id + "/sentinel.txt")
+	_write_text(sentinel_path, SENTINEL)
+	var document_path := TEST_ROOT.path_join(map_id + "/" + map_id + ".editor.json")
+	var before := _read_text(TEST_CATALOG)
+	CatalogService.test_force_blank_template_write_failure = true
+	SaveService.test_force_workspace_restore_failure = true
+	var result := SaveService.delete_map_authoring_transaction(
+		map_id,
+		"incomplete_template",
+		document_path,
+		{"map_id": map_id, "path": document_path}
+	)
+	CatalogService.test_force_blank_template_write_failure = false
+	SaveService.test_force_workspace_restore_failure = false
+	assert(not bool(result.get("ok", false)), str(result))
+	assert(result.get("transaction_state", "") == "rollback_incomplete", str(result))
+	assert(not bool(result.get("transaction_rolled_back", true)), str(result))
+	assert(not bool(result.get("workspace_restored", true)), str(result))
+	assert(bool(result.get("catalog_restored", false)), str(result))
+	assert(result.get("errors", []).has("workspace_rollback_failed"), str(result))
+	assert(result.get("errors", []).has("forced_workspace_restore_failure"), str(result))
+	var recovery_path := str(result.get("recovery_path", ""))
+	var recovery_root := str(result.get("recovery_root_path", ""))
+	assert(not recovery_path.is_empty(), str(result))
+	assert(not recovery_root.is_empty(), str(result))
+	var recovery := _absolute(recovery_path)
+	assert(DirAccess.dir_exists_absolute(recovery), str(result))
+	assert(_read_text(recovery.path_join("sentinel.txt")) == SENTINEL)
+	assert(not DirAccess.dir_exists_absolute(_absolute(TEST_ROOT.path_join(map_id))))
+	assert(_read_text(TEST_CATALOG) == before, "failed rollback must not lose catalog")
+
+	# The failure result itself remains a safe recovery handle. Once the
+	# injected restore failure is removed, the exact quarantine can be restored.
+	var restored := SaveService.restore_workspace_map(result)
+	assert(bool(restored.get("ok", false)), str(restored))
+	assert(DirAccess.dir_exists_absolute(_absolute(TEST_ROOT.path_join(map_id))))
+	assert(_read_text(sentinel_path) == SENTINEL)
+	_remove_tree(TEST_ROOT.path_join(map_id))
+	_remove_empty_recovery_root()
+
+
+func _test_failure_status_describes_transaction_state() -> void:
+	var not_started := MapEditorAppScript._format_delete_map_failure({
+		"transaction_state": "not_started",
+		"errors": ["formal_map_protected"],
+	})
+	assert(not_started.contains("未开始"), not_started)
+	assert(not_started.contains("未写入"), not_started)
+	assert(not_started.contains("formal_map_protected"), not_started)
+
+	var rolled_back := MapEditorAppScript._format_delete_map_failure({
+		"transaction_state": "rolled_back",
+		"transaction_rolled_back": true,
+		"errors": ["forced_write_failure"],
+	})
+	assert(rolled_back.contains("完整回滚"), rolled_back)
+	assert(rolled_back.contains("原状已恢复"), rolled_back)
+
+	var incomplete := MapEditorAppScript._format_delete_map_failure({
+		"transaction_state": "rollback_incomplete",
+		"transaction_rolled_back": false,
+		"workspace_restored": false,
+		"catalog_restored": true,
+		"recovery_path": "user://recovery/incomplete",
+		"target_path": "user://map_editor_workspace/incomplete_rollback/",
+		"errors": ["workspace_rollback_failed"],
+	})
+	assert(incomplete.contains("回滚不完整"), incomplete)
+	assert(incomplete.contains("数据保留位置"), incomplete)
+	assert(incomplete.contains("user://recovery/incomplete"), incomplete)
+	assert(incomplete.contains("workspace_rollback_failed"), incomplete)
+	assert(not incomplete.contains("原状保留"), incomplete)
+
+	var inconsistent := MapEditorAppScript._format_delete_map_failure({
+		"transaction_state": "rolled_back",
+		"transaction_rolled_back": false,
+		"writes_started": true,
+		"errors": ["rollback_status_inconsistent"],
+	})
+	assert(inconsistent.contains("回滚不完整"), inconsistent)
+	assert(not inconsistent.contains("原状已恢复"), inconsistent)
+
+	var app_source := FileAccess.get_file_as_string("res://scripts/map_editor/map_editor_app.gd")
+	assert(not app_source.contains("删除地图模板未完成，原状保留"))
 
 
 func _test_blank_template_without_workspace() -> void:
