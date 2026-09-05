@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical')]
+    [ValidateSet('critical', 'audit_upgrade_critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical')]
     [string]$Suite = 'critical',
     [ValidateRange(1, 60)]
     [int]$TimeoutSeconds = 8,
@@ -454,6 +454,20 @@ $Suites.device_lab_critical = @(
     'tests/device_lab_patch_bootstrap_test.tscn'
 )
 
+$Suites.audit_upgrade_critical = @(
+    'tests/profile_business_validation_recovery_test.tscn',
+    'tests/persistence_business_transactions_test.tscn',
+    'tests/shared_warehouse_transaction_test.tscn',
+    'tests/shared_warehouse_migration_test.tscn',
+    'tests/map_editor_workspace_delete_safety_test.tscn',
+    'tests/startup_loading_failure_recovery_test.tscn',
+    'tests/brand_intro_test.tscn',
+    'tests/device_lab_patch_bootstrap_test.tscn',
+    'tests/lootclock/loot_retry_clock_test.tscn',
+    'tests/lootclock/loot_visual_clock_test.tscn',
+    'tests/runtime_loot_spatial_index_order_test.tscn'
+)
+
 $Suites.critical = @(
     'tests/combat_unit_runtime_static_audit_test.tscn'
 ) + @(
@@ -479,6 +493,7 @@ $Suites.critical = @(
     $Suites.player_visual_contract_critical +
     $Suites.skill_panel_layout_critical +
     $Suites.device_lab_critical +
+    $Suites.audit_upgrade_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )

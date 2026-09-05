@@ -706,6 +706,8 @@ $pfValidateSet = ($RunnerSource -match "formal_map_projection_critical")
 $ReleaseSuite = 'map_runtime_release_critical'
 $ReleaseExpected = @(
     'tests/map_runtime_release_registry_contract_test.tscn',
+    'tests/map_ui_presentation_projection_test.tscn',
+    'tests/map_persistent_boss_spawn_identity_test.tscn',
     'tests/release_registry_current_maps_test.tscn',
     'tests/map_runtime_release_gate_test.tscn'
 )
@@ -887,6 +889,33 @@ $ok = $ok -and $rlFound -and (Test-StringSetEqual $ReleaseExpected $rlEntries) -
 $ok = $ok -and $rtFound -and (Test-StringSetEqual $TransactionExpected $rtEntries) -and ($rtMissing.Count -eq 0) -and ($rtDuplicates.Count -eq 0) -and ($rtGitTracked.Count -eq 0) -and $rtIncluded -and $rtValidateSet
 $ok = $ok -and $pvFound -and (Test-StringSetEqual $PlayerVisualExpected $pvEntries) -and ($pvMissing.Count -eq 0) -and ($pvDuplicates.Count -eq 0) -and ($pvGitTracked.Count -eq 0) -and $pvIncluded -and $pvValidateSet
 $ok = $ok -and $slpFound -and (Test-StringSetEqual $SkillPanelExpected $slpEntries) -and ($slpMissing.Count -eq 0) -and ($slpDuplicates.Count -eq 0) -and ($slpGitTracked.Count -eq 0) -and $slpIncluded -and $slpValidateSet
+$auditExpected = @(
+    'tests/profile_business_validation_recovery_test.tscn',
+    'tests/persistence_business_transactions_test.tscn',
+    'tests/shared_warehouse_transaction_test.tscn',
+    'tests/shared_warehouse_migration_test.tscn',
+    'tests/map_editor_workspace_delete_safety_test.tscn',
+    'tests/startup_loading_failure_recovery_test.tscn',
+    'tests/brand_intro_test.tscn',
+    'tests/device_lab_patch_bootstrap_test.tscn',
+    'tests/lootclock/loot_retry_clock_test.tscn',
+    'tests/lootclock/loot_visual_clock_test.tscn',
+    'tests/runtime_loot_spatial_index_order_test.tscn'
+)
+$auditBlock = [regex]::Match($RunnerSource, '(?ms)^\$Suites\.audit_upgrade_critical\s*=\s*@\((.*?)^\)')
+$auditEntries = @([regex]::Matches($auditBlock.Groups[1].Value, "'([^']+\.tscn)'") | ForEach-Object { $_.Groups[1].Value })
+$auditMissing = @($auditExpected | Where-Object {
+    -not (Test-Path -LiteralPath (Join-Path $ProjectRoot $_)) -or
+    ((& git -C $ProjectRoot ls-files -- $_ | Out-String).Trim() -ne $_)
+})
+$auditOk = $auditBlock.Success -and
+    (Test-StringSetEqual $auditExpected $auditEntries) -and
+    $auditEntries.Count -eq $auditExpected.Count -and
+    $auditMissing.Count -eq 0 -and
+    $RunnerSource.Contains("'audit_upgrade_critical'") -and
+    ($RunnerSource -match '\$Suites\.audit_upgrade_critical\s*\+')
+$ok = $ok -and $auditOk
+
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -1038,6 +1067,10 @@ $report = [ordered]@{
     skill_panel_layout_not_git_tracked = $slpGitTracked
     skill_panel_layout_included_in_default_critical = $slpIncluded
     skill_panel_layout_validate_set = $slpValidateSet
+    audit_upgrade_expected_count = $auditExpected.Count
+    audit_upgrade_actual_count = $auditEntries.Count
+    audit_upgrade_missing_or_untracked = $auditMissing
+    audit_upgrade_registration_pass = $auditOk
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

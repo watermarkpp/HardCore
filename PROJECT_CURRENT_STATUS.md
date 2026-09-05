@@ -5,6 +5,13 @@ Branch: `codex/integration`
 Updated: 2026-08-29
 Purpose: where the project stands right now.
 
+## 2026-09-05 当前施工状态（优先于下文历史状态）
+
+- 审计升级与新里程碑仍在进行，尚未完成整体验收、远端同步或新 APK 安装；详见 `docs/AUDIT_UPGRADE_20260905.md`。
+- 已人工验收的怪物密度性能基线 `c97a08b43832b174f98de31f5ed6673ccda344ae` 已归入 `codex/integration`。该基线不是本轮全部审计通过证明。
+- 当前工作树、专业领域、冻结保护与代理调度以根目录最新 `AGENTS.md` 为准。下文旧“只在主树修改”是历史阶段记录，不否定本轮由 integration 明确分配的隔离专项树。
+- 下文旧 PASS、旧 APK 和旧标签仅作历史证据，不代表当前 HEAD 验收结果。最终里程碑完成后再更新本节发布身份。
+
 ## Current HEAD
 
 Use annotated tag `standard-20260829-main-tree` for the immutable consolidated standard. Formal runtime/map baseline is `00f6e5e6525a4a07679b41eb482a2cfd05fdd068`.

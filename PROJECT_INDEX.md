@@ -19,8 +19,8 @@ Current navigation context verified against HEAD: `ec057c52de4c99f59aa31a96dbd79
 ## Quick Start
 
 - 项目路径：`C:\Users\Administrator\Documents\HardCore`（Godot 4.7 项目）
-- Godot 项目入口：`res://scenes/main.tscn`（主场景 = game_root）
-- 测试 Runner：`tools\run_godot_tests.ps1`（headless，每测试 timeout=30s，禁止 1800）
+- Godot 启动入口：`res://scenes/startup_loading.tscn` → `scenes/character_select.tscn`；进入游戏后加载 `scenes/main.tscn`（game_root）。
+- 测试 Runner：`tools\run_godot_tests.ps1`（headless，普通测试显式传 `-TimeoutSeconds 30`；不要把 runner 默认值当成 30 秒）
 - 测试注册检查：`tools\tests\test_suite_registration.ps1`
 - Python：`C:\Windows\py.exe -3.12`（禁止裸 `python`/`python3`）
 
