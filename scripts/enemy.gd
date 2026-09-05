@@ -41,6 +41,7 @@ const MonsterTargetAcquisitionPolicyScript := preload(
 const MonsterTerrainNavigationPolicyScript := preload(
 	"res://scripts/monster_terrain_navigation_policy.gd"
 )
+const PlayerCharacterScript := preload("res://scripts/player.gd")
 const MONSTER_RUNTIME_AUTHORITY_PATH := (
 	"res://assets/data/monster_runtime_authority_v1.json"
 )
@@ -139,6 +140,15 @@ static var _background_deep_sleep_entry_count := 0
 static var _background_deep_sleep_wakeup_count := 0
 static var _physics_move_count := 0
 static var _environment_guard_check_count := 0
+static var _runtime_map_id_property_list_scan_count := 0
+
+static func reset_runtime_map_id_diagnostics() -> void:
+	_runtime_map_id_property_list_scan_count = 0
+
+static func runtime_map_id_diagnostics() -> Dictionary:
+	return {
+		"property_list_scans": _runtime_map_id_property_list_scan_count,
+	}
 
 static func _record_performance_counter(field: StringName, amount := 1) -> void:
 	RuntimeDiagnostics.increment_performance_counter(field, amount)
@@ -4092,7 +4102,21 @@ func _area_attack_release_target_is_valid(
 
 func _runtime_map_id_for_area_target(victim: Node2D) -> int:
 	if victim.has_meta("runtime_map_id"):
-		return int(victim.get_meta("runtime_map_id", runtime_map_id))
+		var metadata_map_id := int(victim.get_meta("runtime_map_id", runtime_map_id))
+		return metadata_map_id if metadata_map_id >= 0 else runtime_map_id
+	if victim is EnemyActor:
+		var enemy_map_id := (victim as EnemyActor).runtime_map_id
+		return enemy_map_id if enemy_map_id >= 0 else runtime_map_id
+	if victim is SummonActor:
+		var summon_map_id := (victim as SummonActor).runtime_map_id
+		return summon_map_id if summon_map_id >= 0 else runtime_map_id
+	# PlayerCharacter has no declared runtime_map_id. Its production map identity
+	# is the attacker's current map unless an explicit metadata override exists.
+	# Compare the exact script so a custom PlayerCharacter subclass with a typed
+	# or dynamic runtime_map_id still retains the generic compatibility fallback.
+	if victim.get_script() == PlayerCharacterScript:
+		return runtime_map_id
+	_runtime_map_id_property_list_scan_count += 1
 	for property: Dictionary in victim.get_property_list():
 		if str(property.get("name", "")) != "runtime_map_id":
 			continue

@@ -6,6 +6,8 @@ const AcquisitionPolicy := preload("res://scripts/monster_target_acquisition_pol
 const NeighborPolicy := preload("res://scripts/monster_neighbor_step_policy.gd")
 const TerrainPolicy := preload("res://scripts/monster_terrain_navigation_policy.gd")
 const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
+const PlayerCharacterScript := preload("res://scripts/player.gd")
+const SkillProjectileScript := preload("res://scripts/skill_projectile.gd")
 
 var _checks := 0
 
@@ -25,6 +27,7 @@ func _run() -> void:
 	await _test_exact_special_view_ranges(player)
 	await _test_runtime_classification_floors(player)
 	await _test_data_hold_runtime_fail_closed(player)
+	await _test_runtime_map_id_fast_paths(player)
 	await _test_current_center_and_nearest_manhattan(player)
 	await _test_target_retention_authority(player)
 	await _test_formal_terrain_los_and_bounded_detour(player)
@@ -389,6 +392,117 @@ func _test_formal_terrain_los_and_bounded_detour(player: PlayerCharacter) -> voi
 	assert(int(TerrainPolicy.diagnostics().path_queries) == queries_after_failure)
 	_checks += 4
 
+	enemy.queue_free()
+	await get_tree().process_frame
+
+
+func _test_runtime_map_id_fast_paths(player: PlayerCharacter) -> void:
+	const TEST_RUNTIME_MAP_ID := 93001
+	var enemy := await _make_enemy(18, player)
+	enemy.runtime_map_id = TEST_RUNTIME_MAP_ID
+	player.remove_meta("runtime_map_id")
+	assert(player.get_script() == PlayerCharacterScript)
+	var player_property_count := player.get_property_list().size()
+	assert(player_property_count > 0, "real PlayerCharacter must expose inherited properties")
+
+	var summon := SummonActor.new()
+	summon.setup(player, "骷髅", 10, 1, "taoist.summon_skeleton", 35)
+	summon.runtime_map_id = TEST_RUNTIME_MAP_ID
+	add_child(summon)
+	await get_tree().process_frame
+	var enemy_property_count := enemy.get_property_list().size()
+	var summon_property_count := summon.get_property_list().size()
+	assert(enemy_property_count > 0 and summon_property_count > 0)
+
+	EnemyActor.reset_runtime_map_id_diagnostics()
+	assert(enemy._runtime_map_id_for_area_target(player) == TEST_RUNTIME_MAP_ID)
+	assert(enemy._runtime_map_id_for_area_target(enemy) == TEST_RUNTIME_MAP_ID)
+	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID)
+	assert(
+		int(EnemyActor.runtime_map_id_diagnostics().get("property_list_scans", -1)) == 0,
+		"typed Player/Enemy/Summon paths must not scan property lists",
+	)
+
+	# Metadata remains the highest-priority identity source. Negative metadata
+	# falls back to the live typed/attacker map instead of poisoning identity.
+	summon.set_meta("runtime_map_id", TEST_RUNTIME_MAP_ID + 1)
+	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID + 1)
+	summon.set_meta("runtime_map_id", -1)
+	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID)
+	summon.remove_meta("runtime_map_id")
+	summon.runtime_map_id = TEST_RUNTIME_MAP_ID + 2
+	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID + 2)
+
+	# A script with a runtime_map_id property remains on the generic compatibility
+	# path, including live value mutation without caching.
+	var generic := SkillProjectileScript.new()
+	generic.runtime_map_id = TEST_RUNTIME_MAP_ID
+	var generic_property_count := generic.get_property_list().size()
+	assert(generic_property_count > 0)
+	EnemyActor.reset_runtime_map_id_diagnostics()
+	assert(enemy._runtime_map_id_for_area_target(generic) == TEST_RUNTIME_MAP_ID)
+	assert(
+		int(EnemyActor.runtime_map_id_diagnostics().get("property_list_scans", -1)) == 1,
+		"generic typed property must retain one compatibility scan",
+	)
+	generic.runtime_map_id = TEST_RUNTIME_MAP_ID + 3
+	assert(enemy._runtime_map_id_for_area_target(generic) == TEST_RUNTIME_MAP_ID + 3)
+	var no_property := Node2D.new()
+	EnemyActor.reset_runtime_map_id_diagnostics()
+	assert(enemy._runtime_map_id_for_area_target(no_property) == TEST_RUNTIME_MAP_ID)
+	assert(int(EnemyActor.runtime_map_id_diagnostics().get("property_list_scans", -1)) == 1)
+
+	# Same-map rejection must observe map mutation immediately; no identity cache
+	# may outlive a transition or an explicit metadata update.
+	player.set_meta("runtime_map_id", TEST_RUNTIME_MAP_ID + 4)
+	assert(not enemy._target_candidate_is_live(player))
+	player.set_meta("runtime_map_id", TEST_RUNTIME_MAP_ID)
+	assert(enemy._target_candidate_is_live(player))
+	player.set_meta("runtime_map_id", -1)
+	assert(enemy._target_candidate_is_live(player))
+	player.remove_meta("runtime_map_id")
+
+	# Compare real-object property-list sizes and elapsed helper work without a
+	# brittle wall-time threshold. The operation count is the acceptance gate.
+	const ITERATIONS := 256
+	EnemyActor.reset_runtime_map_id_diagnostics()
+	var typed_started_usec := Time.get_ticks_usec()
+	for _iteration in range(ITERATIONS):
+		enemy._runtime_map_id_for_area_target(player)
+		enemy._runtime_map_id_for_area_target(enemy)
+		enemy._runtime_map_id_for_area_target(summon)
+	var typed_elapsed_usec := Time.get_ticks_usec() - typed_started_usec
+	var typed_scans := int(EnemyActor.runtime_map_id_diagnostics().get("property_list_scans", -1))
+	assert(typed_scans == 0)
+
+	EnemyActor.reset_runtime_map_id_diagnostics()
+	var generic_started_usec := Time.get_ticks_usec()
+	for _iteration in range(ITERATIONS):
+		enemy._runtime_map_id_for_area_target(generic)
+	var generic_elapsed_usec := Time.get_ticks_usec() - generic_started_usec
+	var generic_scans := int(EnemyActor.runtime_map_id_diagnostics().get("property_list_scans", -1))
+	assert(generic_scans == ITERATIONS)
+	print(
+		(
+			"MONSTER_RUNTIME_MAP_ID_FAST_PATH_PASS player_properties=%d enemy_properties=%d "
+			+ "summon_properties=%d generic_properties=%d typed_usec=%d generic_usec=%d "
+			+ "typed_scans=%d generic_scans=%d"
+		)
+		% [
+			player_property_count,
+			enemy_property_count,
+			summon_property_count,
+			generic_property_count,
+			typed_elapsed_usec,
+			generic_elapsed_usec,
+			typed_scans,
+			generic_scans,
+		]
+	)
+
+	no_property.free()
+	generic.free()
+	summon.queue_free()
 	enemy.queue_free()
 	await get_tree().process_frame
 
