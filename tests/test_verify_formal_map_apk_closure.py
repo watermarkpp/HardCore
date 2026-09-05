@@ -192,6 +192,47 @@ class VerifyFormalMapApkClosureTest(unittest.TestCase):
             with zipfile.ZipFile(apk) as archive:
                 self.assertFalse(any(name.endswith(".png") for name in archive.namelist()))
 
+    def test_android_assets_prefix_is_resolved_without_relaxing_hash_checks(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="formal-map-apk-android-assets-test-") as temporary:
+            temp = Path(temporary)
+            source_root = temp / "source"
+            source_root.mkdir()
+            entries = _fixture(source_root)
+            # Android packages the project's res://assets/... tree below the
+            # APK assets container, while .godot/imported remains a sibling
+            # under that same container. This mirrors the real APK layout and
+            # must not bypass byte/hash or source-PNG checks.
+            android_entries: dict[str, bytes] = {}
+            for name, data in entries.items():
+                if name.endswith(".png.import"):
+                    # Match the real exported APK metadata: the member path
+                    # identifies the imported PNG, while source_file is not
+                    # serialized. Remap closure and all source/hash checks
+                    # must still remain mandatory.
+                    data = b"\n".join(
+                        line
+                        for line in data.splitlines()
+                        if not line.startswith(b"source_file=")
+                    ) + b"\n"
+                android_entries[f"assets/{name}"] = data
+            apk = temp / "android-assets-prefix.apk"
+            evidence = temp / "android-assets-prefix.json"
+            _write_zip(apk, android_entries)
+
+            result = _run(source_root, apk, evidence)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            report = json.loads(evidence.read_text(encoding="utf-8"))
+            self.assertTrue(report["ok"])
+            self.assertEqual(
+                report["registry"]["packagePath"],
+                f"assets/{REGISTRY_PATH}",
+            )
+            self.assertEqual(report["counts"]["chunk_imports_checked"], UNIQUE_CHUNKS)
+            self.assertEqual(
+                report["counts"]["non_empty_ctex_targets"],
+                UNIQUE_CHUNKS,
+            )
+
     def test_missing_ctex_is_a_failure(self) -> None:
         with tempfile.TemporaryDirectory(prefix="formal-map-apk-test-") as temporary:
             temp = Path(temporary)

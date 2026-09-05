@@ -163,7 +163,13 @@ class PackageIndex:
         candidates = [normalised]
         # Godot exports may place .godot/imported resources beside the data
         # tree under assets/, while project resources remain assets/data/...
-        if not normalised.startswith("assets/"):
+        # Android APKs add the APK assets directory in front of the project's
+        # own assets/ tree, so res://assets/... is packaged as
+        # assets/assets/.... Keep the exact project-relative path first, then
+        # try that container prefix without accepting any rewritten path.
+        if normalised.startswith("assets/"):
+            candidates.append(f"assets/{normalised}")
+        else:
             candidates.append(f"assets/{normalised}")
             candidates.append(f"assets/data/{normalised}")
         return candidates
@@ -548,7 +554,14 @@ def verify(root: Path, apk: Path) -> dict[str, Any]:
                     continue
                 import_text = import_bytes.decode("utf-8", errors="replace")
                 source_match = SOURCE_FILE_RE.search(import_text)
-                if source_match is None or _normalise_resource_path(source_match.group(1)) != image_path:
+                # Exported Godot .import members may omit source_file after
+                # import metadata is packaged. The manifest member path still
+                # binds this metadata to image_path; when source_file is
+                # present, retain the exact identity check.
+                if (
+                    source_match is not None
+                    and _normalise_resource_path(source_match.group(1)) != image_path
+                ):
                     _add_error(
                         errors,
                         "chunk_import_source_mismatch",
