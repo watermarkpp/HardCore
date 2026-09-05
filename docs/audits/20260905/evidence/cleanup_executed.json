@@ -1,0 +1,379 @@
+{
+  "schema": "hardcore.cleanup_verified.v1",
+  "mode": "Execute",
+  "startedUtc": "2026-09-05T09:45:06.0581309Z",
+  "expectedMainCommit": "2bd4bb36e4f1e8bd1510e62f0a7c8ece96c7e8bc",
+  "mainRoot": "C:\\Users\\Administrator\\Documents\\HardCore",
+  "remoteRef": "refs/heads/codex/integration",
+  "archiveManifest": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\audit_upgrade_20260905\\cleanup_archive\\archive_manifest.json",
+  "archiveManifestExpectedSha256": "6bd29d7b29479e96be4c714665d25fb78012754fb0ffe647b368c380cba8b33e",
+  "preFreeBytes": 79930961920,
+  "postFreeBytes": 126286782464,
+  "mainHead": "2bd4bb36e4f1e8bd1510e62f0a7c8ece96c7e8bc",
+  "remoteHead": "2bd4bb36e4f1e8bd1510e62f0a7c8ece96c7e8bc",
+  "archiveCheck": {
+    "passed": true,
+    "manifestSha256": "6bd29d7b29479e96be4c714665d25fb78012754fb0ffe647b368c380cba8b33e",
+    "entryCount": 3749,
+    "uniqueArchiveFileCount": 3746,
+    "sourceBytes": 3304852226,
+    "archiveBytes": 1965071811,
+    "verifiedSourceCount": 3749,
+    "verifiedArchiveEntryCount": 3749
+  },
+  "treeResults": [
+    {
+      "name": "406b3cf4-teleport",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\406b3cf4-teleport",
+      "passed": true,
+      "head": "406b3cf4a2e72cd063ad203660e369187d50bc13",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 1,
+      "outputsFileCount": 4,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 308,
+      "error": null
+    },
+    {
+      "name": "702b6062d4f0-20260831-201713-405d2656",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\702b6062d4f0-20260831-201713-405d2656",
+      "passed": true,
+      "head": "702b6062d4f0f7bbad06b9ec4e7561ba861de6e7",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 0,
+      "outputsFileCount": 9,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 294,
+      "error": null
+    },
+    {
+      "name": "7f0d9f2d4c48-20260905-033432-f184f37c",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-033432-f184f37c",
+      "passed": true,
+      "head": "7f0d9f2d4c48a5ae6d05987b70f4088bb59ff9b8",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 0,
+      "outputsFileCount": 5,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 314,
+      "error": null
+    },
+    {
+      "name": "7f0d9f2d4c48-20260905-034604-b1d31e43",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-034604-b1d31e43",
+      "passed": true,
+      "head": "7f0d9f2d4c48a5ae6d05987b70f4088bb59ff9b8",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 0,
+      "outputsFileCount": 5,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 314,
+      "error": null
+    },
+    {
+      "name": "7f0d9f2d4c48-20260905-035304-4b88aaab",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-035304-4b88aaab",
+      "passed": true,
+      "head": "7f0d9f2d4c48a5ae6d05987b70f4088bb59ff9b8",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 0,
+      "outputsFileCount": 5,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 314,
+      "error": null
+    },
+    {
+      "name": "a90e405aad17-20260903-171503-ac14e4b2",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\a90e405aad17-20260903-171503-ac14e4b2",
+      "passed": true,
+      "head": "a90e405aad17e5600731f86ac44d8140c6bd79e5",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 0,
+      "outputsFileCount": 10,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 306,
+      "error": null
+    },
+    {
+      "name": "f559463df6f3-20260829-180059-fe46c7bb",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\f559463df6f3-20260829-180059-fe46c7bb",
+      "passed": true,
+      "head": "f559463df6f36142c24f5f34d0370ec17b844395",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 0,
+      "outputsFileCount": 8,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 285,
+      "error": null
+    },
+    {
+      "name": "patch-build-9ffdf01b",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-patch-build-9ffdf01b",
+      "passed": true,
+      "head": "ae09a1fdec40ff0c8d5704b8bd7554fde1581cb3",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 1,
+      "outputsFileCount": 4,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 299,
+      "error": null
+    },
+    {
+      "name": "device-hotfix-74297ac2",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\device-hotfix-74297ac2",
+      "passed": true,
+      "head": "74297ac2cd97b31606b98ef4417a208c2d0631bb",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 1,
+      "outputsFileCount": 4,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 309,
+      "error": null
+    },
+    {
+      "name": "hotfix-e2014fe5",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\hotfix-e2014fe5",
+      "passed": true,
+      "head": "e2014fe58c8a2b196e105346433777f40a0c9808",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 1,
+      "outputsFileCount": 4,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 309,
+      "error": null
+    },
+    {
+      "name": "perf-device-build-82aa5c83",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\perf-device-build-82aa5c83",
+      "passed": true,
+      "head": "82aa5c8320937ee482588bdd82ddd6f603ce1fe4",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 1,
+      "outputsFileCount": 4,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 311,
+      "error": null
+    },
+    {
+      "name": "perf-device-build-final-7f0d9f2d",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\perf-device-build-final-7f0d9f2d",
+      "passed": true,
+      "head": "7f0d9f2d4c48a5ae6d05987b70f4088bb59ff9b8",
+      "trackedClean": true,
+      "registered": true,
+      "detached": true,
+      "ancestor": true,
+      "candidateOnlyCommits": 0,
+      "reparseCount": 1,
+      "outputsFileCount": 4,
+      "runtimeAppdataFileCount": null,
+      "untrackedRetainedFileCount": 314,
+      "error": null
+    }
+  ],
+  "removals": [
+    {
+      "name": "406b3cf4-teleport",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\406b3cf4-teleport",
+      "passed": true,
+      "junction": {
+        "Present": true,
+        "Removed": true,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\406b3cf4-teleport\\tools\\godot-4.7",
+        "Target": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7"
+      },
+      "preFreeBytes": 79927091200,
+      "postFreeBytes": 82214887424
+    },
+    {
+      "name": "702b6062d4f0-20260831-201713-405d2656",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\702b6062d4f0-20260831-201713-405d2656",
+      "passed": true,
+      "junction": {
+        "Present": false,
+        "Removed": false,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\702b6062d4f0-20260831-201713-405d2656\\tools\\godot-4.7",
+        "Target": null
+      },
+      "preFreeBytes": 82214793216,
+      "postFreeBytes": 92036145152
+    },
+    {
+      "name": "7f0d9f2d4c48-20260905-033432-f184f37c",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-033432-f184f37c",
+      "passed": true,
+      "junction": {
+        "Present": false,
+        "Removed": false,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-033432-f184f37c\\tools\\godot-4.7",
+        "Target": null
+      },
+      "preFreeBytes": 92044468224,
+      "postFreeBytes": 95069024256
+    },
+    {
+      "name": "7f0d9f2d4c48-20260905-034604-b1d31e43",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-034604-b1d31e43",
+      "passed": true,
+      "junction": {
+        "Present": false,
+        "Removed": false,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-034604-b1d31e43\\tools\\godot-4.7",
+        "Target": null
+      },
+      "preFreeBytes": 95077486592,
+      "postFreeBytes": 98102611968
+    },
+    {
+      "name": "7f0d9f2d4c48-20260905-035304-4b88aaab",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-035304-4b88aaab",
+      "passed": true,
+      "junction": {
+        "Present": false,
+        "Removed": false,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\7f0d9f2d4c48-20260905-035304-4b88aaab\\tools\\godot-4.7",
+        "Target": null
+      },
+      "preFreeBytes": 98110488576,
+      "postFreeBytes": 101135093760
+    },
+    {
+      "name": "a90e405aad17-20260903-171503-ac14e4b2",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\a90e405aad17-20260903-171503-ac14e4b2",
+      "passed": true,
+      "junction": {
+        "Present": false,
+        "Removed": false,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\a90e405aad17-20260903-171503-ac14e4b2\\tools\\godot-4.7",
+        "Target": null
+      },
+      "preFreeBytes": 101135216640,
+      "postFreeBytes": 107331039232
+    },
+    {
+      "name": "f559463df6f3-20260829-180059-fe46c7bb",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\f559463df6f3-20260829-180059-fe46c7bb",
+      "passed": true,
+      "junction": {
+        "Present": false,
+        "Removed": false,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\f559463df6f3-20260829-180059-fe46c7bb\\tools\\godot-4.7",
+        "Target": null
+      },
+      "preFreeBytes": 107331055616,
+      "postFreeBytes": 114808008704
+    },
+    {
+      "name": "patch-build-9ffdf01b",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-patch-build-9ffdf01b",
+      "passed": true,
+      "junction": {
+        "Present": true,
+        "Removed": true,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-patch-build-9ffdf01b\\tools\\godot-4.7",
+        "Target": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7"
+      },
+      "preFreeBytes": 114808000512,
+      "postFreeBytes": 117102911488
+    },
+    {
+      "name": "device-hotfix-74297ac2",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\device-hotfix-74297ac2",
+      "passed": true,
+      "junction": {
+        "Present": true,
+        "Removed": true,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\device-hotfix-74297ac2\\tools\\godot-4.7",
+        "Target": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7"
+      },
+      "preFreeBytes": 117102911488,
+      "postFreeBytes": 119405408256
+    },
+    {
+      "name": "hotfix-e2014fe5",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\hotfix-e2014fe5",
+      "passed": true,
+      "junction": {
+        "Present": true,
+        "Removed": true,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\hotfix-e2014fe5\\tools\\godot-4.7",
+        "Target": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7"
+      },
+      "preFreeBytes": 119388831744,
+      "postFreeBytes": 121678790656
+    },
+    {
+      "name": "perf-device-build-82aa5c83",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\perf-device-build-82aa5c83",
+      "passed": true,
+      "junction": {
+        "Present": true,
+        "Removed": true,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\perf-device-build-82aa5c83\\tools\\godot-4.7",
+        "Target": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7"
+      },
+      "preFreeBytes": 121688182784,
+      "postFreeBytes": 123983429632
+    },
+    {
+      "name": "perf-device-build-final-7f0d9f2d",
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\perf-device-build-final-7f0d9f2d",
+      "passed": true,
+      "junction": {
+        "Present": true,
+        "Removed": true,
+        "Path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\perf-device-build-final-7f0d9f2d\\tools\\godot-4.7",
+        "Target": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7"
+      },
+      "preFreeBytes": 123983478784,
+      "postFreeBytes": 126286782464
+    }
+  ],
+  "stoppedOnFailure": false,
+  "failure": null,
+  "finishedUtc": "2026-09-05T09:55:58.3945953Z"
+}

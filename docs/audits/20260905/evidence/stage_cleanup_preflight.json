@@ -1,0 +1,144 @@
+{
+  "schema": "hardcore.stage_cleanup_preflight.v1",
+  "generated_utc": "2026-09-05T09:54:29.1041336Z",
+  "stage": {
+    "path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\52ae0565856c-20260905-172022-d8fe8765",
+    "head": "52ae0565856c2d99a28639b2bf0c6278186e0858",
+    "registered_worktree": true,
+    "branch": null,
+    "detached": true,
+    "main_head_at_check": "2bd4bb36e4f1e8bd1510e62f0a7c8ece96c7e8bc",
+    "main_only_commits": 1,
+    "candidate_only_commits": 0,
+    "candidate_is_main_ancestor": true,
+    "tracked_dirty_count": 0,
+    "logical_file_count": 87246,
+    "logical_bytes": 5530211784,
+    "reparse_count": 0,
+    "reparse_points": []
+  },
+  "generated_state": {
+    "untracked_nonignored_file_count": 11000,
+    "untracked_nonignored_classes": {
+      "android_generated": 10964,
+      "uid": 36,
+      "translation": 0,
+      "unknown": 0
+    },
+    "ignored_file_count": 61357,
+    "ignored_classes": {
+      "godot_generated": 16207,
+      "android_generated": 37692,
+      "outputs_generated": 5,
+      "import_cache": 7452,
+      "generated_build_info": 1,
+      "unknown": 0
+    },
+    "all_untracked_and_ignored_are_generated_or_uid_translation": true
+  },
+  "stage_outputs": {
+    "file_count": 6,
+    "bytes": 450465497,
+    "files": [
+      {
+        "relative": "outputs/agent_rules_migration/rule_migration_matrix.json",
+        "bytes": 918,
+        "sha256": "082d5b2508a42dea4bce1a215ff4a301fc2d64118523caf0641a9fd646b770dd"
+      },
+      {
+        "relative": "outputs/android_isolated_export_stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "relative": "outputs/android_isolated_export_stdout.log",
+        "bytes": 1013,
+        "sha256": "7e8d6188c11a4895beae0959573cadbe8afca6b188097f6bb90ba811989cc260"
+      },
+      {
+        "relative": "outputs/android_isolated_export.log",
+        "bytes": 763,
+        "sha256": "b090c246fd3d8c164368a2d421daa8b7d4f1d6e9555f872527971165ecd98bcc"
+      },
+      {
+        "relative": "outputs/android_isolated_import.log",
+        "bytes": 1269746,
+        "sha256": "bc438828fde3428a5a5318bd236e6554a9a0a26da5ae94cdfd0b10d60d7262c2"
+      },
+      {
+        "relative": "outputs/hardcore/HardCore-isolated-debug.apk",
+        "bytes": 449193057,
+        "sha256": "26584b871f61b2f6ec2dddaf52432263e7d68a6b8bea35b2a3196d59d5b21664"
+      }
+    ],
+    "apk_duplicate_source": {
+      "relative": "android/build/build/outputs/apk/standard/debug/android_debug.apk",
+      "bytes": 449193057,
+      "sha256": "26584b871f61b2f6ec2dddaf52432263e7d68a6b8bea35b2a3196d59d5b21664"
+    }
+  },
+  "retention_matches": [
+    {
+      "stage": "assets/generated/build_info.json",
+      "retained": "outputs/audit_upgrade_20260905/final_build/build_info.json",
+      "bytes": 327,
+      "sha256": "0b2e6fd612ccf20a16a3ea1b7ed1eda7235b89991dfe95c1ff2561709bffe85f",
+      "match": true
+    },
+    {
+      "stage": "outputs/android_isolated_export_stderr.log",
+      "retained": "outputs/audit_upgrade_20260905/final_build/export_stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "match": true
+    },
+    {
+      "stage": "outputs/android_isolated_export_stdout.log",
+      "retained": "outputs/audit_upgrade_20260905/final_build/export_stdout.log",
+      "bytes": 1013,
+      "sha256": "7e8d6188c11a4895beae0959573cadbe8afca6b188097f6bb90ba811989cc260",
+      "match": true
+    },
+    {
+      "stage": "outputs/android_isolated_export.log",
+      "retained": "outputs/audit_upgrade_20260905/final_build/export_godot.log",
+      "bytes": 763,
+      "sha256": "b090c246fd3d8c164368a2d421daa8b7d4f1d6e9555f872527971165ecd98bcc",
+      "match": true
+    },
+    {
+      "stage": "outputs/android_isolated_import.log",
+      "retained": "outputs/audit_upgrade_20260905/final_build/import.log",
+      "bytes": 1269746,
+      "sha256": "bc438828fde3428a5a5318bd236e6554a9a0a26da5ae94cdfd0b10d60d7262c2",
+      "match": true
+    },
+    {
+      "stage": "outputs/hardcore/HardCore-isolated-debug.apk",
+      "retained": "outputs/hardcore/HardCore-20260905-audit-milestone-debug.apk",
+      "bytes": 449193057,
+      "sha256": "26584b871f61b2f6ec2dddaf52432263e7d68a6b8bea35b2a3196d59d5b21664",
+      "match": true
+    },
+    {
+      "stage": "outputs/agent_rules_migration/rule_migration_matrix.json",
+      "retained": "outputs/audit_upgrade_20260905/final_build/stage_retention/52ae0565856c-20260905-172022-d8fe8765/outputs/agent_rules_migration/rule_migration_matrix.json",
+      "bytes": 918,
+      "sha256": "082d5b2508a42dea4bce1a215ff4a301fc2d64118523caf0641a9fd646b770dd",
+      "match": true
+    }
+  ],
+  "archive_reference": {
+    "cleanup_archive_manifest_sha256": "6bd29d7b29479e96be4c714665d25fb78012754fb0ffe647b368c380cba8b33e",
+    "stage_retention_added_only": true,
+    "existing_final_build_files_modified": false
+  },
+  "decision": {
+    "included_in_current_twelve_tree_cleanup": false,
+    "safe_to_remove_only_after_separate_root_decision": true,
+    "godot_started": false,
+    "device_operation": false,
+    "git_write": false,
+    "source_edit": false
+  }
+}
