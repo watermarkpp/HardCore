@@ -11,6 +11,7 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 const Router := preload("res://scripts/skills/skill_runtime_router.gd")
 const DataLoader := preload("res://scripts/skills/skill_data_loader.gd")
+const FIXTURE_MONSTER_ID := 19
 
 const MATRIX := [
 	{
@@ -331,19 +332,27 @@ func _compare_shadow(
 
 func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": "profession_matrix_target",
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-		"anti_magic_points": 0,
-		"magic_defense_min": 0,
-		"magic_defense_max": 0,
-	}, caster, false)
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"profession matrix fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
+	)
+	enemy.setup(canonical_data, caster, false)
+	assert(
+		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
+		"profession matrix fixture must remain an ordinary exact-ID target"
+	)
+	enemy.max_hp = 9999
+	enemy.current_hp = enemy.max_hp
 	enemy.global_position = position
 	enemy.control_time = 60.0
 	game.add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"profession matrix fixture target must survive exact-ID admission"
+	)
 	return enemy
 
 

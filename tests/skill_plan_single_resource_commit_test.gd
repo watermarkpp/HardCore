@@ -9,6 +9,7 @@ const Fixtures := preload(
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 const DataLoader := preload("res://scripts/skills/skill_data_loader.gd")
+const FIXTURE_MONSTER_ID := 19
 
 
 func _ready() -> void:
@@ -28,13 +29,26 @@ func _run() -> void:
 		await get_tree().process_frame
 	game.player.current_mp = 500
 	var target := EnemyActor.new()
-	target.setup(
-		{"name": "q3a_mp", "hp": 9999, "attackMin": 1, "attackMax": 1, "level": 1},
-		game.player,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"resource commit fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
 	)
+	target.setup(canonical_data, game.player, false)
+	assert(
+		target.monster_id == FIXTURE_MONSTER_ID and not target.is_boss,
+		"resource commit fixture must remain an ordinary exact-ID target"
+	)
+	target.max_hp = 9999
+	target.current_hp = target.max_hp
 	target.global_position = game.player.global_position + Vector2(18, 0)
 	game.add_child(target)
+	assert(
+		is_instance_valid(target)
+		and not target.is_queued_for_deletion()
+		and target.can_receive_damage(),
+		"resource commit fixture target must survive exact-ID admission"
+	)
 	target.set_physics_process(false)
 	target.apply_control(10.0)
 	await get_tree().process_frame

@@ -8,6 +8,9 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	PlayerState.level = 6
+	PlayerState.recalculate_stats()
+	assert(PlayerState.max_inventory_weight() >= 60, "比奇任务奖励夹具负重不足")
 	assert(GameData.bich_quest_count() == 6, "比奇主线必须包含六段")
 	var quests := GameData.get_bich_quests()
 	assert(quests[0].get("confidence", "") == "B", "初级装备任务必须保持经典改编B标记")

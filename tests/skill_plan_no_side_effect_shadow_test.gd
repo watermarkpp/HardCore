@@ -8,6 +8,7 @@ const Fixtures := preload(
 )
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
+const FIXTURE_MONSTER_ID := 19
 
 
 func _ready() -> void:
@@ -23,13 +24,26 @@ func _run() -> void:
 		await get_tree().process_frame
 	game.player.current_mp = 200
 	var target := EnemyActor.new()
-	target.setup(
-		{"name": "q3a_shadow", "hp": 500, "attackMin": 1, "attackMax": 1, "level": 1},
-		game.player,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"shadow fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
 	)
+	target.setup(canonical_data, game.player, false)
+	assert(
+		target.monster_id == FIXTURE_MONSTER_ID and not target.is_boss,
+		"shadow fixture must remain an ordinary exact-ID target"
+	)
+	target.max_hp = 500
+	target.current_hp = target.max_hp
 	target.global_position = game.player.global_position + Vector2(60, 0)
 	game.add_child(target)
+	assert(
+		is_instance_valid(target)
+		and not target.is_queued_for_deletion()
+		and target.can_receive_damage(),
+		"shadow fixture target must survive exact-ID admission"
+	)
 	target.set_physics_process(false)
 	await get_tree().process_frame
 

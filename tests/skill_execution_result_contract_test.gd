@@ -4,6 +4,7 @@ extends Node
 ## full frozen field set; rejections carry accepted=false and zero commits.
 
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
+const FIXTURE_MONSTER_ID := 19
 
 var _game: Node
 var _caster: PlayerCharacter
@@ -136,17 +137,25 @@ func _check_rejection_result(result: Dictionary) -> void:
 
 func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": "execution_result_target",
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-		"anti_magic_points": 0,
-		"magic_defense_min": 0,
-		"magic_defense_max": 0,
-	}, caster, false)
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"execution-result fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
+	)
+	enemy.setup(canonical_data, caster, false)
+	assert(
+		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
+		"execution-result fixture must remain an ordinary exact-ID target"
+	)
+	enemy.max_hp = 9999
+	enemy.current_hp = enemy.max_hp
 	enemy.global_position = position
 	enemy.control_time = 60.0
 	game.add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"execution-result fixture target must survive exact-ID admission"
+	)
 	return enemy
