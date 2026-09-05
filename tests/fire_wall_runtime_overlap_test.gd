@@ -12,9 +12,12 @@ func _run() -> void:
 	var caster := Node2D.new()
 	add_child(caster)
 	var target := EnemyActor.new()
+	target.setup({
+		"monster_id": 19,
+	}, null, false)
+	target.display_name = "fire-wall-overlap-target"
 	target.max_hp = 999
 	target.current_hp = 999
-	target.monster_data = {"name": "fire-wall-overlap-target"}
 	add_child(target)
 	target.global_position = Vector2.ZERO
 	target.add_to_group("enemies")

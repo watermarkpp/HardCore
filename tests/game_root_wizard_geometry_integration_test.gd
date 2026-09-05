@@ -644,6 +644,9 @@ func _register_enemy_with_runtime_index(
 	)
 	enemy.configure_spatial_index(spatial_index, spawn_serial)
 	enemy.set_meta("spawn_serial", spawn_serial)
+	# The production target query rejects actors from another zone generation;
+	# keep this manually-created canonical actor in the active fixture zone.
+	enemy.set_meta("zone_generation", int(game.get("_zone_generation")))
 	enemy.set_combat_position(position_px, &"integration_fixture_spawn")
 	spatial_index.register(
 		spawn_serial,

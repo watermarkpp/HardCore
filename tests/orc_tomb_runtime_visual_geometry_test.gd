@@ -16,6 +16,7 @@ func _ready() -> void:
 	var total_wall_instances := 0
 	var total_wall_commands := 0
 	var layout_hashes := {}
+	var unpublished_divergence_count := 0
 	for config: Dictionary in MAPS:
 		var map_id := str(config.map_id)
 		var loaded := MapEditorLoadService.load_document(
@@ -24,41 +25,84 @@ func _ready() -> void:
 		assert(loaded.ok, "%s:%s" % [map_id, loaded.get("errors", [])])
 		var document: Dictionary = loaded.document
 		assert(int(document.runtime_map_id) == int(config.runtime_map_id))
+		var runtime_map_id := int(config.runtime_map_id)
+		assert(
+			MapEditorRuntimeBridge.has_runtime_map(runtime_map_id),
+			"%s published runtime is not approved" % map_id
+		)
 		var runtime_loaded := MapEditorRuntimeMapService.load_runtime(
-			MapEditorBuildRuntimeService.default_runtime_path(map_id)
+			MapEditorRuntimeBridge.runtime_path(runtime_map_id)
 		)
 		assert(
 			runtime_loaded.ok,
 			"%s:%s" % [map_id, runtime_loaded.get("errors", [])]
 		)
 		var runtime: Dictionary = runtime_loaded.runtime
+		assert(int(runtime.get("source", {}).get("runtime_map_id", -1)) == runtime_map_id)
+		assert(str(runtime.get("source", {}).get("map_id", "")) == map_id)
 		var source_instances: Array = []
 		for instance: Dictionary in MapEditorInstanceService.all_instances(document):
 			if bool(instance.get("runtime_export", true)):
 				source_instances.append(instance)
 		var runtime_instances: Array = runtime.instances
-		assert(runtime_instances.size() == source_instances.size(), map_id)
-		assert(
-			GeometryService.geometry_sha256(runtime_instances)
-			== GeometryService.geometry_sha256(source_instances),
-			"%s runtime instances diverged from the editor source" % map_id
+		var published_binding: Dictionary = runtime.get("source", {}).get(
+			"candidate_binding", {}
 		)
-		var source_commands := GeometryService.sorted_draw_commands(
-			source_instances
+		assert(
+			str(published_binding.get("contract_id", ""))
+			== MapEditorBuildRuntimeService.CANDIDATE_BINDING_CONTRACT_ID,
+			"%s published candidate binding contract is invalid" % map_id
+		)
+		assert(
+			str(published_binding.get("map_key", "")) == map_id
+			and int(published_binding.get("runtime_map_id", -1)) == runtime_map_id,
+			"%s published candidate binding identity drifted" % map_id
+		)
+		var editor_matches_published: bool = (
+			MapEditorBuildRuntimeService.candidate_matches_document(
+				{"document_binding": published_binding}, document
+			)
+		)
+		var geometry_matches_published: bool = (
+			runtime_instances.size() == source_instances.size()
+			and GeometryService.geometry_sha256(runtime_instances)
+			== GeometryService.geometry_sha256(source_instances)
+		)
+		if not geometry_matches_published:
+			unpublished_divergence_count += 1
+			assert(
+				not editor_matches_published,
+				"%s binding claims parity while geometry diverges" % map_id
+			)
+			assert(
+				map_id == "bich_orc_tomb_f2",
+				"unexpected editor/published geometry divergence:%s" % map_id
+			)
+			assert(
+				int(document.get("editor_meta", {}).get("runtime_approved_revision", -1))
+				< int(document.get("editor_meta", {}).get("revision", -1)),
+				"%s divergence is not marked as an unpublished revision" % map_id
+			)
+		var source_commands: Array = (
+			GeometryService.sorted_draw_commands(source_instances)
+			if geometry_matches_published
+			else []
 		)
 		var runtime_commands := GeometryService.sorted_draw_commands(
 			runtime_instances
 		)
-		assert(runtime_commands.size() == source_commands.size(), map_id)
+		if geometry_matches_published:
+			assert(runtime_commands.size() == source_commands.size(), map_id)
 		var design_raw: Array = runtime.design.design_size
 		var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
 		var editor_draw_offset := (
 			-Vector2(MapEditorCoordinate.ground_image_size(design_size)) * 0.5
 		)
 		for command_index in runtime_commands.size():
-			var source_command: Dictionary = source_commands[command_index]
 			var runtime_command: Dictionary = runtime_commands[command_index]
-			_assert_same_command(source_command, runtime_command, map_id)
+			if geometry_matches_published:
+				var source_command: Dictionary = source_commands[command_index]
+				_assert_same_command(source_command, runtime_command, map_id)
 			if command_index > 0:
 				assert(
 					not GeometryService.draw_command_less(
@@ -123,23 +167,25 @@ func _ready() -> void:
 				total_wall_instances += 1
 		total_instances += runtime_instances.size()
 		total_commands += runtime_commands.size()
-		var layout_sha := GeometryService.editor_layout_sha256(document)
+		var layout_sha := GeometryService.geometry_sha256(runtime_instances)
 		assert(not layout_sha.is_empty(), map_id)
 		layout_hashes[layout_sha] = true
-	assert(layout_hashes.size() == 3, "three editor layouts must remain distinct")
+	assert(layout_hashes.size() == 3, "three published runtime layouts must remain distinct")
 	assert(total_wall_instances > 0)
 	assert(
 		total_wall_commands > total_wall_instances,
 		"wall render_parts were flattened to one sprite per instance"
 	)
 	print(
-		"ORC_TOMB_RUNTIME_VISUAL_GEOMETRY_PASS "
-		+ "contract=%s maps=911001,911002,911003 instances=%d commands=%d walls=%d"
+		("ORC_TOMB_RUNTIME_VISUAL_GEOMETRY_PASS "
+		+ "contract=%s maps=911001,911002,911003 instances=%d commands=%d "
+		+ "walls=%d unpublished_divergence=%d")
 		% [
 			GeometryService.VISUAL_GEOMETRY_CONTRACT_ID,
 			total_instances,
 			total_commands,
 			total_wall_instances,
+			unpublished_divergence_count,
 		]
 	)
 	get_tree().quit(0)
