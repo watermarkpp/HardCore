@@ -7,6 +7,8 @@ Purpose: subsystem/path navigation for model handoff. Read it after current stat
 
 Current navigation context verified against HEAD: `ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`
 
+2026-09-05 审计升级导航：`docs/AUDIT_UPGRADE_20260905.md` 为完整施工及限制记录，`docs/audits/20260905/MILESTONE_APK.md` 为固定 `52ae0565` 构建与待设备安装交付，`docs/audits/20260905/evidence/` 为已入库验收证据。当前状态优先读取 `PROJECT_CURRENT_STATUS.md` 顶部的新日期章节，不把以下历史导航 SHA 当作当前 HEAD。
+
 ## Required Context Order
 
 1. `PROJECT_CURRENT_STATUS.md` — 当前阶段、已关闭 Gate、HOLD 与下一正式 Gate。
