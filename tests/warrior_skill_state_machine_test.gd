@@ -343,18 +343,20 @@ func _make_enemy(
 	is_boss := false
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
+	var canonical_monster_id := 76 if is_boss else 19
+	var expected_classification := "boss" if is_boss else "ordinary"
 	enemy.setup(
-		{"monster_id": 19, "name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level},
+		{"monster_id": canonical_monster_id, "name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level},
 		player,
-		is_boss
+		false
 	)
-	# Keep this fixture canonical-ID valid while preserving its local level/name,
-	# health and boss flags for the state-machine assertions.
+	# Keep this fixture canonical-ID valid while preserving its local level/name
+	# and high-HP isolation for the state-machine assertions. Boss identity must
+	# come from the selected canonical catalog entry, never this test argument.
 	enemy.display_name = display_name
 	enemy.level = enemy_level
 	enemy.max_hp = 9999
 	enemy.current_hp = 9999
-	enemy.is_boss = is_boss
 	game._runtime_spawn_serial += 1
 	var spawn_serial := int(game._runtime_spawn_serial)
 	enemy.configure_runtime_map_projection(
@@ -380,6 +382,14 @@ func _make_enemy(
 	# fixture after it enters the tree so hit-frame assertions use the intended
 	# fixed geometry.
 	enemy.control_time = 60.0
+	assert(
+		enemy.monster_id == canonical_monster_id
+		and enemy.is_boss == is_boss
+		and str(enemy.monster_data.get("classification", "")) == expected_classification
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"战士夹具未从canonical ID派生有效%s身份" % expected_classification
+	)
 	return enemy
 
 
