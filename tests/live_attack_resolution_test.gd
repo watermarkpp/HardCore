@@ -21,7 +21,10 @@ func _run() -> void:
 	await get_tree().process_frame
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
-			(value as EnemyActor).global_position = game.player.global_position + Vector2(3000, 3000)
+			_move_enemy(
+				value as EnemyActor,
+				game.player.global_position + Vector2(3000, 3000)
+			)
 
 	var origin_at_input: Vector2 = game.player.global_position
 	var target_axis_gu := Vector2(1.0, 0.35).normalized()
@@ -39,6 +42,8 @@ func _run() -> void:
 			target_axis_gu.rotated(PI / 2.0)
 		)
 	)
+	_assert_live_fixture(intended, "原锁定目标")
+	_assert_live_fixture(decoy, "禁止偷换目标")
 	game.locked_target = intended
 
 	# Body animation remains eight-way, while the release geometry uses the
@@ -64,11 +69,17 @@ func _run() -> void:
 
 	# An out-of-range lock fails closed. It must not fall back to a nearer target.
 	intended.current_hp = intended.max_hp
-	intended.global_position = game.player.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-		target_axis_gu * 4.0
+	_move_enemy(
+		intended,
+		game.player.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			target_axis_gu * 4.0
+		)
 	)
-	decoy.global_position = game.player.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-		target_axis_gu
+	_move_enemy(
+		decoy,
+		game.player.global_position + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			target_axis_gu
+		)
 	)
 	game.player._pending_attack_context = {
 		"mode": "normal",
@@ -93,7 +104,7 @@ func _run() -> void:
 	# It must update both caster origin and target direction at release time.
 	var moved_origin := origin_at_input + Vector2(18, -11)
 	game.player.global_position = moved_origin
-	intended.global_position = moved_origin + Vector2(-40, 28)
+	_move_enemy(intended, moved_origin + Vector2(-40, 28))
 	var live_geometry: Dictionary = ReleaseGeometry.resolve(
 		game.player.global_position,
 		Vector2.RIGHT,
@@ -109,7 +120,7 @@ func _run() -> void:
 		),
 		"职业技能发射帧仍使用旧目标方向"
 	)
-	decoy.global_position = moved_origin + Vector2(3000, 3000)
+	_move_enemy(decoy, moved_origin + Vector2(3000, 3000))
 	_verify_caster_projectile_release(game, intended, origin_at_input)
 	game.queue_free()
 	await get_tree().process_frame
@@ -122,6 +133,7 @@ func _make_enemy(game: Node, display_name: String, position: Vector2) -> EnemyAc
 	var enemy := EnemyActor.new()
 	enemy.setup(
 		{
+			"monster_id": 38,
 			"name": display_name,
 			"hp": 100,
 			"attackMin": 1,
@@ -134,10 +146,49 @@ func _make_enemy(game: Node, display_name: String, position: Vector2) -> EnemyAc
 		game.player,
 		false
 	)
-	enemy.global_position = position
+	enemy.display_name = display_name
+	enemy.max_hp = 100
+	enemy.current_hp = 100
 	enemy.control_time = 60.0
+	game._runtime_spawn_serial += 1
+	var spawn_serial := int(game._runtime_spawn_serial)
+	enemy.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	enemy.configure_spatial_index(game._combat_spatial_index, spawn_serial)
+	enemy.set_meta("spawn_serial", spawn_serial)
+	enemy.set_meta("zone_generation", int(game._zone_generation))
+	enemy.set_combat_position(position, &"live_attack_fixture_spawn")
+	game._combat_spatial_index.register(
+		spawn_serial,
+		game.current_map_id,
+		game._canonical_screen_px_to_ground_gu(position),
+		enemy.combat_radius_gu,
+		spawn_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position"),
+	)
 	game.add_child(enemy)
 	return enemy
+
+
+func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
+	enemy.set_combat_position(position, &"live_attack_fixture_move")
+
+
+func _assert_live_fixture(enemy: EnemyActor, label: String) -> void:
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.monster_id == 38
+		and str(enemy.monster_data.get("canonical_name", "")) == "半兽勇士"
+		and str(enemy.monster_data.get("classification", "")) == "elite"
+		and not enemy.is_boss,
+		"%s夹具未保持canonical elite ID38身份" % label
+	)
+	assert(enemy.can_receive_damage(), "%s夹具未保持可受击状态" % label)
 
 
 func _verify_caster_projectile_release(
@@ -156,7 +207,7 @@ func _verify_caster_projectile_release(
 	game.player.current_mp = 999
 	var live_origin := origin_at_input + Vector2(12, -7)
 	game.player.global_position = live_origin
-	target.global_position = live_origin + Vector2(-72, 28)
+	_move_enemy(target, live_origin + Vector2(-72, 28))
 	var release_geometry: Dictionary = ReleaseGeometry.resolve(
 		live_origin,
 		Vector2.RIGHT,
