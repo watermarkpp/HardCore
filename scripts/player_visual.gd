@@ -23,6 +23,10 @@ const CLIENT_EFFECTS := {
 }
 const CLIENT_EFFECT_ACTOR_OFFSET := Vector2(ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR - ArtSpec.WARRIOR_FOOT_ANCHOR)
 const SUPPORTED_PROFESSIONS := ["战士", "法师", "道士"]
+## Temporarily suppress the existing weapon/skill swing cue while preserving
+## the AudioStreamPlayer2D node and stream selection for a later audio pass.
+## This is local to the actor; Master and Music buses remain untouched.
+const SKILL_AUDIO_ENABLED := false
 
 var actor: PlayerCharacter
 var sprite: Sprite2D
@@ -943,7 +947,12 @@ func _update_action_audio() -> void:
 		return
 	_action_audio_played = true
 	weapon_audio.stream = _weapon_swing_stream()
-	weapon_audio.play()
+	if SKILL_AUDIO_ENABLED:
+		weapon_audio.play()
+	else:
+		# Keep the selected stream observable for existing visual contracts, but
+		# never start playback until the temporary gate is explicitly reopened.
+		weapon_audio.stop()
 
 
 func _weapon_swing_stream() -> AudioStream:

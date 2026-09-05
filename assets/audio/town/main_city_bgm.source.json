@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "assetId": "audio.town.main_city_bgm",
+  "role": "main_city_bgm",
+  "distribution": "client.user_supplied",
+  "runtimePath": "res://assets/audio/town/main_city_bgm.ogg",
+  "source": {
+    "kind": "user_supplied_external_file",
+    "originalFilename": "1788586979404.m4a",
+    "sourceLocator": "C:/Users/Administrator/Downloads/1788586979404.m4a",
+    "sha256": "61cbd3c6d1fb7459115cca67f38a26293cb228f57563a4528210fc5f80b56115",
+    "durationSeconds": 48.181406,
+    "codec": "aac",
+    "sampleRateHz": 44100,
+    "channels": 2
+  },
+  "conversion": {
+    "tool": "ffmpeg 8.1",
+    "format": "ogg",
+    "codec": "vorbis",
+    "quality": 5,
+    "sampleRateHz": 44100,
+    "channels": 2,
+    "metadataPolicy": "strip_input_metadata",
+    "runtimeLoop": false,
+    "runtimeSha256": "c750b7ee2c6a3baaa326d1dbcfaaa6bca853df5c00c6adb6d444b2bbac1e71c6",
+    "runtimeDurationSeconds": 48.181406,
+    "runtimeBytes": 795642
+  },
+  "cityMapIds": [910001, 910003, 910005, 910006, 910007],
+  "townAreaPolicyId": "gameplay.main_city.safe_area.v1",
+  "preservation": "The original M4A remains at the user-provided external source path; it is not deleted by this conversion."
+}

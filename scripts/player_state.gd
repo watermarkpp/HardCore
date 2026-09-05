@@ -25,6 +25,7 @@ signal consumable_requested(item_name: String)
 signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
+signal levels_gained(previous_level: int, new_level: int)
 
 const SAVE_VERSION := 10
 const SAVE_PATH := "user://player_save_v03.json"
@@ -101,6 +102,11 @@ const STARTER_LOADOUT_CONTRACT_ID := "gameplay.character.starter_loadout.v1"
 const CHARACTER_DELETE_CONTRACT_ID := "player_state.character.delete.v1"
 const STARTER_WEAPON_ITEM_NAME := "木剑"
 const STARTER_ARMOR_BY_GENDER := {"男": "布衣(男)", "女": "布衣(女)"}
+# The service table remains the raw/source authority.  This is the explicit
+# gameplay-only tuning policy for the current character: level thresholds use
+# 10% of that source value, rounded to the nearest integer and never below 1.
+const GAMEPLAY_EXPERIENCE_THRESHOLD_SCALE := 0.10
+const GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM := 1
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
 	10: 6000, 11: 8000, 12: 10000, 13: 15000, 14: 30000, 15: 40000, 16: 50000,
@@ -1688,13 +1694,26 @@ func lose_gold_percent(rate: float) -> int:
 
 
 func add_experience(amount: int) -> void:
-	experience += maxi(0, amount)
+	var gained := maxi(0, amount)
+	if gained <= 0:
+		return
+	var previous_level := level
+	var previous_experience := experience
+	experience += gained
 	while experience >= experience_to_next_level():
 		experience -= experience_to_next_level()
 		level += 1
-		recalculate_stats()
+		recalculate_stats(false)
+	var leveled_up := level != previous_level
+	if not _commit_save():
+		experience = previous_experience
+		level = previous_level
+		if leveled_up:
+			recalculate_stats(false)
+		return
 	profile_changed.emit()
-	_commit_save()
+	if leveled_up:
+		levels_gained.emit(previous_level, level)
 
 
 ## Compatibility entrypoint for one death. Runtime callers should batch every
@@ -1792,6 +1811,8 @@ func record_kills_and_experience_batch(
 		if test_mode:
 			_test_transaction_counters["profile_signals"] = int(_test_transaction_counters.get("profile_signals", 0)) + 1
 		profile_changed.emit()
+	if level != level_before:
+		levels_gained.emit(level_before, level)
 	_last_death_settlement_profile = {
 		"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
 		"save_ms": float(_last_runtime_commit_profile.get("duration_ms", 0.0)),
@@ -1827,12 +1848,22 @@ func apply_death_experience_penalty() -> int:
 
 
 func experience_to_next_level() -> int:
+	var source_experience: int
 	if GameData != null and not GameData.service_reference.is_empty():
-		return GameData.service_exp_to_next_level(level)
-	if VERIFIED_EXPERIENCE_1_TO_22.has(level):
-		return int(VERIFIED_EXPERIENCE_1_TO_22[level])
-	# 23级以上尚未完成多源核验，暂沿用保守占位曲线并在验收报告中标记。
-	return 300000 + maxi(0, level - 22) * 100000
+		source_experience = GameData.service_exp_to_next_level(level)
+	elif VERIFIED_EXPERIENCE_1_TO_22.has(level):
+		source_experience = int(VERIFIED_EXPERIENCE_1_TO_22[level])
+	else:
+		# 23级以上尚未完成多源核验，暂沿用保守占位曲线并在验收报告中标记。
+		source_experience = 300000 + maxi(0, level - 22) * 100000
+	return _gameplay_experience_threshold(source_experience)
+
+
+func _gameplay_experience_threshold(source_experience: int) -> int:
+	return maxi(
+		GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM,
+		roundi(float(maxi(0, source_experience)) * GAMEPLAY_EXPERIENCE_THRESHOLD_SCALE),
+	)
 
 
 func equip_inventory_index(index: int, preferred_slot := "") -> String:

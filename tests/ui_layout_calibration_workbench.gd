@@ -2,6 +2,7 @@ extends Control
 
 const CalibrationOverlayScript := preload("res://scripts/ui_layout_calibration_overlay.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
+const LevelUpPreviewScript := preload("res://scripts/ui_level_up_preview.gd")
 
 const DEVICE_PHYSICAL_SIZE := Vector2i(2664, 1200)
 const EXPECTED_DEVICE_LOGICAL_SIZE := Vector2(1598, 720)
@@ -10,6 +11,10 @@ const DEVICE_SAFE_RIGHT_PX := 129.0
 const INSPECTOR_WINDOW_SIZE := Vector2i(412, 1040)
 const INSPECTOR_GAP := 16
 const WORLD_BOOTSTRAP_TIMEOUT_MSEC := 30000
+const LEVEL_UP_PREVIEW_ARG := "--level-up-preview"
+const LEVEL_UP_PREVIEW_CAPTURE_ARG_PREFIX := "--capture-level-up-preview="
+const LEVEL_UP_PREVIEW_PEAK_PROGRESS := 0.48
+const LEVEL_UP_PREVIEW_RESTART_GAP_SECONDS := 0.65
 
 const PANEL_SPECS := [
 	{"id": "skill", "label": "技能", "panel_property": "skill_panel", "open_method": "_toggle_skill_book"},
@@ -36,18 +41,151 @@ var _character_hall_instance: Control
 var _confirmation_instance: Control
 var game: Node
 var hud: Node
+# Keep the preview reference dynamic so this workbench remains parse-safe even
+# before Godot has imported the new class_name resource in a fresh worktree.
+var level_up_preview
+var level_up_preview_status: Label
+var level_up_preview_toggle_button: Button
+var _level_up_preview_requested := false
+var _level_up_preview_capture_path := ""
+var _level_up_preview_capture_scheduled := false
+var _level_up_preview_capture_done := false
+var _level_up_preview_auto_active := false
+var _level_up_preview_peak_reached := false
+var _level_up_preview_restart_remaining := -1.0
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_parse_level_up_preview_args(OS.get_cmdline_user_args())
 	_build_native_inspector_window()
 	_build_panel_picker()
 	await _build_production_game()
 	_freeze_calibration_world()
 	_build_calibration_overlay()
+	_build_level_up_preview_controls()
 	assert(process_mode == Node.PROCESS_MODE_ALWAYS, "calibration workbench must process while the game is paused")
 	active_panel = null
 	_print_geometry()
+	if _level_up_preview_requested:
+		_start_requested_level_up_preview.call_deferred()
+
+
+func _process(delta: float) -> void:
+	if not _level_up_preview_auto_active or level_up_preview == null:
+		return
+	var delta_seconds := maxf(delta, 0.0)
+	if _level_up_preview_restart_remaining >= 0.0:
+		_level_up_preview_restart_remaining = maxf(
+			0.0,
+			_level_up_preview_restart_remaining - delta_seconds,
+		)
+		if _level_up_preview_restart_remaining <= 0.0:
+			_start_level_up_preview_auto_cycle()
+		return
+	if level_up_preview.is_playing():
+		if (
+			not _level_up_preview_peak_reached
+			and level_up_preview.progress() >= LEVEL_UP_PREVIEW_PEAK_PROGRESS
+		):
+			_level_up_preview_peak_reached = true
+			_schedule_level_up_preview_capture()
+		return
+	if level_up_preview.progress() >= 1.0:
+		_level_up_preview_restart_remaining = LEVEL_UP_PREVIEW_RESTART_GAP_SECONDS
+
+
+func _parse_level_up_preview_args(user_args: PackedStringArray) -> void:
+	for argument: String in user_args:
+		if argument == LEVEL_UP_PREVIEW_ARG:
+			_level_up_preview_requested = true
+		elif argument.begins_with(LEVEL_UP_PREVIEW_CAPTURE_ARG_PREFIX):
+			var raw_path := argument.trim_prefix(LEVEL_UP_PREVIEW_CAPTURE_ARG_PREFIX).strip_edges()
+			var capture_path := _resolve_project_local_capture_path(raw_path)
+			if capture_path.is_empty():
+				push_error("level-up preview capture path must be a project-local PNG: %s" % raw_path)
+				continue
+			_level_up_preview_capture_path = capture_path
+			_level_up_preview_requested = true
+
+
+func _resolve_project_local_capture_path(raw_path: String) -> String:
+	if raw_path.is_empty():
+		return ""
+	var project_root := ProjectSettings.globalize_path("res://").simplify_path()
+	var project_path := raw_path.replace("\\", "/")
+	if not project_path.begins_with("res://"):
+		project_path = "res://" + project_path.trim_prefix("/")
+	var absolute_path := ProjectSettings.globalize_path(project_path).simplify_path()
+	var normalized_root := project_root.replace("\\", "/").trim_suffix("/")
+	var normalized_path := absolute_path.replace("\\", "/")
+	var project_prefix := normalized_root + "/"
+	if (
+		not normalized_path.to_lower().begins_with(project_prefix.to_lower())
+		or normalized_path.get_extension().to_lower() != "png"
+	):
+		return ""
+	return absolute_path
+
+
+func _start_requested_level_up_preview() -> void:
+	if level_up_preview == null:
+		return
+	# This is a frozen, non-saving calibration fixture. Move only its actor to
+	# open foreground ground: the service-home well otherwise hides the body
+	# and makes a correct foot effect impossible to judge.
+	var preview_player := game.get("player") as Node2D
+	if preview_player != null:
+		var preview_offset := Vector2(-150.0, 110.0)
+		preview_player.position += preview_offset
+		var preview_anchor: Variant = (
+			preview_player.call("approved_ground_footpoint_local_px")
+			if preview_player.has_method("approved_ground_footpoint_local_px")
+			else Vector2.ZERO
+		)
+		level_up_preview.set_anchor(preview_anchor if preview_anchor is Vector2 else Vector2.ZERO)
+	_level_up_preview_auto_active = true
+	_start_level_up_preview_auto_cycle()
+
+
+func _start_level_up_preview_auto_cycle() -> void:
+	if level_up_preview == null or not _level_up_preview_auto_active:
+		return
+	_level_up_preview_peak_reached = false
+	_level_up_preview_restart_remaining = -1.0
+	level_up_preview.replay()
+
+
+func _schedule_level_up_preview_capture() -> void:
+	if (
+		_level_up_preview_capture_path.is_empty()
+		or _level_up_preview_capture_scheduled
+		or _level_up_preview_capture_done
+	):
+		return
+	_level_up_preview_capture_scheduled = true
+	_capture_level_up_preview_peak.call_deferred()
+
+
+func _capture_level_up_preview_peak() -> void:
+	await RenderingServer.frame_post_draw
+	if level_up_preview == null or _level_up_preview_capture_path.is_empty():
+		return
+	var capture_directory := _level_up_preview_capture_path.get_base_dir()
+	DirAccess.make_dir_recursive_absolute(capture_directory)
+	var image := get_viewport().get_texture().get_image()
+	var save_error := image.save_png(_level_up_preview_capture_path) if image != null else ERR_UNCONFIGURED
+	if save_error != OK:
+		push_error("level-up preview capture failed: %s (%s)" % [_level_up_preview_capture_path, save_error])
+		return
+	_level_up_preview_capture_done = true
+	print(
+		"UI_LEVEL_UP_PREVIEW_CAPTURE_PASS path=%s progress=%.3f anchor=%s" % [
+			_level_up_preview_capture_path,
+			level_up_preview.progress(),
+			level_up_preview.global_position,
+		]
+	)
 
 
 func _shortcut_input(event: InputEvent) -> void:
@@ -148,6 +286,7 @@ func _build_production_game() -> void:
 	safe_root.position = Vector2(safe_left, 0.0)
 	safe_root.size = logical_size - Vector2(safe_left + safe_right, 0.0)
 	await get_tree().process_frame
+	_build_level_up_preview()
 
 
 func _wait_for_production_world_ready() -> void:
@@ -169,12 +308,145 @@ func _wait_for_production_world_ready() -> void:
 	)
 
 
+func _build_level_up_preview() -> void:
+	var player := game.get("player") as Node2D
+	assert(player != null, "calibrator production player is unavailable for level-up preview")
+	level_up_preview = LevelUpPreviewScript.new()
+	level_up_preview.name = "CalibrationLevelUpPreview"
+	# Match the formal runtime mount: the owner is a player child on actor z=0,
+	# allowing the component's back pass to use show_behind_parent while the
+	# foreground pass remains after the actor body. The anchor is player-local so
+	# moving the calibration actor does not apply the preview offset twice.
+	level_up_preview.z_index = 0
+	level_up_preview.z_as_relative = true
+	level_up_preview.set_meta("render_domain", "actor_y_sort")
+	level_up_preview.set_meta("draw_order", "after_player_footpoint")
+	level_up_preview.set_meta("preview_only", true)
+	level_up_preview.set_meta("gameplay_event_source", "none")
+	player.add_child(level_up_preview)
+	var anchor_local: Variant = (
+		player.call("approved_ground_footpoint_local_px")
+		if player.has_method("approved_ground_footpoint_local_px")
+		else Vector2.ZERO
+	)
+	level_up_preview.set_anchor(anchor_local if anchor_local is Vector2 else Vector2.ZERO)
+	level_up_preview.reset()
+
+
+func _build_level_up_preview_controls() -> void:
+	assert(level_up_preview != null, "calibrator level-up preview was not created")
+	var panel := PanelContainer.new()
+	panel.name = "LevelUpPreviewControls"
+	panel.position = Vector2(12, 918)
+	panel.size = Vector2(388, 108)
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	inspector_host.add_child(panel)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 4)
+	panel.add_child(column)
+	var title := Label.new()
+	title.text = "升级脚下光环（仅校准预览）"
+	title.add_theme_font_size_override("font_size", 14)
+	column.add_child(title)
+	var actions := HBoxContainer.new()
+	actions.add_theme_constant_override("separation", 4)
+	column.add_child(actions)
+	var replay_button := Button.new()
+	replay_button.text = "重播"
+	replay_button.custom_minimum_size = Vector2(82, 36)
+	replay_button.pressed.connect(_replay_level_up_preview)
+	actions.add_child(replay_button)
+	level_up_preview_toggle_button = Button.new()
+	level_up_preview_toggle_button.text = "播放"
+	level_up_preview_toggle_button.custom_minimum_size = Vector2(82, 36)
+	level_up_preview_toggle_button.pressed.connect(_toggle_level_up_preview)
+	actions.add_child(level_up_preview_toggle_button)
+	var hide_button := Button.new()
+	hide_button.text = "隐藏"
+	hide_button.custom_minimum_size = Vector2(82, 36)
+	hide_button.pressed.connect(_hide_level_up_preview)
+	actions.add_child(hide_button)
+	level_up_preview_status = Label.new()
+	level_up_preview_status.text = "待播放 · 不连接升级事件"
+	level_up_preview_status.add_theme_font_size_override("font_size", 11)
+	level_up_preview_status.modulate = Color("e6c179")
+	column.add_child(level_up_preview_status)
+	level_up_preview.playback_started.connect(_on_level_up_preview_started)
+	level_up_preview.playback_paused.connect(_on_level_up_preview_paused)
+	level_up_preview.playback_finished.connect(_on_level_up_preview_finished)
+
+
+func _replay_level_up_preview() -> void:
+	if level_up_preview == null:
+		return
+	_level_up_preview_auto_active = false
+	_level_up_preview_restart_remaining = -1.0
+	level_up_preview.replay()
+	level_up_preview_toggle_button.text = "暂停"
+
+
+func _toggle_level_up_preview() -> void:
+	if level_up_preview == null:
+		return
+	_level_up_preview_auto_active = false
+	_level_up_preview_restart_remaining = -1.0
+	if level_up_preview.is_playing():
+		level_up_preview.pause()
+	else:
+		level_up_preview.play()
+
+
+func _hide_level_up_preview() -> void:
+	if level_up_preview == null:
+		return
+	_level_up_preview_auto_active = false
+	_level_up_preview_restart_remaining = -1.0
+	level_up_preview.reset()
+	level_up_preview_toggle_button.text = "播放"
+	level_up_preview_status.text = "已隐藏 · 待用户确认"
+
+
+func _on_level_up_preview_started() -> void:
+	if level_up_preview_toggle_button != null:
+		level_up_preview_toggle_button.text = "暂停"
+	if level_up_preview_status != null:
+		level_up_preview_status.text = (
+			"自动播放中 · 仅校准预览"
+			if _level_up_preview_auto_active
+			else "播放中 · 仅校准预览"
+		)
+
+
+func _on_level_up_preview_paused() -> void:
+	if level_up_preview_toggle_button != null:
+		level_up_preview_toggle_button.text = "继续"
+	if level_up_preview_status != null:
+		level_up_preview_status.text = "已暂停 · 仅校准预览"
+
+
+func _on_level_up_preview_finished() -> void:
+	if level_up_preview_toggle_button != null:
+		level_up_preview_toggle_button.text = "重播"
+	if level_up_preview_status != null:
+		level_up_preview_status.text = (
+			"自动循环 · 即将重播"
+			if _level_up_preview_auto_active
+			else "播放完成 · 点击重播"
+		)
+
+
 func _freeze_calibration_world() -> void:
 	_freeze_gameplay_branch(game, hud)
 	for enemy: Node in get_tree().get_nodes_in_group("enemies"):
 		if enemy is CanvasItem:
 			(enemy as CanvasItem).visible = false
 		enemy.process_mode = Node.PROCESS_MODE_DISABLED
+	# _freeze_gameplay_branch disables callbacks on every child, including this
+	# calibration-only node. Re-enable only its idle callback so Play/Replay can
+	# advance while the production world remains frozen.
+	if level_up_preview != null:
+		level_up_preview.process_mode = Node.PROCESS_MODE_ALWAYS
+		level_up_preview.set_process(true)
 
 
 func _freeze_gameplay_branch(node: Node, excluded_branch: Node) -> void:

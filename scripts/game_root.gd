@@ -3,6 +3,11 @@ extends Node2D
 const BICH_RUNTIME_MAP_ID := 910001
 const ORC_TOMB_F3_RUNTIME_MAP_ID := 911003
 const INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC := 60000
+const TownMusicControllerScript := preload("res://scripts/town_music_controller.gd")
+const LevelUpEffectScript := preload("res://scripts/ui_level_up_preview.gd")
+
+var _town_music_controller: Node
+var _player_level_up_effect: Node2D
 
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
@@ -1398,6 +1403,14 @@ func _ready() -> void:
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
 	add_child(player)
+	_player_level_up_effect = LevelUpEffectScript.new()
+	_player_level_up_effect.name = "PlayerLevelUpEffect"
+	_player_level_up_effect.z_index = 0
+	player.add_child(_player_level_up_effect)
+	_player_level_up_effect.process_mode = Node.PROCESS_MODE_INHERIT
+	_player_level_up_effect.set_meta("preview_only", false)
+	_player_level_up_effect.set_meta("gameplay_event_source", "PlayerState.levels_gained")
+	PlayerState.levels_gained.connect(_on_player_levels_gained)
 	_loot_pickup_runtime_manager = LootPickupRuntimeManagerScript.new()
 	_loot_pickup_runtime_manager.name = "LootPickupRuntimeManager"
 	_loot_pickup_runtime_manager.configure_player(player)
@@ -1471,6 +1484,12 @@ func _ready() -> void:
 			profile_started_usec,
 		)
 	add_child(hud)
+	_town_music_controller = TownMusicControllerScript.new()
+	_town_music_controller.name = "TownMusicController"
+	add_child(_town_music_controller)
+	hud.loading_transition_finished.connect(
+		_town_music_controller.on_loading_transition_finished
+	)
 	if loading_profile_enabled:
 		stage_started_usec = _loading_profile_mark(
 			loading_profile,
@@ -1525,6 +1544,10 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if PlayerState.levels_gained.is_connected(_on_player_levels_gained):
+		PlayerState.levels_gained.disconnect(_on_player_levels_gained)
+	if is_instance_valid(_town_music_controller):
+		_town_music_controller.cancel("world_exited")
 	PlayerState.clear_taoist_main_pets_persistence_provider()
 
 
@@ -1578,6 +1601,7 @@ func _process(delta: float) -> void:
 	_expire_canonical_fire_charge_if_needed()
 	_constrain_player_foot_to_runtime_ground()
 	_refresh_player_safe_zone_cache()
+	_update_town_music_presence()
 	background.set_focus_position(player.global_position)
 	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
@@ -1782,6 +1806,31 @@ func _release_system_menu_pause() -> void:
 		return
 	_system_menu_pause_owned = false
 	get_tree().paused = false
+
+
+func _on_player_levels_gained(previous_level: int, new_level: int) -> void:
+	if new_level <= previous_level or not is_instance_valid(_player_level_up_effect):
+		return
+	# PlayerState emits once per successful experience settlement, outside its
+	# level loop. The approved visual follows the actor rather than a world point.
+	_player_level_up_effect.replay(player.approved_ground_footpoint_local_px())
+
+
+func _update_town_music_presence() -> void:
+	if (
+		not is_instance_valid(_town_music_controller)
+		or _map_transition_in_progress
+		or _world_bootstrap_in_progress
+	):
+		return
+	# Reuse the already-computed player safe-area result, without adding a
+	# second geometry query or a world scan to the presentation hot path.
+	_town_music_controller.set_town_presence(
+		TownMusicControllerScript.is_main_city_map(current_map_id)
+		and bool(_player_safe_zone_cache.get("valid", false))
+		and int(_player_safe_zone_cache.get("map_id", -1)) == current_map_id
+		and bool(_player_safe_zone_cache.get("inside", false))
+	)
 
 
 func _audio_bus_enabled(bus_name: StringName) -> bool:
@@ -2532,6 +2581,8 @@ func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 		_map_transition_serial,
 	]
 	_map_transition_in_progress = true
+	if is_instance_valid(_town_music_controller):
+		_town_music_controller.begin_map_transition(target_map_id, _active_map_transition_id)
 	_acquire_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 	_cancel_map_transition_movement_input()
 	_run_map_transition(_active_map_transition_id, operation, target_map_id)
@@ -2635,6 +2686,13 @@ func _run_map_transition(
 		return
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
 	if _check_world_ready_contract():
+		if is_instance_valid(_town_music_controller):
+			_town_music_controller.set_map_context(
+				current_map_id,
+				_active_safe_zones,
+				_canonical_screen_px_to_ground_gu(player.global_position),
+				transition_id
+			)
 		# Release the world first. Reusable UI then warms invisibly in small,
 		# frame-separated batches; this keeps Loading and gameplay input responsive
 		# while removing the one-time cost from the player's first panel click.

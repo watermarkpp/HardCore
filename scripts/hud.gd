@@ -39,8 +39,16 @@ const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
 const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
 const HUD_EXPERIENCE_SEGMENT_COUNT := 10
 const HUD_EXPERIENCE_BAR_STABLE_ID := "ui.hud.experience_bar.10_segments.v1"
-const HUD_EXPERIENCE_BAR_SIZE := Vector2(180, 10)
+## The width is retained as a calibration reference for the current formal
+## chassis source. Runtime construction uses the actual ItemSlot1..4 outer
+## union below, so a future source-pixel calibration cannot silently drift the
+## bar away from the visible quick-item frame.
+const HUD_EXPERIENCE_BAR_SIZE := Vector2(325.90625, 10)
+const HUD_EXPERIENCE_BAR_HEIGHT := 10.0
 const HUD_EXPERIENCE_BOTTOM_GAP := 7.0
+const HUD_EXPERIENCE_SEGMENT_GAP := 3.0
+const HUD_EXPERIENCE_EMPTY_COLOR := Color("241a16")
+const HUD_EXPERIENCE_FILL_COLOR := Color("b77a31")
 const ITEM_QUICK_SLOT_COUNT := 4
 const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
 const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
@@ -662,34 +670,44 @@ func _build_bottom_chassis(root: Control) -> void:
 
 
 func _build_experience_bar(chassis_root: Control) -> void:
+	var item_slot_bounds := _item_quick_slot_outer_bounds()
+	var experience_size := Vector2(
+		item_slot_bounds.size.x if item_slot_bounds.size.x > 0.0 else HUD_EXPERIENCE_BAR_SIZE.x,
+		HUD_EXPERIENCE_BAR_HEIGHT,
+	)
 	experience_bar = Control.new()
 	experience_bar.name = "ExperienceBar"
-	experience_bar.size = HUD_EXPERIENCE_BAR_SIZE
+	experience_bar.size = experience_size
 	experience_bar.position = Vector2(
-		(HUD_CHASSIS_SIZE.x - experience_bar.size.x) * 0.5,
+		item_slot_bounds.position.x
+			if item_slot_bounds.size.x > 0.0
+			else (HUD_CHASSIS_SIZE.x - experience_bar.size.x) * 0.5,
 		HUD_CHASSIS_SIZE.y - HUD_EXPERIENCE_BOTTOM_GAP - experience_bar.size.y,
 	)
 	experience_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	experience_bar.set_meta("stable_id", HUD_EXPERIENCE_BAR_STABLE_ID)
 	experience_bar.set_meta("segment_count", HUD_EXPERIENCE_SEGMENT_COUNT)
+	experience_bar.set_meta("geometry_policy", "item_quick_slot_outer_frame_union.v1")
+	experience_bar.set_meta("outer_frame_source", "ItemSlot1.left_to_ItemSlot4.right")
+	experience_bar.set_meta("calibrated_height", HUD_EXPERIENCE_BAR_HEIGHT)
 	experience_bar.set_meta("data_source", "PlayerState.experience / experience_to_next_level()")
 	chassis_root.add_child(experience_bar)
 	experience_segments.clear()
-	var gap := 3.0
-	var segment_width := (HUD_EXPERIENCE_BAR_SIZE.x - gap * (HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / HUD_EXPERIENCE_SEGMENT_COUNT
+	var gap := HUD_EXPERIENCE_SEGMENT_GAP
+	var segment_width := (experience_bar.size.x - gap * (HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / HUD_EXPERIENCE_SEGMENT_COUNT
 	for index in range(HUD_EXPERIENCE_SEGMENT_COUNT):
 		var segment := ColorRect.new()
 		segment.name = "Segment%02d" % (index + 1)
 		segment.position = Vector2(index * (segment_width + gap), 0)
-		segment.size = Vector2(segment_width, HUD_EXPERIENCE_BAR_SIZE.y)
-		segment.color = Color("241a16")
+		segment.size = Vector2(segment_width, HUD_EXPERIENCE_BAR_HEIGHT)
+		segment.color = HUD_EXPERIENCE_EMPTY_COLOR
 		segment.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		segment.set_meta("stable_id", "%s.segment.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
 		var fill := ColorRect.new()
 		fill.name = "Fill"
 		fill.position = Vector2.ZERO
 		fill.size = Vector2.ZERO
-		fill.color = Color("b77a31")
+		fill.color = HUD_EXPERIENCE_FILL_COLOR
 		fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		fill.set_meta("stable_id", "%s.fill.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
 		segment.add_child(fill)
@@ -697,15 +715,29 @@ func _build_experience_bar(chassis_root: Control) -> void:
 		experience_segments.append(segment)
 
 
+func _item_quick_slot_outer_bounds() -> Rect2:
+	if hud_item_buttons.is_empty():
+		return Rect2()
+	var bounds := Rect2(hud_item_buttons[0].position, hud_item_buttons[0].size)
+	for index in range(1, hud_item_buttons.size()):
+		bounds = bounds.merge(Rect2(hud_item_buttons[index].position, hud_item_buttons[index].size))
+	return bounds
+
+
+static func experience_progress_ratio(experience_value: int, required_value: int) -> float:
+	var required := maxi(1, required_value)
+	return clampf(float(experience_value) / float(required), 0.0, 1.0)
+
+
 func update_experience_bar() -> void:
 	if experience_segments.is_empty():
 		return
 	var required := maxi(1, int(PlayerState.experience_to_next_level()))
-	var progress := clampf(float(PlayerState.experience) / float(required), 0.0, 1.0)
+	var progress := experience_progress_ratio(PlayerState.experience, required)
 	for index in range(experience_segments.size()):
 		var segment_progress := clampf(progress * HUD_EXPERIENCE_SEGMENT_COUNT - index, 0.0, 1.0)
 		var segment := experience_segments[index]
-		segment.color = Color("241a16")
+		segment.color = HUD_EXPERIENCE_EMPTY_COLOR
 		var fill := segment.get_node("Fill") as ColorRect
 		fill.size = Vector2(segment.size.x * segment_progress, segment.size.y)
 		segment.set_meta("fill_ratio", segment_progress)

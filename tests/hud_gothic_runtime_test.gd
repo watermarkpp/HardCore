@@ -52,12 +52,28 @@ func _run() -> void:
 	var experience_bar := chassis.get_node("ExperienceBar") as Control
 	assert(experience_bar != null and experience_bar.get_meta("stable_id") == "ui.hud.experience_bar.10_segments.v1")
 	assert(experience_bar.get_meta("segment_count") == 10)
-	assert(experience_bar.size == Vector2(180, 10))
-	assert(absf(experience_bar.get_global_rect().get_center().x - chassis.get_global_rect().get_center().x) <= 0.5)
+	assert(experience_bar.get_meta("geometry_policy") == "item_quick_slot_outer_frame_union.v1")
+	assert(experience_bar.get_meta("outer_frame_source") == "ItemSlot1.left_to_ItemSlot4.right")
+	assert(experience_bar.size.y == GameHUD.HUD_EXPERIENCE_BAR_HEIGHT)
+	assert((experience_bar.get_node("Segment01") as ColorRect).color == GameHUD.HUD_EXPERIENCE_EMPTY_COLOR)
+	assert((experience_bar.get_node("Segment01/Fill") as ColorRect).color == GameHUD.HUD_EXPERIENCE_FILL_COLOR)
+	var item_slot_bounds := Rect2(
+		(chassis.get_node("ItemSlot1") as Control).position,
+		(chassis.get_node("ItemSlot1") as Control).size,
+	)
+	for index in range(2, 5):
+		var item_slot := chassis.get_node("ItemSlot%d" % index) as Control
+		item_slot_bounds = item_slot_bounds.merge(Rect2(item_slot.position, item_slot.size))
+	assert(is_equal_approx(experience_bar.position.x, item_slot_bounds.position.x), "经验条左端没有对齐快捷物品第1槽外框")
+	assert(is_equal_approx(experience_bar.position.x + experience_bar.size.x, item_slot_bounds.end.x), "经验条右端没有对齐快捷物品第4槽外框")
 	assert(is_equal_approx(chassis.size.y - experience_bar.position.y - experience_bar.size.y, GameHUD.HUD_EXPERIENCE_BOTTOM_GAP))
 	for index in range(1, 5):
 		assert(not experience_bar.get_global_rect().intersects((chassis.get_node("ItemSlot%d" % index) as Control).get_global_rect()))
 	var required_exp := maxi(1, int(PlayerState.experience_to_next_level()))
+	assert(is_equal_approx(GameHUD.experience_progress_ratio(required_exp - 1, required_exp), float(required_exp - 1) / float(required_exp)))
+	assert(is_equal_approx(GameHUD.experience_progress_ratio(required_exp, required_exp), 1.0), "经验刚好达到升级边界时应显示满条")
+	assert(is_equal_approx(GameHUD.experience_progress_ratio(required_exp + 1, required_exp), 1.0), "经验超过升级边界时应保持满条")
+	assert(is_equal_approx(GameHUD.experience_progress_ratio(0, 0), 0.0), "零需求表必须 fail-closed 到零进度")
 	for sample in [0.0, 0.05, 0.10, 0.55, 1.0]:
 		PlayerState.experience = int(round(required_exp * sample))
 		hud.update_experience_bar()

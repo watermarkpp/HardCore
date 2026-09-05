@@ -1,18 +1,62 @@
-param()
+param(
+    [switch]$LevelUpPreview,
+    [string]$CaptureLevelUpPreview = ''
+)
 
 $ErrorActionPreference = 'Stop'
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
 $RuntimeAppData = Join-Path $ProjectRoot '.godot\runtime_appdata'
+$LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
+$LogPath = Join-Path $LogRoot 'ui_layout_calibrator.log'
+$ImportLogPath = Join-Path $LogRoot 'ui_layout_calibrator_import.log'
 New-Item -ItemType Directory -Force -Path $RuntimeAppData | Out-Null
+New-Item -ItemType Directory -Force -Path $LogRoot | Out-Null
 $env:APPDATA = $RuntimeAppData
 $env:LOCALAPPDATA = $RuntimeAppData
+
+function Resolve-ProjectLocalPngArgument {
+    param([string]$CandidatePath)
+
+    $rawPath = $CandidatePath.Trim()
+    if ([string]::IsNullOrWhiteSpace($rawPath)) {
+        throw 'CaptureLevelUpPreview must be a non-empty project-local PNG path.'
+    }
+    $projectRootFull = [IO.Path]::GetFullPath($ProjectRoot).TrimEnd('\', '/')
+    if ($rawPath.StartsWith('res://', [StringComparison]::OrdinalIgnoreCase)) {
+        $relativePath = $rawPath.Substring(6).Replace('/', '\')
+        $fullPath = [IO.Path]::GetFullPath((Join-Path $projectRootFull $relativePath))
+    } elseif ([IO.Path]::IsPathRooted($rawPath)) {
+        $fullPath = [IO.Path]::GetFullPath($rawPath)
+    } else {
+        $fullPath = [IO.Path]::GetFullPath((Join-Path $projectRootFull ($rawPath.Replace('/', '\'))))
+    }
+    $projectPrefix = $projectRootFull + [IO.Path]::DirectorySeparatorChar
+    if (-not $fullPath.StartsWith($projectPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        throw "CaptureLevelUpPreview must remain inside the project: $CandidatePath"
+    }
+    if ([IO.Path]::GetExtension($fullPath) -ine '.png') {
+        throw "CaptureLevelUpPreview must end in .png: $CandidatePath"
+    }
+    $relativeForGodot = $fullPath.Substring($projectPrefix.Length).Replace('\', '/')
+    return "res://$relativeForGodot"
+}
+
+$PreviewUserArguments = @()
+if ($LevelUpPreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureLevelUpPreview)) {
+    $PreviewUserArguments += '--level-up-preview'
+}
+if (-not [string]::IsNullOrWhiteSpace($CaptureLevelUpPreview)) {
+    $CaptureArgument = Resolve-ProjectLocalPngArgument $CaptureLevelUpPreview
+    $PreviewUserArguments += "--capture-level-up-preview=$CaptureArgument"
+}
 
 $Arguments = @(
 	'--path', $ProjectRoot,
 	'--display-driver', 'windows',
 	'--rendering-method', 'gl_compatibility',
 	'--audio-driver', 'Dummy',
+	'--log-file', $LogPath,
 	'--resolution', '2664x1200',
 	'tests/ui_layout_calibration_workbench.tscn'
 )
@@ -44,10 +88,20 @@ foreach ($Chunk in $HomeVisual.chunks) {
 	}
 }
 if ($NeedsImport) {
-	& $Godot '--path' $ProjectRoot '--headless' '--import'
-	if ($LASTEXITCODE -ne 0) {
-		throw "Godot resource import failed with exit code $LASTEXITCODE"
+	$ImportArguments = @(
+		'--path', $ProjectRoot,
+		'--headless',
+		'--log-file', $ImportLogPath,
+		'--import'
+	)
+    $ImportProcess = Start-Process -FilePath $Godot -ArgumentList $ImportArguments -WorkingDirectory $ProjectRoot -WindowStyle Hidden -Wait -PassThru
+	if ($ImportProcess.ExitCode -ne 0) {
+		throw "Godot resource import failed with exit code $($ImportProcess.ExitCode)"
 	}
 }
 
-Start-Process -FilePath $Godot -ArgumentList $Arguments
+if ($PreviewUserArguments.Count -gt 0) {
+    $Arguments += '--'
+    $Arguments += $PreviewUserArguments
+}
+Start-Process -FilePath $Godot -ArgumentList $Arguments -WorkingDirectory $ProjectRoot -WindowStyle Hidden
