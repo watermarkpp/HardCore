@@ -6,6 +6,20 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	var original_persistence := {
+		"profile_directory": PlayerState.profile_directory,
+		"profile_index_path": PlayerState.profile_index_path,
+		"shared_warehouse_path": PlayerState.shared_warehouse_path,
+		"transaction_path": PlayerState.shared_warehouse_transaction_log_path,
+		"initialized": PlayerState._shared_warehouse_initialized,
+	}
+	var test_root := "user://quick_item_slots_isolated_%d" % Time.get_ticks_usec()
+	PlayerState.profile_directory = test_root.path_join("characters")
+	PlayerState.profile_index_path = test_root.path_join("profiles.json")
+	PlayerState.shared_warehouse_path = test_root.path_join("shared.json")
+	PlayerState.shared_warehouse_transaction_log_path = test_root.path_join("shared.transaction.json")
+	PlayerState._shared_warehouse_initialized = false
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory))
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
 	PlayerState.level = 50
@@ -169,5 +183,26 @@ func _run() -> void:
 	if FileAccess.file_exists("%s.bak" % save_path):
 		DirAccess.remove_absolute("%s.bak" % absolute_save_path)
 	PlayerState.active_profile_id = ""
+	_cleanup_isolated_persistence(test_root)
+	PlayerState.profile_directory = str(original_persistence.profile_directory)
+	PlayerState.profile_index_path = str(original_persistence.profile_index_path)
+	PlayerState.shared_warehouse_path = str(original_persistence.shared_warehouse_path)
+	PlayerState.shared_warehouse_transaction_log_path = str(original_persistence.transaction_path)
+	PlayerState._shared_warehouse_initialized = bool(original_persistence.initialized)
 	print("QUICK_ITEM_SLOTS_PASS")
 	get_tree().quit(0)
+
+
+func _cleanup_isolated_persistence(root: String) -> void:
+	for file_name: String in [
+		"profiles.json", "profiles.json.bak", "shared.json", "shared.json.bak",
+		"shared.transaction.json", "shared.transaction.json.bak",
+	]:
+		var path := root.path_join(file_name)
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	var characters := root.path_join("characters")
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(characters)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(characters))
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(root)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(root))

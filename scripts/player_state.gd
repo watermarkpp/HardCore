@@ -178,6 +178,11 @@ var last_load_result: Dictionary = {
 	"success": false,
 	"reason": "not_attempted",
 }
+## A profile which failed validation must not be replaced by defaults through
+## autosave, app suspension, or a later gameplay commit. A successful validated
+## reload of the same profile clears this guard.
+var _save_blocked_profile_id := ""
+var _save_blocked_reason := ""
 var _consumed_shop_sell_quote_ids: Dictionary = {}
 var _loot_batch_debug: Dictionary = {
 	"plan_scans": 0,
@@ -2930,7 +2935,253 @@ func _read_json_document(path: String) -> Dictionary:
 	}
 
 
-func _restore_json_backup(path: String) -> Dictionary:
+func _validation_result(valid: bool, reason := "", terminal := false) -> Dictionary:
+	return {"valid": valid, "reason": reason, "terminal": terminal}
+
+
+func _is_json_number(value: Variant) -> bool:
+	return value is int or value is float
+
+
+func _is_integral_json_number(value: Variant) -> bool:
+	return _is_json_number(value) and is_finite(float(value)) and float(value) == floor(float(value))
+
+
+func _valid_saved_position(value: Variant) -> bool:
+	return (
+		value is Array
+		and (value as Array).size() >= 2
+		and _is_json_number((value as Array)[0])
+		and _is_json_number((value as Array)[1])
+		and is_finite(float((value as Array)[0]))
+		and is_finite(float((value as Array)[1]))
+	)
+
+
+func _validate_saved_item_records(value: Variant, capacity: int) -> bool:
+	if not value is Array or (value as Array).size() > capacity:
+		return false
+	for raw_record: Variant in value:
+		if not raw_record is Dictionary:
+			return false
+		var record: Dictionary = raw_record
+		if record.is_empty() or not record.has("count"):
+			continue
+		var count_value: Variant = record.get("count")
+		if not _is_integral_json_number(count_value) or int(count_value) <= 0:
+			return false
+	return true
+
+
+func _validate_saved_equipment(value: Variant) -> bool:
+	if not value is Dictionary:
+		return false
+	var allowed_slots: Dictionary = {}
+	for slot: String in EQUIPMENT_SLOTS + ["手镯", "戒指"]:
+		allowed_slots[slot] = true
+	for raw_slot: Variant in (value as Dictionary).keys():
+		var slot := str(raw_slot)
+		if not allowed_slots.has(slot):
+			return false
+		var equipped: Variant = (value as Dictionary).get(raw_slot)
+		if equipped is String:
+			continue # v02-v09 stored some equipment as its display name.
+		if not equipped is Dictionary:
+			return false
+		if (equipped as Dictionary).has("count"):
+			var count_value: Variant = (equipped as Dictionary).get("count")
+			if not _is_integral_json_number(count_value) or int(count_value) <= 0:
+				return false
+	return true
+
+
+func _validate_profile_document_status(
+	document: Dictionary,
+	expected_profile_id: String,
+	allow_missing_identity: bool
+) -> Dictionary:
+	var document_version := -1
+	if document.has("save_version"):
+		var version_value: Variant = document.get("save_version")
+		if not _is_integral_json_number(version_value) or int(version_value) < 0:
+			return _validation_result(false, "invalid_save_version")
+		document_version = int(version_value)
+		if document_version > SAVE_VERSION:
+			return _validation_result(false, "future_save_version", true)
+	if not allow_missing_identity:
+		if (
+			not document.get("profile_id", null) is String
+			or str(document.get("profile_id", "")) != expected_profile_id
+			or not _valid_profile_storage_id(expected_profile_id)
+		):
+			return _validation_result(false, "profile_id_mismatch")
+	elif document.has("profile_id") and not document.get("profile_id") is String:
+		return _validation_result(false, "invalid_profile_id")
+	# Every v10 document produced by save_game contains these identity and core
+	# gameplay containers. Older versions remain sparse-compatible and are
+	# normalized by load_save before being rewritten.
+	if document_version == SAVE_VERSION:
+		for required_field: String in [
+			"character_name", "level", "profession", "gender", "inventory",
+			"equipment", "learned_skills", "quest_states",
+		]:
+			if not document.has(required_field):
+				return _validation_result(false, "missing_%s" % required_field)
+	# Historical v02-v09 saves do not share one complete required-field set.
+	# Require credible player data, then validate every known field that exists.
+	var has_player_payload := false
+	for key: String in [
+		"character_name", "level", "profession", "gender", "inventory",
+		"warehouse_inventory", "equipment", "learned_skills", "map_id",
+		"position", "position_screen_px", "position_ground_gu",
+	]:
+		if document.has(key):
+			has_player_payload = true
+			break
+	if not has_player_payload:
+		return _validation_result(false, "missing_player_payload")
+	for string_field: String in [
+		"character_name", "profession", "gender", "game_mode_id",
+		"warehouse_storage_contract_id", "position_space_contract_id",
+	]:
+		if document.has(string_field) and not document.get(string_field) is String:
+			return _validation_result(false, "invalid_%s" % string_field)
+	if document.has("later_content_enabled") and not document.get("later_content_enabled") is bool:
+		return _validation_result(false, "invalid_later_content_enabled")
+	if document.has("content_packages") and not document.get("content_packages") is Array:
+		return _validation_result(false, "invalid_content_packages")
+	for array_field: String in ["inventory"]:
+		if document.has(array_field) and not _validate_saved_item_records(document.get(array_field), INVENTORY_CAPACITY):
+			return _validation_result(false, "invalid_%s" % array_field)
+	if document.has("warehouse_inventory") and not _validate_saved_item_records(document.get("warehouse_inventory"), WAREHOUSE_CAPACITY):
+		return _validation_result(false, "invalid_warehouse_inventory")
+	if document.has("equipment") and not _validate_saved_equipment(document.get("equipment")):
+		return _validation_result(false, "invalid_equipment")
+	for object_field: String in [
+		"learned_skills", "skill_progression", "skill_button_assignments",
+		"equip_cycle_cursor", "warrior_runtime_state", "quest_states",
+		"world_monster_respawn_state", "taoist_main_pet_runtime_state",
+		"taoist_main_pet_runtime_states",
+	]:
+		if document.has(object_field) and not document.get(object_field) is Dictionary:
+			return _validation_result(false, "invalid_%s" % object_field)
+	for slots_field: String in ["quick_slots", "quick_item_slots"]:
+		if document.has(slots_field) and not document.get(slots_field) is Array:
+			return _validation_result(false, "invalid_%s" % slots_field)
+	for position_field: String in ["position", "position_screen_px", "position_ground_gu"]:
+		if document.has(position_field):
+			var position_value: Variant = document.get(position_field)
+			if position_field == "position_ground_gu" and position_value is Array and (position_value as Array).is_empty():
+				continue
+			if not _valid_saved_position(position_value):
+				return _validation_result(false, "invalid_%s" % position_field)
+	if (
+		document.has("position_ground_gu")
+		and document.get("position_ground_gu") is Array
+		and not (document.get("position_ground_gu") as Array).is_empty()
+		and str(document.get("position_space_contract_id", "")) != WORLD_POSITION_CONTRACT_ID
+	):
+		return _validation_result(false, "invalid_position_space_contract_id")
+	if document.has("level"):
+		var level_value: Variant = document.get("level")
+		if not _is_integral_json_number(level_value) or int(level_value) < 1:
+			return _validation_result(false, "invalid_level")
+	for nonnegative_integer_field: String in [
+		"experience", "gold", "updated_at", "content_schema_version",
+	]:
+		if document.has(nonnegative_integer_field):
+			var integer_value: Variant = document.get(nonnegative_integer_field)
+			if not _is_integral_json_number(integer_value) or int(integer_value) < 0:
+				return _validation_result(false, "invalid_%s" % nonnegative_integer_field)
+	if document.has("map_id"):
+		var map_value: Variant = document.get("map_id")
+		if not _is_integral_json_number(map_value) or int(map_value) <= 0:
+			return _validation_result(false, "invalid_map_id")
+	return _validation_result(true)
+
+
+func _validate_profile_index_document_status(document: Dictionary) -> Dictionary:
+	var version_value: Variant = document.get("version", null)
+	if not _is_integral_json_number(version_value) or int(version_value) < 1:
+		return _validation_result(false, "invalid_profile_index_version")
+	if int(version_value) > 1:
+		return _validation_result(false, "future_profile_index_version", true)
+	var profiles_value: Variant = document.get("profiles", null)
+	if not profiles_value is Array:
+		return _validation_result(false, "invalid_profile_index_profiles")
+	var seen: Dictionary = {}
+	for raw_entry: Variant in profiles_value:
+		if not raw_entry is Dictionary:
+			return _validation_result(false, "invalid_profile_index_entry")
+		var profile_id_value: Variant = (raw_entry as Dictionary).get("id", null)
+		if not profile_id_value is String:
+			return _validation_result(false, "invalid_profile_index_id")
+		var profile_id := str(profile_id_value)
+		if not _valid_profile_storage_id(profile_id) or seen.has(profile_id):
+			return _validation_result(false, "invalid_profile_index_id")
+		for string_field: String in ["name", "profession", "gender"]:
+			if (raw_entry as Dictionary).has(string_field) and not (raw_entry as Dictionary).get(string_field) is String:
+				return _validation_result(false, "invalid_profile_index_%s" % string_field)
+		if (raw_entry as Dictionary).has("level"):
+			var level_value: Variant = (raw_entry as Dictionary).get("level")
+			if not _is_integral_json_number(level_value) or int(level_value) < 1:
+				return _validation_result(false, "invalid_profile_index_level")
+		if (raw_entry as Dictionary).has("updated_at"):
+			var updated_at_value: Variant = (raw_entry as Dictionary).get("updated_at")
+			if not _is_integral_json_number(updated_at_value) or int(updated_at_value) < 0:
+				return _validation_result(false, "invalid_profile_index_updated_at")
+		seen[profile_id] = true
+	return _validation_result(true)
+
+
+func _validate_shared_warehouse_document_status(document: Dictionary) -> Dictionary:
+	var schema_value: Variant = document.get("schema_version", null)
+	if not _is_integral_json_number(schema_value) or int(schema_value) < 1:
+		return _validation_result(false, "invalid_shared_warehouse_version")
+	if int(schema_value) > SHARED_WAREHOUSE_SCHEMA_VERSION:
+		return _validation_result(false, "future_shared_warehouse_version", true)
+	if document.has("revision"):
+		var revision_value: Variant = document.get("revision")
+		if not _is_integral_json_number(revision_value) or int(revision_value) < 0:
+			return _validation_result(false, "invalid_shared_warehouse_revision")
+	return _validation_result(
+		_validate_shared_warehouse_document(document),
+		"invalid_shared_warehouse"
+	)
+
+
+func _json_validator_for_path(path: String) -> Callable:
+	if path == profile_index_path:
+		return Callable(self, "_validate_profile_index_document_status")
+	if path == shared_warehouse_path:
+		return Callable(self, "_validate_shared_warehouse_document_status")
+	if path in [SAVE_PATH, LEGACY_SAVE_PATH]:
+		return Callable(self, "_validate_profile_document_status").bind("", true)
+	if path.get_base_dir() == profile_directory and path.ends_with(".json"):
+		var expected_profile_id := path.get_file().get_basename()
+		return Callable(self, "_validate_profile_document_status").bind(expected_profile_id, false)
+	return Callable()
+
+
+func _validate_json_candidate(document: Dictionary, validator: Callable) -> Dictionary:
+	if not validator.is_valid():
+		return _validation_result(true)
+	var result: Variant = validator.call(document)
+	if not result is Dictionary:
+		return _validation_result(false, "invalid_validator_result")
+	return result
+
+
+func _next_quarantine_path(path: String) -> String:
+	var candidate := "%s.quarantine.%d" % [path, Time.get_ticks_usec()]
+	var serial := 0
+	while FileAccess.file_exists(candidate):
+		serial += 1
+		candidate = "%s.quarantine.%d.%d" % [path, Time.get_ticks_usec(), serial]
+	return candidate
+
+
+func _restore_json_backup(path: String, validator := Callable()) -> Dictionary:
 	var backup := path + ".bak"
 	var backup_document := _read_json_document(backup)
 	if not bool(backup_document.get("valid", false)):
@@ -2939,62 +3190,75 @@ func _restore_json_backup(path: String) -> Dictionary:
 			"reason": "backup_missing_or_invalid",
 			"data": {},
 		}
+	var backup_validation := _validate_json_candidate(backup_document.get("data", {}), validator)
+	if not bool(backup_validation.get("valid", false)):
+		return {
+			"success": false,
+			"reason": str(backup_validation.get("reason", "backup_business_invalid")),
+			"terminal": bool(backup_validation.get("terminal", false)),
+			"data": {},
+		}
 	var temporary := path + ".tmp"
-	var corrupt := path + ".corrupt.tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return {"success": false, "reason": "backup_restore_temp_open_failed", "data": {}}
 	file.store_string(JSON.stringify(backup_document.get("data", {}), "\t"))
 	file.flush()
 	file.close()
-	if not bool(_read_json_document(temporary).get("valid", false)):
+	var temporary_document := _read_json_document(temporary)
+	if (
+		not bool(temporary_document.get("valid", false))
+		or not bool(_validate_json_candidate(temporary_document.get("data", {}), validator).get("valid", false))
+	):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
 		return {"success": false, "reason": "backup_restore_temp_invalid", "data": {}}
 	var absolute_path := ProjectSettings.globalize_path(path)
 	var absolute_temp := ProjectSettings.globalize_path(temporary)
-	var absolute_corrupt := ProjectSettings.globalize_path(corrupt)
-	if FileAccess.file_exists(corrupt):
-		if DirAccess.remove_absolute(absolute_corrupt) != OK:
-			DirAccess.remove_absolute(absolute_temp)
-			return {"success": false, "reason": "backup_restore_cleanup_failed", "data": {}}
-	var moved_corrupt := false
+	var quarantine_path := ""
 	if FileAccess.file_exists(path):
-		if DirAccess.rename_absolute(absolute_path, absolute_corrupt) != OK:
+		quarantine_path = _next_quarantine_path(path)
+		if DirAccess.rename_absolute(absolute_path, ProjectSettings.globalize_path(quarantine_path)) != OK:
 			DirAccess.remove_absolute(absolute_temp)
-			return {"success": false, "reason": "backup_restore_main_move_failed", "data": {}}
-		moved_corrupt = true
+			return {"success": false, "reason": "backup_restore_quarantine_failed", "data": {}}
 	if DirAccess.rename_absolute(absolute_temp, absolute_path) != OK:
-		if moved_corrupt:
-			DirAccess.rename_absolute(absolute_corrupt, absolute_path)
+		if not quarantine_path.is_empty():
+			DirAccess.rename_absolute(ProjectSettings.globalize_path(quarantine_path), absolute_path)
 		return {"success": false, "reason": "backup_restore_promote_failed", "data": {}}
-	if moved_corrupt and FileAccess.file_exists(corrupt):
-		DirAccess.remove_absolute(absolute_corrupt)
 	return {
 		"success": true,
 		"reason": "recovered_from_backup",
 		"data": backup_document.get("data", {}).duplicate(true),
+		"quarantine_path": quarantine_path,
 	}
 
 
-func _read_json_with_status(path: String) -> Dictionary:
+func _read_json_with_status(path: String, validator := Callable()) -> Dictionary:
+	if not validator.is_valid():
+		validator = _json_validator_for_path(path)
 	var primary := _read_json_document(path)
 	if bool(primary.get("valid", false)):
-		return {
-			"success": true,
-			"reason": "primary",
-			"data": primary.get("data", {}).duplicate(true),
-		}
-	var recovered := _restore_json_backup(path)
+		var validation := _validate_json_candidate(primary.get("data", {}), validator)
+		if bool(validation.get("valid", false)):
+			return {
+				"success": true,
+				"reason": "primary",
+				"data": primary.get("data", {}).duplicate(true),
+			}
+		if bool(validation.get("terminal", false)):
+			return {
+				"success": false,
+				"reason": str(validation.get("reason", "primary_business_invalid")),
+				"data": {},
+				"terminal": true,
+			}
+	var recovered := _restore_json_backup(path, validator)
 	if bool(recovered.get("success", false)):
 		return recovered
 	return {
 		"success": false,
-		"reason": (
-			"primary_missing"
-			if not bool(primary.get("exists", false))
-			else "primary_invalid"
-		),
+		"reason": str(recovered.get("reason", "")) if bool(primary.get("exists", false)) else "primary_missing",
 		"data": {},
+		"terminal": bool(recovered.get("terminal", false)),
 	}
 
 
@@ -3007,7 +3271,6 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 		return false
 	var temporary := path + ".tmp"
 	var backup := path + ".bak"
-	var corrupt := path + ".corrupt.tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return false
@@ -3016,18 +3279,32 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 	file.close()
 	# Never move the current profile until the complete temporary document has
 	# been reparsed successfully. This keeps a failed/partial write fail-closed.
-	if not bool(_read_json_document(temporary).get("valid", false)):
+	var validator := _json_validator_for_path(path)
+	var temporary_document := _read_json_document(temporary)
+	if (
+		not bool(temporary_document.get("valid", false))
+		or not bool(_validate_json_candidate(temporary_document.get("data", {}), validator).get("valid", false))
+	):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
 		return false
 	var absolute_path := ProjectSettings.globalize_path(path)
 	var absolute_temp := ProjectSettings.globalize_path(temporary)
 	var absolute_backup := ProjectSettings.globalize_path(backup)
-	var absolute_corrupt := ProjectSettings.globalize_path(corrupt)
 	var current_document := _read_json_document(path)
+	var current_validation := _validate_json_candidate(current_document.get("data", {}), validator)
+	if (
+		bool(current_document.get("valid", false))
+		and bool(current_validation.get("terminal", false))
+	):
+		DirAccess.remove_absolute(absolute_temp)
+		return false
 	var moved_valid_main := false
-	var moved_corrupt_main := false
+	var quarantine_path := ""
 	if bool(current_document.get("exists", false)):
-		if bool(current_document.get("valid", false)):
+		if (
+			bool(current_document.get("valid", false))
+			and bool(current_validation.get("valid", false))
+		):
 			if (
 				FileAccess.file_exists(backup)
 				and DirAccess.remove_absolute(absolute_backup) != OK
@@ -3039,27 +3316,24 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 				return false
 			moved_valid_main = true
 		else:
-			# A corrupt main must never replace a valid .bak.
-			if (
-				FileAccess.file_exists(corrupt)
-				and DirAccess.remove_absolute(absolute_corrupt) != OK
-			):
+			# Keep the exact rejected bytes as evidence, and never rotate them over
+			# a known-good backup.
+			quarantine_path = _next_quarantine_path(path)
+			if DirAccess.rename_absolute(absolute_path, ProjectSettings.globalize_path(quarantine_path)) != OK:
 				DirAccess.remove_absolute(absolute_temp)
 				return false
-			if DirAccess.rename_absolute(absolute_path, absolute_corrupt) != OK:
-				DirAccess.remove_absolute(absolute_temp)
-				return false
-			moved_corrupt_main = true
 	var promote_result := DirAccess.rename_absolute(absolute_temp, absolute_path)
 	if promote_result != OK:
 		if moved_valid_main:
 			DirAccess.rename_absolute(absolute_backup, absolute_path)
-		elif moved_corrupt_main:
-			DirAccess.rename_absolute(absolute_corrupt, absolute_path)
+		elif not quarantine_path.is_empty():
+			DirAccess.rename_absolute(ProjectSettings.globalize_path(quarantine_path), absolute_path)
 		return false
-	if moved_corrupt_main and FileAccess.file_exists(corrupt):
-		DirAccess.remove_absolute(absolute_corrupt)
-	return bool(_read_json_document(path).get("valid", false))
+	var promoted := _read_json_document(path)
+	return (
+		bool(promoted.get("valid", false))
+		and bool(_validate_json_candidate(promoted.get("data", {}), validator).get("valid", false))
+	)
 
 
 func _shared_warehouse_empty_document() -> Dictionary:
@@ -3137,12 +3411,10 @@ func _profile_ids_for_shared_warehouse() -> Dictionary:
 
 func _legacy_warehouse_source(document: Dictionary) -> Dictionary:
 	var legacy: Variant = document.get("warehouse_inventory", [])
-	if not legacy is Array or (legacy as Array).size() > WAREHOUSE_CAPACITY:
+	if not _validate_saved_item_records(legacy, WAREHOUSE_CAPACITY):
 		return {"ok": false, "records": []}
 	var records: Array = []
 	for raw_record: Variant in legacy:
-		if not raw_record is Dictionary:
-			return {"ok": false, "records": []}
 		if not (raw_record as Dictionary).is_empty():
 			records.append((raw_record as Dictionary).duplicate(true))
 	return {"ok": true, "records": records}
@@ -3154,15 +3426,16 @@ func _validate_shared_warehouse_document(document: Dictionary) -> bool:
 	if str(document.get("contract_id", "")) != SHARED_WAREHOUSE_CONTRACT_ID:
 		return false
 	var records: Variant = document.get("warehouse_inventory", null)
-	if not records is Array or (records as Array).size() > WAREHOUSE_CAPACITY:
+	if not _validate_saved_item_records(records, WAREHOUSE_CAPACITY):
 		return false
-	for record: Variant in records:
-		if not record is Dictionary:
-			return false
 	# The warehouse is a fixed 5 x 100-slot surface. Empty dictionaries are
 	# valid holes and must survive page-specific deposits and non-tail withdraws.
 	var ledger: Variant = document.get("legacy_migration", null)
-	if not ledger is Dictionary or not bool((ledger as Dictionary).get("completed", false)):
+	if (
+		not ledger is Dictionary
+		or not (ledger as Dictionary).get("completed", null) is bool
+		or not bool((ledger as Dictionary).get("completed", false))
+	):
 		return false
 	if str((ledger as Dictionary).get("contract_id", "")) != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID:
 		return false
@@ -3174,11 +3447,15 @@ func _validate_shared_warehouse_document(document: Dictionary) -> bool:
 		var ledger_source: Variant = (sources as Dictionary).get(profile_id, null)
 		if not _valid_profile_storage_id(profile_id) or not ledger_source is Dictionary:
 			return false
+		var source_complete: Variant = (ledger_source as Dictionary).get("complete", null)
+		var occupied_count: Variant = (ledger_source as Dictionary).get("occupied_count", null)
 		if (
-			not bool((ledger_source as Dictionary).get("complete", false))
+			not source_complete is bool
+			or not bool(source_complete)
 			or str((ledger_source as Dictionary).get("contract_id", "")) != SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID
 			or str((ledger_source as Dictionary).get("digest", "")).is_empty()
-			or int((ledger_source as Dictionary).get("occupied_count", -1)) < 0
+			or not _is_integral_json_number(occupied_count)
+			or int(occupied_count) < 0
 		):
 			return false
 		var source_path := _profile_path(profile_id)
@@ -3222,14 +3499,17 @@ func _occupied_records(records: Array) -> Array:
 
 
 func _initialize_shared_warehouse() -> bool:
-	var existing := _read_json_document(shared_warehouse_path)
-	if bool(existing.get("exists", false)):
-		if not bool(existing.get("valid", false)) or not _validate_shared_warehouse_document(existing.get("data", {})):
-			_shared_warehouse_initialized = false
-			return false
-		warehouse_inventory = _shared_warehouse_read_inventory()
+	var existing := _read_json_with_status(shared_warehouse_path)
+	if bool(existing.get("success", false)):
+		warehouse_inventory = (existing.get("data", {}) as Dictionary).get("warehouse_inventory", []).duplicate(true)
 		_shared_warehouse_initialized = true
 		return true
+	if (
+		FileAccess.file_exists(shared_warehouse_path)
+		or FileAccess.file_exists(shared_warehouse_path + ".bak")
+	):
+		_shared_warehouse_initialized = false
+		return false
 	var profile_ids_result := _profile_ids_for_shared_warehouse()
 	if not bool(profile_ids_result.get("ok", false)):
 		_shared_warehouse_initialized = false
@@ -3282,11 +3562,7 @@ func _ensure_shared_warehouse_ready() -> bool:
 
 
 func _revalidate_shared_warehouse_authority() -> bool:
-	var current := _read_json_document(shared_warehouse_path)
-	return (
-		bool(current.get("valid", false))
-		and _validate_shared_warehouse_document(current.get("data", {}))
-	)
+	return bool(_read_json_with_status(shared_warehouse_path).get("success", false))
 
 
 func _recover_shared_warehouse_transaction() -> void:
@@ -3407,6 +3683,21 @@ func save_game(update_profile_index := true) -> bool:
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
 			"success": false,
 			"reason": "active_profile_missing",
+		}
+		return false
+	if not _valid_profile_storage_id(active_profile_id):
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "invalid_profile_id",
+		}
+		return false
+	if active_profile_id == _save_blocked_profile_id:
+		last_save_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "profile_save_blocked_after_invalid_load",
+			"load_failure_reason": _save_blocked_reason,
 		}
 		return false
 	_refresh_taoist_main_pet_runtime_states_for_save()
@@ -3795,8 +4086,24 @@ func _emit_device_lab_state_changed() -> void:
 
 
 func load_save() -> void:
+	if active_profile_id.is_empty():
+		last_load_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "active_profile_missing",
+			"path": "",
+		}
+		return
+	if not _valid_profile_storage_id(active_profile_id):
+		last_load_result = {
+			"contract_id": SAVE_RESULT_CONTRACT_ID,
+			"success": false,
+			"reason": "invalid_profile_id",
+			"path": "",
+		}
+		return
 	_recover_shared_warehouse_transaction()
-	var load_path := _profile_path(active_profile_id) if not active_profile_id.is_empty() else SAVE_PATH
+	var load_path := _profile_path(active_profile_id)
 	var load_result := _read_json_with_status(load_path)
 	last_load_result = {
 		"contract_id": SAVE_RESULT_CONTRACT_ID,
@@ -3804,8 +4111,12 @@ func load_save() -> void:
 		"reason": str(load_result.get("reason", "")),
 		"path": load_path,
 	}
+	if load_result.has("quarantine_path"):
+		last_load_result["quarantine_path"] = str(load_result.get("quarantine_path", ""))
 	if not bool(load_result.get("success", false)):
-		reset_progress(false)
+		if not active_profile_id.is_empty():
+			_save_blocked_profile_id = active_profile_id
+			_save_blocked_reason = str(load_result.get("reason", "invalid_profile"))
 		return
 	var parsed: Dictionary = load_result.get("data", {})
 	var legacy_isolated_profile_fixture := (
@@ -3822,8 +4133,13 @@ func load_save() -> void:
 	elif not _shared_warehouse_initialized and not _initialize_shared_warehouse():
 		last_load_result["success"] = false
 		last_load_result["reason"] = "shared_warehouse_unavailable"
-		reset_progress(false)
+		if not active_profile_id.is_empty():
+			_save_blocked_profile_id = active_profile_id
+			_save_blocked_reason = "shared_warehouse_unavailable"
 		return
+	if active_profile_id == _save_blocked_profile_id:
+		_save_blocked_profile_id = ""
+		_save_blocked_reason = ""
 	level = maxi(1, int(parsed.get("level", 1)))
 	profession = str(parsed.get("profession", "战士"))
 	if not ProfessionRules.is_valid_profession(profession):
@@ -4518,11 +4834,17 @@ func save_safe_logout(
 
 
 func list_characters() -> Array[Dictionary]:
-	var index := _read_json(profile_index_path)
+	var index_status := _read_json_with_status(profile_index_path)
+	if not bool(index_status.get("success", false)):
+		return []
+	var index: Dictionary = index_status.get("data", {})
 	var result: Array[Dictionary] = []
 	for entry: Variant in index.get("profiles", []):
-		if entry is Dictionary and FileAccess.file_exists(_profile_path(str(entry.get("id", "")))):
-			result.append(entry.duplicate(true))
+		if not entry is Dictionary:
+			continue
+		var profile_id := str((entry as Dictionary).get("id", ""))
+		if bool(_read_json_with_status(_profile_path(profile_id)).get("success", false)):
+			result.append((entry as Dictionary).duplicate(true))
 	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("updated_at", 0)) > int(b.get("updated_at", 0)))
 	return result
 
@@ -5637,6 +5959,8 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 func select_character(profile_id: String) -> bool:
 	if _warehouse_transaction_locked:
 		return false
+	if not _valid_profile_storage_id(profile_id):
+		return false
 	if not _ensure_shared_warehouse_ready():
 		return false
 	var profile_path := _profile_path(profile_id)
@@ -5655,7 +5979,18 @@ func select_character(profile_id: String) -> bool:
 
 
 func _update_profile_index() -> bool:
-	var profiles := list_characters()
+	var profiles: Array[Dictionary] = []
+	if (
+		FileAccess.file_exists(profile_index_path)
+		or FileAccess.file_exists(profile_index_path + ".bak")
+	):
+		var index_status := _read_json_with_status(profile_index_path)
+		if not bool(index_status.get("success", false)):
+			return false
+		for raw_entry: Variant in (index_status.get("data", {}) as Dictionary).get("profiles", []):
+			if not raw_entry is Dictionary:
+				return false
+			profiles.append((raw_entry as Dictionary).duplicate(true))
 	var found := false
 	for entry: Dictionary in profiles:
 		if str(entry.get("id", "")) == active_profile_id:
@@ -5667,21 +6002,43 @@ func _update_profile_index() -> bool:
 
 
 func _migrate_single_save_to_profile() -> void:
-	if not list_characters().is_empty():
+	var index_status := _read_json_with_status(profile_index_path)
+	if (
+		FileAccess.file_exists(profile_index_path)
+		or FileAccess.file_exists(profile_index_path + ".bak")
+	):
+		if not bool(index_status.get("success", false)):
+			return
+		var indexed_profiles: Variant = (index_status.get("data", {}) as Dictionary).get("profiles", [])
+		if indexed_profiles is Array and not (indexed_profiles as Array).is_empty():
+			return
+	elif not list_characters().is_empty():
 		return
-	var legacy_path := SAVE_PATH if FileAccess.file_exists(SAVE_PATH) else LEGACY_SAVE_PATH
-	if not FileAccess.file_exists(legacy_path):
+	var legacy_path := (
+		SAVE_PATH
+		if FileAccess.file_exists(SAVE_PATH) or FileAccess.file_exists(SAVE_PATH + ".bak")
+		else LEGACY_SAVE_PATH
+	)
+	if not FileAccess.file_exists(legacy_path) and not FileAccess.file_exists(legacy_path + ".bak"):
 		return
-	var old_data := _read_json(legacy_path)
-	if old_data.is_empty():
+	# Missing profile identity is accepted only at this explicit one-time seam;
+	# every document under characters/<id>.json uses exact path identity.
+	var legacy_validator := Callable(self, "_validate_profile_document_status").bind("", true)
+	var legacy_status := _read_json_with_status(legacy_path, legacy_validator)
+	if not bool(legacy_status.get("success", false)):
 		return
+	var old_data: Dictionary = (legacy_status.get("data", {}) as Dictionary).duplicate(true)
 	active_profile_id = "legacy_01"
 	character_name = str(old_data.get("character_name", "旧角色"))
 	old_data["profile_id"] = active_profile_id
 	old_data["character_name"] = character_name
 	old_data["updated_at"] = int(Time.get_unix_time_from_system())
-	_write_json_atomic(_profile_path(active_profile_id), old_data)
-	_update_profile_index()
+	if not _write_json_atomic(_profile_path(active_profile_id), old_data):
+		active_profile_id = ""
+		character_name = ""
+		return
+	if not _update_profile_index():
+		_remove_new_profile_files(active_profile_id)
 	active_profile_id = ""
 	character_name = ""
 
