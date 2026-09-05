@@ -35,6 +35,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(controller.music_player != null, "主城BGM缺少全局AudioStreamPlayer")
 	assert(controller.music_player.bus == &"Music", "主城BGM没有路由到Music bus")
+	assert(is_equal_approx(db_to_linear(controller.music_player.volume_db), 0.70), "主城BGM默认音量必须为原来的70%，不能改变总线音量")
 	assert(controller.music_player.stream != null, "用户主城BGM OGG没有加载")
 	assert(
 		controller.music_player.stream is AudioStreamOggVorbis

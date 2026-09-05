@@ -29,15 +29,23 @@ func _run() -> void:
 	game.player._dead = true
 	game.player.current_hp = 0
 	game._test_force_home_failure = true
+	PlayerState.level = 1
 	PlayerState.experience = 100
+	var death_threshold := PlayerState.experience_to_next_level()
+	var expected_death_loss := int(floor(float(death_threshold) * 0.10))
+	var death_profile_signal_count := [0]
+	var on_death_profile_changed := func() -> void: death_profile_signal_count[0] += 1
+	PlayerState.profile_changed.connect(on_death_profile_changed)
 	game._on_player_death_requested()
-	assert(PlayerState.experience == 90, "formal death did not deduct 10% experience")
+	assert(PlayerState.experience == 100 - expected_death_loss, "formal death did not deduct 10% of the level requirement")
 	assert(game._death_experience_penalty_applied, "formal death did not latch penalty")
 	assert(game.hud.death_revival_panel.visible, "formal death did not open the real death UI")
 	assert(not game._map_transition_in_progress, "formal death started Loading before a revival choice")
 	assert(game.player._dead and game.player.current_hp == 0, "death UI did not preserve the dead state")
 	game._on_player_death_requested()
-	assert(PlayerState.experience == 90, "duplicate active death request deducted twice")
+	assert(PlayerState.experience == 100 - expected_death_loss, "duplicate active death request deducted twice")
+	PlayerState.profile_changed.disconnect(on_death_profile_changed)
+	assert(death_profile_signal_count[0] == 1, "formal death penalty was not committed exactly once")
 	game.hud.death_revival_panel.town_button.pressed.emit()
 	assert(not game._map_transition_in_progress, "failed Home resolution started Loading")
 	assert(game.hud.death_revival_panel.visible, "failed Home resolution closed death UI")
@@ -65,18 +73,46 @@ func _run() -> void:
 
 
 func _run_experience_penalty_contract() -> void:
-	for entry in [[0, 0], [1, 0], [9, 0], [10, 1], [101, 10]]:
-		PlayerState.experience = int(entry[0])
-		PlayerState.level = 7
+	PlayerState.level = 7
+	var level_requirement := PlayerState.experience_to_next_level()
+	assert(level_requirement == 120, "level 7 threshold must remain the scaled source requirement")
+	var expected_loss := int(floor(float(level_requirement) * 0.10))
+	assert(expected_loss == 12, "death penalty must floor 10% of the current level requirement")
+	for entry in [
+		{"experience": 0, "expected_loss": 0},
+		{"experience": 1, "expected_loss": 1},
+		{"experience": 11, "expected_loss": 11},
+		{"experience": 12, "expected_loss": 12},
+		{"experience": 119, "expected_loss": 12},
+		{"experience": 500, "expected_loss": 12},
+	]:
+		var starting_experience := int(entry["experience"])
+		var expected_entry_loss := int(entry["expected_loss"])
+		PlayerState.experience = starting_experience
 		var signal_count := [0]
 		var on_profile_changed := func() -> void: signal_count[0] += 1
 		PlayerState.profile_changed.connect(on_profile_changed)
 		var lost := PlayerState.apply_death_experience_penalty()
 		PlayerState.profile_changed.disconnect(on_profile_changed)
-		assert(lost == int(entry[1]), "death penalty rounding mismatch")
-		assert(PlayerState.experience == int(entry[0]) - int(entry[1]))
+		assert(lost == expected_entry_loss, "death penalty threshold basis mismatch exp=%d lost=%d" % [starting_experience, lost])
+		assert(PlayerState.experience == starting_experience - expected_entry_loss)
 		assert(PlayerState.level == 7, "death penalty changed level")
-		assert(signal_count[0] == (1 if int(entry[1]) > 0 else 0), "penalty signal count mismatch exp=%d lost=%d count=%d" % [int(entry[0]), int(entry[1]), signal_count[0]])
+		assert(signal_count[0] == (1 if expected_entry_loss > 0 else 0), "penalty signal count mismatch exp=%d lost=%d count=%d" % [starting_experience, expected_entry_loss, signal_count[0]])
+
+	# A failed persistence commit must roll back the mutation and must not
+	# publish a profile update for an uncommitted death penalty.
+	PlayerState.experience = 500
+	var failed_before := PlayerState.experience
+	var failed_signal_count := [0]
+	var on_failed_profile_changed := func() -> void: failed_signal_count[0] += 1
+	PlayerState.profile_changed.connect(on_failed_profile_changed)
+	PlayerState._test_force_atomic_write_failure = true
+	var failed_loss := PlayerState.apply_death_experience_penalty()
+	PlayerState._test_force_atomic_write_failure = false
+	PlayerState.profile_changed.disconnect(on_failed_profile_changed)
+	assert(failed_loss == 0, "save failure must reject the death penalty")
+	assert(PlayerState.experience == failed_before, "save failure did not roll back death penalty experience")
+	assert(failed_signal_count[0] == 0, "save failure emitted an uncommitted profile update")
 
 
 func _run_automatic_revival_boundary(game: Node) -> void:

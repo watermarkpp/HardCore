@@ -736,6 +736,7 @@ static func build_snapshot(root: Node) -> Dictionary:
 		"loot_runtime": _loot_runtime_snapshot(root),
 		"performance_diagnostics": _performance_window_snapshot(root, enemy_activity),
 		"monster_streaming": _monster_streaming_snapshot(root),
+		"monster_visuals": _monster_visual_snapshot(root),
 		"controls": [],
 		"node2d": [],
 		"limits": {
@@ -881,6 +882,48 @@ static func _seconds_to_milliseconds(seconds: float) -> float:
 	if is_nan(seconds) or is_inf(seconds) or seconds < 0.0:
 		return 0.0
 	return seconds * 1000.0
+
+
+## On-demand only: map decorations can exhaust the generic node snapshot
+## before it reaches enemies. Keep a separate bounded exact-ID visual view.
+static func _monster_visual_snapshot(root: Node) -> Array:
+	var rows: Array = []
+	if root == null or not is_instance_valid(root) or root.get_tree() == null:
+		return rows
+	var enemies: Array[Node] = root.get_tree().get_nodes_in_group("enemies")
+	for index in range(mini(enemies.size(), MAX_SNAPSHOT_ENEMY_ACTIVITY_SCAN)):
+		var enemy := enemies[index] as EnemyActor
+		if enemy == null or not is_instance_valid(enemy):
+			continue
+		var point := enemy.get_global_transform_with_canvas().origin
+		var viewport_rect := enemy.get_viewport().get_visible_rect()
+		var row := {
+			"instance_id": enemy.get_instance_id(), "monster_id": enemy.monster_id,
+			"screen_position": [point.x, point.y],
+			"viewport": [viewport_rect.position.x, viewport_rect.position.y, viewport_rect.size.x, viewport_rect.size.y],
+			"on_screen": viewport_rect.has_point(point),
+			"burrowed": enemy._burrowed, "dying": enemy._dying,
+			"has_visual": is_instance_valid(enemy.visual),
+		}
+		var visual := enemy.visual
+		if is_instance_valid(visual):
+			row["visual_visible"] = visual.is_visible_in_tree()
+			row["resources_active"] = not visual.active_resources.is_empty()
+			row["resource_key"] = visual._streaming_resource_key
+			row["generation"] = visual._streaming_world_generation
+			row["state"] = visual.current_state
+			row["processing"] = visual.is_processing()
+			row["activation_inside"] = visual._inside_visual_distance_px(320.0)
+			row["release_inside"] = visual._inside_visual_distance_px(640.0)
+			if is_instance_valid(visual.sprite):
+				var sprite := visual.sprite
+				var region := sprite.region_rect
+				row["sprite_visible"] = sprite.is_visible_in_tree()
+				row["texture"] = sprite.texture.resource_path if sprite.texture != null else ""
+				row["region"] = [region.position.x, region.position.y, region.size.x, region.size.y]
+				row["texture_size"] = [sprite.texture.get_width(), sprite.texture.get_height()] if sprite.texture != null else []
+		rows.append(row)
+	return rows
 
 
 static func _enemy_activity_snapshot(root: Node) -> Dictionary:

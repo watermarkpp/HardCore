@@ -16,6 +16,7 @@ const TOWN_MUSIC_PATH := "res://assets/audio/town/main_city_bgm.ogg"
 const SOURCE_RECORD_PATH := "res://assets/audio/town/main_city_bgm.source.json"
 const MUSIC_BUS_NAME := &"Music"
 const DELAY_SECONDS := 10.0
+const DEFAULT_VOLUME_LINEAR := 0.70
 const TOWN_AREA_POLICY_ID := "gameplay.main_city.safe_area.v1"
 
 ## These are the exact direct-city map IDs already exposed by the formal map
@@ -59,6 +60,7 @@ func _build_audio_nodes() -> void:
 	music_player = AudioStreamPlayer.new()
 	music_player.name = "TownMusicPlayer"
 	music_player.bus = MUSIC_BUS_NAME
+	music_player.volume_db = linear_to_db(DEFAULT_VOLUME_LINEAR)
 	music_player.autoplay = false
 	var stream := load(TOWN_MUSIC_PATH) as AudioStream
 	if stream != null:

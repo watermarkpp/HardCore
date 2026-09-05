@@ -1832,18 +1832,23 @@ func record_kills_and_experience_batch(
 
 
 ## Applies the formal-death experience penalty exactly as a level-local
-## experience mutation.  Experience is the current level's progress (see
-## add_experience), so no level or threshold is changed here.  floor() gives
-## deterministic integer behaviour for 0/1/9/10/101 and the clamp prevents
-## negative values.  The caller must invoke this once per formal death.
+## experience mutation.  The current level's scaled requirement is the loss
+## basis; existing progress only caps the loss at zero.  floor() gives
+## deterministic integer behaviour and the clamp prevents negative values.
+## The caller must invoke this once per formal death.
 func apply_death_experience_penalty() -> int:
+	var previous_experience := experience
 	var current_experience := maxi(0, int(experience))
-	var lost := mini(current_experience, int(floor(float(current_experience) * 0.10)))
+	var level_requirement := maxi(1, int(experience_to_next_level()))
+	var loss_from_level_requirement := int(floor(float(level_requirement) * 0.10))
+	var lost := mini(current_experience, maxi(0, loss_from_level_requirement))
 	if lost <= 0:
 		return 0
 	experience = current_experience - lost
+	if not _commit_save():
+		experience = previous_experience
+		return 0
 	profile_changed.emit()
-	_commit_save()
 	return lost
 
 
