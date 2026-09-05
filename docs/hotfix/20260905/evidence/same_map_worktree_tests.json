@@ -1,0 +1,26 @@
+{
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "passed": 1,
+  "results": [
+    {
+      "test_name": "monster_same_map_residency_test",
+      "test_path": "tests/monster_same_map_residency_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "git_head": "77c2421f537daec4cfd2d4af721b3c79bd2ed334",
+  "generated_at": "2026-09-05T23:46:42.4318705+08:00",
+  "total": 1
+}

@@ -2589,6 +2589,18 @@ func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	return true
 
 
+func _begin_monster_transition_prefetch(target_map_id: int) -> Dictionary:
+	# Same-map Home/revival/teleport keeps the existing EnemyActors: _load_zone
+	# returns without rebuilding that world. Do not fence their visual leases
+	# merely because a Loading transition is shown. A real map change (or first
+	# bootstrap) still starts a new generation and rejects stale actors.
+	if target_map_id == current_map_id and target_map_id >= 0 and not _world_bootstrap_in_progress:
+		return {"complete": true, "preserved_world": true}
+	return _streaming_coordinator.begin_map_prefetch(
+		_monster_ids_for_map(target_map_id), _world_bootstrap_in_progress
+	)
+
+
 func _run_map_transition(
 	transition_id: String,
 	operation: Callable,
@@ -2615,10 +2627,7 @@ func _run_map_transition(
 		_last_monster_prefetch_status = {"complete": true}
 	elif _monster_prefetch_enabled and target_map_id >= 0:
 		_last_monster_prefetch_status = (
-			_streaming_coordinator.begin_map_prefetch(
-				_monster_ids_for_map(target_map_id),
-				_world_bootstrap_in_progress
-			)
+			_begin_monster_transition_prefetch(target_map_id)
 		)
 		var prefetch_deadline := (
 			Time.get_ticks_msec() + MONSTER_PREFETCH_TIMEOUT_MSEC
