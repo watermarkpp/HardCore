@@ -124,6 +124,23 @@ func _run() -> void:
 		game._queued_mobile_attacks == 0 and not game._mobile_attack_held,
 		"touch cancel left a ghost attack ticket or held-repeat state"
 	)
+	for index in range(enemies.size()):
+		_move_enemy(
+			enemies[index] as EnemyActor,
+			Vector2(3000 + index * 80, 3000)
+		)
+	game.player.global_position = _find_open_rightward_movement_origin(game)
+	game.player.velocity = Vector2.ZERO
+	await get_tree().physics_frame
+	assert(
+		not game.player._dead
+		and game.player._attack_action_timer > 0.0
+		and game.player._movement_visual_lock_timer <= 0.0
+		and game.player._struck_lock_remaining <= 0.0
+		and game.player._struck_reaction_lock_remaining <= 0.0
+		and game.player.control_time <= 0.0,
+		"movement fixture did not isolate the active attack-action lock"
+	)
 	var movement_position_before: Vector2 = game.player.global_position
 	game.player.set_touch_vector(Vector2.RIGHT)
 	game.player._physics_process(game.player._attack_action_timer + 0.01)
@@ -205,7 +222,13 @@ func _run() -> void:
 	assert(game._skill_needs_target("projectile") and game._skill_needs_target("area"), "攻击技能目标规则错误")
 	assert(not game._skill_needs_target("heal") and not game._skill_needs_target("summon"), "增益或召唤不应抢夺目标方向")
 	var flying := EnemyActor.new()
-	flying.setup(GameData.get_monster("山洞蝙蝠"), game.player, false)
+	var cave_bat: Dictionary = GameData.get_monster_by_id(43)
+	assert(
+		int(cave_bat.get("monster_id", -1)) == 43
+		and str(cave_bat.get("canonical_name", "")) == "山洞蝙蝠",
+		"飞行怪夹具未取得canonical ID43"
+	)
+	flying.setup(cave_bat, game.player, false)
 	game.add_child(flying)
 	await get_tree().process_frame
 	assert(flying.collision_layer == 0 and flying.collision_mask == 1, "飞行怪仍阻挡人物移动")
@@ -260,6 +283,34 @@ func _place_at_tile_offset(
 
 func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
 	enemy.set_combat_position(position, &"mobile_targeting_fixture_move")
+
+
+func _find_open_rightward_movement_origin(game: Node) -> Vector2:
+	const CLEAR_DISTANCE_PX := 64
+	const SAMPLE_STEP_PX := 4
+	var center_tile: Vector2i = game._canonical_screen_px_to_grid_cell(
+		game.player.global_position
+	)
+	for y in range(-24, 25):
+		for x in range(-24, 25):
+			var candidate: Vector2 = game._canonical_grid_cell_to_screen_px(
+				center_tile + Vector2i(x, y)
+			)
+			var clear: bool = true
+			for distance_px: int in range(
+				0, CLEAR_DISTANCE_PX + SAMPLE_STEP_PX, SAMPLE_STEP_PX
+			):
+				if WorldSpatialRules.environment_blocks_actor_screen_px(
+					game.background,
+					candidate + Vector2.RIGHT * float(distance_px),
+					ArtSpec.PLAYER_COLLISION_RADIUS_PX
+				):
+					clear = false
+					break
+			if clear:
+				return candidate
+	assert(false, "找不到向右移动开放夹具")
+	return Vector2.ZERO
 
 
 func _expected_melee_facing(actor: Node2D, target: Node2D) -> Vector2:
@@ -331,7 +382,7 @@ func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
 	boss.current_hp = 9999
 	game._runtime_spawn_serial += 1
 	var spawn_serial := int(game._runtime_spawn_serial)
-	var boss_position := game.player.global_position + Vector2(-180, -40)
+	var boss_position: Vector2 = game.player.global_position + Vector2(-180, -40)
 	boss.configure_runtime_map_projection(
 		game.current_map_id,
 		Callable(game, "_canonical_ground_gu_to_screen_px"),

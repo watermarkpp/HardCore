@@ -33,10 +33,24 @@ func _run() -> void:
 	for portal_position: Vector2 in required_portals:
 		assert(not background.is_environment_point_blocked(portal_position), "Portal is blocked: %s" % portal_position)
 
-	game.travel_to_map(217)
+	var orc_tomb_f1_id := _runtime_map_id("bich_orc_tomb_f1")
+	assert(MapEditorRuntimeBridge.has_runtime_map(orc_tomb_f1_id))
+	game.travel_to_map(orc_tomb_f1_id)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	assert(game.current_map_id == orc_tomb_f1_id, "formal orc tomb map change failed")
+	assert(background.editor_runtime_ground_ready(), "formal orc tomb ground is not ready")
 	assert(not background.uses_bich_art(), "Bich presentation remained active after map change")
 	assert(background.bich_collision_count() == 0, "Bich legacy collision remained after map change")
 	print("BICH_ENVIRONMENT_PASS: editor occupancy, portals, hard boundary and map cleanup share one spatial contract")
 	get_tree().quit(0)
+
+
+func _runtime_map_id(map_key: String) -> int:
+	for raw_map: Variant in GameData.get_available_maps(true):
+		if (
+			raw_map is Dictionary
+			and str((raw_map as Dictionary).get("formalMapKey", "")) == map_key
+		):
+			return int((raw_map as Dictionary).get("mapId", -1))
+	return -1

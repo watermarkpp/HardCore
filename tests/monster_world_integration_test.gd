@@ -197,17 +197,24 @@ func _test_bridge_contract() -> void:
 
 
 func _test_formal_runtime_bridge_projection() -> void:
-	var raw_total := 0
+	var authored_slot_total := 0
 	var projected_total := 0
-	for runtime_map_id: int in BridgeScript.released_map_ids():
+	var formal_maps := _formal_authored_maps()
+	assert(not formal_maps.is_empty(), "formal release registry has no playable maps")
+	for authored_map: Dictionary in formal_maps:
+		var runtime_map_id := int(authored_map.runtime_map_id)
 		var loaded := RuntimeMapServiceScript.load_runtime(
-			BridgeScript.runtime_path(runtime_map_id)
+			str(authored_map.runtime_path)
 		)
 		assert(bool(loaded.get("ok", false)), "formal runtime failed validation: %d" % runtime_map_id)
 		var runtime: Dictionary = loaded.get("runtime", {})
 		var semantics: Dictionary = runtime.get("semantics", {})
 		var raw_spawns: Array = semantics.get("monster_spawn", [])
 		var raw_bosses: Array = semantics.get("boss_spawn", [])
+		for raw_entry: Variant in raw_spawns:
+			_assert_valid_authored_slot(raw_entry, "monster_spawn")
+		for raw_entry: Variant in raw_bosses:
+			_assert_valid_authored_slot(raw_entry, "boss_spawn")
 		var projected := BridgeScript.game_content_for_map(runtime_map_id)
 		var projected_spawns: Array = projected.get("spawns", [])
 		var projected_bosses: Array = projected.get("bosses", [])
@@ -219,10 +226,78 @@ func _test_formal_runtime_bridge_projection() -> void:
 			projected_bosses.size() == raw_bosses.size(),
 			"bridge lost canonical elite/boss spawns on map %d" % runtime_map_id
 		)
-		raw_total += raw_spawns.size() + raw_bosses.size()
+		authored_slot_total += raw_spawns.size() + raw_bosses.size()
 		projected_total += projected_spawns.size() + projected_bosses.size()
-	assert(raw_total == 1880, "formal canonical spawn total drifted")
-	assert(projected_total == raw_total, "bridge dropped canonical formal spawns")
+	assert(authored_slot_total > 0, "formal authored spawn slots are empty")
+	assert(
+		projected_total == authored_slot_total,
+		"bridge dropped canonical formal authored slots"
+	)
+
+
+func _formal_authored_maps() -> Array[Dictionary]:
+	assert(bool(BridgeScript.registry_load_state().get("valid", false)))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		BridgeScript.RELEASE_REGISTRY_PATH
+	))
+	assert(parsed is Dictionary)
+	var registry := parsed as Dictionary
+	assert(int(registry.get("schema_version", 0)) == 1)
+	assert(str(registry.get("registry_contract_id", "")) == "mse.map.runtime.release.v1")
+	var result: Array[Dictionary] = []
+	for raw_entry: Variant in registry.get("maps", []):
+		assert(raw_entry is Dictionary)
+		var entry := raw_entry as Dictionary
+		if str(entry.get("release_state", "")) != "implemented_playable":
+			continue
+		var runtime_path := str(entry.get("runtime_path", ""))
+		var runtime_value: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string(runtime_path)
+		)
+		assert(runtime_value is Dictionary)
+		var runtime := runtime_value as Dictionary
+		assert(str(runtime.get("build_sha256", "")) == str(entry.get("approved_build_sha256", "")))
+		assert(str(runtime.get("source", {}).get("map_id", "")) == str(entry.get("map_key", "")))
+		assert(int(runtime.get("source", {}).get("runtime_map_id", -1)) == int(entry.get("runtime_map_id", -1)))
+		result.append({
+			"runtime_map_id": int(entry.get("runtime_map_id", -1)),
+			"runtime_path": runtime_path,
+		})
+	return result
+
+
+func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> void:
+	assert(raw_entry is Dictionary)
+	var entry := raw_entry as Dictionary
+	var raw_id: Variant = entry.get("monster_id", null)
+	assert(
+		raw_id is int
+		or (
+			raw_id is float
+			and is_finite(float(raw_id))
+			and float(raw_id) == floorf(float(raw_id))
+		)
+	)
+	var monster_id := int(raw_id)
+	var runtime_monster := GameData.get_canonical_monster_entry(monster_id, "runtime")
+	var editor_monster := GameData.get_canonical_monster_entry(monster_id, "editor")
+	assert(not runtime_monster.is_empty() and not editor_monster.is_empty())
+	var classification := GameData.canonical_monster_classification(monster_id)
+	var spawn_classification := str(
+		runtime_monster.get("spawn_classification", "")
+	)
+	var canonical_placement := str(
+		editor_monster.get("editor_placement", {}).get("placement_kind", "")
+	)
+	assert(
+		canonical_placement.is_empty() or canonical_placement == source_layer
+	)
+	if spawn_classification == "special_normal":
+		assert(source_layer == "monster_spawn")
+	elif source_layer == "boss_spawn":
+		assert(classification in ["elite", "boss"])
+	else:
+		assert(classification not in ["elite", "boss"])
 
 
 func _test_loot_contract() -> void:
