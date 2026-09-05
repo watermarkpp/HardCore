@@ -1,0 +1,68 @@
+{
+	"baseLoaded": true,
+	"basePath": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_base\\52ae0565_apk_asset_base.pck",
+	"classCache": {
+		"classCount": 182,
+		"expectedClassCount": 182,
+		"hasTownMusicController": true,
+		"hasUILevelUpPreview": true,
+		"levelUpPath": true,
+		"loaded": true,
+		"townPath": true
+	},
+	"effect": {
+		"constantVerified": true,
+		"expectedFlameSizeScale": 0.75,
+		"flameSizeScale": 0.75
+	},
+	"method": "fresh_sandbox_resource_loader_base_then_patch_cache_mode_ignore",
+	"music": {
+		"expectedLengthSeconds": 48.181406,
+		"lengthSeconds": 48.1814041137695,
+		"lengthVerified": true,
+		"sourceRecordDurationSeconds": -1.0,
+		"sourceRecordLoaded": true,
+		"streamLoaded": true
+	},
+	"ok": true,
+	"patchLoaded": true,
+	"patchPath": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hotfix_20260905\\minimal_pack_work_f7he6zj1\\hotfix-20260905-xp-town-minimal.pck",
+	"resources": {
+		"remaps": {
+			"res://scripts/town_music_controller.gd.remap": true,
+			"res://scripts/ui_level_up_preview.gd.remap": true
+		},
+		"scriptFailures": [],
+		"scripts": {
+			"res://scripts/game_root.gd": true,
+			"res://scripts/hud.gd": true,
+			"res://scripts/player_state.gd": true,
+			"res://scripts/player_visual.gd": true,
+			"res://scripts/town_music_controller.gd": true,
+			"res://scripts/ui_level_up_preview.gd": true
+		}
+	},
+	"sfx": {
+		"representativeBaseStreamLoaded": true,
+		"representativePath": "res://assets/audio/warrior/51.wav",
+		"skillAudioEnabled": false,
+		"skillAudioGateVerifiedFalse": true
+	},
+	"sourceFallback": {
+		"cacheMode": "CACHE_MODE_IGNORE",
+		"sourceGuardDir": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hotfix_20260905\\minimal_pack_work_f7he6zj1\\source_guard",
+		"sourceScriptsAbsentOnDisk": true
+	},
+	"xp": {
+		"expectedGameplayThresholdLevel1": 10,
+		"expectedSourceLevel1": 100,
+		"gameplayThresholdLevel1": 10,
+		"minimumConstantProof": true,
+		"scaleConstantProof": true,
+		"scaledThresholdProof": true,
+		"serviceTableUnchangedProof": true,
+		"sourceLevel1": 100,
+		"thresholdMinimum": 1,
+		"thresholdScale": 0.1
+	}
+}

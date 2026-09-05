@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "patchId": "hotfix-20260905-xp-town",
+  "file": "hotfix-20260905-xp-town.pck",
+  "size": 62207592,
+  "sha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+  "baseCommit": "52ae0565856c2d99a28639b2bf0c6278186e0858",
+  "patchCommit": "930c17aaa269da02e3313713b7c2604ccc70172f",
+  "basePacks": [
+    "52ae0565_apk_asset_base.pck"
+  ],
+  "resources": [
+    "res://assets/audio/town/main_city_bgm.ogg",
+    "res://assets/audio/town/main_city_bgm.source.json",
+    "res://scripts/game_root.gd",
+    "res://scripts/hud.gd",
+    "res://scripts/player_state.gd",
+    "res://scripts/player_visual.gd",
+    "res://scripts/town_music_controller.gd",
+    "res://scripts/town_music_controller.gd.uid",
+    "res://scripts/ui_level_up_preview.gd",
+    "res://scripts/ui_level_up_preview.gd.uid"
+  ]
+}

@@ -3,6 +3,13 @@
 基线：`e263cc93713f6863e293d2b0c03c83c657eb7034`（主树）。
 目标安装基包：审计里程碑 `70 / 1.19.0-audit-milestone`，构建源 `52ae0565856c2d99a28639b2bf0c6278186e0858`。
 
+## 当前交付状态（优先于后文施工历史）
+
+- 源码提交 `0abc83e94a58ba4f71b0e15485d384935ab4dd56` 已实现五项 hotfix；用户已批准最终升级动画，并明确音乐仅按五个主城的安全区触发。后文“待确认/仅预览”均为历史过程，不是当前状态。
+- 干净源码提交专项 7/7 PASS，0 engine errors。证据：`docs/hotfix/20260905/evidence/source_0abc83e9_seven_tests.json`；批准的效果截图在同目录 `approved_level_up_depth_75.png`。
+- 补丁构建提交 `930c17aaa269da02e3313713b7c2604ccc70172f`，基准为里程碑 APK 的精确资源集；16,001 项、510,109,897 bytes 经新进程逐项校验。证据：`docs/hotfix/20260905/evidence/base_apk_assets_verified.json`。
+- 手机已确认精确 APK70，旧基线怪物补丁已由最小 hotfix 原子替换；设备运行加载回执通过，未清存档。最终包身份、导出返工原因及设备证据见 `docs/hotfix/20260905/DELIVERY.md`。用户实际玩法/听感验收仍待进行。
+
 ## 用户范围
 
 - 人物升级门槛变为原值的 10%；经验奖励数值、死亡损失规则不乘倍。
