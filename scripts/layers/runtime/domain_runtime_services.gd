@@ -25,5 +25,5 @@ func skill(skill_name: String, level: int) -> Dictionary:
 	return GameData.get_skill(skill_name, level)
 
 
-func save() -> void:
-	PlayerState.save_game()
+func save() -> bool:
+	return PlayerState.save_game()

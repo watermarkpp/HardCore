@@ -13,6 +13,24 @@ func _find_inventory_instance(instance_id: String) -> int:
 
 
 func _run() -> void:
+	var old_profile_directory := PlayerState.profile_directory
+	var old_profile_index_path := PlayerState.profile_index_path
+	var old_shared_warehouse_path := PlayerState.shared_warehouse_path
+	var old_shared_transaction_path := PlayerState.shared_warehouse_transaction_log_path
+	var old_shared_initialized := PlayerState._shared_warehouse_initialized
+	var old_active_profile_id := PlayerState.active_profile_id
+	var old_test_mode := PlayerState.test_mode
+	var isolated_root := "user://equipment_slot_migration_isolated_%d" % Time.get_ticks_usec()
+	PlayerState.profile_directory = isolated_root.path_join("characters")
+	PlayerState.profile_index_path = isolated_root.path_join("profiles.json")
+	PlayerState.shared_warehouse_path = isolated_root.path_join("shared.json")
+	PlayerState.shared_warehouse_transaction_log_path = isolated_root.path_join(
+		"shared.transaction.json"
+	)
+	PlayerState._shared_warehouse_initialized = false
+	DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(PlayerState.profile_directory)
+	)
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	PlayerState.level = 50
@@ -33,9 +51,21 @@ func _run() -> void:
 	assert(str(PlayerState.equipment["左戒指"].get("instance_id", "")) == third_id, "双槽已满时没有确定性替换左戒指")
 	assert(_find_inventory_instance(first_id) >= 0 and str(PlayerState.equipment["右戒指"].get("instance_id", "")) == second_id, "被替换戒指或右戒指实例丢失")
 
+	var inventory_ids_before_bracelets: Dictionary = {}
+	for raw_record: Variant in PlayerState.inventory:
+		if raw_record is Dictionary:
+			inventory_ids_before_bracelets[str((raw_record as Dictionary).get("instance_id", ""))] = true
 	PlayerState.add_item("铁手镯", 2)
-	var bracelet_a := str(PlayerState.inventory[-2].get("instance_id", ""))
-	var bracelet_b := str(PlayerState.inventory[-1].get("instance_id", ""))
+	var bracelet_ids: Array[String] = []
+	for raw_record: Variant in PlayerState.inventory:
+		if not raw_record is Dictionary or str((raw_record as Dictionary).get("name", "")) != "铁手镯":
+			continue
+		var instance_id := str((raw_record as Dictionary).get("instance_id", ""))
+		if not instance_id.is_empty() and not inventory_ids_before_bracelets.has(instance_id):
+			bracelet_ids.append(instance_id)
+	assert(bracelet_ids.size() == 2, "未精确找到本轮新增的两只铁手镯实例")
+	var bracelet_a := bracelet_ids[0]
+	var bracelet_b := bracelet_ids[1]
 	assert(PlayerState.equip_inventory_index(_find_inventory_instance(bracelet_a)).begins_with("已装备"), "左手镯穿戴失败")
 	assert(PlayerState.equip_inventory_index(_find_inventory_instance(bracelet_b)).begins_with("已装备"), "右手镯穿戴失败")
 	assert(str(PlayerState.equipment["左手镯"].get("instance_id", "")) == bracelet_a, "左手镯槽错误")
@@ -101,10 +131,24 @@ func _run() -> void:
 	assert(PlayerState.equip_cycle_cursor["戒指"] == "右戒指", "左槽替换后未切回右戒指")
 
 	# 手镯独立维护轮换 cursor
+	var cycle_inventory_ids_before_bracelets: Dictionary = {}
+	for raw_record: Variant in PlayerState.inventory:
+		if raw_record is Dictionary:
+			cycle_inventory_ids_before_bracelets[
+				str((raw_record as Dictionary).get("instance_id", ""))
+			] = true
 	PlayerState.add_item("铁手镯", 3)
-	var bracelet_x := str(PlayerState.inventory[-3].get("instance_id", ""))
-	var bracelet_y := str(PlayerState.inventory[-2].get("instance_id", ""))
-	var bracelet_z := str(PlayerState.inventory[-1].get("instance_id", ""))
+	var cycle_bracelet_ids: Array[String] = []
+	for raw_record: Variant in PlayerState.inventory:
+		if not raw_record is Dictionary or str((raw_record as Dictionary).get("name", "")) != "铁手镯":
+			continue
+		var instance_id := str((raw_record as Dictionary).get("instance_id", ""))
+		if not instance_id.is_empty() and not cycle_inventory_ids_before_bracelets.has(instance_id):
+			cycle_bracelet_ids.append(instance_id)
+	assert(cycle_bracelet_ids.size() == 3, "未精确找到本轮新增的三只铁手镯实例")
+	var bracelet_x := cycle_bracelet_ids[0]
+	var bracelet_y := cycle_bracelet_ids[1]
+	var bracelet_z := cycle_bracelet_ids[2]
 	assert(PlayerState.equip_cycle_cursor["手镯"] == "左手镯", "手镯初始轮换目标不是左手镯")
 	assert(PlayerState.equip_inventory_index(_find_inventory_instance(bracelet_x)).begins_with("已装备"), "手镯第一件穿戴失败")
 	assert(str(PlayerState.equipment["左手镯"].get("instance_id", "")) == bracelet_x, "手镯第一件未进左手镯")
@@ -147,7 +191,7 @@ func _run() -> void:
 	# 轮换 cursor 持久化，旧档缺失时安全默认
 	PlayerState.active_profile_id = "equipment_slot_cycle_persistence_test"
 	PlayerState.character_name = "双槽轮换测试"
-	PlayerState.save_game()
+	assert(PlayerState.save_game(), str(PlayerState.last_save_result))
 	var cycle_save_path := PlayerState._profile_path(PlayerState.active_profile_id)
 	PlayerState.test_mode = false
 	PlayerState.load_save()
@@ -170,17 +214,17 @@ func _run() -> void:
 	PlayerState.active_profile_id = ""
 
 	# 回归：双槽满后手动卸下右槽，cursor 按本次实际装备的槽推进到另一侧
+	var refilled_right_id := str(PlayerState.equipment["右戒指"].get("instance_id", ""))
 	PlayerState.unequip_slot("右戒指")
 	assert(PlayerState.equipment["右戒指"].is_empty(), "回归前置右戒指未卸下")
 	assert(PlayerState.equip_cycle_cursor["戒指"] == "左戒指", "回归前置戒指 cursor 应为左戒指")
-	var refilled_right_id := str(PlayerState.inventory[-1].get("instance_id", ""))
 	assert(
 		PlayerState.equip_inventory_index(_find_inventory_instance(refilled_right_id)).begins_with("已装备"),
 		"空右槽自动装备失败"
 	)
 	assert(str(PlayerState.equipment["右戒指"].get("instance_id", "")) == refilled_right_id, "空槽自动装备未进右戒指")
 	assert(PlayerState.equip_cycle_cursor["戒指"] == "左戒指", "实际装备右槽后 cursor 未推进到左戒指")
-	var next_auto_id := str(PlayerState.inventory[0].get("instance_id", ""))
+	var next_auto_id := cycle_a
 	assert(not next_auto_id.is_empty(), "回归缺少可自动装备的戒指实例")
 	assert(
 		PlayerState.equip_inventory_index(_find_inventory_instance(next_auto_id)).begins_with("已装备"),
@@ -188,6 +232,29 @@ func _run() -> void:
 	)
 	assert(str(PlayerState.equipment["左戒指"].get("instance_id", "")) == next_auto_id, "再下一件未替换左戒指（连续右）")
 	assert(PlayerState.equip_cycle_cursor["戒指"] == "右戒指", "左槽替换后 cursor 未推进")
+	PlayerState.profile_directory = old_profile_directory
+	PlayerState.profile_index_path = old_profile_index_path
+	PlayerState.shared_warehouse_path = old_shared_warehouse_path
+	PlayerState.shared_warehouse_transaction_log_path = old_shared_transaction_path
+	PlayerState._shared_warehouse_initialized = old_shared_initialized
+	PlayerState.active_profile_id = old_active_profile_id
+	PlayerState.test_mode = old_test_mode
+	for path: String in [
+		cycle_save_path,
+		"%s.bak" % cycle_save_path,
+		isolated_root.path_join("profiles.json"),
+		isolated_root.path_join("profiles.json.bak"),
+		isolated_root.path_join("shared.json"),
+		isolated_root.path_join("shared.json.bak"),
+		isolated_root.path_join("shared.transaction.json"),
+	]:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	var isolated_characters := isolated_root.path_join("characters")
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(isolated_characters)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(isolated_characters))
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(isolated_root)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(isolated_root))
 
 	print("EQUIPMENT_SLOT_MIGRATION_PASS：双手镯、双戒指、确定性替换、属性修理、指定卸下、v02迁移和自动轮换cursor正常")
 	get_tree().quit(0)

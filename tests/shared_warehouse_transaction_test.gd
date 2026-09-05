@@ -27,6 +27,9 @@ func _run() -> void:
 	PlayerState._test_fail_profile_write = false
 	PlayerState._test_fail_shared_write = false
 	PlayerState._test_fail_warehouse_rollback_write = false
+	PlayerState.level = 50
+	PlayerState.profession = "战士"
+	PlayerState.recalculate_stats(false)
 	_write_index()
 	assert(PlayerState._write_json_atomic(_other_profile, {"profile_id": "q", "inventory": [_item("q-safe")]}))
 	_test_successful_deposit_and_withdraw()
@@ -34,6 +37,8 @@ func _run() -> void:
 	_test_batch_write_failure_rolls_back_every_item()
 	_test_precise_write_failures_rollback()
 	_test_prepared_log_recovery_without_active_profile_coupling()
+	_test_extended_stack_metadata_and_opaque_split_guard()
+	_cleanup_isolated_files()
 	_restore_player_state()
 	print("SHARED_WAREHOUSE_TRANSACTION_TEST_PASS")
 	get_tree().quit()
@@ -176,6 +181,65 @@ func _test_prepared_log_recovery_without_active_profile_coupling() -> void:
 	assert(not FileAccess.file_exists(PlayerState.shared_warehouse_transaction_log_path))
 
 
+func _test_extended_stack_metadata_and_opaque_split_guard() -> void:
+	var extended := {
+		"name": "太阳水",
+		"count": 3,
+		"bind": true,
+		"extension": {"source": "legacy", "flags": ["keep", "deep"]},
+	}
+	_reset_documents("metadata-base")
+	PlayerState.inventory = []
+	PlayerState.warehouse_inventory = [extended.duplicate(true)]
+	assert(PlayerState._write_json_atomic(_profile, {"profile_id": "p", "inventory": []}))
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_path, _shared_document(PlayerState.warehouse_inventory)))
+	var result := PlayerState.withdraw_from_warehouse(0)
+	assert(bool(result.get("success", false)), str(result))
+	assert(PlayerState.inventory.size() == 1)
+	assert(PlayerState.inventory[0] == extended, "扩展堆叠记录字段未完整保留")
+	var stored_record: Dictionary = (PlayerState._read_json(_profile).get("inventory", []) as Array)[0]
+	assert(bool(stored_record.get("bind", false)))
+	assert(stored_record.get("extension", {}) == extended.get("extension", {}))
+
+	var split_max_stack := PlayerState._max_stack_for_item(
+		GameData.get_item_record("太阳水")
+	)
+	var split_record := {
+		"name": "太阳水",
+		"count": split_max_stack + 1,
+		"extension": {"source": "legacy-split", "flags": ["copy"]},
+	}
+	_reset_documents("metadata-split")
+	PlayerState.inventory = []
+	PlayerState.warehouse_inventory = [split_record.duplicate(true)]
+	assert(PlayerState._write_json_atomic(_profile, {"profile_id": "p", "inventory": []}))
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_path, _shared_document(PlayerState.warehouse_inventory)))
+	result = PlayerState.withdraw_from_warehouse(0)
+	assert(bool(result.get("success", false)), str(result))
+	assert(PlayerState.inventory.size() == 2)
+	assert(int(PlayerState.inventory[0].get("count", 0)) == split_max_stack)
+	assert(int(PlayerState.inventory[1].get("count", 0)) == 1)
+	assert(PlayerState.inventory[0].get("extension", {}) == split_record.get("extension", {}))
+	assert(PlayerState.inventory[1].get("extension", {}) == split_record.get("extension", {}))
+
+	var opaque := split_record.duplicate(true)
+	opaque["instance_id"] = "opaque-stack-identity"
+	_reset_documents("opaque-split")
+	PlayerState.inventory = []
+	PlayerState.warehouse_inventory = [opaque.duplicate(true)]
+	assert(PlayerState._write_json_atomic(_profile, {"profile_id": "p", "inventory": []}))
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_path, _shared_document(PlayerState.warehouse_inventory)))
+	var profile_before := FileAccess.get_file_as_string(_profile)
+	var shared_before := FileAccess.get_file_as_string(PlayerState.shared_warehouse_path)
+	result = PlayerState.withdraw_from_warehouse(0)
+	assert(not bool(result.get("success", false)), str(result))
+	assert(str(result.get("reason", "")) == "opaque_instance_split_unsupported")
+	assert(PlayerState.inventory.is_empty())
+	assert(PlayerState.warehouse_inventory == [opaque])
+	assert(FileAccess.get_file_as_string(_profile) == profile_before)
+	assert(FileAccess.get_file_as_string(PlayerState.shared_warehouse_path) == shared_before)
+
+
 func _reset_documents(instance_id: String) -> void:
 	PlayerState._warehouse_transaction_locked = false
 	PlayerState._persistence_transaction_in_progress = false
@@ -249,6 +313,24 @@ func _capture_player_state() -> void:
 		"shared_fail": PlayerState._test_fail_shared_write, "profile_fail": PlayerState._test_fail_profile_write,
 		"rollback_fail": PlayerState._test_fail_warehouse_rollback_write,
 	}
+
+
+func _cleanup_isolated_files() -> void:
+	for base_path: String in [
+		_profile,
+		_other_profile,
+		PlayerState.profile_index_path,
+		PlayerState.shared_warehouse_path,
+		PlayerState.shared_warehouse_transaction_log_path,
+	]:
+		for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
+			var path := "%s%s" % [base_path, suffix]
+			if FileAccess.file_exists(path):
+				DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory))
+	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(_root)):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(_root))
 
 
 func _restore_player_state() -> void:

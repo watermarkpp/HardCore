@@ -134,7 +134,16 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	_oil_unlucky_roll = 0
 	_oil_success_roll = 1
-	assert(PlayerState.use_inventory_index(_inventory_index("祝福油")).begins_with("使用"), "装备武器后祝福油没有正常消耗")
+	var blessing_use_result := PlayerState.use_blessing_oil_inventory_index_with_rolls(
+		_inventory_index("祝福油"),
+		_oil_unlucky_roll,
+		_oil_success_roll
+	)
+	assert(
+		bool(blessing_use_result.get("ok", false))
+		and str(blessing_use_result.get("message", "")).begins_with("使用"),
+		"装备武器后祝福油没有正常消耗"
+	)
 	assert(PlayerState.has_item("祝福油", 2), "祝福油每次应消耗一个")
 	assert(int(weapon.get("weapon_luck", 0)) == 4, "命运之刃幸运+3后喝油没有继续提升")
 

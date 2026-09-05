@@ -1349,6 +1349,7 @@ func _ready() -> void:
 
 	y_sort_enabled = true
 	_rng.randomize()
+	PlayerState.configure_blessing_oil_rng(_rng)
 	_combat_spatial_index = RuntimeCombatSpatialIndexScript.new()
 	# Q2-B: one scheduler for generic persistent ground effects. It reuses the
 	# shared enemy spatial index; FireWall's formal field path stays outside.
@@ -5787,6 +5788,7 @@ func _on_item_quick_slot_assignment_requested(
 ) -> void:
 	var result := PlayerState.assign_quick_item_slot(slot_index, item_name)
 	if not bool(result.get("ok", false)):
+		_sync_item_quick_slots_to_hud()
 		hud.show_message(str(result.get("message", "快捷物品绑定失败")))
 		return
 	_sync_item_quick_slots_to_hud()
@@ -5826,6 +5828,11 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
 		return
 	if not PlayerState.apply_skill_button_assignment(result):
+		if is_instance_valid(hud) and hud.has_method("set_skill_button_assignments"):
+			hud.call(
+				"set_skill_button_assignments",
+				PlayerState.skill_button_assignments_snapshot()
+			)
 		hud.show_message("技能栏配置未能保存")
 		return
 	if is_instance_valid(hud):
@@ -12124,9 +12131,6 @@ func _on_consumable_used(item_name: String) -> void:
 		player.restore_health(30)
 		player.restore_mana(30)
 		player.apply_defense_buff(60.0, 2)
-	elif item_name == "祝福油":
-		hud.show_message(PlayerState.apply_blessing_oil(_rng))
-		return
 	hud.show_message("使用了%s" % item_name)
 
 
@@ -12142,9 +12146,6 @@ func _on_scroll_used(item_name: String) -> void:
 			hud.show_message("附近没有可用传送落点")
 			return
 		_set_player_world_position(destination)
-	elif effect == "blessing_oil":
-		hud.show_message(PlayerState.apply_blessing_oil(_rng))
-		return
 	elif effect == "repair_oil":
 		hud.show_message(PlayerState.apply_weapon_repair_oil(false))
 		return

@@ -162,6 +162,7 @@ var computed_special_effects: Dictionary = {}
 var test_mode := false
 var durability_event_commit_count := 0
 var _durability_rng := RandomNumberGenerator.new()
+var _blessing_oil_rng: RandomNumberGenerator
 var active_profile_id := ""
 var character_name := ""
 var _autosave_elapsed := 0.0
@@ -506,6 +507,36 @@ func _build_receive_result_for_template(
 	var next_inventory: Array = base_inventory.duplicate(true)
 	var is_stackable := bool(catalog_item.get("stackable", false)) and str(catalog_item.get("kind", "")) != "equipment"
 	var max_stack := _max_stack_for_item(catalog_item) if is_stackable else 1
+	var opaque_instance_id := str(template.get("instance_id", ""))
+	if not opaque_instance_id.is_empty():
+		if amount > max_stack:
+			return _receive_failure(
+				"opaque_instance_split_unsupported",
+				"带唯一实例标识的物品无法安全拆分。"
+			)
+		var opaque_existing_count := 0
+		for raw_existing: Variant in next_inventory:
+			if (
+				not raw_existing is Dictionary
+				or str((raw_existing as Dictionary).get("instance_id", ""))
+				!= opaque_instance_id
+			):
+				continue
+			opaque_existing_count += 1
+			if (
+				not is_stackable
+				or not _inventory_records_mergeable(raw_existing, template)
+				or int((raw_existing as Dictionary).get("count", 0)) + amount > max_stack
+			):
+				return _receive_failure(
+					"opaque_instance_split_unsupported",
+					"带唯一实例标识的物品无法安全拆分。"
+				)
+		if opaque_existing_count > 1:
+			return _receive_failure(
+				"opaque_instance_split_unsupported",
+				"带唯一实例标识的物品无法安全拆分。"
+			)
 	var remaining := amount
 	if is_stackable:
 		for index in range(next_inventory.size()):
@@ -525,9 +556,9 @@ func _build_receive_result_for_template(
 			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
 		var moved := mini(remaining, max_stack) if is_stackable else 1
 		var new_record: Dictionary
-		if not template.is_empty() and not is_stackable:
+		if not template.is_empty():
 			new_record = template.duplicate(true)
-			new_record["count"] = 1
+			new_record["count"] = moved
 		elif str(catalog_item.get("kind", "")) == "equipment":
 			new_record = _make_item_instance(item_name, catalog_item)
 		else:
@@ -634,18 +665,25 @@ func _build_receive_batch_result(rewards: Array, base_inventory: Array) -> Dicti
 	}
 
 
-func add_gold(amount: int) -> void:
+func add_gold(amount: int) -> bool:
+	var previous := gold
 	gold = maxi(0, gold + amount)
+	if not _commit_save():
+		gold = previous
+		return false
 	profile_changed.emit()
-	_commit_save()
+	return true
 
 
 func spend_gold(amount: int) -> bool:
 	if amount < 0 or gold < amount:
 		return false
+	var previous := gold
 	gold -= amount
+	if not _commit_save():
+		gold = previous
+		return false
 	profile_changed.emit()
-	_commit_save()
 	return true
 
 
@@ -741,6 +779,14 @@ func remove_item(item_name: String, amount := 1) -> bool:
 
 
 func _consume_inventory_index(index: int, amount := 1) -> bool:
+	if not _consume_inventory_index_without_commit(index, amount):
+		return false
+	inventory_changed.emit()
+	_commit_save()
+	return true
+
+
+func _consume_inventory_index_without_commit(index: int, amount := 1) -> bool:
 	if index < 0 or index >= inventory.size() or amount <= 0:
 		return false
 	var raw_record: Variant = inventory[index]
@@ -754,8 +800,6 @@ func _consume_inventory_index(index: int, amount := 1) -> bool:
 		_clear_inventory_slot(inventory, index)
 	else:
 		record["count"] = count - amount
-	inventory_changed.emit()
-	_commit_save()
 	return true
 
 
@@ -1340,6 +1384,18 @@ func use_inventory_index(index: int) -> String:
 			var weapon_value: Variant = equipment.get("武器", {})
 			if not weapon_value is Dictionary or weapon_value.is_empty():
 				return "需要先装备武器"
+			if effect == "blessing_oil":
+				if item_name != "祝福油":
+					return "%s效果配置无效" % item_name
+				if _blessing_oil_rng == null:
+					return "祝福油随机源尚未就绪"
+				var blessing_result := use_blessing_oil_inventory_index(
+					index,
+					_blessing_oil_rng
+				)
+				if bool(blessing_result.get("ok", false)):
+					scroll_requested.emit(item_name)
+				return str(blessing_result.get("message", "祝福油使用失败"))
 			if effect in ["repair_oil", "war_god_oil"]:
 				return _use_weapon_repair_oil_item(index, effect == "war_god_oil")
 		if _consume_inventory_index(index):
@@ -1349,9 +1405,17 @@ func use_inventory_index(index: int) -> String:
 	if kind != "consumable":
 		return "%s当前不可使用" % item_name
 	if item_name == "祝福油":
+		if effect != "blessing_oil":
+			return "祝福油效果配置无效"
 		var weapon_value: Variant = equipment.get("武器", {})
 		if not weapon_value is Dictionary or weapon_value.is_empty():
 			return "需要先装备武器"
+		if _blessing_oil_rng == null:
+			return "祝福油随机源尚未就绪"
+		var blessing_result := use_blessing_oil_inventory_index(index, _blessing_oil_rng)
+		if bool(blessing_result.get("ok", false)):
+			consumable_requested.emit(item_name)
+		return str(blessing_result.get("message", "祝福油使用失败"))
 	if effect == "temporary_stat_buff":
 		var profile: Variant = item.get("effectProfile", {})
 		if not profile is Dictionary:
@@ -1457,10 +1521,14 @@ func _make_item_instance(item_name: String, catalog_item: Dictionary, instance_s
 	return instance
 
 
-func apply_blessing_oil(rng: RandomNumberGenerator) -> String:
-	var weapon_value: Variant = equipment.get("武器", {})
-	if not weapon_value is Dictionary or weapon_value.is_empty():
-		return "需要先装备武器"
+func configure_blessing_oil_rng(rng: RandomNumberGenerator) -> void:
+	_blessing_oil_rng = rng
+
+
+func _blessing_oil_rolls(
+	weapon_value: Dictionary,
+	rng: RandomNumberGenerator
+) -> Dictionary:
 	var item := GameData.get_item(str(weapon_value.get("name", "")))
 	var attack_min := int(item.get("attackMin", 0) if item.get("attackMin", null) != null else 0)
 	var attack_max := int(item.get("attackMax", attack_min) if item.get("attackMax", null) != null else attack_min)
@@ -1468,31 +1536,147 @@ func apply_blessing_oil(rng: RandomNumberGenerator) -> String:
 	var unlucky_roll := rng.randi_range(0, EquipmentRulesScript.BLESSING_UNLUCKY_RATE - 1)
 	var success_roll := 0
 	if unlucky_roll != 1:
-		var denominator := EquipmentRulesScript.blessing_success_denominator(luck, attack_min, attack_max)
+		var denominator := EquipmentRulesScript.blessing_success_denominator(
+			luck,
+			attack_min,
+			attack_max
+		)
 		success_roll = rng.randi_range(0, denominator - 1) if denominator > 1 else 0
-	return apply_blessing_oil_with_rolls(unlucky_roll, success_roll)
+	return {"unlucky_roll": unlucky_roll, "success_roll": success_roll}
 
 
-func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int) -> String:
+func _apply_blessing_oil_effect_with_rolls(
+	unlucky_roll: int,
+	success_roll: int
+) -> Dictionary:
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
-		return "需要先装备武器"
+		return {"ok": false, "message": "需要先装备武器"}
 	var item := GameData.get_item(str(weapon_value.get("name", "")))
+	if item.is_empty():
+		return {"ok": false, "reason": "invalid_weapon", "message": "武器数据无效"}
 	var attack_min := int(item.get("attackMin", 0) if item.get("attackMin", null) != null else 0)
 	var attack_max := int(item.get("attackMax", attack_min) if item.get("attackMax", null) != null else attack_min)
 	var luck := int(weapon_value.get("weapon_luck", 0))
 	var curse := int(weapon_value.get("weapon_curse", 0))
-	var outcome := EquipmentRulesScript.blessing_outcome(luck, curse, attack_min, attack_max, unlucky_roll, success_roll)
+	var outcome := EquipmentRulesScript.blessing_outcome(
+		luck,
+		curse,
+		attack_min,
+		attack_max,
+		unlucky_roll,
+		success_roll
+	)
 	weapon_value["weapon_luck"] = int(outcome.get("luck", luck))
 	weapon_value["weapon_curse"] = int(outcome.get("curse", curse))
-	recalculate_stats()
+	var message := "祝福油无效"
+	match str(outcome.get("result", "ineffective")):
+		"cursed": message = "祝福油失败：武器受到诅咒"
+		"improved": message = "祝福油生效：武器幸运改善"
+	return {"ok": true, "message": message, "outcome": outcome}
+
+
+func apply_blessing_oil(rng: RandomNumberGenerator) -> String:
+	if rng == null:
+		return "祝福油随机源尚未就绪"
+	var weapon_value: Variant = equipment.get("武器", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return "需要先装备武器"
+	if GameData.get_item(str(weapon_value.get("name", ""))).is_empty():
+		return "武器数据无效"
+	var rolls := _blessing_oil_rolls(weapon_value, rng)
+	return apply_blessing_oil_with_rolls(
+		int(rolls.get("unlucky_roll", 0)),
+		int(rolls.get("success_roll", 0))
+	)
+
+
+func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int) -> String:
+	var equipment_before := equipment.duplicate(true)
+	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll)
+	if not bool(effect_result.get("ok", false)):
+		return str(effect_result.get("message", "祝福油使用失败"))
+	recalculate_stats(false)
+	if not _commit_save():
+		equipment = equipment_before
+		recalculate_stats(false)
+		return "祝福油效果未能保存"
 	equipment_changed.emit()
 	profile_changed.emit()
-	_commit_save()
-	match str(outcome.get("result", "ineffective")):
-		"cursed": return "祝福油失败：武器受到诅咒"
-		"improved": return "祝福油生效：武器幸运改善"
-		_: return "祝福油无效"
+	return str(effect_result.get("message", "祝福油无效"))
+
+
+func use_blessing_oil_inventory_index(
+	index: int,
+	rng: RandomNumberGenerator
+) -> Dictionary:
+	if rng == null:
+		return {"ok": false, "reason": "rng_unavailable", "message": "祝福油随机源尚未就绪"}
+	if (
+		index < 0
+		or index >= inventory.size()
+		or not inventory[index] is Dictionary
+		or str(inventory[index].get("name", "")) != "祝福油"
+	):
+		return {"ok": false, "reason": "invalid_oil", "message": "物品数量不足"}
+	var weapon_value: Variant = equipment.get("武器", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return {"ok": false, "reason": "no_weapon", "message": "需要先装备武器"}
+	if GameData.get_item(str(weapon_value.get("name", ""))).is_empty():
+		return {"ok": false, "reason": "invalid_weapon", "message": "武器数据无效"}
+	var rolls := _blessing_oil_rolls(weapon_value, rng)
+	return use_blessing_oil_inventory_index_with_rolls(
+		index,
+		int(rolls.get("unlucky_roll", 0)),
+		int(rolls.get("success_roll", 0))
+	)
+
+
+func use_blessing_oil_inventory_index_with_rolls(
+	index: int,
+	unlucky_roll: int,
+	success_roll: int
+) -> Dictionary:
+	var oil_catalog := GameData.get_item_record("祝福油")
+	if (
+		str(oil_catalog.get("useEffect", "")) != "blessing_oil"
+		or str(oil_catalog.get("kind", "")) not in ["scroll", "consumable"]
+	):
+		return {"ok": false, "reason": "invalid_oil", "message": "祝福油效果配置无效"}
+	if (
+		index < 0
+		or index >= inventory.size()
+		or not inventory[index] is Dictionary
+		or str(inventory[index].get("name", "")) != "祝福油"
+	):
+		return {"ok": false, "reason": "invalid_oil", "message": "物品数量不足"}
+	var weapon_value: Variant = equipment.get("武器", {})
+	if not weapon_value is Dictionary or weapon_value.is_empty():
+		return {"ok": false, "reason": "no_weapon", "message": "需要先装备武器"}
+	var inventory_before := inventory.duplicate(true)
+	var equipment_before := equipment.duplicate(true)
+	if not _consume_inventory_index_without_commit(index):
+		return {"ok": false, "reason": "invalid_oil", "message": "物品数量不足"}
+	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll)
+	if not bool(effect_result.get("ok", false)):
+		inventory = inventory_before
+		equipment = equipment_before
+		return effect_result
+	recalculate_stats(false)
+	if not _commit_save():
+		inventory = inventory_before
+		equipment = equipment_before
+		recalculate_stats(false)
+		return {"ok": false, "reason": "save_failed", "message": "祝福油使用未能保存"}
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
+	return {
+		"ok": true,
+		"reason": "",
+		"message": "使用：祝福油；%s" % str(effect_result.get("message", "祝福油无效")),
+		"outcome": effect_result.get("outcome", {}).duplicate(true),
+	}
 
 
 func lose_gold_percent(rate: float) -> int:
@@ -4320,6 +4504,9 @@ func apply_quick_slot_assignment(result: Dictionary) -> bool:
 		if not skill_name.is_empty() and not learned_skills.has(skill_name):
 			return false
 		next_slots.append(skill_name)
+	var previous_attack := attack_skill_slots.duplicate()
+	var previous_ring := attack_ring_slots.duplicate()
+	var previous_quick := quick_slots.duplicate()
 	var migrated := SkillLoadoutRulesScript.normalize_assignments({}, next_slots)
 	attack_skill_slots = _normalized_skill_slot_array(
 		migrated.get(SKILL_SLOT_GROUP_ATTACK, []),
@@ -4330,10 +4517,14 @@ func apply_quick_slot_assignment(result: Dictionary) -> bool:
 		ATTACK_RING_SKILL_SLOT_COUNT
 	)
 	_sync_legacy_quick_slots_from_ring()
+	if not _commit_save():
+		attack_skill_slots = previous_attack
+		attack_ring_slots = previous_ring
+		quick_slots = previous_quick
+		return false
 	quick_slots_changed.emit(change.duplicate(true))
 	skills_changed.emit()
 	profile_changed.emit()
-	_commit_save()
 	return true
 
 
@@ -4358,13 +4549,20 @@ func apply_skill_button_assignment(result: Dictionary) -> bool:
 	for skill_name: String in next_attack + next_ring:
 		if not skill_name.is_empty() and not is_skill_learned(skill_name):
 			return false
+	var previous_attack := attack_skill_slots.duplicate()
+	var previous_ring := attack_ring_slots.duplicate()
+	var previous_quick := quick_slots.duplicate()
 	attack_skill_slots = next_attack
 	attack_ring_slots = next_ring
 	_sync_legacy_quick_slots_from_ring()
+	if not _commit_save():
+		attack_skill_slots = previous_attack
+		attack_ring_slots = previous_ring
+		quick_slots = previous_quick
+		return false
 	quick_slots_changed.emit(change.duplicate(true))
 	skills_changed.emit()
 	profile_changed.emit()
-	_commit_save()
 	return true
 
 
@@ -4487,6 +4685,16 @@ func assign_quick_item_slot(index: int, item_name: String) -> Dictionary:
 		}
 	var previous := quick_item_slots[index]
 	quick_item_slots[index] = item_name
+	if not _commit_save():
+		quick_item_slots[index] = previous
+		return {
+			"ok": false,
+			"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
+			"slot_index": index,
+			"item_name": item_name,
+			"reason": "save_failed",
+			"message": "快捷物品绑定未能保存",
+		}
 	var change := {
 		"contract_id": QUICK_ITEM_SLOTS_CONTRACT_ID,
 		"slot_index": index,
@@ -4496,7 +4704,6 @@ func assign_quick_item_slot(index: int, item_name: String) -> Dictionary:
 	}
 	quick_item_slots_changed.emit(change.duplicate(true))
 	profile_changed.emit()
-	_commit_save()
 	var message := "快捷物品槽%d已清空" % (index + 1) if item_name.is_empty() else (
 		"已将%s绑定到快捷物品槽%d" % [item_name, index + 1]
 	)
