@@ -27,6 +27,7 @@ var _registration_sequence := 0
 var _fail_safe_remaining := 0.0
 var _visual_update_remaining := 0.0
 var _collection_elapsed := 0.0
+var _visual_elapsed := 0.0
 var _player_ground_gu := Vector2.INF
 var _player_screen_position_px := Vector2.INF
 var _registered_pickups: Dictionary = {}
@@ -76,6 +77,7 @@ func configure_map(
 	_fail_safe_remaining = 0.0
 	_visual_update_remaining = 0.0
 	_collection_elapsed = 0.0
+	_visual_elapsed = 0.0
 	_player_ground_gu = Vector2.INF
 	_candidate_scratch.clear()
 	_previous_candidate_ids.clear()
@@ -110,6 +112,8 @@ func clear_all() -> void:
 	_previous_candidate_ids.clear()
 	_candidate_ids.clear()
 	_logout_blocked_pickup_ids.clear()
+	_collection_elapsed = 0.0
+	_visual_elapsed = 0.0
 	_player_ground_gu = Vector2.INF
 
 
@@ -188,10 +192,16 @@ func player_position_changed(position_px: Vector2) -> void:
 	_player_screen_position_px = position_px
 	manager_player_event_count += 1
 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_manager_player_events")
-	_refresh_player_ground()
+	if not _refresh_player_ground():
+		return
+	# Movement remains an immediate collection trigger, but it consumes the
+	# manager's accumulated game-time clock instead of discarding the time since
+	# the previous scheduled pass.  The fail-safe schedule is still reset here
+	# so a movement event does not cause an immediate duplicate query.
+	var elapsed_since_collection_pass := _collection_elapsed
 	_collection_elapsed = 0.0
 	_fail_safe_remaining = FAIL_SAFE_INTERVAL_SECONDS
-	_run_collection_pass(0.0)
+	_run_collection_pass(elapsed_since_collection_pass)
 
 
 func flush_for_logout() -> Dictionary:
@@ -271,6 +281,7 @@ func _process(delta: float) -> void:
 		return
 	var safe_delta := maxf(0.0, delta)
 	_collection_elapsed += safe_delta
+	_visual_elapsed += safe_delta
 	_fail_safe_remaining -= safe_delta
 	_visual_update_remaining -= safe_delta
 	if _fail_safe_remaining <= 0.0:
@@ -283,7 +294,8 @@ func _process(delta: float) -> void:
 		_collection_elapsed = 0.0
 	if _visual_update_remaining <= 0.0:
 		_visual_update_remaining = VISUAL_UPDATE_INTERVAL_SECONDS
-		_update_visuals(safe_delta)
+		_update_visuals(_visual_elapsed)
+		_visual_elapsed = 0.0
 
 
 func _run_collection_pass(delta_seconds: float) -> void:
