@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "apk_assets_pck_base_verification",
+  "generatedAtUtc": "2026-09-05T13:58:56.5315241Z",
+  "sourceCommit": "52ae0565856c2d99a28639b2bf0c6278186e0858",
+  "apk": {
+    "path": "C:\\Users\\Administrator\\Desktop\\HardCore-20260905-audit-milestone-debug.apk",
+    "bytes": 449193057,
+    "sha256": "26584B871F61B2F6EC2DDDAF52432263E7D68A6B8BEA35B2A3196D59D5B21664"
+  },
+  "pack": {
+    "path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_base\\52ae0565_apk_asset_base.pck",
+    "bytes": 512340152,
+    "sha256": "0FC6C2DAE3672130F9EEB8F9ED1A8C250DF119435BC43E55E5D47802FE0A4E5B"
+  },
+  "mapping": {
+    "apkAssetPrefix": "assets/",
+    "pckResourcePrefix": "res://",
+    "resourceCount": 16001,
+    "resourceBytes": 510109897
+  },
+  "verification": {
+    "method": "fresh_process_load_resource_pack_replace_true_fileaccess_sha256",
+    "ok": true,
+    "resourceBytes": 510109897,
+    "resourceCount": 16001,
+    "sentinel": "res://assets.sparsepck"
+  },
+  "verificationMethod": "Independent fresh headless Godot process loads the existing PCK with replace=true; FileAccess streams every res:// entry. Expected hashes are recomputed directly from the APK ZIP in this VerifyExisting run.",
+  "helperRevision": "nul_safe_utf8_buffer_check"
+}
