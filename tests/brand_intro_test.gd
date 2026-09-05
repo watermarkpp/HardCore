@@ -85,6 +85,15 @@ func _run() -> void:
 		assert(handoff._target_scene_ready, "target did not settle behind the CG on launch %d" % launch_index)
 		assert((handoff._target_scene_instance as CanvasItem).visible, "prepared handoff did not reveal a settled target on launch %d" % launch_index)
 		assert(handoff.is_inside_tree(), "startup intro was removed before target readiness on launch %d" % launch_index)
+		# The real main-scene prefetch is fire-and-forget in production. Let the
+		# request reach a terminal state before freeing startup, otherwise Godot
+		# reports its in-flight worker as a main.tscn parse/leak at shutdown.
+		var settled_prefetch := await _wait_for_main_scene_prefetch(handoff)
+		if launch_index == 0:
+			assert(
+				str(settled_prefetch.get("status", "")) in ["ready", "already_cached"],
+				"real main-scene prefetch did not settle successfully: %s" % settled_prefetch
+			)
 		handoff._target_scene_instance.queue_free()
 		handoff.queue_free()
 		await get_tree().process_frame
@@ -176,5 +185,23 @@ func _run() -> void:
 		assert(lazy_node.is_loaded(), "%s did not publish a ready state atomically" % lazy_script_path)
 		lazy_node.queue_free()
 		await get_tree().process_frame
+	intro.queue_free()
+	await get_tree().process_frame
 	print("BRAND_INTRO_PASS: icon, boot splash, animation and exact slogan are connected")
 	get_tree().quit(0)
+
+
+func _wait_for_main_scene_prefetch(handoff: Control) -> Dictionary:
+	for _frame in range(240):
+		var diagnostic: Dictionary = handoff.main_scene_prefetch_diagnostic()
+		var status := str(diagnostic.get("status", ""))
+		if status in ["ready", "already_cached", "failed"]:
+			return diagnostic
+		await get_tree().process_frame
+	var pending_diagnostic: Dictionary = handoff.main_scene_prefetch_diagnostic()
+	if str(pending_diagnostic.get("status", "")) == "loading":
+		# Finalize the request that this test already started. This is teardown
+		# only; production still owns the non-blocking prefetch decision.
+		var prefetched_scene: Resource = ResourceLoader.load_threaded_get("res://scenes/main.tscn")
+		pending_diagnostic["status"] = "ready" if prefetched_scene is PackedScene else "failed"
+	return pending_diagnostic

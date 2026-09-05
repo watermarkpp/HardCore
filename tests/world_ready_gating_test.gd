@@ -46,6 +46,38 @@ func _run() -> void:
 		int(_game.current_map_id) == 9999,
 		"refused travel must not switch the current map"
 	)
+	# READY releases the real background panel prewarm. Let that production
+	# request and its catalog icon requests settle before freeing GameRoot, so
+	# this test cannot turn a valid world-gate assertion into an exit-time
+	# ResourceLoader leak.
+	var hud: GameHUD = _game.hud
+	for _frame in range(240):
+		if hud.all_panels_are_prewarmed():
+			break
+		await get_tree().process_frame
+	assert(hud.all_panels_are_prewarmed(), "background panel prewarm did not settle before test exit")
+	for _frame in range(240):
+		if hud._catalog_icon_prewarm_complete:
+			break
+		await get_tree().process_frame
+	assert(hud._catalog_icon_prewarm_complete, "catalog icon prewarm did not settle before test exit")
+	var prewarm_diagnostic: Dictionary = hud.panel_prewarm_diagnostic()
+	var pending_scripts: Array = (prewarm_diagnostic.get("script_prefetch", {}) as Dictionary).get("pending", [])
+	for raw_path: Variant in pending_scripts:
+		var path := str(raw_path)
+		for _frame in range(240):
+			var status := ResourceLoader.load_threaded_get_status(path)
+			if status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				break
+			await get_tree().process_frame
+		var final_status := ResourceLoader.load_threaded_get_status(path)
+		if final_status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			# Finalize the request that production already started. This is bounded
+			# test teardown; the production prewarm remains asynchronous.
+			var prefetched_script: Script = ResourceLoader.load_threaded_get(path) as Script
+			assert(prefetched_script != null, "panel script prefetch returned no script: %s" % path)
+		else:
+			assert(final_status == ResourceLoader.THREAD_LOAD_LOADED, "panel script prefetch did not settle: %s (%d)" % [path, final_status])
 	_game.queue_free()
 	await get_tree().process_frame
 	print("WORLD_READY_GATING_PASS")
