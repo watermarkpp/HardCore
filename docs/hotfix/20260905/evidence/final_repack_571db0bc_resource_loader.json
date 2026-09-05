@@ -1,0 +1,91 @@
+{
+	"baseLoaded": true,
+	"basePath": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-xp-town-minimal.pck",
+	"classCache": {
+		"baselinePreservedPolicy": true,
+		"classCount": 182,
+		"expectedClassCount": 182,
+		"hasDeviceLabRuntime": true,
+		"hasTownMusicController": true,
+		"hasUILevelUpPreview": true,
+		"loaded": true
+	},
+	"deathPenalty": {
+		"expectedLoss": 12,
+		"expectedLossConstant": 12,
+		"expectedThreshold": 120,
+		"highAfter": 488,
+		"highBefore": 500,
+		"highLost": 12,
+		"level": 7,
+		"lowAfter": 8,
+		"lowBefore": 20,
+		"lowLost": 12,
+		"noNegativeProof": true,
+		"sameThresholdLossProof": true,
+		"threshold": 120,
+		"verified": true,
+		"zeroAfter": 0,
+		"zeroLost": 0
+	},
+	"effect": {
+		"constantVerified": true,
+		"expectedFlameSizeScale": 0.75,
+		"flameSizeScale": 0.75
+	},
+	"method": "fresh_main_pack_base_then_followup_active_patch_cache_mode_ignore",
+	"music": {
+		"defaultVolumeLinear": 0.7,
+		"expectedLengthSeconds": 48.181406,
+		"expectedVolumeLinear": 0.7,
+		"lengthSeconds": 48.1814041137695,
+		"lengthVerified": true,
+		"sourceRecordDurationSeconds": 48.181406,
+		"sourceRecordLoaded": true,
+		"streamLoaded": true,
+		"volumeVerified": true
+	},
+	"ok": true,
+	"patchLoaded": true,
+	"patchPath": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hotfix_20260905\\followup_pack_work_1y0vxmmn\\hotfix-20260905-revival-visual-final.pck",
+	"resources": {
+		"remaps": {
+			"res://scripts/town_music_controller.gd.remap": true,
+			"res://scripts/ui_level_up_preview.gd.remap": true
+		},
+		"scriptFailures": [],
+		"scripts": {
+			"res://scripts/device_lab_runtime.gd": true,
+			"res://scripts/game_root.gd": true,
+			"res://scripts/hud.gd": true,
+			"res://scripts/player_state.gd": true,
+			"res://scripts/player_visual.gd": true,
+			"res://scripts/town_music_controller.gd": true,
+			"res://scripts/ui_level_up_preview.gd": true
+		}
+	},
+	"sameMapGuardPresent": true,
+	"sfx": {
+		"representativeBaseStreamLoaded": true,
+		"representativePath": "res://assets/audio/warrior/51.wav",
+		"skillAudioEnabled": false,
+		"skillAudioGateVerifiedFalse": true
+	},
+	"sourceFallback": {
+		"cacheMode": "CACHE_MODE_IGNORE",
+		"sourceGuardDir": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hotfix_20260905\\followup_pack_work_1y0vxmmn\\source_guard",
+		"sourceScriptsAbsentOnDisk": true
+	},
+	"xp": {
+		"expectedGameplayThresholdLevel1": 10,
+		"expectedSourceLevel1": 100,
+		"gameplayThresholdLevel1": 10,
+		"minimumConstantProof": true,
+		"scaleConstantProof": true,
+		"scaledThresholdProof": true,
+		"serviceTableUnchangedProof": true,
+		"sourceLevel1": 100,
+		"thresholdMinimum": 1,
+		"thresholdScale": 0.1
+	}
+}

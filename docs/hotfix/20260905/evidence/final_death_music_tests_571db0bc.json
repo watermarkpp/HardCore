@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "test_name": "death_revival_home_failure_test",
+      "test_path": "tests/death_revival_home_failure_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "town_music_controller_test",
+      "test_path": "tests/town_music_controller_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 2,
+  "passed": 2,
+  "suite": "adhoc",
+  "git_head": "571db0bc265a35a267dfcc18015bcc4a1e2a33d8",
+  "generated_at": "2026-09-05T23:51:54.3321241+08:00",
+  "engine_log_errors": 0,
+  "failed": 0
+}

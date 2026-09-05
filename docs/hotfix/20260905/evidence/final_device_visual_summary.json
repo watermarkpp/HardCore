@@ -1,0 +1,73 @@
+{
+  "kind": "post_install_readonly_snapshot_summary",
+  "map": {
+    "mapId": 910001,
+    "zone": "比奇省（单机重制）"
+  },
+  "monsterCount": 82,
+  "onScreenAlive": [
+    {
+      "monster_id": 21,
+      "resources_active": true,
+      "sprite_visible": true,
+      "texture": "res://assets/art/monsters/client_bich_common/strawman/strawman_idle.png"
+    },
+    {
+      "monster_id": 21,
+      "resources_active": true,
+      "sprite_visible": true,
+      "texture": "res://assets/art/monsters/client_bich_common/strawman/strawman_idle.png"
+    },
+    {
+      "monster_id": 26,
+      "resources_active": true,
+      "sprite_visible": true,
+      "texture": "res://assets/art/monsters/client_bich_common/rake_cat/rake_cat_idle.png"
+    },
+    {
+      "monster_id": 26,
+      "resources_active": true,
+      "sprite_visible": true,
+      "texture": "res://assets/art/monsters/client_bich_common/rake_cat/rake_cat_idle.png"
+    },
+    {
+      "monster_id": 26,
+      "resources_active": true,
+      "sprite_visible": true,
+      "texture": "res://assets/art/monsters/client_bich_common/rake_cat/rake_cat_idle.png"
+    },
+    {
+      "monster_id": 26,
+      "resources_active": true,
+      "sprite_visible": true,
+      "texture": "res://assets/art/monsters/client_bich_common/rake_cat/rake_cat_idle.png"
+    }
+  ],
+  "streaming": {
+    "active_request_count": 0,
+    "decoded_rgba8_bytes": 149192704,
+    "duplicate_request_count": 0,
+    "evicted_before_first_apply_count": 0,
+    "failed_request_count": 0,
+    "failed_resource_count": 0,
+    "immediate_eviction_count": 0,
+    "late_completion_resident_skip_count": 0,
+    "leased_profile_count": 4,
+    "leased_visual_count": 32,
+    "loaded_request_count": 0,
+    "loading_request_count": 0,
+    "pin_rejection_count": 6,
+    "protected_overbudget_bytes": 82083840,
+    "queued_request_count": 0,
+    "ready_resource_count": 5,
+    "registered_visual_count": 82,
+    "request_enqueue_count": 9,
+    "resource_apply_count": 76,
+    "same_key_reload_count": 1,
+    "stale_completion_count": 0,
+    "status_poll_count": 95,
+    "unique_request_count": 9,
+    "waiting_visual_count": 0
+  },
+  "manualDeathRetestAccepted": false
+}
