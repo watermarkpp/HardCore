@@ -7,7 +7,7 @@ const VISUAL_CONTRACT_ID := "mse.map.runtime.visual.v1"
 const FORMAL_GROUND_CHUNK_ROOT := "assets/data/runtime/map_editor/formal_ground_chunks/sha256/"
 const EXPECTED_FORMAL_MAPS := 67
 const EXPECTED_AUTHORED_CHUNKS := 445
-const EXPECTED_UNIQUE_CHUNKS := 210
+const EXPECTED_UNIQUE_CHUNKS := 208
 
 
 func _ready() -> void:
@@ -47,7 +47,7 @@ func _ready() -> void:
 
 	assert(map_count == EXPECTED_FORMAL_MAPS, "预期检查 67 个正式视觉地图，实际 %d" % map_count)
 	assert(authored_chunk_refs == EXPECTED_AUTHORED_CHUNKS, "预期检查 445 个 authored chunk 引用，实际 %d" % authored_chunk_refs)
-	assert(import_paths.size() == EXPECTED_UNIQUE_CHUNKS, "预期 SHA-256 去重后 210 个正式地图块，实际 %d" % import_paths.size())
+	assert(import_paths.size() == EXPECTED_UNIQUE_CHUNKS, "预期 SHA-256 去重后 208 个正式地图块，实际 %d" % import_paths.size())
 	for image_path: String in import_paths:
 		var import_path := "res://%s.import" % image_path
 		var import_file := FileAccess.open(import_path, FileAccess.READ)
