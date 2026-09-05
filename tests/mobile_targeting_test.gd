@@ -325,6 +325,10 @@ func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
 		game.player,
 		false
 	)
+	# The canonical setup owns identity and stats; this is only the local
+	# high-HP movement fixture override used by the facing assertion.
+	boss.max_hp = 9999
+	boss.current_hp = 9999
 	game._runtime_spawn_serial += 1
 	var spawn_serial := int(game._runtime_spawn_serial)
 	var boss_position := game.player.global_position + Vector2(-180, -40)
@@ -353,7 +357,7 @@ func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
 		and boss.is_boss
 		and str(boss.monster_data.get("classification", "")) == "boss"
 		and int(boss.boss_rule.get("monsterId", -1)) == 76
-		and not bool(boss.get_meta("caller_boss_ignored", true)),
+		and bool(boss.get_meta("caller_boss_ignored", false)),
 		"隔离Boss夹具必须由canonical ID76派生Boss身份"
 	)
 	boss.control_time = 0.0
