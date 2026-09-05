@@ -236,21 +236,40 @@ func _run() -> void:
 
 	for enemy: EnemyActor in [primary, second, unrelated, half_a, half_b, half_c]:
 		_move_enemy(enemy, Vector2(3000, 3000) + Vector2(enemy.get_instance_id() % 200, 0))
-	var rush_step := Vector2i(1, -1)
-	var rush_direction_ground_gu := Vector2(rush_step).normalized()
-	player.global_position = _find_open_rush_origin(game, rush_step)
-	var player_rush_tile: Vector2 = game._canonical_screen_px_to_ground_gu(player.global_position)
-	var player_rush_origin := player.global_position
+	var rush_step: Vector2i = Vector2i(1, -1)
+	var rush_direction_ground_gu: Vector2 = Vector2(rush_step).normalized()
 	var rush_target := _make_enemy(
 		game,
 		player,
 		"低级冲撞目标",
-		game._canonical_ground_gu_to_screen_px(player_rush_tile + Vector2(rush_step)),
+		Vector2(3300, 3000),
 		1
 	)
-	var rush_origin := rush_target.global_position
-	var rush_hp := rush_target.current_hp
+	player.global_position = _find_open_rush_origin(
+		game, rush_step, rush_target.collision_radius_px
+	)
+	var player_rush_tile: Vector2 = game._canonical_screen_px_to_ground_gu(player.global_position)
+	var player_rush_origin: Vector2 = player.global_position
+	_move_enemy(
+		rush_target,
+		game._canonical_ground_gu_to_screen_px(
+			player_rush_tile + Vector2(rush_step)
+		)
+	)
+	var rush_origin: Vector2 = rush_target.global_position
+	var rush_hp: int = rush_target.current_hp
 	game.locked_target = rush_target
+	var fixture_rush_plan: Dictionary = game._build_wild_rush_path_plan(rush_target)
+	assert(
+		is_equal_approx(float(fixture_rush_plan.get("resolved_push_distance_gu", 0.0)), 3.0),
+		"rush fixture invalid: eligible=%s dynamic=%s static=%.2f resolved=%.2f"
+		% [
+			str(fixture_rush_plan.get("eligible", false)),
+			str(fixture_rush_plan.get("dynamic_blocker_in_corridor", false)),
+			float(fixture_rush_plan.get("static_clear_distance_gu", 0.0)),
+			float(fixture_rush_plan.get("resolved_push_distance_gu", 0.0)),
+		]
+	)
 	assert(game._execute_wild_rush(Vector2.LEFT, 0), "野蛮在开阔地没有移动")
 	assert(
 		game._canonical_screen_px_to_ground_gu(player.global_position).is_equal_approx(
@@ -355,6 +374,7 @@ func _make_enemy(
 	# come from the selected canonical catalog entry, never this test argument.
 	enemy.display_name = display_name
 	enemy.level = enemy_level
+	enemy.monster_data["level"] = enemy_level
 	enemy.max_hp = 9999
 	enemy.current_hp = 9999
 	game._runtime_spawn_serial += 1
@@ -397,20 +417,48 @@ func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
 	enemy.set_combat_position(position, &"warrior_fixture_move")
 
 
-func _find_open_rush_origin(game: Node, direction_step: Vector2i) -> Vector2:
+func _find_open_rush_origin(
+	game: Node,
+	direction_step: Vector2i,
+	target_collision_radius_px: float
+) -> Vector2:
+	const RUSH_DISTANCE_GU := 3.0
+	const SAMPLE_STEP_GU := 0.25
 	var center_tile: Vector2 = game._canonical_screen_px_to_ground_gu(game.player.global_position)
+	var direction_ground_gu: Vector2 = Vector2(direction_step).normalized()
 	for y in range(-24, 25):
 		for x in range(-24, 25):
-			var origin_tile := center_tile + Vector2(x, y)
-			var clear := true
-			for distance in range(5):
-				var sample: Vector2 = game._canonical_ground_gu_to_screen_px(
-					origin_tile + Vector2(direction_step) * float(distance)
+			var origin_tile: Vector2 = center_tile + Vector2(x, y)
+			var target_origin_tile: Vector2 = origin_tile + Vector2(direction_step)
+			var clear: bool = true
+			var sample_count: int = ceili(RUSH_DISTANCE_GU / SAMPLE_STEP_GU)
+			for sample_index: int in range(sample_count + 1):
+				var distance_gu: float = minf(
+					float(sample_index) * SAMPLE_STEP_GU,
+					RUSH_DISTANCE_GU
 				)
-				if game.background.is_environment_point_blocked(sample):
+				var motion_ground_gu: Vector2 = direction_ground_gu * distance_gu
+				var player_sample: Vector2 = game._canonical_ground_gu_to_screen_px(
+					origin_tile + motion_ground_gu
+				)
+				var target_sample: Vector2 = game._canonical_ground_gu_to_screen_px(
+					target_origin_tile + motion_ground_gu
+				)
+				if (
+					WorldSpatialRules.environment_blocks_actor_screen_px(
+						game.background,
+						player_sample,
+						ArtSpec.PLAYER_COLLISION_RADIUS_PX
+					)
+					or WorldSpatialRules.environment_blocks_actor_screen_px(
+						game.background,
+						target_sample,
+						target_collision_radius_px
+					)
+				):
 					clear = false
 					break
 			if clear:
 				return game._canonical_ground_gu_to_screen_px(origin_tile)
-	assert(false, "测试地图中找不到野蛮冲撞开阔夹具")
+	assert(false, "找不到双足迹完整3GU冲撞走廊")
 	return Vector2.ZERO
