@@ -2314,6 +2314,13 @@ func _travel_to_map_immediate(map_id: int) -> bool:
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty() or current_map_id == map_id:
 		return false
+	# Resolve Home before _load_zone tears down the source world. The staged
+	# pipeline already has this gate; synchronous travel must fail closed too.
+	if map_id == BICH_RUNTIME_MAP_ID:
+		var home_result := _resolve_bich_home()
+		if not bool(home_result.get("valid", false)):
+			_handle_home_resolution_failure(&"sync_travel_arrival", home_result)
+			return false
 	map_data = _runtime_named_map_data(map_data)
 	var source_map_id := current_map_id
 	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
@@ -3546,6 +3553,11 @@ func _spawn_outskirts_content() -> void:
 		var monster := GameData.get_monster_by_id(int(entry[0]))
 		if not monster.is_empty():
 			var group_id := "outskirts:%d:spawn:%d" % [current_map_id, spawn_index]
+			var policy := MonsterRespawnPolicyScript.resolve(
+				"", str(monster.get("classification", "")),
+				DEFAULT_NORMAL_RESPAWN_SECONDS,
+				str(monster.get("spawn_classification", ""))
+			)
 			_spawn_enemy(
 				monster,
 				entry[1],
@@ -3554,7 +3566,7 @@ func _spawn_outskirts_content() -> void:
 				{
 					"spawn_group_id": group_id,
 					"spawn_slot_id": "%s:0" % group_id,
-					"respawn_policy_id": MonsterRespawnPolicyScript.BEGINNER_OUTDOOR,
+					"respawn_policy_id": str(policy.get("policy_id", "")),
 				}
 			)
 	_spawn_portal(Vector2(560, -305), "比奇城", "进入比奇城")

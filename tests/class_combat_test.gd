@@ -19,10 +19,17 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var enemy: EnemyActor
+	var elite_fixture: EnemyActor
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
 		if node is EnemyActor:
-			enemy = node
-			break
+			if enemy == null:
+				enemy = node
+			if node.monster_id == 56:
+				elite_fixture = node
+	assert(elite_fixture != null, "旧演示场必须保留 canonical 精英 ID56")
+	assert(not elite_fixture.is_boss, "精英不得变成Boss")
+	assert(str(elite_fixture.get_meta("respawn_policy_id", "")) == "elite")
+	assert(is_equal_approx(float(elite_fixture.get_meta("respawn_seconds", 0.0)), 1800.0))
 	assert(enemy != null, "职业战斗测试缺少确定性目标")
 	enemy.max_hp = 9999
 	enemy.current_hp = 9999

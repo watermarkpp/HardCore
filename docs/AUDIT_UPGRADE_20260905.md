@@ -123,7 +123,21 @@ O01 专项提交 `3351284ab2c7e3dae343583afc17d7b0871c45d2`：收集后按 `(sta
 
 确认缺陷修复与专项回归、冻结对象保全、用户内容归档校验、必要正式 suites、最终 APK 身份/资源闭包与设备验收；记录准确 HEAD、测试覆盖及未验证/接受债务。完成后再建立里程碑 tag、推送正式主树及 tag，并查询远端 SHA 核对。当前尚未满足这些门槛。
 
-待构建里程碑版本设为 `versionCode=70`、`versionName=1.19.0-audit-milestone`，包 ID 保持 `com.personal.mafaoffline`。这只是导出配置，不表示已生成或安装。当前手机仍为 code 69 / 1.18.6-loading-runtime-fix，active patch 为已验收 `r3x9-map-fast-c97a08b4-enemy-only`。新整包验收前须备份真实存档及补丁状态，再停用旧 overlay，防止旧补丁遮盖新代码；禁止卸载或清除应用数据。
+待构建里程碑版本设为 `versionCode=70`、`versionName=1.19.0-audit-milestone`，包 ID 保持 `com.personal.mafaoffline`。这只是导出配置，不表示已生成或安装。当前手机仍为 code 69 / 1.18.6-loading-runtime-fix，active patch 为已验收 `r3x9-map-fast-c97a08b4-enemy-only`。新整包验收前须记录补丁状态并停用旧 overlay，防止旧补丁遮盖新代码。
+
+用户随后明确授权：测试阶段手机旧存档可以全部删除，改建战士、法师、道士各一名 40 级赤月装备角色；不再以保留旧档作为安装前提。此授权仅适用于最终设备测试存档重建，不用于清除回归失败现场或跳过存档恢复/事务测试，也不扩及源码、素材与验收证据。现有 `ensure_chiyue_test_roster` 模板实际为 50 级，不能直接调用后声称完成 40 级要求；最终必须核验三个角色的实际等级与装备。
+
+### 默认 critical 首轮诊断与专项复验（尚未验收完成）
+
+首轮结果为 298 项中 237 PASS / 61 FAIL，76 engine errors：`outputs/test_logs/runner_results_critical_20260905_145806.json`。新增 audit 11 项全部通过，但不代表默认 critical 通过。此轮为施工期诊断；中途接入 APK 工具并修正已失败测试和版本显示，不作为最终 clean HEAD 证据。
+
+强化真实非 Home 地图场景后，同步 Home 落点失败仍切图的问题独立复现 0/1（`runner_results_adhoc_20260905_145856.json`）。integration 在 `_travel_to_map_immediate` 拆除源世界前增加仅 Home 目标的解析门禁，正常路径仍按原 `route_arrival_position` 到达。另修复旧 outskirts 演示场 ID56 精英被硬编码普通刷新策略拒绝的问题，复用 canonical respawn resolver，不改变正式比奇地图。两项复验 2/2、零 engine errors（`runner_results_adhoc_20260905_150158.json`）。
+
+第一批 19 项复验 16 PASS / 3 FAIL（`runner_results_adhoc_20260905_150705.json`）；安全退出、Home 同步失败与正常落点、火墙死亡目标独立世界 oracle、重绘 wrapper 静态门禁和背包固定槽占用计数已通过。第二批 34 项复验 31 PASS / 3 FAIL（`runner_results_adhoc_20260905_151423.json`）；11 项投射物已全部通过，任务奖励负重前置及大部分技能生产入口已通过。其余伤害、快照、lazy UI 和旧地图断言继续排查，不将空命中/空快照当作通过。
+
+用户明确追加授权：只删除比奇同坐标重复老兵中的一个并单目标正规重发，其他 NPC、82 条怪物刷新、位置、碰撞和素材全部保持不变。专项基线 `42b8b4d9`，使用独立 `codex/audit-bich-npc-20260905`；尚未发布完成。
+
+本轮从 clean `eb9993b1` 启动；运行中仅接入独立 Python APK 校验工具 `d04a83d5`，并修复已运行失败的独立测试夹具，尚未修改生产逻辑。runner 只在结束时记录 HEAD，因此此轮须标为诊断运行，不能称为最终 clean HEAD 验收。已发现旧夹具缺 canonical monster ID / 临时生成禁用 respawn 前置、法师技能学习状态缺失、固定测试角色名与历史 userdata 冲突、旧比奇 map ID，以及一项静态单位名子串误匹配。各项保留原断言，按独立证据修复；未诊断失败不得一概归为旧测试。
 
 ## 用户追加：归并完成后的磁盘清理
 
