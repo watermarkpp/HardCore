@@ -5,6 +5,7 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const SpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
+const FIXTURE_MONSTER_ID := 19
 
 var _index: SpatialIndexScript
 var _enemies: Array[EnemyActor] = []
@@ -55,6 +56,7 @@ func _run() -> void:
 	# A projectile frozen on map 1 must never hit map-2 enemies.
 	var projectile := _make_projectile(Vector2(0, 0), 8.0, 1)
 	var previous_hp: Dictionary = {}
+	var map_1_hit_count := 0
 	for enemy: EnemyActor in _enemies:
 		previous_hp[enemy.get_instance_id()] = enemy.current_hp
 	for _step in range(60):
@@ -66,10 +68,15 @@ func _run() -> void:
 			int(previous_hp.get(enemy.get_instance_id(), 0))
 			> enemy.current_hp
 		):
+			map_1_hit_count += 1
 			assert(
 				int(enemy.get_meta("spatial_id", 0)) < 100,
 				"map-1 projectile must not hit a map-2 enemy"
 			)
+	assert(
+		map_1_hit_count >= 1,
+		"map-1 projectile must hit at least one valid map-1 enemy"
+	)
 	var diagnostics: Dictionary = projectile.projectile_broadphase_diagnostics()
 	assert(
 		int(diagnostics.get("cross_map_candidate_rejection_count", 0)) == 0,
@@ -87,11 +94,18 @@ func _make_enemy(
 	serial: int
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{"name": "map_%d_%d" % [map_id, serial], "hp": 1000, "attackMin": 1, "attackMax": 1, "level": 1},
-		null,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"map isolation fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
 	)
+	enemy.setup(canonical_data, null, false)
+	assert(
+		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
+		"map isolation fixture must remain an ordinary exact-ID target"
+	)
+	enemy.max_hp = 1000
+	enemy.current_hp = enemy.max_hp
 	enemy.configure_runtime_map_projection(
 		map_id,
 		Callable(self, "_ground_to_screen")
@@ -103,6 +117,12 @@ func _make_enemy(
 	)
 	enemy.combat_radius_gu = 0.25
 	add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"map isolation fixture target must survive exact-ID admission"
+	)
 	_index.register(
 		serial,
 		map_id,

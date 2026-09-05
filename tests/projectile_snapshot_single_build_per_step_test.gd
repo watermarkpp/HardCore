@@ -5,6 +5,7 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const SpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
+const FIXTURE_MONSTER_ID := 19
 
 var _index: SpatialIndexScript
 var _enemies: Array[EnemyActor] = []
@@ -63,11 +64,18 @@ func _make_enemy(
 	serial: int
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{"name": "sb_%d" % serial, "hp": 1000, "attackMin": 1, "attackMax": 1, "level": 1},
-		null,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"snapshot build fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
 	)
+	enemy.setup(canonical_data, null, false)
+	assert(
+		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
+		"snapshot build fixture must remain an ordinary exact-ID target"
+	)
+	enemy.max_hp = 1000
+	enemy.current_hp = enemy.max_hp
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_ground_to_screen")
@@ -78,6 +86,12 @@ func _make_enemy(
 	)
 	enemy.combat_radius_gu = combat_radius_gu
 	add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"snapshot build fixture target must survive exact-ID admission"
+	)
 	_index.register(
 		serial,
 		1,
