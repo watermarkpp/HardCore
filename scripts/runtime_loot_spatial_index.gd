@@ -13,6 +13,7 @@ var _buckets: Dictionary = {}
 var _entries: Dictionary = {}
 var _bucket_size_gu := DEFAULT_BUCKET_SIZE_GU
 var _stale_ids: Array[int] = []
+var _candidate_records: Array[Dictionary] = []
 
 var index_register_count := 0
 var index_unregister_count := 0
@@ -151,6 +152,7 @@ func query_nearby_into(
 ) -> void:
 	output.clear()
 	_stale_ids.clear()
+	_candidate_records.clear()
 	index_query_count += 1
 	if (
 		not center_ground_gu.is_finite()
@@ -179,11 +181,36 @@ func query_nearby_into(
 					_stale_ids.append(loot_runtime_id)
 					continue
 				if node is LootPickup:
-					_append_sorted(output, node as LootPickup, entry)
+					var pickup := node as LootPickup
+					_candidate_records.append({
+						"pickup": pickup,
+						"stable_registration_order": int(
+							entry.get("stable_registration_order", 0)
+						),
+						# The entry key is a loot runtime ID. Keep the node's actual
+						# instance ID as the tie-break key instead of assuming those
+						# identifiers are interchangeable.
+						"node_instance_id": pickup.get_instance_id(),
+					})
 	for loot_runtime_id: int in _stale_ids:
 		unregister(loot_runtime_id)
 		index_stale_cleanup_count += 1
 	_stale_ids.clear()
+	_candidate_records.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool:
+			var order_a := int(a.get("stable_registration_order", 0))
+			var order_b := int(b.get("stable_registration_order", 0))
+			if order_a != order_b:
+				return order_a < order_b
+			return int(a.get("node_instance_id", 0)) < int(
+				b.get("node_instance_id", 0)
+			)
+	)
+	for record: Dictionary in _candidate_records:
+		var pickup: Variant = record.get("pickup", null)
+		if pickup is LootPickup and is_instance_valid(pickup):
+			output.append(pickup)
+	_candidate_records.clear()
 	index_candidate_count += output.size()
 	index_max_candidate_count = maxi(index_max_candidate_count, output.size())
 
@@ -220,20 +247,3 @@ func _bucket_key(ground_gu: Vector2) -> Vector2i:
 		floori(ground_gu.x / _bucket_size_gu),
 		floori(ground_gu.y / _bucket_size_gu),
 	)
-
-
-func _append_sorted(output: Array, pickup: LootPickup, entry: Dictionary) -> void:
-	var order := int(entry.get("stable_registration_order", 0))
-	var instance_id := pickup.get_instance_id()
-	var insert_at := output.size()
-	while insert_at > 0:
-		var previous: Variant = output[insert_at - 1]
-		if not previous is LootPickup:
-			break
-		var previous_pickup := previous as LootPickup
-		var previous_entry: Variant = _entries.get(previous_pickup.get_instance_id(), {})
-		var previous_order := int((previous_entry as Dictionary).get("stable_registration_order", 0)) if previous_entry is Dictionary else 0
-		if previous_order < order or (previous_order == order and previous_pickup.get_instance_id() < instance_id):
-			break
-		insert_at -= 1
-	output.insert(insert_at, pickup)
