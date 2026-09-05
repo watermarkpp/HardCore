@@ -135,7 +135,19 @@ O01 专项提交 `3351284ab2c7e3dae343583afc17d7b0871c45d2`：收集后按 `(sta
 
 第一批 19 项复验 16 PASS / 3 FAIL（`runner_results_adhoc_20260905_150705.json`）；安全退出、Home 同步失败与正常落点、火墙死亡目标独立世界 oracle、重绘 wrapper 静态门禁和背包固定槽占用计数已通过。第二批 34 项复验 31 PASS / 3 FAIL（`runner_results_adhoc_20260905_151423.json`）；11 项投射物已全部通过，任务奖励负重前置及大部分技能生产入口已通过。其余伤害、快照、lazy UI 和旧地图断言继续排查，不将空命中/空快照当作通过。
 
-用户明确追加授权：只删除比奇同坐标重复老兵中的一个并单目标正规重发，其他 NPC、82 条怪物刷新、位置、碰撞和素材全部保持不变。专项基线 `42b8b4d9`，使用独立 `codex/audit-bich-npc-20260905`；尚未发布完成。
+用户明确追加授权：只删除比奇同坐标重复老兵中的一个并单目标正规重发，其他 NPC、82 条怪物刷新、位置、碰撞和素材全部保持不变。专项基线 `42b8b4d9`，独立 `codex/audit-bich-npc-20260905` 的提交 `5b737710` 已经正式发布并以 `518fa216` 接入主树，独立与主树 NPC 专项均 PASS，精确冻结核验见 `docs/audits/20260905/BICH_DUPLICATE_NPC_ACCEPTANCE.md`。这不代表新 APK 已安装。
+
+已通过复验的测试按独立范围收口：`523e9ede` 为 11 项 canonical 投射物夹具并新增非空实际命中门禁；`e1403dc9` 为 20 项技能/召唤/地面效果与任务容量夹具；`0953748f` 为 15 个安全退出隔离、火墙独立 oracle、单位与重绘静态门禁等文件。对应复验仍是上列施工工作区证据，不冒充这些新提交的 clean HEAD 全量验收。生产怪物 AI、技能效果及地图数据没有随这些测试提交修改。
+
+后续 `runner_results_adhoc_20260905_154923.json` 为 14 项 8 PASS / 6 FAIL；其中 mobile、正式刷新独立权威、沃玛路线、古墓来源与部分地图碰撞已通过，测试以 `728d1d76` 收口。`runner_results_adhoc_20260905_155131.json` 为 5 项 3 PASS / 2 FAIL；安全区外真实怪物快照及烈火命中通过，以 `01aafbc5` 收口。雷电伤害、书商库存、边界、编辑稿 binding 等尚在定位，未宣称 critical 全通过。版本 70 / 1.19.0 的隔离构建配置预检已通过，未启动正式 APK 构建。
+
+### 雷电请求快照的真实生产阻碍
+
+`runner_results_adhoc_20260905_160259.json` 的真实诊断排除了 HUD、入场、投影、距离及安全区：正式目标 ID19，地图910001，空间注册有效，距离2GU，计划 accepted，MP100→85，但 HP不变。查询计划明确报 `snapshot_not_immutable`，GameRoot 记录 `aoe_query_plan_invalid_or_spatial_index_unavailable`。根因是 `SkillCastRequest.create()` 的 `target_context.duplicate(true)` 丢失嵌套 canonical snapshot 的只读标记，后续正确的查询门禁拒绝该快照。
+
+integration 裁决最小修复：只对已经只读的精确 `skill_footprint_snapshot` 保留原实例引用，其他可变上下文继续深拷贝；不重新冻结未受信的可变输入，不放宽 STRICT_V2/只读门禁，不重建第二份 snapshot，也不修改几何、伤害公式或 AI。已提交 `08d4d8ae`。核心复制隔离 1/1 PASS（161110），QueryPlan 与两项雷电真实伤害 3/3 PASS（161147），其余 wizard/firewall 2/2 PASS（161228），phase1/掉落/古墓 3/3 PASS（161327）；文件为 `outputs/test_logs/runner_results_adhoc_20260905_<时间>.json`。这些是施工验证，随后执行干净提交最终回归。
+
+保全复核：在 `01aafbc5` 后按原 `main_preservation_20260905_093400/manifest.json` 逐项重新计算 391 个用户文件的存在状态与 SHA-256，差异 0；没有利用测试修复覆盖人工地图/素材。设备只读核验另证实三职业主档、备份及两份索引已为 40 级，不能把正式 QA 生成器的默认 50 级误写成设备当前等级。仍待新包安装和两个空装备槽占位记录规范化，不需无故清空已符合要求的三档。
 
 本轮从 clean `eb9993b1` 启动；运行中仅接入独立 Python APK 校验工具 `d04a83d5`，并修复已运行失败的独立测试夹具，尚未修改生产逻辑。runner 只在结束时记录 HEAD，因此此轮须标为诊断运行，不能称为最终 clean HEAD 验收。已发现旧夹具缺 canonical monster ID / 临时生成禁用 respawn 前置、法师技能学习状态缺失、固定测试角色名与历史 userdata 冲突、旧比奇 map ID，以及一项静态单位名子串误匹配。各项保留原断言，按独立证据修复；未诊断失败不得一概归为旧测试。
 
