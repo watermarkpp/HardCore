@@ -406,11 +406,11 @@ func _build_create_map_dialog() -> void:
 
 func _build_delete_map_dialog() -> void:
 	delete_map_dialog = ConfirmationDialog.new()
-	delete_map_dialog.title = "彻底删除地图模板"
+	delete_map_dialog.title = "移除地图模板（工作区可恢复）"
 	delete_map_dialog.dialog_text = ""
 	delete_map_dialog.min_size = Vector2i(520, 260)
 
-	delete_map_dialog.get_ok_button().text = "彻底删除"
+	delete_map_dialog.get_ok_button().text = "移除模板"
 	delete_map_dialog.get_cancel_button().text = "取消"
 
 	delete_map_dialog.confirmed.connect(_on_delete_map_confirmed)
@@ -687,16 +687,16 @@ func _on_delete_map_pressed() -> void:
 		template_line = template_id
 
 	delete_map_dialog.dialog_text = (
-		"确定彻底删除地图模板？\n\n"
+		"确定移除地图模板？\n\n"
 		+ "名称：%s\n" % display_name
 		+ "地图 ID：%s\n" % map_id
 		+ "模板 ID：%s\n\n" % template_line
-		+ "将删除：\n"
+		+ "将处理：\n"
 		+ "• 地图编辑器模板定义（如果存在）\n"
 		+ "• map_editor_workspace/%s/ 工作区（如果存在）\n\n" % map_id
 		+ "不会删除 map_design_catalog.json 中的世界地图身份。\n\n"
-		+ "删除后可以重新使用相同名称和相同 map_id 创建地图模板。\n\n"
-		+ "此操作不可通过编辑器撤销。"
+		+ "工作区不会递归销毁，而是先移动到 map_editor_workspace/.recycle_bin/ 的可恢复回收区。\n"
+		+ "模板定义移除后可重新使用相同名称和相同 map_id 创建地图模板。"
 	)
 
 	delete_map_dialog.popup_centered(Vector2i(560, 320))
@@ -722,65 +722,26 @@ func _on_delete_map_confirmed() -> void:
 		status_label.text = "删除地图模板失败：map_id 为空"
 		return
 
-	var template_deleted := false
-	var workspace_deleted := false
-	var errors: Array[String] = []
-
-	# ---------------------------------------------------------
-	# 1. 删除 blank template 定义
-	# ---------------------------------------------------------
-
-	var template_result := MapDesignCatalogService.delete_blank_template(
+	var expected_path := str(target.get("path", ""))
+	var expected_document := {
+		"map_id": map_id,
+		"path": expected_path,
+	}
+	var deletion_result := MapEditorSaveService.delete_map_authoring_transaction(
+		map_id,
 		template_id,
-		map_id
+		expected_path,
+		expected_document
 	)
-
-	if bool(template_result.get("ok", false)):
-		template_deleted = true
-	else:
-		var template_errors: Array = template_result.get("errors", [])
-
-		# 没有 blank template 是允许的：
-		# 用户自建 workspace 本身可能没有 template entry。
-		if not template_errors.has("template_not_found"):
-			errors.append_array(
-				_to_string_array(template_errors)
-			)
-
-	# ---------------------------------------------------------
-	# 2. 删除该 map_id 的整个 workspace
-	# ---------------------------------------------------------
-
-	var workspace_result := MapEditorSaveService.delete_workspace_map(
-		map_id
-	)
-
-	if bool(workspace_result.get("ok", false)):
-		workspace_deleted = true
-	else:
-		var workspace_errors: Array = workspace_result.get(
-			"errors",
-			[]
+	if not bool(deletion_result.get("ok", false)):
+		status_label.text = (
+			"删除地图模板未完成，原状保留：%s"
+			% _to_string_array(deletion_result.get("errors", []))
 		)
-
-		# 没创建过 workspace 的 blank template：
-		# directory_not_found 属于正常情况。
-		if not workspace_errors.has("directory_not_found"):
-			errors.append_array(
-				_to_string_array(workspace_errors)
-			)
-
-	# ---------------------------------------------------------
-	# 3. 如果两种删除都失败，而且存在真实错误，则停止
-	# ---------------------------------------------------------
-
-	if (
-		not template_deleted
-		and not workspace_deleted
-		and not errors.is_empty()
-	):
-		status_label.text = "删除地图模板失败：%s" % errors
 		return
+
+	var template_deleted := bool(deletion_result.get("template_deleted", false))
+	var workspace_deleted := bool(deletion_result.get("workspace_deleted", false))
 
 	# ---------------------------------------------------------
 	# 4. 如果删除的是当前打开地图，彻底清空 session
@@ -825,13 +786,15 @@ func _on_delete_map_confirmed() -> void:
 		deleted_text = "、".join(deleted_parts)
 
 	status_label.text = (
-		"地图模板已彻底删除：%s（%s）[%s]"
+		"地图模板处理完成：%s（%s）[%s]"
 		% [
 			display_name,
 			map_id,
 			deleted_text,
 		]
 	)
+	if workspace_deleted:
+		status_label.text += "；工作区已移动到可恢复回收区 .recycle_bin/"
 
 
 func _to_string_array(values: Array) -> Array[String]:
