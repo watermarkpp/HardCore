@@ -423,15 +423,25 @@ func _test_runtime_map_id_fast_paths(player: PlayerCharacter) -> void:
 		"typed Player/Enemy/Summon paths must not scan property lists",
 	)
 
-	# Metadata remains the highest-priority identity source. Negative metadata
-	# falls back to the live typed/attacker map instead of poisoning identity.
+	# Metadata remains the highest-priority identity source, including its legacy
+	# negative values. Only typed-property and generic-property paths apply the
+	# non-negative fallback below.
 	summon.set_meta("runtime_map_id", TEST_RUNTIME_MAP_ID + 1)
 	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID + 1)
 	summon.set_meta("runtime_map_id", -1)
-	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID)
+	assert(enemy._runtime_map_id_for_area_target(summon) == -1)
+	summon.set_meta("runtime_map_id", -2)
+	assert(enemy._runtime_map_id_for_area_target(summon) == -2)
+	summon.runtime_map_id = -1
+	assert(enemy._runtime_map_id_for_area_target(summon) == -2)
 	summon.remove_meta("runtime_map_id")
+	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID)
 	summon.runtime_map_id = TEST_RUNTIME_MAP_ID + 2
 	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID + 2)
+	summon.runtime_map_id = -1
+	EnemyActor.reset_runtime_map_id_diagnostics()
+	assert(enemy._runtime_map_id_for_area_target(summon) == TEST_RUNTIME_MAP_ID)
+	summon.runtime_map_id = TEST_RUNTIME_MAP_ID + 2
 
 	# A script with a runtime_map_id property remains on the generic compatibility
 	# path, including live value mutation without caching.
@@ -445,6 +455,10 @@ func _test_runtime_map_id_fast_paths(player: PlayerCharacter) -> void:
 		int(EnemyActor.runtime_map_id_diagnostics().get("property_list_scans", -1)) == 1,
 		"generic typed property must retain one compatibility scan",
 	)
+	generic.runtime_map_id = -1
+	EnemyActor.reset_runtime_map_id_diagnostics()
+	assert(enemy._runtime_map_id_for_area_target(generic) == TEST_RUNTIME_MAP_ID)
+	assert(int(EnemyActor.runtime_map_id_diagnostics().get("property_list_scans", -1)) == 1)
 	generic.runtime_map_id = TEST_RUNTIME_MAP_ID + 3
 	assert(enemy._runtime_map_id_for_area_target(generic) == TEST_RUNTIME_MAP_ID + 3)
 	var no_property := Node2D.new()
@@ -459,7 +473,11 @@ func _test_runtime_map_id_fast_paths(player: PlayerCharacter) -> void:
 	player.set_meta("runtime_map_id", TEST_RUNTIME_MAP_ID)
 	assert(enemy._target_candidate_is_live(player))
 	player.set_meta("runtime_map_id", -1)
-	assert(enemy._target_candidate_is_live(player))
+	assert(enemy._runtime_map_id_for_area_target(player) == -1)
+	assert(not enemy._target_candidate_is_live(player))
+	player.set_meta("runtime_map_id", -2)
+	assert(enemy._runtime_map_id_for_area_target(player) == -2)
+	assert(not enemy._target_candidate_is_live(player))
 	player.remove_meta("runtime_map_id")
 
 	# Compare real-object property-list sizes and elapsed helper work without a

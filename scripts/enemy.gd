@@ -4102,8 +4102,7 @@ func _area_attack_release_target_is_valid(
 
 func _runtime_map_id_for_area_target(victim: Node2D) -> int:
 	if victim.has_meta("runtime_map_id"):
-		var metadata_map_id := int(victim.get_meta("runtime_map_id", runtime_map_id))
-		return metadata_map_id if metadata_map_id >= 0 else runtime_map_id
+		return int(victim.get_meta("runtime_map_id", runtime_map_id))
 	if victim is EnemyActor:
 		var enemy_map_id := (victim as EnemyActor).runtime_map_id
 		return enemy_map_id if enemy_map_id >= 0 else runtime_map_id
