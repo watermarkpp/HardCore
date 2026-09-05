@@ -27,12 +27,30 @@ static func create(
 		"caster_level": maxi(1, caster_level),
 		"origin_tile": origin_tile,
 		"facing": facing,
-		"target_context": target_context.duplicate(true),
+		"target_context": _copy_target_context_preserving_snapshot(target_context),
 		"resource_context": resource_context.duplicate(true),
 		"seed": seed_value,
 		"client_claimed_damage": null,
 		"client_claimed_success": null,
 	}
+
+
+static func _copy_target_context_preserving_snapshot(
+	target_context: Dictionary
+) -> Dictionary:
+	## Target/resource context is request-owned and normally deep-copied.  A
+	## formal release snapshot is different: an already immutable snapshot is
+	## the single identity shared by the release and its query plan.  Preserve
+	## that exact dictionary reference. Mutable/non-dictionary values stay on
+	## the deep-copy path; all snapshots still require strict validation.
+	var snapshot: Variant = target_context.get("skill_footprint_snapshot", null)
+	if snapshot is Dictionary and (snapshot as Dictionary).is_read_only():
+		var context_without_snapshot: Dictionary = target_context.duplicate(false)
+		context_without_snapshot.erase("skill_footprint_snapshot")
+		var copied_context: Dictionary = context_without_snapshot.duplicate(true)
+		copied_context["skill_footprint_snapshot"] = snapshot
+		return copied_context
+	return target_context.duplicate(true)
 
 
 static func validate(request: Variant) -> Dictionary:

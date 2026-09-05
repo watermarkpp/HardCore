@@ -1,5 +1,10 @@
 extends Node
 
+const FIXTURE_MONSTER_ID := 19
+## The central outdoor authored spawn avoids the Home polygon and map edge.
+const FIXTURE_GROUND_POSITION := Vector2(40.5, 13.5)
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -16,13 +21,28 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	await _wait_for_formal_world(game)
 	var caster: PlayerCharacter = game.player
 	caster.current_mp = 100
+	var caster_ground: Vector2 = FIXTURE_GROUND_POSITION - Vector2(2.0, 0.0)
+	var caster_position: Vector2 = game._canonical_ground_gu_to_screen_px(caster_ground)
+	assert(caster_position.is_finite(), "canonical skill fixture needs a finite map projection")
+	game._set_player_world_position(caster_position)
+	assert(
+		not WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			caster_ground,
+			game._active_safe_zones,
+		),
+		"canonical skill caster fixture must be outside the authored safe area"
+	)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			(value as EnemyActor).global_position = caster.global_position + Vector2(3000, 3000)
-	var target := _make_enemy(game, caster, caster.global_position + Vector2(80, 0))
+	var target_position: Vector2 = game._canonical_ground_gu_to_screen_px(FIXTURE_GROUND_POSITION)
+	var target: EnemyActor = _make_enemy(game, caster, target_position)
 	game.locked_target = target
+	game._set_magic_locked_target(target, true)
+	game._skill_cast_target = target
 	var hp_before := target.current_hp
 	var mana_before := caster.current_mp
 	var lightning: Dictionary = game._execute_canonical_skill(
@@ -31,6 +51,41 @@ func _run() -> void:
 		Vector2.RIGHT,
 		999999
 	)
+	if target.current_hp >= hp_before:
+		var lightning_plan: Dictionary = lightning.get("canonical_plan", {})
+		var lightning_snapshot: Dictionary = lightning_plan.get("canonical_snapshot", {})
+		var lightning_actions: Array = lightning_plan.get("gameplay_actions", [])
+		var lightning_effect: Dictionary = lightning_actions[0] if not lightning_actions.is_empty() else {}
+		var lightning_query_plan: Dictionary = game._aoe_spell_query_plan(
+			"wizard.lightning",
+			[],
+			lightning_effect,
+			{},
+			lightning_snapshot,
+			game._canonical_screen_px_to_ground_gu(caster.global_position),
+			{}
+		)
+		print(
+			("CANONICAL_LIGHTNING_FAILURE target_px=%s target_ground=%s caster_ground=%s "
+			+ "runtime_map=%d target_map=%d projection=%s spatial=%d safe=%s in_range=%s "
+			+ "plan_rejection=%s query_failure=%s query_ready=%s projection_rejection=%s missing_projection=%d")
+			% [
+				str(target.global_position),
+				str(game._canonical_screen_px_to_ground_gu(target.global_position)),
+				str(game._canonical_screen_px_to_ground_gu(caster.global_position)),
+				int(game.get("current_map_id")),
+				target.runtime_map_id,
+				str(target.projection_ready()),
+				target.spatial_actor_runtime_id,
+				str(WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(FIXTURE_GROUND_POSITION, game._active_safe_zones)),
+				str(game._is_magic_target_in_range(target)),
+				str(lightning_plan.get("rejection", {})),
+				str(lightning_query_plan.get("failure_reason", "")),
+				str(game._aoe_plan_is_ready(lightning_query_plan)),
+				str(game.projection_rejection_reason),
+				game.missing_projection_rejection_count,
+			]
+		)
 	assert(lightning.get("runtime_contract", "") == "skills.runtime_router.cn_mir2_176.v1", "真实入口必须经过SkillRuntimeRouter.build_canonical_plan")
 	assert(lightning.get("adapter_contract", "") == "skills.production_adaptation.hardcore.v1", "真实入口缺少六类生产适配合同")
 	assert(caster.current_mp == mana_before - 15, "雷电术未按canonical rank3唯一提交15MP")
@@ -41,11 +96,16 @@ func _run() -> void:
 		SkillDataLoader.display_name("wizard.holy_word"): 3,
 	}
 	caster.current_mp = 100
-	var zuma_guard_data := GameData.get_monster_by_id(156).duplicate(true)
-	var zuma_guard := EnemyActor.new()
-	zuma_guard.setup(zuma_guard_data, caster, false)
-	zuma_guard.global_position = caster.global_position + Vector2(80, 0)
-	game.add_child(zuma_guard)
+	var zuma_ground: Vector2 = FIXTURE_GROUND_POSITION + Vector2(4.0, 0.0)
+	var zuma_position: Vector2 = game._canonical_ground_gu_to_screen_px(zuma_ground)
+	assert(
+		not WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			zuma_ground,
+			game._active_safe_zones,
+		),
+		"Holy Word fixture must be outside the authored safe area"
+	)
+	var zuma_guard: EnemyActor = _make_enemy(game, caster, zuma_position, 156)
 	game._set_magic_locked_target(zuma_guard, true)
 	game._skill_cast_target = zuma_guard
 	var holy_word: Dictionary = game._execute_canonical_skill(
@@ -98,7 +158,20 @@ func _run() -> void:
 		"瞬息移动canonical真实入口未创建主库离场/到达两阶段动画"
 	)
 
-	target.global_position = caster.global_position + Vector2(80, 0)
+	var fire_wall_origin_ground: Vector2 = game._canonical_screen_px_to_ground_gu(
+		caster.global_position
+	)
+	var fire_wall_ground: Vector2 = fire_wall_origin_ground + Vector2(4.0, 0.0)
+	var fire_wall_position: Vector2 = game._canonical_ground_gu_to_screen_px(fire_wall_ground)
+	assert(fire_wall_position.is_finite(), "Fire Wall fixture needs a finite map projection")
+	assert(
+		not WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			fire_wall_ground,
+			game._active_safe_zones,
+		),
+		"Fire Wall fixture must remain outside the authored safe area",
+	)
+	target.set_combat_position(fire_wall_position, &"test_fire_wall_target")
 	game._set_magic_locked_target(target, true)
 	game._skill_cast_target = target
 	var fire_wall: Dictionary = game._execute_canonical_skill(
@@ -193,22 +266,61 @@ func _run() -> void:
 	get_tree().quit(0)
 
 
-func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
-	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": "canonical目标",
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-		"anti_magic_points": 0,
-		"magic_defense_min": 0,
-		"magic_defense_max": 0,
-	}, caster, false)
-	enemy.global_position = position
+func _make_enemy(
+	game: Node,
+	caster: PlayerCharacter,
+	position: Vector2,
+	monster_id: int = FIXTURE_MONSTER_ID,
+) -> EnemyActor:
+	var canonical_data: Dictionary = GameData.get_monster_by_id(monster_id)
+	assert(
+		not canonical_data.is_empty(),
+		"canonical skill fixture monster_id=%d must exist" % monster_id
+	)
+	var enemy: EnemyActor = game._spawn_enemy(
+		canonical_data,
+		position,
+		false,
+		-1.0,
+		{
+			"respawn_enabled": false,
+			"spawn_slot_id": "test:canonical_skill:%d" % monster_id,
+		},
+	)
+	assert(
+		enemy != null
+			and enemy.monster_id == monster_id
+			and not enemy.is_boss
+			and enemy.runtime_map_id == int(game.get("current_map_id"))
+			and enemy.projection_ready()
+			and enemy.spatial_actor_runtime_id > 0,
+		"canonical skill fixture must use the formal exact-ID mapped spawn"
+	)
+	enemy.max_hp = 9999
+	enemy.current_hp = enemy.max_hp
 	enemy.control_time = 60.0
-	game.add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"canonical skill fixture target must survive exact-ID admission"
+	)
 	return enemy
+
+
+func _wait_for_formal_world(game: Node) -> void:
+	var deadline_ms: int = Time.get_ticks_msec() + 5000
+	while Time.get_ticks_msec() < deadline_ms:
+		var current_map_id: int = int(game.get("current_map_id"))
+		var input_enabled: bool = bool(game.call("gameplay_input_is_enabled"))
+		if current_map_id >= 0 and input_enabled:
+			break
+		await get_tree().process_frame
+	assert(
+		int(game.get("current_map_id")) == GameData.service_runtime_map_id(0),
+		"canonical skill fixture must wait for the formal mapped world"
+	)
+	assert(not game._active_safe_zones.is_empty(), "canonical skill fixture needs the formal safe-zone context")
 
 
 func _has_formal_visual(

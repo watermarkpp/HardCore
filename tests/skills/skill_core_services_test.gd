@@ -5,6 +5,7 @@ const CastRequest := preload("res://scripts/skills/skill_cast_request.gd")
 const TargetService := preload("res://scripts/skills/skill_target_service.gd")
 const ResourceService := preload("res://scripts/skills/skill_resource_service.gd")
 const GeometryService := preload("res://scripts/skills/skill_geometry_service.gd")
+const QueryPlan := preload("res://scripts/skills/skill_footprint_query_plan.gd")
 
 
 func _ready() -> void:
@@ -16,6 +17,82 @@ func _ready() -> void:
 	)
 	assert(CastRequest.validate(request).valid)
 	assert(request.client_claimed_damage == null and request.client_claimed_success == null)
+	var immutable_snapshot: Dictionary = {
+		"skill_id": "wizard.lightning",
+		"release_id": "core_services:immutable_snapshot",
+		"shape_type": "target_footprint",
+	}
+	immutable_snapshot.make_read_only()
+	var mutable_nested_target: Dictionary = {"values": [1]}
+	var mutable_nested_resource: Dictionary = {"values": [2]}
+	var target_context_with_snapshot: Dictionary = {
+		"has_target": true,
+		"line_of_sight": true,
+		"hostile": true,
+		"skill_footprint_snapshot": immutable_snapshot,
+		"nested": mutable_nested_target,
+	}
+	var resource_context_with_nested: Dictionary = {
+		"mana": 100,
+		"nested": mutable_nested_resource,
+	}
+	var preserved_request: Dictionary = CastRequest.create(
+		"wizard.lightning",
+		3,
+		40,
+		Vector2i.ZERO,
+		Vector2i.RIGHT,
+		target_context_with_snapshot,
+		resource_context_with_nested,
+		78,
+	)
+	var preserved_target_context: Dictionary = preserved_request.get("target_context", {})
+	var preserved_resource_context: Dictionary = preserved_request.get("resource_context", {})
+	var preserved_snapshot: Dictionary = preserved_target_context.get("skill_footprint_snapshot", {})
+	assert(is_same(preserved_snapshot, immutable_snapshot), "immutable release snapshot identity must survive request creation")
+	assert(preserved_snapshot.is_read_only(), "immutable release snapshot must remain read-only")
+	assert(
+		not is_same(preserved_target_context.get("nested", {}), mutable_nested_target)
+			and not is_same(preserved_resource_context.get("nested", {}), mutable_nested_resource),
+		"ordinary target/resource nested containers must remain deep-copy isolated"
+	)
+	(mutable_nested_target["values"] as Array).append(3)
+	(mutable_nested_resource["values"] as Array).append(4)
+	assert((preserved_target_context.get("nested", {}) as Dictionary).get("values", []) == [1])
+	assert((preserved_resource_context.get("nested", {}) as Dictionary).get("values", []) == [2])
+	var mutable_snapshot: Dictionary = immutable_snapshot.duplicate(true)
+	assert(not mutable_snapshot.is_read_only())
+	var mutable_snapshot_request: Dictionary = CastRequest.create(
+		"wizard.lightning",
+		3,
+		40,
+		Vector2i.ZERO,
+		Vector2i.RIGHT,
+		{"skill_footprint_snapshot": mutable_snapshot},
+		{"mana": 100},
+		79,
+	)
+	var copied_mutable_snapshot: Dictionary = (
+		mutable_snapshot_request.get("target_context", {})
+	).get("skill_footprint_snapshot", {})
+	assert(
+		not is_same(copied_mutable_snapshot, mutable_snapshot)
+			and not copied_mutable_snapshot.is_read_only(),
+		"mutable pseudo-snapshot must remain an isolated mutable request copy"
+	)
+	var mutable_snapshot_plan: Dictionary = QueryPlan.build(
+		"core_services:mutable_snapshot",
+		"wizard.lightning",
+		910001,
+		copied_mutable_snapshot,
+		{},
+		{"maximum_targets": -1},
+	)
+	assert(
+		not bool(mutable_snapshot_plan.get("valid", false))
+			and str(mutable_snapshot_plan.get("failure_reason", "")) == "snapshot_not_immutable",
+		"mutable pseudo-snapshot must remain rejected by strict QueryPlan validation"
+	)
 	var fireball := Loader.skill("wizard.fireball")
 	assert(TargetService.validate(fireball, request.target_context).valid)
 	assert(not TargetService.validate(fireball, {"has_target": true, "line_of_sight": false}).valid)
