@@ -11,6 +11,10 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.profession = "法师"
+	PlayerState.learned_skills = {"雷电术": 3, "火墙": 3}
+	PlayerState.recalculate_stats()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await get_tree().process_frame

@@ -1,6 +1,7 @@
 extends Node
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const FIXTURE_MONSTER_ID := 19
 
 var _projectile_created_count := 0
 
@@ -72,17 +73,19 @@ func _run() -> void:
 
 func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": "soul_fire_timing_target",
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-		"anti_magic_points": 0,
-		"magic_defense_min": 0,
-		"magic_defense_max": 0,
-	}, caster, false)
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(not canonical_data.is_empty(), "canonical soul-fire target fixture is missing")
+	enemy.setup(canonical_data, caster, false)
+	assert(enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss)
+	enemy.max_hp = 9999
+	enemy.current_hp = enemy.max_hp
 	enemy.global_position = position
 	enemy.control_time = 60.0
 	game.add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"canonical soul-fire target fixture is not damage-eligible"
+	)
 	return enemy

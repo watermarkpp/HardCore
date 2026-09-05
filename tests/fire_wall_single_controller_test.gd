@@ -9,6 +9,7 @@ const GroundSkillVisualCell := preload(
 	"res://scripts/ground_skill_visual_cell.gd"
 )
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
+const FIXTURE_MONSTER_ID := 19
 
 var _recorded_tick_powers: Array[int] = []
 var _enemy_serial := 0
@@ -131,11 +132,12 @@ func _record_tick(_target: EnemyActor, raw_power: int) -> void:
 
 func _make_enemy(game: Node, pos: Vector2, name_str: String) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": name_str, "hp": 999, "attackMin": 1, "attackMax": 1,
-		"level": 1, "anti_magic_points": 0, "magic_defense_min": 0,
-		"magic_defense_max": 0,
-	}, game.player, false)
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(not canonical_data.is_empty(), "canonical fire-wall target fixture is missing")
+	enemy.setup(canonical_data, game.player, false)
+	assert(enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss)
+	enemy.max_hp = 999
+	enemy.current_hp = enemy.max_hp
 	enemy.name = name_str
 	enemy.global_position = pos
 	# Q2-C: the controller queries the shared RuntimeCombatSpatialIndex, so the
@@ -156,6 +158,12 @@ func _make_enemy(game: Node, pos: Vector2, name_str: String) -> EnemyActor:
 	# (spawn-overlap resolution) which would otherwise re-home the index entry
 	# into a different coordinate space before the canonical registration.
 	game.add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"canonical fire-wall target fixture is not damage-eligible"
+	)
 	# FREEZE-P0: the shared index and the controller both live in absolute
 	# runtime-map Ground GU; the enemy must register with the same map-aware
 	# conversion its provider uses.

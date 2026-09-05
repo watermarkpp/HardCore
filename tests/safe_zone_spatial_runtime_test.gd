@@ -576,14 +576,32 @@ func _verify_production_paths_are_indexed_and_cached() -> void:
 	_expect("set_combat_position" in game_source)
 
 	var enemy_source := FileAccess.get_file_as_string("res://scripts/enemy.gd")
-	var redraw_start := enemy_source.find("func _request_actor_redraw_if_dynamic")
+	var redraw_wrapper_start := enemy_source.find("func _request_actor_redraw_if_dynamic()")
+	var redraw_wrapper_end := enemy_source.find("\nfunc ", redraw_wrapper_start + 1)
+	_expect(redraw_wrapper_start >= 0 and redraw_wrapper_end > redraw_wrapper_start)
+	_expect(
+		"_request_actor_redraw_if_dynamic_internal()" in enemy_source.substr(
+			redraw_wrapper_start, redraw_wrapper_end - redraw_wrapper_start
+		),
+		"timed redraw wrapper must delegate to the production gate"
+	)
+	var redraw_start := enemy_source.find("func _request_actor_redraw_if_dynamic_internal()")
 	var redraw_end := enemy_source.find("\nfunc ", redraw_start + 1)
 	_expect(redraw_start >= 0 and redraw_end > redraw_start)
 	var redraw_body := enemy_source.substr(redraw_start, redraw_end - redraw_start)
 	_expect("uses_final_art" in redraw_body)
 	_expect("should_draw_synthetic_ground_shadow" in redraw_body)
 	_expect("_request_actor_redraw()" in redraw_body)
-	var physics_start := enemy_source.find("func _physics_process(delta: float)")
+	var physics_wrapper_start := enemy_source.find("func _physics_process(delta: float)")
+	var physics_wrapper_end := enemy_source.find("\nfunc ", physics_wrapper_start + 1)
+	_expect(physics_wrapper_start >= 0 and physics_wrapper_end > physics_wrapper_start)
+	_expect(
+		"_physics_process_internal(delta)" in enemy_source.substr(
+			physics_wrapper_start, physics_wrapper_end - physics_wrapper_start
+		),
+		"timed physics wrapper must delegate to the production body"
+	)
+	var physics_start := enemy_source.find("func _physics_process_internal(delta: float)")
 	var physics_end := enemy_source.find("\nfunc ", physics_start + 1)
 	var physics_body := enemy_source.substr(physics_start, physics_end - physics_start)
 	_expect("_request_actor_redraw_if_dynamic()" in physics_body)

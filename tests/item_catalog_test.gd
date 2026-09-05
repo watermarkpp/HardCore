@@ -30,10 +30,15 @@ func _run() -> void:
 			weapon_index = index
 			break
 	assert(weapon_index >= 0, "木剑实例未生成")
+	var equipped_instance_id := str(PlayerState.inventory[weapon_index].get("instance_id", ""))
+	assert(not equipped_instance_id.is_empty(), "木剑缺少实例身份")
 	var equip_result := PlayerState.equip_inventory_index(weapon_index)
 	assert(equip_result.begins_with("已装备"), "装备实例穿戴失败")
 	assert(PlayerState.equipment["武器"] is Dictionary and PlayerState.equipment["武器"].get("name", "") == "木剑", "装备槽没有保存实例")
-	assert(PlayerState.inventory.size() == 2, "穿戴后装备仍错误地留在背包")
+	assert(PlayerState.inventory_occupied_count() == 2, "穿戴后背包实际占用数量错误")
+	assert(str(PlayerState.equipment["武器"].get("instance_id", "")) == equipped_instance_id)
+	for record: Dictionary in PlayerState.inventory:
+		assert(str(record.get("instance_id", "")) != equipped_instance_id, "穿戴后装备实例仍错误地留在背包")
 	var weapon: Dictionary = PlayerState.equipment["武器"]
 	var max_durability := int(weapon.get("max_durability", 1))
 	PlayerState.damage_equipment_durability("武器", mini(2, max_durability))

@@ -167,7 +167,16 @@ func _verify_runtime_redraw_ownership() -> void:
 
 func _verify_redraw_gate_source() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/enemy.gd")
-	var gate_start := source.find("func _request_actor_redraw_if_dynamic")
+	var wrapper_start := source.find("func _request_actor_redraw_if_dynamic()")
+	var wrapper_end := source.find("\nfunc ", wrapper_start + 1)
+	_expect(wrapper_start >= 0 and wrapper_end > wrapper_start)
+	_expect(
+		"_request_actor_redraw_if_dynamic_internal()" in source.substr(
+			wrapper_start, wrapper_end - wrapper_start
+		),
+		"timed redraw wrapper must delegate to the production gate"
+	)
+	var gate_start := source.find("func _request_actor_redraw_if_dynamic_internal()")
 	var gate_end := source.find("\nfunc ", gate_start + 1)
 	_expect(gate_start >= 0 and gate_end > gate_start)
 	if gate_start < 0 or gate_end <= gate_start:
@@ -177,7 +186,16 @@ func _verify_redraw_gate_source() -> void:
 	_expect("should_draw_synthetic_ground_shadow" in gate_body)
 	_expect("is_fallback_attacking" in gate_body)
 	_expect("_request_actor_redraw()" in gate_body)
-	var physics_start := source.find("func _physics_process(delta: float)")
+	var physics_wrapper_start := source.find("func _physics_process(delta: float)")
+	var physics_wrapper_end := source.find("\nfunc ", physics_wrapper_start + 1)
+	_expect(physics_wrapper_start >= 0 and physics_wrapper_end > physics_wrapper_start)
+	_expect(
+		"_physics_process_internal(delta)" in source.substr(
+			physics_wrapper_start, physics_wrapper_end - physics_wrapper_start
+		),
+		"timed physics wrapper must delegate to the production body"
+	)
+	var physics_start := source.find("func _physics_process_internal(delta: float)")
 	var physics_end := source.find("\nfunc ", physics_start + 1)
 	_expect(physics_start >= 0 and physics_end > physics_start)
 	if physics_start >= 0 and physics_end > physics_start:
