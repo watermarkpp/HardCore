@@ -79,6 +79,10 @@ static func _blank_template_path() -> String:
 	)
 
 
+static func _blank_template_catalog_path() -> String:
+	return ProjectSettings.globalize_path(_blank_template_path())
+
+
 ## Read-only phase for a catalog deletion. Both supplied IDs must identify the
 ## same exact entry; no fuzzy OR matching is allowed.
 static func plan_blank_template_deletion(
@@ -140,6 +144,7 @@ static func plan_blank_template_deletion(
 		"template": found_entry,
 		"before_data": before_data,
 		"after_data": after_data,
+		"catalog_path": _blank_template_catalog_path(),
 		"errors": [],
 	}
 
@@ -151,6 +156,7 @@ static func _blank_template_not_found_plan(data: Dictionary) -> Dictionary:
 		"template_deleted": false,
 		"before_data": data.duplicate(true),
 		"after_data": data.duplicate(true),
+		"catalog_path": _blank_template_catalog_path(),
 		"errors": [],
 	}
 

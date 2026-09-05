@@ -18,6 +18,7 @@ const RECOVERY_DIRECTORY_NAME := ".recycle_bin"
 static var test_workspace_root_override := ""
 static var test_formal_identity_path_override := ""
 static var test_runtime_release_registry_path_override := ""
+static var test_force_workspace_restore_failure := false
 
 
 static func default_path(map_id: String) -> String:
@@ -312,19 +313,19 @@ static func delete_map_authoring_transaction(
 ) -> Dictionary:
 	var guard := validate_map_deletion_guard(map_id, expected_document)
 	if not bool(guard.get("ok", false)):
-		return guard
+		return _transaction_not_started_failure(guard.get("errors", []), map_id)
 
 	var template_plan := MapDesignCatalogService.plan_blank_template_deletion(
 		template_id,
 		map_id
 	)
 	if not bool(template_plan.get("ok", false)):
-		return {"ok": false, "errors": template_plan.get("errors", [])}
+		return _transaction_not_started_failure(template_plan.get("errors", []), map_id)
 	if bool(template_plan.get("found", false)):
 		var template_entry: Variant = template_plan.get("template", {})
 		var template_guard := validate_map_deletion_guard(map_id, template_entry)
 		if not bool(template_guard.get("ok", false)):
-			return template_guard
+			return _transaction_not_started_failure(template_guard.get("errors", []), map_id)
 
 	var workspace_plan := plan_workspace_map_deletion(
 		map_id,
@@ -337,9 +338,9 @@ static func delete_map_authoring_transaction(
 		if _workspace_absence_is_allowed(workspace_errors):
 			workspace_exists = false
 		else:
-			return {"ok": false, "errors": workspace_errors}
+			return _transaction_not_started_failure(workspace_errors, map_id)
 	if not workspace_exists and not bool(template_plan.get("found", false)):
-		return {"ok": false, "errors": ["authoring_target_not_found"]}
+		return _transaction_not_started_failure(["authoring_target_not_found"], map_id)
 
 	var workspace_result: Dictionary = {}
 	if workspace_exists:
@@ -349,12 +350,7 @@ static func delete_map_authoring_transaction(
 			expected_document
 		)
 		if not bool(workspace_result.get("ok", false)):
-			return {
-				"ok": false,
-				"errors": workspace_result.get("errors", []),
-				"template_deleted": false,
-				"workspace_deleted": false,
-			}
+			return _transaction_not_started_failure(workspace_result.get("errors", []), map_id)
 
 	var template_result := MapDesignCatalogService.commit_blank_template_deletion(
 		template_plan
@@ -376,22 +372,32 @@ static func delete_map_authoring_transaction(
 			var workspace_restore := restore_workspace_map(workspace_result)
 			workspace_restored = bool(workspace_restore.get("ok", false))
 			if not workspace_restored:
+				rollback_errors.append("workspace_rollback_failed")
 				rollback_errors.append_array(
 					_to_string_array(workspace_restore.get("errors", []))
 				)
 		var errors: Array[String] = ["template_commit_failed"]
 		errors.append_array(_to_string_array(template_result.get("errors", [])))
-		if not rollback_errors.is_empty():
-			errors.append("workspace_rollback_failed")
-			errors.append_array(rollback_errors)
+		for rollback_error: String in rollback_errors:
+			if not errors.has(rollback_error):
+				errors.append(rollback_error)
 		return {
 			"ok": false,
 			"errors": errors,
+			"map_id": map_id,
 			"template_deleted": false,
 			"workspace_deleted": false,
 			"workspace_restored": workspace_restored,
 			"catalog_restored": catalog_restored,
+			"writes_started": true,
 			"transaction_rolled_back": rollback_errors.is_empty(),
+			"transaction_state": "rolled_back" if rollback_errors.is_empty() else "rollback_incomplete",
+			"recovery_path": str(workspace_result.get("recovery_path", "")),
+			"recovery_root_path": str(workspace_result.get("recovery_root_absolute", "")),
+			"recovery_root_absolute": str(workspace_result.get("recovery_root_absolute", "")),
+			"target_path": str(workspace_result.get("deleted_path", "")),
+			"target_absolute": str(workspace_result.get("target_absolute", "")),
+			"catalog_path": str(template_plan.get("catalog_path", "")),
 		}
 
 	return {
@@ -399,10 +405,31 @@ static func delete_map_authoring_transaction(
 		"map_id": map_id,
 		"template_deleted": bool(template_result.get("template_deleted", false)),
 		"workspace_deleted": workspace_exists,
+		"writes_started": true,
 		"recovery_path": str(workspace_result.get("recovery_path", "")),
 		"deleted_files": int(workspace_result.get("deleted_files", 0)),
 		"deleted_directories": int(workspace_result.get("deleted_directories", 0)),
+		"transaction_state": "completed",
 		"errors": [],
+	}
+
+
+static func _transaction_not_started_failure(errors: Array, map_id := "") -> Dictionary:
+	return {
+		"ok": false,
+		"errors": errors,
+		"template_deleted": false,
+		"workspace_deleted": false,
+		"writes_started": false,
+		"transaction_rolled_back": false,
+		"transaction_state": "not_started",
+		"map_id": map_id,
+		"recovery_path": "",
+		"recovery_root_path": "",
+		"recovery_root_absolute": "",
+		"target_path": "",
+		"target_absolute": "",
+		"catalog_path": "",
 	}
 
 
@@ -417,7 +444,13 @@ static func _workspace_absence_is_allowed(errors: Array) -> bool:
 ## still points to the original direct child. No recursive cleanup is done.
 static func restore_workspace_map(delete_result: Dictionary) -> Dictionary:
 	if not bool(delete_result.get("ok", false)):
-		return {"ok": false, "errors": ["delete_result_invalid"]}
+		if (
+			str(delete_result.get("transaction_state", "")) != "rollback_incomplete"
+			or str(delete_result.get("recovery_path", "")).strip_edges().is_empty()
+		):
+			return {"ok": false, "errors": ["delete_result_invalid"]}
+	if test_force_workspace_restore_failure:
+		return {"ok": false, "errors": ["forced_workspace_restore_failure"]}
 	var map_id := str(delete_result.get("map_id", ""))
 	var identity_error := PathSafety.map_id_error(map_id)
 	if not identity_error.is_empty():

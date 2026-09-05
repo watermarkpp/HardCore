@@ -26,11 +26,13 @@ Godot 能证明的是运行时 `DirAccess.is_link()` 的 reparse-point 探针边
 
 删除不是递归 `remove`。`delete_map_authoring_transaction()` 先完成 map ID、formal/frozen、模板双 ID、文档路径/身份和 workspace 计划；随后将整个目标目录移动到同一工作区下的 `.recycle_bin/<map_id>.deleted-<ticks>`，只有移动成功才提交模板目录。模板提交失败时恢复 catalog 快照并把 workspace rename 回原目标；任一回滚失败都返回失败，不报告 partial success。移动失败不会清理目标；recovery 根由本次操作创建时若为空也会回收。恢复只需将返回的目录 rename 回原目标路径，因此测试也验证了完整树和隐藏文件可恢复。
 
+事务失败结果有明确三态，UI 只按该状态提示：`not_started` 表示尚未移动工作区或提交模板，`rolled_back` 表示模板和工作区均已完整恢复，`rollback_incomplete` 表示至少一个回滚步骤失败。后者始终返回 `recovery_path`/`recovery_root_path`、原目标路径、模板 catalog 路径和错误数组；工作区未恢复时，回收目录仍保留且可用 `restore_workspace_map()` 复原。UI 不再把不完整回滚说成“原状保留”，而是显示保留位置与错误。
+
 `.recycle_bin` 是工作区内部的可恢复隔离区，不使用系统回收站；系统回收站可能被禁用且不适合作为项目级事务边界。生产清理策略不在本 B01 范围内。
 
 ## R01 只读核查
 
-`MapEditorBuildRuntimeService` 当前的 publish helpers 使用 `.tmp`/`.bak` 和同进程内的 promote/restore 回滚；现有 `publish_failure_rollback_test` 覆盖的是注入失败后的即时回滚。针对进程 kill、重启后恢复，没有发现持久 journal 或启动恢复证据，因此 R01 状态记录为 **UNVERIFIED risk**；本次未进行大重构，也没有把同步 rollback 宣称为崩溃恢复。
+审计包原文只把 journal/单一发布指针列为 R01 的候选改造，并要求未来验证进程 kill 后的恢复；没有把本 B01 回合实施持久 journal 写成已授权/必做项。`MapEditorBuildRuntimeService` 当前的 publish helpers 使用 `.tmp`/`.bak` 和同进程内的 promote/restore 回滚；现有 `publish_failure_rollback_test` 覆盖的是注入失败后的即时回滚。针对进程 kill、重启后恢复，没有发现持久 journal 或启动恢复证据，因此 R01 状态记录为 **UNVERIFIED risk**；本次未进行大重构，也没有把同步 rollback 宣称为崩溃恢复。
 
 ## 专项验证
 
