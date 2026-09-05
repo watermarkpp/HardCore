@@ -87,9 +87,12 @@ func _run() -> void:
 	player.current_mp = mp_before_half
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:
-			existing.global_position = Vector2(3000, 3000) + Vector2(
-				existing.get_instance_id() % 200,
-				0
+			_move_enemy(
+				existing as EnemyActor,
+				Vector2(3000, 3000) + Vector2(
+					existing.get_instance_id() % 200,
+					0
+				)
 			)
 	var no_target_half_mp := player.current_mp
 	for _attack_index in range(6):
@@ -156,7 +159,10 @@ func _run() -> void:
 	player.facing = Vector2.RIGHT
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:
-			existing.global_position = Vector2(3000, 3000) + Vector2(existing.get_instance_id() % 200, 0)
+			_move_enemy(
+				existing as EnemyActor,
+				Vector2(3000, 3000) + Vector2(existing.get_instance_id() % 200, 0)
+			)
 	var attack_direction_gu := (
 		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT)
 		.normalized()
@@ -229,7 +235,7 @@ func _run() -> void:
 		assert(secondary.current_hp == secondary.max_hp - 50, "半月三个源码方向没有按5/13伤害结算")
 
 	for enemy: EnemyActor in [primary, second, unrelated, half_a, half_b, half_c]:
-		enemy.global_position = Vector2(3000, 3000) + Vector2(enemy.get_instance_id() % 200, 0)
+		_move_enemy(enemy, Vector2(3000, 3000) + Vector2(enemy.get_instance_id() % 200, 0))
 	var rush_step := Vector2i(1, -1)
 	var rush_direction_ground_gu := Vector2(rush_step).normalized()
 	player.global_position = _find_open_rush_origin(game, rush_step)
@@ -264,7 +270,7 @@ func _run() -> void:
 	# Any second monster inside the complete three-tile corridor cancels the
 	# whole coupled displacement; neither actor may move partially.
 	player.global_position = player_rush_origin
-	rush_target.global_position = rush_origin
+	_move_enemy(rush_target, rush_origin)
 	var blocker := _make_enemy(
 		game,
 		player,
@@ -283,11 +289,14 @@ func _run() -> void:
 		and rush_target.global_position.is_equal_approx(blocked_target_origin),
 		"怪物阻挡没有原子取消人物与目标的全部位移"
 	)
-	blocker.global_position = Vector2(3000, 3000)
+	_move_enemy(blocker, Vector2(3000, 3000))
 	# A live lock remains authoritative: an out-of-reach locked monster must not
 	# redirect Wild Rush onto another eligible adjacent monster.
-	rush_target.global_position = game._canonical_ground_gu_to_screen_px(
-		player_rush_tile + Vector2(rush_step) * 2.0
+	_move_enemy(
+		rush_target,
+		game._canonical_ground_gu_to_screen_px(
+			player_rush_tile + Vector2(rush_step) * 2.0
+		)
 	)
 	var adjacent_fallback := _make_enemy(
 		game,
@@ -298,8 +307,8 @@ func _run() -> void:
 	)
 	game.locked_target = rush_target
 	assert(game._select_wild_rush_target() == null, "野蛮冲撞错误偷换了超距锁定目标")
-	adjacent_fallback.global_position = Vector2(3050, 3000)
-	rush_target.global_position = Vector2(3100, 3000)
+	_move_enemy(adjacent_fallback, Vector2(3050, 3000))
+	_move_enemy(rush_target, Vector2(3100, 3000))
 	var equal_level_target := _make_enemy(
 		game,
 		player,
@@ -309,7 +318,7 @@ func _run() -> void:
 	)
 	game.locked_target = equal_level_target
 	assert(game._select_wild_rush_target() == null, "野蛮错误选择了同级目标")
-	equal_level_target.global_position = Vector2(3200, 3000)
+	_move_enemy(equal_level_target, Vector2(3200, 3000))
 	var boss_target := _make_enemy(
 		game,
 		player,
@@ -346,13 +355,36 @@ func _make_enemy(
 	enemy.max_hp = 9999
 	enemy.current_hp = 9999
 	enemy.is_boss = is_boss
-	enemy.global_position = position
+	game._runtime_spawn_serial += 1
+	var spawn_serial := int(game._runtime_spawn_serial)
+	enemy.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	enemy.configure_spatial_index(game._combat_spatial_index, spawn_serial)
+	enemy.set_meta("spawn_serial", spawn_serial)
+	enemy.set_meta("zone_generation", int(game._zone_generation))
+	enemy.set_combat_position(position, &"warrior_fixture_spawn")
+	game._combat_spatial_index.register(
+		spawn_serial,
+		game.current_map_id,
+		game._canonical_screen_px_to_ground_gu(position),
+		enemy.combat_radius_gu,
+		spawn_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position"),
+	)
 	game.add_child(enemy)
 	# EnemyActor._ready() initializes its runtime control state. Freeze the
 	# fixture after it enters the tree so hit-frame assertions use the intended
 	# fixed geometry.
 	enemy.control_time = 60.0
 	return enemy
+
+
+func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
+	enemy.set_combat_position(position, &"warrior_fixture_move")
 
 
 func _find_open_rush_origin(game: Node, direction_step: Vector2i) -> Vector2:

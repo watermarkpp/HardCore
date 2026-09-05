@@ -30,7 +30,10 @@ func _run() -> void:
 		enemy.max_hp = 9999
 		enemy.current_hp = 9999
 	for index in range(4, enemies.size()):
-		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
+		_move_enemy(
+			enemies[index] as EnemyActor,
+			Vector2(3000 + index * 80, 3000)
+		)
 
 	var player_tile: Vector2i = game._canonical_screen_px_to_grid_cell(game.player.global_position)
 	game.player.global_position = game._canonical_grid_cell_to_screen_px(player_tile)
@@ -186,7 +189,10 @@ func _run() -> void:
 	await _assert_boss_faces_player(game, enemies)
 
 	for index in range(enemies.size()):
-		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
+		_move_enemy(
+			enemies[index] as EnemyActor,
+			Vector2(3000 + index * 80, 3000)
+		)
 	player_tile = game._canonical_screen_px_to_grid_cell(game.player.global_position)
 	_place_at_tile_offset(game, second, player_tile, Vector2i(-2, -2))
 	game._cancel_target()
@@ -246,7 +252,14 @@ func _place_at_tile_offset(
 	origin_tile: Vector2i,
 	offset: Vector2i
 ) -> void:
-	enemy.global_position = game._canonical_grid_cell_to_screen_px(origin_tile + offset)
+	_move_enemy(
+		enemy,
+		game._canonical_grid_cell_to_screen_px(origin_tile + offset)
+	)
+
+
+func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
+	enemy.set_combat_position(position, &"mobile_targeting_fixture_move")
 
 
 func _expected_melee_facing(actor: Node2D, target: Node2D) -> Vector2:
@@ -284,11 +297,14 @@ func _assert_player_cannot_push_enemy(game: Node, blocker: EnemyActor, second: E
 	# inside that circle are intentionally expelled by GameRoot every frame.
 	var arena_origin: Vector2 = game._bich_home_screen_position_px() + Vector2(600, 0)
 	for enemy: EnemyActor in [second, side, behind]:
-		enemy.global_position = arena_origin + Vector2(700, 300) + Vector2(enemy.get_instance_id() % 100, 0)
+		_move_enemy(
+			enemy,
+			arena_origin + Vector2(700, 300) + Vector2(enemy.get_instance_id() % 100, 0)
+		)
 	game.player.global_position = arena_origin
 	game.player.velocity = Vector2.ZERO
 	game.player.facing = Vector2.RIGHT
-	blocker.global_position = arena_origin + Vector2(72, 0)
+	_move_enemy(blocker, arena_origin + Vector2(72, 0))
 	blocker.velocity = Vector2.ZERO
 	blocker.control_time = 0.0
 	blocker.apply_control(30.0)
@@ -305,14 +321,43 @@ func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
 	# 使用隔离 Boss，避免默认地图中已有 Boss 的仇恨表影响朝向断言。
 	var boss := EnemyActor.new()
 	boss.setup(
-		{"name": "测试Boss", "hp": 9999, "attackMin": 1, "attackMax": 1},
+		{"monster_id": 76, "name": "沃玛教主", "hp": 9999, "attackMin": 1, "attackMax": 1},
 		game.player,
-		true
+		false
+	)
+	game._runtime_spawn_serial += 1
+	var spawn_serial := int(game._runtime_spawn_serial)
+	var boss_position := game.player.global_position + Vector2(-180, -40)
+	boss.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	boss.configure_spatial_index(game._combat_spatial_index, spawn_serial)
+	boss.set_meta("spawn_serial", spawn_serial)
+	boss.set_meta("zone_generation", int(game._zone_generation))
+	boss.set_combat_position(boss_position, &"mobile_targeting_fixture_boss_spawn")
+	game._combat_spatial_index.register(
+		spawn_serial,
+		game.current_map_id,
+		game._canonical_screen_px_to_ground_gu(boss_position),
+		boss.combat_radius_gu,
+		spawn_serial,
+		boss,
+		Callable(boss, "spatial_index_position"),
 	)
 	game.add_child(boss)
 	await get_tree().process_frame
+	assert(
+		boss.monster_id == 76
+		and boss.is_boss
+		and str(boss.monster_data.get("classification", "")) == "boss"
+		and int(boss.boss_rule.get("monsterId", -1)) == 76
+		and not bool(boss.get_meta("caller_boss_ignored", true)),
+		"隔离Boss夹具必须由canonical ID76派生Boss身份"
+	)
 	boss.control_time = 0.0
-	boss.global_position = game.player.global_position + Vector2(-180, -40)
+	_move_enemy(boss, boss_position)
 	boss.velocity = Vector2.ZERO
 	boss.target = game.player
 	for _frame in range(5):

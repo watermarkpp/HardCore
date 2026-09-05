@@ -1,5 +1,7 @@
 extends Node
 
+const DEATH_RELEASE_TIMEOUT_SECONDS := 5.0
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -78,10 +80,34 @@ func _run() -> void:
 	game.player.facing = Vector2.RIGHT
 	game.player.attack_min = enemy.max_hp * 10
 	game.player.attack_max = enemy.max_hp * 10
+	var enemy_hp_before_attack := enemy.current_hp
+	var lethal_hp_observed := false
+	var death_pending_observed := false
+	var dying_observed := false
+	var died_signal_observed := false
+	enemy.died.connect(func(dead_enemy: EnemyActor, _monster_data: Dictionary) -> void:
+		died_signal_observed = true
+		lethal_hp_observed = dead_enemy.current_hp < enemy_hp_before_attack
+		dying_observed = dead_enemy._dying
+	)
 	assert(game.player.request_attack(true, enemy.get_instance_id()), "Basic attack rejected: attack=%.3f action=%.3f struck=%.3f control=%.3f dead=%s" % [game.player._attack_timer, game.player._attack_action_timer, game.player._struck_lock_remaining, game.player.control_time, game.player._dead])
-	for _wait in range(180):
+	var death_observation_deadline := Time.get_ticks_msec() + 3000
+	while Time.get_ticks_msec() < death_observation_deadline:
 		if not is_instance_valid(enemy):
 			break
+		lethal_hp_observed = lethal_hp_observed or enemy.current_hp < enemy_hp_before_attack
+		death_pending_observed = death_pending_observed or enemy._death_pending
+		dying_observed = dying_observed or enemy._dying
+		if lethal_hp_observed and (death_pending_observed or dying_observed or died_signal_observed):
+			break
+		await get_tree().process_frame
+	assert(lethal_hp_observed, "攻击释放后目标HP没有下降")
+	assert(
+		death_pending_observed or dying_observed or died_signal_observed,
+		"致死攻击没有进入death_pending/dying生命周期"
+	)
+	var death_release_deadline := Time.get_ticks_msec() + int(DEATH_RELEASE_TIMEOUT_SECONDS * 1000.0)
+	while is_instance_valid(enemy) and Time.get_ticks_msec() < death_release_deadline:
 		await get_tree().process_frame
 	assert(not is_instance_valid(enemy), "攻击、死亡链路未完成")
 
