@@ -41,7 +41,7 @@ func _build_manager_fixture() -> Dictionary:
 
 func _run_visual_sequence(deltas: Array[float]) -> Dictionary:
 	var fixture := _build_manager_fixture()
-	var manager: LootPickupRuntimeManager = fixture["manager"]
+	var manager: LootManagerScript = fixture["manager"]
 	var pickup: LootPickup = fixture["pickup"]
 	var elapsed := 0.0
 	for delta in deltas:

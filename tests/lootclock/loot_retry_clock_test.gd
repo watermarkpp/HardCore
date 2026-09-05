@@ -3,7 +3,7 @@ extends Node
 const LootPickupScript := preload("res://scripts/loot_pickup.gd")
 const LootManagerScript := preload("res://scripts/loot_pickup_runtime_manager.gd")
 
-var _manager: LootPickupRuntimeManager
+var _manager: LootManagerScript
 var _player: PlayerCharacter
 var _pickup: LootPickup
 var _collection_event_count := 0
