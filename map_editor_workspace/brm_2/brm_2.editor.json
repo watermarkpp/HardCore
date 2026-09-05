@@ -31,7 +31,9 @@
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
     "revision": 1.0,
+    "source_editor_schema_version": 4,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/brm_2"
   },
   "ground": {
@@ -44,14 +46,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1536.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/brm_2.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/brm_2.ground_paint_state.json",
@@ -349,7 +351,7 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
@@ -382,7 +384,7 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
@@ -415,7 +417,7 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
@@ -733,12 +735,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          44.0
+          10,
+          44
         ],
         "tile_anchor": [
-          10.0,
-          44.0
+          10,
+          44
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -812,12 +814,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          32.0
+          1,
+          32
         ],
         "tile_anchor": [
-          1.0,
-          32.0
+          1,
+          32
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -893,12 +895,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          43.0
+          2,
+          43
         ],
         "tile_anchor": [
-          2.0,
-          43.0
+          2,
+          43
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -974,12 +976,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          27.0
+          1,
+          27
         ],
         "tile_anchor": [
-          1.0,
-          27.0
+          1,
+          27
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -1055,12 +1057,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          37.0
+          1,
+          37
         ],
         "tile_anchor": [
-          1.0,
-          37.0
+          1,
+          37
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -1136,12 +1138,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          46.0
+          17,
+          46
         ],
         "tile_anchor": [
-          17.0,
-          46.0
+          17,
+          46
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -1217,12 +1219,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          44.0
+          17,
+          44
         ],
         "tile_anchor": [
-          17.0,
-          44.0
+          17,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -1298,12 +1300,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          35.0
+          6,
+          35
         ],
         "tile_anchor": [
-          6.0,
-          35.0
+          6,
+          35
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -1379,12 +1381,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          33.0
+          6,
+          33
         ],
         "tile_anchor": [
-          6.0,
-          33.0
+          6,
+          33
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -1460,12 +1462,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          44.0
+          17,
+          44
         ],
         "tile_anchor": [
-          17.0,
-          44.0
+          17,
+          44
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -1541,12 +1543,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          41.0,
-          41.0
+          41,
+          41
         ],
         "tile_anchor": [
-          41.0,
-          41.0
+          41,
+          41
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -1622,12 +1624,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -1703,12 +1705,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          42.0,
-          2.0
+          42,
+          2
         ],
         "tile_anchor": [
-          42.0,
-          2.0
+          42,
+          2
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -1731,8 +1733,8 @@
         "semantic_id": "respawn_point_000001",
         "semantic_role": "birth_and_respawn",
         "tile": [
-          9,
-          38
+          9.0,
+          38.0
         ]
       }
     ],
@@ -1744,44 +1746,44 @@
         "content_layer": "personal_expansion",
         "display_name": "安全区",
         "kind": "safe_area",
-        "polygon_tiles": [
+        "polygon_ground_gu": [
           [
-            21,
-            47
+            21.0,
+            47.0
           ],
           [
-            16,
-            38
+            16.0,
+            38.0
           ],
           [
-            9,
-            30
+            9.0,
+            30.0
           ],
           [
-            3,
-            25
+            3.0,
+            25.0
           ],
           [
-            0,
-            25
+            0.0,
+            25.0
           ],
           [
-            0,
-            47
+            0.0,
+            47.0
           ],
           [
-            21,
-            47
+            21.0,
+            47.0
           ]
         ],
-        "radius_tiles": 0,
+        "radius_gu": 0.0,
         "return_anchor": false,
         "runtime_export": true,
         "semantic_id": "safe_area_000001",
         "shape": "polygon",
         "tile": [
-          10,
-          37
+          10.0,
+          37.0
         ]
       }
     ],
@@ -1791,6 +1793,6 @@
   },
   "map_id": "brm_2",
   "runtime_map_id": 97789.0,
-  "schema_version": 4.0,
+  "schema_version": 5,
   "source_policy": "expansion_editable"
 }

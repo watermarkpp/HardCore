@@ -28,9 +28,13 @@
       16.0,
       16.0
     ],
+    "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
-    "revision": 1.0,
+    "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
+    "portal_contract_id": "unified_map_portal_endpoint_v1",
+    "revision": 2,
     "template_kind": "custom_empty_map",
     "workspace": "res://map_editor_workspace/world_cangyue_island"
   },
@@ -61,6 +65,7 @@
     "workspace_manifest": "res://map_editor_workspace/world_cangyue_island/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/world_cangyue_island/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
     "boss_spawn": [],
     "collision": [
@@ -1039,17 +1044,20 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_cangyue_island.map_exit_000001.cangyue_bull_temple_f1.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "牛魔寺庙",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "official_connection_id": "portal.world_cangyue_island.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "cangyue_bull_temple_f1",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -1057,12 +1065,19 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_cangyue_island",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 917101,
+        "target_map_key": "cangyue_bull_temple_f1",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          76.0,
+          23.0
+        ],
         "tile": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -1071,17 +1086,20 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_cangyue_island.map_exit_000002.cangyue_bone_cave_f1.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "骨魔洞",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "official_connection_id": "portal.world_cangyue_island.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "cangyue_bone_cave_f1",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -1089,12 +1107,19 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_cangyue_island",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 917001,
+        "target_map_key": "cangyue_bone_cave_f1",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          77.0,
+          15.0
+        ],
         "tile": [
-          44,
-          5
+          44.0,
+          5.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -1103,17 +1128,20 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_cangyue_island.map_exit_000003.world_mengzhong_province.map_exit_000004",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "盟重",
         "exit_id": "map_exit_000003",
         "kind": "map_exit",
+        "official_connection_id": "portal.world_cangyue_island.map_exit_000003",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000004",
+        "reciprocal_map_key": "world_mengzhong_province",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -1121,18 +1149,566 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_cangyue_island",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000004",
+        "target_map_id": 910003,
+        "target_map_key": "world_mengzhong_province",
+        "target_portal_id": "map_exit_000004",
+        "target_tile": [
+          79.0,
+          78.0
+        ],
         "tile": [
-          41,
-          41
+          41.0,
+          41.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            37.0,
+            1.0,
+            1.0,
+            1683.0,
+            -46.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3,
+          37
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            90.0,
+            6.0,
+            1.0,
+            1683.0,
+            -1.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          1.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26,
+          41
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19,
+          4
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            24.0,
+            10.0,
+            1.0,
+            1683.0,
+            -46.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          46.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3,
+          23
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43,
+          22
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43,
+          12
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45,
+          33
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            37.0,
+            1.0,
+            1.0,
+            1683.0,
+            -46.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31,
+          4
+        ]
+      }
+    ],
     "npc_points": [
       {
         "collision_policy": "profile",
@@ -2889,7 +3465,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           2.0,
           2.0
@@ -2941,8 +3517,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2951,8 +3527,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2962,18 +3538,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000024",
-        "instance_scale_level": -2,
+        "instance_scale_level": -2.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "offset_px": [
           0.0,
@@ -2996,16 +3572,16 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          41,
-          41
+          41.0,
+          41.0
         ],
         "tile_anchor": [
-          41,
-          41
+          41.0,
+          41.0
         ],
         "visual_footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
         ]
       },
       {
@@ -3022,8 +3598,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3032,8 +3608,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3043,18 +3619,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000026",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ],
         "offset_px": [
           0.0,
@@ -3077,16 +3653,16 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43,
-          0
+          43.0,
+          0.0
         ],
         "tile_anchor": [
-          43,
-          0
+          43.0,
+          0.0
         ],
         "visual_footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ]
       },
       {
@@ -3103,8 +3679,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3113,8 +3689,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3124,18 +3700,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000027",
-        "instance_scale_level": -2,
+        "instance_scale_level": -2.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
         ],
         "offset_px": [
           0.0,
@@ -3158,30 +3734,77 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "tile_anchor": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "visual_footprint_tiles": [
-          6,
-          6
+          6.0,
+          6.0
         ]
       }
     ],
     "object_front": [],
     "region_semantics": [],
     "region_trigger": [],
-    "respawn_points": [],
-    "safe_area": [],
+    "respawn_points": [
+      {
+        "content_layer": "personal_expansion",
+        "is_birth_point": true,
+        "is_default": true,
+        "is_respawn_point": true,
+        "kind": "respawn_point",
+        "respawn_id": "respawn_point_000001",
+        "runtime_export": true,
+        "semantic_id": "respawn_point_000001",
+        "semantic_role": "birth_and_respawn",
+        "tile": [
+          25,
+          24
+        ]
+      }
+    ],
+    "safe_area": [
+      {
+        "area_id": "safe_area_000001",
+        "blocks_monster_damage": true,
+        "blocks_pvp": true,
+        "content_layer": "personal_expansion",
+        "display_name": "安全区",
+        "kind": "safe_area",
+        "polygon_ground_gu": [
+          [15, 33],
+          [31, 35],
+          [36, 30],
+          [36, 15],
+          [30, 10],
+          [14, 9],
+          [10, 13],
+          [10, 29],
+          [15, 33]
+        ],
+        "radius_gu": 0.0,
+        "return_anchor": false,
+        "runtime_export": true,
+        "semantic_id": "safe_area_000001",
+        "shape": "polygon",
+        "tile": [
+          22,
+          23
+        ]
+      }
+    ],
     "shadow": [],
     "terrain_base": [],
     "terrain_front": []
   },
+  "legacy_map_id": "cyd_1",
+  "legacy_runtime_map_id": 2000,
   "map_id": "world_cangyue_island",
-  "runtime_map_id": 2000.0,
+  "runtime_map_id": 910007,
   "schema_version": 4.0,
   "source_policy": "expansion_editable"
 }

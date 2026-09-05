@@ -74,12 +74,14 @@
     "phase1_map_production_complete": true,
     "phase1_network_version_id": "phase1_finished_map_network_v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 4,
+    "revision": 4.0,
     "runtime_approved": true,
     "runtime_approved_revision": 3.0,
+    "source_editor_schema_version": 4,
     "structure_id": "bich_orc_tomb_f2.hui_ring.v1",
     "structure_policy": "visual_walls_only_manual_collision_and_decoration",
     "template_kind": "cloned_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/bich_orc_tomb_f2"
   },
   "ground": {
@@ -92,14 +94,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1216.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/bich_orc_tomb_f2.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/bich_orc_tomb_f2.ground_paint_state.json",
@@ -122,7 +124,7 @@
         "kind": "boss_spawn",
         "max_alive": 1.0,
         "monster_id": 54.0,
-        "radius_tiles": 0.0,
+        "radius_gu": 0.0,
         "respawn_seconds": 900.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_orc_tomb_f2.boss_spawn.000001",
@@ -143,7 +145,7 @@
         "kind": "boss_spawn",
         "max_alive": 1.0,
         "monster_id": 54.0,
-        "radius_tiles": 0.0,
+        "radius_gu": 0.0,
         "respawn_seconds": 900.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_orc_tomb_f2.boss_spawn.000002",
@@ -164,15 +166,15 @@
         "kind": "boss_spawn",
         "max_alive": 1.0,
         "monster_id": 54.0,
-        "radius_tiles": 0.0,
+        "radius_gu": 0.0,
         "respawn_seconds": 900.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_orc_tomb_f2.boss_spawn.000003",
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.boss_spawn.000003",
         "spawn_rule": "boss",
         "tile": [
-          20,
-          15
+          20.0,
+          15.0
         ]
       }
     ],
@@ -632,10 +634,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            1,
-            23,
-            1,
-            1
+            1.0,
+            23.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -648,10 +650,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            1,
-            25,
-            1,
-            1
+            1.0,
+            25.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -664,10 +666,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            2,
-            25,
-            1,
-            1
+            2.0,
+            25.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -680,10 +682,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            2,
-            14,
-            1,
-            1
+            2.0,
+            14.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -863,32 +865,32 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          2,
-          3
+          2.0,
+          3.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          3,
-          3
+          3.0,
+          3.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          4,
-          3
+          4.0,
+          3.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          1,
-          23
+          1.0,
+          23.0
         ]
       }
     ],
@@ -921,14 +923,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "bich_orc_tomb_f2",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 911003,
+        "target_map_id": 911003.0,
         "target_map_key": "bich_orc_tomb_f3",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -963,14 +965,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "bich_orc_tomb_f2",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 911001,
+        "target_map_id": 911001.0,
         "target_map_key": "bich_orc_tomb_f1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -1026,8 +1028,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          23,
-          28
+          23.0,
+          28.0
         ]
       },
       {
@@ -1070,8 +1072,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000002",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          4,
-          13
+          4.0,
+          13.0
         ]
       },
       {
@@ -1114,8 +1116,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          31,
-          23
+          31.0,
+          23.0
         ]
       },
       {
@@ -1158,8 +1160,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000004",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          16,
-          32
+          16.0,
+          32.0
         ]
       },
       {
@@ -1240,7 +1242,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1248,8 +1249,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000006",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          25,
-          34
+          25.0,
+          34.0
         ]
       },
       {
@@ -1286,7 +1287,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1294,8 +1294,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000007",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          3,
-          20
+          3.0,
+          20.0
         ]
       },
       {
@@ -1332,7 +1332,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1378,7 +1377,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1386,8 +1384,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000009",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          19,
-          4
+          19.0,
+          4.0
         ]
       },
       {
@@ -1424,7 +1422,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1470,7 +1467,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1478,8 +1474,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000011",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          16,
-          3
+          16.0,
+          3.0
         ]
       },
       {
@@ -1516,7 +1512,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1524,8 +1519,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000012",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          33,
-          21
+          33.0,
+          21.0
         ]
       },
       {
@@ -1562,7 +1557,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1570,8 +1564,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000013",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          20,
-          30
+          20.0,
+          30.0
         ]
       },
       {
@@ -1608,7 +1602,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1654,7 +1647,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1662,8 +1654,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000015",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          28,
-          19
+          28.0,
+          19.0
         ]
       },
       {
@@ -1700,7 +1692,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1708,8 +1699,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000016",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          15,
-          5
+          15.0,
+          5.0
         ]
       },
       {
@@ -1746,7 +1737,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1754,8 +1744,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000017",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          6,
-          19
+          6.0,
+          19.0
         ]
       },
       {
@@ -1792,7 +1782,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1800,8 +1789,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          34,
-          13
+          34.0,
+          13.0
         ]
       },
       {
@@ -1838,7 +1827,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1846,8 +1834,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000019",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          7,
-          15
+          7.0,
+          15.0
         ]
       },
       {
@@ -1884,7 +1872,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1892,8 +1879,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000020",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          12,
-          7
+          12.0,
+          7.0
         ]
       },
       {
@@ -1930,7 +1917,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1938,8 +1924,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000021",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          30,
-          15
+          30.0,
+          15.0
         ]
       },
       {
@@ -1976,7 +1962,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -1984,8 +1969,8 @@
         "spawn_group_id": "mse.group.v1.bich_orc_tomb_f2.monster_spawn.000022",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          19,
-          8
+          19.0,
+          8.0
         ]
       }
     ],
@@ -2151,8 +2136,8 @@
           12.0
         ],
         "tile_anchor": [
-          13.0,
-          12.0
+          13,
+          12
         ]
       },
       {
@@ -2220,8 +2205,8 @@
           0.0
         ],
         "tile_anchor": [
-          3.0,
-          1.0
+          5,
+          0
         ]
       },
       {
@@ -2289,8 +2274,8 @@
           0.0
         ],
         "tile_anchor": [
-          35.0,
-          0.0
+          28,
+          0
         ]
       },
       {
@@ -2358,8 +2343,8 @@
           37.0
         ],
         "tile_anchor": [
-          35.0,
-          37.0
+          34,
+          37
         ]
       },
       {
@@ -2427,8 +2412,8 @@
           5.0
         ],
         "tile_anchor": [
-          2.0,
-          4.0
+          0,
+          5
         ]
       },
       {
@@ -2496,8 +2481,8 @@
           1.0
         ],
         "tile_anchor": [
-          32.0,
-          3.0
+          37,
+          1
         ]
       },
       {
@@ -2565,8 +2550,8 @@
           34.0
         ],
         "tile_anchor": [
-          25.0,
-          30.0
+          37,
+          34
         ]
       },
       {
@@ -2634,8 +2619,8 @@
           31.0
         ],
         "tile_anchor": [
-          11.0,
-          29.0
+          0,
+          31
         ]
       },
       {
@@ -2703,8 +2688,8 @@
           35.0
         ],
         "tile_anchor": [
-          0.0,
-          36.0
+          0,
+          35
         ]
       },
       {
@@ -2772,8 +2757,8 @@
           0.0
         ],
         "tile_anchor": [
-          37.0,
-          0.0
+          37,
+          0
         ]
       },
       {
@@ -2841,8 +2826,8 @@
           12.0
         ],
         "tile_anchor": [
-          21.0,
-          12.0
+          20,
+          12
         ]
       },
       {
@@ -2855,8 +2840,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "collision_policy": "preset",
         "collision_policy_id": "",
@@ -2909,12 +2894,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          1.0
+          2,
+          1
         ],
         "tile_anchor": [
-          3.0,
-          3.0
+          2,
+          1
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -2986,8 +2971,8 @@
           4.0
         ],
         "tile_anchor": [
-          1.0,
-          1.0
+          0,
+          4
         ]
       },
       {
@@ -3055,8 +3040,8 @@
           0.0
         ],
         "tile_anchor": [
-          30.0,
-          0.0
+          30,
+          0
         ]
       },
       {
@@ -3121,12 +3106,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          37.0
+          1,
+          37
         ],
         "tile_anchor": [
-          5.0,
-          36.0
+          1,
+          37
         ]
       },
       {
@@ -3191,12 +3176,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          37.0
+          6,
+          37
         ],
         "tile_anchor": [
-          6.0,
-          37.0
+          6,
+          37
         ]
       },
       {
@@ -3261,12 +3246,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          0.0
+          31,
+          0
         ],
         "tile_anchor": [
-          31.0,
-          0.0
+          31,
+          0
         ]
       },
       {
@@ -3279,8 +3264,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "collision_policy": "preset",
         "collision_policy_id": "",
@@ -3333,12 +3318,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29.0,
-          19.0
+          29,
+          19
         ],
         "tile_anchor": [
-          31.0,
-          21.0
+          29,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3407,12 +3392,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          18.0
+          18,
+          18
         ],
         "tile_anchor": [
-          17.0,
-          17.0
+          18,
+          18
         ]
       },
       {
@@ -3479,12 +3464,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          14.0
+          1,
+          14
         ],
         "tile_anchor": [
-          1.0,
-          14.0
+          1,
+          14
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -3555,12 +3540,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          13.0
+          26,
+          13
         ],
         "tile_anchor": [
-          26.0,
-          13.0
+          26,
+          13
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -3631,12 +3616,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          30.0
+          18,
+          30
         ],
         "tile_anchor": [
-          19.0,
-          29.0
+          18,
+          30
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -3707,12 +3692,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          2.0
+          16,
+          2
         ],
         "tile_anchor": [
-          17.0,
-          2.0
+          16,
+          2
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -3781,12 +3766,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          24.0
+          1,
+          24
         ],
         "tile_anchor": [
-          11.0,
-          28.0
+          1,
+          24
         ]
       },
       {
@@ -3799,8 +3784,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          2.0,
+          2.0
         ],
         "collision_policy": "preset",
         "collision_policy_id": "",
@@ -3853,12 +3838,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          3.0
+          24,
+          3
         ],
         "tile_anchor": [
-          24.0,
-          4.0
+          24,
+          3
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -3942,8 +3927,8 @@
           0.0
         ],
         "tile_anchor": [
-          3.0,
-          4.0
+          0,
+          0
         ]
       },
       {
@@ -4015,8 +4000,8 @@
           0.0
         ],
         "tile_anchor": [
-          4.0,
-          3.0
+          1,
+          0
         ]
       },
       {
@@ -4088,8 +4073,8 @@
           8.0
         ],
         "tile_anchor": [
-          3.0,
-          8.0
+          0,
+          8
         ]
       },
       {
@@ -4161,8 +4146,8 @@
           0.0
         ],
         "tile_anchor": [
-          8.0,
-          3.0
+          8,
+          0
         ]
       },
       {
@@ -4234,8 +4219,8 @@
           12.0
         ],
         "tile_anchor": [
-          3.0,
-          12.0
+          0,
+          12
         ]
       },
       {
@@ -4307,8 +4292,8 @@
           0.0
         ],
         "tile_anchor": [
-          12.0,
-          3.0
+          12,
+          0
         ]
       },
       {
@@ -4380,8 +4365,8 @@
           16.0
         ],
         "tile_anchor": [
-          3.0,
-          16.0
+          0,
+          16
         ]
       },
       {
@@ -4453,8 +4438,8 @@
           0.0
         ],
         "tile_anchor": [
-          16.0,
-          3.0
+          16,
+          0
         ]
       },
       {
@@ -4526,8 +4511,8 @@
           20.0
         ],
         "tile_anchor": [
-          3.0,
-          20.0
+          0,
+          20
         ]
       },
       {
@@ -4601,8 +4586,8 @@
           0.0
         ],
         "tile_anchor": [
-          21.0,
-          0.0
+          21,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -4678,8 +4663,8 @@
           12.0
         ],
         "tile_anchor": [
-          13.0,
-          12.0
+          16,
+          12
         ]
       },
       {
@@ -4751,8 +4736,8 @@
           13.0
         ],
         "tile_anchor": [
-          12.0,
-          13.0
+          12,
+          13
         ]
       },
       {
@@ -4824,8 +4809,8 @@
           12.0
         ],
         "tile_anchor": [
-          16.0,
-          12.0
+          19,
+          12
         ]
       },
       {
@@ -4897,8 +4882,8 @@
           24.0
         ],
         "tile_anchor": [
-          3.0,
-          24.0
+          0,
+          24
         ]
       },
       {
@@ -4970,8 +4955,8 @@
           0.0
         ],
         "tile_anchor": [
-          24.0,
-          3.0
+          24,
+          0
         ]
       },
       {
@@ -5043,8 +5028,8 @@
           17.0
         ],
         "tile_anchor": [
-          12.0,
-          17.0
+          12,
+          17
         ]
       },
       {
@@ -5116,8 +5101,8 @@
           28.0
         ],
         "tile_anchor": [
-          3.0,
-          28.0
+          0,
+          28
         ]
       },
       {
@@ -5189,8 +5174,8 @@
           37.0
         ],
         "tile_anchor": [
-          28.0,
-          3.0
+          18,
+          37
         ]
       },
       {
@@ -5262,8 +5247,8 @@
           33.0
         ],
         "tile_anchor": [
-          3.0,
-          31.0
+          0,
+          33
         ]
       },
       {
@@ -5335,8 +5320,8 @@
           21.0
         ],
         "tile_anchor": [
-          12.0,
-          21.0
+          12,
+          21
         ]
       },
       {
@@ -5408,8 +5393,8 @@
           37.0
         ],
         "tile_anchor": [
-          4.0,
-          34.0
+          7,
+          37
         ]
       },
       {
@@ -5481,8 +5466,8 @@
           13.0
         ],
         "tile_anchor": [
-          25.0,
-          13.0
+          25,
+          13
         ]
       },
       {
@@ -5554,8 +5539,8 @@
           4.0
         ],
         "tile_anchor": [
-          34.0,
-          4.0
+          37,
+          4
         ]
       },
       {
@@ -5627,8 +5612,8 @@
           37.0
         ],
         "tile_anchor": [
-          8.0,
-          34.0
+          9,
+          37
         ]
       },
       {
@@ -5700,8 +5685,8 @@
           25.0
         ],
         "tile_anchor": [
-          17.0,
-          25.0
+          17,
+          25
         ]
       },
       {
@@ -5773,8 +5758,8 @@
           17.0
         ],
         "tile_anchor": [
-          25.0,
-          17.0
+          25,
+          17
         ]
       },
       {
@@ -5846,8 +5831,8 @@
           8.0
         ],
         "tile_anchor": [
-          34.0,
-          8.0
+          37,
+          8
         ]
       },
       {
@@ -5919,8 +5904,8 @@
           37.0
         ],
         "tile_anchor": [
-          12.0,
-          34.0
+          13,
+          37
         ]
       },
       {
@@ -5992,8 +5977,8 @@
           25.0
         ],
         "tile_anchor": [
-          21.0,
-          25.0
+          21,
+          25
         ]
       },
       {
@@ -6065,8 +6050,8 @@
           21.0
         ],
         "tile_anchor": [
-          25.0,
-          21.0
+          25,
+          21
         ]
       },
       {
@@ -6138,8 +6123,8 @@
           12.0
         ],
         "tile_anchor": [
-          34.0,
-          12.0
+          37,
+          12
         ]
       },
       {
@@ -6211,8 +6196,8 @@
           37.0
         ],
         "tile_anchor": [
-          15.0,
-          34.0
+          16,
+          37
         ]
       },
       {
@@ -6284,8 +6269,8 @@
           16.0
         ],
         "tile_anchor": [
-          34.0,
-          16.0
+          37,
+          16
         ]
       },
       {
@@ -6357,8 +6342,8 @@
           20.0
         ],
         "tile_anchor": [
-          34.0,
-          20.0
+          37,
+          20
         ]
       },
       {
@@ -6430,8 +6415,8 @@
           37.0
         ],
         "tile_anchor": [
-          21.0,
-          34.0
+          21,
+          37
         ]
       },
       {
@@ -6503,8 +6488,8 @@
           37.0
         ],
         "tile_anchor": [
-          25.0,
-          34.0
+          25,
+          37
         ]
       },
       {
@@ -6576,8 +6561,8 @@
           24.0
         ],
         "tile_anchor": [
-          34.0,
-          24.0
+          37,
+          24
         ]
       },
       {
@@ -6649,8 +6634,8 @@
           37.0
         ],
         "tile_anchor": [
-          28.0,
-          34.0
+          31,
+          37
         ]
       },
       {
@@ -6722,8 +6707,8 @@
           31.0
         ],
         "tile_anchor": [
-          34.0,
-          28.0
+          37,
+          31
         ]
       },
       {
@@ -6795,8 +6780,8 @@
           37.0
         ],
         "tile_anchor": [
-          31.0,
-          34.0
+          28,
+          37
         ]
       },
       {
@@ -6868,8 +6853,8 @@
           28.0
         ],
         "tile_anchor": [
-          34.0,
-          31.0
+          37,
+          28
         ]
       },
       {
@@ -6939,8 +6924,8 @@
           37.0
         ],
         "tile_anchor": [
-          0.0,
-          37.0
+          0,
+          37
         ]
       },
       {
@@ -7010,8 +6995,8 @@
           37.0
         ],
         "tile_anchor": [
-          0.0,
-          37.0
+          0,
+          37
         ]
       },
       {
@@ -7081,8 +7066,8 @@
           24.0
         ],
         "tile_anchor": [
-          12.0,
-          24.0
+          12,
+          24
         ]
       },
       {
@@ -7152,8 +7137,8 @@
           25.0
         ],
         "tile_anchor": [
-          25.0,
-          25.0
+          25,
+          25
         ]
       },
       {
@@ -7223,8 +7208,8 @@
           25.0
         ],
         "tile_anchor": [
-          25.0,
-          25.0
+          25,
+          25
         ]
       },
       {
@@ -7294,8 +7279,8 @@
           37.0
         ],
         "tile_anchor": [
-          37.0,
-          37.0
+          37,
+          37
         ]
       },
       {
@@ -7365,18 +7350,18 @@
           37.0
         ],
         "tile_anchor": [
-          37.0,
-          37.0
+          37,
+          37
         ]
       }
     ],
     "terrain_front": []
   },
   "legacy_map_id": "orc_tomb_2",
-  "legacy_runtime_map_id": 218,
+  "legacy_runtime_map_id": 218.0,
   "map_id": "bich_orc_tomb_f2",
-  "runtime_map_id": 911002,
-  "schema_version": 4.0,
+  "runtime_map_id": 911002.0,
+  "schema_version": 5,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "derived_editor_clone",

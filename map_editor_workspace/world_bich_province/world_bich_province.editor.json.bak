@@ -39,6 +39,7 @@
     "connection_version_id": "bich_wooma_connection_v1",
     "created_by": "human_codex_shared_tool",
     "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
     "milestone": "BICH-WOOMA-CONNECTION-V1",
     "official_runtime_map_id": 4.0,
     "official_source_authority": "user_saved_editor_document",
@@ -46,7 +47,7 @@
     "phase1_map_production_complete": true,
     "phase1_network_version_id": "phase1_finished_map_network_v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 5.0,
+    "revision": 6,
     "runtime_approved": true,
     "runtime_approved_revision": 5.0,
     "size_migration": "bich_64_to_80_centered",
@@ -79,6 +80,7 @@
     "workspace_manifest": "res://map_editor_workspace/world_bich_province/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/world_bich_province/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
     "boss_spawn": [],
     "collision": [
@@ -6001,42 +6003,7 @@
         ]
       }
     ],
-    "door_points": [
-      {
-        "auto_created_from_asset": true,
-        "blocks_movement": false,
-        "content_layer": "personal_expansion",
-        "display_name": "进入毒蛇山谷",
-        "door_id": "door.inst_000004",
-        "kind": "door",
-        "linked_visual_instance_id": "inst_000004",
-        "one_way": false,
-        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
-        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
-        "portal_visual_footprint_tiles": [
-          6.0,
-          6.0
-        ],
-        "portal_visual_origin_tile": [
-          73.0,
-          72.0
-        ],
-        "runtime_export": true,
-        "semantic_id": "door_000003",
-        "semantic_role": "map_portal",
-        "target_configured": false,
-        "target_map_id": "",
-        "target_tile": [
-          0.0,
-          0.0
-        ],
-        "tile": [
-          69.0,
-          72.0
-        ],
-        "trigger_on_enter": true
-      }
-    ],
+    "door_points": [],
     "editor_guides": [],
     "ground_base": [],
     "ground_overlay": [],
@@ -6050,18 +6017,18 @@
         "blocks_movement": false,
         "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "bich_wooma_forest_pair_v2",
+        "connection_pair_id": "portal_pair.world_bich_province.map_exit_000001.world_wooma_forest.map_exit_000004",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "前往沃玛森林",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
-        "official_connection_id": "bich_north_to_wooma_forest_v2",
+        "official_connection_id": "portal.world_bich_province.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
         "reciprocal_exit_id": "map_exit_000004",
-        "reciprocal_map_key": "wooma_forest",
+        "reciprocal_map_key": "world_wooma_forest",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -6072,12 +6039,12 @@
         "source_map_key": "world_bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000004",
-        "target_map_id": 268.0,
-        "target_map_key": "wooma_forest",
+        "target_map_id": 910004,
+        "target_map_key": "world_wooma_forest",
         "target_portal_id": "map_exit_000004",
         "target_tile": [
-          3.0,
-          52.0
+          6.0,
+          49.0
         ],
         "tile": [
           5.0,
@@ -6092,18 +6059,18 @@
         "blocks_movement": false,
         "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "bich_orc_tomb_1_pair_v2",
+        "connection_pair_id": "portal_pair.world_bich_province.map_exit_000002.bich_orc_tomb_f1.map_exit_000002",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "进入兽人古墓一层",
+        "display_name": "兽人古墓",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
-        "official_connection_id": "bich_east_to_orc_tomb_1_v3",
+        "official_connection_id": "portal.world_bich_province.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
         "reciprocal_exit_id": "map_exit_000002",
-        "reciprocal_map_key": "orc_tomb_1",
+        "reciprocal_map_key": "bich_orc_tomb_f1",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -6114,8 +6081,8 @@
         "source_map_key": "world_bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 217.0,
-        "target_map_key": "orc_tomb_1",
+        "target_map_id": 911001,
+        "target_map_key": "bich_orc_tomb_f1",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
           3.0,
@@ -6133,16 +6100,16 @@
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "auto_created_from_asset": true,
         "blocks_movement": false,
-        "connection_direction": "forward",
+        "connection_direction": "reverse",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "bich_mine_1_pair_v1",
+        "connection_pair_id": "portal_pair.bich_mine_f1.map_exit_000001.world_bich_province.map_exit_000003",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "进入矿区一层",
+        "display_name": "比奇矿区",
         "exit_id": "map_exit_000003",
         "kind": "map_exit",
         "linked_visual_instance_id": "inst_000016",
-        "official_connection_id": "bich_bottom_to_mine_1_v1",
+        "official_connection_id": "portal.world_bich_province.map_exit_000003",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -6157,7 +6124,7 @@
           73.0
         ],
         "reciprocal_exit_id": "map_exit_000001",
-        "reciprocal_map_key": "bich_mine_1",
+        "reciprocal_map_key": "bich_mine_f1",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -6168,8 +6135,8 @@
         "source_map_key": "world_bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 406.0,
-        "target_map_key": "bich_mine_1",
+        "target_map_id": 911101,
+        "target_map_key": "bich_mine_f1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
           3.0,
@@ -6186,18 +6153,17 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "one_way",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "地狱烈焰",
         "exit_id": "map_exit_000004",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
-        "one_way": false,
+        "official_connection_id": "portal.world_bich_province.map_exit_000004",
+        "one_way": true,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "one_way_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -6205,18 +6171,1908 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000004",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_bich_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 918002,
+        "target_map_key": "hidden_hellfire",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          14.0,
+          26.0
+        ],
         "tile": [
-          40,
-          72
+          40.0,
+          72.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": true
+      },
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "auto_created_from_asset": true,
+        "blocks_movement": false,
+        "connection_direction": "forward",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "portal_pair.world_bich_province.map_exit_000005.world_snake_valley.map_exit_000001",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "进入毒蛇山谷",
+        "exit_id": "map_exit_000005",
+        "kind": "map_exit",
+        "legacy_door_id": "door.inst_000004",
+        "legacy_semantic_id": "door_000003",
+        "linked_visual_instance_id": "inst_000004",
+        "official_connection_id": "portal.world_bich_province.map_exit_000005",
+        "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "portal_trigger_policy_id": "bich_cave_mouth_explicit_v1",
+        "portal_visual_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "portal_visual_origin_tile": [
+          73.0,
+          72.0
+        ],
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "world_snake_valley",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000005",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "world_bich_province",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 910002,
+        "target_map_key": "world_snake_valley",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          24.0,
+          43.0
+        ],
+        "tile": [
+          69.0,
+          72.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          74.0,
+          36.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            88.0,
+            17.0,
+            1.0,
+            4510.0,
+            -78.0,
+            -19.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18.0,
+          74.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          59.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          47.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          63.0,
+          76.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          73.0,
+          29.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          71.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          64.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          65.0,
+          30.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          58.0,
+          69.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          53.0,
+          76.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          47.0,
+          68.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          50.0,
+          62.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          59.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          51.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          52.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            88.0,
+            17.0,
+            1.0,
+            4510.0,
+            -78.0,
+            -19.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26.0,
+          73.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            88.0,
+            17.0,
+            1.0,
+            4510.0,
+            -78.0,
+            -19.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19.0,
+          67.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            88.0,
+            17.0,
+            1.0,
+            4510.0,
+            -78.0,
+            -19.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          64.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            88.0,
+            17.0,
+            1.0,
+            4510.0,
+            -78.0,
+            -19.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          61.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          44.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          37.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          37.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          51.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000030",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000031",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000032",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          74.0,
+          62.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000033",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          74.0,
+          54.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000034",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000034",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          68.0,
+          55.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000035",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000035",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          68.0,
+          47.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000036",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000036",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000037",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000037",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000038",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000038",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000039",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000039",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000040",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000040",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          61.0,
+          48.0
+        ]
+      }
+    ],
     "npc_points": [
       {
         "collision_policy": "profile",
@@ -9418,7 +11274,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           2.0,
           2.0
@@ -9499,7 +11355,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           5.0,
           4.0
@@ -9580,7 +11436,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -9661,7 +11517,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           2.0,
           2.0
@@ -9742,7 +11598,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           3.0,
           2.0
@@ -9823,7 +11679,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -9904,7 +11760,7 @@
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
-        "occlusion": false,
+        "occlusion": true,
         "occupancy_footprint_tiles": [
           1.0,
           1.0
@@ -10195,8 +12051,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -10205,8 +12061,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4,
-          5
+          4.0,
+          5.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -10216,18 +12072,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000100",
-        "instance_scale_level": -4,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4,
-          5
+          4.0,
+          5.0
         ],
         "offset_px": [
           0.0,
@@ -10250,16 +12106,16 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          39,
-          72
+          39.0,
+          72.0
         ],
         "tile_anchor": [
-          39,
-          72
+          39.0,
+          72.0
         ],
         "visual_footprint_tiles": [
-          4,
-          5
+          4.0,
+          5.0
         ]
       }
     ],
@@ -10352,8 +12208,10 @@
     "terrain_base": [],
     "terrain_front": []
   },
+  "legacy_map_id": "bich_province",
+  "legacy_runtime_map_id": 4,
   "map_id": "world_bich_province",
-  "runtime_map_id": 4.0,
+  "runtime_map_id": 910001,
   "schema_version": 4.0,
   "source_policy": "expansion_editable",
   "source_reference": {

@@ -32,6 +32,7 @@
     "content_policy": "user_authored_layers",
     "created_by": "human_codex_shared_tool",
     "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
     "milestone": "WOOMA-FOREST-TO-TEMPLE-1-V1",
     "official_runtime_map_id": 268.0,
     "official_source_authority": "user_saved_editor_document",
@@ -39,7 +40,7 @@
     "phase1_map_production_complete": true,
     "phase1_network_version_id": "phase1_finished_map_network_v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 6.0,
+    "revision": 7,
     "route_version_id": "wooma_temple_user_route_v3_unified_portals",
     "runtime_approved": true,
     "runtime_approved_revision": 6.0,
@@ -75,8 +76,188 @@
     "workspace_manifest": "res://map_editor_workspace/world_wooma_forest/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/world_wooma_forest/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "elite",
+          "source_line": 159.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 38.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            33.0,
+            19.0,
+            19.0,
+            2233.0,
+            -19.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          28.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "elite",
+          "source_line": 159.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 38.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            33.0,
+            19.0,
+            19.0,
+            2233.0,
+            -19.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "elite",
+          "source_line": 159.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 38.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            33.0,
+            19.0,
+            19.0,
+            2233.0,
+            -19.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "elite",
+          "source_line": 159.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 38.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            33.0,
+            19.0,
+            19.0,
+            2233.0,
+            -19.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.boss_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24.0,
+          27.0
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -5355,18 +5536,18 @@
         "blocks_movement": false,
         "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "world_wooma_forest_temple_1_pair_v1",
+        "connection_pair_id": "portal_pair.world_wooma_forest.map_exit_000001.wooma_temple_f1.map_exit_000002",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
-        "display_name": "进入沃玛寺庙一层",
+        "display_name": "沃玛寺庙",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
-        "official_connection_id": "world_wooma_forest_top_to_temple_1_v2",
+        "official_connection_id": "portal.world_wooma_forest.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
         "reciprocal_exit_id": "map_exit_000002",
-        "reciprocal_map_key": "wooma_temple_1",
+        "reciprocal_map_key": "wooma_temple_f1",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -5377,8 +5558,8 @@
         "source_map_key": "world_wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 313.0,
-        "target_map_key": "wooma_temple_1",
+        "target_map_id": 915001,
+        "target_map_key": "wooma_temple_f1",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
           20.0,
@@ -5392,41 +5573,46 @@
         "trigger_on_enter": true
       },
       {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "reverse",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "portal_pair.world_fengmo_valley.map_exit_000001.world_wooma_forest.map_exit_000002",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "封魔谷",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
-        "portal_role": "exit",
+        "official_connection_id": "portal.world_wooma_forest.map_exit_000002",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
         "radius_tiles": 3.0,
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "world_fengmo_valley",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
-        "semantic_role": "map_exit_trigger",
-        "target_configured": false,
-        "target_entrance_id": "",
-        "target_map_id": -1.0,
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "world_wooma_forest",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 910005,
+        "target_map_key": "world_fengmo_valley",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          40.0,
+          40.0
+        ],
         "tile": [
           6.0,
           6.0
         ],
-        "trigger_on_enter": true
-      },
-      {
-        "blocks_movement": false,
-        "content_layer": "personal_expansion",
-        "exit_id": "map_exit_000003",
-        "kind": "map_exit",
-        "portal_role": "exit",
-        "radius_tiles": 3.0,
-        "runtime_export": true,
-        "semantic_id": "map_exit_000003",
-        "semantic_role": "map_exit_trigger",
-        "target_configured": false,
-        "target_entrance_id": "",
-        "target_map_id": -1.0,
-        "tile": [
-          47.0,
-          48.0
-        ],
+        "travel_request_single_flight": true,
         "trigger_on_enter": true
       },
       {
@@ -5435,18 +5621,61 @@
         "blocks_movement": false,
         "connection_direction": "reverse",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "bich_world_wooma_forest_pair_v2",
+        "connection_pair_id": "portal_pair.world_white_day_gate.map_exit_000001.world_wooma_forest.map_exit_000003",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "白日门",
+        "exit_id": "map_exit_000003",
+        "kind": "map_exit",
+        "official_connection_id": "portal.world_wooma_forest.map_exit_000003",
+        "one_way": false,
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "radius_tiles": 3.0,
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "world_white_day_gate",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_tiles": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000003",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "world_wooma_forest",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 910006,
+        "target_map_key": "world_white_day_gate",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          40.0,
+          41.0
+        ],
+        "tile": [
+          47.0,
+          48.0
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": true
+      },
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_direction": "reverse",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "portal_pair.world_bich_province.map_exit_000001.world_wooma_forest.map_exit_000004",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "返回比奇省",
         "exit_id": "map_exit_000004",
         "kind": "map_exit",
-        "official_connection_id": "world_wooma_forest_to_bich_v1",
+        "official_connection_id": "portal.world_wooma_forest.map_exit_000004",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
         "reciprocal_exit_id": "map_exit_000001",
-        "reciprocal_map_key": "bich_province",
+        "reciprocal_map_key": "world_bich_province",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -5457,12 +5686,12 @@
         "source_map_key": "world_wooma_forest",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 4.0,
-        "target_map_key": "bich_province",
+        "target_map_id": 910001,
+        "target_map_key": "world_bich_province",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
-          6.0,
-          5.0
+          5.0,
+          6.0
         ],
         "tile": [
           6.0,
@@ -5475,18 +5704,17 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "one_way",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "堕落坟场",
         "exit_id": "map_exit_000005",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
-        "one_way": false,
+        "official_connection_id": "portal.world_wooma_forest.map_exit_000005",
+        "one_way": true,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "one_way_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -5494,9 +5722,16 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000005",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_wooma_forest",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 918003,
+        "target_map_key": "hidden_fallen_graveyard",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          25.0,
+          25.0
+        ],
         "tile": [
           50.0,
           28.0
@@ -5508,18 +5743,17 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "one_way",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "深渊魔域",
         "exit_id": "map_exit_000006",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
-        "one_way": false,
+        "official_connection_id": "portal.world_wooma_forest.map_exit_000006",
+        "one_way": true,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "one_way_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -5527,18 +5761,1120 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000006",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "world_wooma_forest",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 918005,
+        "target_map_key": "hidden_abyss_domain",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          24.0,
+          24.0
+        ],
         "tile": [
-          4,
-          31
+          4.0,
+          31.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            56.0,
+            8.0,
+            1.0,
+            2233.0,
+            -47.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46,
+          41
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24,
+          52
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          49,
+          12
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          48
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            8.0,
+            1.0,
+            2233.0,
+            -8.0,
+            -54.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11,
+          6
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          38,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41,
+          4
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7,
+          15
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            53.0,
+            7.0,
+            1.0,
+            2233.0,
+            -54.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          29,
+          52
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36,
+          9
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48,
+          19
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35,
+          44
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          39
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36,
+          38
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            38.0,
+            5.0,
+            1.0,
+            2233.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          39,
+          16
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1,
+          16
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9,
+          11
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_wooma_forest",
+          "source_category_role": "ordinary",
+          "source_line": 158.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            28.0,
+            22.0,
+            18.0,
+            2233.0,
+            -37.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "radius_tiles": 2.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_wooma_forest.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.world_wooma_forest.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          35
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {
@@ -12997,8 +14333,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -13007,8 +14343,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4,
-          3
+          4.0,
+          3.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -13018,18 +14354,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000229",
-        "instance_scale_level": -5,
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4,
-          3
+          4.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -13052,16 +14388,16 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1,
-          28
+          1.0,
+          28.0
         ],
         "tile_anchor": [
-          1,
-          28
+          1.0,
+          28.0
         ],
         "visual_footprint_tiles": [
-          4,
-          3
+          4.0,
+          3.0
         ]
       }
     ],
@@ -13074,8 +14410,10 @@
     "terrain_base": [],
     "terrain_front": []
   },
+  "legacy_map_id": "wooma_forest",
+  "legacy_runtime_map_id": 268,
   "map_id": "world_wooma_forest",
-  "runtime_map_id": 268.0,
+  "runtime_map_id": 910004,
   "schema_version": 4.0,
   "source_policy": "expansion_editable",
   "source_reference": {
