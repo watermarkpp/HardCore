@@ -387,7 +387,9 @@ func _test_same_frame_death_batch() -> void:
 		(monster_data.get("combat", {}) as Dictionary).get("stats", {}).get("exp", 0)
 	)
 	assert(experience_each > 0, "AOE death fixture has no experience")
-	PlayerState.level = 1
+	# This contract verifies batch aggregation, not level-up rollover. Level 22's
+	# current threshold is safely above the two-monster 50 XP fixture.
+	PlayerState.level = 22
 	PlayerState.experience = 0
 	PlayerState.test_transaction_debug_reset()
 	var enemies: Array[EnemyActor] = []
@@ -413,6 +415,7 @@ func _test_same_frame_death_batch() -> void:
 	game._flush_enemy_deaths(false)
 	var counters := PlayerState.test_transaction_debug_snapshot()
 	assert(counters.commit_attempts == 1, "two same-frame deaths did not share one save")
+	assert(PlayerState.level == 22, "AOE batch fixture unexpectedly crossed a level boundary")
 	assert(PlayerState.experience == experience_each * 2, "AOE batch lost experience")
 	assert(game._pending_enemy_deaths.is_empty(), "AOE death queue did not drain")
 	assert(not game._enemy_death_pipeline_running, "AOE death pipeline remained active")

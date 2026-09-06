@@ -51,11 +51,27 @@ func _ready() -> void:
 		"runtime spawn projection diverged from independently-read authored slots"
 	)
 	var source := FileAccess.get_file_as_string("res://scripts/game_root.gd")
-	var covered_index := source.find("hud.loading_transition_covered")
-	var prefetch_index := source.find("_streaming_coordinator.begin_map_prefetch")
-	var load_index := source.find("\n\toperation.call()", prefetch_index)
-	assert(covered_index >= 0 and prefetch_index > covered_index)
+	var transition_index := source.find("func _run_map_transition(")
+	assert(transition_index >= 0, "map transition function missing")
+	var transition_end_index := source.find("\nfunc ", transition_index + 1)
+	assert(transition_end_index > transition_index, "map transition function boundary missing")
+	var transition_source := source.substr(
+		transition_index,
+		transition_end_index - transition_index,
+	)
+	var covered_index := transition_source.find("await hud.loading_transition_covered")
+	assert(covered_index >= 0, "loading coverage await missing from map transition")
+	var prefetch_index := transition_source.find(
+		"_begin_monster_transition_prefetch(target_map_id)",
+		covered_index,
+	)
+	assert(prefetch_index > covered_index, "monster prefetch missing after loading coverage")
+	var load_index := transition_source.find("\n\toperation.call()", prefetch_index)
 	assert(load_index > prefetch_index, "map loaded before monster prefetch")
+	assert(
+		"_streaming_coordinator.begin_map_prefetch" in source,
+		"map prefetch helper no longer delegates to the streaming coordinator"
+	)
 	assert("_streaming_coordinator.poll_once" in source)
 	assert(
 		"_streaming_coordinator.poll_once(Engine.get_process_frames())" in source,

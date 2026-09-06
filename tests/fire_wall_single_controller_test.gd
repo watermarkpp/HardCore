@@ -22,6 +22,7 @@ func _ready() -> void:
 
 func _run() -> void:
 	GroundSkillEffect.reset_runtime_tick_claims_for_tests()
+	PlayerState.test_mode = true
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	_game = game
 	add_child(game)
@@ -121,7 +122,7 @@ func _run() -> void:
 	inside_target.queue_free()
 	outside_target.queue_free()
 	game.queue_free()
-	await get_tree().process_frame
+	await game.tree_exited
 	print("FIRE_WALL_SINGLE_CONTROLLER_PASS")
 	get_tree().quit(0)
 

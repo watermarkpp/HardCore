@@ -1,6 +1,7 @@
 extends Node
 
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const WarriorMeleeGeometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 
 func _ready() -> void:
@@ -203,20 +204,38 @@ func _run() -> void:
 	assert(unrelated.current_hp == unrelated_hp, "刺杀错误命中背后目标")
 
 	primary.current_hp = primary.max_hp
-	# Facing screen-E maps to canonical tile step (1,-1). The three classic
-	# secondary sectors are NE, SE and S, each exactly one logical tile away.
+	# Half Moon is a symmetric 120-degree fan in formal Euclidean GU.  Probe
+	# the center and +/-45-degree secondary sectors at the same 1.2 GU reach
+	# used by the release-geometry contract.
+	var half_moon_direction_index := (
+		WarriorMeleeGeometry.direction_index_for_ground_delta_gu(attack_direction_gu)
+	)
+	for outside_angle: float in [-61.0, 61.0]:
+		assert(
+			WarriorMeleeGeometry.half_moon_footprint_relative_sector_gu(
+				Vector2.ZERO,
+				attack_direction_gu.rotated(deg_to_rad(outside_angle)) * 1.2,
+				0.0,
+				half_moon_direction_index,
+			) == -1,
+			"半月±61°点目标必须在正式120°扇区外",
+		)
 	var half_a := _make_enemy(
 		game,
 		player,
 		"半月左前",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(0.0, -1.0)),
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu.rotated(deg_to_rad(-45.0)) * 1.2
+		),
 		1
 	)
 	var half_b := _make_enemy(
 		game,
 		player,
 		"半月右前",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(1.0, 0.0)),
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu * 1.2
+		),
 		1
 	)
 	var half_c := _make_enemy(
@@ -224,17 +243,47 @@ func _run() -> void:
 		player,
 		"半月右侧",
 		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-			Vector2(1.0, 1.0).normalized()
+			attack_direction_gu.rotated(deg_to_rad(45.0)) * 1.2
 		),
 		1
 	)
+	# Zero-radius probes isolate the exact angular contract: a footprint with
+	# positive radius may straddle a sector boundary and is covered by the
+	# dedicated footprint tests.  These two probes remain within 2 GU but are
+	# strictly outside the formal +/-60-degree fan.
+	var half_outside_left := _make_enemy(
+		game,
+		player,
+		"半月左侧拒绝",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu.rotated(deg_to_rad(-61.0)) * 1.2
+		),
+		1
+	)
+	var half_outside_right := _make_enemy(
+		game,
+		player,
+		"半月右侧拒绝",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu.rotated(deg_to_rad(61.0)) * 1.2
+		),
+		1
+	)
+	half_outside_left.combat_radius_gu = 0.0
+	half_outside_right.combat_radius_gu = 0.0
 	player.half_moon_enabled = true
 	player._pending_attack_context = {"mode": "half_moon", "skill_level": 3}
 	game._on_player_attack(Vector2.ZERO, Vector2.RIGHT, 130)
-	for secondary: EnemyActor in [half_a, half_b, half_c]:
-		assert(secondary.current_hp == secondary.max_hp - 50, "半月三个源码方向没有按5/13伤害结算")
+	for secondary: EnemyActor in [half_a, half_c]:
+		assert(secondary.current_hp == secondary.max_hp - 50, "半月±45°侧向没有按5/13伤害结算")
+	assert(half_b.current_hp == half_b.max_hp - 130, "半月中心没有按主扇区伤害结算")
+	for outside: EnemyActor in [half_outside_left, half_outside_right]:
+		assert(outside.current_hp == outside.max_hp, "半月±61°越界目标不应命中")
 
-	for enemy: EnemyActor in [primary, second, unrelated, half_a, half_b, half_c]:
+	for enemy: EnemyActor in [
+		primary, second, unrelated, half_a, half_b, half_c,
+		half_outside_left, half_outside_right,
+	]:
 		_move_enemy(enemy, Vector2(3000, 3000) + Vector2(enemy.get_instance_id() % 200, 0))
 	var rush_step: Vector2i = Vector2i(1, -1)
 	var rush_direction_ground_gu: Vector2 = Vector2(rush_step).normalized()

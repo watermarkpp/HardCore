@@ -56,11 +56,24 @@ func _run() -> void:
 			break
 		await get_tree().process_frame
 	assert(hud.all_panels_are_prewarmed(), "background panel prewarm did not settle before test exit")
-	for _frame in range(240):
-		if hud._catalog_icon_prewarm_complete:
-			break
-		await get_tree().process_frame
-	assert(hud._catalog_icon_prewarm_complete, "catalog icon prewarm did not settle before test exit")
+	# Headless process frames are uncapped and can exhaust the production
+	# frame-bounded attempt before ResourceLoader worker threads receive wall
+	# time. Drain the real shared pending set with a wall-clock bound instead of
+	# asserting HUD's one-shot private diagnostic latch.
+	var icon_prewarm_deadline_msec := Time.get_ticks_msec() + 5000
+	while (
+		UIItemTextureCache.threaded_pending_count() > 0
+		and Time.get_ticks_msec() < icon_prewarm_deadline_msec
+	):
+		UIItemTextureCache.poll_threaded_paths()
+		await get_tree().create_timer(0.01).timeout
+	UIItemTextureCache.poll_threaded_paths()
+	assert(
+		UIItemTextureCache.threaded_pending_count() == 0,
+		"catalog icon prewarm did not settle before test exit: pending=%d"
+		% UIItemTextureCache.threaded_pending_count()
+	)
+	await get_tree().process_frame
 	var prewarm_diagnostic: Dictionary = hud.panel_prewarm_diagnostic()
 	var pending_scripts: Array = (prewarm_diagnostic.get("script_prefetch", {}) as Dictionary).get("pending", [])
 	for raw_path: Variant in pending_scripts:

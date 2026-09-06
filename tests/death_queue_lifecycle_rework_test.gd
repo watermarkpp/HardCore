@@ -232,10 +232,20 @@ func _test_async_real_deaths_and_rng_parity() -> void:
 		var planned_requests: Array = []
 		var death_position := Vector2(float(_index * 6), float(_index % 4) * 5.0)
 		var raw_items: Variant = roll.get("items", [])
+		var item_records: Variant = roll.get("item_records", [])
 		if raw_items is Array:
-			for item_name: String in raw_items:
+			for item_index: int in range(raw_items.size()):
+				var item_name := str(raw_items[item_index])
+				var item_record: Dictionary = (
+					item_records[item_index]
+					if item_records is Array
+					and item_index < item_records.size()
+					and item_records[item_index] is Dictionary
+					else {}
+				)
 				planned_requests.append({
 					"item_name": item_name,
+					"item_record": item_record.duplicate(true),
 					"position": death_position + Vector2(
 						expected_rng.randf_range(-34.0, 34.0),
 						expected_rng.randf_range(-18.0, 18.0),

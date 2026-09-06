@@ -1,0 +1,56 @@
+﻿{
+    "git_head":  "313c11144e14c92a60c1aa433fcefd0cd1d13e13",
+    "engine_log_errors":  0,
+    "passed":  3,
+    "results":  [
+                    {
+                        "test_name":  "taoist_support_production_integration_test",
+                        "test_path":  "tests/taoist_support_production_integration_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "warrior_skill_state_machine_test",
+                        "test_path":  "tests/warrior_skill_state_machine_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "death_queue_lifecycle_rework_test",
+                        "test_path":  "tests/death_queue_lifecycle_rework_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-09-06T16:48:40.4078597+08:00",
+    "total":  3,
+    "failed":  0
+}
