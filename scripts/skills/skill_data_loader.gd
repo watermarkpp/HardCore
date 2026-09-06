@@ -15,7 +15,16 @@ const SOURCE_OF_TRUTH_PATH := "res://assets/data/vanilla_176/skills_source_of_tr
 const PACKAGE_ROOT := "res://assets/data/vanilla_176/skill_source_package_v1_0_1"
 const PACKAGE_MANIFEST_PATH := PACKAGE_ROOT + "/manifest.json"
 const PACKAGE_TEST_MANIFEST_PATH := PACKAGE_ROOT + "/mir2_176_skill_test_manifest_v1.json"
-const SOURCE_OF_TRUTH_SHA256 := "6c4a4b447787eb6ad9f9f44c6c24cf6ca23c952673797226c66541008b25c516"
+## The archived package remains immutable. Project-only test additions live in
+## this explicit overlay and are merged only after each entry is checked
+## against the current primary SOT required_tests list.
+const PROJECT_TEST_MANIFEST_OVERLAY_PATH := (
+	"res://assets/data/vanilla_176/skill_test_manifest_project_overlay_v1.json"
+)
+const PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID := (
+	"skills.project_test_manifest_overlay.v1"
+)
+const SOURCE_OF_TRUTH_SHA256 := "d439258d5ef1e76f86fb2eb590a8ec22d49757cd909de0c1f889370bd2ccdc19"
 const PACKAGE_ZIP_SHA256 := "2dac78d285dff8d5f1ba36a8b83e0e8f11c70b76ace15a34ee7fbfb802862a22"
 const RULESET_ID := "cn_mir2_176_vanilla_project_canonical_v1"
 const CLASS_COUNTS := {"warrior": 6, "wizard": 14, "taoist": 13}
@@ -184,7 +193,8 @@ static func legacy_records() -> Array:
 
 
 static func package_test_manifest() -> Dictionary:
-	return _read_json(PACKAGE_TEST_MANIFEST_PATH)
+	var archived_manifest := _read_json(PACKAGE_TEST_MANIFEST_PATH)
+	return _merge_project_test_manifest_overlay(archived_manifest)
 
 
 static func source_identity() -> Dictionary:
@@ -197,6 +207,8 @@ static func source_identity() -> Dictionary:
 		"sot_sha256": SOURCE_OF_TRUTH_SHA256,
 		"package_zip_sha256": PACKAGE_ZIP_SHA256,
 		"package_manifest_path": PACKAGE_MANIFEST_PATH,
+		"project_test_manifest_overlay_path": PROJECT_TEST_MANIFEST_OVERLAY_PATH,
+		"project_test_manifest_overlay_contract_id": PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID,
 	}
 
 
@@ -227,12 +239,83 @@ static func validate_package_integrity() -> Dictionary:
 	var runtime_hash := FileAccess.get_sha256(SOURCE_OF_TRUTH_PATH).to_lower()
 	if runtime_hash != SOURCE_OF_TRUTH_SHA256:
 		errors.append("runtime_sot_hash_mismatch")
+	var merged_test_manifest := package_test_manifest()
+	if not bool(merged_test_manifest.get("project_overlay_valid", false)):
+		for overlay_error: Variant in merged_test_manifest.get(
+			"project_overlay_errors",
+			[]
+		):
+			errors.append("project_test_manifest_overlay:%s" % str(overlay_error))
 	return {
 		"valid": errors.is_empty() and checked == 10,
 		"checked_files": checked,
 		"errors": errors,
 		"runtime_sot_sha256": runtime_hash,
 	}
+
+
+static func _merge_project_test_manifest_overlay(
+	archived_manifest: Dictionary
+) -> Dictionary:
+	var merged := archived_manifest.duplicate(true)
+	var errors: Array[String] = []
+	var overlay := _read_json(PROJECT_TEST_MANIFEST_OVERLAY_PATH)
+	if overlay.is_empty():
+		errors.append("overlay_missing_or_invalid_json")
+	else:
+		if str(overlay.get("overlay_contract_id", "")) != PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID:
+			errors.append("overlay_contract_id")
+		if str(overlay.get("base_manifest_path", "")) != PACKAGE_TEST_MANIFEST_PATH:
+			errors.append("overlay_base_manifest_path")
+		if str(overlay.get("source_of_truth_path", "")) != SOURCE_OF_TRUTH_PATH:
+			errors.append("overlay_source_of_truth_path")
+		if str(overlay.get("source_of_truth_sha256", "")).to_lower() != SOURCE_OF_TRUTH_SHA256:
+			errors.append("overlay_source_of_truth_sha256")
+		var entries_value: Variant = overlay.get("skill_tests", null)
+		if not entries_value is Array:
+			errors.append("overlay_skill_tests_not_array")
+		else:
+			var existing_ids: Dictionary = {}
+			for archived_value: Variant in merged.get("skill_tests", []):
+				if archived_value is Dictionary:
+					existing_ids[str((archived_value as Dictionary).get("id", ""))] = true
+			for entry_value: Variant in entries_value as Array:
+				if not entry_value is Dictionary:
+					errors.append("overlay_entry_not_dictionary")
+					continue
+				var entry := (entry_value as Dictionary).duplicate(true)
+				var skill_id := str(entry.get("skill_id", ""))
+				var assertion_id := str(entry.get("assert", ""))
+				var contract_id := str(entry.get("id", ""))
+				if str(entry.get("priority", "")) != "P1":
+					errors.append("overlay_entry_priority:%s" % contract_id)
+				if contract_id != "%s::%s" % [skill_id, assertion_id]:
+					errors.append("overlay_entry_id:%s" % contract_id)
+				if existing_ids.has(contract_id):
+					errors.append("overlay_entry_duplicate:%s" % contract_id)
+					continue
+				var definition := skill(skill_id)
+				if definition.is_empty():
+					errors.append("overlay_unknown_skill:%s" % skill_id)
+					continue
+				if assertion_id.is_empty() or not assertion_id in definition.get("required_tests", []):
+					errors.append("overlay_assertion_not_in_sot:%s" % contract_id)
+					continue
+				(merged.get("skill_tests", []) as Array).append(entry)
+				existing_ids[contract_id] = true
+	var overlay_entry_count := 0
+	var overlay_entries_for_metadata: Variant = overlay.get("skill_tests", null)
+	if overlay_entries_for_metadata is Array:
+		overlay_entry_count = (overlay_entries_for_metadata as Array).size()
+	merged["project_overlay_valid"] = errors.is_empty()
+	merged["project_overlay_errors"] = errors.duplicate()
+	merged["project_overlay"] = {
+		"contract_id": PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID,
+		"path": PROJECT_TEST_MANIFEST_OVERLAY_PATH,
+		"entry_count": overlay_entry_count,
+		"valid": errors.is_empty(),
+	}
+	return merged
 
 
 static func validate_document(value: Variant) -> Dictionary:

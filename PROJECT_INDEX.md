@@ -11,6 +11,8 @@ Current navigation context verified against HEAD: `ec057c52de4c99f59aa31a96dbd79
 
 ## Required Context Order
 
+2026-09-06 玩法与音频升级记录：`docs/UPGRADE_20260906.md`；精确音频来源与接线：`docs/audio/20260906/AUDIO_HANDOFF.md`、`SFX_CALLPOINTS.md`；战士范围合同：`docs/combat/warrior_melee_overrides_20260906.md`。安装包与最终验收状态以升级记录为准，不以施工期 PASS 代替最终交付。
+
 1. `PROJECT_CURRENT_STATUS.md` — 当前阶段、已关闭 Gate、HOLD 与下一正式 Gate。
 2. `PROJECT_HISTORY_CONTEXT.md` — 历史整改、已裁决方案、被否决路线与 Accepted Debt。
 3. `PROJECT_INDEX.md` — 当前代码位置、文件职责与 subsystem 入口。

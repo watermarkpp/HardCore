@@ -13,7 +13,7 @@ func _run() -> void:
 		"center_ground_gu": Vector2.ZERO,
 		"radius_gu": 9.0,
 	}]
-	assert(ControllerScript.DELAY_SECONDS == 10.0, "主城BGM延迟契约必须是10秒")
+	assert(ControllerScript.DELAY_SECONDS == 6.0, "主城BGM延迟契约必须是6秒")
 	for map_id in [910001, 910003, 910005, 910006, 910007]:
 		assert(ControllerScript.is_main_city_map(map_id), "主城稳定地图ID遗漏：%d" % map_id)
 	assert(not ControllerScript.is_main_city_map(910002), "野外地图不得被识别为主城")
@@ -44,8 +44,12 @@ func _run() -> void:
 	)
 	controller.delay_seconds = 0.05
 	var started: Array[Dictionary] = []
+	var stopped: Array[Dictionary] = []
 	controller.music_started.connect(
 		func(request: Dictionary) -> void: started.append(request.duplicate(true))
+	)
+	controller.music_stopped.connect(
+		func(request: Dictionary) -> void: stopped.append(request.duplicate(true))
 	)
 
 	# A direct-city map outside its compiled safe area must not arm anything.
@@ -88,27 +92,29 @@ func _run() -> void:
 	)
 	assert(controller.is_delay_pending(), "Loading结束后没有挂起一次性延迟")
 	await get_tree().create_timer(0.02).timeout
-	assert(started.is_empty(), "10秒边界之前不应开始主城BGM")
+	assert(started.is_empty(), "6秒边界之前不应开始主城BGM")
 	await get_tree().create_timer(0.06).timeout
 	assert(started.size() == 1, "一次入城只能启动一次主城BGM")
 	assert(started[0].map_id == 910001 and started[0].transition_id == "map:city:001")
+	assert(controller.is_music_active(), "主城BGM启动事件后播放器必须保持播放")
 	assert(not controller.on_loading_transition_finished({
 		"contract_id": "ui.loading.transition.v1",
 		"transition_id": "map:city:001",
 	}), "重复Loading结束事件不能重复启动同一次入城")
 	await get_tree().process_frame
 	assert(started.size() == 1, "重复事件产生了第二次主城BGM启动")
-	controller.music_player.stop()
-	controller._on_music_finished()
-	assert(not controller.is_music_active(), "主城BGM自然结束后不应保持播放")
-	assert(started.size() == 1, "主城BGM自然结束后不应自动重播")
 
-	# Leaving the safe area stops the stream and permits a fresh entry only after
-	# a new area entry, while a stale transition event remains rejected.
+	# Leaving the safe area and crossing to the wild must not truncate a track
+	# that already started. A new city entry waits for the natural end instead
+	# of calling play() again or creating a second voice.
 	controller.set_town_presence(false)
 	assert(not controller.state_snapshot().in_town, "离开安全区没有清除主城状态")
-	controller.set_town_presence(true, "safe_area.910001.0")
-	assert(controller.is_delay_pending(), "同图重新入城没有重新计时")
+	assert(controller.is_music_active(), "离开安全区不能截断已经开始的主城BGM")
+	assert(stopped.is_empty(), "离开安全区不应产生主城BGM停止事件")
+	controller.begin_map_transition(910002, "map:wild:001")
+	assert(controller.is_music_active(), "切到野外地图不能截断已经开始的主城BGM")
+	assert(stopped.is_empty(), "跨图时不应停止已经开始的主城BGM")
+
 	controller.begin_map_transition(910003, "map:city:002")
 	assert(
 		not controller.on_loading_transition_finished({
@@ -119,18 +125,37 @@ func _run() -> void:
 	)
 	assert(not controller.is_delay_pending(), "切图后旧延迟仍然存活")
 
-	# Correct destination event arms the new city; a subsequent non-city map
-	# invalidates it before timeout, proving no delayed cross-map playback.
+	# Correct destination event arms the new city, but the previous track still
+	# owns the player. The gate is pending on natural completion, not active yet.
 	controller.set_map_context(910003, safe_circle, Vector2.ZERO, "map:city:002")
 	controller.on_loading_transition_finished({
 		"contract_id": "ui.loading.transition.v1",
 		"transition_id": "map:city:002",
 	})
-	assert(controller.is_delay_pending(), "盟重主城没有启动一次性延迟")
-	controller.begin_map_transition(910002, "map:wild:001")
-	assert(not controller.is_delay_pending(), "离城后仍残留主城延迟")
+	assert(controller.is_delay_pending(), "旧曲播放期间新主城入场没有挂起延迟")
+	assert(controller.is_music_active(), "新主城入场不应抢占旧曲")
+	assert(started.size() == 1, "旧曲播放期间不得重启或叠加主城BGM")
+	controller.music_player.stop()
+	controller._on_music_finished()
+	assert(not controller.is_music_active(), "主城BGM自然结束后播放器应停止")
+	assert(controller.is_delay_pending(), "旧曲自然结束后新主城延迟没有重新计时")
 	await get_tree().create_timer(0.08).timeout
-	assert(started.size() == 1, "离城后的过期延迟串播了主城BGM")
+	assert(started.size() == 2, "新主城入场应在旧曲自然结束后只启动一次")
 
-	print("TOWN_MUSIC_CONTROLLER_PASS：五主城安全区、Loading结束后延迟、离城取消、重复入城与旧事件隔离契约通过")
+	# The second track also ends naturally and must not restart while the player
+	# remains in the same entry. Only the explicit world/character exit may stop.
+	# The player remains active until explicit exit; a finished callback must not replay.
+	controller._on_music_finished()
+	await get_tree().process_frame
+	assert(started.size() == 2, "主城BGM自然结束后不应自动重播")
+	controller.cancel("world_exited")
+	assert(not controller.is_music_active(), "角色/世界退出允许停止主城BGM")
+	assert(stopped.size() == 1, "显式世界退出未产生一次主城BGM停止事件")
+
+	# A stale delayed callback after leaving a city must never cross-play.
+	controller.begin_map_transition(910002, "map:wild:002")
+	await get_tree().create_timer(0.08).timeout
+	assert(started.size() == 2, "离城后的过期延迟串播了主城BGM")
+
+	print("TOWN_MUSIC_CONTROLLER_PASS：五主城安全区、6秒延迟、离区/跨图自然播完、旧曲结束后延迟重入、显式退出停止与旧事件隔离契约通过")
 	get_tree().quit(0)

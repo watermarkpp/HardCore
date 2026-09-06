@@ -4,9 +4,11 @@ const BICH_RUNTIME_MAP_ID := 910001
 const ORC_TOMB_F3_RUNTIME_MAP_ID := 911003
 const INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC := 60000
 const TownMusicControllerScript := preload("res://scripts/town_music_controller.gd")
+const AudioRuntimeServiceScript := preload("res://scripts/audio_runtime_service.gd")
 const LevelUpEffectScript := preload("res://scripts/ui_level_up_preview.gd")
 
 var _town_music_controller: Node
+var _audio_runtime_service: Node
 var _player_level_up_effect: Node2D
 
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
@@ -145,8 +147,7 @@ const SAFE_RING_TELEPORT_DISTANCES_GU := [
 	2.25,
 	1.125,
 ]
-const RANDOM_TELEPORT_MIN_DISTANCE_GU := 3.0
-const RANDOM_TELEPORT_MAX_DISTANCE_GU := 16.25
+const RANDOM_TELEPORT_MAX_ATTEMPTS := 256
 const RANDOM_TELEPORT_ACTOR_CLEARANCE_GU := 0.25
 const CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU := 2.0
 const CANONICAL_SUMMON_ACTOR_CLEARANCE_GU := 0.05
@@ -1396,12 +1397,14 @@ func _ready() -> void:
 	player.attack_requested.connect(_on_player_attack)
 	player.environment_blocker = background
 	player.skill_requested.connect(_on_player_skill)
+	player.skill_cast_started.connect(_on_skill_cast_audio_started)
 	player.warrior_skill_state_changed.connect(_on_warrior_skill_state_changed)
 	player.stats_changed.connect(_on_player_stats_changed)
 	player.movement_performed.connect(_on_player_moved)
 	player.death_requested.connect(_on_player_death_requested)
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
+	PlayerState.item_audio_committed.connect(_on_item_audio_committed)
 	add_child(player)
 	_player_level_up_effect = LevelUpEffectScript.new()
 	_player_level_up_effect.name = "PlayerLevelUpEffect"
@@ -1487,6 +1490,9 @@ func _ready() -> void:
 	_town_music_controller = TownMusicControllerScript.new()
 	_town_music_controller.name = "TownMusicController"
 	add_child(_town_music_controller)
+	_audio_runtime_service = AudioRuntimeServiceScript.new()
+	_audio_runtime_service.name = "AudioRuntimeService"
+	add_child(_audio_runtime_service)
 	hud.loading_transition_finished.connect(
 		_town_music_controller.on_loading_transition_finished
 	)
@@ -1544,8 +1550,12 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.stop_all_audio("world_exited")
 	if PlayerState.levels_gained.is_connected(_on_player_levels_gained):
 		PlayerState.levels_gained.disconnect(_on_player_levels_gained)
+	if PlayerState.item_audio_committed.is_connected(_on_item_audio_committed):
+		PlayerState.item_audio_committed.disconnect(_on_item_audio_committed)
 	if is_instance_valid(_town_music_controller):
 		_town_music_controller.cancel("world_exited")
 	PlayerState.clear_taoist_main_pets_persistence_provider()
@@ -2190,6 +2200,7 @@ func _change_zone_immediate(zone_name: String, initial := false) -> void:
 		_load_zone(str(bich_map.get("name", "比奇省")), initial, bich_map)
 		_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 		player.velocity = Vector2.ZERO
+		_relocate_main_pets_after_map_arrival()
 		background.set_focus_position(player.global_position)
 		return
 	_load_zone(zone_name, initial, GameData.get_map(zone_name))
@@ -2243,6 +2254,7 @@ func _travel_to_service_home_immediate(
 			# 服务端(289,618)直接进入700×700原MAP统一坐标，不再压缩到场景中心。
 			_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 			player.velocity = Vector2.ZERO
+			_relocate_main_pets_after_map_arrival()
 			background.set_focus_position(player.global_position)
 	else:
 		# 红名地图3尚未进入项目地图表；保留显式回退，不伪造服务端映射。
@@ -2315,6 +2327,7 @@ func _teleport_to_map_immediate(map_id: int, arrival_anchor_id: String) -> bool:
 		return false
 	_set_player_world_position(arrival.get("position_px", Vector2.ZERO) as Vector2)
 	player.velocity = Vector2.ZERO
+	_relocate_main_pets_after_map_arrival()
 	background.set_focus_position(player.global_position)
 	_record_player_world_location()
 	return true
@@ -2376,6 +2389,7 @@ func _travel_to_map_immediate(map_id: int) -> bool:
 	if current_map_id == map_id:
 		_set_player_world_position(route_arrival_position(map_id, source_map_id))
 		player.velocity = Vector2.ZERO
+		_relocate_main_pets_after_map_arrival()
 		background.set_focus_position(player.global_position)
 	return current_map_id == map_id
 
@@ -2475,6 +2489,7 @@ func _complete_portal_travel(
 	)
 	_set_player_world_position(arrival_position)
 	player.velocity = Vector2.ZERO
+	_relocate_main_pets_after_map_arrival()
 	background.set_focus_position(player.global_position)
 	MapPortalTravelGuardScript.finish_arrival(
 		_portal_guard_state,
@@ -2695,6 +2710,7 @@ func _run_map_transition(
 		return
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
 	if _check_world_ready_contract():
+		_relocate_main_pets_after_map_arrival()
 		if is_instance_valid(_town_music_controller):
 			_town_music_controller.set_map_context(
 				current_map_id,
@@ -5210,6 +5226,7 @@ func _finish_death_revival() -> void:
 	_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 	player.velocity = Vector2.ZERO
 	player.complete_death_revival()
+	_relocate_main_pets_after_map_arrival()
 	background.set_focus_position(player.global_position)
 	_record_player_world_location()
 	PlayerState.save_game()
@@ -5623,6 +5640,11 @@ func _update_target_hud() -> void:
 		)
 	else:
 		hud.update_target("", 0, 0, false, auto_target_enabled)
+
+
+func play_npc_interaction_voice(service_id: String) -> void:
+	if is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.play_npc_interaction_success(service_id, {"map_id": current_map_id})
 
 
 func _try_interact() -> void:
@@ -6208,6 +6230,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	_commit_warrior_melee_modifier_events(melee_modifiers)
 	if (
 		bool(melee_modifiers.get("slaying_proc", false))
+		and effect_mode == "normal"
 		and player.visual != null
 		and player.visual.has_method("play_passive_proc_effect")
 	):
@@ -6545,6 +6568,28 @@ func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, messag
 		hud.update_warrior_states(player.warrior_state_snapshot())
 
 
+func _on_skill_cast_audio_started(stable_skill_id: String) -> void:
+	_play_skill_audio_phase(stable_skill_id, "cast")
+
+
+func _on_item_audio_committed(identity_domain: String, identity_id: int, semantic_event: String) -> void:
+	if identity_domain not in ["item", "service"] or identity_id < 0:
+		return
+	if is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.play_item_event(
+			"%s:%d" % [identity_domain, identity_id], semantic_event,
+			{"map_id": current_map_id},
+		)
+
+
+func _play_skill_audio_phase(stable_skill_id: String, phase: String) -> void:
+	if is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.play_event("skill.%s.%s" % [stable_skill_id, phase], {
+			"gender": PlayerState.gender,
+			"map_id": current_map_id,
+		})
+
+
 func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, damage: int) -> void:
 	if not gameplay_input_is_enabled(): return
 	var skill_context := player.consume_skill_context()
@@ -6598,6 +6643,8 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 	if not bool(execution.get("accepted", false)):
 		hud.show_message("技能释放失败：%s" % str(execution.get("reason", "runtime_rejected")), 1.5)
 		return
+	if hit_any:
+		_play_skill_audio_phase(stable_skill_id, "effect")
 	var effect_color := Color(1.0, 0.22, 0.05) if PlayerState.profession == "战士" else (Color(0.28, 0.62, 1.0) if PlayerState.profession == "法师" else Color(0.45, 0.92, 0.55))
 	_show_attack_flash(origin, direction, hit_any, effect_color)
 	if skill_name == "烈火剑法":
@@ -7079,10 +7126,20 @@ func _execute_canonical_melee(
 					else thrust_secondaries
 				)
 				for target: EnemyActor in targets:
+					var resolved_damage := (
+						roundi(float(base_damage) * float(effect.get("multiplier", 1.0)))
+						+ post_body_damage_bonus
+					)
+					if mode == "thrust":
+						var physical_resolution := WarriorCombatMath.resolve_enemy_physical_damage(
+							resolved_damage,
+							target.defense,
+							WarriorCombatMath.thrust_segment_ignores_ac(int(effect.get("cell", 1))),
+						)
+						resolved_damage = int(physical_resolution.get("final_damage", 0))
 					var target_hit := _apply_physical_hit(
 						target,
-						roundi(float(base_damage) * float(effect.get("multiplier", 1.0)))
-						+ post_body_damage_bonus,
+						resolved_damage,
 						accuracy_bonus
 					)
 					hit_any = target_hit or hit_any
@@ -9121,6 +9178,7 @@ func _apply_canonical_player_teleport(destination: Vector2) -> bool:
 		return false
 	_set_player_world_position(destination)
 	player.velocity = Vector2.ZERO
+	_relocate_main_pets_after_map_arrival()
 	player.movement_performed.emit(player.global_position, player.facing)
 	return true
 
@@ -9733,7 +9791,32 @@ func _apply_canonical_main_pet(
 	)
 
 
-func _canonical_summon_spawn_plan(stable_skill_id: String) -> Dictionary:
+func _relocate_main_pets_after_map_arrival() -> void:
+	# _load_zone restores pets before the caller installs its final arrival.
+	# Reuse the canonical legal-position search, excluding only the moving pet.
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var summon := _canonical_main_pet(summon_id)
+		if summon == null:
+			continue
+		summon.configure_runtime_map_projection(
+			current_map_id,
+			Callable(self, "_canonical_ground_gu_to_screen_px"),
+			Callable(self, "_canonical_screen_px_to_ground_gu"),
+		)
+		summon.configure_spatial_index(_combat_spatial_index)
+		var stable_skill_id := (
+			"taoist.summon_skeleton" if summon_id == "skeleton"
+			else "taoist.summon_divine_beast"
+		)
+		var plan := _canonical_summon_spawn_plan(stable_skill_id, summon)
+		if bool(plan.get("valid", false)):
+			summon.relocate_after_owner_teleport(plan.get("position_screen_px") as Vector2)
+
+
+func _canonical_summon_spawn_plan(
+	stable_skill_id: String,
+	ignored_summon: SummonActor = null,
+) -> Dictionary:
 	if not is_instance_valid(player):
 		return {"valid": false, "reason": "player_unavailable"}
 	var player_ground_gu := _canonical_screen_px_to_ground_gu(
@@ -9795,7 +9878,7 @@ func _canonical_summon_spawn_plan(stable_skill_id: String) -> Dictionary:
 		if not _canonical_summon_position_is_valid(
 			candidate_ground_gu,
 			summon_radius_gu,
-			null
+			ignored_summon
 		):
 			continue
 		return {
@@ -11635,10 +11718,18 @@ func _plan_enemy_death_item(death: Dictionary) -> bool:
 	var death_position: Vector2 = death.get("death_position", Vector2.ZERO)
 	var requests: Array[Dictionary] = []
 	var raw_items: Variant = drop_roll.get("items", [])
+	var identity_records: Array = drop_roll.get("item_records", [])
 	if raw_items is Array:
-		for item_name: String in raw_items:
+		for item_index in range(raw_items.size()):
+			var item_name := str(raw_items[item_index])
+			var identity_record: Dictionary = (
+				identity_records[item_index]
+				if item_index < identity_records.size() and identity_records[item_index] is Dictionary
+				else {}
+			)
 			requests.append({
 				"item_name": item_name,
+				"item_record": identity_record,
 				"position": death_position + Vector2(
 					_rng.randf_range(-34, 34),
 					_rng.randf_range(-18, 18)
@@ -11800,6 +11891,7 @@ func _materialize_enemy_death_nodes(
 			materialized = _spawn_loot(
 				str(request.get("item_name", "")),
 				request.get("position", death.get("death_position", Vector2.ZERO)),
+				request.get("item_record", {}),
 			)
 		if not materialized:
 			death["remaining_requests"] = requests.slice(request_index)
@@ -11971,12 +12063,19 @@ func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
 	}
 
 
-func _spawn_loot(item_name: String, position: Vector2) -> bool:
+func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary = {}) -> bool:
+	# A formal but unresolved identity must never become an unrelated valid
+	# name-only item at collection time. Legacy callers still pass no record.
+	if not item_record.is_empty() and str(item_record.get("identity_status", "")) != "resolved":
+		return false
 	if _test_force_loot_materialization_failure_count > 0:
 		_test_force_loot_materialization_failure_count -= 1
 		return false
 	var loot := LootPickup.new()
-	loot.setup(item_name, player)
+	if item_record.is_empty():
+		loot.setup(item_name, player)
+	else:
+		loot.setup_item_record(item_record, player)
 	loot.global_position = position
 	loot.add_to_group("zone_content")
 	loot.collected.connect(_on_loot_collected)
@@ -12026,7 +12125,10 @@ func _on_gold_loot_collected(amount: int, pickup: LootPickup) -> void:
 
 
 func _on_loot_collected(item_name: String, pickup: LootPickup) -> void:
-	_queue_loot_collection({"item_name": item_name, "pickup": pickup})
+	var candidate := {"item_name": item_name, "pickup": pickup}
+	if is_instance_valid(pickup) and pickup.item_id >= 0:
+		candidate["item_id"] = pickup.item_id
+	_queue_loot_collection(candidate)
 
 
 func _queue_loot_collection(candidate: Dictionary) -> bool:
@@ -12109,12 +12211,15 @@ func _flush_loot_collections() -> Dictionary:
 	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_authority_checks", pending.size())
 	var outcomes: Array = result.get("outcomes", [])
 	var loot_feedback_names: Array = []
+	var collected_gold := 0
 	var processed_count := mini(transaction_pending.size(), outcomes.size())
 	for index in range(processed_count):
 		var candidate: Dictionary = transaction_pending[index]
 		var outcome: Dictionary = outcomes[index]
 		var pickup: Variant = candidate.get("pickup")
 		if bool(outcome.get("success", false)):
+			if bool(candidate.get("gold", false)):
+				collected_gold += maxi(0, int(candidate.get("amount", 0)))
 			loot_feedback_names.append(
 				"金币 +%d" % int(candidate.get("amount", 0))
 				if bool(candidate.get("gold", false))
@@ -12135,6 +12240,8 @@ func _flush_loot_collections() -> Dictionary:
 		if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
 			_loot_collection_flush_queued = true
 			call_deferred("_flush_loot_collections")
+	if collected_gold > 0 and is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.play_item_event("currency:gold", "loot_success", {"map_id": current_map_id})
 	if hud != null and not loot_feedback_names.is_empty():
 		hud.show_loot_batch(loot_feedback_names)
 	if CombatDiagnosticLogScript.capture_enabled():
@@ -12225,6 +12332,8 @@ func _on_scroll_used(item_name: String) -> void:
 			hud.show_message("附近没有可用传送落点")
 			return
 		_set_player_world_position(destination)
+		player.velocity = Vector2.ZERO
+		_relocate_main_pets_after_map_arrival()
 	elif effect == "repair_oil":
 		hud.show_message(PlayerState.apply_weapon_repair_oil(false))
 		return
@@ -12242,19 +12351,22 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 	)
 	if not origin_ground_gu.is_finite() or not _target_spatial_query_ready():
 		return origin_screen_px
+	# Primary MapRandomMove samples the map dimensions, not a radius around
+	# the actor. Use the published map's actual GU extent; collision below
+	# rejects black borders, walls and occupied cells without biasing to Home.
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	if raw_size.size() != 2 or int(raw_size[0]) <= 0 or int(raw_size[1]) <= 0:
+		return origin_screen_px
 	var player_combat_radius_gu := (
 		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
 			ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		)
 	)
-	for _attempt in range(96):
-		var angle := _rng.randf_range(0.0, TAU)
-		var distance_gu := _rng.randf_range(
-			RANDOM_TELEPORT_MIN_DISTANCE_GU,
-			RANDOM_TELEPORT_MAX_DISTANCE_GU
-		)
-		var candidate_ground_gu := (
-			origin_ground_gu + Vector2.from_angle(angle) * distance_gu
+	for _attempt in range(RANDOM_TELEPORT_MAX_ATTEMPTS):
+		var candidate_ground_gu := Vector2(
+			float(_rng.randi_range(0, int(raw_size[0]) - 1)) + 0.5,
+			float(_rng.randi_range(0, int(raw_size[1]) - 1)) + 0.5,
 		)
 		var candidate_screen_px := _canonical_ground_gu_to_screen_px(
 			candidate_ground_gu

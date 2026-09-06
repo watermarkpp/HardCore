@@ -43,6 +43,16 @@ func _load_active_patch() -> void:
 	if int(manifest.get("schemaVersion", 0)) != MANIFEST_VERSION:
 		load_error = "manifest_version"
 		return
+	# A full APK update already contains the earlier hotfixes. Never mount a
+	# retained patch built for another APK over its newer gameplay scripts.
+	var build_info_path := "res://generated/build_info.json"
+	if FileAccess.file_exists(build_info_path):
+		var build_info: Variant = JSON.parse_string(FileAccess.get_file_as_string(build_info_path))
+		if build_info is Dictionary:
+			var apk_commit := str(build_info.get("git_head", ""))
+			if not patch_matches_base(manifest, apk_commit):
+				load_error = "patch_base_mismatch"
+				return
 	var patch_id := str(manifest.get("patchId", ""))
 	var file_name := str(manifest.get("file", ""))
 	var expected_hash := str(manifest.get("sha256", "")).to_upper()
@@ -74,6 +84,10 @@ func _load_active_patch() -> void:
 	loaded_patch_sha256 = expected_hash
 	set_meta("device_lab_patch_id", patch_id)
 	set_meta("device_lab_patch_sha256", expected_hash)
+
+
+static func patch_matches_base(manifest: Dictionary, apk_commit: String) -> bool:
+	return not apk_commit.is_empty() and str(manifest.get("baseCommit", "")) == apk_commit
 
 
 func _patch_dir_path() -> String:

@@ -3454,6 +3454,21 @@ func get_item_record(item_ref: Variant) -> Dictionary:
 	var item_id := int(identity.get("item_id", -1))
 	if item_id >= 0 and _catalog_by_item_id.has(item_id):
 		return (_catalog_by_item_id.get(item_id, {}) as Dictionary).duplicate(true)
+	# Direct-drop reserved identities (notably 920xxx skill books) are exact
+	# authority IDs even when the legacy presentation catalog has serviceIndex
+	# only. Resolve through that explicit ID map, never through caller text.
+	if item_id >= 0:
+		var direct_identity := dpv2_direct_item_identity(item_id)
+		var direct_name := str(direct_identity.get("canonical_item_name", ""))
+		if not direct_name.is_empty() and _catalog_by_name.has(direct_name):
+			var direct_record: Dictionary = (_catalog_by_name[direct_name] as Dictionary).duplicate(true)
+			var existing_id := int(direct_record.get("itemId", -1))
+			if existing_id >= 0 and existing_id != item_id:
+				return {}
+			direct_record["itemId"] = item_id
+			direct_record["identityBridge"] = "dpv2.direct_item_identity.v2"
+			return direct_record
+		return {}
 	var service_index := int(identity.get("service_index", -1))
 	if service_index >= 0 and _catalog_by_service_index.has(service_index):
 		return (_catalog_by_service_index.get(service_index, {}) as Dictionary).duplicate(true)

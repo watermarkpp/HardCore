@@ -29,7 +29,8 @@ func _run() -> void:
 	game.player._dead = true
 	game.player.current_hp = 0
 	game._test_force_home_failure = true
-	PlayerState.level = 1
+	# Use a nonzero penalty level; level 1 now correctly floors 10% of 3 to 0.
+	PlayerState.level = 7
 	PlayerState.experience = 100
 	var death_threshold := PlayerState.experience_to_next_level()
 	var expected_death_loss := int(floor(float(death_threshold) * 0.10))
@@ -75,16 +76,16 @@ func _run() -> void:
 func _run_experience_penalty_contract() -> void:
 	PlayerState.level = 7
 	var level_requirement := PlayerState.experience_to_next_level()
-	assert(level_requirement == 120, "level 7 threshold must remain the scaled source requirement")
+	assert(level_requirement == 40, "level 7 threshold must use the newly reduced source requirement")
 	var expected_loss := int(floor(float(level_requirement) * 0.10))
-	assert(expected_loss == 12, "death penalty must floor 10% of the current level requirement")
+	assert(expected_loss == 4, "death penalty must floor 10% of the current level requirement")
 	for entry in [
 		{"experience": 0, "expected_loss": 0},
 		{"experience": 1, "expected_loss": 1},
-		{"experience": 11, "expected_loss": 11},
-		{"experience": 12, "expected_loss": 12},
-		{"experience": 119, "expected_loss": 12},
-		{"experience": 500, "expected_loss": 12},
+		{"experience": 3, "expected_loss": 3},
+		{"experience": 4, "expected_loss": 4},
+		{"experience": 39, "expected_loss": 4},
+		{"experience": 500, "expected_loss": 4},
 	]:
 		var starting_experience := int(entry["experience"])
 		var expected_entry_loss := int(entry["expected_loss"])

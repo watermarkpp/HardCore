@@ -77,6 +77,7 @@ func _refresh_name_label_anchor() -> void:
 func interact(game: Node) -> void:
 	if game != null and is_instance_valid(game.player):
 		face_toward(game.player.global_position)
+	var interaction_succeeded := false
 	if npc_kind == "shop":
 		var active_stock := shop_stock
 		if stock_key == "books":
@@ -85,14 +86,27 @@ func interact(game: Node) -> void:
 		# filtered. ShopPanel must not infer authority from stock[0].
 		var merchant_context := GameData.merchant_context(stock_key)
 		game.hud.open_shop(npc_name, active_stock, merchant_context)
+		interaction_succeeded = true
 	elif npc_kind == "trainer":
 		game.hud.open_skill_trainer(npc_name)
+		interaction_succeeded = true
 	elif npc_kind == "quest":
 		game.hud.open_quest(npc_name)
+		interaction_succeeded = true
 	elif npc_kind == "guide":
 		game.hud.show_message("暗殿真假难辨，沿通道深入后原路返回。", 2.5)
+		interaction_succeeded = true
 	elif npc_kind == "warehouse":
 		game.hud.open_warehouse()
+		interaction_succeeded = true
+	if interaction_succeeded:
+		_notify_interaction_audio(game)
+
+
+func _notify_interaction_audio(game: Node) -> void:
+	if service_identity_id.is_empty() or game == null or not game.has_method("play_npc_interaction_voice"):
+		return
+	game.call("play_npc_interaction_voice", service_identity_id)
 
 
 func interaction_text() -> String:

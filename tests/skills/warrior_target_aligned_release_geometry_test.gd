@@ -246,7 +246,7 @@ func _verify_thrust_dimensions_and_slots_unchanged() -> void:
 		_absolute_context(ORIGIN_GROUND_GU)
 	)
 	var snapshot := plan.get("skill_footprint_snapshot") as Dictionary
-	assert(is_equal_approx(float(snapshot.get("effect_length_gu", 0.0)), 2.5))
+	assert(is_equal_approx(float(snapshot.get("effect_length_gu", 0.0)), 3.0))
 	assert(is_equal_approx(float(snapshot.get("effect_width_gu", 0.0)), 1.0))
 	assert(is_equal_approx(float(snapshot.get("start_offset_gu", -1.0)), 0.0))
 	assert(
@@ -269,7 +269,7 @@ func _verify_thrust_dimensions_and_slots_unchanged() -> void:
 	) == 2)
 	assert(Geometry.target_aligned_thrust_slot_for_plan_gu(
 		plan,
-		ORIGIN_GROUND_GU + axis_ground_gu * 2.751,
+		ORIGIN_GROUND_GU + axis_ground_gu * 3.251,
 		TARGET_RADIUS_GU,
 		coordinate_context
 	) == 0)
@@ -297,9 +297,8 @@ func _verify_half_moon_sector_semantics_unchanged() -> void:
 		-45.0: 7,
 		0.0: 0,
 		45.0: 1,
-		90.0: 2,
 	}
-	for offset_deg: float in [-45.0, 0.0, 45.0, 90.0]:
+	for offset_deg: float in [-45.0, 0.0, 45.0]:
 		var sector_direction := axis_ground_gu.rotated(deg_to_rad(offset_deg))
 		var target_ground_gu := (
 			ORIGIN_GROUND_GU + sector_direction * 1.2
@@ -322,7 +321,7 @@ func _verify_half_moon_sector_semantics_unchanged() -> void:
 	) == -1)
 	var inside_edge_target_ground_gu := (
 		ORIGIN_GROUND_GU
-		+ axis_ground_gu.rotated(deg_to_rad(-66.5)) * 1.2
+		+ axis_ground_gu.rotated(deg_to_rad(-59.5)) * 1.2
 	)
 	assert(Geometry.target_aligned_half_moon_relative_sector_for_plan_gu(
 		plan,
@@ -342,7 +341,7 @@ func _verify_half_moon_sector_semantics_unchanged() -> void:
 		Geometry.SKILL_HALF_MOON,
 		coordinate_context
 	)
-	for direction_index: int in [3, 4, 5, 6]:
+	for direction_index: int in [3, 4, 5]:
 		var target_direction := Geometry.canonical_ground_direction_gu(
 			direction_index
 		)

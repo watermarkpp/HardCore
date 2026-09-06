@@ -16,6 +16,11 @@ const WorldMonsterRespawnStateScript := preload(
 signal profile_changed
 signal inventory_changed
 signal equipment_changed
+signal item_audio_committed(
+	identity_domain: String,
+	identity_id: int,
+	semantic_event: String,
+)
 signal skills_changed
 signal skill_progression_changed(snapshot: Dictionary)
 signal quick_slots_changed(change: Dictionary)
@@ -104,8 +109,8 @@ const STARTER_WEAPON_ITEM_NAME := "木剑"
 const STARTER_ARMOR_BY_GENDER := {"男": "布衣(男)", "女": "布衣(女)"}
 # The service table remains the raw/source authority.  This is the explicit
 # gameplay-only tuning policy for the current character: level thresholds use
-# 10% of that source value, rounded to the nearest integer and never below 1.
-const GAMEPLAY_EXPERIENCE_THRESHOLD_SCALE := 0.10
+# one third of the prior 10% value (1/30 of source), rounded and never below 1.
+const GAMEPLAY_EXPERIENCE_THRESHOLD_SCALE := 1.0 / 30.0
 const GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM := 1
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -493,12 +498,16 @@ func _build_receive_result(item_name: String, amount: int, base_inventory: Array
 
 
 func _build_receive_result_for_record(record: Dictionary, base_inventory: Array) -> Dictionary:
-	var item_name := str(record.get("name", ""))
 	var amount := maxi(1, int(record.get("count", 1)))
-	var catalog_item := GameData.get_item_record(item_name)
+	var catalog_item := GameData.get_item_record(record)
+	var item_name := str(catalog_item.get("name", record.get("name", "")))
+	if record.has("item_id") and int(record.get("item_id", -1)) != int(catalog_item.get("itemId", -2)):
+		return _receive_failure("unknown_item", "物品身份无效。")
 	if catalog_item.is_empty() or item_name.is_empty():
 		return _receive_failure("unknown_item", "物品无效。")
-	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, record)
+	var canonical_record := record.duplicate(true)
+	canonical_record["name"] = item_name
+	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, canonical_record)
 
 
 func _build_receive_result_for_template(
@@ -554,6 +563,8 @@ func _build_receive_result_for_template(
 				continue
 			var moved := mini(available, remaining)
 			existing["count"] = int(existing.get("count", 0)) + moved
+			if template.has("item_id"):
+				existing["item_id"] = int(template.get("item_id", -1))
 			remaining -= moved
 			if remaining <= 0:
 				break
@@ -842,6 +853,8 @@ func sort_inventory_deterministic() -> Dictionary:
 		var record: Variant = entry["record"]
 		if record is Dictionary and not sorted_inventory.is_empty() and sorted_inventory.back() is Dictionary and _inventory_records_mergeable(sorted_inventory.back(), record) and sorted_inventory.back().get("name", "") == record.get("name", ""):
 			sorted_inventory.back()["count"] = int(sorted_inventory.back().get("count", 1)) + int(record.get("count", 1))
+			if record.has("item_id"):
+				sorted_inventory.back()["item_id"] = int(record.get("item_id", -1))
 		else:
 			sorted_inventory.append(record)
 	var changed := sorted_inventory != inventory
@@ -855,12 +868,18 @@ func sort_inventory_deterministic() -> Dictionary:
 
 func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
 	for key: Variant in a.keys():
-		if str(key) not in ["name", "count"]:
+		if str(key) not in ["name", "count", "item_id"]:
 			return false
 	for key: Variant in b.keys():
-		if str(key) not in ["name", "count"]:
+		if str(key) not in ["name", "count", "item_id"]:
 			return false
-	var item := GameData.get_item_record(str(a.get("name", "")))
+	var item := GameData.get_item_record(a if a.has("item_id") else b)
+	if str(item.get("name", "")) != str(a.get("name", "")):
+		return false
+	var canonical_id := int(item.get("itemId", -1))
+	for record: Dictionary in [a, b]:
+		if record.has("item_id") and int(record.get("item_id", -2)) != canonical_id:
+			return false
 	if str(a.get("name", "")) != str(b.get("name", "")) or not bool(item.get("stackable", false)) or str(item.get("kind", "")) == "equipment":
 		return false
 	for key: String in ["instance_id", "durability", "max_durability", "durability_raw", "max_durability_raw", "modifiers", "random_stats", "bind", "bound"]:
@@ -1374,6 +1393,52 @@ func _current_shop_sell_quote_items(merchant_id := "") -> Array:
 	return items
 
 
+func _item_audio_identity(item_ref: Variant) -> Dictionary:
+	var catalog_item := GameData.get_item_record(item_ref)
+	if catalog_item.is_empty():
+		return {}
+	# The catalog fields are the only identity authority here.  In particular,
+	# do not derive a service/item namespace from a numeric range or display
+	# name; audio_runtime_service performs the final route/fail-closed check.
+	for key: String in ["itemId", "item_id"]:
+		var item_id := _item_audio_nonnegative_integer(catalog_item.get(key, null))
+		if item_id >= 0:
+			return {"identity_domain": "item", "identity_id": item_id}
+	for key: String in ["serviceIndex", "service_index"]:
+		var service_id := _item_audio_nonnegative_integer(catalog_item.get(key, null))
+		if service_id >= 0:
+			return {
+				"identity_domain": "service",
+				"identity_id": service_id,
+			}
+	return {}
+
+
+func _item_audio_nonnegative_integer(value: Variant) -> int:
+	if value is int:
+		return int(value) if int(value) >= 0 else -1
+	if value is float:
+		var numeric := float(value)
+		if is_finite(numeric) and numeric >= 0.0 and numeric == floorf(numeric):
+			return int(numeric)
+	return -1
+
+
+func _emit_item_audio_committed(item_ref: Variant, semantic_event: String) -> void:
+	var identity := _item_audio_identity(item_ref)
+	if identity.is_empty():
+		return
+	item_audio_committed.emit(
+		str(identity.get("identity_domain", "")),
+		int(identity.get("identity_id", -1)),
+		semantic_event,
+	)
+
+
+func _last_item_commit_succeeded() -> bool:
+	return bool(_last_runtime_commit_profile.get("success", false))
+
+
 func use_inventory_index(index: int) -> String:
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return "请先选择物品"
@@ -1406,6 +1471,8 @@ func use_inventory_index(index: int) -> String:
 				return _use_weapon_repair_oil_item(index, effect == "war_god_oil")
 		if _consume_inventory_index(index):
 			scroll_requested.emit(item_name)
+			if _last_item_commit_succeeded():
+				_emit_item_audio_committed(item, "use_success")
 			return "使用：%s" % item_name
 		return "物品数量不足"
 	if kind != "consumable":
@@ -1431,10 +1498,14 @@ func use_inventory_index(index: int) -> String:
 			return str(buff_result.get("reason", "增益效果应用失败"))
 		if _consume_inventory_index(index):
 			recalculate_stats()
+			if _last_item_commit_succeeded():
+				_emit_item_audio_committed(item, "use_success")
 			return "使用：%s" % item_name
 		return "物品数量不足"
 	if _consume_inventory_index(index):
 		consumable_requested.emit(item_name)
+		if _last_item_commit_succeeded():
+			_emit_item_audio_committed(item, "use_success")
 		return "使用：%s" % item_name
 	return "物品数量不足"
 
@@ -1453,6 +1524,7 @@ func _use_weapon_repair_oil_item(index: int, full_repair: bool) -> String:
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
 	var record: Dictionary = inventory[index]
+	var item_audio_ref := record.duplicate(true)
 	var count := maxi(1, int(record.get("count", 1)))
 	if count <= 1:
 		_clear_inventory_slot(inventory, index)
@@ -1467,6 +1539,7 @@ func _use_weapon_repair_oil_item(index: int, full_repair: bool) -> String:
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
+	_emit_item_audio_committed(item_audio_ref, "use_success")
 	return "武器已完全修复" if full_repair else "武器已部分修复"
 
 
@@ -1677,6 +1750,7 @@ func use_blessing_oil_inventory_index_with_rolls(
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
+	_emit_item_audio_committed(oil_catalog, "use_success")
 	return {
 		"ok": true,
 		"reason": "",
@@ -1875,6 +1949,7 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return "请先选择物品"
 	var inventory_record: Dictionary = inventory[index]
+	var incoming_audio_ref := inventory_record.duplicate(true)
 	var item_name := str(inventory_record.get("name", ""))
 	var item := GameData.get_item(item_name)
 	if item.is_empty():
@@ -1907,6 +1982,11 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		if prospective_wear > max_wear:
 			return "穿戴重量不足：需要%d，上限%d" % [prospective_wear, max_wear]
 	var previous: Variant = equipment.get(slot, {})
+	var previous_audio_ref: Variant = null
+	if previous is Dictionary and not (previous as Dictionary).is_empty():
+		previous_audio_ref = (previous as Dictionary).duplicate(true)
+	elif not previous is Dictionary and not str(previous).is_empty():
+		previous_audio_ref = str(previous)
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
 	var inventory_after := inventory.duplicate(true)
@@ -1940,6 +2020,9 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		equipment = equipment_before
 		recalculate_stats()
 		return "装备存档失败，装备和背包均未改变"
+	if previous_audio_ref != null:
+		_emit_item_audio_committed(previous_audio_ref, "unequip_success")
+	_emit_item_audio_committed(incoming_audio_ref, "equip_success")
 	return "已装备：%s" % item_name
 
 
@@ -1949,6 +2032,7 @@ func unequip_slot(slot: String) -> String:
 	var equipped_value: Variant = equipment.get(slot, {})
 	if not equipped_value is Dictionary or equipped_value.is_empty():
 		return "%s为空" % slot
+	var item_audio_ref := (equipped_value as Dictionary).duplicate(true)
 	var return_preview := _build_receive_result_for_record(equipped_value, inventory)
 	if not bool(return_preview.get("success", false)):
 		return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
@@ -1965,6 +2049,7 @@ func unequip_slot(slot: String) -> String:
 		equipment = equipment_before
 		recalculate_stats()
 		return "卸装存档失败，装备和背包均未改变"
+	_emit_item_audio_committed(item_audio_ref, "unequip_success")
 	return "已卸下：%s" % str(equipped_value.get("name", ""))
 
 
@@ -1980,6 +2065,25 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 		return "%s只能由%s学习" % [skill_name, skill_profession]
 	if not has_item(skill_name):
 		return "背包中缺少《%s》技能书" % skill_name
+	var book_index := inventory_index
+	if (
+		book_index < 0 or book_index >= inventory.size()
+		or not inventory[book_index] is Dictionary
+		or str(inventory[book_index].get("name", "")) != skill_name
+	):
+		book_index = -1
+		for index in range(inventory.size()):
+			if inventory[index] is Dictionary and str(inventory[index].get("name", "")) == skill_name:
+				book_index = index
+				break
+	if book_index < 0:
+		return "背包中缺少《%s》技能书" % skill_name
+	var book_audio_ref := (inventory[book_index] as Dictionary).duplicate(true)
+	var progress_before: Dictionary = _skill_progression.snapshot()
+	var inventory_before := inventory.duplicate(true)
+	var learned_before := learned_skills.duplicate(true)
+	var ring_before := attack_ring_slots.duplicate()
+	var quick_before := quick_slots.duplicate()
 	var learn_result: Dictionary = _skill_progression.learn(stable_skill_id, level)
 	if not bool(learn_result.get("accepted", false)):
 		match str(learn_result.get("outcome", "")):
@@ -1989,15 +2093,9 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 				return "需要人物等级%d" % int(learn_result.get("required_level", 1))
 			_:
 				return "技能学习失败：%s" % str(learn_result.get("reason", "unknown"))
-	if (
-		inventory_index >= 0
-		and inventory_index < inventory.size()
-		and inventory[inventory_index] is Dictionary
-		and str((inventory[inventory_index] as Dictionary).get("name", "")) == skill_name
-	):
-		_consume_inventory_index(inventory_index)
-	else:
-		remove_item(skill_name)
+	if not _consume_inventory_index_without_commit(book_index):
+		_skill_progression.load_snapshot(progress_before)
+		return "技能书消耗失败"
 	var base_rank := int(learn_result.get("base_rank", 0))
 	learned_skills[skill_name] = base_rank
 	var outcome := str(learn_result.get("outcome", ""))
@@ -2010,11 +2108,20 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 				attack_ring_slots[index] = skill_name
 				break
 		_sync_legacy_quick_slots_from_ring()
-	recalculate_stats()
+	recalculate_stats(false)
+	if not _commit_save():
+		inventory = inventory_before
+		learned_skills = learned_before
+		attack_ring_slots.assign(ring_before)
+		quick_slots.assign(quick_before)
+		_skill_progression.load_snapshot(progress_before)
+		recalculate_stats(false)
+		return "技能学习存档失败，技能书和技能均未改变"
+	inventory_changed.emit()
 	skills_changed.emit()
 	skill_progression_changed.emit(_skill_progression.snapshot())
 	profile_changed.emit()
-	_commit_save()
+	_emit_item_audio_committed(book_audio_ref, "use_success")
 	match outcome:
 		"upgraded":
 			return "技能提升：%s（当前%d级）" % [skill_name, base_rank]
@@ -2580,13 +2687,18 @@ func current_wear_weight(excluded_slot := "") -> int:
 ## Weight is derived from the primary item catalog on every query. Currency
 ## records intentionally contribute zero so picking up gold never gets blocked
 ## by a full or legacy-overweight bag.
-func _loot_inventory_catalog_record(item_name: String) -> Dictionary:
-	if item_name.is_empty():
+func _loot_inventory_catalog_record(item_ref: Variant) -> Dictionary:
+	var cache_key: Variant = item_ref
+	if item_ref is String and item_ref.is_empty():
 		return {}
-	if _loot_inventory_catalog_cache.has(item_name):
-		return _loot_inventory_catalog_cache.get(item_name, {})
-	var catalog := GameData.get_item_record(item_name)
-	_loot_inventory_catalog_cache[item_name] = catalog
+	if _loot_inventory_catalog_cache.has(cache_key):
+		return _loot_inventory_catalog_cache.get(cache_key, {})
+	var catalog := GameData.get_item_record(item_ref)
+	_loot_inventory_catalog_cache[cache_key] = catalog
+	if not catalog.is_empty():
+		var catalog_id := int(catalog.get("itemId", -1))
+		if catalog_id >= 0:
+			_loot_inventory_catalog_cache[catalog_id] = catalog
 	_loot_batch_debug["catalog_lookups"] = int(
 		_loot_batch_debug.get("catalog_lookups", 0)
 	) + 1
@@ -5504,7 +5616,7 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		if not _inventory_slot_is_occupied(working_inventory[slot_index]):
 			free_slots.append(slot_index)
 	var free_slot_cursor := 0
-	var merge_slots_by_name: Dictionary = {}
+	var merge_slots_by_identity: Dictionary = {}
 	var outcomes: Array = []
 	var changed := false
 	for raw_candidate: Variant in candidates:
@@ -5519,10 +5631,24 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 			outcomes.append({"success": amount > 0, "gold": true, "amount": amount})
 			continue
 		var item_name := str(candidate.get("item_name", ""))
-		var catalog: Dictionary = _loot_inventory_catalog_record(item_name)
+		var explicit_item_id := int(candidate.get("item_id", -1))
+		if candidate.has("item_id") and (
+			not candidate.get("item_id") is int or explicit_item_id < 0
+		):
+			outcomes.append({"success": false, "item_name": item_name, "message": "物品身份无效。", "reason": "unknown_item"})
+			continue
+		var catalog: Dictionary = (
+			_loot_inventory_catalog_record(explicit_item_id) if explicit_item_id >= 0
+			else _loot_inventory_catalog_record(item_name)
+		)
+		if explicit_item_id >= 0 and int(catalog.get("itemId", -1)) != explicit_item_id:
+			catalog = {}
 		if catalog.is_empty():
 			outcomes.append({"success": false, "item_name": item_name, "message": "物品无效。", "reason": "unknown_item"})
 			continue
+		item_name = str(catalog.get("name", item_name))
+		var canonical_item_id := int(catalog.get("itemId", -1))
+		var merge_key: Variant = canonical_item_id if canonical_item_id >= 0 else item_name
 		var item_weight := maxi(0, int(catalog.get("weight", 0)))
 		var kind := str(catalog.get("kind", ""))
 		var stackable := bool(catalog.get("stackable", false)) and kind != "equipment"
@@ -5533,7 +5659,7 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		var merged := false
 		if stackable:
 			var max_stack := _max_stack_for_item(catalog)
-			if not merge_slots_by_name.has(item_name):
+			if not merge_slots_by_identity.has(merge_key):
 				var merge_slots: Array[int] = []
 				for existing_index in range(working_inventory.size()):
 					var existing_value: Variant = working_inventory[existing_index]
@@ -5542,12 +5668,13 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 					var existing: Dictionary = existing_value
 					if (
 						str(existing.get("name", "")) == item_name
-						and existing.keys().all(func(key: Variant) -> bool: return str(key) in ["name", "count"])
+						and existing.keys().all(func(key: Variant) -> bool: return str(key) in ["name", "count", "item_id"])
+						and int(existing.get("item_id", canonical_item_id)) == canonical_item_id
 						and int(existing.get("count", 0)) < max_stack
 					):
 						merge_slots.append(existing_index)
-				merge_slots_by_name[item_name] = merge_slots
-			var merge_slots: Array = merge_slots_by_name.get(item_name, [])
+				merge_slots_by_identity[merge_key] = merge_slots
+			var merge_slots: Array = merge_slots_by_identity.get(merge_key, [])
 			while not merge_slots.is_empty():
 				var merge_index := int(merge_slots[0])
 				var existing: Dictionary = working_inventory[merge_index]
@@ -5555,6 +5682,8 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 					merge_slots.pop_front()
 					continue
 				existing["count"] = int(existing.get("count", 0)) + 1
+				if canonical_item_id >= 0:
+					existing["item_id"] = canonical_item_id
 				if int(existing.get("count", 0)) >= max_stack:
 					merge_slots.pop_front()
 				merged = true
@@ -5564,6 +5693,8 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
 				continue
 			var new_record: Dictionary = _make_item_instance(item_name, catalog, Time.get_ticks_usec() + working_inventory.size() + outcomes.size()) if kind == "equipment" else {"name": item_name, "count": 1}
+			if canonical_item_id >= 0:
+				new_record["item_id"] = canonical_item_id
 			var placed_slot := -1
 			if free_slot_cursor < free_slots.size():
 				placed_slot = free_slots[free_slot_cursor]
@@ -5577,9 +5708,9 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 				continue
 			occupied_count += 1
 			if stackable and int(new_record.get("count", 1)) < _max_stack_for_item(catalog):
-				var merge_slots: Array = merge_slots_by_name.get(item_name, [])
+				var merge_slots: Array = merge_slots_by_identity.get(merge_key, [])
 				merge_slots.append(placed_slot)
-				merge_slots_by_name[item_name] = merge_slots
+				merge_slots_by_identity[merge_key] = merge_slots
 		working_weight = prospective_weight
 		changed = true
 		outcomes.append({"success": true, "item_name": item_name})

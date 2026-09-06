@@ -1,7 +1,7 @@
 extends Node
 
-## Executes the package's 19 P0 and 150 P1 manifest entries against the
-## canonical specialty contracts; integration-owned P0s remain explicit.
+## Executes the archived package's 19 P0 plus the project overlay's 152 P1
+## entries against the canonical specialty contracts; the archive is immutable.
 
 const Loader := preload("res://scripts/skills/skill_data_loader.gd")
 const Progression := preload("res://scripts/skills/skill_progression_service.gd")
@@ -21,7 +21,9 @@ func _ready() -> void:
 	var document := Loader.document()
 	var manifest := Loader.package_test_manifest()
 	assert(manifest.global_tests.size() == 19)
-	assert(manifest.skill_tests.size() == 150)
+	assert(bool(manifest.get("project_overlay_valid", false)))
+	assert(manifest.get("project_overlay", {}).get("entry_count", 0) == 2)
+	assert(manifest.skill_tests.size() == 152)
 	var global_status: Dictionary = {}
 	for entry_value: Variant in manifest.global_tests:
 		assert(entry_value is Dictionary)
@@ -42,7 +44,7 @@ func _ready() -> void:
 		var definition := Loader.skill(skill_id)
 		for assertion_value: Variant in definition.get("required_tests", []):
 			expected_contracts["%s::%s" % [skill_id, str(assertion_value)]] = true
-	assert(expected_contracts.size() == 150)
+	assert(expected_contracts.size() == 152)
 	var executed_contracts: Dictionary = {}
 	for entry_value: Variant in manifest.skill_tests:
 		assert(entry_value is Dictionary)
@@ -67,12 +69,12 @@ func _ready() -> void:
 		assert(result.mechanics == definition.mechanics)
 		assert(not result.effects.is_empty())
 		executed_contracts[contract_id] = true
-	assert(executed_contracts.size() == 150)
+	assert(executed_contracts.size() == 152)
 	for contract_id: String in expected_contracts:
 		assert(executed_contracts.has(contract_id))
 	print(
-		"SKILL_PACKAGE_CONTRACT_MANIFEST_PASS: 169/169 machine-bound; "
-		+ "17 P0 specialty PASS, 2 P0 integration-owned, 150 P1 routed through canonical runtime"
+		"SKILL_PACKAGE_CONTRACT_MANIFEST_PASS: 171/171 machine-bound; "
+		+ "17 P0 specialty PASS, 2 P0 integration-owned, 152 P1 routed through canonical runtime"
 	)
 	get_tree().quit()
 
@@ -144,7 +146,7 @@ func _verify_specialty_global_contract(contract_id: String, document: Dictionary
 			return (
 				not failed.accepted
 				and failed.gain == 0
-				and failed_progression.state("wizard.fireball").base_rank == 0
+				and failed_progression.state("wizard.fireball").base_rank == 1
 			)
 		"global_proficiency_persists":
 			var saved_progression := Progression.new()

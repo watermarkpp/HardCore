@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "contractId": "monster.attack_range_policy.v1",
+  "sourcePriorityPolicy": "assets/data/source_priority_policy.json",
+  "unitContract": "combat.unit.gu_gs_px.v1",
+  "distanceMetric": "euclidean",
+  "runtimeIdentity": "monster_id",
+  "sourcePriorityEvidence": {
+    "path": "assets/data/source_priority_policy.json",
+    "sha256": "F8F6EB59E4B95E15A34FE13BB4D1AC79B7F229025A2C1B774B4B5F75DB1201E0"
+  },
+  "unitSource": {
+    "distribution": "project.hardcore.combat_unit_contract.v1",
+    "tier": "primary",
+    "originalPath": "docs/COMBAT-UNIT-V1.md",
+    "sha256": "3E7D5DFB2DA386CFCA03F3EA5BDF3DB36B9849289598625AD8A08840EB2A947E"
+  },
+  "primarySource": {
+    "distribution": "source.original_gameofmir.server_suite",
+    "tier": "primary",
+    "root": "dev_art_sources/reference/original_gameofmir",
+    "rule": "server_rules",
+    "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/{ObjMon.pas,ObjMon2.pas,ObjAxeMon.pas,ObjBase.pas}",
+    "sha256": {
+      "ObjMon.pas": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+      "ObjMon2.pas": "983C098130D7A83B34F19746FC484609DCEF975344864C435526D254F98D0BCD",
+      "ObjAxeMon.pas": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+      "ObjBase.pas": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262"
+    },
+    "note": "21CQ attributes never provide attack delivery or range rules."
+  },
+  "retiredSourceOnlyMonsterIds": [151, 207, 221, 223],
+  "records": [
+    {
+      "monsterId": 70,
+      "canonicalName": "火焰沃玛",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "special_melee",
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+        "lines": "963-1017",
+        "rule": "TMagCowMonster uses adjacent body-only magic melee."
+      }
+    },
+    {
+      "monsterId": 124,
+      "canonicalName": "触龙神",
+      "runtimeAllowed": true,
+      "attackRangeGu": 6.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_axis_aligned_square",
+      "boundary": "exclusive",
+      "deliveryKind": "area_magic",
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas",
+        "sha256": "983C098130D7A83B34F19746FC484609DCEF975344864C435526D254F98D0BCD",
+        "lines": "457-521",
+        "rule": "TCentipedeKingMonster targets same-map actors where abs(x)<6 and abs(y)<6."
+      }
+    },
+    {
+      "monsterId": 150,
+      "canonicalName": "祖玛弓箭手",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "65-100",
+        "rule": "TDualAxeMonster.AttackTarget permits FlyAxeAttack through the source seven-cell gate; the duplicated X comparison in source is recorded, not silently treated as a second authoritative Y rule. Runtime converts the proven scalar to formal GU."
+      }
+    },
+    {
+      "monsterId": 152,
+      "canonicalName": "祖玛弓箭手3",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "65-100",
+        "rule": "TDualAxeMonster.AttackTarget permits FlyAxeAttack through the source seven-cell gate; the duplicated X comparison in source is recorded, not silently treated as a second authoritative Y rule. Runtime converts the proven scalar to formal GU."
+      }
+    },
+    {
+      "monsterId": 206,
+      "canonicalName": "骷髅弓箭手",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "65-100",
+        "rule": "TDualAxeMonster.AttackTarget permits FlyAxeAttack through the source seven-cell gate; the duplicated X comparison in source is recorded, not silently treated as a second authoritative Y rule. Runtime converts the proven scalar to formal GU."
+      }
+    },
+    {
+      "monsterId": 220,
+      "canonicalName": "牛魔法师",
+      "runtimeAllowed": true,
+      "attackRangeGu": 2.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "target_magic",
+      "sourceContactMeleeFallback": true,
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+        "lines": "1842-1881",
+        "rule": "TElectronicScolpionMon casts only within abs(dx)<=2 and abs(dy)<=2 when low HP or an axis is exactly 2; inherited TMonster.Run still supplies the ordinary adjacent attack."
+      },
+      "meleeFallbackSource": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TBaseObject.GetAttackDir accepts adjacent Chebyshev-square targets."
+      }
+    },
+    {
+      "monsterId": 222,
+      "canonicalName": "牛魔祭司",
+      "runtimeAllowed": true,
+      "attackRangeGu": 2.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "target_magic",
+      "sourceContactMeleeFallback": true,
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+        "lines": "1842-1881",
+        "rule": "TElectronicScolpionMon casts only within abs(dx)<=2 and abs(dy)<=2 when low HP or an axis is exactly 2; inherited TMonster.Run still supplies the ordinary adjacent attack."
+      },
+      "meleeFallbackSource": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TBaseObject.GetAttackDir accepts adjacent Chebyshev-square targets."
+      }
+    }
+  ]
+}

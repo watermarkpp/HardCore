@@ -1,0 +1,5662 @@
+{
+  "schema_version": 1,
+  "contract_id": "audio.exact_mapping.report.v1",
+  "base_sha": "7c3019da4d3732766bdea2655abfedbea84e5b7b",
+  "source_rules": {
+    "sound_loader_and_constants": {
+      "distribution": "source.original_gameofmir.mirclient",
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+      "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+    },
+    "actor_formula_and_calls": {
+      "distribution": "source.original_gameofmir.mirclient",
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+      "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd"
+    },
+    "skill_identity_constants": {
+      "distribution": "source.original_gameofmir.mirclient",
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/Grobal2.pas",
+      "sha256": "e29027ff7ea1a713847af5742261455859f5822bd3a3d97698f03442e3a07c6a"
+    },
+    "magic_phase_classification": {
+      "distribution": "source.original_gameofmir.mirclient",
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/PlayScn.pas",
+      "sha256": "6c9d1d191368ebc841bb10e51d248e8bfe7e344013e866d30f70a775cc9694d4"
+    },
+    "magic_effect_impact_call": {
+      "distribution": "source.original_gameofmir.mirclient",
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+      "sha256": "66606a4e495790f83e8a6fce3809ec54963882ff0b55ca390d1442b4e4699f3c"
+    },
+    "item_operation_calls": {
+      "distribution": "source.original_gameofmir.mirclient",
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/ClMain.pas",
+      "sha256": "c0928322de261cc600384f0b278f14ea8b44034c7e900cc5aa3aea0c05f7775b"
+    },
+    "item_inventory_calls": {
+      "distribution": "source.original_gameofmir.mirclient",
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/FState.pas",
+      "sha256": "d2ad68723041cb102b80b0b23aabf0859e7f08113431c6ff29d8ff5ed163fea4"
+    },
+    "current_projectile_authority": {
+      "distribution": "project.current_runtime_authority",
+      "path": "scripts/combat_resolution_rules.gd",
+      "sha256": "7ea5ce823a96e78cc1638ab8565a51d13ce58f77eb231537691fb938a4b65fb4"
+    },
+    "current_weapon_shape_authority": {
+      "distribution": "project.current_equipment_visual_authority",
+      "path": "assets/data/equipment_visual_catalog.json",
+      "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+    }
+  },
+  "item_identity_sources": [
+    {
+      "scope": "equipment_item_id_and_category",
+      "path": "assets/data/vanilla_176/items.json",
+      "sha256": "9e0e74f68dae9cc85a241e81893ffa837c2f5e2ce2e40bc1b49be66a2b419222",
+      "distribution": "project.current_equipment_runtime_authority"
+    },
+    {
+      "scope": "service_index_non_equipment_identity_and_type",
+      "path": "assets/data/service_item_catalog.json",
+      "sha256": "db61781ad87853a3169aff491a1af8336884b4be0d34ff13145c703713da44b2",
+      "distribution": "project.current_service_item_catalog"
+    },
+    {
+      "scope": "new_canonical_item_id_and_type",
+      "path": "assets/data/item_runtime_authority_v1.json",
+      "sha256": "fb0d6813f7443a5069392284f8c005cd8ed8c2a3eaf49b27934417af429e91d2",
+      "distribution": "project.hardcore.item_runtime_authority.v1"
+    }
+  ],
+  "sound_index_sha256": "9b74427b29334aadaa150e81c0c2f69e30f3dcad8aadb441986ba61111982802",
+  "effective_loader": {
+    "raw_duplicate_ids": [
+      1680,
+      1943
+    ],
+    "accepted_rows": {
+      "1680": 600,
+      "1943": 687
+    },
+    "rule": "strictly increasing ID; later duplicate rows ignored"
+  },
+  "counts": {
+    "canonical_skills": 33,
+    "runtime_monsters": 153,
+    "authoring_events": 1152,
+    "runtime_events": 509,
+    "managed_unique_assets": 349,
+    "current_item_identities": 727,
+    "item_route_identities": 278,
+    "item_runtime_routes": 454
+  },
+  "missing_sources": [
+    {
+      "event_id": "skill.wizard.lightning.cast",
+      "samples": [
+        {
+          "sound_id": 10110,
+          "source_index_line": 784,
+          "source_raw_path": "wav\\M11-1.wav",
+          "source_relative_path": "m11-1.wav",
+          "mapping_status": "MISSING_SOURCE",
+          "reason": "MirClient effective slot names a sample absent from the primary client_assets snapshot"
+        }
+      ]
+    },
+    {
+      "event_id": "monster.112.attack_frame",
+      "samples": [
+        {
+          "sound_id": 943,
+          "source_index_line": 406,
+          "source_raw_path": "wav\\940-3.wav",
+          "source_relative_path": "940-3.wav",
+          "mapping_status": "MISSING_SOURCE",
+          "reason": "MirClient effective slot names a sample absent from the primary client_assets snapshot"
+        }
+      ]
+    }
+  ],
+  "verified_silent_events": [
+    {
+      "event_id": "skill.wizard.repulsion_ring.effect",
+      "samples": [
+        {
+          "sound_id": 10082,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 776
+        }
+      ]
+    },
+    {
+      "event_id": "skill.wizard.teleport.effect",
+      "samples": [
+        {
+          "sound_id": 10212,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 824
+        }
+      ]
+    },
+    {
+      "event_id": "skill.wizard.laser.effect",
+      "samples": [
+        {
+          "sound_id": 10102,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "skill.wizard.hell_lightning.effect",
+      "samples": [
+        {
+          "sound_id": 10242,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 836
+        }
+      ]
+    },
+    {
+      "event_id": "skill.wizard.magic_shield.effect",
+      "samples": [
+        {
+          "sound_id": 10312,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 852
+        }
+      ]
+    },
+    {
+      "event_id": "skill.taoist.summon_skeleton.effect",
+      "samples": [
+        {
+          "sound_id": 10172,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 808
+        }
+      ]
+    },
+    {
+      "event_id": "skill.taoist.invisibility.effect",
+      "samples": [
+        {
+          "sound_id": 10182,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 812
+        }
+      ]
+    },
+    {
+      "event_id": "skill.taoist.mass_invisibility.cast",
+      "samples": [
+        {
+          "sound_id": 10190,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 814
+        }
+      ]
+    },
+    {
+      "event_id": "skill.taoist.magic_defense.cast",
+      "samples": [
+        {
+          "sound_id": 10140,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 794
+        }
+      ]
+    },
+    {
+      "event_id": "skill.taoist.defense.cast",
+      "samples": [
+        {
+          "sound_id": 10150,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 798
+        }
+      ]
+    },
+    {
+      "event_id": "skill.taoist.summon_divine_beast.effect",
+      "samples": [
+        {
+          "sound_id": 10302,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 848
+        }
+      ]
+    },
+    {
+      "event_id": "monster.18.appear",
+      "samples": [
+        {
+          "sound_id": 1830,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 649
+        }
+      ]
+    },
+    {
+      "event_id": "monster.18.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1833,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 652
+        }
+      ]
+    },
+    {
+      "event_id": "monster.19.appear",
+      "samples": [
+        {
+          "sound_id": 1820,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 642
+        }
+      ]
+    },
+    {
+      "event_id": "monster.19.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1823,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 645
+        }
+      ]
+    },
+    {
+      "event_id": "monster.21.appear",
+      "samples": [
+        {
+          "sound_id": 470,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 193
+        }
+      ]
+    },
+    {
+      "event_id": "monster.21.attack_frame",
+      "samples": [
+        {
+          "sound_id": 473,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 196
+        }
+      ]
+    },
+    {
+      "event_id": "monster.24.appear",
+      "samples": [
+        {
+          "sound_id": 450,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 179
+        }
+      ]
+    },
+    {
+      "event_id": "monster.26.appear",
+      "samples": [
+        {
+          "sound_id": 460,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 186
+        }
+      ]
+    },
+    {
+      "event_id": "monster.28.appear",
+      "samples": [
+        {
+          "sound_id": 210,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 123
+        }
+      ]
+    },
+    {
+      "event_id": "monster.28.attack_frame",
+      "samples": [
+        {
+          "sound_id": 213,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 126
+        }
+      ]
+    },
+    {
+      "event_id": "monster.30.attack_frame",
+      "samples": [
+        {
+          "sound_id": 303,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 140
+        }
+      ]
+    },
+    {
+      "event_id": "monster.31.appear",
+      "samples": [
+        {
+          "sound_id": 450,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 179
+        }
+      ]
+    },
+    {
+      "event_id": "monster.32.appear",
+      "samples": [
+        {
+          "sound_id": 460,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 186
+        }
+      ]
+    },
+    {
+      "event_id": "monster.34.appear",
+      "samples": [
+        {
+          "sound_id": 1200,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 453
+        }
+      ]
+    },
+    {
+      "event_id": "monster.34.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1203,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 456
+        }
+      ]
+    },
+    {
+      "event_id": "monster.36.appear",
+      "samples": [
+        {
+          "sound_id": 1210,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 460
+        }
+      ]
+    },
+    {
+      "event_id": "monster.38.appear",
+      "samples": [
+        {
+          "sound_id": 1220,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 467
+        }
+      ]
+    },
+    {
+      "event_id": "monster.39.appear",
+      "samples": [
+        {
+          "sound_id": 1220,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 467
+        }
+      ]
+    },
+    {
+      "event_id": "monster.41.appear",
+      "samples": [
+        {
+          "sound_id": 1220,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 467
+        }
+      ]
+    },
+    {
+      "event_id": "monster.42.appear",
+      "samples": [
+        {
+          "sound_id": 1220,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 467
+        }
+      ]
+    },
+    {
+      "event_id": "monster.43.appear",
+      "samples": [
+        {
+          "sound_id": 1000,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 410
+        }
+      ]
+    },
+    {
+      "event_id": "monster.43.ambient",
+      "samples": [
+        {
+          "sound_id": 1001,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 411
+        }
+      ]
+    },
+    {
+      "event_id": "monster.43.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1003,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 413
+        }
+      ]
+    },
+    {
+      "event_id": "monster.43.hurt",
+      "samples": [
+        {
+          "sound_id": 1004,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 414
+        }
+      ]
+    },
+    {
+      "event_id": "monster.45.appear",
+      "samples": [
+        {
+          "sound_id": 1030,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 432
+        }
+      ]
+    },
+    {
+      "event_id": "monster.45.ambient",
+      "samples": [
+        {
+          "sound_id": 1031,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 433
+        }
+      ]
+    },
+    {
+      "event_id": "monster.45.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1033,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 435
+        }
+      ]
+    },
+    {
+      "event_id": "monster.45.hurt",
+      "samples": [
+        {
+          "sound_id": 1034,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 436
+        }
+      ]
+    },
+    {
+      "event_id": "monster.46.appear",
+      "samples": [
+        {
+          "sound_id": 440,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 172
+        }
+      ]
+    },
+    {
+      "event_id": "monster.46.attack_frame",
+      "samples": [
+        {
+          "sound_id": 443,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 175
+        }
+      ]
+    },
+    {
+      "event_id": "monster.47.appear",
+      "samples": [
+        {
+          "sound_id": 400,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 144
+        }
+      ]
+    },
+    {
+      "event_id": "monster.50.appear",
+      "samples": [
+        {
+          "sound_id": 410,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 151
+        }
+      ]
+    },
+    {
+      "event_id": "monster.50.attack_frame",
+      "samples": [
+        {
+          "sound_id": 413,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 154
+        }
+      ]
+    },
+    {
+      "event_id": "monster.52.appear",
+      "samples": [
+        {
+          "sound_id": 420,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 158
+        }
+      ]
+    },
+    {
+      "event_id": "monster.52.attack_frame",
+      "samples": [
+        {
+          "sound_id": 423,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 161
+        }
+      ]
+    },
+    {
+      "event_id": "monster.54.appear",
+      "samples": [
+        {
+          "sound_id": 430,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 165
+        }
+      ]
+    },
+    {
+      "event_id": "monster.55.appear",
+      "samples": [
+        {
+          "sound_id": 430,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 165
+        }
+      ]
+    },
+    {
+      "event_id": "monster.56.appear",
+      "samples": [
+        {
+          "sound_id": 1700,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 607
+        }
+      ]
+    },
+    {
+      "event_id": "monster.57.appear",
+      "samples": [
+        {
+          "sound_id": 1700,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 607
+        }
+      ]
+    },
+    {
+      "event_id": "monster.59.appear",
+      "samples": [
+        {
+          "sound_id": 1700,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 607
+        }
+      ]
+    },
+    {
+      "event_id": "monster.60.appear",
+      "samples": [
+        {
+          "sound_id": 490,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 207
+        }
+      ]
+    },
+    {
+      "event_id": "monster.60.attack_frame",
+      "samples": [
+        {
+          "sound_id": 493,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 210
+        }
+      ]
+    },
+    {
+      "event_id": "monster.62.appear",
+      "samples": [
+        {
+          "sound_id": 480,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 200
+        }
+      ]
+    },
+    {
+      "event_id": "monster.62.attack_frame",
+      "samples": [
+        {
+          "sound_id": 483,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 203
+        }
+      ]
+    },
+    {
+      "event_id": "monster.64.appear",
+      "samples": [
+        {
+          "sound_id": 500,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 214
+        }
+      ]
+    },
+    {
+      "event_id": "monster.64.attack_frame",
+      "samples": [
+        {
+          "sound_id": 503,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 217
+        }
+      ]
+    },
+    {
+      "event_id": "monster.66.appear",
+      "samples": [
+        {
+          "sound_id": 520,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 228
+        }
+      ]
+    },
+    {
+      "event_id": "monster.66.attack_frame",
+      "samples": [
+        {
+          "sound_id": 523,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 231
+        }
+      ]
+    },
+    {
+      "event_id": "monster.68.appear",
+      "samples": [
+        {
+          "sound_id": 530,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 235
+        }
+      ]
+    },
+    {
+      "event_id": "monster.68.attack_frame",
+      "samples": [
+        {
+          "sound_id": 533,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 238
+        }
+      ]
+    },
+    {
+      "event_id": "monster.70.appear",
+      "samples": [
+        {
+          "sound_id": 510,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 221
+        }
+      ]
+    },
+    {
+      "event_id": "monster.70.attack_frame",
+      "samples": [
+        {
+          "sound_id": 513,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 224
+        }
+      ]
+    },
+    {
+      "event_id": "monster.73.appear",
+      "samples": [
+        {
+          "sound_id": 1710,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 614
+        }
+      ]
+    },
+    {
+      "event_id": "monster.73.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1713,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 617
+        }
+      ]
+    },
+    {
+      "event_id": "monster.74.appear",
+      "samples": [
+        {
+          "sound_id": 1710,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 614
+        }
+      ]
+    },
+    {
+      "event_id": "monster.74.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1713,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 617
+        }
+      ]
+    },
+    {
+      "event_id": "monster.75.appear",
+      "samples": [
+        {
+          "sound_id": 1710,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 614
+        }
+      ]
+    },
+    {
+      "event_id": "monster.75.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1713,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 617
+        }
+      ]
+    },
+    {
+      "event_id": "monster.76.appear",
+      "samples": [
+        {
+          "sound_id": 540,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 242
+        }
+      ]
+    },
+    {
+      "event_id": "monster.77.appear",
+      "samples": [
+        {
+          "sound_id": 540,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 242
+        }
+      ]
+    },
+    {
+      "event_id": "monster.78.appear",
+      "samples": [
+        {
+          "sound_id": 540,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 242
+        }
+      ]
+    },
+    {
+      "event_id": "monster.79.appear",
+      "samples": [
+        {
+          "sound_id": 600,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 277
+        }
+      ]
+    },
+    {
+      "event_id": "monster.79.attack_frame",
+      "samples": [
+        {
+          "sound_id": 603,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 280
+        }
+      ]
+    },
+    {
+      "event_id": "monster.81.attack_frame",
+      "samples": [
+        {
+          "sound_id": 703,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 343
+        }
+      ]
+    },
+    {
+      "event_id": "monster.83.attack_frame",
+      "samples": [
+        {
+          "sound_id": 713,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 350
+        }
+      ]
+    },
+    {
+      "event_id": "monster.85.attack_frame",
+      "samples": [
+        {
+          "sound_id": 723,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 357
+        }
+      ]
+    },
+    {
+      "event_id": "monster.87.attack_frame",
+      "samples": [
+        {
+          "sound_id": 733,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 364
+        }
+      ]
+    },
+    {
+      "event_id": "monster.89.appear",
+      "samples": [
+        {
+          "sound_id": 1720,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 621
+        }
+      ]
+    },
+    {
+      "event_id": "monster.89.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1723,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 624
+        }
+      ]
+    },
+    {
+      "event_id": "monster.90.appear",
+      "samples": [
+        {
+          "sound_id": 1720,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 621
+        }
+      ]
+    },
+    {
+      "event_id": "monster.90.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1723,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 624
+        }
+      ]
+    },
+    {
+      "event_id": "monster.91.appear",
+      "samples": [
+        {
+          "sound_id": 1720,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 621
+        }
+      ]
+    },
+    {
+      "event_id": "monster.91.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1723,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 624
+        }
+      ]
+    },
+    {
+      "event_id": "monster.92.appear",
+      "samples": [
+        {
+          "sound_id": 560,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 249
+        }
+      ]
+    },
+    {
+      "event_id": "monster.92.attack_frame",
+      "samples": [
+        {
+          "sound_id": 563,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 252
+        }
+      ]
+    },
+    {
+      "event_id": "monster.94.appear",
+      "samples": [
+        {
+          "sound_id": 580,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 263
+        }
+      ]
+    },
+    {
+      "event_id": "monster.94.attack_frame",
+      "samples": [
+        {
+          "sound_id": 583,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 266
+        }
+      ]
+    },
+    {
+      "event_id": "monster.96.appear",
+      "samples": [
+        {
+          "sound_id": 630,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 298
+        }
+      ]
+    },
+    {
+      "event_id": "monster.96.attack_frame",
+      "samples": [
+        {
+          "sound_id": 633,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 301
+        }
+      ]
+    },
+    {
+      "event_id": "monster.97.appear",
+      "samples": [
+        {
+          "sound_id": 640,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 305
+        }
+      ]
+    },
+    {
+      "event_id": "monster.97.attack_frame",
+      "samples": [
+        {
+          "sound_id": 643,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 308
+        }
+      ]
+    },
+    {
+      "event_id": "monster.100.appear",
+      "samples": [
+        {
+          "sound_id": 900,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 389
+        }
+      ]
+    },
+    {
+      "event_id": "monster.100.attack_frame",
+      "samples": [
+        {
+          "sound_id": 903,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 392
+        }
+      ]
+    },
+    {
+      "event_id": "monster.101.appear",
+      "samples": [
+        {
+          "sound_id": 650,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 312
+        }
+      ]
+    },
+    {
+      "event_id": "monster.101.attack_frame",
+      "samples": [
+        {
+          "sound_id": 653,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 315
+        }
+      ]
+    },
+    {
+      "event_id": "monster.103.appear",
+      "samples": [
+        {
+          "sound_id": 680,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 333
+        }
+      ]
+    },
+    {
+      "event_id": "monster.103.attack_frame",
+      "samples": [
+        {
+          "sound_id": 683,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 336
+        }
+      ]
+    },
+    {
+      "event_id": "monster.104.appear",
+      "samples": [
+        {
+          "sound_id": 690,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.104.ambient",
+      "samples": [
+        {
+          "sound_id": 691,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.104.attack_start",
+      "samples": [
+        {
+          "sound_id": 692,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.104.attack_frame",
+      "samples": [
+        {
+          "sound_id": 693,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.104.hurt",
+      "samples": [
+        {
+          "sound_id": 694,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.104.death",
+      "samples": [
+        {
+          "sound_id": 695,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.105.appear",
+      "samples": [
+        {
+          "sound_id": 1100,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 439
+        }
+      ]
+    },
+    {
+      "event_id": "monster.105.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1103,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 442
+        }
+      ]
+    },
+    {
+      "event_id": "monster.107.appear",
+      "samples": [
+        {
+          "sound_id": 1110,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 446
+        }
+      ]
+    },
+    {
+      "event_id": "monster.107.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1113,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 449
+        }
+      ]
+    },
+    {
+      "event_id": "monster.110.appear",
+      "samples": [
+        {
+          "sound_id": 930,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 396
+        }
+      ]
+    },
+    {
+      "event_id": "monster.110.attack_frame",
+      "samples": [
+        {
+          "sound_id": 933,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 399
+        }
+      ]
+    },
+    {
+      "event_id": "monster.114.appear",
+      "samples": [
+        {
+          "sound_id": 1010,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 418
+        }
+      ]
+    },
+    {
+      "event_id": "monster.114.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1013,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 421
+        }
+      ]
+    },
+    {
+      "event_id": "monster.116.appear",
+      "samples": [
+        {
+          "sound_id": 1020,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 425
+        }
+      ]
+    },
+    {
+      "event_id": "monster.116.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1023,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 428
+        }
+      ]
+    },
+    {
+      "event_id": "monster.118.appear",
+      "samples": [
+        {
+          "sound_id": 1400,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 523
+        }
+      ]
+    },
+    {
+      "event_id": "monster.118.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1403,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 526
+        }
+      ]
+    },
+    {
+      "event_id": "monster.120.appear",
+      "samples": [
+        {
+          "sound_id": 1410,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 530
+        }
+      ]
+    },
+    {
+      "event_id": "monster.120.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1413,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 533
+        }
+      ]
+    },
+    {
+      "event_id": "monster.121.appear",
+      "samples": [
+        {
+          "sound_id": 1410,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 530
+        }
+      ]
+    },
+    {
+      "event_id": "monster.121.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1413,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 533
+        }
+      ]
+    },
+    {
+      "event_id": "monster.122.appear",
+      "samples": [
+        {
+          "sound_id": 1410,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 530
+        }
+      ]
+    },
+    {
+      "event_id": "monster.122.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1413,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 533
+        }
+      ]
+    },
+    {
+      "event_id": "monster.123.appear",
+      "samples": [
+        {
+          "sound_id": 1410,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 530
+        }
+      ]
+    },
+    {
+      "event_id": "monster.123.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1413,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 533
+        }
+      ]
+    },
+    {
+      "event_id": "monster.124.ambient",
+      "samples": [
+        {
+          "sound_id": 1601,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 552
+        }
+      ]
+    },
+    {
+      "event_id": "monster.124.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1603,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 554
+        }
+      ]
+    },
+    {
+      "event_id": "monster.126.appear",
+      "samples": [
+        {
+          "sound_id": 610,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 284
+        }
+      ]
+    },
+    {
+      "event_id": "monster.126.attack_frame",
+      "samples": [
+        {
+          "sound_id": 613,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 287
+        }
+      ]
+    },
+    {
+      "event_id": "monster.127.appear",
+      "samples": [
+        {
+          "sound_id": 620,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 291
+        }
+      ]
+    },
+    {
+      "event_id": "monster.127.attack_frame",
+      "samples": [
+        {
+          "sound_id": 623,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 294
+        }
+      ]
+    },
+    {
+      "event_id": "monster.128.appear",
+      "samples": [
+        {
+          "sound_id": 590,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 270
+        }
+      ]
+    },
+    {
+      "event_id": "monster.128.attack_frame",
+      "samples": [
+        {
+          "sound_id": 593,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 273
+        }
+      ]
+    },
+    {
+      "event_id": "monster.129.appear",
+      "samples": [
+        {
+          "sound_id": 1300,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 474
+        }
+      ]
+    },
+    {
+      "event_id": "monster.129.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1303,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 477
+        }
+      ]
+    },
+    {
+      "event_id": "monster.131.appear",
+      "samples": [
+        {
+          "sound_id": 1300,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 474
+        }
+      ]
+    },
+    {
+      "event_id": "monster.131.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1303,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 477
+        }
+      ]
+    },
+    {
+      "event_id": "monster.132.appear",
+      "samples": [
+        {
+          "sound_id": 1310,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 481
+        }
+      ]
+    },
+    {
+      "event_id": "monster.132.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1313,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 484
+        }
+      ]
+    },
+    {
+      "event_id": "monster.133.appear",
+      "samples": [
+        {
+          "sound_id": 1310,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 481
+        }
+      ]
+    },
+    {
+      "event_id": "monster.133.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1313,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 484
+        }
+      ]
+    },
+    {
+      "event_id": "monster.134.appear",
+      "samples": [
+        {
+          "sound_id": 1310,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 481
+        }
+      ]
+    },
+    {
+      "event_id": "monster.134.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1313,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 484
+        }
+      ]
+    },
+    {
+      "event_id": "monster.135.appear",
+      "samples": [
+        {
+          "sound_id": 1320,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 488
+        }
+      ]
+    },
+    {
+      "event_id": "monster.135.attack_start",
+      "samples": [
+        {
+          "sound_id": 1322,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 490
+        }
+      ]
+    },
+    {
+      "event_id": "monster.136.appear",
+      "samples": [
+        {
+          "sound_id": 1320,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 488
+        }
+      ]
+    },
+    {
+      "event_id": "monster.136.attack_start",
+      "samples": [
+        {
+          "sound_id": 1322,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 490
+        }
+      ]
+    },
+    {
+      "event_id": "monster.137.appear",
+      "samples": [
+        {
+          "sound_id": 1320,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 488
+        }
+      ]
+    },
+    {
+      "event_id": "monster.137.attack_start",
+      "samples": [
+        {
+          "sound_id": 1322,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 490
+        }
+      ]
+    },
+    {
+      "event_id": "monster.138.appear",
+      "samples": [
+        {
+          "sound_id": 1500,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 537
+        }
+      ]
+    },
+    {
+      "event_id": "monster.138.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1503,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 540
+        }
+      ]
+    },
+    {
+      "event_id": "monster.140.appear",
+      "samples": [
+        {
+          "sound_id": 1500,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 537
+        }
+      ]
+    },
+    {
+      "event_id": "monster.140.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1503,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 540
+        }
+      ]
+    },
+    {
+      "event_id": "monster.141.appear",
+      "samples": [
+        {
+          "sound_id": 1840,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.141.ambient",
+      "samples": [
+        {
+          "sound_id": 1841,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.141.attack_start",
+      "samples": [
+        {
+          "sound_id": 1842,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.141.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1843,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.141.hurt",
+      "samples": [
+        {
+          "sound_id": 1844,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.141.death",
+      "samples": [
+        {
+          "sound_id": 1845,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.142.appear",
+      "samples": [
+        {
+          "sound_id": 1840,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.142.ambient",
+      "samples": [
+        {
+          "sound_id": 1841,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.142.attack_start",
+      "samples": [
+        {
+          "sound_id": 1842,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.142.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1843,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.142.hurt",
+      "samples": [
+        {
+          "sound_id": 1844,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.142.death",
+      "samples": [
+        {
+          "sound_id": 1845,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.143.attack_frame",
+      "samples": [
+        {
+          "sound_id": 703,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 343
+        }
+      ]
+    },
+    {
+      "event_id": "monster.144.appear",
+      "samples": [
+        {
+          "sound_id": 620,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 291
+        }
+      ]
+    },
+    {
+      "event_id": "monster.144.attack_frame",
+      "samples": [
+        {
+          "sound_id": 623,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 294
+        }
+      ]
+    },
+    {
+      "event_id": "monster.145.ambient",
+      "samples": [
+        {
+          "sound_id": 571,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 257
+        }
+      ]
+    },
+    {
+      "event_id": "monster.145.hurt",
+      "samples": [
+        {
+          "sound_id": 574,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 260
+        }
+      ]
+    },
+    {
+      "event_id": "monster.148.appear",
+      "samples": [
+        {
+          "sound_id": 660,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 319
+        }
+      ]
+    },
+    {
+      "event_id": "monster.148.attack_frame",
+      "samples": [
+        {
+          "sound_id": 663,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 322
+        }
+      ]
+    },
+    {
+      "event_id": "monster.150.appear",
+      "samples": [
+        {
+          "sound_id": 670,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 326
+        }
+      ]
+    },
+    {
+      "event_id": "monster.150.attack_frame",
+      "samples": [
+        {
+          "sound_id": 673,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 329
+        }
+      ]
+    },
+    {
+      "event_id": "monster.152.appear",
+      "samples": [
+        {
+          "sound_id": 670,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 326
+        }
+      ]
+    },
+    {
+      "event_id": "monster.152.attack_frame",
+      "samples": [
+        {
+          "sound_id": 673,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 329
+        }
+      ]
+    },
+    {
+      "event_id": "monster.153.appear",
+      "samples": [
+        {
+          "sound_id": 810,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 368
+        }
+      ]
+    },
+    {
+      "event_id": "monster.153.attack_frame",
+      "samples": [
+        {
+          "sound_id": 813,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 371
+        }
+      ]
+    },
+    {
+      "event_id": "monster.155.appear",
+      "samples": [
+        {
+          "sound_id": 810,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 368
+        }
+      ]
+    },
+    {
+      "event_id": "monster.155.attack_frame",
+      "samples": [
+        {
+          "sound_id": 813,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 371
+        }
+      ]
+    },
+    {
+      "event_id": "monster.156.appear",
+      "samples": [
+        {
+          "sound_id": 820,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 375
+        }
+      ]
+    },
+    {
+      "event_id": "monster.156.attack_frame",
+      "samples": [
+        {
+          "sound_id": 823,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 378
+        }
+      ]
+    },
+    {
+      "event_id": "monster.156.death",
+      "samples": [
+        {
+          "sound_id": 825,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 380
+        }
+      ]
+    },
+    {
+      "event_id": "monster.157.appear",
+      "samples": [
+        {
+          "sound_id": 820,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 375
+        }
+      ]
+    },
+    {
+      "event_id": "monster.157.attack_frame",
+      "samples": [
+        {
+          "sound_id": 823,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 378
+        }
+      ]
+    },
+    {
+      "event_id": "monster.157.death",
+      "samples": [
+        {
+          "sound_id": 825,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 380
+        }
+      ]
+    },
+    {
+      "event_id": "monster.158.appear",
+      "samples": [
+        {
+          "sound_id": 820,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 375
+        }
+      ]
+    },
+    {
+      "event_id": "monster.158.attack_frame",
+      "samples": [
+        {
+          "sound_id": 823,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 378
+        }
+      ]
+    },
+    {
+      "event_id": "monster.158.death",
+      "samples": [
+        {
+          "sound_id": 825,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 380
+        }
+      ]
+    },
+    {
+      "event_id": "monster.159.appear",
+      "samples": [
+        {
+          "sound_id": 820,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 375
+        }
+      ]
+    },
+    {
+      "event_id": "monster.159.attack_frame",
+      "samples": [
+        {
+          "sound_id": 823,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 378
+        }
+      ]
+    },
+    {
+      "event_id": "monster.159.death",
+      "samples": [
+        {
+          "sound_id": 825,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 380
+        }
+      ]
+    },
+    {
+      "event_id": "monster.160.attack_frame",
+      "samples": [
+        {
+          "sound_id": 833,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 385
+        }
+      ]
+    },
+    {
+      "event_id": "monster.161.attack_frame",
+      "samples": [
+        {
+          "sound_id": 833,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 385
+        }
+      ]
+    },
+    {
+      "event_id": "monster.162.appear",
+      "samples": [
+        {
+          "sound_id": 1120,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.162.ambient",
+      "samples": [
+        {
+          "sound_id": 1121,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.162.attack_start",
+      "samples": [
+        {
+          "sound_id": 1122,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.162.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1123,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.162.hurt",
+      "samples": [
+        {
+          "sound_id": 1124,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.162.death",
+      "samples": [
+        {
+          "sound_id": 1125,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.163.appear",
+      "samples": [
+        {
+          "sound_id": 1130,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.163.ambient",
+      "samples": [
+        {
+          "sound_id": 1131,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.163.attack_start",
+      "samples": [
+        {
+          "sound_id": 1132,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.163.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1133,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.163.hurt",
+      "samples": [
+        {
+          "sound_id": 1134,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.163.death",
+      "samples": [
+        {
+          "sound_id": 1135,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.164.appear",
+      "samples": [
+        {
+          "sound_id": 1350,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.164.ambient",
+      "samples": [
+        {
+          "sound_id": 1351,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.164.attack_start",
+      "samples": [
+        {
+          "sound_id": 1352,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.164.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1353,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.164.hurt",
+      "samples": [
+        {
+          "sound_id": 1354,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.164.death",
+      "samples": [
+        {
+          "sound_id": 1355,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.166.appear",
+      "samples": [
+        {
+          "sound_id": 1350,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.166.ambient",
+      "samples": [
+        {
+          "sound_id": 1351,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.166.attack_start",
+      "samples": [
+        {
+          "sound_id": 1352,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.166.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1353,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.166.hurt",
+      "samples": [
+        {
+          "sound_id": 1354,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.166.death",
+      "samples": [
+        {
+          "sound_id": 1355,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.168.appear",
+      "samples": [
+        {
+          "sound_id": 1330,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 495
+        }
+      ]
+    },
+    {
+      "event_id": "monster.170.appear",
+      "samples": [
+        {
+          "sound_id": 1380,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.170.ambient",
+      "samples": [
+        {
+          "sound_id": 1381,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.170.attack_start",
+      "samples": [
+        {
+          "sound_id": 1382,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.170.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1383,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.170.hurt",
+      "samples": [
+        {
+          "sound_id": 1384,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.170.death",
+      "samples": [
+        {
+          "sound_id": 1385,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.172.appear",
+      "samples": [
+        {
+          "sound_id": 1340,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 502
+        }
+      ]
+    },
+    {
+      "event_id": "monster.172.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1343,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 505
+        }
+      ]
+    },
+    {
+      "event_id": "monster.174.appear",
+      "samples": [
+        {
+          "sound_id": 1340,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 502
+        }
+      ]
+    },
+    {
+      "event_id": "monster.174.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1343,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 505
+        }
+      ]
+    },
+    {
+      "event_id": "monster.176.appear",
+      "samples": [
+        {
+          "sound_id": 1390,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 516
+        }
+      ]
+    },
+    {
+      "event_id": "monster.176.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1393,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 519
+        }
+      ]
+    },
+    {
+      "event_id": "monster.178.appear",
+      "samples": [
+        {
+          "sound_id": 1370,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 509
+        }
+      ]
+    },
+    {
+      "event_id": "monster.180.appear",
+      "samples": [
+        {
+          "sound_id": 1510,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.180.ambient",
+      "samples": [
+        {
+          "sound_id": 1511,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.180.attack_start",
+      "samples": [
+        {
+          "sound_id": 1512,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.180.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1513,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.180.hurt",
+      "samples": [
+        {
+          "sound_id": 1514,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.180.death",
+      "samples": [
+        {
+          "sound_id": 1515,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.182.appear",
+      "samples": [
+        {
+          "sound_id": 1520,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.182.ambient",
+      "samples": [
+        {
+          "sound_id": 1521,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.182.attack_start",
+      "samples": [
+        {
+          "sound_id": 1522,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.182.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1523,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.182.hurt",
+      "samples": [
+        {
+          "sound_id": 1524,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.182.death",
+      "samples": [
+        {
+          "sound_id": 1525,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.185.appear",
+      "samples": [
+        {
+          "sound_id": 1830,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 649
+        }
+      ]
+    },
+    {
+      "event_id": "monster.185.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1833,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 652
+        }
+      ]
+    },
+    {
+      "event_id": "monster.186.appear",
+      "samples": [
+        {
+          "sound_id": 910,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.186.ambient",
+      "samples": [
+        {
+          "sound_id": 911,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.186.attack_start",
+      "samples": [
+        {
+          "sound_id": 912,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.186.attack_frame",
+      "samples": [
+        {
+          "sound_id": 913,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.186.hurt",
+      "samples": [
+        {
+          "sound_id": 914,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.186.death",
+      "samples": [
+        {
+          "sound_id": 915,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.187.appear",
+      "samples": [
+        {
+          "sound_id": 920,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.187.ambient",
+      "samples": [
+        {
+          "sound_id": 921,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.187.attack_start",
+      "samples": [
+        {
+          "sound_id": 922,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.187.attack_frame",
+      "samples": [
+        {
+          "sound_id": 923,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.187.hurt",
+      "samples": [
+        {
+          "sound_id": 924,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.187.death",
+      "samples": [
+        {
+          "sound_id": 925,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.188.appear",
+      "samples": [
+        {
+          "sound_id": 1230,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.188.ambient",
+      "samples": [
+        {
+          "sound_id": 1231,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.188.attack_start",
+      "samples": [
+        {
+          "sound_id": 1232,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.188.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1233,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.188.hurt",
+      "samples": [
+        {
+          "sound_id": 1234,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.188.death",
+      "samples": [
+        {
+          "sound_id": 1235,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.189.appear",
+      "samples": [
+        {
+          "sound_id": 2010,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.189.ambient",
+      "samples": [
+        {
+          "sound_id": 2011,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.189.attack_start",
+      "samples": [
+        {
+          "sound_id": 2012,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.189.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2013,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.189.hurt",
+      "samples": [
+        {
+          "sound_id": 2014,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.189.death",
+      "samples": [
+        {
+          "sound_id": 2015,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.190.appear",
+      "samples": [
+        {
+          "sound_id": 1230,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.190.ambient",
+      "samples": [
+        {
+          "sound_id": 1231,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.190.attack_start",
+      "samples": [
+        {
+          "sound_id": 1232,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.190.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1233,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.190.hurt",
+      "samples": [
+        {
+          "sound_id": 1234,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.190.death",
+      "samples": [
+        {
+          "sound_id": 1235,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.191.appear",
+      "samples": [
+        {
+          "sound_id": 2000,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.191.ambient",
+      "samples": [
+        {
+          "sound_id": 2001,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.191.attack_start",
+      "samples": [
+        {
+          "sound_id": 2002,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.191.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2003,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.191.hurt",
+      "samples": [
+        {
+          "sound_id": 2004,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.191.death",
+      "samples": [
+        {
+          "sound_id": 2005,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.192.appear",
+      "samples": [
+        {
+          "sound_id": 2000,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.192.ambient",
+      "samples": [
+        {
+          "sound_id": 2001,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.192.attack_start",
+      "samples": [
+        {
+          "sound_id": 2002,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.192.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2003,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.192.hurt",
+      "samples": [
+        {
+          "sound_id": 2004,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.192.death",
+      "samples": [
+        {
+          "sound_id": 2005,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.193.appear",
+      "samples": [
+        {
+          "sound_id": 2020,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.193.ambient",
+      "samples": [
+        {
+          "sound_id": 2021,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.193.attack_start",
+      "samples": [
+        {
+          "sound_id": 2022,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.193.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2023,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.193.hurt",
+      "samples": [
+        {
+          "sound_id": 2024,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.193.death",
+      "samples": [
+        {
+          "sound_id": 2025,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.194.appear",
+      "samples": [
+        {
+          "sound_id": 670,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 326
+        }
+      ]
+    },
+    {
+      "event_id": "monster.194.attack_frame",
+      "samples": [
+        {
+          "sound_id": 673,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 329
+        }
+      ]
+    },
+    {
+      "event_id": "monster.195.appear",
+      "samples": [
+        {
+          "sound_id": 1610,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.195.ambient",
+      "samples": [
+        {
+          "sound_id": 1611,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.195.attack_start",
+      "samples": [
+        {
+          "sound_id": 1612,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.195.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1613,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.195.hurt",
+      "samples": [
+        {
+          "sound_id": 1614,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.195.death",
+      "samples": [
+        {
+          "sound_id": 1615,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.196.appear",
+      "samples": [
+        {
+          "sound_id": 2100,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.196.ambient",
+      "samples": [
+        {
+          "sound_id": 2101,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.196.attack_start",
+      "samples": [
+        {
+          "sound_id": 2102,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.196.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2103,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.196.hurt",
+      "samples": [
+        {
+          "sound_id": 2104,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.196.death",
+      "samples": [
+        {
+          "sound_id": 2105,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.198.appear",
+      "samples": [
+        {
+          "sound_id": 2110,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.198.ambient",
+      "samples": [
+        {
+          "sound_id": 2111,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.198.attack_start",
+      "samples": [
+        {
+          "sound_id": 2112,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.198.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2113,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.198.hurt",
+      "samples": [
+        {
+          "sound_id": 2114,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.198.death",
+      "samples": [
+        {
+          "sound_id": 2115,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.199.appear",
+      "samples": [
+        {
+          "sound_id": 2110,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.199.ambient",
+      "samples": [
+        {
+          "sound_id": 2111,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.199.attack_start",
+      "samples": [
+        {
+          "sound_id": 2112,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.199.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2113,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.199.hurt",
+      "samples": [
+        {
+          "sound_id": 2114,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.199.death",
+      "samples": [
+        {
+          "sound_id": 2115,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.200.appear",
+      "samples": [
+        {
+          "sound_id": 2120,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.200.ambient",
+      "samples": [
+        {
+          "sound_id": 2121,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.200.attack_start",
+      "samples": [
+        {
+          "sound_id": 2122,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.200.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2123,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.200.hurt",
+      "samples": [
+        {
+          "sound_id": 2124,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.200.death",
+      "samples": [
+        {
+          "sound_id": 2125,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.202.appear",
+      "samples": [
+        {
+          "sound_id": 2130,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.202.ambient",
+      "samples": [
+        {
+          "sound_id": 2131,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.202.attack_start",
+      "samples": [
+        {
+          "sound_id": 2132,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.202.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2133,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.202.hurt",
+      "samples": [
+        {
+          "sound_id": 2134,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.202.death",
+      "samples": [
+        {
+          "sound_id": 2135,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.204.appear",
+      "samples": [
+        {
+          "sound_id": 2140,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.204.ambient",
+      "samples": [
+        {
+          "sound_id": 2141,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.204.attack_start",
+      "samples": [
+        {
+          "sound_id": 2142,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.204.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2143,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.204.hurt",
+      "samples": [
+        {
+          "sound_id": 2144,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.204.death",
+      "samples": [
+        {
+          "sound_id": 2145,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.206.appear",
+      "samples": [
+        {
+          "sound_id": 2150,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.206.ambient",
+      "samples": [
+        {
+          "sound_id": 2151,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.206.attack_start",
+      "samples": [
+        {
+          "sound_id": 2152,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.206.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2153,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.206.hurt",
+      "samples": [
+        {
+          "sound_id": 2154,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.206.death",
+      "samples": [
+        {
+          "sound_id": 2155,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.208.appear",
+      "samples": [
+        {
+          "sound_id": 2160,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.208.ambient",
+      "samples": [
+        {
+          "sound_id": 2161,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.208.attack_start",
+      "samples": [
+        {
+          "sound_id": 2162,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.208.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2163,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.208.hurt",
+      "samples": [
+        {
+          "sound_id": 2164,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.208.death",
+      "samples": [
+        {
+          "sound_id": 2165,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.209.appear",
+      "samples": [
+        {
+          "sound_id": 2160,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.209.ambient",
+      "samples": [
+        {
+          "sound_id": 2161,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.209.attack_start",
+      "samples": [
+        {
+          "sound_id": 2162,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.209.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2163,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.209.hurt",
+      "samples": [
+        {
+          "sound_id": 2164,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.209.death",
+      "samples": [
+        {
+          "sound_id": 2165,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.210.appear",
+      "samples": [
+        {
+          "sound_id": 2200,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.210.ambient",
+      "samples": [
+        {
+          "sound_id": 2201,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.210.attack_start",
+      "samples": [
+        {
+          "sound_id": 2202,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.210.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2203,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.210.hurt",
+      "samples": [
+        {
+          "sound_id": 2204,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.210.death",
+      "samples": [
+        {
+          "sound_id": 2205,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.212.appear",
+      "samples": [
+        {
+          "sound_id": 2210,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.212.ambient",
+      "samples": [
+        {
+          "sound_id": 2211,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.212.attack_start",
+      "samples": [
+        {
+          "sound_id": 2212,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.212.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2213,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.212.hurt",
+      "samples": [
+        {
+          "sound_id": 2214,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.212.death",
+      "samples": [
+        {
+          "sound_id": 2215,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.214.appear",
+      "samples": [
+        {
+          "sound_id": 2220,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.214.ambient",
+      "samples": [
+        {
+          "sound_id": 2221,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.214.attack_start",
+      "samples": [
+        {
+          "sound_id": 2222,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.214.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2223,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.214.hurt",
+      "samples": [
+        {
+          "sound_id": 2224,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.214.death",
+      "samples": [
+        {
+          "sound_id": 2225,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.216.appear",
+      "samples": [
+        {
+          "sound_id": 2230,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.216.ambient",
+      "samples": [
+        {
+          "sound_id": 2231,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.216.attack_start",
+      "samples": [
+        {
+          "sound_id": 2232,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.216.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2233,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.216.hurt",
+      "samples": [
+        {
+          "sound_id": 2234,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.216.death",
+      "samples": [
+        {
+          "sound_id": 2235,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.218.appear",
+      "samples": [
+        {
+          "sound_id": 2240,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.218.ambient",
+      "samples": [
+        {
+          "sound_id": 2241,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.218.attack_start",
+      "samples": [
+        {
+          "sound_id": 2242,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.218.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2243,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.218.hurt",
+      "samples": [
+        {
+          "sound_id": 2244,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.218.death",
+      "samples": [
+        {
+          "sound_id": 2245,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.220.appear",
+      "samples": [
+        {
+          "sound_id": 2250,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.220.ambient",
+      "samples": [
+        {
+          "sound_id": 2251,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.220.attack_start",
+      "samples": [
+        {
+          "sound_id": 2252,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.220.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2253,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.220.hurt",
+      "samples": [
+        {
+          "sound_id": 2254,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.220.death",
+      "samples": [
+        {
+          "sound_id": 2255,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.222.appear",
+      "samples": [
+        {
+          "sound_id": 2260,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.222.ambient",
+      "samples": [
+        {
+          "sound_id": 2261,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.222.attack_start",
+      "samples": [
+        {
+          "sound_id": 2262,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.222.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2263,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.222.hurt",
+      "samples": [
+        {
+          "sound_id": 2264,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.222.death",
+      "samples": [
+        {
+          "sound_id": 2265,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.224.appear",
+      "samples": [
+        {
+          "sound_id": 2270,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.224.ambient",
+      "samples": [
+        {
+          "sound_id": 2271,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.224.attack_start",
+      "samples": [
+        {
+          "sound_id": 2272,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.224.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2273,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.224.hurt",
+      "samples": [
+        {
+          "sound_id": 2274,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.224.death",
+      "samples": [
+        {
+          "sound_id": 2275,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.225.appear",
+      "samples": [
+        {
+          "sound_id": 2270,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.225.ambient",
+      "samples": [
+        {
+          "sound_id": 2271,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.225.attack_start",
+      "samples": [
+        {
+          "sound_id": 2272,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.225.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2273,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.225.hurt",
+      "samples": [
+        {
+          "sound_id": 2274,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.225.death",
+      "samples": [
+        {
+          "sound_id": 2275,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.226.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.226.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.226.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.226.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.226.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.226.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.227.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.227.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.227.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.227.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.227.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.227.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.228.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.228.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.228.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.228.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.228.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.228.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.229.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.229.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.229.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.229.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.229.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.229.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.230.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.230.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.230.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.230.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.230.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.230.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.231.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.231.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.231.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.231.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.231.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.231.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.232.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.232.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.232.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.232.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.232.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.232.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.233.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.233.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.233.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.233.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.233.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.233.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.234.appear",
+      "samples": [
+        {
+          "sound_id": 1860,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.234.ambient",
+      "samples": [
+        {
+          "sound_id": 1861,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.234.attack_start",
+      "samples": [
+        {
+          "sound_id": 1862,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.234.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1863,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.234.hurt",
+      "samples": [
+        {
+          "sound_id": 1864,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.234.death",
+      "samples": [
+        {
+          "sound_id": 1865,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.235.appear",
+      "samples": [
+        {
+          "sound_id": 1120,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.235.ambient",
+      "samples": [
+        {
+          "sound_id": 1121,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.235.attack_start",
+      "samples": [
+        {
+          "sound_id": 1122,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.235.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1123,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.235.hurt",
+      "samples": [
+        {
+          "sound_id": 1124,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.235.death",
+      "samples": [
+        {
+          "sound_id": 1125,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.236.appear",
+      "samples": [
+        {
+          "sound_id": 1130,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.236.ambient",
+      "samples": [
+        {
+          "sound_id": 1131,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.236.attack_start",
+      "samples": [
+        {
+          "sound_id": 1132,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.236.attack_frame",
+      "samples": [
+        {
+          "sound_id": 1133,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.236.hurt",
+      "samples": [
+        {
+          "sound_id": 1134,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.236.death",
+      "samples": [
+        {
+          "sound_id": 1135,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.237.appear",
+      "samples": [
+        {
+          "sound_id": 2160,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.237.ambient",
+      "samples": [
+        {
+          "sound_id": 2161,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.237.attack_start",
+      "samples": [
+        {
+          "sound_id": 2162,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.237.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2163,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.237.hurt",
+      "samples": [
+        {
+          "sound_id": 2164,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.237.death",
+      "samples": [
+        {
+          "sound_id": 2165,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.238.appear",
+      "samples": [
+        {
+          "sound_id": 1700,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 607
+        }
+      ]
+    },
+    {
+      "event_id": "monster.239.appear",
+      "samples": [
+        {
+          "sound_id": 540,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": 242
+        }
+      ]
+    },
+    {
+      "event_id": "monster.240.appear",
+      "samples": [
+        {
+          "sound_id": 2020,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.240.ambient",
+      "samples": [
+        {
+          "sound_id": 2021,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.240.attack_start",
+      "samples": [
+        {
+          "sound_id": 2022,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.240.attack_frame",
+      "samples": [
+        {
+          "sound_id": 2023,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.240.hurt",
+      "samples": [
+        {
+          "sound_id": 2024,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    },
+    {
+      "event_id": "monster.240.death",
+      "samples": [
+        {
+          "sound_id": 2025,
+          "mapping_status": "SILENCE_VERIFIED",
+          "reason": "MirClient effective sound slot is absent or empty; PlaySound therefore emits no sample",
+          "source_index_line": null
+        }
+      ]
+    }
+  ],
+  "source_guarded_not_applicable_events": [
+    "monster.18.death_secondary",
+    "monster.19.death_secondary",
+    "monster.21.death_secondary",
+    "monster.24.death_secondary",
+    "monster.26.death_secondary",
+    "monster.28.death_secondary",
+    "monster.30.death_secondary",
+    "monster.31.death_secondary",
+    "monster.32.death_secondary",
+    "monster.34.death_secondary",
+    "monster.36.death_secondary",
+    "monster.38.death_secondary",
+    "monster.39.death_secondary",
+    "monster.41.death_secondary",
+    "monster.42.death_secondary",
+    "monster.45.death_secondary",
+    "monster.46.death_secondary",
+    "monster.47.death_secondary",
+    "monster.50.death_secondary",
+    "monster.52.death_secondary",
+    "monster.54.death_secondary",
+    "monster.55.death_secondary",
+    "monster.56.death_secondary",
+    "monster.57.death_secondary",
+    "monster.59.death_secondary",
+    "monster.60.death_secondary",
+    "monster.62.death_secondary",
+    "monster.64.death_secondary",
+    "monster.66.death_secondary",
+    "monster.68.death_secondary",
+    "monster.70.death_secondary",
+    "monster.73.death_secondary",
+    "monster.74.death_secondary",
+    "monster.75.death_secondary",
+    "monster.76.death_secondary",
+    "monster.77.death_secondary",
+    "monster.78.death_secondary",
+    "monster.79.death_secondary",
+    "monster.81.death_secondary",
+    "monster.83.death_secondary",
+    "monster.85.death_secondary",
+    "monster.87.death_secondary",
+    "monster.89.death_secondary",
+    "monster.90.death_secondary",
+    "monster.91.death_secondary",
+    "monster.92.death_secondary",
+    "monster.94.death_secondary",
+    "monster.96.death_secondary",
+    "monster.97.death_secondary",
+    "monster.100.death_secondary",
+    "monster.101.death_secondary",
+    "monster.103.death_secondary",
+    "monster.104.death_secondary",
+    "monster.105.death_secondary",
+    "monster.107.death_secondary",
+    "monster.110.death_secondary",
+    "monster.112.death_secondary",
+    "monster.114.death_secondary",
+    "monster.116.death_secondary",
+    "monster.118.death_secondary",
+    "monster.120.death_secondary",
+    "monster.121.death_secondary",
+    "monster.122.death_secondary",
+    "monster.123.death_secondary",
+    "monster.124.death_secondary",
+    "monster.126.death_secondary",
+    "monster.127.death_secondary",
+    "monster.128.death_secondary",
+    "monster.129.death_secondary",
+    "monster.131.death_secondary",
+    "monster.132.death_secondary",
+    "monster.133.death_secondary",
+    "monster.134.death_secondary",
+    "monster.135.death_secondary",
+    "monster.136.death_secondary",
+    "monster.137.death_secondary",
+    "monster.138.death_secondary",
+    "monster.140.death_secondary",
+    "monster.141.death_secondary",
+    "monster.142.death_secondary",
+    "monster.143.death_secondary",
+    "monster.144.death_secondary",
+    "monster.145.death_secondary",
+    "monster.146.death_secondary",
+    "monster.147.death_secondary",
+    "monster.148.death_secondary",
+    "monster.150.death_secondary",
+    "monster.152.death_secondary",
+    "monster.153.death_secondary",
+    "monster.155.death_secondary",
+    "monster.156.death_secondary",
+    "monster.157.death_secondary",
+    "monster.158.death_secondary",
+    "monster.159.death_secondary",
+    "monster.160.death_secondary",
+    "monster.161.death_secondary",
+    "monster.162.death_secondary",
+    "monster.163.death_secondary",
+    "monster.164.death_secondary",
+    "monster.166.death_secondary",
+    "monster.168.death_secondary",
+    "monster.170.death_secondary",
+    "monster.172.death_secondary",
+    "monster.174.death_secondary",
+    "monster.176.death_secondary",
+    "monster.178.death_secondary",
+    "monster.180.death_secondary",
+    "monster.182.death_secondary",
+    "monster.185.death_secondary",
+    "monster.186.death_secondary",
+    "monster.187.death_secondary",
+    "monster.188.death_secondary",
+    "monster.189.death_secondary",
+    "monster.190.death_secondary",
+    "monster.191.death_secondary",
+    "monster.192.death_secondary",
+    "monster.193.death_secondary",
+    "monster.194.death_secondary",
+    "monster.195.death_secondary",
+    "monster.196.death_secondary",
+    "monster.198.death_secondary",
+    "monster.199.death_secondary",
+    "monster.200.death_secondary",
+    "monster.202.death_secondary",
+    "monster.204.death_secondary",
+    "monster.206.death_secondary",
+    "monster.208.death_secondary",
+    "monster.209.death_secondary",
+    "monster.210.death_secondary",
+    "monster.212.death_secondary",
+    "monster.214.death_secondary",
+    "monster.216.death_secondary",
+    "monster.218.death_secondary",
+    "monster.220.death_secondary",
+    "monster.222.death_secondary",
+    "monster.224.death_secondary",
+    "monster.225.death_secondary",
+    "monster.226.death_secondary",
+    "monster.227.death_secondary",
+    "monster.228.death_secondary",
+    "monster.229.death_secondary",
+    "monster.230.death_secondary",
+    "monster.231.death_secondary",
+    "monster.232.death_secondary",
+    "monster.233.death_secondary",
+    "monster.234.death_secondary",
+    "monster.235.death_secondary",
+    "monster.236.death_secondary",
+    "monster.237.death_secondary",
+    "monster.238.death_secondary",
+    "monster.239.death_secondary",
+    "monster.240.death_secondary"
+  ],
+  "integration_api": {
+    "method": "AudioRuntimeService.play_event(event_id, context)",
+    "monster_helper": "AudioRuntimeService.play_monster_event(monster_id, semantic_event, context)",
+    "success_only": true
+  }
+}

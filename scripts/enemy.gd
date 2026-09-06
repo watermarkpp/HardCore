@@ -45,6 +45,9 @@ const PlayerCharacterScript := preload("res://scripts/player.gd")
 const MONSTER_RUNTIME_AUTHORITY_PATH := (
 	"res://assets/data/monster_runtime_authority_v1.json"
 )
+const MONSTER_ATTACK_RANGE_POLICY_PATH := (
+	"res://assets/data/monster_attack_range_policy_v1.json"
+)
 const MONSTER_MAGIC_MELEE_EFFECT_ID := "monster.flame_wooma.magic_melee.v1"
 const MONSTER_AREA_MAGIC_EFFECT_ID := "monster.touch_dragon.area_magic.v1"
 const RETIRED_SOURCE_ONLY_MONSTER_IDS := [71]
@@ -183,6 +186,17 @@ static func _record_performance_counter(field: StringName, amount := 1) -> void:
 static var _movement_authority_loaded := false
 static var _movement_authority_load_failed := false
 static var _movement_authority_by_id: Dictionary = {}
+static var _attack_range_policy_loaded := false
+static var _attack_range_policy_load_failed := false
+static var _attack_range_policy_by_id: Dictionary = {}
+## Monster SFX is an observer of the existing actor/visual lifecycle.  Keep a
+## shared lifecycle-aware service lookup; per-actor group scans in the physics
+## hot path would turn a presentation hook into a scaling cost.
+static var _audio_runtime_service: Node
+const AUDIO_SERVICE_NEGATIVE_CACHE_MSEC := 1000
+static var _audio_service_retry_after_msec := 0
+static var _audio_service_lookup_count := 0
+static var _audio_service_now_override_msec := -1
 
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
@@ -331,6 +345,18 @@ var _boss_base_move_speed_gu_per_sec := 0.0
 var _boss_base_attack_interval := 0.0
 var _burrowed := false
 var _rng := RandomNumberGenerator.new()
+## This RNG is deliberately independent from gameplay, spawn-facing, loot and
+## status randomness.  It owns only the client's 1/8 ambient sound cadence.
+var _audio_rng := RandomNumberGenerator.new()
+var _audio_rng_initialized := false
+var _audio_appear_emitted := false
+var _audio_death_emitted := false
+var _audio_attack_sequence := 0
+var _audio_attack_frame_sequence := -1
+var _audio_attack_frame_ready := false
+var _audio_previous_visual_state := ""
+var _audio_previous_visual_frame := -1
+var _audio_previous_facing := Vector2.INF
 ## Spawn presentation uses an instance-local RNG so the one-time direction
 ## choice cannot advance combat, loot, summon, or status-effect randomness.
 var _spawn_facing_rng := RandomNumberGenerator.new()
@@ -409,6 +435,7 @@ var _terrain_failed_cell_until_ms := 0
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
+	_reset_monster_audio_observer()
 	_reset_direct_spell_runtime_stats()
 	var requested_id := MonsterIdentityScript.monster_id(data)
 	if requested_id in RETIRED_SOURCE_ONLY_MONSTER_IDS:
@@ -473,6 +500,7 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	)
 	behavior_profile = MonsterIdentityScript.behavior_profile(monster_data)
 	_apply_behavior_profile()
+	_apply_attack_range_policy()
 	_apply_source_locked_special_delivery_override()
 	if is_boss:
 		boss_rule = MonsterIdentityScript.boss_rule(monster_data, GameData.boss_service_rules)
@@ -494,6 +522,180 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 		move_speed_gu_per_sec = 0.0
 	_configure_target_acquisition()
 	_configure_movement_cadence()
+
+
+func _reset_monster_audio_observer() -> void:
+	_audio_appear_emitted = false
+	_audio_death_emitted = false
+	_audio_attack_sequence = 0
+	_audio_attack_frame_sequence = -1
+	_audio_attack_frame_ready = false
+	_audio_previous_visual_state = ""
+	_audio_previous_visual_frame = -1
+	_audio_previous_facing = Vector2.INF
+
+
+## Test-only deterministic control for the presentation RNG.  Production
+## callers never need this; importantly it never aliases `_rng`.
+func set_audio_seed_for_test(seed_value: int) -> void:
+	_audio_rng.seed = seed_value
+	_audio_rng_initialized = true
+
+
+## The service is resolved only when a semantic event is ready.  Successful
+## lookups are shared by all EnemyActor instances. A miss installs one shared
+## one-second negative cache so thousands of actors cannot group-scan every
+## frame, while a later service (or a replacement after world teardown) is
+## still discovered without a production reset hook.
+func _audio_service() -> Node:
+	if not is_inside_tree():
+		return null
+	if (
+		is_instance_valid(_audio_runtime_service)
+		and _audio_runtime_service.is_inside_tree()
+		and _audio_runtime_service.get_tree() == get_tree()
+	):
+		return _audio_runtime_service
+	_audio_runtime_service = null
+	var now_msec := _audio_service_cache_now_msec()
+	if now_msec < _audio_service_retry_after_msec:
+		return null
+	_audio_service_retry_after_msec = now_msec + AUDIO_SERVICE_NEGATIVE_CACHE_MSEC
+	_audio_service_lookup_count += 1
+	for candidate: Node in get_tree().get_nodes_in_group(&"audio_runtime_service"):
+		if (
+			is_instance_valid(candidate)
+			and candidate.is_inside_tree()
+			and candidate.has_method("play_monster_event")
+		):
+			_audio_runtime_service = candidate
+			_audio_service_retry_after_msec = 0
+			return candidate
+	return null
+
+
+static func _audio_service_cache_now_msec() -> int:
+	return (
+		_audio_service_now_override_msec
+		if _audio_service_now_override_msec >= 0
+		else Time.get_ticks_msec()
+	)
+
+
+static func set_audio_service_cache_clock_for_test(now_msec: int) -> void:
+	_audio_service_now_override_msec = now_msec
+
+
+static func audio_service_lookup_count_for_test() -> int:
+	return _audio_service_lookup_count
+
+
+func _audio_is_listenable(allow_death := false) -> bool:
+	if not is_inside_tree() or process_mode == Node.PROCESS_MODE_DISABLED:
+		return false
+	if not allow_death and not is_physics_processing():
+		return false
+	if not visible or not is_visible_in_tree() or _background_deep_sleeping:
+		return false
+	if _burrowed and not allow_death:
+		return false
+	if not allow_death and (_dying or _death_pending or current_hp <= 0):
+		return false
+	var viewport := get_viewport()
+	if viewport == null:
+		return false
+	# The viewport is the existing client listener/audibility boundary.  Do not
+	# invent a second gameplay distance or wake off-screen actors for SFX.
+	return viewport.get_visible_rect().has_point(
+		get_global_transform_with_canvas().origin
+	)
+
+
+func _audio_context(semantic_event: String) -> Dictionary:
+	return {
+		"source": "enemy_actor",
+		"monster_id": monster_id,
+		"runtime_map_id": runtime_map_id,
+		"semantic_event": semantic_event,
+	}
+
+
+func _emit_monster_audio(semantic_event: String, allow_death := false) -> bool:
+	if monster_id <= 0 or not _audio_is_listenable(allow_death):
+		return false
+	var service := _audio_service()
+	if service == null:
+		return false
+	# The service owns exact ID mapping, resource availability, voice pooling
+	# and fail-closed status.  EnemyActor never resolves names/appearances.
+	service.call(
+		"play_monster_event",
+		monster_id,
+		semantic_event,
+		_audio_context(semantic_event),
+	)
+	return true
+
+
+func _audio_try_emit_appear() -> void:
+	if _audio_appear_emitted:
+		return
+	if _emit_monster_audio("appear"):
+		_audio_appear_emitted = true
+
+
+func _audio_attack_started() -> void:
+	_audio_attack_sequence += 1
+	_audio_attack_frame_sequence = -1
+	_audio_attack_frame_ready = false
+	# Attack start is emitted only by accepted actions below, never by target
+	# acquisition or an AI preview.
+	_emit_monster_audio("attack_start")
+
+
+func _play_attack_animation(duration: float) -> void:
+	if visual != null:
+		visual.play_attack(duration)
+	_audio_attack_started()
+
+
+func _audio_observe_visual_state() -> void:
+	if visual == null or not is_instance_valid(visual):
+		return
+	var state := str(visual.current_state)
+	var frame := int(visual.current_frame)
+	var frame_changed := frame != _audio_previous_visual_frame
+	var facing_changed := (
+		_audio_previous_facing != Vector2.INF
+		and _audio_previous_facing.distance_squared_to(facing) > 0.000001
+	)
+	if (
+		_audio_attack_sequence > 0
+		and state == "attack"
+		and frame <= 1
+	):
+		_audio_attack_frame_ready = true
+	if (
+		_audio_attack_sequence > 0
+		and _audio_attack_frame_ready
+		and state == "attack"
+		and frame >= 2
+		and _audio_attack_frame_sequence != _audio_attack_sequence
+	):
+		# MonsterVisual uses zero-based atlas frames; >=2 also survives a
+		# render/physics tick that advances across frame 3 without replaying it.
+		_audio_attack_frame_sequence = _audio_attack_sequence
+		_emit_monster_audio("attack_frame")
+	var ambient_frame_one := (
+		frame == 0
+		and frame_changed
+		and (state == "walk" or (state == "idle" and facing_changed))
+	)
+	if ambient_frame_one and _audio_is_listenable() and _audio_rng.randi_range(1, 8) == 1:
+		_emit_monster_audio("ambient")
+	_audio_previous_visual_state = state
+	_audio_previous_visual_frame = frame
+	_audio_previous_facing = facing
 
 
 func _reset_direct_spell_runtime_stats() -> void:
@@ -723,6 +925,91 @@ func _apply_behavior_profile() -> void:
 		0,
 		int(on_hit.get("controlChanceDenominatorBase", control_chance_denominator_base)),
 	)
+
+
+func _apply_attack_range_policy() -> void:
+	var policy := _attack_range_policy_record_for_id(monster_id)
+	if policy.is_empty():
+		return
+	var range_gu_value: Variant = policy.get("attackRangeGu", null)
+	if range_gu_value is bool or not (range_gu_value is int or range_gu_value is float):
+		set_meta("attack_range_policy_rejected", "attackRangeGu_not_numeric")
+		return
+	var range_gu := float(range_gu_value)
+	if not is_finite(range_gu) or range_gu <= 0.0:
+		set_meta("attack_range_policy_rejected", "attackRangeGu_not_positive_finite")
+		return
+	attack_range_gu = range_gu
+	var delivery_kind := str(policy.get("deliveryKind", ""))
+	if delivery_kind == str(attack_delivery_rule.get("kind", "")):
+		# Special delivery gates consume their formal range from this overlay;
+		# legacy rangePixels remains source evidence only.
+		attack_delivery_rule["range_gu"] = range_gu
+	set_meta("attack_range_policy_id", monster_id)
+	set_meta("attack_range_policy_distance_metric", str(policy.get("distanceMetric", "")))
+	set_meta("attack_range_policy_shape", str(policy.get("rangeShape", "")))
+
+
+static func _load_attack_range_policy_once() -> void:
+	if _attack_range_policy_loaded or _attack_range_policy_load_failed:
+		return
+	var file := FileAccess.open(MONSTER_ATTACK_RANGE_POLICY_PATH, FileAccess.READ)
+	if file == null:
+		_attack_range_policy_load_failed = true
+		push_error("EnemyActor: cannot open attack range policy: ", MONSTER_ATTACK_RANGE_POLICY_PATH)
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if parsed == null or not (parsed is Dictionary):
+		_attack_range_policy_load_failed = true
+		push_error("EnemyActor: invalid JSON in attack range policy")
+		return
+	var root := parsed as Dictionary
+	if str(root.get("contractId", "")) != "monster.attack_range_policy.v1":
+		_attack_range_policy_load_failed = true
+		push_error("EnemyActor: attack range policy contract mismatch")
+		return
+	var records: Variant = root.get("records", null)
+	if records == null or not (records is Array):
+		_attack_range_policy_load_failed = true
+		push_error("EnemyActor: missing records array in attack range policy")
+		return
+	var seen_ids: Dictionary = {}
+	for record_variant: Variant in (records as Array):
+		if not (record_variant is Dictionary):
+			_attack_range_policy_load_failed = true
+			push_error("EnemyActor: malformed attack range policy record")
+			return
+		var record := record_variant as Dictionary
+		var monster_id_value := int(record.get("monsterId", -1))
+		var range_gu_value: Variant = record.get("attackRangeGu", null)
+		if monster_id_value <= 0 or seen_ids.has(monster_id_value):
+			_attack_range_policy_load_failed = true
+			push_error("EnemyActor: invalid or duplicate attack range policy monsterId: ", monster_id_value)
+			return
+		if range_gu_value is bool or not (range_gu_value is int or range_gu_value is float):
+			_attack_range_policy_load_failed = true
+			push_error("EnemyActor: non-numeric attackRangeGu for monsterId: ", monster_id_value)
+			return
+		var range_gu := float(range_gu_value)
+		if not is_finite(range_gu) or range_gu <= 0.0:
+			_attack_range_policy_load_failed = true
+			push_error("EnemyActor: invalid attackRangeGu for monsterId: ", monster_id_value)
+			return
+		seen_ids[monster_id_value] = true
+		_attack_range_policy_by_id[monster_id_value] = record.duplicate(true)
+	_attack_range_policy_loaded = true
+	_attack_range_policy_load_failed = false
+
+
+static func _attack_range_policy_record_for_id(requested_monster_id: int) -> Dictionary:
+	_load_attack_range_policy_once()
+	if _attack_range_policy_load_failed:
+		return {}
+	var raw: Variant = _attack_range_policy_by_id.get(requested_monster_id, null)
+	if raw == null or not (raw is Dictionary):
+		return {}
+	return (raw as Dictionary).duplicate(true)
 
 
 func _apply_source_locked_special_delivery_override() -> void:
@@ -1612,6 +1899,9 @@ func _ready() -> void:
 	safe_margin = 0.35
 	max_slides = 6
 	_rng.randomize()
+	if not _audio_rng_initialized:
+		_audio_rng.randomize()
+		_audio_rng_initialized = true
 	_initialize_spawn_facing_once()
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
@@ -1720,6 +2010,8 @@ func _update_natural_regen(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_audio_try_emit_appear()
+	_audio_observe_visual_state()
 	var physics_started_usec := RuntimeDiagnostics.begin_timed_segment(
 		&"enemy_physics_calls"
 	)
@@ -1933,8 +2225,7 @@ func _physics_process_internal(delta: float) -> void:
 		if _attack_timer <= 0.0:
 			_attack_timer = _current_attack_interval()
 			_refresh_target_focus()
-			if visual != null:
-				visual.play_attack(maxf(_attack_animation_duration,0.62))
+			_play_attack_animation(maxf(_attack_animation_duration, 0.62))
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
 			if _uses_special_magic_melee_delivery():
 				_deal_special_magic_melee_hit(target, dealt_damage)
@@ -3621,10 +3912,9 @@ func _update_area_magic_delivery(delta: float) -> void:
 		0.001,
 		float(attack_delivery_rule.get("hitDelaySeconds", 0.6)),
 	)
-	if visual != null:
-		# Only the authored monster body attack is presented. There is no
-		# unproven client warning circle or independent projectile/effect.
-		visual.play_attack(maxf(_attack_animation_duration, _area_magic_warning))
+	# Only the authored monster body attack is presented. There is no
+	# unproven client warning circle or independent projectile/effect.
+	_play_attack_animation(maxf(_attack_animation_duration, _area_magic_warning))
 
 
 func _create_area_magic_footprint_snapshot() -> Dictionary:
@@ -3863,11 +4153,10 @@ func _update_area_attack(delta: float) -> bool:
 					candidate_snapshot,
 				)
 			_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
-			if visual != null:
-				visual.play_attack(maxf(
-					_area_attack_visual_duration(),
-					_area_attack_warning,
-				))
+			_play_attack_animation(maxf(
+				_area_attack_visual_duration(),
+				_area_attack_warning,
+			))
 	return true
 
 
@@ -4220,6 +4509,9 @@ func _update_behavior_summon(delta: float) -> bool:
 		_summon_cooldown = maxf(0.0, _summon_cooldown - delta)
 	elif is_instance_valid(target):
 		_summon_warning = maxf(0.001, float(summon_rule.get("delaySeconds", 0.5)))
+		# Summon warning is a separate ability action, not an accepted monster
+		# attack.  Preserve its existing visual timing without manufacturing the
+		# source phase-2 attack sound.
 		if visual != null:
 			visual.play_attack(maxf(_attack_animation_duration, _summon_warning))
 	return true
@@ -4503,6 +4795,7 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 		return
 	_record_performance_counter(&"take_damage_calls")
 	_leave_background_deep_sleep()
+	var hp_before_damage := current_hp
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
@@ -4511,6 +4804,8 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 		_apply_health_stage_mechanics()
 	if visual != null and current_hp > 0:
 		visual.play_hit()
+		if hp_before_damage - current_hp > 0:
+			_emit_monster_audio("hurt")
 	if is_boss and _boss_phase_enabled and not _boss_phase_two and current_hp <= max_hp / 2:
 		_boss_phase_two = true
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
@@ -4611,6 +4906,12 @@ func _begin_death() -> void:
 		return
 	clear_entrapment("death")
 	_dying = true
+	if not _audio_death_emitted:
+		_audio_death_emitted = true
+		_emit_monster_audio("death", true)
+	# Do not synthesize death_secondary: the source contract permits it only
+	# for appearance-80 guard records, and EnemyActor has no proven source guard
+	# at this boundary.  The shared service therefore remains fail-closed.
 	# A corpse is a presentation/persistence job, not an active physics actor.
 	# Disable the callback at the formal death boundary so a long corpse hold
 	# cannot keep entering _physics_process every frame.
@@ -5623,8 +5924,7 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 			_next_spatial_release_id("boss_special"),
 		)
 		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
-		if visual != null:
-			visual.play_attack(float(special.get("animationSeconds", _attack_animation_duration)))
+		_play_attack_animation(float(special.get("animationSeconds", _attack_animation_duration)))
 
 
 func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:

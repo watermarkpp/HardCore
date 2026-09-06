@@ -19,6 +19,8 @@ func _run() -> void:
 
 	var player := _make_player(Vector2(2.0, 0.0))
 	var mage := _make_caster(220, player)
+	assert(is_equal_approx(mage.attack_range_gu, 2.0), "牛魔法师未应用正式GU射程")
+	assert(is_equal_approx(float(mage.attack_delivery_rule.get("range_gu", -1.0)), 2.0), "牛魔法师魔法门槛未应用正式GU射程")
 	mage.attack_min = 50
 	mage.attack_max = 50
 	mage._attack_timer = 0.0
@@ -68,6 +70,8 @@ func _run() -> void:
 
 	# Cow priest healing is based on post-MAC damage, not the raw magic roll.
 	var priest := _make_caster(222, player)
+	assert(is_equal_approx(priest.attack_range_gu, 2.0), "牛魔祭司未应用正式GU射程")
+	assert(is_equal_approx(float(priest.attack_delivery_rule.get("range_gu", -1.0)), 2.0), "牛魔祭司魔法门槛未应用正式GU射程")
 	priest.attack_min = 50
 	priest.attack_max = 50
 	priest.current_hp = maxi(1, priest.max_hp - 100)

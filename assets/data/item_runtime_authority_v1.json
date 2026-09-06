@@ -339,9 +339,9 @@
         }
       },
       "art": {
-        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
-        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
-        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+        "inventoryIcon": { "path": "res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00420.png", "exact": false, "distribution": "client.classic_raw_complete", "sourceIndex": 420, "sourceName": "疾风药水", "selection": "semantic_primary_client_art" },
+        "stateIcon": { "path": "res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00420.png", "exact": false, "distribution": "client.classic_raw_complete", "sourceIndex": 420, "sourceName": "疾风药水", "selection": "semantic_primary_client_art" },
+        "groundIcon": { "path": "res://assets/art/items/service/ground/client.classic_raw_complete/DnItems_00420.png", "exact": false, "distribution": "client.classic_raw_complete", "sourceIndex": 420, "sourceName": "疾风药水", "selection": "semantic_primary_client_art" }
       },
       "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
     }

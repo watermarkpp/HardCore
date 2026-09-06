@@ -3,6 +3,7 @@ extends Node
 const PROFILE_PATH := "res://assets/data/monster_behavior_profiles.json"
 const BOSS_RULE_PATH := "res://assets/data/boss_service_rules.json"
 const SOURCE_PATH := "res://assets/data/monster_special_delivery_sources_v1.json"
+const RANGE_POLICY_PATH := "res://assets/data/monster_attack_range_policy_v1.json"
 const ENEMY_PATH := "res://scripts/enemy.gd"
 
 var _failures: Array[String] = []
@@ -12,9 +13,11 @@ func _ready() -> void:
 	var profiles := _read_json(PROFILE_PATH)
 	var boss_rules := _read_json(BOSS_RULE_PATH)
 	var sources := _read_json(SOURCE_PATH)
+	var range_policy := _read_json(RANGE_POLICY_PATH)
 	_assert_profiles(profiles)
 	_assert_boss_rules(boss_rules)
 	_assert_sources(sources)
+	_assert_range_policy(range_policy)
 	_assert_runtime_route()
 	if _failures.is_empty():
 		print("MONSTER_SPECIAL_DELIVERY_CONTRACT_PASS")
@@ -97,6 +100,47 @@ func _assert_sources(document: Dictionary) -> void:
 	_expect(str(record124_delivery.get("effectId", "")) == "monster.touch_dragon.area_magic.v1", "124 source effect mismatch")
 
 
+func _assert_range_policy(document: Dictionary) -> void:
+	_expect(str(document.get("contractId", "")) == "monster.attack_range_policy.v1", "attack range policy contract mismatch")
+	_expect(str(document.get("unitContract", "")) == "combat.unit.gu_gs_px.v1", "attack range policy unit contract mismatch")
+	_expect(str(document.get("distanceMetric", "")) == "euclidean", "attack range policy must be Euclidean")
+	_expect(str(document.get("sourcePriorityEvidence", {}).get("path", "")) == "assets/data/source_priority_policy.json", "attack range source-priority evidence missing")
+	_expect(str(document.get("unitSource", {}).get("tier", "")) == "primary", "attack range unit source is not primary")
+	_expect(str(document.get("unitSource", {}).get("sha256", "")).length() == 64, "attack range unit source hash missing")
+	var expected_ranges := {
+		70: 1.0,
+		124: 6.0,
+		150: 7.0,
+		152: 7.0,
+		206: 7.0,
+		220: 2.0,
+		222: 2.0,
+	}
+	var by_id: Dictionary = {}
+	for record_value: Variant in document.get("records", []):
+		if record_value is Dictionary:
+			var record := record_value as Dictionary
+			by_id[int(record.get("monsterId", -1))] = record
+	_expect(by_id.size() == expected_ranges.size(), "attack range policy exact-ID record count mismatch")
+	for monster_id_value: Variant in expected_ranges.keys():
+		var monster_id := int(monster_id_value)
+		var record: Dictionary = by_id.get(monster_id, {})
+		_expect(not record.is_empty(), "attack range policy missing monsterId=%d" % monster_id)
+		_expect(is_equal_approx(float(record.get("attackRangeGu", -1.0)), float(expected_ranges[monster_id])), "attack range GU mismatch for monsterId=%d" % monster_id)
+		var source: Dictionary = record.get("source", {})
+		_expect(str(source.get("distribution", "")) == "source.original_gameofmir.server_suite", "range source distribution mismatch for monsterId=%d" % monster_id)
+		_expect(str(source.get("tier", "")) == "primary", "range source tier mismatch for monsterId=%d" % monster_id)
+		_expect(str(source.get("path", "")).begins_with("dev_art_sources/reference/original_gameofmir/"), "range source is not primary server rule for monsterId=%d" % monster_id)
+		_expect(str(source.get("sha256", "")).length() == 64, "range source hash missing for monsterId=%d" % monster_id)
+		if monster_id in [150, 152, 206]:
+			_expect(str(record.get("deliveryKind", "")) == "physical_projectile", "archer delivery mismatch for monsterId=%d" % monster_id)
+			_expect(str(record.get("rangeShape", "")) == "euclidean_circle", "archer range shape mismatch for monsterId=%d" % monster_id)
+		if monster_id in [220, 222]:
+			_expect(str(record.get("deliveryKind", "")) == "target_magic", "caster delivery mismatch for monsterId=%d" % monster_id)
+			_expect(str(record.get("rangeShape", "")) == "chebyshev_square", "caster source grid shape mismatch for monsterId=%d" % monster_id)
+			_expect(bool(record.get("sourceContactMeleeFallback", false)), "caster source melee fallback missing for monsterId=%d" % monster_id)
+
+
 func _assert_runtime_route() -> void:
 	var file := FileAccess.open(ENEMY_PATH, FileAccess.READ)
 	if file == null:
@@ -110,6 +154,8 @@ func _assert_runtime_route() -> void:
 	_expect(source.contains("_update_area_magic_delivery(delta)"), "124 exclusive early route missing")
 	_expect(source.contains("MONSTER_AREA_MAGIC_EFFECT_ID"), "124 stable effect constant missing")
 	_expect(source.contains("RETIRED_SOURCE_ONLY_MONSTER_IDS := [71]"), "71 runtime retirement guard missing")
+	_expect(source.contains("MONSTER_ATTACK_RANGE_POLICY_PATH"), "attack range policy path missing")
+	_expect(source.contains("_apply_attack_range_policy()"), "attack range policy is not applied after profile projection")
 
 
 func _expect(condition: bool, message: String) -> void:

@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "overlay_contract_id": "skills.project_test_manifest_overlay.v1",
+  "overlay_status": "project_canonical",
+  "base_manifest_path": "res://assets/data/vanilla_176/skill_source_package_v1_0_1/mir2_176_skill_test_manifest_v1.json",
+  "source_of_truth_path": "res://assets/data/vanilla_176/skills_source_of_truth_v1.json",
+  "source_of_truth_sha256": "D439258D5EF1E76F86FB2EB590A8EC22D49757CD909DE0C1F889370BD2CCDC19",
+  "merge_policy": "append_explicit_entries_only_after_id_and_sot_required_test_validation",
+  "skill_tests": [
+    {
+      "id": "warrior.slaying_swordsmanship::slaying_scope_all_body_modes",
+      "skill_id": "warrior.slaying_swordsmanship",
+      "priority": "P1",
+      "assert": "slaying_scope_all_body_modes"
+    },
+    {
+      "id": "warrior.fire_sword::fire_sword_requires_target_before_action",
+      "skill_id": "warrior.fire_sword",
+      "priority": "P1",
+      "assert": "fire_sword_requires_target_before_action"
+    }
+  ]
+}

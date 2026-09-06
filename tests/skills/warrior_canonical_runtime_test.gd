@@ -11,6 +11,7 @@ func _ready() -> void:
 	var thrust_definition := Loader.skill("warrior.thrusting")
 	var half_definition := Loader.skill("warrior.half_moon")
 	var fire_definition := Loader.skill("warrior.fire_sword")
+	_verify_normal_fire_project_override()
 	assert(thrust_definition.geometry.maximum_targets == -1)
 	assert(half_definition.geometry.maximum_targets == -1)
 	assert(fire_definition.geometry.maximum_targets == 1)
@@ -102,7 +103,7 @@ func _ready() -> void:
 	assert(thrust.effects[0].maximum_targets == -1)
 	assert(thrust.effects[1].maximum_targets == -1)
 	assert(thrust.effects[0].target_count_policy_id == "gameplay.warrior.melee_target_count.v1")
-	assert(is_equal_approx(float(thrust.geometry.effect_length_gu), 2.0))
+	assert(is_equal_approx(float(thrust.geometry.effect_length_gu), 3.0))
 	var half := _execute("warrior.half_moon", 3, {"has_target": true, "eligible_target_count": 4}, 100)
 	assert(half.effects[0].maximum_targets == -1)
 	assert(half.effects[0].target_count_policy_id == "gameplay.warrior.melee_target_count.v1")
@@ -145,6 +146,34 @@ func _ready() -> void:
 	assert(consumed_fire.timing.cooldown_ms == 8000)
 	print("WARRIOR_CANONICAL_RUNTIME_PASS: six skills, deterministic atomic wild rush, active fire charge, proficiency disabled")
 	get_tree().quit()
+
+
+func _verify_normal_fire_project_override() -> void:
+	var file := FileAccess.open(
+		"res://assets/data/vanilla_176/skills_source_of_truth_v1.json",
+		FileAccess.READ,
+	)
+	assert(file != null)
+	var root: Variant = JSON.parse_string(file.get_as_text())
+	assert(root is Dictionary)
+	var geometry: Dictionary = (root as Dictionary).get("global_policy", {}).get(
+		"geometry", {}
+	)
+	var override: Dictionary = geometry.get("warrior_melee_override", {})
+	assert(override.contract_id == "gameplay.warrior.normal_fire.fixed_2gu.v1")
+	assert(is_equal_approx(float(override.ordinary_attack_reach_gu), 2.0))
+	assert(is_equal_approx(float(override.fire_sword_reach_gu), 2.0))
+	assert(is_equal_approx(float(override.range_bonus_cap_gu), 0.0))
+	assert(bool(override.fire_requires_valid_target_at_input))
+	assert(not bool(override.fire_fallback_to_other_melee_modes))
+	assert(
+		str(override.fire_empty_swing_policy)
+		== "reject_without_valid_target_at_input"
+	)
+	var fire_definition: Dictionary = Loader.skill("warrior.fire_sword")
+	var fire_geometry: Dictionary = fire_definition.get("geometry", {})
+	assert(is_equal_approx(float(fire_geometry.get("runtime_melee_reach_gu", -1.0)), 2.0))
+	assert(is_equal_approx(float(fire_geometry.get("range_bonus_cap_gu", -1.0)), 0.0))
 
 
 func _execute(

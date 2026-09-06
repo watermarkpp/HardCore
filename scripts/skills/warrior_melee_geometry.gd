@@ -36,6 +36,14 @@ const TARGET_ALIGNED_CONTINUOUS_RELEASE_CONTRACT_ID := (
 const TARGET_ALIGNED_RELEASE_FOOTPRINT_CONTRACT_ID := (
 	"gameplay.warrior.target_aligned_release_footprint.shared_snapshot.v1"
 )
+## User-authorized HardCore override (2026-09-06): every ordinary melee
+## attack is a fixed 2 GU single-target release.  Fire Sword inherits the
+## same 2 GU contact range; these are total reaches, so a second range-bonus
+## pass is forbidden.  The release snapshot below remains the sole runtime
+## geometry truth for both modes.
+const NORMAL_FIRE_FIXED_REACH_CONTRACT_ID := (
+	"gameplay.warrior.normal_fire.fixed_2gu.v1"
+)
 const RELEASE_FOOTPRINT_CONTRACT_ID := (
 	"gameplay.warrior.release_footprint.shared_snapshot.v1"
 )
@@ -50,16 +58,22 @@ const SKILL_HALF_MOON := "half_moon"
 const SKILL_THRUST := "thrust"
 
 const BASE_REACH_GU := {
-	SKILL_NORMAL: 1.5,
-	SKILL_FIRE: 1.5,
-	SKILL_HALF_MOON: 1.5,
-	SKILL_THRUST: 2.5,
+	SKILL_NORMAL: 2.0,
+	SKILL_FIRE: 2.0,
+	## User-authorized HardCore override: Half Moon is a 2 GU fan.
+	SKILL_HALF_MOON: 2.0,
+	## User-authorized HardCore override: Thrusting is a fixed 3 GU line.
+	SKILL_THRUST: 3.0,
 }
 const RANGE_BONUS_CAP_GU := {
-	SKILL_NORMAL: 1.0,
-	SKILL_FIRE: 1.0,
-	SKILL_HALF_MOON: 0.5,
-	SKILL_THRUST: 1.0,
+	## Ordinary and Fire Sword ranges are explicit total reaches, not bases
+	## that can be extended by a second range calculation.
+	SKILL_NORMAL: 0.0,
+	SKILL_FIRE: 0.0,
+	## The explicit 2 GU/3 GU skill lengths are total reaches, not bases
+	## extended by a second range calculation.
+	SKILL_HALF_MOON: 0.0,
+	SKILL_THRUST: 0.0,
 }
 const MAXIMUM_TARGETS := {
 	SKILL_NORMAL: 1,
@@ -69,20 +83,23 @@ const MAXIMUM_TARGETS := {
 }
 
 const THRUST_PRIMARY_REACH_GU := 1.5
+const THRUST_TOTAL_REACH_GU := 3.0
 const THRUST_WIDTH_GU := 1.0
+const THRUST_SECONDARY_IGNORE_AC := true
 ## Short straight-line footprint shared by normal/fire target-aligned releases.
 ## Width covers the locked target combat radius (<= 0.5 GU) so the locked
 ## target remains formally covered while the band stays a narrow line.
 const TARGET_ALIGNED_NORMAL_WIDTH_GU := 1.0
 const TARGET_ALIGNED_LINE_WIDTH_GU := 1.0
-## Half-moon keeps the existing four-sector fan exactly: sector centers are
-## [-45, 0, +45, +90] degrees relative to the continuous axis, each +/-22.5
-## degrees, so the fan spans [-67.5, +112.5] degrees. The arc snapshot is
-## centered at axis + PI/8 (same offset as the legacy quantized fan). The fan
-## is deliberately not symmetrized to preserve the existing balance semantics.
-const TARGET_ALIGNED_HALF_MOON_ARC_CENTER_OFFSET_RADIANS := PI / 8.0
-const TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS := PI / 2.0
-const HALF_MOON_RELATIVE_DIRECTION_OFFSETS: Array[int] = [7, 0, 1, 2]
+## User-authorized HardCore override: Half Moon's release snapshot is a
+## symmetric 120-degree fan centered on the continuous GU release axis. The
+## legacy relative codes remain stable for primary/left/right consumers; code 2
+## (the old +90-degree fourth sector) is no longer inside the canonical fan.
+const TARGET_ALIGNED_HALF_MOON_ARC_CENTER_OFFSET_RADIANS := 0.0
+const TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS := PI / 3.0
+const HALF_MOON_RELATIVE_DIRECTION_OFFSETS: Array[int] = [7, 0, 1]
+const HALF_MOON_SIDE_SECTOR_CENTER_RADIANS := (PI / 8.0 + PI / 3.0) * 0.5
+const HALF_MOON_SIDE_SECTOR_HALF_ANGLE_RADIANS := (PI / 3.0 - PI / 8.0) * 0.5
 const WILD_RUSH_TARGET_REACH_GU := 1.5
 const WILD_RUSH_PUSH_DISTANCE_GU := 3.0
 const WILD_RUSH_MAXIMUM_GRID_STEPS := 3
@@ -118,6 +135,12 @@ static func reach_gu(mode: String, range_bonus_gu := 0.0) -> float:
 	var base := float(BASE_REACH_GU.get(mode, BASE_REACH_GU[SKILL_NORMAL]))
 	var bonus_cap := float(RANGE_BONUS_CAP_GU.get(mode, 0.0))
 	return base + clampf(float(range_bonus_gu), 0.0, bonus_cap)
+
+
+static func reach_contract_id(mode: String) -> String:
+	if mode == SKILL_NORMAL or mode == SKILL_FIRE:
+		return NORMAL_FIRE_FIXED_REACH_CONTRACT_ID
+	return CONTRACT_ID
 
 
 static func maximum_targets(mode: String) -> int:
@@ -221,6 +244,10 @@ static func thrust_slot_gu(
 	)
 
 
+static func thrust_slot_ignores_ac(slot: int) -> bool:
+	return THRUST_SECONDARY_IGNORE_AC and slot == 2
+
+
 static func target_footprint_polygon_ground_gu(
 	target_center_ground_gu: Vector2,
 	target_combat_radius_gu: float
@@ -252,12 +279,15 @@ static func attack_region_polygons(
 		))
 		return result
 	if resolved_mode == SKILL_HALF_MOON:
-		for relative_direction: int in HALF_MOON_RELATIVE_DIRECTION_OFFSETS:
-			result.append(direction_sector_polygon(
-				origin,
-				posmod(direction_index + relative_direction, 8),
-				reach_tiles(SKILL_HALF_MOON, range_bonus_tiles)
-			))
+		## One arc polygon is the canonical 120-degree footprint. Do not rebuild
+		## the old four-cell fan here: release snapshots and broadphase consumers
+		## must agree at the exact angular boundary.
+		result.append(_direction_sector_polygon_for_direction_ground_gu(
+			origin,
+			canonical_ground_direction_gu(direction_index),
+			reach_tiles(SKILL_HALF_MOON, range_bonus_tiles),
+			TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS,
+		))
 		return result
 	result.append(direction_sector_polygon(
 		origin,
@@ -308,8 +338,31 @@ static func footprint_intersects_direction_sector_gu(
 	direction_index: int,
 	reach_gu: float
 ) -> bool:
+	return _footprint_intersects_direction_ground_sector_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		canonical_ground_direction_gu(direction_index),
+		reach_gu,
+		PI / 8.0,
+	)
+
+
+static func _footprint_intersects_direction_ground_sector_gu(
+	origin_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	target_combat_radius_gu: float,
+	direction_ground_gu: Vector2,
+	reach_gu: float,
+	half_angle_radians: float,
+) -> bool:
 	return convex_polygons_intersect_inclusive(
-		direction_sector_polygon(origin_ground_gu, direction_index, reach_gu),
+		_direction_sector_polygon_for_direction_ground_gu(
+			origin_ground_gu,
+			direction_ground_gu,
+			reach_gu,
+			half_angle_radians,
+		),
 		target_footprint_polygon_ground_gu(
 			target_center_ground_gu,
 			target_combat_radius_gu
@@ -324,29 +377,83 @@ static func half_moon_footprint_relative_sector_gu(
 	attack_direction_index: int,
 	range_bonus_gu := 0.0
 ) -> int:
+	if maxf(0.0, target_combat_radius_gu) <= EPSILON:
+		return _half_moon_point_relative_sector_gu(
+			origin_ground_gu,
+			target_center_ground_gu,
+			attack_direction_index,
+			range_bonus_gu,
+		)
 	var effective_reach_gu := reach_gu(SKILL_HALF_MOON, range_bonus_gu)
 	# Primary damage remains the facing sector. If an ellipse straddles the
 	# primary/secondary boundary, primary wins deterministically and the caller
 	# must not add the same target to a secondary list.
-	if footprint_intersects_direction_sector_gu(
+	if _footprint_intersects_direction_ground_sector_gu(
 		origin_ground_gu,
 		target_center_ground_gu,
 		target_combat_radius_gu,
-		attack_direction_index,
-		effective_reach_gu
+		canonical_ground_direction_gu(attack_direction_index),
+		effective_reach_gu,
+		PI / 8.0,
 	):
 		return 0
-	for relative_direction: int in HALF_MOON_RELATIVE_DIRECTION_OFFSETS:
-		if relative_direction == 0:
-			continue
-		if footprint_intersects_direction_sector_gu(
-			origin_ground_gu,
-			target_center_ground_gu,
-			target_combat_radius_gu,
-			posmod(attack_direction_index + relative_direction, 8),
-			effective_reach_gu
-		):
-			return relative_direction
+	var attack_axis := canonical_ground_direction_gu(attack_direction_index)
+	if _footprint_intersects_direction_ground_sector_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		attack_axis.rotated(-HALF_MOON_SIDE_SECTOR_CENTER_RADIANS),
+		effective_reach_gu,
+		HALF_MOON_SIDE_SECTOR_HALF_ANGLE_RADIANS,
+	):
+		return 7
+	if _footprint_intersects_direction_ground_sector_gu(
+		origin_ground_gu,
+		target_center_ground_gu,
+		target_combat_radius_gu,
+		attack_axis.rotated(HALF_MOON_SIDE_SECTOR_CENTER_RADIANS),
+		effective_reach_gu,
+		HALF_MOON_SIDE_SECTOR_HALF_ANGLE_RADIANS,
+	):
+		return 1
+	return -1
+
+
+static func _half_moon_point_relative_sector_gu(
+	origin_ground_gu: Vector2,
+	target_center_ground_gu: Vector2,
+	attack_direction_index: int,
+	range_bonus_gu := 0.0
+) -> int:
+	## A point candidate has no area polygon. Keep its classification in the
+	## same continuous angular contract instead of asking SAT to intersect four
+	## coincident vertices, which is undefined for a zero-radius footprint.
+	if not is_single_target_in_reach(
+		origin_ground_gu,
+		target_center_ground_gu,
+		SKILL_HALF_MOON,
+		range_bonus_gu,
+	):
+		return -1
+	var delta := target_center_ground_gu - origin_ground_gu
+	var attack_axis := canonical_ground_direction_gu(attack_direction_index)
+	var angular_delta := wrapf(
+		delta.angle() - attack_axis.angle(),
+		-PI,
+		PI,
+	)
+	if absf(angular_delta) <= PI / 8.0 + EPSILON:
+		return 0
+	if (
+		angular_delta >= -TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS - EPSILON
+		and angular_delta < 0.0
+	):
+		return 7
+	if (
+		angular_delta <= TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS + EPSILON
+		and angular_delta > 0.0
+	):
+		return 1
 	return -1
 
 
@@ -395,16 +502,18 @@ static func attack_release_footprint_snapshot_ground_gu(
 				coordinate_context
 			)
 		SKILL_HALF_MOON:
-			# The approved four sectors are [-1, 0, +1, +2] relative to
-			# facing. Their exact union is one 180-degree sector centered
-			# half a direction step clockwise from the visual facing axis.
+			# The project override is a symmetric 120-degree sector centered
+			# on the canonical visual facing axis. This snapshot is the sole
+			# release footprint consumed by candidate and damage validation.
 			return SkillFootprintSnapshotScript.create_sector_arc(
 				skill_id,
 				release_id,
 				origin_ground_gu,
-				direction_ground_gu.rotated(PI / 8.0),
+				direction_ground_gu.rotated(
+					TARGET_ALIGNED_HALF_MOON_ARC_CENTER_OFFSET_RADIANS
+				),
 				reach_gu(SKILL_HALF_MOON, range_bonus_gu),
-				PI / 2.0,
+				TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS,
 				96,
 				coordinate_context
 			)
@@ -817,10 +926,11 @@ static func target_aligned_half_moon_relative_sector_for_plan_gu(
 	range_bonus_gu := 0.0
 ) -> int:
 	## Same-snapshot sector classification for the continuous half-moon fan.
-	## Return codes preserve the legacy mapping: 0 = primary sector centered
-	## on the continuous axis (+/-22.5 deg), 7 = axis -45 deg, 1 = axis +45
-	## deg, 2 = axis +90 deg. A body straddling the primary boundary wins
-	## primary deterministically; callers must not add it to a side list.
+	## Return codes preserve the primary/left/right mapping: 0 = primary sector
+	## centered on the continuous axis (+/-22.5 deg), 7 = the negative-angle
+	## side band, 1 = the positive-angle side band. The bands end at +/-60 deg,
+	## exactly matching the 120-degree release snapshot. A body straddling the
+	## primary boundary wins primary deterministically.
 	if not bool(plan.get("target_axis_eligible", false)):
 		return -1
 	var raw_snapshot: Variant = plan.get("skill_footprint_snapshot")
@@ -857,30 +967,24 @@ static func target_aligned_half_moon_relative_sector_for_plan_gu(
 		effective_reach_gu
 	):
 		return 0
-	if footprint_intersects_continuous_direction_sector_gu(
+	if _footprint_intersects_direction_ground_sector_gu(
 		origin_ground_gu,
 		target_center_ground_gu,
 		target_combat_radius_gu,
-		continuous_axis_ground_gu.rotated(-PI / 4.0),
-		effective_reach_gu
+		continuous_axis_ground_gu.rotated(-HALF_MOON_SIDE_SECTOR_CENTER_RADIANS),
+		effective_reach_gu,
+		HALF_MOON_SIDE_SECTOR_HALF_ANGLE_RADIANS,
 	):
 		return 7
-	if footprint_intersects_continuous_direction_sector_gu(
+	if _footprint_intersects_direction_ground_sector_gu(
 		origin_ground_gu,
 		target_center_ground_gu,
 		target_combat_radius_gu,
-		continuous_axis_ground_gu.rotated(PI / 4.0),
-		effective_reach_gu
+		continuous_axis_ground_gu.rotated(HALF_MOON_SIDE_SECTOR_CENTER_RADIANS),
+		effective_reach_gu,
+		HALF_MOON_SIDE_SECTOR_HALF_ANGLE_RADIANS,
 	):
 		return 1
-	if footprint_intersects_continuous_direction_sector_gu(
-		origin_ground_gu,
-		target_center_ground_gu,
-		target_combat_radius_gu,
-		continuous_axis_ground_gu.rotated(PI / 2.0),
-		effective_reach_gu
-	):
-		return 2
 	return -1
 
 
@@ -975,20 +1079,26 @@ static func _target_aligned_ineligible_plan(
 static func _direction_sector_polygon_for_direction_ground_gu(
 	origin_ground_gu: Vector2,
 	direction_ground_gu: Vector2,
-	effective_reach_gu: float
+	effective_reach_gu: float,
+	half_angle_radians := PI / 8.0,
 ) -> PackedVector2Array:
-	## Continuous-direction analogue of direction_sector_polygon(): a 45-degree
-	## sector centered on an arbitrary ground direction. Deterministic convex
-	## SAT with 24 arc samples, endpoints include the +/-22.5-degree edges.
+	## Continuous-direction analogue of direction_sector_polygon(). The default
+	## is the ordinary 45-degree sector; callers may provide the exact half-angle
+	## for a canonical arc/sub-sector while staying in GU space.
 	var safe_reach_gu := maxf(0.0, effective_reach_gu)
+	var safe_half_angle_radians := clampf(
+		float(half_angle_radians),
+		0.0,
+		PI * 0.5,
+	)
 	var center_angle_radians := direction_ground_gu.angle()
 	var polygon := PackedVector2Array([origin_ground_gu])
 	const ARC_SEGMENTS := 24
 	for index: int in range(ARC_SEGMENTS + 1):
 		var weight := float(index) / float(ARC_SEGMENTS)
 		var angle_radians := lerpf(
-			center_angle_radians - PI / 8.0,
-			center_angle_radians + PI / 8.0,
+			center_angle_radians - safe_half_angle_radians,
+			center_angle_radians + safe_half_angle_radians,
 			weight
 		)
 		polygon.append(
@@ -1245,8 +1355,16 @@ static func is_in_half_moon_arc(
 ) -> bool:
 	if not is_single_target_in_reach(origin, target, SKILL_HALF_MOON, range_bonus_tiles):
 		return false
-	var target_direction := direction_index_for_ground_delta_gu(target - origin)
-	return half_moon_relative_sector(attack_direction_index, target_direction) in HALF_MOON_RELATIVE_DIRECTION_OFFSETS
+	var delta := target - origin
+	if delta.length_squared() <= EPSILON * EPSILON:
+		return false
+	var attack_axis := canonical_ground_direction_gu(attack_direction_index)
+	var angular_delta := wrapf(
+		delta.angle() - attack_axis.angle(),
+		-PI,
+		PI,
+	)
+	return absf(angular_delta) <= TARGET_ALIGNED_HALF_MOON_HALF_ANGLE_RADIANS + EPSILON
 
 
 static func is_in_half_moon_arc_gu(

@@ -77,6 +77,23 @@
       "failed_or_invalid_action_gains_proficiency": false,
       "rank_3_is_terminal": true
     },
+    "book_model": {
+      "contract_id": "skills.progression.hardcore.v2.book_rank_v1",
+      "status": "project_canonical",
+      "first_book_sets_rank": 1,
+      "second_book_sets_rank": 2,
+      "third_book_sets_rank": 3,
+      "maximum_books_per_skill": 3,
+      "book_name_resolution": "exact_stable_skill_id_or_exact_canonical_display_name",
+      "rank_zero_player_level_required_is_first_book_gate": true,
+      "rank_n_player_level_required_is_gate_for_book_n": true,
+      "proficiency_required": false,
+      "proficiency_is_not_produced_or_persisted": true,
+      "rank_three_is_terminal": true,
+      "overrides_global_historical_rank_model_for_runtime": true,
+      "legacy_rank_zero_snapshots": "load_as_base_rank_zero_without_automatic_upgrade",
+      "save_failure": "inventory_and_skill_state_restore_atomically"
+    },
     "authoritative_runtime": {
       "server_authoritative": true,
       "single_entrypoint": "SkillRuntimeRouter.execute(request) -> SkillCastResult",
@@ -128,7 +145,19 @@
         32
       ],
       "distance_metric": "chebyshev_for_8_direction_grid_unless_skill_overrides",
-      "raw_pixel_ranges_for_gameplay": "forbidden"
+      "raw_pixel_ranges_for_gameplay": "forbidden",
+      "warrior_melee_override": {
+        "contract_id": "gameplay.warrior.normal_fire.fixed_2gu.v1",
+        "ordinary_attack_reach_gu": 2.0,
+        "fire_sword_reach_gu": 2.0,
+        "range_bonus_cap_gu": 0.0,
+        "target_count": 1,
+        "unit": "ground_gu",
+        "release_snapshot_is_sole_geometry_truth": true,
+        "fire_requires_valid_target_at_input": true,
+        "fire_empty_swing_policy": "reject_without_valid_target_at_input",
+        "fire_fallback_to_other_melee_modes": false
+      }
     },
     "random": {
       "pascal_random_semantics": "Random(n) returns integer in [0,n-1]; n<=0 returns 0",
@@ -427,6 +456,9 @@
         "proc_timing": "once_per_valid_melee_action_before_target_damage_commits",
         "damage_bonus_timing": "after_each_selected_body_skill_formula",
         "modifier_scope": "one_shared_proc_result_applies_to_all_hits_of_normal_thrust_half_moon_or_fire_action",
+        "project_runtime_scope": "all_valid_warrior_melee_actions_with_body_damage; wild_rush_has_no_body_damage_and_is_not_applicable",
+        "skill_effect_policy": "post_body_damage_only_no_extra_slaying_animation_for_skill_body_modes",
+        "body_animation_policy": "selected_body_skill_animation_remains_unchanged",
         "status": "project_canonical",
         "source_status": "explicit_user_primary_override",
         "evidence_note": "用户定稿表为唯一验收基准：准确常驻；每次近战攻击动作独立按1/7、1/6、1/5、1/4判定一次。触发后，该动作的每个实际命中在主体技能公式之后固定增加+2、+4、+6、+8物理伤害。"
@@ -466,10 +498,11 @@
         ]
       },
       "required_tests": [
-        "slaying_proc_table_exact",
-        "slaying_dc_bonus_exact",
-        "slaying_accuracy_bonus_exact",
-        "slaying_training_only_on_proc"
+			"slaying_proc_table_exact",
+			"slaying_dc_bonus_exact",
+			"slaying_accuracy_bonus_exact",
+			"slaying_scope_all_body_modes",
+			"slaying_training_only_on_proc"
       ]
     },
     {
@@ -525,15 +558,17 @@
       },
       "geometry": {
         "shape": "line",
-        "length_tiles": 2,
+        "length_tiles": 3,
         "width_tiles": 1,
-		"maximum_reach_tiles": 2.5,
+		"maximum_reach_tiles": 3.0,
 		"endpoint_tolerance_tiles": 0.5,
 		"primary_segment_reach_tiles": 1.5,
         "maximum_targets": -1,
         "maximum_targets_semantics": "unlimited_within_valid_geometry",
         "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
-		"range_bonus_cap_tiles": 1.0,
+		"range_bonus_cap_tiles": 0.0,
+		"unit_override": "ground_gu",
+		"project_override_contract_id": "gameplay.warrior.thrusting.fixed_3gu_two_segment.v1",
 		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
 		"raw_pixel_geometry_forbidden": true,
         "stop_on_terrain": true
@@ -669,13 +704,16 @@
         "relation": "hostile"
       },
       "geometry": {
-        "shape": "project_canonical_four_target_arc",
-        "primary_cell": "front_1",
-        "side_cells": "three cells defined by HalfMoonArcResolver; resolver must rotate with 8-direction facing",
-		"relative_direction_offsets": [7, 0, 1, 2],
-		"base_reach_tiles": 1.5,
+		"shape": "project_canonical_four_target_arc",
+		"primary_cell": "front_1",
+		"side_cells": "continuous_120_degree_fan_side_bands",
+		"relative_direction_offsets": [7, 0, 1],
+		"arc_angle_degrees": 120.0,
+		"base_reach_tiles": 2.0,
 		"endpoint_tolerance_tiles": 0.5,
-		"range_bonus_cap_tiles": 0.5,
+		"range_bonus_cap_tiles": 0.0,
+		"unit_override": "ground_gu",
+		"project_override_contract_id": "gameplay.warrior.half_moon.fixed_2gu_120deg.v1",
 		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
         "maximum_targets": -1,
         "maximum_targets_semantics": "unlimited_within_valid_geometry",
@@ -960,18 +998,15 @@
       },
       "geometry": {
         "shape": "none_until_next_melee_hit",
-		"runtime_melee_reach_tiles": 1.5,
+		"runtime_melee_reach_tiles": 2.0,
 		"maximum_targets": 1,
-		"range_bonus_cap_tiles": 1.0,
+		"range_bonus_cap_tiles": 0.0,
 		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
 		"requires_valid_target_at_input": true,
-		"empty_swing_policy": "physical_miss_only",
-		"fallback_to_other_melee_modes": true,
-		"fallback_priority_order": [
-		  "warrior.half_moon",
-		  "warrior.thrusting",
-		  "normal"
-		],
+		"empty_swing_policy": "reject_without_valid_target_at_input",
+		"fallback_to_other_melee_modes": false,
+		"fallback_priority_order": [],
+		"release_snapshot_is_sole_geometry_truth": true,
 		"raw_pixel_geometry_forbidden": true
       },
       "timing": {
@@ -1043,9 +1078,10 @@
         ]
       },
       "required_tests": [
-        "fire_sword_never_auto_casts",
-        "fire_sword_multiplier_exact",
-        "fire_sword_charge_expires",
+			"fire_sword_never_auto_casts",
+			"fire_sword_multiplier_exact",
+			"fire_sword_requires_target_before_action",
+			"fire_sword_charge_expires",
         "fire_sword_consumed_once",
         "fire_sword_cooldown_independent_from_charge_lifetime"
       ]

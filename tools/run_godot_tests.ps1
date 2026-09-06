@@ -7,6 +7,22 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# A single worktree owns one import cache, userdata directory and log namespace.
+# Reject overlapping runners before either can overwrite evidence or terminate
+# a peer's child process during cleanup. The OS also releases abandoned locks.
+$RunnerHashAlgorithm = [Security.Cryptography.SHA256]::Create()
+$RunnerMutexKey = [BitConverter]::ToString($RunnerHashAlgorithm.ComputeHash(
+    [Text.Encoding]::UTF8.GetBytes([IO.Path]::GetFullPath($PSScriptRoot).ToUpperInvariant())
+)).Replace('-', '')
+$RunnerHashAlgorithm.Dispose()
+$RunnerMutex = New-Object Threading.Mutex($false, "Local\HardCoreGodotRunner_$RunnerMutexKey")
+$RunnerLockHeld = $false
+try {
+    try { $RunnerLockHeld = $RunnerMutex.WaitOne(0) }
+    catch [Threading.AbandonedMutexException] { $RunnerLockHeld = $true }
+    if (-not $RunnerLockHeld) {
+        throw 'Another Godot test runner owns this worktree. Wait for its explicit handoff before retrying.'
+    }
 # Some Codex desktop shells inherit both `Path` and `PATH`. PowerShell's
 # Start-Process treats environment keys case-insensitively and aborts when both
 # spellings are present, so normalize the process copy before launching Godot.
@@ -498,6 +514,32 @@ $Suites.critical = @(
         Select-Object -Unique
 )
 
+# 2026-09-06 gameplay/audio integration regressions. Keep these production
+# boundaries in the formal suite instead of relying on one-off adhoc evidence.
+$Suites.critical = @($Suites.critical + @(
+    'tests/random_teleport_map_extent_test.tscn',
+    'tests/loot_stable_identity_save_test.tscn',
+    'tests/loot_inventory_transaction_batch_test.tscn',
+    'tests/loot_runtime_item_policy_test.tscn',
+    'tests/combat_unit_source_priority_test.tscn',
+    'tests/skill_book_rank_upgrade_integration_test.tscn',
+    'tests/skill_progression_save_integration_test.tscn',
+    'tests/player_level_up_effect_runtime_test.tscn',
+    'tests/town_music_controller_test.tscn',
+    'tests/audio_runtime_service_test.tscn',
+    'tests/skills/warrior_thrust_defense_runtime_test.tscn',
+    'tests/skills/warrior_melee_entry_runtime_test.tscn',
+    'tests/skills/summon_owner_teleport_runtime_test.tscn',
+    'tests/skills/summon_incoming_damage_runtime_test.tscn',
+    'tests/skills/summon_audio_hook_test.tscn',
+    'tests/monster_audio_hook_test.tscn',
+    'tests/projectile_audio_lifecycle_test.tscn',
+    'tests/player_item_audio_event_test.tscn',
+    'tests/skills/skill_contract_manifest_test.tscn',
+    'tests/skills/skill_source_of_truth_test.tscn',
+    'tests/skills/skill_semantic_contracts_test.tscn'
+) | Select-Object -Unique)
+
 # ── Q0-A: final judgement contract ──
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.
@@ -766,7 +808,7 @@ $engineLogErrorTotal = 0
 foreach ($resultEntry in $StructuredResults) {
     $engineLogErrorTotal += [int]$resultEntry.engine_log_failure_count
 }
-$resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}.json" -f $EffectiveSuite, (Get-Date -Format 'yyyyMMdd_HHmmss'))
+$resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}_{2}.json" -f $EffectiveSuite, (Get-Date -Format 'yyyyMMdd_HHmmss_fff'), $PID)
 @{
     suite = $EffectiveSuite
     generated_at = (Get-Date -Format o)
@@ -786,3 +828,7 @@ if ($failedCount -gt 0) {
     exit 1
 }
 exit 0
+} finally {
+    if ($RunnerLockHeld) { $RunnerMutex.ReleaseMutex() }
+    $RunnerMutex.Dispose()
+}

@@ -23,9 +23,9 @@ const CLIENT_EFFECTS := {
 }
 const CLIENT_EFFECT_ACTOR_OFFSET := Vector2(ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR - ArtSpec.WARRIOR_FOOT_ANCHOR)
 const SUPPORTED_PROFESSIONS := ["战士", "法师", "道士"]
-## Temporarily suppress the existing weapon/skill swing cue while preserving
-## the AudioStreamPlayer2D node and stream selection for a later audio pass.
-## This is local to the actor; Master and Music buses remain untouched.
+## Keep the legacy local player silent: audited cues are dispatched to the
+## shared AudioRuntimeService pool so simultaneous actors do not restart one
+## another and source identity remains event-ID based.
 const SKILL_AUDIO_ENABLED := false
 
 var actor: PlayerCharacter
@@ -947,12 +947,94 @@ func _update_action_audio() -> void:
 		return
 	_action_audio_played = true
 	weapon_audio.stream = _weapon_swing_stream()
+	_dispatch_audited_action_audio()
 	if SKILL_AUDIO_ENABLED:
 		weapon_audio.play()
 	else:
 		# Keep the selected stream observable for existing visual contracts, but
 		# never start playback until the temporary gate is explicitly reopened.
 		weapon_audio.stop()
+
+
+func _dispatch_audited_action_audio() -> void:
+	# MirClient's rush action has no dedicated weapon/skill PlaySound call.
+	# Do not borrow the adjacent attack samples merely because this visual uses
+	# the shared attack atlas.
+	if _action_name in ["野蛮冲撞", "烈火蓄力"]:
+		return
+	var tree := get_tree()
+	if tree == null:
+		return
+	var service := tree.get_first_node_in_group("audio_runtime_service")
+	if service == null or not service.has_method("play_event"):
+		return
+	var context := {
+		"gender": PlayerState.gender,
+		"action_name": _action_name,
+		"source": "player_visual.client_effect_frame",
+	}
+	var weapon_event_id := _weapon_audio_event_id()
+	if not weapon_event_id.is_empty():
+		service.call("play_event", weapon_event_id, context)
+	var skill_event_id := str({
+		"攻杀剑术": "player.skill.slaying",
+		"刺杀剑术": "player.skill.thrusting",
+		"半月弯刀": "player.skill.half_moon",
+		"烈火剑法": "player.skill.fire_sword",
+	}.get(_action_name, ""))
+	if not skill_event_id.is_empty():
+		service.call("play_event", skill_event_id, context)
+
+
+func _weapon_audio_event_id() -> String:
+	var weapon := _equipped_record("武器")
+	if weapon.is_empty():
+		return "player.weapon.fist.swing"
+	# MirClient selects the attack sample from (m_btWeapon div 2), not from
+	# the item display name. Resolve the current stable item ID to the formal
+	# classic weapon shape already used by world-wear rendering; an old
+	# name-only/unknown equipped record stays silent instead of guessing.
+	var stable_item_id := _audio_stable_equipped_item_id(weapon)
+	if stable_item_id < 0:
+		return ""
+	var formal_items: Variant = GameData.equipment_visual_catalog.get("itemsById", {})
+	if not formal_items is Dictionary:
+		return ""
+	var formal_item: Variant = formal_items.get(str(stable_item_id), {})
+	if not formal_item is Dictionary:
+		return ""
+	var world_wear: Variant = formal_item.get("worldWear", {})
+	if not world_wear is Dictionary or not world_wear.has("shape"):
+		return ""
+	var classic_shape := int(world_wear.get("shape", -1))
+	if classic_shape in [6, 20]:
+		return "player.weapon.short.swing"
+	if classic_shape == 1:
+		return "player.weapon.wood.swing"
+	if classic_shape in [2, 5, 9, 13, 14, 22]:
+		return "player.weapon.sword.swing"
+	if classic_shape in [4, 10, 15, 16, 17, 23]:
+		return "player.weapon.blade.swing"
+	if classic_shape in [3, 7, 11]:
+		return "player.weapon.axe.swing"
+	if classic_shape == 24:
+		return "player.weapon.club.swing"
+	if classic_shape in [8, 12, 18, 21]:
+		return "player.weapon.long.swing"
+	return ""
+
+
+func _audio_stable_equipped_item_id(record: Dictionary) -> int:
+	for field_name: String in ["item_id", "itemId"]:
+		var raw_id: Variant = record.get(field_name, null)
+		if raw_id is int or raw_id is float:
+			var numeric_id := int(raw_id)
+			if numeric_id >= 0:
+				return numeric_id
+		var text_id := str(raw_id)
+		if text_id.is_valid_int() and text_id.to_int() >= 0:
+			return text_id.to_int()
+	return -1
 
 
 func _weapon_swing_stream() -> AudioStream:

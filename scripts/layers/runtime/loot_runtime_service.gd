@@ -113,14 +113,14 @@ func possible_item_names_for_monster_ids(monster_ids: Array) -> Array[String]:
 			# the authoritative mirror-validation cost on the gameplay frame.
 			_lean_probability(resolved_id, str(raw_slot.get("slot_uid", "")))
 			var reward := _lean_reward(raw_slot)
-			var item_name := (
-				_drop_output_item_name(
+			var item_name := ""
+			if bool(reward.get("ok", false)) and str(reward.get("kind", "")) != "gold":
+				# Icon prewarming needs only the exact output-name mapping; do not
+				# allocate full catalog records for every potential drop slot.
+				item_name = _drop_output_item_name(
 					int(raw_slot.get("canonical_item_id", -1)),
 					str(reward.get("item_name", "")),
 				)
-				if bool(reward.get("ok", false))
-				else ""
-			)
 			if str(reward.get("kind", "")) == "gold" or item_name.is_empty() or seen.has(item_name):
 				continue
 			seen[item_name] = true
@@ -172,6 +172,10 @@ func roll_monster_drops(
 		"all_enabled_resolved_slots_rng_before_overflow": false,
 		"ground_output_plus_discarded_equals_successful": true,
 		"items": [],
+		# Parallel stable identities for items.  `items` remains the legacy
+		# display-name array consumed by existing callers; this array has the
+		# same order and cardinality for item entries only.
+		"item_records": [],
 		"gold_drops": [],
 		"overflow_discarded": [],
 		"rejected_entries": [],
@@ -362,10 +366,20 @@ func roll_monster_drops(
 			result.resolved_gold_count += 1
 			result.gold_drops.append(int(reward.get("gold_amount", 0)))
 		else:
-			result.items.append(_drop_output_item_name(
-				int(selected.get("canonical_item_id", -1)),
-				str(reward.get("item_name", "")),
-			))
+			var canonical_item_id := int(selected.get("canonical_item_id", -1))
+			var original_name := str(reward.get("item_name", ""))
+			var item_record := _drop_output_item_record(
+				canonical_item_id,
+				original_name,
+			)
+			# Preserve the old output contract even if an identity row is
+			# unexpectedly unavailable. The parallel record is marked unresolved
+			# and never invents an ID from a display-name/fuzzy lookup.
+			result.items.append(str(item_record.get(
+				"item_name",
+				_drop_output_item_name(canonical_item_id, original_name),
+			)))
+			result.item_records.append(item_record)
 	result.overflow_discarded = selection.get("discarded", [])
 	result.ground_output_count = result.items.size() + result.gold_drops.size()
 	result.overflow_discarded_count = result.overflow_discarded.size()
@@ -386,6 +400,112 @@ func _drop_output_item_name(canonical_item_id: int, original_name: String) -> St
 		canonical_item_id,
 		original_name,
 	))
+
+
+func _drop_output_item_record(
+	canonical_item_id: int,
+	original_name: String,
+) -> Dictionary:
+	# Resolve one direct-drop identity without name/fuzzy ID guessing. The stable
+	# item_id is always the GameData catalog ID of the item actually picked up.
+	# The direct-table source ID is retained separately because the explicit
+	# female-equipment presentation map changes the display to the male record.
+	var attempted_item_id := canonical_item_id
+	var direct_identity := GameData.dpv2_direct_item_identity(canonical_item_id)
+	var canonical_name := str(direct_identity.get("canonical_item_name", ""))
+	if direct_identity.is_empty() or canonical_name.is_empty():
+		return _unresolved_drop_item_record(
+			attempted_item_id,
+			original_name,
+			_drop_output_item_name(attempted_item_id, original_name),
+		)
+	var source_record := GameData.get_item_record(canonical_name)
+	if source_record.is_empty() or str(source_record.get("name", "")) != canonical_name:
+		return _unresolved_drop_item_record(
+			attempted_item_id,
+			original_name,
+			_drop_output_item_name(attempted_item_id, canonical_name),
+		)
+	# The resolver must accept aliases only through GameData's exact canonical
+	# alias table. Any unregistered/fuzzy display token remains unresolved.
+	if not original_name.is_empty():
+		var original_record := GameData.get_item_record(original_name)
+		if original_record.is_empty() or str(original_record.get("name", "")) != canonical_name:
+			return _unresolved_drop_item_record(
+				attempted_item_id,
+				original_name,
+				# Keep the old output token on an invalid name/ID pairing. The
+				# record remains unresolved, so this is never an identity fallback.
+				_drop_output_item_name(attempted_item_id, original_name),
+			)
+	var output_name := _drop_output_item_name(attempted_item_id, canonical_name)
+	var output_record := GameData.get_item_record(output_name)
+	if output_record.is_empty() or str(output_record.get("name", "")) != output_name:
+		return _unresolved_drop_item_record(
+			attempted_item_id,
+			original_name,
+			output_name,
+		)
+	var output_item_id := _stable_catalog_item_id(output_record)
+	# Reserved DPV2 IDs (the 920xxx skill-book range) intentionally point to
+	# legacy service records that expose only serviceIndex in the presentation
+	# catalog. Once the exact direct ID/name identity above is validated, the
+	# direct canonical ID is the stable item identity for those records.
+	if output_item_id < 0 and output_name == canonical_name:
+		output_item_id = attempted_item_id
+	if output_item_id < 0:
+		return _unresolved_drop_item_record(
+			attempted_item_id,
+			original_name,
+			output_name,
+		)
+	return {
+		"item_id": output_item_id,
+		"canonical_item_id": output_item_id,
+		"canonical_name": output_name,
+		"source_item_id": attempted_item_id,
+		"source_canonical_item_id": attempted_item_id,
+		"source_canonical_name": canonical_name,
+		"item_name": output_name,
+		"name": output_name,
+		"output_item_id": output_item_id,
+		"output_record": output_record.duplicate(true),
+		"identity_status": "resolved",
+	}
+
+
+func _unresolved_drop_item_record(
+	attempted_item_id: int,
+	original_name: String,
+	output_name: String,
+) -> Dictionary:
+	return {
+		"item_id": -1,
+		"canonical_item_id": -1,
+		"source_item_id": attempted_item_id,
+		"source_canonical_item_id": attempted_item_id,
+		"canonical_name": "",
+		"source_canonical_name": "",
+		"item_name": output_name,
+		"name": output_name,
+		"original_name": original_name,
+		"output_item_id": -1,
+		"output_record": {},
+		"identity_status": "unresolved",
+	}
+
+
+func _stable_catalog_item_id(record: Dictionary) -> int:
+	for key: String in ["item_id", "itemId", "stableItemId", "id"]:
+		if not record.has(key):
+			continue
+		var value: Variant = record.get(key, -1)
+		if value is String and not (value as String).is_valid_int():
+			continue
+		var item_id := int(value)
+		if item_id >= 0:
+			return item_id
+	return -1
 
 
 func _apply_drop_probability_policy(

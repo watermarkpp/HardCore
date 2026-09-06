@@ -89,10 +89,10 @@ func _test_normal_and_fire_boundaries() -> void:
 	var south_gu := Vector2(1.0, 1.0).normalized()
 	for mode: String in [Geometry.SKILL_NORMAL, Geometry.SKILL_FIRE]:
 		var accepted := Diagnostic.explain_candidate(
-			Vector2.ZERO, south_gu * 1.5, 0, mode
+			Vector2.ZERO, south_gu * 2.0, 0, mode
 		)
 		assert(accepted.accepted and accepted.result_code == Diagnostic.RESULT_OK)
-		assert(is_equal_approx(accepted.effective_reach_gu, 1.5))
+		assert(is_equal_approx(accepted.effective_reach_gu, 2.0))
 		assert(accepted.maximum_targets == 1)
 		assert(not accepted.unlimited_targets_within_geometry)
 		var wrong_facing := Diagnostic.explain_candidate(
@@ -101,7 +101,7 @@ func _test_normal_and_fire_boundaries() -> void:
 		assert(not wrong_facing.accepted)
 		assert(wrong_facing.result_code == Diagnostic.RESULT_WRONG_FACING)
 		var outside := Diagnostic.explain_candidate(
-			Vector2.ZERO, south_gu * 1.5002, 0, mode
+			Vector2.ZERO, south_gu * 2.0002, 0, mode
 		)
 		assert(outside.result_code == Diagnostic.RESULT_OUT_OF_RANGE)
 	var same_footpoint := Diagnostic.explain_candidate(
@@ -118,12 +118,12 @@ func _test_thrust_lane_boundaries() -> void:
 		Vector2.ZERO, south_gu * 1.5, 0, Geometry.SKILL_THRUST
 	)
 	assert(primary.accepted and primary.thrust_slot == 1)
-	assert(is_equal_approx(primary.effective_reach_gu, 2.5))
+	assert(is_equal_approx(primary.effective_reach_gu, 3.0))
 	assert(is_equal_approx(primary.attack_lane_width_gu, 1.0))
 	assert(primary.maximum_targets == Geometry.UNLIMITED_TARGETS)
 	assert(primary.unlimited_targets_within_geometry)
 	var endpoint := Diagnostic.explain_candidate(
-		Vector2.ZERO, south_gu * 2.5, 0, Geometry.SKILL_THRUST
+		Vector2.ZERO, south_gu * 3.0, 0, Geometry.SKILL_THRUST
 	)
 	assert(endpoint.accepted and endpoint.thrust_slot == 2)
 	var outside_lane := Diagnostic.explain_candidate(
@@ -135,7 +135,7 @@ func _test_thrust_lane_boundaries() -> void:
 	)
 	assert(behind.result_code == Diagnostic.RESULT_WRONG_FACING)
 	var outside := Diagnostic.explain_candidate(
-		Vector2.ZERO, south_gu * 2.5002, 0, Geometry.SKILL_THRUST
+		Vector2.ZERO, south_gu * 3.0002, 0, Geometry.SKILL_THRUST
 	)
 	assert(outside.result_code == Diagnostic.RESULT_OUT_OF_RANGE)
 
@@ -157,13 +157,13 @@ func _test_half_moon_arc_boundaries() -> void:
 	)
 	assert(rejected.result_code == Diagnostic.RESULT_OUTSIDE_HALF_MOON_ARC)
 	var outside := Diagnostic.explain_candidate(
-		Vector2.ZERO, Vector2(1.0, 1.0).normalized() * 1.5002, 0, Geometry.SKILL_HALF_MOON
+		Vector2.ZERO, Vector2(1.0, 1.0).normalized() * 2.0002, 0, Geometry.SKILL_HALF_MOON
 	)
 	assert(outside.result_code == Diagnostic.RESULT_OUT_OF_RANGE)
 
 
 func _test_mirrors_canonical_geometry() -> void:
-	var sample_coordinates: Array[float] = [-2.5002, -1.5, -0.5, 0.0, 0.5, 1.5, 2.5002]
+	var sample_coordinates: Array[float] = [-3.0002, -1.5, -0.5, 0.0, 0.5, 1.5, 3.0002]
 	for attack_direction in range(8):
 		for x: float in sample_coordinates:
 			for y: float in sample_coordinates:

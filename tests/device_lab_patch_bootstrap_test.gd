@@ -10,6 +10,10 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	assert(PatchBootstrap.patch_matches_base({"baseCommit": "new-apk"}, "new-apk"))
+	assert(not PatchBootstrap.patch_matches_base({"baseCommit": "old-apk"}, "new-apk"))
+	assert(not PatchBootstrap.patch_matches_base({}, "new-apk"))
+	assert(not PatchBootstrap.patch_matches_base({}, ""))
 	assert(PatchBootstrap.MAX_PATCH_BYTES == 64 * 1024 * 1024, "patch size ceiling changed")
 	assert(PatchBootstrap.HASH_CHUNK_BYTES <= 64 * 1024, "patch hash chunk exceeds 64 KiB")
 	assert(PatchBootstrap._safe_token("skill_flash_fix_v1"), "valid patch token rejected")
@@ -170,6 +174,9 @@ func _write_sparse_file(path: String, length: int) -> void:
 
 
 func _write_manifest(path: String, manifest: Dictionary) -> void:
+	if FileAccess.file_exists("res://generated/build_info.json"):
+		var info: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/build_info.json"))
+		manifest["baseCommit"] = str(info.get("git_head", ""))
 	_write_text(path, JSON.stringify(manifest))
 
 

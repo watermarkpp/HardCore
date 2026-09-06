@@ -132,12 +132,12 @@ func _test_all_warrior_mode_direction_contracts() -> void:
 	)
 	assert(Geometry.thrust_slot(origin, target, direction_index) == 1)
 
-	# Existing range/width contracts remain exact; this fix changes only the
-	# direction coordinate space.
+	# The project override keeps the direction contract while expanding ordinary
+	# and Fire Sword total reach to a fixed 2 GU.
 	var forward_gu := Vector2(-1.0, -1.0).normalized()
 	var side_gu := Vector2(-1.0, 1.0).normalized()
 	assert(not Geometry.is_single_target_in_reach(
-		origin, forward_gu * 1.5002, Geometry.SKILL_NORMAL
+		origin, forward_gu * 2.0002, Geometry.SKILL_NORMAL
 	))
 	var lane_edge := forward_gu + side_gu * 0.5
 	var outside_lane := forward_gu + side_gu * 0.5002

@@ -20,7 +20,7 @@ func _ready() -> void:
 		assert(str(entry.get("priority", "")) == "P1")
 		assert(not expected.has(contract_id))
 		expected[contract_id] = true
-	assert(expected.size() == 150)
+	assert(expected.size() == 152)
 
 	var validators: Dictionary = {}
 	_suites = [
@@ -33,7 +33,7 @@ func _ready() -> void:
 		for contract_id: String in suite_validators:
 			assert(not validators.has(contract_id), "duplicate semantic validator: %s" % contract_id)
 			validators[contract_id] = suite_validators[contract_id]
-	assert(validators.size() == 150)
+	assert(validators.size() == 152)
 	for contract_id: String in expected:
 		assert(validators.has(contract_id), "missing semantic validator: %s" % contract_id)
 	for contract_id: String in validators:
@@ -46,6 +46,6 @@ func _ready() -> void:
 		var passed := bool(validator.call())
 		executed[contract_id] = true
 		assert(passed, "semantic contract failed: %s" % contract_id)
-	assert(executed.size() == 150)
-	print("SKILL_SEMANTIC_CONTRACTS_PASS: 150/150 P1 validators executed with exact manifest key coverage")
+	assert(executed.size() == 152)
+	print("SKILL_SEMANTIC_CONTRACTS_PASS: 152/152 P1 validators executed with exact manifest key coverage")
 	get_tree().quit()

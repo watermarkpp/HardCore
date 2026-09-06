@@ -61,6 +61,7 @@ const LOCOMOTION_RUN := "run"
 signal stats_changed(current_hp: int, max_hp: int)
 signal attack_requested(origin: Vector2, direction: Vector2, damage: int)
 signal skill_requested(skill_name: String, origin: Vector2, direction: Vector2, damage: int)
+signal skill_cast_started(stable_skill_id: String)
 signal warrior_skill_state_changed(skill_name: String, enabled: bool, message: String)
 signal resources_changed(current_hp: int, max_hp: int, current_mp: int, max_mp: int)
 signal movement_performed(position: Vector2, facing: Vector2)
@@ -574,6 +575,7 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	movement_input_active = false
 	var action_id := _begin_combat_action("skill:%s" % skill_name)
 	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
+	skill_cast_started.emit(stable_skill_id)
 	_emit_skill_after_windup(
 		skill_name,
 		0,

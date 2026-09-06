@@ -15,7 +15,7 @@ const LOADING_TRANSITION_CONTRACT_ID := "ui.loading.transition.v1"
 const TOWN_MUSIC_PATH := "res://assets/audio/town/main_city_bgm.ogg"
 const SOURCE_RECORD_PATH := "res://assets/audio/town/main_city_bgm.source.json"
 const MUSIC_BUS_NAME := &"Music"
-const DELAY_SECONDS := 10.0
+const DELAY_SECONDS := 6.0
 const DEFAULT_VOLUME_LINEAR := 0.70
 const TOWN_AREA_POLICY_ID := "gameplay.main_city.safe_area.v1"
 
@@ -41,6 +41,7 @@ var _in_town := false
 var _loading_finished := false
 var _music_started_for_entry := false
 var _delay_armed_for_entry := false
+var _waiting_for_track_finish := false
 
 
 func _ready() -> void:
@@ -94,7 +95,7 @@ static func town_entry_id(map_id: int) -> String:
 		return ""
 	# Safe-area geometry answers "am I in town?"; the map-level entry ID
 	# answers "did I leave town?". This keeps multiple authored safe areas in
-	# one city from restarting the same entry's ten-second gate.
+	# one city from restarting the same entry's six-second gate.
 	return "main_city.%d" % map_id
 
 
@@ -133,8 +134,9 @@ static func town_area_at(
 	return {}
 
 
-## Called before the destination map is built. This is the invalidation barrier
-## for an old map's pending ten-second callback and for an already-playing BGM.
+## Called before the destination map is built. This invalidates an old map's
+## pending six-second callback while deliberately preserving an already-playing
+## BGM until its natural end.
 func begin_map_transition(map_id: int, transition_id: String) -> void:
 	_entry_serial += 1
 	_active_map_id = map_id
@@ -145,7 +147,9 @@ func begin_map_transition(map_id: int, transition_id: String) -> void:
 	_music_started_for_entry = false
 	_delay_armed_for_entry = false
 	_cancel_delay()
-	_stop_music("map_transition_started")
+	# A started city track belongs to the presentation session, not to the
+	# current map node.  Keep it playing across map changes; a later city entry
+	# waits for the natural end before arming its own six-second delay.
 
 
 ## Called after _load_zone and actor staging have completed, while Loading is
@@ -176,7 +180,6 @@ func set_town_presence(in_town: bool, _area_id := "") -> void:
 			not _in_town
 			and not _delay_armed_for_entry
 			and not _music_started_for_entry
-			and not is_music_active()
 		):
 			return
 		_entry_serial += 1
@@ -184,7 +187,8 @@ func set_town_presence(in_town: bool, _area_id := "") -> void:
 		_town_area_id = ""
 		_music_started_for_entry = false
 		_cancel_delay()
-		_stop_music("town_area_exited")
+		# Leaving the safe area must not truncate a track that has already begun.
+		# `cancel()` remains the explicit character/app/world-exit stop boundary.
 		return
 	var resolved_area_id := town_entry_id(_active_map_id)
 	if _in_town and _town_area_id == resolved_area_id:
@@ -228,7 +232,10 @@ func cancel(reason := "cancelled") -> void:
 
 
 func is_delay_pending() -> bool:
-	return _delay_armed_for_entry and delay_timer != null and not delay_timer.is_stopped()
+	return _delay_armed_for_entry and (
+		_waiting_for_track_finish
+		or (delay_timer != null and not delay_timer.is_stopped())
+	)
 
 
 func is_music_active() -> bool:
@@ -246,6 +253,7 @@ func state_snapshot() -> Dictionary:
 		"loading_finished": _loading_finished,
 		"delay_pending": is_delay_pending(),
 		"music_started_for_entry": _music_started_for_entry,
+		"waiting_for_track_finish": _waiting_for_track_finish,
 		"music_active": is_music_active(),
 	}
 
@@ -260,6 +268,12 @@ func _arm_delay() -> void:
 	):
 		return
 	_delay_armed_for_entry = true
+	if is_music_active():
+		# Do not restart or overlap the current one-shot.  The natural finished
+		# callback below will arm this same entry after the old track ends.
+		_waiting_for_track_finish = true
+		return
+	_waiting_for_track_finish = false
 	_delay_callback = Callable(self, "_on_delay_timeout").bind(_entry_serial)
 	delay_timer.timeout.connect(_delay_callback)
 	delay_timer.start(maxf(0.0, delay_seconds))
@@ -275,6 +289,7 @@ func _arm_delay() -> void:
 
 func _cancel_delay() -> void:
 	_delay_armed_for_entry = false
+	_waiting_for_track_finish = false
 	if (
 		delay_timer != null
 		and _delay_callback.is_valid()
@@ -298,6 +313,7 @@ func _on_delay_timeout(expected_entry_serial: int) -> void:
 		or not _in_town
 		or not is_main_city_map(_active_map_id)
 		or _music_started_for_entry
+		or is_music_active()
 		or music_player == null
 		or music_player.stream == null
 	):
@@ -326,7 +342,16 @@ func _stop_music(reason: String) -> void:
 
 
 func _on_music_finished() -> void:
-	# The stream is intentionally one-shot. Keep the entry's started latch set
-	# so the natural end cannot restart it; set_town_presence(false) or a new
-	# map transition is the only reset boundary.
-	return
+	# The stream is intentionally one-shot. Keep the current entry's started
+	# latch set so a natural end cannot restart it. If a new city entry arrived
+	# while this track was playing, its deferred gate is now safe to arm.
+	var should_arm_deferred_entry := (
+		_waiting_for_track_finish
+		and _in_town
+		and _loading_finished
+		and not _music_started_for_entry
+	)
+	_waiting_for_track_finish = false
+	if should_arm_deferred_entry:
+		_delay_armed_for_entry = false
+		_arm_delay()

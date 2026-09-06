@@ -16,6 +16,7 @@ const CombatUnitLegacyAdapterScript := preload(
 const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 
 const SPATIAL_CONTRACT_ID := "skills.summon_actor.spatial_ground_gu.v1"
 const SPAWN_FOOTPRINT_CONTRACT_ID := (
@@ -25,6 +26,9 @@ const ATTACK_FOOTPRINT_CONTRACT_ID := (
 	"skills.summon.attack_release_directed_gu.v2"
 )
 const PERSISTENCE_CONTRACT_ID := "skills.summon.persistence.runtime_state.v1"
+const DIRECT_SPELL_DAMAGE_RUNTIME_ID := (
+	"summon.direct_spell_damage.openmir2.v1"
+)
 const STEALTH_STATE_CONTRACT_ID := "skills.summon_actor.stealth_state.v1"
 const BUFF_STATE_CONTRACT_ID := "skills.summon_actor.buff_state.v1"
 const SUSTAINED_FRAME_COST_CONTRACT_ID := (
@@ -43,6 +47,19 @@ const GROUND_SHADOW_CONTRACT_ID := (
 const REST_FORMATION_CONTRACT_ID := (
 	"skills.summon.owner_formation_slots.v1"
 )
+const OWNER_TELEPORT_RELOCATION_CONTRACT_ID := (
+	"skills.summon.owner_teleport_relocation.v1"
+)
+const AUDIO_MONSTER_HOOK_CONTRACT_ID := (
+	"skills.summon.audio_monster_identity.v1"
+)
+## These are the exact monster templates from taoist_summon_baseline.  The
+## audio service owns the event mapping; SummonActor only supplies the stable
+## integer identity and the already-accepted lifecycle phase.
+const AUDIO_MONSTER_ID_BY_SUMMON_ID := {
+	"skeleton": 145,
+	"divine_beast": 146,
+}
 const COLLISION_INTERACTION_CONTRACT_ID := (
 	"skills.summon.collision.player_pet_passthrough.v1"
 )
@@ -184,6 +201,18 @@ var _custom_draw_request_count := 0
 var _sprite_frame_apply_count := 0
 var _last_buff_draw_signature := Vector2i(-1, -1)
 
+## Presentation-only monster SFX observer. Lookup is lifecycle-aware and
+## shared across actors so the hot physics path never scans the group per actor.
+static var _audio_runtime_service: Node
+const AUDIO_SERVICE_NEGATIVE_CACHE_MSEC := 1000
+static var _audio_service_retry_after_msec := 0
+static var _audio_service_lookup_count := 0
+static var _audio_service_now_override_msec := -1
+var _audio_appear_emitted := false
+var _audio_death_emitted := false
+var _audio_attack_sequence := 0
+var _audio_attack_frame_sequence := -1
+
 ## Independent support-buff state: stealth, physical defence (AC) and magic
 ## defence (MAC) each keep their own timer and refresh independently.
 var stealth_remaining_seconds := 0.0
@@ -290,6 +319,10 @@ func setup(
 	reject_when_owner_has_slave = bool(profile.get("reject_when_owner_has_slave", true))
 	recall_existing_on_create_failure = bool(profile.get("recall_existing_on_create_failure", false))
 	state = SummonState.FOLLOW_OWNER
+	_audio_appear_emitted = false
+	_audio_death_emitted = false
+	_audio_attack_sequence = 0
+	_audio_attack_frame_sequence = -1
 
 
 func configure_spawn_release_footprint(source_release_id: String) -> void:
@@ -347,6 +380,184 @@ func configure_runtime_map_projection(
 
 func configure_spatial_index(index: RuntimeCombatSpatialIndexScript) -> void:
 	_combat_spatial_index = index
+
+
+func _audio_monster_id() -> int:
+	return int(AUDIO_MONSTER_ID_BY_SUMMON_ID.get(summon_id, -1))
+
+
+func _audio_service() -> Node:
+	if not is_inside_tree():
+		return null
+	if (
+		is_instance_valid(_audio_runtime_service)
+		and _audio_runtime_service.is_inside_tree()
+		and _audio_runtime_service.get_tree() == get_tree()
+	):
+		return _audio_runtime_service
+	_audio_runtime_service = null
+	var now_msec := _audio_service_cache_now_msec()
+	if now_msec < _audio_service_retry_after_msec:
+		return null
+	_audio_service_retry_after_msec = now_msec + AUDIO_SERVICE_NEGATIVE_CACHE_MSEC
+	_audio_service_lookup_count += 1
+	for candidate: Node in get_tree().get_nodes_in_group(&"audio_runtime_service"):
+		if (
+			is_instance_valid(candidate)
+			and candidate.is_inside_tree()
+			and candidate.has_method("play_monster_event")
+		):
+			_audio_runtime_service = candidate
+			_audio_service_retry_after_msec = 0
+			return candidate
+	return null
+
+
+static func _audio_service_cache_now_msec() -> int:
+	return (
+		_audio_service_now_override_msec
+		if _audio_service_now_override_msec >= 0
+		else Time.get_ticks_msec()
+	)
+
+
+static func set_audio_service_cache_clock_for_test(now_msec: int) -> void:
+	_audio_service_now_override_msec = now_msec
+
+
+static func audio_service_lookup_count_for_test() -> int:
+	return _audio_service_lookup_count
+
+
+func _audio_is_listenable(allow_death := false) -> bool:
+	if not is_inside_tree() or process_mode == Node.PROCESS_MODE_DISABLED:
+		return false
+	if not allow_death and not is_physics_processing():
+		return false
+	if not allow_death and state in [SummonState.EXPIRED, SummonState.DEAD]:
+		return false
+	var viewport := get_viewport()
+	if viewport == null or not visible or not is_visible_in_tree():
+		return false
+	# Reuse the existing client viewport as the audibility boundary.  Do not
+	# wake off-screen pets or invent a second gameplay-distance rule for SFX.
+	return viewport.get_visible_rect().has_point(
+		get_global_transform_with_canvas().origin
+	)
+
+
+func _audio_context(semantic_event: String) -> Dictionary:
+	return {
+		"source": "summon_actor",
+		"contract_id": AUDIO_MONSTER_HOOK_CONTRACT_ID,
+		"monster_id": _audio_monster_id(),
+		"summon_id": summon_id,
+		"skill_id": skill_id,
+		"runtime_map_id": runtime_map_id,
+		"semantic_event": semantic_event,
+	}
+
+
+func _emit_summon_audio(semantic_event: String, allow_death := false) -> bool:
+	var monster_id := _audio_monster_id()
+	if monster_id <= 0 or not _audio_is_listenable(allow_death):
+		return false
+	var service := _audio_service()
+	if service == null:
+		return false
+	# The service performs exact-ID event resolution and fail-closed mapping;
+	# this actor never derives an event from display names or appearance data.
+	service.call(
+		"play_monster_event",
+		monster_id,
+		semantic_event,
+		_audio_context(semantic_event),
+	)
+	return true
+
+
+func _audio_try_emit_appear() -> void:
+	if _audio_appear_emitted:
+		return
+	if _emit_summon_audio("appear"):
+		_audio_appear_emitted = true
+
+
+func _audio_attack_started() -> void:
+	_audio_attack_sequence += 1
+	_audio_attack_frame_sequence = -1
+	# This is called only after _begin_attack has accepted a target and frozen
+	# its release snapshot; target acquisition alone never emits attack_start.
+	_emit_summon_audio("attack_start")
+
+
+func _audio_attack_frame() -> void:
+	if (
+		_audio_attack_sequence <= 0
+		or _audio_attack_frame_sequence == _audio_attack_sequence
+	):
+		return
+	# The attack-frame cue is an action-frame observation, not a hit result. Set
+	# the guard before dispatch so a service rejection cannot replay the cue.
+	_audio_attack_frame_sequence = _audio_attack_sequence
+	_emit_summon_audio("attack_frame")
+
+
+func _audio_hurt() -> void:
+	_emit_summon_audio("hurt")
+
+
+func _audio_death_once() -> void:
+	if _audio_death_emitted:
+		return
+	_audio_death_emitted = true
+	_emit_summon_audio("death", true)
+
+
+func relocate_after_owner_teleport(final_position_px: Vector2) -> Dictionary:
+	## The integration owner supplies a position already selected by the
+	## canonical map/obstacle-aware summon spawn plan. This method is deliberately
+	## not a placement search: it only cancels stale combat/motion state and
+	## commits the final legal position after same-map or cross-map travel.
+	## The caller must configure the current map projection before calling this
+	## method; runtime_map_id is part of target validation and spatial queries.
+	if not final_position_px.is_finite():
+		return {
+			"contract_id": OWNER_TELEPORT_RELOCATION_CONTRACT_ID,
+			"relocated": false,
+			"reason": "non_finite_final_position",
+		}
+	if state in [SummonState.DEAD, SummonState.EXPIRED]:
+		return {
+			"contract_id": OWNER_TELEPORT_RELOCATION_CONTRACT_ID,
+			"relocated": false,
+			"reason": "summon_not_active",
+		}
+	var had_target := is_instance_valid(_current_target)
+	var had_pending_attack := _pending_attack_target != null
+	_current_target = null
+	_clear_pending_attack()
+	_target_acquire_remaining = TARGET_ACQUIRE_INTERVAL_SECONDS
+	_rest_formation_moving = false
+	_attack_timer = 0.0
+	_attack_visual_remaining = 0.0
+	_fire_visual_remaining = 0.0
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	global_position = final_position_px
+	_set_state(SummonState.FOLLOW_OWNER)
+	_visual_state = "idle"
+	_visual_elapsed = 0.0
+	_request_visual_redraw()
+	return {
+		"contract_id": OWNER_TELEPORT_RELOCATION_CONTRACT_ID,
+		"relocated": true,
+		"final_position_px": final_position_px,
+		"target_cleared": had_target,
+		"pending_attack_cleared": had_pending_attack,
+		"motion_cleared": true,
+		"state": state_name(),
+	}
 
 
 func projection_ready() -> bool:
@@ -454,6 +665,7 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_audio_try_emit_appear()
 	if state == SummonState.DEAD:
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
@@ -563,6 +775,7 @@ func _begin_attack(enemy: EnemyActor) -> void:
 	_attack_visual_remaining = _visual_action_duration("attack")
 	_visual_state = "attack"
 	_visual_elapsed = 0.0
+	_audio_attack_started()
 
 
 func _update_pending_attack(delta: float) -> void:
@@ -578,6 +791,7 @@ func _update_pending_attack(delta: float) -> void:
 func _release_pending_attack() -> void:
 	var target := _pending_attack_target
 	var snapshot := _pending_attack_snapshot
+	_audio_attack_frame()
 	if summon_id == "divine_beast":
 		_start_fire_visual()
 	if (
@@ -804,6 +1018,9 @@ func spatial_contract_snapshot() -> Dictionary:
 		"leash_range_gu": leash_range_gu,
 		"teleport_range_gu": teleport_range_gu,
 		"follow_distance_gu": follow_distance_gu,
+		"owner_teleport_relocation_contract_id": (
+			OWNER_TELEPORT_RELOCATION_CONTRACT_ID
+		),
 	}
 
 
@@ -1009,12 +1226,122 @@ static func _distance_gu_between_screen_positions_px(
 	).length()
 
 
-func take_damage(amount: int) -> void:
-	_apply_resolved_damage(maxi(1, amount - physical_defence_bonus()))
+func take_damage(
+	amount: int,
+	source_or_defense_roll: Variant = null,
+	defense_roll := -1,
+) -> void:
+	## The runtime service supplies the source actor as the second argument. A
+	## numeric second argument is also accepted as a deterministic test hook;
+	## neither form changes the canonical summon defence range.
+	var resolved_roll := defense_roll
+	if resolved_roll < 0 and (source_or_defense_roll is int or source_or_defense_roll is float):
+		resolved_roll = int(source_or_defense_roll)
+	var absorbed := _roll_defense(
+		ac_min,
+		ac_max,
+		physical_defence_bonus(),
+		resolved_roll,
+	)
+	_apply_resolved_damage(maxi(1, amount - absorbed))
 
 
-func take_magic_damage(amount: int) -> void:
-	_apply_resolved_damage(maxi(1, amount - magic_defence_bonus()))
+func take_magic_damage(amount: int, magic_defense_roll := -1) -> void:
+	var absorbed := _roll_defense(
+		mac_min,
+		mac_max,
+		magic_defence_bonus(),
+		magic_defense_roll,
+	)
+	_apply_resolved_damage(maxi(1, amount - absorbed))
+
+
+func take_direct_spell_damage(
+	skill_id_value: String,
+	raw_damage: int,
+	anti_magic_roll := -1,
+	magic_defense_roll := -1,
+	causes_struck := true,
+) -> Dictionary:
+	## Boss target-magic, special-magic melee and area-magic all settle through
+	## this same direct-spell contract. Summons currently have no anti-magic
+	## points; their canonical MAC range (plus an active MAC buff) is consumed by
+	## the shared anti-magic -> MAC -> damage pipeline. AC is intentionally not
+	## part of direct spell settlement.
+	var stable_skill_id := ProfessionRules.skill_id(skill_id_value)
+	var adapted_stats := {
+		"magic_defense_min": maxi(0, mac_min + magic_defence_bonus()),
+		"magic_defense_max": maxi(
+			maxi(0, mac_min + magic_defence_bonus()),
+			mac_max + magic_defence_bonus(),
+		),
+	}
+	var checked_anti_magic_roll := anti_magic_roll
+	if checked_anti_magic_roll < 0:
+		checked_anti_magic_roll = _rng.randi_range(
+			0,
+			CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1,
+		)
+	var magic_defense_state := {}
+	var magic_defense_adapter := Callable(
+		self,
+		"_resolve_direct_spell_magic_defense",
+	).bind(magic_defense_roll, magic_defense_state)
+	var resolution := CombatResolutionRules.resolve_direct_spell_damage(
+		stable_skill_id,
+		raw_damage,
+		adapted_stats,
+		checked_anti_magic_roll,
+		magic_defense_adapter,
+	)
+	resolution["runtime_contract"] = DIRECT_SPELL_DAMAGE_RUNTIME_ID
+	resolution["mac_buff_applied"] = magic_defence_bonus()
+	resolution["magic_defense_min"] = int(adapted_stats.magic_defense_min)
+	resolution["magic_defense_max"] = int(adapted_stats.magic_defense_max)
+	resolution["magic_defense_roll"] = int(magic_defense_state.get("roll", -1))
+	resolution["physical_defense_bypassed"] = true
+	var hp_before := current_hp
+	if int(resolution.get("final_damage", 0)) > 0:
+		_apply_resolved_damage(int(resolution.final_damage))
+	resolution["summon_pipeline_input"] = int(resolution.final_damage)
+	resolution["applied_damage"] = maxi(0, hp_before - current_hp)
+	return resolution
+
+
+func _resolve_direct_spell_magic_defense(
+	_skill_id_value: String,
+	incoming_damage: int,
+	target_stats: Dictionary,
+	roll_override: int,
+	resolution_state: Dictionary,
+) -> int:
+	var minimum := maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	var maximum := maxi(
+		minimum,
+		int(target_stats.get("magic_defense_max", minimum)),
+	)
+	var roll := (
+		clampi(roll_override, minimum, maximum)
+		if roll_override >= 0
+		else _rng.randi_range(minimum, maximum)
+	)
+	resolution_state["roll"] = roll
+	return maxi(0, incoming_damage - roll)
+
+
+func _roll_defense(
+	base_minimum: int,
+	base_maximum: int,
+	active_bonus: int,
+	roll_override: int,
+) -> int:
+	var minimum := maxi(0, base_minimum) + maxi(0, active_bonus)
+	var maximum := maxi(minimum, maxi(0, base_maximum) + maxi(0, active_bonus))
+	return (
+		clampi(roll_override, minimum, maximum)
+		if roll_override >= 0
+		else _rng.randi_range(minimum, maximum)
+	)
 
 
 func restore_health(amount: int) -> int:
@@ -1031,9 +1358,11 @@ func restore_health(amount: int) -> int:
 func _apply_resolved_damage(amount: int) -> void:
 	if state in [SummonState.DEAD, SummonState.EXPIRED]:
 		return
+	var hp_before := current_hp
 	current_hp = maxi(0, current_hp - maxi(1, amount))
 	if current_hp == 0:
 		_set_state(SummonState.DEAD)
+		_audio_death_once()
 		remove_from_group("combat_targets")
 		collision_layer = 0
 		collision_mask = 0
@@ -1049,6 +1378,8 @@ func _apply_resolved_damage(amount: int) -> void:
 		_hit_visual_remaining = _visual_action_duration("hit")
 		_visual_state = "hit"
 		_visual_elapsed = 0.0
+		if current_hp < hp_before:
+			_audio_hurt()
 	_request_visual_redraw()
 
 
@@ -1443,8 +1774,7 @@ func restore_persistence_snapshot(snapshot: Dictionary) -> bool:
 	skill_id = str(snapshot.get("skill_id", skill_id))
 	skill_level = maxi(0, int(snapshot.get("skill_rank", skill_level)))
 	owner_level = maxi(1, int(snapshot.get("owner_level", owner_level)))
-	max_hp = maxi(1, int(snapshot.get("max_hp", max_hp)))
-	current_hp = clampi(int(snapshot.get("current_hp", current_hp)), 0, max_hp)
+	var restored_current_hp := maxi(0, int(snapshot.get("current_hp", current_hp)))
 	summon_exp_level = clampi(
 		int(snapshot.get("summon_exp_level", summon_exp_level)), 0, 7
 	)
@@ -1474,6 +1804,12 @@ func restore_persistence_snapshot(snapshot: Dictionary) -> bool:
 		0.0, float(magic.get("remaining_seconds", 0.0))
 	)
 	mac_buff_id = str(magic.get("buff_id", ""))
+	## max_hp and every combat stat are derived from the canonical pet level.
+	## The persisted max_hp is retained only for backward-readable snapshots;
+	## trusting it would allow a stale/edited snapshot to restore level-3 HP with
+	## level-0 AC/MAC/DC (the historical restore bug).
+	_apply_growth_stats_preserving_current_hp()
+	current_hp = clampi(restored_current_hp, 0, max_hp)
 	name_color_index = TaoistCombatMath.summon_name_color_index(summon_exp_level)
 	attack_range_gu = _attack_effect_length_gu()
 	_last_buff_draw_signature = _buff_draw_signature()

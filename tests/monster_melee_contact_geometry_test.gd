@@ -58,7 +58,8 @@ func _run() -> void:
 	# Race=91 contract is now adjacent magic melee, so exercise the same swept
 	# projectile geometry with the authoritative archer profile instead.
 	ranged_probe.setup(GameData.get_monster_by_id(150), player, false)
-	assert(is_equal_approx(ranged_probe.attack_range_gu, 205.0 / 32.0), "弓箭手旧PX范围未在adapter边界转换为GU")
+	assert(is_equal_approx(ranged_probe.attack_range_gu, 7.0), "弓箭手未应用正式GU射程规则")
+	assert(str(ranged_probe.get_meta("attack_range_policy_shape", "")) == "euclidean_circle")
 	assert(not ranged_probe._uses_player_melee_contact_contract(player))
 	ranged_probe.global_position = player.global_position
 	ranged_probe.set_physics_process(false)

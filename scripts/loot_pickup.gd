@@ -11,6 +11,8 @@ const COLLECTION_RADIUS_GU := 0.75
 const OVERWEIGHT_RETRY_COOLDOWN_SECONDS := 5.0
 
 var item_name := "金币"
+var item_id := -1
+var item_record: Dictionary = {}
 var gold_amount := 0
 var target: PlayerCharacter
 var _bob_time := 0.0
@@ -28,6 +30,46 @@ static func ground_visual_descriptor(name: String) -> Dictionary:
 	if _descriptor_cache.has(name):
 		return _descriptor_cache[name].duplicate(true)
 	var record := GameData.get_item_record(name)
+	return _ground_visual_descriptor_from_catalog_record(name, record, name)
+
+
+## Resolve the presentation record carried by LootRuntime's stable identity
+## record.  The source ID and output ID are intentionally separate: female
+## equipment drops retain the source identity while drawing the explicit male
+## output record.  No fuzzy name-to-ID conversion occurs here.
+static func ground_visual_descriptor_for_record(identity_record: Dictionary) -> Dictionary:
+	var output_record: Dictionary = {}
+	var nested_output: Variant = identity_record.get("output_record", {})
+	if nested_output is Dictionary:
+		output_record = (nested_output as Dictionary).duplicate(true)
+	var display_name := str(identity_record.get(
+		"item_name",
+		identity_record.get("name", identity_record.get("canonical_name", "")),
+	))
+	if output_record.is_empty() and not display_name.is_empty():
+		return ground_visual_descriptor(display_name)
+	if output_record.is_empty():
+		return {}
+	var output_item_id := int(identity_record.get("output_item_id", -1))
+	var cache_key := (
+		"item:%d" % output_item_id
+		if output_item_id >= 0
+		else "name:%s" % str(output_record.get("name", display_name))
+	)
+	return _ground_visual_descriptor_from_catalog_record(
+		cache_key,
+		output_record,
+		display_name,
+	)
+
+
+static func _ground_visual_descriptor_from_catalog_record(
+	cache_key: String,
+	record: Dictionary,
+	fallback_name: String,
+) -> Dictionary:
+	if _descriptor_cache.has(cache_key):
+		return _descriptor_cache[cache_key].duplicate(true)
 	var art: Variant = record.get("art", {})
 	var ground: Variant = art.get("groundIcon", {}) if art is Dictionary else {}
 	var path := str(ground.get("path", "")) if ground is Dictionary else str(ground)
@@ -38,7 +80,7 @@ static func ground_visual_descriptor(name: String) -> Dictionary:
 	var draw_color: Color = {"equipment": Color(0.35, 0.65, 0.95), "skill_book": Color(0.60, 0.38, 0.90), "consumable": Color(0.25, 0.75, 0.35), "quest_item": Color(0.90, 0.28, 0.12)}.get(kind, Color(0.95, 0.67, 0.12))
 	var label_color: Color = {"equipment": Color(0.55, 0.82, 1.0), "skill_book": Color(0.72, 0.55, 1.0), "currency": Color(1.0, 0.82, 0.28), "consumable": Color(0.45, 0.92, 0.52), "quest_item": Color(1.0, 0.48, 0.25)}.get(kind, Color(0.90, 0.82, 0.66))
 	var descriptor := {"path": path, "kind": kind, "label_color": label_color, "fallback_draw_color": draw_color}
-	_descriptor_cache[name] = descriptor
+	_descriptor_cache[cache_key] = descriptor
 	_descriptor_build_count += 1
 	return descriptor.duplicate(true)
 
@@ -52,6 +94,17 @@ static func prewarm_item_names(names: Array) -> int:
 	return UIItemTextureCacheScript.request_threaded_paths(paths)
 
 
+static func prewarm_item_records(records: Array) -> int:
+	var paths: Array[String] = []
+	for raw_record: Variant in records:
+		if not raw_record is Dictionary:
+			continue
+		var path := str(ground_visual_descriptor_for_record(raw_record).get("path", ""))
+		if not path.is_empty():
+			paths.append(path)
+	return UIItemTextureCacheScript.request_threaded_paths(paths)
+
+
 static func clear_descriptor_cache_for_test() -> void:
 	_descriptor_cache.clear()
 	_descriptor_build_count = 0
@@ -59,13 +112,51 @@ static func clear_descriptor_cache_for_test() -> void:
 
 func setup(label_text: String, player_target: PlayerCharacter) -> void:
 	item_name = label_text
+	item_id = -1
+	item_record = {}
 	gold_amount = 0
 	target = player_target
 	_visual_descriptor = ground_visual_descriptor(item_name)
+	var catalog_record := GameData.get_item_record(label_text)
+	if (
+		not catalog_record.is_empty()
+		and str(catalog_record.get("name", "")) == label_text
+	):
+		item_id = _catalog_item_id(catalog_record)
+		if item_id >= 0:
+			item_record = {
+				"item_id": item_id,
+				"canonical_item_id": item_id,
+				"canonical_name": label_text,
+				"item_name": label_text,
+				"name": label_text,
+				"output_item_id": item_id,
+				"output_record": catalog_record.duplicate(true),
+				"identity_status": "catalog_compatibility",
+			}
+
+
+## New stable identity path.  GameRoot can pass LootRuntime's item_records
+## entry while retaining the old collected(item_name, pickup) signal.
+func setup_item_record(identity_record: Dictionary, player_target: PlayerCharacter) -> void:
+	item_record = identity_record.duplicate(true)
+	item_id = int(item_record.get(
+		"item_id",
+		item_record.get("canonical_item_id", -1),
+	))
+	item_name = str(item_record.get(
+		"item_name",
+		item_record.get("name", item_record.get("canonical_name", "")),
+	))
+	gold_amount = 0
+	target = player_target
+	_visual_descriptor = ground_visual_descriptor_for_record(item_record)
 
 
 func setup_gold(amount: int, player_target: PlayerCharacter) -> void:
 	item_name = "金币"
+	item_id = -1
+	item_record = {}
 	gold_amount = maxi(1, amount)
 	target = player_target
 	_visual_descriptor = ground_visual_descriptor(item_name)
@@ -98,6 +189,19 @@ func _ready() -> void:
 	if icon_sprite == null:
 		RuntimeDiagnostics.increment_performance_counter(&"loot_fallback_redraw_requests")
 		queue_redraw()
+
+
+static func _catalog_item_id(record: Dictionary) -> int:
+	for key: String in ["item_id", "itemId", "stableItemId", "id"]:
+		if not record.has(key):
+			continue
+		var value: Variant = record.get(key, -1)
+		if value is String and not (value as String).is_valid_int():
+			continue
+		var parsed := int(value)
+		if parsed >= 0:
+			return parsed
+	return -1
 
 
 

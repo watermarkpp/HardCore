@@ -14,7 +14,10 @@ const BASE_AGILITY := 15
 const MAX_SKILL_LEVEL := 3
 const MAGIC_TRAIN_LEVEL := 3
 const SWORD_LONG_POWER_RATE := 100
-const HALF_MOON_DIRECTION_OFFSETS := [7, 1, 2]
+const THRUST_PRIMARY_REACH_GU := 1.5
+const THRUST_TOTAL_REACH_GU := 3.0
+const THRUST_SECONDARY_IGNORE_AC := true
+const HALF_MOON_DIRECTION_OFFSETS := [7, 0, 1]
 const CLIENT_ATTACK_FRAMES := 6
 const CLIENT_ATTACK_FRAME_MS := 85
 const CLIENT_EFFECT_FRAME := 2
@@ -113,6 +116,36 @@ static func thrust_secondary_damage(base_damage: int, level_value: int, sword_lo
 	var level := clamp_skill_level(level_value)
 	var scaled := roundi(float(base_damage) / float(MAGIC_TRAIN_LEVEL + 2) * float(level + 2))
 	return maxi(1, roundi(float(scaled) * float(sword_long_rate) / 100.0))
+
+
+static func thrust_segment_ignores_ac(segment: int) -> bool:
+	## The user-authorized 3 GU thrust override keeps AC on 0..1.5 GU and
+	## bypasses AC only on the 1.5..3 GU segment.
+	return THRUST_SECONDARY_IGNORE_AC and segment == 2
+
+
+static func resolve_enemy_physical_damage(
+	raw_damage: int,
+	target_defense: int,
+	ignore_ac := false,
+) -> Dictionary:
+	## Enemy canonical combat exposes one scalar AC (`combat.stats.defense`).
+	## Treat it as a deterministic min=max roll, matching the existing physical
+	## pipeline's max(1, raw - absorbed) floor. Integration must call this before
+	## the legacy EnemyActor.take_damage(raw) bridge; the bypass flag is not a
+	## substitute for consuming AC on the primary thrust segment.
+	var safe_raw := maxi(0, raw_damage)
+	var safe_defense := maxi(0, target_defense)
+	var absorbed := 0 if ignore_ac else safe_defense
+	return {
+		"contract_id": "gameplay.physical_damage.enemy_ac.v1",
+		"raw_damage": safe_raw,
+		"target_defense": safe_defense,
+		"defense_checked": not ignore_ac,
+		"defense_bypassed": ignore_ac,
+		"absorbed": absorbed,
+		"final_damage": maxi(1, safe_raw - absorbed) if safe_raw > 0 else 0,
+	}
 
 
 static func half_moon_secondary_damage(base_damage: int, level_value: int) -> int:

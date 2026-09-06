@@ -84,6 +84,9 @@ var _projectile_role_valid := false
 var _physics_segment_index := 0
 var _canonical_release_snapshot_bound := false
 var _release_snapshot_build_count := 0
+var _audio_service: Node
+var _audio_launch_emitted := false
+var _audio_impact_emitted := false
 
 var _broadphase_physics_step_count := 0
 var _broadphase_snapshot_build_count := 0
@@ -287,6 +290,12 @@ func _ready() -> void:
 	add_to_group("zone_content")
 	_install_visual()
 	queue_redraw()
+	if (
+		_projectile_role_valid
+		and visual_rejection_reason.is_empty()
+		and projection_rejection_reason.is_empty()
+	):
+		_emit_projectile_audio_phase("launch", "ready_success")
 
 
 func _install_visual() -> void:
@@ -470,13 +479,48 @@ func _physics_process(delta: float) -> void:
 				continue
 			_broadphase_hit_count += 1
 			_apply_hit(node)
+			_emit_projectile_audio_phase("impact", "target_contact")
 			queue_free()
 			return
 	if (
 		remaining_travel_distance_gu >= 0.0
 		and remaining_travel_distance_gu <= GroundUnitSpaceScript.EPSILON_GU
 	):
+		_emit_projectile_audio_phase("impact", "path_terminal")
 		queue_free()
+
+
+func _emit_projectile_audio_phase(phase: String, terminal_reason: String) -> void:
+	if skill_id.is_empty():
+		return
+	if phase == "launch":
+		if _audio_launch_emitted:
+			return
+		_audio_launch_emitted = true
+	elif phase == "impact":
+		if _audio_impact_emitted:
+			return
+		_audio_impact_emitted = true
+	else:
+		return
+	var service := _audio_runtime_service()
+	if service == null or not service.has_method("play_event"):
+		return
+	service.call("play_event", "skill.%s.%s" % [skill_id, phase], {
+		"source": "skill_projectile",
+		"release_id": release_id,
+		"runtime_map_id": runtime_map_id,
+		"terminal_reason": terminal_reason,
+	})
+
+
+func _audio_runtime_service() -> Node:
+	if _audio_service != null and is_instance_valid(_audio_service):
+		return _audio_service
+	if not is_inside_tree():
+		return null
+	_audio_service = get_tree().get_first_node_in_group("audio_runtime_service")
+	return _audio_service
 
 
 func _intersects_enemy_footprint(enemy: EnemyActor) -> bool:

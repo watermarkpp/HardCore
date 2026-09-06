@@ -1,0 +1,628 @@
+{
+  "schema_version": 1,
+  "contract_id": "audio.client_sound_constants.v1",
+  "source_distribution": "source.original_gameofmir.mirclient",
+  "source_path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+  "source_sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac",
+  "encoding": "utf-8",
+  "rules": [
+    {
+      "symbol": "s_walk_ground_l",
+      "sound_id": 1,
+      "source_line": 37,
+      "source_text": "s_walk_ground_l      = 1;"
+    },
+    {
+      "symbol": "s_walk_ground_r",
+      "sound_id": 2,
+      "source_line": 38,
+      "source_text": "s_walk_ground_r      = 2;"
+    },
+    {
+      "symbol": "s_run_ground_l",
+      "sound_id": 3,
+      "source_line": 39,
+      "source_text": "s_run_ground_l       = 3;"
+    },
+    {
+      "symbol": "s_run_ground_r",
+      "sound_id": 4,
+      "source_line": 40,
+      "source_text": "s_run_ground_r       = 4;"
+    },
+    {
+      "symbol": "s_walk_stone_l",
+      "sound_id": 5,
+      "source_line": 41,
+      "source_text": "s_walk_stone_l       = 5;"
+    },
+    {
+      "symbol": "s_walk_stone_r",
+      "sound_id": 6,
+      "source_line": 42,
+      "source_text": "s_walk_stone_r       = 6;"
+    },
+    {
+      "symbol": "s_run_stone_l",
+      "sound_id": 7,
+      "source_line": 43,
+      "source_text": "s_run_stone_l        = 7;"
+    },
+    {
+      "symbol": "s_run_stone_r",
+      "sound_id": 8,
+      "source_line": 44,
+      "source_text": "s_run_stone_r        = 8;"
+    },
+    {
+      "symbol": "s_walk_lawn_l",
+      "sound_id": 9,
+      "source_line": 45,
+      "source_text": "s_walk_lawn_l        = 9;"
+    },
+    {
+      "symbol": "s_walk_lawn_r",
+      "sound_id": 10,
+      "source_line": 46,
+      "source_text": "s_walk_lawn_r        = 10;"
+    },
+    {
+      "symbol": "s_run_lawn_l",
+      "sound_id": 11,
+      "source_line": 47,
+      "source_text": "s_run_lawn_l         = 11;"
+    },
+    {
+      "symbol": "s_run_lawn_r",
+      "sound_id": 12,
+      "source_line": 48,
+      "source_text": "s_run_lawn_r         = 12;"
+    },
+    {
+      "symbol": "s_walk_rough_l",
+      "sound_id": 13,
+      "source_line": 49,
+      "source_text": "s_walk_rough_l       = 13;"
+    },
+    {
+      "symbol": "s_walk_rough_r",
+      "sound_id": 14,
+      "source_line": 50,
+      "source_text": "s_walk_rough_r       = 14;"
+    },
+    {
+      "symbol": "s_run_rough_l",
+      "sound_id": 15,
+      "source_line": 51,
+      "source_text": "s_run_rough_l        = 15;"
+    },
+    {
+      "symbol": "s_run_rough_r",
+      "sound_id": 16,
+      "source_line": 52,
+      "source_text": "s_run_rough_r        = 16;"
+    },
+    {
+      "symbol": "s_walk_wood_l",
+      "sound_id": 17,
+      "source_line": 53,
+      "source_text": "s_walk_wood_l        = 17;"
+    },
+    {
+      "symbol": "s_walk_wood_r",
+      "sound_id": 18,
+      "source_line": 54,
+      "source_text": "s_walk_wood_r        = 18;"
+    },
+    {
+      "symbol": "s_run_wood_l",
+      "sound_id": 19,
+      "source_line": 55,
+      "source_text": "s_run_wood_l         = 19;"
+    },
+    {
+      "symbol": "s_run_wood_r",
+      "sound_id": 20,
+      "source_line": 56,
+      "source_text": "s_run_wood_r         = 20;"
+    },
+    {
+      "symbol": "s_walk_cave_l",
+      "sound_id": 21,
+      "source_line": 57,
+      "source_text": "s_walk_cave_l        = 21;"
+    },
+    {
+      "symbol": "s_walk_cave_r",
+      "sound_id": 22,
+      "source_line": 58,
+      "source_text": "s_walk_cave_r        = 22;"
+    },
+    {
+      "symbol": "s_run_cave_l",
+      "sound_id": 23,
+      "source_line": 59,
+      "source_text": "s_run_cave_l         = 23;"
+    },
+    {
+      "symbol": "s_run_cave_r",
+      "sound_id": 24,
+      "source_line": 60,
+      "source_text": "s_run_cave_r         = 24;"
+    },
+    {
+      "symbol": "s_walk_room_l",
+      "sound_id": 25,
+      "source_line": 61,
+      "source_text": "s_walk_room_l        = 25;"
+    },
+    {
+      "symbol": "s_walk_room_r",
+      "sound_id": 26,
+      "source_line": 62,
+      "source_text": "s_walk_room_r        = 26;"
+    },
+    {
+      "symbol": "s_run_room_l",
+      "sound_id": 27,
+      "source_line": 63,
+      "source_text": "s_run_room_l         = 27;"
+    },
+    {
+      "symbol": "s_run_room_r",
+      "sound_id": 28,
+      "source_line": 64,
+      "source_text": "s_run_room_r         = 28;"
+    },
+    {
+      "symbol": "s_walk_water_l",
+      "sound_id": 29,
+      "source_line": 65,
+      "source_text": "s_walk_water_l       = 29;"
+    },
+    {
+      "symbol": "s_walk_water_r",
+      "sound_id": 30,
+      "source_line": 66,
+      "source_text": "s_walk_water_r       = 30;"
+    },
+    {
+      "symbol": "s_run_water_l",
+      "sound_id": 31,
+      "source_line": 67,
+      "source_text": "s_run_water_l        = 31;"
+    },
+    {
+      "symbol": "s_run_water_r",
+      "sound_id": 32,
+      "source_line": 68,
+      "source_text": "s_run_water_r        = 32;"
+    },
+    {
+      "symbol": "s_hit_short",
+      "sound_id": 50,
+      "source_line": 71,
+      "source_text": "s_hit_short          = 50;"
+    },
+    {
+      "symbol": "s_hit_wooden",
+      "sound_id": 51,
+      "source_line": 72,
+      "source_text": "s_hit_wooden         = 51;"
+    },
+    {
+      "symbol": "s_hit_sword",
+      "sound_id": 52,
+      "source_line": 73,
+      "source_text": "s_hit_sword          = 52;"
+    },
+    {
+      "symbol": "s_hit_do",
+      "sound_id": 53,
+      "source_line": 74,
+      "source_text": "s_hit_do             = 53;"
+    },
+    {
+      "symbol": "s_hit_axe",
+      "sound_id": 54,
+      "source_line": 75,
+      "source_text": "s_hit_axe            = 54;"
+    },
+    {
+      "symbol": "s_hit_club",
+      "sound_id": 55,
+      "source_line": 76,
+      "source_text": "s_hit_club           = 55;"
+    },
+    {
+      "symbol": "s_hit_long",
+      "sound_id": 56,
+      "source_line": 77,
+      "source_text": "s_hit_long           = 56;"
+    },
+    {
+      "symbol": "s_hit_fist",
+      "sound_id": 57,
+      "source_line": 78,
+      "source_text": "s_hit_fist           = 57;"
+    },
+    {
+      "symbol": "s_struck_short",
+      "sound_id": 60,
+      "source_line": 80,
+      "source_text": "s_struck_short       = 60;"
+    },
+    {
+      "symbol": "s_struck_wooden",
+      "sound_id": 61,
+      "source_line": 81,
+      "source_text": "s_struck_wooden      = 61;"
+    },
+    {
+      "symbol": "s_struck_sword",
+      "sound_id": 62,
+      "source_line": 82,
+      "source_text": "s_struck_sword       = 62;"
+    },
+    {
+      "symbol": "s_struck_do",
+      "sound_id": 63,
+      "source_line": 83,
+      "source_text": "s_struck_do          = 63;"
+    },
+    {
+      "symbol": "s_struck_axe",
+      "sound_id": 64,
+      "source_line": 84,
+      "source_text": "s_struck_axe         = 64;"
+    },
+    {
+      "symbol": "s_struck_club",
+      "sound_id": 65,
+      "source_line": 85,
+      "source_text": "s_struck_club        = 65;"
+    },
+    {
+      "symbol": "s_struck_body_sword",
+      "sound_id": 70,
+      "source_line": 87,
+      "source_text": "s_struck_body_sword  = 70;"
+    },
+    {
+      "symbol": "s_struck_body_axe",
+      "sound_id": 71,
+      "source_line": 88,
+      "source_text": "s_struck_body_axe    = 71;"
+    },
+    {
+      "symbol": "s_struck_body_longstick",
+      "sound_id": 72,
+      "source_line": 89,
+      "source_text": "s_struck_body_longstick = 72;"
+    },
+    {
+      "symbol": "s_struck_body_fist",
+      "sound_id": 73,
+      "source_line": 90,
+      "source_text": "s_struck_body_fist   = 73;"
+    },
+    {
+      "symbol": "s_struck_armor_sword",
+      "sound_id": 80,
+      "source_line": 92,
+      "source_text": "s_struck_armor_sword = 80;"
+    },
+    {
+      "symbol": "s_struck_armor_axe",
+      "sound_id": 81,
+      "source_line": 93,
+      "source_text": "s_struck_armor_axe   = 81;"
+    },
+    {
+      "symbol": "s_struck_armor_longstick",
+      "sound_id": 82,
+      "source_line": 94,
+      "source_text": "s_struck_armor_longstick = 82;"
+    },
+    {
+      "symbol": "s_struck_armor_fist",
+      "sound_id": 83,
+      "source_line": 95,
+      "source_text": "s_struck_armor_fist  = 83;"
+    },
+    {
+      "symbol": "s_strike_stone",
+      "sound_id": 91,
+      "source_line": 106,
+      "source_text": "s_strike_stone        = 91;"
+    },
+    {
+      "symbol": "s_drop_stonepiece",
+      "sound_id": 92,
+      "source_line": 107,
+      "source_text": "s_drop_stonepiece     = 92;"
+    },
+    {
+      "symbol": "s_rock_door_open",
+      "sound_id": 100,
+      "source_line": 109,
+      "source_text": "s_rock_door_open     = 100;"
+    },
+    {
+      "symbol": "s_intro_theme",
+      "sound_id": 102,
+      "source_line": 110,
+      "source_text": "s_intro_theme        = 102;"
+    },
+    {
+      "symbol": "s_meltstone",
+      "sound_id": 101,
+      "source_line": 111,
+      "source_text": "s_meltstone          = 101;"
+    },
+    {
+      "symbol": "s_main_theme",
+      "sound_id": 102,
+      "source_line": 112,
+      "source_text": "s_main_theme         = 102;"
+    },
+    {
+      "symbol": "s_norm_button_click",
+      "sound_id": 103,
+      "source_line": 113,
+      "source_text": "s_norm_button_click  = 103;"
+    },
+    {
+      "symbol": "s_rock_button_click",
+      "sound_id": 104,
+      "source_line": 114,
+      "source_text": "s_rock_button_click  = 104;"
+    },
+    {
+      "symbol": "s_glass_button_click",
+      "sound_id": 105,
+      "source_line": 115,
+      "source_text": "s_glass_button_click = 105;"
+    },
+    {
+      "symbol": "s_money",
+      "sound_id": 106,
+      "source_line": 116,
+      "source_text": "s_money              = 106;"
+    },
+    {
+      "symbol": "s_eat_drug",
+      "sound_id": 107,
+      "source_line": 117,
+      "source_text": "s_eat_drug           = 107;"
+    },
+    {
+      "symbol": "s_click_drug",
+      "sound_id": 108,
+      "source_line": 118,
+      "source_text": "s_click_drug         = 108;"
+    },
+    {
+      "symbol": "s_spacemove_out",
+      "sound_id": 109,
+      "source_line": 119,
+      "source_text": "s_spacemove_out      = 109;"
+    },
+    {
+      "symbol": "s_spacemove_in",
+      "sound_id": 110,
+      "source_line": 120,
+      "source_text": "s_spacemove_in       = 110;"
+    },
+    {
+      "symbol": "s_click_weapon",
+      "sound_id": 111,
+      "source_line": 122,
+      "source_text": "s_click_weapon       = 111;"
+    },
+    {
+      "symbol": "s_click_armor",
+      "sound_id": 112,
+      "source_line": 123,
+      "source_text": "s_click_armor        = 112;"
+    },
+    {
+      "symbol": "s_click_ring",
+      "sound_id": 113,
+      "source_line": 124,
+      "source_text": "s_click_ring         = 113;"
+    },
+    {
+      "symbol": "s_click_armring",
+      "sound_id": 114,
+      "source_line": 125,
+      "source_text": "s_click_armring      = 114;"
+    },
+    {
+      "symbol": "s_click_necklace",
+      "sound_id": 115,
+      "source_line": 126,
+      "source_text": "s_click_necklace     = 115;"
+    },
+    {
+      "symbol": "s_click_helmet",
+      "sound_id": 116,
+      "source_line": 127,
+      "source_text": "s_click_helmet       = 116;"
+    },
+    {
+      "symbol": "s_click_grobes",
+      "sound_id": 117,
+      "source_line": 128,
+      "source_text": "s_click_grobes       = 117;"
+    },
+    {
+      "symbol": "s_itmclick",
+      "sound_id": 118,
+      "source_line": 129,
+      "source_text": "s_itmclick           = 118;"
+    },
+    {
+      "symbol": "s_yedo_man",
+      "sound_id": 130,
+      "source_line": 131,
+      "source_text": "s_yedo_man           = 130;"
+    },
+    {
+      "symbol": "s_yedo_woman",
+      "sound_id": 131,
+      "source_line": 132,
+      "source_text": "s_yedo_woman         = 131;"
+    },
+    {
+      "symbol": "s_longhit",
+      "sound_id": 132,
+      "source_line": 133,
+      "source_text": "s_longhit            = 132;"
+    },
+    {
+      "symbol": "s_widehit",
+      "sound_id": 133,
+      "source_line": 134,
+      "source_text": "s_widehit            = 133;"
+    },
+    {
+      "symbol": "s_rush_l",
+      "sound_id": 134,
+      "source_line": 135,
+      "source_text": "s_rush_l             = 134;"
+    },
+    {
+      "symbol": "s_rush_r",
+      "sound_id": 135,
+      "source_line": 136,
+      "source_text": "s_rush_r             = 135;"
+    },
+    {
+      "symbol": "s_firehit_ready",
+      "sound_id": 136,
+      "source_line": 137,
+      "source_text": "s_firehit_ready      = 136;"
+    },
+    {
+      "symbol": "s_firehit",
+      "sound_id": 137,
+      "source_line": 138,
+      "source_text": "s_firehit            = 137;"
+    },
+    {
+      "symbol": "s_man_struck",
+      "sound_id": 138,
+      "source_line": 140,
+      "source_text": "s_man_struck     = 138;"
+    },
+    {
+      "symbol": "s_wom_struck",
+      "sound_id": 139,
+      "source_line": 141,
+      "source_text": "s_wom_struck     = 139;"
+    },
+    {
+      "symbol": "s_man_die",
+      "sound_id": 144,
+      "source_line": 142,
+      "source_text": "s_man_die        = 144;"
+    },
+    {
+      "symbol": "s_wom_die",
+      "sound_id": 145,
+      "source_line": 143,
+      "source_text": "s_wom_die        = 145;"
+    }
+  ],
+  "semantic_mapping_note": "Constants are preserved as source evidence. A constant does not become a runtime binding without an object, phase, and current-project callsite.",
+  "current_project_exact_bindings": [
+    {
+      "owner_id": "player.weapon.short",
+      "sound_id": 50,
+      "classic_weapon_shapes": [
+        6,
+        20
+      ],
+      "callsite": "scripts/player_visual.gd:_weapon_audio_event_id",
+      "binding_source": "assets/data/audio/audio_bindings.source.json"
+    },
+    {
+      "owner_id": "player.weapon.wood",
+      "sound_id": 51,
+      "classic_weapon_shapes": [
+        1
+      ],
+      "callsite": "scripts/player_visual.gd:_weapon_audio_event_id",
+      "binding_source": "assets/data/audio/audio_bindings.source.json"
+    },
+    {
+      "owner_id": "player.weapon.sword",
+      "sound_id": 52,
+      "classic_weapon_shapes": [
+        2,
+        5,
+        9,
+        13,
+        14,
+        22
+      ],
+      "callsite": "scripts/player_visual.gd:_weapon_audio_event_id",
+      "binding_source": "assets/data/audio/audio_bindings.source.json"
+    },
+    {
+      "owner_id": "player.weapon.blade",
+      "sound_id": 53,
+      "classic_weapon_shapes": [
+        4,
+        10,
+        15,
+        16,
+        17,
+        23
+      ],
+      "callsite": "scripts/player_visual.gd:_weapon_audio_event_id",
+      "binding_source": "assets/data/audio/audio_bindings.source.json"
+    },
+    {
+      "owner_id": "player.weapon.axe",
+      "sound_id": 54,
+      "classic_weapon_shapes": [
+        3,
+        7,
+        11
+      ],
+      "callsite": "scripts/player_visual.gd:_weapon_audio_event_id",
+      "binding_source": "assets/data/audio/audio_bindings.source.json"
+    },
+    {
+      "owner_id": "player.weapon.club",
+      "sound_id": 55,
+      "classic_weapon_shapes": [
+        24
+      ],
+      "callsite": "scripts/player_visual.gd:_weapon_audio_event_id",
+      "binding_source": "assets/data/audio/audio_bindings.source.json"
+    },
+    {
+      "owner_id": "player.weapon.long",
+      "sound_id": 56,
+      "classic_weapon_shapes": [
+        8,
+        12,
+        18,
+        21
+      ],
+      "callsite": "scripts/player_visual.gd:_weapon_audio_event_id",
+      "binding_source": "assets/data/audio/audio_bindings.source.json"
+    },
+    {
+      "owner_id": "player.weapon.fist",
+      "sound_id": 57,
+      "classic_weapon_shapes": [],
+      "callsite": "scripts/player_visual.gd:_weapon_audio_event_id",
+      "binding_source": "assets/data/audio/audio_bindings.source.json"
+    }
+  ],
+  "unbound_constants_require_callsite_evidence": true
+}

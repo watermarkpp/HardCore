@@ -7,7 +7,7 @@ const SkillRankResolverScript := preload(
 )
 
 ## HardCore skill-growth contract v2: base ranks are learned/upgraded with
-## skill books (0..3 terminal), and effective cast rank = base_rank +
+## skill books (first book = 1, third book = 3), and effective cast rank = base_rank +
 ## equipment bonus. Proficiency is fully removed: it is never produced,
 ## upgraded, persisted or converted. v1 snapshots still load (rank kept as
 ## base_rank, current_proficiency discarded).
@@ -34,8 +34,8 @@ func learn(skill_name_or_id: String, player_level: int) -> Dictionary:
 				required_level,
 				"level_requirement"
 			)
-		_set_base_rank(skill_id, 0)
-		return _learn_result(true, "", skill_id, 0, required_level, "learned")
+		_set_base_rank(skill_id, 1)
+		return _learn_result(true, "", skill_id, 1, required_level, "learned")
 	if current_rank >= 3:
 		return _learn_result(
 			false,

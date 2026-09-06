@@ -19,7 +19,7 @@ func _run() -> void:
 	assert(effect != null and effect.get_parent() == game.player)
 	assert(effect.z_index == 0 and not bool(effect.get_meta("preview_only")))
 	effect.playback_started.connect(func() -> void: playback_count += 1)
-	PlayerState.add_experience(30)
+	PlayerState.add_experience(10)
 	assert(PlayerState.level == 3, "one generic reward should cross two reduced thresholds")
 	assert(playback_count == 1, "one multi-level reward must play exactly once")
 	assert(effect.position == game.player.approved_ground_footpoint_local_px())
