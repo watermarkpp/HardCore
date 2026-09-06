@@ -1,11 +1,19 @@
 # HardCore Current Status
 
-Updated against consolidated main-tree anchor: `550b1cf5`
+Updated against current upgrade code anchor: `e6939a74`
 Branch: `codex/integration`
-Updated: 2026-08-29
+Updated: 2026-09-06
 Purpose: where the project stands right now.
 
-## 2026-09-06 复活后怪物视觉与经验/音乐跟进（最新）
+## 2026-09-06 玩法与精确音频升级（最新）
+
+- APK 源码锚点 `e6939a74fb091db24683c738fb85fb977d580cd0`，版本 `71 / 1.20.0-gameplay-audio`。完整安装包已放桌面 `HardCore-20260906-gameplay-audio-debug.apk`，461,365,538 bytes，SHA-256 `A759922572001C43B00C329C7FE398BDF979B70F07B20B53137B32A05898772F`。版本/签名/资源验证通过，交付身份见 `docs/upgrade/20260906/DELIVERY.md`；未安装手机，实机听感/玩法待验。
+- 音乐 6 秒且播放不截断；NPC 单语音随机切换与 BGM 独立；522 个精确音频事件，无法确认来源/材质映射的声音保留为空，不猜配。
+- 召唤物防御与最终传送落点、首本技能 1 级、全图随机卷、物品/掉落 ID 链、主源远程射程、普攻/烈火 2 GU、半月 2 GU/120°、刺杀 3 GU/末端 1.5 GU 无视防御及当前经验门槛再除 3 已接入。保留地图/怪物数/AI 节拍和已批准升级动画。
+- 完整 critical 首轮 310/317，7 个失败均完成夹具修正后分批复验通过；音频核心 3/3、相邻 6/6；最终干净代码锚点最小专项 3/3 PASS。不是一次全套全绿。正式成功/失败 JSON 已入 `docs/upgrade/20260906/evidence/`。
+- 尸王人工倍率未变：当前十只零掉落概率约 16.96%；修复的是正式物品身份传递，未擅自增加保底。详情见 `docs/UPGRADE_20260906.md`。
+
+## 2026-09-06 复活后怪物视觉与经验/音乐跟进（前一版）
 
 - 源码 `571db0bc`：同图死亡回城保留怪物视觉 generation/订阅，真实跨图隔离不变；死亡扣本级总升级门槛 10%（封顶已有经验），主城音乐默认音量 70%。未修改地图、AI、怪物数量或已批准升级动画。
 - 最终源码专项 3/3 PASS、0 engine errors；最小累计热补丁 1,445,316 bytes / 13 项，无删除项，独立基包加载通过。手机已加载精确最终 patchId/SHA，loadError 为空，存档保留。

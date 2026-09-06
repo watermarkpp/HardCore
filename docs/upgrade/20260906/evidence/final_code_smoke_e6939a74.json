@@ -1,0 +1,56 @@
+﻿{
+    "git_head":  "e6939a74fb091db24683c738fb85fb977d580cd0",
+    "engine_log_errors":  0,
+    "passed":  3,
+    "results":  [
+                    {
+                        "test_name":  "player_core_audio_hook_test",
+                        "test_path":  "tests/player_core_audio_hook_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "loot_stable_identity_save_test",
+                        "test_path":  "tests/loot_stable_identity_save_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "warrior_thrust_defense_runtime_test",
+                        "test_path":  "tests/skills/warrior_thrust_defense_runtime_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-09-06T16:52:45.1649517+08:00",
+    "total":  3,
+    "failed":  0
+}
