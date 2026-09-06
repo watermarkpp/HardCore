@@ -305,6 +305,10 @@ func _process(delta: float) -> void:
 
 
 func play_action(animation_name: String, duration: float) -> void:
+	var starts_reaction_action := (
+		animation_name in ["hit", "death"]
+		and not (_action_name == animation_name and _action_remaining > 0.0)
+	)
 	if _action_name == "death" and _action_remaining > 0.0 and animation_name != "death":
 		return
 	_action_name = animation_name
@@ -316,6 +320,8 @@ func play_action(animation_name: String, duration: float) -> void:
 		_action_duration = maxf(_action_duration, duration)
 	_elapsed = 0.0
 	_action_audio_played = false
+	if starts_reaction_action:
+		_dispatch_player_reaction_action_start_audio(animation_name)
 
 
 func play_passive_proc_effect(effect_name: String, duration := 0.24) -> void:
@@ -956,6 +962,30 @@ func _update_action_audio() -> void:
 		weapon_audio.stop()
 
 
+func _dispatch_player_reaction_action_start_audio(animation_name: String) -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	var service := tree.get_first_node_in_group("audio_runtime_service")
+	if service == null or not service.has_method("play_event"):
+		return
+	var context := {
+		"gender": PlayerState.gender,
+		"action_name": animation_name,
+		"source": "player_visual.reaction_action_start",
+	}
+	match animation_name:
+		"hit":
+			# Current PvE has non-human attackers. Primary Actor.pas keeps its
+			# initialized body-longstick contact and then plays the sex voice.
+			service.call("play_event", "player.hurt.pve.body", context)
+			service.call("play_event", "player.hurt.voice", context)
+		"death":
+			# Do not start source game-over music: the user-authorized town BGM
+			# survives map/death transitions and has precedence in HardCore.
+			service.call("play_event", "player.death.voice", context)
+
+
 func _dispatch_audited_action_audio() -> void:
 	# MirClient's rush action has no dedicated weapon/skill PlaySound call.
 	# Do not borrow the adjacent attack samples merely because this visual uses
@@ -986,6 +1016,29 @@ func _dispatch_audited_action_audio() -> void:
 		service.call("play_event", skill_event_id, context)
 
 
+func audio_classic_weapon_shape() -> int:
+	var weapon := _equipped_record("武器")
+	if weapon.is_empty():
+		return 0
+	return _audio_classic_weapon_shape_for_record(weapon)
+
+
+func _audio_classic_weapon_shape_for_record(weapon: Dictionary) -> int:
+	var stable_item_id := _audio_stable_equipped_item_id(weapon)
+	if stable_item_id < 0:
+		return -1
+	var formal_items: Variant = GameData.equipment_visual_catalog.get("itemsById", {})
+	if not formal_items is Dictionary:
+		return -1
+	var formal_item: Variant = formal_items.get(str(stable_item_id), {})
+	if not formal_item is Dictionary:
+		return -1
+	var world_wear: Variant = formal_item.get("worldWear", {})
+	if not world_wear is Dictionary or not world_wear.has("shape"):
+		return -1
+	return int(world_wear.get("shape", -1))
+
+
 func _weapon_audio_event_id() -> String:
 	var weapon := _equipped_record("武器")
 	if weapon.is_empty():
@@ -994,19 +1047,9 @@ func _weapon_audio_event_id() -> String:
 	# the item display name. Resolve the current stable item ID to the formal
 	# classic weapon shape already used by world-wear rendering; an old
 	# name-only/unknown equipped record stays silent instead of guessing.
-	var stable_item_id := _audio_stable_equipped_item_id(weapon)
-	if stable_item_id < 0:
+	var classic_shape := _audio_classic_weapon_shape_for_record(weapon)
+	if classic_shape < 0:
 		return ""
-	var formal_items: Variant = GameData.equipment_visual_catalog.get("itemsById", {})
-	if not formal_items is Dictionary:
-		return ""
-	var formal_item: Variant = formal_items.get(str(stable_item_id), {})
-	if not formal_item is Dictionary:
-		return ""
-	var world_wear: Variant = formal_item.get("worldWear", {})
-	if not world_wear is Dictionary or not world_wear.has("shape"):
-		return ""
-	var classic_shape := int(world_wear.get("shape", -1))
 	if classic_shape in [6, 20]:
 		return "player.weapon.short.swing"
 	if classic_shape == 1:

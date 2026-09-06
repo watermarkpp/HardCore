@@ -527,6 +527,7 @@ $Suites.critical = @($Suites.critical + @(
     'tests/player_level_up_effect_runtime_test.tscn',
     'tests/town_music_controller_test.tscn',
     'tests/audio_runtime_service_test.tscn',
+    'tests/player_core_audio_hook_test.tscn',
     'tests/skills/warrior_thrust_defense_runtime_test.tscn',
     'tests/skills/warrior_melee_entry_runtime_test.tscn',
     'tests/skills/summon_owner_teleport_runtime_test.tscn',

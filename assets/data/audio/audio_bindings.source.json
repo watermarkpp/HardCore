@@ -2629,6 +2629,518 @@
       ]
     },
     {
+      "event_id": "player.hurt.pve.body",
+      "owner_kind": "player",
+      "canonical_owner_id": "player.hurt.pve",
+      "display_name": "player.hurt.pve.body",
+      "semantic_event": "player_struck_body_contact",
+      "phase": "pve_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "call": "TActor.RunSound SM_STRUCK action start; current PvE non-human attacker keeps initialized body-longstick 72 and selects scream by sex",
+        "current_scope": "PvE player actor; PvP dress/attacker material branches are not implemented"
+      },
+      "samples": [
+        {
+          "sound_id": 72,
+          "source_index_line": 53,
+          "source_raw_path": "wav\\72.wav",
+          "source_relative_path": "72.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "921fee1c7775a7903ac276c72399d32f34f586c343a8ef732a79ad12f124b974",
+          "source_size_bytes": 32342,
+          "runtime_path": "res://assets/audio/sfx/client/72__72.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.hurt.voice",
+      "owner_kind": "player",
+      "canonical_owner_id": "player.hurt",
+      "display_name": "player.hurt.voice",
+      "semantic_event": "player_reaction_voice",
+      "phase": "struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "call": "TActor.RunSound SM_STRUCK action start; current PvE non-human attacker keeps initialized body-longstick 72 and selects scream by sex",
+        "current_scope": "PvE player actor; PvP dress/attacker material branches are not implemented"
+      },
+      "samples": [
+        {
+          "sound_id": 138,
+          "source_index_line": 96,
+          "source_raw_path": "wav\\138.wav",
+          "source_relative_path": "138.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "6352611afb6f702a4440f176e09ccf7a2f9239b91a3046aa2f92b4bded9a0e98",
+          "source_size_bytes": 32684,
+          "runtime_path": "res://assets/audio/sfx/client/138__138.wav"
+        },
+        {
+          "sound_id": 139,
+          "source_index_line": 97,
+          "source_raw_path": "wav\\139.wav",
+          "source_relative_path": "139.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "aaf891b18f6b06684fa1040c267de16ed3646de54908470c70cc5a9304ff3586",
+          "source_size_bytes": 57004,
+          "runtime_path": "res://assets/audio/sfx/client/139__139.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.death.voice",
+      "owner_kind": "player",
+      "canonical_owner_id": "player.death",
+      "display_name": "player.death.voice",
+      "semantic_event": "player_reaction_voice",
+      "phase": "death_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "call": "TActor.RunSound SM_NOWDEATH action start via m_nDieSound",
+        "current_scope": "PvE player actor; PvP dress/attacker material branches are not implemented"
+      },
+      "samples": [
+        {
+          "sound_id": 144,
+          "source_index_line": 103,
+          "source_raw_path": "wav\\144.wav",
+          "source_relative_path": "144.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "96da14d611a2255362cd61ab7fae011513dcb49214edf1515dd6176ca1edaca1",
+          "source_size_bytes": 74218,
+          "runtime_path": "res://assets/audio/sfx/client/144__144.wav"
+        },
+        {
+          "sound_id": 145,
+          "source_index_line": 104,
+          "source_raw_path": "wav\\145.wav",
+          "source_relative_path": "145.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "adddb2edbb636d9099f76e06bb0f430b746fb3f8e0e5d5bca1835cef27a3e11a",
+          "source_size_bytes": 85414,
+          "runtime_path": "res://assets/audio/sfx/client/145__145.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.weapon.short",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "display_name": "player.contact.weapon.short",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 60,
+          "source_index_line": 44,
+          "source_raw_path": "wav\\60.wav",
+          "source_relative_path": "60.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "2efa4e2ae9101364f96d404a2f487c0010efd026648ac30d0d6c9fc464437c94",
+          "source_size_bytes": 71200,
+          "runtime_path": "res://assets/audio/sfx/client/60__60.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.weapon.wood",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "display_name": "player.contact.weapon.wood",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 61,
+          "source_index_line": 45,
+          "source_raw_path": "wav\\61.wav",
+          "source_relative_path": "61.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "c48c3836edddac4688310f6906ed08388dd8bcce628c8d439a1e69101acc3942",
+          "source_size_bytes": 47674,
+          "runtime_path": "res://assets/audio/sfx/client/61__61.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.weapon.sword",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "display_name": "player.contact.weapon.sword",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 62,
+          "source_index_line": 46,
+          "source_raw_path": "wav\\62.wav",
+          "source_relative_path": "62.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "23f2a8312c0979e338b8f1b482e606247a653df8c23277d0eafd71cb4e58630b",
+          "source_size_bytes": 58252,
+          "runtime_path": "res://assets/audio/sfx/client/62__62.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.weapon.blade",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "display_name": "player.contact.weapon.blade",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 63,
+          "source_index_line": 47,
+          "source_raw_path": "wav\\63.wav",
+          "source_relative_path": "63.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "f729c4fc85e7f09318463fec9c689bfd652b0b3fd12f2e4f6a991b9272a10f36",
+          "source_size_bytes": 67092,
+          "runtime_path": "res://assets/audio/sfx/client/63__63.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.weapon.axe",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "display_name": "player.contact.weapon.axe",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 64,
+          "source_index_line": 48,
+          "source_raw_path": "wav\\64.wav",
+          "source_relative_path": "64.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "bc8edb1bb3367b888006fd3ac9c909208e2b623e3b4814cf02db37f151adf400",
+          "source_size_bytes": 70818,
+          "runtime_path": "res://assets/audio/sfx/client/64__64.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.weapon.club",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "display_name": "player.contact.weapon.club",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 65,
+          "source_index_line": 49,
+          "source_raw_path": "wav\\65.wav",
+          "source_relative_path": "65.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "19a905f01b171898044c5374997a5390160e80c113ea0eb110270457d1262eaa",
+          "source_size_bytes": 68848,
+          "runtime_path": "res://assets/audio/sfx/client/65__65.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.body.sword",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.body",
+      "display_name": "player.contact.body.sword",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 70,
+          "source_index_line": 51,
+          "source_raw_path": "wav\\70.wav",
+          "source_relative_path": "70.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "b4987c79614a0d230a801082c7a82384fd658b428da78e378d78758667f40a53",
+          "source_size_bytes": 43452,
+          "runtime_path": "res://assets/audio/sfx/client/70__70.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.body.axe",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.body",
+      "display_name": "player.contact.body.axe",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 71,
+          "source_index_line": 52,
+          "source_raw_path": "wav\\71.wav",
+          "source_relative_path": "71.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "18a002e22ff6f06db25a9fb84be02d1ee7521089733e07eeecfe8671c42a1ac0",
+          "source_size_bytes": 54204,
+          "runtime_path": "res://assets/audio/sfx/client/71__71.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.body.long",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.body",
+      "display_name": "player.contact.body.long",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 72,
+          "source_index_line": 53,
+          "source_raw_path": "wav\\72.wav",
+          "source_relative_path": "72.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "921fee1c7775a7903ac276c72399d32f34f586c343a8ef732a79ad12f124b974",
+          "source_size_bytes": 32342,
+          "runtime_path": "res://assets/audio/sfx/client/72__72.wav"
+        }
+      ]
+    },
+    {
+      "event_id": "player.contact.body.fist",
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.body",
+      "display_name": "player.contact.body.fist",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "integration_status": "BOUND",
+      "source_rule": {
+        "distribution": "source.original_gameofmir.mirclient",
+        "path": "dev_art_sources/reference/original_gameofmir/MirClient/Actor.pas",
+        "sha256": "55a43cfdca869810217e007f2284d293c8d69c8d0867cc879327ddcde87e19cd",
+        "constants": {
+          "distribution": "source.original_gameofmir.mirclient",
+          "path": "dev_art_sources/reference/original_gameofmir/MirClient/SoundUtil.pas",
+          "sha256": "85d21c3029d00e5cccf4d9d5e691d3d083ac5560101ddb8afad11f8be40bbfac"
+        },
+        "runtime_shape_authority": {
+          "distribution": "project.current_equipment_visual_authority",
+          "path": "assets/data/equipment_visual_catalog.json",
+          "sha256": "a9c95c683f8e4d696d53b35cca39910b9f2445b8f6ba756fe79852ee5718db55"
+        },
+        "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+        "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound"
+      },
+      "samples": [
+        {
+          "sound_id": 73,
+          "source_index_line": 54,
+          "source_raw_path": "wav\\73.wav",
+          "source_relative_path": "73.wav",
+          "mapping_status": "EXACT",
+          "source_sha256": "8f114ae3ee416f8a25511cebf917217adee713b88eef4ff2ab17079ecf5d0022",
+          "source_size_bytes": 31778,
+          "runtime_path": "res://assets/audio/sfx/client/73__73.wav"
+        }
+      ]
+    },
+    {
       "event_id": "monster.18.appear",
       "owner_kind": "monster",
       "canonical_owner_id": "monster.18",
@@ -30504,16 +31016,25 @@
     {
       "owner_kind": "skill_or_monster_missing_sample",
       "reason": "Entries marked MISSING_SOURCE retain the exact sound ID and primary index path; no adjacent file substitution is permitted."
+    },
+    {
+      "owner_kind": "player_footstep_surface",
+      "reason": "Primary IDs/cadence are known, but current maps do not expose an audited legacy tile-to-footstep-surface identity. Leave runtime unbound rather than treating every map as ground."
+    },
+    {
+      "owner_kind": "ui_material",
+      "reason": "Primary normal/rock/glass IDs are known, but current widgets have no explicit material identity contract. Runtime callpoints remain NOT_STARTED."
     }
   ],
   "event_generation": {
     "command": "audio_pipeline.py build-exact",
     "effective_loader_semantics": "SoundUtil.LoadSoundList accepts only strictly increasing sound IDs",
-    "generated_event_count": 1152,
-    "runtime_event_count": 509,
-    "managed_asset_count": 349,
+    "generated_event_count": 1165,
+    "runtime_event_count": 522,
+    "managed_asset_count": 363,
     "current_item_identity_count": 727,
-    "item_route_count": 454
+    "item_route_count": 454,
+    "player_core_event_count": 13
   },
   "item_identity_sources": [
     {

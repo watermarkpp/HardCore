@@ -1,0 +1,56 @@
+{
+  "results": [
+    {
+      "test_name": "audio_runtime_service_test",
+      "test_path": "tests/audio_runtime_service_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "player_core_audio_hook_test",
+      "test_path": "tests/player_core_audio_hook_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_audio_hook_test",
+      "test_path": "tests/monster_audio_hook_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 3,
+  "failed": 0,
+  "generated_at": "2026-09-06T16:33:32.7143519+08:00",
+  "git_head": "36bfb5f8e8c0c18269fbc2fd8e8b9dae4d700b9f",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "passed": 3
+}

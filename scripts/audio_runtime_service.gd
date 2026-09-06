@@ -240,6 +240,64 @@ func play_monster_event(monster_id: int, semantic_event: String, context: Dictio
 	return play_event("monster.%d.%s" % [monster_id, semantic_event], context)
 
 
+## Primary Actor.pas emits two independent layers on a confirmed player
+## physical hit: m_nStruckWeaponSound, then m_nStruckSound. The first source
+## branch applies integer division a second time after m_btWeapon div 2; keep
+## that exact behavior rather than normalizing it to the swing family.
+func play_player_physical_contact(classic_weapon_shape: int, context: Dictionary = {}) -> Dictionary:
+	if classic_weapon_shape < 0:
+		return _reject_event("invalid_event", "player.contact", context)
+	var layer_results: Array[Dictionary] = []
+	var weapon_event_id := _player_contact_weapon_event(classic_weapon_shape)
+	if not weapon_event_id.is_empty():
+		layer_results.append(play_event(weapon_event_id, context))
+	var body_event_id := _player_contact_body_event(classic_weapon_shape)
+	layer_results.append(play_event(body_event_id, context))
+	var played_count := 0
+	for result: Dictionary in layer_results:
+		if str(result.get("status", "")) == "played":
+			played_count += 1
+	return {
+		"contract_id": CONTRACT_ID,
+		"status": "played" if played_count > 0 else "not_played",
+		"classic_weapon_shape": classic_weapon_shape,
+		"played_layer_count": played_count,
+		"layers": layer_results,
+		"context": context.duplicate(true),
+	}
+
+
+func _player_contact_weapon_event(classic_weapon_shape: int) -> String:
+	var source_second_division := floori(float(classic_weapon_shape) / 2.0)
+	match source_second_division:
+		6, 20:
+			return "player.contact.weapon.short"
+		1, 8, 12, 18, 21:
+			return "player.contact.weapon.wood"
+		2, 5, 9, 13, 14, 22:
+			return "player.contact.weapon.sword"
+		4, 10, 15, 16, 17, 23:
+			return "player.contact.weapon.blade"
+		3, 7, 11:
+			return "player.contact.weapon.axe"
+		24:
+			return "player.contact.weapon.club"
+		_:
+			return ""
+
+
+func _player_contact_body_event(classic_weapon_shape: int) -> String:
+	match classic_weapon_shape:
+		1, 2, 4, 5, 6, 9, 10, 13, 14, 15, 16, 17:
+			return "player.contact.body.sword"
+		3, 11:
+			return "player.contact.body.axe"
+		8, 12, 18:
+			return "player.contact.body.long"
+		_:
+			return "player.contact.body.fist"
+
+
 ## Source-exact ambient cadence: Actor.pas evaluates Random(8) == 1 only on
 ## walk/turn client frame 1. The per-actor audio RNG never touches gameplay
 ## RNG, so muting audio cannot alter combat, AI or drops.

@@ -952,6 +952,17 @@ func _aoe_apply_legacy_damage_candidates(
 			enemy,
 			resolved_damage,
 			player,
+			(
+				{
+					"damage_kind": "player_physical",
+					"confirmed_hit": true,
+					"source_skill_id": source_skill_id,
+					"source": "game_root._aoe_apply_legacy_damage_candidates",
+				}
+				if physical_accuracy
+				and not CombatResolutionRulesScript.anti_magic_eligible(source_skill_id)
+				else {}
+			),
 		) or hit_any
 	return {
 		"hit_any": hit_any,
@@ -10821,7 +10832,16 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 				})
 			return false
 	var hp_before := enemy.current_hp
-	if not _combat_runtime.apply_enemy_physical_damage(enemy, maxi(1, damage), player):
+	if not _combat_runtime.apply_enemy_physical_damage(
+		enemy,
+		maxi(1, damage),
+		player,
+		{
+			"damage_kind": "player_physical",
+			"confirmed_hit": true,
+			"source": "game_root._apply_physical_hit",
+		},
+	):
 		if diagnostics_enabled:
 			_active_physical_hit_diagnostics.append({
 				"target_id": enemy.get_instance_id(),

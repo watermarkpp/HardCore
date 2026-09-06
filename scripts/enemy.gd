@@ -637,6 +637,38 @@ func _emit_monster_audio(semantic_event: String, allow_death := false) -> bool:
 	return true
 
 
+func _emit_player_physical_contact(attacker: Node2D, damage_context: Dictionary) -> bool:
+	if (
+		str(damage_context.get("damage_kind", "")) != "player_physical"
+		or not bool(damage_context.get("confirmed_hit", false))
+		or not attacker is PlayerCharacter
+		or not _audio_is_listenable()
+	):
+		return false
+	var player_attacker := attacker as PlayerCharacter
+	if (
+		player_attacker.visual == null
+		or not is_instance_valid(player_attacker.visual)
+		or not player_attacker.visual.has_method("audio_classic_weapon_shape")
+	):
+		return false
+	var classic_shape := int(player_attacker.visual.call("audio_classic_weapon_shape"))
+	if classic_shape < 0:
+		return false
+	var service := _audio_service()
+	if service == null or not service.has_method("play_player_physical_contact"):
+		return false
+	var context := _audio_context("player_physical_contact")
+	context.merge(damage_context, true)
+	context["classic_weapon_shape"] = classic_shape
+	var result: Variant = service.call(
+		"play_player_physical_contact",
+		classic_shape,
+		context,
+	)
+	return result is Dictionary and str((result as Dictionary).get("status", "")) == "played"
+
+
 func _audio_try_emit_appear() -> void:
 	if _audio_appear_emitted:
 		return
@@ -4790,7 +4822,11 @@ func apply_life_steal(dealt_damage: int) -> void:
 	_refresh_overhead_health()
 
 
-func take_damage(amount: int, attacker: Node2D = null) -> void:
+func take_damage(
+	amount: int,
+	attacker: Node2D = null,
+	damage_context: Dictionary = {},
+) -> void:
 	if _dying or _death_pending:
 		return
 	_record_performance_counter(&"take_damage_calls")
@@ -4805,6 +4841,7 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 	if visual != null and current_hp > 0:
 		visual.play_hit()
 		if hp_before_damage - current_hp > 0:
+			_emit_player_physical_contact(attacker, damage_context)
 			_emit_monster_audio("hurt")
 	if is_boss and _boss_phase_enabled and not _boss_phase_two and current_hp <= max_hp / 2:
 		_boss_phase_two = true

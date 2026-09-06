@@ -14,20 +14,40 @@ func _run() -> void:
 	await get_tree().process_frame
 	var prewarm := service.prewarm_runtime_streams()
 	assert(int(prewarm.get("npc_loaded", 0)) == 14, "NPC 14个WAV未在初始化阶段全部预热")
-	assert(int(prewarm.get("event_loaded", 0)) == 510, "精确事件样本未在初始化阶段全部预热")
+	assert(int(prewarm.get("event_loaded", 0)) == 525, "精确事件样本未在初始化阶段全部预热")
 	assert(int(prewarm.get("missing", 0)) == 0, "运行时音频存在缺失路径")
 	assert(int(prewarm.get("failed", 0)) == 0, "运行时音频预热存在解码失败")
 	assert(service.npc_voice_player != null, "NPC音频缺少唯一播放器")
 	assert(service.npc_voice_player.bus == &"SFX", "NPC音频未路由到SFX总线")
 	assert(AudioServer.get_bus_index(&"Music") < 0 or AudioServer.get_bus_index(&"Music") != AudioServer.get_bus_index(&"SFX"), "NPC与BGM不应共用同一总线")
 	var snapshot: Dictionary = service.state_snapshot()
-	assert(int(snapshot.get("event_count", 0)) == 509, "精确事件映射数量漂移")
+	assert(int(snapshot.get("event_count", 0)) == 522, "精确事件映射数量漂移")
 	assert(int(snapshot.get("item_route_identity_count", 0)) == 727, "物品稳定身份路由数量漂移")
 	assert(int(snapshot.get("event_pool_size", 0)) == 24, "事件服务必须使用固定并发池而非每事件一个播放器")
 	var female_slaying: Dictionary = service.play_event("player.skill.slaying", {"gender": "女"})
 	assert(female_slaying.get("status", "") == "played", "女战士攻杀剑术未播放")
 	assert(int(female_slaying.get("variant_index", -1)) == 1, "女战士攻杀未选择精确131声部")
 	assert(str(female_slaying.get("runtime_path", "")).begins_with("res://assets/audio/sfx/client/131__"), "女战士攻杀映射错位")
+	var female_hurt: Dictionary = service.play_event("player.hurt.voice", {"gender": "女"})
+	assert(str(female_hurt.get("runtime_path", "")).ends_with("139__139.wav"), "女性受击未映射sound 139")
+	var male_death: Dictionary = service.play_event("player.death.voice", {"gender": "男"})
+	assert(str(male_death.get("runtime_path", "")).ends_with("144__144.wav"), "男性死亡未映射sound 144")
+	var shape_six_contact: Dictionary = service.play_player_physical_contact(6, {"source": "test"})
+	assert(int(shape_six_contact.get("played_layer_count", 0)) == 2, "shape 6命中必须播放双层接触声")
+	var shape_six_paths: Array[String] = []
+	for layer: Dictionary in shape_six_contact.get("layers", []):
+		shape_six_paths.append(str(layer.get("runtime_path", "")))
+	assert(
+		shape_six_paths.any(func(path: String) -> bool: return path.ends_with("64__64.wav"))
+		and shape_six_paths.any(func(path: String) -> bool: return path.ends_with("70__70.wav")),
+		"shape 6必须保持源二次div的64层并叠加body sword 70",
+	)
+	var fist_contact: Dictionary = service.play_player_physical_contact(0, {"source": "test"})
+	assert(int(fist_contact.get("played_layer_count", 0)) == 1, "徒手命中源规则只有body fist一层")
+	assert(
+		str((fist_contact.get("layers", [])[0] as Dictionary).get("runtime_path", "")).ends_with("73__73.wav"),
+		"徒手命中未映射sound 73",
+	)
 	var monster_attack: Dictionary = service.play_monster_event(21, "attack_start", {"source": "test"})
 	assert(monster_attack.get("status", "") == "played", "怪物21攻击动作起点精确映射未播放")
 	var display_monster_rejected: Dictionary = service.play_event("monster.鸡.attack_start")
@@ -79,5 +99,5 @@ func _run() -> void:
 	service.stop_npc_voice("test_exit")
 	service.stop_all_events("test_exit")
 	assert(not service.is_npc_voice_active(), "角色退出/会话结束未停止NPC声部")
-	print("AUDIO_RUNTIME_SERVICE_PASS：NPC精确ID/14项预热、509精确事件/固定24声部池、727物品稳定身份路由、怪物独立RNG及BGM并播总线契约通过")
+	print("AUDIO_RUNTIME_SERVICE_PASS：NPC精确ID/14项预热、522精确事件/固定24声部池、玩家受击死亡与双层物理接触、727物品稳定身份路由通过")
 	get_tree().quit(0)

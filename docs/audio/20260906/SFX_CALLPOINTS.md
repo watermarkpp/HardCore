@@ -9,6 +9,7 @@ var result: Dictionary = audio_runtime_service.play_event(event_id, context)
 var result: Dictionary = audio_runtime_service.play_monster_event(monster_id, semantic_event, context)
 var result: Dictionary = audio_runtime_service.play_item_event(stable_item_key, semantic_event, context)
 var result: Dictionary = audio_runtime_service.play_monster_ambient_if_due(monster_id, client_frame, audio_owner_key, context)
+var result: Dictionary = audio_runtime_service.play_player_physical_contact(classic_weapon_shape, context)
 audio_runtime_service.stop_all_audio("world_exit")
 ```
 
@@ -27,6 +28,10 @@ audio_runtime_service.stop_all_audio("world_exit")
 - `.effect`：非飞行技能的效果已经提交后调用；若本次被规则拒绝，不调用。
 
 战士体声和武器声已由 `scripts/player_visual.gd:_update_action_audio()` 在 `WarriorCombatMath.CLIENT_EFFECT_FRAME` 接好：普通攻击只发武器声；攻杀/刺杀/半月/烈火同时发武器层和对应技能体声；野蛮冲撞与烈火蓄力不借用不存在的专属声音。武器层以 stable item ID 解决正式 `worldWear.shape`，按主源 shape 分组发 `player.weapon.short/wood/sword/blade/axe/club/long/fist.swing`；已装备但缺 ID/shape 时 fail-closed，不用名称或“默认剑”猜配。
+
+玩家受击/死亡由 `PlayerVisual.play_action()` 的真实新动作起点发出：PvE hit 先 `player.hurt.pve.body`(72)，再发按性别选择 138/139 的 `player.hurt.voice`；death 发按性别选择 144/145 的 `player.death.voice`。同一活动动作重复请求不会重播。死亡音乐不接入，保持主城 BGM 已播出后不因离区、跨图或死亡被截断的用户规则。
+
+玩家物理接触由 damage context 严格证明，不以 `attacker is PlayerCharacter` 猜测。`GameRoot._apply_physical_hit()` 仅在命中闸通过后标记；legacy AOE 仅在 `physical_accuracy == true` 且 source skill 不走 anti-magic 时标记。`EnemyActor.take_damage()` 只在正数扣血、非致死并实际调用既有 `visual.play_hit()` 的分支中调用 `play_player_physical_contact()`，随后保留原怪物 hurt 顺序。法术、毒伤、miss、零伤害与未进入 hit 表现的致死分支不发。服务按精确 classic shape 播放 weapon 60..65 与 body 70..73；未知装备 ID/shape 拒绝，只有真正空手返回 shape 0。
 
 ## 怪物成功阶段
 
@@ -71,10 +76,10 @@ audio_runtime_service.stop_all_audio("world_exit")
 - `equip_success`：新装备已写入穿戴槽、背包/持久化提交成功后一次。
 - `unequip_success`：旧装备已从穿戴槽移回背包并提交成功后一次。换装如同时完成卸下与穿上，owner 按其真实 commit 结果分别发送；失败回滚不发。
 - `loot_success`：仅 `currency:gold`，在拾取批次完成且金币 delta 已入账后发一次。
-- `balance_change_success`：仅 `currency:gold`，非拾取的已提交金币变更。同一次拾取不可再与 `loot_success` 重复发。
+- `balance_change_success`：仅保留给源中明确的服务端 `SM_GOLDCHANGED` 成功接收边界。同一次拾取不可再与 `loot_success` 重复发；当前商店买入/卖出主源没有专用成功声，因此不接此事件，也禁止用失败前会触发的宽泛 `profile_changed` 代替。
 
 普通物品拾取/丢弃在主源成功路径无专用声，不调用物品声。卷轴、技能书等未命中主源 `ItemUseSound` 分支的身份会返回 `silent_or_unmapped_item_event`，不得用 108 药品声兜底。
 
 ## UI 材质声
 
-主源可证实 `ui.button.normal.click`/`ui.button.rock.click`/`ui.button.glass.click` 分别为 sound 103/104/105，但当前 HardCore widget 没有显式的三类材质合同。未增加 exact UI material stable ID 前，不从 Gothic 样式、按钮文案或文件名猜选。
+主源可证实 `ui.button.normal.click`/`ui.button.rock.click`/`ui.button.glass.click` 分别为 sound 103/104/105，但当前 HardCore widget 没有显式的三类材质合同，运行时状态为 `NOT_STARTED`。未增加 exact UI material stable ID 前，不从 Gothic 样式、按钮文案或文件名猜选。玩家脚步同理：主源 sound 1..32 和帧点已知，但当前地图没有 legacy 表面身份，保持未接入而不是默认地面声。

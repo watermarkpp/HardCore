@@ -104,6 +104,27 @@ PLAYER_WEAPON_SOUNDS: tuple[tuple[str, int, tuple[int, ...]], ...] = (
     ("fist", 57, ()),
 )
 
+# TActor.RunSound/SetSound exact player struck/death layers. Contact sound IDs
+# 66..69 are deliberately absent: SoundUtil declares only 60..65 and 70..73.
+PLAYER_REACTION_SOUNDS: tuple[tuple[str, tuple[int, ...], str], ...] = (
+    ("player.hurt.pve.body", (72,), "pve_struck_action_start"),
+    ("player.hurt.voice", (138, 139), "struck_action_start"),
+    ("player.death.voice", (144, 145), "death_action_start"),
+)
+
+PLAYER_CONTACT_SOUNDS: tuple[tuple[str, int], ...] = (
+    ("player.contact.weapon.short", 60),
+    ("player.contact.weapon.wood", 61),
+    ("player.contact.weapon.sword", 62),
+    ("player.contact.weapon.blade", 63),
+    ("player.contact.weapon.axe", 64),
+    ("player.contact.weapon.club", 65),
+    ("player.contact.body.sword", 70),
+    ("player.contact.body.axe", 71),
+    ("player.contact.body.long", 72),
+    ("player.contact.body.fist", 73),
+)
+
 GENERIC_ITEM_EVENTS: dict[str, tuple[int, str]] = {
     "currency.gold.changed": (106, "committed_gold_balance_change"),
     "item.use.food_or_drug.success": (107, "committed_consumable_use"),
@@ -697,6 +718,50 @@ def command_build_exact(args: argparse.Namespace) -> int:
             priority=100,
         )
 
+    for event_id, sound_ids, phase in PLAYER_REACTION_SOUNDS:
+        resolutions = [sound_resolution(sound_id, slots, files) for sound_id in sound_ids]
+        add_runtime_event(
+            event_id,
+            "player",
+            event_id.rsplit(".", 1)[0],
+            event_id,
+            "player_reaction_voice" if event_id.endswith("voice") else "player_struck_body_contact",
+            phase,
+            resolutions,
+            {
+                **evidence["actor_formula_and_calls"],
+                "constants": evidence["sound_loader_and_constants"],
+                "call": (
+                    "TActor.RunSound SM_NOWDEATH action start via m_nDieSound"
+                    if event_id.startswith("player.death")
+                    else "TActor.RunSound SM_STRUCK action start; current PvE non-human attacker keeps initialized body-longstick 72 and selects scream by sex"
+                ),
+                "current_scope": "PvE player actor; PvP dress/attacker material branches are not implemented",
+            },
+            "context.gender_male_female" if len(sound_ids) == 2 else "single",
+            98,
+        )
+
+    for event_id, sound_id in PLAYER_CONTACT_SOUNDS:
+        resolution = sound_resolution(sound_id, slots, files)
+        add_runtime_event(
+            event_id,
+            "player_physical_contact",
+            event_id.rsplit(".", 1)[0],
+            event_id,
+            "confirmed_player_physical_contact",
+            "target_struck_action_start",
+            [resolution],
+            {
+                **evidence["actor_formula_and_calls"],
+                "constants": evidence["sound_loader_and_constants"],
+                "runtime_shape_authority": evidence["current_weapon_shape_authority"],
+                "call": "TActor.SetSound/RunSound SM_STRUCK weapon-contact then body-contact layers",
+                "resolver": "AudioRuntimeService.play_player_physical_contact reproduces the primary source's classic-shape cases, including its second integer division for m_nStruckWeaponSound",
+            },
+            priority=96,
+        )
+
     monster_audit: dict[str, Any] = {}
     runtime_monsters = [item for item in monsters_doc.get("entries", []) if bool(item.get("runtime_allowed", False))]
     for record in runtime_monsters:
@@ -968,6 +1033,7 @@ def command_build_exact(args: argparse.Namespace) -> int:
         "managed_asset_count": len(needed_files),
         "current_item_identity_count": len(item_audit),
         "item_route_count": sum(len(item.get("runtime_routes", {})) for item in item_audit),
+        "player_core_event_count": len(PLAYER_REACTION_SOUNDS) + len(PLAYER_CONTACT_SOUNDS),
     }
     authoring["unresolved_scope"] = [
         {
@@ -977,6 +1043,14 @@ def command_build_exact(args: argparse.Namespace) -> int:
         {
             "owner_kind": "skill_or_monster_missing_sample",
             "reason": "Entries marked MISSING_SOURCE retain the exact sound ID and primary index path; no adjacent file substitution is permitted.",
+        },
+        {
+            "owner_kind": "player_footstep_surface",
+            "reason": "Primary IDs/cadence are known, but current maps do not expose an audited legacy tile-to-footstep-surface identity. Leave runtime unbound rather than treating every map as ground.",
+        },
+        {
+            "owner_kind": "ui_material",
+            "reason": "Primary normal/rock/glass IDs are known, but current widgets have no explicit material identity contract. Runtime callpoints remain NOT_STARTED.",
         },
     ]
     write_json(source_path, authoring)
@@ -1036,8 +1110,45 @@ def command_build_exact(args: argparse.Namespace) -> int:
             "current_item_identity_count": len(item_audit),
             "item_exact_route_identity_count": sum(1 for item in item_audit if item.get("runtime_routes")),
             "item_runtime_route_count": sum(len(item.get("runtime_routes", {})) for item in item_audit),
+            "player_core_event_count": len(PLAYER_REACTION_SOUNDS) + len(PLAYER_CONTACT_SOUNDS),
         }
     )
+    requirements["player_core"] = {
+        "mapping_status": "EXACT",
+        "runtime_status": "BOUND",
+        "events": [
+            {
+                "event_id": event["event_id"],
+                "semantic_event": event["semantic_event"],
+                "phase": event["phase"],
+                "mapping_status": event["mapping_status"],
+                "samples": event["samples"],
+            }
+            for event in generated_events
+            if str(event.get("event_id", "")).startswith((
+                "player.hurt.",
+                "player.death.",
+                "player.contact.",
+            ))
+        ],
+        "verified_silent_or_unbound": [
+            {
+                "semantic": "ordinary_attack_miss",
+                "status": "SILENCE_VERIFIED",
+                "reason": "Primary client plays the frame-2 weapon swing for the attack action but has no miss-specific PlaySound call.",
+            },
+            {
+                "semantic": "footstep_surface",
+                "status": "CURRENT_RUNTIME_IDENTITY_MISSING",
+                "reason": "Primary sound IDs 1..32 are not bound without an audited current map surface identity.",
+            },
+            {
+                "semantic": "ui_material",
+                "status": "NOT_STARTED",
+                "reason": "Current widgets do not declare normal/rock/glass material identity.",
+            },
+        ],
+    }
     requirements["items"] = item_audit
     requirements["summary"]["item_count"] = len(item_audit)
     requirements["item_identity_contract"] = {

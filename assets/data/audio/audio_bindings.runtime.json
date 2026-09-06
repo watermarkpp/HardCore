@@ -1247,6 +1247,270 @@
         "spatial": false
       }
     },
+    "player.hurt.pve.body": {
+      "owner_kind": "player",
+      "canonical_owner_id": "player.hurt.pve",
+      "semantic_event": "player_struck_body_contact",
+      "phase": "pve_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        72
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/72__72.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 98,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.hurt.voice": {
+      "owner_kind": "player",
+      "canonical_owner_id": "player.hurt",
+      "semantic_event": "player_reaction_voice",
+      "phase": "struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        138,
+        139
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/138__138.wav",
+        "res://assets/audio/sfx/client/139__139.wav"
+      ],
+      "variant_policy": "context.gender_male_female",
+      "priority": 98,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.death.voice": {
+      "owner_kind": "player",
+      "canonical_owner_id": "player.death",
+      "semantic_event": "player_reaction_voice",
+      "phase": "death_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        144,
+        145
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/144__144.wav",
+        "res://assets/audio/sfx/client/145__145.wav"
+      ],
+      "variant_policy": "context.gender_male_female",
+      "priority": 98,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.weapon.short": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        60
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/60__60.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.weapon.wood": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        61
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/61__61.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.weapon.sword": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        62
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/62__62.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.weapon.blade": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        63
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/63__63.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.weapon.axe": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        64
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/64__64.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.weapon.club": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.weapon",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        65
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/65__65.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.body.sword": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.body",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        70
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/70__70.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.body.axe": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.body",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        71
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/71__71.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.body.long": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.body",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        72
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/72__72.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
+    "player.contact.body.fist": {
+      "owner_kind": "player_physical_contact",
+      "canonical_owner_id": "player.contact.body",
+      "semantic_event": "confirmed_player_physical_contact",
+      "phase": "target_struck_action_start",
+      "mapping_status": "EXACT",
+      "sound_ids": [
+        73
+      ],
+      "runtime_paths": [
+        "res://assets/audio/sfx/client/73__73.wav"
+      ],
+      "variant_policy": "single",
+      "priority": 96,
+      "playback_policy": {
+        "bus": "SFX",
+        "loop": false,
+        "spatial": false
+      }
+    },
     "monster.18.ambient": {
       "owner_kind": "monster",
       "canonical_owner_id": "monster.18",

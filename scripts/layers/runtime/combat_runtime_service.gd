@@ -31,7 +31,12 @@ func apply_damage(target: Node, amount: int) -> bool:
 	return true
 
 
-func apply_enemy_physical_damage(target: Node, amount: int, source_actor: Node2D = null) -> bool:
+func apply_enemy_physical_damage(
+	target: Node,
+	amount: int,
+	source_actor: Node2D = null,
+	damage_context: Dictionary = {},
+) -> bool:
 	if (
 		not is_instance_valid(target)
 		or not target.has_method("take_damage")
@@ -39,7 +44,11 @@ func apply_enemy_physical_damage(target: Node, amount: int, source_actor: Node2D
 	):
 		return false
 	var damage_started_usec := RuntimeDiagnostics.timing_start()
-	target.call("take_damage", maxi(1, amount), source_actor)
+	if damage_context.is_empty():
+		target.call("take_damage", maxi(1, amount), source_actor)
+	else:
+		# Only callers with a proven semantic source opt into the third argument.
+		target.call("take_damage", maxi(1, amount), source_actor, damage_context)
 	RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
 	return true
 
