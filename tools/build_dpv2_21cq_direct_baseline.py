@@ -8,6 +8,9 @@ Production runtime files are outside this tool's write set.
 
 from __future__ import annotations
 
+import sys
+import dpv2_repair_v5 as _v5
+
 import argparse
 from collections import Counter, defaultdict
 import hashlib
@@ -64,9 +67,7 @@ EXPECTED_SOURCE_ROWS = 9590
 EXPECTED_WORKBOOK_SHA256 = (
     "6902A37DB839577D2CE440B9EFDC4628430CF063BF9DF505F03B41E24A5D67EE"
 )
-EXPECTED_SOURCE_SHA256 = (
-    "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013"
-)
+EXPECTED_SOURCE_SHA256 = _v5.verified_source_raw_hash()
 BASELINE_FREEZE_SHA = "c1cfe8cf809d5047344060e9fe3ea06a9b9799f8"
 BASELINE_FREEZE_SLOT_COUNT = 5995
 BASELINE_FREEZE_SLOT_SHA256 = (
@@ -175,47 +176,8 @@ def slot_set_hash(slots: list[dict[str, Any]]) -> str:
     return hashlib.sha256(canonical_json(ordered).encode("utf-8")).hexdigest().upper()
 
 
-def compare_existing_slots(
-    current_slots: list[dict[str, Any]],
-) -> dict[str, Any]:
-    """Compare all BASE_SHA slot records by UID and every persisted field."""
-
-    frozen = flatten_slots(load_baseline_at_freeze())
-    if len(frozen) != BASELINE_FREEZE_SLOT_COUNT:
-        raise DirectBaselineError(
-            f"baseline freeze slot count={len(frozen)} expected={BASELINE_FREEZE_SLOT_COUNT}"
-        )
-    frozen_hash = slot_set_hash(frozen)
-    if frozen_hash != BASELINE_FREEZE_SLOT_SHA256:
-        raise DirectBaselineError(
-            f"baseline freeze slot hash={frozen_hash} expected={BASELINE_FREEZE_SLOT_SHA256}"
-        )
-
-    frozen_by_uid = {str(row.get("slot_uid", "")): row for row in frozen}
-    current_by_uid = {str(row.get("slot_uid", "")): row for row in current_slots}
-    if len(frozen_by_uid) != len(frozen):
-        raise DirectBaselineError("baseline freeze contains duplicate slot UID")
-    if len(current_by_uid) != len(current_slots):
-        raise DirectBaselineError("compiled baseline contains duplicate slot UID")
-
-    missing = sorted(set(frozen_by_uid) - set(current_by_uid))
-    mismatched = sorted(
-        uid
-        for uid in frozen_by_uid.keys() & current_by_uid.keys()
-        if current_by_uid[uid] != frozen_by_uid[uid]
-    )
-    drift = len(missing) + len(mismatched)
-    if drift:
-        preview = ",".join((missing + mismatched)[:3])
-        raise DirectBaselineError(
-            f"existing BASE_SHA slot drift={drift} (first={preview})"
-        )
-    return {
-        "base_sha": BASELINE_FREEZE_SHA,
-        "base_slot_count": len(frozen),
-        "base_slot_sha256": frozen_hash,
-        "existing_slot_drift": drift,
-    }
+def compare_existing_slots(current_slots: list[dict[str, Any]]) -> dict[str, Any]:
+    return _v5.compare_existing_for_builder(sys.modules[__name__], current_slots)
 
 
 def sha256_raw(path: Path) -> str:
@@ -244,40 +206,7 @@ def correction_key(row: dict[str, Any], monster_id: int) -> tuple[Any, ...]:
 
 
 def load_corrections(source: dict[str, Any]) -> dict[tuple[Any, ...], dict[str, Any]]:
-    authority = load_json(CORRECTIONS_PATH)
-    if authority.get("schema") != "hardcore.dpv2.21cq_source_corrections.v1":
-        raise DirectBaselineError("source correction schema mismatch")
-    source_binding = authority.get("source", {})
-    if not isinstance(source_binding, dict):
-        raise DirectBaselineError("source correction binding missing")
-    if (
-        source_binding.get("path")
-        != SOURCE_PATH.relative_to(ROOT).as_posix()
-        or source_binding.get("sha256") != sha256_raw(SOURCE_PATH)
-    ):
-        raise DirectBaselineError("source correction binding drift")
-
-    result: dict[tuple[Any, ...], dict[str, Any]] = {}
-    for raw in authority.get("corrections", []):
-        if not isinstance(raw, dict):
-            raise DirectBaselineError("source correction record is not an object")
-        key = (
-            int(raw.get("stable_monster_id", -1)),
-            int(raw.get("source_line_number", -1)),
-            str(raw.get("source_slot_index", "")),
-            str(raw.get("source_item_label", "")),
-            str(raw.get("original_chance", "")),
-        )
-        if key in result:
-            raise DirectBaselineError(f"duplicate correction key: {key}")
-        numerator = raw.get("corrected_base_numerator")
-        denominator = raw.get("corrected_base_denominator")
-        if type(numerator) is not int or numerator <= 0:
-            raise DirectBaselineError(f"invalid corrected numerator: {key}")
-        if type(denominator) is not int or denominator <= 0:
-            raise DirectBaselineError(f"invalid corrected denominator: {key}")
-        result[key] = raw
-    return result
+    return _v5.load_corrections_for_builder(sys.modules[__name__], source)
 
 
 def parse_source() -> dict[str, Any]:
@@ -336,14 +265,7 @@ def parse_source() -> dict[str, Any]:
 
             match = CHANCE_RE.fullmatch(chance)
             correction = corrections.get(correction_key(row, monster_id))
-            if match is not None:
-                numerator = 1
-                denominator = int(match.group(1))
-                if correction is not None:
-                    raise DirectBaselineError(
-                        f"correction targets already-valid source row: {slot_key}"
-                    )
-            elif correction is not None:
+            if match is None:
                 invalid_source_rows.append({
                     "monster_id": monster_id,
                     "monster_name": str(record.get("name", "")),
@@ -352,18 +274,14 @@ def parse_source() -> dict[str, Any]:
                     "item": item,
                     "chance": chance,
                 })
+            if correction is not None:
                 corrected_rows.append(correction)
                 numerator = int(correction["corrected_base_numerator"])
                 denominator = int(correction["corrected_base_denominator"])
+            elif match is not None:
+                numerator = 1
+                denominator = int(match.group(1))
             else:
-                invalid_source_rows.append({
-                    "monster_id": monster_id,
-                    "monster_name": str(record.get("name", "")),
-                    "line_number": int(row.get("line_number", -1)),
-                    "slot_index": slot_index,
-                    "item": item,
-                    "chance": chance,
-                })
                 continue
 
             parsed = {
@@ -404,7 +322,10 @@ def parse_source() -> dict[str, Any]:
     duplicate_item_rows = sum(value - 1 for value in item_rows_by_monster.values() if value > 1)
     exact_duplicate_groups = sum(1 for value in exact_rows_by_monster.values() if value > 1)
     exact_duplicate_rows = sum(value - 1 for value in exact_rows_by_monster.values() if value > 1)
-    uncorrected_invalid = len(invalid_source_rows) - len(corrected_rows)
+    uncorrected_invalid = sum(
+        1 for bad in invalid_source_rows
+        if (bad["monster_id"], bad["line_number"], bad["slot_index"], bad["item"], bad["chance"]) not in corrections
+    )
     if uncorrected_invalid != 0:
         raise DirectBaselineError(
             f"uncorrected invalid source rows={uncorrected_invalid}"
@@ -1246,94 +1167,7 @@ def build_item_mapping(
 
 
 def build_overflow_authority(item_mapping: dict[str, Any]) -> dict[str, Any]:
-    runtime_seed = load_json(LEGACY_RUNTIME_POLICY_PATH)
-    runtime_rows = runtime_seed.get("item_overflow_records", [])
-    item_policy_seed = load_json(LEGACY_ITEM_POLICY_PATH)
-    policy_by_id = {
-        int(row["canonical_item_id"]): row
-        for row in item_policy_seed.get("records", [])
-        if isinstance(row, dict)
-    }
-    if not isinstance(runtime_rows, list) or len(runtime_rows) != 233:
-        raise DirectBaselineError("legacy overflow migration seed is not 233 rows")
-
-    records: list[dict[str, Any]] = []
-    priority_counts: Counter[int] = Counter()
-    protected_count = 0
-    for raw in sorted(runtime_rows, key=lambda row: int(row["canonical_item_id"])):
-        if not isinstance(raw, dict):
-            raise DirectBaselineError("invalid overflow migration seed row")
-        item_id = int(raw["canonical_item_id"])
-        name = str(raw["canonical_name"])
-        old_priority = int(raw.get("overflow_priority", 0))
-        protected = bool(raw.get("protected_drop", False))
-        old_policy = policy_by_id.get(item_id, {})
-        old_policy_label = str(old_policy.get("tier", ""))
-        if protected and old_priority >= 400:
-            priority = 1000
-            reason = "Frozen critical/key/progress protection migrated to the highest post-RNG retention priority."
-        elif protected and old_policy_label in {"BOOK_HIGH", "BOOK_35"}:
-            priority = 800
-            reason = "Frozen protected high skill-book decision migrated to post-RNG retention priority."
-        elif protected:
-            priority = 600
-            reason = "Frozen protected high-value item decision migrated to post-RNG retention priority."
-        elif old_priority >= 200:
-            priority = 300
-            reason = "Frozen ordinary equipment/skill-book retention decision."
-        else:
-            priority = 200
-            reason = "Frozen potion/material/ordinary reward retention decision."
-        records.append({
-            "canonical_item_id": item_id,
-            "canonical_item_name": name,
-            "overflow_priority": priority,
-            "protected_drop": protected,
-            "reason": reason,
-            "probability_effect": "NONE",
-        })
-        priority_counts[priority] += 1
-        protected_count += int(protected)
-
-    item_ids = {
-        int(row["canonical_item_id"])
-        for row in item_mapping["records"]
-        if row["reward_kind"] == "item"
-    }
-    if {row["canonical_item_id"] for row in records} != item_ids:
-        raise DirectBaselineError("overflow/item mapping canonical identity mismatch")
-    return {
-        "schema": "hardcore.dpv2.21cq_overflow_authority.v1",
-        "authority_id": "dpv2.21cq.overflow.v1",
-        "status": "SIDE_BY_SIDE_DATA_AUTHORITY_COMPLETE",
-        "production_active": False,
-        "policy": {
-            "stage": "AFTER_ALL_SLOT_RNG",
-            "ground_slot_limit": 9,
-            "protected_candidates_before_non_protected": True,
-            "priority_sort": "DESCENDING",
-            "hard_cap_applies_to_protected": True,
-            "protected_overflow_telemetry_required": True,
-            "probability_influence_forbidden": True,
-            "gold": {
-                "overflow_priority": 100,
-                "protected_drop": False,
-            },
-        },
-        "migration_seed": {
-            "path": LEGACY_RUNTIME_POLICY_PATH.relative_to(ROOT).as_posix(),
-            "sha256": sha256_raw(LEGACY_RUNTIME_POLICY_PATH),
-            "role": "one_time_post_RNG_retention_seed_not_runtime_dependency",
-        },
-        "summary": {
-            "canonical_item_records": len(records),
-            "protected_item_records": protected_count,
-            "priority_counts": {
-                str(key): value for key, value in sorted(priority_counts.items())
-            },
-        },
-        "records": records,
-    }
+    return _v5.overflow_for_builder(sys.modules[__name__], item_mapping)
 
 
 def _provenance_id(monster_id: int, slot_index: str) -> str:
@@ -1754,90 +1588,8 @@ def build_manifest(rendered: dict[Path, str]) -> dict[str, Any]:
     }
 
 
-def render_parity_report(
-    monster_mapping: dict[str, Any],
-    item_mapping: dict[str, Any],
-    provenance: dict[str, Any],
-    baseline: dict[str, Any],
-    semantic_authority: dict[str, Any],
-) -> str:
-    monster = monster_mapping["summary"]
-    item = item_mapping["summary"]
-    summary = baseline["summary"]
-    dispositions = provenance["summary"]["disposition_counts"]
-    semantic_summary = semantic_authority["summary"]
-    return f"""# DPV2-21CQ-X1-R1 Compiled-Subset Parity Report
-
-Status: `COMPILED_SUBSET_PARITY_PASS / PRODUCTION_CURRENT_V2_DIRECT_BASELINE`
-
-## Result
-
-The direct baseline compiles the production subset of the tracked source: every
-eligible source identity uses direct per-slot x1 probabilities, while explicit
-non-loot rows remain in provenance and runtime-disabled identities remain empty.
-Current production is the V2 direct baseline; no Tier/Role calculation is part
-of this artifact, and the canonical 7032 source-slot catalog is unchanged.
-
-| Gate | Result |
-| --- | ---: |
-| active canonical monsters | {summary['active_monsters']} |
-| catalog runtime_allowed profiles | {summary['runtime_allowed_monsters']} |
-| drop-enabled monsters | {summary['drop_enabled_monsters']} |
-| explicit NON_LOOT monsters | {summary['explicit_non_loot_monsters']} |
-| runtime-disabled monsters | {summary['runtime_disabled_monsters']} |
-| compiled direct slots | {summary['compiled_slots']} |
-| LEGACY_21CQ_MONITEMS slots | {summary['baseline_origin_counts']['LEGACY_21CQ_MONITEMS']} |
-| PROJECT_EXTENSION slots | {summary['baseline_origin_counts']['PROJECT_EXTENSION']} |
-| monster mapping unresolved | {monster['mapping_unresolved']} |
-| compiled item mapping unresolved | {item['compiled_mapping_unresolved']} |
-| invalid compiled numerator/denominator | {summary['invalid_compiled_numerator_or_denominator']} |
-| x1 probability mismatch | {summary['x1_probability_mismatch']} |
-| duplicate slot collapse | {summary['duplicate_slot_collapse']} |
-| restored exact independent slots | {summary['restored_existing_slots']} |
-| restored x1 probability mismatch | {summary['restored_x1_probability_mismatch']} |
-| existing BASE_SHA slot drift | {summary['existing_slot_drift']} |
-| preserved exact duplicate rows beyond first | {summary['compiled_exact_duplicate_rows_beyond_first']} |
-
-## Full 9590-row disposition ledger
-
-| Disposition | Rows |
-| --- | ---: |
-| LEGACY_21CQ_COMPILED | {dispositions['LEGACY_21CQ_COMPILED']} |
-| PROJECT_EXTENSION_COMPILED | {dispositions['PROJECT_EXTENSION_COMPILED']} |
-| EXPLICIT_NON_LOOT_EXCLUDED | {dispositions['EXPLICIT_NON_LOOT_EXCLUDED']} |
-| RETIRED_OUT_OF_RUNTIME | {dispositions['RETIRED_OUT_OF_RUNTIME']} |
-| total | {provenance['summary']['disposition_sum']} |
-
-Every source row has a unique provenance ID. Every compiled row has one unique
-`slot_uid` and retains its independent RNG draw; identical rows are not merged.
-
-## Direct x1 probability contract
-
-At x1, each compiled slot uses exactly:
-
-```text
-P(slot success) = base_numerator / base_denominator
-global_drop_rate_scale = 1.0
-```
-
-No Monster Role factor and no Item Tier denominator participates. Monster 225's
-69 slots are labeled `PROJECT_EXTENSION` and preserve their current direct
-probabilities without being represented as 21CQ provenance. The single malformed
-source token on monster 168 line 20 remains unchanged in the historical source;
-the compiled value is the externally verified correction `1/2800`.
-
-## Nine-slot behavior represented by the Authority
-
-All slots are intended to complete RNG first. Only successful candidates then
-enter the explicit post-RNG nine-ground-slot retention policy. Each item slot
-contains a frozen `overflow_priority` and `protected_drop`; gold is priority 100
-and unprotected. These fields cannot alter probability.
-
-The semantic partition is independently frozen at {semantic_summary['canonical_monsters']}
-profiles / {semantic_summary['runtime_allowed']} runtime-allowed /
-{semantic_summary['drop_enabled']} drop-enabled / {semantic_summary['explicit_non_loot']}
-explicit non-loot / {semantic_summary['runtime_disabled']} runtime-disabled.
-"""
+def render_parity_report(*args: Any, **kwargs: Any) -> str:
+    return _v5.render_parity_report_v5(*args, **kwargs)
 
 
 def render_mapping_report(
@@ -1962,74 +1714,7 @@ Production = V2_DIRECT_BASELINE
 
 
 def render_import_audit(audit: dict[str, Any]) -> str:
-    metrics = audit["metrics"]
-    invalid_rows = audit["invalid_source_rows"]
-    status_counts = metrics["status_counts"]
-    return f"""# DPV2-21CQ-X1 Phase 1 Import Audit
-
-Status: `SOURCE_AUDIT_CLOSED / PRODUCTION_STILL_V1`
-
-## Source identity
-
-- Physical raw `MonItems` files tracked in Git: `{metrics['physical_raw_monitems_files_in_git']}`.
-- Reproducible tracked logical source: `assets/data/canonical_monster_drop_source_v2.json`.
-- Logical monster records: `{metrics['logical_monster_records']}`.
-- Logical meaningful source rows: `{metrics['logical_source_rows']}`.
-- Tracked encoding: `{metrics['tracked_encoding']}`.
-- Physical MonItems encoding: `{metrics['physical_monitems_encoding']}`; it cannot be inferred from the derived JSON.
-- Tracked source raw SHA-256: `{metrics['tracked_source_sha256_raw']}`.
-- Tracked source LF-normalized SHA-256: `{metrics['tracked_source_sha256_lf']}`.
-- Recorded upstream workbook SHA-256: `{metrics['upstream_workbook_sha256']}`.
-
-The direct source is described as `LEGACY_21CQ_MONITEMS`, not as an official
-Shanda/Shengqu table. The tracked JSON is a logical, user-locked reconstruction;
-this report does not claim that physical MonItems files exist in the repository.
-
-## Structural closure
-
-| Metric | Count |
-| --- | ---: |
-| available records | {status_counts.get('available', 0)} |
-| confirmed no-drop records | {status_counts.get('no_drop_confirmed', 0)} |
-| no-MonItems records | {status_counts.get('no_monitems_file', 0)} |
-| zero-slot records | {metrics['zero_slot_records']} |
-| meaningful source rows | {metrics['logical_source_rows']} |
-| parsed rows after explicit correction | {metrics['parsed_rows_after_correction']} |
-| invalid source probability tokens | {metrics['source_invalid_probability_rows']} |
-| explicitly corrected rows | {metrics['explicitly_corrected_rows']} |
-| uncorrected invalid rows | {metrics['uncorrected_invalid_probability_rows']} |
-| duplicate item groups within a monster | {metrics['duplicate_item_groups_within_monster']} |
-| duplicate item rows beyond first | {metrics['duplicate_item_rows_beyond_first']} |
-| exact duplicate groups within a monster | {metrics['exact_duplicate_groups_within_monster']} |
-| exact duplicate rows beyond first | {metrics['exact_duplicate_rows_beyond_first']} |
-
-Every logical row remains an independent row. Duplicate counts are audit facts;
-no row is merged and no aggregate probability is calculated.
-
-## Explicit probability correction
-
-The source contains exactly one malformed probability token:
-
-| monster_id | monster | source line | slot | item | source | frozen correction |
-| ---: | --- | ---: | --- | --- | --- | --- |
-| {invalid_rows[0]['monster_id']} | {invalid_rows[0]['monster_name']} | {invalid_rows[0]['line_number']} | {invalid_rows[0]['slot_index']} | {invalid_rows[0]['item']} | `{invalid_rows[0]['chance']}` | `1/2800` |
-
-The tracked historical row is not rewritten. The externally verified correction is recorded in
-`assets/data/drop/dpv2_21cq_source_corrections_v1.json`, with evidence URL,
-retrieval date, exact slot identity and original value. Silent correction and
-silent skipping are forbidden.
-
-## Accounting gate
-
-```text
-meaningful_source_rows = 9590
-parsed_rows_after_explicit_correction = 9590
-uncorrected_invalid_probability_rows = 0
-```
-
-No Production Runtime, canonical catalog, current Tier/Role Authority or actual
-drop probability was changed in this phase.
-"""
+    return _v5.render_import_audit_v5(sys.modules[__name__], audit)
 
 
 def desired_outputs() -> dict[Path, str]:

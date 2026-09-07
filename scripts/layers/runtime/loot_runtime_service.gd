@@ -36,6 +36,9 @@ const FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID := {
 	145: "天尊道袍",
 }
 
+# V5 trace is opt-in and debug-build-only. It never fabricates actor IDs.
+var _v5_trace_enabled := OS.has_feature("debug") and OS.get_environment("HARDCORE_DPV2_TRACE") == "1"
+var _v5_roll_sequence := 0
 var _overflow_telemetry_by_monster_id: Dictionary = {}
 var _lean_profile_by_monster_id: Dictionary = {}
 var _lean_probability_by_key: Dictionary = {}
@@ -134,6 +137,7 @@ func roll_monster_drops(
 	rng: RandomNumberGenerator,
 	include_audit := true,
 ) -> Dictionary:
+	include_audit = include_audit or _v5_trace_enabled
 	var result := {
 		"contract_id": DROP_CONTRACT_ID,
 		"runtime_authority": {
@@ -392,6 +396,8 @@ func roll_monster_drops(
 	)
 	if include_audit:
 		_sync_attempt_views(result)
+	if _v5_trace_enabled:
+		_v5_write_trace(result)
 	return result
 
 
@@ -916,3 +922,24 @@ func _append_rejection(
 		"baseline_origin": str(slot.get("baseline_origin", "")),
 		"source_provenance_id": str(slot.get("source_provenance_id", "")),
 	})
+
+func _v5_write_trace(result: Dictionary) -> void:
+	_v5_roll_sequence += 1
+	var trace := {
+		"event_kind": "drop_roll_not_authoritative_death",
+		"roll_sequence": _v5_roll_sequence,
+		"ticks_usec": Time.get_ticks_usec(),
+		"canonical_monster_id": result.get("canonical_monster_id", -1),
+		"drop_profile": result.get("direct_profile", {}),
+		"source_bindings": GameData.dpv2_single_player_drop_boost.get("source_bindings", {}),
+		"death_event_id": null,
+		"map_id": null,
+		"spawn_id": null,
+		"context_binding": "ACTOR_CONTEXT_NOT_AVAILABLE_IN_EXISTING_SERVICE_API",
+		"attempts": result.get("attempts", []),
+	}
+	var path := "user://dpv2_v5_trace.jsonl"
+	var file := FileAccess.open(path, FileAccess.READ_WRITE if FileAccess.file_exists(path) else FileAccess.WRITE)
+	if file != null:
+		file.seek_end()
+		file.store_line(JSON.stringify(trace))
