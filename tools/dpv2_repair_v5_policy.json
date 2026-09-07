@@ -1,0 +1,716 @@
+{
+  "schema": "hardcore.dpv2.executor_plan.v5",
+  "base_sha": "ffcdc76b360d5976eef2ce17a45664ddaf550590",
+  "repository": "watermarkpp/HardCore",
+  "book_ids": [
+    920002,
+    920003,
+    920004,
+    920005,
+    920006,
+    920008,
+    920009,
+    920010,
+    920011,
+    920012,
+    920013,
+    920015,
+    920018,
+    920020,
+    920021,
+    920022,
+    920024,
+    920025,
+    920026,
+    920027,
+    920028,
+    920029,
+    920030,
+    920031,
+    920034,
+    920035,
+    920036,
+    920041,
+    920043,
+    920046,
+    920047,
+    920048,
+    920051
+  ],
+  "book_names": {
+    "920002": "冰咆哮",
+    "920003": "刺杀剑术",
+    "920004": "半月弯刀",
+    "920005": "召唤神兽",
+    "920006": "召唤骷髅",
+    "920008": "困魔咒",
+    "920009": "圣言术",
+    "920010": "地狱火",
+    "920011": "地狱雷光",
+    "920012": "基本剑术",
+    "920013": "大火球",
+    "920015": "幽灵盾",
+    "920018": "心灵启示",
+    "920020": "抗拒火环",
+    "920021": "攻杀剑术",
+    "920022": "施毒术",
+    "920024": "治愈术",
+    "920025": "火墙",
+    "920026": "火球术",
+    "920027": "灵魂火符",
+    "920028": "烈火剑法",
+    "920029": "爆裂火焰",
+    "920030": "疾光电影",
+    "920031": "瞬息移动",
+    "920034": "神圣战甲术",
+    "920035": "精神力战法",
+    "920036": "群体治疗术",
+    "920041": "诱惑之光",
+    "920043": "野蛮冲撞",
+    "920046": "隐身术",
+    "920047": "集体隐身术",
+    "920048": "雷电术",
+    "920051": "魔法盾"
+  },
+  "progression_equipment_ids": [
+    99,
+    100,
+    101,
+    102,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    113,
+    114,
+    115,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    151,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228,
+    229,
+    230,
+    231,
+    232,
+    233,
+    234,
+    235,
+    236,
+    237,
+    238,
+    239,
+    240,
+    241,
+    242,
+    243,
+    244,
+    245,
+    246,
+    247,
+    248,
+    249,
+    250,
+    251,
+    252,
+    253,
+    254,
+    255,
+    256,
+    257,
+    258,
+    259,
+    260
+  ],
+  "progression_equipment_names": {
+    "99": "炼狱",
+    "100": "魔杖",
+    "101": "银蛇",
+    "102": "井中月",
+    "104": "无极棍",
+    "105": "裁决之杖",
+    "106": "骨玉权杖",
+    "107": "龙纹剑",
+    "108": "屠龙",
+    "109": "嗜魂法杖",
+    "113": "怒斩",
+    "114": "龙牙",
+    "115": "逍遥扇",
+    "140": "天魔神甲",
+    "141": "圣战宝甲",
+    "142": "法神披风",
+    "143": "霓裳羽衣",
+    "144": "天尊道袍",
+    "145": "天师长袍",
+    "151": "黑铁头盔",
+    "168": "幽灵项链",
+    "169": "生命项链",
+    "170": "天珠项链",
+    "171": "绿色项链",
+    "172": "恶魔铃铛",
+    "173": "灵魂项链",
+    "189": "幽灵手套",
+    "190": "思贝尔手镯",
+    "191": "三眼手镯",
+    "192": "阎罗手套",
+    "193": "骑士手镯",
+    "194": "龙之手镯",
+    "195": "心灵手镯",
+    "212": "龙之戒指",
+    "213": "红宝石戒指",
+    "214": "铂金戒指",
+    "215": "力量戒指",
+    "216": "紫碧螺",
+    "217": "泰坦戒指",
+    "223": "祈祷之刃",
+    "224": "祈祷头盔",
+    "225": "祈祷项链",
+    "226": "祈祷手镯",
+    "227": "祈祷戒指",
+    "228": "记忆头盔",
+    "229": "记忆项链",
+    "230": "记忆手镯",
+    "231": "记忆戒指",
+    "232": "圣战头盔",
+    "233": "圣战项链",
+    "234": "圣战手镯",
+    "235": "圣战戒指",
+    "236": "法神头盔",
+    "237": "法神项链",
+    "238": "法神手镯",
+    "239": "法神戒指",
+    "240": "天尊头盔",
+    "241": "天尊项链",
+    "242": "天尊手镯",
+    "243": "天尊戒指",
+    "244": "魔血戒指",
+    "245": "魔血手镯",
+    "246": "魔血项链",
+    "247": "虹魔戒指",
+    "248": "虹魔手镯",
+    "249": "虹魔项链",
+    "250": "技巧项链",
+    "251": "探测项链",
+    "252": "麻痹戒指",
+    "253": "隐身戒指",
+    "254": "传送戒指",
+    "255": "防御戒指",
+    "256": "复活戒指",
+    "257": "护身戒指",
+    "258": "超负载戒指",
+    "259": "火焰戒指",
+    "260": "求婚戒指"
+  },
+  "ordinary_recovery_ids": [
+    920045,
+    920044,
+    920053,
+    920052,
+    920017,
+    920042,
+    920001,
+    910007,
+    920014,
+    920016
+  ],
+  "boss_ids": [
+    76,
+    198,
+    199,
+    225
+  ],
+  "boss_allowlist": [
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_012",
+      "canonical_item_id": 168,
+      "item_name": "幽灵项链"
+    },
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_013",
+      "canonical_item_id": 169,
+      "item_name": "生命项链"
+    },
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_014",
+      "canonical_item_id": 170,
+      "item_name": "天珠项链"
+    },
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_015",
+      "canonical_item_id": 189,
+      "item_name": "幽灵手套"
+    },
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_016",
+      "canonical_item_id": 190,
+      "item_name": "思贝尔手镯"
+    },
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_017",
+      "canonical_item_id": 195,
+      "item_name": "心灵手镯"
+    },
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_018",
+      "canonical_item_id": 212,
+      "item_name": "龙之戒指"
+    },
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_019",
+      "canonical_item_id": 213,
+      "item_name": "红宝石戒指"
+    },
+    {
+      "monster_id": 76,
+      "slot_uid": "dpv2.direct.m76.slot_020",
+      "canonical_item_id": 214,
+      "item_name": "铂金戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_027",
+      "canonical_item_id": 207,
+      "item_name": "骷髅戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_028",
+      "canonical_item_id": 210,
+      "item_name": "珊瑚戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_029",
+      "canonical_item_id": 203,
+      "item_name": "黑色水晶戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_030",
+      "canonical_item_id": 204,
+      "item_name": "蛇眼戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_031",
+      "canonical_item_id": 205,
+      "item_name": "珍珠戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_032",
+      "canonical_item_id": 201,
+      "item_name": "生铁戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_033",
+      "canonical_item_id": 187,
+      "item_name": "死神手套"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_034",
+      "canonical_item_id": 98,
+      "item_name": "凝霜"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_035",
+      "canonical_item_id": 209,
+      "item_name": "道德戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_036",
+      "canonical_item_id": 208,
+      "item_name": "魅力戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_037",
+      "canonical_item_id": 165,
+      "item_name": "蓝翡翠项链"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_039",
+      "canonical_item_id": 202,
+      "item_name": "蓝色水晶戒指"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_040",
+      "canonical_item_id": 185,
+      "item_name": "道士手镯"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_041",
+      "canonical_item_id": 184,
+      "item_name": "黑檀手镯"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_042",
+      "canonical_item_id": 186,
+      "item_name": "魔力手镯"
+    },
+    {
+      "monster_id": 198,
+      "slot_uid": "dpv2.direct.m198.slot_043",
+      "canonical_item_id": 175,
+      "item_name": "小手镯"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_030",
+      "canonical_item_id": 207,
+      "item_name": "骷髅戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_031",
+      "canonical_item_id": 210,
+      "item_name": "珊瑚戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_032",
+      "canonical_item_id": 203,
+      "item_name": "黑色水晶戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_033",
+      "canonical_item_id": 204,
+      "item_name": "蛇眼戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_034",
+      "canonical_item_id": 205,
+      "item_name": "珍珠戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_035",
+      "canonical_item_id": 201,
+      "item_name": "生铁戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_036",
+      "canonical_item_id": 187,
+      "item_name": "死神手套"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_037",
+      "canonical_item_id": 98,
+      "item_name": "凝霜"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_038",
+      "canonical_item_id": 209,
+      "item_name": "道德戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_039",
+      "canonical_item_id": 208,
+      "item_name": "魅力戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_040",
+      "canonical_item_id": 165,
+      "item_name": "蓝翡翠项链"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_044",
+      "canonical_item_id": 202,
+      "item_name": "蓝色水晶戒指"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_045",
+      "canonical_item_id": 185,
+      "item_name": "道士手镯"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_046",
+      "canonical_item_id": 184,
+      "item_name": "黑檀手镯"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_047",
+      "canonical_item_id": 186,
+      "item_name": "魔力手镯"
+    },
+    {
+      "monster_id": 199,
+      "slot_uid": "dpv2.direct.m199.slot_048",
+      "canonical_item_id": 175,
+      "item_name": "小手镯"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_043",
+      "canonical_item_id": 169,
+      "item_name": "生命项链"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_044",
+      "canonical_item_id": 168,
+      "item_name": "幽灵项链"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_047",
+      "canonical_item_id": 101,
+      "item_name": "银蛇"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_048",
+      "canonical_item_id": 100,
+      "item_name": "魔杖"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_049",
+      "canonical_item_id": 99,
+      "item_name": "炼狱"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_052",
+      "canonical_item_id": 166,
+      "item_name": "放大镜"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_053",
+      "canonical_item_id": 167,
+      "item_name": "竹笛"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_054",
+      "canonical_item_id": 149,
+      "item_name": "道士头盔"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_055",
+      "canonical_item_id": 98,
+      "item_name": "凝霜"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_056",
+      "canonical_item_id": 210,
+      "item_name": "珊瑚戒指"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_057",
+      "canonical_item_id": 211,
+      "item_name": "降妖除魔戒指"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_058",
+      "canonical_item_id": 128,
+      "item_name": "战神盔甲(男)"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_059",
+      "canonical_item_id": 129,
+      "item_name": "战神盔甲(女)"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_060",
+      "canonical_item_id": 133,
+      "item_name": "幽灵战衣(女)"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_061",
+      "canonical_item_id": 132,
+      "item_name": "幽灵战衣(男)"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_062",
+      "canonical_item_id": 130,
+      "item_name": "恶魔长袍(男)"
+    },
+    {
+      "monster_id": 225,
+      "slot_uid": "dpv2.direct.m225.slot_063",
+      "canonical_item_id": 131,
+      "item_name": "恶魔长袍(女)"
+    }
+  ],
+  "boss_no_equipment_target": [
+    7,
+    20
+  ],
+  "boss_no_equipment_tolerance": 5e-05,
+  "boss_k_max_denominator": 10000,
+  "boss_per_slot_ceiling": [
+    1,
+    4
+  ],
+  "armor_targets": [
+    {
+      "monster_id": 235,
+      "monster_name": "暗之双头血魔",
+      "slot_uid": "dpv2.direct.m235.slot_054",
+      "source_item_id": 140,
+      "source_item_name": "天魔神甲",
+      "output_item_id": 140,
+      "output_item_name": "天魔神甲"
+    },
+    {
+      "monster_id": 236,
+      "monster_name": "暗之双头金刚",
+      "slot_uid": "dpv2.direct.m236.slot_054",
+      "source_item_id": 144,
+      "source_item_name": "天尊道袍",
+      "output_item_id": 144,
+      "output_item_name": "天尊道袍"
+    },
+    {
+      "monster_id": 237,
+      "monster_name": "暗之黄泉教主",
+      "slot_uid": "dpv2.direct.m237.slot_054",
+      "source_item_id": 142,
+      "source_item_name": "法神披风",
+      "output_item_id": 142,
+      "output_item_name": "法神披风"
+    },
+    {
+      "monster_id": 238,
+      "monster_name": "暗之骷髅精灵",
+      "slot_uid": "dpv2.direct.m238.slot_054",
+      "source_item_id": 141,
+      "source_item_name": "圣战宝甲",
+      "output_item_id": 140,
+      "output_item_name": "天魔神甲"
+    },
+    {
+      "monster_id": 239,
+      "monster_name": "暗之沃玛教主",
+      "slot_uid": "dpv2.direct.m239.slot_054",
+      "source_item_id": 145,
+      "source_item_name": "天师长袍",
+      "output_item_id": 144,
+      "output_item_name": "天尊道袍"
+    },
+    {
+      "monster_id": 240,
+      "monster_name": "暗之虹魔教主",
+      "slot_uid": "dpv2.direct.m240.slot_054",
+      "source_item_id": 143,
+      "source_item_name": "霓裳羽衣",
+      "output_item_id": 142,
+      "output_item_name": "法神披风"
+    }
+  ],
+  "retention": {
+    "armor": [
+      true,
+      2000
+    ],
+    "progression_minimum": [
+      true,
+      600
+    ],
+    "skill_book_minimum": [
+      true,
+      800
+    ],
+    "common_recovery": [
+      false,
+      200
+    ]
+  },
+  "known_141_reference_only": [
+    {
+      "slot_uid": "dpv2.direct.m141.slot_094",
+      "item_id": 920002,
+      "denominator": 705
+    },
+    {
+      "slot_uid": "dpv2.direct.m141.slot_095",
+      "item_id": 920028,
+      "denominator": 700
+    },
+    {
+      "slot_uid": "dpv2.direct.m141.slot_096",
+      "item_id": 920005,
+      "denominator": 700
+    }
+  ],
+  "max_runtime_rational": 2147483647,
+  "source_url_template": "https://www.21cq.com/mir/Mob.Aspx?ID={monster_id}",
+  "source_status_on_failure": "UNVERIFIED",
+  "auto_add_delete_slots": false,
+  "source_policy": "Only exact complete drop-table parsing and one-to-one reward/occurrence matching can authorize corrections. No search snippets or guessed values.",
+  "decision_provenance": "V4 gameplay decisions. Exact book, progression-equipment, 58-slot Boss and six-armor ID lists were recovered from the preceding project audit bundle; the executor verifies IDs/names and slot bindings against the pinned repository. Historical probabilities, old K and rejected selector/pool redesigns are not imported. The Boss-only per-slot ceiling max(existing_probability,1/4) is an explicitly disclosed V5 safety limit, not a claimed 21CQ fact.",
+  "test_seed": 20260907,
+  "simulation_trials": 100000,
+  "review_only": true,
+  "explicit_high_book_ids": [
+    920002,
+    920005,
+    920028
+  ]
+}

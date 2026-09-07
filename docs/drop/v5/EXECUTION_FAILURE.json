@@ -1,0 +1,6 @@
+{
+  "state": "BLOCKED_PARTIAL",
+  "error": "UNEXPECTED_CHANGED_PATHS:warning: in the working copy of 'assets/data/drop/dpv2_21cq_source_corrections_v1.json', LF will be replaced by CRLF the next time Git touches it",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\Administrator\\Downloads\\HardCore_DPV2_GLM52_Flash_V5_0_2_Runner修正版_20260908\\apply_v5.py\", line 338, in main\n    print('\\n'.join(allowed_paths(repo)))\n                    ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Administrator\\Downloads\\HardCore_DPV2_GLM52_Flash_V5_0_2_Runner修正版_20260908\\apply_v5.py\", line 324, in allowed_paths\n    require(not unexpected, 'UNEXPECTED_CHANGED_PATHS:' + ','.join(unexpected))\n  File \"C:\\Users\\Administrator\\Downloads\\HardCore_DPV2_GLM52_Flash_V5_0_2_Runner修正版_20260908\\apply_v5.py\", line 48, in require\n    raise RuntimeError(message)\nRuntimeError: UNEXPECTED_CHANGED_PATHS:warning: in the working copy of 'assets/data/drop/dpv2_21cq_source_corrections_v1.json', LF will be replaced by CRLF the next time Git touches it\n",
+  "base_sha": "ffcdc76b360d5976eef2ce17a45664ddaf550590"
+}

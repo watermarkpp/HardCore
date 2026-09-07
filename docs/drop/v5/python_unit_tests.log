@@ -1,0 +1,30 @@
+test_k_once_and_armor_bypass_with_mocked_build_inputs (test_dpv2_repair_v5.FinalizationTests.test_k_once_and_armor_bypass_with_mocked_build_inputs) ... ok
+test_book_cap (test_dpv2_repair_v5.RationalTests.test_book_cap) ... ok
+test_book_ordinary (test_dpv2_repair_v5.RationalTests.test_book_ordinary) ... ok
+test_denominator_modifiers (test_dpv2_repair_v5.RationalTests.test_denominator_modifiers) ... ok
+test_draw_boundaries (test_dpv2_repair_v5.RationalTests.test_draw_boundaries) ... ok
+test_invalid (test_dpv2_repair_v5.RationalTests.test_invalid) ... ok
+test_never_nerf_above_cap (test_dpv2_repair_v5.RationalTests.test_never_nerf_above_cap) ... ok
+test_all_success_tie (test_dpv2_repair_v5.SelectionTests.test_all_success_tie) ... ok
+test_armor_worst_case (test_dpv2_repair_v5.SelectionTests.test_armor_worst_case) ... ok
+test_eight_vs_nine_equal_competitors (test_dpv2_repair_v5.SelectionTests.test_eight_vs_nine_equal_competitors) ... ok
+test_exact_enumeration_independent_check (test_dpv2_repair_v5.SelectionTests.test_exact_enumeration_independent_check) ... ok
+test_no_duplicates_merged (test_dpv2_repair_v5.SelectionTests.test_no_duplicates_merged) ... ok
+test_protected_beats_any_ordinary_priority (test_dpv2_repair_v5.SelectionTests.test_protected_beats_any_ordinary_priority) ... ok
+test_same_seed_and_tie_selection (test_dpv2_repair_v5.SelectionTests.test_same_seed_and_tie_selection) ... ok
+test_small_monte_carlo (test_dpv2_repair_v5.SelectionTests.test_small_monte_carlo) ... ok
+test_two_equipment_cannot_both_be_discarded (test_dpv2_repair_v5.SelectionTests.test_two_equipment_cannot_both_be_discarded) ... ok
+test_conflicting_tables_do_not_merge (test_dpv2_repair_v5.SourceTests.test_conflicting_tables_do_not_merge) ... ok
+test_duplicate_rows_retained (test_dpv2_repair_v5.SourceTests.test_duplicate_rows_retained) ... ok
+test_duplicate_slot_rejected (test_dpv2_repair_v5.SourceTests.test_duplicate_slot_rejected) ... ok
+test_encoding (test_dpv2_repair_v5.SourceTests.test_encoding) ... ok
+test_exact_suffix_identity (test_dpv2_repair_v5.SourceTests.test_exact_suffix_identity) ... ok
+test_lf_hash_normalization (test_dpv2_repair_v5.SourceTests.test_lf_hash_normalization) ... ok
+test_missing_table_is_not_zero_drop (test_dpv2_repair_v5.SourceTests.test_missing_table_is_not_zero_drop) ... ok
+test_parse (test_dpv2_repair_v5.SourceTests.test_parse) ... ok
+test_unknown_never_defaults (test_dpv2_repair_v5.SourceTests.test_unknown_never_defaults) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.037s
+
+OK
