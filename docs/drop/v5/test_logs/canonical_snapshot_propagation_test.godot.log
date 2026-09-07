@@ -1,0 +1,17 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.765,"start_ms":323.231},"build_bottom_chassis":{"duration_ms":256.9,"start_ms":52.817},"build_combat_controls":{"duration_ms":12.629,"start_ms":309.717},"build_hidden_compatibility_info":{"duration_ms":9.747,"start_ms":37.865},"build_item_quick_slot_menu":{"duration_ms":0.885,"start_ms":322.346},"build_loading_transition":{"duration_ms":2.278,"start_ms":323.996},"build_loot_feedback":{"duration_ms":0.824,"start_ms":48.459},"build_right_utility_stack":{"duration_ms":3.534,"start_ms":49.283},"build_target_bar":{"duration_ms":0.847,"start_ms":47.612},"initial_state_sync":{"duration_ms":0.71,"start_ms":326.292},"root_and_theme":{"duration_ms":37.83,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.035,"start_ms":37.83},"wire_player_state_signals":{"duration_ms":0.018,"start_ms":326.274}},"total_ms":327.005}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.012,"init_to_enter_tree":0.074},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.05,"start_ms":0.864},"bootstrap_dispatch":{"duration_ms":0.071,"start_ms":943.628},"camera_construct_and_attach":{"duration_ms":0.066,"start_ms":68.258},"hud_attach_and_ready":{"duration_ms":812.107,"start_ms":68.424},"hud_construct":{"duration_ms":0.051,"start_ms":68.324},"hud_post_ready_setup":{"duration_ms":1.703,"start_ms":880.531},"hud_signal_wiring":{"duration_ms":0.049,"start_ms":68.375},"player_construct_wire_attach_restore":{"duration_ms":67.344,"start_ms":0.914},"pre_background_setup":{"duration_ms":0.778,"start_ms":0.086},"system_menu_build":{"duration_ms":61.394,"start_ms":882.234}},"total_ms":943.702}
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] poll_threaded_prefetch (res://scripts/world_bootstrap_coordinator.gd:645)
+       [1] poll_threaded_prefetch_blocking (res://scripts/world_bootstrap_coordinator.gd:668)
+       [2] _run_world_build_pipeline (res://scripts/game_root.gd:2815)
+       [3] _run_map_transition (res://scripts/game_root.gd:2680)
+       [4] _begin_map_transition (res://scripts/game_root.gd:2614)
+       [5] travel_to_service_home (res://scripts/game_root.gd:2236)
+       [6] _begin_initial_world_bootstrap (res://scripts/game_root.gd:2556)
+[WorldBootstrapProfile] {"actor_max_item_ms":497.819,"actor_max_slice_ms":497.825,"actor_slices":52,"actor_total_ms":1051.789,"collision_slices":9,"deferred_actors":0,"duplicate_actors":0,"failed_actors":0,"hud":{},"map_slices":6,"max_slice_ms":497.825,"planned_actors":94,"spawned_actors":94,"stages_ms":{"BUILD_COLLISION":555.681,"BUILD_MAP":549.872,"COLLECT_REQUIREMENTS":45.393,"FINALIZE":1644.403,"REQUEST_RESOURCES":485.15,"SHOW_LOADING":0.069,"SPAWN_ACTORS":560.935,"WAIT_RESOURCES":485.63},"total_ms":1666.072}
+CANONICAL_SNAPSHOT_PROPAGATION_PASS snapshot_id=wizard.fire_wall:player:214043723355:skill:wizard.fire_wall:release:2 schema=2 space=runtime_map_absolute_ground_gu map=910001

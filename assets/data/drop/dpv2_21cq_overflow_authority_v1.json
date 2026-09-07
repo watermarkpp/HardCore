@@ -23,13 +23,14 @@
   },
   "summary": {
     "canonical_item_records": 233,
-    "protected_item_records": 94,
+    "protected_item_records": 110,
     "priority_counts": {
-      "200": 14,
-      "300": 125,
-      "600": 79,
+      "200": 16,
+      "300": 107,
+      "600": 89,
       "800": 13,
-      "1000": 2
+      "1000": 2,
+      "2000": 6
     }
   },
   "records": [
@@ -180,41 +181,41 @@
     {
       "canonical_item_id": 99,
       "canonical_item_name": "炼狱",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 100,
       "canonical_item_name": "魔杖",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 101,
       "canonical_item_name": "银蛇",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 102,
       "canonical_item_name": "井中月",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 104,
       "canonical_item_name": "无极棍",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
@@ -428,49 +429,49 @@
     {
       "canonical_item_id": 140,
       "canonical_item_name": "天魔神甲",
-      "overflow_priority": 600,
+      "overflow_priority": 2000,
       "protected_drop": true,
-      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 141,
       "canonical_item_name": "圣战宝甲",
-      "overflow_priority": 600,
+      "overflow_priority": 2000,
       "protected_drop": true,
-      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 142,
       "canonical_item_name": "法神披风",
-      "overflow_priority": 600,
+      "overflow_priority": 2000,
       "protected_drop": true,
-      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 143,
       "canonical_item_name": "霓裳羽衣",
-      "overflow_priority": 600,
+      "overflow_priority": 2000,
       "protected_drop": true,
-      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 144,
       "canonical_item_name": "天尊道袍",
-      "overflow_priority": 600,
+      "overflow_priority": 2000,
       "protected_drop": true,
-      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 145,
       "canonical_item_name": "天师长袍",
-      "overflow_priority": 600,
+      "overflow_priority": 2000,
       "protected_drop": true,
-      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP",
       "probability_effect": "NONE"
     },
     {
@@ -508,9 +509,9 @@
     {
       "canonical_item_id": 151,
       "canonical_item_name": "黑铁头盔",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
@@ -636,25 +637,25 @@
     {
       "canonical_item_id": 168,
       "canonical_item_name": "幽灵项链",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 169,
       "canonical_item_name": "生命项链",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 170,
       "canonical_item_name": "天珠项链",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
@@ -804,33 +805,33 @@
     {
       "canonical_item_id": 189,
       "canonical_item_name": "幽灵手套",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 190,
       "canonical_item_name": "思贝儿手镯",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 191,
       "canonical_item_name": "三眼手镯",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 192,
       "canonical_item_name": "阎罗手套",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
@@ -980,25 +981,25 @@
     {
       "canonical_item_id": 212,
       "canonical_item_name": "龙之戒指",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 213,
       "canonical_item_name": "红宝石戒指",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 214,
       "canonical_item_name": "铂金戒指",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
@@ -1284,17 +1285,17 @@
     {
       "canonical_item_id": 250,
       "canonical_item_name": "技巧项链",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
       "canonical_item_id": 251,
       "canonical_item_name": "探测项链",
-      "overflow_priority": 300,
-      "protected_drop": false,
-      "reason": "Frozen ordinary equipment/skill-book retention decision.",
+      "overflow_priority": 600,
+      "protected_drop": true,
+      "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR",
       "probability_effect": "NONE"
     },
     {
@@ -1580,9 +1581,9 @@
     {
       "canonical_item_id": 920014,
       "canonical_item_name": "太阳水",
-      "overflow_priority": 600,
-      "protected_drop": true,
-      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "COMMON_RECOVERY_MUST_NOT_EVICT_PROGRESSION",
       "probability_effect": "NONE"
     },
     {
@@ -1596,9 +1597,9 @@
     {
       "canonical_item_id": 920016,
       "canonical_item_name": "强效太阳水",
-      "overflow_priority": 600,
-      "protected_drop": true,
-      "reason": "Frozen protected high-value item decision migrated to post-RNG retention priority.",
+      "overflow_priority": 200,
+      "protected_drop": false,
+      "reason": "COMMON_RECOVERY_MUST_NOT_EVICT_PROGRESSION",
       "probability_effect": "NONE"
     },
     {
@@ -1897,5 +1898,349 @@
       "reason": "Frozen potion/material/ordinary reward retention decision.",
       "probability_effect": "NONE"
     }
-  ]
+  ],
+  "repair_v5": {
+    "policy_path": "tools/dpv2_repair_v5_policy.json",
+    "policy_sha256_lf": "E9C3DDAB4190649ED1FBF1BDAF28E179EBF9F616AF43DED628F0C965919450F8",
+    "changes": [
+      {
+        "canonical_item_id": 99,
+        "name": "炼狱",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 100,
+        "name": "魔杖",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 101,
+        "name": "银蛇",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 102,
+        "name": "井中月",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 104,
+        "name": "无极棍",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 140,
+        "name": "天魔神甲",
+        "before": [
+          true,
+          600
+        ],
+        "after": [
+          true,
+          2000
+        ],
+        "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP"
+      },
+      {
+        "canonical_item_id": 141,
+        "name": "圣战宝甲",
+        "before": [
+          true,
+          600
+        ],
+        "after": [
+          true,
+          2000
+        ],
+        "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP"
+      },
+      {
+        "canonical_item_id": 142,
+        "name": "法神披风",
+        "before": [
+          true,
+          600
+        ],
+        "after": [
+          true,
+          2000
+        ],
+        "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP"
+      },
+      {
+        "canonical_item_id": 143,
+        "name": "霓裳羽衣",
+        "before": [
+          true,
+          600
+        ],
+        "after": [
+          true,
+          2000
+        ],
+        "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP"
+      },
+      {
+        "canonical_item_id": 144,
+        "name": "天尊道袍",
+        "before": [
+          true,
+          600
+        ],
+        "after": [
+          true,
+          2000
+        ],
+        "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP"
+      },
+      {
+        "canonical_item_id": 145,
+        "name": "天师长袍",
+        "before": [
+          true,
+          600
+        ],
+        "after": [
+          true,
+          2000
+        ],
+        "reason": "USER_TARGET_ARMOR_ROLL_MUST_SURVIVE_9_SLOT_CAP"
+      },
+      {
+        "canonical_item_id": 151,
+        "name": "黑铁头盔",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 168,
+        "name": "幽灵项链",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 169,
+        "name": "生命项链",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 170,
+        "name": "天珠项链",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 189,
+        "name": "幽灵手套",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 190,
+        "name": "思贝儿手镯",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 191,
+        "name": "三眼手镯",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 192,
+        "name": "阎罗手套",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 212,
+        "name": "龙之戒指",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 213,
+        "name": "红宝石戒指",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 214,
+        "name": "铂金戒指",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 250,
+        "name": "技巧项链",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 251,
+        "name": "探测项链",
+        "before": [
+          false,
+          300
+        ],
+        "after": [
+          true,
+          600
+        ],
+        "reason": "EXACT_PROGRESS_EQUIPMENT_RETENTION_FLOOR"
+      },
+      {
+        "canonical_item_id": 920014,
+        "name": "太阳水",
+        "before": [
+          true,
+          600
+        ],
+        "after": [
+          false,
+          200
+        ],
+        "reason": "COMMON_RECOVERY_MUST_NOT_EVICT_PROGRESSION"
+      },
+      {
+        "canonical_item_id": 920016,
+        "name": "强效太阳水",
+        "before": [
+          true,
+          600
+        ],
+        "after": [
+          false,
+          200
+        ],
+        "reason": "COMMON_RECOVERY_MUST_NOT_EVICT_PROGRESSION"
+      }
+    ]
+  }
 }

@@ -1,0 +1,426 @@
+[PASS] combat_unit_runtime_static_audit_test
+[PASS] caster_skill_visual_factory_entry_test
+[PASS] laser_direction_visual_extent_test
+[PASS] caster_skill_animation_routing_test
+[PASS] wizard_geometry_visual_alignment_test
+[PASS] sky_strike_visual_contract_test
+[PASS] lightning_runtime_map_visual_test
+[PASS] hell_lightning_self_area_visual_test
+[PASS] beam_visual_contract_test
+[PASS] beam_runtime_empty_space_test
+[PASS] beam_runtime_terrain_cutoff_test
+[PASS] beam_single_active_test
+[PASS] visual_profile_merge_contract_test
+[PASS] fire_wall_runtime_absolute_ground_test
+[PASS] fire_wall_single_controller_test
+[PASS] player_initial_resource_sync_test
+[PASS] gameplay_input_gate_test
+[PASS] input_release_cleanup_test
+[PASS] initial_world_input_lock_test
+[PASS] map_transition_input_lock_test
+[PASS] canonical_summon_integration_test
+[PASS] taoist_summon_projectile_async_visual_test
+[PASS] taoist_soul_fire_launch_timing_test
+[PASS] taoist_summon_projectile_origin_anchor_test
+[PASS] taoist_summon_projectile_stealth_buff_visual_test
+[PASS] taoist_support_policy_test
+[PASS] taoist_support_runtime_test
+[PASS] taoist_canonical_runtime_test
+[PASS] taoist_entrapment_boundary_production_test
+[PASS] taoist_dual_defense_contract_test
+[PASS] spell_target_lock_and_footprint_test
+[PASS] skill_semantic_contracts_test
+[PASS] taoist_support_production_integration_test
+[PASS] canonical_skill_production_entry_test
+[PASS] skill_button_assignments_v2_test
+[PASS] class_combat_test
+[PASS] game_root_spell_lock_input_integration_test
+[PASS] skill_footprint_snapshot_coordinate_contract_test
+[PASS] skill_footprint_snapshot_map_identity_test
+[PASS] skill_footprint_snapshot_projection_origin_test
+[PASS] skill_footprint_snapshot_legacy_upgrade_test
+[PASS] canonical_snapshot_propagation_test
+[PASS] snapshot_strict_consumer_rejection_test
+[PASS] snapshot_v2_no_legacy_fallback_test
+[PASS] snapshot_absolute_converter_failure_test
+[PASS] snapshot_non_finite_coordinate_test
+[PASS] snapshot_legacy_explicit_policy_test
+[PASS] snapshot_consumer_runtime_map_guard_test
+[PASS] warrior_snapshot_v2_production_test
+[PASS] enemy_snapshot_v2_production_test
+[PASS] summon_snapshot_v2_production_test
+[PASS] projectile_snapshot_v2_production_test
+[PASS] ground_effect_snapshot_v2_production_test
+[PASS] fire_wall_snapshot_v2_production_test
+[PASS] production_snapshot_no_legacy_test
+[PASS] canonical_snapshot_identity_production_test
+[PASS] taoist_profession_package_test
+[PASS] projectile_broadphase_hit_parity_test
+[PASS] projectile_broadphase_no_false_negative_test
+[PASS] projectile_broadphase_candidate_reduction_test
+[PASS] projectile_broadphase_stable_order_test
+[PASS] projectile_broadphase_terrain_cutoff_test
+[PASS] projectile_broadphase_runtime_map_isolation_test
+[PASS] projectile_spatial_index_lifecycle_test
+[PASS] projectile_snapshot_single_build_per_step_test
+[PASS] projectile_spatial_index_same_frame_teleport_test
+[PASS] projectile_spatial_index_same_frame_knockback_test
+[PASS] projectile_spatial_index_query_before_enemy_tick_test
+[PASS] projectile_spatial_index_ready_contract_test
+[PASS] safe_logout_atomic_recovery_test
+[PASS] safe_logout_home_resolution_failure_test
+[PASS] safe_logout_character_select_guard_test
+[PASS] safe_logout_exit_guard_test
+[PASS] safe_logout_save_failure_test
+[PASS] safe_logout_existing_state_preservation_test
+[PASS] home_resolution_side_effect_guard_test
+[PASS] service_home_no_current_position_fallback_test
+[PASS] death_revival_home_failure_test
+[PASS] death_revival_touch_input_test
+[PASS] character_select_launch_loading_test
+[PASS] map_transition_missing_arrival_test
+[PASS] portal_home_lookup_failure_test
+[PASS] persistent_ground_effect_hit_parity_test
+[PASS] persistent_ground_effect_no_false_negative_test
+[PASS] persistent_ground_effect_tick_cadence_test
+[PASS] persistent_ground_effect_stacking_claim_test
+[PASS] persistent_ground_effect_stable_order_test
+[PASS] persistent_ground_effect_runtime_map_isolation_test
+[PASS] persistent_ground_effect_lifecycle_test
+[PASS] persistent_ground_effect_candidate_reduction_test
+[PASS] persistent_ground_effect_no_group_scan_test
+[PASS] persistent_ground_effect_spatial_service_reuse_test
+[PASS] fire_wall_single_query_per_tick_test
+[PASS] fire_wall_single_exact_test_per_candidate_test
+[PASS] fire_wall_visual_cells_pure_test
+[PASS] fire_wall_hit_parity_test
+[PASS] fire_wall_tick_claim_parity_test
+[PASS] fire_wall_boundary_target_test
+[PASS] fire_wall_stacking_parity_test
+[PASS] fire_wall_runtime_map_isolation_test
+[PASS] fire_wall_visual_cell_lifecycle_test
+[PASS] fire_wall_candidate_reduction_test
+[PASS] fire_wall_no_group_scan_test
+[PASS] fire_wall_canonical_snapshot_identity_test
+[PASS] skill_plan_contract_test
+[PASS] skill_plan_golden_parity_test
+[PASS] skill_plan_no_side_effect_shadow_test
+[PASS] skill_plan_single_resource_commit_test
+[PASS] skill_plan_single_cooldown_commit_test
+[PASS] skill_plan_single_snapshot_build_test
+[PASS] skill_plan_immutable_consumer_test
+[PASS] skill_plan_rejection_reason_parity_test
+[PASS] caster_runtime_canonical_plan_adapter_test
+[PASS] skill_plan_profession_matrix_test
+[PASS] skill_production_canonical_entry_test
+[PASS] skill_production_no_visual_plan_test
+[PASS] skill_production_no_legacy_planner_test
+[PASS] skill_production_single_release_id_test
+[PASS] skill_production_single_snapshot_test
+[PASS] skill_production_single_commit_test
+[PASS] skill_execution_result_contract_test
+[PASS] skill_production_plan_immutable_test
+[PASS] skill_production_profession_matrix_test
+[PASS] skill_production_rejection_flow_test
+[PASS] skill_production_descriptor_failure_parity_test
+[PASS] skill_runtime_no_legacy_api_test
+[PASS] skill_runtime_single_public_entry_test
+[PASS] skill_plan_golden_contract_test
+[PASS] skill_runtime_no_visual_plan_test
+[PASS] skill_runtime_single_result_contract_test
+[PASS] skill_runtime_mapped_world_strict_snapshot_test
+[PASS] wizard_line_footprint_core_test
+[PASS] wizard_line_visual_stability_test
+[PASS] wizard_line_presentation_alignment_test
+[PASS] combat_absolute_ground_roundtrip_test
+[PASS] enemy_spatial_index_absolute_coordinate_test
+[PASS] projectile_absolute_release_snapshot_test
+[PASS] summon_absolute_snapshot_test
+[PASS] persistent_ground_effect_absolute_broadphase_test
+[PASS] fire_wall_absolute_broadphase_test
+[PASS] shared_spatial_index_absolute_contract_test
+[PASS] combat_absolute_ground_integration_test
+[PASS] combat_absolute_ground_parity_test
+[PASS] mapped_enemy_missing_projection_rejected_test
+[PASS] mapped_projectile_missing_projection_rejected_test
+[PASS] mapped_summon_missing_projection_rejected_test
+[PASS] mapped_fire_wall_missing_projection_rejected_test
+[PASS] mapped_skill_plan_missing_projection_rejected_test
+[PASS] mapped_game_root_projection_failure_test
+[PASS] implemented_map_runtime_projection_test
+[PASS] phase1_network_runtime_coverage_test
+[FAIL] unbuilt_planned_map_not_playable_test - process_did_not_exit;early_script_error;stderr_failures_6
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.419,"start_ms":240.976},"build_bottom_chassis":{"duration_ms":195.023,"start_ms":37.407},"build_combat_controls":{"duration_ms":7.961,"start_ms":232.43},"build_hidden_compatibility_info":{"duration_ms":7.654,"start_ms":25.37},"build_item_quick_slot_menu":{"duration_ms":0.585,"start_ms":240.391},"build_loading_transition":{"duration_ms":1.296,"start_ms":241.395},"build_loot_feedback":{"duration_ms":0.812,"start_ms":33.613},"build_right_utility_stack":{"duration_ms":2.982,"start_ms":34.425},"build_target_bar":{"duration_ms":0.589,"start_ms":33.024},"initial_state_sync":{"duration_ms":0.429,"start_ms":242.708},"root_and_theme":{"duration_ms":25.349,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.021,"start_ms":25.349},"wire_player_state_signals":{"duration_ms":0.017,"start_ms":242.691}},"total_ms":243.139}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.008,"init_to_enter_tree":0.05},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.05,"start_ms":0.666},"bootstrap_dispatch":{"duration_ms":0.104,"start_ms":734.017},"camera_construct_and_attach":{"duration_ms":0.064,"start_ms":61.528},"hud_attach_and_ready":{"duration_ms":621.552,"start_ms":61.685},"hud_construct":{"duration_ms":0.046,"start_ms":61.592},"hud_post_ready_setup":{"duration_ms":1.636,"start_ms":683.237},"hud_signal_wiring":{"duration_ms":0.047,"start_ms":61.638},"player_construct_wire_attach_restore":{"duration_ms":60.812,"start_ms":0.716},"pre_background_setup":{"duration_ms":0.608,"start_ms":0.058},"system_menu_build":{"duration_ms":49.144,"start_ms":684.873}},"total_ms":734.123}
+[WorldBootstrapProfile] {"actor_max_item_ms":39.053,"actor_max_slice_ms":39.064,"actor_slices":44,"actor_total_ms":231.727,"collision_slices":9,"deferred_actors":0,"duplicate_actors":0,"failed_actors":0,"hud":{},"map_slices":6,"max_slice_ms":39.064,"planned_actors":94,"spawned_actors":94,"stages_ms":{"BUILD_COLLISION":951.402,"BUILD_MAP":919.379,"COLLECT_REQUIREMENTS":450.243,"FINALIZE":1393.409,"REQUEST_RESOURCES":846.383,"SHOW_LOADING":0.041,"SPAWN_ACTORS":1013.129,"WAIT_RESOURCES":846.859},"total_ms":1403.572}
+UNBUILT_PLANNED_MAP_NOT_PLAYABLE_PASS map=338
+SCRIPT ERROR: Parse Error: Could not preload resource file "res://assets/art/characters/warrior/paper_doll/classic/base_male_00376_anatomy.png".
+   at: GDScript::reload (res://scripts/equipment_character_preview.gd:22)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "CLASSIC_BASE_FALLBACK_TEXTURE" constant because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/equipment_character_preview.gd:21)
+SCRIPT ERROR: Parse Error: Could not preload resource file "res://assets/art/characters/warrior/paper_doll/classic/hair_male_00442.png".
+   at: GDScript::reload (res://scripts/equipment_character_preview.gd:25)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "CLASSIC_HAIR_FALLBACK_TEXTURE" constant because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/equipment_character_preview.gd:24)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/inventory_panel.gd:0)
+ERROR: Failed to load script "res://scripts/inventory_panel.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+WARNING: 11 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+[PASS] reference_map_not_playable_test
+[PASS] legacy_reference_projection_isolation_test
+[PASS] formal_map_projection_coverage_test
+[PASS] world_ready_gating_test
+[PASS] safe_logout_world_location_inf_guard_test
+[PASS] map_runtime_release_registry_contract_test
+[PASS] map_ui_presentation_projection_test
+[PASS] map_persistent_boss_spawn_identity_test
+[PASS] release_registry_current_maps_test
+[PASS] map_runtime_release_gate_test
+[PASS] build_candidate_does_not_mutate_release_test
+[PASS] publish_promotes_candidate_test
+[PASS] publish_failure_rollback_test
+[PASS] release_registry_consumer_validation_test
+[PASS] future_map_build_publish_no_code_edit_test
+[PASS] mse_publish_entry_wired_test
+[PASS] passive_proc_actor_plane_contract_test
+[PASS] skill_panel_assignment_hint_layout_contract_test
+[PASS] device_lab_runtime_test
+[PASS] device_lab_patch_bootstrap_test
+[PASS] profile_business_validation_recovery_test
+[PASS] persistence_business_transactions_test
+[PASS] shared_warehouse_transaction_test
+[PASS] shared_warehouse_migration_test
+[PASS] map_editor_workspace_delete_safety_test
+[PASS] startup_loading_failure_recovery_test
+[PASS] brand_intro_test
+[PASS] loot_retry_clock_test
+[PASS] loot_visual_clock_test
+[PASS] runtime_loot_spatial_index_order_test
+[FAIL] complete_client_resource_catalog_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+SCRIPT ERROR: Assertion failed: file is missing: res://outputs/resource_catalog/complete_client_frame_catalog/manifest.json
+   at: _read_json (res://tests/complete_client_resource_catalog_test.gd:51)
+   GDScript backtrace (most recent call first):
+       [0] _read_json (res://tests/complete_client_resource_catalog_test.gd:51)
+       [1] _ready (res://tests/complete_client_resource_catalog_test.gd:8)
+SCRIPT ERROR: Assertion failed: complete client library count changed
+   at: _ready (res://tests/complete_client_resource_catalog_test.gd:9)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/complete_client_resource_catalog_test.gd:9)
+[PASS] player_movement_respawn_test
+[PASS] warrior_wear_mapping_test
+[PASS] warrior_service_formula_test
+[PASS] warrior_skill_state_machine_test
+[PASS] caster_spell_action_timing_test
+[PASS] game_root_wizard_geometry_integration_test
+[PASS] fire_wall_runtime_overlap_test
+[PASS] skill_runtime_integration_test
+[PASS] skill_progression_save_integration_test
+[PASS] warrior_client_art_test
+[PASS] skill_combat_profile_test
+[PASS] warrior_attack_timing_test
+[PASS] combat_release_geometry_test
+[PASS] live_attack_resolution_test
+[PASS] melee_lock_fallback_test
+[PASS] warrior_target_aligned_release_geometry_test
+[PASS] warrior_target_aligned_visual_effect_test
+[PASS] game_root_warrior_target_aligned_integration_test
+[PASS] warrior_visual_test
+[PASS] mobile_targeting_test
+[PASS] item_catalog_test
+[PASS] skeleton_spirit_boss_test
+[PASS] smoke_test
+[PASS] npc_facing_interaction_test
+[PASS] world_spatial_contract_test
+[PASS] zone_portal_visual_test
+[PASS] bich_hard_boundary_test
+[PASS] bich_content_1_test
+[PASS] bich_map_3_runtime_bridge_test
+[PASS] wooma_game_runtime_integration_test
+[PASS] phase1_game_runtime_integration_test
+[PASS] game_root_monster_prefetch_test
+[PASS] orc_tomb_runtime_visual_geometry_test
+[PASS] orc_tomb_game_visual_geometry_test
+[PASS] architecture_final_test
+[PASS] five_layer_architecture_test
+[PASS] bich_community_baseline_test
+[PASS] map_coordinate_mapping_test
+[PASS] map_combat_unit_contract_test
+[PASS] game_root_map_unit_integration_test
+[PASS] source_collision_chunk_test
+[PASS] bich_content_closure_test
+[PASS] corpse_king_boss_test
+[PASS] orc_tomb_source_integration_test
+[PASS] natural_cave_source_integration_test
+[PASS] bich_common_client_art_test
+[PASS] bich_undead_client_art_test
+[PASS] bich_quest_chain_test
+[PASS] bich_source_map_integration_test
+[PASS] service_runtime_integration_test
+[PASS] bich_environment_test
+[PASS] bich_area_test
+[PASS] progression_test
+[PASS] vertical_slice_loop_test
+[PASS] pricing_authority_test
+[PASS] inventory_weight_authority_test
+[PASS] loot_pickup_ground_unit_test
+[PASS] loot_pickup_runtime_manager_test
+[PASS] hud_authority_integration_test
+[FAIL] hud_background_prewarm_test - stderr_failures_4;engine_log_failures_4
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.419,"start_ms":238.092},"build_bottom_chassis":{"duration_ms":193.479,"start_ms":36.159},"build_combat_controls":{"duration_ms":7.871,"start_ms":229.638},"build_hidden_compatibility_info":{"duration_ms":6.996,"start_ms":24.739},"build_item_quick_slot_menu":{"duration_ms":0.583,"start_ms":237.509},"build_loading_transition":{"duration_ms":1.28,"start_ms":238.511},"build_loot_feedback":{"duration_ms":0.802,"start_ms":32.333},"build_right_utility_stack":{"duration_ms":3.024,"start_ms":33.135},"build_target_bar":{"duration_ms":0.598,"start_ms":31.735},"initial_state_sync":{"duration_ms":0.429,"start_ms":239.802},"root_and_theme":{"duration_ms":24.718,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.021,"start_ms":24.718},"wire_player_state_signals":{"duration_ms":0.011,"start_ms":239.791}},"total_ms":240.233}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.01,"init_to_enter_tree":0.065},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.052,"start_ms":0.73},"bootstrap_dispatch":{"duration_ms":0.054,"start_ms":741.525},"camera_construct_and_attach":{"duration_ms":0.038,"start_ms":58.164},"hud_attach_and_ready":{"duration_ms":622.388,"start_ms":58.266},"hud_construct":{"duration_ms":0.036,"start_ms":58.202},"hud_post_ready_setup":{"duration_ms":11.441,"start_ms":680.654},"hud_signal_wiring":{"duration_ms":0.028,"start_ms":58.238},"player_construct_wire_attach_restore":{"duration_ms":57.382,"start_ms":0.782},"pre_background_setup":{"duration_ms":0.655,"start_ms":0.075},"system_menu_build":{"duration_ms":49.43,"start_ms":692.095}},"total_ms":741.58}
+[WorldBootstrapProfile] {"actor_max_item_ms":312.889,"actor_max_slice_ms":312.895,"actor_slices":44,"actor_total_ms":708.505,"collision_slices":9,"deferred_actors":0,"duplicate_actors":0,"failed_actors":0,"hud":{},"map_slices":6,"max_slice_ms":312.895,"planned_actors":94,"spawned_actors":94,"stages_ms":{"BUILD_COLLISION":523.571,"BUILD_MAP":520.643,"COLLECT_REQUIREMENTS":45.429,"FINALIZE":1251.448,"REQUEST_RESOURCES":458.551,"SHOW_LOADING":0.048,"SPAWN_ACTORS":525.816,"WAIT_RESOURCES":459.02},"total_ms":1260.068}
+[UIPanelPrewarmProfile] {"background_mode":true,"catalog_icon_pending":9,"catalog_icon_prewarm_complete":false,"completed":true,"confirmation_wait_frames":0,"construction_ms":818.595,"construction_ms_by_panel":{"death_revival":4.204,"inventory":0.003,"map":21.953,"quest":12.555,"shop":6.326,"skill":15.621,"warehouse":22.038},"initial_profiles_elapsed_ms":818.641,"initial_profiles_wait_frames":0,"script_prefetch":{"failures":[],"loaded":6,"pending":[],"requested":6,"waited_frames":76},"shop_alternate_profile_warmed":false,"shop_buy_wait_frames":0,"shop_profiles_elapsed_ms":818.644,"shop_sell_wait_frames":0,"started_at_usec":8841457,"total_ms":822.167}
+HUD_BACKGROUND_PREWARM_PASS inventory_visible=true grids=100 script_failures=0
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _create_item_cell (res://scripts/warehouse_panel.gd:484)
+       [1] _initialize_grid_cells (res://scripts/warehouse_panel.gd:416)
+       [2] _continue_grid_cell_initialization (res://scripts/warehouse_panel.gd:438)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _create_item_cell (res://scripts/warehouse_panel.gd:484)
+       [1] _initialize_grid_cells (res://scripts/warehouse_panel.gd:416)
+       [2] _continue_grid_cell_initialization (res://scripts/warehouse_panel.gd:438)
+ERROR: Attempting to initialize the wrong RID
+   at: get_or_null (./core/templates/rid_owner.h:240)
+ERROR: Parameter "mem" is null.
+   at: initialize_rid (./core/templates/rid_owner.h:284)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] poll_threaded_paths (res://scripts/ui_item_texture_cache.gd:54)
+       [1] _process (res://scripts/game_root.gd:1618)
+ERROR: Attempting to initialize the wrong RID
+   at: get_or_null (./core/templates/rid_owner.h:240)
+ERROR: Parameter "mem" is null.
+   at: initialize_rid (./core/templates/rid_owner.h:284)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] poll_threaded_paths (res://scripts/ui_item_texture_cache.gd:54)
+       [1] _process (res://scripts/game_root.gd:1618)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _physics_process (res://scripts/player.gd:293)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+[PASS] complete_item_system_test
+[PASS] inventory_equipment_ui_test
+[PASS] multi_character_save_test
+[PASS] new_character_starter_loadout_test
+[PASS] system_menu_test
+[PASS] equipment_client_art_test
+[PASS] equipment_future_modifiers_test
+[PASS] equipment_customization_test
+[PASS] equipment_special_phase2_test
+[PASS] equipment_special_effects_test
+[PASS] equipment_luck_test
+[PASS] equipment_durability_policy_test
+[PASS] equipment_precise_durability_test
+[PASS] equipment_service_rules_test
+[PASS] equipment_attribute_master_test
+[PASS] equipment_slot_migration_test
+[PASS] android_layout_test
+[PASS] canonical_monster_catalog_test
+[PASS] monster_drop_authoring_overlay_contract_test
+[PASS] monster_id_contract_test
+[PASS] all_monster_loading_test
+[PASS] monster_world_integration_test
+[PASS] complete_monster_client_art_test
+[PASS] fixed_area_monster_test
+[PASS] classic_boss_order_test
+[PASS] monster_threat_animation_test
+[PASS] bich_monster_visual_test
+[PASS] bich_route_monster_test
+[PASS] crowd_grounding_test
+[PASS] monster_unit_adapter_test
+[PASS] monster_ground_unit_runtime_test
+[PASS] monster_melee_contact_geometry_test
+[PASS] monster_accuracy_runtime_test
+[PASS] monster_anti_stealth_runtime_test
+[PASS] monster_mfc1_attribute_timing_audit_test
+[PASS] monster_movement_cadence_test
+[PASS] monster_neighbor_step_policy_test
+[PASS] monster_cadence_runtime_integration_test
+[PASS] monster_cadence_blocked_step_test
+[PASS] monster_forced_relocation_during_step_test
+[PASS] monster_density_diagnostics_window_test
+[PASS] safe_zone_spatial_runtime_test
+[PASS] monster_parent_redraw_gate_test
+[PASS] monster_physical_projectile_visual_source_test
+[PASS] monster_target_magic_primary_visual_test
+[PASS] monster_special_delivery_contract_test
+[PASS] monster_special_delivery_runtime_test
+[PASS] direct_spell_compiled_stats_parity_test
+[PASS] multi_target_damage_transaction_test
+[PASS] game_root_combat_resolution_integration_test
+[PASS] game_root_r3x6_targeting_broadphase_test
+[PASS] enemy_mass_death_batch_pipeline_test
+[PASS] death_drop_budget_queue_test
+[PASS] death_queue_lifecycle_rework_test
+[PASS] placeholder_attack_animation_test
+[PASS] random_teleport_map_extent_test
+[PASS] loot_stable_identity_save_test
+[PASS] loot_inventory_transaction_batch_test
+[PASS] loot_runtime_item_policy_test
+[FAIL] combat_unit_source_priority_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+SCRIPT ERROR: Assertion failed.
+   at: _ready (res://tests/combat_unit_source_priority_test.gd:22)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/combat_unit_source_priority_test.gd:22)
+[PASS] skill_book_rank_upgrade_integration_test
+[PASS] player_level_up_effect_runtime_test
+[PASS] town_music_controller_test
+[PASS] audio_runtime_service_test
+[PASS] player_core_audio_hook_test
+[PASS] warrior_thrust_defense_runtime_test
+[PASS] warrior_melee_entry_runtime_test
+[FAIL] summon_owner_teleport_runtime_test - process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.675,"start_ms":296.631},"build_bottom_chassis":{"duration_ms":246.918,"start_ms":37.046},"build_combat_controls":{"duration_ms":11.914,"start_ms":283.964},"build_hidden_compatibility_info":{"duration_ms":7.411,"start_ms":25.31},"build_item_quick_slot_menu":{"duration_ms":0.753,"start_ms":295.878},"build_loading_transition":{"duration_ms":1.863,"start_ms":297.306},"build_loot_feedback":{"duration_ms":0.75,"start_ms":33.317},"build_right_utility_stack":{"duration_ms":2.979,"start_ms":34.067},"build_target_bar":{"duration_ms":0.596,"start_ms":32.721},"initial_state_sync":{"duration_ms":0.658,"start_ms":299.183},"root_and_theme":{"duration_ms":25.288,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.022,"start_ms":25.288},"wire_player_state_signals":{"duration_ms":0.014,"start_ms":299.169}},"total_ms":299.844}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.009,"init_to_enter_tree":0.052},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.054,"start_ms":0.672},"bootstrap_dispatch":{"duration_ms":0.053,"start_ms":863.167},"camera_construct_and_attach":{"duration_ms":0.039,"start_ms":59.704},"hud_attach_and_ready":{"duration_ms":741.949,"start_ms":59.802},"hud_construct":{"duration_ms":0.03,"start_ms":59.743},"hud_post_ready_setup":{"duration_ms":11.518,"start_ms":801.751},"hud_signal_wiring":{"duration_ms":0.029,"start_ms":59.773},"player_construct_wire_attach_restore":{"duration_ms":58.978,"start_ms":0.726},"pre_background_setup":{"duration_ms":0.611,"start_ms":0.061},"system_menu_build":{"duration_ms":49.898,"start_ms":813.269}},"total_ms":863.221}
+[WorldBootstrapProfile] {"actor_max_item_ms":336.264,"actor_max_slice_ms":336.27,"actor_slices":49,"actor_total_ms":818.648,"collision_slices":9,"deferred_actors":0,"duplicate_actors":0,"failed_actors":0,"hud":{},"map_slices":6,"max_slice_ms":336.27,"planned_actors":94,"spawned_actors":94,"stages_ms":{"BUILD_COLLISION":403.094,"BUILD_MAP":400.027,"COLLECT_REQUIREMENTS":29.287,"FINALIZE":1239.961,"REQUEST_RESOURCES":338.884,"SHOW_LOADING":0.042,"SPAWN_ACTORS":405.252,"WAIT_RESOURCES":339.406},"total_ms":1249.641}
+SUMMON_OWNER_TELEPORT_RUNTIME_PASS: random and map-arrival endpoints relocate both main pets legally while preserving HP and clearing combat state
+SCRIPT ERROR: Assertion failed.
+   at: _assert_relocated_pet (res://tests/skills/summon_owner_teleport_runtime_test.gd:141)
+   GDScript backtrace (most recent call first):
+       [0] _assert_relocated_pet (res://tests/skills/summon_owner_teleport_runtime_test.gd:141)
+       [1] _run (res://tests/skills/summon_owner_teleport_runtime_test.gd:88)
+SCRIPT ERROR: Assertion failed.
+   at: _assert_relocated_pet (res://tests/skills/summon_owner_teleport_runtime_test.gd:141)
+   GDScript backtrace (most recent call first):
+       [0] _assert_relocated_pet (res://tests/skills/summon_owner_teleport_runtime_test.gd:141)
+       [1] _run (res://tests/skills/summon_owner_teleport_runtime_test.gd:89)
+[PASS] summon_incoming_damage_runtime_test
+[PASS] summon_audio_hook_test
+[PASS] monster_audio_hook_test
+[PASS] projectile_audio_lifecycle_test
+[PASS] player_item_audio_event_test
+[PASS] skill_contract_manifest_test
+[PASS] skill_source_of_truth_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore-dpv2-glm52-flash-v5-0-2\outputs\test_logs\runner_results_critical_20260908_031303_847_12564.json
+TEST_SUMMARY suite=critical passed=313 failed=5 engine_log_errors=9
+FAILED_TESTS=unbuilt_planned_map_not_playable_test (process_did_not_exit;early_script_error;stderr_failures_6); complete_client_resource_catalog_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2); hud_background_prewarm_test (stderr_failures_4;engine_log_failures_4); combat_unit_source_priority_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1); summon_owner_teleport_runtime_test (process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2)
