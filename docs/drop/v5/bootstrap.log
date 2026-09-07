@@ -1,0 +1,11 @@
+fatal: ambiguous argument 'HEAD': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+FAIL
+issues= 6
+Missing assets/data/agent/integration_baseline.json
+Missing docs/CODEX_CONTEXT_SNAPSHOT.compact.json
+Missing assets/data/agent/worktree_ownership.json
+Missing outputs/agent_rules_migration/rule_migration_matrix.json
+Unknown branch for bootstrap routing: master
+report=outputs/agent_bootstrap/latest.json
