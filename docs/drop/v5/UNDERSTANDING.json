@@ -1,0 +1,22 @@
+{
+  "role": "EXECUTOR_NO_DESIGN",
+  "order": [
+    "SOURCE",
+    "BASELINE",
+    "RETENTION",
+    "BALANCE",
+    "TEST",
+    "PUSH_REVIEW"
+  ],
+  "source_rule": "UNKNOWN_IS_BLOCKER_NOT_ZERO_OR_GUESS",
+  "retention_rule": "PROTECTED_THEN_PRIORITY_THEN_RANDOM_TIE_LIMIT_9",
+  "boss_ids": [
+    76,
+    198,
+    199,
+    225
+  ],
+  "armor_rule": "INDEPENDENT_FINAL_1_OVER_60_NO_PITY",
+  "patch_conflict": "STOP_CHANGED_STAGE_PRESERVE_EVIDENCE_NO_FUZZ",
+  "push_rule": "NEW_REVIEW_BRANCH_ONLY_NO_MERGE_NO_FORCE"
+}

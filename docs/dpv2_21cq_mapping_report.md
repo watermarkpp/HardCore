@@ -73,8 +73,8 @@ none of these rows is compiled.
 ## Post-RNG overflow Authority
 
 - Explicit per-item records: 233.
-- Protected item records: 94.
-- Priority counts: `{"1000": 2, "200": 14, "300": 125, "600": 79, "800": 13}`.
+- Protected item records: 110.
+- Priority counts: `{"1000": 2, "200": 16, "2000": 6, "300": 107, "600": 89, "800": 13}`.
 - Gold is explicit priority `100`, unprotected.
 
 The migration used the old retained-value decisions once, then froze direct

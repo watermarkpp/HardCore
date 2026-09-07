@@ -1,5 +1,7 @@
 extends Node
 
+const DPV2RepairV5 = preload("res://scripts/drop/dpv2_repair_v5_contract.gd")
+
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PricingServiceScript = preload("res://scripts/pricing_service.gd")
 
@@ -69,19 +71,13 @@ const DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS := {
 }
 const DPV2_RUNTIME_DISABLED_IDS := {33: true, 183: true, 241: true}
 const DPV2_PROJECT_EXTENSION_ID := 225
-const DPV2_SPB_BASE_SHA := "98ea003b66915622b5c265602e54386f9213016c"
+const DPV2_SPB_BASE_SHA := "ffcdc76b360d5976eef2ce17a45664ddaf550590"
 const DPV2_SPB_SOURCE_SHA256 := (
 	"59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013"
 )
-const DPV2_SPB_DIRECT_BASELINE_SHA256 := (
-	"9E9225DF113BDC94ECDA071388DC5FCFA92ED34BF8028519B06F205E06FF4DD0"
-)
-const DPV2_SPB_PROVENANCE_SHA256 := (
-	"F48A033D5A33D80B795A838BE837AE84FA93469B6055FE012309ACC07082E347"
-)
-const DPV2_SPB_LEDGER_SHA256 := (
-	"057F3664C2CE5376B2A937CB317E978769860AA1B3390D0EF038B512CD496B80"
-)
+const DPV2_SPB_DIRECT_BASELINE_SHA256 := "93E16AB952A428AC1B130CF75844A91F7A11858CA15A56AEB06689E63BA30940"
+const DPV2_SPB_PROVENANCE_SHA256 := "315F36CD92889112A1043032B726D606A3E6C7F0D7018F3F64869A6F90AC3191"
+const DPV2_SPB_LEDGER_SHA256 := "CC07951D77981E6A646219AD6E6C7620C7EE9D04F1B672F9801381C440423E89"
 const DPV2_EXPLICIT_NON_LOOT_REASON_CODES := {
 	59: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
 	78: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
@@ -1002,6 +998,9 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 	var authority: Dictionary = authority_value
 	var classification_authority: Dictionary = classification_value
 	var effective: Dictionary = effective_value
+	if not DPV2RepairV5.verify_documents(authority, effective):
+		load_error = "spb_v5_sealed_documents_mismatch"
+		return false
 	if (
 		str(classification_authority.get("schema", ""))
 			!= "hardcore.dpv2.single_player_item_boost_classification.v1"
@@ -1170,7 +1169,7 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 	var classification_relative_path := (
 		DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH.trim_prefix("res://")
 	)
-	var classification_sha256 := _sha256_raw_file(
+	var classification_sha256 := _sha256_lf_file(
 		DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH
 	)
 	if classification_sha256.is_empty():
@@ -1385,9 +1384,16 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 		):
 			load_error = "spb_effective_probability_multiplier_invalid"
 			return false
-		var expected := dpv2_single_player_boost_formula(
+		var base_stage_expected := dpv2_single_player_boost_formula(
 			base_numerator, base_denominator, is_auto
 		)
+		var expected := DPV2RepairV5.final_formula(
+			record, authority.get("repair_v5_contract", {}), base_stage_expected,
+			canonical_monster_classification(_dpv2_json_integer(record.get("canonical_monster_id", null)))
+		)
+		if not bool(expected.get("ok", false)):
+			load_error = "spb_v5_formula_contract_invalid"
+			return false
 		var expected_numerator := int(expected.get("numerator", 0))
 		var expected_denominator := int(expected.get("denominator", 0))
 		var expected_ceiling := bool(expected.get("ceiling_applied", false))

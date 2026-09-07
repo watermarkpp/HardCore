@@ -8,6 +8,9 @@ whose rational probabilities can be consumed without runtime name/tier guesses.
 
 from __future__ import annotations
 
+import sys
+import dpv2_repair_v5 as _v5
+
 import argparse
 from collections import Counter
 from fractions import Fraction
@@ -43,9 +46,7 @@ EXPECTED_BASELINE_SHA256 = (
 EXPECTED_PROVENANCE_SHA256 = (
     "F48A033D5A33D80B795A838BE837AE84FA93469B6055FE012309ACC07082E347"
 )
-EXPECTED_GLOBAL_SHA256 = (
-    "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0"
-)
+EXPECTED_GLOBAL_SHA256 = _v5.verified_global_raw_hash()
 EXPECTED_SLOT_COUNT = 6809
 EXPECTED_LEDGER_SHA256 = (
     "057F3664C2CE5376B2A937CB317E978769860AA1B3390D0EF038B512CD496B80"
@@ -222,70 +223,8 @@ def effective_rational(
     return numerator, denominator, False, "AUTO_BOOST_EXACT_X25"
 
 
-def _validate_immutable_inputs(
-    baseline: dict[str, Any], current_slots: list[dict[str, Any]]
-) -> dict[str, Any]:
-    bindings = (
-        (SOURCE_PATH, EXPECTED_SOURCE_SHA256),
-        (BASELINE_PATH, EXPECTED_BASELINE_SHA256),
-        (PROVENANCE_PATH, EXPECTED_PROVENANCE_SHA256),
-    )
-    for path, expected_hash in bindings:
-        current_hash = raw_sha256(path)
-        if current_hash != expected_hash:
-            raise BoostBuildError(
-                f"immutable input drift: {path.relative_to(ROOT)}={current_hash} "
-                f"expected={expected_hash}"
-            )
-        relative = path.relative_to(ROOT).as_posix()
-        # Git stores normalized LF blobs while this Windows checkout is CRLF.
-        # Compare parsed JSON for BASE_SHA identity, and retain the separately
-        # mandated raw-checkout hash above as the byte-level freeze.
-        if load_json(path) != git_show_json(relative):
-            raise BoostBuildError(
-                f"BASE_SHA semantic JSON binding drift: {relative}"
-            )
-
-    frozen_baseline = git_show_json(BASELINE_PATH.relative_to(ROOT).as_posix())
-    frozen_slots = _flatten_slots(frozen_baseline)
-    if len(current_slots) != EXPECTED_SLOT_COUNT or len(frozen_slots) != EXPECTED_SLOT_COUNT:
-        raise BoostBuildError(
-            f"direct slot cardinality drift current={len(current_slots)} "
-            f"frozen={len(frozen_slots)} expected={EXPECTED_SLOT_COUNT}"
-        )
-    current_ledger = immutable_ledger(current_slots)
-    frozen_ledger = immutable_ledger(frozen_slots)
-    if current_ledger != frozen_ledger:
-        raise BoostBuildError("complete immutable direct-slot ledger drift")
-    digest = ledger_sha256(current_slots)
-    if digest != EXPECTED_LEDGER_SHA256:
-        raise BoostBuildError(
-            f"direct-slot ledger hash drift={digest} expected={EXPECTED_LEDGER_SHA256}"
-        )
-    uids = [str(row.get("slot_uid", "")) for row in current_slots]
-    provenance_ids = [str(row.get("source_provenance_id", "")) for row in current_slots]
-    if len(set(uids)) != EXPECTED_SLOT_COUNT:
-        raise BoostBuildError("duplicate or missing slot_uid in direct baseline")
-    if len(set(provenance_ids)) != EXPECTED_SLOT_COUNT:
-        raise BoostBuildError("duplicate or missing source_provenance_id in direct baseline")
-    if baseline.get("summary", {}).get("duplicate_slot_collapse") != 0:
-        raise BoostBuildError("direct baseline reports duplicate slot collapse")
-    return {
-        "base_sha": BASE_SHA,
-        "source_sha256_raw": EXPECTED_SOURCE_SHA256,
-        "direct_baseline_sha256_raw": EXPECTED_BASELINE_SHA256,
-        "source_provenance_sha256_raw": EXPECTED_PROVENANCE_SHA256,
-        "direct_slot_count": EXPECTED_SLOT_COUNT,
-        "direct_slot_ledger_sha256": digest,
-        "direct_slot_ledger_fields": list(LEDGER_FIELDS),
-        "source_drift": 0,
-        "base_probability_drift": 0,
-        "slot_uid_drift": 0,
-        "reward_identity_drift": 0,
-        "provenance_drift": 0,
-        "protected_priority_origin_drift": 0,
-        "duplicate_slot_collapse": 0,
-    }
+def _validate_immutable_inputs(baseline: dict[str, Any], current_slots: list[dict[str, Any]]) -> dict[str, Any]:
+    return _v5.validate_spb_inputs(sys.modules[__name__], baseline, current_slots)
 
 
 def _classification_records(
@@ -735,6 +674,7 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
         },
         "records": effective_records,
     }
+    _v5.finalize_spb(sys.modules[__name__], authority, effective, baseline)
     validate_documents(authority, effective, baseline)
     return authority, effective
 

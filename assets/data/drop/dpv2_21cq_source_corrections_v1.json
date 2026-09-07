@@ -32,6 +32,108 @@
         "reported_rule": "1/2800 灵魂战衣(男)",
         "authority": "EXTERNAL_SOURCE_VERIFIED"
       }
+    },
+    {
+      "correction_id": "v5.user_armor.m235.slot_054",
+      "stable_monster_id": 235,
+      "source_monster_name": "暗之双头血魔",
+      "source_line_number": 54,
+      "source_slot_index": "slot_054",
+      "source_item_label": "天魔神甲",
+      "original_chance": "1/60",
+      "corrected_base_numerator": 1,
+      "corrected_base_denominator": 60,
+      "reason": "USER_AUTHORIZED_OVERRIDE_NEW_ARMOR_INDEPENDENT_1_OVER_60",
+      "evidence": {
+        "authority": "USER_V4_SECTION_15",
+        "policy_path": "tools/dpv2_repair_v5_policy.json",
+        "policy_sha256_lf": "E9C3DDAB4190649ED1FBF1BDAF28E179EBF9F616AF43DED628F0C965919450F8"
+      }
+    },
+    {
+      "correction_id": "v5.user_armor.m236.slot_054",
+      "stable_monster_id": 236,
+      "source_monster_name": "暗之双头金刚",
+      "source_line_number": 54,
+      "source_slot_index": "slot_054",
+      "source_item_label": "天尊道袍",
+      "original_chance": "1/60",
+      "corrected_base_numerator": 1,
+      "corrected_base_denominator": 60,
+      "reason": "USER_AUTHORIZED_OVERRIDE_NEW_ARMOR_INDEPENDENT_1_OVER_60",
+      "evidence": {
+        "authority": "USER_V4_SECTION_15",
+        "policy_path": "tools/dpv2_repair_v5_policy.json",
+        "policy_sha256_lf": "E9C3DDAB4190649ED1FBF1BDAF28E179EBF9F616AF43DED628F0C965919450F8"
+      }
+    },
+    {
+      "correction_id": "v5.user_armor.m237.slot_054",
+      "stable_monster_id": 237,
+      "source_monster_name": "暗之黄泉教主",
+      "source_line_number": 54,
+      "source_slot_index": "slot_054",
+      "source_item_label": "法神披风",
+      "original_chance": "1/60",
+      "corrected_base_numerator": 1,
+      "corrected_base_denominator": 60,
+      "reason": "USER_AUTHORIZED_OVERRIDE_NEW_ARMOR_INDEPENDENT_1_OVER_60",
+      "evidence": {
+        "authority": "USER_V4_SECTION_15",
+        "policy_path": "tools/dpv2_repair_v5_policy.json",
+        "policy_sha256_lf": "E9C3DDAB4190649ED1FBF1BDAF28E179EBF9F616AF43DED628F0C965919450F8"
+      }
+    },
+    {
+      "correction_id": "v5.user_armor.m238.slot_054",
+      "stable_monster_id": 238,
+      "source_monster_name": "暗之骷髅精灵",
+      "source_line_number": 54,
+      "source_slot_index": "slot_054",
+      "source_item_label": "圣战宝甲",
+      "original_chance": "1/60",
+      "corrected_base_numerator": 1,
+      "corrected_base_denominator": 60,
+      "reason": "USER_AUTHORIZED_OVERRIDE_NEW_ARMOR_INDEPENDENT_1_OVER_60",
+      "evidence": {
+        "authority": "USER_V4_SECTION_15",
+        "policy_path": "tools/dpv2_repair_v5_policy.json",
+        "policy_sha256_lf": "E9C3DDAB4190649ED1FBF1BDAF28E179EBF9F616AF43DED628F0C965919450F8"
+      }
+    },
+    {
+      "correction_id": "v5.user_armor.m239.slot_054",
+      "stable_monster_id": 239,
+      "source_monster_name": "暗之沃玛教主",
+      "source_line_number": 54,
+      "source_slot_index": "slot_054",
+      "source_item_label": "天师长袍",
+      "original_chance": "1/60",
+      "corrected_base_numerator": 1,
+      "corrected_base_denominator": 60,
+      "reason": "USER_AUTHORIZED_OVERRIDE_NEW_ARMOR_INDEPENDENT_1_OVER_60",
+      "evidence": {
+        "authority": "USER_V4_SECTION_15",
+        "policy_path": "tools/dpv2_repair_v5_policy.json",
+        "policy_sha256_lf": "E9C3DDAB4190649ED1FBF1BDAF28E179EBF9F616AF43DED628F0C965919450F8"
+      }
+    },
+    {
+      "correction_id": "v5.user_armor.m240.slot_054",
+      "stable_monster_id": 240,
+      "source_monster_name": "暗之虹魔教主",
+      "source_line_number": 54,
+      "source_slot_index": "slot_054",
+      "source_item_label": "霓裳羽衣",
+      "original_chance": "1/60",
+      "corrected_base_numerator": 1,
+      "corrected_base_denominator": 60,
+      "reason": "USER_AUTHORIZED_OVERRIDE_NEW_ARMOR_INDEPENDENT_1_OVER_60",
+      "evidence": {
+        "authority": "USER_V4_SECTION_15",
+        "policy_path": "tools/dpv2_repair_v5_policy.json",
+        "policy_sha256_lf": "E9C3DDAB4190649ED1FBF1BDAF28E179EBF9F616AF43DED628F0C965919450F8"
+      }
     }
   ]
 }
