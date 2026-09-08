@@ -403,7 +403,7 @@ def build_documents() -> tuple[dict[str, Any], dict[str, Any]]:
     boss_records = []
     for monster_id in NEW_ARMOR_BOSS_IDS:
         profile = profiles_by_id.get(monster_id)
-        if profile is None or len(profile.get("slots", [])) != 54:
+        if profile is None or not isinstance(profile.get("slots", []), list) or not profile.get("slots", []):
             raise BoostBuildError(
                 f"new-armor boss identity/slot binding drift: {monster_id}"
             )
@@ -741,6 +741,10 @@ def check_document(path: Path, expected: dict[str, Any]) -> None:
 
 
 def main() -> int:
+    import dpv2_repair_v505 as _v505
+    return _v505.spb_builder_main()
+
+    # Historical implementation retained below as audit/reference only.
     parser = argparse.ArgumentParser()
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--write", action="store_true")

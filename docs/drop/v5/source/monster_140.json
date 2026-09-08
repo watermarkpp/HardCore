@@ -3,13 +3,152 @@
   "name": "蝎蛇3",
   "url": "https://www.21cq.com/mir/Mob.Aspx?ID=140",
   "retrieved_utc": "2026-09-07T18:19:49.662952+00:00",
-  "status": "UNVERIFIED",
-  "parser": "dpv2-drop-strict-table-v5.0",
-  "rows": [],
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "半月弯刀",
+      "numerator": 1,
+      "denominator": 7500,
+      "amount": 1
+    },
+    {
+      "item": "地狱雷光",
+      "numerator": 1,
+      "denominator": 6000,
+      "amount": 1
+    },
+    {
+      "item": "困魔咒",
+      "numerator": 1,
+      "denominator": 6000,
+      "amount": 1
+    },
+    {
+      "item": "野蛮冲撞",
+      "numerator": 1,
+      "denominator": 1500,
+      "amount": 1
+    },
+    {
+      "item": "魔法盾",
+      "numerator": 1,
+      "denominator": 6000,
+      "amount": 1
+    },
+    {
+      "item": "圣言术",
+      "numerator": 1,
+      "denominator": 9000,
+      "amount": 1
+    },
+    {
+      "item": "群体治疗术",
+      "numerator": 1,
+      "denominator": 9000,
+      "amount": 1
+    },
+    {
+      "item": "烈火剑法",
+      "numerator": 1,
+      "denominator": 9000,
+      "amount": 1
+    },
+    {
+      "item": "召唤神兽",
+      "numerator": 1,
+      "denominator": 9000,
+      "amount": 1
+    },
+    {
+      "item": "冰咆哮",
+      "numerator": 1,
+      "denominator": 9000,
+      "amount": 1
+    },
+    {
+      "item": "炼狱",
+      "numerator": 1,
+      "denominator": 3000,
+      "amount": 1
+    },
+    {
+      "item": "生命项链",
+      "numerator": 1,
+      "denominator": 9000,
+      "amount": 1
+    },
+    {
+      "item": "幽灵项链",
+      "numerator": 1,
+      "denominator": 9000,
+      "amount": 1
+    },
+    {
+      "item": "天珠项链",
+      "numerator": 1,
+      "denominator": 9000,
+      "amount": 1
+    },
+    {
+      "item": "放大镜",
+      "numerator": 1,
+      "denominator": 1000,
+      "amount": 1
+    },
+    {
+      "item": "竹笛",
+      "numerator": 1,
+      "denominator": 1000,
+      "amount": 1
+    },
+    {
+      "item": "道士头盔",
+      "numerator": 1,
+      "denominator": 1000,
+      "amount": 1
+    },
+    {
+      "item": "凝霜",
+      "numerator": 1,
+      "denominator": 2000,
+      "amount": 1
+    },
+    {
+      "item": "珊瑚戒指",
+      "numerator": 1,
+      "denominator": 3000,
+      "amount": 1
+    },
+    {
+      "item": "降妖除魔戒指",
+      "numerator": 1,
+      "denominator": 3000,
+      "amount": 1
+    },
+    {
+      "item": "死神手套",
+      "numerator": 1,
+      "denominator": 2000,
+      "amount": 1
+    },
+    {
+      "item": "修罗",
+      "numerator": 1,
+      "denominator": 2000,
+      "amount": 1
+    },
+    {
+      "item": "骷髅头盔",
+      "numerator": 1,
+      "denominator": 2000,
+      "amount": 1
+    }
+  ],
   "http_status": 200,
   "declared_charset": "gb2312",
   "actual_encoding": "gb2312",
-  "blocker": "SOURCE_IDENTITY_UNVERIFIED:蝎蛇3",
   "raw_sha256": "316FBA406D279700BD79CBEF593D1E96774A16AE1A118D34D5AF448610179F23",
-  "raw_path": "docs/drop/v5/source/monster_140.bin"
+  "raw_path": "docs/drop/v5/source/monster_140.bin",
+  "cache_reparsed": true
 }

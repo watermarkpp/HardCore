@@ -1,0 +1,19 @@
+{
+  "schema": "hardcore.dpv2.v505b.runtime_classification_closure_verification.v1",
+  "pass": true,
+  "baseline_compiled_slots": 7611,
+  "direct_drop_item_ids": 231,
+  "canonical_classification_ids": 233,
+  "canonical_item_mapping_ids": 233,
+  "classification_not_currently_in_monster_drops": [
+    120,
+    121
+  ],
+  "classification_counts": {
+    "EQUIPMENT": 167,
+    "RARE_FUNCTIONAL_CONSUMABLE": 14,
+    "COMMON_RECOVERY": 10,
+    "BYPASS_UNCLASSIFIED": 42
+  },
+  "errors": []
+}

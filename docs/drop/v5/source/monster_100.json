@@ -3,13 +3,26 @@
   "name": "狼",
   "url": "https://www.21cq.com/mir/Mob.Aspx?ID=100",
   "retrieved_utc": "2026-09-07T18:19:39.903609+00:00",
-  "status": "UNVERIFIED",
-  "parser": "dpv2-drop-strict-table-v5.0",
-  "rows": [],
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "肉",
+      "numerator": 1,
+      "denominator": 1,
+      "amount": 1
+    },
+    {
+      "item": "肉",
+      "numerator": 1,
+      "denominator": 10,
+      "amount": 1
+    }
+  ],
   "http_status": 200,
   "declared_charset": "gb2312",
   "actual_encoding": "gb2312",
-  "blocker": "SOURCE_IDENTITY_UNVERIFIED:狼",
   "raw_sha256": "186AC2754D1566F97EC122032FCA5D1E21E70D991A2073A813A35597FE1CF87A",
-  "raw_path": "docs/drop/v5/source/monster_100.bin"
+  "raw_path": "docs/drop/v5/source/monster_100.bin",
+  "cache_reparsed": true
 }

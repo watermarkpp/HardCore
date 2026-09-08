@@ -56,6 +56,9 @@ const DPV2_DIRECT_ITEM_MAPPING_PATH := (
 const DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH := (
 	"res://assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json"
 )
+const DPV2_VERIFIED_PROFILE_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json"
+)
 
 # These are the user-frozen semantic decisions.  The formal semantic
 # authority remains the data source, while these exact IDs/counts prevent a
@@ -71,13 +74,11 @@ const DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS := {
 }
 const DPV2_RUNTIME_DISABLED_IDS := {33: true, 183: true, 241: true}
 const DPV2_PROJECT_EXTENSION_ID := 225
-const DPV2_SPB_BASE_SHA := "ffcdc76b360d5976eef2ce17a45664ddaf550590"
-const DPV2_SPB_SOURCE_SHA256 := (
-	"59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013"
-)
-const DPV2_SPB_DIRECT_BASELINE_SHA256 := "93E16AB952A428AC1B130CF75844A91F7A11858CA15A56AEB06689E63BA30940"
-const DPV2_SPB_PROVENANCE_SHA256 := "315F36CD92889112A1043032B726D606A3E6C7F0D7018F3F64869A6F90AC3191"
-const DPV2_SPB_LEDGER_SHA256 := "CC07951D77981E6A646219AD6E6C7620C7EE9D04F1B672F9801381C440423E89"
+const DPV2_SPB_BASE_SHA := "342891ab884150c0e81084c932df8205484e6388"
+const DPV2_SPB_SOURCE_SHA256 := "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515"
+const DPV2_SPB_DIRECT_BASELINE_SHA256 := "478235EF26B4272DC192AD8DDCEE4BBC686A966B4DDE414871747948A95B1B1E"
+const DPV2_SPB_PROVENANCE_SHA256 := "E7E57BF197A960F988B0FF60897CFBFC20884DE420C300366A665FC41EF14F01"
+const DPV2_SPB_LEDGER_SHA256 := "B3BCFB22ED285A8EA39E2A86BF522ECADABAC801F9BA4EB27BA784F3F8FF5C3A"
 const DPV2_EXPLICIT_NON_LOOT_REASON_CODES := {
 	59: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
 	78: "INTERNAL_VERSION_DIFFERENCE_NO_SOURCE",
@@ -429,6 +430,7 @@ func _load_dpv2_direct_baseline() -> bool:
 		DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH,
 		DPV2_DIRECT_ITEM_MAPPING_PATH,
 		DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH,
+		DPV2_VERIFIED_PROFILE_AUTHORITY_PATH,
 	]:
 		if not FileAccess.file_exists(path):
 			load_error = "dpv2_direct_authority_missing:%s" % path
@@ -507,6 +509,7 @@ func _load_dpv2_direct_baseline() -> bool:
 		"global_drop_rate_authority": DPV2_GLOBAL_DROP_RATE_AUTHORITY_PATH,
 		"item_mapping": DPV2_DIRECT_ITEM_MAPPING_PATH,
 		"semantic_authority": DPV2_MONSTER_DROP_SEMANTIC_AUTHORITY_PATH,
+		"verified_profile_authority": DPV2_VERIFIED_PROFILE_AUTHORITY_PATH,
 	}
 	for raw_key: Variant in required_artifacts.keys():
 		var key := str(raw_key)
@@ -680,7 +683,7 @@ func _load_dpv2_direct_baseline() -> bool:
 		or _dpv2_json_integer(summary.get("explicit_non_loot_monsters", null)) != 9
 		or _dpv2_json_integer(summary.get("runtime_disabled_monsters", null)) != 3
 		or _dpv2_json_integer(summary.get("non_loot_monsters", null)) != 9
-		or _dpv2_json_integer(summary.get("compiled_slots", null)) != 6809
+		or _dpv2_json_integer(summary.get("compiled_slots", null)) != 7611
 	):
 		load_error = "dpv2_direct_baseline_summary_count_invalid"
 		return false
@@ -690,7 +693,9 @@ func _load_dpv2_direct_baseline() -> bool:
 		return false
 	var origin_counts: Dictionary = origin_counts_value
 	if (
-		_dpv2_json_integer(origin_counts.get("LEGACY_21CQ_MONITEMS", null)) != 6740
+		origin_counts.size() != 3
+		or _dpv2_json_integer(origin_counts.get("VERIFIED_21CQ_PROFILE_V505", null)) != 7352
+		or _dpv2_json_integer(origin_counts.get("LEGACY_21CQ_MONITEMS", null)) != 190
 		or _dpv2_json_integer(origin_counts.get("PROJECT_EXTENSION", null)) != 69
 	):
 		load_error = "dpv2_direct_baseline_origin_counts_invalid"
@@ -913,7 +918,7 @@ func _load_dpv2_direct_baseline() -> bool:
 					load_error = "dpv2_direct_slot_gold_invalid"
 					return false
 			var origin := str(slot.get("baseline_origin", ""))
-			if origin not in ["LEGACY_21CQ_MONITEMS", "PROJECT_EXTENSION"]:
+			if origin not in ["VERIFIED_21CQ_PROFILE_V505", "LEGACY_21CQ_MONITEMS", "PROJECT_EXTENSION"]:
 				load_error = "dpv2_direct_slot_origin_invalid"
 				return false
 			slot_uids[slot_uid] = true
@@ -932,8 +937,8 @@ func _load_dpv2_direct_baseline() -> bool:
 		or enabled_profile_count != 144
 		or explicit_non_loot_profile_count != 9
 		or runtime_disabled_profile_count != 3
-		or compiled_slot_count != 6809
-		or origin_totals != {"LEGACY_21CQ_MONITEMS": 6740, "PROJECT_EXTENSION": 69}
+		or compiled_slot_count != 7611
+		or origin_totals != {"VERIFIED_21CQ_PROFILE_V505": 7352, "LEGACY_21CQ_MONITEMS": 190, "PROJECT_EXTENSION": 69}
 	):
 		load_error = "dpv2_direct_profile_closure_invalid"
 		return false
@@ -1088,9 +1093,15 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 		var indexed_slot_value: Variant = indexed_value.get("slot", null)
 		if indexed_slot_value is Dictionary and indexed_slot_value.has("canonical_item_id"):
 			direct_item_ids[_dpv2_json_integer(indexed_slot_value.canonical_item_id)] = true
-	if classification_by_id.size() != direct_item_ids.size():
+	# V5.0.5b: classification authority is canonical-item-wide.
+	# The current monster-drop baseline may use only a subset of canonical items.
+	if classification_by_id.size() != _dpv2_direct_item_by_id.size():
 		load_error = "spb_item_boost_classification_identity_closure_invalid"
 		return false
+	for item_id: Variant in classification_by_id:
+		if not _dpv2_direct_item_by_id.has(item_id):
+			load_error = "spb_item_boost_classification_identity_closure_invalid"
+			return false
 	for item_id: Variant in direct_item_ids:
 		if not classification_by_id.has(item_id):
 			load_error = "spb_item_boost_classification_identity_closure_invalid"
@@ -1196,7 +1207,7 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 			or str(
 				bindings.get("item_boost_classification_sha256_raw", "")
 			).to_upper() != classification_sha256
-			or _dpv2_json_integer(bindings.get("direct_slot_count", null)) != 6809
+			or _dpv2_json_integer(bindings.get("direct_slot_count", null)) != 7611
 			or _dpv2_json_integer(bindings.get("source_drift", null)) != 0
 			or _dpv2_json_integer(bindings.get("base_probability_drift", null)) != 0
 			or _dpv2_json_integer(bindings.get("slot_uid_drift", null)) != 0
@@ -1220,20 +1231,20 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 	var authority_summary: Dictionary = authority_summary_value
 	var effective_summary: Dictionary = effective_summary_value
 	var expected_policy_counts := {
-		"AUTO_BOOST": 4546,
-		"BYPASS_COMMON_RECOVERY": 1357,
-		"BYPASS_GOLD": 128,
+		"AUTO_BOOST": 5075,
+		"BYPASS_COMMON_RECOVERY": 1529,
+		"BYPASS_GOLD": 135,
 		"BYPASS_NEW_ARMOR_BOSS": 324,
-		"BYPASS_UNCLASSIFIED": 454,
+		"BYPASS_UNCLASSIFIED": 548
 	}
 	var expected_population_counts := {
-		"gold_slots": 134,
-		"common_recovery_slots": 1597,
+		"blessing_oil_slots": 30,
+		"common_recovery_slots": 1769,
+		"equipment_candidate_slots": 4791,
+		"gold_slots": 141,
 		"new_armor_boss_slots": 324,
-		"blessing_oil_slots": 22,
-		"equipment_candidate_slots": 4311,
-		"rare_consumable_candidate_slots": 277,
-		"unclassified_candidate_slots": 490,
+		"rare_consumable_candidate_slots": 326,
+		"unclassified_candidate_slots": 584
 	}
 	for summary: Dictionary in [authority_summary, effective_summary]:
 		var policy_counts_value: Variant = summary.get("effective_policy_counts", null)
@@ -1249,14 +1260,14 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 			if _dpv2_json_integer(populations_value.get(key, null)) != expected_population_counts[key]:
 				load_error = "spb_population_count_invalid:%s" % key
 		if (
-			_dpv2_json_integer(summary.get("ceiling_applied_slots", null)) != 2203
+			_dpv2_json_integer(summary.get("ceiling_applied_slots", null)) != 1435
 			or _dpv2_json_integer(summary.get("disabled_counterfactual_mismatch", null)) != 0
 			or _dpv2_json_integer(summary.get("probability_decreases", null)) != 0
 			or _dpv2_json_integer(summary.get("ceiling_violations", null)) != 0
 			or _dpv2_json_integer(summary.get("boost_formula_mismatch", null)) != 0
 			or _dpv2_json_integer(summary.get("bypass_probability_mismatch", null)) != 0
 			or _dpv2_json_integer(summary.get("duplicate_slot_collapse", null)) != 0
-			or _dpv2_json_integer(summary.get("gold_amount_slots", null)) != 134
+			or _dpv2_json_integer(summary.get("gold_amount_slots", null)) != 141
 			or _dpv2_json_integer(summary.get("gold_amount_mismatch", null)) != 0
 			or _dpv2_json_integer(
 				summary.get("disabled_gold_amount_mismatch", null)
@@ -1273,22 +1284,22 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 			load_error = "spb_gold_amount_summary_invalid"
 			return false
 	if (
-		_dpv2_json_integer(authority_summary.get("production_slots", null)) != 6809
+		_dpv2_json_integer(authority_summary.get("production_slots", null)) != 7611
 		or _dpv2_json_integer(authority_summary.get("equipment_item_ids", null)) != 167
 		or _dpv2_json_integer(
 			authority_summary.get("rare_functional_consumable_item_ids", null)
 		) != 14
 		or _dpv2_json_integer(authority_summary.get("auto_boost_item_ids", null)) != 181
-		or _dpv2_json_integer(effective_summary.get("records", null)) != 6809
+		or _dpv2_json_integer(effective_summary.get("records", null)) != 7611
 		or _dpv2_json_integer(
 			effective_summary.get("disabled_counterfactual_records", null)
-		) != 6809
+		) != 7611
 		or _dpv2_json_integer(effective_summary.get("base_mirror_mismatch", null)) != 0
 	):
 		load_error = "spb_summary_cardinality_invalid"
 		return false
 	var records_value: Variant = effective.get("records", null)
-	if not records_value is Array or records_value.size() != 6809:
+	if not records_value is Array or records_value.size() != 7611:
 		load_error = "spb_effective_probability_cardinality_invalid"
 		return false
 	var allowed_policies := {
@@ -1410,8 +1421,8 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 		_dpv2_spb_effective_by_uid[slot_uid] = record.duplicate(true)
 	if (
 		_dpv2_spb_effective_by_uid.size() != _dpv2_direct_slot_by_uid.size()
-		or _dpv2_spb_effective_by_uid.size() != 6809
-		or ceiling_count != 2203
+		or _dpv2_spb_effective_by_uid.size() != 7611
+		or ceiling_count != 1435
 	):
 		load_error = "spb_effective_probability_closure_invalid"
 		return false
@@ -3742,3 +3753,5 @@ func summary_text() -> String:
 	return "地图 %d｜怪物 %d｜Boss %d｜物品 %d｜技能 %d｜掉落槽 %d" % [
 		maps.size(), monsters.size(), bosses.size(), item_catalog.size(), skills.size(), drops.size()
 	]
+
+# DPV2_V505_RUNTIME_SEAL: exact generated profile/ledger cardinalities and hashes above.

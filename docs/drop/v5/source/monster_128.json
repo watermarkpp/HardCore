@@ -3,13 +3,38 @@
   "name": "楔蛾",
   "url": "https://www.21cq.com/mir/Mob.Aspx?ID=128",
   "retrieved_utc": "2026-09-07T18:19:46.174216+00:00",
-  "status": "UNVERIFIED",
-  "parser": "dpv2-drop-strict-table-v5.0",
-  "rows": [],
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "金创药(中量)",
+      "numerator": 1,
+      "denominator": 15,
+      "amount": 1
+    },
+    {
+      "item": "魔法药(中量)",
+      "numerator": 1,
+      "denominator": 25,
+      "amount": 1
+    },
+    {
+      "item": "太阳水",
+      "numerator": 1,
+      "denominator": 50,
+      "amount": 1
+    },
+    {
+      "item": "麻痹戒指",
+      "numerator": 1,
+      "denominator": 6000000,
+      "amount": 1
+    }
+  ],
   "http_status": 200,
   "declared_charset": "gb2312",
   "actual_encoding": "gb2312",
-  "blocker": "SOURCE_IDENTITY_UNVERIFIED:楔蛾",
   "raw_sha256": "4DA39C9A21C224F90FFFF60A80AE97D69ECAF67AF66B033C51841A1CCA2D5765",
-  "raw_path": "docs/drop/v5/source/monster_128.bin"
+  "raw_path": "docs/drop/v5/source/monster_128.bin",
+  "cache_reparsed": true
 }

@@ -45,7 +45,10 @@ func _run() -> void:
 	for mid: int in [235, 236, 237, 238, 239, 240]:
 		var candidates: Array = []
 		var profile: Dictionary = GameData.dpv2_direct_profile(mid)
-		var target := "dpv2.direct.m%d.slot_054" % mid
+		var contract: Dictionary = GameData.dpv2_single_player_effective_probability.get("repair_v5_contract", {})
+		var armor_by_monster: Dictionary = contract.get("armor_slot_by_monster", {})
+		var target := str(armor_by_monster.get(str(mid), ""))
+		_check(not target.is_empty(), "armor target UID must resolve by exact monster/item authority")
 		var probability: Dictionary = GameData.dpv2_effective_slot_probability(mid, target)
 		_check(int(probability.get("final_numerator", 0)) == 1 and int(probability.get("final_denominator", 0)) == 60, "armor 1/60")
 		for slot: Dictionary in profile.slots:

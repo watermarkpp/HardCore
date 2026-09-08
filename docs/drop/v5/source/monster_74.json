@@ -3,13 +3,188 @@
   "name": "沃玛卫士1",
   "url": "https://www.21cq.com/mir/Mob.Aspx?ID=74",
   "retrieved_utc": "2026-09-07T18:19:34.369832+00:00",
-  "status": "UNVERIFIED",
-  "parser": "dpv2-drop-strict-table-v5.0",
-  "rows": [],
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "神秘腰带",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "神秘头盔",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "神秘戒指",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "放大镜",
+      "numerator": 1,
+      "denominator": 270,
+      "amount": 1
+    },
+    {
+      "item": "竹笛",
+      "numerator": 1,
+      "denominator": 270,
+      "amount": 1
+    },
+    {
+      "item": "道士头盔",
+      "numerator": 1,
+      "denominator": 270,
+      "amount": 1
+    },
+    {
+      "item": "凝霜",
+      "numerator": 1,
+      "denominator": 270,
+      "amount": 1
+    },
+    {
+      "item": "珊瑚戒指",
+      "numerator": 1,
+      "denominator": 540,
+      "amount": 1
+    },
+    {
+      "item": "降妖除魔戒指",
+      "numerator": 1,
+      "denominator": 540,
+      "amount": 1
+    },
+    {
+      "item": "死神手套",
+      "numerator": 1,
+      "denominator": 540,
+      "amount": 1
+    },
+    {
+      "item": "修罗",
+      "numerator": 1,
+      "denominator": 540,
+      "amount": 1
+    },
+    {
+      "item": "骷髅头盔",
+      "numerator": 1,
+      "denominator": 540,
+      "amount": 1
+    },
+    {
+      "item": "重盔甲(男)",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "重盔甲(女)",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "灵魂战衣(女)",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "灵魂战衣(男)",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "魔法长袍(男)",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "魔法长袍(女)",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "金戒指",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "蓝翡翠项链",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "金手镯",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "道德戒指",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "魅力戒指",
+      "numerator": 1,
+      "denominator": 96,
+      "amount": 1
+    },
+    {
+      "item": "战神盔甲(男)",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "战神盔甲(女)",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "幽灵战衣(女)",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "幽灵战衣(男)",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "恶魔长袍(男)",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "恶魔长袍(女)",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    }
+  ],
   "http_status": 200,
   "declared_charset": "gb2312",
   "actual_encoding": "gb2312",
-  "blocker": "SOURCE_IDENTITY_UNVERIFIED:沃玛卫士1",
   "raw_sha256": "14233801B2920223B2B957EA501EB42EA3DA0B5206525EED8FCBC8593DF3A034",
-  "raw_path": "docs/drop/v5/source/monster_74.bin"
+  "raw_path": "docs/drop/v5/source/monster_74.bin",
+  "cache_reparsed": true
 }

@@ -1,13 +1,7 @@
-# DPV2 V5 compiled baseline parity
+# DPV2 V5.0.5 production baseline parity
 
-Pinned task source commit: `ffcdc76b360d5976eef2ce17a45664ddaf550590`.
+Migration base: `342891ab884150c0e81084c932df8205484e6388`.
 
-Compiled slots: 6809; authorized probability changes: 0; authorized retention changes: 1041.
+Parity now means exact equality with `dpv2_21cq_verified_profile_authority_v1.json`, not equality with the historical 6809-slot legacy profile set.
 
-Unauthorized slot, reward, duplicate-count and profile drift: 0. This is NOT a claim that no authorized change occurred.
-
-Only frozen 21CQ corrections and six explicitly authorized clothing rules alter source probabilities.
-
-External verification coverage: `docs/drop/v5/source_audit.json`.
-
-Runtime SPB-OFF and selector tests have separate statuses; a compiler parity check is not an APK test.
+Compiled slots: 7611. Duplicate slot UID collapse: 0.

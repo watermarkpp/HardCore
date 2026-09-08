@@ -4,12 +4,13 @@
   "url": "https://www.21cq.com/mir/Mob.Aspx?ID=75",
   "retrieved_utc": "2026-09-07T18:19:34.713173+00:00",
   "status": "UNVERIFIED",
-  "parser": "dpv2-drop-strict-table-v5.0",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
   "rows": [],
   "http_status": 200,
   "declared_charset": "gb2312",
   "actual_encoding": "gb2312",
-  "blocker": "SOURCE_IDENTITY_UNVERIFIED:沃玛卫士2",
+  "blocker": "EMPTY_DROP_TABLE_NOT_A_NO_DROP_PROOF",
   "raw_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
-  "raw_path": "docs/drop/v5/source/monster_75.bin"
+  "raw_path": "docs/drop/v5/source/monster_75.bin",
+  "cache_reparsed": true
 }

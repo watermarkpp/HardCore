@@ -1,0 +1,55 @@
+{
+  "schema": "hardcore.dpv2.v504.source_exception_authority.v1",
+  "version": "V5.0.4",
+  "author_decision": "B_MODIFIED_PRESERVE_LEGACY_NOT_VERIFIED",
+  "base_candidate_sha": "342891ab884150c0e81084c932df8205484e6388",
+  "expected_review_branch": "codex/dpv2-glm52-flash-v5-0-3-20260908",
+  "source": "21CQ exact monster pages already frozen in docs/drop/v5/source",
+  "policy": {
+    "empty_21cq_drop_table_proves_no_drop": false,
+    "delete_local_slots": false,
+    "inherit_neighbor_variant_drop_table": false,
+    "fuzzy_name_or_suffix_merge": false,
+    "preserve_legacy_rows_for_exact_empty_pages": true,
+    "source_status": "EXTERNAL_EMPTY_DROP_TABLE_LEGACY_PRESERVED",
+    "allow_book_balance_for_exception_monsters": false,
+    "allow_boss_k_for_exception_monsters": false,
+    "allow_retention_priority_changes": true,
+    "exception_is_non_blocking_for_global_source_closure": true
+  },
+  "exceptions": [
+    {
+      "monster_id": 75,
+      "name": "沃玛卫士2",
+      "url": "https://www.21cq.com/mir/Mob.Aspx?ID=75",
+      "raw_path": "docs/drop/v5/source/monster_75.bin",
+      "raw_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+      "expected_local_rows": 78,
+      "expected_anchor": "沃玛卫士2 爆什么装备物品",
+      "decision_reason": "Exact 21CQ identity page and exact drop anchor exist, but the anchored tbody is empty. Empty content is not proof of no-drop. Preserve the exact-ID legacy 78 rows unchanged; do not inherit from 73/74; do not enable source-gated book balance."
+    },
+    {
+      "monster_id": 123,
+      "name": "邪恶钳虫9",
+      "url": "https://www.21cq.com/mir/Mob.Aspx?ID=123",
+      "raw_path": "docs/drop/v5/source/monster_123.bin",
+      "raw_sha256": "D4A96B6179D25CEF2F47A3E0955ED3643430E4A9EC09E4716682078D0757F676",
+      "expected_local_rows": 112,
+      "expected_anchor": "邪恶钳虫9 爆什么装备物品",
+      "decision_reason": "Exact 21CQ identity page and exact drop anchor exist, but the anchored tbody is empty. Although 122 has matching combat stats, no suffix/variant drop inheritance is authorized. Preserve the exact-ID legacy 112 rows unchanged; do not enable source-gated book balance."
+    }
+  ],
+  "safe_duplicate_occurrence_policy": {
+    "enabled": true,
+    "scope": "same exact reward_key and equal occurrence count only",
+    "rule": "consume exact probability matches first; pair remaining local occurrences by stable line/slot order with remaining 21CQ occurrences in page order",
+    "why_safe": "all paired occurrences have identical reward identity and amount, independent RNG, and item-based retention priority; only the multiset of probabilities matters, so occurrence permutation is gameplay-equivalent",
+    "never_allowed": [
+      "pair across different item IDs",
+      "pair across different gold amounts",
+      "repair when local/source occurrence counts differ",
+      "deduplicate repeated slots",
+      "invent missing probabilities"
+    ]
+  }
+}

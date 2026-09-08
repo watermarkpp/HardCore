@@ -2,9 +2,9 @@ extends RefCounted
 ## Build-time sealed V5 extension to the existing SPB validation.
 ## Gameplay still reads the existing SPB effective ledger, not a new override.
 
-const AUTHORITY_SHA256 := "42839C4942D662D1A8D41FDC58EBC7BC720706998909483A3FA6669A17E0E9E8"
-const EFFECTIVE_SHA256 := "6E915ADF4302318B1E76DE046818FC34EABC394CB575B107A87A1776793FC5CB"
-const BASELINE_SHA256 := "93E16AB952A428AC1B130CF75844A91F7A11858CA15A56AEB06689E63BA30940"
+const AUTHORITY_SHA256 := "EC870064F21B04012811B6292F965271FE4EFC0BE898B7762FCB9F690AF147D0"
+const EFFECTIVE_SHA256 := "3B796D57186E5B4122ECEF5B7E70154D3C80C277740C8BF1546642CD9C218A50"
+const BASELINE_SHA256 := "478235EF26B4272DC192AD8DDCEE4BBC686A966B4DDE414871747948A95B1B1E"
 const MAX_RATIONAL := 2147483647
 
 
@@ -16,6 +16,17 @@ static func _integer(value: Variant) -> int:
 		if is_finite(number) and number == floor(number) and abs(number) <= MAX_RATIONAL:
 			return int(number)
 	return -1
+
+
+# V5.0.5c: JSON.parse_string yields numeric literals as float Variants.
+# Never use Array.has/int `in` directly for numeric contract-ID arrays.
+static func _integer_array_has(value: Variant, expected: int) -> bool:
+	if not value is Array:
+		return false
+	for raw_value: Variant in value:
+		if _integer(raw_value) == expected:
+			return true
+	return false
 
 
 static func _sha256_lf(path: String) -> String:
@@ -36,7 +47,7 @@ static func verify_documents(authority: Dictionary, effective: Dictionary) -> bo
 	var ev: Variant = effective.get("repair_v5_contract", null)
 	if not av is Dictionary or not ev is Dictionary or av != ev:
 		return false
-	return _integer(av.get("revision", null)) == 5
+	return _integer(av.get("revision", null)) == 505
 
 
 static func _gcd(a: int, b: int) -> int:
@@ -101,7 +112,10 @@ static func final_formula(
 		d = 60
 	elif bool(contract.get("boss_k_enabled", false)) and uid in contract.get("boss_allowed_slot_uids", []):
 		expected_rule = "BOSS_K"
-		if mid not in [76, 198, 199, 225]:
+		if (
+			mid not in [76, 198, 199, 225]
+			or not _integer_array_has(contract.get("boss_allowed_monster_ids", null), mid)
+		):
 			return {}
 		var multiplied := _multiply(n, d, _integer(contract.get("boss_k_numerator", null)), _integer(contract.get("boss_k_denominator", null)))
 		if multiplied.is_empty():
@@ -120,7 +134,11 @@ static func final_formula(
 		else:
 			n = product_n
 			d = product_d
-	elif item in contract.get("book_item_ids", []) and mid in contract.get("verified_book_monster_ids", []) and (mid < 235 or mid > 240):
+	elif (
+		_integer_array_has(contract.get("book_item_ids", null), item)
+		and _integer_array_has(contract.get("verified_book_monster_ids", null), mid)
+		and (mid < 235 or mid > 240)
+	):
 		if monster_classification in ["ordinary", "elite", "boss"]:
 			expected_rule = "BOOK_ORDINARY" if monster_classification == "ordinary" else "BOOK_ELITE_BOSS"
 			n = _integer(record.get("base_numerator", null))
@@ -145,3 +163,5 @@ static func final_formula(
 	output["ceiling_applied"] = bool(base_stage.get("ceiling_applied", false))
 	output["ok"] = true
 	return output
+
+# DPV2_V505_CONTRACT_SEAL

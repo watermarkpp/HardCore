@@ -41,12 +41,12 @@
     },
     "source_provenance": {
       "path": "assets/data/drop/dpv2_21cq_source_provenance_v1.json",
-      "sha256": "315F36CD92889112A1043032B726D606A3E6C7F0D7018F3F64869A6F90AC3191",
+      "sha256": "E7E57BF197A960F988B0FF60897CFBFC20884DE420C300366A665FC41EF14F01",
       "hash_normalization": "lf_text"
     },
     "direct_baseline_authority": {
       "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
-      "sha256": "93E16AB952A428AC1B130CF75844A91F7A11858CA15A56AEB06689E63BA30940",
+      "sha256": "478235EF26B4272DC192AD8DDCEE4BBC686A966B4DDE414871747948A95B1B1E",
       "hash_normalization": "lf_text"
     },
     "source_correction_authority": {
@@ -64,9 +64,29 @@
       "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
       "sha256": "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0",
       "hash_normalization": "lf_text"
+    },
+    "verified_profile_authority": {
+      "path": "assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json",
+      "sha256": "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515",
+      "hash_normalization": "lf_text"
     }
   },
   "build_entrypoint": "tools/build_dpv2_21cq_direct_baseline.py",
   "write_command": "py -3.12 tools/build_dpv2_21cq_direct_baseline.py --write",
-  "check_command": "py -3.12 tools/build_dpv2_21cq_direct_baseline.py --check"
+  "check_command": "py -3.12 tools/build_dpv2_21cq_direct_baseline.py --check",
+  "v505_source_migration": true,
+  "verified_profile_source": {
+    "path": "assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json",
+    "schema": "hardcore.dpv2.21cq_verified_profile_authority.v1",
+    "source_status_counts": {
+      "EXPLICIT_NON_LOOT": 9,
+      "FULL_21CQ_VERIFIED": 141,
+      "LEGACY_PRESERVED_EXTERNAL_EMPTY": 2,
+      "PROJECT_EXTENSION": 1,
+      "RUNTIME_DISABLED": 3
+    },
+    "compiled_slots": 7611,
+    "sha256_lf": "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515",
+    "reference_claim": "PROJECT_21CQ_REFERENCE_BASELINE_NOT_OFFICIAL_SERVER_PROOF"
+  }
 }

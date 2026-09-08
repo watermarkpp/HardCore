@@ -3,13 +3,26 @@
   "name": "威思而小虫",
   "url": "https://www.21cq.com/mir/Mob.Aspx?ID=103",
   "retrieved_utc": "2026-09-07T18:19:40.562762+00:00",
-  "status": "UNVERIFIED",
-  "parser": "dpv2-drop-strict-table-v5.0",
-  "rows": [],
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "金创药(小量)",
+      "numerator": 1,
+      "denominator": 10,
+      "amount": 1
+    },
+    {
+      "item": "魔法药(小量)",
+      "numerator": 1,
+      "denominator": 15,
+      "amount": 1
+    }
+  ],
   "http_status": 200,
   "declared_charset": "gb2312",
   "actual_encoding": "gb2312",
-  "blocker": "SOURCE_IDENTITY_UNVERIFIED:威思而小虫",
   "raw_sha256": "1792F20D99A3BD87149C787097A374345039885A3D2474A01D2D91D275AEA3A0",
-  "raw_path": "docs/drop/v5/source/monster_103.bin"
+  "raw_path": "docs/drop/v5/source/monster_103.bin",
+  "cache_reparsed": true
 }

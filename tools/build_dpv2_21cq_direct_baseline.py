@@ -1756,6 +1756,10 @@ def desired_outputs() -> dict[Path, str]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    import dpv2_repair_v505 as _v505
+    return _v505.direct_builder_main(argv)
+
+    # Historical implementation retained below as audit/reference only.
     parser = argparse.ArgumentParser()
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--write", action="store_true")

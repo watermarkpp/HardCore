@@ -3,13 +3,56 @@
   "name": "山洞蝙蝠",
   "url": "https://www.21cq.com/mir/Mob.Aspx?ID=43",
   "retrieved_utc": "2026-09-07T18:19:28.429058+00:00",
-  "status": "UNVERIFIED",
-  "parser": "dpv2-drop-strict-table-v5.0",
-  "rows": [],
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "金币",
+      "numerator": 1,
+      "denominator": 4,
+      "amount": 50
+    },
+    {
+      "item": "金创药(小量)",
+      "numerator": 1,
+      "denominator": 15,
+      "amount": 1
+    },
+    {
+      "item": "魔法药(小量)",
+      "numerator": 1,
+      "denominator": 25,
+      "amount": 1
+    },
+    {
+      "item": "回城卷",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "魔力神水",
+      "numerator": 1,
+      "denominator": 800,
+      "amount": 1
+    },
+    {
+      "item": "精神神水",
+      "numerator": 1,
+      "denominator": 800,
+      "amount": 1
+    },
+    {
+      "item": "疾风神水",
+      "numerator": 1,
+      "denominator": 800,
+      "amount": 1
+    }
+  ],
   "http_status": 200,
   "declared_charset": "gb2312",
   "actual_encoding": "gb2312",
-  "blocker": "SOURCE_IDENTITY_UNVERIFIED:山洞蝙蝠",
   "raw_sha256": "BAEC3D09FDB7D264FE6499312E9FBAAC3E87FC3430CD9CE2B63FE7C18BF24613",
-  "raw_path": "docs/drop/v5/source/monster_43.bin"
+  "raw_path": "docs/drop/v5/source/monster_43.bin",
+  "cache_reparsed": true
 }

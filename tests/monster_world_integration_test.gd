@@ -13,6 +13,9 @@ const DomainRuntimeServicesScript := preload(
 const RuntimeMapServiceScript := preload(
 	"res://scripts/map_editor/map_editor_runtime_map_service.gd"
 )
+const V505_SOURCE_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json"
+)
 
 
 func _ready() -> void:
@@ -130,9 +133,34 @@ func _run() -> void:
 
 	print(
 		"MONSTER_WORLD_INTEGRATION_PASS: canonical_ids=6 "
-		+ "bridge_fail_closed=1 loot_rows_76=33 game_root_id_only=1"
+		+ "bridge_fail_closed=1 loot_rows_76=v505_source_authority game_root_id_only=1"
 	)
 	get_tree().quit(0)
+
+
+func _v505_source_record(monster_id: int) -> Dictionary:
+	assert(
+		FileAccess.file_exists(V505_SOURCE_AUTHORITY_PATH),
+		"V505 source authority missing"
+	)
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(V505_SOURCE_AUTHORITY_PATH)
+	)
+	assert(parsed is Dictionary, "V505 source authority invalid JSON")
+	var authority: Dictionary = parsed as Dictionary
+	assert(
+		str(authority.get("schema", ""))
+		== "hardcore.dpv2.21cq_verified_profile_authority.v1",
+		"V505 source authority schema drifted"
+	)
+	for raw_record: Variant in authority.get("records", []):
+		if (
+			raw_record is Dictionary
+			and int((raw_record as Dictionary).get("canonical_monster_id", -1))
+			== monster_id
+		):
+			return (raw_record as Dictionary).duplicate(true)
+	return {}
 
 
 func _test_bridge_contract() -> void:
@@ -304,16 +332,29 @@ func _test_loot_contract() -> void:
 	var loot_runtime := LootRuntimeScript.new()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20260815
+	var source_76 := _v505_source_record(76)
+	assert(
+		str(source_76.get("source_status", "")) == "FULL_21CQ_VERIFIED",
+		"ID 76 must use the V505 full 21CQ source authority"
+	)
+	var expected_source_rows_76 := int(source_76.get("source_row_count", -1))
+	assert(expected_source_rows_76 > 0, "ID 76 V505 source row count invalid")
 	var wooma_boss := loot_runtime.roll_monster_drops(76, rng)
 	assert(bool(wooma_boss.get("configured", false)), "ID 76 drop profile not configured")
-	assert(int(wooma_boss.get("source_entry_count", 0)) == 33, "ID 76 must expose all 33 source rows")
-	assert(int(wooma_boss.get("resolution_attempted_count", 0)) == 33, "ID 76 rows did not enter item resolution")
+	assert(
+		int(wooma_boss.get("source_entry_count", 0)) == expected_source_rows_76,
+		"ID 76 runtime did not expose the complete V505 source profile"
+	)
+	assert(
+		int(wooma_boss.get("resolution_attempted_count", 0)) == expected_source_rows_76,
+		"ID 76 V505 source rows did not all enter item resolution"
+	)
 	assert(int(wooma_boss.get("resolved_entry_count", 0)) > 0, "ID 76 is configured but can never produce an item")
 	assert(
 		int(wooma_boss.get("resolved_entry_count", -1))
 		+ (wooma_boss.get("rejected_entries", []) as Array).size()
-		== 33,
-		"every ID 76 row must resolve or carry a stable rejection"
+		== expected_source_rows_76,
+		"every ID 76 V505 source row must resolve or carry a stable rejection"
 	)
 	for monster_id: int in [68]:
 		var ordinary_roll := loot_runtime.roll_monster_drops(

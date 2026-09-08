@@ -40,6 +40,7 @@ SOURCE_AUDIT = REPORT + 'source_audit.json'
 SOURCE_SEAL = REPORT + 'source_audit.sha256'
 INT_MAX = 2147483647
 HISTORICAL_SOURCE_HASH = '59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013'
+V504_SOURCE_EXCEPTION_AUTHORITY = 'tools/dpv2_repair_v504_author_decision.json'
 
 
 class RepairError(RuntimeError):
@@ -200,19 +201,43 @@ def denominator_modifier(monster_class: str, item_id: int, equipment_ids: set[in
 
 
 class TableParser(HTMLParser):
-    """Preserve individual table cells; do not flatten unrelated site tables."""
+    """Parse 21CQ tables while preserving the immediately preceding <strong> section.
+
+    21CQ Mob.aspx pages do not use a two-column drop table. The formal drop
+    section is headed by `<strong>{monster} 爆什么装备物品</strong>` and the
+    following table contains one textual rule per row, e.g. `1/700 烈火剑法`.
+    """
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.tables: list[list[list[str]]] = []
+        self.tables: list[dict[str, Any]] = []
         self.stack: list[dict[str, Any]] = []
         self.headings: list[str] = []
         self.heading: list[str] | None = None
+        self.heading_tag: str | None = None
+        self.selectables: list[str] = []
+        self.selectable: list[str] | None = None
+        self.strongs: list[str] = []
+        self.strong: list[str] | None = None
+        self.last_strong = ''
+
+    @staticmethod
+    def _normalize(value: str) -> str:
+        return re.sub(r'\s+', ' ', value).strip()
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attr = {key: (value or '') for key, value in attrs}
         if tag in ('title', 'h1', 'h2'):
+            self.heading_tag = tag
             self.heading = []
+        if tag == 'span' and 'selectable' in attr.get('class', '').split():
+            self.selectable = []
+        if tag == 'strong':
+            self.strong = []
         if tag == 'table':
-            self.stack.append({'rows': [], 'row': None, 'cell': None})
+            self.stack.append({
+                'rows': [], 'row': None, 'cell': None,
+                'anchor': self.last_strong,
+            })
         elif self.stack and tag == 'tr':
             self.stack[-1]['row'] = []
         elif self.stack and tag in ('td', 'th'):
@@ -223,26 +248,38 @@ class TableParser(HTMLParser):
     def handle_data(self, data: str) -> None:
         if self.heading is not None:
             self.heading.append(data)
+        if self.selectable is not None:
+            self.selectable.append(data)
+        if self.strong is not None:
+            self.strong.append(data)
         if self.stack and self.stack[-1]['cell'] is not None:
             self.stack[-1]['cell'].append(data)
 
     def handle_endtag(self, tag: str) -> None:
-        if tag in ('title', 'h1', 'h2') and self.heading is not None:
-            self.headings.append(''.join(self.heading).strip())
+        if self.heading is not None and tag == self.heading_tag:
+            self.headings.append(self._normalize(''.join(self.heading)))
             self.heading = None
+            self.heading_tag = None
+        if self.selectable is not None and tag == 'span':
+            self.selectables.append(self._normalize(''.join(self.selectable)))
+            self.selectable = None
+        if self.strong is not None and tag == 'strong':
+            value = self._normalize(''.join(self.strong))
+            self.strongs.append(value)
+            self.last_strong = value
+            self.strong = None
         if not self.stack:
             return
-        t = self.stack[-1]
-        if tag in ('td', 'th') and t['cell'] is not None:
-            if t['row'] is not None:
-                t['row'].append(re.sub(r'\s+', ' ', ''.join(t['cell'])).strip())
-            t['cell'] = None
-        elif tag == 'tr' and t['row'] is not None:
-            t['rows'].append(t['row'])
-            t['row'] = None
+        table = self.stack[-1]
+        if tag in ('td', 'th') and table['cell'] is not None:
+            if table['row'] is not None:
+                table['row'].append(self._normalize(''.join(table['cell'])))
+            table['cell'] = None
+        elif tag == 'tr' and table['row'] is not None:
+            table['rows'].append(table['row'])
+            table['row'] = None
         elif tag == 'table':
-            self.tables.append(self.stack.pop()['rows'])
-
+            self.tables.append(self.stack.pop())
 
 def decode_source(raw: bytes, declared: str) -> tuple[str, str]:
     # 21CQ's existing attribute importer documents GB2312/GB18030 fallback.
@@ -260,33 +297,73 @@ def decode_source(raw: bytes, declared: str) -> tuple[str, str]:
 def parse_drop_table(text: str, expected_name: str) -> list[dict[str, Any]]:
     parser = TableParser()
     parser.feed(text)
-    # Exact title/name token, never a prefix match that merges suffix variants.
-    title_tokens = [re.split(r'[_|｜\-—]', h)[0].strip() for h in parser.headings]
-    require(expected_name in parser.headings or expected_name in title_tokens,
-            f'SOURCE_IDENTITY_UNVERIFIED:{expected_name}')
-    candidates = []
-    for table in parser.tables:
-        if not table:
-            continue
-        header_at = next((i for i, row in enumerate(table[:5])
-                          if any(x in ' '.join(row) for x in ('爆率', '掉率', '掉落概率'))
-                          and any(x in ' '.join(row) for x in ('物品', '名称', '名字'))), None)
-        if header_at is None:
-            continue
-        header = table[header_at]
-        pi = next((i for i, x in enumerate(header) if any(k in x for k in ('爆率', '掉率', '掉落概率'))), None)
-        ni = next((i for i, x in enumerate(header) if any(k in x for k in ('物品', '名称', '名字'))), None)
-        ai = next((i for i, x in enumerate(header) if x in ('数量', '个数')), None)
+
+    # Exact identity only. `尸王` must not validate `尸王1`, and suffix variants
+    # are never merged. 21CQ provides both the selectable monster token and a
+    # title prefix such as `传奇邪恶毒蛇属性_...`.
+    selectable_ok = expected_name in parser.selectables
+    title_ok = any(value.startswith(f'传奇{expected_name}属性') for value in parser.headings)
+    require(selectable_ok or title_ok, f'SOURCE_IDENTITY_UNVERIFIED:{expected_name}')
+
+    expected_anchor = f'{expected_name} 爆什么装备物品'
+    candidates = [
+        table for table in parser.tables
+        if TableParser._normalize(str(table.get('anchor', ''))) == expected_anchor
+    ]
+    require(len(candidates) == 1, f'DROP_TABLE_UNVERIFIED:count={len(candidates)}')
+    rows = candidates[0]['rows']
+
+    # Current 21CQ format: one textual rule per row. Preserve duplicates and row
+    # order. Gold encodes amount in the same cell (`1/1 金币 5500`).
+    parsed: list[dict[str, Any]] = []
+    one_column = all(len([cell for cell in row if cell.strip()]) <= 1 for row in rows)
+    if one_column:
+        for row in rows:
+            cells = [TableParser._normalize(cell) for cell in row if cell.strip()]
+            if not cells:
+                continue
+            cell = cells[0]
+            match = re.fullmatch(r'([1-9]\d*)\s*/\s*([1-9]\d*)\s+(.+?)\s*', cell)
+            require(match is not None, f'UNSUPPORTED_DROP_ROW:{cell}')
+            numerator, denominator = int(match.group(1)), int(match.group(2))
+            checked_fraction(numerator, denominator)
+            tail = TableParser._normalize(match.group(3))
+            gold = re.fullmatch(r'金币\s*([1-9]\d*)', tail)
+            if gold is not None:
+                label, amount = '金币', int(gold.group(1))
+            else:
+                label, amount = tail, 1
+            require(bool(label), 'EMPTY_SOURCE_LABEL')
+            parsed.append({
+                'item': label,
+                'numerator': numerator,
+                'denominator': denominator,
+                'amount': amount,
+            })
+    else:
+        # Backward-compatible fallback for any future/legacy 21CQ page that
+        # really does expose explicit probability/name columns.
+        header_at = next((
+            index for index, row in enumerate(rows[:5])
+            if any(token in ' '.join(row) for token in ('爆率', '掉率', '掉落概率'))
+            and any(token in ' '.join(row) for token in ('物品', '名称', '名字'))
+        ), None)
+        require(header_at is not None, 'UNSUPPORTED_DROP_HEADER')
+        header = rows[header_at]
+        pi = next((i for i, value in enumerate(header)
+                   if any(token in value for token in ('爆率', '掉率', '掉落概率'))), None)
+        ni = next((i for i, value in enumerate(header)
+                   if any(token in value for token in ('物品', '名称', '名字'))), None)
+        ai = next((i for i, value in enumerate(header) if value in ('数量', '个数')), None)
         require(pi is not None and ni is not None and pi != ni, 'UNSUPPORTED_DROP_HEADER')
-        parsed = []
-        for row in table[header_at + 1:]:
+        for row in rows[header_at + 1:]:
             if not any(row):
                 continue
             require(max(pi, ni) < len(row), 'INCOMPLETE_DROP_ROW')
             match = re.fullmatch(r'([1-9]\d*)\s*/\s*([1-9]\d*)', row[pi])
             require(match is not None, f'UNSUPPORTED_DROP_PROBABILITY:{row[pi]}')
-            n, d = map(int, match.groups())
-            checked_fraction(n, d)
+            numerator, denominator = map(int, match.groups())
+            checked_fraction(numerator, denominator)
             label = row[ni].strip()
             require(bool(label), 'EMPTY_SOURCE_LABEL')
             amount = 1
@@ -294,34 +371,88 @@ def parse_drop_table(text: str, expected_name: str) -> list[dict[str, Any]]:
                 require(ai < len(row) and re.fullmatch(r'[1-9]\d*', row[ai]) is not None,
                         'SOURCE_AMOUNT_UNVERIFIED')
                 amount = int(row[ai])
-            parsed.append({'item': label, 'numerator': n, 'denominator': d, 'amount': amount})
-        require(bool(parsed), 'EMPTY_DROP_TABLE_NOT_A_NO_DROP_PROOF')
-        candidates.append(parsed)
-    require(len(candidates) == 1, f'DROP_TABLE_UNVERIFIED:count={len(candidates)}')
-    return candidates[0]
+            parsed.append({
+                'item': label,
+                'numerator': numerator,
+                'denominator': denominator,
+                'amount': amount,
+            })
 
+    require(bool(parsed), 'EMPTY_DROP_TABLE_NOT_A_NO_DROP_PROOF')
+    return parsed
 
 def get_page(monster_id: int, name: str) -> dict[str, Any]:
     relative = REPORT + f'source/monster_{monster_id}.json'
     raw_path = REPORT + f'source/monster_{monster_id}.bin'
-    if (ROOT / relative).exists():
-        meta = read(relative)
-        require(meta.get('monster_id') == monster_id and meta.get('name') == name, 'CACHED_PAGE_IDENTITY_DRIFT')
-        if meta.get('status') == 'PARSED':
-            require(raw_hash(raw_path) == meta['raw_sha256'], 'CACHED_PAGE_HASH_DRIFT')
-        return meta
-    url = policy()['source_url_template'].format(monster_id=monster_id)
-    meta = {'monster_id': monster_id, 'name': name, 'url': url,
+    meta_path = ROOT / relative
+    cache_path = ROOT / raw_path
+    parser_version = 'dpv2-drop-anchored-one-column-v5.0.3'
+
+    # V5.0.2 already downloaded the raw 21CQ pages. Reparse those bytes even if
+    # the old companion JSON says UNVERIFIED; returning stale metadata was the
+    # second half of the V5.0.2 closure failure.
+    if cache_path.exists():
+        meta = read(relative) if meta_path.exists() else {
+            'monster_id': monster_id,
+            'name': name,
+            'url': policy()['source_url_template'].format(monster_id=monster_id),
             'retrieved_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
-            'status': 'UNVERIFIED', 'parser': 'dpv2-drop-strict-table-v5.0', 'rows': []}
+        }
+        require(meta.get('monster_id') == monster_id and meta.get('name') == name,
+                'CACHED_PAGE_IDENTITY_DRIFT')
+        raw = cache_path.read_bytes()
+        digest = hashlib.sha256(raw).hexdigest().upper()
+        if meta.get('raw_sha256'):
+            require(str(meta['raw_sha256']).upper() == digest, 'CACHED_PAGE_HASH_DRIFT')
+        try:
+            text, encoding = decode_source(raw, str(meta.get('declared_charset') or 'gb2312'))
+            rows = parse_drop_table(text, name)
+            meta.update({
+                'status': 'PARSED',
+                'parser': parser_version,
+                'rows': rows,
+                'actual_encoding': encoding,
+                'raw_sha256': digest,
+                'raw_path': raw_path,
+                'cache_reparsed': True,
+            })
+            meta.pop('blocker', None)
+        except (OSError, ValueError, RepairError) as exc:
+            meta.update({
+                'status': 'UNVERIFIED',
+                'parser': parser_version,
+                'rows': [],
+                'blocker': str(exc),
+                'raw_sha256': digest,
+                'raw_path': raw_path,
+                'cache_reparsed': True,
+            })
+        dump(relative, meta)
+        return meta
+
+    # Network is only a fallback for genuinely missing cache files.
+    url = policy()['source_url_template'].format(monster_id=monster_id)
+    meta = {
+        'monster_id': monster_id,
+        'name': name,
+        'url': url,
+        'retrieved_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
+        'status': 'UNVERIFIED',
+        'parser': parser_version,
+        'rows': [],
+    }
     raw = b''
     try:
-        request = urllib.request.Request(url, headers={'User-Agent': 'HardCore-DPV2-audit/5.0'})
+        request = urllib.request.Request(url, headers={'User-Agent': 'HardCore-DPV2-audit/5.0.3'})
         with urllib.request.urlopen(request, timeout=20) as response:
             actual = urllib.parse.urlparse(response.geturl())
             query = urllib.parse.parse_qs(actual.query)
-            require(actual.hostname == 'www.21cq.com' and actual.path.lower() == '/mir/mob.aspx'
-                    and (query.get('ID') or query.get('id')) == [str(monster_id)], 'SOURCE_REDIRECT_IDENTITY')
+            require(
+                actual.hostname == 'www.21cq.com'
+                and actual.path.lower() == '/mir/mob.aspx'
+                and (query.get('ID') or query.get('id')) == [str(monster_id)],
+                'SOURCE_REDIRECT_IDENTITY',
+            )
             meta['http_status'] = int(response.status)
             meta['declared_charset'] = response.headers.get_content_charset() or 'gb2312'
             raw = response.read(4 * 1024 * 1024 + 1)
@@ -334,14 +465,75 @@ def get_page(monster_id: int, name: str) -> dict[str, Any]:
         meta['blocker'] = str(exc)
     finally:
         if raw:
-            path = ROOT / raw_path
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(raw)
+            cache_path.parent.mkdir(parents=True, exist_ok=True)
+            cache_path.write_bytes(raw)
             meta['raw_sha256'] = hashlib.sha256(raw).hexdigest().upper()
             meta['raw_path'] = raw_path
         dump(relative, meta)
     return meta
 
+def v504_source_exception_authority() -> dict[str, Any]:
+    data = read(V504_SOURCE_EXCEPTION_AUTHORITY)
+    require(data.get('schema') == 'hardcore.dpv2.v504.source_exception_authority.v1',
+            'V504_EXCEPTION_AUTHORITY_SCHEMA')
+    require(data.get('base_candidate_sha') == '342891ab884150c0e81084c932df8205484e6388',
+            'V504_EXCEPTION_AUTHORITY_BASE')
+    exceptions = data.get('exceptions')
+    require(isinstance(exceptions, list) and [int(x.get('monster_id', -1)) for x in exceptions] == [75, 123],
+            'V504_EXCEPTION_AUTHORITY_IDS')
+    return data
+
+
+def v504_empty_page_exception(monster_id: int, old: dict[str, Any], page: dict[str, Any]) -> dict[str, Any] | None:
+    authority = v504_source_exception_authority()
+    decision = next((x for x in authority['exceptions'] if int(x['monster_id']) == monster_id), None)
+    if decision is None:
+        return None
+
+    require(str(old.get('name', '')) == str(decision['name']), f'V504_EXCEPTION_NAME:{monster_id}')
+    require(len(old.get('rows', [])) == int(decision['expected_local_rows']),
+            f'V504_EXCEPTION_LOCAL_COUNT:{monster_id}')
+    raw_path = str(decision['raw_path'])
+    require(page.get('raw_path') == raw_path, f'V504_EXCEPTION_RAW_PATH:{monster_id}')
+    require(raw_hash(raw_path) == str(decision['raw_sha256']).upper(),
+            f'V504_EXCEPTION_RAW_HASH:{monster_id}')
+
+    raw = (ROOT / raw_path).read_bytes()
+    text, _encoding = decode_source(raw, str(page.get('declared_charset') or 'gb2312'))
+    parser = TableParser()
+    parser.feed(text)
+    expected_name = str(decision['name'])
+    selectable_ok = expected_name in parser.selectables
+    title_ok = any(value.startswith(f'传奇{expected_name}属性') for value in parser.headings)
+    require(selectable_ok or title_ok, f'V504_EXCEPTION_IDENTITY:{monster_id}')
+
+    expected_anchor = str(decision['expected_anchor'])
+    candidates = [
+        table for table in parser.tables
+        if TableParser._normalize(str(table.get('anchor', ''))) == expected_anchor
+    ]
+    require(len(candidates) == 1, f'V504_EXCEPTION_ANCHOR_COUNT:{monster_id}:{len(candidates)}')
+    nonempty = [
+        TableParser._normalize(cell)
+        for row in candidates[0]['rows']
+        for cell in row
+        if TableParser._normalize(cell)
+    ]
+    require(not nonempty, f'V504_EXCEPTION_TABLE_NOT_EMPTY:{monster_id}')
+
+    return {
+        'monster_id': monster_id,
+        'name': expected_name,
+        'status': authority['policy']['source_status'],
+        'local_rows_preserved': len(old['rows']),
+        'source_rows': 0,
+        'raw_path': raw_path,
+        'raw_sha256': str(decision['raw_sha256']).upper(),
+        'decision': authority['author_decision'],
+        'book_balance_enabled': False,
+        'variant_inheritance': False,
+        'delete_local_slots': False,
+    }
 
 def source_audit() -> dict[str, Any]:
     """Network read/audit only. No gameplay files are changed here."""
@@ -375,6 +567,19 @@ def source_audit() -> dict[str, Any]:
         page = get_page(mid, old['name'])
         identity['source_url'] = page['url']
         if page['status'] != 'PARSED':
+            exception = v504_empty_page_exception(mid, old, page)
+            if exception is not None:
+                identity['source_status'] = exception['status']
+                identity['source_exception'] = exception
+                result.setdefault('source_exceptions', []).append(exception)
+                for row in old['rows']:
+                    result['slots'].append({
+                        'monster_id': mid,
+                        'slot_index': row['slot_index'],
+                        'item': row['item'],
+                        'status': 'LEGACY_PRESERVED_EXTERNAL_EMPTY_TABLE',
+                    })
+                continue
             identity['blocker'] = page.get('blocker', 'UNVERIFIED')
             result['blockers'].append({'monster_id': mid, 'status': 'UNVERIFIED', 'reason': identity['blocker']})
             for row in old['rows']:
@@ -426,39 +631,77 @@ def source_audit() -> dict[str, Any]:
                     mismatches.append(row)
             if not mismatches:
                 continue
-            if len(mismatches) != 1 or len(remaining) != 1:
+            if len(mismatches) != len(remaining):
                 all_complete = False
                 if key[1] in books:
                     books_complete = False
-                result['blockers'].append({'monster_id': mid, 'reward_key': list(key), 'status': 'AMBIGUOUS_OCCURRENCE_MATCH'})
+                result['blockers'].append({
+                    'monster_id': mid,
+                    'reward_key': list(key),
+                    'status': 'RESIDUAL_OCCURRENCE_COUNT_MISMATCH',
+                    'local_residual': len(mismatches),
+                    'source_residual': len(remaining),
+                })
                 continue
-            row, replacement = mismatches[0], remaining[0]
-            prior = next((c for c in historical(CORRECTIONS)['corrections'] if c['stable_monster_id'] == mid and c['source_slot_index'] == row['slot_index']), None)
-            if prior is not None:
-                if Fraction(prior['corrected_base_numerator'], prior['corrected_base_denominator']) == Fraction(replacement['numerator'], replacement['denominator']):
-                    result['slots'].append({'monster_id': mid, 'slot_index': row['slot_index'], 'status': 'MATCH_EXISTING_CORRECTION'})
+
+            ordered_local = sorted(
+                mismatches,
+                key=lambda x: (int(x.get('line_number', -1)), str(x.get('slot_index', '')))
+            )
+            for row, replacement in zip(ordered_local, remaining):
+                prior = next((
+                    c for c in historical(CORRECTIONS)['corrections']
+                    if c['stable_monster_id'] == mid and c['source_slot_index'] == row['slot_index']
+                ), None)
+                if prior is not None:
+                    if Fraction(
+                        prior['corrected_base_numerator'],
+                        prior['corrected_base_denominator']
+                    ) == Fraction(replacement['numerator'], replacement['denominator']):
+                        result['slots'].append({
+                            'monster_id': mid,
+                            'slot_index': row['slot_index'],
+                            'status': 'MATCH_EXISTING_CORRECTION'
+                        })
+                        continue
+                    all_complete = False
+                    if key[1] in books:
+                        books_complete = False
+                    result['blockers'].append({
+                        'monster_id': mid,
+                        'slot_index': row['slot_index'],
+                        'status': 'SOURCE_CONFLICT_WITH_PRIOR_CORRECTION'
+                    })
                     continue
-                all_complete = False
-                if key[1] in books:
-                    books_complete = False
-                result['blockers'].append({'monster_id': mid, 'slot_index': row['slot_index'], 'status': 'SOURCE_CONFLICT_WITH_PRIOR_CORRECTION'})
-                continue
-            correction = {
-                'correction_id': f"v5.21cq.m{mid}.{row['slot_index']}",
-                'stable_monster_id': mid, 'source_monster_name': old['name'],
-                'source_line_number': row['line_number'], 'source_slot_index': row['slot_index'],
-                'source_item_label': row['item'], 'original_chance': row['chance'],
-                'corrected_base_numerator': replacement['numerator'],
-                'corrected_base_denominator': replacement['denominator'],
-                'reason': 'SOURCE_CORRECTION_21CQ_VERIFIED_EXACT_REWARD_OCCURRENCE',
-                'evidence': {'url': page['url'], 'retrieved_on': page['retrieved_utc'],
-                             'raw_path': page['raw_path'], 'raw_sha256': page['raw_sha256'],
-                             'reported_rule': f"{replacement['numerator']}/{replacement['denominator']} {row['item']}",
-                             'authority': 'FROZEN_21CQ_COMPLETE_TABLE'}
-            }
-            result['proposed_corrections'].append(correction)
-            result['slots'].append({'monster_id': mid, 'slot_index': row['slot_index'], 'status': 'WRONG_PROBABILITY',
-                                    'old': row['chance'], 'new': f"{replacement['numerator']}/{replacement['denominator']}"})
+                correction = {
+                    'correction_id': f"v5.21cq.m{mid}.{row['slot_index']}",
+                    'stable_monster_id': mid,
+                    'source_monster_name': old['name'],
+                    'source_line_number': row['line_number'],
+                    'source_slot_index': row['slot_index'],
+                    'source_item_label': row['item'],
+                    'original_chance': row['chance'],
+                    'corrected_base_numerator': replacement['numerator'],
+                    'corrected_base_denominator': replacement['denominator'],
+                    'reason': 'SOURCE_CORRECTION_21CQ_VERIFIED_EXACT_REWARD_MULTISET_OCCURRENCE',
+                    'evidence': {
+                        'url': page['url'],
+                        'retrieved_on': page['retrieved_utc'],
+                        'raw_path': page['raw_path'],
+                        'raw_sha256': page['raw_sha256'],
+                        'reported_rule': f"{replacement['numerator']}/{replacement['denominator']} {row['item']}",
+                        'authority': 'FROZEN_21CQ_COMPLETE_TABLE',
+                        'occurrence_pairing': 'EXACT_REWARD_KEY_EQUAL_COUNT_STABLE_LOCAL_ORDER_TO_SOURCE_PAGE_ORDER'
+                    }
+                }
+                result['proposed_corrections'].append(correction)
+                result['slots'].append({
+                    'monster_id': mid,
+                    'slot_index': row['slot_index'],
+                    'status': 'WRONG_PROBABILITY',
+                    'old': row['chance'],
+                    'new': f"{replacement['numerator']}/{replacement['denominator']}"
+                })
         identity['source_status'] = 'VERIFIED' if all_complete else 'PARTIAL'
         if books_complete and any(k[1] in books for k in local):
             result['verified_book_monster_ids'].append(mid)

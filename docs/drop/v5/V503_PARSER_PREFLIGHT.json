@@ -1,0 +1,68 @@
+{
+  "schema": "hardcore.dpv2.v503_parser_preflight.v1",
+  "expected_direct_identities": 143,
+  "parsed_direct_identities": 141,
+  "failures": [
+    {
+      "monster_id": 75,
+      "name": "沃玛卫士2",
+      "reason": "EMPTY_DROP_TABLE_NOT_A_NO_DROP_PROOF"
+    },
+    {
+      "monster_id": 123,
+      "name": "邪恶钳虫9",
+      "reason": "EMPTY_DROP_TABLE_NOT_A_NO_DROP_PROOF"
+    }
+  ],
+  "golden_141": {
+    "烈火剑法": {
+      "actual": [
+        1,
+        700,
+        1
+      ],
+      "expected": [
+        1,
+        700,
+        1
+      ]
+    },
+    "召唤神兽": {
+      "actual": [
+        1,
+        700,
+        1
+      ],
+      "expected": [
+        1,
+        700,
+        1
+      ]
+    },
+    "冰咆哮": {
+      "actual": [
+        1,
+        705,
+        1
+      ],
+      "expected": [
+        1,
+        705,
+        1
+      ]
+    },
+    "金币": {
+      "actual": [
+        1,
+        1,
+        5500
+      ],
+      "expected": [
+        1,
+        1,
+        5500
+      ]
+    }
+  },
+  "pass": false
+}

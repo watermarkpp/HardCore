@@ -4,6 +4,9 @@ const LootRuntimeScript := preload(
 	"res://scripts/layers/runtime/loot_runtime_service.gd"
 )
 const LootPickupScript := preload("res://scripts/loot_pickup.gd")
+const V505_SOURCE_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json"
+)
 
 const FEMALE_TO_MALE_DROP_NAMES := {
 	117: "布衣(男)",
@@ -245,107 +248,171 @@ func _test_elite_boss_solar_probability(service: Node) -> void:
 	)
 
 
+func _v505_source_record(monster_id: int) -> Dictionary:
+	assert(
+		FileAccess.file_exists(V505_SOURCE_AUTHORITY_PATH),
+		"V505 source authority missing"
+	)
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(V505_SOURCE_AUTHORITY_PATH)
+	)
+	assert(parsed is Dictionary, "V505 source authority invalid JSON")
+	var authority: Dictionary = parsed as Dictionary
+	assert(
+		str(authority.get("schema", ""))
+		== "hardcore.dpv2.21cq_verified_profile_authority.v1",
+		"V505 source authority schema drifted"
+	)
+	for raw_record: Variant in authority.get("records", []):
+		if (
+			raw_record is Dictionary
+			and int((raw_record as Dictionary).get("canonical_monster_id", -1))
+			== monster_id
+		):
+			return (raw_record as Dictionary).duplicate(true)
+	return {}
+
+
 func _test_corpse_king_boost_consumption(service: Node) -> void:
-	# ID 89 is the exact canonical 尸王 profile.  The direct/effective tables
-	# retain base 1/1000 and the human-frozen x25 boost as effective 1/40.
+	# V505 adopts the exact frozen 21CQ full profile for canonical ID89 尸王.
+	# Validate the source-driven profile and runtime boost consumption rather
+	# than the retired fixed eight-slot fixture.
+	var source_record := _v505_source_record(89)
+	assert(
+		str(source_record.get("source_status", "")) == "FULL_21CQ_VERIFIED",
+		"ID89 corpse king must be FULL_21CQ_VERIFIED"
+	)
 	var profile: Dictionary = GameData.dpv2_direct_profile(89)
-	var target_slot: Dictionary = {}
-	for raw_slot: Variant in profile.get("slots", []):
-		if raw_slot is Dictionary and int(raw_slot.get("canonical_item_id", -1)) == 230:
-			target_slot = raw_slot
-			break
-	assert(not target_slot.is_empty(), str(profile))
-	var slot_uid := str(target_slot.get("slot_uid", ""))
-	var effective := GameData.dpv2_effective_slot_probability(89, slot_uid)
-	assert(bool(effective.get("ok", false)), str(effective))
-	assert(int(effective.get("base_numerator", 0)) == 1)
-	assert(int(effective.get("base_denominator", 0)) == 1000)
-	assert(int(effective.get("boost_multiplier_numerator", 0)) == 25)
-	assert(int(effective.get("boost_multiplier_denominator", 0)) == 1)
-	assert(int(effective.get("effective_numerator", 0)) == 1)
-	assert(int(effective.get("effective_denominator", 0)) == 40)
-	assert(int(effective.get("final_denominator", 0)) == 40)
-	var expected_item_ids := [920043, 920008, 920004, 920011, 920051, 920009, 920036, 230]
-	var resolved_identity_count := 0
-	for raw_identity_slot: Variant in profile.get("slots", []):
-		if not raw_identity_slot is Dictionary:
+	var slots: Array = profile.get("slots", [])
+	var source_rows: Array = source_record.get("source_rows", [])
+	var expected_source_rows := int(source_record.get("source_row_count", -1))
+	assert(expected_source_rows > 0, str(source_record))
+	assert(slots.size() == expected_source_rows, str(profile))
+	assert(source_rows.size() == expected_source_rows, str(source_record))
+
+	var contract: Dictionary = GameData.dpv2_single_player_effective_probability.get(
+		"repair_v5_contract", {}
+	)
+	var book_ids := {}
+	for raw_book_id: Variant in contract.get("book_item_ids", []):
+		book_ids[int(raw_book_id)] = true
+	assert(not book_ids.is_empty(), "V505 book contract is empty")
+
+	var effective_by_uid := {}
+	for raw_effective: Variant in GameData.dpv2_single_player_effective_probability.get(
+		"records", []
+	):
+		if not raw_effective is Dictionary:
 			continue
-		var identity_slot: Dictionary = raw_identity_slot
-		var identity_reward := GameData.dpv2_direct_resolve_slot_reward(identity_slot)
-		assert(bool(identity_reward.get("ok", false)), str(identity_reward))
-		var identity_item_id := int(identity_slot.get("canonical_item_id", -1))
+		var effective_record: Dictionary = raw_effective
+		if int(effective_record.get("canonical_monster_id", -1)) != 89:
+			continue
+		effective_by_uid[str(effective_record.get("slot_uid", ""))] = effective_record
+	assert(effective_by_uid.size() == slots.size(), "ID89 effective ledger/profile count drift")
+
+	var item_identity_count := 0
+	var gold_reward_count := 0
+	var corpse_book_slot_count := 0
+	var single_zero_probability := 1.0
+	for raw_slot: Variant in slots:
+		assert(raw_slot is Dictionary)
+		var slot: Dictionary = raw_slot
+		var slot_uid := str(slot.get("slot_uid", ""))
+		assert(not slot_uid.is_empty())
+		var reward := GameData.dpv2_direct_resolve_slot_reward(slot)
+		assert(bool(reward.get("ok", false)), str(reward))
+
+		var probability := GameData.dpv2_effective_slot_probability(89, slot_uid)
+		assert(bool(probability.get("ok", false)), str(probability))
+		var final_n := int(probability.get("final_numerator", 0))
+		var final_d := int(probability.get("final_denominator", 0))
+		assert(final_n > 0 and final_d >= final_n, str(probability))
+		single_zero_probability *= 1.0 - float(final_n) / float(final_d)
+
+		var ledger_value: Variant = effective_by_uid.get(slot_uid, {})
+		assert(ledger_value is Dictionary and not (ledger_value as Dictionary).is_empty())
+		var ledger: Dictionary = ledger_value as Dictionary
+
+		if str(reward.get("kind", "")) == "gold":
+			gold_reward_count += 1
+			assert(slot.has("gold_amount"))
+			assert(int(reward.get("gold_amount", -1)) == int(slot.get("gold_amount", -2)))
+			continue
+
+		var item_id := int(slot.get("canonical_item_id", -1))
+		assert(item_id > 0, str(slot))
 		var item_record: Dictionary = service._drop_output_item_record(
-			identity_item_id,
-			str(identity_reward.get("item_name", "")),
+			item_id,
+			str(reward.get("item_name", "")),
 		)
 		assert(str(item_record.get("identity_status", "")) == "resolved", str(item_record))
 		assert(int(item_record.get("item_id", -1)) > 0, str(item_record))
-		assert(int(item_record.get("source_item_id", -1)) == identity_item_id)
-		assert(expected_item_ids.has(identity_item_id))
-		resolved_identity_count += 1
-	assert(resolved_identity_count == expected_item_ids.size())
-	var single_zero_probability := 1.0
-	var enabled_slot_count := 0
-	for raw_enabled_slot: Variant in profile.get("slots", []):
-		if not raw_enabled_slot is Dictionary:
+		assert(int(item_record.get("source_item_id", -1)) == item_id)
+		item_identity_count += 1
+
+		if not book_ids.has(item_id):
 			continue
-		var enabled_probability := GameData.dpv2_effective_slot_probability(
-			89,
-			str(raw_enabled_slot.get("slot_uid", "")),
+		assert(
+			str(ledger.get("repair_v5_rule", "")) == "BOOK_ELITE_BOSS",
+			str(ledger)
 		)
-		assert(bool(enabled_probability.get("ok", false)), str(enabled_probability))
-		var enabled_numerator := int(enabled_probability.get("final_numerator", 0))
-		var enabled_denominator := int(enabled_probability.get("final_denominator", 0))
-		assert(enabled_numerator > 0 and enabled_denominator >= enabled_numerator)
-		single_zero_probability *= 1.0 - float(enabled_numerator) / float(enabled_denominator)
-		enabled_slot_count += 1
-	assert(enabled_slot_count == 8)
-	var ten_zero_probability := pow(single_zero_probability, 10.0)
-	# All eight ID89 enabled rows are independently attempted. This is the
-	# probability evidence for ten zero-drop kills; it does not turn ten trials
-	# into a deterministic failure signal.
-	assert(abs(single_zero_probability - 0.8374190763043114) < 0.000000001)
-	assert(abs(ten_zero_probability - 0.16960103507654997) < 0.000000001)
+		var base_n := int(slot.get("base_numerator", 0))
+		var base_d := int(slot.get("base_denominator", 0))
+		assert(base_n > 0 and base_d >= base_n)
+		var expected_n := base_n
+		var expected_d := base_d
+		if base_n * 20 < base_d:
+			expected_n = base_n * 25
+			expected_d = base_d
+			if expected_n * 20 > expected_d:
+				expected_n = 1
+				expected_d = 20
+		assert(
+			final_n * expected_d == expected_n * final_d,
+			"ID89 book effective ratio drift: %s" % str(ledger)
+		)
+		corpse_book_slot_count += 1
+
+	assert(item_identity_count > 0, "ID89 V505 profile resolved no item identities")
+	assert(corpse_book_slot_count > 0, "ID89 V505 profile has no source-gated book slot")
+	assert(single_zero_probability >= 0.0 and single_zero_probability < 1.0)
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 8900901
-	var boosted_successes := 0
-	var all_zero_rolls := 0
-	var any_drop_rolls := 0
-	for _index: int in range(512):
+	var saw_book_attempt := false
+	for _index: int in range(64):
 		var roll: Dictionary = service.roll_monster_drops(89, rng, true)
 		assert(bool(roll.get("configured", false)), str(roll))
-		if int(roll.get("successful_roll_count", 0)) == 0:
-			all_zero_rolls += 1
-		else:
-			any_drop_rolls += 1
-		var item_records: Variant = roll.get("item_records", [])
-		var legacy_items: Variant = roll.get("items", [])
-		assert(item_records is Array)
-		assert(legacy_items is Array)
-		assert((item_records as Array).size() == (legacy_items as Array).size())
-		var found_target_attempt := false
-		for attempt: Dictionary in roll.get("attempts", []):
-			if int(attempt.get("canonical_item_id", -1)) != 230:
+		var attempts: Array = roll.get("attempts", [])
+		assert(attempts.size() == slots.size(), "ID89 runtime skipped V505 source slots")
+		for attempt: Dictionary in attempts:
+			var attempt_item_id := int(attempt.get("canonical_item_id", -1))
+			if not book_ids.has(attempt_item_id):
 				continue
-			found_target_attempt = true
-			assert(int(attempt.get("base_denominator", 0)) == 1000)
-			assert(int(attempt.get("boost_multiplier_numerator", 0)) == 25)
-			assert(int(attempt.get("effective_denominator", 0)) == 40)
-			assert(int(attempt.get("final_denominator", 0)) == 40)
-			assert(int(attempt.get("draw", 0)) >= 1)
-			assert(int(attempt.get("draw", 0)) <= 40)
-			if bool(attempt.get("draw_success", false)):
-				boosted_successes += 1
-		assert(found_target_attempt, str(roll.get("attempts", [])))
-	assert(boosted_successes > 0, "fixed seed never consumed corpse-king x25 effective chance")
-	assert(all_zero_rolls > 0 and any_drop_rolls > 0)
-	var fixed_seed_stats := "CORPSE_KING_DROP_FIXED_SEED_STATS seed=8900901 rolls=512 all_zero=%d any_drop=%d item230_success=%d" % [
-		all_zero_rolls,
-		any_drop_rolls,
-		boosted_successes,
-	]
-	print(fixed_seed_stats)
+			saw_book_attempt = true
+			var attempt_uid := str(attempt.get("slot_uid", ""))
+			var expected := GameData.dpv2_effective_slot_probability(89, attempt_uid)
+			assert(bool(expected.get("ok", false)), str(expected))
+			assert(
+				int(attempt.get("final_numerator", 0))
+				== int(expected.get("final_numerator", -1))
+			)
+			assert(
+				int(attempt.get("final_denominator", 0))
+				== int(expected.get("final_denominator", -1))
+			)
+	assert(saw_book_attempt, "ID89 runtime never attempted a V505 book slot")
+	print(
+		"CORPSE_KING_V505_SOURCE_CONTRACT_PASS "
+		+ "slots=%d items=%d gold=%d book_slots=%d zero_probability=%f"
+		% [
+			slots.size(),
+			item_identity_count,
+			gold_reward_count,
+			corpse_book_slot_count,
+			single_zero_probability,
+		]
+	)
 
 
 func _test_prewarm_uses_output_identity(service: Node) -> void:

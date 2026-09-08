@@ -3,13 +3,212 @@
   "name": "红蛇",
   "url": "https://www.21cq.com/mir/Mob.Aspx?ID=92",
   "retrieved_utc": "2026-09-07T18:19:38.518500+00:00",
-  "status": "UNVERIFIED",
-  "parser": "dpv2-drop-strict-table-v5.0",
-  "rows": [],
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "金币",
+      "numerator": 1,
+      "denominator": 30,
+      "amount": 120
+    },
+    {
+      "item": "金创药(中量)",
+      "numerator": 1,
+      "denominator": 30,
+      "amount": 1
+    },
+    {
+      "item": "魔法药(中量)",
+      "numerator": 1,
+      "denominator": 40,
+      "amount": 1
+    },
+    {
+      "item": "祝福油",
+      "numerator": 1,
+      "denominator": 6000,
+      "amount": 1
+    },
+    {
+      "item": "战神油",
+      "numerator": 1,
+      "denominator": 6000,
+      "amount": 1
+    },
+    {
+      "item": "铁剑",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "短剑",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "青铜头盔",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "轻型盔甲(男)",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "轻型盔甲(女)",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "青铜斧",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "黑檀项链",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "黄色水晶项链",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "黑色水晶项链",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "魔法头盔",
+      "numerator": 1,
+      "denominator": 700,
+      "amount": 1
+    },
+    {
+      "item": "青铜剑",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "小手镯",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "玻璃戒指",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "六角戒指",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "皮制手套",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "银手镯",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "铁手镯",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "牛角戒指",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "大手镯",
+      "numerator": 1,
+      "denominator": 300,
+      "amount": 1
+    },
+    {
+      "item": "布衣(男)",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "布衣(女)",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "木剑",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "匕首",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "乌木剑",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "金项链",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "古铜戒指",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "铁手镯",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "传统项链",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    }
+  ],
   "http_status": 200,
   "declared_charset": "gb2312",
   "actual_encoding": "gb2312",
-  "blocker": "SOURCE_IDENTITY_UNVERIFIED:红蛇",
   "raw_sha256": "38EA3E38259E71E118E1FCF72D656C8B6157F7CBF4FBAC67724DCA42AA733172",
-  "raw_path": "docs/drop/v5/source/monster_92.bin"
+  "raw_path": "docs/drop/v5/source/monster_92.bin",
+  "cache_reparsed": true
 }
