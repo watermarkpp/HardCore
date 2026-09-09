@@ -80,6 +80,21 @@ try {
             throw "R3 APK canonical monster $MonsterId target-magic mapping missing"
         }
     }
+    $SpecialFamilies = @{
+        directional_spit_map = @(18, 103, 104, 185, 146)
+        gas_adjacent = @(46, 60, 128, 168)
+        line_magic = @(79)
+        mixed_target_tile = @(76, 77, 160, 235, 236, 239)
+        guard_direct_projectile = @(194)
+    }
+    foreach ($Kind in $SpecialFamilies.Keys) {
+        foreach ($MonsterId in $SpecialFamilies[$Kind]) {
+            $Entry = $Catalog.entries_by_id.PSObject.Properties[[string]$MonsterId].Value
+            if ($Entry.combat.behavior_profile.attackDelivery.kind -cne $Kind) {
+                throw "R3 APK canonical monster $MonsterId special-delivery mapping mismatch"
+            }
+        }
+    }
     foreach ($MonsterId in 226..234) {
         $Entry = $Catalog.entries_by_id.PSObject.Properties[[string]$MonsterId].Value
         $Enabled = $Entry.combat.behavior_profile.combatEnabled
