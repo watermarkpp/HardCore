@@ -20,6 +20,20 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	_assert_authoritative_archer_profiles()
 	_assert_id50_identity_bridge()
+	for monster_id: int in [50, 150, 152, 206]:
+		await _assert_actual_actor_delivery(monster_id)
+	print(
+		"MONSTER_PHYSICAL_PROJECTILE_ATTACK_PASS "
+		+ "exact_actors=50,150,152,206 immediate_damage=0 "
+		+ "chebyshev_delay=0.8 visual=1 cross_map_cancel=1 "
+		+ "combat_epoch_cancel=1 can_fly_block=1"
+	)
+	get_tree().quit(0)
+
+
+func _assert_actual_actor_delivery(monster_id: int) -> void:
+	_descriptors.clear()
+	_blocked_world_px = Vector2.INF
 
 	var player := PlayerCharacter.new()
 	player.global_position = _ground_to_screen(Vector2(4.0, 0.0))
@@ -32,7 +46,7 @@ func _run() -> void:
 
 	var attacker := EnemyActor.new()
 	attacker.global_position = Vector2.ZERO
-	attacker.setup(GameData.get_monster_by_id(50), player, false)
+	attacker.setup(GameData.get_monster_by_id(monster_id), player, false)
 	attacker.configure_runtime_map_projection(
 		1,
 		Callable(self, "_ground_to_screen"),
@@ -53,8 +67,8 @@ func _run() -> void:
 
 	var hp_before := player.current_hp
 	attacker._physics_process(0.01)
-	assert(_descriptors.size() == 1, "archer release must emit exactly one projectile")
-	assert(player.current_hp == hp_before, "projectile must not deal instant melee damage")
+	assert(_descriptors.size() == 1, "monsterId=%d release must emit exactly one projectile" % monster_id)
+	assert(player.current_hp == hp_before, "monsterId=%d projectile must not deal instant melee damage" % monster_id)
 	assert(attacker._pending_attack_release_record.get("kind", "") == "physical_projectile")
 	var descriptor := _descriptors[0]
 	assert(str(descriptor.get("effect_id", "")) == ProjectileEffectScript.EFFECT_ID)
@@ -76,7 +90,7 @@ func _run() -> void:
 		% [str(pending_before), str(attacker._pending_attack_time), player.current_hp],
 	)
 	attacker._physics_process(0.06)
-	assert(player.current_hp == hp_before - 7, "bound projectile impact did not settle")
+	assert(player.current_hp == hp_before - 7, "monsterId=%d bound projectile impact did not settle" % monster_id)
 
 	# A target changing maps during flight keeps the visual but cancels damage.
 	player.current_hp = hp_before
@@ -88,17 +102,17 @@ func _run() -> void:
 	assert(player.current_hp == hp_before)
 	player.set_meta("runtime_map_id", 1)
 
-	# The exact ID50 actor freezes the typed player epoch at launch. A complete
+	# Every exact projectile actor freezes the typed player epoch at launch. A complete
 	# Loading transition invalidates the old projectile even after READY resumes.
 	attacker.target = player
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
 	assert(_descriptors.size() == 3)
-	var transition_token := "id50-projectile-transition"
+	var transition_token := "projectile-transition-%d" % monster_id
 	assert(player.begin_combat_transition(transition_token))
 	assert(player.finish_combat_transition(transition_token))
 	attacker._physics_process(0.81)
-	assert(player.current_hp == hp_before, "ID50 projectile crossed combat_epoch")
+	assert(player.current_hp == hp_before, "monsterId=%d projectile crossed combat_epoch" % monster_id)
 
 	# CanFly parity: one blocked intermediate sample rejects the whole release,
 	# so there is no visual and no delayed damage transaction.
@@ -112,14 +126,10 @@ func _run() -> void:
 
 	attacker.queue_free()
 	player.queue_free()
+	for child: Node in get_children():
+		if child is Node2D and child.get_script() == ProjectileEffectScript:
+			child.queue_free()
 	await get_tree().process_frame
-	print(
-		"MONSTER_PHYSICAL_PROJECTILE_ATTACK_PASS "
-		+ "profiles=150,152,206 exact_actor=50 immediate_damage=0 "
-		+ "chebyshev_delay=0.8 visual=1 cross_map_cancel=1 "
-		+ "combat_epoch_cancel=1 can_fly_block=1"
-	)
-	get_tree().quit(0)
 
 
 func _assert_authoritative_archer_profiles() -> void:

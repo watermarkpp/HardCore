@@ -72,6 +72,8 @@ func _run() -> void:
 	player.shield_time = 0.0
 	await get_tree().physics_frame
 
+	_test_combat_enabled_default()
+	await _test_combat_disabled_gate()
 	_test_start_gate()
 	_test_generic_melee_epoch()
 	_test_physical_projectile_epoch()
@@ -79,6 +81,144 @@ func _run() -> void:
 	_test_area_magic_epoch()
 	_test_area_attack_epoch()
 	finish("combat_epoch_delivery")
+
+
+func _test_combat_enabled_default() -> void:
+	var actor := make_enemy(Vector2(21.5, 20.0))
+	check(
+		actor.combat_enabled,
+		"E-COMBAT-default",
+		"A profile without combatEnabled preserves existing combat behavior",
+	)
+	_free_enemy(actor)
+
+
+func _test_combat_disabled_gate() -> void:
+	# This is a generic profile-contract test, not an exact-ID data assertion.
+	# Exact 226-234 coverage is owned by the canonical data integration test.
+	var actor := make_enemy(Vector2(21.5, 20.0))
+	actor.behavior_profile = {
+		"combatEnabled": false,
+		"movement": {"stationary": true},
+	}
+	actor._apply_behavior_profile()
+	check(
+		not actor.combat_enabled and actor.stationary and actor.move_speed_gu_per_sec == 0.0,
+		"E-COMBAT-profile",
+		"Explicit canonical false disables combat while retaining stationary movement",
+	)
+	var player_hp_before := player.current_hp
+	var actor_position_before := actor.global_position
+	actor._attack_timer = 0.0
+	actor._physics_process_internal(1.0 / 60.0)
+	check(
+		player.current_hp == player_hp_before
+		and actor._hc_starts == 0
+		and actor._pending_attack_release_record.is_empty()
+		and actor.global_position == actor_position_before,
+		"E-COMBAT-autonomous",
+		"Disabled actor cannot start, release or move toward its target",
+	)
+	var audio_sequence_before := actor._audio_attack_sequence
+	actor._play_attack_animation(0.62)
+	check(
+		actor._audio_attack_sequence == audio_sequence_before,
+		"E-COMBAT-audio",
+		"Disabled actor cannot emit an attack-audio action edge",
+	)
+	actor.attack_range_gu = 8.0
+	actor.attack_delivery_rule = {
+		"kind": "physical_projectile",
+		"effectId": "monster.physical_arrow.v1",
+		"obstaclePolicy": "environment_can_fly_line",
+		"impactDelay": {"baseSeconds": 0.01, "perChebyshevGuSeconds": 0.0},
+	}
+	check(
+		not actor._launch_physical_projectile(player, 50),
+		"E-COMBAT-projectile",
+		"Disabled actor rejects physical projectile delivery",
+	)
+	actor.attack_delivery_rule = {
+		"kind": "target_magic",
+		"effectId": "monster.target_lightning.v1",
+		"damageChannel": "magic_defense",
+		"rangeShape": "chebyshev_square",
+		"range_gu": 8.0,
+		"hitDelaySeconds": 0.01,
+		"activation": {"hpBelowRatio": 1.1, "orAxisBoundaryTiles": 0.0},
+	}
+	check(
+		not actor._launch_target_magic(player, 50),
+		"E-COMBAT-target-magic",
+		"Disabled actor rejects target magic delivery",
+	)
+	actor.attack_delivery_rule = {
+		"kind": "area_magic",
+		"effectId": "monster.touch_dragon.area_magic.v1",
+		"damageChannel": "magic_defense",
+		"bodyOnly": true,
+		"range_gu": 8.0,
+		"hitDelaySeconds": 0.01,
+	}
+	actor._attack_timer = 0.0
+	actor._update_area_magic_delivery(1.0)
+	check(
+		actor._area_magic_release_records.is_empty(),
+		"E-COMBAT-area-magic",
+		"Disabled actor rejects area magic delivery",
+	)
+	actor.area_attack_rule = {
+		"enabled": true,
+		"range_gu": 8.0,
+		"targetMode": "current_target",
+		"scope": "current_map",
+		"hitDelaySeconds": 0.01,
+	}
+	check(
+		not actor._update_area_attack(1.0)
+		and actor._area_attack_release_records.is_empty(),
+		"E-COMBAT-area-attack",
+		"Disabled actor rejects fixed area delivery",
+	)
+	var summon_count := 0
+	actor.summon_requested.connect(func(_owner: EnemyActor, _ids: Array, _count: int, _max_active: int) -> void:
+		summon_count += 1
+	)
+	actor.summon_rule = {"enabled": true, "monsterIds": [127], "count": 1, "maxActive": 1}
+	check(
+		not actor._update_behavior_summon(1.0) and summon_count == 0,
+		"E-COMBAT-summon",
+		"Disabled actor cannot start a summon combat action",
+	)
+	actor._deal_melee_hit(player, 50)
+	check(
+		player.current_hp == player_hp_before,
+		"E-COMBAT-direct-delivery",
+		"Disabled actor rejects direct melee delivery",
+	)
+	var actor_hp_before := actor.current_hp
+	actor.take_damage(1, player)
+	check(
+		actor.current_hp == actor_hp_before - 1,
+		"E-COMBAT-damageable",
+		"Combat-disabled entity remains damageable",
+	)
+	var death_observation := {"signals": 0}
+	actor.died.connect(func(_enemy: EnemyActor, _record: Dictionary) -> void:
+		death_observation.signals = int(death_observation.signals) + 1
+	)
+	actor.take_damage(actor.current_hp, player)
+	var lethal_hp_reached_zero := actor.current_hp == 0
+	await get_tree().process_frame
+	# `process_frame` is emitted before the MessageQueue flush that runs the
+	# deferred death commit; the following frame observes the real signal.
+	await get_tree().process_frame
+	check(
+		lethal_hp_reached_zero and int(death_observation.signals) == 1,
+		"E-COMBAT-death",
+		"Combat-disabled entity keeps the normal death signal for drop ownership",
+	)
+	_free_enemy(actor)
 
 
 func _test_start_gate() -> void:

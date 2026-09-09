@@ -306,6 +306,7 @@ var _dying := false
 var _death_pending := false
 var boss_rule: Dictionary = {}
 var behavior_profile: Dictionary = {}
+var combat_enabled := true
 var service_ai_code := -1
 var service_move_interval_ms := 0
 var stationary := false
@@ -730,6 +731,8 @@ func _emit_monster_audio(
 	allow_death := false,
 	context_overrides: Dictionary = {},
 ) -> bool:
+	if not combat_enabled and semantic_event in ["combat_prompt", "attack_start", "attack_frame"]:
+		return false
 	if monster_id <= 0 or not _audio_is_listenable(allow_death):
 		return false
 	var service := _audio_service()
@@ -787,7 +790,7 @@ func _audio_try_emit_appear() -> void:
 
 
 func _audio_try_enter_combat_session() -> bool:
-	if _audio_combat_entry_seen or not is_instance_valid(target):
+	if not combat_enabled or _audio_combat_entry_seen or not is_instance_valid(target):
 		return false
 	# A loading/cross-map transition is not the real combat edge. Wait for the
 	# optional W3 transition contract to settle, then latch the edge before any
@@ -826,6 +829,8 @@ func _audio_end_combat_session(reason := "explicit_disengage") -> void:
 
 
 func _audio_attack_started() -> void:
+	if not combat_enabled:
+		return
 	_audio_attack_sequence += 1
 	_audio_attack_frame_sequence = -1
 	_audio_attack_frame_ready = false
@@ -836,6 +841,8 @@ func _audio_attack_started() -> void:
 
 
 func _play_attack_animation(duration: float) -> void:
+	if not combat_enabled:
+		return
 	if visual != null:
 		visual.play_attack(duration)
 	_audio_attack_started()
@@ -1067,6 +1074,15 @@ func direct_spell_runtime_stats_into(output: Dictionary) -> bool:
 
 
 func _apply_behavior_profile() -> void:
+	var combat_enabled_value: Variant = behavior_profile.get("combatEnabled", true)
+	# The canonical contract is an explicit Boolean. Missing retains legacy
+	# behavior; a malformed present value fails closed instead of enabling an
+	# entity whose combat authority could not be established.
+	combat_enabled = (
+		bool(combat_enabled_value)
+		if combat_enabled_value is bool
+		else not behavior_profile.has("combatEnabled")
+	)
 	var projection_gu := MonsterUnitAdapterScript.runtime_projection_gu(
 		behavior_profile,
 		move_speed_gu_per_sec,
@@ -1097,6 +1113,32 @@ func _apply_behavior_profile() -> void:
 		0,
 		int(on_hit.get("controlChanceDenominatorBase", control_chance_denominator_base)),
 	)
+
+
+func _hold_combat_disabled() -> void:
+	# This canonical action gate does not alter life, collision or death/drop
+	# ownership. It only discards autonomous combat work and freezes motion.
+	if _movement_step_active:
+		_cancel_autonomous_step(true)
+	if _hc_path_pending:
+		_hc_cancel_path()
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_pending_attack_time = -1.0
+	_pending_attack_target = null
+	_pending_attack_damage = 0
+	_pending_attack_release_record = {}
+	_area_attack_warning = 0.0
+	_area_attack_footprint_snapshot = {}
+	_area_attack_release_records.clear()
+	_area_magic_warning = 0.0
+	_area_magic_footprint_snapshot = {}
+	_area_magic_release_records.clear()
+	_boss_warning = 0.0
+	_boss_skill_footprint_snapshot = {}
+	_summon_warning = 0.0
+	_audio_attack_start_accepted = false
+	_audio_attack_frame_ready = false
 
 
 func _apply_attack_range_policy() -> void:
@@ -2280,6 +2322,9 @@ func _physics_process_internal(delta: float) -> void:
 		return
 	_update_natural_regen(delta)
 	_update_entrapment_state(delta)
+	if not combat_enabled:
+		_hold_combat_disabled()
+		return
 	_update_pending_attack(delta)
 	if use_background_ai:
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
@@ -2991,6 +3036,8 @@ func _attack_engagement_ready(
 	contact_distance_gu: float,
 	default_engagement_distance_gu: float,
 ) -> bool:
+	if not combat_enabled:
+		return false
 	if not _player_combat_is_available(hit_target):
 		return false
 	if _uses_special_magic_melee_delivery():
@@ -3378,6 +3425,9 @@ func _current_attack_interval() -> float:
 
 
 func _update_pending_attack(delta: float) -> void:
+	if not combat_enabled:
+		_hold_combat_disabled()
+		return
 	if _pending_attack_time < 0.0:
 		return
 	_pending_attack_time -= delta
@@ -3435,7 +3485,8 @@ func _uses_physical_projectile_delivery() -> bool:
 
 func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
 	if (
-		not _uses_physical_projectile_delivery()
+		not combat_enabled
+		or not _uses_physical_projectile_delivery()
 		or not is_instance_valid(hit_target)
 		or not _player_combat_is_available(hit_target)
 		or not hit_target.has_method("take_damage")
@@ -3536,6 +3587,8 @@ func _physical_projectile_path_is_clear(
 
 
 func _settle_physical_projectile_release(release_record: Dictionary) -> void:
+	if not combat_enabled:
+		return
 	var target_instance_id := int(release_record.get("target_instance_id", 0))
 	if target_instance_id <= 0:
 		return
@@ -3601,7 +3654,8 @@ func _emit_physical_projectile_descriptor(release_record: Dictionary) -> void:
 
 func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
 	if (
-		not _uses_target_magic_delivery()
+		not combat_enabled
+		or not _uses_target_magic_delivery()
 		or not is_instance_valid(hit_target)
 		or not _player_combat_is_available(hit_target)
 		or not hit_target.has_method("take_direct_spell_damage")
@@ -3674,6 +3728,8 @@ func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
 
 
 func _settle_target_magic_release(release_record: Dictionary) -> void:
+	if not combat_enabled:
+		return
 	var target_instance_id := int(release_record.get("target_instance_id", 0))
 	if target_instance_id <= 0:
 		return
@@ -3743,7 +3799,8 @@ func _deal_special_magic_melee_hit(
 	# RM_STRUCK message is a 300ms body presentation notification, not a delayed
 	# damage transaction and not an independent projectile/effect.
 	if (
-		not _uses_special_magic_melee_delivery()
+		not combat_enabled
+		or not _uses_special_magic_melee_delivery()
 		or not is_instance_valid(hit_target)
 		or not hit_target.has_method("take_direct_spell_damage")
 		or _target_is_safe_player(hit_target)
@@ -3803,7 +3860,7 @@ func _deal_melee_hit(
 	center_tolerance_gu := 0.0,
 	force_los_recheck := false,
 ) -> void:
-	if not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
+	if not combat_enabled or not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
 	var target_radius_gu := _target_combat_radius_gu(hit_target)
 	var center_reach_gu := (
@@ -3934,6 +3991,8 @@ func _apply_attack_damage(
 	force_struck_reaction := false,
 	forced_control_roll := -1,
 ) -> void:
+	if not combat_enabled:
+		return
 	if use_accuracy and not _monster_physical_hit_succeeds(hit_target, forced_roll):
 		# A miss consumes the existing attack event/timer and damage roll but
 		# submits no damage or on-hit side effects.
@@ -4154,7 +4213,7 @@ func _release_player_combat_epoch_is_current(
 
 
 func _update_area_magic_delivery(delta: float) -> void:
-	if not _uses_area_magic_delivery():
+	if not combat_enabled or not _uses_area_magic_delivery():
 		return
 	if _area_magic_warning > 0.0:
 		_area_magic_warning = maxf(0.0, _area_magic_warning - delta)
@@ -4324,6 +4383,8 @@ func _freeze_area_magic_release_records(
 
 
 func _settle_area_magic_release_records() -> void:
+	if not combat_enabled:
+		return
 	for release_record: Dictionary in _area_magic_release_records:
 		var target_instance_id := int(release_record.get("target_instance_id", 0))
 		if target_instance_id <= 0:
@@ -4363,6 +4424,8 @@ func _area_magic_release_target_is_valid(
 
 
 func _deal_area_magic_damage(victim: Node2D, dealt_damage: int) -> void:
+	if not combat_enabled:
+		return
 	var raw_resolution: Variant = victim.call(
 		"take_direct_spell_damage",
 		"",
@@ -4401,7 +4464,7 @@ func _apply_area_magic_status(victim: Node2D) -> void:
 
 
 func _update_area_attack(delta: float) -> bool:
-	if not bool(area_attack_rule.get("enabled", false)):
+	if not combat_enabled or not bool(area_attack_rule.get("enabled", false)):
 		return false
 	if _area_attack_warning > 0.0:
 		_area_attack_warning -= delta
@@ -4620,6 +4683,8 @@ func _freeze_area_attack_release_records(
 
 
 func _settle_area_attack_release_records() -> void:
+	if not combat_enabled:
+		return
 	for release_record: Dictionary in _area_attack_release_records:
 		var target_instance_id := int(release_record.get("target_instance_id", 0))
 		if target_instance_id <= 0:
@@ -4771,7 +4836,7 @@ func _emit_fixed_area_ground_spike_descriptor(
 
 
 func _update_behavior_summon(delta: float) -> bool:
-	if not bool(summon_rule.get("enabled", false)):
+	if not combat_enabled or not bool(summon_rule.get("enabled", false)):
 		return false
 	if _summon_warning > 0.0:
 		_summon_warning -= delta
@@ -6157,6 +6222,8 @@ func draw_ellipse_shadow(radius_px: float, center_px := Vector2.ZERO) -> void:
 
 
 func _update_boss_skill(delta: float, distance_gu: float) -> void:
+	if not combat_enabled:
+		return
 	var special: Dictionary = boss_rule.get("specialSkill", {})
 	var phase: Dictionary = boss_rule.get("phaseTwo", {})
 	var skill_radius_gu := MonsterUnitAdapterScript.range_gu(
@@ -6340,7 +6407,8 @@ func _hc_standard_melee() -> bool:
 	# Empty delivery kind is the existing ordinary physical contact channel.
 	# Keep every named/special delivery and pre-existing longer reach unchanged.
 	return (
-		str(attack_delivery_rule.get("kind", "")).is_empty()
+		combat_enabled
+		and str(attack_delivery_rule.get("kind", "")).is_empty()
 		and not bool(area_attack_rule.get("enabled", false))
 		and not bool(summon_rule.get("enabled", false))
 		and not _uses_ranged_projectile_sweep_contract()
@@ -6468,6 +6536,8 @@ func _hc_life(node: Node) -> int:
 	return int(node.get_meta("hc_combat_life_epoch", 0)) if is_instance_valid(node) else -1
 
 func _hc_try_start(hit_target: Node2D, after_motion_attempt := false) -> bool:
+	if not combat_enabled:
+		return false
 	var tick := Engine.get_physics_frames()
 	if _hc_last_start_tick == tick or _attack_timer > 0.0 or _pending_attack_time >= 0.0:
 		return false
@@ -6515,6 +6585,8 @@ func _hc_try_start(hit_target: Node2D, after_motion_attempt := false) -> bool:
 	return true
 
 func _hc_settle(record: Dictionary) -> void:
+	if not combat_enabled:
+		return
 	var seq := int(record.get("seq", 0))
 	if seq <= _hc_settled_seq:
 		return
