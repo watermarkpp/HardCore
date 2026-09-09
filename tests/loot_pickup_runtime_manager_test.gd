@@ -5,6 +5,7 @@ const LootManagerScript := preload("res://scripts/loot_pickup_runtime_manager.gd
 const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd")
 const DeviceLabRuntimeScript := preload("res://scripts/device_lab_runtime.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const GAME_ROOT_BOOTSTRAP_DEADLINE_MSEC := 60000
 
 var _manager: Node
 var _player: PlayerCharacter
@@ -266,13 +267,27 @@ func _run_game_root_collection_and_logout() -> void:
 	PlayerState.recalculate_stats()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var bootstrap_deadline := Time.get_ticks_msec() + GAME_ROOT_BOOTSTRAP_DEADLINE_MSEC
+	while (
+		not is_instance_valid(game.get("player"))
+		or int(game.get("current_map_id")) < 0
+		or bool(game.get("_world_bootstrap_in_progress"))
+		or bool(game.get("_map_transition_in_progress"))
+	):
+		assert(
+			Time.get_ticks_msec() < bootstrap_deadline,
+			"GameRoot initial bootstrap did not reach READY before deadline",
+		)
+		await get_tree().process_frame
 	game.set_process(false)
 	game.set_physics_process(false)
 	var manager: Node = game.get("_loot_pickup_runtime_manager")
 	manager.set_process(false)
 	var player: PlayerCharacter = game.get("player")
+	assert(is_instance_valid(player), "GameRoot player was not ready after bootstrap")
+	assert(int(game.get("current_map_id")) >= 0, "GameRoot map was not ready after bootstrap")
+	assert(not bool(game.get("_world_bootstrap_in_progress")), "GameRoot bootstrap flag remained active")
+	assert(not bool(game.get("_map_transition_in_progress")), "GameRoot transition flag remained active")
 	# GameRoot startup may restore the persisted profile while the bootstrap
 	# finishes.  Establish the deterministic fixture after that lifecycle has
 	# settled, leaving one free slot while making the next item overweight.
@@ -286,7 +301,12 @@ func _run_game_root_collection_and_logout() -> void:
 	)
 	PlayerState.inventory = []
 	PlayerState.recalculate_stats()
-	var loot_position := Vector2(12000.0, 12000.0)
+	var loot_position: Vector2 = game._resolve_loot_ground_position(
+		player.global_position,
+		player.global_position,
+	)
+	assert(loot_position.is_finite(), "legal player footpoint did not resolve to a loot position")
+	assert(game._loot_ground_point_clear(loot_position), "resolved loot position is not a clear ground point")
 	var device_snapshot := DeviceLabRuntimeScript.build_snapshot(game)
 	var loot_runtime: Dictionary = device_snapshot.get("loot_runtime", {})
 	var performance_diagnostics: Dictionary = device_snapshot.get(
