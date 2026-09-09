@@ -114,21 +114,30 @@ Evidence-bounded stability statement (per author post-merge review F03):
   distribution exactly {0: trials}. New clothes (R02): the six targets are
   locked from policy.armor_targets by (monster_id, source_item_id) — unique,
   UID-bound, rule ARMOR_BASE_1_OVER_60, actual draw Fraction EXACTLY 1/60,
-  always_retained with the full candidate set, selected==hits, discarded==0,
-  then 6-sigma Monte-Carlo (sigma 0.08-1.15); missing/duplicate/wrong-item/
-  wrong-probability/extra-target all fail. top_slots (R04) are sorted
-  numerically by the draw Fraction actually used in the simulation, with
-  effective_probability reported separately and labelled. Result:
-  **failures=0**. The tool ships with negative tests
-  (`tools/test_dpv2_repair_v505_acceptance.py`, 9 cases: correct fixture
+  then the retention boundary is ENFORCED as a failure condition:
+  always_retained must be True, selected==hits, discarded==0
+  (`ARMOR_TARGET_NOT_ALWAYS_RETAINED` / `ARMOR_TARGET_RETENTION_LOSS`),
+  followed by the 6-sigma Monte-Carlo stage (sigma 0.08-1.15);
+  missing/duplicate/wrong-item/wrong-probability/extra-target/retention-loss
+  all fail. Female-to-male clothing output mapping (author ruling 2026-09-09):
+  the draw stays on the source identity at 1/60 and the output identity is
+  mapped once (`loot_runtime_service.gd
+  FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID`: 238:141→140 天魔神甲,
+  239:145→144 天尊道袍, 240:143→142 法神披风; the 235/236/237 pairs are
+  unchanged identities). The tool validates the exact
+  (source_item_id -> output_item_id) pairs against the approved table
+  (`armor_output_mapping`); unexpected pairs or a wrong pair count FAIL — the
+  mapping is not double-draw and does not double any boss probability.
+  top_slots (R04) are sorted numerically by the draw Fraction actually used in
+  the simulation, with effective_probability reported separately and labelled.
+  Result: **failures=0**. The tool ships with negative tests
+  (`tools/test_dpv2_repair_v505_acceptance.py`, 13 cases: correct fixture
   passes; wrong cloth probability 1/61, wrong cloth item id, missing target,
-  duplicate target, missing monster, missing slot, BOOK-subclass pollution, and
-  fraction sorting are all rejected). Known disclosure: policy.armor_targets
-  `output_item_id` for 238/239/240 (140/144/142) differs from `source_item_id`
-  and from the effective ledger (141/145/143); acceptance binds by
-  `source_item_id` per the author's R02 instruction and records the difference
-  as `armor_policy_warnings` — author confirmation of output_item_id semantics
-  is requested. The old simulation.json `failures=[]` is no longer the
+  duplicate target, missing monster, missing slot, BOOK-subclass pollution,
+  fraction sorting, 9 higher-priority competitors, 9 same-priority
+  competitors, 9 lower-priority competitors (positive), and unexpected
+  female-to-male output mapping are all exercised — malformed inputs are
+  rejected). The old simulation.json `failures=[]` is no longer the
   acceptance basis; this run is.
 - F02 — reward-caliber balance data: PRODUCED (no balance change). The
   acceptance run records per-monster reward profiles (slots_by_reward_kind,

@@ -55,6 +55,15 @@ DATA_COMMIT = '275eef8b9455c7f3ef63daaf59dfff3c06e26069'
 
 ARMOR_RULE = 'ARMOR_BASE_1_OVER_60'
 
+# Approved female-to-male clothing output mapping (author ruling 2026-09-09):
+# the draw stays on the source identity (1/60), then the output identity is
+# mapped once (loot_runtime_service.gd FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID).
+# key: (monster_id, source_item_id) -> output_item_id
+FEMALE_TO_MALE_OUTPUT = {
+    (235, 140): 140, (236, 144): 144, (237, 142): 142,
+    (238, 141): 140, (239, 145): 144, (240, 143): 142,
+}
+
 
 def sha256_of(path: str) -> str:
     h = hashlib.sha256()
@@ -149,14 +158,15 @@ def simulate_monster(rows, classes, equipment, book_item_ids, trials, seed,
 def run_acceptance(effective_records, classification_records, authority_records,
                    policy_data, catalog_entries, baseline_profiles,
                    data_commit, tool_sha256, input_shas, generator_head,
-                   trials_high=100000, trials_low=20000, seed_base=None):
+                   trials_high=100000, trials_low=20000, seed_base=None,
+                   expected_female_to_male=None):
     """Pure core: no file IO / git beyond the caller's bindings.
 
     Returns (result_dict, exit_code). exit_code == 1 if any failure.
     """
     failures = []
-    warnings = []
     seed_base = seed_base if seed_base is not None else policy_data.get('test_seed', 20260907)
+    ftm = expected_female_to_male if expected_female_to_male is not None else FEMALE_TO_MALE_OUTPUT
     book_ids = set(policy_data['book_ids'])
     explicit_high_ids = set(policy_data.get('explicit_high_book_ids', []))
     armor_targets = policy_data.get('armor_targets') or []
@@ -259,10 +269,23 @@ def run_acceptance(effective_records, classification_records, authority_records,
         if (r['canonical_monster_id'], r.get('canonical_item_id')) not in expected_targets:
             failures.append('ARMOR_EXTRA_TARGET_OUTSIDE_POLICY:%s:%s' % (
                 r['slot_uid'], r.get('canonical_item_id')))
+    # Approved female-to-male output mapping (author ruling 2026-09-09): the
+    # draw stays on the source identity at 1/60, then the output identity is
+    # mapped once. Validate the exact pairs; unexpected pairs FAIL.
+    armor_output_mapping = []
     for t in armor_targets:
-        if t['source_item_id'] != t['output_item_id']:
-            warnings.append('ARMOR_POLICY_SOURCE_OUTPUT_DIFFER:%d:%s:%s' % (
-                t['monster_id'], t['source_item_id'], t['output_item_id']))
+        expected_out = ftm.get((t['monster_id'], t['source_item_id']))
+        if expected_out is None or t['output_item_id'] != expected_out:
+            failures.append('ARMOR_OUTPUT_MAPPING_UNEXPECTED:%d:source=%d:output=%d:expected=%s' % (
+                t['monster_id'], t['source_item_id'], t['output_item_id'], expected_out))
+        armor_output_mapping.append({
+            'monster_id': t['monster_id'], 'source_item_id': t['source_item_id'],
+            'output_item_id': t['output_item_id'], 'expected_female_to_male': expected_out,
+        })
+    # Also require the mapping table to be exactly the approved pairs.
+    if len(armor_output_mapping) != len(ftm):
+        failures.append('ARMOR_OUTPUT_MAPPING_COUNT:%d!=%d' % (
+            len(armor_output_mapping), len(ftm)))
 
     # ---- simulate all monsters ----
     high_risk = set([76, 198, 199, 225]) | set(range(235, 241))
@@ -370,6 +393,14 @@ def run_acceptance(effective_records, classification_records, authority_records,
             failures.append('ARMOR_TARGET_DRAW_NOT_1_OVER_60:%d:%s:%s' % (mid, uid, draw))
         exp = trials * float(draw)
         sigma = abs(obs - exp) / math.sqrt(exp * (1 - float(draw)))
+        # Author R02 (3rd review): the target MUST be always-retained and its
+        # retention must be loss-free. A 1/60 draw that is then squeezed out by
+        # 9 equal-or-higher competitors is a REJECTED input, not a pass.
+        if not det['always_retained']:
+            failures.append('ARMOR_TARGET_NOT_ALWAYS_RETAINED:%d:%s' % (mid, uid))
+        if det['selected'] != obs or det['discarded'] != 0:
+            failures.append('ARMOR_TARGET_RETENTION_LOSS:%d:%s:hits=%d:selected=%d:discarded=%d' % (
+                mid, uid, obs, det['selected'], det['discarded']))
         entry = {
             'monster_id': mid, 'item_id': item_id, 'slot_uid': uid,
             'policy_output_item_id': t['output_item_id'],
@@ -409,7 +440,7 @@ def run_acceptance(effective_records, classification_records, authority_records,
             'drop_enabled_source_status_counts': dict(status_counts),
         },
         'armor_targets_found': {('%d:%d' % k): v for k, v in found_targets.items()},
-        'armor_policy_warnings': warnings,
+        'armor_output_mapping': armor_output_mapping,
         'monsters': monsters_out,
         'new_clothes_boundary': new_clothes,
         'elapsed_seconds': elapsed,

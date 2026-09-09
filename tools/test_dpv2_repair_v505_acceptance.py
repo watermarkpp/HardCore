@@ -73,10 +73,10 @@ def make_fixture():
     return {'effective': eff, 'baseline': profiles}
 
 
-def run(effective, baseline, **kw):
+def run(effective, baseline, classification=None, ftm=None, **kw):
     return run_acceptance(
         effective_records=effective,
-        classification_records=CLASSIFICATION,
+        classification_records=classification if classification is not None else CLASSIFICATION,
         authority_records=AUTHORITY,
         policy_data=POLICY,
         catalog_entries=CATALOG,
@@ -87,8 +87,29 @@ def run(effective, baseline, **kw):
         generator_head='test-head',
         trials_high=10000,
         trials_low=3000,
+        expected_female_to_male=ftm if ftm is not None else {(5, 140): 140},
         **kw,
     )
+
+
+def with_competitors(fx, priority):
+    """Add 9 always-hit competitor slots to monster 5 (armor target) at the
+    given overflow_priority, in both baseline and effective."""
+    profs = [dict(p, slots=list(p['slots'])) for p in fx['baseline']]
+    eff = [dict(r) for r in fx['effective']]
+    for i in range(1, 10):
+        uid = 'dpv2.direct.m5.comp_%02d' % i
+        base = {'slot_uid': uid, 'canonical_item_id': 200 + i,
+                'base_numerator': 1, 'base_denominator': 1, 'baseline_origin': VERIFIED}
+        profs[4]['slots'].append(base)  # monster 5 is index 4
+        eff.append({'slot_uid': uid, 'canonical_monster_id': 5,
+                    'canonical_item_id': 200 + i,
+                    'base_numerator': 1, 'base_denominator': 1,
+                    'effective_numerator': 1, 'effective_denominator': 1,
+                    'protected_drop': False, 'overflow_priority': priority,
+                    'baseline_origin': VERIFIED, 'reward_kind': 'ITEM',
+                    'repair_v5_rule': 'NONE'})
+    return {'effective': eff, 'baseline': profs}
 
 
 def has_any(result, *needles):
@@ -172,6 +193,39 @@ def main():
     res, code = run(bad, fx['baseline'])
     ok = code == 1 and has_any(res, 'COVERAGE_SLOT_SET_MISMATCH', 'COVERAGE_MISSING_SLOT')
     print('T09 R03 missing slot: code=%d caught=%s' % (code, ok))
+    failures_total += 0 if ok else 1
+
+    # R02 retention (author 3rd review): a 1/60 target that is squeezed out by
+    # 9 higher/equal-priority competitors must be REJECTED, not PASS.
+    comp_class = CLASSIFICATION + [{'canonical_item_id': 200 + i, 'classification': 'EQUIPMENT'}
+                                   for i in range(1, 10)]
+
+    # T10: 9 higher-priority competitors -> target drawn but never retained
+    fx10 = with_competitors(fx, 200)
+    res, code = run(fx10['effective'], fx10['baseline'], classification=comp_class)
+    ok = code == 1 and has_any(res, 'ARMOR_TARGET_NOT_ALWAYS_RETAINED', 'ARMOR_TARGET_RETENTION_LOSS')
+    print('T10 R02 9 higher-priority competitors: code=%d caught=%s' % (code, ok))
+    failures_total += 0 if ok else 1
+
+    # T11: 9 same-priority competitors -> partial retention loss must fail
+    fx11 = with_competitors(fx, 100)
+    res, code = run(fx11['effective'], fx11['baseline'], classification=comp_class)
+    ok = code == 1 and has_any(res, 'ARMOR_TARGET_RETENTION_LOSS')
+    print('T11 R02 9 same-priority competitors: code=%d caught=%s' % (code, ok))
+    failures_total += 0 if ok else 1
+
+    # T12: 9 lower-priority competitors -> target always retained, PASS
+    fx12 = with_competitors(fx, 50)
+    res, code = run(fx12['effective'], fx12['baseline'], classification=comp_class)
+    ok = code == 0 and not res['failures']
+    print('T12 R02 9 lower-priority competitors: code=%d failures=%d ok=%s' % (
+        code, len(res['failures']), ok))
+    failures_total += 0 if ok else 1
+
+    # T13: unexpected female-to-male output mapping must fail
+    res, code = run(fx['effective'], fx['baseline'], ftm={(5, 140): 206})
+    ok = code == 1 and has_any(res, 'ARMOR_OUTPUT_MAPPING_UNEXPECTED', 'ARMOR_OUTPUT_MAPPING_COUNT')
+    print('T13 R02 unexpected output mapping: code=%d caught=%s' % (code, ok))
     failures_total += 0 if ok else 1
 
     print('TOTAL_FAILURES=%d' % failures_total)

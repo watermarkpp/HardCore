@@ -1,9 +1,9 @@
 {
   "schema": "hardcore.dpv2.v505.acceptance_run.v2",
   "data_commit": "275eef8b9455c7f3ef63daaf59dfff3c06e26069",
-  "generator_head": "e0ffd538efeeb416418b61dd6f5dd092e8d32a40",
-  "tool_sha256": "934B2E3A4559D7CD97CCAD4F91EEE36EB8112004F9982CDEA95E80E2970B72CF",
-  "generated_at": "2026-09-09T10:14:32+0800",
+  "generator_head": "70398a0814fe315fafc6fb8daf8ce1029f1dc636",
+  "tool_sha256": "43EFD17663AC22952BD6D0226BAC99DF2E684730776EE2BE1A68D303A472F4F2",
+  "generated_at": "2026-09-09T10:55:15+0800",
   "scope": "PYTHON_RNG_SELECTION_MODEL_NOT_GODOT_NOT_NODE_SPAWN_NOT_DEVICE",
   "inputs": {
     "effective": {
@@ -71,10 +71,43 @@
     "239:145": "dpv2.direct.m239.slot_054",
     "240:143": "dpv2.direct.m240.slot_054"
   },
-  "armor_policy_warnings": [
-    "ARMOR_POLICY_SOURCE_OUTPUT_DIFFER:238:141:140",
-    "ARMOR_POLICY_SOURCE_OUTPUT_DIFFER:239:145:144",
-    "ARMOR_POLICY_SOURCE_OUTPUT_DIFFER:240:143:142"
+  "armor_output_mapping": [
+    {
+      "monster_id": 235,
+      "source_item_id": 140,
+      "output_item_id": 140,
+      "expected_female_to_male": 140
+    },
+    {
+      "monster_id": 236,
+      "source_item_id": 144,
+      "output_item_id": 144,
+      "expected_female_to_male": 144
+    },
+    {
+      "monster_id": 237,
+      "source_item_id": 142,
+      "output_item_id": 142,
+      "expected_female_to_male": 142
+    },
+    {
+      "monster_id": 238,
+      "source_item_id": 141,
+      "output_item_id": 140,
+      "expected_female_to_male": 140
+    },
+    {
+      "monster_id": 239,
+      "source_item_id": 145,
+      "output_item_id": 144,
+      "expected_female_to_male": 144
+    },
+    {
+      "monster_id": 240,
+      "source_item_id": 143,
+      "output_item_id": 142,
+      "expected_female_to_male": 142
+    }
   ],
   "monsters": {
     "18": {
@@ -56039,6 +56072,6 @@
       "discarded": 0
     }
   ],
-  "elapsed_seconds": 211.0409456000002,
+  "elapsed_seconds": 216.6841059999997,
   "failures": []
 }
