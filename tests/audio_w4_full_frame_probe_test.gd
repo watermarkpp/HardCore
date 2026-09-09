@@ -37,20 +37,30 @@ class ProbeCombatTarget extends Node2D:
 
 class FrameRecorder extends Node:
 	var recording := false
-	var samples: Array[float] = []
+	var wall_samples_ms: Array[float] = []
+	var delta_samples_ms: Array[float] = []
 	var physics_ticks := 0
+	var _previous_process_usec := -1
 
 	func _process(delta: float) -> void:
 		if recording:
-			samples.append(maxf(0.0, delta) * 1000.0)
+			var now_usec := Time.get_ticks_usec()
+			if _previous_process_usec >= 0:
+				wall_samples_ms.append(
+					float(maxi(0, now_usec - _previous_process_usec)) / 1000.0
+				)
+			delta_samples_ms.append(maxf(0.0, delta) * 1000.0)
+			_previous_process_usec = now_usec
 
 	func _physics_process(_delta: float) -> void:
 		if recording:
 			physics_ticks += 1
 
 	func begin() -> void:
-		samples.clear()
+		wall_samples_ms.clear()
+		delta_samples_ms.clear()
 		physics_ticks = 0
+		_previous_process_usec = -1
 		recording = true
 
 	func end() -> void:
@@ -280,6 +290,7 @@ func _run() -> void:
 	var modes: Array[String] = []
 	if service.has_method("set_sfx_enabled"):
 		modes.append("candidate_on")
+		modes.append("candidate_off")
 	else:
 		modes.append("legacy_on")
 		modes.append("legacy_off")
@@ -339,7 +350,7 @@ func _run() -> void:
 		"conditions": all_results,
 		"runtime_flavor": "candidate" if all_results[0].get("candidate_api", false) else "legacy",
 		"comparison_note": (
-			"cf1d runs legacy_on/legacy_off; W4 runs candidate_on. "
+			"cf1d runs legacy_on/legacy_off; W4 runs candidate_on/candidate_off. "
 			+ "The 20 and 50 actor conditions reuse one formal GameRoot in descending "
 			+ "cohort order; each condition resets actor positions, targets, sessions "
 			+ "and counters before measuring. Legacy on/off conditions also reuse the "
@@ -353,7 +364,7 @@ func _run() -> void:
 			+ "retarget candidate; this is a controlled formal-map fixture, not natural gameplay."
 		),
 		"headless_limitations": [
-			"这是真实Godot process_frame/physics路径和正式地图实例化后的CPU/请求采样",
+			"这是真实Godot process_frame/physics路径和正式地图实例化后的宿主墙钟间隔/请求采样；full_frame_ms不是CPU利用率",
 			"headless不代表扬声器混音延迟、硬件音频线程、GPU渲染提交或Android设备行为",
 			"服务播放与拒绝仍由正式AudioRuntimeService预算/资源准入决定，探针不直调资源",
 		],
@@ -621,11 +632,26 @@ func _sample_condition(
 	var bus_index := AudioServer.get_bus_index(&"SFX")
 	assert(bus_index >= 0, "SFX bus missing in formal scene")
 	if service.has_method("set_sfx_enabled"):
-		assert(mode == "candidate_on", "candidate probe received unsupported mode")
-		service.call("set_sfx_enabled", true)
-		AudioServer.set_bus_mute(bus_index, false)
+		assert(
+			mode == "candidate_on" or mode == "candidate_off",
+			"candidate probe received unsupported mode",
+		)
+		var sfx_enabled := mode == "candidate_on"
+		service.call("set_sfx_enabled", sfx_enabled)
+		AudioServer.set_bus_mute(bus_index, not sfx_enabled)
 	else:
 		AudioServer.set_bus_mute(bus_index, mode == "legacy_off")
+	var expected_sfx_enabled := mode == "candidate_on" or mode == "legacy_on"
+	var expected_bus_muted := not expected_sfx_enabled
+	assert(
+		AudioServer.is_bus_mute(bus_index) == expected_bus_muted,
+		"SFX bus state does not match condition %s" % mode,
+	)
+	if service.has_method("is_sfx_enabled"):
+		assert(
+			bool(service.call("is_sfx_enabled")) == expected_sfx_enabled,
+			"AudioRuntimeService SFX gate does not match condition %s" % mode,
+		)
 
 	var targets: Array[Node] = []
 	if service.has_method("reset_metrics_for_test"):
@@ -686,8 +712,12 @@ func _sample_condition(
 		"real physics-frame recorder captured %d/%d ticks" % [frame_recorder.physics_ticks, SAMPLE_FRAMES],
 	)
 	assert(
-		frame_recorder.samples.size() >= SAMPLE_FRAMES,
-		"real process-frame recorder captured only %d/%d frames" % [frame_recorder.samples.size(), SAMPLE_FRAMES],
+		frame_recorder.wall_samples_ms.size() >= SAMPLE_FRAMES,
+		"real process-frame recorder captured only %d/%d wall samples" % [frame_recorder.wall_samples_ms.size(), SAMPLE_FRAMES],
+	)
+	assert(
+		frame_recorder.delta_samples_ms.size() >= SAMPLE_FRAMES,
+		"real process-frame recorder captured only %d/%d delta samples" % [frame_recorder.delta_samples_ms.size(), SAMPLE_FRAMES],
 	)
 
 	var performance_window := RuntimeDiagnostics.read_performance_window({
@@ -760,6 +790,9 @@ func _sample_condition(
 	var service_metrics := proxy.backing_metrics()
 	var proxy_metrics := proxy.snapshot()
 	var bus_muted := AudioServer.is_bus_mute(bus_index)
+	var full_frame_wall_summary := _summary(frame_recorder.wall_samples_ms)
+	var frame_delta_summary := _summary(frame_recorder.delta_samples_ms)
+	var audio_service_wall_summary := _summary(proxy.service_call_samples_ms)
 	return {
 		"candidate_api": service.has_method("set_sfx_enabled"),
 		"map_key": FORMAL_MAP_KEY,
@@ -772,20 +805,21 @@ func _sample_condition(
 		"warmup_frames": WARMUP_FRAMES,
 		"sample_frames": SAMPLE_FRAMES,
 		"sampled_physics_ticks": frame_recorder.physics_ticks,
-		"real_process_frame_count": frame_recorder.samples.size(),
-		"full_frame_ms": {
-			"p50": float(performance_window.get("frame_ms_p50", 0.0)),
-			"p95": float(performance_window.get("frame_ms_p95", 0.0)),
-			"p99": float(performance_window.get("frame_ms_p99", 0.0)),
-			"samples": int(performance_window.get("frame_count", 0)),
-		},
-		"frame_recorder_ms": _summary(frame_recorder.samples),
+		"real_process_frame_count": frame_recorder.delta_samples_ms.size(),
+		"wall_process_interval_count": frame_recorder.wall_samples_ms.size(),
+		"full_frame_ms": full_frame_wall_summary,
+		"full_frame_wall_samples_ms": frame_recorder.wall_samples_ms.duplicate(),
+		"frame_delta_diagnostic_ms": frame_delta_summary,
+		"frame_delta_diagnostic_samples_ms": frame_recorder.delta_samples_ms.duplicate(),
+		"frame_recorder_ms": full_frame_wall_summary,
 		"runtime_performance_window": performance_window,
 		"service_requests_via_proxy": proxy_metrics["requests"],
 		"service_plays_via_proxy": proxy_metrics["plays"],
 		"service_rejected_via_proxy": proxy_metrics["rejected"],
-		"audio_cpu_ms": _summary(proxy.service_call_samples_ms),
-		"audio_cpu_scope": "production AudioRuntimeService admission/resource call time per observed request",
+		"audio_cpu_ms": audio_service_wall_summary,
+		"audio_service_wall_ms": audio_service_wall_summary,
+		"audio_service_wall_samples_ms": proxy.service_call_samples_ms.duplicate(),
+		"audio_cpu_scope": "compatibility alias: production AudioRuntimeService admission/resource call wall duration per observed request; not a dedicated audio thread CPU measurement",
 		"request_attribution": (
 			"candidate_exact_owner_and_monster"
 			if service.has_method("set_sfx_enabled")
