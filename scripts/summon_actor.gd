@@ -1246,6 +1246,34 @@ func take_damage(
 	_apply_resolved_damage(maxi(1, amount - absorbed))
 
 
+func take_monster_mixed_damage(
+	physical_raw: int,
+	magic_raw: int,
+	context: Dictionary,
+) -> Dictionary:
+	if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
+		return {"success": false, "applied_damage": 0, "failure_reason": "summon_dead"}
+	if is_instance_valid(owner_player) and owner_player.combat_transition_is_active():
+		return {"success": false, "applied_damage": 0, "failure_reason": "owner_combat_isolated"}
+	if physical_raw < 0 or magic_raw < 0:
+		return {"success": false, "applied_damage": 0, "failure_reason": "invalid_mixed_damage"}
+	var ac_roll := _roll_defense(ac_min, ac_max, physical_defence_bonus(), -1)
+	var mac_roll := _roll_defense(mac_min, mac_max, magic_defence_bonus(), -1)
+	var physical_damage := maxi(0, physical_raw - ac_roll)
+	var magic_damage := maxi(0, magic_raw - mac_roll)
+	var total := physical_damage + magic_damage
+	var hp_before := current_hp
+	if total > 0:
+		_apply_resolved_damage(total)
+	return {
+		"success": true, "runtime_contract": "monster_mixed_damage.v1",
+		"physical_defense_roll": ac_roll, "magic_defense_roll": mac_roll,
+		"physical_damage": physical_damage, "magic_damage": magic_damage,
+		"pipeline_input": total, "applied_damage": maxi(0, hp_before - current_hp),
+		"release_id": str(context.get("release_id", "")),
+	}
+
+
 func take_magic_damage(amount: int, magic_defense_roll := -1) -> void:
 	var absorbed := _roll_defense(
 		mac_min,
