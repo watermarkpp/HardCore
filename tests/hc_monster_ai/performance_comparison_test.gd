@@ -213,7 +213,12 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 	assert(SCENARIOS.has(scenario), "unknown REV07 scenario %s" % scenario)
 	_clear_environment()
 	var blocked_cells := _blocked_cells_for_scenario(scenario)
-	_set_environment(blocked_cells)
+	# WORLD detours exercise the actor's last-known-target path.  Let the
+	# production observation acquire the target once in clear space, then add
+	# the real WORLD bodies before warmup; the fixture never writes private AI
+	# state or manually drives a path.
+	if scenario != "world_obstacles":
+		_set_environment(blocked_cells)
 	var index := SpatialIndex.new()
 	var player := _make_player(_target_ground())
 	var context := _terrain_context()
@@ -227,6 +232,11 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 	var initial_layout := _assert_initial_layout_valid(enemies, player)
 	# Let _ready, the physics server and the first target observation settle.
 	await _await_real_frame()
+	if scenario == "world_obstacles":
+		_set_environment(blocked_cells)
+		context = _terrain_context()
+		for enemy: EnemyActor in enemies:
+			enemy.configure_terrain_navigation_context(context)
 	for _frame: int in range(WARMUP_FRAMES - 1):
 		await _await_real_frame()
 	_reset_probe_counters(enemies, player)
@@ -268,6 +278,11 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 		"layout_seed": LAYOUT_SEED,
 		"layout_signature": _layout_signature(scenario, count),
 		"initial_layout": initial_layout,
+		"world_obstacle_activation": (
+			"after_first_unblocked_observation"
+			if scenario == "world_obstacles"
+			else "before_spawn"
+		),
 		"blocked_cell_count": _blocked_cells.size(),
 		"world_body_count": _world_bodies.size(),
 		"full_frame_ms": _summary(_full_frame_samples_ms),
