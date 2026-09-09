@@ -640,15 +640,16 @@ func _show_skill_detail(index: int) -> void:
 
 func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> String:
 	var parts: Array[String] = []
+	var stable_id := str(row.get("skill_id", ProfessionRules.skill_id(str(row.get("skillName", "")))))
 	var base := str(row.get("description", "暂无说明")).strip_edges()
 	if not base.is_empty():
 		parts.append(base)
 	var effect := str(row.get("effect", "")).strip_edges()
-	if not effect.is_empty() and effect != "-":
+	if not effect.is_empty() and effect != "-" and stable_id != "warrior.slaying_swordsmanship":
 		parts.append("效果：%s" % effect)
 	# Only explicit player-facing fields are rendered; internal formula strings are ignored.
 	var probability: Variant = combat.get("probability", combat.get("chance", null))
-	if probability is float or probability is int:
+	if (probability is float or probability is int) and stable_id != "warrior.slaying_swordsmanship":
 		var probability_value := float(probability)
 		parts.append("触发概率：%.1f%%" % (probability_value * 100.0 if probability_value <= 1.0 else probability_value))
 	var cooldown := float(combat.get("cooldown", row.get("delay", 0.0)))
@@ -663,7 +664,6 @@ func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> Strin
 	var range_gu := float(combat.get("maximum_range_gu", 0.0))
 	if range_gu > 0.0:
 		parts.append("作用范围：%.1f GU" % range_gu)
-	var stable_id := str(row.get("skill_id", ProfessionRules.skill_id(str(row.get("skillName", "")))))
 	var formal: Dictionary = _formal_skill_rules.get(stable_id, {})
 	if not formal.is_empty():
 		var group := str(formal.get("formula_group", ""))
@@ -695,7 +695,7 @@ func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> Strin
 		var level := int(combat.get("skill_level", 0))
 		match stable_id:
 			"warrior.fire_sword": parts.append("烈火伤害：基础物理伤害×%.1f倍（当前等级%d）" % [WarriorCombatMath.fire_sword_multiplier(level), level])
-			"warrior.slaying_swordsmanship": parts.append("攻杀：基础物理伤害+%d点；触发概率约%.1f百分比（每%d次攻击一次）" % [WarriorCombatMath.slaying_flat_damage_bonus(level), 100.0 / float(WarriorCombatMath.slaying_proc_cycle(level)), WarriorCombatMath.slaying_proc_cycle(level)])
+			"warrior.slaying_swordsmanship": parts.append("被动提高准确%d点。有效近战攻击有1/%d概率追加%d点伤害，同样作用于刺杀、半月、烈火；多目标共用同次触发，与其他剑法共同生效时不额外叠加攻杀动画。" % [WarriorCombatMath.slaying_accuracy_bonus(level), WarriorCombatMath.slaying_proc_cycle(level), WarriorCombatMath.slaying_flat_damage_bonus(level)])
 			"warrior.thrusting": parts.append("刺杀：第二目标伤害＝基础伤害×(技能等级+2)/(训练等级+2)，并按%d百分比折算" % [WarriorCombatMath.SWORD_LONG_POWER_RATE])
 			"warrior.half_moon": parts.append("半月：扇形副目标伤害＝基础伤害×(技能等级+2)/(训练等级+10)")
 			"warrior.basic_swordsmanship": parts.append("基本剑术：每级准确+3（当前准确+%d），直接用于命中判定" % [WarriorCombatMath.basic_sword_accuracy_bonus(level)])
