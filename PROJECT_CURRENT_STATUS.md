@@ -1,6 +1,6 @@
 # HardCore Current Status
 
-Updated against in-progress integration code anchor: `6fef8e01` (latest APK remains the September 6 build)
+Updated against in-progress integration code anchor: `dcf98d24` (latest APK remains the September 6 build)
 Branch: `codex/integration`
 Updated: 2026-09-09
 Purpose: where the project stands right now.
@@ -10,7 +10,9 @@ Purpose: where the project stands right now.
 - 已集成 Loading/升级事务、WORLD攻击与拾取门禁、共享银行事务、完整掉落实例、音频预算及自适应属性面板。用户已通过面板，标题20/正文14的缩字版本在主树完成专项；不再等待重复校准批准。
 - W6雷电排序、精英/Boss标记、HP910008项目补图、实例字色/光柱与怪物显示名已整合，主树四项专项通过；仓库金币按钮与多选最后物品详情亦已通过。headless两条预取入口兼容与smoke游戏时钟修正已整合，保留原始失败证据。
 - W4新增20/50全活跃真实physics八条件A/B及主树功能冒烟通过，原始日志/精确hash已归档；保留请求量相位差、headless与退出资源警告的边界，不冒称Android混音或普遍性能提升。
-- V3路径/动态占位候选功能专项通过，但正式10/20/30怪真实帧性能对比不达标，正在按相同负载优化；153条攻击投递核查发现更多精确family漏接，12条无来源绑定保持DATA_HOLD。尚未构建下一阶段APK；当前72 / 1.21.0-r3-closure仅为导出配置，不是成品。逐项状态以 `docs/bugfix24/20260909/ACCEPTANCE_MATRIX.md` 为准。
+- V3路径/动态占位已合入主树，七项功能专项通过；非战斗实体门禁与四个既有投射物ID再验2/2通过。正式10/20/30怪真实帧性能仍未达标，四场景对比正在补齐；153条攻击投递核查发现的精确family缺口继续施工，12条无来源绑定保持DATA_HOLD。
+- 金币上限的正式拾取、单件/批量出售、任务合并奖励及保存失败回滚/重试新增专项通过。原始失败与退出资源清理告警保留，不将runner允许的告警记为零原始错误。
+- 尚未构建下一阶段APK；当前72 / 1.21.0-r3-closure仅为导出配置，不是成品。逐项状态以 `docs/bugfix24/20260909/ACCEPTANCE_MATRIX.md` 为准。
 
 ## 2026-09-06 玩法与精确音频升级（最近已构建包）
 
