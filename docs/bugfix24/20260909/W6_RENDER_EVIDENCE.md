@@ -63,6 +63,7 @@ compatibility 渲染；命令不启动编辑器：
 
 ```powershell
 $godot=(Resolve-Path tools/godot-4.7/Godot_v4.7-stable_win64_console.exe).Path
+$env:APPDATA=(Resolve-Path .godot/runtime_appdata).Path
 & $godot --path . --scene res://docs/bugfix24/20260909/W6_sort_render_probe.tscn --rendering-method gl_compatibility --rendering-driver opengl3 --resolution 800x600 --position 80,80 --log-file outputs/test_logs/w6_sort_render_probe_archived.godot.log
 ```
 
@@ -85,6 +86,7 @@ EnemyActor/MonsterOverhead/HUD 的真实 probe 也已归档：
 
 ```powershell
 $godot=(Resolve-Path tools/godot-4.7/Godot_v4.7-stable_win64_console.exe).Path
+$env:APPDATA=(Resolve-Path .godot/runtime_appdata).Path
 & $godot --path . --scene res://docs/bugfix24/20260909/W6_actor_hud_render_probe.tscn --rendering-method gl_compatibility --rendering-driver opengl3 --resolution 1598x720 --position 80,80 --log-file outputs/test_logs/w6_actor_hud_render_archived.godot.log
 ```
 
@@ -153,3 +155,8 @@ FIFO、重试、失败回滚、地图代次和注销断言全部保留。修正�
 最终提交后必须在最终 SHA 再复跑 W6 contract 与本表受影响的视觉专项；提交时
 工作树状态、最终 SHA 和复跑 JSON 由交接消息固定记录。所有渲染和测试均在
 本树独立 `.godot/runtime_appdata`/`outputs`，不生成 Android 包。
+
+## 主树集成验收
+
+主树合入39110308/f5136b27/2848968b，并在GameRoot目标HUD传入真实monster_id。受控headless导入exit0；runner_results_adhoc_20260909_144038_883_11920.json四项PASS（W6、lightning_runtime_map_visual、loot manager、smoke），均自然退出，无非allowlisted引擎错误。测试运行于2848968b加HUD/runner/docs未提交变更，不冒充干净HEAD或设备证据；原始日志在evidence/W6/main_integration。
+

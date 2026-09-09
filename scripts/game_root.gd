@@ -5678,7 +5678,8 @@ func _update_target_hud() -> void:
 			active_target.current_hp,
 			active_target.max_hp,
 			manual_magic_target_lock if magic_domain else manual_target_lock,
-			auto_target_enabled
+			auto_target_enabled,
+			active_target.monster_id
 		)
 	else:
 		hud.update_target("", 0, 0, false, auto_target_enabled)
