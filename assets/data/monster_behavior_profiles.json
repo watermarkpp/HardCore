@@ -211,6 +211,163 @@
         "confidence": "A",
         "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run"
       }
+    },
+    "w1_archer_projectile": {
+      "runtimeProjection": {"attack_range_gu": 7.0},
+      "serviceClass": {
+        "race": 104,
+        "name": "TArcherMonster",
+        "confidence": "A",
+        "bindingStatus": "CANDIDATE",
+        "bindingAuthority": "B_CANDIDATE",
+        "source": "candidate Monster.DB exact IDs 42,145,186 + original_gameofmir/M2Server/UsrEngn.pas:1908 and ObjAxeMon.pas:26-31,41-100,198-204",
+        "sourceEvidence": {
+          "identity": {
+            "distribution": "source.original_gameofmir.monster_db_176",
+            "tier": "primary",
+            "authority": "B_CANDIDATE",
+            "path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "exactMonsterIds": [42, 145, 186],
+            "binding": "exact_name",
+            "adoption": "adopted_by_M00R_audited_candidate_routing"
+          },
+          "classRule": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+            "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+            "lines": "26-31,41-100,198-204",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1908",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "rule": "TArcherMonster inherits TDualAxeMonster.AttackTarget/FlyAxeAttack; m_nAttackMax=6 is a consecutive burst count, not range."
+          }
+        }
+      },
+      "attackDelivery": {
+        "kind": "physical_projectile",
+        "effectId": "monster.physical_arrow.v1",
+        "trajectory": "frozen_target_footpoint",
+        "obstaclePolicy": "environment_can_fly_line",
+        "impactDelay": {"baseSeconds": 0.6, "perChebyshevGuSeconds": 0.05},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjAxeMon.pas TArcherMonster inherits TDualAxeMonster.FlyAxeAttack",
+        "sourceTiming": "StruckDamage precedes SendDelayMsg; 0.6 + Chebyshev-GU * 0.05 describes delayed RM_10101 feedback, not source HP settlement.",
+        "runtimeCompatibility": "Existing HardCore physical-projectile adapter delays target-bound settlement and validates WORLD/combat_epoch at impact.",
+        "visualAuthority": "monster.physical_arrow.v1 is the existing generic physical-projectile trajectory, not archer-specific source art."
+      }
+    },
+    "w1_thorn_dark_projectile": {
+      "runtimeProjection": {"attack_range_gu": 7.0},
+      "serviceClass": {
+        "race": 93,
+        "name": "TThornDarkMonster",
+        "confidence": "A",
+        "bindingStatus": "CANDIDATE",
+        "bindingAuthority": "B_CANDIDATE",
+        "source": "candidate Monster.DB exact IDs 62,174 + original_gameofmir/M2Server/UsrEngn.pas:1882 and ObjAxeMon.pas:19-24,41-100,184-194",
+        "sourceEvidence": {
+          "identity": {
+            "distribution": "source.original_gameofmir.monster_db_176",
+            "tier": "primary",
+            "authority": "B_CANDIDATE",
+            "path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "exactMonsterIds": [62, 174],
+            "binding": "exact_name",
+            "adoption": "adopted_by_M00R_audited_candidate_routing"
+          },
+          "classRule": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+            "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+            "lines": "19-24,41-100,184-194",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1882",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "rule": "TThornDarkMonster inherits TDualAxeMonster.AttackTarget/FlyAxeAttack; m_nAttackMax=3 is a consecutive burst count, not range."
+          }
+        }
+      },
+      "attackDelivery": {
+        "kind": "physical_projectile",
+        "effectId": "monster.physical_arrow.v1",
+        "trajectory": "frozen_target_footpoint",
+        "obstaclePolicy": "environment_can_fly_line",
+        "impactDelay": {"baseSeconds": 0.6, "perChebyshevGuSeconds": 0.05},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjAxeMon.pas TThornDarkMonster inherits TDualAxeMonster.FlyAxeAttack",
+        "sourceTiming": "StruckDamage precedes SendDelayMsg; 0.6 + Chebyshev-GU * 0.05 describes delayed RM_10101 feedback, not source HP settlement.",
+        "runtimeCompatibility": "Existing HardCore physical-projectile adapter delays target-bound settlement and validates WORLD/combat_epoch at impact.",
+        "visualAuthority": "monster.physical_arrow.v1 is the existing generic physical-projectile trajectory, not thorn-specific source art."
+      }
+    },
+    "w1_electronic_scolpion_target_magic": {
+      "runtimeProjection": {"attack_range_gu": 2.0},
+      "serviceClass": {
+        "race": 200,
+        "name": "TElectronicScolpionMon",
+        "confidence": "A",
+        "bindingStatus": "CANDIDATE",
+        "bindingAuthority": "B_CANDIDATE",
+        "source": "candidate Monster.DB exact ID 224 + original_gameofmir/M2Server/UsrEngn.pas:1928 and ObjMon.pas:119-128,1820-1881",
+        "sourceEvidence": {
+          "identity": {
+            "distribution": "source.original_gameofmir.monster_db_176",
+            "tier": "primary",
+            "authority": "B_CANDIDATE",
+            "path": "dev_art_sources/reference/mir2_database_candidates/mylgd_mir2server_176/Mud2/DB/Monster.DB",
+            "sha256": "a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0",
+            "exactMonsterIds": [224],
+            "binding": "exact_name",
+            "adoption": "adopted_by_M00R_audited_candidate_routing"
+          },
+          "classRule": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+            "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+            "lines": "119-128,1820-1881",
+            "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+            "dispatchLine": "1928",
+            "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+            "rule": "TElectronicScolpionMon.LightingAttack uses the low-HP or exact axis-two gate; inherited TMonster.Run retains the adjacent ordinary attack."
+          }
+        }
+      },
+      "attackDelivery": {
+        "kind": "target_magic",
+        "effectId": "monster.target_lightning.v1",
+        "damageChannel": "magic_defense",
+        "rangeShape": "chebyshev_square",
+        "rangeTiles": 2,
+        "rangePixels": 64.0,
+        "hitDelaySeconds": 0.2,
+        "activation": {"hpBelowRatio": 0.5, "orAxisBoundaryTiles": 2.0},
+        "sourceContactMeleeFallback": true,
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjMon.pas TElectronicScolpionMon.LightingAttack and Run",
+        "sourceTiming": "Source applies StruckDamage immediately and sends 200 ms RM_10101 feedback; HardCore retains its delayed target-magic settlement contract.",
+        "runtimeCompatibility": "The existing target-magic adapter enforces the formal 2 GU axis condition, magic-defense channel, WORLD and combat_epoch checks, with inherited adjacent physical fallback.",
+        "visualAuthority": "monster.target_lightning.v1 is the existing generic target-magic effect; no new source art is introduced."
+      }
+    },
+    "w1_fixed_noncombat": {
+      "specialClassification": "fixed_noncombat",
+      "combatEnabled": false,
+      "movement": {"stationary": true},
+      "source": "user.authority.monster_movement_speed.2026-08-30",
+      "sourceEvidence": {
+        "authority": "HUMAN_FROZEN",
+        "distribution": "user.authority.monster_movement_speed.2026-08-30",
+        "path": "assets/data/monster_runtime_authority_v1.json",
+        "exactMonsterIds": [226, 227, 228, 229, 230, 231, 232, 233, 234],
+        "kind": "stationary_entity",
+        "reason": "treasure chest is a fixed non-combat entity",
+        "scope": "Formal combatEnabled=false gate only; no service class, attack delivery, area, poison, burrow, or actor-class inheritance."
+      }
     }
   },
   "profileByMonsterId": {
@@ -224,7 +381,8 @@
     "43": "cave_bat", "44": "cave_bat",
     "45": "scorpion", "46": "cave_maggot",
 	"50": "axe_skeleton",
-    "60": "dung", "62": "dark_warrior", "63": "dark_warrior",
+    "42": "w1_archer_projectile",
+    "60": "dung", "62": "w1_thorn_dark_projectile", "63": "dark_warrior",
     "64": "wooma_soldier", "65": "wooma_soldier",
     "66": "wooma_fighter", "67": "wooma_fighter",
     "68": "wooma_warrior", "69": "wooma_warrior",
@@ -238,14 +396,23 @@
 	"124": "touch_dragon",
 	"160": "zuma_boss",
     "128": "moth_control", "168": "moth_control", "169": "moth_control",
+    "145": "w1_archer_projectile",
+    "174": "w1_thorn_dark_projectile",
     "150": "zuma_archer", "151": "zuma_archer", "152": "zuma_archer",
     "153": "zuma_dormant", "154": "zuma_dormant", "155": "zuma_dormant",
     "156": "zuma_guard_holy_word", "157": "zuma_guard_holy_word", "158": "zuma_guard_holy_word", "159": "zuma_guard_holy_word",
     "180": "stationary_demon", "182": "stationary_spider",
+    "186": "w1_archer_projectile",
     "193": "rainbow_demon", "195": "millennium_tree",
     "206": "skeleton_archer", "207": "skeleton_archer",
     "220": "cow_mage",
-    "222": "cow_priest"
+    "222": "cow_priest",
+    "224": "w1_electronic_scolpion_target_magic",
+    "226": "w1_fixed_noncombat", "227": "w1_fixed_noncombat",
+    "228": "w1_fixed_noncombat", "229": "w1_fixed_noncombat",
+    "230": "w1_fixed_noncombat", "231": "w1_fixed_noncombat",
+    "232": "w1_fixed_noncombat", "233": "w1_fixed_noncombat",
+    "234": "w1_fixed_noncombat"
   },
   "legacyNameToProfile": {
     "稻草人": "strawman", "稻草人1": "strawman",
