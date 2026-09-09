@@ -72,6 +72,196 @@
       }
     },
     {
+      "monsterId": 42,
+      "canonicalName": "半兽统领",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "sourceClassBinding": {
+        "serverRace": 104,
+        "pascalClass": "TArcherMonster",
+        "attackMethod": "FlyAxeAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "26-31,41-100,198-204",
+        "rule": "TArcherMonster inherits TDualAxeMonster.AttackTarget/FlyAxeAttack; the source seven-cell gate is projected to formal 7 GU. m_nAttackMax=6 is a burst count, not range.",
+        "projectCompatibility": "HardCore retains its existing target-bound delayed physical-projectile settlement and generic monster.physical_arrow.v1 trajectory under the typed combat-epoch/WORLD contract."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1908: 104 -> TArcherMonster.Create"
+      }
+    },
+    {
+      "monsterId": 145,
+      "canonicalName": "变异骷髅0",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "sourceClassBinding": {
+        "serverRace": 104,
+        "pascalClass": "TArcherMonster",
+        "attackMethod": "FlyAxeAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "26-31,41-100,198-204",
+        "rule": "TArcherMonster inherits TDualAxeMonster.AttackTarget/FlyAxeAttack; the source seven-cell gate is projected to formal 7 GU. m_nAttackMax=6 is a burst count, not range.",
+        "projectCompatibility": "HardCore retains its existing target-bound delayed physical-projectile settlement and generic monster.physical_arrow.v1 trajectory under the typed combat-epoch/WORLD contract."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1908: 104 -> TArcherMonster.Create"
+      }
+    },
+    {
+      "monsterId": 186,
+      "canonicalName": "鹰卫",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "sourceClassBinding": {
+        "serverRace": 104,
+        "pascalClass": "TArcherMonster",
+        "attackMethod": "FlyAxeAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "26-31,41-100,198-204",
+        "rule": "TArcherMonster inherits TDualAxeMonster.AttackTarget/FlyAxeAttack; the source seven-cell gate is projected to formal 7 GU. m_nAttackMax=6 is a burst count, not range.",
+        "projectCompatibility": "HardCore retains its existing target-bound delayed physical-projectile settlement and generic monster.physical_arrow.v1 trajectory under the typed combat-epoch/WORLD contract."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1908: 104 -> TArcherMonster.Create"
+      }
+    },
+    {
+      "monsterId": 62,
+      "canonicalName": "暗黑战士",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "sourceClassBinding": {
+        "serverRace": 93,
+        "pascalClass": "TThornDarkMonster",
+        "attackMethod": "FlyAxeAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "19-24,41-100,184-194",
+        "rule": "TThornDarkMonster inherits TDualAxeMonster.AttackTarget/FlyAxeAttack; the source seven-cell gate is projected to formal 7 GU. m_nAttackMax=3 is a burst count, not range.",
+        "projectCompatibility": "HardCore retains its existing target-bound delayed physical-projectile settlement and generic monster.physical_arrow.v1 trajectory under the typed combat-epoch/WORLD contract."
+      },
+      "dispatchEvidence": {
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085",
+        "constantLine": "159: MONSTER_THONEDARK = 93",
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1882: MONSTER_THONEDARK -> TThornDarkMonster.Create"
+      }
+    },
+    {
+      "monsterId": 174,
+      "canonicalName": "暴牙蜘蛛",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "sourceClassBinding": {
+        "serverRace": 93,
+        "pascalClass": "TThornDarkMonster",
+        "attackMethod": "FlyAxeAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "19-24,41-100,184-194",
+        "rule": "TThornDarkMonster inherits TDualAxeMonster.AttackTarget/FlyAxeAttack; the source seven-cell gate is projected to formal 7 GU. m_nAttackMax=3 is a burst count, not range.",
+        "projectCompatibility": "HardCore retains its existing target-bound delayed physical-projectile settlement and generic monster.physical_arrow.v1 trajectory under the typed combat-epoch/WORLD contract."
+      },
+      "dispatchEvidence": {
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085",
+        "constantLine": "159: MONSTER_THONEDARK = 93",
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1882: MONSTER_THONEDARK -> TThornDarkMonster.Create"
+      }
+    },
+    {
+      "monsterId": 224,
+      "canonicalName": "牛魔王",
+      "runtimeAllowed": true,
+      "attackRangeGu": 2.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "target_magic",
+      "sourceContactMeleeFallback": true,
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+        "lines": "1820-1881",
+        "rule": "TElectronicScolpionMon casts within abs(dx)<=2 and abs(dy)<=2 when low HP or an axis is exactly 2; inherited TMonster.Run retains the ordinary adjacent attack.",
+        "projectCompatibility": "HardCore projects the source two-cell axis condition to the formal 2 GU target-magic gate and retains delayed target-bound settlement."
+      },
+      "meleeFallbackSource": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TBaseObject.GetAttackDir accepts adjacent Chebyshev-square targets."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1928: 200 -> TElectronicScolpionMon.Create"
+      }
+    },
+    {
       "monsterId": 70,
       "canonicalName": "火焰沃玛",
       "runtimeAllowed": true,
