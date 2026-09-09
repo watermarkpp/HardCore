@@ -108,6 +108,7 @@ func _assert_range_policy(document: Dictionary) -> void:
 	_expect(str(document.get("unitSource", {}).get("tier", "")) == "primary", "attack range unit source is not primary")
 	_expect(str(document.get("unitSource", {}).get("sha256", "")).length() == 64, "attack range unit source hash missing")
 	var expected_ranges := {
+		50: 7.0,
 		70: 1.0,
 		124: 6.0,
 		150: 7.0,
@@ -132,9 +133,17 @@ func _assert_range_policy(document: Dictionary) -> void:
 		_expect(str(source.get("tier", "")) == "primary", "range source tier mismatch for monsterId=%d" % monster_id)
 		_expect(str(source.get("path", "")).begins_with("dev_art_sources/reference/original_gameofmir/"), "range source is not primary server rule for monsterId=%d" % monster_id)
 		_expect(str(source.get("sha256", "")).length() == 64, "range source hash missing for monsterId=%d" % monster_id)
-		if monster_id in [150, 152, 206]:
+		if monster_id in [50, 150, 152, 206]:
 			_expect(str(record.get("deliveryKind", "")) == "physical_projectile", "archer delivery mismatch for monsterId=%d" % monster_id)
 			_expect(str(record.get("rangeShape", "")) == "euclidean_circle", "archer range shape mismatch for monsterId=%d" % monster_id)
+		if monster_id == 50:
+			var bridge: Dictionary = record.get("identityBridge", {})
+			var binding: Dictionary = record.get("sourceClassBinding", {})
+			_expect(int(bridge.get("canonicalAppearance", -1)) == 21, "ID50 canonical appearance bridge mismatch")
+			_expect(int(bridge.get("crystalAiCode", -1)) == 8, "ID50 Crystal AI bridge mismatch")
+			_expect(int(binding.get("serverRace", -1)) == 87, "ID50 server race mismatch")
+			_expect(str(binding.get("pascalClass", "")) == "TDualAxeMonster", "ID50 primary actor class mismatch")
+			_expect(str(binding.get("attackMethod", "")) == "FlyAxeAttack", "ID50 primary attack method mismatch")
 		if monster_id in [220, 222]:
 			_expect(str(record.get("deliveryKind", "")) == "target_magic", "caster delivery mismatch for monsterId=%d" % monster_id)
 			_expect(str(record.get("rangeShape", "")) == "chebyshev_square", "caster source grid shape mismatch for monsterId=%d" % monster_id)

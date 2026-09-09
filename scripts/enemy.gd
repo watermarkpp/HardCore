@@ -93,7 +93,7 @@ const TARGET_GRID_HALF_EXTENTS_PER_GU := Vector2(128.0, 64.0)
 ## primary player remains a live direct candidate and is never delayed here.
 const TARGET_GRID_REFRESH_SECONDS := BACKGROUND_AI_INTERVAL_SECONDS
 const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
-const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
+const ENEMY_MOTION_MASK := WorldSpatialRulesScript.ENEMY_MASK
 const POISON_INDICATOR_STYLE := "overhead_green_red_dot_row"
 const POISON_INDICATOR_DOT_RADIUS := 3.0
 const POISON_INDICATOR_DOT_CENTER_OFFSET_X := 5.0
@@ -126,6 +126,7 @@ const LAST_SAFE_REFRESH_DISTANCE_GU := 2.0
 const PROJECTILE_OBSTACLE_SAMPLE_STEP_GU := 0.25
 const ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU := PROJECTILE_OBSTACLE_SAMPLE_STEP_GU
 const CORPSE_HOLD_SECONDS := 2.0
+const HC_SHARED_GOAL_CACHE_LIMIT := 64
 
 static var _crowd_query_candidate_count := 0
 static var _crowd_steering_evaluation_count := 0
@@ -144,6 +145,8 @@ static var _background_deep_sleep_wakeup_count := 0
 static var _physics_move_count := 0
 static var _environment_guard_check_count := 0
 static var _runtime_map_id_property_list_scan_count := 0
+static var _hc_shared_goal_cache: Dictionary = {}
+static var _hc_shared_goal_cache_order: Array = []
 
 static func reset_runtime_map_id_diagnostics() -> void:
 	_runtime_map_id_property_list_scan_count = 0
@@ -449,6 +452,9 @@ var _terrain_failed_cell_until_ms := 0
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
+	set_meta("hc_combat_life_epoch", int(get_meta("hc_combat_life_epoch", 0)) + 1)
+	_hc_close_session = false
+	_hc_cancel_path()
 	_reset_monster_audio_observer()
 	_reset_direct_spell_runtime_stats()
 	var requested_id := MonsterIdentityScript.monster_id(data)
@@ -1313,6 +1319,8 @@ func _target_should_disengage(
 	if _target_focus_tick_ms <= 0:
 		_refresh_target_focus(now_ms)
 	elif now_ms - _target_focus_tick_ms > _target_focus_timeout_ms:
+		if _hc_standard_melee():
+			_hc_forget(candidate)
 		return true
 	var origin_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
 	var target_ground_gu := _screen_position_px_to_ground_position_gu(
@@ -1431,6 +1439,9 @@ func _request_autonomous_step(
 		return false
 	if not cadence_result.granted:
 		return false
+	if _hc_owned_movement_call and _hc_standard_melee() and reason == &"pursuit" and engagement_target == target:
+		# A granted pursuit session survives a queued path and attack cooldown.
+		_hc_close_session = true
 	var creates_continuous_pursuit := (
 		reason == &"pursuit"
 		and is_instance_valid(engagement_target)
@@ -1470,6 +1481,8 @@ func _begin_autonomous_step_without_cadence(
 		return false
 	if desired_direction_ground_gu.length() <= GroundUnitSpace.EPSILON_GU:
 		return false
+	if _hc_owned_movement_call and _hc_standard_melee():
+		_hc_step_override = Vector2.INF
 	var pursuit_ground := desired_direction_ground_gu.normalized()
 	var steering_ground := pursuit_ground
 	if use_crowd_steering:
@@ -1505,6 +1518,11 @@ func _begin_autonomous_step_without_cadence(
 	if not bool(step.get("valid", false)):
 		return false
 	var target_ground_gu: Vector2 = step.get("target_ground_gu", Vector2.INF)
+	if _hc_owned_movement_call and _hc_standard_melee() and reason == &"pursuit" and _hc_step_override.is_finite():
+		target_ground_gu = _hc_step_override
+	if _hc_owned_movement_call and _hc_standard_melee():
+		_hc_motion_window = 0.0
+		_hc_window_remaining = INF
 	if not target_ground_gu.is_finite():
 		return false
 	_movement_step_start_ground_gu = current_ground_gu
@@ -1533,6 +1551,8 @@ func _terrain_neighbor_for_pursuit(
 	engagement_target: Node2D,
 	direct_neighbor: Vector2i,
 ) -> Vector2i:
+	if _hc_owned_movement_call and _hc_standard_melee():
+		return _hc_neighbor(current_ground_gu, engagement_target, direct_neighbor)
 	if runtime_map_id < 0:
 		return direct_neighbor
 	if not MonsterTerrainNavigationPolicyScript.context_valid(
@@ -1683,6 +1703,8 @@ func _clear_terrain_route_cache() -> void:
 
 
 func _reset_terrain_navigation_state() -> void:
+	_hc_close_debt = false
+	_hc_cancel_path()
 	_clear_terrain_route_cache()
 	_terrain_no_path_until_ms = 0
 	_terrain_failed_cell = Vector2i.ZERO
@@ -1711,6 +1733,9 @@ func _live_continuous_pursuit_target() -> Node2D:
 
 
 func _continue_continuous_pursuit_from_current_target() -> void:
+	if _hc_owned_movement_call and _hc_standard_melee():
+		# Outer physics owns the only post-arrival decision and movement budget.
+		return
 	var live_target := _live_continuous_pursuit_target()
 	if live_target == null:
 		_clear_continuous_pursuit_intent()
@@ -1753,6 +1778,7 @@ func _clear_autonomous_step_state() -> void:
 
 
 func _cancel_autonomous_step(preserve_current_position := true) -> void:
+	_hc_close_session = false
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
 	_clear_autonomous_step_state()
@@ -1780,6 +1806,8 @@ func _movement_step_engagement_target() -> Node2D:
 
 
 func _movement_step_engagement_ready() -> bool:
+	if _hc_owned_movement_call and _hc_standard_melee() and _movement_step_reason == &"pursuit":
+		return _hc_step_can_end()
 	var hit_target := _movement_step_engagement_target()
 	if hit_target == null:
 		return false
@@ -1805,6 +1833,9 @@ func _movement_step_engagement_ready() -> bool:
 
 
 func _fail_autonomous_step_blocked() -> void:
+	if _hc_owned_movement_call and _hc_standard_melee():
+		_hc_fail_step()
+		return
 	var failed_reason := _movement_step_reason
 	var failed_target_ground_gu := _movement_step_target_ground_gu
 	if _movement_step_start_screen_px.is_finite() and _movement_step_start_screen_px != Vector2.INF:
@@ -1924,6 +1955,13 @@ func _advance_autonomous_step_internal(delta: float) -> void:
 		frame_direction,
 		frame_speed,
 	)
+	if _hc_owned_movement_call and _hc_standard_melee() and _movement_step_reason == &"pursuit":
+		var predicted := current_ground_gu + frame_direction * frame_speed * maxf(delta, 0.0)
+		if not _hc_motion_clear(current_ground_gu, predicted):
+			velocity = Vector2.ZERO
+			_clear_autonomous_step_state()
+			_hc_last_reason = "FRONTLINE_BLOCKED"
+			return
 	_move_with_spatial_rules(delta)
 	var after_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
 	# The step target itself remains immutable, but an autonomous pursuit may
@@ -1935,24 +1973,32 @@ func _advance_autonomous_step_internal(delta: float) -> void:
 		_clear_continuous_pursuit_intent()
 		return
 	var blocked := false
-	if get_slide_collision_count() > 0:
-		blocked = true
-	elif not after_ground_gu.is_finite():
-		blocked = true
+	if _hc_owned_movement_call and _hc_standard_melee():
+		blocked = not after_ground_gu.is_finite()
+		if not blocked:
+			var actual_step := after_ground_gu.distance_to(frame_start_ground)
+			blocked = actual_step <= GroundUnitSpace.EPSILON_GU
+			if not blocked:
+				blocked = _hc_track_motion(delta, remaining_distance, after_ground_gu.distance_to(_movement_step_target_ground_gu))
 	else:
-		var motion_ground_gu := after_ground_gu - frame_start_ground
-		if motion_ground_gu.length() > GroundUnitSpace.EPSILON_GU:
-			var forward_dot := motion_ground_gu.normalized().dot(frame_direction)
-			if forward_dot < -0.5:
-				blocked = true
-			elif forward_dot < 0.5:
-				var side_dot := motion_ground_gu.normalized().dot(
-					Vector2(-frame_direction.y, frame_direction.x)
-				)
-				if absf(side_dot) > 0.8:
-					blocked = true
-		else:
+		if get_slide_collision_count() > 0:
 			blocked = true
+		elif not after_ground_gu.is_finite():
+			blocked = true
+		else:
+			var motion_ground_gu := after_ground_gu - frame_start_ground
+			if motion_ground_gu.length() > GroundUnitSpace.EPSILON_GU:
+				var forward_dot := motion_ground_gu.normalized().dot(frame_direction)
+				if forward_dot < -0.5:
+					blocked = true
+				elif forward_dot < 0.5:
+					var side_dot := motion_ground_gu.normalized().dot(
+						Vector2(-frame_direction.y, frame_direction.x)
+					)
+					if absf(side_dot) > 0.8:
+						blocked = true
+			else:
+				blocked = true
 	if blocked:
 		# A live summon that physically intercepts pursuit is a combat decision,
 		# not terrain.  Consume only the slide-collision set already produced by
@@ -2052,10 +2098,9 @@ func _ready() -> void:
 	add_to_group("enemies")
 	input_pickable = true
 	collision_layer = WorldSpatialRulesScript.ENEMY_LAYER
-	# The crowd grid/separation policy is authoritative for monster-to-monster
-	# spacing. Keeping ENEMY_LAYER in this mask makes the physics server solve the
-	# same dense crowd again for every moving actor, which scales disastrously.
-	# World and player remain hard physics collisions.
+	# Crowd steering still chooses routes and reduces contention, while the
+	# physics mask is the final hard occupancy authority. Ground monsters must
+	# not tunnel through WORLD, players, summons (PLAYER_LAYER), or one another.
 	collision_mask = ENEMY_MOTION_MASK
 	if not bool(behavior_profile.get("worldCollision", true)):
 		# 飞行怪参与攻击和选取，但不作为人物移动的实体墙。
@@ -2313,6 +2358,11 @@ func _physics_process_internal(delta: float) -> void:
 		else:
 			velocity = Vector2.ZERO
 			return
+	if _hc_standard_melee():
+		_hc_tick_melee(delta, physics_delta)
+		_hc_finalize_boss_facing()
+		_request_actor_redraw_if_dynamic()
+		return
 	if _movement_step_active:
 		_advance_autonomous_step(physics_delta)
 		_request_actor_redraw_if_dynamic()
@@ -2406,7 +2456,12 @@ func _physics_process_internal(delta: float) -> void:
 				_pending_attack_time = _attack_hit_delay
 				_pending_attack_target = target
 				_pending_attack_damage = dealt_damage
-				_pending_attack_release_record = {}
+				_pending_attack_release_record = {
+					"kind": "generic_melee",
+					"target_instance_id": target.get_instance_id(),
+					"target_combat_epoch": _typed_player_combat_epoch(target),
+					"runtime_map_id": runtime_map_id,
+				}
 			else:
 				_deal_melee_hit(target, dealt_damage)
 	else:
@@ -2747,6 +2802,12 @@ static func _packed_vector2_array_from_variant(raw_points: Variant) -> PackedVec
 
 
 func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
+	if _hc_standard_melee():
+		return _hc_point_inside_safe_zone(point_screen_px)
+	return _point_inside_safe_zone_uncached(point_screen_px)
+
+
+func _point_inside_safe_zone_uncached(point_screen_px: Vector2) -> bool:
 	var safe_zone_started_usec := RuntimeDiagnostics.timing_start()
 	RuntimeDiagnostics.increment_performance_counter(&"safe_zone_queries")
 	var zones: Array = []
@@ -2930,6 +2991,8 @@ func _attack_engagement_ready(
 	contact_distance_gu: float,
 	default_engagement_distance_gu: float,
 ) -> bool:
+	if not _player_combat_is_available(hit_target):
+		return false
 	if _uses_special_magic_melee_delivery():
 		return (
 			is_instance_valid(hit_target)
@@ -3327,6 +3390,9 @@ func _update_pending_attack(delta: float) -> void:
 	_pending_attack_target = null
 	_pending_attack_damage = 0
 	_pending_attack_release_record = {}
+	if str(release_record.get("kind", "")) == "hc_standard_melee":
+		_hc_settle(release_record)
+		return
 	if str(release_record.get("kind", "")) == "physical_projectile":
 		_settle_physical_projectile_release(release_record)
 		return
@@ -3334,6 +3400,8 @@ func _update_pending_attack(delta: float) -> void:
 		_settle_target_magic_release(release_record)
 		return
 	if not is_instance_valid(hit_target):
+		return
+	if not _release_player_combat_epoch_is_current(hit_target, release_record):
 		return
 	if _target_is_safe_player(hit_target):
 		return
@@ -3369,6 +3437,7 @@ func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
 	if (
 		not _uses_physical_projectile_delivery()
 		or not is_instance_valid(hit_target)
+		or not _player_combat_is_available(hit_target)
 		or not hit_target.has_method("take_damage")
 		or _target_is_safe_player(hit_target)
 		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
@@ -3428,6 +3497,7 @@ func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
 		"source_instance_id": get_instance_id(),
 		"source_monster_id": monster_id,
 		"target_instance_id": hit_target.get_instance_id(),
+		"target_combat_epoch": _typed_player_combat_epoch(hit_target),
 		"runtime_map_id": runtime_map_id,
 		"source_ground_gu": source_ground_gu,
 		"target_ground_gu": target_ground_gu,
@@ -3491,6 +3561,7 @@ func _physical_projectile_release_target_is_valid(
 		or int(release_record.get("runtime_map_id", -1)) != runtime_map_id
 		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
 		or _target_is_safe_player(hit_target)
+		or not _release_player_combat_epoch_is_current(hit_target, release_record)
 	):
 		return false
 	var dying_value: Variant = hit_target.get("_dying")
@@ -3510,6 +3581,7 @@ func _emit_physical_projectile_descriptor(release_record: Dictionary) -> void:
 		"source_monster_id": monster_id,
 		"source_instance_id": get_instance_id(),
 		"target_instance_id": int(release_record.get("target_instance_id", 0)),
+		"target_combat_epoch": int(release_record.get("target_combat_epoch", -1)),
 		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
 		"origin_world_px": release_record.get("origin_world_px", global_position),
 		"target_world_px": release_record.get("target_world_px", global_position),
@@ -3531,6 +3603,7 @@ func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
 	if (
 		not _uses_target_magic_delivery()
 		or not is_instance_valid(hit_target)
+		or not _player_combat_is_available(hit_target)
 		or not hit_target.has_method("take_direct_spell_damage")
 		or _target_is_safe_player(hit_target)
 		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
@@ -3576,6 +3649,7 @@ func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
 		"source_instance_id": get_instance_id(),
 		"source_monster_id": monster_id,
 		"target_instance_id": hit_target.get_instance_id(),
+		"target_combat_epoch": _typed_player_combat_epoch(hit_target),
 		"runtime_map_id": runtime_map_id,
 		"source_ground_gu": source_ground_gu,
 		"target_ground_gu": target_ground_gu,
@@ -3642,6 +3716,7 @@ func _emit_target_magic_descriptor(release_record: Dictionary) -> void:
 		"source_monster_id": monster_id,
 		"source_instance_id": get_instance_id(),
 		"target_instance_id": int(release_record.get("target_instance_id", 0)),
+		"target_combat_epoch": int(release_record.get("target_combat_epoch", -1)),
 		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
 		"target_ground_gu": release_record.get("target_ground_gu", Vector2.INF),
 		"target_world_px": release_record.get("target_world_px", Vector2.INF),
@@ -3731,9 +3806,9 @@ func _deal_melee_hit(
 	if not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
 	var target_radius_gu := _target_combat_radius_gu(hit_target)
-	var center_reach_gu := maxf(
-		attack_range_gu,
-		_contact_distance_gu_to_target(hit_target),
+	var center_reach_gu := (
+		HCPolicy.START_GU if _hc_standard_melee()
+		else maxf(attack_range_gu, _contact_distance_gu_to_target(hit_target))
 	)
 	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
 	var target_ground_gu := _screen_position_px_to_ground_position_gu(
@@ -3787,13 +3862,14 @@ func _deal_melee_hit(
 		# when the attack projection is intersected with the target footprint.
 		var contact_projection_radius_gu := maxf(
 			0.0,
-			center_reach_gu
-			+ maxf(0.0, center_tolerance_gu)
-			- target_radius_gu,
+			center_reach_gu + maxf(0.0, center_tolerance_gu)
+			- (0.0 if _hc_standard_melee() else target_radius_gu),
 		)
+		# Ordinary centre distance above remains the strict gate. The shared
+		# snapshot is not allowed to extend that gate by the target radius.
 		snapshot = SkillFootprintSnapshotScript.create_circle(
 			_monster_attack_id("release_contact"),
-			_next_spatial_release_id("release_contact"),
+			_hc_release_id(),
 			source_ground_gu,
 			contact_projection_radius_gu,
 			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
@@ -4047,6 +4123,36 @@ func _target_is_safe_player(hit_target: Node2D) -> bool:
 	return hit_target is PlayerCharacter and _point_inside_safe_zone(hit_target.global_position)
 
 
+func _player_combat_is_available(hit_target: Node2D) -> bool:
+	return (
+		not hit_target is PlayerCharacter
+		or not (hit_target as PlayerCharacter).combat_transition_is_active()
+	)
+
+
+func _typed_player_combat_epoch(hit_target: Node2D) -> int:
+	return (
+		(hit_target as PlayerCharacter).combat_epoch
+		if hit_target is PlayerCharacter
+		else -1
+	)
+
+
+func _release_player_combat_epoch_is_current(
+	hit_target: Node2D,
+	release_record: Dictionary,
+) -> bool:
+	if not hit_target is PlayerCharacter:
+		return true
+	var player_target := hit_target as PlayerCharacter
+	return (
+		release_record.has("target_combat_epoch")
+		and release_record.get("target_combat_epoch") is int
+		and int(release_record.get("target_combat_epoch", -1)) == player_target.combat_epoch
+		and not player_target.combat_transition_is_active()
+	)
+
+
 func _update_area_magic_delivery(delta: float) -> void:
 	if not _uses_area_magic_delivery():
 		return
@@ -4153,6 +4259,7 @@ func _area_magic_victim_is_valid(victim: Node2D, snapshot: Dictionary) -> bool:
 		not is_instance_valid(victim)
 		or victim.is_queued_for_deletion()
 		or not victim.has_method("take_direct_spell_damage")
+		or not _player_combat_is_available(victim)
 		or _target_is_safe_player(victim)
 		or _point_inside_safe_zone(victim.global_position)
 		or _runtime_map_id_for_area_target(victim) != runtime_map_id
@@ -4204,6 +4311,7 @@ func _freeze_area_magic_release_records(
 				victim.get_instance_id(),
 			],
 			"target_instance_id": victim.get_instance_id(),
+			"target_combat_epoch": _typed_player_combat_epoch(victim),
 			"runtime_map_id": _runtime_map_id_for_area_target(victim),
 			"target_ground_gu": target_ground_gu,
 			"target_world_px": _target_approved_ground_footpoint_world_px(victim),
@@ -4241,6 +4349,7 @@ func _area_magic_release_target_is_valid(
 		or _runtime_map_id_for_area_target(victim) != runtime_map_id
 		or _target_is_safe_player(victim)
 		or _point_inside_safe_zone(victim.global_position)
+		or not _release_player_combat_epoch_is_current(victim, release_record)
 	):
 		return false
 	var dying_value: Variant = victim.get("_dying")
@@ -4440,6 +4549,7 @@ func _area_attack_victim_is_valid(
 		not is_instance_valid(victim)
 		or victim.is_queued_for_deletion()
 		or not victim.has_method("take_damage")
+		or not _player_combat_is_available(victim)
 	):
 		return false
 	# Enemy death is guarded by _dying; PlayerCharacter uses _dead. The HP
@@ -4497,6 +4607,7 @@ func _freeze_area_attack_release_records(
 				target_instance_id,
 			],
 			"target_instance_id": target_instance_id,
+			"target_combat_epoch": _typed_player_combat_epoch(victim),
 			"runtime_map_id": _runtime_map_id_for_area_target(victim),
 			"target_ground_gu": target_ground_gu,
 			"target_world_px": _target_approved_ground_footpoint_world_px(victim),
@@ -4543,6 +4654,8 @@ func _area_attack_release_target_is_valid(
 	if runtime_map_id != int(release_record.get("runtime_map_id", -1)):
 		return false
 	if _runtime_map_id_for_area_target(victim) != runtime_map_id:
+		return false
+	if not _release_player_combat_epoch_is_current(victim, release_record):
 		return false
 	var dying_value: Variant = victim.get("_dying")
 	if dying_value != null and bool(dying_value):
@@ -4911,6 +5024,8 @@ static func performance_diagnostics() -> Dictionary:
 
 
 func _can_use_background_ai() -> bool:
+	if _hc_damage_dirty or _hc_path_pending:
+		return false
 	if is_boss or not is_instance_valid(primary_target):
 		return false
 	if (
@@ -4970,6 +5085,8 @@ func take_damage(
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
+	if current_hp < hp_before_damage and is_instance_valid(attacker):
+		_hc_received_damage(attacker, float(hp_before_damage - current_hp))
 	_refresh_overhead_health()
 	if is_boss and not boss_rule.is_empty():
 		_apply_health_stage_mechanics()
@@ -5051,6 +5168,8 @@ func _mark_death_pending() -> void:
 		frozen_snapshot["death_world_position"] = global_position
 		set_meta("death_runtime_snapshot", frozen_snapshot)
 	_death_pending = true
+	set_meta("hc_combat_life_epoch", int(get_meta("hc_combat_life_epoch", 0)) + 1)
+	_hc_cancel_path()
 	# The heavyweight death signal/persistence/drop work is deferred, but a
 	# zero-HP actor must stop participating in collision and target queries now.
 	# Otherwise a second projectile in the same frame can be consumed by this
@@ -5390,6 +5509,11 @@ func _retarget(delta := 0.0) -> void:
 ## Inclusive target maintenance/selection body. Its duration is nested in the
 ## actor physics or background-tick total when called from those paths.
 func _retarget_internal(delta := 0.0) -> void:
+	if _hc_standard_melee():
+		_hc_refresh_observation()
+		if _hc_damage_dirty:
+			_retarget_timer = 0.0
+		_hc_damage_dirty = false
 	_target_stable_remaining_seconds = maxf(
 		0.0,
 		_target_stable_remaining_seconds - delta,
@@ -5646,8 +5770,9 @@ func _target_candidate_is_live(candidate: Node2D) -> bool:
 	# Production combat targets have explicit typed life-state contracts. Avoid
 	# Object.get() probes for optional properties: generic test/runtime target
 	# nodes are valid candidates and missing-property probes emit engine errors.
-	if candidate is PlayerCharacter and (candidate._dead or candidate.current_hp <= 0):
-		return false
+	if candidate is PlayerCharacter:
+		if candidate._dead or candidate.current_hp <= 0 or candidate.combat_transition_is_active():
+			return false
 	if candidate is EnemyActor and (candidate._dying or candidate.current_hp <= 0):
 		return false
 	if candidate is SummonActor and (
@@ -6162,3 +6287,814 @@ func request_surrounded_relocation(blocking_neighbor_count: int) -> bool:
 		MonsterUnitAdapterScript.relocation_radius_gu(relocation, 4.0),
 	)
 	return true
+
+# --- HC-MELEE-AI-PACKAGE V3: bounded user override, not source statistics ---
+const HCPolicy := preload("res://scripts/monster_ai_package/policy.gd")
+const HCSearch := preload("res://scripts/monster_ai_package/path_search.gd")
+const HCScheduler := preload("res://scripts/monster_ai_package/path_scheduler.gd")
+var _hc_last_start_tick := -1
+var _hc_release_seq := 0
+var _hc_settled_seq := 0
+var _hc_active_release_id := ""
+var _hc_attack_scratch: Array = []
+var _hc_motion_scratch: Array = []
+var _hc_last_reason := "IDLE"
+var _hc_blocker_id := 0
+var _hc_starts := 0
+var _hc_settlements := 0
+var _hc_legal_slides := 0
+var _hc_damage_dirty := false
+var _hc_damage_observations: Dictionary = {}
+var _hc_known_target_id := 0
+var _hc_known_ground := Vector2.INF
+var _hc_observed := false
+var _hc_investigation_arrived := false
+var _hc_next_observation_ms := 0
+var _hc_close_session := false
+var _hc_close_debt := false
+var _hc_step_override := Vector2.INF
+var _hc_route := PackedVector2Array()
+var _hc_route_index := 0
+var _hc_path_token := 0
+var _hc_path_pending := false
+var _hc_path_status := "IDLE"
+var _hc_path_tier := 0
+var _hc_path_anchor := Vector2.INF
+var _hc_path_retry_ms := 0
+var _hc_path_context: Dictionary = {}
+var _hc_path_map := -1
+var _hc_path_generation := -1
+var _hc_path_revision := -1
+var _hc_failed_edges: Dictionary = {}
+var _hc_scheduler: HCScheduler
+var _hc_motion_window := 0.0
+var _hc_window_remaining := INF
+var _hc_next_side_retry_ms := 0
+var _hc_owned_movement_call := false
+var _hc_world_collision_count := 0
+static var _hc_shared_static_query_tick := -1
+static var _hc_shared_safe_zone_tick_cache: Dictionary = {}
+static var _hc_shared_world_tick_cache: Dictionary = {}
+
+func _hc_standard_melee() -> bool:
+	# Empty delivery kind is the existing ordinary physical contact channel.
+	# Keep every named/special delivery and pre-existing longer reach unchanged.
+	return (
+		str(attack_delivery_rule.get("kind", "")).is_empty()
+		and not bool(area_attack_rule.get("enabled", false))
+		and not bool(summon_rule.get("enabled", false))
+		and not _uses_ranged_projectile_sweep_contract()
+		and attack_range_gu <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+	)
+
+func _hc_exclusion_reason() -> String:
+	if not str(attack_delivery_rule.get("kind", "")).is_empty():
+		return "NAMED_DELIVERY_PRESERVED"
+	if bool(area_attack_rule.get("enabled", false)):
+		return "AREA_ATTACK_PRESERVED"
+	if bool(summon_rule.get("enabled", false)):
+		return "SUMMON_ACTION_PRESERVED"
+	if _uses_ranged_projectile_sweep_contract():
+		return "RANGED_SWEEP_PRESERVED"
+	if attack_range_gu > HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU:
+		return "EXISTING_LONG_REACH_PRESERVED"
+	return ""
+
+func hc_package_policy_snapshot() -> Dictionary:
+	return {
+		"monster_id": monster_id, "delivery_kind": str(attack_delivery_rule.get("kind", "")),
+		"ordinary_override": _hc_standard_melee(), "source_range_gu": attack_range_gu,
+		"start_gu": HCPolicy.START_GU if _hc_standard_melee() else attack_range_gu,
+		"preferred_base_gu": HCPolicy.PREFERRED_GU,
+		"stationary": stationary, "target_id": target.get_instance_id() if is_instance_valid(target) else 0,
+		"reason": _hc_last_reason, "blocker_id": _hc_blocker_id,
+		"starts": _hc_starts, "settlements": _hc_settlements,
+		"path_pending": _hc_path_pending, "path_token": _hc_path_token,
+		"path_status": _hc_path_status,
+		"route_remaining": maxi(0, _hc_route.size() - _hc_route_index),
+		"known_ground_gu": [ _hc_known_ground.x, _hc_known_ground.y ] if _hc_known_ground.is_finite() else [], "legal_slides": _hc_legal_slides,
+		"world_collision_count": _hc_world_collision_count,
+		"exclusion_reason": _hc_exclusion_reason(),
+		"effective_preferred_gu": _hc_preferred(target) if is_instance_valid(target) else HCPolicy.PREFERRED_GU,
+		"pending_delay_gu": HCPolicy.DELAY_TOLERANCE_GU if _attack_hit_delay > 0.0 else 0.0,
+	}
+
+func _hc_preferred(hit_target: Node2D) -> float:
+	# The existing contact gap is retained. It is NOT added to attack reach.
+	return HCPolicy.preferred(_contact_distance_gu_to_target(hit_target))
+
+func _hc_target_usable(hit_target: Node2D) -> bool:
+	return (
+		_target_candidate_is_live(hit_target)
+		and not _target_is_safe_player(hit_target)
+		and not _hc_point_inside_safe_zone(hit_target.global_position)
+		and not _dying and not _death_pending and current_hp > 0
+		and not is_queued_for_deletion() and is_inside_tree()
+	)
+
+func _hc_access(hit_target: Node2D, tolerance := 0.0, fresh_world := false) -> String:
+	_hc_blocker_id = 0
+	if not HCPolicy.valid():
+		return "POLICY_UNAVAILABLE"
+	if not is_finite(tolerance) or tolerance < 0.0 or tolerance > HCPolicy.DELAY_TOLERANCE_GU:
+		return "INVALID_IMPACT_TOLERANCE"
+	if not _hc_target_usable(hit_target):
+		return "INVALID_TARGET"
+	if hit_target is PlayerCharacter and (hit_target as PlayerCharacter).combat_transition_is_active():
+		return "ACTION_LOCKED"
+	if control_time > 0.0 or charm_time > 0.0 or dormant or _burrowed:
+		return "ACTION_LOCKED"
+	var a := _screen_position_px_to_ground_position_gu(global_position)
+	var b := _screen_position_px_to_ground_position_gu(hit_target.global_position)
+	if not a.is_finite() or not b.is_finite() or runtime_map_id < 0:
+		return "PROJECTION_UNAVAILABLE"
+	if not HCPolicy.within(a, b, HCPolicy.START_GU + tolerance):
+		return "OUT_OF_RANGE"
+	if (
+		hit_target.has_method("is_stealthed") and bool(hit_target.call("is_stealthed"))
+		and not anti_stealth and a.distance_to(b) > MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(35.0)
+	):
+		return "TARGET_HIDDEN"
+	if not (
+		_world_attack_path_is_clear(a, b, global_position, hit_target.global_position, false)
+		if fresh_world
+		else _hc_world_between(a, b)
+	):
+		return "WORLD_BLOCKED"
+	if combat_spatial_index == null or spatial_actor_runtime_id <= 0:
+		return "SPATIAL_INDEX_UNAVAILABLE"
+	_hc_blocker_id = _hc_frontline_at(a, b, hit_target)
+	if _hc_blocker_id != 0:
+		return "FRONTLINE_BLOCKED"
+	return "CLEAR"
+
+func _hc_frontline_at(a: Vector2, b: Vector2, hit_target: Node2D) -> int:
+	if combat_spatial_index == null:
+		return -1
+	combat_spatial_index.query_enemy_nodes_segment_into(runtime_map_id, a, b, HCPolicy.LANE_GU, _hc_attack_scratch)
+	for raw: Variant in _hc_attack_scratch:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == hit_target or not other.can_receive_damage():
+			continue
+		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		var c := _screen_position_px_to_ground_position_gu(other.global_position)
+		if HCPolicy.frontline_blocks(a, b, c, combat_radius_gu, _target_combat_radius_gu(hit_target), other.combat_radius_gu, spatial_actor_runtime_id, other.spatial_actor_runtime_id):
+			return other.get_instance_id()
+	return 0
+
+func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
+	if combat_spatial_index == null or runtime_map_id < 0:
+		return false
+	combat_spatial_index.query_enemy_nodes_segment_into(runtime_map_id, a, b, combat_radius_gu, _hc_motion_scratch)
+	for raw: Variant in _hc_motion_scratch:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == target or not other.can_receive_damage():
+			continue
+		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		var c := _screen_position_px_to_ground_position_gu(other.global_position)
+		if HCPolicy.core_crossed(a, b, c, combat_radius_gu, other.combat_radius_gu):
+			return false
+	return true
+
+func _hc_life(node: Node) -> int:
+	if node is PlayerCharacter and is_instance_valid(node):
+		return (node as PlayerCharacter).combat_epoch
+	return int(node.get_meta("hc_combat_life_epoch", 0)) if is_instance_valid(node) else -1
+
+func _hc_try_start(hit_target: Node2D, after_motion_attempt := false) -> bool:
+	var tick := Engine.get_physics_frames()
+	if _hc_last_start_tick == tick or _attack_timer > 0.0 or _pending_attack_time >= 0.0:
+		return false
+	_hc_last_reason = _hc_access(hit_target)
+	if _hc_last_reason != "CLEAR":
+		return false
+	var start_distance := _ground_delta_gu_between_screen_positions(global_position, hit_target.global_position).length()
+	if _hc_close_debt and not after_motion_attempt and not stationary and start_distance > _hc_preferred(hit_target) + GroundUnitSpace.EPSILON_GU:
+		_hc_last_reason = "CLOSE_AFTER_PREVIOUS_ATTACK"
+		return false
+	# Reserve before callbacks (animation/audio may emit signals).
+	_hc_last_start_tick = tick
+	_hc_release_seq += 1
+	_hc_starts += 1
+	_hc_close_debt = not stationary and start_distance > _hc_preferred(hit_target) + GroundUnitSpace.EPSILON_GU
+	var record := {
+		"kind": "hc_standard_melee", "seq": _hc_release_seq,
+		"release_id": _next_spatial_release_id("ordinary_2gu"),
+		"target": weakref(hit_target), "target_id": hit_target.get_instance_id(),
+		"target_life": _hc_life(hit_target), "source_life": _hc_life(self),
+		"target_combat_epoch": _typed_player_combat_epoch(hit_target),
+		"target_generation": int(hit_target.get_meta("zone_generation", -1)),
+		"target_parent_id": hit_target.get_parent().get_instance_id() if hit_target.get_parent() != null else 0,
+		"map_id": runtime_map_id, "generation": int(get_meta("zone_generation", -1)),
+		"parent_id": get_parent().get_instance_id() if get_parent() != null else 0,
+		"tolerance": DELAYED_HIT_TOLERANCE_GU if _attack_hit_delay > 0.0 else 0.0,
+		"damage": _rng.randi_range(attack_min, attack_max),
+	}
+	_clear_autonomous_step_state()
+	# Keep the path/session. Only this local motion step is interrupted.
+	velocity = Vector2.ZERO
+	_attack_timer = _current_attack_interval()
+	_refresh_target_focus()
+	var direction := _ground_delta_gu_between_screen_positions(global_position, hit_target.global_position)
+	if direction.length_squared() > GroundUnitSpace.EPSILON_GU:
+		facing = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(direction).normalized()
+	if _attack_hit_delay > 0.0:
+		_pending_attack_time = _attack_hit_delay
+		_pending_attack_target = hit_target
+		_pending_attack_damage = int(record.damage)
+		_pending_attack_release_record = record
+	_play_attack_animation(maxf(_attack_animation_duration, 0.62))
+	if _attack_hit_delay <= 0.0:
+		_hc_settle(record)
+	return true
+
+func _hc_settle(record: Dictionary) -> void:
+	var seq := int(record.get("seq", 0))
+	if seq <= _hc_settled_seq:
+		return
+	_hc_settled_seq = seq
+	var ref: WeakRef = record.get("target")
+	var victim: Node2D = ref.get_ref() as Node2D if ref != null else null
+	if not _hc_target_usable(victim) or get_parent() == null:
+		return
+	if (
+		int(record.map_id) != runtime_map_id
+		or int(record.generation) != int(get_meta("zone_generation", -1))
+		or int(record.parent_id) != get_parent().get_instance_id()
+		or int(record.source_life) != _hc_life(self)
+		or int(record.target_life) != _hc_life(victim)
+		or not _release_player_combat_epoch_is_current(victim, record)
+		or int(record.target_generation) != int(victim.get_meta("zone_generation", -1))
+		or victim.get_parent() == null or int(record.target_parent_id) != victim.get_parent().get_instance_id()
+	):
+		_hc_last_reason = "RELEASE_LIFECYCLE_REJECTED"
+		return
+	# Release settlement always rechecks WORLD without the navigation cache.
+	_hc_last_reason = _hc_access(victim, float(record.tolerance), true)
+	if _hc_last_reason != "CLEAR":
+		return
+	_hc_settlements += 1
+	_hc_active_release_id = str(record.release_id)
+	_deal_melee_hit(victim, int(record.damage), float(record.tolerance), true)
+	_hc_active_release_id = ""
+
+func _hc_release_id() -> String:
+	return _hc_active_release_id if not _hc_active_release_id.is_empty() else _next_spatial_release_id("release_contact")
+
+func _hc_finalize_boss_facing() -> void:
+	# Movement owns movement_facing. This function only maintains combat facing.
+	if (
+		not is_boss
+		or _pending_attack_time >= 0.0
+		or _hc_last_start_tick == Engine.get_physics_frames()
+		or control_time > 0.0
+		or charm_time > 0.0
+		or dormant
+		or _burrowed
+	):
+		return
+
+	var aim_target: Node2D = target
+	if not _hc_target_usable(aim_target):
+		return
+	if (
+		runtime_map_id < 0
+		or _runtime_map_id_for_area_target(aim_target) != runtime_map_id
+	):
+		return
+
+	var aim_delta: Vector2 = _ground_delta_gu_between_screen_positions(
+		global_position,
+		aim_target.global_position,
+	)
+	if (
+		not aim_delta.is_finite()
+		or aim_delta.length_squared()
+			<= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+	):
+		return
+
+	# A target reference is not permission to track hidden movement.
+	if (
+		aim_target.has_method("is_stealthed")
+		and bool(aim_target.call("is_stealthed"))
+		and not anti_stealth
+		and aim_delta.length()
+			> MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(35.0)
+	):
+		return
+	# Use the existing WORLD-only path check/cache, not the 2-GU attack gate.
+	# A pursuing Boss may face a visible target farther than its melee reach.
+	if not _attack_world_path_is_clear_for_target(aim_target):
+		return
+
+	facing = _screen_facing_for_ground_direction(aim_delta)
+
+
+func _hc_tick_melee(delta: float, physics_delta: float) -> void:
+	if not HCPolicy.valid() or not _hc_target_usable(target):
+		velocity = Vector2.ZERO
+		return
+	if _pending_attack_time >= 0.0:
+		velocity = Vector2.ZERO
+
+		var pending_target: Node2D = _pending_attack_target
+		if (
+			is_instance_valid(pending_target)
+			and not pending_target.is_queued_for_deletion()
+		):
+			var pending_offset_ground_gu: Vector2 = (
+				_ground_delta_gu_between_screen_positions(
+					global_position,
+					pending_target.global_position
+				)
+			)
+			if (
+				pending_offset_ground_gu.is_finite()
+				and pending_offset_ground_gu.length_squared()
+				> GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+			):
+				facing = _screen_facing_for_ground_direction(
+					pending_offset_ground_gu
+				)
+
+		return
+	var offset := _ground_delta_gu_between_screen_positions(global_position, target.global_position)
+	var distance := offset.length()
+	if dormant:
+		var wake := MonsterUnitAdapterScript.range_gu(behavior_profile, "wake_range_gu", "wakeRange", MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(190.0))
+		wake = MonsterUnitAdapterScript.range_gu(boss_rule.get("mechanics", {}).get("stoneWake", {}), "wake_range_gu", "wakeRange", wake)
+		if distance > wake:
+			velocity = Vector2.ZERO
+			return
+		dormant = false
+	if is_boss and _boss_skill_enabled:
+		_update_boss_skill(delta, distance)
+	# The range comparison uses the already-projected offset. Avoid rebuilding
+	# the same target/safe-zone/projection gate twice for an obviously distant
+	# target; a post-movement endpoint still runs the complete access check.
+	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and _hc_try_start(target):
+		return
+	_hc_refresh_observation()
+	var current := _screen_position_px_to_ground_position_gu(global_position)
+	var desired_target := _hc_known_ground
+	if not current.is_finite() or not desired_target.is_finite():
+		_hc_last_reason = "NO_RELIABLE_POSITION"
+		velocity = Vector2.ZERO
+		return
+	var access := (
+		_hc_access(target)
+		if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+		else "OUT_OF_RANGE"
+	)
+	var preferred := _hc_preferred(target)
+	if preferred > HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU:
+		_hc_last_reason = "BODY_REQUIRES_EXPLICIT_EXCEPTION"
+		velocity = Vector2.ZERO
+		return
+	if access == "CLEAR" and not HCPolicy.should_close(distance, preferred):
+		_clear_autonomous_step_state()
+		velocity = Vector2.ZERO
+		_hc_last_reason = "PREFERRED_COOLDOWN_WAIT"
+		return
+	if stationary:
+		velocity = Vector2.ZERO
+		return
+	if not _hc_observed and (
+		_hc_investigation_arrived
+		or (current.distance_to(desired_target) <= preferred and _hc_world_between(current, desired_target))
+	):
+		_clear_autonomous_step_state()
+		velocity = Vector2.ZERO
+		_hc_last_reason = "INVESTIGATE_WAIT"
+		return
+	# A reversal can cancel only a local open-ground segment, not a wall detour.
+	if _movement_step_active and _hc_observed and _hc_route.is_empty():
+		var leg := _movement_step_target_ground_gu - current
+		if leg.dot(desired_target - current) < 0.0 and _hc_world_between(current, desired_target):
+			_clear_autonomous_step_state()
+	if not _movement_step_active:
+		var started := false
+		if _hc_close_session:
+			_hc_owned_movement_call = true
+			started = _begin_autonomous_step_without_cadence(desired_target - current, 1.0, false, &"pursuit", target)
+			_hc_owned_movement_call = false
+		else:
+			_hc_owned_movement_call = true
+			started = _request_autonomous_step(desired_target - current, 1.0, true, &"pursuit", -1, target)
+			_hc_owned_movement_call = false
+			if started:
+				_hc_close_session = true
+		if not started:
+			velocity = Vector2.ZERO
+			# A physically unavailable closer position is a legitimate outer
+			# attack position, not a reason to stop all attacks indefinitely.
+			_hc_try_start(target, true)
+			return
+	_hc_owned_movement_call = true
+	_advance_autonomous_step(physics_delta)
+	_hc_owned_movement_call = false
+	var after := _screen_position_px_to_ground_position_gu(global_position)
+	if after.is_finite() and after.distance_to(desired_target) < current.distance_to(desired_target) - GroundUnitSpace.EPSILON_GU:
+		_hc_close_debt = false
+	# Actual, post-movement endpoints; no extra movement budget in this tick.
+	_hc_try_start(target, true)
+
+func _hc_step_can_end() -> bool:
+	if not _hc_standard_melee() or not _hc_target_usable(target):
+		return false
+	var access := _hc_access(target)
+	if access != "CLEAR":
+		return false
+	var distance := _ground_delta_gu_between_screen_positions(global_position, target.global_position).length()
+	return (
+		(_attack_timer <= 0.0 and _pending_attack_time < 0.0 and not _hc_close_debt and _hc_last_start_tick != Engine.get_physics_frames())
+		or distance <= _hc_preferred(target) + GroundUnitSpace.EPSILON_GU
+	)
+
+func _hc_world_between(a: Vector2, b: Vector2) -> bool:
+	_hc_refresh_static_query_cache()
+	var scope := _hc_static_query_scope(false)
+	var cache: Dictionary = _hc_shared_world_tick_cache.get(scope, {})
+	var key := Vector4(a.x, a.y, b.x, b.y)
+	if cache.has(key):
+		return bool(cache[key])
+	var result := _world_attack_path_is_clear(
+		a,
+		b,
+		_ground_gu_to_screen_position_px(a),
+		_ground_gu_to_screen_position_px(b),
+		false,
+	)
+	cache[key] = result
+	_hc_shared_world_tick_cache[scope] = cache
+	return result
+
+func _hc_refresh_static_query_cache() -> void:
+	var tick := Engine.get_physics_frames()
+	if tick == _hc_shared_static_query_tick:
+		return
+	_hc_shared_static_query_tick = tick
+	_hc_shared_safe_zone_tick_cache.clear()
+	_hc_shared_world_tick_cache.clear()
+
+func _hc_static_query_scope(include_safe_zone_owner: bool) -> Array:
+	var environment_id := environment_blocker.get_instance_id() if is_instance_valid(environment_blocker) else 0
+	var safe_owner_id := 0
+	var safe_context_revision := -1
+	if include_safe_zone_owner:
+		var local_context: Variant = get_meta("safe_zone_context", {})
+		var legacy_context: Variant = get_meta("safe_zones", [])
+		if local_context is Dictionary and not (local_context as Dictionary).is_empty():
+			safe_context_revision = int((local_context as Dictionary).get("revision", -1))
+		safe_owner_id = (
+			get_instance_id()
+			if (local_context is Dictionary and not (local_context as Dictionary).is_empty())
+				or (legacy_context is Array and not (legacy_context as Array).is_empty())
+			else (get_parent().get_instance_id() if get_parent() != null else 0)
+		)
+	# Array dictionary keys retain full Callable equality after hash lookup. The
+	# query has no exclusions; WORLD mask/body/area flags are included explicitly.
+	return [
+		runtime_map_id,
+		int(get_meta("zone_generation", -1)),
+		environment_id,
+		_hc_environment_revision(),
+		runtime_ground_gu_to_screen_position_px,
+		runtime_screen_to_ground_position_px,
+		WorldSpatialRulesScript.WORLD_MASK,
+		true,
+		true,
+		safe_owner_id,
+		safe_context_revision,
+	]
+
+func _hc_point_inside_safe_zone(point_screen_px: Vector2) -> bool:
+	_hc_refresh_static_query_cache()
+	var scope := _hc_static_query_scope(true)
+	var cache: Dictionary = _hc_shared_safe_zone_tick_cache.get(scope, {})
+	if cache.has(point_screen_px):
+		return bool(cache[point_screen_px])
+	var result := _point_inside_safe_zone_uncached(point_screen_px)
+	cache[point_screen_px] = result
+	_hc_shared_safe_zone_tick_cache[scope] = cache
+	return result
+
+func _hc_refresh_observation() -> void:
+	if not is_instance_valid(target):
+		return
+	var now := Time.get_ticks_msec()
+	var tid := target.get_instance_id()
+	if tid == _hc_known_target_id and now < _hc_next_observation_ms and not _hc_damage_dirty:
+		return
+	if not _hc_target_usable(target):
+		return
+	if tid != _hc_known_target_id:
+		_hc_known_target_id = tid
+		_hc_known_ground = Vector2.INF
+		_hc_observed = false
+		_hc_investigation_arrived = false
+		_hc_next_observation_ms = 0
+		_hc_close_session = false
+		_hc_close_debt = false
+		_hc_cancel_path()
+		var event_position: Variant = _hc_damage_observations.get(tid)
+		if event_position is Vector2:
+			_hc_known_ground = event_position
+	_hc_next_observation_ms = now + 180 + int(posmod(get_instance_id(), 5)) * 7
+	var a := _screen_position_px_to_ground_position_gu(global_position)
+	var b := _screen_position_px_to_ground_position_gu(target.global_position)
+	var hidden := target.has_method("is_stealthed") and bool(target.call("is_stealthed")) and not anti_stealth
+	_hc_observed = not hidden and a.is_finite() and b.is_finite() and _hc_world_between(a, b)
+	if _hc_observed:
+		_hc_investigation_arrived = false
+		# Keep a useful prefix for small target motion; cancel a stale whole job
+		# only after a substantial move. No live tracking while LOS is blocked.
+		if _hc_path_anchor.is_finite() and b.distance_to(_hc_path_anchor) > 2.0:
+			_hc_cancel_path()
+		_hc_known_ground = b
+		_refresh_target_focus(now)
+
+func _hc_received_damage(source: Node2D, amount: float) -> void:
+	if not _hc_standard_melee() or amount <= 0.0 or not _target_candidate_is_live(source):
+		return
+	# One observation at event time, not a live locator from subsequent DOT.
+	var p := _screen_position_px_to_ground_position_gu(source.global_position)
+	if p.is_finite():
+		if _hc_damage_observations.size() >= 16 and not _hc_damage_observations.has(source.get_instance_id()):
+			_hc_damage_observations.erase(_hc_damage_observations.keys()[0])
+		_hc_damage_observations[source.get_instance_id()] = p
+		if source == target:
+			_hc_known_ground = p
+	_hc_damage_dirty = true
+	_hc_investigation_arrived = false
+	_retarget_timer = 0.0
+	_leave_background_deep_sleep()
+
+func _hc_forget(candidate: Node2D) -> void:
+	if is_instance_valid(candidate):
+		_threat_table.erase(candidate.get_instance_id())
+		_hc_damage_observations.erase(candidate.get_instance_id())
+	_hc_known_ground = Vector2.INF
+	_hc_last_reason = "FOCUS_EXPIRED"
+	_hc_cancel_path()
+
+func _hc_cancel_path() -> void:
+	_hc_path_token += 1
+	_hc_path_pending = false
+	_hc_route.clear()
+	_hc_route_index = 0
+	_hc_path_retry_ms = 0
+	_hc_path_anchor = Vector2.INF
+	if is_instance_valid(_hc_scheduler):
+		_hc_scheduler.cancel(get_instance_id())
+
+func _hc_environment_revision() -> int:
+	if not is_instance_valid(environment_blocker) or not environment_blocker.has_method("environment_collision_revision"):
+		return -1
+	return int(environment_blocker.call("environment_collision_revision"))
+
+func _hc_sync_navigation() -> void:
+	var revision := _hc_environment_revision()
+	var generation := int(get_meta("zone_generation", -1))
+	if _hc_path_map != runtime_map_id or _hc_path_generation != generation or _hc_path_revision != revision or not is_same(_hc_path_context, _terrain_navigation_context):
+		_hc_cancel_path()
+		_hc_path_context = _terrain_navigation_context
+		_hc_path_map = runtime_map_id
+		_hc_path_generation = generation
+		_hc_path_revision = revision
+		_hc_failed_edges.clear()
+
+func _hc_edge_key(a: Vector2i, b: Vector2i) -> String:
+	return "%d,%d>%d,%d" % [a.x, a.y, b.x, b.y]
+
+func _hc_edge_blocked(a: Vector2i, b: Vector2i) -> bool:
+	if _hc_failed_edges.is_empty():
+		return false
+	return int(_hc_failed_edges.get(_hc_edge_key(a, b), 0)) > Time.get_ticks_msec()
+
+func _hc_point_walkable(p: Vector2) -> bool:
+	if not p.is_finite():
+		return false
+	var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
+	if not MonsterTerrainNavigationPolicyScript.cell_walkable(_terrain_navigation_context, cell, combat_radius_gu):
+		return false
+	var px := _ground_gu_to_screen_position_px(p)
+	return px.is_finite() and not _hc_point_inside_safe_zone(px) and not WorldSpatialRulesScript.environment_blocks_actor_screen_px(environment_blocker, px, collision_radius_px)
+
+func _hc_goal_points(anchor: Vector2, preferred_tier: bool) -> Dictionary:
+	var cache_key := _hc_goal_cache_key(anchor, preferred_tier)
+	if not cache_key.is_empty() and _hc_shared_goal_cache.has(cache_key):
+		return _hc_shared_goal_cache[cache_key]
+	var goals: Dictionary = {}
+	var reach := _hc_preferred(target) if preferred_tier else HCPolicy.START_GU
+	var floor_distance := combat_radius_gu + _target_combat_radius_gu(target)
+	var base := MonsterNeighborStepPolicyScript.temporary_cell(anchor)
+	var n := ceili(reach) + 1
+	for y in range(-n, n + 1):
+		for x in range(-n, n + 1):
+			var cell := base + Vector2i(x, y)
+			var p := Vector2(cell) + Vector2(0.5, 0.5)
+			if HCPolicy.within(p, anchor, reach) and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
+				goals[cell] = p
+	# Bounded continuous end-point samples. They never extend the attack reach.
+	for index in range(16):
+		var p := anchor + Vector2.from_angle(TAU * float(index) / 16.0) * reach
+		var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
+		if not goals.has(cell) and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
+			goals[cell] = p
+	if not cache_key.is_empty():
+		goals.make_read_only()
+		if _hc_shared_goal_cache_order.size() >= HC_SHARED_GOAL_CACHE_LIMIT:
+			_hc_shared_goal_cache.erase(_hc_shared_goal_cache_order.pop_front())
+		_hc_shared_goal_cache_order.append(cache_key)
+		_hc_shared_goal_cache[cache_key] = goals
+	return goals
+
+func _hc_goal_cache_key(anchor: Vector2, preferred_tier: bool) -> Array:
+	var blocked: Variant = _terrain_navigation_context.get("blocked_cells")
+	if (
+		not _terrain_navigation_context.is_read_only()
+		or not blocked is Dictionary
+		or not (blocked as Dictionary).is_read_only()
+	):
+		return []
+	return [
+		_hc_static_query_scope(true),
+		_terrain_navigation_context,
+		anchor,
+		preferred_tier,
+		combat_radius_gu,
+		_target_combat_radius_gu(target),
+	]
+
+func _hc_submit_path(anchor: Vector2, tier: int) -> void:
+	_hc_sync_navigation()
+	if not MonsterTerrainNavigationPolicyScript.context_valid(_terrain_navigation_context, runtime_map_id):
+		_hc_last_reason = "CONTEXT_UNAVAILABLE"
+		return
+	if not is_instance_valid(_hc_scheduler):
+		_hc_scheduler = HCScheduler.for_tree(get_tree())
+	if not is_instance_valid(_hc_scheduler):
+		return
+	var current := _screen_position_px_to_ground_position_gu(global_position)
+	_hc_path_token += 1
+	_hc_path_tier = tier
+	_hc_path_anchor = anchor
+	var search := HCSearch.new()
+	# Goal sampling/LOS belongs to the same budgeted service as path expansion.
+	# A hidden target uses this captured last-known anchor, never its live cell.
+	var failed_edge_filter := Callable(self, "_hc_edge_blocked") if not _hc_failed_edges.is_empty() else Callable()
+	search.configure_deferred(
+		_terrain_navigation_context,
+		MonsterNeighborStepPolicyScript.temporary_cell(current),
+		Callable(self, "_hc_goal_points").bind(anchor, tier == 0),
+		combat_radius_gu,
+		failed_edge_filter,
+		_hc_static_query_scope(false),
+	)
+	_hc_path_pending = true
+	_hc_path_status = "REPATH_PENDING"
+	_hc_last_reason = "REPATH_PENDING"
+	_hc_scheduler.submit(self, _hc_path_token, search)
+
+func _hc_path_job_current(token: int) -> bool:
+	return (
+		token == _hc_path_token and _hc_path_pending and is_inside_tree()
+		and _hc_target_usable(target) and _hc_known_target_id == target.get_instance_id()
+		and runtime_map_id == _hc_path_map and int(get_meta("zone_generation", -1)) == _hc_path_generation
+		and _hc_environment_revision() == _hc_path_revision
+		and is_same(_hc_path_context, _terrain_navigation_context)
+	)
+
+func _hc_path_completed(token: int, status: String, route: PackedVector2Array) -> void:
+	if not _hc_path_job_current(token):
+		return
+	_hc_path_pending = false
+	_hc_path_status = status
+	_hc_last_reason = status
+	if status == "FOUND":
+		_hc_route = route
+		_hc_route_index = 0
+		return
+	if _hc_path_tier == 0 and status in ["NO_VALID_GOAL_IN_CURRENT_SAMPLE", "NO_ROUTE_FOR_CURRENT_GRAPH"]:
+		_hc_submit_path(_hc_path_anchor, 1)
+		return
+	_hc_path_retry_ms = Time.get_ticks_msec() + 500 + int(posmod(get_instance_id(), 7)) * 17
+
+func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vector2i:
+	_hc_step_override = Vector2.INF
+	_hc_sync_navigation()
+	_hc_refresh_observation()
+	if not _hc_known_ground.is_finite() or not MonsterTerrainNavigationPolicyScript.context_valid(_terrain_navigation_context, runtime_map_id):
+		_hc_last_reason = "CONTEXT_UNAVAILABLE"
+		return Vector2i.ZERO
+	var anchor := _hc_known_ground
+	var cell := MonsterNeighborStepPolicyScript.temporary_cell(current)
+	var preferred := _hc_preferred(hit_target)
+	if _hc_observed and _hc_world_between(current, anchor):
+		var intended := Vector2(cell + direct) + Vector2(0.5, 0.5)
+		if current.distance_to(anchor) <= preferred + 1.0:
+			intended = anchor + (current - anchor).normalized() * preferred
+		var next := MonsterNeighborStepPolicyScript.temporary_cell(intended)
+		var neighbor := next - cell
+		if neighbor == Vector2i.ZERO:
+			neighbor = MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(intended - current)
+		var legal_neighbor := next == cell or MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, next, combat_radius_gu)
+		if legal_neighbor and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended) and _hc_motion_clear(current, intended):
+			_hc_step_override = intended
+			_hc_route.clear()
+			_hc_route_index = 0
+			return neighbor
+		# A live-body block is NOT a static terrain failure. Try bounded flanks.
+		if not _hc_motion_clear(current, intended) or _hc_frontline_at(current, anchor, hit_target) > 0:
+			if Time.get_ticks_msec() < _hc_next_side_retry_ms:
+				return Vector2i.ZERO
+			_hc_next_side_retry_ms = Time.get_ticks_msec() + 100
+			var best := Vector2i.ZERO
+			var best_cost := INF
+			var preferred_sign := 1.0 if posmod(get_instance_id(), 2) == 0 else -1.0
+			for option: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
+				var endpoint := Vector2(cell + option) + Vector2(0.5, 0.5)
+				if not MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, cell + option, combat_radius_gu):
+					continue
+				if not _hc_point_walkable(endpoint) or not _hc_motion_clear(current, endpoint):
+					continue
+				var cost := endpoint.distance_to(anchor) + (0.05 if Vector2(option).cross(anchor - current) * preferred_sign < 0.0 else 0.0)
+				if _hc_frontline_at(endpoint, anchor, hit_target) != 0:
+					cost += 2.0
+				if cost < best_cost:
+					best = option
+					best_cost = cost
+			_hc_last_reason = "FRONTLINE_BLOCKED"
+			if best != Vector2i.ZERO:
+				_hc_step_override = Vector2(cell + best) + Vector2(0.5, 0.5)
+			return best
+	while _hc_route_index < _hc_route.size() and current.distance_to(_hc_route[_hc_route_index]) <= 0.08:
+		_hc_route_index += 1
+	if not _hc_observed and not _hc_route.is_empty() and _hc_route_index >= _hc_route.size():
+		_hc_investigation_arrived = true
+		_hc_last_reason = "INVESTIGATE_WAIT"
+		return Vector2i.ZERO
+	if _hc_route_index < _hc_route.size():
+		var point := _hc_route[_hc_route_index]
+		var next := MonsterNeighborStepPolicyScript.temporary_cell(point)
+		var neighbor := next - cell
+		if next == cell:
+			neighbor = MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(point - current)
+		var adjacent := next == cell or MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, next, combat_radius_gu)
+		if adjacent and _hc_point_walkable(point) and not _hc_edge_blocked(cell, next):
+			if not _hc_motion_clear(current, point):
+				# Keep the static route while a live body temporarily occupies it.
+				_hc_last_reason = "FRONTLINE_BLOCKED"
+				return Vector2i.ZERO
+			_hc_step_override = point
+			return neighbor
+		_hc_cancel_path()
+	if _hc_path_pending:
+		return Vector2i.ZERO
+	if Time.get_ticks_msec() >= _hc_path_retry_ms:
+		_hc_submit_path(anchor, 0)
+	return Vector2i.ZERO
+
+func _hc_fail_step() -> void:
+	var from := MonsterNeighborStepPolicyScript.temporary_cell(_screen_position_px_to_ground_position_gu(global_position))
+	var to := MonsterNeighborStepPolicyScript.temporary_cell(_movement_step_target_ground_gu)
+	var world_collision := false
+	for index in range(get_slide_collision_count()):
+		var collider: Object = get_slide_collision(index).get_collider()
+		if collider is CollisionObject2D and ((collider as CollisionObject2D).collision_layer & WorldSpatialRulesScript.WORLD_MASK) != 0:
+			world_collision = true
+	if world_collision:
+		_hc_world_collision_count += 1
+		if _hc_failed_edges.size() >= 64:
+			_hc_failed_edges.erase(_hc_failed_edges.keys()[0])
+		_hc_failed_edges[_hc_edge_key(from, to)] = Time.get_ticks_msec() + 750
+		_hc_last_reason = "WORLD_BLOCKED"
+	else:
+		_hc_last_reason = "MOTION_BLOCKED"
+	velocity = Vector2.ZERO
+	_clear_autonomous_step_state()
+	_hc_cancel_path()
+	# Do not rewind legal motion; the original environment/safe-zone guards
+	# already reverted any invalid position through set_combat_position().
+
+func _hc_track_motion(delta: float, remaining_before: float, remaining_after: float) -> bool:
+	_hc_motion_window += maxf(0.0, delta)
+	if _hc_window_remaining == INF:
+		_hc_window_remaining = remaining_before
+	if get_slide_collision_count() > 0 and remaining_after < remaining_before:
+		_hc_legal_slides += 1
+	if _hc_motion_window < 0.4:
+		return false
+	var expected := move_speed_gu_per_sec * _hc_motion_window
+	var stalled := _hc_window_remaining - remaining_after < minf(0.02, expected * 0.05)
+	_hc_motion_window = 0.0
+	_hc_window_remaining = remaining_after
+	return stalled

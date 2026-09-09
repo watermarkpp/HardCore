@@ -19,6 +19,7 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	_assert_authoritative_archer_profiles()
+	_assert_id50_identity_bridge()
 
 	var player := PlayerCharacter.new()
 	player.global_position = _ground_to_screen(Vector2(4.0, 0.0))
@@ -31,7 +32,7 @@ func _run() -> void:
 
 	var attacker := EnemyActor.new()
 	attacker.global_position = Vector2.ZERO
-	attacker.setup(GameData.get_monster_by_id(150), player, false)
+	attacker.setup(GameData.get_monster_by_id(50), player, false)
 	attacker.configure_runtime_map_projection(
 		1,
 		Callable(self, "_ground_to_screen"),
@@ -87,12 +88,24 @@ func _run() -> void:
 	assert(player.current_hp == hp_before)
 	player.set_meta("runtime_map_id", 1)
 
+	# The exact ID50 actor freezes the typed player epoch at launch. A complete
+	# Loading transition invalidates the old projectile even after READY resumes.
+	attacker.target = player
+	attacker._attack_timer = 0.0
+	attacker._physics_process(0.01)
+	assert(_descriptors.size() == 3)
+	var transition_token := "id50-projectile-transition"
+	assert(player.begin_combat_transition(transition_token))
+	assert(player.finish_combat_transition(transition_token))
+	attacker._physics_process(0.81)
+	assert(player.current_hp == hp_before, "ID50 projectile crossed combat_epoch")
+
 	# CanFly parity: one blocked intermediate sample rejects the whole release,
 	# so there is no visual and no delayed damage transaction.
 	_blocked_world_px = _ground_to_screen(Vector2(2.0, 0.0))
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	assert(_descriptors.size() == 2)
+	assert(_descriptors.size() == 3)
 	assert(attacker._pending_attack_release_record.is_empty())
 	attacker._physics_process(1.0)
 	assert(player.current_hp == hp_before)
@@ -102,8 +115,9 @@ func _run() -> void:
 	await get_tree().process_frame
 	print(
 		"MONSTER_PHYSICAL_PROJECTILE_ATTACK_PASS "
-		+ "profiles=150,152,206 immediate_damage=0 chebyshev_delay=0.8 "
-		+ "visual=1 cross_map_cancel=1 can_fly_block=1"
+		+ "profiles=150,152,206 exact_actor=50 immediate_damage=0 "
+		+ "chebyshev_delay=0.8 visual=1 cross_map_cancel=1 "
+		+ "combat_epoch_cancel=1 can_fly_block=1"
 	)
 	get_tree().quit(0)
 
@@ -118,6 +132,50 @@ func _assert_authoritative_archer_profiles() -> void:
 		assert(str(delivery.get("effectId", "")) == ProjectileEffectScript.EFFECT_ID)
 		assert(str(delivery.get("obstaclePolicy", "")) == "environment_can_fly_line")
 		assert(str(delivery.get("confidence", "")) == "A")
+
+
+func _assert_id50_identity_bridge() -> void:
+	var canonical_profile := MonsterIdentity.behavior_profile(
+		GameData.get_monster_by_id(50)
+	)
+	var canonical_delivery: Dictionary = canonical_profile.get("attackDelivery", {})
+	assert(str(canonical_delivery.get("kind", "")) == "physical_projectile")
+	assert(
+		str(canonical_delivery.get("effectId", ""))
+		== ProjectileEffectScript.EFFECT_ID
+	)
+	assert(
+		str(canonical_profile.get("serviceClass", {}).get("name", ""))
+		== "TDualAxeMonster"
+	)
+	var combat_source := _read_json(
+		"res://assets/data/canonical_monster_combat_source_v1.json"
+	)
+	var combat_record: Dictionary = combat_source.get(
+		"records_by_monster_id",
+		{},
+	).get("50", {})
+	assert(int(combat_record.get("monster_id", -1)) == 50)
+	assert(int(combat_record.get("appearance", -1)) == 21)
+	assert(int(combat_record.get("ai_code", -1)) == 87)
+	var service := _read_json("res://assets/data/service_monster_runtime_catalog.json")
+	var service_record: Dictionary = service.get("runtimeByMonsterId", {}).get(
+		"50",
+		{},
+	)
+	assert(str(service_record.get("resolutionStatus", "")) == "exact_service_name")
+	assert(
+		int(service_record.get("serviceRecord", {}).get("aiCode", -1)) == 8
+	)
+
+
+func _read_json(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	assert(file != null, "missing JSON: %s" % path)
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	assert(parsed is Dictionary, "invalid JSON: %s" % path)
+	return parsed as Dictionary
 
 
 func is_environment_point_blocked(world_px: Vector2) -> bool:

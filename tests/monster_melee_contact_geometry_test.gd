@@ -9,6 +9,9 @@ const OpenTerrainFixture := preload(
 )
 const START_DISTANCE_GU := 3.0
 const SETTLED_POSITION_EPSILON_GU := 0.002
+const HCSpatial := preload("res://scripts/runtime_combat_spatial_index.gd")
+var _hc_test_index := HCSpatial.new()
+var _hc_test_registered: Dictionary = {}
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -21,6 +24,13 @@ func _configure_enemy_map(enemy: EnemyActor) -> void:
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
 	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
+	enemy.combat_spatial_index = _hc_test_index
+	enemy.spatial_actor_runtime_id = enemy.get_instance_id()
+	if not _hc_test_registered.has(enemy.get_instance_id()):
+		_hc_test_registered[enemy.get_instance_id()] = true
+		_hc_test_index.register(enemy.get_instance_id(), 1,
+			enemy._screen_position_px_to_ground_position_gu(enemy.global_position),
+			enemy.combat_radius_gu, enemy.get_instance_id(), enemy)
 
 
 func _force_enemy_cadence_ready(enemy: EnemyActor) -> void:
@@ -155,10 +165,7 @@ func _run() -> void:
 					player.global_position - enemy.global_position
 				)
 			)
-			var engagement_distance_gu := maxf(
-				enemy.attack_range_gu,
-				enemy._contact_distance_gu_to_target(player),
-			)
+			var engagement_distance_gu := enemy._hc_preferred(player)
 			if (
 				delta_ground_gu.length()
 				<= engagement_distance_gu + 0.002

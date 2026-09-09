@@ -39,7 +39,11 @@ func _run() -> void:
 		await get_tree().physics_frame
 
 	for enemy: EnemyActor in enemies:
-		assert(enemy.collision_layer == 4 and enemy.collision_mask == 3, "怪物必须保留world/player硬碰撞并关闭enemy互撞")
+		assert(
+			enemy.collision_layer == WorldSpatialRulesScript.ENEMY_LAYER
+			and enemy.collision_mask == WorldSpatialRulesScript.ENEMY_MASK,
+			"怪物必须对WORLD、玩家/召唤物和其他地面怪物保持硬碰撞",
+		)
 		var player_offset_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 			player.global_position - enemy.global_position
 		)
