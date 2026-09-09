@@ -54,6 +54,8 @@
 
 ## 最终验收
 
+W7 攻杀与祝福：新增真实 main 场景释放专项，经 `_on_player_attack`/正式 canonical 执行及真实 EnemyActor 受伤，比较四模式 proc/no-proc，确认每动作一抽、主体公式后一次 +8、准确不重复、刺杀/半月至少双目标共用同次结果。PASS 见 `proc_luck_stage_e`。祝福旧测试的临时目录索引未同步 canonical ID/name 索引、换装后仍持有旧武器快照，按当前真实接口修正夹具后 `equipment_luck_test` PASS（131420）；未改祝福概率/数值/生产语义。测试覆盖不是设备画面接受。
+
 W7 完整实例：规则、真实地面失败保留/非法 nested 拒绝/原实例重试通过；持久化错误码顺序修正后，存档链、装备换位、共享事务 3/3 PASS（`instance_stage_d`）。测试运行于未提交候选；首次失败保留，不能称最终 APK/干净 HEAD 全包验收。
 
 待逐项填入实际代码、正式测试、设备和包身份。当前所有未交付项均为 NOT_RUN/IN_PROGRESS，不宣称已修复。

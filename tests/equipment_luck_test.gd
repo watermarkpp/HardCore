@@ -148,17 +148,27 @@ func _run() -> void:
 	assert(int(weapon.get("weapon_luck", 0)) == 4, "命运之刃幸运+3后喝油没有继续提升")
 
 	var ring_item := GameData.get_item("古铜戒指")
+	var ring_id := int(ring_item.get("itemId", -1))
+	assert(ring_id > 0 and GameData._catalog_by_item_id.has(ring_id))
+	var ring_original_by_id: Dictionary = GameData._catalog_by_item_id[ring_id].duplicate(true)
+	var ring_original_by_name: Dictionary = GameData._catalog_by_name["古铜戒指"].duplicate(true)
 	var ring_had_luck := ring_item.has("luck")
 	var ring_had_curse := ring_item.has("curse")
 	var ring_old_luck: Variant = ring_item.get("luck", null)
 	var ring_old_curse: Variant = ring_item.get("curse", null)
 	ring_item["luck"] = 2
 	ring_item["curse"] = 1
+	# Equipment aggregation resolves exact item IDs. Keep this temporary test
+	# authority aligned in both indexes; production catalog files stay frozen.
+	GameData._catalog_by_item_id[ring_id] = ring_item.duplicate(true)
+	GameData._catalog_by_name["古铜戒指"] = ring_item.duplicate(true)
 	PlayerState.add_item("古铜戒指")
 	assert(PlayerState.equip_inventory_index(_inventory_index("古铜戒指")).begins_with("已装备"), "总幸运测试戒指穿戴失败")
+	# A successful equipment transaction publishes a new immutable snapshot.
+	weapon = PlayerState.equipment["武器"]
 	weapon["weapon_curse"] = 1
 	PlayerState.recalculate_stats()
-	assert(int(PlayerState.computed_stats.get("luck", 0)) == 4, "总幸运没有按全部装备luck-curse和武器实例差值计算")
+	assert(int(PlayerState.computed_stats.get("luck", 0)) == 4, "总幸运没有按全部装备luck-curse和武器实例差值计算: %s / %s" % [PlayerState.computed_stats.get("luck", 0), weapon])
 	var ring: Dictionary = PlayerState.equipment["左戒指"]
 	PlayerState.damage_equipment_durability("左戒指", int(ring.get("max_durability", 1)))
 	assert(int(PlayerState.computed_stats.get("luck", 0)) == 3, "零耐久非武器仍贡献luck/curse")
@@ -196,6 +206,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert("幸运+4" in panel.equipment_label.text, "装备面板没有显示武器幸运")
 
+	GameData._catalog_by_item_id[ring_id] = ring_original_by_id
+	GameData._catalog_by_name["古铜戒指"] = ring_original_by_name
 	if ring_had_luck:
 		ring_item["luck"] = ring_old_luck
 	else:
