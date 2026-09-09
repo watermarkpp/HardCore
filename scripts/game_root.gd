@@ -1244,7 +1244,11 @@ const DEATH_REVIVAL_FLOW_ID := "player.death.lifecycle.ui_gated.v1"
 
 
 func gameplay_input_is_enabled() -> bool:
-	return _player_input_enabled
+	return (
+		_player_input_enabled and is_instance_valid(player)
+		and not player._dead and player.current_hp > 0
+		and not player.combat_transition_is_active()
+	)
 
 
 func _acquire_gameplay_input_lock(reason: StringName) -> void:
@@ -1830,11 +1834,13 @@ func _release_system_menu_pause() -> void:
 
 
 func _on_player_levels_gained(previous_level: int, new_level: int) -> void:
-	if new_level <= previous_level or not is_instance_valid(_player_level_up_effect):
+	if new_level <= previous_level or not is_instance_valid(player):
 		return
+	player.restore_level_up_resources()
 	# PlayerState emits once per successful experience settlement, outside its
 	# level loop. The approved visual follows the actor rather than a world point.
-	_player_level_up_effect.replay(player.approved_ground_footpoint_local_px())
+	if is_instance_valid(_player_level_up_effect):
+		_player_level_up_effect.replay(player.approved_ground_footpoint_local_px())
 
 
 func _update_town_music_presence() -> void:
@@ -2406,6 +2412,8 @@ func _travel_to_map_immediate(map_id: int) -> bool:
 
 
 func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
+	if not gameplay_input_is_enabled():
+		return false
 	if str(portal.portal_data.get("portal_contract_id", "")) != MapPortalRuntimeServiceScript.PORTAL_CONTRACT_ID:
 		return _request_map_travel(portal.target_map_id)
 	var portal_id := str(portal.portal_data.get("source_portal_id", ""))
@@ -2599,13 +2607,22 @@ func _begin_initial_world_bootstrap() -> void:
 func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	if _map_transition_in_progress or not operation.is_valid():
 		return false
+	if not is_instance_valid(player):
+		return false
+	var revival_authorized := _death_revival_request_in_flight and not _active_death_id.is_empty()
+	if (player._dead or player.current_hp <= 0) and not revival_authorized:
+		return false
 	_map_transition_serial += 1
+	var combat_token := "map-combat:%d" % _map_transition_serial
+	if not player.begin_combat_transition(combat_token, revival_authorized):
+		return false
 	_world_bootstrap_coordinator.begin_map_transition(target_map_id)
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.SHOW_LOADING)
 	_active_map_transition_id = "map:%d:%d" % [
 		Time.get_ticks_msec(),
 		_map_transition_serial,
 	]
+	set_meta("map_combat_transition_token", combat_token)
 	_map_transition_in_progress = true
 	if is_instance_valid(_town_music_controller):
 		_town_music_controller.begin_map_transition(target_map_id, _active_map_transition_id)
@@ -2764,6 +2781,7 @@ func _run_map_transition(
 		# Cancel again immediately before READY releases the lock. This covers a
 		# release delivered during the lock as well as a release lost entirely.
 		_cancel_map_transition_movement_input()
+		player.finish_combat_transition(str(get_meta("map_combat_transition_token", "")))
 		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
 		if not PlayerState.test_mode and hud.has_method("start_budgeted_panel_prewarm"):
 			hud.start_budgeted_panel_prewarm(_system_menu_panel)
@@ -5139,7 +5157,11 @@ func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
 
 
 func _on_player_death_requested() -> void:
-	if not gameplay_input_is_enabled():
+	# Death is a lifecycle event, not gameplay input. The input gate correctly
+	# rejects zero HP before this delayed notification is delivered.
+	if not is_instance_valid(player) or not _active_death_id.is_empty():
+		return
+	if not player._dead or player.current_hp > 0 or player.combat_transition_is_active():
 		return
 	# player.gd emits this only after the automatic-revival branch has failed,
 	# making it the formal-death boundary.  This boundary opens the gameplay-

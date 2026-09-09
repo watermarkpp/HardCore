@@ -1,0 +1,41 @@
+{
+  "total": 2,
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-09T11:40:05.4719986+08:00",
+  "passed": 2,
+  "suite": "adhoc",
+  "failed": 0,
+  "git_head": "cf1d2718befdef7e6cc2fb274fd91ce0759d105f",
+  "results": [
+    {
+      "test_name": "game_root_loading_transition_test",
+      "test_path": "tests/game_root_loading_transition_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "death_revival_home_failure_test",
+      "test_path": "tests/death_revival_home_failure_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

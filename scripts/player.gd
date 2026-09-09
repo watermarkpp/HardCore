@@ -132,6 +132,8 @@ var _potion_tick_remaining := 0.0
 var _attack_speed_tier := 0
 var _cast_speed_multiplier := 1.0
 var _dead := false
+var _combat_transition_token := ""
+var combat_epoch := 0
 var movement_input_active := false
 var movement_facing := Vector2.DOWN
 var actual_motion_facing := Vector2.DOWN
@@ -237,8 +239,9 @@ func _physics_process(delta: float) -> void:
 	control_time = maxf(0.0, control_time - delta)
 	_process_potion_restore(delta)
 	var previous_poison_second := int(ceil(poison_time))
-	poison_time = maxf(0.0, poison_time - delta)
-	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
+	if not combat_transition_is_active():
+		poison_time = maxf(0.0, poison_time - delta)
+	if not combat_transition_is_active() and poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
 		# Periodic poison damage is not an RM_STRUCK hit in the reference server,
 		# so it must not refresh the movement/action lock.
 		take_damage(poison_damage, false)
@@ -258,7 +261,7 @@ func _physics_process(delta: float) -> void:
 		or _movement_visual_lock_timer > 0.0
 		or was_struck_locked
 	)
-	if _dead or control_time > 0.0 or movement_locked:
+	if _dead or combat_transition_is_active() or control_time > 0.0 or movement_locked:
 		direction = Vector2.ZERO
 	if not has_direction_input or control_time > 0.0:
 		reset_locomotion()
@@ -359,7 +362,7 @@ func can_start_attack() -> bool:
 
 
 func request_attack(has_combat_target := false, locked_target_instance_id := 0) -> bool:
-	if _dead:
+	if _dead or current_hp <= 0 or combat_transition_is_active():
 		return false
 	## Any attack submission breaks stealth uniformly (user override
 	## 2026-08-09).
@@ -408,7 +411,7 @@ func request_attack_toward(
 func can_request_skill(skill_name: String) -> bool:
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		return false
-	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
+	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead or current_hp <= 0 or combat_transition_is_active():
 		return false
 	if PlayerState.profession == "战士" and skill_name in WARRIOR_STATE_SKILL_NAMES:
 		return true
@@ -603,13 +606,52 @@ func apply_confirmed_physical_hit_durability(damage: int, context := {}) -> Dict
 	)
 
 
+func combat_transition_is_active() -> bool:
+	return not _combat_transition_token.is_empty()
+
+
+func begin_combat_transition(token: String, allow_dead := false) -> bool:
+	if token.is_empty() or combat_transition_is_active():
+		return false
+	if not allow_dead and (_dead or current_hp <= 0):
+		return false
+	_combat_transition_token = token
+	combat_epoch += 1
+	_pending_combat_action_active = false
+	_pending_combat_action_committed = false
+	_pending_attack_context.clear()
+	_pending_skill_context.clear()
+	reset_locomotion()
+	velocity = Vector2.ZERO
+	touch_vector = Vector2.ZERO
+	return true
+
+
+func finish_combat_transition(token: String) -> bool:
+	if token.is_empty() or token != _combat_transition_token:
+		return false
+	_combat_transition_token = ""
+	return true
+
+
+func restore_level_up_resources() -> bool:
+	if _dead or current_hp <= 0:
+		return false
+	current_hp = max_hp
+	current_mp = max_mp
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	queue_redraw()
+	return true
+
+
 func take_damage(
 	amount: int,
 	causes_struck: bool = true,
 	durability_context := {},
 	force_struck_reaction := false,
 ) -> void:
-	if _dead:
+	if _dead or combat_transition_is_active():
 		return
 	if amount <= 0:
 		return
@@ -630,6 +672,8 @@ func take_direct_spell_damage(
 	magic_defense_roll := -1,
 	causes_struck := true
 ) -> Dictionary:
+	if _dead or combat_transition_is_active():
+		return {"applied_damage": 0, "final_damage": 0, "failure_reason": "player_combat_isolated"}
 	var stable_skill_id := ProfessionRules.skill_id(skill_id)
 	var target_stats: Dictionary = PlayerState.computed_stats
 	## MAC buff joins the magic-defence roll range without touching
@@ -716,7 +760,7 @@ func _apply_resolved_damage(
 	# Death is a single lifecycle transition.  Damage arriving while the death
 	# animation/UI selection/respawn transition is active must not repeat
 	# durability, gold loss, signals or schedule another death coroutine.
-	if _dead:
+	if _dead or combat_transition_is_active():
 		return
 	var incoming_damage := maxi(1, amount)
 	var final_damage := incoming_damage
@@ -801,6 +845,7 @@ func _apply_resolved_damage(
 			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 			return
 		_dead = true
+		combat_epoch += 1
 		reset_locomotion()
 		velocity = Vector2.ZERO
 		touch_vector = Vector2.ZERO

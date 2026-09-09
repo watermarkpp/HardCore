@@ -16,46 +16,62 @@ func _run() -> void:
 	var game := packed.instantiate()
 	add_child(game)
 	await get_tree().process_frame
+	await _wait_for_transition(game)
+	while game._world_bootstrap_in_progress:
+		await get_tree().process_frame
+	assert(game.gameplay_input_is_enabled(), "initial READY must release gameplay input")
 	# This test isolates the UI handshake. Threaded monster streaming has its own
 	# budget/cache suite and must not make these transition timing assertions wait.
 	game._monster_prefetch_enabled = false
 
-	game.travel_to_map(217)
-	assert(game.current_map_id == 217, "test mode must preserve synchronous travel")
+	game.travel_to_map(911001)
+	assert(game.current_map_id == 911001, "test mode must preserve synchronous travel")
 
 	PlayerState.test_mode = false
-	game.travel_to_map(218)
+	game.travel_to_map(911002)
 	var first_transition_id: String = game._active_map_transition_id
 	assert(game._map_transition_in_progress)
 	assert(not first_transition_id.is_empty())
-	assert(game.current_map_id == 217, "map changed before Loading covered the scene")
+	assert(game.current_map_id == 911001, "map changed before Loading covered the scene")
 	assert(game.hud.loading_transition_overlay.visible)
+	var protected_hp: int = game.player.current_hp
+	var protected_mp: int = game.player.current_mp
+	var transition_epoch: int = game.player.combat_epoch
+	assert(game.player.combat_transition_is_active(), "Loading must isolate damage before its first await")
+	game.player.take_damage(100000)
+	game.player.take_direct_spell_damage("", 100000, 999, 0)
+	game.player._apply_resolved_damage(100000, false, "poison")
+	assert(game.player.current_hp == protected_hp and game.player.current_mp == protected_mp,
+		"Loading damage must not consume HP, MP or shields")
+	assert(not game.player.finish_combat_transition("stale:token"), "stale token must not release isolation")
 
 	game.hud.loading_transition_covered.emit({
 		"contract_id": LOADING_CONTRACT_ID,
 		"transition_id": "stale:request",
 	})
 	await get_tree().process_frame
-	assert(game.current_map_id == 217, "stale Loading callback changed the map")
-	game.travel_to_map(221)
+	assert(game.current_map_id == 911001, "stale Loading callback changed the map")
+	game.travel_to_map(911003)
 	assert(
 		game._active_map_transition_id == first_transition_id,
 		"overlapping travel replaced the active transition"
 	)
 
 	await _wait_for_transition(game)
-	assert(game.current_map_id == 218)
+	assert(game.current_map_id == 911002)
 	assert(not game._map_transition_in_progress)
+	assert(not game.player.combat_transition_is_active(), "READY must release its own protection")
+	assert(game.player.combat_epoch == transition_epoch)
 
-	var portal := _portal_to(game, 221)
+	var portal := _portal_to(game, 911003)
 	assert(portal != null)
 	assert(game.travel_via_portal(portal, true), "portal request was not accepted")
-	assert(game.current_map_id == 218, "portal loaded before Loading covered the scene")
+	assert(game.current_map_id == 911002, "portal loaded before Loading covered the scene")
 	await _wait_for_transition(game)
-	assert(game.current_map_id == 221)
+	assert(game.current_map_id == 911003)
 
 	game.travel_to_service_home(false, false, "比奇省")
-	assert(game.current_map_id == 221, "return-home loaded before Loading covered the scene")
+	assert(game.current_map_id == 911003, "return-home loaded before Loading covered the scene")
 	var return_home_transition_id: String = game._active_map_transition_id
 	game._on_scroll_used("回城卷")
 	assert(
@@ -66,15 +82,17 @@ func _run() -> void:
 	assert(game.current_map_id == GameData.service_runtime_map_id(0))
 
 	PlayerState.test_mode = true
-	game.travel_to_map(217)
+	game.travel_to_map(911001)
 	PlayerState.test_mode = false
 	game.player._dead = true
 	game.player.current_hp = 0
+	assert(not game.travel_to_service_home(false, false, "比奇省"),
+		"dead player must not travel through the ordinary home entry")
 	game._on_player_death_requested()
 	assert(game.hud.death_revival_panel.visible, "death UI did not open before revival travel")
 	assert(not game._map_transition_in_progress, "death started Loading before the player selected revival")
 	game.hud.death_revival_panel.town_button.pressed.emit()
-	assert(game.current_map_id == 217, "death revival moved before Loading covered the scene")
+	assert(game.current_map_id == 911001, "death revival moved before Loading covered the scene")
 	await _wait_for_transition(game)
 	assert(game.current_map_id == GameData.service_runtime_map_id(0))
 	assert(

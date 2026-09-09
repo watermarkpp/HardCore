@@ -153,6 +153,8 @@ var _skill_progression: RefCounted = SkillProgressionServiceScript.new()
 var quick_slots: Array[String] = ["", "", "", ""]
 var quick_item_slots: Array[String] = ["", "", "", ""]
 var equip_cycle_cursor: Dictionary = {"戒指": "左戒指", "手镯": "左手镯"}
+var equipment_transaction_revision := 0
+var _last_equipment_transaction_result: Dictionary = {}
 var attack_skill_slots: Array[String] = [""]
 var attack_ring_slots: Array[String] = ["", "", "", "", "", ""]
 var warrior_runtime_state: Dictionary = {}
@@ -1945,7 +1947,32 @@ func _gameplay_experience_threshold(source_experience: int) -> int:
 	)
 
 
+func equip_inventory_index_result(index: int, preferred_slot := "", expected_instance_id := "") -> Dictionary:
+	if not expected_instance_id.is_empty() and (
+		index < 0 or index >= inventory.size() or not inventory[index] is Dictionary
+		or str(inventory[index].get("instance_id", "")) != expected_instance_id
+	):
+		return {"success": false, "reason": "stale_instance", "message": "所选装备已变化", "revision": equipment_transaction_revision}
+	var message := equip_inventory_index(index, preferred_slot)
+	var result := _last_equipment_transaction_result.duplicate(true)
+	result["message"] = message
+	return result
+
+
+func unequip_to_inventory_slot(slot: String, inventory_slot: int, expected_instance_id := "") -> Dictionary:
+	var current: Variant = equipment.get(slot, {})
+	if not expected_instance_id.is_empty() and (
+		not current is Dictionary or str(current.get("instance_id", "")) != expected_instance_id
+	):
+		return {"success": false, "reason": "stale_instance", "message": "所选装备已变化", "revision": equipment_transaction_revision}
+	var message := unequip_slot(slot, inventory_slot)
+	var result := _last_equipment_transaction_result.duplicate(true)
+	result["message"] = message
+	return result
+
+
 func equip_inventory_index(index: int, preferred_slot := "") -> String:
+	_last_equipment_transaction_result = {"success": false, "reason": "rejected", "revision": equipment_transaction_revision}
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return "请先选择物品"
 	var inventory_record: Dictionary = inventory[index]
@@ -1989,6 +2016,7 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 		previous_audio_ref = str(previous)
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
+	var cursor_before := equip_cycle_cursor.duplicate(true)
 	var inventory_after := inventory.duplicate(true)
 	inventory_after[index] = {}
 	if previous is Dictionary and not previous.is_empty():
@@ -2012,43 +2040,72 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	recalculate_stats()
 	if not explicit_slot:
 		_advance_equip_cycle_cursor(category, slot)
-	inventory_changed.emit()
-	equipment_changed.emit()
-	profile_changed.emit()
 	if not _commit_save():
 		inventory = inventory_before
 		equipment = equipment_before
+		equip_cycle_cursor = cursor_before
 		recalculate_stats()
+		_last_equipment_transaction_result["reason"] = "save_failed"
 		return "装备存档失败，装备和背包均未改变"
+	equipment_transaction_revision += 1
+	_last_equipment_transaction_result = {
+		"success": true, "reason": "", "revision": equipment_transaction_revision,
+		"instance_id": str(inventory_record.get("instance_id", "")),
+		"source": {"container": "inventory", "slot": index},
+		"destination": {"container": "equipment", "slot": slot},
+	}
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
 	if previous_audio_ref != null:
 		_emit_item_audio_committed(previous_audio_ref, "unequip_success")
 	_emit_item_audio_committed(incoming_audio_ref, "equip_success")
 	return "已装备：%s" % item_name
 
 
-func unequip_slot(slot: String) -> String:
+func unequip_slot(slot: String, destination_slot := -1) -> String:
+	_last_equipment_transaction_result = {"success": false, "reason": "rejected", "revision": equipment_transaction_revision}
 	if slot not in EQUIPMENT_SLOTS:
 		return "无效装备槽"
 	var equipped_value: Variant = equipment.get(slot, {})
 	if not equipped_value is Dictionary or equipped_value.is_empty():
 		return "%s为空" % slot
+	if destination_slot < -1 or destination_slot >= INVENTORY_CAPACITY:
+		return "无效背包格"
+	if destination_slot >= 0 and destination_slot < inventory.size() and _inventory_slot_is_occupied(inventory[destination_slot]):
+		return "目标背包格已有物品"
 	var item_audio_ref := (equipped_value as Dictionary).duplicate(true)
 	var return_preview := _build_receive_result_for_record(equipped_value, inventory)
 	if not bool(return_preview.get("success", false)):
 		return str(return_preview.get("message", INVENTORY_SLOT_REJECTION))
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
-	inventory = (return_preview.get("inventory", inventory) as Array).duplicate(true)
+	if destination_slot >= 0:
+		var next_inventory := inventory.duplicate(true)
+		while next_inventory.size() <= destination_slot:
+			next_inventory.append({})
+		next_inventory[destination_slot] = (equipped_value as Dictionary).duplicate(true)
+		inventory = next_inventory
+	else:
+		inventory = (return_preview.get("inventory", inventory) as Array).duplicate(true)
 	equipment[slot] = {}
 	recalculate_stats()
-	inventory_changed.emit()
-	equipment_changed.emit()
-	profile_changed.emit()
 	if not _commit_save():
 		inventory = inventory_before
 		equipment = equipment_before
 		recalculate_stats()
+		_last_equipment_transaction_result["reason"] = "save_failed"
 		return "卸装存档失败，装备和背包均未改变"
+	equipment_transaction_revision += 1
+	_last_equipment_transaction_result = {
+		"success": true, "reason": "", "revision": equipment_transaction_revision,
+		"instance_id": str(equipped_value.get("instance_id", "")),
+		"source": {"container": "equipment", "slot": slot},
+		"destination": {"container": "inventory", "slot": destination_slot},
+	}
+	inventory_changed.emit()
+	equipment_changed.emit()
+	profile_changed.emit()
 	_emit_item_audio_committed(item_audio_ref, "unequip_success")
 	return "已卸下：%s" % str(equipped_value.get("name", ""))
 

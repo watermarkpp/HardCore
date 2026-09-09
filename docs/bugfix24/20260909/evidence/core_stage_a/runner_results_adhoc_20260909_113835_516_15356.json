@@ -1,0 +1,26 @@
+{
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "game_root_loading_transition_test",
+      "test_path": "tests/game_root_loading_transition_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "generated_at": "2026-09-09T11:38:35.5168296+08:00",
+  "passed": 0,
+  "git_head": "cf1d2718befdef7e6cc2fb274fd91ce0759d105f",
+  "total": 1,
+  "engine_log_errors": 1,
+  "suite": "adhoc"
+}
