@@ -17,6 +17,7 @@ const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const MonsterSourcePoisonStateScript := preload("res://scripts/monster_source_poison_state.gd")
 
 const SPATIAL_CONTRACT_ID := "skills.summon_actor.spatial_ground_gu.v1"
 const SPAWN_FOOTPRINT_CONTRACT_ID := (
@@ -98,6 +99,8 @@ const VISUAL_PATHS := {
 }
 
 var owner_player: PlayerCharacter
+var _monster_source_poison := MonsterSourcePoisonStateScript.new()
+var _monster_control_remaining := 0.0
 ## Owner character level frozen at summon creation. Fully independent of the
 ## pet's own growth level (summon_exp_level).
 var owner_level := 1
@@ -666,6 +669,7 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	_audio_try_emit_appear()
+	_update_monster_source_poison(delta)
 	if state == SummonState.DEAD:
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
@@ -682,6 +686,11 @@ func _physics_process(delta: float) -> void:
 		return
 	if not is_instance_valid(owner_player) or owner_player.current_hp <= 0:
 		_expire()
+		return
+	if _monster_control_remaining > 0.0:
+		_monster_control_remaining = maxf(0.0, _monster_control_remaining - delta)
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
 		return
 	var owner_distance_gu := distance_gu_to_screen_position_px(
 		owner_player.global_position
@@ -1224,6 +1233,39 @@ static func _distance_gu_between_screen_positions_px(
 	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 		second_screen_position_px - first_screen_position_px
 	).length()
+
+
+func apply_control(seconds: float) -> void:
+	if not is_finite(seconds) or seconds <= 0.0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
+		return
+	_monster_control_remaining = maxf(_monster_control_remaining, seconds)
+	_pending_attack_target = null
+	_pending_attack_snapshot = {}
+	_pending_attack_release_remaining = 0.0
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+
+
+func apply_monster_poison(tick_damage: int, seconds: float, interval_seconds: float) -> bool:
+	if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
+		return false
+	if is_instance_valid(owner_player) and owner_player.combat_transition_is_active():
+		return false
+	return _monster_source_poison.apply(tick_damage, seconds, interval_seconds)
+
+
+func _update_monster_source_poison(delta: float) -> void:
+	if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
+		_monster_source_poison.clear()
+		return
+	if is_instance_valid(owner_player) and owner_player.combat_transition_is_active():
+		return
+	var ticks: int = _monster_source_poison.advance(delta)
+	for _tick in range(ticks):
+		if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
+			_monster_source_poison.clear()
+			break
+		_apply_resolved_damage(_monster_source_poison.tick_damage)
 
 
 func take_damage(
