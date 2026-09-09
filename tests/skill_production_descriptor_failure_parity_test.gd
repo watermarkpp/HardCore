@@ -7,6 +7,7 @@ extends Node
 
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 const FIXTURE_MONSTER_ID := 19
+const FormalFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 var _game: Node
 var _caster: PlayerCharacter
@@ -30,7 +31,13 @@ func _run() -> void:
 	await get_tree().process_frame
 	_caster = _game.player
 	_caster.current_mp = 500
-	_target = _make_enemy(_game, _caster, _caster.global_position + Vector2(40, 0))
+	_target = await FormalFixture.prepare_target(
+		self,
+		_game,
+		_caster,
+		FIXTURE_MONSTER_ID,
+		"skill_production_descriptor_failure_parity",
+	)
 	await get_tree().process_frame
 
 	_projectile_failure_case()
@@ -161,29 +168,3 @@ func _summon_failure_case() -> void:
 		Plan.sentinel_diagnostics().resource_commit_count == 1,
 		"summon failure must not roll back committed resources"
 	)
-
-
-func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
-	var enemy := EnemyActor.new()
-	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
-	assert(
-		not canonical_data.is_empty(),
-		"descriptor failure fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
-	)
-	enemy.setup(canonical_data, caster, false)
-	assert(
-		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
-		"descriptor failure fixture must remain an ordinary exact-ID target"
-	)
-	enemy.max_hp = 9999
-	enemy.current_hp = enemy.max_hp
-	enemy.global_position = position
-	enemy.control_time = 60.0
-	game.add_child(enemy)
-	assert(
-		is_instance_valid(enemy)
-		and not enemy.is_queued_for_deletion()
-		and enemy.can_receive_damage(),
-		"descriptor failure fixture target must survive exact-ID admission"
-	)
-	return enemy

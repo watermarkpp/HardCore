@@ -5,6 +5,7 @@ extends Node
 
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 const FIXTURE_MONSTER_ID := 19
+const FormalFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 var _game: Node
 var _caster: PlayerCharacter
@@ -27,7 +28,13 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_caster = _game.player
-	_target = _make_enemy(_game, _caster, _caster.global_position + Vector2(40, 0))
+	_target = await FormalFixture.prepare_target(
+		self,
+		_game,
+		_caster,
+		FIXTURE_MONSTER_ID,
+		"skill_execution_result_contract",
+	)
 	await get_tree().process_frame
 
 	_game._set_magic_locked_target(_target, true)
@@ -133,29 +140,3 @@ func _check_rejection_result(result: Dictionary) -> void:
 		str(execution_result.get("rejection_reason", "")) == "insufficient_resource",
 		"rejection reason normalization"
 	)
-
-
-func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
-	var enemy := EnemyActor.new()
-	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
-	assert(
-		not canonical_data.is_empty(),
-		"execution-result fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
-	)
-	enemy.setup(canonical_data, caster, false)
-	assert(
-		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
-		"execution-result fixture must remain an ordinary exact-ID target"
-	)
-	enemy.max_hp = 9999
-	enemy.current_hp = enemy.max_hp
-	enemy.global_position = position
-	enemy.control_time = 60.0
-	game.add_child(enemy)
-	assert(
-		is_instance_valid(enemy)
-		and not enemy.is_queued_for_deletion()
-		and enemy.can_receive_damage(),
-		"execution-result fixture target must survive exact-ID admission"
-	)
-	return enemy

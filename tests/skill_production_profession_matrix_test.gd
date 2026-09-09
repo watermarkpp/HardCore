@@ -12,6 +12,7 @@ const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 const Router := preload("res://scripts/skills/skill_runtime_router.gd")
 const DataLoader := preload("res://scripts/skills/skill_data_loader.gd")
 const FIXTURE_MONSTER_ID := 19
+const FormalFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 const MATRIX := [
 	{
@@ -138,7 +139,13 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_caster = _game.player
-	_target = _make_enemy(_game, _caster, _caster.global_position + Vector2(40, 0))
+	_target = await FormalFixture.prepare_target(
+		self,
+		_game,
+		_caster,
+		FIXTURE_MONSTER_ID,
+		"skill_production_profession_matrix",
+	)
 	await get_tree().process_frame
 	for row: Dictionary in MATRIX:
 		await _matrix_case(row)
@@ -169,7 +176,10 @@ func _matrix_case(row: Dictionary) -> void:
 	PlayerState.recalculate_stats()
 	_caster.current_mp = 500
 	_target.current_hp = _target.max_hp
-	_target.global_position = _caster.global_position + Vector2(40, 0)
+	_target.set_combat_position(
+		FormalFixture.target_screen_position(_game),
+		&"test_matrix_case",
+	)
 	_target.control_time = 60.0
 	_target.apply_control(60.0)
 	_target.set_physics_process(false)
@@ -328,33 +338,5 @@ func _compare_shadow(
 		int(shadow.get("cooldown_contract", {}).get("cooldown_ms", 0)),
 		_differences
 	)
-
-
-func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
-	var enemy := EnemyActor.new()
-	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
-	assert(
-		not canonical_data.is_empty(),
-		"profession matrix fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
-	)
-	enemy.setup(canonical_data, caster, false)
-	assert(
-		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
-		"profession matrix fixture must remain an ordinary exact-ID target"
-	)
-	enemy.max_hp = 9999
-	enemy.current_hp = enemy.max_hp
-	enemy.global_position = position
-	enemy.control_time = 60.0
-	game.add_child(enemy)
-	assert(
-		is_instance_valid(enemy)
-		and not enemy.is_queued_for_deletion()
-		and enemy.can_receive_damage(),
-		"profession matrix fixture target must survive exact-ID admission"
-	)
-	return enemy
-
-
 func _ground_to_screen(value: Vector2) -> Vector2:
 	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)

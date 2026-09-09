@@ -39,7 +39,10 @@ func _run() -> void:
 	)
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
-			(value as EnemyActor).global_position = caster.global_position + Vector2(3000.0, 3000.0)
+			(value as EnemyActor).set_combat_position(
+				caster.global_position + Vector2(3000.0, 3000.0),
+				&"test_fixture_clear",
+			)
 
 	# Lightning chain: gameplay snapshot -> visual metadata.
 	var target_position: Vector2 = game._canonical_ground_gu_to_screen_px(FIXTURE_GROUND_POSITION)
@@ -211,4 +214,5 @@ func _wait_for_formal_world(game: Node) -> void:
 		int(game.get("current_map_id")) == GameData.service_runtime_map_id(0),
 		"canonical snapshot fixture must wait for the formal mapped world",
 	)
+	assert(game.gameplay_input_is_enabled(), "canonical snapshot fixture must wait for READY input")
 	assert(not game._active_safe_zones.is_empty(), "canonical snapshot fixture needs the formal safe-zone context")
