@@ -5759,7 +5759,7 @@ func _crowd_separation() -> Vector2:
 		or runtime_map_id < 0
 	):
 		return separation_ground
-	var center_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var center_ground_gu := spatial_index_position()
 	if not center_ground_gu.is_finite():
 		return separation_ground
 	combat_spatial_index.query_neighbor_enemy_nodes_into(
@@ -7333,7 +7333,7 @@ func _hc_access(hit_target: Node2D, tolerance := 0.0, fresh_world := false) -> S
 		return "ACTION_LOCKED"
 	if control_time > 0.0 or charm_time > 0.0 or dormant or _burrowed:
 		return "ACTION_LOCKED"
-	var a := _screen_position_px_to_ground_position_gu(global_position)
+	var a := spatial_index_position()
 	var b := _screen_position_px_to_ground_position_gu(hit_target.global_position)
 	if not a.is_finite() or not b.is_finite() or runtime_map_id < 0:
 		return "PROJECTION_UNAVAILABLE"
@@ -7360,7 +7360,15 @@ func _hc_access(hit_target: Node2D, tolerance := 0.0, fresh_world := false) -> S
 func _hc_frontline_at(a: Vector2, b: Vector2, hit_target: Node2D) -> int:
 	if combat_spatial_index == null:
 		return -1
-	combat_spatial_index.query_enemy_nodes_segment_into(runtime_map_id, a, b, HCPolicy.LANE_GU, _hc_attack_scratch)
+	# Blocking is an existence query. Candidate order cannot change the result,
+	# so avoid the stable insertion sort retained by damage/selection consumers.
+	combat_spatial_index.query_enemy_nodes_segment_unsorted_into(
+		runtime_map_id,
+		a,
+		b,
+		HCPolicy.LANE_GU,
+		_hc_attack_scratch,
+	)
 	for raw: Variant in _hc_attack_scratch:
 		if not is_instance_valid(raw) or not raw is EnemyActor:
 			continue
@@ -7377,7 +7385,14 @@ func _hc_frontline_at(a: Vector2, b: Vector2, hit_target: Node2D) -> int:
 func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
 	if combat_spatial_index == null or runtime_map_id < 0:
 		return false
-	combat_spatial_index.query_enemy_nodes_segment_into(runtime_map_id, a, b, combat_radius_gu, _hc_motion_scratch)
+	# Motion needs any crossed hard body, never a stable victim order.
+	combat_spatial_index.query_enemy_nodes_segment_unsorted_into(
+		runtime_map_id,
+		a,
+		b,
+		combat_radius_gu,
+		_hc_motion_scratch,
+	)
 	for raw: Variant in _hc_motion_scratch:
 		if not is_instance_valid(raw) or not raw is EnemyActor:
 			continue
@@ -7575,7 +7590,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and _hc_try_start(target):
 		return
 	_hc_refresh_observation()
-	var current := _screen_position_px_to_ground_position_gu(global_position)
+	var current := spatial_index_position()
 	var desired_target := _hc_known_ground
 	if not current.is_finite() or not desired_target.is_finite():
 		_hc_last_reason = "NO_RELIABLE_POSITION"
@@ -7741,7 +7756,7 @@ func _hc_refresh_observation() -> void:
 		if event_position is Vector2:
 			_hc_known_ground = event_position
 	_hc_next_observation_ms = now + 180 + int(posmod(get_instance_id(), 5)) * 7
-	var a := _screen_position_px_to_ground_position_gu(global_position)
+	var a := spatial_index_position()
 	var b := _screen_position_px_to_ground_position_gu(target.global_position)
 	var hidden := target.has_method("is_stealthed") and bool(target.call("is_stealthed")) and not anti_stealth
 	_hc_observed = not hidden and a.is_finite() and b.is_finite() and _hc_world_between(a, b)

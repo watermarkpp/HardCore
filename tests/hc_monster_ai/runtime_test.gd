@@ -122,6 +122,16 @@ func _run() -> void:
 	# Dynamic front obstacle, including same-tick movement and death.
 	actor.set_combat_position(ground_to_screen(Vector2(22,20)),&"hc_test_position")
 	var front:=make_enemy(Vector2(21,20))
+	var ordered_candidates: Array = []
+	var unordered_candidates: Array = []
+	index.query_enemy_nodes_segment_into(1,Vector2(22,20),Vector2(20,20),1.0,ordered_candidates)
+	index.query_enemy_nodes_segment_unsorted_into(1,Vector2(22,20),Vector2(20,20),1.0,unordered_candidates)
+	var ordered_ids:=ordered_candidates.map(func(candidate: EnemyActor)->int:return candidate.spatial_actor_runtime_id)
+	var unordered_ids:=unordered_candidates.map(func(candidate: EnemyActor)->int:return candidate.spatial_actor_runtime_id)
+	var unordered_ids_sorted:=unordered_ids.duplicate()
+	unordered_ids_sorted.sort()
+	check(ordered_ids==unordered_ids_sorted,"O01-index-set","Unsorted blocking broadphase preserves the complete live candidate set")
+	check(ordered_ids==[actor.spatial_actor_runtime_id,front.spatial_actor_runtime_id],"O01-index-order","Existing ordered broadphase retains stable combat order")
 	check(actor._hc_access(player)=="FRONTLINE_BLOCKED","O01-runtime","Live front actor blocks rear start")
 	actor._attack_timer=0.0
 	before=actor._hc_starts
