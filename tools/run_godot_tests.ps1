@@ -547,6 +547,7 @@ $Suites.critical = @($Suites.critical + @(
 $Suites.critical = @($Suites.critical + @(
     'tests/game_root_loading_transition_test.tscn',
     'tests/r3_gold_cap_entrypoints_test.tscn',
+    'tests/w1_exact_ranged_delivery_test.tscn',
     'tests/headless_prefetch_compatibility_test.tscn',
     'tests/hc_monster_ai/geometry_test.tscn',
     'tests/hc_monster_ai/inventory_test.tscn',

@@ -36,7 +36,7 @@ V3 REV07目前仍不达标：此前严格WORLD墙场景10/20/30只的p95旧7.432
 
 ## 当前未完成项
 
-- W1：153个runtime ID、32类投递审计已有；其他精确远程映射和spit/gas/line/mixed/guard通道施工中，尚未主树验收。初始数据审查发现ID62原profile字段丢失，已退回修正，未将该候选合入。
+- W1：153个runtime ID、32类投递审计已有；初始6个物理远程ID、224目标魔法/邻接物理、9个非战斗宝箱已在主树通过，见`evidence/v3_main_integration/w1_initial_d114eb53_165323`。ID62原profile字段丢失已在集成前修正，候选身份未提升为primary。spit/gas/line/mixed/guard新通道仍在施工。
 - 12个缺少exact actor来源的ID继续DATA_HOLD，不按名称或变体猜配。226–234另有人工固定非战斗权威，可接逐ID禁止自主攻击门禁并保留受伤/掉落，不能据此补造actor class。
 - REV07四场景公平对照、最终Critical和固定渲染复验、冻结范围最终复核、APK构建与身份/签名/资源闭包验证仍未完成。
 
