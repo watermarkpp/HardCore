@@ -1,0 +1,2009 @@
+{
+	"counts": [
+		10,
+		20,
+		30
+	],
+	"display_driver": "headless",
+	"fixture_contract": "hardcore.rev07.real_actor_world_scenarios.v1",
+	"frame_clock": "Time.get_ticks_usec_adjacent_process_callbacks",
+	"head": "675005cd",
+	"label": "strict_candidate_dense_crowd",
+	"layout_seed": 20260909,
+	"map_id": 1,
+	"monster_id": 64,
+	"renderer": "opengl3",
+	"rows": [
+		{
+			"actor_proof": [
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.17297601699829,
+					"final_ground_gu": [
+						17.5,
+						19.466667175293
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						19.5
+					],
+					"instance_id": 106669541041,
+					"motion_frames": 76,
+					"motion_gu": 1.26019097026438,
+					"path_status": "IDLE",
+					"serial": 1,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.41299223899841,
+					"final_ground_gu": [
+						19.1499938964844,
+						18.4999961853027
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						19.5
+					],
+					"instance_id": 108666029774,
+					"motion_frames": 125,
+					"motion_gu": 2.0741710010916,
+					"path_status": "IDLE",
+					"serial": 2,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 2,
+					"attack_start_count": 2,
+					"final_distance_to_target_gu": 1.49070560932159,
+					"final_ground_gu": [
+						19.3799819946289,
+						19.5162506103516
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						19.5
+					],
+					"instance_id": 109051905759,
+					"motion_frames": 55,
+					"motion_gu": 0.91481239721179,
+					"path_status": "IDLE",
+					"serial": 3,
+					"target_damage_calls_seen": 2
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 2,
+					"attack_start_count": 2,
+					"final_distance_to_target_gu": 1.49741017818451,
+					"final_ground_gu": [
+						21.6305141448975,
+						19.5180759429932
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						19.5
+					],
+					"instance_id": 109437781744,
+					"motion_frames": 54,
+					"motion_gu": 0.903090566396713,
+					"path_status": "IDLE",
+					"serial": 4,
+					"target_damage_calls_seen": 2
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.41298604011536,
+					"final_ground_gu": [
+						21.8500061035156,
+						18.5000038146973
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						19.5
+					],
+					"instance_id": 109823657729,
+					"motion_frames": 125,
+					"motion_gu": 2.07417069468647,
+					"path_status": "IDLE",
+					"serial": 5,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.00004625320435,
+					"final_ground_gu": [
+						17.5,
+						20.5166664123535
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						20.5
+					],
+					"instance_id": 110209533714,
+					"motion_frames": 73,
+					"motion_gu": 1.21666653826833,
+					"path_status": "IDLE",
+					"serial": 6,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.77513837814331,
+					"final_ground_gu": [
+						19.0333290100098,
+						21.4999961853027
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						20.5
+					],
+					"instance_id": 110595409699,
+					"motion_frames": 118,
+					"motion_gu": 1.96264056395739,
+					"path_status": "IDLE",
+					"serial": 7,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						19.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						20.5
+					],
+					"instance_id": 110981285684,
+					"motion_frames": 30,
+					"motion_gu": 0.500898689962924,
+					"path_status": "IDLE",
+					"serial": 8,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						22.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						20.5
+					],
+					"instance_id": 111367161669,
+					"motion_frames": 31,
+					"motion_gu": 0.50071065989323,
+					"path_status": "IDLE",
+					"serial": 9,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.77514266967773,
+					"final_ground_gu": [
+						21.9666709899902,
+						21.5000038146973
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						20.5
+					],
+					"instance_id": 111753037654,
+					"motion_frames": 118,
+					"motion_gu": 1.96263859793544,
+					"path_status": "IDLE",
+					"serial": 10,
+					"target_damage_calls_seen": 1
+				}
+			],
+			"actors_with_attack_damage": 6,
+			"actors_with_attack_start": 6,
+			"actors_with_motion": 10,
+			"actual_actor_count": 10,
+			"blocked_cell_count": 0,
+			"enemy_metrics": {
+				"active_enemy_physics_count": 1500,
+				"active_loot_pickups": 0,
+				"actor_redraw_requests": 0,
+				"actor_redraw_requests_from_damage": 0,
+				"aoe_candidate_usec": 0,
+				"aoe_damage_target_count": 0,
+				"aoe_exact_intersection_tests": 0,
+				"aoe_exact_phase_usec": 0,
+				"aoe_full_enemy_group_scans": 0,
+				"aoe_max_single_release_candidate_usec": 0,
+				"aoe_nested_cell_enemy_scans": 0,
+				"aoe_query_plan_builds": 0,
+				"aoe_release_count": 0,
+				"aoe_selected_targets": 0,
+				"aoe_snapshot_validation_calls": 0,
+				"aoe_spatial_candidates": 0,
+				"aoe_spatial_queries": 0,
+				"attack_los_cache_hits": 0,
+				"attack_los_evaluations": 1052,
+				"attack_los_map_samples": 10540,
+				"attack_los_physics_rays": 1052,
+				"attack_los_requests": 1052,
+				"attack_los_usec": 14553,
+				"background_ai_evaluations": 0,
+				"background_deep_sleep_entries": 0,
+				"background_deep_sleep_wakeups": 0,
+				"background_fast_path_skips": 0,
+				"crowd_full_group_scans": 0,
+				"crowd_grid_actor_scans": 0,
+				"crowd_grid_builds": 0,
+				"crowd_index_candidates": 54,
+				"crowd_queries": 9,
+				"crowd_query_candidates": 54,
+				"crowd_steering_evaluations": 9,
+				"crowd_usec": 438,
+				"death_batch_count": 0,
+				"death_batch_size_max": 0,
+				"death_begin_calls": 0,
+				"death_jobs_per_frame_max": 0,
+				"death_pending_marks": 0,
+				"death_physics_process_calls_after_begin": 0,
+				"death_queue_cancelled_count": 0,
+				"death_queue_committed_count": 0,
+				"death_queue_failed_count": 0,
+				"death_queue_materialization_failures": 0,
+				"death_queue_retry_count": 0,
+				"death_queue_state_transitions": 0,
+				"death_resolve_active_usec": 0,
+				"death_same_release_unregistrations": 0,
+				"death_settlement_usec": 0,
+				"death_target_refresh_count": 0,
+				"death_work_frames": 0,
+				"direct_spell_full_monster_data_duplicates": 0,
+				"direct_spell_resolution_count": 0,
+				"direct_spell_resolution_usec": 0,
+				"direct_spell_stats_snapshot_count": 0,
+				"draw_calls": 0,
+				"drop_node_spawn_count": 0,
+				"drop_node_spawn_usec": 0,
+				"drop_nodes_per_frame_max": 0,
+				"drop_queue_depth_max": 0,
+				"drop_queue_oldest_age_ms": 0,
+				"drop_request_count": 0,
+				"drop_roll_count": 0,
+				"drop_roll_usec": 0,
+				"drop_work_frames": 0,
+				"enemy_background_tick_calls": 0,
+				"enemy_background_tick_usec": 0,
+				"enemy_environment_guard_calls": 117,
+				"enemy_environment_guard_usec": 3333,
+				"enemy_movement_strategy_calls": 805,
+				"enemy_movement_strategy_usec": 188897,
+				"enemy_physics_calls": 1500,
+				"enemy_physics_usec": 546657,
+				"enemy_projection_calls": 28681,
+				"enemy_projection_usec": 75161,
+				"enemy_retarget_calls": 1500,
+				"enemy_retarget_usec": 44013,
+				"enemy_terrain_path_accepted": 0,
+				"enemy_terrain_path_budget_rejections": 0,
+				"enemy_terrain_path_calls": 0,
+				"enemy_terrain_path_expansions": 0,
+				"enemy_terrain_path_expansions_max": 0,
+				"enemy_terrain_path_usec": 0,
+				"enemy_visual_update_calls": 1500,
+				"enemy_visual_update_usec": 5919,
+				"engaged_enemy_count": 1500,
+				"environment_guard_batches": 747,
+				"environment_guard_checks": 117,
+				"environment_point_samples": 0,
+				"environment_query_usec": 16767,
+				"foreground_ai_ticks": 1500,
+				"hit_animation_requests": 0,
+				"lethal_damage_count": 0,
+				"loot_collection_authority_checks": 0,
+				"loot_collection_candidates": 0,
+				"loot_collection_global_checks": 0,
+				"loot_collection_origin_rejections": 0,
+				"loot_collection_spatial_queries": 0,
+				"loot_fallback_redraw_requests": 0,
+				"loot_manager_collection_requests": 0,
+				"loot_manager_exact_range_checks": 0,
+				"loot_manager_fail_safe_checks": 0,
+				"loot_manager_full_scans": 0,
+				"loot_manager_player_events": 0,
+				"loot_manager_registration_checks": 0,
+				"loot_manager_retry_checks": 0,
+				"loot_manager_visual_registry_entries": 0,
+				"loot_manager_visual_registry_scans": 0,
+				"loot_manager_visual_updates": 0,
+				"loot_pickup_process_calls": 0,
+				"loot_spatial_candidates": 0,
+				"loot_spatial_full_scans": 0,
+				"loot_spatial_queries": 0,
+				"loot_spatial_registers": 0,
+				"loot_spatial_unregisters": 0,
+				"loot_visual_updates": 0,
+				"move_and_slide_usec": 11117,
+				"moving_enemy_count": 805,
+				"overhead_health_refreshes": 0,
+				"physics_moves": 805,
+				"physics_process_ms": 0,
+				"process_ms": 0,
+				"render_primitives": 0,
+				"respawn_state_updates": 0,
+				"retarget_decisions": 115,
+				"retarget_full_scans": 10,
+				"retarget_target_candidates": 10,
+				"retarget_target_group_scans": 10,
+				"safe_zone_global_actor_scans": 0,
+				"safe_zone_queries": 2265,
+				"safe_zone_usec": 9299,
+				"take_damage_calls": 0,
+				"take_damage_usec": 0,
+				"texture_mem": 0,
+				"unexpected_sync_loot_texture_loads": 0,
+				"video_mem": 0,
+				"visual_animation_updates": 3620,
+				"visual_render_state_changes": 294
+			},
+			"frame_delta_diagnostic_ms": {
+				"max": 6.94444444444444,
+				"min": 6.85455555555555,
+				"p50": 6.896,
+				"p95": 6.901,
+				"p99": 6.94444444444444,
+				"samples": 362
+			},
+			"full_frame_ms": {
+				"max": 17.585,
+				"min": 0.017,
+				"p50": 6.903,
+				"p95": 12.076,
+				"p99": 15.012,
+				"samples": 362
+			},
+			"godot_process_monitor_ms_diagnostic_only": {
+				"max": 10.938,
+				"min": 2.57,
+				"p50": 8.991,
+				"p95": 10.938,
+				"p99": 10.938,
+				"samples": 362
+			},
+			"initial_layout": {
+				"min_actor_separation_gu": 1.0,
+				"min_target_separation_gu": 2.0,
+				"player_radius_gu": 0.397747564417433,
+				"valid": true
+			},
+			"layout_seed": 20260909,
+			"layout_signature": "4fc8d8cdc1a85beca3c2229d8ff0128afd792fa0b5a62665e303915e42bb192d",
+			"map_id": 1,
+			"monster_count": 10,
+			"path_search_metrics": {
+				"shared_field_expansions": 0,
+				"shared_field_fallbacks": 0,
+				"shared_field_services": 0
+			},
+			"path_status_counts": {
+				"IDLE": 10
+			},
+			"post_sample_drain": {
+				"completed_within_limit": true,
+				"end_pending_jobs": 0,
+				"expansions": 0,
+				"process_frames": 0,
+				"services": 0,
+				"start_pending_jobs": 0
+			},
+			"sample_physics_ticks": 150,
+			"sample_process_frames": 150,
+			"scenario": "dense_crowd",
+			"scheduler_delta": {
+				"available": false
+			},
+			"target_damage_calls": 8,
+			"target_damage_total": 168,
+			"terrain_metrics": {
+				"max_queries_per_physics_frame": 2,
+				"path_budget_rejections": 0,
+				"path_expansions": 0,
+				"path_queries": 0,
+				"queries_this_physics_frame": 0
+			},
+			"total_attack_damage_applications": 8,
+			"total_attack_starts": 8,
+			"total_motion_frames": 805,
+			"total_motion_gu": 13.3699906796683,
+			"world_body_count": 0,
+			"world_obstacle_activation": "before_spawn"
+		},
+		{
+			"actor_proof": [
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.17844271659851,
+					"final_ground_gu": [
+						17.5,
+						19.4500007629395
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						19.5
+					],
+					"instance_id": 147085854556,
+					"motion_frames": 75,
+					"motion_gu": 1.24995946511626,
+					"path_status": "IDLE",
+					"serial": 1,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.38537907600403,
+					"final_ground_gu": [
+						19.1999931335449,
+						18.4999961853027
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						19.5
+					],
+					"instance_id": 148730021707,
+					"motion_frames": 128,
+					"motion_gu": 2.12417032755911,
+					"path_status": "IDLE",
+					"serial": 2,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 2,
+					"attack_start_count": 2,
+					"final_distance_to_target_gu": 1.48927640914917,
+					"final_ground_gu": [
+						19.3816566467285,
+						19.5165100097656
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						19.5
+					],
+					"instance_id": 149115897655,
+					"motion_frames": 55,
+					"motion_gu": 0.915298308245838,
+					"path_status": "IDLE",
+					"serial": 3,
+					"target_damage_calls_seen": 2
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 2,
+					"attack_start_count": 2,
+					"final_distance_to_target_gu": 1.49837040901184,
+					"final_ground_gu": [
+						21.6325397491455,
+						19.5189456939697
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						19.5
+					],
+					"instance_id": 149501773605,
+					"motion_frames": 54,
+					"motion_gu": 0.900534607470036,
+					"path_status": "IDLE",
+					"serial": 4,
+					"target_damage_calls_seen": 2
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.38537263870239,
+					"final_ground_gu": [
+						21.8000068664551,
+						18.5000038146973
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						19.5
+					],
+					"instance_id": 149887649555,
+					"motion_frames": 128,
+					"motion_gu": 2.12416993174702,
+					"path_status": "IDLE",
+					"serial": 5,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.24787521362305,
+					"final_ground_gu": [
+						16.2588157653809,
+						20.2616729736328
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						20.5
+					],
+					"instance_id": 150273525512,
+					"motion_frames": 34,
+					"motion_gu": 0.566656598821282,
+					"path_status": "IDLE",
+					"serial": 6,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.00004625320435,
+					"final_ground_gu": [
+						17.5,
+						20.4833335876465
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						20.5
+					],
+					"instance_id": 150659401464,
+					"motion_frames": 1,
+					"motion_gu": 0.0166665315628052,
+					"path_status": "IDLE",
+					"serial": 7,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						19.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						20.5
+					],
+					"instance_id": 151045277416,
+					"motion_frames": 30,
+					"motion_gu": 0.500270183198154,
+					"path_status": "IDLE",
+					"serial": 8,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						22.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						20.5
+					],
+					"instance_id": 151431153368,
+					"motion_frames": 31,
+					"motion_gu": 0.5000269562006,
+					"path_status": "IDLE",
+					"serial": 9,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.00018525123596,
+					"final_ground_gu": [
+						23.5,
+						20.466667175293
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						20.5
+					],
+					"instance_id": 151817029309,
+					"motion_frames": 76,
+					"motion_gu": 1.26532222144306,
+					"path_status": "IDLE",
+					"serial": 10,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.46345996856689,
+					"final_ground_gu": [
+						16.1500034332275,
+						21.5000019073486
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						21.5
+					],
+					"instance_id": 152202905458,
+					"motion_frames": 21,
+					"motion_gu": 0.349995851516724,
+					"path_status": "IDLE",
+					"serial": 11,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.16227769851685,
+					"final_ground_gu": [
+						17.5,
+						21.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						21.5
+					],
+					"instance_id": 152588781444,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 12,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.4989857673645,
+					"final_ground_gu": [
+						19.3833236694336,
+						21.4999961853027
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						21.5
+					],
+					"instance_id": 152974657429,
+					"motion_frames": 53,
+					"motion_gu": 0.883323311805725,
+					"path_status": "IDLE",
+					"serial": 13,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.49899077415466,
+					"final_ground_gu": [
+						21.6166763305664,
+						21.5000038146973
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						21.5
+					],
+					"instance_id": 153360533414,
+					"motion_frames": 53,
+					"motion_gu": 0.883323267102242,
+					"path_status": "IDLE",
+					"serial": 14,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.46058416366577,
+					"final_ground_gu": [
+						21.9333381652832,
+						22.5000038146973
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						21.5
+					],
+					"instance_id": 153746409399,
+					"motion_frames": 120,
+					"motion_gu": 1.99597304966301,
+					"path_status": "IDLE",
+					"serial": 15,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.63923454284668,
+					"final_ground_gu": [
+						16.4999980926514,
+						22.8499965667725
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						22.5
+					],
+					"instance_id": 154132285384,
+					"motion_frames": 21,
+					"motion_gu": 0.349995851516724,
+					"path_status": "IDLE",
+					"serial": 16,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.81083917617798,
+					"final_ground_gu": [
+						17.4999980926514,
+						22.8499965667725
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						22.5
+					],
+					"instance_id": 154518161369,
+					"motion_frames": 21,
+					"motion_gu": 0.349995851516724,
+					"path_status": "IDLE",
+					"serial": 17,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.88208675384521,
+					"final_ground_gu": [
+						18.7232799530029,
+						22.7692928314209
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						22.5
+					],
+					"instance_id": 154904037354,
+					"motion_frames": 22,
+					"motion_gu": 0.366671819239855,
+					"path_status": "IDLE",
+					"serial": 18,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 2.16550230979919,
+					"final_ground_gu": [
+						19.7678833007813,
+						22.5379905700684
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						19.5,
+						22.5
+					],
+					"instance_id": 155289913339,
+					"motion_frames": 34,
+					"motion_gu": 0.566383633762598,
+					"path_status": "IDLE",
+					"serial": 19,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						20.5,
+						22.0
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						20.5,
+						22.5
+					],
+					"instance_id": 155675789324,
+					"motion_frames": 31,
+					"motion_gu": 0.500025798392016,
+					"path_status": "IDLE",
+					"serial": 20,
+					"target_damage_calls_seen": 1
+				}
+			],
+			"actors_with_attack_damage": 8,
+			"actors_with_attack_start": 8,
+			"actors_with_motion": 19,
+			"actual_actor_count": 20,
+			"blocked_cell_count": 0,
+			"enemy_metrics": {
+				"active_enemy_physics_count": 3000,
+				"active_loot_pickups": 0,
+				"actor_redraw_requests": 0,
+				"actor_redraw_requests_from_damage": 0,
+				"aoe_candidate_usec": 0,
+				"aoe_damage_target_count": 0,
+				"aoe_exact_intersection_tests": 0,
+				"aoe_exact_phase_usec": 0,
+				"aoe_full_enemy_group_scans": 0,
+				"aoe_max_single_release_candidate_usec": 0,
+				"aoe_nested_cell_enemy_scans": 0,
+				"aoe_query_plan_builds": 0,
+				"aoe_release_count": 0,
+				"aoe_selected_targets": 0,
+				"aoe_snapshot_validation_calls": 0,
+				"aoe_spatial_candidates": 0,
+				"aoe_spatial_queries": 0,
+				"attack_los_cache_hits": 0,
+				"attack_los_evaluations": 2550,
+				"attack_los_map_samples": 29967,
+				"attack_los_physics_rays": 2550,
+				"attack_los_requests": 2550,
+				"attack_los_usec": 33173,
+				"background_ai_evaluations": 0,
+				"background_deep_sleep_entries": 0,
+				"background_deep_sleep_wakeups": 0,
+				"background_fast_path_skips": 0,
+				"crowd_full_group_scans": 0,
+				"crowd_grid_actor_scans": 0,
+				"crowd_grid_builds": 0,
+				"crowd_index_candidates": 245,
+				"crowd_queries": 20,
+				"crowd_query_candidates": 245,
+				"crowd_steering_evaluations": 20,
+				"crowd_usec": 1887,
+				"death_batch_count": 0,
+				"death_batch_size_max": 0,
+				"death_begin_calls": 0,
+				"death_jobs_per_frame_max": 0,
+				"death_pending_marks": 0,
+				"death_physics_process_calls_after_begin": 0,
+				"death_queue_cancelled_count": 0,
+				"death_queue_committed_count": 0,
+				"death_queue_failed_count": 0,
+				"death_queue_materialization_failures": 0,
+				"death_queue_retry_count": 0,
+				"death_queue_state_transitions": 0,
+				"death_resolve_active_usec": 0,
+				"death_same_release_unregistrations": 0,
+				"death_settlement_usec": 0,
+				"death_target_refresh_count": 0,
+				"death_work_frames": 0,
+				"direct_spell_full_monster_data_duplicates": 0,
+				"direct_spell_resolution_count": 0,
+				"direct_spell_resolution_usec": 0,
+				"direct_spell_stats_snapshot_count": 0,
+				"draw_calls": 0,
+				"drop_node_spawn_count": 0,
+				"drop_node_spawn_usec": 0,
+				"drop_nodes_per_frame_max": 0,
+				"drop_queue_depth_max": 0,
+				"drop_queue_oldest_age_ms": 0,
+				"drop_request_count": 0,
+				"drop_roll_count": 0,
+				"drop_roll_usec": 0,
+				"drop_work_frames": 0,
+				"enemy_background_tick_calls": 0,
+				"enemy_background_tick_usec": 0,
+				"enemy_environment_guard_calls": 148,
+				"enemy_environment_guard_usec": 4241,
+				"enemy_movement_strategy_calls": 988,
+				"enemy_movement_strategy_usec": 318275,
+				"enemy_physics_calls": 3000,
+				"enemy_physics_usec": 1440943,
+				"enemy_projection_calls": 87663,
+				"enemy_projection_usec": 218105,
+				"enemy_retarget_calls": 3000,
+				"enemy_retarget_usec": 85471,
+				"enemy_terrain_path_accepted": 0,
+				"enemy_terrain_path_budget_rejections": 0,
+				"enemy_terrain_path_calls": 0,
+				"enemy_terrain_path_expansions": 0,
+				"enemy_terrain_path_expansions_max": 0,
+				"enemy_terrain_path_usec": 0,
+				"enemy_visual_update_calls": 3000,
+				"enemy_visual_update_usec": 11563,
+				"engaged_enemy_count": 3000,
+				"environment_guard_batches": 3227,
+				"environment_guard_checks": 148,
+				"environment_point_samples": 0,
+				"environment_query_usec": 71591,
+				"foreground_ai_ticks": 3000,
+				"hit_animation_requests": 0,
+				"lethal_damage_count": 0,
+				"loot_collection_authority_checks": 0,
+				"loot_collection_candidates": 0,
+				"loot_collection_global_checks": 0,
+				"loot_collection_origin_rejections": 0,
+				"loot_collection_spatial_queries": 0,
+				"loot_fallback_redraw_requests": 0,
+				"loot_manager_collection_requests": 0,
+				"loot_manager_exact_range_checks": 0,
+				"loot_manager_fail_safe_checks": 0,
+				"loot_manager_full_scans": 0,
+				"loot_manager_player_events": 0,
+				"loot_manager_registration_checks": 0,
+				"loot_manager_retry_checks": 0,
+				"loot_manager_visual_registry_entries": 0,
+				"loot_manager_visual_registry_scans": 0,
+				"loot_manager_visual_updates": 0,
+				"loot_pickup_process_calls": 0,
+				"loot_spatial_candidates": 0,
+				"loot_spatial_full_scans": 0,
+				"loot_spatial_queries": 0,
+				"loot_spatial_registers": 0,
+				"loot_spatial_unregisters": 0,
+				"loot_visual_updates": 0,
+				"move_and_slide_usec": 13994,
+				"moving_enemy_count": 988,
+				"overhead_health_refreshes": 0,
+				"physics_moves": 988,
+				"physics_process_ms": 0,
+				"process_ms": 0,
+				"render_primitives": 0,
+				"respawn_state_updates": 0,
+				"retarget_decisions": 221,
+				"retarget_full_scans": 10,
+				"retarget_target_candidates": 10,
+				"retarget_target_group_scans": 10,
+				"safe_zone_global_actor_scans": 0,
+				"safe_zone_queries": 4074,
+				"safe_zone_usec": 16639,
+				"take_damage_calls": 0,
+				"take_damage_usec": 0,
+				"texture_mem": 0,
+				"unexpected_sync_loot_texture_loads": 0,
+				"video_mem": 0,
+				"visual_animation_updates": 7000,
+				"visual_render_state_changes": 612
+			},
+			"frame_delta_diagnostic_ms": {
+				"max": 15.627,
+				"min": 0.189,
+				"p50": 6.94444444444444,
+				"p95": 8.59788888888812,
+				"p99": 12.5,
+				"samples": 350
+			},
+			"full_frame_ms": {
+				"max": 25.636,
+				"min": 0.02,
+				"p50": 5.06,
+				"p95": 21.029,
+				"p99": 24.237,
+				"samples": 350
+			},
+			"godot_process_monitor_ms_diagnostic_only": {
+				"max": 182.097,
+				"min": 18.568,
+				"p50": 19.948,
+				"p95": 182.097,
+				"p99": 182.097,
+				"samples": 350
+			},
+			"initial_layout": {
+				"min_actor_separation_gu": 1.0,
+				"min_target_separation_gu": 2.0,
+				"player_radius_gu": 0.397747564417433,
+				"valid": true
+			},
+			"layout_seed": 20260909,
+			"layout_signature": "846161c46246fa27db2e84316d1642b55eace743a94ae43aa17b9f3750359dd2",
+			"map_id": 1,
+			"monster_count": 20,
+			"path_search_metrics": {
+				"shared_field_expansions": 0,
+				"shared_field_fallbacks": 0,
+				"shared_field_services": 0
+			},
+			"path_status_counts": {
+				"IDLE": 20
+			},
+			"post_sample_drain": {
+				"completed_within_limit": true,
+				"end_pending_jobs": 0,
+				"expansions": 0,
+				"process_frames": 0,
+				"services": 0,
+				"start_pending_jobs": 0
+			},
+			"sample_physics_ticks": 150,
+			"sample_process_frames": 150,
+			"scenario": "dense_crowd",
+			"scheduler_delta": {
+				"available": false
+			},
+			"target_damage_calls": 10,
+			"target_damage_total": 215,
+			"terrain_metrics": {
+				"max_queries_per_physics_frame": 2,
+				"path_budget_rejections": 0,
+				"path_expansions": 0,
+				"path_queries": 0,
+				"queries_this_physics_frame": 0
+			},
+			"total_attack_damage_applications": 10,
+			"total_attack_starts": 10,
+			"total_motion_frames": 988,
+			"total_motion_gu": 16.4087635658798,
+			"world_body_count": 0,
+			"world_obstacle_activation": "before_spawn"
+		},
+		{
+			"actor_proof": [
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.53182792663574,
+					"final_ground_gu": [
+						18.9395771026611,
+						17.331579208374
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						19.5
+					],
+					"instance_id": 217164285970,
+					"motion_frames": 51,
+					"motion_gu": 0.851039970293641,
+					"path_status": "IDLE",
+					"serial": 1,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.54749035835266,
+					"final_ground_gu": [
+						19.9814777374268,
+						18.005838394165
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						19.5
+					],
+					"instance_id": 218808453121,
+					"motion_frames": 47,
+					"motion_gu": 0.779311266727746,
+					"path_status": "IDLE",
+					"serial": 2,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 9,
+					"attack_start_count": 9,
+					"final_distance_to_target_gu": 1.48927640914917,
+					"final_ground_gu": [
+						19.3816566467285,
+						19.5165100097656
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						19.5
+					],
+					"instance_id": 219194329069,
+					"motion_frames": 14,
+					"motion_gu": 0.233336977660656,
+					"path_status": "IDLE",
+					"serial": 3,
+					"target_damage_calls_seen": 9
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 9,
+					"attack_start_count": 9,
+					"final_distance_to_target_gu": 1.49837040901184,
+					"final_ground_gu": [
+						21.6325397491455,
+						19.5189456939697
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						19.5
+					],
+					"instance_id": 219580205019,
+					"motion_frames": 14,
+					"motion_gu": 0.233332274481654,
+					"path_status": "IDLE",
+					"serial": 4,
+					"target_damage_calls_seen": 9
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 8,
+					"attack_start_count": 8,
+					"final_distance_to_target_gu": 1.49999785423279,
+					"final_ground_gu": [
+						20.8059349060059,
+						19.0315322875977
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						19.5
+					],
+					"instance_id": 219966080969,
+					"motion_frames": 30,
+					"motion_gu": 0.492949672974646,
+					"path_status": "IDLE",
+					"serial": 5,
+					"target_damage_calls_seen": 8
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.14549469947815,
+					"final_ground_gu": [
+						18.1753978729248,
+						18.380952835083
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						20.5
+					],
+					"instance_id": 220351956926,
+					"motion_frames": 63,
+					"motion_gu": 1.04999491386116,
+					"path_status": "IDLE",
+					"serial": 6,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.00074052810669,
+					"final_ground_gu": [
+						17.5,
+						20.4333343505859
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						20.5
+					],
+					"instance_id": 220737832878,
+					"motion_frames": 9,
+					"motion_gu": 0.150001058354974,
+					"path_status": "IDLE",
+					"serial": 7,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 9,
+					"attack_start_count": 9,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						19.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						20.5
+					],
+					"instance_id": 221123708830,
+					"motion_frames": 11,
+					"motion_gu": 0.183330301195383,
+					"path_status": "IDLE",
+					"serial": 8,
+					"target_damage_calls_seen": 9
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 9,
+					"attack_start_count": 9,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						22.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						20.5
+					],
+					"instance_id": 221509584782,
+					"motion_frames": 11,
+					"motion_gu": 0.183333106338978,
+					"path_status": "IDLE",
+					"serial": 9,
+					"target_damage_calls_seen": 9
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.85621213912964,
+					"final_ground_gu": [
+						22.1880207061768,
+						18.1959743499756
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						20.5
+					],
+					"instance_id": 221895460734,
+					"motion_frames": 52,
+					"motion_gu": 0.866661733016372,
+					"path_status": "IDLE",
+					"serial": 10,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.42635488510132,
+					"final_ground_gu": [
+						17.2745056152344,
+						19.3441047668457
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						21.5
+					],
+					"instance_id": 222281336627,
+					"motion_frames": 54,
+					"motion_gu": 0.89998416043818,
+					"path_status": "IDLE",
+					"serial": 11,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.2097499370575,
+					"final_ground_gu": [
+						17.4500007629395,
+						21.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						21.5
+					],
+					"instance_id": 222667212473,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 12,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 9,
+					"attack_start_count": 9,
+					"final_distance_to_target_gu": 1.98669302463531,
+					"final_ground_gu": [
+						18.7833309173584,
+						21.4999980926514
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						21.5
+					],
+					"instance_id": 223053088469,
+					"motion_frames": 8,
+					"motion_gu": 0.133332252502441,
+					"path_status": "IDLE",
+					"serial": 13,
+					"target_damage_calls_seen": 9
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 4,
+					"attack_start_count": 4,
+					"final_distance_to_target_gu": 2.00111365318298,
+					"final_ground_gu": [
+						22.2333354949951,
+						21.5000019073486
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						21.5
+					],
+					"instance_id": 223438964454,
+					"motion_frames": 8,
+					"motion_gu": 0.133332252502441,
+					"path_status": "IDLE",
+					"serial": 14,
+					"target_damage_calls_seen": 4
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.01182818412781,
+					"final_ground_gu": [
+						23.5,
+						20.2333374023438
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						21.5
+					],
+					"instance_id": 223824840467,
+					"motion_frames": 51,
+					"motion_gu": 0.849998997524381,
+					"path_status": "IDLE",
+					"serial": 15,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.06666564941406,
+					"final_ground_gu": [
+						16.4333343505859,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						22.5
+					],
+					"instance_id": 224210716460,
+					"motion_frames": 58,
+					"motion_gu": 0.966660436242819,
+					"path_status": "IDLE",
+					"serial": 16,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.00147008895874,
+					"final_ground_gu": [
+						17.1032562255859,
+						22.6151580810547
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						22.5
+					],
+					"instance_id": 224596592445,
+					"motion_frames": 8,
+					"motion_gu": 0.119810123695061,
+					"path_status": "IDLE",
+					"serial": 17,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.82842707633972,
+					"final_ground_gu": [
+						18.5,
+						22.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						22.5
+					],
+					"instance_id": 224982468430,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 18,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 9,
+					"attack_start_count": 9,
+					"final_distance_to_target_gu": 1.98606622219086,
+					"final_ground_gu": [
+						19.6118011474609,
+						22.2763900756836
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						19.5,
+						22.5
+					],
+					"instance_id": 225368344408,
+					"motion_frames": 8,
+					"motion_gu": 0.133334621787071,
+					"path_status": "IDLE",
+					"serial": 19,
+					"target_damage_calls_seen": 9
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 9,
+					"attack_start_count": 9,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						20.5,
+						22.0
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						20.5,
+						22.5
+					],
+					"instance_id": 225754220290,
+					"motion_frames": 9,
+					"motion_gu": 0.150000093504786,
+					"path_status": "IDLE",
+					"serial": 20,
+					"target_damage_calls_seen": 9
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 9,
+					"attack_start_count": 9,
+					"final_distance_to_target_gu": 1.98605680465698,
+					"final_ground_gu": [
+						21.3881893157959,
+						22.2763843536377
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						21.5,
+						22.5
+					],
+					"instance_id": 226140096222,
+					"motion_frames": 7,
+					"motion_gu": 0.116671796888113,
+					"path_status": "IDLE",
+					"serial": 21,
+					"target_damage_calls_seen": 9
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.91209030151367,
+					"final_ground_gu": [
+						22.6166648864746,
+						22.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						22.5
+					],
+					"instance_id": 226525972526,
+					"motion_frames": 15,
+					"motion_gu": 0.24999812990427,
+					"path_status": "IDLE",
+					"serial": 22,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.39527297019959,
+					"final_ground_gu": [
+						23.7657566070557,
+						21.4288234710693
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						22.5
+					],
+					"instance_id": 226911848511,
+					"motion_frames": 45,
+					"motion_gu": 0.749999962747097,
+					"path_status": "IDLE",
+					"serial": 23,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.27436351776123,
+					"final_ground_gu": [
+						16.3295745849609,
+						21.4368743896484
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						23.5
+					],
+					"instance_id": 227297724496,
+					"motion_frames": 58,
+					"motion_gu": 0.966658184304833,
+					"path_status": "IDLE",
+					"serial": 24,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.31393241882324,
+					"final_ground_gu": [
+						17.4999980926514,
+						23.6000003814697
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						23.5
+					],
+					"instance_id": 227683600481,
+					"motion_frames": 55,
+					"motion_gu": 0.916654411703348,
+					"path_status": "IDLE",
+					"serial": 25,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.71722793579102,
+					"final_ground_gu": [
+						18.4999980926514,
+						23.6333332061768
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						23.5
+					],
+					"instance_id": 228069476466,
+					"motion_frames": 54,
+					"motion_gu": 0.899986743927002,
+					"path_status": "IDLE",
+					"serial": 26,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.35261034965515,
+					"final_ground_gu": [
+						19.4999980926514,
+						23.6999988555908
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						19.5,
+						23.5
+					],
+					"instance_id": 228455352451,
+					"motion_frames": 50,
+					"motion_gu": 0.83332371711731,
+					"path_status": "IDLE",
+					"serial": 27,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.19999885559082,
+					"final_ground_gu": [
+						20.4999980926514,
+						23.6999988555908
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						20.5,
+						23.5
+					],
+					"instance_id": 228841228436,
+					"motion_frames": 50,
+					"motion_gu": 0.833326935768127,
+					"path_status": "IDLE",
+					"serial": 28,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.35260939598084,
+					"final_ground_gu": [
+						21.4999980926514,
+						23.6999988555908
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						21.5,
+						23.5
+					],
+					"instance_id": 229227104421,
+					"motion_frames": 51,
+					"motion_gu": 0.849993467330933,
+					"path_status": "IDLE",
+					"serial": 29,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.69086527824402,
+					"final_ground_gu": [
+						22.6499996185303,
+						23.4999980926514
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						23.5
+					],
+					"instance_id": 229612980406,
+					"motion_frames": 40,
+					"motion_gu": 0.666671829298139,
+					"path_status": "IDLE",
+					"serial": 30,
+					"target_damage_calls_seen": 0
+				}
+			],
+			"actors_with_attack_damage": 10,
+			"actors_with_attack_start": 10,
+			"actors_with_motion": 28,
+			"actual_actor_count": 30,
+			"blocked_cell_count": 0,
+			"enemy_metrics": {
+				"active_enemy_physics_count": 31830,
+				"active_loot_pickups": 0,
+				"actor_redraw_requests": 0,
+				"actor_redraw_requests_from_damage": 0,
+				"aoe_candidate_usec": 0,
+				"aoe_damage_target_count": 0,
+				"aoe_exact_intersection_tests": 0,
+				"aoe_exact_phase_usec": 0,
+				"aoe_full_enemy_group_scans": 0,
+				"aoe_max_single_release_candidate_usec": 0,
+				"aoe_nested_cell_enemy_scans": 0,
+				"aoe_query_plan_builds": 0,
+				"aoe_release_count": 0,
+				"aoe_selected_targets": 0,
+				"aoe_snapshot_validation_calls": 0,
+				"aoe_spatial_candidates": 0,
+				"aoe_spatial_queries": 0,
+				"attack_los_cache_hits": 0,
+				"attack_los_evaluations": 28676,
+				"attack_los_map_samples": 361420,
+				"attack_los_physics_rays": 28676,
+				"attack_los_requests": 28676,
+				"attack_los_usec": 375116,
+				"background_ai_evaluations": 0,
+				"background_deep_sleep_entries": 0,
+				"background_deep_sleep_wakeups": 0,
+				"background_fast_path_skips": 0,
+				"crowd_full_group_scans": 0,
+				"crowd_grid_actor_scans": 0,
+				"crowd_grid_builds": 0,
+				"crowd_index_candidates": 559,
+				"crowd_queries": 30,
+				"crowd_query_candidates": 559,
+				"crowd_steering_evaluations": 30,
+				"crowd_usec": 3886,
+				"death_batch_count": 0,
+				"death_batch_size_max": 0,
+				"death_begin_calls": 0,
+				"death_jobs_per_frame_max": 0,
+				"death_pending_marks": 0,
+				"death_physics_process_calls_after_begin": 0,
+				"death_queue_cancelled_count": 0,
+				"death_queue_committed_count": 0,
+				"death_queue_failed_count": 0,
+				"death_queue_materialization_failures": 0,
+				"death_queue_retry_count": 0,
+				"death_queue_state_transitions": 0,
+				"death_resolve_active_usec": 0,
+				"death_same_release_unregistrations": 0,
+				"death_settlement_usec": 0,
+				"death_target_refresh_count": 0,
+				"death_work_frames": 0,
+				"direct_spell_full_monster_data_duplicates": 0,
+				"direct_spell_resolution_count": 0,
+				"direct_spell_resolution_usec": 0,
+				"direct_spell_stats_snapshot_count": 0,
+				"draw_calls": 0,
+				"drop_node_spawn_count": 0,
+				"drop_node_spawn_usec": 0,
+				"drop_nodes_per_frame_max": 0,
+				"drop_queue_depth_max": 0,
+				"drop_queue_oldest_age_ms": 0,
+				"drop_request_count": 0,
+				"drop_roll_count": 0,
+				"drop_roll_usec": 0,
+				"drop_work_frames": 0,
+				"enemy_background_tick_calls": 0,
+				"enemy_background_tick_usec": 0,
+				"enemy_environment_guard_calls": 908,
+				"enemy_environment_guard_usec": 25101,
+				"enemy_movement_strategy_calls": 6351,
+				"enemy_movement_strategy_usec": 1771211,
+				"enemy_physics_calls": 31830,
+				"enemy_physics_usec": 19771255,
+				"enemy_projection_calls": 1137336,
+				"enemy_projection_usec": 2817419,
+				"enemy_retarget_calls": 31830,
+				"enemy_retarget_usec": 926941,
+				"enemy_terrain_path_accepted": 0,
+				"enemy_terrain_path_budget_rejections": 0,
+				"enemy_terrain_path_calls": 0,
+				"enemy_terrain_path_expansions": 0,
+				"enemy_terrain_path_expansions_max": 0,
+				"enemy_terrain_path_usec": 0,
+				"enemy_visual_update_calls": 31830,
+				"enemy_visual_update_usec": 125627,
+				"engaged_enemy_count": 31830,
+				"environment_guard_batches": 54754,
+				"environment_guard_checks": 908,
+				"environment_point_samples": 0,
+				"environment_query_usec": 1216258,
+				"foreground_ai_ticks": 31830,
+				"hit_animation_requests": 0,
+				"lethal_damage_count": 0,
+				"loot_collection_authority_checks": 0,
+				"loot_collection_candidates": 0,
+				"loot_collection_global_checks": 0,
+				"loot_collection_origin_rejections": 0,
+				"loot_collection_spatial_queries": 0,
+				"loot_fallback_redraw_requests": 0,
+				"loot_manager_collection_requests": 0,
+				"loot_manager_exact_range_checks": 0,
+				"loot_manager_fail_safe_checks": 0,
+				"loot_manager_full_scans": 0,
+				"loot_manager_player_events": 0,
+				"loot_manager_registration_checks": 0,
+				"loot_manager_retry_checks": 0,
+				"loot_manager_visual_registry_entries": 0,
+				"loot_manager_visual_registry_scans": 0,
+				"loot_manager_visual_updates": 0,
+				"loot_pickup_process_calls": 0,
+				"loot_spatial_candidates": 0,
+				"loot_spatial_full_scans": 0,
+				"loot_spatial_queries": 0,
+				"loot_spatial_registers": 0,
+				"loot_spatial_unregisters": 0,
+				"loot_visual_updates": 0,
+				"move_and_slide_usec": 94885,
+				"moving_enemy_count": 6344,
+				"overhead_health_refreshes": 0,
+				"physics_moves": 6344,
+				"physics_process_ms": 0,
+				"process_ms": 0,
+				"render_primitives": 0,
+				"respawn_state_updates": 0,
+				"retarget_decisions": 2404,
+				"retarget_full_scans": 78,
+				"retarget_target_candidates": 78,
+				"retarget_target_group_scans": 78,
+				"safe_zone_global_actor_scans": 0,
+				"safe_zone_queries": 48498,
+				"safe_zone_usec": 201663,
+				"take_damage_calls": 0,
+				"take_damage_usec": 0,
+				"texture_mem": 0,
+				"unexpected_sync_loot_texture_loads": 0,
+				"video_mem": 0,
+				"visual_animation_updates": 4980,
+				"visual_render_state_changes": 3670
+			},
+			"frame_delta_diagnostic_ms": {
+				"max": 149.612666666667,
+				"min": 6.896,
+				"p50": 130.382,
+				"p95": 143.465,
+				"p99": 147.706,
+				"samples": 166
+			},
+			"full_frame_ms": {
+				"max": 237.955,
+				"min": 0.022,
+				"p50": 144.57,
+				"p95": 177.512,
+				"p99": 214.926,
+				"samples": 166
+			},
+			"godot_process_monitor_ms_diagnostic_only": {
+				"max": 226.928,
+				"min": 25.534,
+				"p50": 31.572,
+				"p95": 226.928,
+				"p99": 226.928,
+				"samples": 166
+			},
+			"initial_layout": {
+				"min_actor_separation_gu": 1.0,
+				"min_target_separation_gu": 2.0,
+				"player_radius_gu": 0.397747564417433,
+				"valid": true
+			},
+			"layout_seed": 20260909,
+			"layout_signature": "fbc5d4a3c4b80553c6c829a36c35f20c0a762223ac94a003eae8a3b1a540385e",
+			"map_id": 1,
+			"monster_count": 30,
+			"path_search_metrics": {
+				"shared_field_expansions": 0,
+				"shared_field_fallbacks": 0,
+				"shared_field_services": 0
+			},
+			"path_status_counts": {
+				"IDLE": 30
+			},
+			"post_sample_drain": {
+				"completed_within_limit": true,
+				"end_pending_jobs": 0,
+				"expansions": 0,
+				"process_frames": 0,
+				"services": 0,
+				"start_pending_jobs": 0
+			},
+			"sample_physics_ticks": 1061,
+			"sample_process_frames": 150,
+			"scenario": "dense_crowd",
+			"scheduler_delta": {
+				"available": false
+			},
+			"target_damage_calls": 84,
+			"target_damage_total": 1737,
+			"terrain_metrics": {
+				"max_queries_per_physics_frame": 2,
+				"path_budget_rejections": 0,
+				"path_expansions": 0,
+				"path_queries": 0,
+				"queries_this_physics_frame": 0
+			},
+			"total_attack_damage_applications": 84,
+			"total_attack_starts": 84,
+			"total_motion_frames": 931,
+			"total_motion_gu": 15.4930293920916,
+			"world_body_count": 0,
+			"world_obstacle_activation": "before_spawn"
+		}
+	],
+	"sample_boundary": "physics_frame_then_process_frame",
+	"sample_frames": 150,
+	"scenarios": [
+		"dense_crowd"
+	],
+	"schema": "hardcore.v3.rev07.scenario_full_frame_comparison.v2",
+	"threshold": "candidate_p95 <= max(baseline_p95*1.05, baseline_p95+0.5ms)",
+	"warmup_frames": 45
+}
