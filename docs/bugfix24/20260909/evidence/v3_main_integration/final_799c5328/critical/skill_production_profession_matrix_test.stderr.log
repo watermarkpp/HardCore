@@ -1,0 +1,24 @@
+SCRIPT ERROR: Assertion failed: wizard.lightning must carry a snapshot id
+   at: _matrix_case (res://tests/skill_production_profession_matrix_test.gd:231)
+   GDScript backtrace (most recent call first):
+       [0] _matrix_case (res://tests/skill_production_profession_matrix_test.gd:231)
+       [1] _run (res://tests/skill_production_profession_matrix_test.gd:144)
+SCRIPT ERROR: Assertion failed: wizard.fire_wall must be accepted
+   at: _matrix_case (res://tests/skill_production_profession_matrix_test.gd:232)
+   GDScript backtrace (most recent call first):
+       [0] _matrix_case (res://tests/skill_production_profession_matrix_test.gd:232)
+       [1] _run (res://tests/skill_production_profession_matrix_test.gd:144)
+SCRIPT ERROR: Assertion failed: wizard.fireball must carry a snapshot id
+   at: _matrix_case (res://tests/skill_production_profession_matrix_test.gd:231)
+   GDScript backtrace (most recent call first):
+       [0] _matrix_case (res://tests/skill_production_profession_matrix_test.gd:231)
+       [1] _run (res://tests/skill_production_profession_matrix_test.gd:144)
+SCRIPT ERROR: Assertion failed: taoist.poison must be accepted
+   at: _matrix_case (res://tests/skill_production_profession_matrix_test.gd:232)
+   GDScript backtrace (most recent call first):
+       [0] _matrix_case (res://tests/skill_production_profession_matrix_test.gd:232)
+       [1] _run (res://tests/skill_production_profession_matrix_test.gd:144)
+SCRIPT ERROR: Assertion failed: profession matrix parity differences: wizard.lightning.mp_change legacy=15 canonical=0; wizard.lightning.mp_vs_definition legacy=15 canonical=0; wizard.lightning.accepted legacy=false canonical=true; wizard.lightning.reason legacy=world_los_blocked canonical=accepted; wizard.lightning.mp legacy=0 canonical=15; wizard.fire_wall.mp_change legacy=45 canonical=0; wizard.fire_wall.mp_vs_definition legacy=45 canonical=0; wizard.fire_wall.accepted legacy=false canonical=true; wizard.fire_wall.reason legacy=invalid_target canonical=accepted; wizard.fire_wall.mp legacy=0 canonical=45; wizard.fireball.mp_change legacy=9 canonical=0; wizard.fireball.mp_vs_definition legacy=9 canonical=0; wizard.fireball.accepted legacy=false canonical=true; wizard.fireball.reason legacy=invalid_target canonical=accepted; wizard.fireball.mp legacy=0 canonical=9; taoist.poison.mp_change legacy=10 canonical=0; taoist.poison.mp_vs_definition legacy=10 canonical=0; taoist.poison.accepted legacy=false canonical=true; taoist.poison.reason legacy=invalid_target canonical=accepted; taoist.poison.mp legacy=0 canonical=10
+   at: _run (res://tests/skill_production_profession_matrix_test.gd:145)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/skill_production_profession_matrix_test.gd:145)

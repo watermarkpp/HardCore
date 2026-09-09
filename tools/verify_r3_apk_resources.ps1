@@ -31,7 +31,7 @@ try {
         'inventory_panel', 'warehouse_panel', 'shop_panel', 'item_detail_presenter',
         'item_drop_instance_rules', 'loot_visual_effect', 'loot_pickup',
         'monster_display_formatter', 'monster_overhead', 'enemy', 'summon_actor',
-        'monster_source_poison_state',
+        'monster_source_poison_state', 'runtime_combat_spatial_index',
         'caster_skill_sky_strike_visual_effect',
         'monster_ai_package/policy', 'monster_ai_package/path_search',
         'monster_ai_package/path_scheduler', 'monster_ai_package/delivery_geometry'

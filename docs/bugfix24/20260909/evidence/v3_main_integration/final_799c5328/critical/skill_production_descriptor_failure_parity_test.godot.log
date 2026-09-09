@@ -1,0 +1,17 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.41,"start_ms":238.622},"build_bottom_chassis":{"duration_ms":193.743,"start_ms":36.476},"build_combat_controls":{"duration_ms":7.841,"start_ms":230.219},"build_hidden_compatibility_info":{"duration_ms":7.082,"start_ms":25.043},"build_item_quick_slot_menu":{"duration_ms":0.562,"start_ms":238.06},"build_loading_transition":{"duration_ms":1.338,"start_ms":239.032},"build_loot_feedback":{"duration_ms":0.755,"start_ms":32.712},"build_right_utility_stack":{"duration_ms":3.009,"start_ms":33.467},"build_target_bar":{"duration_ms":0.587,"start_ms":32.125},"initial_state_sync":{"duration_ms":0.462,"start_ms":240.381},"root_and_theme":{"duration_ms":25.022,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.021,"start_ms":25.022},"wire_player_state_signals":{"duration_ms":0.011,"start_ms":240.37}},"total_ms":240.846}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.008,"init_to_enter_tree":0.048},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.049,"start_ms":0.686},"bootstrap_dispatch":{"duration_ms":0.053,"start_ms":777.575},"camera_construct_and_attach":{"duration_ms":0.039,"start_ms":58.953},"hud_attach_and_ready":{"duration_ms":657.848,"start_ms":59.053},"hud_construct":{"duration_ms":0.032,"start_ms":58.992},"hud_post_ready_setup":{"duration_ms":11.819,"start_ms":716.901},"hud_signal_wiring":{"duration_ms":0.029,"start_ms":59.024},"player_construct_wire_attach_restore":{"duration_ms":58.218,"start_ms":0.735},"pre_background_setup":{"duration_ms":0.63,"start_ms":0.056},"system_menu_build":{"duration_ms":48.855,"start_ms":728.72}},"total_ms":777.629}
+[WorldBootstrapProfile] {"actor_max_item_ms":301.498,"actor_max_slice_ms":301.504,"actor_slices":85,"actor_total_ms":845.566,"collision_slices":9,"deferred_actors":0,"duplicate_actors":0,"failed_actors":0,"hud":{},"map_slices":6,"max_slice_ms":301.504,"planned_actors":94,"spawned_actors":94,"stages_ms":{"BUILD_COLLISION":520.65,"BUILD_MAP":517.829,"COLLECT_REQUIREMENTS":50.244,"FINALIZE":1713.427,"REQUEST_RESOURCES":366.607,"SHOW_LOADING":0.039,"SPAWN_ACTORS":522.791,"WAIT_RESOURCES":517.731},"total_ms":1722.561}
+SCRIPT ERROR: Assertion failed: fireball release rejected
+   at: _projectile_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] _projectile_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:55)
+       [1] _run (res://tests/skill_production_descriptor_failure_parity_test.gd:36)
+SCRIPT ERROR: Assertion failed: lightning release rejected
+   at: _visual_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:98)
+   GDScript backtrace (most recent call first):
+       [0] _visual_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:98)
+       [1] _run (res://tests/skill_production_descriptor_failure_parity_test.gd:37)
+SKILL_PRODUCTION_DESCRIPTOR_FAILURE_PARITY_PASS cases=3
