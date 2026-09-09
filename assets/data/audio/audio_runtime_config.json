@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "contract_id": "audio.runtime_budget.v1",
+  "source": "engineering_initial_values",
+  "sfx_gain_linear": 0.5,
+  "event_pool_size": 24,
+  "monster": {
+    "polyphony_limit": 6,
+    "combat_prompt_rate_per_second": 3.0,
+    "attack_rate_per_second": 12.0,
+    "session_rearm_seconds": 0.75,
+    "session_los_grace_seconds": 1.25
+  }
+}

@@ -52,6 +52,41 @@ func _run() -> void:
 	assert(monster_attack.get("status", "") == "played", "怪物21攻击动作起点精确映射未播放")
 	var display_monster_rejected: Dictionary = service.play_event("monster.鸡.attack_start")
 	assert(display_monster_rejected.get("status", "") == "missing_mapping", "怪物显示名不应绕过精确monster_id")
+	service.stop_all_events("w4_contract")
+	service.set_clock_for_test(0)
+	service.reset_metrics_for_test(true)
+	var combat_prompt := service.play_monster_combat_prompt(
+		21,
+		"test-owner",
+		{"source": "test", "session_id": "combat:1"},
+	)
+	assert(combat_prompt.get("status", "") == "played", "真正进入战斗时必须播放一次怪物提示")
+	assert(combat_prompt.get("semantic_event", "") == "combat_prompt", "怪物提示必须标记为combat_prompt")
+	assert(combat_prompt.get("source_semantic_event", "") == "ambient", "无专属提示样本时只能复用同ID ambient样本")
+	var duplicate_prompt := service.play_monster_combat_prompt(
+		21,
+		"test-owner",
+		{"source": "target_refresh", "session_id": "combat:target_refresh"},
+	)
+	assert(duplicate_prompt.get("status", "") == "combat_session_duplicate", "目标刷新不得重复打开战斗提示会话")
+	var transient_los := service.notify_monster_los_interrupted("test-owner")
+	assert(transient_los.get("reason", "") == "transient_los", "短暂LOS中断不得结束音频会话")
+	var duplicate_after_los := service.play_monster_combat_prompt(21, "test-owner", {"session_id": "combat:los_refresh"})
+	assert(duplicate_after_los.get("status", "") == "combat_session_duplicate", "短暂LOS中断后不得重播战斗提示")
+	var ended := service.end_monster_combat_session("test-owner", "explicit_disengage")
+	assert(ended.get("status", "") == "ended", "真正脱离战斗必须关闭音频会话")
+	var rearm_pending := service.play_monster_combat_prompt(21, "test-owner", {"session_id": "combat:2"})
+	assert(rearm_pending.get("status", "") == "combat_session_rearm_pending", "真实脱战后必须经过短暂重入防抖")
+	service.set_clock_for_test(751)
+	var reentered := service.play_monster_combat_prompt(21, "test-owner", {"session_id": "combat:2"})
+	assert(reentered.get("status", "") == "played", "真实脱战后允许重新进入战斗并播放提示")
+	service.stop_all_events("w4_contract")
+	var direct_ambient := service.play_monster_event(21, "ambient", {"source": "walk_frame"})
+	assert(direct_ambient.get("status", "") == "monster_event_not_allowed", "追击/转向环境声不得进入生产事件白名单")
+	var direct_hurt := service.play_monster_event(21, "hurt", {"source": "damage"})
+	assert(direct_hurt.get("status", "") == "monster_event_not_allowed", "怪物受击声不得进入生产事件白名单")
+	var direct_death := service.play_monster_event(21, "death", {"source": "death"})
+	assert(direct_death.get("status", "") == "monster_event_not_allowed", "怪物死亡声不得进入生产事件白名单")
 	var weapon_equip: Dictionary = service.play_item_event("item:80", "equip_success")
 	assert(weapon_equip.get("status", "") == "played", "武器成功装备未走精确类型声")
 	assert(str(weapon_equip.get("runtime_path", "")).ends_with("111__111.wav"), "武器装备声未映射到sound 111")
@@ -65,16 +100,31 @@ func _run() -> void:
 	assert(str(gold_loot.get("runtime_path", "")).ends_with("106__106.wav"), "金币声未映射到sound 106")
 	var display_item_rejected: Dictionary = service.play_item_event("乌木剑", "equip_success")
 	assert(display_item_rejected.get("status", "") == "missing_item_route", "物品显示名不应绕过稳定item_id")
-	var wrong_ambient_frame: Dictionary = service.play_monster_ambient_if_due(21, 0, "test-owner")
-	assert(wrong_ambient_frame.get("reason", "") == "not_ambient_frame", "怪物环境声只能在client frame 1抽样")
-	service.set_event_rng_seed("monster_ambient:21:test-owner", 1001)
-	var ambient_played := false
-	for _attempt in 64:
-		var ambient: Dictionary = service.play_monster_ambient_if_due(21, 1, "test-owner")
-		if ambient.get("status", "") == "played":
-			ambient_played = true
-			break
-	assert(ambient_played, "怪物1/8环境声未通过独立音频RNG触发")
+	var ambient_compatibility_call: Dictionary = service.play_monster_ambient_if_due(21, 1, "test-owner")
+	assert(ambient_compatibility_call.get("reason", "") == "ambient_disabled", "旧环境声入口必须保持静音兼容而不再抽样播放")
+	service.stop_all_events("w4_contract")
+	var dedup_first := service.play_monster_event(
+		21,
+		"attack_start",
+		{"audio_owner_key": "attack-owner", "release_id": "attack:1"},
+	)
+	assert(dedup_first.get("status", "") == "played", "已确认攻击动作必须播放攻击起点")
+	var dedup_second := service.play_monster_event(
+		21,
+		"attack_start",
+		{"audio_owner_key": "attack-owner", "release_id": "attack:1"},
+	)
+	assert(dedup_second.get("status", "") == "duplicate_owner_release", "同一owner/release不能重复占用声部")
+	service.set_clock_for_test(2000)
+	assert(service.set_user_sfx_gain_linear(1.0), "用户SFX增益设置失败")
+	var expected_sfx_db := linear_to_db(0.5)
+	assert(absf(service.npc_voice_player.volume_db - expected_sfx_db) < 0.001, "SFX必须应用线性0.5工程缩放")
+	service.set_user_sfx_gain_linear(1.0)
+	assert(absf(service.npc_voice_player.volume_db - expected_sfx_db) < 0.001, "重复设置SFX增益不得再次折半")
+	service.set_sfx_enabled(false)
+	var disabled_result := service.play_event("player.skill.slaying", {"source": "sfx_off"})
+	assert(disabled_result.get("status", "") == "sfx_disabled", "SFX开关关闭时必须在取资源前拒绝")
+	service.set_sfx_enabled(true)
 
 	service.set_rng_seed("npc.service.warehouse.v1", 1001)
 	var warehouse := service.play_npc_interaction_success("npc.service.warehouse.v1", {"source": "test"})
@@ -96,8 +146,12 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(town.music_player.bus == &"Music", "主城BGM未路由到Music总线")
 	assert(town.music_player.bus != service.npc_voice_player.bus, "NPC声部与BGM总线冲突")
+	var music_volume_before_sfx_change := town.music_player.volume_db
+	service.set_user_sfx_gain_linear(0.25)
+	assert(absf(town.music_player.volume_db - music_volume_before_sfx_change) < 0.001, "SFX增益调整不得改变BGM音量")
+	service.set_user_sfx_gain_linear(1.0)
 	service.stop_npc_voice("test_exit")
 	service.stop_all_events("test_exit")
 	assert(not service.is_npc_voice_active(), "角色退出/会话结束未停止NPC声部")
-	print("AUDIO_RUNTIME_SERVICE_PASS：NPC精确ID/14项预热、522精确事件/固定24声部池、玩家受击死亡与双层物理接触、727物品稳定身份路由通过")
+	print("AUDIO_RUNTIME_SERVICE_PASS：精确映射/固定24声部池、W4怪物白名单/会话/预算前置/owner-release去重、SFX线性0.5幂等、BGM独立、玩家物品路由通过")
 	get_tree().quit(0)
