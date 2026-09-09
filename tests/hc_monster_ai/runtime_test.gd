@@ -175,7 +175,9 @@ func _run() -> void:
 	# --- C02: production attack timers remain active while the residual close
 	# debt converges. No cooldown, pending state or position is rewritten after
 	# each window begins.
-	for monster_id: int in [64,76]:
+	# ID162 is exact TATMonster/race81 with no attack override: it preserves a
+	# real ordinary-contact Boss lane after ID76 adopts CowKing mixed delivery.
+	for monster_id: int in [64,162]:
 		for start_distance: float in [1.8,1.99,2.0]:
 			await _assert_outer_ring_real_cadence(monster_id,start_distance)
 	# --- C03: pending victim A stays the only settle target after retarget or death ---
@@ -280,10 +282,6 @@ func _assert_outer_ring_real_cadence(monster_id: int,start_distance: float) -> v
 	await get_tree().physics_frame
 	var cadence_actor:=make_enemy(Vector2(20.0+start_distance,20.0),monster_id)
 	check(cadence_actor._hc_standard_melee(),"C02-channel-%d-%.2f"%[monster_id,start_distance],"Exact actor uses the ordinary HC physical channel")
-	if monster_id==76:
-		# Isolate ID76's ordinary physical channel from its independent boss-skill
-		# scheduler; source movement and ordinary attack cadence remain untouched.
-		cadence_actor._boss_skill_enabled=false
 	cadence_actor._attack_timer=0.0
 	var starts_before:=cadence_actor._hc_starts
 	var settlements_before:=cadence_actor._hc_settlements
