@@ -161,9 +161,28 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -T
 
 headless 证据只覆盖正式地图实例化后的 EnemyActor 逐帧 CPU、生产音频服务准入、请求、播放、池和缓存计数；不代表真实扬声器混音延迟、硬件音频线程、渲染提交、Android CPU/GPU 或设备行为。没有生成 Android 结论，也没有通过减少 actor、改变 AI/寻路/战斗随机数或绕过服务制造性能收益。音频播放器在 headless 退出时可能留下 Godot 的资源/对象 teardown warning，runner 对最终两次运行均报告 engine_log_errors=0。
 
+## 严格全活跃真实帧 paired evidence（2026-09-09）
+
+为补足旧探针仅有 3/11 可听 actor 的限制，已在安静窗口用最终 `audio_w4_full_frame_probe_test` 串行完成 `cf1d2718befdef7e6cc2fb274fd91ce0759d105f` baseline 与 `ef827331c926755e547b5b47f00cde3aff37dc15` candidate。两树均使用正式 `world_wooma_forest`（`map_id=910004`）、seed `20260909`、相同 probe 字节、相同 50→20 顺序、60 tick warmup 和 240 real physics tick sample；baseline 条件为 `legacy_on/legacy_off`，candidate 条件为 `candidate_on/candidate_off`，合计八条记录。完整摘要、manifest、两树 raw stdout/stderr/Godot log、外层 console、runner JSON 与初次失败 runner JSON 归档在 [`audio_full_frame_strict/20260909_ef827331_cf1d2718`](../evidence/audio_full_frame_strict/20260909_ef827331_cf1d2718/)。
+
+| tree | actors | condition | attack starts / attack_start requests | total requests / plays / rejects | full-frame wall p50/p95/p99 ms | service wall p50/p95/p99 ms |
+|---|---:|---|---:|---:|---:|---:|
+| cf1d | 50 | legacy_on | 100 / 100 | 158 / 130 / 28 | 6.893 / 12.794 / 15.245 | 0.063 / 0.082 / 0.092 |
+| cf1d | 50 | legacy_off | 92 / 92 | 150 / 122 / 28 | 6.999 / 12.391 / 13.691 | 0.057 / 0.084 / 0.119 |
+| cf1d | 20 | legacy_on | 40 / 40 | 65 / 56 / 9 | 6.918 / 9.374 / 9.924 | 0.054 / 0.096 / 0.125 |
+| cf1d | 20 | legacy_off | 25 / 25 | 50 / 41 / 9 | 6.918 / 9.333 / 9.835 | 0.053 / 0.084 / 0.097 |
+| ef827 | 50 | candidate_on | 100 / 100 | 110 / 10 / 100 | 6.948 / 12.348 / 14.361 | 0.023 / 0.073 / 0.116 |
+| ef827 | 50 | candidate_off | 100 / 100 | 100 / 0 / 100 | 6.950 / 12.294 / 13.039 | 0.010 / 0.017 / 0.025 |
+| ef827 | 20 | candidate_on | 40 / 40 | 49 / 10 / 39 | 6.925 / 9.305 / 10.252 | 0.025 / 0.112 / 0.124 |
+| ef827 | 20 | candidate_off | 35 / 35 | 35 / 0 / 35 | 6.902 / 9.248 / 10.091 | 0.011 / 0.025 / 0.025 |
+
+每条记录均有 240 physics ticks、每个 actor 至少一次 attack start，candidate owner 对账和 baseline monster/global 对账均与实际 sequence 增量一致。`full_frame_ms` 是 `_process` 相邻回调的 `Time.get_ticks_usec()` 墙钟间隔；`audio_service_wall_ms` 是 proxy 观测到的正式服务调用 wall duration，`audio_cpu_ms` 只是兼容别名，不能解读为专用音频线程 CPU。攻击起手数量不构成等请求量比较：夹具不重置生产 `_attack_timer`，真实窗口会受计时相位和 warmup/window 边界影响；off 相位差已在归档摘要记录，不能解释为音效开关造成的性能收益。
+
+两次 runner 都自然退出、exit 0、PASS marker、`engine_log_errors=0`；原始 stderr 保留 Godot teardown 的 `ObjectDB` warning 与 `1 resources still in use at exit`，runner 仅按既有 allowlist 通过。没有 Android、设备混音或专用音频线程实测结论。
+
 ## 当前交付状态
 
-- 生产代码已经在 fe3585ff、4f714f75 冻结；本次只交性能夹具和本交接文档。enemy.gd 音频写权限已释放给 integration/monsters 后续工作。
+- 生产代码已经在 fe3585ff、4f714f75 冻结；最终性能夹具提交为 `ef827331c926755e547b5b47f00cde3aff37dc15`，本次归档只增加测试/证据/文档。enemy.gd 音频写权限已释放给 integration/monsters 后续工作。
 - integration 合入后须在包含 W3 的最终 HEAD 重跑 actor/service 入口，并按文档的 GameRoot 音频服务接线要求验收；本包不改 GameRoot，未宣称其接线已 PASS。
-- 当前提交 SHA 在本次提交后记录；未推送。
+- 严格 paired evidence 的两侧 runner JSON、原始三件套、manifest 和失败索引均位于 `evidence/audio_full_frame_strict/20260909_ef827331_cf1d2718`；归档提交 SHA 在交付消息中记录，未推送。
 - 不含 Android、真实设备声音或 GameRoot 接线 PASS；以上是主控合入所需动作。

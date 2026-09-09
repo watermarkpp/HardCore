@@ -39,4 +39,12 @@ runner 会把 stdout、stderr、Godot engine log 和结果 JSON 写入本工作�
 
 这是正式地图实例化后由 Godot headless 执行的真实 process/physics、宿主墙钟间隔和服务准入证据。`full_frame_ms` 会受到 headless 主机调度、进程负载和等待方式影响；`audio_service_wall_ms` 只表示被观测服务调用的 wall duration。它们都不是专用线程 CPU 利用率或音频混音耗时。探针不测扬声器混音延迟、硬件音频线程、GPU 提交、Android CPU/GPU 或设备声音；任何“性能提升”或设备结论都必须另有真实设备证据。探针不为达到数字而关闭预算、减少实际攻击 actor、改变 AI/寻路/战斗频率，也不把总 actor 数写成全部 active/全部播放。
 
-当前文件只定义可复现采样入口；在安静窗口完成候选与固定 `cf1d` 基线八条件后，应把原始输出、失败日志和最终 `git_head` 追加到 `W4_HANDOFF.md`，并清楚区分调试运行与正式 paired evidence。
+## 当前严格采样状态（2026-09-09）
+
+正式 paired evidence 已在安静窗口完成并归档到 [`audio_full_frame_strict/20260909_ef827331_cf1d2718`](../evidence/audio_full_frame_strict/20260909_ef827331_cf1d2718/)。旧基线实际运行于 `cf1d2718befdef7e6cc2fb274fd91ce0759d105f`，候选实际运行于 `ef827331c926755e547b5b47f00cde3aff37dc15`；两次均使用同一份 probe `.gd/.tscn` 字节、seed `20260909`、正式地图 `world_wooma_forest`、50→20 顺序和 240 个真实 physics tick。两侧各 4 个条件合计 8 个条件，均有每 actor 真实攻击起手和正式服务请求证据。
+
+两树在采样期间使用相同的 headless 兼容 overlay：`world_bootstrap_coordinator.gd` SHA256 `796C59DE6190516F2CED97252C6E692F1135C25C369C997C89000B268E917199`、`ui_item_texture_cache.gd` SHA256 `8821B38D2A6C7615796C7A7A69AD570BA5C7518023DB346353E32E00EE03E5F5`。候选 overlay 仅为等条件采样临时复制，采样后已恢复到候选 HEAD；baseline 原有 dirty/staged overlay 和其他现场保持不变。最终 runner JSON、stdout、stderr、Godot log、外层 console、环境 manifest 和初次失败 runner JSON 均在上述 evidence 目录的版本子目录中，W4 交接摘要同步记录精确指标与哈希。
+
+八个条件均自然退出且 runner exit 0、PASS marker、engine log failure count 0。stderr 仍保留 Godot teardown 的 `ObjectDB` warning 和 `1 resources still in use at exit`，这是原始日志内容；runner 按既有 allowlist 计为零未允许失败，并不把原始 stderr 描述成无错误。candidate_off 的请求全部经过正式服务并以 `sfx_disabled` 拒绝；旧版和 candidate_on 的播放/拒绝、预算和池结果均为正式服务返回值。
+
+on/off 的攻击起手总数不构成等请求量性能比较：夹具只重置音频观察者、目标和位置，不重置生产 `_attack_timer`，因此真实 240-tick 窗口会受攻击计时相位和 warmup/window 边界影响。每个 actor 的 sequence 与对应请求仍逐项对账，差异不解释为音效开关导致的加速或退化。该 headless 证据仍不代表设备 CPU、专用音频线程、扬声器混音或 Android 行为。
