@@ -8,6 +8,7 @@ var failures: Array[String] = []
 
 
 func _ready() -> void:
+	_test_nearest_integer_cell_quantization()
 	_test_absolute_noninteger_origin_all_directions()
 	_test_target_cell_is_absolute()
 	_test_invalid_inputs_fail_closed()
@@ -38,7 +39,7 @@ func _ground_to_screen(ground_gu: Vector2) -> Vector2:
 
 func _test_absolute_noninteger_origin_all_directions() -> void:
 	var origin := Vector2(31.75, -18.125)
-	var origin_cell := Vector2i(31, -19)
+	var origin_cell := Vector2i(32, -18)
 	var steps: Array[Vector2i] = [
 		Vector2i(1, 1),
 		Vector2i(0, 1),
@@ -104,16 +105,16 @@ func _test_target_cell_is_absolute() -> void:
 		_context(origin),
 	)
 	_check(
-		snapshot.get("geometry_cells_grid_steps", []) == [Vector2i(44, 7)],
+		snapshot.get("geometry_cells_grid_steps", []) == [Vector2i(45, 7)],
 		"target tile was treated as a relative mask",
 	)
 	_check(
 		Snapshot.intersects_target_combat_footprint_ground_gu(
 			snapshot,
-			Vector2(44.5, 7.5),
+			target,
 			0.0,
 		),
-		"target tile does not cover its absolute cell center",
+		"target tile does not cover the exact target used to select it",
 	)
 	_check(
 		not Snapshot.intersects_target_combat_footprint_ground_gu(
@@ -123,6 +124,45 @@ func _test_target_cell_is_absolute() -> void:
 		),
 		"target tile was translated by the nonzero source origin",
 	)
+
+
+func _test_nearest_integer_cell_quantization() -> void:
+	var cases := [
+		[Vector2(44.01, 7.01), Vector2i(44, 7)],
+		[Vector2(44.49, 7.49), Vector2i(44, 7)],
+		[Vector2(44.50, 7.50), Vector2i(45, 8)],
+		[Vector2(44.51, 7.51), Vector2i(45, 8)],
+		[Vector2(44.99, 7.99), Vector2i(45, 8)],
+		[Vector2(-44.01, -7.01), Vector2i(-44, -7)],
+		[Vector2(-44.49, -7.49), Vector2i(-44, -7)],
+		[Vector2(-44.50, -7.50), Vector2i(-45, -8)],
+		[Vector2(-44.51, -7.51), Vector2i(-45, -8)],
+		[Vector2(-44.99, -7.99), Vector2i(-45, -8)],
+	]
+	for raw_case: Variant in cases:
+		var test_case := raw_case as Array
+		var input: Vector2 = test_case[0]
+		var expected: Vector2i = test_case[1]
+		var actual := Geometry.absolute_cell_for_ground_position(input)
+		_check(
+			actual == expected,
+			"nearest-centre quantization mismatch for %s: %s" % [input, actual],
+		)
+		var snapshot := Geometry.create_target_cell_snapshot(
+			"monster.test.quantization",
+			"release:quantization:%s" % str(input),
+			Vector2(31.75, -18.125),
+			input,
+			_context(Vector2(31.75, -18.125)),
+		)
+		_check(
+			Snapshot.intersects_target_combat_footprint_ground_gu(
+				snapshot,
+				input,
+				0.0,
+			),
+			"quantized target snapshot excludes its source point %s" % input,
+		)
 
 
 func _test_invalid_inputs_fail_closed() -> void:

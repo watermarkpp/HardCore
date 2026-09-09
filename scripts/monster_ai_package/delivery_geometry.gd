@@ -18,7 +18,11 @@ const CONTRACT_ID := "monster.delivery.geometry.absolute_cells.v1"
 static func absolute_cell_for_ground_position(ground_position_gu: Vector2) -> Vector2i:
 	if not ground_position_gu.is_finite():
 		return Vector2i(-2147483648, -2147483648)
-	return Vector2i(floori(ground_position_gu.x), floori(ground_position_gu.y))
+	# Snapshot V2 represents an integer cell as a square centred on that integer
+	# (cell +/- 0.5 GU). Quantize to the nearest integer centre so the source or
+	# target point used to choose a cell is always inside that cell. roundi also
+	# gives the project's established, symmetric half-GU rule for negative maps.
+	return Vector2i(roundi(ground_position_gu.x), roundi(ground_position_gu.y))
 
 
 static func canonical_step_for_ground_delta(delta_ground_gu: Vector2) -> Vector2i:
