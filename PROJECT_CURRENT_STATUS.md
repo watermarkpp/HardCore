@@ -1,6 +1,6 @@
 # HardCore Current Status
 
-Updated against in-progress integration code anchor: `efdbde7c` (latest APK remains the September 6 build)
+Updated against in-progress integration code anchor: `1f9c99ac` (latest APK remains the September 6 build)
 Branch: `codex/integration`
 Updated: 2026-09-09
 Purpose: where the project stands right now.
@@ -8,7 +8,8 @@ Purpose: where the project stands right now.
 ## 2026-09-09 V3/R3 与24项收尾（进行中，未交付APK）
 
 - 已集成 Loading/升级事务、WORLD攻击与拾取门禁、共享银行事务、完整掉落实例、音频预算及自适应属性面板。用户已通过面板，标题20/正文14的缩字版本在主树完成专项；不再等待重复校准批准。
-- V3路径/动态占位、W6视觉、仓库金币按钮及最终集成验收继续进行，尚未构建下一阶段APK。分段提交、测试与未验证项以 `docs/bugfix24/20260909/IMPLEMENTATION_REPORT.md` 为准；不要将旧APK或分段PASS当作本阶段交付。
+- W6雷电排序、精英/Boss标记、HP910008项目补图、实例字色/光柱与怪物显示名已整合，主树四项专项通过；仓库金币按钮与多选最后物品详情亦已通过。headless两条预取入口兼容与smoke游戏时钟修正已整合，保留原始失败证据。
+- V3路径/动态占位候选功能专项通过，但正式10/20/30怪真实帧性能对比不达标，正在按相同负载优化；153条攻击投递核查发现更多精确family漏接，12条无来源绑定保持DATA_HOLD。尚未构建下一阶段APK；当前72 / 1.21.0-r3-closure仅为导出配置，不是成品。逐项状态以 `docs/bugfix24/20260909/ACCEPTANCE_MATRIX.md` 为准。
 
 ## 2026-09-06 玩法与精确音频升级（最近已构建包）
 
