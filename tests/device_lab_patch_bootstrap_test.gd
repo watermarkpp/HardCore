@@ -35,6 +35,7 @@ func _run() -> void:
 	var autoload_section := FileAccess.get_file_as_string("res://project.godot").get_slice("[autoload]", 1).get_slice("[", 0)
 	assert(autoload_section.find("DeviceLabPatch=") < autoload_section.find("ContentLayers="), "patch loader must run before gameplay autoloads: %s" % content_layers)
 	_run_bounded_pack_validation()
+	_run_upgrade_retirement()
 	print("DEVICE_LAB_PATCH_BOOTSTRAP_PASS strict_manifest init_mount early_autoload bounded_stream isolated_fixtures")
 	get_tree().quit(0)
 
@@ -142,6 +143,32 @@ func _run_bounded_pack_validation() -> void:
 	assert(FileAccess.file_exists("res://__device_lab_b08_fixture_marker.txt"), "valid PCK did not mount its fixture entry")
 
 	_cleanup_tree(absolute_root)
+
+
+func _run_upgrade_retirement() -> void:
+	var test_root := "%supgrade_%d" % [TEST_ROOT_PREFIX, Time.get_ticks_usec()]
+	var patch_root := test_root.path_join("device_lab/patches")
+	assert(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(patch_root)) == OK)
+	assert(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(test_root.path_join("characters"))) == OK)
+	var saves := ["character_profiles.json", "characters/hero.json", "player_save_v03.json", "shared_warehouse.json"]
+	for file_name: String in saves:
+		_write_text(test_root.path_join(file_name), "preserve exact character and warehouse bytes")
+	_write_text(patch_root.path_join("old.pck"), "obsolete packaged content")
+	_write_text(patch_root.path_join("unrelated.pck"), "unrelated private patch")
+	var bootstrap := _bootstrap_for(patch_root)
+	_write_text(bootstrap.active_manifest_for_test, "old active manifest")
+	assert(not PatchBootstrap.patch_matches_base({"baseCommit": "v71"}, "v72"))
+	assert(bootstrap._discard_obsolete_patch({"file": "old.pck"}) == OK)
+	assert(not FileAccess.file_exists(patch_root.path_join("old.pck")))
+	assert(not FileAccess.file_exists(bootstrap.active_manifest_for_test))
+	assert(FileAccess.get_file_as_string(patch_root.path_join("unrelated.pck")) == "unrelated private patch")
+	assert(bootstrap._discard_obsolete_patch({"file": "old.pck"}) == OK, "cleanup retry must be idempotent")
+	for unsafe_name: String in ["../player_save_v03.json", "../../shared_warehouse.json", "user://characters/hero.pck"]:
+		assert(bootstrap._discard_obsolete_patch({"file": unsafe_name}) == ERR_INVALID_DATA)
+	for file_name: String in saves:
+		assert(FileAccess.get_file_as_string(test_root.path_join(file_name)) == "preserve exact character and warehouse bytes")
+	bootstrap.free()
+	_cleanup_tree(ProjectSettings.globalize_path(test_root))
 
 
 func _bootstrap_for(test_root: String) -> Node:

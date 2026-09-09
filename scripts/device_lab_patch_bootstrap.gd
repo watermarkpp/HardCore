@@ -52,6 +52,8 @@ func _load_active_patch() -> void:
 			var apk_commit := str(build_info.get("git_head", ""))
 			if not patch_matches_base(manifest, apk_commit):
 				load_error = "patch_base_mismatch"
+				if not apk_commit.is_empty():
+					set_meta("obsolete_patch_cleanup_error", _discard_obsolete_patch(manifest))
 				return
 	var patch_id := str(manifest.get("patchId", ""))
 	var file_name := str(manifest.get("file", ""))
@@ -88,6 +90,23 @@ func _load_active_patch() -> void:
 
 static func patch_matches_base(manifest: Dictionary, apk_commit: String) -> bool:
 	return not apk_commit.is_empty() and str(manifest.get("baseCommit", "")) == apk_commit
+
+
+func _discard_obsolete_patch(manifest: Dictionary) -> Error:
+	# APK replacement preserves user://. Retire only the old active PCK and its
+	# manifest inside the fixed private patch directory; never walk user data.
+	var file_name := str(manifest.get("file", ""))
+	if not _safe_pack_name(file_name):
+		return ERR_INVALID_DATA
+	var pack_path := _patch_dir_path().path_join(file_name)
+	if FileAccess.file_exists(pack_path):
+		var pack_error := DirAccess.remove_absolute(ProjectSettings.globalize_path(pack_path))
+		if pack_error != OK:
+			return pack_error # Remain rejected; retry cleanup on the next launch.
+	var manifest_path := _active_manifest_path()
+	if FileAccess.file_exists(manifest_path):
+		return DirAccess.remove_absolute(ProjectSettings.globalize_path(manifest_path))
+	return OK
 
 
 func _patch_dir_path() -> String:
