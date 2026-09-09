@@ -67,8 +67,24 @@ try {
         throw 'R3 APK item 910008 art binding mismatch'
     }
     $Catalog = (Read-Entry 'assets/assets/data/runtime/canonical_monster_catalog.json') | ConvertFrom-Json
-    if ($Catalog.entries_by_id.'50'.combat.behavior_profile.attackDelivery.kind -cne 'physical_projectile') {
-        throw 'R3 APK canonical monster 50 projectile mapping missing'
+    foreach ($MonsterId in @(50, 42, 145, 186, 62, 174, 150, 152, 206)) {
+        $Entry = $Catalog.entries_by_id.PSObject.Properties[[string]$MonsterId].Value
+        if ($Entry.combat.behavior_profile.attackDelivery.kind -cne 'physical_projectile') {
+            throw "R3 APK canonical monster $MonsterId projectile mapping missing"
+        }
+    }
+    foreach ($MonsterId in @(220, 222, 224)) {
+        $Entry = $Catalog.entries_by_id.PSObject.Properties[[string]$MonsterId].Value
+        if ($Entry.combat.behavior_profile.attackDelivery.kind -cne 'target_magic') {
+            throw "R3 APK canonical monster $MonsterId target-magic mapping missing"
+        }
+    }
+    foreach ($MonsterId in 226..234) {
+        $Entry = $Catalog.entries_by_id.PSObject.Properties[[string]$MonsterId].Value
+        $Enabled = $Entry.combat.behavior_profile.combatEnabled
+        if ($Enabled -isnot [bool] -or $Enabled) {
+            throw "R3 APK canonical monster $MonsterId noncombat gate missing"
+        }
     }
     Write-Output "R3_APK_RESOURCE_CLOSURE_PASS scripts=$($Scripts.Count) svg_import_closures=$($Visuals.Count)"
 } finally {
