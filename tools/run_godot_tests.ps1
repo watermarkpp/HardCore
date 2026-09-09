@@ -541,6 +541,21 @@ $Suites.critical = @($Suites.critical + @(
     'tests/skills/skill_semantic_contracts_test.tscn'
 ) | Select-Object -Unique)
 
+# September 9 closure: persist the new integration boundaries in critical.
+# Performance probes stay explicit because their sampling needs a controlled
+# machine window; they are not correctness gates for every ordinary test run.
+$Suites.critical = @($Suites.critical + @(
+    'tests/game_root_loading_transition_test.tscn',
+    'tests/equipment_inventory_slot_swap_test.tscn',
+    'tests/combat_environment_request_integration_test.tscn',
+    'tests/loot_world_placement_integration_test.tscn',
+    'tests/item_drop_instance_rules_test.tscn',
+    'tests/item_drop_instance_persistence_test.tscn',
+    'tests/warrior_slaying_release_integration_test.tscn',
+    'tests/audio_w4_actor_service_test.tscn',
+    'tests/audio_w4_contract_test.tscn'
+) | Select-Object -Unique)
+
 # ── Q0-A: final judgement contract ──
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.
