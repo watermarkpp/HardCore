@@ -1265,7 +1265,7 @@ func _update_monster_source_poison(delta: float) -> void:
 		if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
 			_monster_source_poison.clear()
 			break
-		_apply_resolved_damage(_monster_source_poison.tick_damage)
+		_apply_resolved_damage(_monster_source_poison.tick_damage, false)
 
 
 func take_damage(
@@ -1425,7 +1425,7 @@ func restore_health(amount: int) -> int:
 	return actual_restored
 
 
-func _apply_resolved_damage(amount: int) -> void:
+func _apply_resolved_damage(amount: int, causes_struck := true) -> void:
 	if state in [SummonState.DEAD, SummonState.EXPIRED]:
 		return
 	var hp_before := current_hp
@@ -1444,7 +1444,7 @@ func _apply_resolved_damage(amount: int) -> void:
 		_death_visual_remaining = _visual_action_duration("death")
 		_visual_state = "death"
 		_visual_elapsed = 0.0
-	else:
+	elif causes_struck:
 		_hit_visual_remaining = _visual_action_duration("hit")
 		_visual_state = "hit"
 		_visual_elapsed = 0.0
