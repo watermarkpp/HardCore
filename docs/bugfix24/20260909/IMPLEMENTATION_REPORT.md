@@ -32,11 +32,11 @@ W4严格对照采用旧版`cf1d2718`和候选`ef827331`，同一地图、同字�
 
 V3 REV07目前仍不达标：此前严格WORLD墙场景10/20/30只的p95旧7.432/8.206/8.538ms，新8.995/10.275/11.112ms。四场景（开阔追击、持续近身攻击、真实障碍、密集群体）矩阵正在补齐，不能用功能PASS替代性能门槛，也不能降低怪数/碰撞/玩法频率制造提升。
 
-`5fbef39d`仅修复两处已观察到的headless预取入口，保留可视/Android异步路径。正式dummy渲染三场景三轮最终候选验收仍待执行。原始stderr保留ObjectDB/resource清理等现有allowlist文本；runner的engine_log_errors=0不等于原始日志零ERROR。本轮未放宽allowlist。
+`5fbef39d`仅修复两处已观察到的headless预取入口，保留可视/Android异步路径。在主树9a5f7158上，正式dummy渲染三场景连续三轮均3/3 PASS，完整逐轮raw见evidence/v3_main_integration/final_9a5f7158。原始stderr保留ObjectDB/resource清理等现有allowlist文本；runner的engine_log_errors=0不等于原始日志零ERROR。本轮未放宽allowlist。
 
 ## 当前未完成项
 
-- W1：153个runtime ID、32类投递审计已有；初始6个物理远程ID、224目标魔法/邻接物理、9个非战斗宝箱已在主树通过，见`evidence/v3_main_integration/w1_initial_d114eb53_165323`。ID62原profile字段丢失已在集成前修正，候选身份未提升为primary。spit/gas/line/mixed/guard新通道仍在施工。
+- W1：153个runtime ID、32类投递审计已有；初始6个物理远程ID、224目标魔法/邻接物理、9个非战斗宝箱已在主树通过，见`evidence/v3_main_integration/w1_initial_d114eb53_165323`。ID62原profile字段丢失已在集成前修正，候选身份未提升为primary。spit/gas/line/mixed/guard 17个精确ID新通道已集成，675005cd真实Actor专项通过，799c5328 Critical中同样通过。
 - 12个缺少exact actor来源的ID继续DATA_HOLD，不按名称或变体猜配。226–234另有人工固定非战斗权威，可接逐ID禁止自主攻击门禁并保留受伤/掉落，不能据此补造actor class。
 - REV07四场景公平对照、最终Critical和固定渲染复验、冻结范围最终复核、APK构建与身份/签名/资源闭包验证仍未完成。
 
@@ -47,3 +47,12 @@ V3 REV07目前仍不达标：此前严格WORLD墙场景10/20/30只的p95旧7.432
 冻结阶段检查`frozen_scope_checkpoint.json`为7031项中7030项原hash一致；唯一旧测试差异是无地图死亡队列夹具的位置provider适配，生产WORLD由真实场景验证。后续获准行为catalog生成有来源hash级联，最终必须做语义复核，不能把此阶段hash结论复用成最终零差异。
 
 完成剩余实现后固定源码提交，运行必要最终回归，再隔离导出并核对APK版本、签名、build-info、资源和SHA256。当前没有新APK或设备验收结论。历史失败原始资料保留，已被同名runner覆盖的早期raw明确区分，仅存JSON时不冒称完整逐轮日志。
+
+## 2026-09-09 19:22 集成验收增量
+
+- 主树 `799c5328` 完整 Critical 为 318/344 PASS，26个失败完整原始日志与SHA256已归档 `evidence/v3_main_integration/final_799c5328/critical`。
+- 失败项完成正式WORLD/READY与独立仓库夹具适配；ID18起步位置对齐已授权喷吐射程；queue-only落点适配保留生产WORLD专项，未改爆率抽样。Loading等待预算对齐既有过渡夹具5秒，保留覆盖、单飞、隔离和READY断言。
+- `9a5f7158` 24个失败项加10个受影响路径/索引专项共34/34 PASS；三轮smoke/warrior_visual/player_movement_respawn各3/3 PASS。`0247b8d0` 最后音频和Loading两项2/2 PASS。这是全套基线加最终增量复验，不是单次最终HEAD 344/344。
+- 投影缓存与仅用于布尔占位的无序候选查询已整合；缓存验证同帧移动、地图/修订/提供者失效，旧有排序与投射物查询语义保留。最终严格性能对照待执行，不用减少投影调用的诊断替代帧时间验收。
+- 用户补充旧APK在其他手机不停攻击：未证实设备根因，已排除fresh默认自动攻击；正在补充输入事件防护与专项。未连接设备，不声称已复现或解决三台手机现象。
+- 覆盖安装预检通过：显式对比桌面版本71基包，配置版本72；新增同包名、同签名证书摘要、versionCode递增检查。过期启用热更新包的定向清理和人物/共享仓库字节保留专项通过；实际新APK核验尚待构建。
