@@ -407,6 +407,535 @@
         "lines": "18449-18502",
         "rule": "TBaseObject.GetAttackDir accepts adjacent Chebyshev-square targets."
       }
+    },
+    {
+      "monsterId": 18,
+      "canonicalName": "毒蜘蛛",
+      "runtimeAllowed": true,
+      "attackRangeGu": 2.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "source_spit_map_5x5",
+      "deliveryKind": "directional_spit_map",
+      "sourceClassBinding": {
+        "serverRace": 82,
+        "pascalClass": "TSpitSpider",
+        "attackMethod": "SpitAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18504-18531",
+        "rule": "TSpitSpider consumes the source 5x5 SpitMap and TargetInSpitRange two-cell gate; exact candidate IDs route to this primary class rule."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1871: MONSTER_SPITSPIDER -> TSpitSpider.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 103,
+      "canonicalName": "威思而小虫",
+      "runtimeAllowed": true,
+      "attackRangeGu": 2.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "source_spit_map_5x5",
+      "deliveryKind": "directional_spit_map",
+      "sourceClassBinding": {
+        "serverRace": 82,
+        "pascalClass": "TSpitSpider",
+        "attackMethod": "SpitAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18504-18531",
+        "rule": "TSpitSpider consumes the source 5x5 SpitMap and TargetInSpitRange two-cell gate; exact candidate IDs route to this primary class rule."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1871: MONSTER_SPITSPIDER -> TSpitSpider.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 104,
+      "canonicalName": "沙虫",
+      "runtimeAllowed": true,
+      "attackRangeGu": 2.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "source_spit_map_5x5",
+      "deliveryKind": "directional_spit_map",
+      "sourceClassBinding": {
+        "serverRace": 82,
+        "pascalClass": "TSpitSpider",
+        "attackMethod": "SpitAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18504-18531",
+        "rule": "TSpitSpider consumes the source 5x5 SpitMap and TargetInSpitRange two-cell gate; exact candidate IDs route to this primary class rule."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1871: MONSTER_SPITSPIDER -> TSpitSpider.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 185,
+      "canonicalName": "剧毒蜘蛛",
+      "runtimeAllowed": true,
+      "attackRangeGu": 2.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "source_spit_map_5x5",
+      "deliveryKind": "directional_spit_map",
+      "sourceClassBinding": {
+        "serverRace": 82,
+        "pascalClass": "TSpitSpider",
+        "attackMethod": "SpitAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18504-18531",
+        "rule": "TSpitSpider consumes the source 5x5 SpitMap and TargetInSpitRange two-cell gate; exact candidate IDs route to this primary class rule."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1871: MONSTER_SPITSPIDER -> TSpitSpider.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 146,
+      "canonicalName": "神兽0",
+      "runtimeAllowed": true,
+      "attackRangeGu": 2.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "source_spit_map_5x5",
+      "deliveryKind": "directional_spit_map",
+      "sourceClassBinding": {
+        "serverRace": 114,
+        "pascalClass": "TElfWarriorMonster",
+        "attackMethod": "SpitAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18504-18531",
+        "rule": "TElfWarriorMonster inherits the TSpitSpider geometry but disables poison; its inherited TargetInSpitRange remains the two-cell source SpitMap gate."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1916: MONSTER_ELFWARRIOR -> TElfWarriorMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 46,
+      "canonicalName": "洞蛆",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "gas_adjacent",
+      "sourceClassBinding": {
+        "serverRace": 90,
+        "pascalClass": "TGasAttackMonster",
+        "attackMethod": "sub_4A9C78",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TGasAttackMonster resolves one adjacent target with GetPoseCreate/GetAttackDir and applies the gas status to that target."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1879: 90 -> TGasAttackMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 60,
+      "canonicalName": "粪虫",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "gas_adjacent",
+      "sourceClassBinding": {
+        "serverRace": 90,
+        "pascalClass": "TGasAttackMonster",
+        "attackMethod": "sub_4A9C78",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TGasAttackMonster resolves one adjacent target with GetPoseCreate/GetAttackDir and applies the gas status to that target."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1879: 90 -> TGasAttackMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 128,
+      "canonicalName": "楔蛾",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "gas_adjacent",
+      "sourceClassBinding": {
+        "serverRace": 105,
+        "pascalClass": "TGasMothMonster",
+        "attackMethod": "inherited gas attack + hidden reveal",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TGasMothMonster inherits the one-cell gas target and adds the separately recorded hidden-target reveal chance; range remains adjacent."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1909: 105 -> TGasMothMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 168,
+      "canonicalName": "月魔蜘蛛",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "gas_adjacent",
+      "sourceClassBinding": {
+        "serverRace": 105,
+        "pascalClass": "TGasMothMonster",
+        "attackMethod": "inherited gas attack + hidden reveal",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TGasMothMonster inherits the one-cell gas target and adds the separately recorded hidden-target reveal chance; range remains adjacent."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1909: 105 -> TGasMothMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 79,
+      "canonicalName": "僵尸1",
+      "runtimeAllowed": true,
+      "attackRangeGu": 6.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "directional_line_cells",
+      "deliveryKind": "line_magic",
+      "sourceClassBinding": {
+        "serverRace": 94,
+        "pascalClass": "TLightingZombi",
+        "attackMethod": "LightingAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+        "sha256": "E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2",
+        "lines": "1131-1188",
+        "rule": "TLightingZombi attacks on an axis-aligned line only when abs(dx)<6 and abs(dy)<6; the sixth-cell boundary is exclusive and the emitted line advances nine cells."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1883: MONSTER_LIGHTZOMBI -> TLightingZombi.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      },
+      "boundary": "exclusive"
+    },
+    {
+      "monsterId": 76,
+      "canonicalName": "沃玛教主",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "mixed_target_tile",
+      "sourceClassBinding": {
+        "serverRace": 92,
+        "pascalClass": "TCowKingMonster",
+        "attackMethod": "HitMagAttackTarget",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TCowKingMonster uses the inherited adjacent target cell, then splits nPower into physical and magic halves."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1881: 92 -> TCowKingMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 77,
+      "canonicalName": "沃玛教主1",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "mixed_target_tile",
+      "sourceClassBinding": {
+        "serverRace": 92,
+        "pascalClass": "TCowKingMonster",
+        "attackMethod": "HitMagAttackTarget",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TCowKingMonster uses the inherited adjacent target cell, then splits nPower into physical and magic halves."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1881: 92 -> TCowKingMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 235,
+      "canonicalName": "暗之双头血魔",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "mixed_target_tile",
+      "sourceClassBinding": {
+        "serverRace": 92,
+        "pascalClass": "TCowKingMonster",
+        "attackMethod": "HitMagAttackTarget",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TCowKingMonster uses the inherited adjacent target cell, then splits nPower into physical and magic halves."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1881: 92 -> TCowKingMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 236,
+      "canonicalName": "暗之双头金刚",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "mixed_target_tile",
+      "sourceClassBinding": {
+        "serverRace": 92,
+        "pascalClass": "TCowKingMonster",
+        "attackMethod": "HitMagAttackTarget",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TCowKingMonster uses the inherited adjacent target cell, then splits nPower into physical and magic halves."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1881: 92 -> TCowKingMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 239,
+      "canonicalName": "暗之沃玛教主",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "mixed_target_tile",
+      "sourceClassBinding": {
+        "serverRace": 92,
+        "pascalClass": "TCowKingMonster",
+        "attackMethod": "HitMagAttackTarget",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TCowKingMonster uses the inherited adjacent target cell, then splits nPower into physical and magic halves."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1881: 92 -> TCowKingMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 160,
+      "canonicalName": "祖玛教主",
+      "runtimeAllowed": true,
+      "attackRangeGu": 1.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "chebyshev_square",
+      "deliveryKind": "mixed_target_tile",
+      "sourceClassBinding": {
+        "serverRace": 102,
+        "pascalClass": "TScultureKingMonster",
+        "attackMethod": "HitMagAttackTarget",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+        "sha256": "65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262",
+        "lines": "18449-18502",
+        "rule": "TScultureKingMonster uses the inherited adjacent target cell, then passes zero physical and full magic power; dormant/wake state remains in the behavior profile."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1906: MONSTER_SCULTUREKING -> TScultureKingMonster.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      }
+    },
+    {
+      "monsterId": 194,
+      "canonicalName": "恶魔弓箭手",
+      "runtimeAllowed": true,
+      "attackRangeGu": 12.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "manhattan_diamond",
+      "deliveryKind": "guard_direct_projectile",
+      "sourceClassBinding": {
+        "serverRace": 112,
+        "pascalClass": "TArcherGuard",
+        "attackMethod": "sub_4A6B30",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon2.pas",
+        "sha256": "983C098130D7A83B34F19746FC484609DCEF975344864C435526D254F98D0BCD",
+        "lines": "889-950",
+        "rule": "TArcherGuard selects a nearest target by Manhattan distance within m_nViewRange=12; physical HP is settled immediately and the delayed message is presentation."
+      },
+      "dispatchEvidence": {
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1914: MONSTER_ARCHERGUARD -> TArcherGuard.Create",
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085"
+      },
+      "rangeMetric": "manhattan"
     }
   ]
 }
