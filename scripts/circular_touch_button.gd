@@ -22,6 +22,7 @@ const SOURCE_UI_ACCEPT := &"ui_accept"
 
 var _next_press_token := 1
 var _active_inputs: Dictionary = {}
+var _pointer_diagnostic_events: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -46,6 +47,7 @@ func _notification(what: int) -> void:
 func _gui_input(event: InputEvent) -> void:
 	if not lifecycle_enabled:
 		return
+	_record_pointer_diagnostic(&"gui", event)
 	if event is InputEventScreenTouch:
 		_handle_screen_touch(event as InputEventScreenTouch)
 		return
@@ -56,7 +58,10 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if not lifecycle_enabled or _active_inputs.is_empty():
+	if not lifecycle_enabled:
+		return
+	_record_pointer_diagnostic(&"global", event)
+	if _active_inputs.is_empty():
 		return
 	# Global input is a release-only safety net. Starts remain owned by GUI hit
 	# testing, while an active pointer is allowed to finish outside this Control.
@@ -152,6 +157,8 @@ func _handle_ui_accept(event: InputEvent) -> void:
 
 
 func _start_input(touch_id: int, source: StringName) -> void:
+	if not lifecycle_enabled or disabled or not is_visible_in_tree():
+		return
 	if _active_inputs.has(touch_id):
 		return
 	var press_token := _next_press_token
@@ -191,3 +198,72 @@ func _on_window_focus_exited() -> void:
 func _has_point(point: Vector2) -> bool:
 	var radius := minf(size.x, size.y) * 0.5
 	return point.distance_squared_to(size * 0.5) <= radius * radius
+
+
+func owns_lifecycle_input(
+	press_token: int, touch_id: int, source: StringName
+) -> bool:
+	if not lifecycle_enabled or disabled or not is_visible_in_tree():
+		return false
+	var raw_entry: Variant = _active_inputs.get(touch_id)
+	if not raw_entry is Dictionary:
+		return false
+	var entry := raw_entry as Dictionary
+	return (
+		int(entry.get("press_token", 0)) == press_token
+		and StringName(entry.get("source", &"")) == source
+	)
+
+
+func input_lifecycle_snapshot() -> Dictionary:
+	return {
+		"contract_id": INPUT_LIFECYCLE_CONTRACT_ID,
+		"lifecycle_enabled": lifecycle_enabled,
+		"disabled": disabled,
+		"visible_in_tree": is_visible_in_tree(),
+		"active_inputs": _active_inputs.duplicate(true),
+		"pointer_events": _pointer_diagnostic_events.duplicate(true),
+	}
+
+
+func _record_pointer_diagnostic(stage: StringName, event: InputEvent) -> void:
+	# Debug ring only; no per-frame logging, file writes, or synthetic inputs.
+	if not OS.is_debug_build():
+		return
+	# Reject motion/drag before allocating a dictionary (high-frequency path).
+	if not (event is InputEventScreenTouch or event is InputEventMouseButton or event is InputEventKey):
+		return
+	if event is InputEventMouseButton and event.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if event is InputEventKey and not event.is_action(&"ui_accept"):
+		return
+	var entry: Dictionary = {
+		"time_ms": Time.get_ticks_msec(),
+		"stage": str(stage),
+		"device": event.device,
+		"active_count": _active_inputs.size(),
+	}
+	if event is InputEventScreenTouch:
+		var touch := event as InputEventScreenTouch
+		entry["kind"] = "touch"
+		entry["touch_id"] = touch.index
+		entry["pressed"] = touch.pressed
+		entry["canceled"] = touch.canceled
+		entry["position"] = [touch.position.x, touch.position.y]
+	elif event is InputEventMouseButton:
+		var mouse := event as InputEventMouseButton
+		if mouse.button_index != MOUSE_BUTTON_LEFT:
+			return
+		entry["kind"] = "mouse"
+		entry["pressed"] = mouse.pressed
+		entry["emulated"] = mouse.device == InputEvent.DEVICE_ID_EMULATION
+		entry["position"] = [mouse.position.x, mouse.position.y]
+	elif event is InputEventKey and event.is_action(&"ui_accept"):
+		entry["kind"] = "ui_accept"
+		entry["pressed"] = event.is_pressed()
+		entry["echo"] = event.is_echo()
+	else:
+		return
+	_pointer_diagnostic_events.append(entry)
+	while _pointer_diagnostic_events.size() > 128:
+		_pointer_diagnostic_events.pop_front()

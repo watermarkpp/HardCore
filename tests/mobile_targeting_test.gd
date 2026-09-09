@@ -84,7 +84,16 @@ func _run() -> void:
 	_place_at_tile_offset(game, first, player_tile, Vector2i(3, 3))
 	game.player._attack_timer = 0.0
 	game.player._attack_action_timer = 0.0
-	game._mobile_attack_held = true
+	# live_owner_no_debt.v2: hold is derived from live pointer ownership on both
+	# ledgers, so the fixture registers a real touch on the button and the root
+	# instead of injecting the derived `_mobile_attack_held` bool directly.
+	var hold_token := 9001
+	game.hud.attack_button._active_inputs[3] = {
+		"press_token": hold_token,
+		"touch_id": 3,
+		"source": &"touch",
+	}
+	game._on_mobile_attack_input_started(hold_token, 3, &"touch")
 	game._process(0.0)
 	assert(
 		game.locked_target == first
@@ -93,33 +102,33 @@ func _run() -> void:
 		),
 		"按住攻击的重复输入没有保持锁定并持续转向目标"
 	)
-	game._on_mobile_attack_released()
+	game.hud.attack_button._active_inputs.erase(3)
+	game._on_mobile_attack_input_ended(hold_token, 3, &"touch")
 
 	game._on_mobile_attack_pressed()
 	game._on_mobile_attack_released()
 	game._on_mobile_attack_pressed()
 	game._on_mobile_attack_released()
-	assert(game._queued_mobile_attacks == 2, "快速点击发生在攻击动作中时没有逐次登记")
+	assert(game._queued_mobile_attacks == 0, "快速点击发生在攻击动作中时不得排队积欠（无历史债务）")
 	game.player._attack_timer = 0.0
 	game.player._attack_action_timer = 0.0
 	game._process(0.0)
 	assert(
-		game._queued_mobile_attacks == 1 and game.player._attack_action_timer > 0.0,
-		"第一笔快速点击没有在人物可攻击时完成一次攻击"
+		game._queued_mobile_attacks == 0 and game.player._attack_action_timer == 0.0,
+		"无按住且无新输入时不得自行开刀（历史欠账不得复燃）"
 	)
-	game.player._attack_timer = 0.0
-	game.player._attack_action_timer = 0.0
-	game._process(0.0)
+	game._on_mobile_attack_pressed()
 	assert(
 		game._queued_mobile_attacks == 0 and game.player._attack_action_timer > 0.0,
-		"第二笔快速点击没有独立完成一次攻击"
+		"可攻击时的全新点击没有立即完成一次攻击"
 	)
-	var repeated_press_token := 9001
+	game._on_mobile_attack_released()
+	var repeated_press_token := 9002
 	game._on_mobile_attack_input_started(repeated_press_token, 17, &"touch")
 	game._on_mobile_attack_input_started(repeated_press_token, 17, &"touch")
 	assert(
-		game._queued_mobile_attacks == 1,
-		"repeated DOWN for one physical touch created more than one attack ticket"
+		game._active_mobile_attack_tokens.size() == 1 and game._queued_mobile_attacks == 0,
+		"repeated DOWN for one physical touch must keep one live owner and no debt"
 	)
 	game._on_mobile_attack_input_cancelled(
 		repeated_press_token,
@@ -276,14 +285,22 @@ func _assert_attack_ticket_contract_for_all_professions(game: Node) -> void:
 		game._on_mobile_attack_input_started(first_token, 1, &"touch")
 		game._on_mobile_attack_input_started(second_token, 2, &"touch")
 		assert(
-			game._queued_mobile_attacks == 2,
-			"%s attack input did not keep one ticket per unique physical touch" % profession_name
+			game._queued_mobile_attacks == 0,
+			"%s busy taps must not queue future attack debt" % profession_name
+		)
+		assert(
+			game._active_mobile_attack_tokens.size() == 2 and game._mobile_attack_held,
+			"%s attack input did not keep one live owner per unique physical touch" % profession_name
 		)
 		game._on_mobile_attack_input_ended(first_token, 1, &"touch")
+		assert(
+			game._mobile_attack_held and game._queued_mobile_attacks == 0,
+			"%s one finger release must preserve the other live owner without debt" % profession_name
+		)
 		game._on_mobile_attack_input_ended(second_token, 2, &"touch")
 		assert(
-			not game._mobile_attack_held and game._queued_mobile_attacks == 2,
-			"%s release did not stop held repeat or lost legitimate buffered taps" % profession_name
+			not game._mobile_attack_held and game._queued_mobile_attacks == 0,
+			"%s release of every live owner must leave no attack debt" % profession_name
 		)
 		game._cancel_all_mobile_attack_inputs(true)
 	PlayerState.select_profession(original_profession)

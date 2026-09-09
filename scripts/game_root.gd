@@ -127,8 +127,8 @@ const TAOIST_SUPPORT_SKILL_IDS := {
 	"taoist.defense": true,
 }
 const PLAYER_STEALTH_ALPHA := 0.60
-const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.attack_ticket.touch_lifecycle.v1"
-const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 32
+const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.ordinary_attack.live_owner_no_debt.v2"
+const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 0
 const SKILL_INPUT_TICKET_CONTRACT_ID := (
 	"combat.input.skill_ticket.cooldown_coalesce_hold_repeat.v2"
 )
@@ -239,7 +239,7 @@ var _next_skill_input_sequence := 1
 var _skill_input_retry_remaining := 0.0
 var _keyboard_bound_skill_token := 0
 const ATTACK_ACTION_LIFECYCLE_CONTRACT_ID := "input.attack.fresh_down.v1"
-const ATTACK_ACTION_DIAGNOSTIC_LIMIT := 16
+const ATTACK_ACTION_DIAGNOSTIC_LIMIT := 256
 var _attack_action_press_owned := false
 var _attack_action_neutral_observed := true
 var _attack_action_ignored_pressed_recorded := false
@@ -1661,12 +1661,7 @@ func _process(delta: float) -> void:
 	)
 	var attack_action_lifecycle := _poll_attack_action_lifecycle(gameplay_input_is_enabled())
 	if bound_attack_skill.is_empty():
-		if bool(attack_action_lifecycle.get("started", false)):
-			_submit_mobile_attack_ticket(_allocate_synthetic_attack_token())
-		if not _queued_mobile_attack_tickets.is_empty():
-			_drain_next_mobile_attack_ticket()
-		elif _mobile_attack_held or bool(attack_action_lifecycle.get("active", false)):
-			_request_mobile_attack()
+		_process_ordinary_attack_input(attack_action_lifecycle)
 	else:
 		_queued_mobile_attack_tickets.clear()
 		if bool(attack_action_lifecycle.get("started", false)):
@@ -4121,13 +4116,13 @@ func _build_enemy_death_runtime_snapshot(canonical_monster: Dictionary) -> Dicti
 
 
 func _request_mobile_attack() -> bool:
+	if not gameplay_input_is_enabled() or not player.can_start_attack():
+		return false
 	_activate_physical_attack_domain()
 	var target := _ensure_attack_locked_target()
 	var facing_before := player.facing
 	var touch_before := player.touch_vector
 	var movement_was_active := player.movement_input_active
-	if not player.can_start_attack():
-		return false
 	var attack_direction := player.facing.normalized()
 	if is_instance_valid(target):
 		attack_direction = _face_locked_target()
@@ -4343,30 +4338,21 @@ func _allocate_synthetic_attack_token() -> int:
 
 
 func _submit_mobile_attack_ticket(press_token: int) -> void:
-	if press_token == 0 or press_token in _queued_mobile_attack_tickets:
+	# Compatibility entry point only. A DOWN is an attempt, NOT a future debt.
+	_queued_mobile_attack_tickets.clear()
+	if press_token == 0:
 		return
-	if _queued_mobile_attack_tickets.is_empty() and _request_mobile_attack():
-		return
-	if _queued_mobile_attack_tickets.size() >= MAX_BUFFERED_MOBILE_ATTACK_TICKETS:
-		return
-	_queued_mobile_attack_tickets.append(press_token)
+	_try_ordinary_attack_intent(&"fresh_down")
 
 
 func _drain_next_mobile_attack_ticket() -> bool:
-	if _queued_mobile_attack_tickets.is_empty():
-		return false
-	if not _request_mobile_attack():
-		return false
-	_queued_mobile_attack_tickets.pop_front()
-	return true
+	# Compatibility shim: an old caller can never resurrect deferred attacks.
+	_queued_mobile_attack_tickets.clear()
+	return false
 
 
 func _refresh_mobile_attack_held() -> void:
-	_mobile_attack_held = false
-	for value in _active_mobile_attack_tokens.values():
-		if bool(value):
-			_mobile_attack_held = true
-			return
+	_mobile_attack_held = not _active_mobile_attack_tokens.is_empty()
 
 
 func _on_mobile_attack_input_started(
@@ -4374,29 +4360,30 @@ func _on_mobile_attack_input_started(
 	touch_id: int,
 	source: StringName
 ) -> void:
-	if not gameplay_input_is_enabled(): return
-	if press_token == 0 or _active_mobile_attack_tokens.has(press_token):
+	if not gameplay_input_is_enabled() or press_token == 0:
+		return
+	if _active_mobile_attack_tokens.has(press_token):
 		return
 	var ordinary_attack := PlayerState.skill_name_for_slot(
-		PlayerState.SKILL_SLOT_GROUP_ATTACK,
-		0
+		PlayerState.SKILL_SLOT_GROUP_ATTACK, 0
 	).is_empty()
 	if not ordinary_attack:
 		_on_skill_input_started(
-			PlayerState.SKILL_SLOT_GROUP_ATTACK,
-			0,
-			press_token,
-			touch_id,
-			source
+			PlayerState.SKILL_SLOT_GROUP_ATTACK, 0,
+			press_token, touch_id, source
 		)
 		return
-	_active_mobile_attack_tokens[press_token] = true
+	_active_mobile_attack_tokens[press_token] = {
+		"press_token": press_token,
+		"touch_id": touch_id,
+		"source": source,
+		"started_at_ms": Time.get_ticks_msec(),
+	}
 	_refresh_mobile_attack_held()
-	if ordinary_attack:
-		_submit_mobile_attack_ticket(press_token)
-		return
-	_queued_mobile_attack_tickets.clear()
-	_request_primary_attack_action()
+	_record_attack_action_diagnostic(&"pointer_down", source, {
+		"press_token": press_token, "touch_id": touch_id,
+	})
+	_submit_mobile_attack_ticket(press_token)
 
 
 func _on_mobile_attack_input_ended(
@@ -4406,15 +4393,18 @@ func _on_mobile_attack_input_ended(
 ) -> void:
 	if not _active_mobile_attack_tokens.has(press_token):
 		_on_skill_input_ended(
-			PlayerState.SKILL_SLOT_GROUP_ATTACK,
-			0,
-			press_token,
-			touch_id,
-			source
+			PlayerState.SKILL_SLOT_GROUP_ATTACK, 0,
+			press_token, touch_id, source
 		)
 		return
+	if not _ordinary_attack_owner_matches(press_token, touch_id, source):
+		return
 	_active_mobile_attack_tokens.erase(press_token)
+	_queued_mobile_attack_tickets.clear()
 	_refresh_mobile_attack_held()
+	_record_attack_action_diagnostic(&"pointer_up", source, {
+		"press_token": press_token, "touch_id": touch_id,
+	})
 
 
 func _on_mobile_attack_input_cancelled(
@@ -4425,25 +4415,27 @@ func _on_mobile_attack_input_cancelled(
 ) -> void:
 	if not _active_mobile_attack_tokens.has(press_token):
 		_on_skill_input_cancelled(
-			PlayerState.SKILL_SLOT_GROUP_ATTACK,
-			0,
-			press_token,
-			touch_id,
-			source,
-			reason
+			PlayerState.SKILL_SLOT_GROUP_ATTACK, 0,
+			press_token, touch_id, source, reason
 		)
 		return
+	if not _ordinary_attack_owner_matches(press_token, touch_id, source):
+		return
 	_active_mobile_attack_tokens.erase(press_token)
-	_queued_mobile_attack_tickets.erase(press_token)
+	_queued_mobile_attack_tickets.clear()
 	_refresh_mobile_attack_held()
+	_record_attack_action_diagnostic(&"pointer_cancel", reason, {
+		"press_token": press_token, "touch_id": touch_id,
+		"source": str(source),
+	})
 
 
-func _cancel_all_mobile_attack_inputs(clear_tickets := false) -> void:
+func _cancel_all_mobile_attack_inputs(_clear_tickets := false) -> void:
+	# Retain the argument for old callers, but stale debt is never retained.
 	_active_mobile_attack_tokens.clear()
 	_mobile_attack_held = false
 	_legacy_mobile_attack_token = 0
-	if clear_tickets:
-		_queued_mobile_attack_tickets.clear()
+	_queued_mobile_attack_tickets.clear()
 
 
 func _skill_input_key(
@@ -4586,30 +4578,66 @@ func _poll_attack_action_lifecycle(input_enabled: bool) -> Dictionary:
 	return {"started": false, "ended": false, "active": _attack_action_press_owned}
 
 
-func _record_attack_action_diagnostic(kind: StringName, reason: StringName) -> void:
+func _record_attack_action_diagnostic(
+	kind: StringName,
+	reason: StringName,
+	details: Dictionary = {}
+) -> void:
 	_attack_action_diagnostic_serial += 1
-	_attack_action_diagnostic_events.append({
+	var entry := {
 		"serial": _attack_action_diagnostic_serial,
+		"time_ms": Time.get_ticks_msec(),
 		"epoch": _attack_action_lifecycle_epoch,
 		"kind": str(kind),
 		"reason": str(reason),
 		"pressed": Input.is_action_pressed("attack"),
-	})
+		"touch_attack_held": _mobile_attack_held,
+		"active_touch_count": _active_mobile_attack_tokens.size(),
+		"queued_ticket_count": _queued_mobile_attack_tickets.size(),
+		"map_id": current_map_id,
+		"zone_generation": _zone_generation,
+	}
+	if is_instance_valid(player):
+		entry["attack_timer"] = player._attack_timer
+		entry["attack_action_timer"] = player._attack_action_timer
+		entry["attack_cooldown"] = player.attack_cooldown
+		entry["combat_action_sequence"] = player._combat_action_sequence
+		entry["player_hp"] = player.current_hp
+	if is_instance_valid(locked_target):
+		entry["locked_target_id"] = locked_target.get_instance_id()
+		entry["locked_target_hp"] = locked_target.current_hp
+	else:
+		entry["locked_target_id"] = 0
+		entry["locked_target_hp"] = 0
+	entry["details"] = details.duplicate(true)
+	_attack_action_diagnostic_events.append(entry)
 	while _attack_action_diagnostic_events.size() > ATTACK_ACTION_DIAGNOSTIC_LIMIT:
 		_attack_action_diagnostic_events.pop_front()
 
 
 func attack_action_lifecycle_snapshot() -> Dictionary:
-	return {
+	var result := {
 		"contract_id": ATTACK_ACTION_LIFECYCLE_CONTRACT_ID,
+		"ordinary_attack_contract_id": ATTACK_INPUT_TICKET_CONTRACT_ID,
 		"epoch": _attack_action_lifecycle_epoch,
 		"press_owned": _attack_action_press_owned,
 		"neutral_observed": _attack_action_neutral_observed,
+		"raw_attack_pressed": Input.is_action_pressed("attack"),
 		"touch_attack_held": _mobile_attack_held,
 		"active_touch_count": _active_mobile_attack_tokens.size(),
+		"active_touch_owners": _active_mobile_attack_tokens.duplicate(true),
 		"queued_ticket_count": _queued_mobile_attack_tickets.size(),
 		"events": _attack_action_diagnostic_events.duplicate(true),
 	}
+	if is_instance_valid(player):
+		result["attack_timer"] = player._attack_timer
+		result["attack_action_timer"] = player._attack_action_timer
+		result["combat_action_sequence"] = player._combat_action_sequence
+		result["attack_cooldown"] = player.attack_cooldown
+	if is_instance_valid(hud) and is_instance_valid(hud.attack_button):
+		if hud.attack_button.has_method("input_lifecycle_snapshot"):
+			result["button"] = hud.attack_button.call("input_lifecycle_snapshot")
+	return result
 
 
 func _submit_skill_input_ticket(entry: Dictionary) -> void:
@@ -4699,8 +4727,8 @@ func _on_mobile_attack_pressed() -> void:
 
 
 func _on_mobile_attack_released() -> void:
+	# A duplicate legacy release must not release another finger's ownership.
 	if _legacy_mobile_attack_token == 0:
-		_cancel_all_mobile_attack_inputs(false)
 		return
 	var press_token := _legacy_mobile_attack_token
 	_legacy_mobile_attack_token = 0
@@ -12705,3 +12733,69 @@ func _hc_skill_preflight(stable_skill_id: String, target_id: int) -> bool:
 		_hc_lightning_hint_ms = Time.get_ticks_msec()
 		hud.show_message("目标被遮挡或已失效", 1.5)
 	return clear
+
+
+func _ordinary_attack_owner_matches(
+	press_token: int, touch_id: int, source: StringName
+) -> bool:
+	var raw_entry: Variant = _active_mobile_attack_tokens.get(press_token)
+	if not raw_entry is Dictionary:
+		return false
+	var entry := raw_entry as Dictionary
+	return (
+		int(entry.get("touch_id", -999)) == touch_id
+		and StringName(entry.get("source", &"")) == source
+	)
+
+
+func _process_ordinary_attack_input(attack_action_lifecycle: Dictionary) -> void:
+	_queued_mobile_attack_tickets.clear()
+	if not gameplay_input_is_enabled():
+		_cancel_all_mobile_attack_inputs(true)
+		return
+	_reconcile_ordinary_attack_button_owners()
+	if bool(attack_action_lifecycle.get("started", false)):
+		_submit_mobile_attack_ticket(_allocate_synthetic_attack_token())
+	elif _mobile_attack_held or bool(attack_action_lifecycle.get("active", false)):
+		_try_ordinary_attack_intent(&"live_hold")
+
+
+func _reconcile_ordinary_attack_button_owners() -> void:
+	# Reconcile two software ledgers; this is NOT an inactivity/hold timer.
+	# No inference is made from the absence of DRAG events.
+	if not is_instance_valid(hud) or not is_instance_valid(hud.attack_button):
+		return
+	if not hud.attack_button.has_method("owns_lifecycle_input"):
+		return
+	for raw_token: Variant in _active_mobile_attack_tokens.keys():
+		var token := int(raw_token)
+		var raw_entry: Variant = _active_mobile_attack_tokens.get(token)
+		if not raw_entry is Dictionary:
+			# Legacy bool entries cannot describe a current verified pointer.
+			_active_mobile_attack_tokens.erase(token)
+			continue
+		var entry := raw_entry as Dictionary
+		var source := StringName(entry.get("source", &""))
+		if source not in [&"touch", &"mouse", &"ui_accept"]:
+			continue
+		var touch_id := int(entry.get("touch_id", -999))
+		if not bool(hud.attack_button.call(
+			"owns_lifecycle_input", token, touch_id, source
+		)):
+			_on_mobile_attack_input_cancelled(
+				token, touch_id, source, &"button_owner_revoked"
+			)
+	_refresh_mobile_attack_held()
+
+
+func _try_ordinary_attack_intent(origin: StringName) -> bool:
+	if not gameplay_input_is_enabled():
+		return false
+	# Reject before target selection/geometry. Never adjust gameplay timers.
+	if not player.can_start_attack():
+		return false
+	var accepted := _request_mobile_attack()
+	if accepted:
+		# This means action STARTED; it does NOT mean damage has been committed.
+		_record_attack_action_diagnostic(&"attack_action_started", origin)
+	return accepted
