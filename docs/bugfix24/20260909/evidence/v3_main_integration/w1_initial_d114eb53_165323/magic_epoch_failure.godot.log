@@ -1,0 +1,18 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+W1_SPECIAL_NONCOMBAT_HOLD id=226 binding=CANDIDATE class=TCentipedeKingMonster/107.0 attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+W1_SPECIAL_NONCOMBAT_HOLD id=227 binding=CANDIDATE class=TCentipedeKingMonster/107.0 attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+W1_SPECIAL_NONCOMBAT_HOLD id=228 binding=DATA_HOLD class=<null>/<null> attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+W1_SPECIAL_NONCOMBAT_HOLD id=229 binding=DATA_HOLD class=<null>/<null> attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+W1_SPECIAL_NONCOMBAT_HOLD id=230 binding=DATA_HOLD class=<null>/<null> attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+W1_SPECIAL_NONCOMBAT_HOLD id=231 binding=DATA_HOLD class=<null>/<null> attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+W1_SPECIAL_NONCOMBAT_HOLD id=232 binding=DATA_HOLD class=<null>/<null> attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+W1_SPECIAL_NONCOMBAT_HOLD id=233 binding=DATA_HOLD class=<null>/<null> attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+W1_SPECIAL_NONCOMBAT_HOLD id=234 binding=CANDIDATE class=TCentipedeKingMonster/107.0 attack_behavior=DISABLED_BY_CONTRACT movement=HUMAN_FROZEN
+SCRIPT ERROR: Assertion failed.
+   at: _run_target_magic_case (res://tests/w1_exact_ranged_delivery_test.gd:607)
+   GDScript backtrace (most recent call first):
+       [0] _run_target_magic_case (res://tests/w1_exact_ranged_delivery_test.gd:607)
+       [1] _assert_target_magic_world_wall (res://tests/w1_exact_ranged_delivery_test.gd:484)
+W1_EXACT_RANGED_DELIVERY_PASS physical=50,42,145,186,62,174 range=7 target_magic=224 range=2 melee_fallback=1 special_noncombat=226,227,228,229,230,231,232,233,234 same_world=1 moving_target=1 epoch_cancel=1 world_body=1 target_magic_world_body=1
