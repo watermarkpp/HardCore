@@ -217,6 +217,7 @@ func _run() -> void:
 		},
 	)
 	assert(formal_affix_text.count("攻击上限 +1") == 1, "正式 modifiers[]/drop_affix 属性没有准确显示或发生重复")
+	assert("无额外属性" not in formal_affix_text, "存在追加属性时仍输出无额外属性占位行")
 	var dagger_popup_size: Vector2 = panel.item_detail_presenter.size
 	panel._clear_inventory_selection_styles()
 	var potion_index_for_size_probe := _inventory_index_of("太阳水")
