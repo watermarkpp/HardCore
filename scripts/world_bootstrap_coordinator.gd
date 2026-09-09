@@ -620,9 +620,26 @@ func record_sync_load() -> void:
 
 func request_threaded_prefetch() -> int:
 	var _requested := 0
+	# Godot 4.7's dummy renderer has unsafe concurrent texture RID allocation.
+	# Automated gameplay tests retain the same manifest and failure gates while
+	# creating imported resources on this thread. Visible/Android loading keeps
+	# its original asynchronous path; this is not an engine-wide repair.
+	var serial_test_load := DisplayServer.get_name() == "headless"
+	diagnostic["headless_serial_prefetch"] = serial_test_load
 	for _path: Variant in resource_manifest:
 		var _entry: Dictionary = resource_manifest[_path]
 		if not (_entry.get("required", true) as bool):
+			continue
+		if serial_test_load:
+			var resource_path := str(_path)
+			var resource: Resource = ResourceLoader.load(resource_path) if ResourceLoader.exists(resource_path) else null
+			if resource != null:
+				_prefetched_resources[resource_path] = resource
+				_entry["status"] = "ready"
+				_requested += 1
+			else:
+				_entry["status"] = "load_failed"
+				diagnostic["prefetch_failure_count"] += 1
 			continue
 		var _status := ResourceLoader.load_threaded_request(str(_path))
 		if _status == OK or _status == ERR_ALREADY_IN_USE:

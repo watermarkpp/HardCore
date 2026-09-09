@@ -4,6 +4,10 @@ extends RefCounted
 static var _textures: Dictionary = {}
 static var _threaded_paths: Dictionary = {}
 static var _sync_miss_count := 0
+static var _headless_prefetch_load_count := 0
+static var _headless_prefetch_failures: Dictionary = {}
+# Allows the dedicated contract test to exercise the unchanged async branch.
+static var _test_force_threaded_prefetch := false
 
 
 static func texture_for(record: Dictionary, field := "inventoryIcon") -> Texture2D:
@@ -22,6 +26,8 @@ static func texture_at_path(path: String) -> Texture2D:
 		return null
 	if _textures.has(path):
 		return _textures[path] as Texture2D
+	if _use_headless_serial_prefetch() and _headless_prefetch_failures.has(path):
+		return null
 	if _threaded_paths.has(path) and ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_LOADED:
 		var threaded_texture := ResourceLoader.load_threaded_get(path) as Texture2D
 		_threaded_paths.erase(path)
@@ -37,9 +43,23 @@ static func texture_at_path(path: String) -> Texture2D:
 
 static func request_threaded_paths(paths: Array) -> int:
 	var requested := 0
+	var serial_test_load := _use_headless_serial_prefetch()
 	for raw_path: Variant in paths:
 		var path := str(raw_path)
-		if path.is_empty() or _textures.has(path) or _threaded_paths.has(path) or not ResourceLoader.exists(path):
+		if path.is_empty() or _textures.has(path) or _threaded_paths.has(path):
+			continue
+		if serial_test_load:
+			if _headless_prefetch_failures.has(path):
+				continue
+			var texture: Texture2D = ResourceLoader.load(path) as Texture2D if ResourceLoader.exists(path) else null
+			_headless_prefetch_load_count += 1
+			if texture == null:
+				_headless_prefetch_failures[path] = true
+			else:
+				_textures[path] = texture
+				requested += 1
+			continue
+		if not ResourceLoader.exists(path):
 			continue
 		var error := ResourceLoader.load_threaded_request(path, "Texture2D", false)
 		if error == OK:
@@ -71,7 +91,18 @@ static func sync_miss_count() -> int:
 	return _sync_miss_count
 
 
+static func headless_prefetch_diagnostics() -> Dictionary:
+	return {"load_count": _headless_prefetch_load_count, "failure_count": _headless_prefetch_failures.size()}
+
+
+static func _use_headless_serial_prefetch() -> bool:
+	return DisplayServer.get_name() == "headless" and not _test_force_threaded_prefetch
+
+
 static func clear_for_test() -> void:
 	_textures.clear()
 	_threaded_paths.clear()
 	_sync_miss_count = 0
+	_headless_prefetch_load_count = 0
+	_headless_prefetch_failures.clear()
+	_test_force_threaded_prefetch = false

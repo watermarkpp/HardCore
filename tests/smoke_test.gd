@@ -117,9 +117,19 @@ func _run() -> void:
 		or bool(death_observation.get("died_signal_observed", false)),
 		"致死攻击没有进入death_pending/dying生命周期"
 	)
-	var death_release_deadline := Time.get_ticks_msec() + int(DEATH_RELEASE_TIMEOUT_SECONDS * 1000.0)
-	while is_instance_valid(enemy) and Time.get_ticks_msec() < death_release_deadline:
+	# The two production SceneTreeTimers advance in game/process time. A cold
+	# background UI prewarm can block a frame while wall time advances, so a
+	# wall-clock-only deadline would expire before those timers received 5 s.
+	# Keep the same 5 s game-time bound; the runner still caps total wall time.
+	var death_release_elapsed := 0.0
+	var death_release_wall_start := Time.get_ticks_msec()
+	while is_instance_valid(enemy) and death_release_elapsed < DEATH_RELEASE_TIMEOUT_SECONDS:
 		await get_tree().process_frame
+		death_release_elapsed += get_process_delta_time()
+	if is_instance_valid(enemy):
+		print("SMOKE_DEATH_DIAGNOSTIC ", JSON.stringify(game.death_work_queue_snapshot()))
+		print("SMOKE_ACTOR_DIAGNOSTIC id=", enemy.monster_id, " hp=", enemy.current_hp, " pending=", enemy._death_pending, " dying=", enemy._dying)
+	print("SMOKE_DEATH_CLOCK game_seconds=", death_release_elapsed, " wall_seconds=", float(Time.get_ticks_msec() - death_release_wall_start) / 1000.0)
 	assert(not is_instance_valid(enemy), "攻击、死亡链路未完成")
 
 	PlayerState.level = 7

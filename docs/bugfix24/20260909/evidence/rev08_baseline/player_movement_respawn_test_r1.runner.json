@@ -1,0 +1,26 @@
+{
+  "failed": 0,
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "player_movement_respawn_test",
+      "test_path": "tests/player_movement_respawn_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 1,
+  "engine_log_errors": 0,
+  "passed": 1,
+  "git_head": "cf1d2718befdef7e6cc2fb274fd91ce0759d105f",
+  "generated_at": "2026-09-09T14:06:10.0157041+08:00"
+}

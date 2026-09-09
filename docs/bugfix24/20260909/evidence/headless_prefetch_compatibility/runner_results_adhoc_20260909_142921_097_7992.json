@@ -1,0 +1,41 @@
+{
+  "passed": 2,
+  "total": 2,
+  "suite": "adhoc",
+  "generated_at": "2026-09-09T14:29:21.0973277+08:00",
+  "engine_log_errors": 0,
+  "failed": 0,
+  "git_head": "d714a4908ef9be17163608c5475b49301ca2d26a",
+  "results": [
+    {
+      "test_name": "headless_prefetch_compatibility_test",
+      "test_path": "tests/headless_prefetch_compatibility_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "smoke_test",
+      "test_path": "tests/smoke_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

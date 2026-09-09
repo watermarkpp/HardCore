@@ -1,0 +1,10 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _create_item_cell (res://scripts/warehouse_panel.gd:484)
+       [1] _initialize_grid_cells (res://scripts/warehouse_panel.gd:416)
+       [2] _continue_grid_cell_initialization (res://scripts/warehouse_panel.gd:438)
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

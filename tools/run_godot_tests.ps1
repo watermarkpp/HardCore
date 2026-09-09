@@ -546,6 +546,7 @@ $Suites.critical = @($Suites.critical + @(
 # machine window; they are not correctness gates for every ordinary test run.
 $Suites.critical = @($Suites.critical + @(
     'tests/game_root_loading_transition_test.tscn',
+    'tests/headless_prefetch_compatibility_test.tscn',
     'tests/equipment_inventory_slot_swap_test.tscn',
     'tests/combat_environment_request_integration_test.tscn',
     'tests/loot_world_placement_integration_test.tscn',
