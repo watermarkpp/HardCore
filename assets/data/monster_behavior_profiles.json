@@ -74,6 +74,33 @@
     },
 	"zuma_boss": {"largeClientBoss": true, "dormant": true, "wakeRange": 64.0},
     "moth_control": {"onHit": {"controlSeconds": 5.0, "controlChanceDenominatorBase": 20, "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas race=105 + ObjMon.pas TGasMothMonster inherits TGasAttackMonster.sub_4A9C78"}},
+    "axe_skeleton": {
+      "runtimeProjection": {"attack_range_gu": 7.0},
+      "serviceClass": {
+        "race": 87,
+        "name": "TDualAxeMonster",
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/M2Share.pas + UsrEngn.pas + ObjAxeMon.pas",
+        "identityBridge": {
+          "monsterId": 50,
+          "canonicalAppearance": 21,
+          "crystalAiCode": 8,
+          "role": "identity_only"
+        }
+      },
+      "attackDelivery": {
+        "kind": "physical_projectile",
+        "effectId": "monster.physical_arrow.v1",
+        "trajectory": "frozen_target_footpoint",
+        "obstaclePolicy": "environment_can_fly_line",
+        "impactDelay": {"baseSeconds": 0.6, "perChebyshevGuSeconds": 0.05},
+        "confidence": "A",
+        "source": "original_gameofmir/M2Server/ObjAxeMon.pas TDualAxeMonster.FlyAxeAttack",
+        "sourceTiming": "StruckDamage precedes SendDelayMsg; 0.6 + Chebyshev-GU * 0.05 describes delayed RM_10101 feedback.",
+        "runtimeCompatibility": "Existing HardCore physical-projectile adapter delays target-bound settlement and validates WORLD/combat_epoch at impact.",
+        "visualAuthority": "monster.physical_arrow.v1 is the existing generic physical-projectile trajectory, not axe-specific source art."
+      }
+    },
     "zuma_archer": {
       "runtimeProjection": {"moveSpeed": 44.0, "attackRange": 205.0},
       "attackDelivery": {
@@ -196,6 +223,7 @@
     "38": "oma_warrior", "39": "oma_warrior", "41": "oma_warrior",
     "43": "cave_bat", "44": "cave_bat",
     "45": "scorpion", "46": "cave_maggot",
+	"50": "axe_skeleton",
     "60": "dung", "62": "dark_warrior", "63": "dark_warrior",
     "64": "wooma_soldier", "65": "wooma_soldier",
     "66": "wooma_fighter", "67": "wooma_fighter",
