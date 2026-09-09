@@ -2721,7 +2721,8 @@ func _spatial_index_update() -> void:
 
 func _spatial_index_projection_cache_matches() -> bool:
 	return (
-		_last_spatial_index_screen_position_px == global_position
+		runtime_screen_to_ground_position_px.is_valid()
+		and _last_spatial_index_screen_position_px == global_position
 		and _last_spatial_index_runtime_map_id == runtime_map_id
 		and _last_spatial_index_zone_generation
 			== int(get_meta("zone_generation", -1))

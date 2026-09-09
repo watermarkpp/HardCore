@@ -14,6 +14,11 @@ class RevisionProvider:
 	func environment_collision_revision() -> int:
 		return revision
 
+class ProjectionProvider:
+	extends Node
+	func project(_screen_position_px: Vector2) -> Vector2:
+		return Vector2(25,25)
+
 func ground_to_screen(p: Vector2) -> Vector2:
 	return GU.ground_delta_gu_to_screen_delta_px(p)
 
@@ -159,6 +164,13 @@ func _run() -> void:
 	check(front.spatial_index_position()==Vector2(28,29) and projection_probe_calls==calls_before_revision+1,"O06-revision","Projection context revision invalidates the same-position snapshot")
 	revision_provider.queue_free()
 	front.environment_blocker=null
+	var projection_provider:=ProjectionProvider.new()
+	add_child(projection_provider)
+	front.configure_runtime_map_projection(1,Callable(self,"ground_to_screen"),Callable(projection_provider,"project"))
+	front.set_combat_position(front.global_position,&"hc_projection_provider_setup")
+	check(front.spatial_index_position()==Vector2(25,25),"O06-provider-setup","Live bound projection establishes an indexed snapshot")
+	projection_provider.free()
+	check(front.spatial_index_position()==Vector2.INF,"O06-provider-freed","Freed projection provider rejects its stale finite indexed snapshot")
 	front.configure_runtime_map_projection(1,Callable(self,"ground_to_screen"),Callable(self,"screen_to_ground"))
 	front.set_combat_position(ground_to_screen(Vector2(21,20)),&"hc_test_position")
 	front.current_hp=0
