@@ -554,7 +554,7 @@ func play_monster_combat_prompt(
 	var owner_key := audio_owner_key.strip_edges()
 	var now_msec := _now_msec()
 	var session: Dictionary = _monster_sessions.get(owner_key, {}) as Dictionary
-	if bool(session.get("active", false)):
+	if bool(session.get("active", false)) or bool(session.get("entry_attempted", false)):
 		return _reject_event_light(
 			"combat_session_duplicate",
 			"monster.%d.ambient" % monster_id,
@@ -572,19 +572,23 @@ func play_monster_combat_prompt(
 		context.get("session_id", "combat:%s:%d" % [owner_key, now_msec])
 	)
 	prompt_context["monster_combat_session"] = true
+	# Latch the real engagement before playback/admission. A missing sample,
+	# muted SFX bus or exhausted budget is still one completed entry attempt;
+	# only end_monster_combat_session may clear it for a later re-entry.
+	session["active"] = true
+	session["entry_attempted"] = true
+	session["monster_id"] = monster_id
+	session["started_msec"] = now_msec
+	session["last_activity_msec"] = now_msec
+	session["rearm_after_msec"] = 0
 	var result := _play_event_internal(
 		"monster.%d.ambient" % monster_id,
 		prompt_context,
 		true,
 		"combat_prompt",
 	)
-	if str(result.get("status", "")) == "played":
-		session["active"] = true
-		session["monster_id"] = monster_id
-		session["started_msec"] = now_msec
-		session["last_activity_msec"] = now_msec
-		session["rearm_after_msec"] = 0
-		_monster_sessions[owner_key] = session
+	session["audio_started"] = str(result.get("status", "")) == "played"
+	_monster_sessions[owner_key] = session
 	return result
 
 
@@ -624,6 +628,7 @@ func end_monster_combat_session(audio_owner_key: String, reason := "explicit_dis
 	if session.is_empty() or not bool(session.get("active", false)):
 		return {"status": "already_inactive", "audio_owner_key": owner_key}
 	session["active"] = false
+	session["entry_attempted"] = false
 	session["ended_msec"] = _now_msec()
 	session["last_end_reason"] = reason
 	session["rearm_after_msec"] = _now_msec() + int(_monster_session_rearm_seconds * 1000.0)
@@ -748,6 +753,7 @@ func stop_all_audio(reason := "world_exit") -> void:
 		var session: Dictionary = _monster_sessions[owner_key]
 		if bool(session.get("active", false)):
 			session["active"] = false
+			session["entry_attempted"] = false
 			session["ended_msec"] = _now_msec()
 			session["last_end_reason"] = reason
 			session["rearm_after_msec"] = _now_msec()

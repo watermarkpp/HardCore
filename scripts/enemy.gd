@@ -353,12 +353,21 @@ var _audio_rng_initialized := false
 var _audio_appear_emitted := false
 var _audio_death_emitted := false
 var _audio_combat_session_active := false
+## This is the gameplay-entry latch, not a playback-success flag. Once the
+## actor has crossed the real target edge, an audio rejection is still a
+## completed entry attempt; retry only after a real disengagement.
+var _audio_combat_entry_seen := false
 var _audio_combat_session_serial := 0
 var _audio_owner_key := ""
 var _audio_attack_sequence := 0
 var _audio_attack_frame_sequence := -1
 var _audio_attack_frame_ready := false
 var _audio_attack_start_accepted := false
+var _audio_combat_epoch_target_instance_id := 0
+var _audio_combat_epoch_method_available := false
+var _audio_combat_epoch_property_available := false
+var _audio_combat_epoch_probe_complete := false
+var _audio_combat_epoch_property_probe_count := 0
 var _audio_previous_visual_state := ""
 var _audio_previous_visual_frame := -1
 var _audio_previous_facing := Vector2.INF
@@ -533,12 +542,18 @@ func _reset_monster_audio_observer() -> void:
 	_audio_appear_emitted = false
 	_audio_death_emitted = false
 	_audio_combat_session_active = false
+	_audio_combat_entry_seen = false
 	_audio_combat_session_serial = 0
 	_audio_owner_key = ""
 	_audio_attack_sequence = 0
 	_audio_attack_frame_sequence = -1
 	_audio_attack_frame_ready = false
 	_audio_attack_start_accepted = false
+	_audio_combat_epoch_target_instance_id = 0
+	_audio_combat_epoch_method_available = false
+	_audio_combat_epoch_property_available = false
+	_audio_combat_epoch_probe_complete = false
+	_audio_combat_epoch_property_probe_count = 0
 	_audio_previous_visual_state = ""
 	_audio_previous_visual_frame = -1
 	_audio_previous_facing = Vector2.INF
@@ -636,15 +651,31 @@ func _audio_combat_epoch() -> int:
 	var player_target := _audio_player_target()
 	if player_target == null:
 		return -1
+	var target_instance_id := player_target.get_instance_id()
+	if (
+		not _audio_combat_epoch_probe_complete
+		or _audio_combat_epoch_target_instance_id != target_instance_id
+	):
+		_audio_combat_epoch_target_instance_id = target_instance_id
+		_audio_combat_epoch_method_available = player_target.has_method("combat_epoch")
+		_audio_combat_epoch_property_available = false
+		_audio_combat_epoch_probe_complete = true
+		if not _audio_combat_epoch_method_available:
+			_audio_combat_epoch_property_probe_count += 1
+			for property_info: Dictionary in player_target.get_property_list():
+				if str(property_info.get("name", "")) == "combat_epoch":
+					_audio_combat_epoch_property_available = true
+					break
 	var epoch: Variant = null
-	if player_target.has_method("combat_epoch"):
+	if _audio_combat_epoch_method_available:
 		epoch = player_target.call("combat_epoch")
-	else:
-		for property_info: Dictionary in player_target.get_property_list():
-			if str(property_info.get("name", "")) == "combat_epoch":
-				epoch = player_target.get("combat_epoch")
-				break
+	elif _audio_combat_epoch_property_available:
+		epoch = player_target.get("combat_epoch")
 	return int(epoch) if epoch is int or epoch is float else -1
+
+
+func audio_combat_epoch_property_probe_count_for_test() -> int:
+	return _audio_combat_epoch_property_probe_count
 
 
 func _audio_is_listenable(allow_death := false) -> bool:
@@ -750,14 +781,22 @@ func _audio_try_emit_appear() -> void:
 
 
 func _audio_try_enter_combat_session() -> bool:
-	if _audio_combat_session_active or not is_instance_valid(target):
+	if _audio_combat_entry_seen or not is_instance_valid(target):
 		return false
+	# A loading/cross-map transition is not the real combat edge. Wait for the
+	# optional W3 transition contract to settle, then latch the edge before any
+	# audibility, service or resource decision. A rejected sound must not turn
+	# into a per-physics retry loop.
+	if _audio_combat_transition_is_active():
+		return false
+	_audio_combat_entry_seen = true
+	_audio_combat_session_active = true
+	_audio_combat_session_serial += 1
 	if monster_id <= 0 or not _audio_is_listenable():
 		return false
 	var service := _audio_service()
 	if service == null or not service.has_method("play_monster_combat_prompt"):
 		return false
-	_audio_combat_session_serial += 1
 	var result: Variant = service.call(
 		"play_monster_combat_prompt",
 		monster_id,
@@ -777,6 +816,7 @@ func _audio_end_combat_session(reason := "explicit_disengage") -> void:
 	if service != null and service.has_method("end_monster_combat_session"):
 		service.call("end_monster_combat_session", _audio_owner_key_for_actor(), reason)
 	_audio_combat_session_active = false
+	_audio_combat_entry_seen = false
 
 
 func _audio_attack_started() -> void:
