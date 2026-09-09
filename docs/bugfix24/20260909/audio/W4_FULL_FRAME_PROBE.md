@@ -2,7 +2,7 @@
 
 ## 目的
 
-`tests/audio_w4_full_frame_probe_test.tscn` 用同一份可执行夹具记录旧音频服务与 W4 服务在正式地图中的全帧 CPU、真实攻击起手、音频服务请求、播放和拒绝计数。它用于补足早期只保留可听 3/11 个 actor 的固定探针证据；本探针要求总 actor 数为 20 和 50，并要求每个保留 actor 在采样窗口内至少完成一次真实攻击起手。
+`tests/audio_w4_full_frame_probe_test.tscn` 用同一份可执行夹具记录旧音频服务与 W4 服务在正式地图中的全帧墙钟间隔、真实攻击起手、音频服务请求、播放和拒绝计数。它用于补足早期只保留可听 3/11 个 actor 的固定探针证据；本探针要求总 actor 数为 20 和 50，并要求每个保留 actor 在采样窗口内至少完成一次真实攻击起手。
 
 探针只写测试和本目录文档，生产代码、GameRoot、PlayerState、地图、怪物数据、战斗随机数、AI 速度/间隔和 runner 注册均不改。`AudioProxy` 只包裹场景已经创建的 `AudioRuntimeService`，每次请求都转发到正式服务并记录返回的 `status`；预算、SFX 门控、精确 monster ID 资源解析、播放槽和拒绝原因仍由正式服务决定。
 
@@ -15,11 +15,11 @@
 - 目标距离使用每个 actor 调用 `_contact_distance_gu_to_target()` 得出的正式接触距离，避免重叠后退分支。source、target、segment 和 viewport 可听边界全部在夹具中断言。
 - 夹具只等待 `get_tree().physics_frame` 和 `get_tree().process_frame`；不直接调用 `_physics_process`，也不手工增加攻击或音频计数。`_audio_attack_sequence` 的增量必须与 proxy 看到的 `attack_start` 请求一一对应。候选 W4 另外按 owner key 逐 actor 对账；旧服务没有 owner context，则按实际事件的 monster ID 和全局攻击请求对账。
 
-每个条件先经历 60 个真实 physics tick，再采集 240 个真实 physics tick；每个 tick 都通过 `physics_frame` 和随后的 `process_frame` 边界等待，headless 下因此可能观察到多于 240 个 idle/process callback。`RuntimeDiagnostics`/`DeviceLabRuntime` 提供全帧 p50/p95/p99；夹具自带 recorder 同时断言至少 240 个 physics tick 和 process frame。proxy 还记录每次正式 `AudioRuntimeService` 调用的毫秒样本，输出 `audio_cpu_ms` 的 p50/p95/p99（这是服务准入/资源调用时间，不把它误称为整帧或设备混音时间）。服务字段同时保留 requests、plays、rejected、reject reason、attack start/frame、combat prompt、pool/cache 等原始指标。
+每个条件先经历 60 个真实 physics tick，再采集 240 个真实 physics tick；每个 tick 都通过 `physics_frame` 和随后的 `process_frame` 边界等待，headless 下因此可能观察到多于 240 个 idle/process callback。夹具自带 recorder 同时断言至少 240 个 physics tick 和 process frame。`full_frame_ms` 是相邻 `_process` 回调之间由 `Time.get_ticks_usec()` 计算的宿主墙钟间隔 p50/p95/p99；它不是传入的游戏 `delta`，也不是专用线程 CPU 时间。`frame_delta_diagnostic_ms` 保留 `delta * 1000` 作为时间缩放/引擎诊断，不能替代墙钟帧间隔。proxy 还记录每次正式 `AudioRuntimeService` 调用的墙钟毫秒样本，输出 `audio_service_wall_ms` 的 p50/p95/p99；`audio_cpu_ms` 作为兼容别名保留，但其含义是每次观察到的服务准入/资源调用 wall duration，不是专用音频线程 CPU 测量。服务字段同时保留 requests、plays、rejected、reject reason、attack start/frame、combat prompt、pool/cache 等原始指标。
 
 ## 配对条件
 
-在 `cf1d2718befdef7e6cc2fb274fd91ce0759d105f` 基线运行 `legacy_on` 和 `legacy_off`；在 W4 候选运行 `candidate_on`。每个 actor 数的 on/off 条件复用同一次正式地图、cohort、布局和独立目标；20/50 两档在各自 runner 进程中使用相同确定性布局算法和 seed，单进程内按 50 后 20 的顺序复用一个 GameRoot。旧版的 off 通过原 SFX bus mute，W4 的 on 通过正式 `set_sfx_enabled` 与 SFX bus 路径，不把 muted 请求改写成播放。
+在 `cf1d2718befdef7e6cc2fb274fd91ce0759d105f` 基线运行 `legacy_on` 和 `legacy_off`；在 W4 候选运行 `candidate_on` 和 `candidate_off`。每个 actor 数的 on/off 条件复用同一次正式地图、cohort、布局和独立目标；20/50 两档在各自 runner 进程中使用相同确定性布局算法和 seed，单进程内按 50 后 20 的顺序复用一个 GameRoot。旧版的 off 通过原 SFX bus mute，候选的 on/off 都通过正式 `set_sfx_enabled` 配合 SFX bus 路径；关闭时请求仍经过正式服务并保留 `sfx_disabled` 等拒绝计数，不把 muted 请求改写成播放。这样两次代码版本各自产生 20/50 × 2 个透明命名条件，共八个条件记录。
 
 旧服务没有 `metrics_snapshot()`、combat prompt API 或 owner context。它的请求序列和每个 monster ID 事件由 proxy 记录；候选服务则保留完整 `metrics_snapshot()` 和 owner 对账。两种服务的拒绝/播放结果都原样保存，不能用候选服务替换旧版结果。
 
@@ -33,10 +33,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -T
 
 runner 会把 stdout、stderr、Godot engine log 和结果 JSON 写入本工作树 `outputs/test_logs/`。应保存完整三件套和 `runner_results_*.json`，按结果 JSON 的 `git_head` 绑定代码版本。基线树只能使用同一测试文件的只读副本和独立的 `.godot`/`outputs`，不能共享缓存或生成输出。
 
-成功输出以 `AUDIO_W4_FULL_FRAME_COMPARE_JSON=` 开头，并包含 20/50 的每 actor `actor_proof`、布局签名、frame p50/p95/p99、请求/播放/拒绝和服务指标；最终 marker 是 `AUDIO_W4_FULL_FRAME_COMPARE_PASS`。缺少任一 actor 的真实攻击起手、真实 `attack_start` 请求、完整 frame window、合法布局或 runner 严格退出码，都不能算 PASS。
+成功输出以 `AUDIO_W4_FULL_FRAME_COMPARE_JSON=` 开头，并包含 20/50 的每 actor `actor_proof`、布局签名、`full_frame_ms` 墙钟帧间隔及 `frame_delta_diagnostic_ms` 原始诊断样本、`audio_service_wall_ms`/`audio_cpu_ms` 兼容字段的 p50/p95/p99、请求/播放/拒绝和服务指标；候选与旧版均须按透明条件名输出。最终 marker 是 `AUDIO_W4_FULL_FRAME_COMPARE_PASS`。缺少任一 actor 的真实攻击起手、真实 `attack_start` 请求、完整 frame window、合法布局或 runner 严格退出码，都不能算 PASS。
 
 ## 证据边界
 
-这是正式地图实例化后由 Godot headless 执行的真实 process/physics、CPU 和服务准入证据。它不测扬声器混音延迟、硬件音频线程、GPU 提交、Android CPU/GPU 或设备声音；任何“性能提升”或设备结论都必须另有真实设备证据。探针不为达到数字而关闭预算、减少实际攻击 actor、改变 AI/寻路/战斗频率，也不把总 actor 数写成全部 active/全部播放。
+这是正式地图实例化后由 Godot headless 执行的真实 process/physics、宿主墙钟间隔和服务准入证据。`full_frame_ms` 会受到 headless 主机调度、进程负载和等待方式影响；`audio_service_wall_ms` 只表示被观测服务调用的 wall duration。它们都不是专用线程 CPU 利用率或音频混音耗时。探针不测扬声器混音延迟、硬件音频线程、GPU 提交、Android CPU/GPU 或设备声音；任何“性能提升”或设备结论都必须另有真实设备证据。探针不为达到数字而关闭预算、减少实际攻击 actor、改变 AI/寻路/战斗频率，也不把总 actor 数写成全部 active/全部播放。
 
-当前文件只定义可复现采样入口；在安静窗口完成候选与固定 `cf1d` 基线六条件后，应把原始输出、失败日志和最终 `git_head` 追加到 `W4_HANDOFF.md`，并清楚区分调试运行与正式 paired evidence。
+当前文件只定义可复现采样入口；在安静窗口完成候选与固定 `cf1d` 基线八条件后，应把原始输出、失败日志和最终 `git_head` 追加到 `W4_HANDOFF.md`，并清楚区分调试运行与正式 paired evidence。
