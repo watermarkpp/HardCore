@@ -179,6 +179,12 @@ func _test_profile_index_update_preserves_unloadable_entries() -> void:
 	var future_path := PlayerState._profile_path(future_id)
 	var corrupt_path := PlayerState._profile_path(corrupt_id)
 	_write_raw(active_path, JSON.stringify(_valid_profile(active_id, 10)))
+	# Establish the case-local shared authority from the only valid profile
+	# before introducing unloadable sibling profiles.  Saving the active
+	# profile must still preserve their index rows and bytes once they exist.
+	PlayerState.active_profile_id = active_id
+	PlayerState.load_save()
+	assert(bool(PlayerState.last_load_result.get("success", false)), str(PlayerState.last_load_result))
 	var future := _valid_profile(future_id, 20)
 	future["save_version"] = PlayerState.SAVE_VERSION + 1
 	var future_main_bytes := JSON.stringify(future)
@@ -208,9 +214,6 @@ func _test_profile_index_update_preserves_unloadable_entries() -> void:
 	var original_index := PlayerState._read_json(PlayerState.profile_index_path)
 	var original_future_entry := _index_entry(original_index, future_id)
 	var original_corrupt_entry := _index_entry(original_index, corrupt_id)
-	PlayerState.active_profile_id = active_id
-	PlayerState.load_save()
-	assert(bool(PlayerState.last_load_result.get("success", false)), str(PlayerState.last_load_result))
 	PlayerState.gold = 11
 	assert(PlayerState.save_game(), str(PlayerState.last_save_result))
 	assert(bool(PlayerState.last_save_result.get("profile_index_updated", false)), str(PlayerState.last_save_result))
@@ -412,18 +415,28 @@ func _configure_case(name: String) -> void:
 	PlayerState.active_profile_id = ""
 	PlayerState._save_blocked_profile_id = ""
 	PlayerState._save_blocked_reason = ""
-	PlayerState._shared_warehouse_initialized = true
+	PlayerState._shared_warehouse_initialized = false
 	PlayerState._warehouse_transaction_locked = false
 	PlayerState._persistence_transaction_in_progress = false
 	PlayerState.warehouse_inventory = []
 	PlayerState.inventory = []
+	assert(
+		PlayerState._initialize_shared_warehouse(),
+		"isolated profile case must initialize its own shared warehouse",
+	)
 
 
 func _load_fixture(profile_id: String, document: Dictionary) -> void:
 	var path := PlayerState._profile_path(profile_id)
 	_write_raw(path, JSON.stringify(document))
 	PlayerState.active_profile_id = profile_id
-	PlayerState._shared_warehouse_initialized = FileAccess.file_exists(PlayerState.shared_warehouse_path)
+	# A legacy profile carrying warehouse_inventory must be the source for a
+	# fresh real initialization; every other fixture re-reads the already
+	# initialized case-local authority instead of forcing its flag.
+	if document.has("warehouse_inventory"):
+		_clear_profile_files(PlayerState.shared_warehouse_path)
+	PlayerState._shared_warehouse_initialized = false
+	assert(PlayerState._initialize_shared_warehouse(), "fixture shared warehouse initialization failed")
 	PlayerState.load_save()
 	assert(bool(PlayerState.last_load_result.get("success", false)), str(PlayerState.last_load_result))
 
