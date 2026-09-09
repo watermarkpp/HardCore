@@ -36,7 +36,11 @@ This is a review candidate, not an integration merge certificate.
   - complete_client_resource_catalog_test — FAIL on candidate AND on ffcdc76b BASE (A/B: baseline/environment; generated resource manifest missing on both)
   - combat_unit_source_priority_test — FAIL on candidate AND on ffcdc76b BASE (A/B: baseline/environment; identical assertion failure on both)
 - skill_runtime_single_result_contract_test RID gate: candidate 3/3 PASS, ffcdc76b BASE 3/3 PASS — no repeatable candidate-only RID failure
-- No candidate-only regression remains; all failures are baseline/environment-classified via same-machine A/B.
+- In the designated run above, the only two failures were A/B-classified as
+  baseline/environment on the same machine (both also FAIL on ffcdc76b BASE).
+  This is a per-run statement, not a global claim: additional intermittent
+  RID-class failures in other full-suite runs have an OPEN root-cause
+  attribution (see the Full-suite stability section below).
 
 ## Full-suite stability (V5.0.5f re-run record)
 
@@ -90,21 +94,42 @@ Evidence-bounded stability statement (per author post-merge review F03):
   re-run against the current committed V505 data (ID76=108 slots, ID141 book
   slots 5/141 + 1/28; previously the same blob as the pre-migration candidate).
   Full close-condition acceptance: `docs/drop/v5/V505_ACCEPTANCE_RUN.json`
-  (schema `hardcore.dpv2.v505.acceptance_run.v1`), bound to commit
-  `275eef8b9455c7f3ef63daaf59dfff3c06e26069` and to the SHA256 of every input
-  file. Coverage: 144 distinct monster ids / 7611 records, grouped by
-  `baseline_origin` (VERIFIED_21CQ_PROFILE_V505 7352 / LEGACY_21CQ_MONITEMS 190
-  / PROJECT_EXTENSION 69) and by authority `source_status` (141 FULL / 2 LEGACY
-  / 1 PROJECT). High-risk monsters (bosses 76/198/199/225, new clothes 235-240,
-  all 42 verified book monsters, legacy 75/123): per-slot
-  hits/selected/discarded + always_retained boundary. Book per-kill
-  distributions (all books and BOOK_ELITE_BOSS books) per book monster. New
-  clothes: all six exact 1/60 slots observed within 6-sigma of 1/60
-  (sigma 0.08-1.15), `always_retained=True`, selected==hits (zero discard) —
-  deterministic retention boundary, not a 60-kill luck sample. Result:
-  **failures=0** (per-slot hit rates, any_equipment and any_book analytic vs
-  observed within 6-sigma for all 144 identities). The old simulation.json
-  `failures=[]` is no longer the acceptance basis; this run is.
+  (schema `hardcore.dpv2.v505.acceptance_run.v2`), bound to
+  `data_commit=275eef8b9455c7f3ef63daaf59dfff3c06e26069`, to the SHA256 of every
+  input file (effective/classification/authority/baseline/policy/catalog), and
+  to `tool_sha256` of the acceptance tool itself (tool and data commits are
+  recorded separately). Coverage is a HARD completeness condition (R03): the
+  expected drop-enabled identity set (144) and per-identity slot UID sets are
+  taken from the independent baseline and must EQUAL the effective ledger
+  (missing/extra identity, missing/duplicate slot UID, NO_AUTHORITY_ROW,
+  origin-count drift 7352/190/69, and per-UID item/base mirror all fail);
+  source_status distribution 141/2/1 recorded. High-risk monsters (bosses
+  76/198/199/225, new clothes 235-240, all book monsters, legacy 75/123):
+  per-slot hits/selected/discarded + always_retained. Per-slot invariants for
+  ALL slots: 0<=selected<=hits<=trials, hits==selected+discarded,
+  always_retained -> discarded==0. Book per-kill distributions are per-row-rule
+  (R01): total books (policy book_ids), BOOK_ELITE_BOSS books by the row's own
+  rule, and explicit-high books (policy explicit_high_book_ids) as a separate
+  identity set; a monster with zero BOOK_ELITE_BOSS slots must have that
+  distribution exactly {0: trials}. New clothes (R02): the six targets are
+  locked from policy.armor_targets by (monster_id, source_item_id) — unique,
+  UID-bound, rule ARMOR_BASE_1_OVER_60, actual draw Fraction EXACTLY 1/60,
+  always_retained with the full candidate set, selected==hits, discarded==0,
+  then 6-sigma Monte-Carlo (sigma 0.08-1.15); missing/duplicate/wrong-item/
+  wrong-probability/extra-target all fail. top_slots (R04) are sorted
+  numerically by the draw Fraction actually used in the simulation, with
+  effective_probability reported separately and labelled. Result:
+  **failures=0**. The tool ships with negative tests
+  (`tools/test_dpv2_repair_v505_acceptance.py`, 9 cases: correct fixture
+  passes; wrong cloth probability 1/61, wrong cloth item id, missing target,
+  duplicate target, missing monster, missing slot, BOOK-subclass pollution, and
+  fraction sorting are all rejected). Known disclosure: policy.armor_targets
+  `output_item_id` for 238/239/240 (140/144/142) differs from `source_item_id`
+  and from the effective ledger (141/145/143); acceptance binds by
+  `source_item_id` per the author's R02 instruction and records the difference
+  as `armor_policy_warnings` — author confirmation of output_item_id semantics
+  is requested. The old simulation.json `failures=[]` is no longer the
+  acceptance basis; this run is.
 - F02 — reward-caliber balance data: PRODUCED (no balance change). The
   acceptance run records per-monster reward profiles (slots_by_reward_kind,
   equipment/book/gold slot counts, top slots, per-slot probabilities and
