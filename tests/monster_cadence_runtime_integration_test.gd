@@ -755,7 +755,12 @@ func _test_engagement_completion_does_not_rollback() -> void:
 	enemy.set_physics_process(false)
 
 	var contact_distance := enemy._contact_distance_gu_to_target(player)
-	var start_ground := player_ground + Vector2(contact_distance + 0.60, 0.0)
+	var engagement_distance := maxf(enemy.attack_range_gu, contact_distance)
+	var start_ground := player_ground + Vector2(engagement_distance + 0.60, 0.0)
+	assert(
+		start_ground.distance_to(player_ground) > engagement_distance,
+		"engagement test must start outside the formal attack range",
+	)
 	enemy.set_combat_position(_ground_gu_to_screen_px(start_ground), &"test_setup")
 	enemy.set_meta("spawn_position", enemy.global_position)
 
@@ -774,7 +779,6 @@ func _test_engagement_completion_does_not_rollback() -> void:
 
 	var final_ground := _screen_px_to_ground_gu(enemy.global_position)
 	var final_distance := final_ground.distance_to(player_ground)
-	var engagement_distance := maxf(enemy.attack_range_gu, contact_distance)
 	assert(final_distance <= engagement_distance + 0.05, "monster must finish inside existing engagement geometry")
 	assert(enemy.global_position.distance_to(start_screen) > 0.01, "target engagement must preserve movement progress instead of rolling back")
 
