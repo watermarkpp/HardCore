@@ -1,11 +1,16 @@
 # HardCore Current Status
 
-Updated against current upgrade code anchor: `e6939a74`
+Updated against in-progress integration code anchor: `efdbde7c` (latest APK remains the September 6 build)
 Branch: `codex/integration`
-Updated: 2026-09-06
+Updated: 2026-09-09
 Purpose: where the project stands right now.
 
-## 2026-09-06 玩法与精确音频升级（最新）
+## 2026-09-09 V3/R3 与24项收尾（进行中，未交付APK）
+
+- 已集成 Loading/升级事务、WORLD攻击与拾取门禁、共享银行事务、完整掉落实例、音频预算及自适应属性面板。用户已通过面板，标题20/正文14的缩字版本在主树完成专项；不再等待重复校准批准。
+- V3路径/动态占位、W6视觉、仓库金币按钮及最终集成验收继续进行，尚未构建下一阶段APK。分段提交、测试与未验证项以 `docs/bugfix24/20260909/IMPLEMENTATION_REPORT.md` 为准；不要将旧APK或分段PASS当作本阶段交付。
+
+## 2026-09-06 玩法与精确音频升级（最近已构建包）
 
 - APK 源码锚点 `e6939a74fb091db24683c738fb85fb977d580cd0`，版本 `71 / 1.20.0-gameplay-audio`。完整安装包已放桌面 `HardCore-20260906-gameplay-audio-debug.apk`，461,365,538 bytes，SHA-256 `A759922572001C43B00C329C7FE398BDF979B70F07B20B53137B32A05898772F`。版本/签名/资源验证通过，交付身份见 `docs/upgrade/20260906/DELIVERY.md`；未安装手机，实机听感/玩法待验。
 - 音乐 6 秒且播放不截断；NPC 单语音随机切换与 BGM 独立；522 个精确音频事件，无法确认来源/材质映射的声音保留为空，不猜配。
