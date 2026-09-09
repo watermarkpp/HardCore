@@ -28,6 +28,7 @@ const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const MonsterSourcePoisonStateScript := preload("res://scripts/monster_source_poison_state.gd")
 const DIRECT_SPELL_DAMAGE_RUNTIME_ID := "player.direct_spell_damage.openmir2.v1"
 const SOUL_FIRE_TALISMAN_LAUNCH_TIMING_CONTRACT_ID := (
 	"skills.taoist.soul_fire_talisman.body_release_frame_launch.v1"
@@ -98,6 +99,7 @@ var mac_buff := 0
 var mac_buff_time := 0.0
 var control_time := 0.0
 var poison_time := 0.0
+var _monster_source_poison := MonsterSourcePoisonStateScript.new()
 var poison_damage := 0
 var touch_vector := Vector2.ZERO
 var facing := Vector2.DOWN
@@ -246,6 +248,7 @@ func _physics_process(delta: float) -> void:
 		# Periodic poison damage is not an RM_STRUCK hit in the reference server,
 		# so it must not refresh the movement/action lock.
 		take_damage(poison_damage, false)
+	_update_monster_source_poison(delta)
 	if shield_time == 0.0:
 		damage_reduction = 0.0
 		shield_capacity = 0.0
@@ -810,6 +813,7 @@ func _apply_resolved_damage(
 	var final_damage := incoming_damage
 	if (
 		shield_time > 0.0
+		and damage_type != "source_poison"
 		and shield_capacity > 0.0
 		and damage_reduction > 0.0
 	):
@@ -889,6 +893,7 @@ func _apply_resolved_damage(
 			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 			return
 		_dead = true
+		_monster_source_poison.clear()
 		combat_epoch += 1
 		reset_locomotion()
 		velocity = Vector2.ZERO
@@ -1455,6 +1460,34 @@ func apply_poison(tick_damage: int, seconds: float) -> void:
 	queue_redraw()
 
 
+func apply_monster_poison(tick_damage: int, seconds: float, interval_seconds: float) -> bool:
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return false
+	var applied: bool = _monster_source_poison.apply(tick_damage, seconds, interval_seconds)
+	if applied:
+		queue_redraw()
+	return applied
+
+
+func _update_monster_source_poison(delta: float) -> void:
+	if _dead or current_hp <= 0:
+		_monster_source_poison.clear()
+		return
+	if combat_transition_is_active():
+		return
+	var was_active: bool = _monster_source_poison.remaining_seconds > 0.0
+	var ticks: int = _monster_source_poison.advance(delta)
+	for _tick in range(ticks):
+		if _dead or current_hp <= 0:
+			_monster_source_poison.clear()
+			break
+		# ObjBase.DamageHealth bypasses AC/MAC and the spell bubble, but retains
+		# the MP magic-shield ring and the target's single death boundary.
+		_apply_resolved_damage(_monster_source_poison.tick_damage, false, "source_poison")
+	if was_active and _monster_source_poison.remaining_seconds <= 0.0:
+		queue_redraw()
+
+
 func is_stealthed() -> bool:
 	return stealth_time > 0.0 or (
 		PlayerState.has_special_effect("stealth")
@@ -1477,7 +1510,7 @@ func _draw() -> void:
 		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
 	if control_time > 0.0:
 		draw_circle(Vector2(0, -4), 37.0, Color(0.42, 0.62, 1.0, 0.75), false, 4.0)
-	if poison_time > 0.0:
+	if poison_time > 0.0 or _monster_source_poison.remaining_seconds > 0.0:
 		draw_circle(Vector2(0, -4), 40.0, Color(0.20, 0.85, 0.22, 0.70), false, 4.0)
 
 
