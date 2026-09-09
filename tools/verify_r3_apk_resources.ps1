@@ -34,7 +34,7 @@ try {
         'monster_source_poison_state',
         'caster_skill_sky_strike_visual_effect',
         'monster_ai_package/policy', 'monster_ai_package/path_search',
-        'monster_ai_package/path_scheduler'
+        'monster_ai_package/path_scheduler', 'monster_ai_package/delivery_geometry'
     )
     foreach ($Script in $Scripts) {
         $null = Require-Entry "assets/scripts/$Script.gdc"
