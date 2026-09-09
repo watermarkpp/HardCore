@@ -23,6 +23,7 @@ var _runtime_map_id := -1
 var _zone_generation := -1
 var _screen_to_ground := Callable()
 var _ground_to_screen := Callable()
+var collection_path_is_clear := Callable()
 var _registration_sequence := 0
 var _fail_safe_remaining := 0.0
 var _visual_update_remaining := 0.0
@@ -364,6 +365,8 @@ func _check_registered_pickup(
 		and _player_ground_gu.distance_squared_to(pickup_ground_gu)
 		< COLLECTION_RADIUS_GU * COLLECTION_RADIUS_GU
 	)
+	if in_range and collection_path_is_clear.is_valid():
+		in_range = bool(collection_path_is_clear.call(pickup))
 	manager_exact_range_check_count += 1
 	RuntimeDiagnosticsScript.increment_performance_counter(
 		&"loot_manager_exact_range_checks"

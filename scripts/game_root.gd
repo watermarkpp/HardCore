@@ -1433,6 +1433,7 @@ func _ready() -> void:
 	_loot_pickup_runtime_manager = LootPickupRuntimeManagerScript.new()
 	_loot_pickup_runtime_manager.name = "LootPickupRuntimeManager"
 	_loot_pickup_runtime_manager.configure_player(player)
+	_loot_pickup_runtime_manager.collection_path_is_clear = Callable(self, "_loot_collection_path_is_clear")
 	add_child(_loot_pickup_runtime_manager)
 	PlayerState.configure_taoist_main_pets_persistence_provider(
 		Callable(self, "_capture_taoist_main_pet_runtime_states")
@@ -11942,12 +11943,14 @@ func _materialize_enemy_death_nodes(
 			materialized = _spawn_gold_loot(
 				int(request.get("gold_amount", 0)),
 				request.get("position", death.get("death_position", Vector2.ZERO)),
+				death.get("death_position", Vector2.INF),
 			)
 		else:
 			materialized = _spawn_loot(
 				str(request.get("item_name", "")),
 				request.get("position", death.get("death_position", Vector2.ZERO)),
 				request.get("item_record", {}),
+				death.get("death_position", Vector2.INF),
 			)
 		if not materialized:
 			death["remaining_requests"] = requests.slice(request_index)
@@ -12119,13 +12122,70 @@ func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
 	}
 
 
-func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary = {}) -> bool:
+func _loot_world_segment_clear(origin_px: Vector2, target_px: Vector2) -> bool:
+	if not origin_px.is_finite() or not target_px.is_finite() or not is_instance_valid(background):
+		return false
+	var origin_gu := _canonical_screen_px_to_ground_gu(origin_px)
+	var target_gu := _canonical_screen_px_to_ground_gu(target_px)
+	if background.is_environment_segment_blocked_ground(origin_gu, target_gu, 0.125):
+		return false
+	var space := get_world_2d().direct_space_state
+	if space == null:
+		return false
+	var query := PhysicsRayQueryParameters2D.create(origin_px, target_px, WorldSpatialRulesScript.WORLD_MASK)
+	query.hit_from_inside = true
+	return space.intersect_ray(query).is_empty()
+
+
+func _loot_ground_point_clear(position_px: Vector2) -> bool:
+	if not position_px.is_finite() or not is_instance_valid(background):
+		return false
+	if background.is_environment_actor_blocked(position_px, 6.0):
+		return false
+	var shape := CircleShape2D.new()
+	shape.radius = 5.0
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.transform = Transform2D(0.0, position_px)
+	query.collision_mask = WorldSpatialRulesScript.WORLD_MASK
+	return get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty()
+
+
+func _resolve_loot_ground_position(desired_px: Vector2, death_origin := Vector2.INF) -> Vector2:
+	var anchor: Vector2 = death_origin if death_origin.is_finite() else desired_px
+	if _loot_ground_point_clear(desired_px) and _loot_world_segment_clear(anchor, desired_px):
+		return desired_px
+	# Stable bounded search: materialization retries never consume drop RNG.
+	# Every candidate remains connected to the death footpoint by WORLD geometry.
+	var anchor_gu := _canonical_screen_px_to_ground_gu(anchor)
+	for radius in [0.0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0]:
+		for direction in range(8 if radius > 0.0 else 1):
+			var candidate := _canonical_ground_gu_to_screen_px(anchor_gu + Vector2.from_angle(direction * TAU / 8.0) * radius)
+			if _loot_ground_point_clear(candidate) and _loot_world_segment_clear(anchor, candidate):
+				return candidate
+	return Vector2.INF
+
+
+func _loot_collection_path_is_clear(pickup: LootPickup) -> bool:
+	if not is_instance_valid(pickup) or not is_instance_valid(player) or not gameplay_input_is_enabled():
+		return false
+	var origin_gu := _canonical_screen_px_to_ground_gu(player.global_position)
+	var target_gu := _canonical_screen_px_to_ground_gu(pickup.global_position)
+	if origin_gu.distance_to(target_gu) >= LootPickupRuntimeManagerScript.COLLECTION_RADIUS_GU:
+		return false
+	return _loot_world_segment_clear(player.global_position, pickup.global_position)
+
+
+func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary = {}, death_origin := Vector2.INF) -> bool:
 	# A formal but unresolved identity must never become an unrelated valid
 	# name-only item at collection time. Legacy callers still pass no record.
 	if not item_record.is_empty() and str(item_record.get("identity_status", "")) != "resolved":
 		return false
 	if _test_force_loot_materialization_failure_count > 0:
 		_test_force_loot_materialization_failure_count -= 1
+		return false
+	position = _resolve_loot_ground_position(position, death_origin)
+	if not position.is_finite():
 		return false
 	var loot := LootPickup.new()
 	if item_record.is_empty():
@@ -12152,9 +12212,12 @@ func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary =
 	return is_instance_valid(loot)
 
 
-func _spawn_gold_loot(amount: int, position: Vector2) -> bool:
+func _spawn_gold_loot(amount: int, position: Vector2, death_origin := Vector2.INF) -> bool:
 	if _test_force_loot_materialization_failure_count > 0:
 		_test_force_loot_materialization_failure_count -= 1
+		return false
+	position = _resolve_loot_ground_position(position, death_origin)
+	if not position.is_finite():
 		return false
 	var loot := LootPickup.new()
 	loot.setup_gold(amount, player)
@@ -12255,6 +12318,10 @@ func _flush_loot_collections() -> Dictionary:
 			stale_count += 1
 			if pickup is LootPickup and is_instance_valid(pickup):
 				(pickup as LootPickup).reject_collection("地图已切换，无法拾取。")
+			continue
+		if not pickup is LootPickup or not _loot_collection_path_is_clear(pickup):
+			if pickup is LootPickup and is_instance_valid(pickup):
+				pickup.reject_collection("暂时无法到达该物品。")
 			continue
 		transaction_pending.append(candidate)
 		candidates.append(candidate.duplicate(true))

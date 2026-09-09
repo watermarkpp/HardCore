@@ -1,0 +1,14 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] poll_threaded_prefetch (res://scripts/world_bootstrap_coordinator.gd:645)
+       [1] poll_threaded_prefetch_blocking (res://scripts/world_bootstrap_coordinator.gd:668)
+       [2] _run_world_build_pipeline (res://scripts/game_root.gd:2835)
+       [3] _run_map_transition (res://scripts/game_root.gd:2699)
+       [4] _begin_map_transition (res://scripts/game_root.gd:2633)
+       [5] travel_to_service_home (res://scripts/game_root.gd:2244)
+       [6] _begin_initial_world_bootstrap (res://scripts/game_root.gd:2566)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

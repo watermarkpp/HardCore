@@ -1,0 +1,9 @@
+ERROR: DEATH_DROP_BUDGET_QUEUE_FAIL: node budget did not leave remaining work queued; first budget slice did not materialize one node; budgeted death did not commit in order; budgeted materialization duplicated or lost a node; first materialization node did not commit before the injected failure; failed materialization duplicated the successful node; partial materialization lost explicit remaining request evidence
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://tests/death_drop_budget_queue_test.gd:306)
+       [1] _run (res://tests/death_drop_budget_queue_test.gd:38)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

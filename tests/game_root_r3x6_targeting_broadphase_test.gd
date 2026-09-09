@@ -155,7 +155,7 @@ func _fixture_ground_position(fixture_index: int) -> Vector2:
 		Vector2(3.00, 2.00),
 		Vector2(6.00, 0.0),
 		Vector2(9.50, 0.0),
-		Vector2(12.01, 0.0),
+		Vector2(10.001, 0.0),
 		Vector2(0.0, 1.30),
 		Vector2(0.0, -1.30),
 		Vector2(2.50, 2.00),
@@ -342,7 +342,7 @@ func _expected_lock_candidates(magic: bool) -> Array[EnemyActor]:
 
 func _test_target_lock_parity() -> void:
 	_move_enemy(_fixture[5], Vector2(10.0, 0.0))
-	_move_enemy(_fixture[6], Vector2(12.01, 0.0))
+	_move_enemy(_fixture[6], Vector2(10.001, 0.0))
 	var attack := _attack_lock_candidates()
 	var spell := _spell_lock_candidates()
 	_expect(
@@ -354,7 +354,7 @@ func _test_target_lock_parity() -> void:
 		"spell lock order/range differs from group authority",
 	)
 	_expect(attack.has(_fixture[5]) and not attack.has(_fixture[6]), "10 GU boundary changed")
-	_expect(spell.has(_fixture[5]) and not spell.has(_fixture[6]), "12 GU boundary fixture was not isolated")
+	_expect(spell.has(_fixture[5]) and not spell.has(_fixture[6]), "10 GU magic boundary fixture was not isolated")
 	_move_enemy(_fixture[5], _fixture_ground_position(5))
 	_move_enemy(_fixture[6], _fixture_ground_position(6))
 

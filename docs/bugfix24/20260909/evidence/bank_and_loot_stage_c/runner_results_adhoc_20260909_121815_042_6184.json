@@ -1,0 +1,71 @@
+{
+  "results": [
+    {
+      "test_name": "shared_warehouse_transaction_test",
+      "test_path": "tests/shared_warehouse_transaction_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "loot_world_placement_integration_test",
+      "test_path": "tests/loot_world_placement_integration_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "death_drop_budget_queue_test",
+      "test_path": "tests/death_drop_budget_queue_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "loot_inventory_transaction_batch_test",
+      "test_path": "tests/loot_inventory_transaction_batch_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 2,
+  "passed": 2,
+  "total": 4,
+  "git_head": "7468943ccfc8cf07ddcfd64fe70ea0861ad98c4d",
+  "suite": "adhoc",
+  "generated_at": "2026-09-09T12:18:15.0422199+08:00",
+  "failed": 2
+}

@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-09-09T12:20:38.2659042+08:00",
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "total": 4,
+  "passed": 4,
+  "git_head": "7468943ccfc8cf07ddcfd64fe70ea0861ad98c4d",
+  "results": [
+    {
+      "test_name": "loot_world_placement_integration_test",
+      "test_path": "tests/loot_world_placement_integration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "death_drop_budget_queue_test",
+      "test_path": "tests/death_drop_budget_queue_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "shared_warehouse_migration_test",
+      "test_path": "tests/shared_warehouse_migration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "game_root_r3x6_targeting_broadphase_test",
+      "test_path": "tests/game_root_r3x6_targeting_broadphase_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0
+}
