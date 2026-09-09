@@ -132,15 +132,23 @@ $godot=(Resolve-Path tools/godot-4.7/Godot_v4.7-stable_win64_console.exe).Path
 | `tests/lootclock/loot_visual_clock_test.tscn` | `outputs/test_logs/runner_results_adhoc_20260909_141233_876_23820.json` |
 | `tests/loot_runtime_item_policy_test.tscn` | `outputs/test_logs/runner_results_adhoc_20260909_141258_117_5320.json` |
 | `tests/loot_stable_identity_save_test.tscn` | `outputs/test_logs/runner_results_adhoc_20260909_141316_559_18384.json` |
+| `tests/loot_pickup_runtime_manager_test.tscn`（fixture 修正后，60 秒） | `outputs/test_logs/runner_results_adhoc_20260909_142723_680_4304.json` |
 
-以上每项均为 `passed=1 failed=0 engine_log_errors=0`。相邻
-`tests/loot_pickup_runtime_manager_test.tscn` 仍保留失败现场：
+以上每项均为 `passed=1 failed=0 engine_log_errors=0`。在 fixture 修正前，
+`tests/loot_pickup_runtime_manager_test.tscn` 保留了原始失败现场：
 `outputs/test_logs/runner_results_adhoc_20260909_140759_934_24264.json`，原始
 stderr 为 `outputs/test_logs/loot_pickup_runtime_manager_test.stderr.log`，准确断言
 位置为 `tests/loot_pickup_runtime_manager_test.gd:359` 的
 `_spawn_loot("强效太阳水", Vector2(12000,12000))`。该进程带有早先的 PASS marker，
 随后因该断言失败而被 runner 强制终止；W6 没有修改 `GameRoot` 或该管理器，不能
-把它记为 W6 通过，也没有为此弱化断言。
+把旧 fixture 现场记为通过，也没有为此弱化断言。随后仅修正该测试 fixture：等待
+`_world_bootstrap_in_progress`、`_map_transition_in_progress`、有效 `player` 和
+`current_map_id` 在 60 秒 deadline 内完成，再用
+`game._resolve_loot_ground_position(player.global_position, player.global_position)`
+取得有限落点，并以 `game._loot_ground_point_clear(loot_position)` 作真实地面断言；
+FIFO、重试、失败回滚、地图代次和注销断言全部保留。修正后正式 runner 结果为
+`outputs/test_logs/runner_results_adhoc_20260909_142723_680_4304.json`，
+`passed=1 failed=0 engine_log_errors=0`。
 
 最终提交后必须在最终 SHA 再复跑 W6 contract 与本表受影响的视觉专项；提交时
 工作树状态、最终 SHA 和复跑 JSON 由交接消息固定记录。所有渲染和测试均在
