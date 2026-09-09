@@ -266,7 +266,7 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 		attacker,
 		monster_id,
 		expected,
-		"physical",
+		"physical_projectile",
 	)
 	assert(
 		is_equal_approx(attacker.attack_range_gu, float(expected.get("range_gu", -1.0))),
