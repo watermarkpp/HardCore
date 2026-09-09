@@ -1,6 +1,5 @@
 extends Node
 
-const MainScene := preload("res://scenes/main.tscn")
 const GameRootScript := preload("res://scripts/game_root.gd")
 const SpatialIndexScript := preload("res://scripts/runtime_combat_spatial_index.gd")
 const LootRuntimeScript := preload(
@@ -8,10 +7,21 @@ const LootRuntimeScript := preload(
 )
 
 class FixtureGameRoot extends GameRootScript:
+	var queue_only := true
+
 	## Keep the real GameRoot._ready lifecycle (including the loot manager), but
 	## do not start the production world bootstrap for the isolated async queue.
 	func _begin_initial_world_bootstrap() -> void:
-		return
+		if queue_only:
+			return
+		super._begin_initial_world_bootstrap()
+
+	# Queue-only fixture has no formal map geometry. Production placement and
+	# real WORLD walls are exercised by loot_world_placement_integration_test.
+	func _resolve_loot_ground_position(desired_px: Vector2, _death_origin := Vector2.INF) -> Vector2:
+		if queue_only:
+			return desired_px
+		return super._resolve_loot_ground_position(desired_px, _death_origin)
 
 const MAP_ID := 6317
 const GENERATION := 17
@@ -49,7 +59,8 @@ func _run() -> void:
 
 
 func _test_in_tree_logout_and_origin_guard() -> void:
-	_in_tree_game = MainScene.instantiate()
+	_in_tree_game = FixtureGameRoot.new()
+	_in_tree_game.queue_only = false
 	add_child(_in_tree_game)
 	if not await _wait_for_world_ready(_in_tree_game):
 		_expect(false, "in-tree GameRoot production bootstrap did not reach READY")
@@ -166,9 +177,10 @@ func _test_in_tree_logout_and_origin_guard() -> void:
 	_in_tree_game.current_map_id = origin_map
 	_in_tree_game._zone_generation = origin_generation
 	_in_tree_game._enemy_death_flush_queued = true
-	# Keep this single real GameRoot alive for the async phase.  Constructing a
-	# second GameRoot in the same viewport reconnects the global HUD safe-area
-	# signal and obscures queue failures with duplicate-connection errors.
+	# Reuse this same real GameRoot for the queue phase, switching only the
+	# fixture's map/bootstrap and loot-placement policy.  A second GameRoot
+	# would reconnect the global HUD safe-area signal.
+	_in_tree_game.queue_only = true
 
 
 func _test_async_real_deaths_and_rng_parity() -> void:
@@ -229,6 +241,7 @@ func _test_async_real_deaths_and_rng_parity() -> void:
 	for _index: int in range(ASYNC_DEATH_COUNT):
 		var roll := loot_runtime.roll_monster_drops(MONSTER_ID, expected_rng, false)
 		expected_rolls.append(roll.duplicate(true))
+		var death_key := str(_async_game._pending_enemy_deaths[_index].get("death_key", ""))
 		var planned_requests: Array = []
 		var death_position := Vector2(float(_index * 6), float(_index % 4) * 5.0)
 		var raw_items: Variant = roll.get("items", [])
@@ -242,6 +255,14 @@ func _test_async_real_deaths_and_rng_parity() -> void:
 					and item_index < item_records.size()
 					and item_records[item_index] is Dictionary
 					else {}
+				)
+				item_record = PlayerState.create_drop_item_instance(
+					item_record,
+					"%s:%s:item:%d" % [
+						str(_async_game._drop_instance_session_key),
+						death_key,
+						item_index,
+					],
 				)
 				planned_requests.append({
 					"item_name": item_name,

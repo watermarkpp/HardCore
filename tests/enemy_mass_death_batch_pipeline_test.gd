@@ -12,6 +12,11 @@ class FixtureGameRoot extends GameRootScript:
 	func _begin_initial_world_bootstrap() -> void:
 		return
 
+	# Queue-only fixture has no formal map geometry. Production placement and
+	# real WORLD walls are exercised by loot_world_placement_integration_test.
+	func _resolve_loot_ground_position(desired_px: Vector2, _death_origin := Vector2.INF) -> Vector2:
+		return desired_px
+
 const MAP_ID := 4317
 const GENERATION := 7
 const MONSTER_ID := 34
