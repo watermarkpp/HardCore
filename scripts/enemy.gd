@@ -256,6 +256,7 @@ var target: Node2D:
 			_refresh_target_focus()
 			if not _background_maintenance_running:
 				_leave_background_deep_sleep()
+			_audio_target_changed(target)
 var primary_target: PlayerCharacter
 var is_boss := false
 var runtime_map_id: int = -1
@@ -345,15 +346,19 @@ var _boss_base_move_speed_gu_per_sec := 0.0
 var _boss_base_attack_interval := 0.0
 var _burrowed := false
 var _rng := RandomNumberGenerator.new()
-## This RNG is deliberately independent from gameplay, spawn-facing, loot and
-## status randomness.  It owns only the client's 1/8 ambient sound cadence.
+## Presentation-only RNG. It is retained for deterministic audio fixtures and
+## never aliases gameplay, spawn-facing, loot or status randomness.
 var _audio_rng := RandomNumberGenerator.new()
 var _audio_rng_initialized := false
 var _audio_appear_emitted := false
 var _audio_death_emitted := false
+var _audio_combat_session_active := false
+var _audio_combat_session_serial := 0
+var _audio_owner_key := ""
 var _audio_attack_sequence := 0
 var _audio_attack_frame_sequence := -1
 var _audio_attack_frame_ready := false
+var _audio_attack_start_accepted := false
 var _audio_previous_visual_state := ""
 var _audio_previous_visual_frame := -1
 var _audio_previous_facing := Vector2.INF
@@ -527,9 +532,13 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 func _reset_monster_audio_observer() -> void:
 	_audio_appear_emitted = false
 	_audio_death_emitted = false
+	_audio_combat_session_active = false
+	_audio_combat_session_serial = 0
+	_audio_owner_key = ""
 	_audio_attack_sequence = 0
 	_audio_attack_frame_sequence = -1
 	_audio_attack_frame_ready = false
+	_audio_attack_start_accepted = false
 	_audio_previous_visual_state = ""
 	_audio_previous_visual_frame = -1
 	_audio_previous_facing = Vector2.INF
@@ -590,8 +599,58 @@ static func audio_service_lookup_count_for_test() -> int:
 	return _audio_service_lookup_count
 
 
+func _audio_owner_key_for_actor() -> String:
+	if _audio_owner_key.is_empty():
+		_audio_owner_key = "monster:%d:%d" % [monster_id, get_instance_id()]
+	return _audio_owner_key
+
+
+func _audio_target_changed(next_target: Node2D) -> void:
+	if not is_instance_valid(next_target):
+		return
+	# Target assignment is only an intent edge. The actual prompt is retried
+	# from the actor tick when the service is present and the actor is audible.
+	_audio_try_enter_combat_session()
+
+
+func _audio_player_target() -> Node:
+	if is_instance_valid(primary_target):
+		return primary_target
+	if target is PlayerCharacter and is_instance_valid(target):
+		return target
+	return null
+
+
+func _audio_combat_transition_is_active() -> bool:
+	# W3 adds this optional player contract after the audio branch baseline. The
+	# has_method guard keeps this branch compatible with the current checkout and
+	# rejects audio before service admission once the method is present.
+	var player_target := _audio_player_target()
+	if player_target == null or not player_target.has_method("combat_transition_is_active"):
+		return false
+	var active: Variant = player_target.call("combat_transition_is_active")
+	return active is bool and bool(active)
+
+
+func _audio_combat_epoch() -> int:
+	var player_target := _audio_player_target()
+	if player_target == null:
+		return -1
+	var epoch: Variant = null
+	if player_target.has_method("combat_epoch"):
+		epoch = player_target.call("combat_epoch")
+	else:
+		for property_info: Dictionary in player_target.get_property_list():
+			if str(property_info.get("name", "")) == "combat_epoch":
+				epoch = player_target.get("combat_epoch")
+				break
+	return int(epoch) if epoch is int or epoch is float else -1
+
+
 func _audio_is_listenable(allow_death := false) -> bool:
 	if not is_inside_tree() or process_mode == Node.PROCESS_MODE_DISABLED:
+		return false
+	if _audio_combat_transition_is_active():
 		return false
 	if not allow_death and not is_physics_processing():
 		return false
@@ -612,15 +671,28 @@ func _audio_is_listenable(allow_death := false) -> bool:
 
 
 func _audio_context(semantic_event: String) -> Dictionary:
-	return {
+	var context := {
 		"source": "enemy_actor",
 		"monster_id": monster_id,
 		"runtime_map_id": runtime_map_id,
 		"semantic_event": semantic_event,
+		"audio_owner_key": _audio_owner_key_for_actor(),
 	}
+	var combat_epoch := _audio_combat_epoch()
+	if combat_epoch >= 0:
+		context["combat_epoch"] = combat_epoch
+	if semantic_event in ["attack_start", "attack_frame"]:
+		context["release_id"] = "attack:%d" % _audio_attack_sequence
+	if semantic_event == "combat_prompt":
+		context["session_id"] = "combat:%d" % _audio_combat_session_serial
+	return context
 
 
-func _emit_monster_audio(semantic_event: String, allow_death := false) -> bool:
+func _emit_monster_audio(
+	semantic_event: String,
+	allow_death := false,
+	context_overrides: Dictionary = {},
+) -> bool:
 	if monster_id <= 0 or not _audio_is_listenable(allow_death):
 		return false
 	var service := _audio_service()
@@ -628,13 +700,15 @@ func _emit_monster_audio(semantic_event: String, allow_death := false) -> bool:
 		return false
 	# The service owns exact ID mapping, resource availability, voice pooling
 	# and fail-closed status.  EnemyActor never resolves names/appearances.
-	service.call(
+	var context := _audio_context(semantic_event)
+	context.merge(context_overrides, true)
+	var result: Variant = service.call(
 		"play_monster_event",
 		monster_id,
 		semantic_event,
-		_audio_context(semantic_event),
+		context,
 	)
-	return true
+	return result is Dictionary and str((result as Dictionary).get("status", "")) == "played"
 
 
 func _emit_player_physical_contact(attacker: Node2D, damage_context: Dictionary) -> bool:
@@ -670,19 +744,49 @@ func _emit_player_physical_contact(attacker: Node2D, damage_context: Dictionary)
 
 
 func _audio_try_emit_appear() -> void:
-	if _audio_appear_emitted:
+	# Compatibility shim for old test fixtures. Spawn/appear is intentionally
+	# silent in the W4 production whitelist.
+	return
+
+
+func _audio_try_enter_combat_session() -> bool:
+	if _audio_combat_session_active or not is_instance_valid(target):
+		return false
+	if monster_id <= 0 or not _audio_is_listenable():
+		return false
+	var service := _audio_service()
+	if service == null or not service.has_method("play_monster_combat_prompt"):
+		return false
+	_audio_combat_session_serial += 1
+	var result: Variant = service.call(
+		"play_monster_combat_prompt",
+		monster_id,
+		_audio_owner_key_for_actor(),
+		_audio_context("combat_prompt"),
+	)
+	if result is Dictionary and str((result as Dictionary).get("status", "")) == "played":
+		_audio_combat_session_active = true
+		return true
+	return false
+
+
+func _audio_end_combat_session(reason := "explicit_disengage") -> void:
+	if not _audio_combat_session_active:
 		return
-	if _emit_monster_audio("appear"):
-		_audio_appear_emitted = true
+	var service := _audio_service()
+	if service != null and service.has_method("end_monster_combat_session"):
+		service.call("end_monster_combat_session", _audio_owner_key_for_actor(), reason)
+	_audio_combat_session_active = false
 
 
 func _audio_attack_started() -> void:
 	_audio_attack_sequence += 1
 	_audio_attack_frame_sequence = -1
 	_audio_attack_frame_ready = false
+	_audio_attack_start_accepted = false
 	# Attack start is emitted only by accepted actions below, never by target
 	# acquisition or an AI preview.
-	_emit_monster_audio("attack_start")
+	_audio_attack_start_accepted = _emit_monster_audio("attack_start")
 
 
 func _play_attack_animation(duration: float) -> void:
@@ -696,19 +800,16 @@ func _audio_observe_visual_state() -> void:
 		return
 	var state := str(visual.current_state)
 	var frame := int(visual.current_frame)
-	var frame_changed := frame != _audio_previous_visual_frame
-	var facing_changed := (
-		_audio_previous_facing != Vector2.INF
-		and _audio_previous_facing.distance_squared_to(facing) > 0.000001
-	)
 	if (
-		_audio_attack_sequence > 0
+		_audio_attack_start_accepted
+		and _audio_attack_sequence > 0
 		and state == "attack"
 		and frame <= 1
 	):
 		_audio_attack_frame_ready = true
 	if (
-		_audio_attack_sequence > 0
+		_audio_attack_start_accepted
+		and _audio_attack_sequence > 0
 		and _audio_attack_frame_ready
 		and state == "attack"
 		and frame >= 2
@@ -718,13 +819,6 @@ func _audio_observe_visual_state() -> void:
 		# render/physics tick that advances across frame 3 without replaying it.
 		_audio_attack_frame_sequence = _audio_attack_sequence
 		_emit_monster_audio("attack_frame")
-	var ambient_frame_one := (
-		frame == 0
-		and frame_changed
-		and (state == "walk" or (state == "idle" and facing_changed))
-	)
-	if ambient_frame_one and _audio_is_listenable() and _audio_rng.randi_range(1, 8) == 1:
-		_emit_monster_audio("ambient")
 	_audio_previous_visual_state = state
 	_audio_previous_visual_frame = frame
 	_audio_previous_facing = facing
@@ -2042,7 +2136,7 @@ func _update_natural_regen(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	_audio_try_emit_appear()
+	_audio_try_enter_combat_session()
 	_audio_observe_visual_state()
 	var physics_started_usec := RuntimeDiagnostics.begin_timed_segment(
 		&"enemy_physics_calls"
@@ -2308,6 +2402,7 @@ func _handle_safe_zone_target_return(physics_delta: float) -> bool:
 		and _point_inside_safe_zone(target.global_position)
 	):
 		return false
+	_audio_end_combat_session("safe_zone")
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
 	_pending_attack_damage = 0
@@ -4842,7 +4937,6 @@ func take_damage(
 		visual.play_hit()
 		if hp_before_damage - current_hp > 0:
 			_emit_player_physical_contact(attacker, damage_context)
-			_emit_monster_audio("hurt")
 	if is_boss and _boss_phase_enabled and not _boss_phase_two and current_hp <= max_hp / 2:
 		_boss_phase_two = true
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
@@ -4943,9 +5037,7 @@ func _begin_death() -> void:
 		return
 	clear_entrapment("death")
 	_dying = true
-	if not _audio_death_emitted:
-		_audio_death_emitted = true
-		_emit_monster_audio("death", true)
+	_audio_end_combat_session("target_dead")
 	# Do not synthesize death_secondary: the source contract permits it only
 	# for appearance-80 guard records, and EnemyActor has no proven source guard
 	# at this boundary.  The shared service therefore remains fail-closed.
@@ -5274,6 +5366,15 @@ func _retarget_internal(delta := 0.0) -> void:
 		or _point_inside_safe_zone(target.global_position)
 		or _target_should_disengage(target)
 	):
+		var target_is_live := _target_candidate_is_live(target)
+		var target_is_safe := target_is_live and _point_inside_safe_zone(target.global_position)
+		var target_is_disengaged := target_is_live and _target_should_disengage(target)
+		var disengage_reason := "target_invalid"
+		if target_is_safe:
+			disengage_reason = "safe_zone"
+		elif target_is_disengaged:
+			disengage_reason = "leash_expired"
+		_audio_end_combat_session(disengage_reason)
 		target = null
 		_retarget_timer = 0.0
 		if _movement_step_active:

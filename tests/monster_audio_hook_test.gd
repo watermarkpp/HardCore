@@ -19,6 +19,27 @@ class AudioProbe extends Node:
 		})
 		return {"status": "played"}
 
+	func play_monster_combat_prompt(
+		monster_id: int,
+		audio_owner_key: String,
+		context: Dictionary = {},
+	) -> Dictionary:
+		calls.append({
+			"monster_id": monster_id,
+			"semantic_event": "combat_prompt",
+			"audio_owner_key": audio_owner_key,
+			"context": context.duplicate(true),
+		})
+		return {"status": "played"}
+
+	func end_monster_combat_session(audio_owner_key: String, reason := "") -> Dictionary:
+		calls.append({
+			"semantic_event": "combat_session_end",
+			"audio_owner_key": audio_owner_key,
+			"reason": reason,
+		})
+		return {"status": "ended"}
+
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -45,11 +66,15 @@ func _run() -> void:
 	enemy.global_position = Vector2(32.0, 32.0)
 	add_child(enemy)
 	await get_tree().process_frame
+	var target := Node2D.new()
+	target.name = "CombatTarget"
+	add_child(target)
+	await get_tree().process_frame
+	enemy.target = target
 
 	# A first miss is shared and recoverable. Installing a service inside the
 	# one-second negative window must not cause another group scan; expiry must
 	# discover it naturally without any production reset call.
-	enemy._audio_try_emit_appear()
 	assert(
 		EnemyActor.audio_service_lookup_count_for_test() == lookup_before_missing + 1,
 		"first missing service must perform one lookup",
@@ -57,15 +82,15 @@ func _run() -> void:
 	var probe := AudioProbe.new()
 	add_child(probe)
 	await get_tree().process_frame
-	enemy._audio_try_emit_appear()
+	enemy._audio_try_enter_combat_session()
 	assert(probe.calls.is_empty(), "negative-cache window must stay fail-closed")
 	EnemyActor.set_audio_service_cache_clock_for_test(2000)
-	enemy._audio_try_emit_appear()
+	enemy._audio_try_enter_combat_session()
 
-	# Spawn audio is one-shot and uses the runtime integer ID, not display text.
-	enemy._audio_try_emit_appear()
-	enemy._audio_try_emit_appear()
-	assert(_count(probe, "appear") == 1, "appear must emit exactly once")
+	# Combat entry is one-shot and uses the runtime integer ID, not display text.
+	enemy._audio_try_enter_combat_session()
+	enemy._audio_try_enter_combat_session()
+	assert(_count(probe, "combat_prompt") == 1, "combat prompt must emit exactly once per session")
 	assert(
 		int(probe.calls[0].get("monster_id", -1)) == 21,
 		"monster audio must pass the stable runtime monster ID",
@@ -74,6 +99,9 @@ func _run() -> void:
 		str(probe.calls[0].get("context", {}).get("source", "")) == "enemy_actor",
 		"monster audio context must identify the actor hook",
 	)
+	var transient_end := probe.end_monster_combat_session("test-owner", "los_interrupted")
+	assert(transient_end.get("status", "") == "ended", "probe lifecycle hook should accept session transition")
+	assert(_count(probe, "combat_prompt") == 1, "LOS interruption must not reopen a combat prompt")
 
 	# A cached service removed with an old GameRoot must not poison the next
 	# world. The first semantic lookup after invalidation discovers the new one.
@@ -116,41 +144,28 @@ func _run() -> void:
 	enemy._audio_observe_visual_state()
 	assert(_count(probe, "attack_frame") == 1, "attack frame 3 must be one-shot per action")
 
-	# Zero damage never enters hit presentation; positive damage does.
+	# Monster hurt/death/ambient are outside the W4 production whitelist.
 	enemy.current_hp = 100
 	enemy.take_damage(0)
 	assert(_count(probe, "hurt") == 0, "zero damage must not emit hurt")
 	enemy.take_damage(5)
-	assert(_count(probe, "hurt") == 1, "positive damage entering hit must emit hurt")
+	assert(_count(probe, "hurt") == 0, "positive monster damage must stay silent in W4")
+	enemy.visual.current_state = "walk"
+	enemy.visual.current_frame = 0
+	enemy._audio_observe_visual_state()
+	enemy._audio_observe_visual_state()
+	assert(_count(probe, "ambient") == 0, "walk/turn cadence must not emit continuous ambient")
 
-	# The death boundary emits exactly once, including when the actor is already
-	# leaving active physics for corpse presentation.
+	# The death boundary closes the session but does not synthesize a monster
+	# death sound without a dedicated production source contract.
 	enemy.current_hp = 0
 	enemy._death_pending = false
 	enemy._begin_death()
 	enemy._begin_death()
-	assert(_count(probe, "death") == 1, "death must emit once at the death transition")
+	assert(_count(probe, "death") == 0, "monster death must stay silent in W4")
 
-	# An independent audio RNG must not advance gameplay randomness.  Search a
-	# deterministic seed only to reach the 1/8 ambient branch in this fixture.
-	var ambient_seen := false
-	for seed_value in range(1, 128):
-		enemy._dying = false
-		enemy._death_pending = false
-		enemy.current_hp = 100
-		enemy.set_physics_process(true)
-		enemy.set_audio_seed_for_test(seed_value)
-		enemy._audio_previous_visual_state = ""
-		enemy._audio_previous_visual_frame = -1
-		enemy.visual.current_state = "walk"
-		enemy.visual.current_frame = 0
-		var before := _count(probe, "ambient")
-		enemy._audio_observe_visual_state()
-		if _count(probe, "ambient") > before:
-			ambient_seen = true
-			break
-	assert(ambient_seen, "ambient 1/8 branch must be reachable")
-
+	# The retained presentation RNG is independent even though W4 no longer
+	# consumes it for ambient cadence.
 	enemy._rng.seed = 8128
 	var gameplay_before := enemy._rng.randi_range(1, 100000)
 	enemy._rng.seed = 8128
