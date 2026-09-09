@@ -16,3 +16,6 @@ assets/data/equipment_helmet_finalization_manifest.json -text
 assets/data/equipment_helmet_visual_v2_overrides.json -text
 assets/data/equipment_visual_catalog.json -text
 assets/data/ui/manual_layout_overrides.json -text
+
+# Preserve archived test evidence bytes and their recorded SHA-256 values.
+docs/bugfix24/20260909/evidence/audio_full_frame_strict/** -text
