@@ -433,6 +433,11 @@ var _attack_los_cache: Dictionary = {
 ## Re-submit only actual position changes; static/background actors otherwise
 ## performed an identical projection + dictionary update on every physics tick.
 var _last_spatial_index_screen_position_px := Vector2.INF
+var _last_spatial_index_ground_position_gu := Vector2.INF
+var _last_spatial_index_runtime_map_id := -1
+var _last_spatial_index_zone_generation := -1
+var _last_spatial_index_environment_revision := -1
+var _last_spatial_index_projection := Callable()
 var actual_ground_motion_gu := Vector2.ZERO
 
 var _movement_cadence
@@ -2697,16 +2702,43 @@ func _spatial_index_update() -> void:
 		or spatial_actor_runtime_id <= 0
 	):
 		return
-	if _last_spatial_index_screen_position_px == global_position:
+	if _spatial_index_projection_cache_matches():
 		return
+	var ground_position_gu := _screen_position_px_to_ground_position_gu(
+		global_position
+	)
 	combat_spatial_index.update_actor(
 		spatial_actor_runtime_id,
-		_screen_position_px_to_ground_position_gu(global_position)
+		ground_position_gu
 	)
 	_last_spatial_index_screen_position_px = global_position
+	_last_spatial_index_ground_position_gu = ground_position_gu
+	_last_spatial_index_runtime_map_id = runtime_map_id
+	_last_spatial_index_zone_generation = int(get_meta("zone_generation", -1))
+	_last_spatial_index_environment_revision = _hc_environment_revision()
+	_last_spatial_index_projection = runtime_screen_to_ground_position_px
+
+
+func _spatial_index_projection_cache_matches() -> bool:
+	return (
+		_last_spatial_index_screen_position_px == global_position
+		and _last_spatial_index_runtime_map_id == runtime_map_id
+		and _last_spatial_index_zone_generation
+			== int(get_meta("zone_generation", -1))
+		and _last_spatial_index_environment_revision
+			== _hc_environment_revision()
+		and _last_spatial_index_projection
+			== runtime_screen_to_ground_position_px
+	)
 
 
 func spatial_index_position() -> Vector2:
+	# The spatial-index transaction above already projected this exact screen
+	# position. Reuse that immutable value for dynamic narrow phases instead of
+	# re-running the map projection once per nearby candidate. Any position write
+	# invalidates this equality and falls through to a fresh projection.
+	if _spatial_index_projection_cache_matches():
+		return _last_spatial_index_ground_position_gu
 	return _screen_position_px_to_ground_position_gu(global_position)
 
 
@@ -4915,6 +4947,11 @@ func configure_spatial_index(
 	combat_spatial_index = index
 	spatial_actor_runtime_id = actor_runtime_id
 	_last_spatial_index_screen_position_px = Vector2.INF
+	_last_spatial_index_ground_position_gu = Vector2.INF
+	_last_spatial_index_runtime_map_id = -1
+	_last_spatial_index_zone_generation = -1
+	_last_spatial_index_environment_revision = -1
+	_last_spatial_index_projection = Callable()
 
 
 func _exit_tree() -> void:
@@ -7332,7 +7369,7 @@ func _hc_frontline_at(a: Vector2, b: Vector2, hit_target: Node2D) -> int:
 			continue
 		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
 			continue
-		var c := _screen_position_px_to_ground_position_gu(other.global_position)
+		var c := other.spatial_index_position()
 		if HCPolicy.frontline_blocks(a, b, c, combat_radius_gu, _target_combat_radius_gu(hit_target), other.combat_radius_gu, spatial_actor_runtime_id, other.spatial_actor_runtime_id):
 			return other.get_instance_id()
 	return 0
@@ -7349,7 +7386,7 @@ func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
 			continue
 		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
 			continue
-		var c := _screen_position_px_to_ground_position_gu(other.global_position)
+		var c := other.spatial_index_position()
 		if HCPolicy.core_crossed(a, b, c, combat_radius_gu, other.combat_radius_gu):
 			return false
 	return true

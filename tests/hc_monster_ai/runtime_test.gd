@@ -6,12 +6,27 @@ const Warrior := preload("res://scripts/skills/warrior_melee_geometry.gd")
 var index := Index.new()
 var player: PlayerCharacter
 var serial := 0
+var projection_probe_calls := 0
+
+class RevisionProvider:
+	extends Node
+	var revision := 0
+	func environment_collision_revision() -> int:
+		return revision
 
 func ground_to_screen(p: Vector2) -> Vector2:
 	return GU.ground_delta_gu_to_screen_delta_px(p)
 
 func screen_to_ground(p: Vector2) -> Vector2:
 	return GU.screen_delta_px_to_ground_delta_gu(p)
+
+func counted_screen_to_ground(p: Vector2) -> Vector2:
+	projection_probe_calls += 1
+	return screen_to_ground(p)
+
+func shifted_screen_to_ground(p: Vector2) -> Vector2:
+	projection_probe_calls += 1
+	return screen_to_ground(p) + Vector2(3.0, 4.0)
 
 func open_context() -> Dictionary:
 	return {"valid":true,"contract_id":Terrain.CONTRACT_ID,"runtime_map_id":1,
@@ -113,6 +128,28 @@ func _run() -> void:
 	check(not actor._hc_try_start(player) and actor._attack_timer==0.0 and actor._hc_starts==before,"O01-cooldown","Blocked start does not consume cooldown")
 	front.set_combat_position(ground_to_screen(Vector2(25,25)),&"hc_test_position")
 	check(actor._hc_access(player)=="CLEAR","O06-runtime","Moved front actor invalidates dynamic blockage without endpoint movement")
+	# The live spatial-index transaction owns one exact projection snapshot.
+	# Repeated narrow phases may reuse it, but map/projection/revision changes at
+	# the same screen position must force a new formal projection.
+	projection_probe_calls=0
+	front.configure_runtime_map_projection(1,Callable(self,"ground_to_screen"),Callable(self,"counted_screen_to_ground"))
+	front.set_combat_position(front.global_position,&"hc_projection_cache_setup")
+	var cached_ground:=front.spatial_index_position()
+	check(projection_probe_calls==1 and cached_ground==Vector2(25,25),"O06-cache","Unchanged indexed position reuses its formal projection snapshot")
+	front.configure_runtime_map_projection(2,Callable(self,"ground_to_screen"),Callable(self,"counted_screen_to_ground"))
+	check(front.spatial_index_position()==Vector2(25,25) and projection_probe_calls==2,"O06-map","Same screen position on another map invalidates the projection snapshot")
+	front.configure_runtime_map_projection(2,Callable(self,"ground_to_screen"),Callable(self,"shifted_screen_to_ground"))
+	check(front.spatial_index_position()==Vector2(28,29) and projection_probe_calls==3,"O06-projection","Changed formal projection cannot reuse an old ground position")
+	var revision_provider:=RevisionProvider.new()
+	add_child(revision_provider)
+	front.environment_blocker=revision_provider
+	front.set_combat_position(front.global_position,&"hc_projection_revision_setup")
+	var calls_before_revision:=projection_probe_calls
+	revision_provider.revision+=1
+	check(front.spatial_index_position()==Vector2(28,29) and projection_probe_calls==calls_before_revision+1,"O06-revision","Projection context revision invalidates the same-position snapshot")
+	revision_provider.queue_free()
+	front.environment_blocker=null
+	front.configure_runtime_map_projection(1,Callable(self,"ground_to_screen"),Callable(self,"screen_to_ground"))
 	front.set_combat_position(ground_to_screen(Vector2(21,20)),&"hc_test_position")
 	front.current_hp=0
 	front._death_pending=true
