@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "contract_id": "item.drop.instance.rules.v1",
+  "enabled": true,
+  "affix_roll": {
+    "numerator": 1,
+    "denominator": 20,
+    "increment": 1
+  },
+  "eligible_item_authority": {
+    "path": "res://assets/data/equipment_attribute_master.json",
+    "contract_id": "equipment.attribute.master.v2",
+    "source_tier": "primary",
+    "identity_field": "itemId"
+  },
+  "stat_mapping": [
+    {"source_stat": "dc", "runtime_stat": "attack_max"},
+    {"source_stat": "mc", "runtime_stat": "magic_max"},
+    {"source_stat": "sc", "runtime_stat": "tao_max"},
+    {"source_stat": "ac", "runtime_stat": "defense_max"},
+    {"source_stat": "mac", "runtime_stat": "magic_defense_max"}
+  ],
+  "provenance": {
+    "classification": "project_gameplay_default_not_original_value",
+    "source": "HardCore 2026-09-09 W7 implementation authorization",
+    "note": "The enabled 5 percent one-stat plus-one rule is a configurable project default, not an original-game authority value."
+  }
+}

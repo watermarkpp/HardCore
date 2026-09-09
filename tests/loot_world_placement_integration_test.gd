@@ -61,10 +61,53 @@ func _run() -> void:
 	assert(PlayerState.gold == gold_before + 30)
 	await get_tree().process_frame
 	assert(not is_instance_valid(pickup))
+	await _test_frozen_equipment_pickup(game, desired)
 	game.queue_free()
 	await get_tree().process_frame
 	print("LOOT_WORLD_PLACEMENT_INTEGRATION_PASS")
 	get_tree().quit(0)
+
+func _test_frozen_equipment_pickup(game: Node, position_px: Vector2) -> void:
+	var catalog := GameData.get_item_record({"item_id": 80})
+	var record := PlayerState.create_drop_item_instance({
+		"item_id": 80, "canonical_item_id": 80, "output_item_id": 80,
+		"item_name": str(catalog.name), "canonical_name": str(catalog.name),
+		"output_record": catalog.duplicate(true), "identity_status": "resolved",
+	}, "world-pickup-save-retry")
+	assert(record.has("item_instance"))
+	var frozen: Dictionary = record.item_instance.duplicate(true)
+	assert(game._spawn_loot(str(catalog.name), position_px, record, position_px))
+	var pickup: LootPickup
+	for child in game.get_children():
+		if child is LootPickup and child.item_id == 80:
+			pickup = child
+	assert(is_instance_valid(pickup))
+	var before := PlayerState.inventory.duplicate(true)
+	PlayerState._test_force_atomic_write_failure = true
+	game._loot_pickup_runtime_manager.player_position_changed(game.player.global_position)
+	game._flush_loot_collections()
+	PlayerState._test_force_atomic_write_failure = false
+	assert(PlayerState.inventory == before and is_instance_valid(pickup))
+	assert(pickup.item_record.item_instance == frozen and not pickup.collection_pending())
+	# Invalid nested data must reach the receiver as invalid, never turn into a
+	# legacy name-only pickup and silently generate a replacement instance.
+	pickup.item_record["item_instance"] = null
+	pickup.manager_advance_time(10.0)
+	game._loot_pickup_runtime_manager.player_position_changed(game.player.global_position)
+	game._flush_loot_collections()
+	assert(PlayerState.inventory == before and is_instance_valid(pickup))
+	pickup.item_record["item_instance"] = frozen.duplicate(true)
+	pickup.manager_advance_time(10.0)
+	game._loot_pickup_runtime_manager.player_position_changed(game.player.global_position)
+	game._flush_loot_collections()
+	var matches := 0
+	for entry in PlayerState.inventory:
+		if entry is Dictionary and str(entry.get("instance_id", "")) == str(frozen.instance_id):
+			assert(entry == frozen)
+			matches += 1
+	assert(matches == 1, "formal ground pickup must preserve exactly one frozen instance")
+	await get_tree().process_frame
+	assert(not is_instance_valid(pickup))
 
 func _wall(game: Node, position_px: Vector2, size_px: Vector2) -> StaticBody2D:
 	var body := StaticBody2D.new()

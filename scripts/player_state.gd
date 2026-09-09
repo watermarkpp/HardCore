@@ -9,6 +9,7 @@ const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.g
 const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progression_service.gd")
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
 const PricingServiceScript := preload("res://scripts/pricing_service.gd")
+const ItemDropInstanceRulesScript := preload("res://scripts/item_drop_instance_rules.gd")
 const WorldMonsterRespawnStateScript := preload(
 	"res://scripts/world_monster_respawn_state.gd"
 )
@@ -437,7 +438,7 @@ func can_receive(item_name: String, amount := 1) -> bool:
 
 
 func can_receive_record(record: Dictionary) -> bool:
-	last_receive_result = _build_receive_result_for_record(record, inventory)
+	last_receive_result = _build_receive_result_for_record(record, inventory, true)
 	return bool(last_receive_result.get("success", false))
 
 
@@ -472,7 +473,7 @@ func _add_item_without_commit(item_name: String, amount: int) -> bool:
 func receive_record(record: Dictionary, commit := true) -> Dictionary:
 	var before_inventory := inventory.duplicate(true)
 	var before_gold := gold
-	var result := _build_receive_result_for_record(record, inventory)
+	var result := _build_receive_result_for_record(record, inventory, true)
 	if not bool(result.get("success", false)):
 		last_receive_result = result
 		return result
@@ -514,7 +515,11 @@ func _build_receive_result(item_name: String, amount: int, base_inventory: Array
 	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, {})
 
 
-func _build_receive_result_for_record(record: Dictionary, base_inventory: Array) -> Dictionary:
+func _build_receive_result_for_record(
+	record: Dictionary,
+	base_inventory: Array,
+	reject_existing_drop_instance := false,
+) -> Dictionary:
 	var amount := maxi(1, int(record.get("count", 1)))
 	var catalog_item := GameData.get_item_record(record)
 	var item_name := str(catalog_item.get("name", record.get("name", "")))
@@ -522,6 +527,19 @@ func _build_receive_result_for_record(record: Dictionary, base_inventory: Array)
 		return _receive_failure("unknown_item", "物品身份无效。")
 	if catalog_item.is_empty() or item_name.is_empty():
 		return _receive_failure("unknown_item", "物品无效。")
+	if (
+		record.has("drop_instance_contract_id")
+		and not ItemDropInstanceRulesScript.validate_instance(record, catalog_item)
+	):
+		return _receive_failure("invalid_item_instance", "掉落实例无效。")
+	# External receipt rejects an existing W7 identity before the legacy opaque
+	# instance split guard. Internal equip/unequip previews retain move semantics.
+	if (
+		reject_existing_drop_instance
+		and record.has("drop_instance_contract_id")
+		and _drop_instance_id_already_present(str(record.get("instance_id", "")), base_inventory)
+	):
+		return _receive_failure("duplicate_item_instance", "掉落实例已入账。")
 	var canonical_record := record.duplicate(true)
 	canonical_record["name"] = item_name
 	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, canonical_record)
@@ -830,6 +848,45 @@ func transfer_shared_gold(
 		"transaction_id": transaction_id,
 		"transaction_sequence": transaction_sequence,
 	}, true)
+	return result
+
+
+## Freeze one resolved drop identity into the exact equipment instance carried
+## by LootPickup. Non-equipment identities pass through byte-for-byte. Invalid
+## equipment identities retain their source evidence but become unspawnable.
+func create_drop_item_instance(item_record: Dictionary, stable_drop_key: String) -> Dictionary:
+	var result := item_record.duplicate(true)
+	if str(result.get("identity_status", "")) != "resolved":
+		return _invalid_drop_instance_record(result, "unresolved_item_identity")
+	var raw_item_id: Variant = result.get("canonical_item_id", result.get("item_id", null))
+	if not _is_integral_json_number(raw_item_id) or int(raw_item_id) <= 0:
+		return _invalid_drop_instance_record(result, "invalid_item_id")
+	var item_id := int(raw_item_id)
+	for identity_field: String in ["item_id", "canonical_item_id", "output_item_id"]:
+		if not result.has(identity_field):
+			continue
+		var identity_value: Variant = result.get(identity_field)
+		if not _is_integral_json_number(identity_value) or int(identity_value) != item_id:
+			return _invalid_drop_instance_record(result, "conflicting_%s" % identity_field)
+	var catalog := GameData.get_item_record({"item_id": item_id})
+	if catalog.is_empty() or int(catalog.get("itemId", -1)) != item_id:
+		return _invalid_drop_instance_record(result, "catalog_identity_missing")
+	if str(catalog.get("kind", "")) != "equipment":
+		return result
+	var instance := ItemDropInstanceRulesScript.create_instance(catalog, stable_drop_key)
+	if instance.is_empty():
+		return _invalid_drop_instance_record(result, "instance_generation_failed")
+	result["item_instance_contract_id"] = ItemDropInstanceRulesScript.INSTANCE_CONTRACT_ID
+	result["item_instance"] = instance
+	return result
+
+
+func _invalid_drop_instance_record(item_record: Dictionary, reason: String) -> Dictionary:
+	var result := item_record.duplicate(true)
+	result["identity_status"] = "invalid_instance"
+	result["item_instance_error"] = reason
+	result.erase("item_instance")
+	result.erase("item_instance_contract_id")
 	return result
 
 
@@ -2613,21 +2670,38 @@ func recalculate_stats(emit_profile_change := true) -> void:
 			continue
 		if equipped_value is Dictionary and not _has_positive_raw_durability(equipped_value):
 			continue
-		var item := GameData.get_item(item_name)
+		var item := (
+			GameData.get_item_record(equipped_value)
+			if equipped_value is Dictionary
+			else GameData.get_item(item_name)
+		)
 		if item.is_empty():
 			continue
-		## Affix input is an immutable snapshot of the catalog record with the
-		## equipped instance's own modifiers merged in. When the instance
-		## carries a `modifiers` container it is authoritative (full override of
-		## the catalog set), so one item can never contribute the same affixes
-		## twice. Without instance modifiers the catalog set is used unchanged.
+		var is_drop_instance := (
+			equipped_value is Dictionary
+			and (equipped_value as Dictionary).has("drop_instance_contract_id")
+		)
+		if (
+			is_drop_instance
+			and not ItemDropInstanceRulesScript.validate_instance(
+				equipped_value as Dictionary,
+				item,
+			)
+		):
+			continue
+		## Legacy instance modifiers remain a full catalog override. W7 drop
+		## modifiers are a separate additive layer, so pre-existing catalog
+		## modifier semantics are applied once before the frozen instance affix.
 		var affix_input := item.duplicate(true)
 		var instance_modifiers: Variant = (
 			equipped_value.get("modifiers")
 			if equipped_value is Dictionary
 			else null
 		)
-		if instance_modifiers != null:
+		var drop_instance_modifiers: Array = []
+		if is_drop_instance:
+			drop_instance_modifiers = (instance_modifiers as Array).duplicate(true)
+		elif instance_modifiers != null:
 			if instance_modifiers is Dictionary or instance_modifiers is Array:
 				affix_input["modifiers"] = instance_modifiers.duplicate(true)
 			else:
@@ -2675,6 +2749,10 @@ func recalculate_stats(emit_profile_change := true) -> void:
 			result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0)) + int(modifiers.get("attackSpeedTier", 0))
 			result["attack_speed_percent"] = float(result.get("attack_speed_percent", 0.0)) + float(modifiers.get("attackSpeedPercent", 0.0))
 			result["cast_speed_percent"] = float(result.get("cast_speed_percent", 0.0)) + float(modifiers.get("castSpeedPercent", 0.0))
+		if not drop_instance_modifiers.is_empty():
+			result = ModifierEffectRuntime.apply_modifiers(result, drop_instance_modifiers, {
+				"profession": profession, "level": level, "slot": slot,
+			})
 		var special := EquipmentRulesScript.special_effect_for(item)
 		if not special.is_empty() and bool(special.get("runtime", false)):
 			var effect_id := str(special.get("id", ""))
@@ -3613,11 +3691,19 @@ func _valid_saved_position(value: Variant) -> bool:
 func _validate_saved_item_records(value: Variant, capacity: int) -> bool:
 	if not value is Array or (value as Array).size() > capacity:
 		return false
+	var seen_drop_instance_ids: Dictionary = {}
 	for raw_record: Variant in value:
 		if not raw_record is Dictionary:
 			return false
 		var record: Dictionary = raw_record
-		if record.is_empty() or not record.has("count"):
+		if record.is_empty():
+			continue
+		if record.has("drop_instance_contract_id"):
+			var drop_instance_id := _validated_drop_instance_id(record)
+			if drop_instance_id == "#invalid" or seen_drop_instance_ids.has(drop_instance_id):
+				return false
+			seen_drop_instance_ids[drop_instance_id] = true
+		if not record.has("count"):
 			continue
 		var count_value: Variant = record.get("count")
 		if not _is_integral_json_number(count_value) or int(count_value) <= 0:
@@ -3643,6 +3729,81 @@ func _validate_saved_equipment(value: Variant) -> bool:
 		if (equipped as Dictionary).has("count"):
 			var count_value: Variant = (equipped as Dictionary).get("count")
 			if not _is_integral_json_number(count_value) or int(count_value) <= 0:
+				return false
+		if _validated_drop_instance_id(equipped as Dictionary) == "#invalid":
+			return false
+	return true
+
+
+func _validated_drop_instance_id(record: Dictionary) -> String:
+	if not record.has("drop_instance_contract_id"):
+		return ""
+	var raw_item_id: Variant = record.get("item_id", null)
+	if not _is_integral_json_number(raw_item_id) or int(raw_item_id) <= 0:
+		return "#invalid"
+	var catalog := GameData.get_item_record({"item_id": int(raw_item_id)})
+	if not ItemDropInstanceRulesScript.validate_instance(record, catalog):
+		return "#invalid"
+	return str(record.get("instance_id", ""))
+
+
+func _validate_profile_drop_instance_uniqueness(document: Dictionary) -> bool:
+	var seen: Dictionary = {}
+	for array_field: String in ["inventory", "warehouse_inventory"]:
+		var records: Variant = document.get(array_field, [])
+		if not records is Array:
+			continue
+		for raw_record: Variant in records:
+			if not raw_record is Dictionary:
+				continue
+			var instance_id := _validated_drop_instance_id(raw_record as Dictionary)
+			if instance_id in ["", "#invalid"]:
+				continue
+			if seen.has(instance_id):
+				return false
+			seen[instance_id] = true
+	var saved_equipment: Variant = document.get("equipment", {})
+	if saved_equipment is Dictionary:
+		for raw_equipped: Variant in (saved_equipment as Dictionary).values():
+			if not raw_equipped is Dictionary:
+				continue
+			var instance_id := _validated_drop_instance_id(raw_equipped as Dictionary)
+			if instance_id in ["", "#invalid"]:
+				continue
+			if seen.has(instance_id):
+				return false
+			seen[instance_id] = true
+	return true
+
+
+func _profile_and_shared_drop_instances_are_disjoint(
+	profile_document: Dictionary,
+	shared_document: Dictionary,
+) -> bool:
+	var profile_ids: Dictionary = {}
+	var inventory_value: Variant = profile_document.get("inventory", [])
+	if inventory_value is Array:
+		for raw_record: Variant in inventory_value:
+			if not raw_record is Dictionary:
+				continue
+			var inventory_instance_id := _validated_drop_instance_id(raw_record as Dictionary)
+			if inventory_instance_id not in ["", "#invalid"]:
+				profile_ids[inventory_instance_id] = true
+	var equipment_value: Variant = profile_document.get("equipment", {})
+	if equipment_value is Dictionary:
+		for raw_equipped: Variant in (equipment_value as Dictionary).values():
+			if not raw_equipped is Dictionary:
+				continue
+			var equipment_instance_id := _validated_drop_instance_id(raw_equipped as Dictionary)
+			if equipment_instance_id not in ["", "#invalid"]:
+				profile_ids[equipment_instance_id] = true
+	var shared_records: Variant = shared_document.get("warehouse_inventory", [])
+	if shared_records is Array:
+		for raw_record: Variant in shared_records:
+			if not raw_record is Dictionary:
+				continue
+			var shared_instance_id := _validated_drop_instance_id(raw_record as Dictionary)
+			if shared_instance_id not in ["", "#invalid"] and profile_ids.has(shared_instance_id):
 				return false
 	return true
 
@@ -3709,6 +3870,8 @@ func _validate_profile_document_status(
 		return _validation_result(false, "invalid_warehouse_inventory")
 	if document.has("equipment") and not _validate_saved_equipment(document.get("equipment")):
 		return _validation_result(false, "invalid_equipment")
+	if not _validate_profile_drop_instance_uniqueness(document):
+		return _validation_result(false, "duplicate_drop_instance")
 	for object_field: String in [
 		"learned_skills", "skill_progression", "skill_button_assignments",
 		"equip_cycle_cursor", "warrior_runtime_state", "quest_states",
@@ -4354,6 +4517,8 @@ func _warehouse_transaction_log_is_valid(log: Dictionary) -> bool:
 		or not bool(_validate_profile_document_status(after_profile, profile_id, false).get("valid", false))
 		or not _validate_shared_warehouse_document(before_shared)
 		or not _validate_shared_warehouse_document(after_shared)
+		or not _profile_and_shared_drop_instances_are_disjoint(before_profile, before_shared)
+		or not _profile_and_shared_drop_instances_are_disjoint(after_profile, after_shared)
 	):
 		return false
 	var operation_kind := str(log.get("operation_kind", "warehouse_items"))
@@ -4942,6 +5107,21 @@ func load_save() -> void:
 		if not active_profile_id.is_empty():
 			_save_blocked_profile_id = active_profile_id
 			_save_blocked_reason = "shared_warehouse_unavailable"
+		return
+	elif not _revalidate_shared_warehouse_authority():
+		last_load_result["success"] = false
+		last_load_result["reason"] = "shared_warehouse_unavailable"
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "shared_warehouse_unavailable"
+		return
+	elif not _profile_and_shared_drop_instances_are_disjoint(
+		parsed,
+		_read_json(shared_warehouse_path),
+	):
+		last_load_result["success"] = false
+		last_load_result["reason"] = "duplicate_drop_instance_across_shared"
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = "duplicate_drop_instance_across_shared"
 		return
 	if active_profile_id == _save_blocked_profile_id:
 		_save_blocked_profile_id = ""
@@ -6190,6 +6370,34 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		var merge_key: Variant = canonical_item_id if canonical_item_id >= 0 else item_name
 		var item_weight := maxi(0, int(catalog.get("weight", 0)))
 		var kind := str(catalog.get("kind", ""))
+		var provided_instance: Dictionary = {}
+		if candidate.has("item_instance"):
+			var instance_value: Variant = candidate.get("item_instance", null)
+			if (
+				kind != "equipment"
+				or not instance_value is Dictionary
+				or not ItemDropInstanceRulesScript.validate_instance(
+					instance_value as Dictionary,
+					catalog,
+				)
+			):
+				outcomes.append({
+					"success": false,
+					"item_name": item_name,
+					"message": "掉落实例无效。",
+					"reason": "invalid_item_instance",
+				})
+				continue
+			provided_instance = (instance_value as Dictionary).duplicate(true)
+			var provided_instance_id := str(provided_instance.get("instance_id", ""))
+			if _drop_instance_id_already_present(provided_instance_id, working_inventory):
+				outcomes.append({
+					"success": false,
+					"item_name": item_name,
+					"message": "掉落实例已入账。",
+					"reason": "duplicate_item_instance",
+				})
+				continue
 		var stackable := bool(catalog.get("stackable", false)) and kind != "equipment"
 		var prospective_weight := working_weight + item_weight
 		if prospective_weight > maximum_weight and prospective_weight > initial_weight:
@@ -6231,7 +6439,19 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 			if occupied_count >= INVENTORY_CAPACITY:
 				outcomes.append({"success": false, "item_name": item_name, "message": INVENTORY_SLOT_REJECTION, "reason": "inventory_full"})
 				continue
-			var new_record: Dictionary = _make_item_instance(item_name, catalog, Time.get_ticks_usec() + working_inventory.size() + outcomes.size()) if kind == "equipment" else {"name": item_name, "count": 1}
+			var new_record: Dictionary = (
+				provided_instance
+				if not provided_instance.is_empty()
+				else (
+					_make_item_instance(
+						item_name,
+						catalog,
+						Time.get_ticks_usec() + working_inventory.size() + outcomes.size(),
+					)
+					if kind == "equipment"
+					else {"name": item_name, "count": 1}
+				)
+			)
 			if canonical_item_id >= 0:
 				new_record["item_id"] = canonical_item_id
 			var placed_slot := -1
@@ -6297,6 +6517,26 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		"success": true,
 	}
 	return {"success": true, "saved": true, "outcomes": outcomes, "success_count": success_count}
+
+
+func _drop_instance_id_already_present(instance_id: String, working_inventory: Array) -> bool:
+	if instance_id.is_empty():
+		return true
+	for raw_records: Variant in [working_inventory, warehouse_inventory]:
+		var records: Array = raw_records
+		for raw_record: Variant in records:
+			if (
+				raw_record is Dictionary
+				and str((raw_record as Dictionary).get("instance_id", "")) == instance_id
+			):
+				return true
+	for raw_equipped: Variant in equipment.values():
+		if (
+			raw_equipped is Dictionary
+			and str((raw_equipped as Dictionary).get("instance_id", "")) == instance_id
+		):
+			return true
+	return false
 
 
 func loot_batch_debug_snapshot() -> Dictionary:

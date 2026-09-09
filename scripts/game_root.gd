@@ -1510,6 +1510,7 @@ func _ready() -> void:
 	_audio_runtime_service = AudioRuntimeServiceScript.new()
 	_audio_runtime_service.name = "AudioRuntimeService"
 	add_child(_audio_runtime_service)
+	_audio_runtime_service.sync_sfx_enabled_from_bus()
 	hud.loading_transition_finished.connect(
 		_town_music_controller.on_loading_transition_finished
 	)
@@ -1874,6 +1875,8 @@ func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
 	var bus_name := "Music" if setting_id == "audio.music.enabled" else "SFX"
 	if setting_id not in ["audio.music.enabled", "audio.sfx.enabled"]:
 		return
+	if setting_id == "audio.sfx.enabled" and is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.set_sfx_enabled(bool(request.get("enabled", true)))
 	var bus_index := AudioServer.get_bus_index(bus_name)
 	if bus_index >= 0:
 		AudioServer.set_bus_mute(bus_index, not bool(request.get("enabled", true)))
@@ -11760,6 +11763,9 @@ func _settle_pending_enemy_death_batch(
 	return true
 
 
+var _drop_instance_session_key := Crypto.new().generate_random_bytes(16).hex_encode()
+
+
 func _plan_enemy_death_item(death: Dictionary) -> bool:
 	if not _death_origin_matches_current(death):
 		death["last_error"] = "origin_map_generation_mismatch_before_roll"
@@ -11783,6 +11789,10 @@ func _plan_enemy_death_item(death: Dictionary) -> bool:
 				identity_records[item_index]
 				if item_index < identity_records.size() and identity_records[item_index] is Dictionary
 				else {}
+			)
+			identity_record = PlayerState.create_drop_item_instance(
+				identity_record,
+				"%s:%s:item:%d" % [_drop_instance_session_key, str(death.get("death_key", "")), item_index],
 			)
 			requests.append({
 				"item_name": item_name,
@@ -12247,6 +12257,13 @@ func _on_loot_collected(item_name: String, pickup: LootPickup) -> void:
 	var candidate := {"item_name": item_name, "pickup": pickup}
 	if is_instance_valid(pickup) and pickup.item_id >= 0:
 		candidate["item_id"] = pickup.item_id
+		if pickup.item_record.has("item_instance"):
+			var instance_value: Variant = pickup.item_record["item_instance"]
+			candidate["item_instance"] = (
+				instance_value.duplicate(true)
+				if instance_value is Dictionary or instance_value is Array
+				else instance_value
+			)
 	_queue_loot_collection(candidate)
 
 
