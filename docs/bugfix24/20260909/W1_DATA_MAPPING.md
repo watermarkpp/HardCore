@@ -91,3 +91,106 @@ the new range records through the existing range adapter, and update the
 Sol-owned expected-range contract for `42,62,145,174,186,224`. The generic
 Enemy gate should leave the chest actor damageable and droppable while blocking
 autonomous combat. No production Enemy or test file is changed here.
+
+
+## 第二包：W1 special delivery families
+
+This independent package adds exact-ID mappings only for the following 17 IDs;
+`profileByMonsterId` and `monster_attack_range_policy_v1.json` are both keyed by
+these stable IDs, with no name/suffix/class fallback:
+
+| IDs | Profile / kind | Formal range | Primary class evidence |
+| --- | --- | --- | --- |
+| 18, 103, 104, 185 | `w1_spit_spider` / `directional_spit_map` | 2.0 GU, `source_spit_map_5x5`, 2 cells | `TSpitSpider`, race 82 |
+| 146 | `w1_spit_elf_warrior_146` / `directional_spit_map` | 2.0 GU, `source_spit_map_5x5`, 2 cells | `TElfWarriorMonster`, race 114; inherited geometry, poison disabled |
+| 46, 60 | gas profiles / `gas_adjacent` | 1.0 GU, adjacent Chebyshev cell | `TGasAttackMonster`, race 90 |
+| 128, 168 | `w1_gas_moth_128_168` / `gas_adjacent` | 1.0 GU, adjacent Chebyshev cell | `TGasMothMonster`, race 105; hidden reveal denominator 3 |
+| 79 | `w1_line_lighting_zombi_79` / `line_magic` | 6.0 GU, strict axis boundary, 9-cell line | `TLightingZombi`, race 94 |
+| 76, 77, 235, 236, 239 | cow profiles / `mixed_target_tile` | 1.0 GU, adjacent Chebyshev cell | `TCowKingMonster`, race 92; physical/magic ratio 0.5/0.5 |
+| 160 | `w1_mixed_sculture_king_160` / `mixed_target_tile` | 1.0 GU, adjacent Chebyshev cell | `TScultureKingMonster`, race 102; physical/magic ratio 0.0/1.0 |
+| 194 | `w1_guard_archer_194` / `guard_direct_projectile` | Manhattan view range 12.0 GU | `TArcherGuard`, race 112 |
+
+The Pascal class rule is `source.original_gameofmir.server_suite` with
+`tier=primary`; candidate Monster.DB identity remains separately recorded as
+`distribution=candidate.mylgd_mir2server_176`, `authority=B_CANDIDATE`, exact
+ID route, SHA-256
+`a8a2919b2f05f95459c01a67c9326f3d86fb954ecdc5dbb095e96cba237515b0`. The
+primary source hashes are `ObjMon.pas`
+`E32425C0C056CD83E0DD449F752813C613E829DA4EABC21C26CBAD45FFA59CE2`,
+`ObjMon2.pas`
+`983C098130D7A83B34F19746FC484609DCEF975344864C435526D254F98D0BCD`,
+`ObjBase.pas`
+`65D59610B8A1F7F4DCF76058A753651D1A97997AD273FC4DF8E468E65A989262`,
+`UsrEngn.pas`
+`E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3`, and
+`M2Share.pas`
+`9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085`.
+
+The spit source is `TSpitSpider.SpitAttack/AttackTarget`
+(`ObjMon.pas:674-729`) plus `TargetInSpitRange`
+(`ObjBase.pas:18504-18531`): it scans a 5x5 source `SpitMap`, uses a two-cell
+axis gate, and uses magic-defense damage. Poison is only enabled by the base
+spider constructor (`ObjMon.pas:660-665`); `TElfWarriorMonster` disables it
+(`ObjMon.pas:1718-1724`). The poison descriptor records the source operation
+`POISON_DECHEALTH`, 30.0 seconds, `point=1`, `tickDamage=2` (the source applies
+`DamageHealth(point+1)` at `ObjBase.pas:4255-4263`), and denominator offset 20.
+`M2Share.pas:2073,10368-10371` plus `MirServer/Mir200/!Setup.txt:290` establish
+a 2500 ms default/checked-in value while allowing a runtime Setup override;
+the data must not claim the interval is immutable.
+
+The gas source is `TGasAttackMonster.sub_4A9C78/AttackTarget`
+(`ObjMon.pas:874-918`) and inherited `GetAttackDir`
+(`ObjBase.pas:18449-18502`): one adjacent target, magic-defense damage, stone
+status for 5.0 seconds, denominator offset 20, and the strict accuracy gate
+`Random(speedPoint) < hitPoint`; the poison denominator owner is the target
+anti-poison value. The moth class adds only its
+separate hidden reveal branch (`ObjMon.pas:1581-1590`), denominator 3 for IDs
+128/168. The line source is `TLightingZombi.LightingAttack/Run`
+(`ObjMon.pas:1131-1188`), with strict `<6` axis gate and 9-cell advance;
+`MagPassThroughMagic` (`ObjBase.pas:2536+`) documents the 600 ms hit feedback
+and undead multiplier 1.5. The mixed source uses `HitMagAttackTarget`
+(`ObjMon.pas:1039-1047` for cow and `1502-1508` for Sculture); the source HP
+settlement/timing remains the project adapter contract. The guard descriptor
+sets `useAccuracy=false`: `TArcherGuard` (`ObjMon2.pas:904-923`) has no
+`Random(speedPoint) < hitPoint` gate before immediate physical settlement. The
+guard source is
+`TArcherGuard` (`ObjMon2.pas:889-950`): Manhattan target selection, immediate
+physical HP settlement, and presentation delay `{baseSeconds:0.6,
+perChebyshevGuSeconds:0.05}`; the latter is not an HP delay.
+
+No `life_type`/`undead` field is present in the formal summon template
+`assets/data/vanilla_176/taoist_summon_baseline.json` (`templates.skeleton`,
+lines 37-87) or in the primary skill record
+`assets/data/vanilla_176/skills_source_of_truth_v1.json`
+(`taoist.summon_skeleton`, lines 3447-3570); those records establish
+`new_pet_template=skeleton`, `database_names=[BoneFamiliar]`, and stats only.
+The primary skills lane therefore cannot prove a summon life type, and the
+summon template's `monster_id=145` must not be joined to canonical monster 145
+(the latter is an Archer exact ID). An auxiliary-2 Jev release note
+(`server.crystal.Jev`, `Jev/README.md:840`, SHA-256
+`2C7102B20C278E6356DAB8CA57B48C1D71B2C1FBCFF4928C3FE28AC284C66104`) says
+`BoneFamiliar` was classified undead, but that name-only release note is
+insufficient to promote a stable summon `life_type`; line79's 1.5 branch must
+remain conditional on a separately proven target flag. This package does not
+modify skills or summon data.
+
+Existing non-delivery leaves are preserved. In particular ID46/60 keep their
+original timing/serviceBehavior/move/collision/onHit fields, ID160 keeps
+`largeClientBoss`, `dormant`, and `wakeRange`, the cow variants are independent
+profiles, and ID169's shared `moth_control` mapping is untouched. IDs 226-234
+remain the existing human-frozen `combatEnabled=false` profiles; their
+DATA_HOLD is actor-class identity, not a reason to add combat delivery here.
+
+Integration must consume the typed named kinds from the canonical profile and
+range policy, add strict validation/fail-closed handling for malformed named
+delivery, and accept the poison shape `decrease_health` plus `point=1`,
+`tickDamage=2`, and configurable interval evidence. Sol owns the Enemy/runtime
+consumer and expected-range tests; this package changes no Enemy or tests and
+runs no Godot/import.
+
+Static checks for this package: parse both source JSON files, run
+`C:\Windows\py.exe -3.12 tools/build_canonical_monster_catalog.py` and its
+`--check` mode, compare non-target canonical leaves against the base, and run
+`git diff --check`. The isolated tree has no source manifest for
+`verify_source_priority_policy.py`; the main tree's already-passing policy
+check remains the integration evidence.
