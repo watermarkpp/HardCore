@@ -3,6 +3,8 @@ extends Node
 
 class AudioProbe extends Node:
 	var calls: Array[Dictionary] = []
+	var prompt_status := "played"
+	var prompt_request_count := 0
 
 	func _ready() -> void:
 		add_to_group(&"audio_runtime_service")
@@ -24,13 +26,14 @@ class AudioProbe extends Node:
 		audio_owner_key: String,
 		context: Dictionary = {},
 	) -> Dictionary:
+		prompt_request_count += 1
 		calls.append({
 			"monster_id": monster_id,
 			"semantic_event": "combat_prompt",
 			"audio_owner_key": audio_owner_key,
 			"context": context.duplicate(true),
 		})
-		return {"status": "played"}
+		return {"status": prompt_status}
 
 	func end_monster_combat_session(audio_owner_key: String, reason := "") -> Dictionary:
 		calls.append({
@@ -53,6 +56,43 @@ func _count(probe: AudioProbe, semantic_event: String) -> int:
 	return result
 
 
+func _assert_rejected_entry_is_one_shot(
+	probe: AudioProbe,
+	rejection_status: String,
+	case_name: String,
+) -> void:
+	probe.prompt_status = rejection_status
+	var request_count_before := probe.prompt_request_count
+	var actor := EnemyActor.new()
+	actor.name = "RejectedEntry_%s" % case_name
+	actor.monster_id = 21
+	actor.monster_data = {"monster_id": 21}
+	actor.max_hp = 100
+	actor.current_hp = 100
+	actor.global_position = Vector2(48.0, 48.0)
+	add_child(actor)
+	var target := Node2D.new()
+	target.name = "RejectedEntryTarget_%s" % case_name
+	target.global_position = Vector2(64.0, 48.0)
+	add_child(target)
+	await get_tree().process_frame
+	actor.target = target
+	await get_tree().process_frame
+	assert(
+		probe.prompt_request_count == request_count_before + 1,
+		"%s entry must issue one service request" % case_name,
+	)
+	for _tick in range(120):
+		actor._audio_try_enter_combat_session()
+	assert(
+		probe.prompt_request_count == request_count_before + 1,
+		"%s rejection must not retry for 120 ticks" % case_name,
+	)
+	actor._audio_end_combat_session("explicit_disengage")
+	actor.queue_free()
+	target.queue_free()
+
+
 func _run() -> void:
 	EnemyActor.set_audio_service_cache_clock_for_test(1000)
 	var lookup_before_missing := EnemyActor.audio_service_lookup_count_for_test()
@@ -72,9 +112,9 @@ func _run() -> void:
 	await get_tree().process_frame
 	enemy.target = target
 
-	# A first miss is shared and recoverable. Installing a service inside the
-	# one-second negative window must not cause another group scan; expiry must
-	# discover it naturally without any production reset call.
+	# The target edge is a real gameplay entry even when the service is absent.
+	# Installing a service inside the one-second negative window must not cause a
+	# retry: an audio rejection is not evidence that combat did not begin.
 	assert(
 		EnemyActor.audio_service_lookup_count_for_test() == lookup_before_missing + 1,
 		"first missing service must perform one lookup",
@@ -83,7 +123,8 @@ func _run() -> void:
 	add_child(probe)
 	await get_tree().process_frame
 	enemy._audio_try_enter_combat_session()
-	assert(probe.calls.is_empty(), "negative-cache window must stay fail-closed")
+	assert(probe.calls.is_empty(), "rejected entry must not retry within the same session")
+	enemy._audio_end_combat_session("explicit_disengage")
 	EnemyActor.set_audio_service_cache_clock_for_test(2000)
 	enemy._audio_try_enter_combat_session()
 
@@ -99,6 +140,24 @@ func _run() -> void:
 		str(probe.calls[0].get("context", {}).get("source", "")) == "enemy_actor",
 		"monster audio context must identify the actor hook",
 	)
+
+	# W3's optional property form is probed once per target instance. Repeated
+	# semantic contexts must reuse that result instead of walking the property
+	# list on every combat tick.
+	var epoch_target := PlayerCharacter.new()
+	enemy.primary_target = epoch_target
+	var epoch_probe_before := enemy.audio_combat_epoch_property_probe_count_for_test()
+	enemy._audio_context("attack_start")
+	var epoch_probe_after := enemy.audio_combat_epoch_property_probe_count_for_test()
+	for _context_call in range(120):
+		enemy._audio_context("attack_frame")
+	assert(epoch_probe_after == epoch_probe_before + 1, "epoch property probe must occur once")
+	assert(
+		enemy.audio_combat_epoch_property_probe_count_for_test() == epoch_probe_after,
+		"epoch property probe must stay cached across 120 contexts",
+	)
+	epoch_target.free()
+	enemy.primary_target = null
 	var transient_end := probe.end_monster_combat_session("test-owner", "los_interrupted")
 	assert(transient_end.get("status", "") == "ended", "probe lifecycle hook should accept session transition")
 	assert(_count(probe, "combat_prompt") == 1, "LOS interruption must not reopen a combat prompt")
@@ -155,6 +214,14 @@ func _run() -> void:
 	enemy._audio_observe_visual_state()
 	enemy._audio_observe_visual_state()
 	assert(_count(probe, "ambient") == 0, "walk/turn cadence must not emit continuous ambient")
+
+	# A real target edge remains one-shot even when the service rejects the
+	# prompt. Missing sample, muted SFX and exhausted budget each simulate a
+	# rejected service result; 120 pursuit ticks must not add requests.
+	await _assert_rejected_entry_is_one_shot(probe, "load_failed", "missing_sample")
+	await _assert_rejected_entry_is_one_shot(probe, "sfx_disabled", "sfx_off")
+	await _assert_rejected_entry_is_one_shot(probe, "monster_polyphony_limit", "budget")
+	probe.prompt_status = "played"
 
 	# The death boundary closes the session but does not synthesize a monster
 	# death sound without a dedicated production source contract.
