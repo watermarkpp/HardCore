@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "total": 1,
+  "git_head": "6859e1106ec3dfffc49371bff5394a2601b8f910",
+  "results": [
+    {
+      "test_name": "warehouse_gothic_ui_test",
+      "test_path": "tests/warehouse_gothic_ui_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;timeout_60s;non_zero_exit_code_-1"
+    }
+  ],
+  "engine_log_errors": 0,
+  "passed": 0,
+  "generated_at": "2026-09-09T13:45:43.8752408+08:00",
+  "failed": 1
+}

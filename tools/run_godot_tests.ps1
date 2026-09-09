@@ -553,7 +553,12 @@ $Suites.critical = @($Suites.critical + @(
     'tests/item_drop_instance_persistence_test.tscn',
     'tests/warrior_slaying_release_integration_test.tscn',
     'tests/audio_w4_actor_service_test.tscn',
-    'tests/audio_w4_contract_test.tscn'
+    'tests/audio_w4_contract_test.tscn',
+    'tests/inventory_equipment_ui_test.tscn',
+    'tests/warehouse_gothic_ui_test.tscn',
+    'tests/shop_gothic_ui_test.tscn',
+    'tests/shared_warehouse_transaction_test.tscn',
+    'tests/shared_warehouse_migration_test.tscn'
 ) | Select-Object -Unique)
 
 # ── Q0-A: final judgement contract ──

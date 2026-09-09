@@ -6,6 +6,7 @@
 - 怪物等级从 canonical classification/明确 spawn classification 读取。新增 overhead 兼容入口，保留原四参数 `setup`；EnemyActor 接线由 V3 唯一写者或 integration 完成。Boss 优先于 elite，普通无标，不依据名字和 HP 猜测。
 - 名称格式化只在玩家展示边界执行；以已确认的稳定 monster_id 变体集合消除末尾变体编号，不全局删除数字，不改 canonical/任务/音频/掉落身份。
 - 光柱只读取冻结的 `assets/data/drop/dpv2_item_tier_authority_v1.json` 精确 item ID/档位。`WOOMA_GEAR`、`ZUMA_GEAR`、`REDMOON_SET` 为明确核心；其他档位逐项裁决，不因售价或名字自行提升。药、书、油、金币一律无光柱。
+- 本轮 integration 明确纳入的其他装备档位为 `HIGH_CLASS_WEAPON`、`EXPANDED_HIGH_WEAPON`、`LEGENDARY_WEAPON`、`NEW_CLOTHES`、`MAGICBLOOD_RAINBOW`、`SPECIAL_RING`。要求展示记录 `kind == equipment`，并将冻结权威的六种 `item_type`（武器、盔甲、头盔、项链、手镯、戒指）严格识别为装备；现表没有字面 `equipment` 类型，未知类型不放行。`PRAYER_MEMORY`、`MYSTERY_SIGNATURE`、`FUNCTIONAL_SPECIAL` 不是可直接比较的线性等级，本轮不整体纳入。这是项目显示策略，不是新的掉率或来源事实；冻结 Tier 文件、分母和抽样逻辑不变。
 - 小极品颜色由实例 `drop_affix.applied` 和经校验的 `modifiers` 决定，与模板档位光柱独立。不得把 descriptor 的按模板缓存当实例权威，避免一件极品污染同 ID 普通物品。
 - 光柱归属 LootPickup 生命周期；失败保留、确认入账才移除，切图不留孤儿。不采用每件大型粒子/灯光/全局查找。
 - W7 冻结实例由 `PlayerState.create_drop_item_instance` 生成。跨树未合入之前可使用精确候选合同夹具，不另写第二个实例生成器。正式联调必须使用主树 API。
