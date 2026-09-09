@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-09-09T13:25:47.6541917+08:00",
+  "code_head": "73728f20b224d412cee40bf228fda164d3887f3f",
+  "baseline_head": "cf1d2718befdef7e6cc2fb274fd91ce0759d105f",
+  "checked_count": 7031,
+  "unchanged_count": 7030,
+  "differences": [
+    {
+      "path": "tests/death_drop_budget_queue_test.gd",
+      "baseline_sha256": "FA03969AC92415A9F0A5B33082AFF2F9E6CFD0493B87A2247128A487C988F8A3",
+      "current_sha256": "1AEF1D16CBD55B89677B968E0AFA7822C1F6B46324014696D2FAF488DD6FD767",
+      "adjudication": "authorized_test_fixture_adaptation",
+      "reason": "Queue-only fixture has no formal map; identity placement provider preserves queue-budget assertions while actual WORLD placement is covered by loot_world_placement_integration_test. No drop probability or production data change."
+    }
+  ]
+}

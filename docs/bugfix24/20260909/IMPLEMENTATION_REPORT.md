@@ -54,6 +54,10 @@
 
 ## 最终验收
 
+冻结清单阶段复核（`frozen_scope_checkpoint.json`）：7031项中7030项SHA-256相同；唯一差异是已记录的死亡掉落队列测试夹具新增无地图位置provider，真实WORLD测试独立承担落点验证，未改概率/生产数据。当前diff复核接受此必要测试适配，不将其隐去或记作零差异。
+
+下一APK配置已固定72 / `1.21.0-r3-closure`，`73728f20`上预检PASS，包名仍`com.personal.mafaoffline`。初次预检发现project版本未同步，补齐后通过。未开始正式导出；ADB当前无设备。
+
 `dd919c21` UI 集成烟测：inventory_equipment_ui_test / equipment_luck_test 2/2 PASS，runner `131714_229_14116`；用户已明确接受，字号缩小2号且尺寸测量同步。共享仓库金币按钮仍在后续包。
 
 `efdbde7c` W4 六条件证据已并入。原始 samples 保存在 `evidence/audio_performance/{candidate,baseline}`。总actor20/50、实际可听活跃3/11，旧版service播放0、候选3；不是等量全攻击混音负载，也不能支持普遍性能提升。候选50的actor驱动p50/p95/p99为1.038/1.522/1.601ms，旧on为0.898/1.358/1.562ms；如实保留不利数据。硬件混音、Android与真实20/50全攻击仍未验证。
