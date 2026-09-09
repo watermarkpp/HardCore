@@ -47,6 +47,7 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	await _wait_for_formal_world(game)
 	var service: Node = game._audio_runtime_service
 	assert(service != null, "shared audio service missing")
 	service.event_started.connect(_capture_event)
@@ -157,3 +158,23 @@ func _run() -> void:
 	PlayerState.equipment = previous_equipment
 	print("PLAYER_CORE_AUDIO_HOOK_PASS：受击/死亡动作一次、性别映射、物理命中双层、miss/魔法/致死无伪contact")
 	get_tree().quit(0)
+
+
+func _wait_for_formal_world(game: Node) -> void:
+	var deadline_ms := Time.get_ticks_msec() + 5000
+	while (
+		(
+			bool(game._world_bootstrap_in_progress)
+			or bool(game._map_transition_in_progress)
+			or not bool(game.gameplay_input_is_enabled())
+		)
+		and Time.get_ticks_msec() < deadline_ms
+	):
+		await get_tree().process_frame
+	assert(
+		int(game.current_map_id) >= 0
+			and not bool(game._world_bootstrap_in_progress)
+			and not bool(game._map_transition_in_progress)
+			and bool(game.gameplay_input_is_enabled()),
+		"audio fixture must wait for formal READY before a contact event",
+	)

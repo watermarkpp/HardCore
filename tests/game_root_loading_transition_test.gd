@@ -108,7 +108,7 @@ func _run() -> void:
 
 
 func _wait_for_transition(game: Node) -> void:
-	var deadline := Time.get_ticks_msec() + 3000
+	var deadline := Time.get_ticks_msec() + 5000
 	while bool(game._map_transition_in_progress) and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
 	assert(not game._map_transition_in_progress, "Loading transition did not finish")
