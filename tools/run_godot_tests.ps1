@@ -485,7 +485,10 @@ $Suites.audit_upgrade_critical = @(
 )
 
 $Suites.critical = @(
-    'tests/combat_unit_runtime_static_audit_test.tscn'
+    'tests/combat_unit_runtime_static_audit_test.tscn',
+    'tests/android_attack_action_lifecycle_test.tscn',
+    'tests/virtual_joystick_lifecycle_test.tscn',
+    'tests/circular_touch_button_lifecycle_test.tscn'
 ) + @(
     $Suites.caster_visual_critical +
     $Suites.taoist_critical +
