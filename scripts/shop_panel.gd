@@ -8,6 +8,7 @@ const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.g
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const ItemDetailPresenterScript := preload("res://scripts/item_detail_presenter.gd")
 
 signal closed
 signal buy_quotes_requested(stock: Array)
@@ -32,6 +33,7 @@ var sell_tab_button: Button
 var goods_grid: GridContainer
 var goods_buttons: Array[Button] = []
 var detail_label: RichTextLabel
+var item_detail_presenter
 var buy_button: Button
 var repair_button: Button
 var sell_quantity_row: Control
@@ -96,6 +98,14 @@ func _ready() -> void:
 	_build_goods_section()
 	_build_detail_section()
 	_build_compatibility_list()
+	item_detail_presenter = ItemDetailPresenterScript.new()
+	item_detail_presenter.position = Vector2(704, 126)
+	item_detail_presenter.size = Vector2.ZERO
+	item_detail_presenter.z_as_relative = false
+	item_detail_presenter.z_index = 4095
+	item_detail_presenter.set_meta("calibration_runtime_text", true)
+	add_child(item_detail_presenter)
+	detail_label = item_detail_presenter.detail_label
 	GothicFrameFactoryScript.seal_modal_rings(self)
 	PlayerState.profile_changed.connect(_refresh_gold)
 	PlayerState.equipment_changed.connect(_refresh_repair_preview)
@@ -207,17 +217,19 @@ func _build_detail_section() -> void:
 	var detail_title := _section_title("DetailTitle", "商品详情", 366)
 	detail_title.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
 	panel.add_child(detail_title)
-	detail_label = RichTextLabel.new()
-	detail_label.name = "DetailLabel"
-	detail_label.set_meta("calibration_runtime_text", true)
-	detail_label.position = Vector2(36.1974487304688, 129.199844360352)
-	detail_label.size = Vector2(287.927917480469, 150.000259399414)
-	detail_label.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
-	detail_label.bbcode_enabled = true
-	detail_label.fit_content = false
-	detail_label.scroll_active = true
-	detail_label.theme_type_variation = "GothicDetailText"
-	panel.add_child(detail_label)
+	# Retain the formerly calibrated path as a hidden compatibility anchor. The
+	# visible text sink is the shared presenter, so shop and inventory cannot
+	# drift into separate attribute-window implementations.
+	var legacy_detail := RichTextLabel.new()
+	legacy_detail.name = "DetailLabel"
+	legacy_detail.set_meta("calibration_runtime_text", true)
+	legacy_detail.position = Vector2(36.1974487304688, 129.199844360352)
+	legacy_detail.size = Vector2(287.927917480469, 150.000259399414)
+	legacy_detail.set_meta("calibration_layout_revision", SHARED_SHOP_LAYOUT_REVISION)
+	legacy_detail.visible = false
+	legacy_detail.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(legacy_detail)
+	detail_label = null
 	buy_button = Button.new()
 	buy_button.name = "BuyButton"
 	buy_button.text = "购买"
@@ -383,6 +395,8 @@ func open_for(display_name: String, new_stock: Array, merchant_context: Dictiona
 	for entry: Variant in stock:
 		item_list.add_item(str(entry.get("name", "物品")))
 	_set_trade_mode("buy")
+	if item_detail_presenter != null:
+		item_detail_presenter.hide_detail()
 	_refresh_gold()
 	_refresh_repair_preview()
 	show()
@@ -865,12 +879,17 @@ func _select_sell_item(inventory_index: int) -> void:
 	var sellable := bool(quote.get("sellable", false))
 	_set_sell_actions_enabled(sellable)
 	if quote.is_empty():
-		detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % [record.get("name", "物品"), count]
+		_show_shop_detail(str(record.get("name", "物品")), "数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % count, inventory_index, true)
 		return
-	detail_label.text = _sell_item_detail(
-		record,
-		GameData.get_item_record(str(record.get("name", ""))),
-		quote,
+	_show_shop_detail(
+		str(record.get("name", "物品")),
+		_sell_item_detail(
+			record,
+			GameData.get_item_record(str(record.get("name", ""))),
+			quote,
+		),
+		inventory_index,
+		true,
 	)
 
 func _show_sell_detail(inventory_index: int, quote: Dictionary) -> void:
@@ -878,12 +897,34 @@ func _show_sell_detail(inventory_index: int, quote: Dictionary) -> void:
 	if record.is_empty():
 		return
 	var item := GameData.get_item_record(str(record.get("name", "")))
-	detail_label.text = _sell_item_detail(record, item, quote)
+	_show_shop_detail(str(record.get("name", "物品")), _sell_item_detail(record, item, quote), inventory_index, true)
+
+
+func _show_shop_detail(title: String, body: String, index: int, selling: bool) -> void:
+	if item_detail_presenter == null:
+		return
+	var anchor: Control = null
+	if selling:
+		anchor = _sell_card_for_inventory_index(index)
+	elif index >= 0 and index < goods_buttons.size():
+		anchor = goods_buttons[index]
+	var selected_rect := Rect2(anchor.get_global_transform_with_canvas().origin, anchor.size) if anchor != null else Rect2()
+	var panel_rect := Rect2(get_global_transform_with_canvas().origin, size)
+	var avoid_rects: Array = []
+	for path in ["GoodsPanel", "DetailPanel/BuyButton", "DetailPanel/SellQuantityRow", "DetailPanel/RepairButton", "CloseButton"]:
+		var node := get_node_or_null(path) as Control
+		if node != null and node.visible:
+			avoid_rects.append(Rect2(node.get_global_transform_with_canvas().origin, node.size))
+	item_detail_presenter.show_text(title, body, {
+		"selected_rect": selected_rect,
+		"safe_rect": panel_rect.grow(-18.0),
+		"avoid_rects": avoid_rects,
+	})
+	detail_label = item_detail_presenter.detail_label
 
 
 func _sell_item_detail(record: Dictionary, item: Dictionary, quote: Dictionary) -> String:
 	var lines: Array[String] = [
-		"[color=#f2c783][font_size=20]%s[/font_size][/color]" % str(record.get("name", "物品")),
 		"数量：%d" % maxi(1, int(record.get("count", 1))),
 	]
 	if not item.is_empty():
@@ -1187,7 +1228,7 @@ func _on_item_selected(index: int) -> void:
 		if bool(quote.get("valid", false))
 		else "[color=#b8a58a]%s[/color]" % str(quote.get("reason", "等待玩法价格报价"))
 	)
-	detail_label.text = "[color=#f2c783][font_size=20]%s[/font_size][/color]\n%s\n\n%s" % [item_name, price_line, description]
+	_show_shop_detail(item_name, "%s\n\n%s" % [price_line, description], index, false)
 	_refresh_buy_action_enabled()
 
 

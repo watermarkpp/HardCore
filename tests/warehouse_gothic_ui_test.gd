@@ -154,6 +154,8 @@ func _run() -> void:
 	assert((panel._bag_cells[1].get_node("ItemButton") as Button).theme_type_variation == &"GothicComponentSelectedSlotButton", "人物背包第二个多选框没有显示")
 	assert(panel.bag_list.get_selected_items().size() == 2, "兼容列表没有镜像人物背包多选")
 	assert(panel.transfer_detail_label.text == "已选择 2 件背包物品", "中间转移栏没有显示人物背包多选数量")
+	assert(panel.item_detail_presenter.visible and panel.item_detail_presenter.title_label.text == "已选择 2 件物品", "仓库多选没有进入共享属性浮窗")
+	assert(not panel.item_detail_presenter.z_as_relative and panel.item_detail_presenter.z_index >= 2048, "仓库共享属性浮窗没有置于运行时最高层")
 	panel._select_item("bag", 0)
 	assert(panel.selected_bag_indices.size() == 1 and panel.selected_bag_indices.has(1), "再次点击人物背包格没有取消单个选择")
 	panel._select_item("bag", 0)
@@ -182,6 +184,7 @@ func _run() -> void:
 	assert(panel._warehouse_occupied_count() == stash_count + 2, "批量存入后个人仓库数量错误")
 	assert(panel.warehouse_page == 1, "存入物品后不应跳离当前选择的仓库页")
 	assert(str(panel._warehouse_record(100).get("name", "")) == deposited_names[0] and str(panel._warehouse_record(101).get("name", "")) == deposited_names[1], "两个物品没有按稳定顺序存入当前仓库页")
+	assert(panel.item_detail_presenter.visible and panel.item_detail_presenter.title_label.text == deposited_names[1], "存入成功后共享属性浮窗没有跟随同一实例")
 	assert(panel._warehouse_record(2).is_empty(), "存入第二页时不应占用第一页空格")
 	assert(panel.selected_bag_indices.is_empty() and panel.selected_bag_index == -1, "批量存入成功后仍保留已转移选择")
 
@@ -199,6 +202,7 @@ func _run() -> void:
 	assert(panel._refresh_execution_count == refresh_before_withdraw + 1, "批量取仓信号的 deferred refresh 重复执行")
 	assert(PlayerState.inventory_occupied_count() == bag_count, "取出后人物背包占用数量错误")
 	assert(str(PlayerState.inventory[0].get("name", "")) == deposited_names[0] and str(PlayerState.inventory[1].get("name", "")) == deposited_names[1], "批量取出没有按稳定顺序填回空槽")
+	assert(panel.item_detail_presenter.visible and panel.item_detail_presenter.title_label.text == deposited_names[1], "取出成功后共享属性浮窗没有跟随同一实例")
 	assert(panel._warehouse_occupied_count() == stash_count, "取出后个人仓库数量错误")
 	assert(panel._warehouse_record(100).is_empty() and panel._warehouse_record(101).is_empty(), "批量取出后当前页两个物品格没有清空")
 

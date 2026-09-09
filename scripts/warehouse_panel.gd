@@ -6,6 +6,7 @@ const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const ItemDetailPresenterScript = preload("res://scripts/item_detail_presenter.gd")
 
 signal closed
 signal warehouse_sort_requested
@@ -72,6 +73,11 @@ var _grid_cell_initialization_running := false
 var _action_feedback_serial := 0
 var _active_selection_side := ""
 var _last_transfer_batch_result: Dictionary = {}
+var selected_bag_refs: Array[Dictionary] = []
+var selected_stash_refs: Array[Dictionary] = []
+var selected_ref: Dictionary = {}
+var _selection_revision := 0
+var item_detail_presenter
 
 
 func _ready() -> void:
@@ -99,6 +105,13 @@ func _ready() -> void:
 	_build_header()
 	_build_storage_sections()
 	_build_compatibility_lists()
+	item_detail_presenter = ItemDetailPresenterScript.new()
+	item_detail_presenter.position = Vector2(408, 112)
+	item_detail_presenter.size = Vector2.ZERO
+	item_detail_presenter.z_as_relative = false
+	item_detail_presenter.z_index = 4095
+	item_detail_presenter.set_meta("calibration_runtime_text", true)
+	add_child(item_detail_presenter)
 	GothicFrameFactoryScript.seal_modal_rings(self)
 	visibility_changed.connect(_on_visibility_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
@@ -315,6 +328,7 @@ func open_panel() -> void:
 
 
 func _on_inventory_changed() -> void:
+	_selection_revision += 1
 	if not visible:
 		_refresh_pending = true
 		return
@@ -333,6 +347,7 @@ func refresh() -> void:
 	_refresh_scheduled = false
 	_refresh_execution_count += 1
 	_sanitize_transfer_selections()
+	_reconcile_semantic_selections()
 	_fill_compatibility_list(bag_list, PlayerState.inventory, selected_bag_indices)
 	_fill_compatibility_list(stash_list, PlayerState.warehouse_inventory, selected_stash_indices)
 	_fill_grid(bag_grid, PlayerState.inventory, 0, BAG_CAPACITY, "bag", selected_bag_indices)
@@ -552,14 +567,35 @@ func _select_item(side: String, index: int) -> void:
 		# column starts a new batch and removes every selection from the old side.
 		selected_bag_indices.clear()
 		selected_stash_indices.clear()
+		selected_bag_refs.clear()
+		selected_stash_refs.clear()
+		selected_ref = {}
 		_active_selection_side = side
-	var selection := selected_bag_indices if side == "bag" else selected_stash_indices
+	var selection: Dictionary = selected_bag_indices if side == "bag" else selected_stash_indices
+	var refs: Array[Dictionary] = selected_bag_refs if side == "bag" else selected_stash_refs
+	var record := _bag_record(index) if side == "bag" else _warehouse_record(index)
+	var selection_ref := _selection_ref(side, index, record)
+	var existing_position := -1
+	for ref_index in range(refs.size()):
+		if _same_selection_ref(refs[ref_index], selection_ref):
+			existing_position = ref_index
+			break
 	if selection.has(index):
 		selection.erase(index)
+		if existing_position >= 0:
+			refs.remove_at(existing_position)
 	else:
 		selection[index] = true
+		refs.append(selection_ref)
+	if side == "bag":
+		selected_bag_indices = selection
+		selected_bag_refs = refs
+	else:
+		selected_stash_indices = selection
+		selected_stash_refs = refs
 	if selection.is_empty():
 		_active_selection_side = ""
+	selected_ref = refs.back() if not refs.is_empty() else {}
 	_sync_primary_selection_indices()
 	_refresh_transfer_selection_visuals()
 	_refresh_transfer_action_states()
@@ -613,13 +649,18 @@ func _sanitize_transfer_selections() -> void:
 			selected_stash_indices.erase(raw_index)
 	if _active_selection_side == "bag":
 		selected_stash_indices.clear()
+		selected_stash_refs.clear()
 	elif _active_selection_side == "stash":
 		selected_bag_indices.clear()
+		selected_bag_refs.clear()
 	elif not selected_bag_indices.is_empty():
 		_active_selection_side = "bag"
 		selected_stash_indices.clear()
+		selected_stash_refs.clear()
 	elif not selected_stash_indices.is_empty():
 		_active_selection_side = "stash"
+		selected_bag_indices.clear()
+		selected_bag_refs.clear()
 	if (
 		(_active_selection_side == "bag" and selected_bag_indices.is_empty())
 		or (_active_selection_side == "stash" and selected_stash_indices.is_empty())
@@ -647,6 +688,8 @@ func _refresh_cell_selection(side: String, data_index: int, selected: bool) -> v
 func _change_warehouse_page(delta: int) -> void:
 	warehouse_page = clampi(warehouse_page + delta, 0, WAREHOUSE_PAGE_COUNT - 1)
 	selected_stash_indices.clear()
+	selected_stash_refs.clear()
+	selected_ref = {}
 	if _active_selection_side == "stash":
 		_active_selection_side = ""
 	_sync_primary_selection_indices()
@@ -668,6 +711,42 @@ func _refresh_transfer_detail() -> void:
 		transfer_detail_label.text = "当前页已满"
 	else:
 		transfer_detail_label.text = "选择两侧物品"
+	_update_detail_presenter()
+
+
+func _update_detail_presenter() -> void:
+	if item_detail_presenter == null:
+		return
+	var side := str(selected_ref.get("container", ""))
+	var index := int(selected_ref.get("slot", -1))
+	var refs := selected_bag_refs if side == "bag" else selected_stash_refs
+	if refs.size() > 1:
+		item_detail_presenter.show_multi(refs.size(), _presenter_context(side, index))
+		return
+	var record := _bag_record(index) if side == "bag" else _warehouse_record(index)
+	if record.is_empty():
+		item_detail_presenter.hide_detail()
+		return
+	var item := GameData.get_item_record(str(record.get("name", "")))
+	if item.is_empty():
+		item_detail_presenter.show_message("物品目录缺少此记录。", _presenter_context(side, index))
+		return
+	item_detail_presenter.show_item(item, record, _presenter_context(side, index))
+
+
+func _presenter_context(side: String, index: int) -> Dictionary:
+	var cell: Control = null
+	var display_index := index if side == "bag" else index - warehouse_page * WAREHOUSE_PAGE_CAPACITY
+	var cells := _bag_cells if side == "bag" else _stash_cells
+	if display_index >= 0 and display_index < cells.size():
+		cell = cells[display_index].get_node("ItemButton") as Control
+	var selected_rect := Rect2(cell.get_global_transform_with_canvas().origin, cell.size) if cell != null else Rect2()
+	var panel_rect := Rect2(get_global_transform_with_canvas().origin, size)
+	var avoid_rects: Array = [
+		Rect2((get_node("StashSection").get_global_transform_with_canvas().origin), (get_node("StashSection") as Control).size),
+		Rect2((get_node("BagSection").get_global_transform_with_canvas().origin), (get_node("BagSection") as Control).size),
+	]
+	return {"selected_rect": selected_rect, "safe_rect": panel_rect.grow(-18.0), "avoid_rects": avoid_rects}
 
 
 func _fill_compatibility_list(list: ItemList, records: Array, selected_indices: Dictionary) -> void:
@@ -685,6 +764,11 @@ func _deposit() -> void:
 	if _active_selection_side != "bag" or selected_bag_indices.is_empty():
 		return
 	var source_indices := _sorted_selection_indices(selected_bag_indices)
+	var moving_refs: Array[Dictionary] = []
+	for raw_index: Variant in source_indices:
+		var record := _bag_record(int(raw_index))
+		if not record.is_empty():
+			moving_refs.append(_selection_ref("bag", int(raw_index), record))
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(deposit_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.deposit")
 	var target_slots := _free_slots_on_current_page(source_indices.size())
@@ -693,6 +777,7 @@ func _deposit() -> void:
 	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
 	for raw_index: Variant in result.get("completed_source_indices", []):
 		selected_bag_indices.erase(int(raw_index))
+	_selected_transfer_refs_after_deposit(moving_refs, result)
 	if selected_bag_indices.is_empty():
 		_active_selection_side = ""
 	_sync_primary_selection_indices()
@@ -706,6 +791,11 @@ func _withdraw() -> void:
 	if _active_selection_side != "stash" or selected_stash_indices.is_empty():
 		return
 	var source_indices := _sorted_selection_indices(selected_stash_indices)
+	var moving_refs: Array[Dictionary] = []
+	for raw_index: Variant in source_indices:
+		var record := _warehouse_record(int(raw_index))
+		if not record.is_empty():
+			moving_refs.append(_selection_ref("stash", int(raw_index), record))
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(withdraw_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.withdraw")
 	var result: Dictionary = PlayerState.withdraw_from_warehouse_batch(source_indices)
@@ -713,6 +803,7 @@ func _withdraw() -> void:
 	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
 	for raw_index: Variant in result.get("completed_warehouse_slots", []):
 		selected_stash_indices.erase(int(raw_index))
+	_selected_transfer_refs_after_withdraw(moving_refs, result)
 	if selected_stash_indices.is_empty():
 		_active_selection_side = ""
 	_sync_primary_selection_indices()
@@ -727,6 +818,90 @@ func _sorted_selection_indices(selection: Dictionary) -> Array[int]:
 		result.append(int(raw_index))
 	result.sort()
 	return result
+
+
+func _selected_instance_ids(refs: Array[Dictionary]) -> Array[String]:
+	var ids: Array[String] = []
+	for selection_ref: Dictionary in refs:
+		var instance_id := str(selection_ref.get("instance_id", ""))
+		if not instance_id.is_empty():
+			ids.append(instance_id)
+	return ids
+
+
+func _selected_indices_for_instance_ids(records: Array, ids: Array[String]) -> Array[int]:
+	var result: Array[int] = []
+	for index in range(records.size()):
+		var value: Variant = records[index]
+		if not value is Dictionary:
+			continue
+		if str((value as Dictionary).get("instance_id", "")) in ids:
+			result.append(index)
+	return result
+
+
+func _selected_refs_for_indices(side: String, records: Array, indices: Array[int]) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for index in indices:
+		if index >= 0 and index < records.size() and records[index] is Dictionary and not (records[index] as Dictionary).is_empty():
+			result.append(_selection_ref(side, index, records[index]))
+	return result
+
+
+func _selected_transfer_refs_after_deposit(moving_refs: Array[Dictionary], result: Dictionary) -> void:
+	var ids := _selected_instance_ids(moving_refs)
+	if not bool(result.get("success", false)):
+		return
+	if not bool(result.get("complete", false)):
+		selected_bag_indices.clear()
+		selected_bag_refs.clear()
+		for selection_ref: Dictionary in moving_refs:
+			var source_index := int(selection_ref.get("slot", -1))
+			if source_index not in result.get("completed_source_indices", []) and not _bag_record(source_index).is_empty():
+				selected_bag_indices[source_index] = true
+				selected_bag_refs.append(_selection_ref("bag", source_index, _bag_record(source_index)))
+		_active_selection_side = "bag" if not selected_bag_refs.is_empty() else ""
+		selected_ref = selected_bag_refs.back() if not selected_bag_refs.is_empty() else {}
+		return
+	var moved_indices := _selected_indices_for_instance_ids(PlayerState.warehouse_inventory, ids)
+	if moved_indices.is_empty():
+		return
+	var followed_refs := _selected_refs_for_indices("stash", PlayerState.warehouse_inventory, moved_indices)
+	selected_bag_indices.clear()
+	selected_bag_refs.clear()
+	selected_stash_indices.clear()
+	selected_stash_refs.clear()
+	# The selection itself is cleared after a successful batch, while the
+	# presenter keeps following the same instance at its new location.
+	_active_selection_side = ""
+	selected_ref = followed_refs.back() if not followed_refs.is_empty() else {}
+
+
+func _selected_transfer_refs_after_withdraw(moving_refs: Array[Dictionary], result: Dictionary) -> void:
+	var ids := _selected_instance_ids(moving_refs)
+	if not bool(result.get("success", false)):
+		return
+	if not bool(result.get("complete", false)):
+		selected_stash_indices.clear()
+		selected_stash_refs.clear()
+		for selection_ref: Dictionary in moving_refs:
+			var source_slot := int(selection_ref.get("slot", -1))
+			if source_slot not in result.get("completed_warehouse_slots", []) and not _warehouse_record(source_slot).is_empty():
+				selected_stash_indices[source_slot] = true
+				selected_stash_refs.append(_selection_ref("stash", source_slot, _warehouse_record(source_slot)))
+		_active_selection_side = "stash" if not selected_stash_refs.is_empty() else ""
+		selected_ref = selected_stash_refs.back() if not selected_stash_refs.is_empty() else {}
+		return
+	var moved_indices := _selected_indices_for_instance_ids(PlayerState.inventory, ids)
+	if moved_indices.is_empty():
+		return
+	var followed_refs := _selected_refs_for_indices("bag", PlayerState.inventory, moved_indices)
+	selected_stash_indices.clear()
+	selected_stash_refs.clear()
+	selected_bag_indices.clear()
+	selected_bag_refs.clear()
+	_active_selection_side = ""
+	selected_ref = followed_refs.back() if not followed_refs.is_empty() else {}
 
 
 func _finish_transfer_batch(
@@ -799,6 +974,8 @@ func apply_sort_result(result: Dictionary) -> void:
 		# Sorting changes warehouse slot identity. Any stash-side selection is
 		# stale after a successful authority result and must not target new items.
 		selected_stash_indices.clear()
+		selected_stash_refs.clear()
+		selected_ref = {}
 		if _active_selection_side == "stash":
 			_active_selection_side = ""
 		_sync_primary_selection_indices()
@@ -819,6 +996,86 @@ func _bag_record(slot_index: int) -> Dictionary:
 		return {}
 	var value: Variant = PlayerState.inventory[slot_index]
 	return value if value is Dictionary and not (value as Dictionary).is_empty() else {}
+
+
+func _selection_ref(side: String, index: int, record: Dictionary) -> Dictionary:
+	return {
+		"container": side,
+		"slot": index,
+		"index": index,
+		"instance_id": str(record.get("instance_id", "")),
+		"revision": _selection_revision,
+	}
+
+
+func _same_selection_ref(left: Dictionary, right: Dictionary) -> bool:
+	if left.is_empty() or right.is_empty() or str(left.get("container", "")) != str(right.get("container", "")):
+		return false
+	var left_id := str(left.get("instance_id", ""))
+	var right_id := str(right.get("instance_id", ""))
+	if not left_id.is_empty() or not right_id.is_empty():
+		return not left_id.is_empty() and left_id == right_id
+	return int(left.get("slot", -1)) == int(right.get("slot", -1)) and int(left.get("revision", -1)) == int(right.get("revision", -1))
+
+
+func _find_ref_index(selection_ref: Dictionary) -> int:
+	var side := str(selection_ref.get("container", ""))
+	var records: Array = PlayerState.inventory if side == "bag" else PlayerState.warehouse_inventory
+	var instance_id := str(selection_ref.get("instance_id", ""))
+	if not instance_id.is_empty():
+		for index in range(records.size()):
+			var value: Variant = records[index]
+			if value is Dictionary and str((value as Dictionary).get("instance_id", "")) == instance_id:
+				return index
+	var slot := int(selection_ref.get("slot", -1))
+	if side not in ["bag", "stash"] or slot < 0 or slot >= records.size():
+		return -1
+	var record: Variant = records[slot]
+	if not record is Dictionary or (record as Dictionary).is_empty():
+		return -1
+	return slot if int(selection_ref.get("revision", _selection_revision)) == _selection_revision else -1
+
+
+func _reconcile_semantic_selections() -> void:
+	# A completed transfer clears the source selection but leaves one opaque
+	# instance reference so the shared presenter can follow that same object at
+	# its destination through the refresh signal.  Keep that ephemeral follow
+	# reference only while the destination instance still resolves; ordinary
+	# deselection and page changes explicitly reset selected_ref.
+	var followed_ref := selected_ref
+	var next_bag: Array[Dictionary] = []
+	for selection_ref: Dictionary in selected_bag_refs:
+		var index := _find_ref_index(selection_ref)
+		if index >= 0:
+			next_bag.append(_selection_ref("bag", index, _bag_record(index)))
+	selected_bag_refs = next_bag
+	var next_stash: Array[Dictionary] = []
+	for selection_ref: Dictionary in selected_stash_refs:
+		var index := _find_ref_index(selection_ref)
+		if index >= 0:
+			next_stash.append(_selection_ref("stash", index, _warehouse_record(index)))
+	selected_stash_refs = next_stash
+	selected_bag_indices.clear()
+	for selection_ref: Dictionary in selected_bag_refs:
+		selected_bag_indices[int(selection_ref.get("slot", -1))] = true
+	selected_stash_indices.clear()
+	for selection_ref: Dictionary in selected_stash_refs:
+		selected_stash_indices[int(selection_ref.get("slot", -1))] = true
+	if not selected_bag_refs.is_empty():
+		selected_ref = selected_bag_refs.back()
+	elif not selected_stash_refs.is_empty():
+		selected_ref = selected_stash_refs.back()
+	elif not followed_ref.is_empty() and not str(followed_ref.get("instance_id", "")).is_empty():
+		var followed_index := _find_ref_index(followed_ref)
+		if followed_index >= 0:
+			var followed_side := str(followed_ref.get("container", ""))
+			var followed_record := _bag_record(followed_index) if followed_side == "bag" else _warehouse_record(followed_index)
+			selected_ref = _selection_ref(followed_side, followed_index, followed_record)
+		else:
+			selected_ref = {}
+	else:
+		selected_ref = {}
+	_sync_primary_selection_indices()
 
 
 func _warehouse_slot_has_item(slot_index: int) -> bool:
