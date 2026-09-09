@@ -234,6 +234,7 @@ func query_enemy_nodes_segment_into(
 	end_ground_gu: Vector2,
 	expansion_gu: float,
 	output: Array,
+	stable_order := true,
 ) -> void:
 	output.clear()
 	_neighbor_stale_actor_ids.clear()
@@ -261,8 +262,24 @@ func query_enemy_nodes_segment_into(
 		Rect2(min_gu, max_gu - min_gu),
 		output,
 		query_stamp,
+		stable_order,
 	)
 	_finish_enemy_node_query(output)
+
+
+## Existence-only narrow phases do not need combat ordering. Preserve the
+## identical conservative candidates, live filtering and query-stamp dedup.
+## Callers choosing a victim or applying ordered damage must use the ordered API.
+func query_enemy_nodes_segment_unsorted_into(
+	runtime_map_id: int,
+	start_ground_gu: Vector2,
+	end_ground_gu: Vector2,
+	expansion_gu: float,
+	output: Array,
+) -> void:
+	query_enemy_nodes_segment_into(
+		runtime_map_id, start_ground_gu, end_ground_gu, expansion_gu, output, false,
+	)
 
 
 func _query_enemy_nodes_in_aabb(
@@ -270,6 +287,7 @@ func _query_enemy_nodes_in_aabb(
 	bounds_ground_gu: Rect2,
 	output: Array,
 	query_stamp: int,
+	stable_order := true,
 ) -> void:
 	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
 	if map_buckets.is_empty():
@@ -312,11 +330,14 @@ func _query_enemy_nodes_in_aabb(
 				):
 					_neighbor_stale_actor_ids.append(actor_id)
 					continue
-				_append_neighbor_node_sorted(
-					output,
-					enemy,
-					int(entry.get("stable_combat_order", actor_id)),
-				)
+				if stable_order:
+					_append_neighbor_node_sorted(
+						output,
+						enemy,
+						int(entry.get("stable_combat_order", actor_id)),
+					)
+				else:
+					output.append(enemy)
 
 
 func _finish_enemy_node_query(output: Array) -> void:
