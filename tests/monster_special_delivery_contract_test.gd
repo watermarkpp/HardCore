@@ -108,14 +108,37 @@ func _assert_range_policy(document: Dictionary) -> void:
 	_expect(str(document.get("unitSource", {}).get("tier", "")) == "primary", "attack range unit source is not primary")
 	_expect(str(document.get("unitSource", {}).get("sha256", "")).length() == 64, "attack range unit source hash missing")
 	var expected_ranges := {
+		18: 2.0,
+		42: 7.0,
+		46: 1.0,
 		50: 7.0,
+		60: 1.0,
+		62: 7.0,
 		70: 1.0,
+		76: 1.0,
+		77: 1.0,
+		79: 6.0,
+		103: 2.0,
+		104: 2.0,
 		124: 6.0,
+		128: 1.0,
+		145: 7.0,
+		146: 2.0,
 		150: 7.0,
 		152: 7.0,
+		160: 1.0,
+		168: 1.0,
+		174: 7.0,
+		185: 2.0,
+		186: 7.0,
+		194: 12.0,
 		206: 7.0,
 		220: 2.0,
 		222: 2.0,
+		224: 2.0,
+		235: 1.0,
+		236: 1.0,
+		239: 1.0,
 	}
 	var by_id: Dictionary = {}
 	for record_value: Variant in document.get("records", []):
@@ -133,7 +156,7 @@ func _assert_range_policy(document: Dictionary) -> void:
 		_expect(str(source.get("tier", "")) == "primary", "range source tier mismatch for monsterId=%d" % monster_id)
 		_expect(str(source.get("path", "")).begins_with("dev_art_sources/reference/original_gameofmir/"), "range source is not primary server rule for monsterId=%d" % monster_id)
 		_expect(str(source.get("sha256", "")).length() == 64, "range source hash missing for monsterId=%d" % monster_id)
-		if monster_id in [50, 150, 152, 206]:
+		if monster_id in [42, 50, 62, 145, 150, 152, 174, 186, 206]:
 			_expect(str(record.get("deliveryKind", "")) == "physical_projectile", "archer delivery mismatch for monsterId=%d" % monster_id)
 			_expect(str(record.get("rangeShape", "")) == "euclidean_circle", "archer range shape mismatch for monsterId=%d" % monster_id)
 		if monster_id == 50:
@@ -144,7 +167,7 @@ func _assert_range_policy(document: Dictionary) -> void:
 			_expect(int(binding.get("serverRace", -1)) == 87, "ID50 server race mismatch")
 			_expect(str(binding.get("pascalClass", "")) == "TDualAxeMonster", "ID50 primary actor class mismatch")
 			_expect(str(binding.get("attackMethod", "")) == "FlyAxeAttack", "ID50 primary attack method mismatch")
-		if monster_id in [220, 222]:
+		if monster_id in [220, 222, 224]:
 			_expect(str(record.get("deliveryKind", "")) == "target_magic", "caster delivery mismatch for monsterId=%d" % monster_id)
 			_expect(str(record.get("rangeShape", "")) == "chebyshev_square", "caster source grid shape mismatch for monsterId=%d" % monster_id)
 			_expect(bool(record.get("sourceContactMeleeFallback", false)), "caster source melee fallback missing for monsterId=%d" % monster_id)

@@ -13,6 +13,9 @@ const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const MonsterDeliveryGeometryScript := preload(
+	"res://scripts/monster_ai_package/delivery_geometry.gd"
+)
 const EntrapmentBoundaryControllerScript := preload(
 	"res://scripts/entrapment_boundary_controller.gd"
 )
@@ -127,6 +130,14 @@ const PROJECTILE_OBSTACLE_SAMPLE_STEP_GU := 0.25
 const ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU := PROJECTILE_OBSTACLE_SAMPLE_STEP_GU
 const CORPSE_HOLD_SECONDS := 2.0
 const HC_SHARED_GOAL_CACHE_LIMIT := 64
+const SPECIAL_DELIVERY_SETTLEMENT_LIMIT := 512
+const MONSTER_SPECIAL_CELL_DELIVERY_KINDS := [
+	"directional_spit_map",
+	"gas_adjacent",
+	"line_magic",
+	"mixed_target_tile",
+	"guard_direct_projectile",
+]
 
 static var _crowd_query_candidate_count := 0
 static var _crowd_steering_evaluation_count := 0
@@ -214,6 +225,10 @@ signal fixed_area_ground_spike_requested(descriptor: Dictionary)
 ## and must never submit a second damage transaction.
 signal ranged_projectile_requested(descriptor: Dictionary)
 signal target_magic_requested(descriptor: Dictionary)
+## Presentation-only observer for source-backed monster cell attacks. Damage
+## remains owned and settled by this actor against the exact same frozen V2
+## snapshot; listeners must never schedule or submit damage.
+signal monster_special_delivery_requested(descriptor: Dictionary)
 
 var monster_data: Dictionary = {}
 var monster_id := -1
@@ -324,6 +339,7 @@ var _pending_attack_target: Node2D
 var _pending_attack_release_record: Dictionary = {}
 var last_magic_attack_resolution: Dictionary = {}
 var last_physical_hit_resolution: Dictionary = {}
+var last_special_delivery_accuracy_resolution: Dictionary = {}
 var _retarget_timer := 0.0
 var _target_stable_remaining_seconds := 0.0
 var _crowd_steering_timer := 0.0
@@ -396,6 +412,9 @@ var _area_magic_footprint_snapshot: Dictionary = {}
 var _area_magic_release_records: Array[Dictionary] = []
 var _last_attack_footprint_snapshot: Dictionary = {}
 var _spatial_release_serial := 0
+var _special_delivery_settled_targets: Dictionary = {}
+var _special_delivery_settlement_order: Array[Dictionary] = []
+var _special_delivery_settlement_floor_serial := 0
 var _summon_cooldown := 0.0
 var _summon_warning := 0.0
 var _environment_guard_timer := 0.0
@@ -454,6 +473,9 @@ var _terrain_failed_cell_until_ms := 0
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
 	set_meta("hc_combat_life_epoch", int(get_meta("hc_combat_life_epoch", 0)) + 1)
+	_special_delivery_settled_targets.clear()
+	_special_delivery_settlement_order.clear()
+	_special_delivery_settlement_floor_serial = _spatial_release_serial
 	_hc_close_session = false
 	_hc_cancel_path()
 	_reset_monster_audio_observer()
@@ -2490,6 +2512,8 @@ func _physics_process_internal(delta: float) -> void:
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
 			if _uses_special_magic_melee_delivery():
 				_deal_special_magic_melee_hit(target, dealt_damage)
+			elif _uses_monster_special_cell_delivery():
+				_launch_monster_special_cell_delivery(target, dealt_damage)
 			elif _uses_physical_projectile_delivery():
 				_launch_physical_projectile(target, dealt_damage)
 			elif (
@@ -2497,6 +2521,11 @@ func _physics_process_internal(delta: float) -> void:
 				and _target_magic_condition_met(offset_ground_gu)
 			):
 				_launch_target_magic(target, dealt_damage)
+			elif str(attack_delivery_rule.get("kind", "")) in MONSTER_SPECIAL_CELL_DELIVERY_KINDS:
+				# A named canonical delivery that fails its exact contract is not
+				# ordinary contact. Keep the actor alive and mobile while preventing
+				# a malformed profile from dealing damage.
+				pass
 			elif _attack_hit_delay > 0.0:
 				_pending_attack_time = _attack_hit_delay
 				_pending_attack_target = target
@@ -3449,6 +3478,9 @@ func _update_pending_attack(delta: float) -> void:
 	if str(release_record.get("kind", "")) == "target_magic":
 		_settle_target_magic_release(release_record)
 		return
+	if str(release_record.get("kind", "")) == "line_magic":
+		_settle_monster_special_cell_release(release_record)
+		return
 	if not is_instance_valid(hit_target):
 		return
 	if not _release_player_combat_epoch_is_current(hit_target, release_record):
@@ -3481,6 +3513,798 @@ func _uses_physical_projectile_delivery() -> bool:
 		and str(attack_delivery_rule.get("effectId", ""))
 		== MonsterRangedProjectileEffectScript.EFFECT_ID
 	)
+
+
+func _uses_monster_special_cell_delivery() -> bool:
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	if kind not in MONSTER_SPECIAL_CELL_DELIVERY_KINDS:
+		return false
+	if not attack_delivery_rule.get("bodyOnly", null) is bool:
+		return false
+	if (
+		kind != "guard_direct_projectile"
+		and not attack_delivery_rule.get("presentationDelaySeconds", null) is float
+	):
+		return false
+	match kind:
+		"directional_spit_map":
+			return _valid_directional_spit_rule()
+		"gas_adjacent":
+			return _valid_gas_rule()
+		"line_magic":
+			return _valid_line_magic_rule()
+		"mixed_target_tile":
+			return _valid_mixed_target_tile_rule()
+		"guard_direct_projectile":
+			return _valid_guard_direct_projectile_rule()
+	return false
+
+
+func _valid_directional_spit_rule() -> bool:
+	if (
+		str(attack_delivery_rule.get("footprintPattern", ""))
+		!= "source_spit_map_5x5"
+		or not _valid_special_integer_number(
+			attack_delivery_rule.get("cellSteps", null), 2, 2
+		)
+		or str(attack_delivery_rule.get("damageChannel", "")) != "magic_defense"
+		or attack_delivery_rule.get("useAccuracy", null) != true
+		or not attack_delivery_rule.get("poisonEnabled", false) is bool
+	):
+		return false
+	if not bool(attack_delivery_rule.get("poisonEnabled", false)):
+		return true
+	return _valid_special_status_rule("decrease_health", "attacker")
+
+
+func _valid_gas_rule() -> bool:
+	return (
+		str(attack_delivery_rule.get("footprintPattern", "")) == "adjacent_target"
+		and _valid_special_integer_number(
+			attack_delivery_rule.get("cellSteps", null), 1, 1
+		)
+		and str(attack_delivery_rule.get("damageChannel", "")) == "magic_defense"
+		and attack_delivery_rule.get("useAccuracy", null) == true
+		and _valid_special_status_rule("stone", "target")
+		and (
+			_valid_special_integer_number(
+				attack_delivery_rule.get("hiddenRevealChanceDenominator", 0), 0
+			)
+		)
+	)
+
+
+func _valid_line_magic_rule() -> bool:
+	var trigger_value: Variant = attack_delivery_rule.get("trigger", null)
+	return (
+		str(attack_delivery_rule.get("footprintPattern", ""))
+		== "directional_line_cells"
+		and _valid_special_integer_number(
+			attack_delivery_rule.get("cellSteps", null), 9, 9
+		)
+		and str(attack_delivery_rule.get("damageChannel", "")) == "magic_defense"
+		and attack_delivery_rule.get("hitDelaySeconds", null) is float
+		and float(attack_delivery_rule.get("hitDelaySeconds", 0.0)) > 0.0
+		and attack_delivery_rule.get("undeadMultiplier", null) is float
+		and float(attack_delivery_rule.get("undeadMultiplier", 0.0)) >= 1.0
+		and trigger_value is Dictionary
+		and (trigger_value as Dictionary).get("axisExclusiveGu", null) is float
+		and float((trigger_value as Dictionary).get("axisExclusiveGu", 0.0)) > 0.0
+	)
+
+
+func _valid_mixed_target_tile_rule() -> bool:
+	var physical_ratio: Variant = attack_delivery_rule.get("physicalRatio", null)
+	var magic_ratio: Variant = attack_delivery_rule.get("magicRatio", null)
+	return (
+		str(attack_delivery_rule.get("footprintPattern", "")) == "target_cell"
+		and str(attack_delivery_rule.get("damageChannel", "")) == "mixed_defense"
+		and physical_ratio is float
+		and magic_ratio is float
+		and float(physical_ratio) >= 0.0
+		and float(magic_ratio) >= 0.0
+		and float(physical_ratio) + float(magic_ratio) > 0.0
+	)
+
+
+func _valid_guard_direct_projectile_rule() -> bool:
+	var delay_value: Variant = attack_delivery_rule.get("presentationDelay", null)
+	return (
+		str(attack_delivery_rule.get("footprintPattern", "")) == "target_cell"
+		and str(attack_delivery_rule.get("damageChannel", "")) == "physical_defense"
+		and str(attack_delivery_rule.get("damageTiming", "")) == "immediate"
+		and str(attack_delivery_rule.get("obstaclePolicy", ""))
+		== "world_fresh_override"
+		and str(attack_delivery_rule.get("presentationKind", ""))
+		== "generic_projectile_observer"
+		and str(attack_delivery_rule.get("rangeMetric", "")) == "manhattan"
+		and attack_delivery_rule.get("viewRangeGu", null) is float
+		and float(attack_delivery_rule.get("viewRangeGu", 0.0)) > 0.0
+		and attack_delivery_rule.get("useAccuracy", null) is bool
+		and delay_value is Dictionary
+		and (delay_value as Dictionary).get("baseSeconds", null) is float
+		and float((delay_value as Dictionary).get("baseSeconds", 0.0)) > 0.0
+		and (delay_value as Dictionary).get("perChebyshevGuSeconds", null) is float
+		and float((delay_value as Dictionary).get("perChebyshevGuSeconds", -1.0)) >= 0.0
+	)
+
+
+func _valid_special_status_rule(
+	expected_kind: String,
+	expected_denominator_owner: String,
+) -> bool:
+	var status_value: Variant = attack_delivery_rule.get("status", null)
+	if not status_value is Dictionary:
+		return false
+	var status := status_value as Dictionary
+	if (
+		str(status.get("poisonKind", "")) != expected_kind
+		or str(status.get("chanceDenominatorStatOwner", ""))
+		!= expected_denominator_owner
+		or not status.get("durationSeconds", null) is float
+		or float(status.get("durationSeconds", 0.0)) <= 0.0
+		or not _valid_special_integer_number(
+			status.get("chanceDenominatorOffset", null), 1
+		)
+	):
+		return false
+	if expected_kind == "decrease_health":
+		return (
+			_valid_special_integer_number(status.get("point", null), 0)
+			and _valid_special_integer_number(status.get("tickDamage", null), 1)
+			and int(status.get("tickDamage", 0))
+			== int(status.get("point", -1)) + 1
+			and status.get("intervalSeconds", null) is float
+			and float(status.get("intervalSeconds", 0.0)) > 0.0
+		)
+	return _valid_special_integer_number(status.get("point", null), 0, 0)
+
+
+func _valid_special_integer_number(
+	value: Variant,
+	minimum: int,
+	maximum := 2147483647,
+) -> bool:
+	if not (value is int or value is float):
+		return false
+	var numeric := float(value)
+	return (
+		is_finite(numeric)
+		and numeric == floorf(numeric)
+		and numeric >= float(minimum)
+		and numeric <= float(maximum)
+	)
+
+
+func _launch_monster_special_cell_delivery(
+	hit_target: Node2D,
+	rolled_damage: int,
+) -> bool:
+	if (
+		not combat_enabled
+		or not _uses_monster_special_cell_delivery()
+		or not _special_delivery_target_is_live(hit_target)
+	):
+		return false
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if not source_ground_gu.is_finite() or not target_ground_gu.is_finite():
+		return false
+	var delta_ground_gu := target_ground_gu - source_ground_gu
+	if not _special_delivery_release_condition_met(delta_ground_gu):
+		return false
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	var release_id := _next_spatial_release_id(kind)
+	var release_serial := _spatial_release_serial
+	var delivery_contract := _freeze_monster_special_delivery_contract(kind)
+	if delivery_contract.is_empty():
+		return false
+	var snapshot := _create_monster_special_cell_snapshot(
+		kind,
+		release_id,
+		source_ground_gu,
+		target_ground_gu,
+	)
+	if snapshot.is_empty() or not _snapshot_strict_ok(snapshot):
+		return false
+	var victims := _monster_special_delivery_targets(snapshot, hit_target)
+	var victim_records := _freeze_monster_special_delivery_records(
+		kind,
+		victims,
+		snapshot,
+		rolled_damage,
+		release_serial,
+		delivery_contract,
+	)
+	if victim_records.is_empty():
+		return false
+	var release_record := {
+		"kind": kind,
+		"release_id": release_id,
+		"release_serial": release_serial,
+		"source_instance_id": get_instance_id(),
+		"source_life": _hc_life(self),
+		"runtime_map_id": runtime_map_id,
+		"generation": int(get_meta("zone_generation", -1)),
+		"source_ground_gu": source_ground_gu,
+		"origin_world_px": global_position,
+		"footprint_snapshot": snapshot,
+		"delivery_contract": delivery_contract,
+		"victims": victim_records,
+		"presentation_delay_seconds": _monster_special_presentation_delay_seconds(
+			kind,
+			source_ground_gu,
+			target_ground_gu,
+		),
+	}
+	release_record.make_read_only()
+	_last_attack_footprint_snapshot = snapshot
+	_emit_monster_special_delivery_descriptor(release_record)
+	if kind == "line_magic":
+		_pending_attack_time = float(attack_delivery_rule.get("hitDelaySeconds", 0.0))
+		_pending_attack_target = hit_target
+		_pending_attack_damage = maxi(0, rolled_damage)
+		_pending_attack_release_record = release_record
+	else:
+		_settle_monster_special_cell_release(release_record)
+	return true
+
+
+func _freeze_monster_special_delivery_contract(kind: String) -> Dictionary:
+	var contract := {
+		"kind": kind,
+		"physical_ratio": float(attack_delivery_rule.get("physicalRatio", 0.0)),
+		"magic_ratio": float(attack_delivery_rule.get("magicRatio", 0.0)),
+		"undead_multiplier": float(attack_delivery_rule.get("undeadMultiplier", 1.0)),
+		"use_accuracy": bool(attack_delivery_rule.get("useAccuracy", false)),
+		"source_accuracy": accuracy,
+		"source_anti_poison": anti_poison,
+		"poison_enabled": bool(attack_delivery_rule.get("poisonEnabled", false)),
+		"hidden_reveal_chance_denominator": int(
+			attack_delivery_rule.get("hiddenRevealChanceDenominator", 0)
+		),
+	}
+	var status_value: Variant = attack_delivery_rule.get("status", null)
+	if status_value is Dictionary:
+		var raw_status := status_value as Dictionary
+		var status := {
+			"poison_kind": str(raw_status.get("poisonKind", "")),
+			"duration_seconds": float(raw_status.get("durationSeconds", 0.0)),
+			"chance_denominator_offset": int(
+				raw_status.get("chanceDenominatorOffset", 0)
+			),
+			"chance_denominator_stat_owner": str(
+				raw_status.get("chanceDenominatorStatOwner", "")
+			),
+			"point": int(raw_status.get("point", -1)),
+			"damage_per_tick": int(raw_status.get("tickDamage", 0)),
+			"interval_seconds": float(raw_status.get("intervalSeconds", 0.0)),
+		}
+		status.make_read_only()
+		contract["status"] = status
+	contract.make_read_only()
+	return contract
+
+
+func _special_delivery_release_condition_met(delta_ground_gu: Vector2) -> bool:
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	if kind == "line_magic":
+		var trigger: Dictionary = attack_delivery_rule.get("trigger", {})
+		var axis_exclusive_gu := float(trigger.get("axisExclusiveGu", 0.0))
+		return (
+			absf(delta_ground_gu.x) < axis_exclusive_gu
+			and absf(delta_ground_gu.y) < axis_exclusive_gu
+		)
+	if kind in ["directional_spit_map", "gas_adjacent"]:
+		var step_limit := int(attack_delivery_rule.get("cellSteps", 0))
+		return (
+			absf(delta_ground_gu.x) <= float(step_limit) + GroundUnitSpace.EPSILON_GU
+			and absf(delta_ground_gu.y) <= float(step_limit) + GroundUnitSpace.EPSILON_GU
+		)
+	if kind == "guard_direct_projectile":
+		return absf(delta_ground_gu.x) + absf(delta_ground_gu.y) <= (
+			float(attack_delivery_rule.get("viewRangeGu", 0.0))
+			+ GroundUnitSpace.EPSILON_GU
+		)
+	return delta_ground_gu.length() <= attack_range_gu + GroundUnitSpace.EPSILON_GU
+
+
+func _monster_special_presentation_delay_seconds(
+	kind: String,
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+) -> float:
+	if kind != "guard_direct_projectile":
+		return maxf(
+			0.0,
+			float(attack_delivery_rule.get("presentationDelaySeconds", 0.0)),
+		)
+	var delay: Dictionary = attack_delivery_rule.get("presentationDelay", {})
+	var delta := (target_ground_gu - source_ground_gu).abs()
+	return maxf(
+		0.001,
+		float(delay.get("baseSeconds", 0.0))
+		+ maxf(delta.x, delta.y)
+		* float(delay.get("perChebyshevGuSeconds", 0.0)),
+	)
+
+
+func _create_monster_special_cell_snapshot(
+	kind: String,
+	release_id: String,
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+) -> Dictionary:
+	var snapshot: Dictionary
+	if kind in ["directional_spit_map", "line_magic"]:
+		snapshot = MonsterDeliveryGeometryScript.create_directional_cell_snapshot(
+			_monster_attack_id(kind),
+			release_id,
+			source_ground_gu,
+			target_ground_gu - source_ground_gu,
+			int(attack_delivery_rule.get("cellSteps", 0)),
+			_snapshot_coordinate_context(),
+		)
+	else:
+		snapshot = MonsterDeliveryGeometryScript.create_target_cell_snapshot(
+			_monster_attack_id(kind),
+			release_id,
+			source_ground_gu,
+			target_ground_gu,
+			_snapshot_coordinate_context(),
+		)
+	if snapshot.is_empty():
+		return {}
+	var decorated := _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		null,
+		attack_range_gu,
+	)
+	var result := decorated.duplicate(true)
+	result["delivery_kind"] = kind
+	result["source_ground_gu"] = source_ground_gu
+	result["target_ground_gu"] = target_ground_gu
+	result["world_obstacle_policy"] = "fresh_per_victim_at_settlement"
+	result.make_read_only()
+	return result
+
+
+func _monster_special_delivery_targets(
+	snapshot: Dictionary,
+	selected_target: Node2D,
+) -> Array[Node2D]:
+	var candidates: Array[Node2D] = []
+	_append_special_delivery_candidate(candidates, selected_target)
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	# Source spit/line and mixed HitMagAttackTarget enumerate the proper objects
+	# in their footprint cells. Gas and guard each take one explicit BaseObject
+	# target even though that target cell is frozen for geometry.
+	if kind in ["directional_spit_map", "line_magic", "mixed_target_tile"]:
+		_append_special_delivery_candidate(candidates, primary_target)
+		_ensure_target_grid(false)
+		for candidate: Node2D in _target_grid_candidates(12.0):
+			_append_special_delivery_candidate(candidates, candidate)
+	var victims: Array[Node2D] = []
+	for candidate: Node2D in candidates:
+		if (
+			_special_delivery_target_is_live(candidate)
+			and _snapshot_intersects_target(snapshot, candidate)
+		):
+			victims.append(candidate)
+	victims.sort_custom(func(left: Node2D, right: Node2D) -> bool:
+		return left.get_instance_id() < right.get_instance_id()
+	)
+	return victims
+
+
+func _append_special_delivery_candidate(
+	candidates: Array[Node2D],
+	raw_candidate: Variant,
+) -> void:
+	if (
+		is_instance_valid(raw_candidate)
+		and raw_candidate is Node2D
+		and not candidates.has(raw_candidate)
+	):
+		candidates.append(raw_candidate as Node2D)
+
+
+func _special_delivery_target_is_live(victim: Node2D) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not _player_combat_is_available(victim)
+		or _target_is_safe_player(victim)
+		or _point_inside_safe_zone(victim.global_position)
+		or _runtime_map_id_for_area_target(victim) != runtime_map_id
+	):
+		return false
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	if kind in ["directional_spit_map", "gas_adjacent", "line_magic"]:
+		if not victim.has_method("take_direct_spell_damage"):
+			return false
+	elif kind == "mixed_target_tile":
+		if not victim.has_method("take_monster_mixed_damage"):
+			return false
+	elif not victim.has_method("take_damage"):
+		return false
+	return _target_candidate_is_live(victim)
+
+
+func _freeze_monster_special_delivery_records(
+	kind: String,
+	victims: Array[Node2D],
+	snapshot: Dictionary,
+	rolled_damage: int,
+	release_serial: int,
+	delivery_contract: Dictionary,
+) -> Array[Dictionary]:
+	var records: Array[Dictionary] = []
+	var release_id := str(snapshot.get("release_id", ""))
+	var source_ground_gu: Vector2 = snapshot.get("source_ground_gu", Vector2.INF)
+	for victim: Node2D in victims:
+		if not _special_delivery_target_is_live(victim):
+			continue
+		var target_ground_gu := _screen_position_px_to_ground_position_gu(
+			victim.global_position
+		)
+		if not target_ground_gu.is_finite():
+			continue
+		var target_id := victim.get_instance_id()
+		var record := {
+			"kind": kind,
+			"release_id": release_id,
+			"release_serial": release_serial,
+			"release_target_id": "%s:target:%d" % [release_id, target_id],
+			"source_instance_id": get_instance_id(),
+			"source_life": _hc_life(self),
+			"source_ground_gu": source_ground_gu,
+			"origin_world_px": global_position,
+			"target_instance_id": target_id,
+			"target_life": _hc_life(victim),
+			"target_combat_epoch": _typed_player_combat_epoch(victim),
+			"target_generation": int(victim.get_meta("zone_generation", -1)),
+			"runtime_map_id": runtime_map_id,
+			"generation": int(get_meta("zone_generation", -1)),
+			"target_ground_gu": target_ground_gu,
+			"target_world_px": _target_approved_ground_footpoint_world_px(victim),
+			"damage": maxi(0, rolled_damage),
+			"footprint_snapshot": snapshot,
+			"delivery_contract": delivery_contract,
+		}
+		record.make_read_only()
+		records.append(record)
+	records.make_read_only()
+	return records
+
+
+func _settle_monster_special_cell_release(release_record: Dictionary) -> void:
+	if (
+		not combat_enabled
+		or int(release_record.get("source_instance_id", 0)) != get_instance_id()
+		or int(release_record.get("source_life", -1)) != _hc_life(self)
+		or int(release_record.get("runtime_map_id", -1)) != runtime_map_id
+		or int(release_record.get("generation", -1))
+		!= int(get_meta("zone_generation", -1))
+		or _dying
+		or current_hp <= 0
+	):
+		return
+	var victims_value: Variant = release_record.get("victims", null)
+	if not victims_value is Array:
+		return
+	for raw_record: Variant in victims_value:
+		if not raw_record is Dictionary:
+			continue
+		var victim_record := raw_record as Dictionary
+		var target_instance_id := int(victim_record.get("target_instance_id", 0))
+		var release_serial := int(victim_record.get("release_serial", 0))
+		if (
+			target_instance_id <= 0
+			or release_serial <= 0
+			or not _claim_special_delivery_settlement(
+				target_instance_id,
+				release_serial,
+			)
+		):
+			continue
+		var raw_victim: Object = instance_from_id(target_instance_id)
+		if not raw_victim is Node2D:
+			continue
+		var victim := raw_victim as Node2D
+		if not _monster_special_release_target_is_valid(victim, victim_record):
+			continue
+		_settle_monster_special_victim(victim, victim_record)
+
+
+func _claim_special_delivery_settlement(
+	target_instance_id: int,
+	release_serial: int,
+) -> bool:
+	if release_serial <= _special_delivery_settlement_floor_serial:
+		return false
+	var last_serial := int(
+		_special_delivery_settled_targets.get(target_instance_id, 0)
+	)
+	if release_serial <= last_serial:
+		return false
+	_special_delivery_settled_targets[target_instance_id] = release_serial
+	_special_delivery_settlement_order.append({
+		"target_instance_id": target_instance_id,
+		"release_serial": release_serial,
+	})
+	while _special_delivery_settlement_order.size() > SPECIAL_DELIVERY_SETTLEMENT_LIMIT:
+		var expired: Dictionary = _special_delivery_settlement_order.pop_front()
+		var expired_target_id := int(expired.get("target_instance_id", 0))
+		var expired_serial := int(expired.get("release_serial", 0))
+		_special_delivery_settlement_floor_serial = maxi(
+			_special_delivery_settlement_floor_serial,
+			expired_serial,
+		)
+		if int(_special_delivery_settled_targets.get(expired_target_id, 0)) == expired_serial:
+			_special_delivery_settled_targets.erase(expired_target_id)
+	return true
+
+
+func _monster_special_release_target_is_valid(
+	victim: Node2D,
+	record: Dictionary,
+) -> bool:
+	return (
+		_special_delivery_release_target_is_live(
+			victim,
+			str(record.get("kind", "")),
+		)
+		and int(record.get("source_instance_id", 0)) == get_instance_id()
+		and int(record.get("source_life", -1)) == _hc_life(self)
+		and int(record.get("target_life", -1)) == _hc_life(victim)
+		and int(record.get("runtime_map_id", -1)) == runtime_map_id
+		and int(record.get("generation", -1))
+		== int(get_meta("zone_generation", -1))
+		and int(record.get("target_generation", -1))
+		== int(victim.get_meta("zone_generation", -1))
+		and _release_player_combat_epoch_is_current(victim, record)
+		and _world_attack_path_is_clear_for_release(record)
+	)
+
+
+func _special_delivery_release_target_is_live(
+	victim: Node2D,
+	kind: String,
+) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not _player_combat_is_available(victim)
+		or _target_is_safe_player(victim)
+		or _point_inside_safe_zone(victim.global_position)
+		or _runtime_map_id_for_area_target(victim) != runtime_map_id
+		or not _target_candidate_is_live(victim)
+	):
+		return false
+	if kind in ["directional_spit_map", "gas_adjacent", "line_magic"]:
+		return victim.has_method("take_direct_spell_damage")
+	if kind == "mixed_target_tile":
+		return victim.has_method("take_monster_mixed_damage")
+	return kind == "guard_direct_projectile" and victim.has_method("take_damage")
+
+
+func _settle_monster_special_victim(
+	victim: Node2D,
+	record: Dictionary,
+) -> void:
+	var kind := str(record.get("kind", ""))
+	var raw_damage := maxi(0, int(record.get("damage", 0)))
+	var delivery_contract_value: Variant = record.get("delivery_contract", null)
+	if not delivery_contract_value is Dictionary:
+		return
+	var delivery_contract := delivery_contract_value as Dictionary
+	if str(delivery_contract.get("kind", "")) != kind:
+		return
+	if (
+		bool(delivery_contract.get("use_accuracy", false))
+		and not _monster_special_accuracy_succeeds(victim, delivery_contract)
+	):
+		return
+	if kind == "mixed_target_tile":
+		var physical_damage := int(floor(
+			float(raw_damage) * float(delivery_contract.get("physical_ratio", 0.0))
+		))
+		var magic_damage := int(floor(
+			float(raw_damage) * float(delivery_contract.get("magic_ratio", 0.0))
+		))
+		var mixed_context := {
+			"source_monster_id": monster_id,
+			"source_instance_id": get_instance_id(),
+			"release_id": str(record.get("release_id", "")),
+			"damage_owner": "enemy.monster_special_cell_release",
+		}
+		mixed_context.make_read_only()
+		var resolution_value: Variant = victim.call(
+			"take_monster_mixed_damage",
+			physical_damage,
+			magic_damage,
+			mixed_context,
+		)
+		if resolution_value is Dictionary:
+			last_magic_attack_resolution = (
+				resolution_value as Dictionary
+			).duplicate(true)
+			last_magic_attack_resolution["source_monster_id"] = monster_id
+			last_magic_attack_resolution["damage_channel"] = "mixed_defense"
+			last_magic_attack_resolution["delivery_kind"] = kind
+			last_magic_attack_resolution["success"] = true
+			apply_life_steal(int(
+				last_magic_attack_resolution.get("applied_damage", 0)
+			))
+		return
+	if kind == "guard_direct_projectile":
+		_apply_attack_damage(
+			victim,
+			raw_damage,
+			bool(delivery_contract.get("use_accuracy", false)),
+		)
+		return
+	var magic_damage := raw_damage
+	if kind == "line_magic" and _special_delivery_target_is_undead(victim):
+		magic_damage = int(floor(
+			float(magic_damage)
+			* float(delivery_contract.get("undead_multiplier", 1.0))
+		))
+	if not _apply_monster_special_magic_damage(victim, magic_damage, kind):
+		return
+	if kind in ["directional_spit_map", "gas_adjacent"]:
+		_apply_monster_special_status(victim, kind, delivery_contract)
+
+
+func _apply_monster_special_magic_damage(
+	victim: Node2D,
+	raw_damage: int,
+	kind: String,
+) -> bool:
+	var raw_resolution: Variant = victim.call(
+		"take_direct_spell_damage",
+		"",
+		maxi(0, raw_damage),
+		0,
+	)
+	if not raw_resolution is Dictionary:
+		return false
+	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
+	last_magic_attack_resolution["source_monster_id"] = monster_id
+	last_magic_attack_resolution["damage_channel"] = "magic_defense"
+	last_magic_attack_resolution["delivery_kind"] = kind
+	last_magic_attack_resolution["success"] = true
+	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
+	# Source SpitAttack/gas status gates on GetMagStruckDamage > 0. The
+	# downstream shield may absorb every HP point, so applied_damage is not the
+	# poison gate; final_damage is the post-MAC amount presented to that shield.
+	return int(last_magic_attack_resolution.get("final_damage", 0)) > 0
+
+
+func _monster_special_accuracy_succeeds(
+	victim: Node2D,
+	delivery_contract: Dictionary,
+) -> bool:
+	var target_speed_point := _target_agility_for_monster_hit(victim)
+	var source_hit_point := maxi(0, int(delivery_contract.get("source_accuracy", 0)))
+	var random_roll: Variant = null
+	var success := true
+	if not PlayerState.test_mode:
+		random_roll = _rng.randi_range(0, target_speed_point - 1)
+		success = int(random_roll) < source_hit_point
+	last_special_delivery_accuracy_resolution = {
+		"policy_id": "monster.special_delivery.speed_point_hit_point.strict_lt.v1",
+		"source_hit_point": source_hit_point,
+		"target_speed_point": target_speed_point,
+		"random_roll": random_roll,
+		"success": success,
+		"test_mode_bypass": PlayerState.test_mode,
+	}
+	return success
+
+
+func _apply_monster_special_status(
+	victim: Node2D,
+	kind: String,
+	delivery_contract: Dictionary,
+) -> void:
+	if kind == "directional_spit_map" and not bool(
+		delivery_contract.get("poison_enabled", false)
+	):
+		return
+	var status: Dictionary = delivery_contract.get("status", {})
+	var denominator_stat := (
+		int(delivery_contract.get("source_anti_poison", 0))
+		if str(status.get("chance_denominator_stat_owner", "")) == "attacker"
+		else _target_anti_poison_for_control(victim)
+	)
+	var denominator := denominator_stat + int(
+		status.get("chance_denominator_offset", 0)
+	)
+	if denominator > 0 and _rng.randi_range(0, denominator - 1) == 0:
+		var poison_kind := str(status.get("poison_kind", ""))
+		var duration_seconds := float(status.get("duration_seconds", 0.0))
+		if poison_kind == "decrease_health" and victim.has_method("apply_monster_poison"):
+			victim.call(
+				"apply_monster_poison",
+				int(status.get("damage_per_tick", 0)),
+				duration_seconds,
+				float(status.get("interval_seconds", 0.0)),
+			)
+		elif poison_kind == "stone" and victim.has_method("apply_control"):
+			victim.call("apply_control", duration_seconds)
+	if kind != "gas_adjacent":
+		return
+	var reveal_denominator := int(
+		delivery_contract.get("hidden_reveal_chance_denominator", 0)
+	)
+	if (
+		reveal_denominator > 0
+		and victim.has_method("is_stealthed")
+		and bool(victim.call("is_stealthed"))
+		and _rng.randi_range(0, reveal_denominator - 1) == 0
+		and victim.has_method("break_stealth")
+	):
+		victim.call("break_stealth")
+
+
+func _special_delivery_target_is_undead(victim: Node2D) -> bool:
+	return victim is EnemyActor and (victim as EnemyActor).undead
+
+
+func _emit_monster_special_delivery_descriptor(release_record: Dictionary) -> void:
+	var descriptor := {
+		"contract_id": MonsterDeliveryGeometryScript.CONTRACT_ID,
+		"release_id": str(release_record.get("release_id", "")),
+		"delivery_kind": str(release_record.get("kind", "")),
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"runtime_map_id": runtime_map_id,
+		"presentation_delay_seconds": float(
+			release_record.get("presentation_delay_seconds", 0.0)
+		),
+		"presentation_kind": str(
+			attack_delivery_rule.get("presentationKind", "body_attack")
+		),
+		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
+		"damage_owner": "enemy.monster_special_cell_release",
+	}
+	descriptor.make_read_only()
+	monster_special_delivery_requested.emit(descriptor)
+	if str(release_record.get("kind", "")) != "guard_direct_projectile":
+		return
+	var victim_records_value: Variant = release_record.get("victims", null)
+	if not victim_records_value is Array or (victim_records_value as Array).is_empty():
+		return
+	var first_record_value: Variant = (victim_records_value as Array)[0]
+	if not first_record_value is Dictionary:
+		return
+	var first_record := first_record_value as Dictionary
+	var projectile_descriptor := {
+		"effect_id": MonsterRangedProjectileEffectScript.EFFECT_ID,
+		"release_id": str(release_record.get("release_id", "")),
+		"origin_world_px": release_record.get("origin_world_px", Vector2.INF),
+		"target_world_px": first_record.get("target_world_px", Vector2.INF),
+		"duration_seconds": maxf(
+			0.001,
+			float(release_record.get("presentation_delay_seconds", 0.0)),
+		),
+		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
+		"damage_owner": "enemy.monster_special_cell_release",
+		"presentation_only": true,
+	}
+	projectile_descriptor.make_read_only()
+	var host := get_parent()
+	if not is_instance_valid(host):
+		return
+	var effect: Node2D = MonsterRangedProjectileEffectScript.create_visual(
+		projectile_descriptor
+	)
+	host.add_child(effect)
 
 
 func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
