@@ -30,7 +30,8 @@ try {
         'game_root', 'player', 'player_state', 'audio_runtime_service',
         'inventory_panel', 'warehouse_panel', 'shop_panel', 'item_detail_presenter',
         'item_drop_instance_rules', 'loot_visual_effect', 'loot_pickup',
-        'monster_display_formatter', 'monster_overhead', 'enemy',
+        'monster_display_formatter', 'monster_overhead', 'enemy', 'summon_actor',
+        'monster_source_poison_state',
         'caster_skill_sky_strike_visual_effect',
         'monster_ai_package/policy', 'monster_ai_package/path_search',
         'monster_ai_package/path_scheduler'
