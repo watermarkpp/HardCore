@@ -519,7 +519,8 @@ func _refresh_equipment_slots() -> void:
 		button.text = ""
 		button.tooltip_text = "%s：空" % slot
 		if not name.is_empty():
-			_set_button_texture(button, _item_texture(GameData.get_item_record(name), "inventoryIcon"))
+			var item_ref: Variant = record if record is Dictionary else name
+			_set_button_texture(button, _item_texture(GameData.get_item_record(item_ref), "inventoryIcon"))
 			button.tooltip_text = _equipment_tooltip(slot, record)
 		else:
 			_set_button_texture(button, null)
@@ -650,7 +651,7 @@ func _update_bag_cell(index: int, stack: Dictionary) -> void:
 	button.mouse_filter = Control.MOUSE_FILTER_STOP if occupied or can_receive_unequip else Control.MOUSE_FILTER_IGNORE
 	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else ("卸下到此格" if can_receive_unequip else "空物品格")
 	button.theme_type_variation = "GothicComponentSelectedSlotButton" if occupied and selected_inventory_indices.has(index) else "GothicComponentSlotButton"
-	_set_button_texture(button, _item_texture(GameData.get_item_record(str(stack.get("name", ""))), "inventoryIcon") if occupied else null)
+	_set_button_texture(button, _item_texture(GameData.get_item_record(stack), "inventoryIcon") if occupied else null)
 	var count_label := cell.get_node("StackCount") as Label
 	var count := int(stack.get("count", 1))
 	count_label.text = str(count)
@@ -855,11 +856,10 @@ func _select_inventory_item(index: int) -> void:
 	selected_equipment_slot = ""
 	selected_equipment_ref.clear()
 	if selected_inventory_index >= 0:
-		if selected_inventory_refs.size() > 1:
-			var anchor_cell := _bag_cells[index].get_child(0) as Control if index < _bag_cells.size() else null
-			item_detail_presenter.show_multi(selected_inventory_refs.size(), _selection_control_context(anchor_cell))
-		else:
-			_show_inventory_detail(selected_inventory_index)
+		# Multi-select remains a batch operation for actions, while the shared
+		# presenter always follows the latest selected instance.  This keeps the
+		# attribute view useful without enabling equipment actions for a batch.
+		_show_inventory_detail(selected_inventory_index)
 	else:
 		_hide_item_detail()
 	_refresh_equipment_slots()
@@ -905,7 +905,7 @@ func _select_equipment_slot(slot: String) -> void:
 		# last item when the player taps an equipment slot.
 		return
 	if selected_inventory_index >= 0 and not _inventory_record(selected_inventory_index).is_empty():
-		var item := GameData.get_item_record(str(_inventory_record(selected_inventory_index).get("name", "")))
+		var item := GameData.get_item_record(_inventory_record(selected_inventory_index))
 		if str(item.get("kind", "")) == "equipment":
 			var allowed: Array = _slots_for_category(str(item.get("category", "")))
 			if not allowed.has(slot):
@@ -960,7 +960,7 @@ func _show_equipment_detail(slot: String) -> void:
 	if not equipped is Dictionary or (equipped as Dictionary).is_empty():
 		return
 	var record: Dictionary = equipped
-	var item := GameData.get_item_record(str(record.get("name", "")))
+	var item := GameData.get_item_record(record)
 	if item.is_empty():
 		item_detail_presenter.show_message(
 			"物品目录缺少此记录。",
@@ -1016,7 +1016,7 @@ func _show_inventory_detail(index: int) -> void:
 	if stack.is_empty():
 		_hide_item_detail()
 		return
-	var item := GameData.get_item_record(str(stack.get("name", "")))
+	var item := GameData.get_item_record(stack)
 	if item.is_empty():
 		item_detail_presenter.show_message("[color=#f2c783]%s[/color]\n物品目录缺少此记录。" % stack.get("name", "未知物品"), _selection_control_context(_bag_cells[index].get_child(0) as Control if index < _bag_cells.size() else null))
 		return
@@ -1039,7 +1039,7 @@ func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 	if _is_double_activation_event(event):
 		_cancel_long_press()
 		selected_inventory_indices.clear()
-		var item := GameData.get_item_record(str(stack.get("name", "")))
+		var item := GameData.get_item_record(stack)
 		if str(item.get("kind", "")) == "equipment":
 			_select_inventory_item(index)
 			# Button.pressed follows gui_input for the same physical gesture.  Keep
@@ -1167,7 +1167,7 @@ func _add_inventory_context_actions(index: int) -> void:
 	var stack := _inventory_record(index)
 	if stack.is_empty():
 		return
-	var item := GameData.get_item_record(str(stack.get("name", "")))
+	var item := GameData.get_item_record(stack)
 	var kind := str(item.get("kind", ""))
 	if kind == "equipment":
 		var slots := _slots_for_category(str(item.get("category", "")))
@@ -1260,7 +1260,7 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 	selected_inventory_refs = [selected_inventory_ref.duplicate(true)]
 	selected_equipment_slot = ""
 	selected_equipment_ref.clear()
-	var item := GameData.get_item_record(str(stack.get("name", "")))
+	var item := GameData.get_item_record(stack)
 	var is_equipment := str(item.get("kind", "")) == "equipment"
 	# use_inventory_index emits inventory_changed synchronously.  Clear the
 	# selection before that signal so a consumed stack removal cannot make the
@@ -1402,7 +1402,7 @@ func _player_requirement_label(item: Dictionary) -> String:
 
 
 func _equipment_detail(slot: String, record: Dictionary) -> String:
-	var item := GameData.get_item_record(str(record.get("name", "")))
+	var item := GameData.get_item_record(record)
 	var durability := int(record.get("durability", 0))
 	var maximum := int(record.get("max_durability", 1))
 	var state_parts: Array[String] = []
