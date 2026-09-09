@@ -6,7 +6,7 @@ extends Node2D
 
 const GU := preload("res://scripts/ground_unit_space.gd")
 const Terrain := preload("res://scripts/monster_terrain_navigation_policy.gd")
-const Search := preload("res://scripts/monster_ai_package/path_search.gd")
+const PATH_SEARCH_RESOURCE := "res://scripts/monster_ai_package/path_search.gd"
 const SpatialIndex := preload("res://scripts/runtime_combat_spatial_index.gd")
 const WorldRules := preload("res://scripts/world_spatial_rules.gd")
 const ArtSpec := preload("res://scripts/art_spec.gd")
@@ -47,6 +47,7 @@ var _frame_delta_diagnostic_ms: Array[float] = []
 var _process_monitor_samples_ms: Array[float] = []
 var _capture_actor_progress := false
 var _sample_frame_index := 0
+var _path_search_script: Script = null
 
 
 class ProbePlayer:
@@ -102,7 +103,38 @@ class ProbeEnemy:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_path_search_script = _load_path_search_script()
 	_run.call_deferred()
+
+
+func _load_path_search_script() -> Script:
+	# cf1d predates the path-search resource.  It is a diagnostic side channel
+	# only; loading it dynamically keeps the old production tree runnable while
+	# preserving the metrics when the resource exists on the candidate.
+	if not ResourceLoader.exists(PATH_SEARCH_RESOURCE):
+		return null
+	return ResourceLoader.load(PATH_SEARCH_RESOURCE) as Script
+
+
+func _reset_path_search_diagnostics() -> void:
+	if _path_search_script == null:
+		return
+	_path_search_script.call("reset_diagnostics")
+
+
+func _path_search_diagnostics() -> Dictionary:
+	if _path_search_script == null:
+		return {
+			"available": false,
+			"reason": "path_search_resource_missing_in_baseline",
+		}
+	var result: Variant = _path_search_script.call("diagnostics")
+	if result is Dictionary:
+		return result
+	return {
+		"available": false,
+		"reason": "path_search_diagnostics_unavailable",
+	}
 
 
 func _process(delta: float) -> void:
@@ -242,7 +274,7 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 	_reset_probe_counters(enemies, player)
 	EnemyActor.reset_performance_diagnostics()
 	Terrain.reset_diagnostics()
-	Search.reset_diagnostics()
+	_reset_path_search_diagnostics()
 	var scheduler := _path_scheduler()
 	var scheduler_before := _scheduler_snapshot(scheduler)
 	_capture_frame_timing = true
@@ -264,7 +296,7 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 	assert(get_tree().get_nodes_in_group("enemies").size() == count, "%s/%d actor count changed" % [scenario, count])
 	var enemy_metrics := EnemyActor.performance_diagnostics()
 	var terrain_metrics := Terrain.diagnostics()
-	var path_search_metrics := Search.diagnostics()
+	var path_search_metrics: Dictionary = _path_search_diagnostics()
 	var scheduler_after := _scheduler_snapshot(scheduler)
 	if scheduler == null:
 		scheduler = _path_scheduler()
