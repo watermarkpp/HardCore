@@ -1,0 +1,56 @@
+{
+  "failed": 0,
+  "git_head": "909821c928ddb66e5fd48f7cef718baa2e8bfe03",
+  "results": [
+    {
+      "test_name": "system_menu_test",
+      "test_path": "tests/system_menu_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "android_attack_action_lifecycle_test",
+      "test_path": "tests/android_attack_action_lifecycle_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "map_transition_input_lock_test",
+      "test_path": "tests/map_transition_input_lock_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "passed": 3,
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "total": 3,
+  "generated_at": "2026-09-09T20:03:52.5348839+08:00"
+}
