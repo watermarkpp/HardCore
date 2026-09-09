@@ -669,6 +669,46 @@ func take_damage(
 	)
 
 
+func take_monster_mixed_damage(
+	physical_raw: int,
+	magic_raw: int,
+	context: Dictionary,
+) -> Dictionary:
+	# ObjBase.HitMagAttackTarget resolves AC and MAC, sums both channels, then
+	# calls StruckDamage once. Keep the existing common shield/death pipeline
+	# atomic; separate take_damage / take_direct_spell_damage calls are unsafe.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return {"success": false, "applied_damage": 0, "failure_reason": "player_combat_isolated"}
+	if physical_raw < 0 or magic_raw < 0:
+		return {"success": false, "applied_damage": 0, "failure_reason": "invalid_mixed_damage"}
+	var ac_roll := (
+		_rng.randi_range(defense_min, defense_max)
+		if defense_max >= defense_min else defense_min
+	) + defense_buff
+	var target_stats: Dictionary = PlayerState.computed_stats
+	var mac_minimum := maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	var mac_maximum := maxi(mac_minimum, int(target_stats.get("magic_defense_max", mac_minimum)))
+	var active_mac_buff := mac_buff if mac_buff_time > 0.0 else 0
+	mac_minimum += active_mac_buff
+	mac_maximum += active_mac_buff
+	var mac_roll := _rng.randi_range(mac_minimum, mac_maximum)
+	var physical_damage := maxi(0, physical_raw - ac_roll)
+	var magic_damage := maxi(0, magic_raw - mac_roll)
+	var total := physical_damage + magic_damage
+	var hp_before := current_hp
+	if total > 0:
+		_apply_resolved_damage(
+			total, true, "physical" if physical_damage > 0 else "magic", context,
+		)
+	return {
+		"success": true, "runtime_contract": "monster_mixed_damage.v1",
+		"physical_defense_roll": ac_roll, "magic_defense_roll": mac_roll,
+		"physical_damage": physical_damage, "magic_damage": magic_damage,
+		"pipeline_input": total, "applied_damage": maxi(0, hp_before - current_hp),
+		"release_id": str(context.get("release_id", "")),
+	}
+
+
 func take_direct_spell_damage(
 	skill_id: String,
 	raw_damage: int,
