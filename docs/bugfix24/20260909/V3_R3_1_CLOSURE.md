@@ -1,6 +1,6 @@
 # V3 R3.1 closure evidence
 
-Status: candidate implemented and focused correctness tests passed on the dirty worktree. REV07 has a reproducible comparative failure and remains OPEN; no APK or device acceptance is claimed.
+Historical specialist handoff: the sections below preserve the original candidate findings and failures. Current integration status is recorded in `IMPLEMENTATION_REPORT.md` and `ACCEPTANCE_MATRIX.md`; they supersede the pending implementation statements below. W1 special families are now integrated, the full Critical baseline plus all 26 failed-case follow-ups passed, and the three render rounds passed. Final performance and Android input follow-up are still pending; no device acceptance is claimed.
 
 Baseline: `f14f0b058092c5ee977048463fafc0c9fa3902a4` (`codex/bugfix24-v3-close-20260909`). Exact ID50 data authority was split into parent commit `2290fc49e917f4c2a9d1c8cd852bac068e908a15`. The V3 candidate and W4 audio changes already present in `scripts/enemy.gd` were preserved. User-locked monster counts, combat values, maps, speed/interval data, drop data, and W4 audio service were not changed.
 
