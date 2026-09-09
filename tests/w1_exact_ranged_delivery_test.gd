@@ -352,6 +352,9 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	player.current_hp = hp_before
 	_projectile_descriptors.clear()
 	attacker._attack_timer = 0.0
+	# The previous map-boundary cancellation legitimately cleared the target.
+	# Reacquire it before testing the independent epoch boundary.
+	attacker.target = player
 	attacker._physics_process(0.01)
 	assert(
 		_projectile_descriptors.size() == 1,
@@ -600,6 +603,7 @@ func _run_target_magic_case() -> void:
 	player.current_hp = hp_before
 	_target_magic_descriptors.clear()
 	attacker._attack_timer = 0.0
+	attacker.target = player
 	attacker._physics_process(0.01)
 	assert(_target_magic_descriptors.size() == 1)
 	var transition_token := "w1-id224-epoch"
