@@ -7,6 +7,7 @@ extends Node
 
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 const FIXTURE_MONSTER_ID := 19
+const FormalFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 
 func _ready() -> void:
@@ -35,9 +36,17 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	game.player.current_mp = 500
-	var target := _make_enemy(game, game.player, game.player.global_position + Vector2(40, 0))
+	var caster: PlayerCharacter = game.player
+	caster.current_mp = 500
+	var target: EnemyActor = await FormalFixture.prepare_target(
+		self,
+		game,
+		caster,
+		FIXTURE_MONSTER_ID,
+		"skill_runtime_no_visual_plan",
+	)
 	game._set_magic_locked_target(target, true)
+	assert(game.magic_locked_target == target, "runtime no-visual-plan target was rejected by the formal WORLD gate")
 	game._skill_cast_target = target
 	await get_tree().process_frame
 	Plan.reset_sentinels_for_tests()
@@ -60,29 +69,3 @@ func _run() -> void:
 	await get_tree().process_frame
 	print("SKILL_RUNTIME_NO_VISUAL_PLAN_PASS")
 	get_tree().quit(0)
-
-
-func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
-	var enemy := EnemyActor.new()
-	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
-	assert(
-		not canonical_data.is_empty(),
-		"runtime no-visual-plan fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
-	)
-	enemy.setup(canonical_data, caster, false)
-	assert(
-		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
-		"runtime no-visual-plan fixture must remain an ordinary exact-ID target"
-	)
-	enemy.max_hp = 9999
-	enemy.current_hp = enemy.max_hp
-	enemy.global_position = position
-	enemy.control_time = 60.0
-	game.add_child(enemy)
-	assert(
-		is_instance_valid(enemy)
-		and not enemy.is_queued_for_deletion()
-		and enemy.can_receive_damage(),
-		"runtime no-visual-plan fixture target must survive exact-ID admission"
-	)
-	return enemy
