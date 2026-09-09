@@ -80,7 +80,8 @@ func _run() -> void:
 	assert(panel.size == Vector2(1080, 620), "商店没有使用横屏安全尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "商店没有复用公共哥特外框")
 	assert(panel.gold_label.position.y >= 20.0 and panel.gold_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "商店金币文字仍然贴近装饰框上沿")
-	assert(panel.detail_label.position.x >= 24.0 and panel.detail_label.position.y >= 60.0, "商品详情文字没有避开装饰框安全内边距")
+	var shop_safe_rect := panel.get_global_rect().grow(-18.0)
+	assert(shop_safe_rect.encloses(panel.item_detail_presenter.get_global_rect()), "共享商品详情浮窗没有避开面板安全内边距：%s / %s" % [panel.item_detail_presenter.get_global_rect(), shop_safe_rect])
 	assert(panel.detail_label.get_meta("calibration_runtime_text", false), "商店动态详情文字会被旧校准文案覆盖")
 	assert(panel.goods_grid.columns == 2 and panel.goods_buttons.size() == STOCK.size(), "商品没有使用两列双格卡布局")
 	var buy_card_creation_count := panel._goods_card_creation_count
@@ -97,7 +98,7 @@ func _run() -> void:
 	panel._select_shop_item(0)
 	assert(panel.item_list.get_selected_items() == PackedInt32Array([0]), "商品卡选择没有同步购买逻辑")
 	assert(panel.goods_buttons[0].theme_type_variation == "GothicComponentSelectedShopCard", "选中商品没有公共高亮状态")
-	assert("匕首" in panel.detail_label.text, "商品详情没有响应卡片选择")
+	assert(panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "商品详情没有响应卡片选择")
 	var gold_before := PlayerState.gold
 	var buy_quote := panel._buy_quote_for_index(0)
 	panel._buy_selected()

@@ -13,6 +13,8 @@ const INSPECTOR_GAP := 16
 const WORLD_BOOTSTRAP_TIMEOUT_MSEC := 30000
 const LEVEL_UP_PREVIEW_ARG := "--level-up-preview"
 const LEVEL_UP_PREVIEW_CAPTURE_ARG_PREFIX := "--capture-level-up-preview="
+const INVENTORY_ATTRIBUTE_PREVIEW_ARG := "--inventory-attribute-preview"
+const INVENTORY_ATTRIBUTE_PREVIEW_CAPTURE_ARG_PREFIX := "--capture-inventory-attribute-preview="
 const LEVEL_UP_PREVIEW_PEAK_PROGRESS := 0.48
 const LEVEL_UP_PREVIEW_RESTART_GAP_SECONDS := 0.65
 
@@ -53,6 +55,9 @@ var _level_up_preview_capture_done := false
 var _level_up_preview_auto_active := false
 var _level_up_preview_peak_reached := false
 var _level_up_preview_restart_remaining := -1.0
+var _inventory_attribute_preview_requested := false
+var _inventory_attribute_preview_capture_path := ""
+var _inventory_attribute_preview_capture_done := false
 
 
 func _ready() -> void:
@@ -69,6 +74,8 @@ func _ready() -> void:
 	_print_geometry()
 	if _level_up_preview_requested:
 		_start_requested_level_up_preview.call_deferred()
+	if _inventory_attribute_preview_requested:
+		_start_requested_inventory_attribute_preview.call_deferred()
 
 
 func _process(delta: float) -> void:
@@ -107,6 +114,16 @@ func _parse_level_up_preview_args(user_args: PackedStringArray) -> void:
 				continue
 			_level_up_preview_capture_path = capture_path
 			_level_up_preview_requested = true
+		elif argument == INVENTORY_ATTRIBUTE_PREVIEW_ARG:
+			_inventory_attribute_preview_requested = true
+		elif argument.begins_with(INVENTORY_ATTRIBUTE_PREVIEW_CAPTURE_ARG_PREFIX):
+			var inventory_capture_raw := argument.trim_prefix(INVENTORY_ATTRIBUTE_PREVIEW_CAPTURE_ARG_PREFIX).strip_edges()
+			var inventory_capture_path := _resolve_project_local_capture_path(inventory_capture_raw)
+			if inventory_capture_path.is_empty():
+				push_error("inventory attribute preview capture path must be a project-local PNG: %s" % inventory_capture_raw)
+				continue
+			_inventory_attribute_preview_capture_path = inventory_capture_path
+			_inventory_attribute_preview_requested = true
 
 
 func _resolve_project_local_capture_path(raw_path: String) -> String:
@@ -146,6 +163,41 @@ func _start_requested_level_up_preview() -> void:
 		level_up_preview.set_anchor(preview_anchor if preview_anchor is Vector2 else Vector2.ZERO)
 	_level_up_preview_auto_active = true
 	_start_level_up_preview_auto_cycle()
+
+
+func _start_requested_inventory_attribute_preview() -> void:
+	# This opens exactly one production panel and selects one in-memory equipment
+	# instance. It never invokes overlay.save_profile or the profile promoter.
+	await _show_panel(1)
+	var inventory_panel := hud.get("inventory_panel") as Node
+	assert(inventory_panel != null and inventory_panel.visible, "inventory attribute preview panel did not open")
+	var candidate_index := -1
+	for index in range(PlayerState.inventory.size()):
+		var record: Variant = PlayerState.inventory[index]
+		if record is Dictionary and str((record as Dictionary).get("name", "")) == "匕首":
+			candidate_index = index
+			break
+	assert(candidate_index >= 0, "inventory attribute preview candidate is missing")
+	inventory_panel.call("_select_inventory_item", candidate_index)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(inventory_panel.get("item_detail_presenter") != null, "inventory attribute presenter is missing")
+	var presenter = inventory_panel.get("item_detail_presenter")
+	assert(bool(presenter.visible), "inventory attribute presenter did not reveal the selected item")
+	if not _inventory_attribute_preview_capture_path.is_empty() and not _inventory_attribute_preview_capture_done:
+		await RenderingServer.frame_post_draw
+		var capture_directory := _inventory_attribute_preview_capture_path.get_base_dir()
+		DirAccess.make_dir_recursive_absolute(capture_directory)
+		var image := get_viewport().get_texture().get_image()
+		var save_error := image.save_png(_inventory_attribute_preview_capture_path) if image != null else ERR_UNCONFIGURED
+		assert(save_error == OK, "inventory attribute preview capture failed: %s" % save_error)
+		_inventory_attribute_preview_capture_done = true
+		print("UI_INVENTORY_ATTRIBUTE_PREVIEW_CAPTURE_PASS path=%s title=%s rect=%s" % [
+			_inventory_attribute_preview_capture_path,
+			str(presenter.get("title_label").text),
+			presenter.get_global_rect(),
+		])
+	print("UI_INVENTORY_ATTRIBUTE_PREVIEW_READY candidate=匕首 index=%d presenter=%s" % [candidate_index, presenter.get_global_rect()])
 
 
 func _start_level_up_preview_auto_cycle() -> void:
@@ -267,6 +319,15 @@ func _build_production_game() -> void:
 	PlayerState.add_item("强效太阳水", 82)
 	PlayerState.add_item("魔法药(中量)", 94)
 	PlayerState.add_item("金创药(小量)", 25)
+	if _inventory_attribute_preview_requested:
+		PlayerState.add_item("匕首")
+		PlayerState.add_item("布衣(男)")
+		PlayerState.add_item("古铜戒指")
+		for candidate_record: Variant in PlayerState.inventory:
+			if candidate_record is Dictionary and str((candidate_record as Dictionary).get("name", "")) == "匕首":
+				(candidate_record as Dictionary)["modifiers"] = [{"stat": "attack_max", "op": "add", "value": 1}]
+				(candidate_record as Dictionary)["drop_affix"] = {"applied": true, "stat": "attack_max", "op": "add", "value": 1}
+				break
 	PlayerState.warehouse_inventory = [{"name": "魔法药(小量)", "count": 23}]
 	game = load("res://scenes/main.tscn").instantiate()
 	add_child(game)

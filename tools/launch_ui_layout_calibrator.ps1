@@ -1,6 +1,9 @@
 param(
     [switch]$LevelUpPreview,
-    [string]$CaptureLevelUpPreview = ''
+    [string]$CaptureLevelUpPreview = '',
+    [switch]$InventoryAttributePreview,
+    [string]$CaptureInventoryAttributePreview = '',
+    [switch]$Visible
 )
 
 $ErrorActionPreference = 'Stop'
@@ -49,6 +52,13 @@ if ($LevelUpPreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureLeve
 if (-not [string]::IsNullOrWhiteSpace($CaptureLevelUpPreview)) {
     $CaptureArgument = Resolve-ProjectLocalPngArgument $CaptureLevelUpPreview
     $PreviewUserArguments += "--capture-level-up-preview=$CaptureArgument"
+}
+if ($InventoryAttributePreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureInventoryAttributePreview)) {
+    $PreviewUserArguments += '--inventory-attribute-preview'
+}
+if (-not [string]::IsNullOrWhiteSpace($CaptureInventoryAttributePreview)) {
+    $InventoryCaptureArgument = Resolve-ProjectLocalPngArgument $CaptureInventoryAttributePreview
+    $PreviewUserArguments += "--capture-inventory-attribute-preview=$InventoryCaptureArgument"
 }
 
 $Arguments = @(
@@ -104,4 +114,8 @@ if ($PreviewUserArguments.Count -gt 0) {
     $Arguments += '--'
     $Arguments += $PreviewUserArguments
 }
-Start-Process -FilePath $Godot -ArgumentList $Arguments -WorkingDirectory $ProjectRoot -WindowStyle Hidden
+$WindowStyle = 'Hidden'
+if ($Visible.IsPresent) {
+    $WindowStyle = 'Normal'
+}
+Start-Process -FilePath $Godot -ArgumentList $Arguments -WorkingDirectory $ProjectRoot -WindowStyle $WindowStyle
