@@ -10,9 +10,9 @@ class PlayerProbe extends PlayerCharacter:
 
 class SummonProbe extends SummonActor:
 	var commits := 0
-	func _apply_resolved_damage(amount: int) -> void:
+	func _apply_resolved_damage(amount: int, causes_struck := true) -> void:
 		commits += 1
-		super._apply_resolved_damage(amount)
+		super._apply_resolved_damage(amount, causes_struck)
 
 
 func _ready() -> void:

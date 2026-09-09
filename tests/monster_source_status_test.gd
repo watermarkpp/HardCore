@@ -60,11 +60,13 @@ func _run() -> void:
 	summon.current_hp = 100
 	summon.ac_min = 100
 	summon.ac_max = 100
+	summon._hit_visual_remaining = 0.0
 	assert(summon.apply_monster_poison(2, 30.0, 2.5))
 	summon._update_monster_source_poison(2.49)
 	assert(summon.current_hp == 100)
 	summon._update_monster_source_poison(0.01)
 	assert(summon.current_hp == 98)
+	assert(summon._hit_visual_remaining == 0.0, "periodic poison must not play pet struck/hurt")
 	assert(player.begin_combat_transition("pet-poison-test"))
 	summon._update_monster_source_poison(20.0)
 	assert(summon.current_hp == 98)
