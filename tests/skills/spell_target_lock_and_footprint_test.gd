@@ -8,16 +8,20 @@ func _ready() -> void:
 	_test_lock_range_and_order()
 	_test_spell_range_is_independent_from_lock_range()
 	_test_monster_footprint_cell_contact()
-	print("SPELL_TARGET_LOCK_AND_FOOTPRINT_PASS: 12-GU Euclidean lock stays separate from spell range and area damage uses footprint contact")
+	print("SPELL_TARGET_LOCK_AND_FOOTPRINT_PASS: 10-GU Euclidean lock stays separate from spell range and area damage uses footprint contact")
 	get_tree().quit(0)
 
 
 func _test_lock_range_and_order() -> void:
 	assert(LockPolicy.CONTRACT_ID == "combat.spell_lock.euclidean_gu.v2")
-	assert(LockPolicy.LOCK_RANGE_GU == 12.0)
-	assert(not LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(12.0, -3.0)))
-	assert(LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(7.2, 9.6)))
-	assert(not LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(12.01, 0.0)))
+	assert(LockPolicy.LOCK_RANGE_GU == 10.0)
+	assert(not LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(10.0, -3.0)))
+	assert(LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(6.0, 8.0)))
+	for direction_index in range(8):
+		var direction := Vector2.RIGHT.rotated(direction_index * PI / 4.0)
+		assert(LockPolicy.is_within_lock_range(Vector2.ZERO, direction * 9.999))
+		assert(LockPolicy.is_within_lock_range(Vector2.ZERO, direction * 10.0))
+		assert(not LockPolicy.is_within_lock_range(Vector2.ZERO, direction * 10.001))
 	var ordered := LockPolicy.ordered_candidates([
 		{"origin_ground_gu": Vector2.ZERO, "target_ground_gu": Vector2(4, 4), "instance_id": 3},
 		{"origin_ground_gu": Vector2.ZERO, "target_ground_gu": Vector2(2, 0), "instance_id": 2},
@@ -33,7 +37,7 @@ func _test_lock_range_and_order() -> void:
 
 func _test_spell_range_is_independent_from_lock_range() -> void:
 	var origin := Vector2.ZERO
-	var locked_target := Vector2(11, 0)
+	var locked_target := Vector2(9.5, 0)
 	assert(LockPolicy.is_within_lock_range(origin, locked_target))
 	assert(not LockPolicy.spell_range_allows_target(origin, locked_target, 9.0))
 	assert(not LockPolicy.spell_range_allows_target(origin, Vector2(9, 9), 9.0))

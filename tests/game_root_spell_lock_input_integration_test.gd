@@ -27,8 +27,12 @@ func _run() -> void:
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	for frame in range(1200):
+		await get_tree().process_frame
+		if not game._world_bootstrap_in_progress and not game._map_transition_in_progress:
+			break
+	assert(game.gameplay_input_is_enabled())
+	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5, 13.5)))
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			(value as EnemyActor).global_position = game.player.global_position + Vector2(4000, 4000)
@@ -57,7 +61,7 @@ func _run() -> void:
 
 	game.queue_free()
 	await get_tree().process_frame
-	print("GAME_ROOT_SPELL_LOCK_INPUT_INTEGRATION_PASS: idle 12-tile magic lock, exact spell range, footprint contact, click/hold cast, and shield auto-refresh are integrated")
+	print("GAME_ROOT_SPELL_LOCK_INPUT_INTEGRATION_PASS: idle 10-tile magic lock, exact spell range, footprint contact, click/hold cast, and shield auto-refresh are integrated")
 	get_tree().quit(0)
 
 
@@ -79,13 +83,13 @@ func _test_idle_cycle_and_lock_range(
 	assert(game.player.current_mp == mana_before)
 	assert(game.player._combat_action_sequence == action_sequence_before)
 
-	_move_enemy(game, far_target, origin_tile + Vector2(12.0, 0.0))
+	_move_enemy(game, far_target, origin_tile + Vector2(10.0, 0.0))
 	game._validate_locked_target()
 	assert(game.magic_locked_target == far_target)
-	_move_enemy(game, far_target, origin_tile + Vector2(12.01, 0.0))
+	_move_enemy(game, far_target, origin_tile + Vector2(10.001, 0.0))
 	game._validate_locked_target()
 	assert(game.magic_locked_target == null)
-	assert(SpellLockPolicy.LOCK_RANGE_GU == 12.0)
+	assert(SpellLockPolicy.LOCK_RANGE_GU == 10.0)
 	_move_enemy(game, far_target, origin_tile + Vector2(8, 0))
 
 
@@ -193,7 +197,7 @@ func _test_target_centered_release_rejects_lost_lock(
 		"locked_target_instance_id": near_target.get_instance_id(),
 		"locked_target_valid_at_release": true,
 	}
-	_move_enemy(game, near_target, origin_tile + Vector2(12.01, 0.0))
+	_move_enemy(game, near_target, origin_tile + Vector2(10.001, 0.0))
 	assert(game._combat_release_target(release_geometry) == near_target)
 	assert(not game._is_magic_target_in_range(near_target))
 	var serial_before: int = game._canonical_cast_serial
@@ -207,7 +211,7 @@ func _test_target_centered_release_rejects_lost_lock(
 	)
 	assert(
 		game._canonical_cast_serial == serial_before,
-		"target-centred spell fell back to a ground cast after its lock left 12 tiles"
+		"target-centred spell fell back to a ground cast after its lock left 10 tiles"
 	)
 	assert(game.player.current_mp == mana_before)
 	assert(game._skill_cast_target == null)
@@ -633,7 +637,7 @@ func _test_projectile_target_range_contract(
 	)
 	var outer_target := _make_enemy(
 		game,
-		origin_tile + Vector2(11.0, 0.0),
+		origin_tile + Vector2(9.5, 0.0),
 		"projectile-range-outer"
 	)
 	var projectile_skill_ids: Array[String] = [
@@ -750,11 +754,11 @@ func _test_caster_empty_primary_uses_physical_lock(
 		game._set_attack_locked_target(stale_physical_target, true)
 		var far_target := _make_enemy(
 			game,
-			origin_tile + Vector2(11.0, 0.0),
+			origin_tile + Vector2(9.5, 0.0),
 			"caster-basic-far-%s" % profession_id
 		)
 		game._on_enemy_target_requested(far_target)
-		assert(game.locked_target == stale_physical_target)
+		assert(game.locked_target == far_target)
 		assert(game.magic_locked_target == far_target)
 		game._activate_magic_skill_domain()
 		assert(game._active_display_target() == far_target)
@@ -863,6 +867,7 @@ func _make_enemy(game: Node, tile: Vector2, display_name: String) -> EnemyActor:
 		Callable(enemy, "spatial_index_position"),
 	)
 	game.add_child(enemy)
+	enemy.environment_blocker = game.background
 	enemy.set_physics_process(false)
 	return enemy
 

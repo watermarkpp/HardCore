@@ -134,6 +134,7 @@ var _cast_speed_multiplier := 1.0
 var _dead := false
 var _combat_transition_token := ""
 var combat_epoch := 0
+var hc_world_skill_preflight := Callable()
 var movement_input_active := false
 var movement_facing := Vector2.DOWN
 var actual_motion_facing := Vector2.DOWN
@@ -469,6 +470,9 @@ func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	if stable_skill_id == "wizard.lightning":
+		if not hc_world_skill_preflight.is_valid() or not bool(hc_world_skill_preflight.call(stable_skill_id, locked_target_instance_id)):
+			return false
 	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
 	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
 	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)

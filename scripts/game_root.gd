@@ -1412,6 +1412,7 @@ func _ready() -> void:
 	player.attack_requested.connect(_on_player_attack)
 	player.environment_blocker = background
 	player.skill_requested.connect(_on_player_skill)
+	player.hc_world_skill_preflight = Callable(self, "_hc_skill_preflight")
 	player.skill_cast_started.connect(_on_skill_cast_audio_started)
 	player.warrior_skill_state_changed.connect(_on_warrior_skill_state_changed)
 	player.stats_changed.connect(_on_player_stats_changed)
@@ -4773,6 +4774,7 @@ func _is_magic_target_in_range(target: EnemyActor) -> bool:
 			_spell_lock_ground_gu(player.global_position),
 			_spell_lock_ground_gu(target.global_position)
 		)
+		and _combat_target_world_clear(target, player.global_position, true)
 	)
 
 
@@ -4864,10 +4866,13 @@ func _is_attack_target_in_range(target: EnemyActor) -> bool:
 		and target.current_hp > 0
 		and _attack_lock_distance_gu(target)
 		<= ATTACK_LOCK_RANGE_GU + GroundUnitSpaceScript.EPSILON_GU
+		and _combat_target_world_clear(target, player.global_position, true)
 	)
 
 
 func _on_enemy_target_requested(enemy: EnemyActor) -> void:
+	if not gameplay_input_is_enabled():
+		return
 	var magic_domain_active := _magic_target_domain_is_active()
 	if _uses_magic_lock_domain():
 		# A caster click may be valid in one or both lock domains. Keep each
@@ -6781,6 +6786,11 @@ func _execute_canonical_skill(
 		release_context
 	)
 	var cast_target := _skill_cast_target
+	if stable_skill_id == "wizard.lightning" and not _hc_lightning_clear(cast_target, origin):
+		_skill_cast_target = null
+		return {"accepted": false, "effect_success": false, "reason": "world_los_blocked", "skill_id": stable_skill_id}
+	if stable_skill_id == "wizard.lightning":
+		target_context["line_of_sight"] = true
 	var request_facing := _canonical_facing_for_skill(stable_skill_id, direction)
 	if stable_skill_id == WILD_RUSH_SKILL_ID and cast_target != null:
 		var rush_plan := _build_wild_rush_path_plan(
@@ -7376,6 +7386,8 @@ func _canonical_target_context(
 	# effect destination and footprint snapshot describe different ground
 	# positions.
 	context.merge(context_overrides, true)
+	if stable_skill_id == "wizard.lightning":
+		context["line_of_sight"] = usable_target and _hc_lightning_clear(target, origin)
 	if stable_skill_id in [
 		"taoist.summon_skeleton",
 		"taoist.summon_divine_beast",
@@ -8331,6 +8343,8 @@ func _apply_canonical_spell_damage(
 	var aoe_exact_started_usec := RuntimeDiagnostics.timing_start()
 	var hit_any := false
 	for enemy: EnemyActor in targets:
+		if stable_skill_id == "wizard.lightning" and not _hc_lightning_clear(enemy, origin):
+			continue
 		var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
 			enemy,
 			stable_skill_id,
@@ -10341,7 +10355,7 @@ func _canonical_primary_stat_roll(profession_id: String) -> int:
 	var maximum_key := "tao_max" if profession_id == "taoist" else ("magic_max" if profession_id == "wizard" else "attack_max")
 	var minimum := int(PlayerState.computed_stats.get(minimum_key, 0))
 	var maximum := maxi(minimum, int(PlayerState.computed_stats.get(maximum_key, minimum)))
-	return _rng.randi_range(minimum, maximum)
+	return WarriorCombatMath.roll_primary_stat(minimum, maximum, int(PlayerState.computed_stats.get("luck", 0)), _rng)
 
 
 func _next_canonical_seed() -> int:
@@ -12476,3 +12490,38 @@ func _spawn_slot_is_alive(slot_id: String, generation: int) -> bool:
 			if str(value.get_meta("spawn_slot_id", "")) == slot_id and int(value.get_meta("zone_generation", -1)) == generation:
 				return true
 	return false
+
+# HC-MELEE-AI-PACKAGE: lightning legality stays in the canonical pipeline.
+var _hc_lightning_hint_ms := -1000
+
+func _hc_lightning_clear(victim: EnemyActor, caster_origin: Vector2) -> bool:
+	return _combat_target_world_clear(victim, caster_origin, false)
+
+
+func _combat_target_world_clear(victim: EnemyActor, caster_origin: Vector2, allow_cache := false) -> bool:
+	if not is_instance_valid(player) or player._dead or player.combat_transition_is_active() or current_map_id < 0:
+		return false
+	if not is_instance_valid(victim) or not victim.can_receive_damage():
+		return false
+	if victim.runtime_map_id != current_map_id or victim.is_queued_for_deletion():
+		return false
+	if int(victim.get_meta("zone_generation", _zone_generation)) != _zone_generation:
+		return false
+	var a := _canonical_screen_px_to_ground_gu(caster_origin)
+	var b := _canonical_screen_px_to_ground_gu(victim.global_position)
+	if not a.is_finite() or not b.is_finite() or not is_instance_valid(background):
+		return false
+	# Cast gates query fresh WORLD geometry; target selection can reuse its cache.
+	# The victim provides the same formal map projection injected by GameRoot.
+	return victim._world_attack_path_is_clear(a, b, caster_origin, victim.global_position, allow_cache)
+
+func _hc_skill_preflight(stable_skill_id: String, target_id: int) -> bool:
+	if stable_skill_id != "wizard.lightning":
+		return true
+	var object: Object = instance_from_id(target_id) if target_id > 0 else null
+	var victim := object as EnemyActor
+	var clear := _hc_lightning_clear(victim, player.global_position)
+	if not clear and hud != null and Time.get_ticks_msec() - _hc_lightning_hint_ms >= 500:
+		_hc_lightning_hint_ms = Time.get_ticks_msec()
+		hud.show_message("目标被遮挡或已失效", 1.5)
+	return clear
