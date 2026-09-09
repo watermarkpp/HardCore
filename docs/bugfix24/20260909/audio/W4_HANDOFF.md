@@ -82,26 +82,25 @@ EnemyActor 对 W3 后续接口采用兼容适配：若目标实现 `combat_trans
 tools/godot-4.7/Godot_v4.7-stable_win64_console.exe --headless --editor --path . --quit --log-file outputs/test_logs/audio_import_console.log
 ```
 
-正式 runner 均使用工作树 `.godot/runtime_appdata` 和 `outputs/test_logs`，普通超时 30 秒：
+正式 runner 均使用工作树 .godot/runtime_appdata 和 outputs/test_logs；普通专项超时 30 秒，正式地图性能探针使用 60 秒。生产链 fe3585ff -> 4f714f75 的专项 PASS 证据如下：
 
-| 测试 | 命令结果 | runner 结果文件 |
+| 测试 | 命令结果 | runner 结果文件与 HEAD |
 |---|---|---|
-| 服务映射、NPC/玩家/物品回归、W4 会话和增益 | PASS | `outputs/test_logs/audio_runtime_service_test.stdout.log`；最终 runner JSON 以交付消息列出的 `runner_results_adhoc_*.json` 为准 |
-| EnemyActor 正式音频入口/生命周期 | PASS | `outputs/test_logs/monster_audio_hook_test.stdout.log` |
-| 真实 EnemyActor + AudioRuntimeService 联合入口 | PASS | `outputs/test_logs/audio_w4_actor_service_test.stdout.log` |
-| W4 预算、并发和资源前拒绝 | PASS | `outputs/test_logs/audio_w4_contract_test.stdout.log` |
-| 玩家核心音频回归 | PASS | `outputs/test_logs/player_core_audio_hook_test.stdout.log` |
-| 玩家物品音频回归 | PASS | `outputs/test_logs/player_item_audio_event_test.stdout.log` |
-| 投射物音频生命周期回归 | PASS | `outputs/test_logs/projectile_audio_lifecycle_test.stdout.log` |
-| W4 固定性能探针 | PASS | `outputs/test_logs/audio_w4_performance_probe_test.stdout.log` |
-
+| 服务映射、NPC/玩家/物品回归、W4 会话和增益 | PASS | outputs/test_logs/runner_results_adhoc_20260909_122625_833_15296.json，HEAD 4f714f7545077bcba3f5fd362159d87bfbcbb480 |
+| EnemyActor 正式音频入口/生命周期 | PASS | outputs/test_logs/runner_results_adhoc_20260909_122548_728_7712.json，HEAD 4f714f7545077bcba3f5fd362159d87bfbcbb480 |
+| 真实 EnemyActor + AudioRuntimeService 联合入口 | PASS | outputs/test_logs/runner_results_adhoc_20260909_122601_741_8876.json，HEAD 4f714f7545077bcba3f5fd362159d87bfbcbb480 |
+| W4 预算、并发和资源前拒绝 | PASS | outputs/test_logs/runner_results_adhoc_20260909_122614_913_11428.json，HEAD 4f714f7545077bcba3f5fd362159d87bfbcbb480 |
+| 玩家核心音频回归 | PASS | outputs/test_logs/runner_results_adhoc_20260909_121443_289_23396.json，HEAD fe3585ffccc8866e8e4586a09fa61af5464b4719 |
+| 玩家物品音频回归 | PASS | outputs/test_logs/runner_results_adhoc_20260909_121502_951_8328.json，HEAD fe3585ffccc8866e8e4586a09fa61af5464b4719 |
+| 投射物音频生命周期回归 | PASS | outputs/test_logs/runner_results_adhoc_20260909_121519_209_19576.json，HEAD fe3585ffccc8866e8e4586a09fa61af5464b4719 |
+| W4 固定性能探针 | PASS | 候选和基线 runner 结果见下方固定性能采样段；两次均 passed=1 failed=0 engine_log_errors=0 |
 对应命令示例：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -TestPaths tests/audio_runtime_service_test.tscn -TimeoutSeconds 30
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -TestPaths tests/monster_audio_hook_test.tscn -TimeoutSeconds 30
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -TestPaths tests/audio_w4_contract_test.tscn -TimeoutSeconds 30
-powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -TestPaths tests/audio_w4_performance_probe_test.tscn -TimeoutSeconds 30
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -TestPaths tests/audio_w4_performance_probe_test.tscn -TimeoutSeconds 60
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -TestPaths tests/player_core_audio_hook_test.tscn -TimeoutSeconds 30
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -TestPaths tests/player_item_audio_event_test.tscn -TimeoutSeconds 30
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -TestPaths tests/projectile_audio_lifecycle_test.tscn -TimeoutSeconds 30
@@ -122,27 +121,49 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/run_godot_tests.ps1 -T
 
 ## 固定性能采样
 
-`audio_w4_performance_probe_test` 在相同当前代码、预热缓存、console/headless 环境下，
-每个条件 32 个批次，逐批驱动 0/10/20/50 个合成 monster attack 请求；为测量路由而停止
-每个已准入声部，并用隔离服务时钟跨预算窗口，未改变实际怪物数量、AI、寻路、战斗随机数或
-地图。完整 JSON 在 `outputs/test_logs/audio_w4_performance_probe_test.stdout.log`。
+正式对照采用两个独立工作树和同一份固定性能夹具：
 
-| 怪物请求数 | 新代码 SFX on p50/p95/p99 ms | 新代码 SFX off p50/p95/p99 ms | on 实际启动数 | off 拒绝数 |
-|---:|---:|---:|---:|---:|
-| 0 | 0/0/0.001 | 0/0.001/0.001 | 0 | 0 |
-| 10 | 0.670/0.738/0.752 | 0.121/0.130/0.138 | 320 | 320 |
-| 20 | 1.335/1.455/1.470 | 0.242/0.278/0.284 | 640 | 640 |
-| 50 | 3.351/3.432/3.473 | 0.608/0.705/0.708 | 1600 | 1600 |
+- 旧基线工作树：C:/Users/Administrator/Documents/HardCore-worktrees/bugfix24-audio-baseline-20260909，detached HEAD cf1d2718befdef7e6cc2fb274fd91ce0759d105f。
+- 候选工作树：C:/Users/Administrator/Documents/HardCore-worktrees/bugfix24-audio-20260909，生产 HEAD 4f714f7545077bcba3f5fd362159d87bfbcbb480，生产链为 fe3585ffccc8866e8e4586a09fa61af5464b4719 -> 4f714f7545077bcba3f5fd362159d87bfbcbb480。
+- 两次运行都实例化正式地图 world_wooma_forest（map_id 910004），从同一组已编排的 50 个普通 EnemyActor 中取前缀 20 或 50 个；固定 seed 20260909，热身 30 帧，采样 64 帧，步长为 1/60 秒。
+- 夹具保留 50 个普通 actor，按生产 _audio_is_listenable() 只给可听见的真实 cohort 设置 player target。实际 active cohort 是总 actor 20 时 3 个、总 actor 50 时 11 个（采样结束仍可听见分别为 3 和 10）；其余 actor 没有伪造攻击边界，结果不能描述为 20/50 个都在攻击。
+- 每帧 CPU 是直接驱动该正式地图 EnemyActor 的 _physics_process；audio CPU 是同一批 actor 的生产 _audio_try_enter_combat_session / _audio_observe_visual_state 路径。AudioProxy 只统计真实 GameRoot AudioRuntimeService 的请求和 status=played 返回，没有绕过服务或合成播放计数。
 
-`old code on/off` 无法在当前工作树与新服务并存执行，因此探针 JSON 明确记录
-`legacy_old_on.status=not_available_in_current_head`，没有把新旧代码伪装成同条件对照。
-headless 只能证明本服务的准入、池、缓存和 CPU 路径；不能证明真实扬声器混音延迟、硬件
-音频线程、渲染帧时间或 Android 行为。本包没有 Android 结论，也没有降低 AI 或删除怪物来
-制造性能结果。
+完整原始 JSON 行和逐帧样本保留在各工作树的 outputs/test_logs/audio_w4_performance_probe_test.stdout.log。下表的 full frame 与 audio CPU 单位均为毫秒，顺序为 p50/p95/p99；request/play 是该条件内 proxy 观察到的服务请求数/实际 played 数。
+
+| 代码与 SFX | 总 actor | active/采样末可听 | service request/play | full frame p50/p95/p99 | audio CPU p50/p95/p99 |
+|---|---:|---:|---:|---:|---:|
+| cf1d legacy_on | 20 | 3/3 | 3/0 | 0.353/0.537/0.812 | 0.014/0.028/0.053 |
+| cf1d legacy_off | 20 | 3/3 | 3/0 | 0.288/0.472/0.489 | 0.014/0.016/0.018 |
+| W4 candidate_on | 20 | 3/3 | 3/3 | 0.461/0.512/0.587 | 0.014/0.028/0.036 |
+| cf1d legacy_on | 50 | 11/10 | 11/0 | 0.898/1.358/1.562 | 0.035/0.042/0.058 |
+| cf1d legacy_off | 50 | 11/10 | 11/0 | 0.833/1.335/1.388 | 0.062/0.069/0.075 |
+| W4 candidate_on | 50 | 11/10 | 11/3 | 1.038/1.522/1.601 | 0.057/0.074/0.090 |
+
+独立 warmup 30 帧的 p50/p95/p99 依次为：legacy_on-20 0.295/0.492/0.513，legacy_off-20 0.300/0.503/0.548，candidate_on-20 0.338/0.503/0.513；legacy_on-50 0.862/1.824/1.825，legacy_off-50 0.902/1.354/1.532，candidate_on-50 1.038/1.766/1.920。
+
+候选 20 条件的服务指标为 prompt admitted 3、polyphony rejected 0、stream lookup 3、stream cache miss 0、owner release duplicate 0；候选 50 条件为 prompt admitted 3、polyphony rejected 8、stream lookup 3、stream cache miss 0、owner release duplicate 0，配置的怪物并发上限为 6。两次候选条件的 project_sfx_gain_linear 和 effective_sfx_gain_linear 都是 0.5。旧版的 play=0 是旧 service 运行时返回的真实观察结果，未将请求数改写成播放数，也未用候选服务替代旧版本。
+
+正式 runner 证据：
+
+- 候选：C:/Users/Administrator/Documents/HardCore-worktrees/bugfix24-audio-20260909/outputs/test_logs/runner_results_adhoc_20260909_130820_055_20704.json，HEAD 4f714f7545077bcba3f5fd362159d87bfbcbb480，passed=1 failed=0 engine_log_errors=0。原始 stdout/stderr/Godot log 为同目录的 audio_w4_performance_probe_test.stdout.log、.stderr.log、.godot.log。
+- 基线：C:/Users/Administrator/Documents/HardCore-worktrees/bugfix24-audio-baseline-20260909/outputs/test_logs/runner_results_adhoc_20260909_130511_297_4320.json，HEAD cf1d2718befdef7e6cc2fb274fd91ce0759d105f，passed=1 failed=0 engine_log_errors=0。原始 stdout/stderr/Godot log 为同目录的同名三件套。
+- 基线先完成受控 console/headless 导入，日志为 C:/Users/Administrator/Documents/HardCore-worktrees/bugfix24-audio-baseline-20260909/outputs/test_logs/audio_baseline_import_console.log，退出码 0；导入缓存达到 16929 个文件。未使用 GUI，也未改共享 dev_art_sources 或 editor data。
+
+失败现场全部保留并定性如下：
+
+- 候选 runner_results_adhoc_20260909_123857_236_5800.json、124344_718_18424.json：外层把 runner stdout 重定向到 runner 为子进程保留的同名 stdout 文件，导致子进程/marker 失败；两次 engine_log_errors=0，不是生产错误。
+- 候选 runner_results_adhoc_20260909_124506_514_9844.json、124552_025_3064.json：同一日志重定向冲突的后续残留，分别为 early script/child stderr 失败；停止外层重定向后由 124806_474_14380.json 起恢复 PASS。
+- 基线 runner_results_adhoc_20260909_125748_729_12984.json：完整导入尚未结束，正式地图资源的 PNG loader 缺失；随后受控导入完成，未改生产代码。
+- 基线 runner_results_adhoc_20260909_130246_204_10216.json：夹具调试快照直接读取旧基线不存在的动态字段，导致夹具运行时失败。
+- 基线 runner_results_adhoc_20260909_130421_574_16180.json：夹具使用了 Godot 4.7 不支持的 Object.get 双参数调用；改为单参数读取并做类型保护后，130511_297_4320.json PASS。
+- 更早的服务/actor 失败 113635_582_22876.json、115010_271_20376.json、115524_710_4320.json、115548_936_10800.json、115606_019_5676.json、115658_354_6656.json、120145_468_11028.json、120207_161_1980.json、122251_145_6680.json 的原因与上面的测试夹具/导入修正相同，原始 runner JSON 均未删除；没有通过删断言或挑选绿色结果解决。
+
+headless 证据只覆盖正式地图实例化后的 EnemyActor 逐帧 CPU、生产音频服务准入、请求、播放、池和缓存计数；不代表真实扬声器混音延迟、硬件音频线程、渲染提交、Android CPU/GPU 或设备行为。没有生成 Android 结论，也没有通过减少 actor、改变 AI/寻路/战斗随机数或绕过服务制造性能收益。音频播放器在 headless 退出时可能留下 Godot 的资源/对象 teardown warning，runner 对最终两次运行均报告 engine_log_errors=0。
 
 ## 当前交付状态
 
-- 代码/测试/配置已完成，待 integration 合入后在包含 W3 的真实最终 HEAD 重跑相关 actor 和
-  GameRoot 入口。
-- 当前提交 SHA 在提交后记录；未推送。
+- 生产代码已经在 fe3585ff、4f714f75 冻结；本次只交性能夹具和本交接文档。enemy.gd 音频写权限已释放给 integration/monsters 后续工作。
+- integration 合入后须在包含 W3 的最终 HEAD 重跑 actor/service 入口，并按文档的 GameRoot 音频服务接线要求验收；本包不改 GameRoot，未宣称其接线已 PASS。
+- 当前提交 SHA 在本次提交后记录；未推送。
 - 不含 Android、真实设备声音或 GameRoot 接线 PASS；以上是主控合入所需动作。
