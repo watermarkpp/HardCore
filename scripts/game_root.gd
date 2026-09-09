@@ -238,6 +238,14 @@ var _active_skill_inputs: Dictionary = {}
 var _next_skill_input_sequence := 1
 var _skill_input_retry_remaining := 0.0
 var _keyboard_bound_skill_token := 0
+const ATTACK_ACTION_LIFECYCLE_CONTRACT_ID := "input.attack.fresh_down.v1"
+const ATTACK_ACTION_DIAGNOSTIC_LIMIT := 16
+var _attack_action_press_owned := false
+var _attack_action_neutral_observed := true
+var _attack_action_ignored_pressed_recorded := false
+var _attack_action_lifecycle_epoch := 0
+var _attack_action_diagnostic_serial := 0
+var _attack_action_diagnostic_events: Array[Dictionary] = []
 var _magic_shield_auto_enabled := false
 var _magic_shield_auto_retry_remaining := 0.0
 var _queued_mobile_attacks: int:
@@ -1252,6 +1260,7 @@ func gameplay_input_is_enabled() -> bool:
 
 
 func _acquire_gameplay_input_lock(reason: StringName) -> void:
+	_reset_attack_action_lifecycle(reason)
 	var _count: int = int(_gameplay_input_locks.get(reason, 0))
 	_gameplay_input_locks[reason] = _count + 1
 	_refresh_gameplay_input_state()
@@ -1386,6 +1395,7 @@ func _ready() -> void:
 	get_tree().auto_accept_quit = false
 	_bich_camp_layout = GothicBichCampBuilderScript.load_layout()
 	_register_input_actions()
+	_reset_attack_action_lifecycle(&"game_root_ready")
 	if loading_profile_enabled:
 		stage_started_usec = _loading_profile_mark(
 			loading_profile,
@@ -1591,6 +1601,7 @@ func _notification(what: int) -> void:
 			hud.cancel_skill_inputs(&"application_interrupted")
 		_cancel_all_mobile_attack_inputs(true)
 		_cancel_all_skill_inputs(true)
+		_reset_attack_action_lifecycle(&"application_interrupted")
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_cancel_all_mobile_attack_inputs(true)
 		_cancel_all_skill_inputs(true)
@@ -1653,16 +1664,17 @@ func _process(delta: float) -> void:
 		PlayerState.SKILL_SLOT_GROUP_ATTACK,
 		0
 	)
+	var attack_action_lifecycle := _poll_attack_action_lifecycle(gameplay_input_is_enabled())
 	if bound_attack_skill.is_empty():
-		if Input.is_action_just_pressed("attack"):
+		if bool(attack_action_lifecycle.get("started", false)):
 			_submit_mobile_attack_ticket(_allocate_synthetic_attack_token())
 		if not _queued_mobile_attack_tickets.is_empty():
 			_drain_next_mobile_attack_ticket()
-		elif _mobile_attack_held or Input.is_action_pressed("attack"):
+		elif _mobile_attack_held or bool(attack_action_lifecycle.get("active", false)):
 			_request_mobile_attack()
 	else:
 		_queued_mobile_attack_tickets.clear()
-		if Input.is_action_just_pressed("attack"):
+		if bool(attack_action_lifecycle.get("started", false)):
 			_keyboard_bound_skill_token = _allocate_synthetic_attack_token()
 			_on_skill_input_started(
 				PlayerState.SKILL_SLOT_GROUP_ATTACK,
@@ -1671,7 +1683,7 @@ func _process(delta: float) -> void:
 				-4,
 				&"keyboard"
 			)
-		if Input.is_action_just_released("attack") and _keyboard_bound_skill_token != 0:
+		if bool(attack_action_lifecycle.get("ended", false)) and _keyboard_bound_skill_token != 0:
 			_on_skill_input_ended(
 				PlayerState.SKILL_SLOT_GROUP_ATTACK,
 				0,
@@ -1800,6 +1812,15 @@ func _build_system_menu() -> void:
 func _show_system_menu() -> void:
 	if _system_menu_panel == null:
 		return
+	# The paused tree may never receive the matching Android UP/CANCEL. Revoke
+	# each current owner before pausing; a later press must establish a new token.
+	if is_instance_valid(hud):
+		hud.cancel_attack_inputs(&"system_menu_opened")
+		hud.cancel_skill_inputs(&"system_menu_opened")
+		hud.cancel_movement_input()
+	_cancel_all_mobile_attack_inputs(true)
+	_cancel_all_skill_inputs(true)
+	_reset_attack_action_lifecycle(&"system_menu_opened")
 	_system_menu_pause_owned = true
 	_system_menu_panel.open_menu()
 	get_tree().paused = true
@@ -4515,6 +4536,80 @@ func _cancel_all_skill_inputs(clear_tickets := false) -> void:
 	# lifetime, so there are no deferred skill tickets to clear.
 	if clear_tickets:
 		_skill_input_retry_remaining = 0.0
+
+
+func _reset_attack_action_lifecycle(reason: StringName) -> void:
+	if _keyboard_bound_skill_token != 0:
+		_on_skill_input_cancelled(
+			PlayerState.SKILL_SLOT_GROUP_ATTACK,
+			0,
+			_keyboard_bound_skill_token,
+			-4,
+			&"keyboard",
+			reason
+		)
+		_keyboard_bound_skill_token = 0
+	_attack_action_press_owned = false
+	_attack_action_neutral_observed = not Input.is_action_pressed("attack")
+	_attack_action_ignored_pressed_recorded = false
+	_attack_action_lifecycle_epoch += 1
+	_record_attack_action_diagnostic(&"boundary", reason)
+
+
+func _poll_attack_action_lifecycle(input_enabled: bool) -> Dictionary:
+	var pressed := Input.is_action_pressed("attack")
+	if not input_enabled:
+		_attack_action_press_owned = false
+		_attack_action_neutral_observed = not pressed
+		return {"started": false, "ended": false, "active": false}
+	if not pressed:
+		var ended := _attack_action_press_owned
+		_attack_action_press_owned = false
+		_attack_action_neutral_observed = true
+		_attack_action_ignored_pressed_recorded = false
+		if ended:
+			_record_attack_action_diagnostic(&"released", &"input_action")
+		return {"started": false, "ended": ended, "active": false}
+	if (
+		not _attack_action_press_owned
+		and _attack_action_neutral_observed
+		and Input.is_action_just_pressed("attack")
+	):
+		_attack_action_press_owned = true
+		_attack_action_neutral_observed = false
+		_attack_action_ignored_pressed_recorded = false
+		_record_attack_action_diagnostic(&"fresh_down", &"input_action")
+		return {"started": true, "ended": false, "active": true}
+	if not _attack_action_press_owned and not _attack_action_ignored_pressed_recorded:
+		_attack_action_ignored_pressed_recorded = true
+		_record_attack_action_diagnostic(&"pressed_without_fresh_down_ignored", &"input_action")
+	return {"started": false, "ended": false, "active": _attack_action_press_owned}
+
+
+func _record_attack_action_diagnostic(kind: StringName, reason: StringName) -> void:
+	_attack_action_diagnostic_serial += 1
+	_attack_action_diagnostic_events.append({
+		"serial": _attack_action_diagnostic_serial,
+		"epoch": _attack_action_lifecycle_epoch,
+		"kind": str(kind),
+		"reason": str(reason),
+		"pressed": Input.is_action_pressed("attack"),
+	})
+	while _attack_action_diagnostic_events.size() > ATTACK_ACTION_DIAGNOSTIC_LIMIT:
+		_attack_action_diagnostic_events.pop_front()
+
+
+func attack_action_lifecycle_snapshot() -> Dictionary:
+	return {
+		"contract_id": ATTACK_ACTION_LIFECYCLE_CONTRACT_ID,
+		"epoch": _attack_action_lifecycle_epoch,
+		"press_owned": _attack_action_press_owned,
+		"neutral_observed": _attack_action_neutral_observed,
+		"touch_attack_held": _mobile_attack_held,
+		"active_touch_count": _active_mobile_attack_tokens.size(),
+		"queued_ticket_count": _queued_mobile_attack_tickets.size(),
+		"events": _attack_action_diagnostic_events.duplicate(true),
+	}
 
 
 func _submit_skill_input_ticket(entry: Dictionary) -> void:

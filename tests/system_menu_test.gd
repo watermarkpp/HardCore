@@ -15,9 +15,24 @@ func _run() -> void:
 	assert(game.get("_system_menu_panel") is SystemMenuPanel, "主体游戏仍在使用临时系统菜单")
 	assert(game.get("_system_menu_panel").settings_button != null, "UI 分支制作的设置入口未接入")
 	var menu: Control = game.get("_system_menu_panel")
+	# A menu pause is an input lifecycle boundary. Android can suppress the UP
+	# that would otherwise clear these owners while the SceneTree is paused.
+	game._active_mobile_attack_tokens[91] = true
+	game._refresh_mobile_attack_held()
+	var joystick_touch := InputEventScreenTouch.new()
+	joystick_touch.index = 7
+	joystick_touch.pressed = true
+	joystick_touch.position = Vector2(110.0, 72.0)
+	game.hud.movement_joystick._gui_input(joystick_touch)
+	assert(game._mobile_attack_held)
+	assert(game.hud.movement_joystick.input_state_snapshot().pointer_id == 7)
 	# Ordinary show/hide owns and releases only the pause created by the menu.
 	game.call("_show_system_menu")
 	assert(get_tree().paused and menu.visible, "系统菜单没有暂停游戏")
+	assert(not game._mobile_attack_held and game._active_mobile_attack_tokens.is_empty(),
+		"系统菜单暂停前没有撤销攻击触摸所有权")
+	assert(game.hud.movement_joystick.input_state_snapshot().pointer_id == -1,
+		"系统菜单暂停前没有撤销摇杆触摸所有权")
 	assert(bool(game.get("_system_menu_pause_owned")), "系统菜单没有记录自身暂停所有权")
 	game.call("_hide_system_menu")
 	assert(not get_tree().paused and not menu.visible, "继续游戏没有关闭菜单")
