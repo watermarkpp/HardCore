@@ -27,7 +27,7 @@ function Read-Entry([string]$Name) {
 
 try {
     $Scripts = @(
-        'game_root', 'player', 'player_state', 'audio_runtime_service',
+        'game_root', 'player', 'player_state', 'audio_runtime_service', 'device_lab_patch_bootstrap',
         'inventory_panel', 'warehouse_panel', 'shop_panel', 'item_detail_presenter',
         'item_drop_instance_rules', 'loot_visual_effect', 'loot_pickup',
         'monster_display_formatter', 'monster_overhead', 'enemy', 'summon_actor',

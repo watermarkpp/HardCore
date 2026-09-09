@@ -39,10 +39,29 @@ $Aapt = Join-Path $BuildTools "aapt.exe"
 $ApkSigner = Join-Path $BuildTools "apksigner.bat"
 $env:JAVA_HOME = $JavaHome
 
-& $ApkSigner verify --verbose $ApkPath
+$CandidateSignature = (& $ApkSigner verify --verbose --print-certs $ApkPath) -join "`n"
 if ($LASTEXITCODE -ne 0) { throw "APK signature verification failed." }
+$BaselineSignature = (& $ApkSigner verify --print-certs $BaselineApkPath) -join "`n"
+if ($LASTEXITCODE -ne 0) { throw 'Baseline APK signature verification failed.' }
+$CertificatePattern = '(?m)^Signer #[0-9]+ certificate SHA-256 digest:\s*([0-9a-fA-F]+)\s*$'
+$CandidateCertificates = @([regex]::Matches($CandidateSignature, $CertificatePattern) | ForEach-Object { $_.Groups[1].Value.ToUpperInvariant() } | Sort-Object)
+$BaselineCertificates = @([regex]::Matches($BaselineSignature, $CertificatePattern) | ForEach-Object { $_.Groups[1].Value.ToUpperInvariant() } | Sort-Object)
+if ($CandidateCertificates.Count -eq 0 -or ($CandidateCertificates -join ',') -cne ($BaselineCertificates -join ',')) {
+    throw 'APK signer differs from the supplied baseline; direct update cannot be accepted.'
+}
+Write-Output $CandidateSignature
 
 $Badging = (& $Aapt dump badging $ApkPath) -join "`n"
+$BaselineBadging = (& $Aapt dump badging $BaselineApkPath) -join "`n"
+$IdentityPattern = "package: name='([^']+)' versionCode='([0-9]+)'"
+$CandidateIdentity = [regex]::Match($Badging, $IdentityPattern)
+$BaselineIdentity = [regex]::Match($BaselineBadging, $IdentityPattern)
+if (-not $CandidateIdentity.Success -or -not $BaselineIdentity.Success -or
+    $CandidateIdentity.Groups[1].Value -cne $BaselineIdentity.Groups[1].Value -or
+    [long]$CandidateIdentity.Groups[2].Value -le [long]$BaselineIdentity.Groups[2].Value) {
+    throw 'Direct update requires the same package identity and a higher version code.'
+}
+Write-Output "ANDROID_DIRECT_UPDATE_IDENTITY_PASS certificate_sha256=$($CandidateCertificates -join ',')"
 $Manifest = (& $Aapt dump xmltree $ApkPath AndroidManifest.xml) -join "`n"
 $ExpectedBadging = @(
     "name='com.personal.mafaoffline'",
