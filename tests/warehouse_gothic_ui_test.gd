@@ -2,6 +2,9 @@ extends Node
 
 const CalibrationOverlayScript := preload("res://scripts/ui_layout_calibration_overlay.gd")
 const AdaptiveButtonStyleBoxScript := preload("res://scripts/adaptive_button_style_box.gd")
+const BANK_TEST_ROOT_PREFIX := "user://warehouse_ui_bank"
+
+var _bank_test_root := ""
 
 
 func _ready() -> void:
@@ -120,7 +123,13 @@ func _run() -> void:
 		assert(warehouse_disabled.square_texture.resource_path == warehouse_normal.square_texture.resource_path, "仓库禁用按钮错误使用银色方形边框")
 		assert(warehouse_disabled.shortwide_texture.resource_path == warehouse_normal.shortwide_texture.resource_path, "仓库禁用按钮错误使用银色短宽边框")
 		assert(warehouse_disabled.widesmall_texture.resource_path == warehouse_normal.widesmall_texture.resource_path, "仓库禁用按钮错误使用银色超薄边框")
-	for button in [panel.deposit_button, panel.withdraw_button, panel.get_node("TransferSection/SortStashButton")]:
+	for button in [
+		panel.deposit_button,
+		panel.withdraw_button,
+		panel.get_node("TransferSection/SortStashButton"),
+		panel.bank_deposit_button,
+		panel.bank_withdraw_button,
+	]:
 		assert((button as Button).size.y == WarehousePanel.THIN_BUTTON_HEIGHT, "仓库执行按钮未统一为细按钮：%s" % button.name)
 		assert((button as Button).alignment == HORIZONTAL_ALIGNMENT_CENTER, "仓库执行按钮文字未数学居中：%s" % button.name)
 		assert((button as Button).theme_type_variation == &"GothicWarehouseActionPlainButton", "仓库执行按钮仍在使用旧普通按钮逻辑：%s" % button.name)
@@ -138,6 +147,8 @@ func _run() -> void:
 	assert(is_equal_approx(page_group_center, 246.0), "翻页按钮和页码没有作为整体居中")
 	assert(panel.previous_page_button.disabled and not panel.next_page_button.disabled, "仓库第一页翻页按钮状态错误")
 	assert(panel.deposit_button.disabled and panel.withdraw_button.disabled, "未选择物品时转移按钮不应启用")
+	assert(panel.bank_deposit_button.disabled and panel.bank_withdraw_button.disabled, "共享金币初始余额为零时按钮状态错误")
+	assert("金币：0" in panel.bank_balance_label.text and "共享：0" in panel.bank_balance_label.text, "共享金币余额没有使用整数格式显示")
 
 	var bag_count := PlayerState.inventory_occupied_count()
 	var bag_shape_before := PlayerState.inventory.size()
@@ -290,8 +301,176 @@ func _run() -> void:
 		assert(first_cell.position.y == sixth_cell.position.y, "校准载入后首行不足六格")
 		assert(seventh_cell.position.y > sixth_cell.position.y and seventh_cell.position.x == first_cell.position.x, "校准载入后第七格没有换到第二行")
 	assert(calibrated_panel.previous_page_button.disabled and calibrated_panel.deposit_button.disabled and calibrated_panel.withdraw_button.disabled, "仓库初始禁用按钮逻辑被视觉修复改变")
+	await _run_bank_transfer_ui_checks(calibrated_panel)
 	print("WAREHOUSE_GOTHIC_UI_PASS：同侧多选、跨侧互斥、批量部分失败、执行按钮状态与既有布局均正常")
 	get_tree().quit(0)
+
+
+func _run_bank_transfer_ui_checks(panel: WarehousePanel) -> void:
+	_prepare_bank_fixture()
+	panel.warehouse_page = 0
+	panel.refresh()
+	await get_tree().process_frame
+	var amount := int(PlayerState.BANK_TRANSFER_AMOUNT)
+	var player_cap := int(PlayerState.PLAYER_GOLD_CAP)
+	var shared_cap := int(PlayerState.SHARED_GOLD_CAP)
+	assert("金币：300000" in panel.bank_balance_label.text and "共享：0" in panel.bank_balance_label.text, "共享金币面板初始余额错误")
+	assert(not panel.bank_deposit_button.disabled and panel.bank_withdraw_button.disabled, "共享金币初始边界状态错误")
+
+	var first_sequence := int(PlayerState.next_shared_gold_transaction_sequence())
+	var first_gold := PlayerState.gold
+	panel._on_bank_transfer_pressed(true)
+	assert(panel._bank_transfer_pending, "共享金币点击没有进入 pending 状态")
+	var first_request: Dictionary = panel._last_bank_transfer_request.duplicate(true)
+	var serial_before_duplicate := panel._bank_transaction_serial
+	panel._on_bank_transfer_pressed(true)
+	assert(panel._bank_transaction_serial == serial_before_duplicate, "pending 状态允许快速重复生成事务 ID")
+	assert(panel._last_bank_transfer_request == first_request, "快速重复点击改写了 pending 请求")
+	assert(PlayerState.gold == first_gold - amount, "共享金币存入没有按 100000 扣除身上金币")
+	assert(int(PlayerState.next_shared_gold_transaction_sequence()) == first_sequence + 1, "共享金币成功事务没有推进序列")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(not panel._bank_transfer_pending, "共享金币成功后 pending 没有释放")
+	assert(bool(panel._last_bank_transfer_result.get("success", false)), "共享金币存入成功结果未回填")
+	assert(PlayerState.shared_gold_balance() == amount, "共享金币存入后余额错误")
+	assert("金币：200000" in panel.bank_balance_label.text and "共享：100000" in panel.bank_balance_label.text, "共享金币存入后 UI 没有刷新整数余额")
+
+	var external_sequence := int(PlayerState.next_shared_gold_transaction_sequence())
+	var external_result: Dictionary = PlayerState.transfer_shared_gold(
+		true,
+		"warehouse-bank-external-%d" % external_sequence,
+		external_sequence,
+	)
+	assert(bool(external_result.get("success", false)), "共享金币 stale_sequence 场景的外部推进失败")
+	var stale_sequence := int(PlayerState.next_shared_gold_transaction_sequence()) + 1
+	var stale_gold := PlayerState.gold
+	var stale_shared := PlayerState.shared_gold_balance()
+	panel._submit_bank_transfer(false, "warehouse-bank-stale-%d" % stale_sequence, stale_sequence)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(str(panel._last_bank_transfer_result.get("reason", "")) == "stale_transaction_sequence", "stale_sequence 没有保留明确失败原因")
+	assert(PlayerState.gold == stale_gold and PlayerState.shared_gold_balance() == stale_shared, "stale_sequence 错误重放或改变了金币")
+	assert("金币：100000" in panel.bank_balance_label.text and "共享：200000" in panel.bank_balance_label.text, "stale_sequence 失败后没有刷新权威余额")
+	var high_water_after_stale := int(PlayerState.next_shared_gold_transaction_sequence())
+	assert(high_water_after_stale == stale_sequence - 1, "stale_sequence 失败后错误推进了事务序列")
+
+	panel._on_bank_transfer_pressed(false)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(bool(panel._last_bank_transfer_result.get("success", false)), "stale_sequence 后正常新点击不可操作")
+	assert(PlayerState.gold == 200000 and PlayerState.shared_gold_balance() == amount, "共享金币取出后金币/余额错误")
+
+	_set_bank_balances(0, amount)
+	panel.refresh()
+	assert(panel.bank_deposit_button.disabled and "不足" in panel.bank_deposit_button.tooltip_text, "身上余额不足时存入按钮边界错误")
+	var boundary_sequence := int(PlayerState.next_shared_gold_transaction_sequence())
+	panel._on_bank_transfer_pressed(true)
+	assert(int(PlayerState.next_shared_gold_transaction_sequence()) == boundary_sequence and "不足" in panel.transfer_detail_label.text, "余额不足点击没有提示且没有保持事务状态")
+
+	_set_bank_balances(200000, shared_cap)
+	panel.refresh()
+	assert(panel.bank_deposit_button.disabled and "上限" in panel.bank_deposit_button.tooltip_text, "共享金币达到上限时存入按钮边界错误")
+	var cap_gold := PlayerState.gold
+	panel._on_bank_transfer_pressed(true)
+	assert(PlayerState.gold == cap_gold and "上限" in panel.transfer_detail_label.text, "共享金币上限点击错误改变了身上金币")
+
+	_set_bank_balances(200000, 0)
+	panel.refresh()
+	assert(panel.bank_withdraw_button.disabled and "不足" in panel.bank_withdraw_button.tooltip_text, "共享余额不足时取出按钮边界错误")
+	panel._on_bank_transfer_pressed(false)
+	assert(PlayerState.gold == 200000 and "不足" in panel.transfer_detail_label.text, "共享余额不足点击没有保持失败状态")
+
+	_set_bank_balances(player_cap, amount)
+	panel.refresh()
+	assert(panel.bank_withdraw_button.disabled and "上限" in panel.bank_withdraw_button.tooltip_text, "身上金币达到上限时取出按钮边界错误")
+	var full_gold := PlayerState.gold
+	panel._on_bank_transfer_pressed(false)
+	assert(PlayerState.gold == full_gold and "上限" in panel.transfer_detail_label.text, "身上金币上限点击错误改变了金币")
+
+	_set_bank_balances(300000, 0)
+	panel.refresh()
+	var failed_gold := PlayerState.gold
+	var failed_shared := PlayerState.shared_gold_balance()
+	PlayerState._test_fail_profile_write = true
+	panel._on_bank_transfer_pressed(true)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	PlayerState._test_fail_profile_write = false
+	assert(not bool(panel._last_bank_transfer_result.get("success", false)), "共享金币存档失败错误报告成功")
+	assert(str(panel._last_bank_transfer_result.get("reason", "")) == "save_failed", "共享金币存档失败原因未结构化保留")
+	assert(not panel._bank_transfer_pending and PlayerState.gold == failed_gold and PlayerState.shared_gold_balance() == failed_shared, "共享金币存档失败没有回滚或释放 pending")
+	assert(not panel.bank_deposit_button.disabled, "共享金币失败后存入按钮没有恢复可操作")
+	panel._on_bank_transfer_pressed(true)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(bool(panel._last_bank_transfer_result.get("success", false)), "共享金币失败后重试不可操作")
+	assert(PlayerState.gold == failed_gold - amount and PlayerState.shared_gold_balance() == amount, "共享金币失败后重试结果错误")
+
+
+func _prepare_bank_fixture() -> void:
+	_bank_test_root = "%s_%d" % [BANK_TEST_ROOT_PREFIX, Time.get_ticks_usec()]
+	PlayerState.profile_directory = _bank_test_root.path_join("characters")
+	PlayerState.profile_index_path = _bank_test_root.path_join("index.json")
+	PlayerState.shared_warehouse_path = _bank_test_root.path_join("shared.json")
+	PlayerState.shared_warehouse_transaction_log_path = _bank_test_root.path_join("shared.transaction.json")
+	PlayerState.active_profile_id = "bank-ui"
+	PlayerState.character_name = "银行测试"
+	PlayerState.level = 50
+	PlayerState.profession = "战士"
+	PlayerState.gender = "男"
+	PlayerState.test_mode = true
+	PlayerState._test_force_atomic_write_failure = false
+	PlayerState._test_fail_profile_write = false
+	PlayerState._test_fail_shared_write = false
+	PlayerState._test_fail_warehouse_rollback_write = false
+	PlayerState._warehouse_transaction_locked = false
+	PlayerState._persistence_transaction_in_progress = false
+	PlayerState.inventory = [{"name": "太阳水", "count": 1, "instance_id": "bank-ui-item"}]
+	PlayerState.warehouse_inventory = []
+	PlayerState.equipment = PlayerState._empty_equipment()
+	PlayerState.gold = 300000
+	PlayerState.recalculate_stats(false)
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory))
+	var profile_entry := {"id": "bank-ui", "name": "银行测试", "profession": "战士", "gender": "男", "level": 50}
+	var profile_payload: Dictionary = PlayerState._test_character_payload({}, {}, profile_entry, int(Time.get_unix_time_from_system()))
+	profile_payload["character_name"] = "银行测试"
+	profile_payload["gold"] = PlayerState.gold
+	profile_payload["inventory"] = PlayerState.inventory.duplicate(true)
+	profile_payload["equipment"] = PlayerState.equipment.duplicate(true)
+	profile_payload["warehouse_storage_contract_id"] = PlayerState.SHARED_WAREHOUSE_CONTRACT_ID
+	assert(PlayerState._write_json_atomic(PlayerState._profile_path(PlayerState.active_profile_id), profile_payload), "共享金币 UI 测试 profile fixture 写入失败")
+	var shared := PlayerState._shared_warehouse_empty_document()
+	shared["revision"] = 1
+	shared["warehouse_inventory"] = []
+	shared["legacy_migration"] = {
+		"completed": true,
+		"contract_id": PlayerState.SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+		"sources": {
+			"bank-ui": {
+				"complete": true,
+				"contract_id": PlayerState.SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
+				"digest": PlayerState._shared_digest([]),
+				"occupied_count": 0,
+			},
+		},
+	}
+	shared["bank_gold"] = 0
+	shared["bank_contract_id"] = PlayerState.BANK_CONTRACT_ID
+	shared["bank_transaction_high_water"] = 0
+	shared["bank_transactions"] = {}
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_path, shared), "共享金币 UI 测试 shared fixture 写入失败")
+	PlayerState._shared_warehouse_initialized = true
+
+
+func _set_bank_balances(player_gold: int, shared_gold: int) -> void:
+	PlayerState.gold = player_gold
+	var profile: Dictionary = PlayerState._read_json(PlayerState._profile_path(PlayerState.active_profile_id))
+	profile["gold"] = player_gold
+	assert(PlayerState._write_json_atomic(PlayerState._profile_path(PlayerState.active_profile_id), profile), "共享金币 UI 测试 profile 余额更新失败")
+	var shared: Dictionary = PlayerState._read_json(PlayerState.shared_warehouse_path)
+	shared["bank_gold"] = shared_gold
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_path, shared), "共享金币 UI 测试 shared 余额更新失败")
+	PlayerState._shared_warehouse_initialized = true
 
 
 func _assert_plain_warehouse_frame(style: AdaptiveButtonStyleBox, context: String) -> void:

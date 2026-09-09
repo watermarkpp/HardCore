@@ -78,6 +78,14 @@ var selected_stash_refs: Array[Dictionary] = []
 var selected_ref: Dictionary = {}
 var _selection_revision := 0
 var item_detail_presenter
+var bank_balance_label: Label
+var bank_deposit_button: Button
+var bank_withdraw_button: Button
+var _bank_transfer_pending := false
+var _bank_transaction_serial := 0
+var _bank_status_message := ""
+var _last_bank_transfer_request: Dictionary = {}
+var _last_bank_transfer_result: Dictionary = {}
 
 
 func _ready() -> void:
@@ -115,6 +123,7 @@ func _ready() -> void:
 	GothicFrameFactoryScript.seal_modal_rings(self)
 	visibility_changed.connect(_on_visibility_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
+	PlayerState.profile_changed.connect(_on_profile_changed)
 	_initialize_grid_cells(GRID_VISIBLE_SLOTS)
 	refresh()
 	_continue_grid_cell_initialization.call_deferred()
@@ -192,6 +201,25 @@ func _build_storage_sections() -> void:
 	sort_button.tooltip_text = "请求玩法层按既定规则整理仓库"
 	sort_button.pressed.connect(_sort_requested)
 	transfer_panel.add_child(sort_button)
+	bank_balance_label = Label.new()
+	bank_balance_label.name = "BankBalance"
+	bank_balance_label.position = Vector2(8, 436)
+	bank_balance_label.size = Vector2(108, 28)
+	bank_balance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	bank_balance_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	bank_balance_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bank_balance_label.add_theme_font_size_override("font_size", 11)
+	bank_balance_label.theme_type_variation = "GothicMutedLabel"
+	bank_balance_label.set_meta("calibration_layout_revision", LAYOUT_REVISION)
+	transfer_panel.add_child(bank_balance_label)
+	bank_deposit_button = _transfer_button("BankDepositButton", "存入10万", Vector2(14, 466))
+	bank_deposit_button.tooltip_text = "存入共享仓库（100000金币）"
+	bank_deposit_button.pressed.connect(_on_bank_transfer_pressed.bind(true))
+	transfer_panel.add_child(bank_deposit_button)
+	bank_withdraw_button = _transfer_button("BankWithdrawButton", "取出10万", Vector2(14, 516))
+	bank_withdraw_button.tooltip_text = "从共享仓库取出（100000金币）"
+	bank_withdraw_button.pressed.connect(_on_bank_transfer_pressed.bind(false))
+	transfer_panel.add_child(bank_withdraw_button)
 
 	var bag_panel := _section_panel("BagSection", Rect2(652, 72, 492, 566))
 	var bag_frame := GothicFrameFactoryScript.add_filled_section(bag_panel, "BagGridV3Frame", GRID_FRAME_RECT)
@@ -333,6 +361,10 @@ func _on_inventory_changed() -> void:
 		_refresh_pending = true
 		return
 	_queue_refresh()
+
+
+func _on_profile_changed() -> void:
+	_refresh_bank_state()
 
 
 func _on_visibility_changed() -> void:
@@ -672,6 +704,125 @@ func _sanitize_transfer_selections() -> void:
 func _refresh_transfer_action_states() -> void:
 	deposit_button.disabled = selected_bag_indices.is_empty() or _first_free_slot_on_current_page() < 0
 	withdraw_button.disabled = selected_stash_indices.is_empty() or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
+	_refresh_bank_state()
+
+
+func _bank_transfer_amount() -> int:
+	return int(PlayerState.BANK_TRANSFER_AMOUNT)
+
+
+func _bank_boundary_message(deposit: bool, player_gold: int, shared_gold: int) -> String:
+	var amount := _bank_transfer_amount()
+	if deposit:
+		if player_gold < amount:
+			return "存入不可用：金币不足%d。" % amount
+		if shared_gold > int(PlayerState.SHARED_GOLD_CAP) - amount:
+			return "存入不可用：共享金币已达上限。"
+	else:
+		if shared_gold < amount:
+			return "取出不可用：共享金币不足%d。" % amount
+		if player_gold > int(PlayerState.PLAYER_GOLD_CAP) - amount:
+			return "取出不可用：身上金币已达上限。"
+	return ""
+
+
+func _refresh_bank_state() -> void:
+	if bank_balance_label == null or bank_deposit_button == null or bank_withdraw_button == null:
+		return
+	var player_gold := int(PlayerState.gold)
+	var shared_gold := int(PlayerState.shared_gold_balance())
+	bank_balance_label.text = "金币：%d\n共享：%d" % [player_gold, shared_gold]
+	bank_balance_label.tooltip_text = "身上金币：%d；共享金币：%d" % [player_gold, shared_gold]
+	var busy_text := "共享金币操作处理中，请稍候。" if _bank_transfer_pending else ""
+	var deposit_boundary := _bank_boundary_message(true, player_gold, shared_gold)
+	var withdraw_boundary := _bank_boundary_message(false, player_gold, shared_gold)
+	bank_deposit_button.disabled = _bank_transfer_pending or not deposit_boundary.is_empty()
+	bank_withdraw_button.disabled = _bank_transfer_pending or not withdraw_boundary.is_empty()
+	bank_deposit_button.tooltip_text = (
+		busy_text
+		if not busy_text.is_empty()
+		else deposit_boundary
+		if not deposit_boundary.is_empty()
+		else "存入共享仓库（%d金币）" % _bank_transfer_amount()
+	)
+	bank_withdraw_button.tooltip_text = (
+		busy_text
+		if not busy_text.is_empty()
+		else withdraw_boundary
+		if not withdraw_boundary.is_empty()
+		else "从共享仓库取出（%d金币）" % _bank_transfer_amount()
+	)
+
+
+func _bank_result_message(deposit: bool, result: Dictionary) -> String:
+	var action := "存入" if deposit else "取出"
+	var amount := _bank_transfer_amount()
+	if bool(result.get("success", false)):
+		return "%s成功：%d金币。" % [action, amount]
+	match str(result.get("reason", "")):
+		"insufficient_balance_or_cap":
+			return "%s失败：金币余额或上限不足。" % action
+		"stale_transaction_sequence":
+			return "共享金币状态已变化，请刷新后重试。"
+		"duplicate_transaction":
+			return "该共享金币请求已处理，未重复执行。"
+		"save_failed":
+			return "%s失败：存档失败，金币未改变。" % action
+		"stale_profile":
+			return "共享金币状态已过期，请刷新后重试。"
+		"storage_unavailable":
+			return "共享金币暂不可用，请稍后重试。"
+		_:
+			return "%s失败：请求未完成。" % action
+
+
+func _on_bank_transfer_pressed(deposit: bool) -> void:
+	if _bank_transfer_pending:
+		return
+	_refresh_bank_state()
+	var player_gold := int(PlayerState.gold)
+	var shared_gold := int(PlayerState.shared_gold_balance())
+	var boundary := _bank_boundary_message(deposit, player_gold, shared_gold)
+	if not boundary.is_empty():
+		_bank_status_message = boundary
+		transfer_detail_label.text = boundary
+		return
+	var transaction_sequence := int(PlayerState.next_shared_gold_transaction_sequence())
+	if transaction_sequence <= 0:
+		_bank_status_message = "共享金币事务不可用，请稍后重试。"
+		transfer_detail_label.text = _bank_status_message
+		_refresh_bank_state()
+		return
+	_bank_transaction_serial += 1
+	var transaction_id := "warehouse-bank-%d-%d" % [transaction_sequence, _bank_transaction_serial]
+	_submit_bank_transfer(deposit, transaction_id, transaction_sequence)
+
+
+func _submit_bank_transfer(deposit: bool, transaction_id: String, transaction_sequence: int) -> void:
+	if _bank_transfer_pending:
+		return
+	_bank_transfer_pending = true
+	_last_bank_transfer_request = {
+		"deposit": deposit,
+		"transaction_id": transaction_id,
+		"transaction_sequence": transaction_sequence,
+	}
+	var button: Button = bank_deposit_button if deposit else bank_withdraw_button
+	_clear_transfer_feedback()
+	GothicUIThemeScript.set_button_feedback(button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.bank")
+	_refresh_bank_state()
+	var result: Dictionary = PlayerState.transfer_shared_gold(deposit, transaction_id, transaction_sequence)
+	_last_bank_transfer_result = result.duplicate(true)
+	_bank_status_message = _bank_result_message(deposit, result)
+	transfer_detail_label.text = _bank_status_message
+	# A stale sequence only refreshes the visible authority state. The failed
+	# request is never replayed with a new sequence automatically.
+	_refresh_bank_state()
+	_show_transfer_result(button, bool(result.get("success", false)), "warehouse.bank")
+	if is_inside_tree():
+		await get_tree().process_frame
+	_bank_transfer_pending = false
+	_refresh_bank_state()
 
 
 func _refresh_cell_selection(side: String, data_index: int, selected: bool) -> void:
@@ -945,7 +1096,7 @@ func _show_transfer_result(button: Button, success: bool, group: String) -> void
 	# A late authority result still invalidates every other transfer action.
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
-	for action_button: Button in [deposit_button, withdraw_button, sort_button]:
+	for action_button: Button in [deposit_button, withdraw_button, sort_button, bank_deposit_button, bank_withdraw_button]:
 		if action_button != button:
 			GothicUIThemeScript.clear_button_feedback(action_button)
 	if is_inside_tree():
@@ -965,7 +1116,7 @@ func _show_transfer_result(button: Button, success: bool, group: String) -> void
 
 func _clear_transfer_feedback() -> void:
 	_action_feedback_serial += 1
-	for button in [deposit_button, withdraw_button, sort_button]:
+	for button in [deposit_button, withdraw_button, sort_button, bank_deposit_button, bank_withdraw_button]:
 		GothicUIThemeScript.clear_button_feedback(button)
 
 

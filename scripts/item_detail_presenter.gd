@@ -395,7 +395,9 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		if maximum_durability > 0:
 			lines.append("耐久：%d/%d" % [current_durability, maximum_durability])
 		lines.append(_stat_line(item))
-		lines.append(_advanced_stat_line(item, instance))
+		var advanced_line := _advanced_stat_line(item, instance)
+		if not advanced_line.is_empty():
+			lines.append(advanced_line)
 		var requirement := _requirement_label(item)
 		if not requirement.is_empty():
 			lines.append("穿戴要求：%s" % requirement)
@@ -443,7 +445,7 @@ static func _advanced_stat_line(item: Dictionary, instance: Dictionary = {}) -> 
 			parts.append("暴击 +%d%%" % int(critical * 100.0))
 	elif modifiers is Array:
 		parts.append_array(_modifier_lines_from_container(modifiers))
-	return "　".join(parts) if not parts.is_empty() else "无额外属性"
+	return "　".join(parts)
 
 
 static func _instance_modifier_lines(instance: Dictionary) -> Array[String]:
