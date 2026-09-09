@@ -1,16 +1,22 @@
 {
+  "schema": "hardcore.dpv2.v505.execution_status.v1",
   "base_sha": "ffcdc76b360d5976eef2ce17a45664ddaf550590",
-  "branch": "codex/dpv2-glm52-flash-v5-0-2-20260908",
-  "original_worktree_untouched_status": "",
-  "bootstrap_exit_code": 0,
-  "bootstrap_route": "LOCAL_CODEX_INTEGRATION_CWD_BEFORE_REVIEW_WORKTREE",
+  "migration_base_sha": "342891ab884150c0e81084c932df8205484e6388",
+  "integration_head": "275eef8b9455c7f3ef63daaf59dfff3c06e26069",
+  "branch": "codex/integration",
+  "review_branch": "codex/dpv2-glm52-flash-v5-0-3-20260908",
+  "code_commit": "1ee2b0381cd72c1872ed7de7823d9880dd62adc2",
   "python_build": "PASS",
   "godot_v5": "PASS",
-  "critical": "FAIL_OR_TIMEOUT",
+  "critical": "316_2_RECORDED_PLUS_INTERMITTENT_RID_RE_RUNS_314_4_313_5_ROOT_CAUSE_OPEN",
+  "simulation_bound_to_new_data": "PASS",
+  "v505_acceptance_run_bound_to_commit": "PASS_FAILURES_0",
   "apk_build": "NOT_RUN",
   "device_test": "NOT_RUN",
   "world_item_node_creation_performance": "NOT_RUN",
   "actual_duplicate_death_award_test": "NOT_RUN",
   "actor_death_map_spawn_trace_context": "NOT_CONNECTED",
-  "completion_claim": "REVIEW_CANDIDATE_ONLY"
+  "android_drop_spawn_pickup_smoke": "NOT_RUN",
+  "completion_claim": "IMPLEMENTED_AND_MERGED_CORE_RUNTIME_VERIFIED_NEW_BASELINE_ACCEPTANCE_BOUND_APK_DEVICE_PENDING",
+  "note": "Production code/data/runtime were NOT changed in the post-merge closure; only acceptance evidence and docs. APK/device/real-drop smoke evidence still required before device-facing release."
 }

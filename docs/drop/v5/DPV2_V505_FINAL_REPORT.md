@@ -62,13 +62,70 @@ Classification of the RID-noise failures:
 - ffcdc76b BASE standalone: both PASS;
 - all such tests PASSED in the official 143024 run on the same candidate code.
 
-Conclusion: the intermittent RID errors are a headless dummy-renderer engine
-artifact that randomly hits 2-3 texture-loading tests per full-suite run. They are
-not candidate-only regressions (same code PASSed them in the official run and in
-standalone retries; BASE also PASSes them). The official `316/2` result is the
-canonical evidence for this candidate; `critical_runner.log` records it with a
-provenance header so the reconstructed transcript is auditable against
-`runner_results_critical_20260908_143024_221_8864.json`.
+Evidence-bounded stability statement (per author post-merge review F03):
+- What the records SUPPORT: the RID-class errors are intermittent on this
+  machine/Godot/runner (three full-suite runs on the SAME candidate commit gave
+  `316/2`, `314/4`, `313/5` with 2-3 different texture-loading tests each);
+  they are not a repeatable deterministic assertion regression; the Godot
+  specialist and one full suite passed the major checks.
+- What the records do NOT prove: that the root cause is entirely engine-side
+  and unrelated to the candidate changes; that the candidate adds no
+  race/load-related failure mode; that every unfavorable run may be replaced by
+  the best run.
+- Therefore this candidate carries an OPEN item: intermittent stability risk
+  with root-cause attribution INCOMPLETE. A full BASE-vs-candidate comparison at
+  the same run scale/order, or direct root-cause evidence, is required before
+  claiming the RID errors are proven engine-only. "BASE standalone PASS" does not
+  substitute for "BASE under the same full-suite load".
+- All full-suite run records are preserved verbatim (unfavorable runs are NOT
+  overwritten): `docs/drop/v5/test_logs/runner_results_critical_20260908_031303_847_12564.json`,
+  `..._143024_221_8864.json` (official 316/2),
+  `..._153322_961_24628.json` (314/4), `..._162805_045_24652.json` (313/5).
+  `critical_runner.log` records the official 316/2 transcript with a provenance
+  header auditable against `..._143024_221_8864.json`.
+
+## Post-merge review closure (author post-merge independent review F01-F04)
+
+- F01 — stale simulation evidence: CLOSED. `docs/drop/v5/simulation.json` was
+  re-run against the current committed V505 data (ID76=108 slots, ID141 book
+  slots 5/141 + 1/28; previously the same blob as the pre-migration candidate).
+  Full close-condition acceptance: `docs/drop/v5/V505_ACCEPTANCE_RUN.json`
+  (schema `hardcore.dpv2.v505.acceptance_run.v1`), bound to commit
+  `275eef8b9455c7f3ef63daaf59dfff3c06e26069` and to the SHA256 of every input
+  file. Coverage: 144 distinct monster ids / 7611 records, grouped by
+  `baseline_origin` (VERIFIED_21CQ_PROFILE_V505 7352 / LEGACY_21CQ_MONITEMS 190
+  / PROJECT_EXTENSION 69) and by authority `source_status` (141 FULL / 2 LEGACY
+  / 1 PROJECT). High-risk monsters (bosses 76/198/199/225, new clothes 235-240,
+  all 42 verified book monsters, legacy 75/123): per-slot
+  hits/selected/discarded + always_retained boundary. Book per-kill
+  distributions (all books and BOOK_ELITE_BOSS books) per book monster. New
+  clothes: all six exact 1/60 slots observed within 6-sigma of 1/60
+  (sigma 0.08-1.15), `always_retained=True`, selected==hits (zero discard) —
+  deterministic retention boundary, not a 60-kill luck sample. Result:
+  **failures=0** (per-slot hit rates, any_equipment and any_book analytic vs
+  observed within 6-sigma for all 144 identities). The old simulation.json
+  `failures=[]` is no longer the acceptance basis; this run is.
+- F02 — reward-caliber balance data: PRODUCED (no balance change). The
+  acceptance run records per-monster reward profiles (slots_by_reward_kind,
+  equipment/book/gold slot counts, top slots, per-slot probabilities and
+  drawn-vs-retained discard). Selected readings: ID76 沃玛教主 any-equipment
+  100%, any-book 22.2% (7 BOOK_ELITE_BOSS slots); ID198 恶灵尸王 any-equipment
+  33.5% (66.5% no-equipment, consistent with balance.json) BUT any-book 34.4%
+  across 28 BOOK_ELITE_BOSS slots — book value must be included when judging
+  its reward; ID89 尸王 any-book 99.5% (29 book slots, up to 9 books/kill);
+  ID141 any-book 10.3% (冰咆哮 5/141 + 2× 1/28). K remains 1; old K=1.761644 is
+  NOT restored. Any individual target adjustment (e.g. 198) requires a separate
+  author balance ruling.
+- F03 — stability attribution: REWRITTEN with evidence-bounded phrasing (see
+  above). All four full-suite run records preserved verbatim in
+  `docs/drop/v5/test_logs/`. Open item: intermittent stability risk,
+  root-cause attribution incomplete.
+- F04 — Android/real-drop boundary: OPEN (recorded). APK build, device test,
+  world item node creation performance, duplicate-death award test, and
+  Android drop spawn/pickup smoke are NOT_RUN / NOT_CONNECTED
+  (`EXECUTION_STATUS.json`). Python RNG/selection acceptance does not replace
+  ground-node spawn/pickup/save/device evidence. 1/60 data and selector
+  retention proofs are separate from ground generation chain correctness.
 
 ## Hotfix chain applied on top of migration
 
