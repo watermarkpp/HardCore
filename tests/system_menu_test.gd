@@ -53,6 +53,7 @@ func _run() -> void:
 		"系统菜单暂停前没有撤销HUD按钮所有权")
 	assert(game.hud.movement_joystick.input_state_snapshot().pointer_id == -1,
 		"系统菜单暂停前没有撤销摇杆触摸所有权")
+	assert(game.player.touch_vector.is_zero_approx(), "menu must clear authoritative player movement")
 	assert(bool(game.get("_system_menu_pause_owned")), "系统菜单没有记录自身暂停所有权")
 	game.call("_hide_system_menu")
 	assert(not get_tree().paused and not menu.visible, "继续游戏没有关闭菜单")
@@ -99,6 +100,15 @@ func _run() -> void:
 	game.call("_hide_system_menu")
 	assert(get_tree().paused, "closing menu must preserve an existing external pause")
 	get_tree().paused = false
+	# A zero signal from the control can be ignored by a gameplay input lock.
+	# Application interruption must also clear the authoritative player vector.
+	game._acquire_gameplay_input_lock(&"test_interruption")
+	for boundary: int in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		game.player.set_touch_vector(Vector2.ONE)
+		game.call("_notification", boundary)
+		assert(game.player.touch_vector.is_zero_approx(), "locked interruption retained player movement")
+		assert(game.hud.movement_joystick.input_state_snapshot().pointer_id == -1)
+	game._release_gameplay_input_lock(&"test_interruption")
 	game.queue_free()
 	PlayerState.test_mode = false
 	print("SYSTEM_MENU_PASS：返回键菜单、暂停与继续入口正常")

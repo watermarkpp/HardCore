@@ -1596,12 +1596,7 @@ func _notification(what: int) -> void:
 		# paused tree close the WHEN_PAUSED menu cleanly on the next idle tick.
 		call_deferred("_toggle_system_menu")
 	elif what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
-		if is_instance_valid(hud):
-			hud.cancel_attack_inputs(&"application_interrupted")
-			hud.cancel_skill_inputs(&"application_interrupted")
-		_cancel_all_mobile_attack_inputs(true)
-		_cancel_all_skill_inputs(true)
-		_reset_attack_action_lifecycle(&"application_interrupted")
+		_cancel_player_input_boundary(&"application_interrupted")
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_cancel_all_mobile_attack_inputs(true)
 		_cancel_all_skill_inputs(true)
@@ -1814,13 +1809,7 @@ func _show_system_menu() -> void:
 		return
 	# The paused tree may never receive the matching Android UP/CANCEL. Revoke
 	# each current owner before pausing; a later press must establish a new token.
-	if is_instance_valid(hud):
-		hud.cancel_attack_inputs(&"system_menu_opened")
-		hud.cancel_skill_inputs(&"system_menu_opened")
-		hud.cancel_movement_input()
-	_cancel_all_mobile_attack_inputs(true)
-	_cancel_all_skill_inputs(true)
-	_reset_attack_action_lifecycle(&"system_menu_opened")
+	_cancel_player_input_boundary(&"system_menu_opened")
 	_system_menu_pause_owned = _system_menu_pause_owned or not get_tree().paused
 	_system_menu_panel.open_menu()
 	get_tree().paused = true
@@ -1853,8 +1842,19 @@ func _on_system_menu_visibility_changed() -> void:
 func _release_system_menu_pause() -> void:
 	if not _system_menu_pause_owned:
 		return
+	_cancel_player_input_boundary(&"system_menu_closed")
 	_system_menu_pause_owned = false
 	get_tree().paused = false
+
+
+func _cancel_player_input_boundary(reason: StringName) -> void:
+	if is_instance_valid(hud):
+		hud.cancel_attack_inputs(reason)
+		hud.cancel_skill_inputs(reason)
+	_cancel_map_transition_movement_input()
+	_cancel_all_mobile_attack_inputs(true)
+	_cancel_all_skill_inputs(true)
+	_reset_attack_action_lifecycle(reason)
 
 
 func _on_player_levels_gained(previous_level: int, new_level: int) -> void:
