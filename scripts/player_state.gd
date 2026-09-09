@@ -100,6 +100,14 @@ const SHARED_WAREHOUSE_CONTRACT_ID := "player_state.shared_warehouse.v1"
 const SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID := "player_state.shared_warehouse.legacy_merge.v1"
 const SHARED_WAREHOUSE_DEFAULT_PATH := "user://shared_warehouse.json"
 const SHARED_WAREHOUSE_TRANSACTION_LOG_PATH := "user://shared_warehouse.transaction.json"
+const PLAYER_GOLD_CAP := 9990000
+const SHARED_GOLD_CAP := 99990000
+const BANK_TRANSFER_AMOUNT := 100000
+const BANK_CONTRACT_ID := "player_state.shared_gold.v1"
+const BANK_TRANSACTION_HISTORY_LIMIT := 64
+const BANK_TRANSACTION_ID_MAX_LENGTH := 96
+const GOLD_OVERFLOW_RECORD_LIMIT := 8
+const MAX_EXACT_JSON_INTEGER := 9007199254740991
 const MAX_SAFE_WEIGHT := 9223372036854775807
 const SHOP_SELL_HIGH_VALUE_PRICE := 10000
 const EQUIPMENT_SLOTS: Array[String] = ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"]
@@ -131,6 +139,7 @@ var later_content_enabled := false
 var game_mode_id := "classic_176"
 var experience := 0
 var gold := 0
+var gold_overflow_records: Array = []
 var inventory: Array = []
 var warehouse_inventory: Array = []
 ## The public warehouse is account-scoped, never character-scoped.  The path
@@ -269,6 +278,7 @@ func reset_progress(emit_updates := true) -> void:
 	game_mode_id = "classic_176"
 	experience = 0
 	gold = 0
+	gold_overflow_records = []
 	inventory = []
 	# reset_progress is character-local.  Never clear the account warehouse.
 	if test_mode and not _shared_warehouse_test_isolation_enabled():
@@ -486,6 +496,11 @@ func _build_receive_result(item_name: String, amount: int, base_inventory: Array
 		return _receive_failure("invalid_amount", "数量无效。")
 	var kind := str(catalog_item.get("kind", "unknown"))
 	if kind == "currency":
+		var unit_amount := int(catalog_item.get("currencyAmount", 1))
+		if unit_amount < 0 or amount > PLAYER_GOLD_CAP or unit_amount > PLAYER_GOLD_CAP / amount:
+			return _receive_failure("gold_cap", "金币已达上限，奖励未领取。")
+		if not can_credit_gold(unit_amount * amount):
+			return _receive_failure("gold_cap", "金币已达上限，奖励未领取。")
 		return {
 			"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
 			"success": true,
@@ -671,6 +686,8 @@ func _build_receive_batch_result(rewards: Array, base_inventory: Array) -> Dicti
 			return result
 		next_inventory = (result.get("inventory", next_inventory) as Array).duplicate(true)
 		gold_delta += int(result.get("gold_delta", 0))
+		if not can_credit_gold(gold_delta):
+			return _receive_failure("gold_cap", "金币已达上限，奖励未领取。")
 	return {
 		"contract_id": INVENTORY_WEIGHT_CONTRACT_ID,
 		"success": true,
@@ -684,9 +701,29 @@ func _build_receive_batch_result(rewards: Array, base_inventory: Array) -> Dicti
 	}
 
 
-func add_gold(amount: int) -> bool:
+func can_credit_gold(amount: Variant, balance := -1) -> bool:
+	var current := gold if balance < 0 else balance
+	return (
+		_is_integral_json_number(amount) and float(amount) >= 0.0
+		and current >= 0 and current <= PLAYER_GOLD_CAP
+		and float(amount) <= float(PLAYER_GOLD_CAP - current)
+	)
+
+
+func _gold_load_projection(document: Dictionary) -> Dictionary:
+	var original := int(document.get("gold", 0))
+	var held: Array = document.get("gold_overflow_records", []).duplicate(true)
+	if original > PLAYER_GOLD_CAP:
+		held.append({"contract_id": BANK_CONTRACT_ID, "original_gold": original,
+			"retained_gold": original - PLAYER_GOLD_CAP, "source_digest": _shared_digest(document)})
+	return {"gold": mini(original, PLAYER_GOLD_CAP), "gold_overflow_records": held, "needs_archive": original > PLAYER_GOLD_CAP}
+
+
+func add_gold(amount: Variant) -> bool:
+	if not can_credit_gold(amount):
+		return false
 	var previous := gold
-	gold = maxi(0, gold + amount)
+	gold += int(amount)
 	if not _commit_save():
 		gold = previous
 		return false
@@ -704,6 +741,96 @@ func spend_gold(amount: int) -> bool:
 		return false
 	profile_changed.emit()
 	return true
+
+
+func shared_gold_balance() -> int:
+	if not _ensure_shared_warehouse_ready():
+		return 0
+	var shared := _read_json(shared_warehouse_path)
+	return int(shared.get("bank_gold", 0)) if _validate_shared_warehouse_document(shared) else 0
+
+
+func next_shared_gold_transaction_sequence() -> int:
+	if not _ensure_shared_warehouse_ready():
+		return -1
+	var shared := _read_json(shared_warehouse_path)
+	if not _validate_shared_warehouse_document(shared):
+		return -1
+	return int(shared.get("bank_transaction_high_water", 0)) + 1
+
+
+## `transaction_sequence` is an account-wide monotonic request identity. The
+## bounded audit history may prune old rows, while the persisted high-water
+## mark continues to reject every replayed old request.
+func transfer_shared_gold(
+	deposit: bool,
+	transaction_id: String,
+	transaction_sequence: int = -1,
+) -> Dictionary:
+	var result := {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "storage_unavailable"}
+	if not _valid_bank_transaction_id(transaction_id):
+		result["reason"] = "invalid_transaction_id"
+		return result
+	if transaction_sequence <= 0 or transaction_sequence > MAX_EXACT_JSON_INTEGER:
+		result["reason"] = "invalid_transaction_sequence"
+		return result
+	if _warehouse_transaction_locked or _persistence_transaction_in_progress or not _ensure_shared_warehouse_ready():
+		return result
+	var shared := _read_json(shared_warehouse_path)
+	var profile := _read_json(_profile_path(active_profile_id))
+	if (
+		not _validate_shared_warehouse_document(shared)
+		or not bool(_validate_profile_document_status(profile, active_profile_id, false).get("valid", false))
+		or int(profile.get("gold", 0)) != gold
+	):
+		result["reason"] = "stale_profile"
+		return result
+	var processed: Dictionary = shared.get("bank_transactions", {}).duplicate(true)
+	var high_water := int(shared.get("bank_transaction_high_water", 0))
+	if processed.has(transaction_id) or transaction_sequence <= high_water:
+		result["reason"] = "duplicate_transaction"
+		return result
+	if transaction_sequence != high_water + 1:
+		result["reason"] = "stale_transaction_sequence"
+		return result
+	var bank := int(shared.get("bank_gold", 0))
+	if deposit:
+		if gold < BANK_TRANSFER_AMOUNT or bank > SHARED_GOLD_CAP - BANK_TRANSFER_AMOUNT:
+			result["reason"] = "insufficient_balance_or_cap"
+			return result
+	else:
+		if bank < BANK_TRANSFER_AMOUNT or not can_credit_gold(BANK_TRANSFER_AMOUNT):
+			result["reason"] = "insufficient_balance_or_cap"
+			return result
+	var next_gold := gold + (-BANK_TRANSFER_AMOUNT if deposit else BANK_TRANSFER_AMOUNT)
+	bank += BANK_TRANSFER_AMOUNT if deposit else -BANK_TRANSFER_AMOUNT
+	var transaction_record := {
+		"profile_id": active_profile_id,
+		"sequence": transaction_sequence,
+		"deposit": deposit,
+		"amount": BANK_TRANSFER_AMOUNT,
+	}
+	processed = _bounded_bank_transaction_history(processed, transaction_id, transaction_record)
+	var bank_update := {
+		"bank_gold": bank,
+		"bank_contract_id": BANK_CONTRACT_ID,
+		"bank_transaction_high_water": transaction_sequence,
+		"bank_transactions": processed,
+	}
+	if not _bank_transfer_commit(profile, shared, next_gold, bank_update):
+		result["reason"] = "save_failed"
+		return result
+	gold = next_gold
+	profile_changed.emit()
+	result.merge({
+		"success": true,
+		"reason": "",
+		"player_gold": gold,
+		"shared_gold": bank,
+		"transaction_id": transaction_id,
+		"transaction_sequence": transaction_sequence,
+	}, true)
+	return result
 
 
 func has_item(item_name: String, amount := 1) -> bool:
@@ -1029,6 +1156,9 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 	var current_count := maxi(1, int((record as Dictionary).get("count", 1)))
 	if amount > current_count:
 		return _shop_sell_result(false, "出售数量超过当前背包库存。", merchant_id)
+	var unit_price := int(quote.get("unit_price", 0))
+	if unit_price < 0 or unit_price > PLAYER_GOLD_CAP / amount or not can_credit_gold(unit_price * amount):
+		return _shop_sell_result(false, "金币已达上限，物品未出售。", merchant_id)
 	if amount >= current_count:
 		_clear_inventory_slot(inventory, inventory_index)
 	else:
@@ -1095,6 +1225,10 @@ func sell_inventory_items(requests: Array) -> Dictionary:
 		var current_count := maxi(1, int(record.get("count", 1)))
 		if amount <= 0 or amount > current_count or amount > int(quote.get("max_quantity", 0)):
 			result["message"] = "出售数量超过当前背包库存。"
+			return result
+		var unit_price := int(quote.get("unit_price", 0))
+		if unit_price < 0 or unit_price > PLAYER_GOLD_CAP / amount or not can_credit_gold(total_gold + unit_price * amount):
+			result["message"] = "金币已达上限，物品未出售。"
 			return result
 		if amount >= current_count:
 			working_inventory[index] = {}
@@ -2318,6 +2452,9 @@ func claim_quest(quest_id: String) -> String:
 	var reward_preview := _build_receive_batch_result(reward_items, inventory)
 	if not bool(reward_preview.get("success", false)):
 		return str(reward_preview.get("message", "超过负重，无法领取任务奖励。"))
+	var quest_gold: Variant = rewards.get("gold", 0)
+	if not can_credit_gold(quest_gold) or not can_credit_gold(int(quest_gold) + int(reward_preview.get("gold_delta", 0))):
+		return "金币已达上限，任务奖励未领取。"
 	var inventory_before := inventory.duplicate(true)
 	var gold_before := gold
 	var state_before := quest_states.duplicate(true)
@@ -3336,6 +3473,132 @@ func _is_integral_json_number(value: Variant) -> bool:
 	return _is_json_number(value) and is_finite(float(value)) and float(value) == floor(float(value))
 
 
+func _valid_bank_transaction_id(transaction_id: String) -> bool:
+	if transaction_id.is_empty() or transaction_id.length() > BANK_TRANSACTION_ID_MAX_LENGTH:
+		return false
+	for index in range(transaction_id.length()):
+		var code := transaction_id.unicode_at(index)
+		if not (
+			(code >= 48 and code <= 57)
+			or (code >= 65 and code <= 90)
+			or (code >= 97 and code <= 122)
+			or code in [45, 46, 58, 95]
+		):
+			return false
+	return true
+
+
+func _valid_sha256_text(value: Variant) -> bool:
+	if not value is String or str(value).length() != 64:
+		return false
+	for index in range(str(value).length()):
+		var code := str(value).unicode_at(index)
+		if not ((code >= 48 and code <= 57) or (code >= 97 and code <= 102)):
+			return false
+	return true
+
+
+func _bounded_bank_transaction_history(
+	current: Dictionary,
+	transaction_id: String,
+	record: Dictionary,
+) -> Dictionary:
+	var result := current.duplicate(true)
+	result[transaction_id] = record.duplicate(true)
+	while result.size() > BANK_TRANSACTION_HISTORY_LIMIT:
+		var oldest_id := ""
+		var oldest_sequence := MAX_EXACT_JSON_INTEGER
+		for raw_id: Variant in result.keys():
+			var candidate: Variant = result.get(raw_id)
+			var sequence := (
+				int((candidate as Dictionary).get("sequence", MAX_EXACT_JSON_INTEGER))
+				if candidate is Dictionary
+				else MAX_EXACT_JSON_INTEGER
+			)
+			if sequence < oldest_sequence or (sequence == oldest_sequence and str(raw_id) < oldest_id):
+				oldest_id = str(raw_id)
+				oldest_sequence = sequence
+		if oldest_id.is_empty():
+			return {}
+		result.erase(oldest_id)
+	return result
+
+
+func _validate_bank_transaction_history(document: Dictionary) -> bool:
+	var high_water_value: Variant = document.get("bank_transaction_high_water", 0)
+	if (
+		not _is_integral_json_number(high_water_value)
+		or float(high_water_value) < 0.0
+		or float(high_water_value) > MAX_EXACT_JSON_INTEGER
+	):
+		return false
+	var high_water := int(high_water_value)
+	var history_value: Variant = document.get("bank_transactions", {})
+	if not history_value is Dictionary or (history_value as Dictionary).size() > BANK_TRANSACTION_HISTORY_LIMIT:
+		return false
+	var seen_sequences: Dictionary = {}
+	for raw_id: Variant in (history_value as Dictionary).keys():
+		if not raw_id is String or not _valid_bank_transaction_id(str(raw_id)):
+			return false
+		var raw_record: Variant = (history_value as Dictionary).get(raw_id)
+		if not raw_record is Dictionary:
+			return false
+		var record: Dictionary = raw_record
+		if record.keys().size() != 4:
+			return false
+		for required_key: String in ["profile_id", "sequence", "deposit", "amount"]:
+			if not record.has(required_key):
+				return false
+		if not record.get("profile_id") is String or not _valid_profile_storage_id(str(record.profile_id)):
+			return false
+		var amount_value: Variant = record.get("amount")
+		if (
+			not record.get("deposit") is bool
+			or not _is_integral_json_number(amount_value)
+			or int(amount_value) != BANK_TRANSFER_AMOUNT
+		):
+			return false
+		var sequence_value: Variant = record.get("sequence")
+		if (
+			not _is_integral_json_number(sequence_value)
+			or int(sequence_value) <= 0
+			or int(sequence_value) > high_water
+			or seen_sequences.has(int(sequence_value))
+		):
+			return false
+		seen_sequences[int(sequence_value)] = true
+	return true
+
+
+func _validate_gold_overflow_records(document: Dictionary) -> bool:
+	var overflow: Variant = document.get("gold_overflow_records", [])
+	if not overflow is Array or (overflow as Array).size() > GOLD_OVERFLOW_RECORD_LIMIT:
+		return false
+	var seen_sources: Dictionary = {}
+	for raw_entry: Variant in overflow:
+		if not raw_entry is Dictionary:
+			return false
+		var entry: Dictionary = raw_entry
+		if entry.keys().size() != 4:
+			return false
+		for required_key: String in ["contract_id", "original_gold", "retained_gold", "source_digest"]:
+			if not entry.has(required_key):
+				return false
+		if str(entry.contract_id) != BANK_CONTRACT_ID or not _valid_sha256_text(entry.source_digest):
+			return false
+		if (
+			not _is_integral_json_number(entry.original_gold)
+			or not _is_integral_json_number(entry.retained_gold)
+			or int(entry.original_gold) <= PLAYER_GOLD_CAP
+			or float(entry.original_gold) > MAX_EXACT_JSON_INTEGER
+			or int(entry.retained_gold) != int(entry.original_gold) - PLAYER_GOLD_CAP
+			or seen_sources.has(str(entry.source_digest))
+		):
+			return false
+		seen_sources[str(entry.source_digest)] = true
+	return true
+
+
 func _valid_saved_position(value: Variant) -> bool:
 	return (
 		value is Array
@@ -3482,6 +3745,12 @@ func _validate_profile_document_status(
 			var integer_value: Variant = document.get(nonnegative_integer_field)
 			if not _is_integral_json_number(integer_value) or int(integer_value) < 0:
 				return _validation_result(false, "invalid_%s" % nonnegative_integer_field)
+	if float(document.get("gold", 0)) > MAX_EXACT_JSON_INTEGER:
+		return _validation_result(false, "gold_not_exact_json_integer")
+	if not _validate_gold_overflow_records(document):
+		return _validation_result(false, "invalid_gold_overflow_records")
+	if int(document.get("gold", 0)) > PLAYER_GOLD_CAP and not (document.get("gold_overflow_records", []) as Array).is_empty():
+		return _validation_result(false, "repeated_gold_overflow_migration")
 	if document.has("map_id"):
 		var map_value: Variant = document.get("map_id")
 		if not _is_integral_json_number(map_value) or int(map_value) <= 0:
@@ -3814,6 +4083,19 @@ func _validate_shared_warehouse_document(document: Dictionary) -> bool:
 		return false
 	if str(document.get("contract_id", "")) != SHARED_WAREHOUSE_CONTRACT_ID:
 		return false
+	var bank_value: Variant = document.get("bank_gold", 0)
+	if not _is_integral_json_number(bank_value) or float(bank_value) < 0.0 or float(bank_value) > SHARED_GOLD_CAP:
+		return false
+	var has_bank_state := (
+		document.has("bank_gold")
+		or document.has("bank_contract_id")
+		or document.has("bank_transaction_high_water")
+		or document.has("bank_transactions")
+	)
+	if has_bank_state and str(document.get("bank_contract_id", "")) != BANK_CONTRACT_ID:
+		return false
+	if not _validate_bank_transaction_history(document):
+		return false
 	var records: Variant = document.get("warehouse_inventory", null)
 	if not _validate_saved_item_records(records, WAREHOUSE_CAPACITY):
 		return false
@@ -3954,6 +4236,142 @@ func _revalidate_shared_warehouse_authority() -> bool:
 	return bool(_read_json_with_status(shared_warehouse_path).get("success", false))
 
 
+func _bank_fields_snapshot(document: Dictionary) -> Dictionary:
+	return {
+		"bank_gold": int(document.get("bank_gold", 0)),
+		"bank_contract_id": str(document.get("bank_contract_id", "")),
+		"bank_transaction_high_water": int(document.get("bank_transaction_high_water", 0)),
+		"bank_transactions": document.get("bank_transactions", {}).duplicate(true),
+	}
+
+
+func _bank_transaction_transition_is_valid(
+	profile_id: String,
+	before_profile: Dictionary,
+	after_profile: Dictionary,
+	before_shared: Dictionary,
+	after_shared: Dictionary,
+) -> bool:
+	var before_profile_fixed := before_profile.duplicate(true)
+	var after_profile_fixed := after_profile.duplicate(true)
+	for field: String in ["gold", "updated_at", "warehouse_storage_contract_id", "warehouse_inventory"]:
+		before_profile_fixed.erase(field)
+		after_profile_fixed.erase(field)
+	if _shared_digest(before_profile_fixed) != _shared_digest(after_profile_fixed):
+		return false
+	var before_shared_fixed := before_shared.duplicate(true)
+	var after_shared_fixed := after_shared.duplicate(true)
+	for field: String in [
+		"revision", "bank_gold", "bank_contract_id",
+		"bank_transaction_high_water", "bank_transactions",
+	]:
+		before_shared_fixed.erase(field)
+		after_shared_fixed.erase(field)
+	if _shared_digest(before_shared_fixed) != _shared_digest(after_shared_fixed):
+		return false
+	if int(after_shared.get("revision", -1)) != int(before_shared.get("revision", -1)) + 1:
+		return false
+	var player_delta := int(after_profile.get("gold", 0)) - int(before_profile.get("gold", 0))
+	var bank_delta := int(after_shared.get("bank_gold", 0)) - int(before_shared.get("bank_gold", 0))
+	if absi(player_delta) != BANK_TRANSFER_AMOUNT or player_delta + bank_delta != 0:
+		return false
+	var before_high_water := int(before_shared.get("bank_transaction_high_water", 0))
+	var after_high_water := int(after_shared.get("bank_transaction_high_water", 0))
+	if after_high_water != before_high_water + 1:
+		return false
+	var before_history: Dictionary = before_shared.get("bank_transactions", {})
+	var after_history: Dictionary = after_shared.get("bank_transactions", {})
+	var new_transaction_id := ""
+	var new_record: Dictionary = {}
+	for raw_id: Variant in after_history.keys():
+		var candidate: Variant = after_history.get(raw_id)
+		if candidate is Dictionary and int((candidate as Dictionary).get("sequence", -1)) == after_high_water:
+			if not new_transaction_id.is_empty():
+				return false
+			new_transaction_id = str(raw_id)
+			new_record = (candidate as Dictionary).duplicate(true)
+	if (
+		new_transaction_id.is_empty()
+		or before_history.has(new_transaction_id)
+		or str(new_record.get("profile_id", "")) != profile_id
+		or bool(new_record.get("deposit", false)) != (player_delta < 0)
+		or int(new_record.get("amount", 0)) != BANK_TRANSFER_AMOUNT
+	):
+		return false
+	var expected_history := _bounded_bank_transaction_history(
+		before_history,
+		new_transaction_id,
+		new_record,
+	)
+	return (
+		str(after_shared.get("bank_contract_id", "")) == BANK_CONTRACT_ID
+		and _shared_digest(expected_history) == _shared_digest(after_history)
+	)
+
+
+func _warehouse_transaction_log_is_valid(log: Dictionary) -> bool:
+	var allowed_fields := {
+		"contract_id": true, "state": true, "operation_kind": true,
+		"profile_id": true, "profile_path": true,
+		"before_profile": true, "after_profile": true,
+		"before_shared": true, "after_shared": true,
+		"before_profile_hash": true, "after_profile_hash": true,
+		"before_shared_hash": true, "after_shared_hash": true,
+	}
+	for raw_field: Variant in log.keys():
+		if not allowed_fields.has(str(raw_field)):
+			return false
+	var profile_id := str(log.get("profile_id", ""))
+	var profile_path_value: Variant = log.get("profile_path", null)
+	var before_profile_value: Variant = log.get("before_profile", null)
+	var after_profile_value: Variant = log.get("after_profile", null)
+	var before_shared_value: Variant = log.get("before_shared", null)
+	var after_shared_value: Variant = log.get("after_shared", null)
+	if (
+		str(log.get("contract_id", "")) != WAREHOUSE_TRANSFER_CONTRACT_ID
+		or str(log.get("state", "")) != "PREPARED"
+		or not profile_path_value is String
+		or not _valid_profile_storage_id(profile_id)
+		or str(profile_path_value) != _profile_path(profile_id)
+		or not before_profile_value is Dictionary
+		or not after_profile_value is Dictionary
+		or not before_shared_value is Dictionary
+		or not after_shared_value is Dictionary
+	):
+		return false
+	var before_profile: Dictionary = before_profile_value
+	var after_profile: Dictionary = after_profile_value
+	var before_shared: Dictionary = before_shared_value
+	var after_shared: Dictionary = after_shared_value
+	if (
+		str(before_profile.get("profile_id", "")) != profile_id
+		or str(after_profile.get("profile_id", "")) != profile_id
+		or _shared_digest(before_profile) != str(log.get("before_profile_hash", ""))
+		or _shared_digest(after_profile) != str(log.get("after_profile_hash", ""))
+		or _shared_digest(before_shared) != str(log.get("before_shared_hash", ""))
+		or _shared_digest(after_shared) != str(log.get("after_shared_hash", ""))
+		or not bool(_validate_profile_document_status(before_profile, profile_id, false).get("valid", false))
+		or not bool(_validate_profile_document_status(after_profile, profile_id, false).get("valid", false))
+		or not _validate_shared_warehouse_document(before_shared)
+		or not _validate_shared_warehouse_document(after_shared)
+	):
+		return false
+	var operation_kind := str(log.get("operation_kind", "warehouse_items"))
+	if operation_kind == "bank":
+		return _bank_transaction_transition_is_valid(
+			profile_id, before_profile, after_profile, before_shared, after_shared
+		)
+	if operation_kind != "warehouse_items":
+		return false
+	return (
+		int(before_profile.get("gold", 0)) == int(after_profile.get("gold", 0))
+		and _shared_digest(_bank_fields_snapshot(before_shared))
+		== _shared_digest(_bank_fields_snapshot(after_shared))
+		and int(after_shared.get("revision", -1))
+		== int(before_shared.get("revision", -1)) + 1
+	)
+
+
 func _recover_shared_warehouse_transaction() -> void:
 	var log_document := _read_json_document(shared_warehouse_transaction_log_path)
 	if not bool(log_document.get("exists", false)):
@@ -3962,43 +4380,23 @@ func _recover_shared_warehouse_transaction() -> void:
 		_warehouse_transaction_locked = true
 		return
 	var log: Dictionary = log_document.get("data", {})
-	if (
-		str(log.get("contract_id", "")) != WAREHOUSE_TRANSFER_CONTRACT_ID
-		or str(log.get("state", "")) != "PREPARED"
-		or not log.get("profile_path", "") is String
-	):
+	if not _warehouse_transaction_log_is_valid(log):
 		_warehouse_transaction_locked = true
 		return
 	var profile_id := str(log.get("profile_id", ""))
 	var profile_path := str(log.get("profile_path", ""))
-	var before_profile: Variant = log.get("before_profile", null)
-	var after_profile: Variant = log.get("after_profile", null)
-	var before_shared: Variant = log.get("before_shared", null)
-	var after_shared: Variant = log.get("after_shared", null)
-	if (
-		not _valid_profile_storage_id(profile_id)
-		or profile_path != _profile_path(profile_id)
-		or not before_profile is Dictionary
-		or not after_profile is Dictionary
-		or not before_shared is Dictionary
-		or not after_shared is Dictionary
-		or str((before_profile as Dictionary).get("profile_id", "")) != profile_id
-		or str((after_profile as Dictionary).get("profile_id", "")) != profile_id
-		or _shared_digest(before_profile) != str(log.get("before_profile_hash", ""))
-		or _shared_digest(after_profile) != str(log.get("after_profile_hash", ""))
-		or _shared_digest(before_shared) != str(log.get("before_shared_hash", ""))
-		or _shared_digest(after_shared) != str(log.get("after_shared_hash", ""))
-	):
-		_warehouse_transaction_locked = true
-		return
+	var before_profile: Dictionary = log.get("before_profile", {})
+	var after_profile: Dictionary = log.get("after_profile", {})
+	var before_shared: Dictionary = log.get("before_shared", {})
+	var after_shared: Dictionary = log.get("after_shared", {})
 	var current_profile := _read_json(profile_path)
 	var current_shared := _read_json(shared_warehouse_path)
 	if _shared_digest(current_profile) == _shared_digest(after_profile) and _shared_digest(current_shared) == _shared_digest(after_shared):
 		_warehouse_transaction_locked = not _remove_persistence_file(shared_warehouse_transaction_log_path)
 		_shared_warehouse_initialized = false
 		return
-	var profile_restored := _write_json_atomic(profile_path, before_profile as Dictionary)
-	var shared_restored := _write_json_atomic(shared_warehouse_path, before_shared as Dictionary)
+	var profile_restored := _write_json_atomic(profile_path, before_profile)
+	var shared_restored := _write_json_atomic(shared_warehouse_path, before_shared)
 	if (
 		not profile_restored
 		or not shared_restored
@@ -4022,6 +4420,9 @@ func _shared_document_for_records(records: Array) -> Dictionary:
 	var document := _shared_warehouse_empty_document()
 	document["revision"] = int(current.get("revision", 0)) + 1
 	document["warehouse_inventory"] = records.duplicate(true)
+	for bank_field: String in ["bank_gold", "bank_contract_id", "bank_transaction_high_water", "bank_transactions"]:
+		if current.has(bank_field):
+			document[bank_field] = current[bank_field]
 	document["legacy_migration"] = current.get("legacy_migration", {
 		"completed": true,
 		"contract_id": SHARED_WAREHOUSE_MIGRATION_CONTRACT_ID,
@@ -4060,6 +4461,9 @@ func _write_shared_warehouse(records: Array) -> bool:
 	document["revision"] = revision
 	document["warehouse_inventory"] = records.duplicate(true)
 	document["legacy_migration"] = migration.duplicate(true)
+	for bank_field: String in ["bank_gold", "bank_contract_id", "bank_transaction_high_water", "bank_transactions"]:
+		if current.has(bank_field):
+			document[bank_field] = current[bank_field]
 	return _write_shared_warehouse_document_atomic(document)
 
 
@@ -4130,6 +4534,7 @@ func save_game(update_profile_index := true) -> bool:
 		"game_mode_id": game_mode_id,
 		"experience": experience,
 		"gold": gold,
+		"gold_overflow_records": gold_overflow_records.duplicate(true),
 		"inventory": inventory,
 		"warehouse_storage_contract_id": SHARED_WAREHOUSE_CONTRACT_ID,
 		"equipment": equipment,
@@ -4508,6 +4913,18 @@ func load_save() -> void:
 			_save_blocked_reason = str(load_result.get("reason", "invalid_profile"))
 		return
 	var parsed: Dictionary = load_result.get("data", {})
+	var projected_gold := _gold_load_projection(parsed)
+	if bool(projected_gold.needs_archive):
+		var archive_root := profile_directory.get_base_dir().path_join("gold_migrations")
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(archive_root))
+		var archive_path := archive_root.path_join(active_profile_id + "-" + _shared_digest(parsed) + ".json")
+		if not FileAccess.file_exists(archive_path) and not _write_json_atomic(archive_path, parsed):
+			last_load_result["success"] = false
+			last_load_result["reason"] = "gold_migration_archive_failed"
+			_save_blocked_profile_id = active_profile_id
+			_save_blocked_reason = "gold_migration_archive_failed"
+			return
+		last_load_result["gold_migration_archive"] = archive_path
 	var legacy_isolated_profile_fixture := (
 		profile_directory != PROFILE_DIRECTORY
 		and not _shared_warehouse_test_isolation_enabled()
@@ -4543,7 +4960,8 @@ func load_save() -> void:
 		GameModes.apply_mode(game_mode_id)
 	ContentLayers.set_expansion_enabled("later_176_content", later_content_enabled)
 	experience = maxi(0, int(parsed.get("experience", 0)))
-	gold = maxi(0, int(parsed.get("gold", 0)))
+	gold = int(projected_gold.gold)
+	gold_overflow_records = projected_gold.gold_overflow_records
 	var loaded_inventory: Variant = parsed.get("inventory", [])
 	inventory = (loaded_inventory as Array).duplicate(true) if loaded_inventory is Array else []
 	if not legacy_isolated_profile_fixture:
@@ -5571,37 +5989,24 @@ func ensure_chiyue_test_roster() -> Dictionary:
 	return result
 
 
-func _warehouse_transfer_commit(inventory_before: Array, warehouse_before: Array) -> bool:
-	if test_mode and not _shared_warehouse_test_isolation_enabled():
-		return _commit_save()
-	if not _ensure_shared_warehouse_ready():
-		return false
-	if (
-		profile_directory != PROFILE_DIRECTORY
-		and not _shared_warehouse_test_isolation_enabled()
-		and not _shared_warehouse_initialized
-	):
-		return _commit_save()
+func _commit_warehouse_transaction_snapshots(
+	before_profile: Dictionary,
+	after_profile: Dictionary,
+	before_shared: Dictionary,
+	after_shared: Dictionary,
+	operation_kind: String,
+) -> bool:
 	var profile_path := _profile_path(active_profile_id)
-	var before_profile := _read_json(profile_path)
-	var before_shared := _read_json(shared_warehouse_path)
 	if (
-		before_profile.is_empty()
-		or str(before_profile.get("profile_id", "")) != active_profile_id
-		or not _validate_shared_warehouse_document(before_shared)
+		FileAccess.file_exists(shared_warehouse_transaction_log_path)
+		or _shared_digest(_read_json(profile_path)) != _shared_digest(before_profile)
+		or _shared_digest(_read_json(shared_warehouse_path)) != _shared_digest(before_shared)
 	):
-		return false
-	var after_profile := before_profile.duplicate(true)
-	after_profile["inventory"] = inventory.duplicate(true)
-	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
-	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
-	after_profile.erase("warehouse_inventory")
-	var after_shared := _shared_document_for_records(warehouse_inventory)
-	if not _validate_shared_warehouse_document(after_shared):
 		return false
 	var prepared := {
 		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
 		"state": "PREPARED",
+		"operation_kind": operation_kind,
 		"profile_id": active_profile_id,
 		"profile_path": profile_path,
 		"before_profile": before_profile,
@@ -5613,6 +6018,8 @@ func _warehouse_transfer_commit(inventory_before: Array, warehouse_before: Array
 		"before_shared_hash": _shared_digest(before_shared),
 		"after_shared_hash": _shared_digest(after_shared),
 	}
+	if not _warehouse_transaction_log_is_valid(prepared):
+		return false
 	if not _write_json_atomic(shared_warehouse_transaction_log_path, prepared):
 		return false
 	_warehouse_transaction_locked = true
@@ -5651,6 +6058,78 @@ func _warehouse_transfer_commit(inventory_before: Array, warehouse_before: Array
 	return false
 
 
+func _bank_transfer_commit(
+	before_profile: Dictionary,
+	before_shared: Dictionary,
+	next_gold: int,
+	bank_update: Dictionary,
+) -> bool:
+	var allowed_bank_fields := {
+		"bank_gold": true,
+		"bank_contract_id": true,
+		"bank_transaction_high_water": true,
+		"bank_transactions": true,
+	}
+	if bank_update.size() != allowed_bank_fields.size():
+		return false
+	for raw_field: Variant in bank_update.keys():
+		if not allowed_bank_fields.has(str(raw_field)):
+			return false
+	var after_profile := before_profile.duplicate(true)
+	after_profile["gold"] = next_gold
+	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
+	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
+	after_profile.erase("warehouse_inventory")
+	var after_shared := before_shared.duplicate(true)
+	after_shared["revision"] = int(before_shared.get("revision", 0)) + 1
+	for field: String in allowed_bank_fields.keys():
+		after_shared[field] = bank_update[field]
+	return _commit_warehouse_transaction_snapshots(
+		before_profile,
+		after_profile,
+		before_shared,
+		after_shared,
+		"bank",
+	)
+
+
+func _warehouse_transfer_commit(_inventory_before: Array, _warehouse_before: Array) -> bool:
+	if test_mode and not _shared_warehouse_test_isolation_enabled():
+		return _commit_save()
+	if not _ensure_shared_warehouse_ready():
+		return false
+	if (
+		profile_directory != PROFILE_DIRECTORY
+		and not _shared_warehouse_test_isolation_enabled()
+		and not _shared_warehouse_initialized
+	):
+		return _commit_save()
+	var profile_path := _profile_path(active_profile_id)
+	var before_profile := _read_json(profile_path)
+	var before_shared := _read_json(shared_warehouse_path)
+	if (
+		before_profile.is_empty()
+		or str(before_profile.get("profile_id", "")) != active_profile_id
+		or not _validate_shared_warehouse_document(before_shared)
+	):
+		return false
+	var after_profile := before_profile.duplicate(true)
+	after_profile["inventory"] = inventory.duplicate(true)
+	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
+	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
+	after_profile.erase("warehouse_inventory")
+	var after_shared := _shared_document_for_records(warehouse_inventory)
+	if not _validate_shared_warehouse_document(after_shared):
+		return false
+	return _commit_warehouse_transaction_snapshots(
+		before_profile,
+		after_profile,
+		before_shared,
+		after_shared,
+		"warehouse_items",
+	)
+
+
 ## Partial atomic pickup transaction. Each candidate is simulated in order;
 ## failures do not prevent later candidates from being attempted.
 func receive_loot_batch_partial(candidates: Array) -> Dictionary:
@@ -5681,11 +6160,14 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 			continue
 		var candidate: Dictionary = raw_candidate
 		if bool(candidate.get("gold", false)):
-			var amount := maxi(0, int(candidate.get("amount", 0)))
-			if amount > 0:
-				working_gold = maxi(0, working_gold + amount)
-				changed = true
-			outcomes.append({"success": amount > 0, "gold": true, "amount": amount})
+			var raw_amount: Variant = candidate.get("amount", 0)
+			if not can_credit_gold(raw_amount, working_gold) or float(raw_amount) <= 0.0:
+				outcomes.append({"success": false, "gold": true, "reason": "gold_cap_or_invalid_amount"})
+				continue
+			var amount := int(raw_amount)
+			working_gold += amount
+			changed = true
+			outcomes.append({"success": true, "gold": true, "amount": amount})
 			continue
 		var item_name := str(candidate.get("item_name", ""))
 		var explicit_item_id := int(candidate.get("item_id", -1))
@@ -6315,6 +6797,7 @@ func _creation_runtime_snapshot() -> Dictionary:
 		"experience": experience,
 		"gold": gold,
 		"inventory": inventory.duplicate(true),
+		"gold_overflow_records": gold_overflow_records.duplicate(true),
 		"warehouse_inventory": warehouse_inventory.duplicate(true),
 		"equipment": equipment.duplicate(true),
 		"learned_skills": learned_skills.duplicate(true),
@@ -6355,6 +6838,7 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 	game_mode_id = str(snapshot.get("game_mode_id", "classic_176"))
 	experience = int(snapshot.get("experience", 0))
 	gold = int(snapshot.get("gold", 0))
+	gold_overflow_records = snapshot.get("gold_overflow_records", []).duplicate(true)
 	inventory = (snapshot.get("inventory", []) as Array).duplicate(true)
 	warehouse_inventory = (snapshot.get("warehouse_inventory", []) as Array).duplicate(true)
 	equipment = (snapshot.get("equipment", {}) as Dictionary).duplicate(true)

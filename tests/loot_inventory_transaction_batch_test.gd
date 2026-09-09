@@ -69,6 +69,13 @@ func _run() -> void:
 		requests.append({"quote_key": "inventory:%d" % index, "quote_id": str(quote.get("quote_id", "")), "inventory_index": index, "instance_id": "", "item_name": sell_name, "amount": 1, "merchant_id": merchant_id})
 	var sell_inventory_before := PlayerState.inventory.duplicate(true)
 	var sell_gold_before := PlayerState.gold
+	PlayerState.gold = PlayerState.PLAYER_GOLD_CAP
+	var cap_rejected := PlayerState.sell_inventory_items(requests)
+	assert(not cap_rejected.success and PlayerState.inventory == sell_inventory_before,
+		"gold cap must reject the whole batch before consuming any source item")
+	assert(not PlayerState.sell_inventory_item(requests[0]).success and PlayerState.inventory == sell_inventory_before)
+	assert(not PlayerState.receive("金币", 1).success and PlayerState.gold == PlayerState.PLAYER_GOLD_CAP)
+	PlayerState.gold = sell_gold_before
 	var consumed_before := PlayerState._consumed_shop_sell_quote_ids.duplicate(true)
 	PlayerState.test_transaction_debug_reset()
 	PlayerState._test_force_atomic_write_failure = true

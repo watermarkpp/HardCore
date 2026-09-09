@@ -38,6 +38,10 @@ func _run() -> void:
 	_test_precise_write_failures_rollback()
 	_test_prepared_log_recovery_without_active_profile_coupling()
 	_test_extended_stack_metadata_and_opaque_split_guard()
+	_test_shared_gold_transactions()
+	_test_bank_stale_snapshot_and_wal_guards()
+	_test_bounded_bank_history_rejects_replay()
+	_test_gold_migration_real_load()
 	_cleanup_isolated_files()
 	_restore_player_state()
 	print("SHARED_WAREHOUSE_TRANSACTION_TEST_PASS")
@@ -240,6 +244,168 @@ func _test_extended_stack_metadata_and_opaque_split_guard() -> void:
 	assert(FileAccess.get_file_as_string(PlayerState.shared_warehouse_path) == shared_before)
 
 
+func _test_shared_gold_transactions() -> void:
+	_reset_documents("bank")
+	PlayerState.gold = 300000
+	var profile := PlayerState._read_json(_profile)
+	profile["gold"] = PlayerState.gold
+	assert(PlayerState._write_json_atomic(_profile, profile))
+	var result := PlayerState.transfer_shared_gold(true, "deposit-a", 1)
+	assert(result.success and PlayerState.gold == 200000 and PlayerState.shared_gold_balance() == 100000)
+	assert(not PlayerState.transfer_shared_gold(true, "deposit-a", 1).success, "duplicate transaction must not charge twice")
+	assert(PlayerState._write_shared_warehouse([]))
+	assert(PlayerState.shared_gold_balance() == 100000, "ordinary item save must preserve bank balance")
+	PlayerState.active_profile_id = "q"
+	PlayerState.gold = 0
+	var other := PlayerState._read_json(_other_profile)
+	other["gold"] = 0
+	assert(PlayerState._write_json_atomic(_other_profile, other))
+	result = PlayerState.transfer_shared_gold(false, "withdraw-b", 2)
+	assert(result.success and PlayerState.gold == 100000 and PlayerState.shared_gold_balance() == 0)
+	for failure_kind: String in ["log", "shared", "profile"]:
+		var before_profile := PlayerState._read_json(_other_profile)
+		var before_shared := PlayerState._read_json(PlayerState.shared_warehouse_path)
+		PlayerState._test_force_atomic_write_failure = failure_kind == "log"
+		PlayerState._test_fail_shared_write = failure_kind == "shared"
+		PlayerState._test_fail_profile_write = failure_kind == "profile"
+		result = PlayerState.transfer_shared_gold(true, "bank-fail-" + failure_kind, 3)
+		PlayerState._test_force_atomic_write_failure = false
+		PlayerState._test_fail_shared_write = false
+		PlayerState._test_fail_profile_write = false
+		assert(not result.success and PlayerState.gold == 100000)
+		assert(PlayerState._shared_digest(PlayerState._read_json(_other_profile)) == PlayerState._shared_digest(before_profile))
+		assert(PlayerState._shared_digest(PlayerState._read_json(PlayerState.shared_warehouse_path)) == PlayerState._shared_digest(before_shared))
+	PlayerState.gold = PlayerState.PLAYER_GOLD_CAP
+	assert(not PlayerState.add_gold(1) and not PlayerState.add_gold(-1) and not PlayerState.add_gold(0.5))
+	var pickup := PlayerState.receive_loot_batch_partial([{"gold": true, "amount": 1}])
+	assert(int(pickup.get("success_count", -1)) == 0 and PlayerState.gold == PlayerState.PLAYER_GOLD_CAP)
+	var projected := PlayerState._gold_load_projection({"gold": PlayerState.PLAYER_GOLD_CAP + 777})
+	assert(int(projected.gold) == PlayerState.PLAYER_GOLD_CAP)
+	assert(int(projected.gold_overflow_records[0].retained_gold) == 777)
+	var reloaded := PlayerState._gold_load_projection(projected)
+	assert(reloaded.gold_overflow_records == projected.gold_overflow_records and not reloaded.needs_archive,
+		"legacy overflow migration must preserve value once without re-credit")
+
+
+func _test_bank_stale_snapshot_and_wal_guards() -> void:
+	_reset_documents("bank-preserve-disk")
+	PlayerState.gold = 200000
+	var profile := PlayerState._read_json(_profile)
+	profile["gold"] = PlayerState.gold
+	assert(PlayerState._write_json_atomic(_profile, profile))
+	PlayerState.warehouse_inventory = [_item("stale-memory")]
+	assert(PlayerState._write_json_atomic(
+		PlayerState.shared_warehouse_path, _shared_document([_item("disk-authority")])
+	))
+	var preserve_result := PlayerState.transfer_shared_gold(true, "preserve-disk-a", 1)
+	assert(preserve_result.success, str(preserve_result))
+	assert(_instance_ids(PlayerState._read_json(PlayerState.shared_warehouse_path).warehouse_inventory) == ["disk-authority"],
+		"bank-only commit rewrote shared inventory from stale memory")
+
+	_reset_documents("bank-stale")
+	PlayerState.gold = 200000
+	var before_profile := PlayerState._read_json(_profile)
+	before_profile["gold"] = PlayerState.gold
+	assert(PlayerState._write_json_atomic(_profile, before_profile))
+	var before_shared := PlayerState._read_json(PlayerState.shared_warehouse_path)
+	var record := {"profile_id": "p", "sequence": 1, "deposit": true, "amount": PlayerState.BANK_TRANSFER_AMOUNT}
+	var bank_update := {
+		"bank_gold": PlayerState.BANK_TRANSFER_AMOUNT,
+		"bank_contract_id": PlayerState.BANK_CONTRACT_ID,
+		"bank_transaction_high_water": 1,
+		"bank_transactions": PlayerState._bounded_bank_transaction_history({}, "stale-a", record),
+	}
+	var externally_advanced := before_shared.duplicate(true)
+	externally_advanced["revision"] = int(before_shared.revision) + 1
+	externally_advanced["warehouse_inventory"] = [_item("external-new")]
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_path, externally_advanced))
+	assert(not PlayerState._bank_transfer_commit(before_profile, before_shared, 100000, bank_update),
+		"stale bank snapshot must fail CAS")
+	assert(_instance_ids(PlayerState._read_json(PlayerState.shared_warehouse_path).warehouse_inventory) == ["external-new"],
+		"stale bank write overwrote the newer shared inventory")
+	assert(PlayerState.gold == 200000 and not FileAccess.file_exists(PlayerState.shared_warehouse_transaction_log_path))
+
+	_reset_documents("bad-bank-wal")
+	before_profile = PlayerState._read_json(_profile)
+	before_profile["gold"] = 200000
+	assert(PlayerState._write_json_atomic(_profile, before_profile))
+	before_shared = PlayerState._read_json(PlayerState.shared_warehouse_path)
+	var after_profile := before_profile.duplicate(true)
+	after_profile["gold"] = 100000
+	var after_shared := before_shared.duplicate(true)
+	after_shared.merge(bank_update, true)
+	after_shared["bank_gold"] = 50000 # Deliberately violates conservation.
+	after_shared["revision"] = int(before_shared.revision) + 1
+	var invalid_wal := _prepared_log(before_profile, after_profile, before_shared, after_shared, "bank")
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_transaction_log_path, invalid_wal))
+	PlayerState._recover_shared_warehouse_transaction()
+	assert(PlayerState._warehouse_transaction_locked, "non-conserving bank WAL must lock recovery")
+	assert(PlayerState._shared_digest(PlayerState._read_json(_profile)) == PlayerState._shared_digest(before_profile))
+	assert(PlayerState._shared_digest(PlayerState._read_json(PlayerState.shared_warehouse_path)) == PlayerState._shared_digest(before_shared))
+	PlayerState._warehouse_transaction_locked = false
+	assert(PlayerState._remove_persistence_file(PlayerState.shared_warehouse_transaction_log_path))
+
+
+func _test_bounded_bank_history_rejects_replay() -> void:
+	_reset_documents("bank-history")
+	var history: Dictionary = {}
+	for sequence in range(1, PlayerState.BANK_TRANSACTION_HISTORY_LIMIT + 3):
+		history = PlayerState._bounded_bank_transaction_history(history, "history-%d" % sequence, {
+			"profile_id": "p", "sequence": sequence, "deposit": sequence % 2 == 1,
+			"amount": PlayerState.BANK_TRANSFER_AMOUNT,
+		})
+	assert(history.size() == PlayerState.BANK_TRANSACTION_HISTORY_LIMIT)
+	assert(not history.has("history-1"), "old audit rows should be pruned at the fixed bound")
+	var shared := PlayerState._read_json(PlayerState.shared_warehouse_path)
+	shared.merge({
+		"bank_gold": 0,
+		"bank_contract_id": PlayerState.BANK_CONTRACT_ID,
+		"bank_transaction_high_water": PlayerState.BANK_TRANSACTION_HISTORY_LIMIT + 2,
+		"bank_transactions": history,
+	}, true)
+	assert(PlayerState._validate_shared_warehouse_document(shared))
+	assert(PlayerState._write_json_atomic(PlayerState.shared_warehouse_path, shared))
+	var malformed := shared.duplicate(true)
+	malformed["bank_transactions"] = history.duplicate(true)
+	var latest_id := "history-%d" % (PlayerState.BANK_TRANSACTION_HISTORY_LIMIT + 2)
+	var malformed_history: Dictionary = malformed["bank_transactions"]
+	var malformed_record: Dictionary = malformed_history[latest_id]
+	malformed_record["forged"] = true
+	assert(not PlayerState._validate_shared_warehouse_document(malformed),
+		"unknown bank ledger fields must not gain authority")
+	PlayerState.gold = 200000
+	var profile := PlayerState._read_json(_profile)
+	profile["gold"] = PlayerState.gold
+	assert(PlayerState._write_json_atomic(_profile, profile))
+	var replay := PlayerState.transfer_shared_gold(true, "history-1", 1)
+	assert(not replay.success and str(replay.reason) == "duplicate_transaction")
+	assert(PlayerState.gold == 200000 and PlayerState.shared_gold_balance() == 0)
+
+
+func _test_gold_migration_real_load() -> void:
+	_reset_documents("gold-migration")
+	var legacy := PlayerState._read_json(_profile)
+	legacy["gold"] = PlayerState.PLAYER_GOLD_CAP + 777
+	assert(PlayerState._write_json_atomic(_profile, legacy))
+	PlayerState.load_save()
+	assert(PlayerState.last_load_result.success, str(PlayerState.last_load_result))
+	assert(PlayerState.gold == PlayerState.PLAYER_GOLD_CAP and PlayerState.gold_overflow_records.size() == 1)
+	assert(int(PlayerState.gold_overflow_records[0].retained_gold) == 777)
+	var malformed_overflow := {"gold": PlayerState.PLAYER_GOLD_CAP, "gold_overflow_records": [
+		PlayerState.gold_overflow_records[0].duplicate(true),
+	]}
+	malformed_overflow.gold_overflow_records[0]["unknown"] = true
+	assert(not PlayerState._validate_gold_overflow_records(malformed_overflow),
+		"unknown overflow archive fields must not gain authority")
+	var archive := str(PlayerState.last_load_result.get("gold_migration_archive", ""))
+	assert(not archive.is_empty() and FileAccess.file_exists(archive))
+	assert(int(PlayerState._read_json(archive).gold) == PlayerState.PLAYER_GOLD_CAP + 777)
+	assert(PlayerState.save_game(false), str(PlayerState.last_save_result))
+	PlayerState.load_save()
+	assert(PlayerState.last_load_result.success and PlayerState.gold_overflow_records.size() == 1)
+	assert(PlayerState.gold == PlayerState.PLAYER_GOLD_CAP and int(PlayerState.gold_overflow_records[0].retained_gold) == 777)
+
+
 func _reset_documents(instance_id: String) -> void:
 	PlayerState._warehouse_transaction_locked = false
 	PlayerState._persistence_transaction_in_progress = false
@@ -273,8 +439,14 @@ func _shared_document(records: Array) -> Dictionary:
 	}
 
 
-func _prepared_log(before_profile: Dictionary, after_profile: Dictionary, before_shared: Dictionary, after_shared: Dictionary) -> Dictionary:
-	return {
+func _prepared_log(
+	before_profile: Dictionary,
+	after_profile: Dictionary,
+	before_shared: Dictionary,
+	after_shared: Dictionary,
+	operation_kind := "",
+) -> Dictionary:
+	var result := {
 		"contract_id": PlayerState.WAREHOUSE_TRANSFER_CONTRACT_ID,
 		"state": "PREPARED", "profile_id": "p", "profile_path": _profile,
 		"before_profile": before_profile, "after_profile": after_profile,
@@ -284,6 +456,9 @@ func _prepared_log(before_profile: Dictionary, after_profile: Dictionary, before
 		"before_shared_hash": PlayerState._shared_digest(before_shared),
 		"after_shared_hash": PlayerState._shared_digest(after_shared),
 	}
+	if not operation_kind.is_empty():
+		result["operation_kind"] = operation_kind
+	return result
 
 
 func _item(instance_id: String) -> Dictionary:
@@ -307,6 +482,7 @@ func _capture_player_state() -> void:
 		"profile_directory": PlayerState.profile_directory, "profile_index_path": PlayerState.profile_index_path,
 		"shared": PlayerState.shared_warehouse_path, "log": PlayerState.shared_warehouse_transaction_log_path,
 		"active": PlayerState.active_profile_id, "inventory": PlayerState.inventory.duplicate(true),
+		"gold": PlayerState.gold, "gold_overflow_records": PlayerState.gold_overflow_records.duplicate(true),
 		"warehouse": PlayerState.warehouse_inventory.duplicate(true), "test_mode": PlayerState.test_mode,
 		"initialized": PlayerState._shared_warehouse_initialized, "locked": PlayerState._warehouse_transaction_locked,
 		"in_progress": PlayerState._persistence_transaction_in_progress, "force": PlayerState._test_force_atomic_write_failure,
@@ -339,6 +515,8 @@ func _restore_player_state() -> void:
 	PlayerState.shared_warehouse_path = str(_saved.shared)
 	PlayerState.shared_warehouse_transaction_log_path = str(_saved.log)
 	PlayerState.active_profile_id = str(_saved.active)
+	PlayerState.gold = int(_saved.gold)
+	PlayerState.gold_overflow_records = (_saved.gold_overflow_records as Array).duplicate(true)
 	PlayerState.inventory = (_saved.inventory as Array).duplicate(true)
 	PlayerState.warehouse_inventory = (_saved.warehouse as Array).duplicate(true)
 	PlayerState.test_mode = bool(_saved.test_mode)
