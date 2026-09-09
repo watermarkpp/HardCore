@@ -7,6 +7,7 @@ signal collection_rejected(item_name: String, message: String)
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const LootVisualEffectScript := preload("res://scripts/loot_visual_effect.gd")
 const COLLECTION_RADIUS_GU := 0.75
 const OVERWEIGHT_RETRY_COOLDOWN_SECONDS := 5.0
 
@@ -22,6 +23,7 @@ var _collection_pending := false
 var _collection_authority_check_count := 0
 var _collection_manager: Node
 var _visual_descriptor: Dictionary = {}
+var loot_visual_effect: LootVisualEffect
 static var _descriptor_cache: Dictionary = {}
 static var _descriptor_build_count := 0
 
@@ -167,6 +169,7 @@ func _ready() -> void:
 	if _visual_descriptor.is_empty():
 		_visual_descriptor = ground_visual_descriptor(item_name)
 	var descriptor: Dictionary = _visual_descriptor
+	_configure_instance_visual()
 	var icon_path := str(descriptor.get("path", ""))
 	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
 		icon_sprite = Sprite2D.new()
@@ -180,7 +183,11 @@ func _ready() -> void:
 	label.position = Vector2(-48, -36)
 	label.size = Vector2(96, 24)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	var item_color: Color = descriptor.get("label_color", Color(0.90, 0.82, 0.66))
+	var template_item_color: Color = descriptor.get("label_color", Color(0.90, 0.82, 0.66))
+	var item_color := LootVisualEffectScript.label_color_for_record(
+		item_record,
+		template_item_color,
+	)
 	label.add_theme_color_override("font_color", item_color)
 	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	label.add_theme_constant_override("shadow_offset_x", 1)
@@ -189,6 +196,32 @@ func _ready() -> void:
 	if icon_sprite == null:
 		RuntimeDiagnostics.increment_performance_counter(&"loot_fallback_redraw_requests")
 		queue_redraw()
+
+
+func _configure_instance_visual() -> void:
+	if item_record.is_empty():
+		return
+	if loot_visual_effect == null or not is_instance_valid(loot_visual_effect):
+		loot_visual_effect = LootVisualEffectScript.new()
+		loot_visual_effect.name = "LootVisualEffect"
+		# The helper is the first child so its static beam is behind the client
+		# icon.  LootPickup remains the only lifetime owner.
+		add_child(loot_visual_effect)
+		move_child(loot_visual_effect, 0)
+	var template_item_color: Color = _visual_descriptor.get("label_color", Color(0.90, 0.82, 0.66))
+	loot_visual_effect.configure(item_record, template_item_color)
+
+
+func loot_visual_snapshot() -> Dictionary:
+	if loot_visual_effect == null or not is_instance_valid(loot_visual_effect):
+		return {
+			"contract": LootVisualEffectScript.VISUAL_CONTRACT,
+			"item_id": LootVisualEffectScript.exact_item_id(item_record),
+			"tier": LootVisualEffectScript.tier_for_record(item_record),
+			"golden_beam": false,
+			"affix_highlight": LootVisualEffectScript.affix_is_valid(item_record),
+		}
+	return loot_visual_effect.visual_descriptor()
 
 
 static func _catalog_item_id(record: Dictionary) -> int:

@@ -15,6 +15,7 @@ const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
 const INVENTORY_PANEL_SCRIPT_PATH := "res://scripts/inventory_panel.gd"
+const MonsterDisplayFormatterScript := preload("res://scripts/monster_display_formatter.gd")
 const SHOP_PANEL_SCRIPT_PATH := "res://scripts/shop_panel.gd"
 const SKILL_PANEL_SCRIPT_PATH := "res://scripts/skill_panel.gd"
 const QUEST_PANEL_SCRIPT_PATH := "res://scripts/quest_panel.gd"
@@ -2107,15 +2108,22 @@ func _update_taoist_defence_buff_icon(
 	seconds_label.text = str(maxi(0, int(ceil(remaining_seconds))))
 
 
-func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true) -> void:
+func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true, monster_id := -1) -> void:
 	if target_label == null:
 		return
+	# This is the player-facing boundary.  Internal target identity remains the
+	# exact monster name/ID; only confirmed catalog variant suffixes are removed
+	# for the label shown here.
+	var display_target_name := MonsterDisplayFormatterScript.display_name(
+		str(target_name),
+		int(monster_id),
+	)
 	if target_health_fill != null:
-		target_health_fill.visible = not target_name.is_empty() and max_hp > 0
+		target_health_fill.visible = not display_target_name.is_empty() and max_hp > 0
 		target_health_fill.size.x = 320.0 * clampf(float(current_hp) / float(maxi(1, max_hp)), 0.0, 1.0)
 	var next_text := "目标：自动选敌待命" if auto_enabled else "目标：手动模式待选择"
-	if not target_name.is_empty():
-		next_text = "目标［%s］：%s　%d/%d" % ["自动" if auto_enabled else "手动", target_name, current_hp, max_hp]
+	if not display_target_name.is_empty():
+		next_text = "目标［%s］：%s　%d/%d" % ["自动" if auto_enabled else "手动", display_target_name, current_hp, max_hp]
 	if next_text == _last_target_text:
 		return
 	_last_target_text = next_text
