@@ -32,6 +32,46 @@
   "retiredSourceOnlyMonsterIds": [151, 207, 221, 223],
   "records": [
     {
+      "monsterId": 50,
+      "canonicalName": "掷斧骷髅",
+      "runtimeAllowed": true,
+      "attackRangeGu": 7.0,
+      "distanceMetric": "euclidean",
+      "rangeShape": "euclidean_circle",
+      "deliveryKind": "physical_projectile",
+      "identityBridge": {
+        "monsterId": 50,
+        "canonicalAppearance": 21,
+        "crystalAiCode": 8,
+        "policy": "Exact canonical ID/appearance and the unique Crystal service record establish identity only; they do not override original server behavior."
+      },
+      "sourceClassBinding": {
+        "serverRace": 87,
+        "pascalClass": "TDualAxeMonster",
+        "attackMethod": "FlyAxeAttack",
+        "runtimeLookup": "monster_id_only"
+      },
+      "source": {
+        "distribution": "source.original_gameofmir.server_suite",
+        "tier": "primary",
+        "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "originalPath": "dev_art_sources/reference/original_gameofmir/M2Server/ObjAxeMon.pas",
+        "sha256": "9D42ABF6B34B7A74FBD2AD802B08629CC67E0864CABDA694E13764DE750F28C0",
+        "lines": "41-100",
+        "rule": "TDualAxeMonster.FlyAxeAttack requires CanFly and applies StruckDamage before SendDelayMsg; 600 + Chebyshev-distance * 50 delays RM_10101 feedback, not source HP settlement.",
+        "projectCompatibility": "HardCore retains its existing target-bound delayed physical-projectile settlement and generic monster.physical_arrow.v1 trajectory under the typed combat-epoch/WORLD contract; this is a project adapter, not axe-specific source art or original server HP timing.",
+        "rangeProjectionCompatibility": "The source seven-cell AttackTarget gate is axis-oriented (and repeats the X comparison in the preserved source); HardCore projects the adopted scalar into its existing Euclidean GU circle rather than claiming the source shape was circular."
+      },
+      "dispatchEvidence": {
+        "constantsPath": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+        "constantsSha256": "9E1505BE616D55A362151150BA92712B9C8439F0A32E35B13C666AE07A33C085",
+        "constantLine": "158: MONSTER_DUALAXE = 87",
+        "dispatchPath": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+        "dispatchSha256": "E9E1735511CE0AEC8F90E52D38F504FD7430DF1AA490D6E82B29D62D7C6E84D3",
+        "dispatchLine": "1876: MONSTER_DUALAXE -> TDualAxeMonster.Create"
+      }
+    },
+    {
       "monsterId": 70,
       "canonicalName": "火焰沃玛",
       "runtimeAllowed": true,
