@@ -518,6 +518,25 @@ func _run() -> void:
 	# guard set.  A fresh test selection represents a new pointer-down frame.
 	panel._press_cancelled = false
 	panel._select_inventory_item(contract_dagger_index)
+	assert(panel.item_detail_presenter.visible and panel.item_detail_presenter.title_label.text == "匕首", "单选详情没有显示当前实例")
+	panel._select_inventory_item(contract_armor_index)
+	assert(
+		panel.selected_inventory_indices.size() == 2
+		and panel.item_detail_presenter.visible
+		and panel.item_detail_presenter.title_label.text == "布衣(男)",
+		"多选详情没有跟随最后选中的物品",
+	)
+	panel._select_inventory_item(contract_armor_index)
+	assert(
+		panel.selected_inventory_indices.size() == 1
+		and panel.selected_inventory_indices.has(contract_dagger_index)
+		and panel.item_detail_presenter.visible
+		and panel.item_detail_presenter.title_label.text == "匕首",
+		"取消多选最后一件后详情没有回落到剩余物品",
+	)
+	panel._select_inventory_item(contract_dagger_index)
+	assert(panel.selected_inventory_indices.is_empty() and not panel.item_detail_presenter.visible, "清空多选后详情没有隐藏")
+	panel._select_inventory_item(contract_dagger_index)
 	panel._select_inventory_item(contract_armor_index)
 	panel._select_equipment_slot("武器")
 	assert(PlayerState.equipment["武器"].is_empty() and PlayerState.has_item("匕首"), "多选物品点击穿戴槽仍触发了单项穿戴")

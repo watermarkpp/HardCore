@@ -165,11 +165,24 @@ func _run() -> void:
 	assert((panel._bag_cells[1].get_node("ItemButton") as Button).theme_type_variation == &"GothicComponentSelectedSlotButton", "人物背包第二个多选框没有显示")
 	assert(panel.bag_list.get_selected_items().size() == 2, "兼容列表没有镜像人物背包多选")
 	assert(panel.transfer_detail_label.text == "已选择 2 件背包物品", "中间转移栏没有显示人物背包多选数量")
-	assert(panel.item_detail_presenter.visible and panel.item_detail_presenter.title_label.text == "已选择 2 件物品", "仓库多选没有进入共享属性浮窗")
+	assert(panel.item_detail_presenter.visible and panel.item_detail_presenter.title_label.text == deposited_names[1], "仓库多选详情没有跟随最后选中的物品")
 	assert(not panel.item_detail_presenter.z_as_relative and panel.item_detail_presenter.z_index >= 2048, "仓库共享属性浮窗没有置于运行时最高层")
+	panel._select_item("bag", 1)
+	assert(
+		panel.selected_bag_indices.size() == 1
+		and panel.selected_bag_indices.has(0)
+		and panel.item_detail_presenter.visible
+		and panel.item_detail_presenter.title_label.text == deposited_names[0],
+		"取消仓库多选最后一件后详情没有回落到剩余物品",
+	)
+	panel._select_item("bag", 1)
+	assert(panel.selected_bag_indices.size() == 2 and panel.item_detail_presenter.title_label.text == deposited_names[1], "恢复仓库多选后详情没有跟随最新物品")
 	panel._select_item("bag", 0)
 	assert(panel.selected_bag_indices.size() == 1 and panel.selected_bag_indices.has(1), "再次点击人物背包格没有取消单个选择")
+	panel._select_item("bag", 1)
+	assert(panel.selected_bag_indices.is_empty() and not panel.item_detail_presenter.visible, "清空仓库多选后详情没有隐藏")
 	panel._select_item("bag", 0)
+	panel._select_item("bag", 1)
 	panel._select_item("stash", 0)
 	panel._select_item("stash", 1)
 	assert(panel.selected_bag_indices.is_empty() and panel.selected_stash_indices.size() == 2, "切到仓库侧没有清空人物背包多选")

@@ -871,14 +871,22 @@ func _update_detail_presenter() -> void:
 	var side := str(selected_ref.get("container", ""))
 	var index := int(selected_ref.get("slot", -1))
 	var refs := selected_bag_refs if side == "bag" else selected_stash_refs
-	if refs.size() > 1:
-		item_detail_presenter.show_multi(refs.size(), _presenter_context(side, index))
+	# A batch keeps its transfer semantics, but the detail surface follows the
+	# latest selected reference.  selected_ref also carries the same-instance
+	# follow-up after a successful transfer clears the source batch.
+	if not refs.is_empty():
+		var latest_ref: Dictionary = refs.back()
+		side = str(latest_ref.get("container", side))
+		index = int(latest_ref.get("slot", index))
+		selected_ref = latest_ref
+	if side not in ["bag", "stash"] or index < 0:
+		item_detail_presenter.hide_detail()
 		return
 	var record := _bag_record(index) if side == "bag" else _warehouse_record(index)
 	if record.is_empty():
 		item_detail_presenter.hide_detail()
 		return
-	var item := GameData.get_item_record(str(record.get("name", "")))
+	var item := GameData.get_item_record(record)
 	if item.is_empty():
 		item_detail_presenter.show_message("物品目录缺少此记录。", _presenter_context(side, index))
 		return
@@ -1280,7 +1288,7 @@ func _item_texture(record: Dictionary) -> Texture2D:
 	if record.is_empty():
 		return null
 	return UIItemTextureCacheScript.texture_for(
-		GameData.get_item_record(str(record.get("name", ""))), "inventoryIcon"
+		GameData.get_item_record(record), "inventoryIcon"
 	)
 
 
