@@ -9,6 +9,10 @@ extends Node2D
 
 const EnemyActorScript := preload("res://scripts/enemy.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const SpatialIndex := preload("res://scripts/runtime_combat_spatial_index.gd")
+const OpenTerrainFixture := preload(
+	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
+)
 
 const ANTI_STEALTH_MONSTER_ID := 38
 const NORMAL_MONSTER_ID := 64
@@ -16,6 +20,10 @@ const TEST_DISTANCE_GU := 4.0
 const STEALTH_SUPPRESSION_DISTANCE_GU := 35.0 / 32.0
 const POSITION_EPSILON_PX := 0.001
 const MOVEMENT_DELTA_EPSILON_GU := 0.000001
+
+
+var index := SpatialIndex.new()
+var _next_actor_runtime_id := 0
 
 
 func _ready() -> void:
@@ -167,6 +175,24 @@ func _make_enemy(
 	# The test positions both actors at the same canonical footpoint.  The
 	# target is four GU away, so setup's overlap safety correction is not active.
 	enemy.set_combat_position(position_px, &"test_setup")
+	_next_actor_runtime_id += 1
+	enemy.configure_runtime_map_projection(
+		1,
+		GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px,
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu,
+	)
+	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
+	enemy.configure_spatial_index(index, _next_actor_runtime_id)
+	index.register(
+		_next_actor_runtime_id,
+		1,
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			position_px
+		),
+		enemy.combat_radius_gu,
+		_next_actor_runtime_id,
+		enemy,
+	)
 	enemy._attack_timer = 999.0
 	enemy._pending_attack_time = -1.0
 	enemy._pending_attack_target = null

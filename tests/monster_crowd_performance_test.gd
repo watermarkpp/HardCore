@@ -2,6 +2,7 @@ extends Node
 
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const SpatialIndexScript := preload("res://scripts/runtime_combat_spatial_index.gd")
 const OpenTerrainFixture := preload("res://tests/helpers/monster_open_terrain_test_fixture.gd")
 const ENEMY_COUNT := 96
@@ -80,8 +81,8 @@ func _run() -> void:
 	print("MONSTER_CROWD_STAGE dense %s" % dense_metrics)
 
 	# Action budget: all 96 monsters advance for half a second, while imported
-	# occupancy fallback checks stay at 10 Hz rather than 60 Hz. Enemy-to-enemy
-	# collision is absent from the mask; world/player collision remains physical.
+	# occupancy fallback checks stay at 10 Hz rather than 60 Hz. WORLD、玩家/
+	# 召唤物与怪物硬碰撞均保留；共享空间索引仍负责有界邻居决策。
 	EnemyActor.reset_performance_diagnostics()
 	for step in range(30):
 		for enemy: EnemyActor in enemies:
@@ -91,7 +92,11 @@ func _run() -> void:
 	assert(int(movement_metrics.physics_moves) == ENEMY_COUNT * 30, "moving crowd skipped playable motion ticks: %s" % movement_metrics)
 	assert(int(movement_metrics.environment_guard_checks) <= ENEMY_COUNT * 6, "occupancy fallback returned to per-frame sampling: %s" % movement_metrics)
 	for enemy: EnemyActor in enemies:
-		assert(enemy.collision_mask == EnemyActor.ENEMY_MOTION_MASK and enemy.collision_mask == 3, "dense actor still participates in enemy mutual physics")
+		assert(
+			enemy.collision_mask == EnemyActor.ENEMY_MOTION_MASK
+			and enemy.collision_mask == WorldSpatialRulesScript.ENEMY_MASK,
+			"dense actor lost the frozen WORLD/player/summon/enemy hard mask",
+		)
 	print("MONSTER_CROWD_STAGE moving %s" % movement_metrics)
 
 	# A forced relocation crosses buckets before another physics tick. The
@@ -132,6 +137,19 @@ func _run() -> void:
 	# this test is about crowd/index lifecycle, not target-grid refresh timing.
 	EnemyActor._target_grid_last_refresh_msec = -1
 	background_enemy._on_background_wakeup_timeout()
+	if background_enemy.target != player:
+		var acquisition_delta := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			player.global_position - background_enemy.global_position
+		)
+		print(
+			"MONSTER_CROWD_BACKGROUND_DIAG live=", background_enemy._target_candidate_is_live(player),
+			" transition=", player.combat_transition_is_active(),
+			" delta_gu=", acquisition_delta,
+			" contains=", background_enemy._initial_acquisition_contains_ground_delta_gu(acquisition_delta),
+			" los=", background_enemy._initial_acquisition_static_los_clear(player),
+			" primary=", background_enemy.primary_target == player,
+			" deep_sleep=", background_enemy._background_deep_sleeping,
+		)
 	assert(background_enemy.target == player, "background decision tick did not acquire the nearby player")
 	assert(not background_enemy._can_use_background_ai(), "near acquired player target did not resume foreground AI")
 	background_enemy.target = enemies[2]
@@ -176,8 +194,8 @@ func _spawn_groups(player: PlayerCharacter, id_offset: int, count := ENEMY_COUNT
 		var group_index := index / ENEMIES_PER_GROUP
 		var local_index := index % ENEMIES_PER_GROUP
 		var ground_position_gu := Vector2(
-			float(group_index) * 50.0 + float(local_index % 6) * 1.125,
-			float(local_index / 6) * 1.125
+			16.5 + float(group_index) * 25.0 + float(local_index % 6) * 1.125,
+			16.5 + float(local_index / 6) * 1.125
 		)
 		var position: Vector2 = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(ground_position_gu)
 		var serial := id_offset + index + 1

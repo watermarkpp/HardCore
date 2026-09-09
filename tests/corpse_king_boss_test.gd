@@ -6,6 +6,10 @@ const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const OpenTerrainFixture := preload(
 	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
 )
+const SpatialIndex := preload("res://scripts/runtime_combat_spatial_index.gd")
+
+
+var index := SpatialIndex.new()
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -64,6 +68,15 @@ func _run() -> void:
 	boss.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
 	add_child(boss)
 	boss.set_physics_process(false)
+	boss.configure_spatial_index(index, 1)
+	index.register(
+		1,
+		1,
+		OpenTerrainFixture.CENTER_GROUND_GU,
+		boss.combat_radius_gu,
+		1,
+		boss,
+	)
 	await get_tree().process_frame
 	var visual: MonsterVisual = boss.get_node("MonsterVisual")
 	var sprite: Sprite2D = visual.get_node("BodySprite")

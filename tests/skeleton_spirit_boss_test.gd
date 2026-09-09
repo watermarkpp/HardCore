@@ -3,6 +3,13 @@ extends Node
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+const SpatialIndex := preload("res://scripts/runtime_combat_spatial_index.gd")
+const OpenTerrainFixture := preload(
+	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
+)
+
+
+var index := SpatialIndex.new()
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -55,6 +62,18 @@ func _run() -> void:
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
 	add_child(boss)
 	boss.set_physics_process(false)
+	boss.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
+	boss.configure_spatial_index(index, 1)
+	index.register(
+		1,
+		1,
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+			boss.global_position
+		),
+		boss.combat_radius_gu,
+		1,
+		boss,
+	)
 	await get_tree().process_frame
 	var visual: MonsterVisual = boss.get_node("MonsterVisual")
 	var sprite: Sprite2D = visual.get_node("BodySprite")

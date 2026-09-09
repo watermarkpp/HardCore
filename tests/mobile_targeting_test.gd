@@ -2,6 +2,8 @@ extends Node
 
 const TargetingSystem := preload("res://scripts/targeting_system.gd")
 const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
+const TerrainPolicy := preload("res://scripts/monster_terrain_navigation_policy.gd")
+const NeighborPolicy := preload("res://scripts/monster_neighbor_step_policy.gd")
 
 
 func _ready() -> void:
@@ -35,8 +37,13 @@ func _run() -> void:
 			Vector2(3000 + index * 80, 3000)
 		)
 
-	var player_tile: Vector2i = game._canonical_screen_px_to_grid_cell(game.player.global_position)
-	game.player.global_position = game._canonical_grid_cell_to_screen_px(player_tile)
+	var player_tile: Vector2i = _find_formal_targeting_origin(
+		game,
+		[first, second, side, behind],
+	)
+	game.player.global_position = game._canonical_ground_gu_to_screen_px(
+		Vector2(player_tile) + Vector2(0.5, 0.5)
+	)
 	game.player.velocity = Vector2.ZERO
 	game.player.facing = Vector2.RIGHT
 	_place_at_tile_offset(game, first, player_tile, Vector2i(2, 0))
@@ -151,7 +158,14 @@ func _run() -> void:
 		"松开攻击后没有在动作完成时恢复摇杆方向并继续移动"
 	)
 	game.player.set_touch_vector(Vector2.ZERO)
-	player_tile = game._canonical_screen_px_to_grid_cell(game.player.global_position)
+	player_tile = _find_formal_targeting_origin(
+		game,
+		[first, second, side, behind],
+	)
+	game.player.global_position = game._canonical_ground_gu_to_screen_px(
+		Vector2(player_tile) + Vector2(0.5, 0.5)
+	)
+	game.player.velocity = Vector2.ZERO
 	assert(game.ATTACK_LOCK_CONTRACT == "combat.attack_lock.euclidean_gu.v2")
 	assert(is_equal_approx(game.ATTACK_LOCK_RANGE_GU, 10.0))
 	_place_at_tile_offset(game, first, player_tile, Vector2i(8, 8))
@@ -210,7 +224,14 @@ func _run() -> void:
 			enemies[index] as EnemyActor,
 			Vector2(3000 + index * 80, 3000)
 		)
-	player_tile = game._canonical_screen_px_to_grid_cell(game.player.global_position)
+	player_tile = _find_formal_targeting_origin(
+		game,
+		[first, second, side, behind],
+	)
+	game.player.global_position = game._canonical_ground_gu_to_screen_px(
+		Vector2(player_tile) + Vector2(0.5, 0.5)
+	)
+	game.player.velocity = Vector2.ZERO
 	_place_at_tile_offset(game, second, player_tile, Vector2i(-2, -2))
 	game._cancel_target()
 	game.player.facing = Vector2.DOWN
@@ -277,12 +298,60 @@ func _place_at_tile_offset(
 ) -> void:
 	_move_enemy(
 		enemy,
-		game._canonical_grid_cell_to_screen_px(origin_tile + offset)
+		game._canonical_ground_gu_to_screen_px(
+			Vector2(origin_tile + offset) + Vector2(0.5, 0.5)
+		)
 	)
 
 
 func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
 	enemy.set_combat_position(position, &"mobile_targeting_fixture_move")
+
+
+func _find_formal_targeting_origin(game: Node, enemies: Array[EnemyActor]) -> Vector2i:
+	assert(game.current_map_id == 910001, "移动选敌夹具必须运行在正式runtime map 910001")
+	var context: Dictionary = game._monster_terrain_navigation_context
+	var design_size: Vector2i = context.get("design_size", Vector2i.ZERO)
+	var player_radius_gu := WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	)
+	var maximum_enemy_radius_gu := 0.0
+	var maximum_enemy_radius_px := 0.0
+	for enemy: EnemyActor in enemies:
+		maximum_enemy_radius_gu = maxf(maximum_enemy_radius_gu, enemy.combat_radius_gu)
+		maximum_enemy_radius_px = maxf(maximum_enemy_radius_px, enemy.collision_radius_px)
+	var offsets: Array[Vector2i] = [
+		Vector2i(2, 0), Vector2i(-3, 0), Vector2i(0, 4), Vector2i(-5, -5),
+		Vector2i(5, 0), Vector2i(1, 0), Vector2i(-4, -2), Vector2i(3, 3),
+		Vector2i(8, 8), Vector2i(7, 7), Vector2i(11, 0), Vector2i(-2, 0),
+		Vector2i(0, 3), Vector2i(4, 4), Vector2i(-2, -2),
+	]
+	for y in range(12, design_size.y - 12):
+		for x in range(12, design_size.x - 12):
+			var cell := Vector2i(x, y)
+			if not TerrainPolicy.cell_walkable(context, cell, player_radius_gu):
+				continue
+			var player_ground := Vector2(cell) + Vector2(0.5, 0.5)
+			var player_screen: Vector2 = game._canonical_ground_gu_to_screen_px(player_ground)
+			if WorldSpatialRules.environment_blocks_actor_screen_px(game.background, player_screen, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
+				continue
+			var valid := true
+			for offset: Vector2i in offsets:
+				var target_cell := cell + offset
+				var target_ground := Vector2(target_cell) + Vector2(0.5, 0.5)
+				var target_screen: Vector2 = game._canonical_ground_gu_to_screen_px(target_ground)
+				if (
+					not TerrainPolicy.cell_walkable(context, target_cell, maximum_enemy_radius_gu)
+					or WorldSpatialRules.environment_blocks_actor_screen_px(game.background, target_screen, maximum_enemy_radius_px)
+					or game.background.is_environment_segment_blocked_ground(player_ground, target_ground, 0.125)
+					or not _world_ray_clear(game, player_screen, target_screen)
+				):
+					valid = false
+					break
+			if valid:
+				return cell
+	assert(false, "map910001找不到覆盖移动选敌所有偏移的正式开放夹具")
+	return Vector2i.ZERO
 
 
 func _find_open_rightward_movement_origin(game: Node) -> Vector2:
@@ -368,8 +437,94 @@ func _assert_player_cannot_push_enemy(game: Node, blocker: EnemyActor, second: E
 	assert(game.player.global_position.distance_to(blocker.global_position) >= ArtSpec.PLAYER_COLLISION_RADIUS_PX + blocker.collision_radius_px - 1.0, "人物移动穿进了怪物碰撞体")
 
 
-func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
+func _world_ray_clear(game: Node, from_screen_px: Vector2, to_screen_px: Vector2) -> bool:
+	var query := PhysicsRayQueryParameters2D.create(
+		from_screen_px,
+		to_screen_px,
+		WorldSpatialRules.WORLD_MASK,
+	)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	return game.get_world_2d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func _find_formal_boss_facing_fixture(game: Node, boss: EnemyActor) -> Dictionary:
+	assert(game.current_map_id == 910001, "Boss朝向夹具必须运行在正式runtime map 910001")
+	var context: Dictionary = game._monster_terrain_navigation_context
+	assert(TerrainPolicy.context_valid(context, 910001), "map910001 terrain context无效")
+	var design_size: Vector2i = context.get("design_size", Vector2i.ZERO)
+	var player_radius_gu := WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	)
+	var center_ground: Vector2 = game._canonical_screen_px_to_ground_gu(
+		game.player.global_position
+	)
+	var center_cell := Vector2i(center_ground.floor())
+	var offsets: Array[Vector2i] = [
+		Vector2i(5, 0), Vector2i(-5, 0), Vector2i(0, 5), Vector2i(0, -5),
+		Vector2i(4, 3), Vector2i(-4, 3), Vector2i(4, -3), Vector2i(-4, -3),
+	]
+	for radius in range(0, 33):
+		for y in range(-radius, radius + 1):
+			for x in range(-radius, radius + 1):
+				if radius > 0 and abs(x) != radius and abs(y) != radius:
+					continue
+				var player_cell := center_cell + Vector2i(x, y)
+				if player_cell.x < 1 or player_cell.y < 1 or player_cell.x >= design_size.x - 1 or player_cell.y >= design_size.y - 1:
+					continue
+				for offset: Vector2i in offsets:
+					var boss_cell := player_cell + offset
+					if boss_cell.x < 1 or boss_cell.y < 1 or boss_cell.x >= design_size.x - 1 or boss_cell.y >= design_size.y - 1:
+						continue
+					if not TerrainPolicy.cell_walkable(context, player_cell, player_radius_gu):
+						continue
+					if not TerrainPolicy.cell_walkable(context, boss_cell, boss.combat_radius_gu):
+						continue
+					var player_ground := Vector2(player_cell) + Vector2(0.5, 0.5)
+					var boss_ground := Vector2(boss_cell) + Vector2(0.5, 0.5)
+					var player_screen: Vector2 = game._canonical_ground_gu_to_screen_px(player_ground)
+					var boss_screen: Vector2 = game._canonical_ground_gu_to_screen_px(boss_ground)
+					if not player_screen.is_finite() or not boss_screen.is_finite():
+						continue
+					if WorldSpatialRules.environment_blocks_actor_screen_px(game.background, player_screen, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
+						continue
+					if WorldSpatialRules.environment_blocks_actor_screen_px(game.background, boss_screen, boss.collision_radius_px):
+						continue
+					if game.background.is_environment_segment_blocked_ground(player_ground, boss_ground, 0.125):
+						continue
+					if not _world_ray_clear(game, player_screen, boss_screen):
+						continue
+					return {
+						"player_ground": player_ground,
+						"boss_ground": boss_ground,
+						"player_screen": player_screen,
+						"boss_screen": boss_screen,
+						"player_radius_gu": player_radius_gu,
+					}
+	assert(false, "map910001找不到正式可行走、双WORLD LOS开放的Boss朝向夹具")
+	return {}
+
+
+func _make_world_los_barrier(from_screen_px: Vector2, to_screen_px: Vector2) -> StaticBody2D:
+	var direction := (to_screen_px - from_screen_px).normalized()
+	var wall := StaticBody2D.new()
+	wall.name = "MobileBossWorldLosBarrier"
+	wall.collision_layer = WorldSpatialRules.WORLD_LAYER
+	wall.collision_mask = 0
+	wall.global_position = from_screen_px.lerp(to_screen_px, 0.5)
+	wall.rotation = direction.angle()
+	var collision := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = Vector2(10.0, 160.0)
+	collision.shape = shape
+	wall.add_child(collision)
+	return wall
+
+
+func _assert_boss_faces_player(game: Node, enemies: Array) -> void:
 	# 使用隔离 Boss，避免默认地图中已有 Boss 的仇恨表影响朝向断言。
+	for index in range(enemies.size()):
+		_move_enemy(enemies[index] as EnemyActor, Vector2(5000 + index * 96, 5000))
 	var boss := EnemyActor.new()
 	boss.setup(
 		{"monster_id": 76, "name": "沃玛教主", "hp": 9999, "attackMin": 1, "attackMax": 1},
@@ -382,15 +537,25 @@ func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
 	boss.current_hp = 9999
 	game._runtime_spawn_serial += 1
 	var spawn_serial := int(game._runtime_spawn_serial)
-	var boss_position: Vector2 = game.player.global_position + Vector2(-180, -40)
+	var fixture := _find_formal_boss_facing_fixture(game, boss)
+	var player_ground: Vector2 = fixture.player_ground
+	var boss_ground: Vector2 = fixture.boss_ground
+	var boss_position: Vector2 = fixture.boss_screen
+	game.player.global_position = fixture.player_screen
+	game.player.velocity = Vector2.ZERO
 	boss.configure_runtime_map_projection(
 		game.current_map_id,
 		Callable(game, "_canonical_ground_gu_to_screen_px"),
 		Callable(game, "_canonical_screen_px_to_ground_gu"),
 	)
+	boss.configure_terrain_navigation_context(
+		game._monster_terrain_navigation_context
+	)
+	boss.environment_blocker = game.background
 	boss.configure_spatial_index(game._combat_spatial_index, spawn_serial)
 	boss.set_meta("spawn_serial", spawn_serial)
 	boss.set_meta("zone_generation", int(game._zone_generation))
+	boss.set_meta("safe_zones", game._active_safe_zones)
 	boss.set_combat_position(boss_position, &"mobile_targeting_fixture_boss_spawn")
 	game._combat_spatial_index.register(
 		spawn_serial,
@@ -412,11 +577,64 @@ func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
 		"隔离Boss夹具必须由canonical ID76派生Boss身份"
 	)
 	boss.control_time = 0.0
+	boss.set_physics_process(false)
 	_move_enemy(boss, boss_position)
 	boss.velocity = Vector2.ZERO
 	boss.target = game.player
+	boss.primary_target = game.player
+	boss._clear_attack_los_cache()
+	assert(boss._attack_world_path_is_clear_for_target(game.player), "map910001开放夹具未同时通过地图segment与WORLD physics ray")
+	var open_expected := boss.global_position.direction_to(game.player.global_position)
+	boss.facing = -open_expected
+	boss._hc_finalize_boss_facing()
+	assert(boss.facing.dot(open_expected) > 0.995, "Boss在合法开放WORLD路径没有面对玩家")
+	var wall := _make_world_los_barrier(boss.global_position, game.player.global_position)
+	game.add_child(wall)
+	await get_tree().physics_frame
+	boss._clear_attack_los_cache()
+	var blocked_sentinel := -open_expected
+	boss.facing = blocked_sentinel
+	assert(not boss._attack_world_path_is_clear_for_target(game.player), "动态WORLD墙未阻断Boss到玩家的physics ray")
+	boss._hc_finalize_boss_facing()
+	assert(boss.facing.dot(blocked_sentinel) > 0.995, "Boss隔墙追踪并更新了玩家朝向")
+	wall.queue_free()
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	boss._clear_attack_los_cache()
+	assert(boss._attack_world_path_is_clear_for_target(game.player), "移除动态WORLD墙后合法路径未恢复")
+	boss.set_physics_process(true)
 	for _frame in range(5):
 		await get_tree().physics_frame
+	var moved_ground: Vector2 = game._canonical_screen_px_to_ground_gu(boss.global_position)
+	var moved_gu := moved_ground.distance_to(boss_ground)
+	print(
+		"MOBILE_BOSS_DIAG map_id=", game.current_map_id,
+		" runtime_map_id=", boss.runtime_map_id,
+		" area_map_id=", boss._runtime_map_id_for_area_target(game.player),
+		" terrain_valid=", boss.terrain_navigation_context_ready(),
+		" safe_player=", boss._target_is_safe_player(game.player),
+		" target_usable=", boss._hc_target_usable(game.player),
+		" los_clear=", boss._attack_world_path_is_clear_for_target(game.player),
+		" hc_reason=", boss._hc_last_reason,
+		" observed=", boss._hc_observed,
+		" step_active=", boss._movement_step_active,
+		" target_linked=", boss.target == game.player,
+		" pending=", boss._pending_attack_time,
+		" facing=", boss.facing,
+		" movement_facing=", boss.movement_facing,
+		" moved_gu=", moved_gu,
+		" player_radius_gu=", fixture.player_radius_gu,
+		" boss_radius_gu=", boss.combat_radius_gu,
+		" map_segment_clear=", not game.background.is_environment_segment_blocked_ground(player_ground, boss_ground, 0.125),
+		" world_ray_clear=", _world_ray_clear(game, boss.global_position, game.player.global_position),
+		" boss_ground=", boss._screen_position_px_to_ground_position_gu(boss.global_position),
+		" player_ground=", boss._screen_position_px_to_ground_position_gu(game.player.global_position),
+		" boss_cell=", NeighborPolicy.temporary_cell(boss._screen_position_px_to_ground_position_gu(boss.global_position)),
+		" player_cell=", NeighborPolicy.temporary_cell(boss._screen_position_px_to_ground_position_gu(game.player.global_position)),
+		" boss_cell_walkable=", TerrainPolicy.cell_walkable(game._monster_terrain_navigation_context, NeighborPolicy.temporary_cell(boss._screen_position_px_to_ground_position_gu(boss.global_position)), boss.combat_radius_gu),
+		" player_cell_walkable=", TerrainPolicy.cell_walkable(game._monster_terrain_navigation_context, NeighborPolicy.temporary_cell(boss._screen_position_px_to_ground_position_gu(game.player.global_position)), float(fixture.player_radius_gu)),
+	)
 	var expected := boss.global_position.direction_to(game.player.global_position)
 	assert(boss.facing.dot(expected) > 0.995, "Boss追击时没有持续面对玩家")
+	game._combat_spatial_index.unregister(spawn_serial)
 	boss.queue_free()
