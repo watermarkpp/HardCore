@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Generate res://generated/build_info.json from Git state.
+    Generate res://assets/generated/build_info.json from Git state.
     HC-P1-014: binds exported builds to source revision.
 #>
 param(

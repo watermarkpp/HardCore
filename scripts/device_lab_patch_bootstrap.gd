@@ -12,6 +12,7 @@ const ACTIVE_MANIFEST := PATCH_DIR + "/active.json"
 const MAX_PATCH_BYTES := 64 * 1024 * 1024
 const HASH_CHUNK_BYTES := 64 * 1024
 const MANIFEST_VERSION := 1
+const BUILD_INFO_PATH := "res://assets/generated/build_info.json"
 
 var loaded_patch_id := ""
 var loaded_patch_sha256 := ""
@@ -22,6 +23,7 @@ var _load_attempted := false
 ## fixed ACTIVE_MANIFEST path; tests use an isolated user:// directory.
 var patch_dir_for_test := ""
 var active_manifest_for_test := ""
+var build_info_path_for_test := ""
 
 
 func _init() -> void:
@@ -45,16 +47,24 @@ func _load_active_patch() -> void:
 		return
 	# A full APK update already contains the earlier hotfixes. Never mount a
 	# retained patch built for another APK over its newer gameplay scripts.
-	var build_info_path := "res://generated/build_info.json"
-	if FileAccess.file_exists(build_info_path):
-		var build_info: Variant = JSON.parse_string(FileAccess.get_file_as_string(build_info_path))
-		if build_info is Dictionary:
-			var apk_commit := str(build_info.get("git_head", ""))
-			if not patch_matches_base(manifest, apk_commit):
-				load_error = "patch_base_mismatch"
-				if not apk_commit.is_empty():
-					set_meta("obsolete_patch_cleanup_error", _discard_obsolete_patch(manifest))
-				return
+	var build_info_path := build_info_path_for_test if not build_info_path_for_test.is_empty() else BUILD_INFO_PATH
+	if not FileAccess.file_exists(build_info_path):
+		load_error = "build_identity_missing"
+		return
+	var build_parser := JSON.new()
+	if build_parser.parse(FileAccess.get_file_as_string(build_info_path)) != OK:
+		load_error = "build_identity_invalid"
+		return
+	var build_info: Variant = build_parser.data
+	if not build_info is Dictionary or not _is_git_commit(build_info.get("git_head", null)):
+		load_error = "build_identity_invalid"
+		return
+	var apk_commit: String = build_info["git_head"]
+	set_meta("apk_base_commit", apk_commit)
+	if not patch_matches_base(manifest, apk_commit):
+		load_error = "patch_base_mismatch"
+		set_meta("obsolete_patch_cleanup_error", _discard_obsolete_patch(manifest))
+		return
 	var patch_id := str(manifest.get("patchId", ""))
 	var file_name := str(manifest.get("file", ""))
 	var expected_hash := str(manifest.get("sha256", "")).to_upper()
@@ -90,6 +100,15 @@ func _load_active_patch() -> void:
 
 static func patch_matches_base(manifest: Dictionary, apk_commit: String) -> bool:
 	return not apk_commit.is_empty() and str(manifest.get("baseCommit", "")) == apk_commit
+
+
+static func _is_git_commit(value: Variant) -> bool:
+	if not value is String or value.length() != 40:
+		return false
+	for character: String in value:
+		if not character in "0123456789abcdef":
+			return false
+	return true
 
 
 func _discard_obsolete_patch(manifest: Dictionary) -> Error:

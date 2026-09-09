@@ -3,6 +3,7 @@ extends Node
 const PatchBootstrap := preload("res://scripts/device_lab_patch_bootstrap.gd")
 
 const TEST_ROOT_PREFIX := "user://device_lab_patch_bootstrap_b08_"
+const TEST_COMMIT := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
 
 func _ready() -> void:
@@ -36,6 +37,7 @@ func _run() -> void:
 	assert(autoload_section.find("DeviceLabPatch=") < autoload_section.find("ContentLayers="), "patch loader must run before gameplay autoloads: %s" % content_layers)
 	_run_bounded_pack_validation()
 	_run_upgrade_retirement()
+	_run_build_identity_gate()
 	print("DEVICE_LAB_PATCH_BOOTSTRAP_PASS strict_manifest init_mount early_autoload bounded_stream isolated_fixtures")
 	get_tree().quit(0)
 
@@ -175,7 +177,44 @@ func _bootstrap_for(test_root: String) -> Node:
 	var bootstrap := PatchBootstrap.new()
 	bootstrap.patch_dir_for_test = test_root
 	bootstrap.active_manifest_for_test = test_root.path_join("active.json")
+	bootstrap.build_info_path_for_test = test_root.path_join("build_info.json")
+	_write_text(bootstrap.build_info_path_for_test, JSON.stringify({"git_head": TEST_COMMIT}))
 	return bootstrap
+
+
+func _run_build_identity_gate() -> void:
+	assert(PatchBootstrap.BUILD_INFO_PATH == "res://assets/generated/build_info.json")
+	var test_root := "%sidentity_%d" % [TEST_ROOT_PREFIX, Time.get_ticks_usec()]
+	assert(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(test_root)) == OK)
+	var bootstrap := _bootstrap_for(test_root)
+	var marker := test_root.path_join("marker.txt")
+	_write_text(marker, "must not mount")
+	var pack_path := test_root.path_join("old.pck")
+	var packer := PCKPacker.new()
+	assert(packer.pck_start(pack_path) == OK)
+	assert(packer.add_file("res://__identity_rejected_marker.txt", marker) == OK)
+	assert(packer.flush() == OK)
+	var manifest := {"schemaVersion": 1, "patchId": "identity", "file": "old.pck",
+		"size": FileAccess.get_file_as_bytes(pack_path).size(), "sha256": _stream_sha256(pack_path),
+		"baseCommit": TEST_COMMIT}
+	_write_manifest(bootstrap.active_manifest_for_test, manifest)
+	assert(DirAccess.remove_absolute(ProjectSettings.globalize_path(bootstrap.build_info_path_for_test)) == OK)
+	bootstrap._load_active_patch()
+	assert(bootstrap.load_error == "build_identity_missing")
+	for malformed: String in ["{", "[]", "{}", '{"git_head":123}', '{"git_head":""}', '{"git_head":"not-a-commit"}']:
+		_write_text(bootstrap.build_info_path_for_test, malformed)
+		bootstrap._load_active_patch()
+		assert(bootstrap.load_error == "build_identity_invalid")
+		assert(FileAccess.file_exists(pack_path) and FileAccess.file_exists(bootstrap.active_manifest_for_test))
+		assert(not FileAccess.file_exists("res://__identity_rejected_marker.txt"))
+		assert(bootstrap.loaded_patch_id.is_empty())
+	_write_text(bootstrap.build_info_path_for_test, JSON.stringify({"git_head": "b".repeat(40)}))
+	bootstrap._load_active_patch()
+	assert(bootstrap.load_error == "patch_base_mismatch")
+	assert(not FileAccess.file_exists(pack_path) and not FileAccess.file_exists(bootstrap.active_manifest_for_test))
+	assert(not FileAccess.file_exists("res://__identity_rejected_marker.txt"))
+	bootstrap.free()
+	_cleanup_tree(ProjectSettings.globalize_path(test_root))
 
 
 func _write_text(path: String, value: String) -> void:
@@ -201,9 +240,8 @@ func _write_sparse_file(path: String, length: int) -> void:
 
 
 func _write_manifest(path: String, manifest: Dictionary) -> void:
-	if FileAccess.file_exists("res://generated/build_info.json"):
-		var info: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/build_info.json"))
-		manifest["baseCommit"] = str(info.get("git_head", ""))
+	if not manifest.has("baseCommit"):
+		manifest["baseCommit"] = TEST_COMMIT
 	_write_text(path, JSON.stringify(manifest))
 
 
