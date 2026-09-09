@@ -214,11 +214,58 @@
         }
       },
       "art": {
-        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
-        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
-        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+        "inventoryIcon": {
+          "path": "res://assets/art/items/service/hp910008/hp_enhanced_inventory.svg",
+          "exact": false,
+          "distribution": "project.hardcore.w6_hp910008_supplement",
+          "binding": "item_id=910008",
+          "source_status": "primary_exact_source_missing_after_search",
+          "source_evidence": {
+            "primary_client_source": "dev_art_sources/reference/mir2_client_raw/Data/Items.wil",
+            "primary_client_source_sha256": "E7AA6E3B0F599118C4728BCF337084F8D0AD209F1959EA9DB71CFA63B24338BD",
+            "primary_index_table": "dev_art_sources/reference/mir2_client_raw/Data/Items.WIX",
+            "primary_index_table_sha256": "8320392C3FAF624FF57FBBBB10CCA13F9AFD49C350E6B4278FAD5A61454F8C73",
+            "exact_match": false,
+            "search_result": "no exact 910008 or HP强化水 binding"
+          }
+        },
+        "stateIcon": {
+          "path": "res://assets/art/items/service/hp910008/hp_enhanced_inventory.svg",
+          "exact": false,
+          "distribution": "project.hardcore.w6_hp910008_supplement",
+          "binding": "item_id=910008",
+          "source_status": "primary_exact_source_missing_after_search",
+          "source_evidence": {
+            "primary_client_source": "dev_art_sources/reference/mir2_client_raw/Data/Items.wil",
+            "primary_client_source_sha256": "E7AA6E3B0F599118C4728BCF337084F8D0AD209F1959EA9DB71CFA63B24338BD",
+            "primary_index_table": "dev_art_sources/reference/mir2_client_raw/Data/Items.WIX",
+            "primary_index_table_sha256": "8320392C3FAF624FF57FBBBB10CCA13F9AFD49C350E6B4278FAD5A61454F8C73",
+            "exact_match": false,
+            "search_result": "no exact 910008 or HP强化水 binding"
+          }
+        },
+        "groundIcon": {
+          "path": "res://assets/art/items/service/hp910008/hp_enhanced_ground.svg",
+          "exact": false,
+          "distribution": "project.hardcore.w6_hp910008_supplement",
+          "binding": "item_id=910008",
+          "source_status": "primary_exact_source_missing_after_search",
+          "source_evidence": {
+            "primary_client_source": "dev_art_sources/reference/mir2_client_raw/Data/DnItems.wil",
+            "primary_client_source_sha256": "CC9F63C26093A099C244020F373D0A573906A7D41C70CBFAB1C6E19A79D9F56B",
+            "primary_index_table": "dev_art_sources/reference/mir2_client_raw/Data/DnItems.WIX",
+            "primary_index_table_sha256": "FD2A1C4F7EAE7D89130EB84E8615622448665B5AFA08DFBBF8B7CA038EAD58B5",
+            "exact_match": false,
+            "search_result": "no exact 910008 or HP强化水 binding"
+          }
+        }
       },
-      "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
+      "source": {
+        "distribution": "project.hardcore.item_runtime_authority.v1",
+        "authority": "project_integration_authority",
+        "purpose": "canonical_monster_drop_item_closure",
+        "visual_supplement": "W6 project art only; no primary exact pixel claim"
+      }
     },
     {
       "itemId": 910009,
