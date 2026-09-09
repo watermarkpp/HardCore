@@ -1,0 +1,1 @@
+Final PASS executed on source changes subsequently committed as 90237d22. Initial constant-parse and malformed-JSON logging failures retained as runner JSON only; final PASS raw logs retained. Missing/invalid identity cannot mount or delete a valid PCK. Confirmed mismatched identity retires only active PCK/manifest; save bytes preserved.
