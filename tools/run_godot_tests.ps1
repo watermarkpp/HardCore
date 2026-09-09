@@ -547,6 +547,13 @@ $Suites.critical = @($Suites.critical + @(
 $Suites.critical = @($Suites.critical + @(
     'tests/game_root_loading_transition_test.tscn',
     'tests/headless_prefetch_compatibility_test.tscn',
+    'tests/hc_monster_ai/geometry_test.tscn',
+    'tests/hc_monster_ai/inventory_test.tscn',
+    'tests/hc_monster_ai/lightning_test.tscn',
+    'tests/hc_monster_ai/path_test.tscn',
+    'tests/hc_monster_ai/runtime_test.tscn',
+    'tests/hc_monster_ai/world_obstacle_runtime_test.tscn',
+    'tests/hc_monster_ai/combat_epoch_delivery_test.tscn',
     'tests/w6_visual_contract_test.tscn',
     'tests/equipment_inventory_slot_swap_test.tscn',
     'tests/combat_environment_request_integration_test.tscn',
