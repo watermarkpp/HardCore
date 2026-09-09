@@ -1821,7 +1821,7 @@ func _show_system_menu() -> void:
 	_cancel_all_mobile_attack_inputs(true)
 	_cancel_all_skill_inputs(true)
 	_reset_attack_action_lifecycle(&"system_menu_opened")
-	_system_menu_pause_owned = true
+	_system_menu_pause_owned = _system_menu_pause_owned or not get_tree().paused
 	_system_menu_panel.open_menu()
 	get_tree().paused = true
 

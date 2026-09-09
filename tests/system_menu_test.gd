@@ -93,6 +93,11 @@ func _run() -> void:
 
 	# Leave the global tree and test-mode singleton in a known state on every
 	# successful path; the test runner must not leak a paused tree.
+	get_tree().paused = true
+	game.call("_show_system_menu")
+	assert(not bool(game.get("_system_menu_pause_owned")), "menu must not acquire an existing external pause")
+	game.call("_hide_system_menu")
+	assert(get_tree().paused, "closing menu must preserve an existing external pause")
 	get_tree().paused = false
 	game.queue_free()
 	PlayerState.test_mode = false
