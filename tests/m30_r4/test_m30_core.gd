@@ -191,5 +191,5 @@ func _run() -> void:
 	check((queue.snapshot()["reserved_by_slot"] as Dictionary).is_empty(), "construction failure releases reservations")
 	host.queue_free()
 	await get_tree().process_frame
-	print("HC_M30_CORE checks=%d failures=%d" % [checks, failures])
+	print("HC_M30_CORE_PASS checks=%d failures=%d" % [checks, failures])
 	get_tree().quit(0 if failures == 0 else 1)
