@@ -1,0 +1,70 @@
+{
+  "schema": "hardcore.closure.final_combination_antidegradation.v1",
+  "date": "2026-09-11",
+  "head": "c5ca7ad28a44812d68260dd0ff9cc6a782cab332",
+  "engine": "Godot 4.7.stable.official.5b4e0cb0f",
+  "fixture": "tests/hc_monster_ai/performance_comparison_test.tscn",
+  "layout_seed": 20260909,
+  "map_id": 1,
+  "monster_id": 64,
+  "monster_count": 30,
+  "rounds": 3,
+  "aggregation": "median of sorted round p95s (n=3 -> middle value)",
+  "accepted_reference": "docs/monster/m30_r3_closure/evidence/perf_report_r3closure.json (12/12 PASS)",
+  "hot_path_note": "monster_visual/enemy/world_bootstrap_coordinator/monster_display_formatter/monster_overhead byte-identical to accepted baseline 8dd1d092",
+  "rows": [
+    {
+      "scenario": "open_pursuit",
+      "round_p95s_ms": [
+        21.614,
+        22.387,
+        23.392
+      ],
+      "final_median_p95_ms": 22.387,
+      "accepted_candidate_median_p95_ms": 24.4285,
+      "predeclared_gate_ms": 25.833675,
+      "within_gate": true,
+      "actor_proof": "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "round_p95s_ms": [
+        29.455,
+        27.143,
+        27.489
+      ],
+      "final_median_p95_ms": 27.489,
+      "accepted_candidate_median_p95_ms": 30.0515,
+      "predeclared_gate_ms": 33.6850504,
+      "within_gate": true,
+      "actor_proof": "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+    },
+    {
+      "scenario": "world_obstacles",
+      "round_p95s_ms": [
+        17.857,
+        17.14,
+        17.318
+      ],
+      "final_median_p95_ms": 17.318,
+      "accepted_candidate_median_p95_ms": 22.3215,
+      "predeclared_gate_ms": 23.57565,
+      "within_gate": true,
+      "actor_proof": "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+    },
+    {
+      "scenario": "dense_crowd",
+      "round_p95s_ms": [
+        26.717,
+        25.635,
+        27.278
+      ],
+      "final_median_p95_ms": 26.717,
+      "accepted_candidate_median_p95_ms": 28.591,
+      "predeclared_gate_ms": 30.52875,
+      "within_gate": true,
+      "actor_proof": "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+    }
+  ],
+  "all_within_predeclared_gates": true
+}
