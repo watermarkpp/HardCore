@@ -240,6 +240,8 @@ func _run() -> void:
 	# docs/01 §六与 docs/04 明示详情“不再依赖空格分布”。新断言加严为：
 	# 停靠详情可见且与全部背包格零重叠。
 	assert(panel.item_detail_presenter.visible, "选中物品后停靠详情未显示")
+	assert(panel.item_detail_presenter.debug_layout_valid(), "停靠详情布局有效（不能只检查 visible）")
+	assert(panel.item_detail_presenter.modulate.a == 1.0, "支持布局下停靠详情保持实际可见")
 	var docked_presenter_rect: Rect2 = panel.item_detail_presenter.get_global_rect()
 	assert(docked_presenter_rect.size != Vector2.ZERO, "停靠详情没有按内容生成尺寸")
 	for bag_index in range(mini(InventoryPanel.BAG_VISIBLE_CAPACITY, panel.item_grid.get_child_count())):
