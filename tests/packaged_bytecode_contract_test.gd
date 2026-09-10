@@ -48,12 +48,13 @@ func _ready() -> void:
 		buffered == EXPECTED_BUFFERED,
 		"packaged MAX_BUFFERED_MOBILE_ATTACK_TICKETS mismatch: %d" % buffered,
 	)
+	# Companion scripts that declare a global class_name (hud, guard, enemy)
+	# cannot be re-loaded beside the project's own registrations; their
+	# presence is proven by the byte-level APK comparison and the resource
+	# closure verifier. Scripts without a global class load cleanly here.
 	for companion in [
 		"combat_runtime_service.gdc",
-		"ui_selection_dismiss_guard.gdc",
 		"audio_preferences.gdc",
-		"hud.gdc",
-		"enemy.gdc",
 		"player_state.gdc",
 	]:
 		var script: GDScript = load(gdc_dir + "/" + companion)
