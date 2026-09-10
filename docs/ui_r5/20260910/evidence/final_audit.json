@@ -1,0 +1,127 @@
+{
+  "audit_kind": "UI_R5_FINAL_AUDIT_R1",
+  "repo_head": "f9716ac158c4480d696bc112461e525e978ea603",
+  "head_branch": "codex/ui-r5-dock-audio-dismiss",
+  "worktree_clean_for_task_paths": false,
+  "states": {
+    "original_install_state": {
+      "source": "receipt.json after_sha256 (package apply)",
+      "files": {
+        "project.godot": "891eac64ff303cb5cc84b273ea083288a35cd672ae2b58f170441f7aa678c927",
+        "scripts/audio_runtime_service.gd": "c10240e2258ad0163f65f25c6d0e8f851838ef412802338cba364a5bd2df582a",
+        "scripts/game_root.gd": "ae2ba6c4f95ea16dcfafae3957b15e361ffc848e89294bcca920b5c2e27ab619",
+        "scripts/inventory_panel.gd": "9ed565a1d6cf7cb53c08531a222fd6804429dbaef99447b87bdbcae3aae0fbcc",
+        "scripts/loot_pickup.gd": "c504b319cfa2d450b9a3f297e6cfabfa25dfd7883c9655c31b577bd3b366bd31",
+        "scripts/player_state.gd": "840173e113915c87267f8f5e9dae7e6d390b8dbf6e55bd1a138d60e71bd64505",
+        "scripts/shop_panel.gd": "03cc816d41a51f8571e1fda499db6f2e76466e934601f54de988c88e7fa029ce",
+        "scripts/system_menu_panel.gd": "7fef1be5e1fc10342275a93be4bd3b3139fee8b1165c08e303eb221aaea33113",
+        "scripts/warehouse_panel.gd": "4adb44f1e97dd6feaf41a0d94d17bcaa54ea97b701b9d366581850d0a40604bd",
+        "scripts/audio_preferences.gd": "fe05f1af5878e84ba5f7cf48a801330baf678930a232aa06382d23967e1a1300",
+        "scripts/item_detail_docked_presenter.gd": "bfbe4df4cf0d607996049ad683bbe65a75b1444cb7b7cd83cee4f10d3695329b",
+        "scripts/ui_item_detail_dock.gd": "e78a6fcc1b7354a4b62f70c14b3b3c82b3a09ed144c6bd9e3a7f5ca2d9c00387",
+        "scripts/ui_item_selection_visual.gd": "a865d536026e5b252be558f24616f297b423e23bb612bb5644cfaedcce469131",
+        "scripts/ui_selection_dismiss_guard.gd": "e70d4961a4ac3d7fef8d7141f47d65e9ee30a07d624896ec90a85e42a8554cf5",
+        "tests/ui_r5_audio_test.gd": "7ec73561976692b56db25f06e34990a0049fbb103ad4956a26cd7a737c338636",
+        "tests/ui_r5_audio_test.tscn": "f6ff927b697afab3c917aaa3c91c950371b3cc824a4d8eef1097445fb9c2cce4",
+        "tests/ui_r5_core_test.gd": "f4d732be22b0e08fa57668db500243100dab9271c17cf7b0189a7bf94622dee2",
+        "tests/ui_r5_core_test.tscn": "2fd00fb720ad3c693cef2c73794ebc280437ed515e4e3b1d1adbb802ffe34c61",
+        "tests/ui_r5_delete_test.gd": "3116ea75ebc950cdb2b4f8c92682f989d6a5490c4529d8e04241cbbfc2512241",
+        "tests/ui_r5_delete_test.tscn": "1956158a9198b3a545fce8eb6fb115e8e03f8d7e33dad0083729f3b8ab08a68a",
+        "tests/ui_r5_panels_test.gd": "c2da1e933ee615683bc69d616c0bcdb4a8362d9900162b0e2795ffd6fc92ad79",
+        "tests/ui_r5_panels_test.tscn": "8e7cc0664294a650ea0b6aac7c2de604fae42e7f9a18a1cea899c6b7b0e549e0"
+      }
+    },
+    "package_payload_state": {
+      "source": "payload files",
+      "files": {
+        "project.godot": null,
+        "scripts/audio_runtime_service.gd": null,
+        "scripts/game_root.gd": null,
+        "scripts/inventory_panel.gd": null,
+        "scripts/loot_pickup.gd": null,
+        "scripts/player_state.gd": null,
+        "scripts/shop_panel.gd": null,
+        "scripts/system_menu_panel.gd": null,
+        "scripts/warehouse_panel.gd": null,
+        "scripts/audio_preferences.gd": "fe05f1af5878e84ba5f7cf48a801330baf678930a232aa06382d23967e1a1300",
+        "scripts/item_detail_docked_presenter.gd": "bfbe4df4cf0d607996049ad683bbe65a75b1444cb7b7cd83cee4f10d3695329b",
+        "scripts/ui_item_detail_dock.gd": "e78a6fcc1b7354a4b62f70c14b3b3c82b3a09ed144c6bd9e3a7f5ca2d9c00387",
+        "scripts/ui_item_selection_visual.gd": "a865d536026e5b252be558f24616f297b423e23bb612bb5644cfaedcce469131",
+        "scripts/ui_selection_dismiss_guard.gd": "e70d4961a4ac3d7fef8d7141f47d65e9ee30a07d624896ec90a85e42a8554cf5",
+        "tests/ui_r5_audio_test.gd": "7ec73561976692b56db25f06e34990a0049fbb103ad4956a26cd7a737c338636",
+        "tests/ui_r5_audio_test.tscn": "f6ff927b697afab3c917aaa3c91c950371b3cc824a4d8eef1097445fb9c2cce4",
+        "tests/ui_r5_core_test.gd": "f4d732be22b0e08fa57668db500243100dab9271c17cf7b0189a7bf94622dee2",
+        "tests/ui_r5_core_test.tscn": "2fd00fb720ad3c693cef2c73794ebc280437ed515e4e3b1d1adbb802ffe34c61",
+        "tests/ui_r5_delete_test.gd": "3116ea75ebc950cdb2b4f8c92682f989d6a5490c4529d8e04241cbbfc2512241",
+        "tests/ui_r5_delete_test.tscn": "1956158a9198b3a545fce8eb6fb115e8e03f8d7e33dad0083729f3b8ab08a68a",
+        "tests/ui_r5_panels_test.gd": "c2da1e933ee615683bc69d616c0bcdb4a8362d9900162b0e2795ffd6fc92ad79",
+        "tests/ui_r5_panels_test.tscn": "8e7cc0664294a650ea0b6aac7c2de604fae42e7f9a18a1cea899c6b7b0e549e0"
+      }
+    },
+    "final_test_state": {
+      "source": "worktree files at final HEAD",
+      "files": {
+        "project.godot": "891eac64ff303cb5cc84b273ea083288a35cd672ae2b58f170441f7aa678c927",
+        "scripts/audio_runtime_service.gd": "c10240e2258ad0163f65f25c6d0e8f851838ef412802338cba364a5bd2df582a",
+        "scripts/game_root.gd": "ae2ba6c4f95ea16dcfafae3957b15e361ffc848e89294bcca920b5c2e27ab619",
+        "scripts/inventory_panel.gd": "9ed565a1d6cf7cb53c08531a222fd6804429dbaef99447b87bdbcae3aae0fbcc",
+        "scripts/loot_pickup.gd": "c504b319cfa2d450b9a3f297e6cfabfa25dfd7883c9655c31b577bd3b366bd31",
+        "scripts/player_state.gd": "840173e113915c87267f8f5e9dae7e6d390b8dbf6e55bd1a138d60e71bd64505",
+        "scripts/shop_panel.gd": "03cc816d41a51f8571e1fda499db6f2e76466e934601f54de988c88e7fa029ce",
+        "scripts/system_menu_panel.gd": "7fef1be5e1fc10342275a93be4bd3b3139fee8b1165c08e303eb221aaea33113",
+        "scripts/warehouse_panel.gd": "4adb44f1e97dd6feaf41a0d94d17bcaa54ea97b701b9d366581850d0a40604bd",
+        "scripts/audio_preferences.gd": "fe05f1af5878e84ba5f7cf48a801330baf678930a232aa06382d23967e1a1300",
+        "scripts/item_detail_docked_presenter.gd": "bfbe4df4cf0d607996049ad683bbe65a75b1444cb7b7cd83cee4f10d3695329b",
+        "scripts/ui_item_detail_dock.gd": "e78a6fcc1b7354a4b62f70c14b3b3c82b3a09ed144c6bd9e3a7f5ca2d9c00387",
+        "scripts/ui_item_selection_visual.gd": "a865d536026e5b252be558f24616f297b423e23bb612bb5644cfaedcce469131",
+        "scripts/ui_selection_dismiss_guard.gd": "0826790036a65f66fea4e3573a52351e6f2fc2ba865bd986493f6de072bf40db",
+        "tests/ui_r5_audio_test.gd": "18e1ce6890181e5c66a8e5d3dfdc21ce97265ada44c765c6782c7e8d19d9bda3",
+        "tests/ui_r5_audio_test.tscn": "f6ff927b697afab3c917aaa3c91c950371b3cc824a4d8eef1097445fb9c2cce4",
+        "tests/ui_r5_core_test.gd": "766e6dc0b2f4de8a81039386707cd58f8089b425efefac4011492fcc6ee6430b",
+        "tests/ui_r5_core_test.tscn": "2fd00fb720ad3c693cef2c73794ebc280437ed515e4e3b1d1adbb802ffe34c61",
+        "tests/ui_r5_delete_test.gd": "06c2c3c9da599e4e81374bb1c07634eb7f40591f578dd155007dc4511f86ff89",
+        "tests/ui_r5_delete_test.tscn": "1956158a9198b3a545fce8eb6fb115e8e03f8d7e33dad0083729f3b8ab08a68a",
+        "tests/ui_r5_panels_test.gd": "d61dc6fe311d86ce0fef6ffa4e05b3cc76de283645650ad372198f1c322ef90c",
+        "tests/ui_r5_panels_test.tscn": "8e7cc0664294a650ea0b6aac7c2de604fae42e7f9a18a1cea899c6b7b0e549e0",
+        "tests/inventory_equipment_ui_test.gd": "4a4de4317bf38c702ea0391065f2460736bdc847e3a85ac3f2caa5f0276b8eff",
+        "tests/system_menu_gothic_ui_test.gd": "fa86684564f284c841b6d5c1d1919f0755895d62ec255a11fdd8c6d2d2c5db56"
+      },
+      "tests/inventory_equipment_ui_test.gd.git_blob": "ad3ce2754d8e2166970a4c53e8a446ab51da6aab",
+      "tests/system_menu_gothic_ui_test.gd.git_blob": "ae2f4b13837be1d8f99dc472262be71ec4d77e04",
+      "tests/ui_r5_panels_test.gd.git_blob": "66ca49fa86a6ab2053a14f882deac1ce9dec907b",
+      "tests/ui_r5_core_test.gd.git_blob": "8999cd3c9bbff477c6e7c43bc3118d299f6b6d9b",
+      "tests/ui_r5_audio_test.gd.git_blob": "4247c61a8dce2c19581c872cb8ce483d745fe8a5",
+      "tests/ui_r5_delete_test.gd.git_blob": "3308171f9d63d49dfef1511b5f42845de17a249c"
+    }
+  },
+  "protected_dependencies": {
+    "expected": {
+      "scripts/item_detail_presenter.gd": "ea37fb379d68bd5ca4a824b074deab07ce709746",
+      "scripts/touch_scroll_support.gd": "67b60b1cbd0916d42aa8227b79411ea68c0986e2",
+      "scripts/gothic_ui_theme.gd": "051dbd0702381b6e5b1aad63c65a10d33c0de432",
+      "scripts/ui_runtime_layout_overrides.gd": "4e49d0cda53587865815daccbf5872cdf7dcb229",
+      "scripts/town_music_controller.gd": "3dd8cfe2ab07b4ca9a45a8090f4a68fc6b9b47b1",
+      "scripts/equipment_rules.gd": "9d36069bffa7d7bf6f8627cac886fee0f95c1250",
+      "scripts/hud.gd": "a78d7edaac9ac03d1a351acb4d86ee9295b0f4b2",
+      "tools/run_godot_tests.ps1": "2c0ecddea6ad740cbf3545c80e8cad2e72abbd0c"
+    },
+    "actual": {
+      "scripts/item_detail_presenter.gd": "ea37fb379d68bd5ca4a824b074deab07ce709746",
+      "scripts/touch_scroll_support.gd": "67b60b1cbd0916d42aa8227b79411ea68c0986e2",
+      "scripts/gothic_ui_theme.gd": "051dbd0702381b6e5b1aad63c65a10d33c0de432",
+      "scripts/ui_runtime_layout_overrides.gd": "4e49d0cda53587865815daccbf5872cdf7dcb229",
+      "scripts/town_music_controller.gd": "3dd8cfe2ab07b4ca9a45a8090f4a68fc6b9b47b1",
+      "scripts/equipment_rules.gd": "9d36069bffa7d7bf6f8627cac886fee0f95c1250",
+      "scripts/hud.gd": "a78d7edaac9ac03d1a351acb4d86ee9295b0f4b2",
+      "tools/run_godot_tests.ps1": "2c0ecddea6ad740cbf3545c80e8cad2e72abbd0c"
+    },
+    "all_match": true
+  },
+  "supplemental_deviation_paths": [
+    "scripts/ui_selection_dismiss_guard.gd",
+    "tests/ui_r5_audio_test.gd",
+    "tests/ui_r5_core_test.gd",
+    "tests/ui_r5_delete_test.gd",
+    "tests/ui_r5_panels_test.gd"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "test_name": "ui_r5_panels_test",
+      "test_path": "tests/ui_r5_panels_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "inventory_equipment_ui_test",
+      "test_path": "tests/inventory_equipment_ui_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "4004874f04cd0d72744567faef41ea9149d0f4c4",
+  "generated_at": "2026-09-10T22:00:59.4860413+08:00",
+  "total": 2,
+  "failed": 0,
+  "engine_log_errors": 0,
+  "passed": 2,
+  "suite": "adhoc"
+}
