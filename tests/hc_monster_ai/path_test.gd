@@ -344,17 +344,24 @@ func _run() -> void:
 	# Static footprint checks may share only an exact deeply read-only authored
 	# context and radius. Dynamic edge occupancy remains a separate callback.
 	var frozen_context_a := readonly_context({Vector2i(4, 4): true})
-	var frozen_context_b := readonly_context({Vector2i(4, 4): true})
 	var frozen_context_changed := readonly_context({Vector2i(4, 5): true})
 	var walk_a := Search.new()
 	var walk_b := Search.new()
 	var walk_changed := Search.new()
 	var walk_radius := Search.new()
 	walk_a.configure(frozen_context_a,Vector2i(1,1),goals,.35,Callable())
-	walk_b.configure(frozen_context_b,Vector2i(2,1),goals,.35,Callable())
+	# M30-R4: walkability sharing keys on the HCM30ContextToken identity of the
+	# frozen context object plus the radius (never a content hash of the whole
+	# map dictionary). Production passes one frozen snapshot object to every
+	# actor, so cross-instance sharing is exercised with the same object while
+	# equal-content clones stay isolated by design.
+	walk_b.configure(frozen_context_a,Vector2i(2,1),goals,.35,Callable())
 	walk_changed.configure(frozen_context_changed,Vector2i(2,1),goals,.35,Callable())
 	walk_radius.configure(frozen_context_a,Vector2i(2,1),goals,.76,Callable())
+	var walk_clone := Search.new()
+	walk_clone.configure(readonly_context({Vector2i(4, 4): true}),Vector2i(2,1),goals,.35,Callable())
 	check(is_same(walk_a.walkable_cache,walk_b.walkable_cache),"A-walkable-exact-share","Exact immutable map snapshot and footprint share static cells")
+	check(not is_same(walk_a.walkable_cache,walk_clone.walkable_cache),"A-walkable-clone-isolated","Equal-content context clones keep separate walkability under identity tokens")
 	check(not is_same(walk_a.walkable_cache,walk_changed.walkable_cache),"A-walkable-context-isolated","Changed authored cells never reuse static walkability")
 	check(not is_same(walk_a.walkable_cache,walk_radius.walkable_cache),"A-walkable-radius-isolated","Different actor footprints never reuse static walkability")
 	# HC per-tick static caches partition map/revision/projection and actor-local
