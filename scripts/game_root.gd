@@ -3576,16 +3576,12 @@ func _enforce_enemy_outside_bich_safe_zone(enemy: EnemyActor) -> void:
 	var current_ground_gu := _canonical_screen_px_to_ground_gu(
 		enemy.global_position
 	)
-	var padding_gu: float = (
-		float(enemy.combat_radius_gu) + SAFE_ZONE_ACTOR_PADDING_GU
+	var legal_ground_gu: Vector2 = hc_m30_stable_enemy_ground_point(
+		current_ground_gu, float(enemy.combat_radius_gu), enemy.runtime_map_id
 	)
-	var legal_ground_gu := (
-		WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
-			current_ground_gu,
-			_active_safe_zones,
-			padding_gu
-		)
-	)
+	if not legal_ground_gu.is_finite():
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return
 	if not legal_ground_gu.is_equal_approx(current_ground_gu):
 		enemy.set_combat_position(
 			_canonical_ground_gu_to_screen_px(legal_ground_gu),
@@ -12792,3 +12788,16 @@ func hc_m30_summon_snapshot() -> Dictionary:
 func _hc_m30_resolve_monster(raw_id: Variant) -> Dictionary:
 	var monster_id: int = GameData.canonical_monster_id(raw_id)
 	return GameData.get_monster_by_id(monster_id) if monster_id > 0 else {}
+
+func hc_m30_stable_enemy_ground_point(point: Vector2, radius_gu: float, expected_map_id: int) -> Vector2:
+	# Read-only projection shared by existing Bich enforcement and navigation.
+	# Does NOT modify positions, safe zones, attack reach or attack eligibility.
+	if expected_map_id != current_map_id or not point.is_finite() or not is_finite(radius_gu) or radius_gu < 0.0:
+		return Vector2.INF
+	if current_map_id != BICH_RUNTIME_MAP_ID:
+		return point
+	if not _safe_zone_context_is_valid():
+		return Vector2.INF
+	return WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
+		point, _active_safe_zones, radius_gu + SAFE_ZONE_ACTOR_PADDING_GU
+	)
