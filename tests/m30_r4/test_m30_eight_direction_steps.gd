@@ -88,6 +88,13 @@ func _run() -> void:
 		if not is_instance_valid(monster):
 			continue
 		check(_point(monster).distance_to(start) < 0.015, "direction %d spawn must not be silently relocated" % d)
+		# Fixture adaptation (assertion-preserving): the per-direction actor's
+		# atlas activates asynchronously; visual_process_frame only stamps once
+		# resources are active, so wait for real art before sampling. Every
+		# sampled frame must still follow the visual update.
+		var art_deadline: int = Time.get_ticks_msec() + 8000
+		while is_instance_valid(monster) and not monster.visual.uses_final_art() and Time.get_ticks_msec() < art_deadline:
+			await _sampler.after_visual
 		var preferred: float = monster._hc_preferred(caster)
 		var walks: int = 0
 		var attacks: int = 0
