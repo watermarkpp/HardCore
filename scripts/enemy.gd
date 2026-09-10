@@ -3,7 +3,8 @@ extends CharacterBody2D
 
 const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
 const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
-var _hc_m30_attack_move_cutoff: float = INF
+var _hc_m30_attack_move_cutoff: float = INF # R4 compatibility diagnostic only
+var _hc_m30_attack_pose_remaining: float = 0.0
 
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
@@ -483,6 +484,7 @@ var _terrain_failed_cell_until_ms := 0
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
 	set_meta("hc_combat_life_epoch", int(get_meta("hc_combat_life_epoch", 0)) + 1)
 	_hc_m30_attack_move_cutoff = INF
+	_hc_m30_attack_pose_remaining = 0.0
 	_summon_warning = 0.0
 	_summon_cooldown = 0.0
 	set_meta("m30_summon_warning_life", -1)
@@ -1858,6 +1860,7 @@ func _clear_autonomous_step_state() -> void:
 
 func _cancel_autonomous_step(preserve_current_position := true) -> void:
 	_hc_close_session = false
+	_hc_m30_attack_pose_remaining = 0.0
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
 	_clear_autonomous_step_state()
@@ -2351,6 +2354,7 @@ func _physics_process_internal(delta: float) -> void:
 	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - delta)
 	_spatial_index_update()
 	_attack_timer = maxf(0.0, _attack_timer - delta)
+	_hc_m30_attack_pose_remaining = maxf(0.0, _hc_m30_attack_pose_remaining - delta)
 	_update_status_effects(delta)
 	# Poison/status damage and natural regeneration are independent. Resolve
 	# status first, but never allow a lethal status tick to be resurrected by
@@ -2677,6 +2681,7 @@ func _on_background_wakeup_timeout() -> void:
 	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - elapsed_seconds)
 	_spatial_index_update()
 	_attack_timer = maxf(0.0, _attack_timer - elapsed_seconds)
+	_hc_m30_attack_pose_remaining = maxf(0.0, _hc_m30_attack_pose_remaining - elapsed_seconds)
 	_update_status_effects(elapsed_seconds)
 	if _dying or _death_pending:
 		_leave_background_deep_sleep()
@@ -7385,6 +7390,7 @@ func _hc_frontline_at(a: Vector2, b: Vector2, hit_target: Node2D) -> int:
 		HCPolicy.LANE_GU,
 		_hc_attack_scratch,
 	)
+	var target_radius: float = _target_combat_radius_gu(hit_target)
 	for raw: Variant in _hc_attack_scratch:
 		if not is_instance_valid(raw) or not raw is EnemyActor:
 			continue
@@ -7394,7 +7400,7 @@ func _hc_frontline_at(a: Vector2, b: Vector2, hit_target: Node2D) -> int:
 		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
 			continue
 		var c := other.spatial_index_position()
-		if HCPolicy.frontline_blocks(a, b, c, combat_radius_gu, _target_combat_radius_gu(hit_target), other.combat_radius_gu, spatial_actor_runtime_id, other.spatial_actor_runtime_id):
+		if HCPolicy.frontline_blocks(a, b, c, combat_radius_gu, target_radius, other.combat_radius_gu, spatial_actor_runtime_id, other.spatial_actor_runtime_id):
 			return other.get_instance_id()
 	return 0
 
@@ -7473,6 +7479,7 @@ func _hc_try_start(hit_target: Node2D, after_motion_attempt := false) -> bool:
 		_pending_attack_release_record = record
 	var m30_clip: float = HCM30WalkPhaseScript.attack_clip_seconds(_attack_animation_duration, _attack_timer, _attack_hit_delay)
 	_hc_m30_attack_move_cutoff = maxf(0.0, _attack_timer - m30_clip)
+	_hc_m30_attack_pose_remaining = m30_clip
 	_play_attack_animation(m30_clip)
 	if _attack_hit_delay <= 0.0:
 		_hc_settle(record)
@@ -7607,7 +7614,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	# The range comparison uses the already-projected offset. Avoid rebuilding
 	# the same target/safe-zone/projection gate twice for an obviously distant
 	# target; a post-movement endpoint still runs the complete access check.
-	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and HCM30WalkPhaseScript.attack_movement_locked(_attack_timer, _hc_m30_attack_move_cutoff):
+	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and (_attack_timer > 0.0 and _hc_m30_attack_pose_remaining > 0.000001):
 		velocity = Vector2.ZERO
 		_hc_last_reason = "ATTACK_POSE_COMMIT"
 		return
@@ -7681,15 +7688,22 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	_hc_try_start(target, true)
 
 func _hc_step_can_end() -> bool:
-	if not _hc_standard_melee() or not _hc_target_usable(target):
+	if not _hc_standard_melee() or not is_instance_valid(target) or target.is_queued_for_deletion():
 		return false
-	# Pure gates FIRST; do not run WORLD+frontline queries at both ends of every
-	# physics move when neither arrival nor attack start is possible.
-	var distance: float = _ground_delta_gu_between_screen_positions(global_position, target.global_position).length()
-	var arrived: bool = distance <= _hc_preferred(target) + GroundUnitSpace.EPSILON_GU
+	# Pure geometry first; distant moves cannot end through the 2-GU gate.
+	var offset: Vector2 = _ground_delta_gu_between_screen_positions(global_position, target.global_position)
+	if not offset.is_finite():
+		return false
+	var reach: float = HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+	var distance_sq: float = offset.length_squared()
+	if distance_sq > reach * reach:
+		return false
+	var preferred: float = _hc_preferred(target) + GroundUnitSpace.EPSILON_GU
+	var arrived: bool = distance_sq <= preferred * preferred
 	var may_attack: bool = _attack_timer <= 0.0 and _pending_attack_time < 0.0 and not _hc_close_debt and _hc_last_start_tick != Engine.get_physics_frames()
 	if not arrived and not may_attack:
 		return false
+	# Full live target, WORLD and frontline checks still own any accepted end.
 	return _hc_access(target) == "CLEAR"
 
 

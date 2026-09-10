@@ -1,149 +1,139 @@
 extends Node
-
-## M30-R4 acceptance: 8-direction 2.0 -> 1.5 GU short steps through the real
-## melee pipeline. Judged on walk-state phase continuity: the walk phase may
-## wrap only after ~one full cycle_gu of accumulated real distance; a walk
-## frame 0 is legal only while phase < 1/frame_count. Attack-pose samples
-## (state != walk) are excluded because the attack animation legitimately
-## starts at its own frame 0 on the same physics tick as a movement settle.
-## Directions whose 2 GU corridor is authored terrain barely move and are
-## counted as skipped (at least five directions must walk).
-
 const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
-
-const MONSTER_ID := 64
-const DIRECTIONS := 8
-const PROBE_TICKS := 480
-
-var checks: int = 0
+const Sampler := preload("res://tests/m30_r4_r1/r1_lab_sampler.gd")
+const MONSTER_ID: int = 64
 var failures: int = 0
-var evidence: Array[String] = []
+var checks: int = 0
+var _sampler: Node
 
-
-func check(condition: bool, label: String) -> void:
+func check(ok: bool, label: String) -> void:
 	checks += 1
-	if not condition:
+	if not ok:
 		failures += 1
-		push_error("M30STEPS FAIL: " + label)
+		push_error("M30STEPS_R1 " + label)
 
+func _point(monster: EnemyActor) -> Vector2:
+	return monster.spatial_index_position()
 
-func _ground_of(monster: EnemyActor) -> Vector2:
-	var result: Dictionary = monster.try_screen_position_px_to_ground_position_gu(monster.global_position)
-	return result.get("value", Vector2.INF) if bool(result.get("success", false)) else Vector2.INF
-
-
-func _cycle_estimate(monster: EnemyActor) -> float:
-	var snapshot: Dictionary = monster.visual.hc_m30_motion_snapshot()
-	return maxf(0.4, float(snapshot["reference_cycle_gu"]))
-
+func _find_open_center(probe: EnemyActor) -> Vector2:
+	# Independent preflight BEFORE movement. A failed approach is never relabelled
+	# as terrain. Bounded search in the formal map; no terrain or masks are edited.
+	for ring: int in range(9):
+		for y: int in range(-ring, ring + 1):
+			for x: int in range(-ring, ring + 1):
+				if maxi(absi(x), absi(y)) != ring:
+					continue
+				var center: Vector2 = Fixture.FIXTURE_GROUND_POSITION + Vector2(x, y) * 2.0
+				if not probe._hc_point_walkable(center):
+					continue
+				var clear: bool = true
+				for d: int in range(8):
+					var direction: Vector2 = Vector2.from_angle(TAU * float(d) / 8.0)
+					for i: int in range(5):
+						var point: Vector2 = center + direction * (1.5 + 0.125 * float(i))
+						if not probe._hc_point_walkable(point) or not probe._hc_world_between(center, point):
+							clear = false
+							break
+					if not clear:
+						break
+				if clear:
+					return center
+	return Vector2.INF
 
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	MonsterVisual.set_synchronous_loading_for_tests(false)
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await Fixture.wait_for_formal_world(self, game, "m30_steps")
+	await Fixture.wait_for_formal_world(self, game, "m30_steps_r1")
+	MonsterVisual.set_synchronous_loading_for_tests(false)
+	_sampler = Sampler.new()
+	add_child(_sampler)
+	for value: Node in get_tree().get_nodes_in_group("enemies"):
+		value.queue_free()
+	await _sampler.after_visual
+	await _sampler.after_visual
 	var caster: PlayerCharacter = game.player
 	caster.max_hp = 999999
 	caster.current_hp = caster.max_hp
-	var center_ground: Vector2 = Fixture.FIXTURE_GROUND_POSITION
-	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(center_ground))
-	var preferred: float = -1.0
-	var skipped_blocked := 0
-	for direction_index: int in range(DIRECTIONS):
-		var angle := TAU * float(direction_index) / float(DIRECTIONS)
-		var start_ground: Vector2 = center_ground + Vector2.RIGHT.rotated(angle) * 2.0
-		var start_px: Vector2 = game._canonical_ground_gu_to_screen_px(start_ground)
-		var monster: EnemyActor = game._spawn_enemy(
-			GameData.get_monster_by_id(MONSTER_ID),
-			start_px,
-			false,
-			-1.0,
-			{"respawn_enabled": false, "spawn_slot_id": "test:m30_steps_%d" % direction_index},
-		)
-		check(monster != null and monster.monster_id == MONSTER_ID, "direction %d must spawn monster 64" % direction_index)
-		if monster == null:
+	var probe: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(MONSTER_ID), game._canonical_ground_gu_to_screen_px(Fixture.FIXTURE_GROUND_POSITION), false, -1.0, {"respawn_enabled": false, "spawn_slot_id": "test:r1_preflight"})
+	check(is_instance_valid(probe), "preflight actor must exist")
+	if not is_instance_valid(probe):
+		get_tree().quit(1)
+		return
+	probe.set_physics_process(false)
+	var center: Vector2 = _find_open_center(probe)
+	if not center.is_finite():
+		print("M30_EIGHT_DIRECTION_STEPS_BLOCKED reason=no_verified_open_8way_fixture")
+		get_tree().quit(2)
+		return
+	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(center))
+	probe.set_combat_position(game._canonical_ground_gu_to_screen_px(center + Vector2(2, 0)), &"r1_prefetch")
+	var deadline: int = Time.get_ticks_msec() + 8000
+	while not probe.visual.uses_final_art() and Time.get_ticks_msec() < deadline:
+		await _sampler.after_visual
+	check(probe.visual.uses_final_art(), "real atlas must be applied before 8way visual test")
+	if not probe.visual.uses_final_art():
+		get_tree().quit(1)
+		return
+	probe.queue_free()
+	await _sampler.after_visual
+	await _sampler.after_visual
+	var completed: int = 0
+	for d: int in range(8):
+		var start: Vector2 = center + Vector2.from_angle(TAU * float(d) / 8.0) * 2.0
+		var monster: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(MONSTER_ID), game._canonical_ground_gu_to_screen_px(start), false, -1.0, {"respawn_enabled": false, "spawn_slot_id": "test:r1_8way:%d" % d})
+		check(is_instance_valid(monster), "direction %d must spawn" % d)
+		if not is_instance_valid(monster):
 			continue
-		preferred = monster._hc_preferred(caster)
-		var walk_phases: Array[float] = []
-		var walk_distances: Array[float] = []
-		var walk_frames: Array[int] = []
-		var previous_ground: Vector2 = _ground_of(monster)
-		var moving := false
-		var attack_samples := 0
-		for tick: int in range(PROBE_TICKS):
-			await get_tree().physics_frame
+		check(_point(monster).distance_to(start) < 0.015, "direction %d spawn must not be silently relocated" % d)
+		var preferred: float = monster._hc_preferred(caster)
+		var walks: int = 0
+		var attacks: int = 0
+		var last_phase: float = 0.0
+		var last_distance: float = 0.0
+		var reached: bool = false
+		var deadline_dir: int = Time.get_ticks_msec() + 7000
+		while Time.get_ticks_msec() < deadline_dir:
+			await _sampler.after_visual
 			if not is_instance_valid(monster):
 				break
-			var ground: Vector2 = _ground_of(monster)
-			if ground == Vector2.INF:
-				continue
-			var moved: float = ground.distance_to(previous_ground)
-			previous_ground = ground
-			if ground.distance_to(center_ground) <= preferred + 0.05:
+			var snap: Dictionary = monster.visual.hc_m30_motion_snapshot()
+			check(int(snap["visual_process_frame"]) == Engine.get_process_frames(), "direction %d sample follows visual update" % d)
+			var distance: float = float(snap["actual_distance_gu"])
+			var phase: float = float(snap["walk_phase"])
+			var cycle: float = float(snap["reference_cycle_gu"])
+			if distance > last_distance and cycle > 0.0:
+				var expected: float = fposmod(last_phase + (distance - last_distance) / cycle, 1.0)
+				var error: float = absf(expected - phase)
+				check(minf(error, 1.0 - error) < 0.001, "direction %d real-distance phase continuity" % d)
+			elif distance == last_distance:
+				check(is_equal_approx(phase, last_phase), "direction %d no phase advance at rest" % d)
+			last_phase = phase
+			last_distance = distance
+			if str(snap["state"]) == "walk":
+				walks += 1
+				var count: int = MonsterAnimationPolicy.frame_count(monster.visual.active_resources, &"walk")
+				check(count > 0 and int(snap["frame"]) == mini(count - 1, int(floor(phase * float(count)))), "direction %d frame matches actual atlas count" % d)
+			elif str(snap["state"]) == "attack":
+				attacks += 1
+			if _point(monster).distance_to(center) <= preferred + 0.015:
+				reached = true
 				break
-			if moved > 0.001:
-				moving = true
-				var snapshot: Dictionary = monster.visual.hc_m30_motion_snapshot()
-				if str(snapshot["state"]) == "walk":
-					walk_phases.append(float(snapshot["walk_phase"]))
-					walk_distances.append(float(snapshot["actual_distance_gu"]))
-					walk_frames.append(int(snapshot["frame"]))
-				else:
-					attack_samples += 1
-			if tick == PROBE_TICKS / 2 and not moving:
-				break
-		var total_gu: float = float(monster.visual.hc_m30_motion_snapshot()["actual_distance_gu"])
-		if not moving or total_gu < 0.35:
-			skipped_blocked += 1
-			evidence.append(
-				"dir=%d authored terrain limits the approach (moved=%.3f GU), skipped" % [direction_index, total_gu]
-			)
-			monster.take_damage(999999, caster, {"source": "m30_steps_test"})
+		check(is_instance_valid(monster) and reached, "direction %d reaches preferred distance" % d)
+		check(walks >= 2, "direction %d has at least two rendered walk samples, no vacuous PASS" % d)
+		check(attacks >= 1, "direction %d has readable outer attack" % d)
+		if reached and walks >= 2 and attacks >= 1:
+			completed += 1
+		print("M30STEPS_R1_EVIDENCE dir=%d walk_samples=%d attack_samples=%d distance_gu=%.6f" % [d, walks, attacks, last_distance])
+		if is_instance_valid(monster):
 			monster.queue_free()
-			await get_tree().process_frame
-			continue
-		var reached: float = _ground_of(monster).distance_to(center_ground)
-		check(
-			reached <= preferred + 0.1,
-			"direction %d must reach preferred contact (reached=%.3f preferred=%.3f)" % [direction_index, reached, preferred],
-		)
-		# Phase continuity: a decrease is only legal as a cycle wrap, which
-		# must land on a multiple of cycle_gu in accumulated distance (within
-		# one sample's movement, ~0.1 GU).
-		var phase_violations := 0
-		var cycle_gu: float = _cycle_estimate(monster)
-		for sample_index: int in range(1, walk_phases.size()):
-			var drop: float = walk_phases[sample_index - 1] - walk_phases[sample_index]
-			if drop > 0.05:
-				var remainder: float = fmod(walk_distances[sample_index], cycle_gu)
-				if remainder > 0.12 and remainder < cycle_gu - 0.12:
-					phase_violations += 1
-		check(phase_violations == 0, "direction %d walk phase must not reset without a full cycle" % direction_index)
-		# Walk frame 0 is legal only while phase < 1/frame_count.
-		var frame_violations := 0
-		for sample_index: int in range(walk_frames.size()):
-			if walk_frames[sample_index] == 0 and walk_phases[sample_index] >= 1.0 / 6.0:
-				frame_violations += 1
-		check(frame_violations == 0, "direction %d walk animation must not replay frame 0 mid-cycle" % direction_index)
-		evidence.append(
-			"dir=%d samples=%d attack_samples=%d phases=[%.3f..%.3f] total_gu=%.3f reached=%.3f preferred=%.3f cycle=%.3f"
-			% [direction_index, walk_phases.size(), attack_samples,
-				walk_phases[0] if walk_phases.size() > 0 else -1.0,
-				walk_phases[walk_phases.size() - 1] if walk_phases.size() > 0 else -1.0,
-				total_gu, reached, preferred, cycle_gu]
-		)
-		monster.take_damage(999999, caster, {"source": "m30_steps_test"})
-		monster.queue_free()
-		await get_tree().process_frame
-	check(skipped_blocked <= 3, "at least five directions must have an open corridor (skipped=%d)" % skipped_blocked)
-	print("M30_EIGHT_DIRECTION_STEPS_%s checks=%d failures=%d preferred=%.3f skipped=%d" % [
-		"PASS" if failures == 0 else "FAIL", checks, failures, preferred, skipped_blocked,
-	])
-	for line: String in evidence:
-		print("M30STEPS_EVIDENCE " + line)
+		await _sampler.after_visual
+		await _sampler.after_visual
+	check(completed == 8, "all eight directions must complete; no pass-by-skip")
+	print("M30_EIGHT_DIRECTION_STEPS_%s completed=%d/8 checks=%d failures=%d" % ["PASS" if failures == 0 else "FAIL", completed, checks, failures])
 	get_tree().quit(0 if failures == 0 else 1)
-
 
 func _ready() -> void:
 	_run.call_deferred()

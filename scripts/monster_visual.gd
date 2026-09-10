@@ -83,6 +83,12 @@ var _hit_remaining := 0.0
 var _death_remaining := 0.0
 var _death_pose_held := false
 var _action_duration := 0.0
+var _hc_m30_attack_duration: float = 0.46
+var _hc_m30_hit_duration: float = 0.22
+var _hc_m30_death_duration: float = 0.62
+var _hc_m30_last_geometry_origin: Vector2 = Vector2.INF
+var _hc_m30_last_geometry_radius: float = -1.0
+var _hc_m30_last_geometry_radius_px: float = -1.0
 var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
 var _resource_residency_timer := 0.0
@@ -312,6 +318,7 @@ func _update_resource_residency() -> void:
 
 
 func _update_animation_frame(delta: float) -> void:
+	_hc_m30_last_visual_process_frame = Engine.get_process_frames()
 	if _death_remaining > 0.0 or _death_pose_held:
 		current_state = "death"
 	elif _attack_remaining > 0.0:
@@ -328,16 +335,19 @@ func _update_animation_frame(delta: float) -> void:
 		_elapsed = 0.0
 		_last_state = current_state
 	_elapsed += delta
-	var frame_count := MonsterAnimationPolicy.frame_count(active_resources, StringName(current_state))
+	var frame_count: int = maxi(1, MonsterAnimationPolicy.frame_count(active_resources, StringName(current_state)))
 	if _death_pose_held and current_state == "death":
-		current_frame = maxi(0, frame_count - 1)
-	elif current_state in ["attack", "hit", "death"]:
-		var progress := clampf(_elapsed / maxf(_action_duration, 0.001), 0.0, 0.999)
-		current_frame = mini(frame_count - 1, int(floor(progress * frame_count)))
+		current_frame = frame_count - 1
+	elif current_state == "attack":
+		current_frame = HCM30WalkPhaseScript.action_frame_index(_attack_remaining, _hc_m30_attack_duration, frame_count)
+	elif current_state == "hit":
+		current_frame = HCM30WalkPhaseScript.action_frame_index(_hit_remaining, _hc_m30_hit_duration, frame_count)
+	elif current_state == "death":
+		current_frame = HCM30WalkPhaseScript.action_frame_index(_death_remaining, _hc_m30_death_duration, frame_count)
 	elif current_state == "walk" and _hc_m30_melee_tick == Engine.get_physics_frames():
 		current_frame = _hc_m30_walk.frame_index(frame_count)
 	else:
-		var fps := MonsterAnimationPolicy.loop_fps(StringName(current_state))
+		var fps: float = MonsterAnimationPolicy.loop_fps(StringName(current_state))
 		current_frame = int(floor(_elapsed * fps)) % frame_count
 	var next_region := Rect2(current_frame * frame_size.x, current_direction * frame_size.y, frame_size.x, frame_size.y)
 	if sprite.texture != active_resources[current_state] or sprite.region_rect != next_region:
@@ -837,17 +847,29 @@ func _load_client_profile_synchronously(client_mapping: Dictionary) -> Dictionar
 
 
 func _apply_render_state(texture: Texture2D, region: Rect2) -> void:
-	var changed := false
-	if sprite.texture != texture:
+	var texture_changed: bool = sprite.texture != texture
+	var changed: bool = texture_changed or sprite.region_rect != region
+	var radius: float = actor.combat_radius_gu if is_instance_valid(actor) else -1.0
+	var radius_px: float = actor.collision_radius_px if is_instance_valid(actor) else -1.0
+	var geometry_changed: bool = (
+		position != _hc_m30_last_geometry_origin
+		or radius != _hc_m30_last_geometry_radius
+		or radius_px != _hc_m30_last_geometry_radius_px
+	)
+	if texture_changed:
 		sprite.texture = texture
-		changed = true
 	if sprite.region_rect != region:
 		sprite.region_rect = region
-		changed = true
 	if changed:
 		_render_state_update_count += 1
 		RuntimeDiagnostics.increment_performance_counter(&"visual_render_state_changes")
+	# Frame/row changes do not alter the reviewed footprint. Preserve resource
+	# transitions AND legitimate actor radius/visual-origin edits.
+	if texture_changed or geometry_changed:
 		_refresh_actor_ground_indicator()
+		_hc_m30_last_geometry_origin = position
+		_hc_m30_last_geometry_radius = radius
+		_hc_m30_last_geometry_radius_px = radius_px
 
 
 func render_state_update_count() -> int:
@@ -894,6 +916,7 @@ func play_attack(duration := 0.46) -> void:
 	if _death_remaining > 0.0:
 		return
 	_attack_remaining = duration
+	_hc_m30_attack_duration = float(duration)
 	_action_duration = duration
 	_elapsed = 0.0
 
@@ -903,8 +926,11 @@ func play_hit(duration := 0.22) -> void:
 	if _death_remaining > 0.0:
 		return
 	_hit_remaining = duration
-	_action_duration = duration
-	_elapsed = 0.0
+	_hc_m30_hit_duration = float(duration)
+	# A hit cannot reset a higher-priority attack clock/fallback lunge.
+	if _attack_remaining <= 0.0:
+		_action_duration = duration
+		_elapsed = 0.0
 
 
 func death_animation_duration() -> float:
@@ -924,6 +950,7 @@ func play_death(duration := -1.0) -> float:
 	)
 	_death_pose_held = false
 	_death_remaining = resolved_duration
+	_hc_m30_death_duration = resolved_duration
 	_hit_remaining = 0.0
 	_attack_remaining = 0.0
 	_action_duration = resolved_duration
@@ -997,6 +1024,7 @@ func fallback_attack_angle(direction_px: Vector2) -> float:
 const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
 var _hc_m30_walk: HCM30WalkPhase = HCM30WalkPhaseScript.new()
 var _hc_m30_melee_tick: int = -1
+var _hc_m30_last_visual_process_frame: int = -1
 var _hc_m30_stride_configured: bool = false
 
 func hc_m30_begin_melee_tick() -> void:
@@ -1032,6 +1060,10 @@ func _hc_m30_is_walking() -> bool:
 func hc_m30_motion_snapshot() -> Dictionary:
 	# On-demand diagnostics only; do not JSON-log every actor every frame.
 	return {
+		"visual_process_frame": _hc_m30_last_visual_process_frame,
+		"attack_duration": _hc_m30_attack_duration,
+		"hit_duration": _hc_m30_hit_duration,
+		"pose_remaining": actor._hc_m30_attack_pose_remaining if is_instance_valid(actor) else 0.0,
 		"physics_tick": Engine.get_physics_frames(),
 		"melee_tick": _hc_m30_melee_tick,
 		"last_motion_tick": _hc_m30_walk.last_motion_tick,

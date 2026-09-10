@@ -111,26 +111,20 @@ func _run() -> void:
 	before=actor._hc_starts
 	actor._physics_process_internal(1.0/60.0)
 	check(actor._hc_starts==before+1,"T02","A legal opportunity after actual movement starts in same tick")
-	# Cooldown must not permanently pin the actor at the outer ring. Do not
-	# change speed. M30-R4: inside 2 GU the attack-pose presentation window
-	# defers approach while the committed attack timing is still far from
-	# ready; the gate must open as soon as the next attack is legal.
+	# R4R1: an independent physics pose expires while cooldown remains positive.
+	# Do not reset cooldown to zero to make this test pass.
 	actor.set_combat_position(ground_to_screen(Vector2(21.8,20)),&"hc_test_position")
 	actor._clear_autonomous_step_state()
 	actor._attack_timer=999.0
 	actor._hc_close_session=true
 	var source_speed:=actor.move_speed_gu_per_sec
-	for frame in range(30):
-		await get_tree().physics_frame
-		actor._physics_process_internal(1.0/60.0)
-	var presentation_distance:=screen_to_ground(actor.global_position).distance_to(Vector2(20,20))
-	check(presentation_distance>actor._hc_preferred(player)+0.003,"S02-presentation","Inside 2 GU the attack-pose commitment window defers approach")
-	actor._attack_timer=0.0
-	for frame in range(90):
+	var starts_before_close:=actor._hc_starts
+	for frame in range(120):
 		await get_tree().physics_frame
 		actor._physics_process_internal(1.0/60.0)
 	var d:=screen_to_ground(actor.global_position).distance_to(Vector2(20,20))
-	check(d<=actor._hc_preferred(player)+0.003,"S02-runtime","Ready attack lets the actor converge toward preferred contact")
+	check(d<=actor._hc_preferred(player)+0.003,"S02-runtime","Positive cooldown actor converges after the finite pose expires")
+	check(actor._attack_timer>0.0 and actor._hc_starts==starts_before_close,"S02-no-reset","Closing does not require a new attack or clearing cooldown")
 	check(is_equal_approx(actor.move_speed_gu_per_sec,source_speed),"S10-speed","Source movement speed remains unchanged")
 	check(Warrior.thrust_footprint_slot_for_direction_ground_gu(Vector2(20,20),screen_to_ground(actor.global_position),actor.combat_radius_gu,Vector2.RIGHT)==1,"S04-runtime","Stationary warrior does not get a permanent outer-slot target")
 	# Dynamic front obstacle, including same-tick movement and death.

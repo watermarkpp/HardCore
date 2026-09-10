@@ -36,17 +36,24 @@ func _wait_physics_frames(owner: Node, count: int) -> void:
 
 
 func _wait_for_children(owner: Node, game: Node, minimum: int, max_frames: int) -> Array[EnemyActor]:
-	var frames: int = 0
-	while frames < max_frames:
+	for _frame: int in range(max_frames):
 		var children: Array[EnemyActor] = []
 		for value: Variant in owner.get_tree().get_nodes_in_group("enemies"):
-			var enemy := value as EnemyActor
-			if enemy != null and enemy.monster_id == CHILD_MONSTER_ID and enemy.current_hp > 0:
+			if not is_instance_valid(value) or not value is EnemyActor:
+				continue
+			var enemy: EnemyActor = value as EnemyActor
+			if (
+				enemy.monster_id == CHILD_MONSTER_ID
+				and enemy.can_receive_damage()
+				and enemy.get_parent() == game
+				and enemy.runtime_map_id == int(game.get("current_map_id"))
+				and int(enemy.get_meta("zone_generation", -1)) == int(game.get("_zone_generation"))
+				and str(enemy.get_meta("summoner_spawn_slot", "")) == MOTHER_SLOT
+			):
 				children.append(enemy)
 		if children.size() >= minimum:
 			return children
 		await owner.get_tree().physics_frame
-		frames += 1
 	return []
 
 
@@ -110,6 +117,10 @@ func _run() -> void:
 
 	var children: Array[EnemyActor] = await _wait_for_children(self, game, 3, 720)
 	check(children.size() >= 3, "mother must summon at least three children while player stands beside")
+	if children.size() < 3:
+		print("M30_MOTHER_REPRO_FAIL insufficient_scoped_children")
+		get_tree().quit(1)
+		return
 	note("children_born=%d" % children.size())
 	var queue_snapshot: Dictionary = game.hc_m30_summon_snapshot()
 	note("summon_snapshot=" + JSON.stringify(queue_snapshot))
@@ -187,7 +198,7 @@ func _run() -> void:
 		"budgets must hold for the whole scene",
 	)
 
-	print("M30_MOTHER_REPRO_%s checks=%d failures=%d mother_id=%d child_id=%d children=%d" % [
+	print("M30_MOTHER_REPRO_%s coverage=formal_home_function_smoke natural_respawn=NOT_TESTED checks=%d failures=%d mother_id=%d child_id=%d children=%d" % [
 		"PASS" if failures == 0 else "FAIL", checks, failures, MOTHER_MONSTER_ID, CHILD_MONSTER_ID,
 		children_after_respawn.size(),
 	])

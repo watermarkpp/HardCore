@@ -16,7 +16,8 @@ func configure_cycle(distance_per_cycle_gu: float) -> void:
 	if not is_finite(distance_per_cycle_gu) or distance_per_cycle_gu <= 0.000001:
 		return
 	cycle_gu = distance_per_cycle_gu
-	phase = fposmod(total_ground_distance_gu / cycle_gu, 1.0)
+	# A late atlas calibration changes FUTURE stride, not the visible phase.
+	# Re-dividing all past distance here caused a one-time phase discontinuity.
 
 func accept_distance(distance_gu: float, physics_tick: int) -> void:
 	if not is_finite(distance_gu) or distance_gu <= 0.000001:
@@ -49,3 +50,13 @@ static func attack_clip_seconds(authored_seconds: float, interval_seconds: float
 
 static func attack_movement_locked(attack_timer: float, cutoff: float) -> bool:
 	return attack_timer > maxf(0.0, cutoff) + 0.000001
+
+# R4R1: presentation frame selection uses the timer belonging to THIS action.
+# No damage/cooldown/position writes and no second action timer owner.
+static func action_frame_index(remaining: float, duration: float, frame_count: int) -> int:
+	if frame_count <= 1:
+		return 0
+	if not is_finite(remaining) or not is_finite(duration) or duration <= 0.0:
+		return 0
+	var progress: float = clampf(1.0 - remaining / duration, 0.0, 1.0)
+	return mini(frame_count - 1, maxi(0, int(floor(progress * float(frame_count)))))

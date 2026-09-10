@@ -17,8 +17,12 @@ var _children: Dictionary = {} # stable owner spawn-slot -> {instance_id: WeakRe
 var _reserved: Dictionary = {} # stable owner spawn-slot -> queued births
 var _cursor: int = 0
 var _last_pump_tick: int = -1
+var _queue_epoch: int = 0
+var _pump_active: bool = false
 var _stats: Dictionary = {
-	"requests": 0, "admitted_children": 0, "spawned": 0,
+	"reentrant_pump_rejected": 0, "stale_callback_rejections": 0,
+	"max_resolve_call_usec": 0, "max_probe_call_usec": 0,
+	"cancel_during_materialize": 0, "requests": 0, "admitted_children": 0, "spawned": 0,
 	"candidate_probes": 0, "materialization_attempts": 0,
 	"landing_exhausted": 0, "spawn_failed": 0,
 	"cancelled_children": 0, "duplicate_release": 0,
@@ -164,6 +168,8 @@ func _job_source(job: Dictionary, host: Node) -> EnemyActor:
 	var source: EnemyActor = source_ref.get_ref() as EnemyActor
 	if not _source_valid(source, host):
 		return null
+	if str(source.get_meta("spawn_slot_id", "")) != str(job["slot"]):
+		return null
 	if int(source.get_meta("hc_combat_life_epoch", 0)) != int(job["life"]):
 		return null
 	return source
@@ -193,6 +199,7 @@ func _remove_job(index: int, cancelled: bool) -> void:
 		_cursor = 0
 
 func cancel_all() -> void:
+	_queue_epoch += 1
 	for job: Dictionary in _jobs:
 		_stats["cancelled_children"] = int(_stats["cancelled_children"]) + int(job["remaining"])
 	_jobs.clear()
@@ -204,12 +211,34 @@ func _physics_process(_delta: float) -> void:
 	pump()
 
 func pump() -> void:
+	# A host callback may pump/cancel/enqueue synchronously. Never run two cursors.
+	if _pump_active:
+		_stats["reentrant_pump_rejected"] = int(_stats["reentrant_pump_rejected"]) + 1
+		return
 	var tick: int = Engine.get_physics_frames()
 	if _last_pump_tick == tick:
 		return
 	_last_pump_tick = tick
+	_pump_active = true
+	_pump_body(tick)
+	_pump_active = false
+
+func _callback_world_current(host: Node, epoch: int) -> bool:
+	if not is_instance_valid(host) or not host.is_inside_tree() or host.is_queued_for_deletion():
+		cancel_all()
+		return false
+	_sync_world(host)
+	if bool(host.get("_map_transition_in_progress")) or bool(host.get("_world_bootstrap_in_progress")):
+		cancel_all()
+		return false
+	# Do NOT clear a new generation's queue because an old callback returned.
+	return epoch == _queue_epoch
+
+func _pump_body(tick: int) -> void:
+	_stats["last_probes_in_tick"] = 0
+	_stats["last_materializations_in_tick"] = 0
 	var host: Node = _host()
-	if not is_instance_valid(host) or not host.is_inside_tree():
+	if not is_instance_valid(host) or not host.is_inside_tree() or host.is_queued_for_deletion():
 		cancel_all()
 		return
 	_sync_world(host)
@@ -220,7 +249,6 @@ func pump() -> void:
 	var probes: int = 0
 	var materializations: int = 0
 	var visits: int = 0
-	# Rotating ownership prevents a blocked mother's job monopolizing the queue.
 	while not _jobs.is_empty() and probes < PROBES_PER_TICK and materializations < MATERIALIZATIONS_PER_TICK:
 		if visits > 0 and Time.get_ticks_usec() - started >= SOFT_BUDGET_USEC:
 			break
@@ -229,45 +257,70 @@ func pump() -> void:
 		visits += 1
 		_cursor %= _jobs.size()
 		var job: Dictionary = _jobs[_cursor]
+		var epoch: int = _queue_epoch
 		var source: EnemyActor = _job_source(job, host)
 		if source == null:
 			_remove_job(_cursor, true)
 			continue
 		_stats["max_queue_age_ticks"] = maxi(int(_stats["max_queue_age_ticks"]), tick - int(job["enqueued_tick"]))
 		var slot: String = str(job["slot"])
-		# Recheck cap at COMMIT time; third-party births cannot cause overspawn.
 		if _active(slot) >= int(job["limit"]):
 			_remove_job(_cursor, true)
 			continue
 		var monster: Dictionary = job["monster"]
 		if monster.is_empty():
 			var ids: Array = job["ids"]
+			var resolve_started: int = Time.get_ticks_usec()
 			monster = host.call("_hc_m30_resolve_monster", ids[int(job["index"]) % ids.size()]) as Dictionary
+			_stats["max_resolve_call_usec"] = maxi(int(_stats["max_resolve_call_usec"]), Time.get_ticks_usec() - resolve_started)
+			if not _callback_world_current(host, epoch):
+				_stats["stale_callback_rejections"] = int(_stats["stale_callback_rejections"]) + 1
+				break
+			source = _job_source(job, host)
+			if source == null:
+				_remove_job(_cursor, true)
+				continue
 			job["monster"] = monster
 		if monster.is_empty():
 			_finish_child(job)
 		else:
-			# Each probe consumes one of the original 96 attempts for this child.
 			probes += 1
 			job["attempts"] = int(job["attempts"]) + 1
+			var probe_started: int = Time.get_ticks_usec()
 			var candidate: Vector2 = host.call("_hc_m30_probe_landing", source.global_position)
+			_stats["max_probe_call_usec"] = maxi(int(_stats["max_probe_call_usec"]), Time.get_ticks_usec() - probe_started)
+			if not _callback_world_current(host, epoch):
+				_stats["stale_callback_rejections"] = int(_stats["stale_callback_rejections"]) + 1
+				break
+			source = _job_source(job, host)
+			if source == null or _active(slot) >= int(job["limit"]):
+				_remove_job(_cursor, true)
+				continue
 			if candidate.is_finite():
 				materializations += 1
 				var spawn_started: int = Time.get_ticks_usec()
 				var child: EnemyActor = host.call("_hc_m30_materialize", monster, candidate, {
-						"spawn_group_id": "%s:summons" % slot,
-						"respawn_enabled": false,
-						"summoner_spawn_slot": slot,
-						"summon_monster_id": int(monster.get("monster_id", -1)),
-						"m30_source_instance_id": source.get_instance_id(),
-						"m30_source_life": int(job["life"]),
-					}) as EnemyActor
+					"spawn_group_id": "%s:summons" % slot,
+					"respawn_enabled": false,
+					"summoner_spawn_slot": slot,
+					"summon_monster_id": int(monster.get("monster_id", -1)),
+					"m30_source_instance_id": source.get_instance_id(),
+					"m30_source_life": int(job["life"]),
+				}) as EnemyActor
 				_stats["max_spawn_call_usec"] = maxi(int(_stats["max_spawn_call_usec"]), Time.get_ticks_usec() - spawn_started)
+				# Birth already returned from the formal factory. Source death during
+				# a child-ready callback does not retrospectively kill a live child.
 				if is_instance_valid(child):
-					track_child(child)
 					_stats["spawned"] = int(_stats["spawned"]) + 1
 				else:
 					_stats["spawn_failed"] = int(_stats["spawn_failed"]) + 1
+				if not _callback_world_current(host, epoch):
+					_stats["cancel_during_materialize"] = int(_stats["cancel_during_materialize"]) + 1
+					if is_instance_valid(child):
+						track_child(child) # map/generation filter; never own an old child
+					break
+				if is_instance_valid(child):
+					track_child(child)
 				_finish_child(job)
 			elif int(job["attempts"]) >= MAX_ATTEMPTS_PER_CHILD:
 				_stats["landing_exhausted"] = int(_stats["landing_exhausted"]) + 1
@@ -285,10 +338,11 @@ func pump() -> void:
 	_stats["max_tick_usec"] = maxi(int(_stats["max_tick_usec"]), Time.get_ticks_usec() - started)
 	if _jobs.is_empty():
 		set_physics_process(false)
-	# Retire membership through death/tree-exit signals and live-count checks.
 
 func snapshot() -> Dictionary:
 	var result: Dictionary = _stats.duplicate()
+	result["last_pump_tick"] = _last_pump_tick
+	result["queue_epoch"] = _queue_epoch
 	result["map_id"] = _map_id
 	result["generation"] = _generation
 	result["pending_batches"] = _jobs.size()
