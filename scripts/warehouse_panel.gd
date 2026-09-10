@@ -194,8 +194,11 @@ func _build_storage_sections() -> void:
 	withdraw_button.pressed.connect(_withdraw)
 	transfer_panel.add_child(withdraw_button)
 	var divider := HSeparator.new()
+	divider.name = "TransferDivider"
 	divider.position = Vector2(16, 346)
 	divider.size = Vector2(92, 8)
+	divider.set_meta("calibration_layer", "warehouse_transfer_divider")
+	divider.set_meta("calibration_layout_revision", LAYOUT_REVISION)
 	transfer_panel.add_child(divider)
 	sort_button = _transfer_button("SortStashButton", "整理", Vector2(14, 382))
 	sort_button.tooltip_text = "请求玩法层按既定规则整理仓库"

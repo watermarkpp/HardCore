@@ -112,7 +112,7 @@ func _run() -> void:
 	)
 	assert(panel.previous_page_button.size.x >= 96.0 and panel.next_page_button.size.x >= 96.0, "翻页按钮宽度不足，九宫格图框会被裁切")
 	for button in [panel.previous_page_button, panel.next_page_button]:
-		assert((button as Button).size.y == WarehousePanel.THIN_BUTTON_HEIGHT, "仓库按钮未统一为细按钮：%s" % button.name)
+		assert(is_equal_approx((button as Button).size.y, WarehousePanel.THIN_BUTTON_HEIGHT), "仓库按钮未统一为细按钮：%s" % button.name)
 		assert((button as Button).alignment == HORIZONTAL_ALIGNMENT_CENTER, "仓库按钮文字未数学居中：%s" % button.name)
 		assert((button as Button).theme_type_variation == &"GothicWarehouseThinButton", "仓库按钮未使用最终最薄按钮：%s" % button.name)
 		for state in [&"normal", &"pressed"]:
@@ -130,7 +130,7 @@ func _run() -> void:
 		panel.bank_deposit_button,
 		panel.bank_withdraw_button,
 	]:
-		assert((button as Button).size.y == WarehousePanel.THIN_BUTTON_HEIGHT, "仓库执行按钮未统一为细按钮：%s" % button.name)
+		assert(is_equal_approx((button as Button).size.y, WarehousePanel.THIN_BUTTON_HEIGHT), "仓库执行按钮未统一为细按钮：%s" % button.name)
 		assert((button as Button).alignment == HORIZONTAL_ALIGNMENT_CENTER, "仓库执行按钮文字未数学居中：%s" % button.name)
 		assert((button as Button).theme_type_variation == &"GothicWarehouseActionPlainButton", "仓库执行按钮仍在使用旧普通按钮逻辑：%s" % button.name)
 		assert((button as Button).get_theme_font_size("font_size") == GothicUITheme.BUTTON_ACTION_FONT_SIZE, "仓库执行按钮字号未统一：%s" % button.name)
