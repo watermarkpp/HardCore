@@ -15,7 +15,7 @@
 | eight 短回归 | **双层** | R3 diagnostics 运行 completed=7/8（dir 0 art-wait 期间零攻击消耗，R1 外圈首攻方差类；新观察器未恢复 art-wait 漏采，攻击时序未变）；prune 分支同日复跑 8/8 PASS——方差为间歇性，两轮 JSON 均保留 |
 | 猪洞 f3 短检 observe | BLOCKED（有效前提证据） | `ONE_SHOT_HP_MARGIN_REPLACED_BY_PROFILE_RECALCULATION`：一次性大血量被生产属性重算回 89/89；完整状态入 JSON；未回填旧记录 |
 | 猪洞 f3/f4 短检 guarded | PASS | 标题条件成立：生产属性监听后、保护前 HP=89/89 已录，repairs 2-3 次，HP 保持 999999965/10⁹；producer 信号逐 instance 记录（首代各 3 次） |
-| 猪洞 f3 自然（480s） | PASS | 生命周期实测：死亡事务安排的原 480s 档真实等待（elapsed 531.7s）→ 新母体（复合身份 map/generation/instance/life=1）→ **新命 4 只归因重生母体 + 旧世 3 只共存**（admitted 3→7）→ 二杀后旧世子怪存活（starts 399→428 递增）；接收端消融拦截 3 次另计；屏幕像素+正式 GU 双坐标记录；probe 层 FAIL 同上（仅退出告警计数）。**R2 失败根因判定：玩家未设防死亡→重生母体无合法目标→不召唤** |
+| 猪洞 f3 自然（480s） | PASS | 生命周期实测：死亡事务安排的原 480s 档真实等待（elapsed 531.7s）→ 新母体（复合身份 map/generation/instance/life=1）→ **新命 4 只归因重生母体 + 旧世 3 只共存**（admitted 3→7）→ 二杀后旧世子怪存活（starts 399→428 递增）；接收端消融拦截 3 次另计；屏幕像素+正式 GU 双坐标记录；probe 层 FAIL 同上（仅退出告警计数）。R2 失败根因限定表述（R3 封板修订）：**存活余量前提被破坏已证，guarded 下自然链通过，旧死亡链未完整追溯**（旧运行无死亡直接证据，不以新运行 JSON 回填旧日志） |
 | 猪洞 f4 自然（480s） | PASS | 同上模式全链成立（新母体 producer 7 信号、admitted 3→7、starts 593→632）；guard repairs 3 |
 | prune 重跑 | PASS | R4 core/R1 core/runtime/geometry/path/combat_epoch/母体烟测/AIA2×3 = 10/10；safe 24/24、D PASS、eight 8/8（同日复跑） |
 | R3 性能（对照：diagnostics d446beba vs prune 49501f19） | 12/12 门槛 PASS | 预运行双方各 1 次不计门槛；顺序开跑前固定为 AB·BA·AB·BA·AB·BA；6 对 12 轮全部有效（exit 0+PASS marker+12 行 JSON），0 轮剔除（含双侧 192.87/147.20ms 离群轮原样保留）；中位数：prune 在 9/12 场景更优（sustained@30 −2.314ms、sustained@20 −0.915、dense@30 −0.472；3 项噪声级 +0.35 以内）。**算术/相对门槛 PASS ≠ 性能达标结论**：R2 历史 9/12（三失败差值 1.663/1.653/1.871ms、超门槛 0.195/0.129/1.027ms 不混写）与 fcc 0.131ms FAIL 原样保留；无 headless→真机外推 |
