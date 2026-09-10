@@ -1,0 +1,495 @@
+{
+  "arithmetic_status": "PASS",
+  "performance_gate_status": "PASS",
+  "passed_gates": 12,
+  "total_gates": 12,
+  "pairs": 6,
+  "rows": [
+    {
+      "scenario": "dense_crowd",
+      "monster_count": 10,
+      "base_round_p95_ms": [
+        16.441,
+        16.543,
+        18.174,
+        16.62,
+        16.215,
+        16.759
+      ],
+      "candidate_round_p95_ms": [
+        17.291,
+        16.631,
+        16.972,
+        16.659,
+        17.146,
+        16.738
+      ],
+      "paired_delta_ms": [
+        0.8500000000000014,
+        0.08800000000000097,
+        -1.2019999999999982,
+        0.038999999999997925,
+        0.9310000000000009,
+        -0.021000000000000796
+      ],
+      "base_median_p95_ms": 16.5815,
+      "candidate_median_p95_ms": 16.855,
+      "gate_ms": 17.410574999999998,
+      "delta_from_base_ms": 0.2735000000000021,
+      "excess_over_gate_ms": -0.5555749999999975,
+      "candidate_rounds_above_aggregate_gate": 0,
+      "status": "PASS"
+    },
+    {
+      "scenario": "dense_crowd",
+      "monster_count": 20,
+      "base_round_p95_ms": [
+        23.611,
+        23.554,
+        25.063,
+        23.1,
+        23.294,
+        22.928
+      ],
+      "candidate_round_p95_ms": [
+        23.683,
+        22.861,
+        22.642,
+        23.203,
+        22.787,
+        23.979
+      ],
+      "paired_delta_ms": [
+        0.07199999999999918,
+        -0.6929999999999978,
+        -2.4209999999999994,
+        0.10299999999999798,
+        -0.5070000000000014,
+        1.0509999999999984
+      ],
+      "base_median_p95_ms": 23.424,
+      "candidate_median_p95_ms": 23.032,
+      "gate_ms": 24.595200000000002,
+      "delta_from_base_ms": -0.39199999999999946,
+      "excess_over_gate_ms": -1.563200000000002,
+      "candidate_rounds_above_aggregate_gate": 0,
+      "status": "PASS"
+    },
+    {
+      "scenario": "dense_crowd",
+      "monster_count": 30,
+      "base_round_p95_ms": [
+        29.859,
+        28.933,
+        32.377,
+        28.868,
+        27.793,
+        29.217
+      ],
+      "candidate_round_p95_ms": [
+        28.745,
+        33.668,
+        28.347,
+        26.712,
+        28.437,
+        29.421
+      ],
+      "paired_delta_ms": [
+        -1.1140000000000008,
+        4.734999999999999,
+        -4.030000000000001,
+        -2.155999999999999,
+        0.6440000000000019,
+        0.20400000000000063
+      ],
+      "base_median_p95_ms": 29.075,
+      "candidate_median_p95_ms": 28.591,
+      "gate_ms": 30.528750000000002,
+      "delta_from_base_ms": -0.4839999999999982,
+      "excess_over_gate_ms": -1.9377500000000012,
+      "candidate_rounds_above_aggregate_gate": 1,
+      "status": "PASS"
+    },
+    {
+      "scenario": "open_pursuit",
+      "monster_count": 10,
+      "base_round_p95_ms": [
+        16.417,
+        16.809,
+        16.495,
+        16.443,
+        17.044,
+        16.245
+      ],
+      "candidate_round_p95_ms": [
+        16.311,
+        16.176,
+        16.168,
+        16.452,
+        16.439,
+        16.491
+      ],
+      "paired_delta_ms": [
+        -0.10600000000000165,
+        -0.6330000000000027,
+        -0.32700000000000173,
+        0.009000000000000341,
+        -0.6050000000000004,
+        0.24599999999999866
+      ],
+      "base_median_p95_ms": 16.469,
+      "candidate_median_p95_ms": 16.375,
+      "gate_ms": 17.292450000000002,
+      "delta_from_base_ms": -0.0940000000000012,
+      "excess_over_gate_ms": -0.9174500000000023,
+      "candidate_rounds_above_aggregate_gate": 0,
+      "status": "PASS"
+    },
+    {
+      "scenario": "open_pursuit",
+      "monster_count": 20,
+      "base_round_p95_ms": [
+        21.718,
+        20.156,
+        22.752,
+        21.492,
+        22.043,
+        20.79
+      ],
+      "candidate_round_p95_ms": [
+        20.42,
+        22.74,
+        20.872,
+        21.729,
+        20.922,
+        21.146
+      ],
+      "paired_delta_ms": [
+        -1.2979999999999983,
+        2.5839999999999996,
+        -1.879999999999999,
+        0.23699999999999832,
+        -1.1209999999999987,
+        0.35600000000000165
+      ],
+      "base_median_p95_ms": 21.605,
+      "candidate_median_p95_ms": 21.034,
+      "gate_ms": 22.68525,
+      "delta_from_base_ms": -0.5710000000000015,
+      "excess_over_gate_ms": -1.651250000000001,
+      "candidate_rounds_above_aggregate_gate": 1,
+      "status": "PASS"
+    },
+    {
+      "scenario": "open_pursuit",
+      "monster_count": 30,
+      "base_round_p95_ms": [
+        24.094,
+        25.128,
+        24.505,
+        24.998,
+        24.702,
+        24.347
+      ],
+      "candidate_round_p95_ms": [
+        24.38,
+        23.971,
+        24.433,
+        25.012,
+        29.026,
+        24.424
+      ],
+      "paired_delta_ms": [
+        0.2859999999999978,
+        -1.157,
+        -0.07199999999999918,
+        0.013999999999999346,
+        4.323999999999998,
+        0.07699999999999818
+      ],
+      "base_median_p95_ms": 24.6035,
+      "candidate_median_p95_ms": 24.4285,
+      "gate_ms": 25.833675000000003,
+      "delta_from_base_ms": -0.1750000000000007,
+      "excess_over_gate_ms": -1.4051750000000034,
+      "candidate_rounds_above_aggregate_gate": 1,
+      "status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "monster_count": 10,
+      "base_round_p95_ms": [
+        17.439,
+        18.465,
+        18.976,
+        18.278,
+        17.97,
+        18.147
+      ],
+      "candidate_round_p95_ms": [
+        17.859,
+        17.615,
+        18.307,
+        17.529,
+        19.958,
+        18.164
+      ],
+      "paired_delta_ms": [
+        0.4200000000000017,
+        -0.8500000000000014,
+        -0.6690000000000005,
+        -0.7489999999999988,
+        1.9879999999999995,
+        0.017000000000003013
+      ],
+      "base_median_p95_ms": 18.2125,
+      "candidate_median_p95_ms": 18.0115,
+      "gate_ms": 19.123124999999998,
+      "delta_from_base_ms": -0.20099999999999696,
+      "excess_over_gate_ms": -1.1116249999999965,
+      "candidate_rounds_above_aggregate_gate": 1,
+      "status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "monster_count": 20,
+      "base_round_p95_ms": [
+        23.796,
+        24.634,
+        31.213,
+        24.877,
+        23.591,
+        25.038
+      ],
+      "candidate_round_p95_ms": [
+        23.81,
+        23.962,
+        24.804,
+        22.602,
+        26.653,
+        23.009
+      ],
+      "paired_delta_ms": [
+        0.013999999999999346,
+        -0.6720000000000006,
+        -6.4090000000000025,
+        -2.2749999999999986,
+        3.0619999999999976,
+        -2.029
+      ],
+      "base_median_p95_ms": 24.755499999999998,
+      "candidate_median_p95_ms": 23.886,
+      "gate_ms": 25.993275,
+      "delta_from_base_ms": -0.8694999999999986,
+      "excess_over_gate_ms": -2.1072750000000013,
+      "candidate_rounds_above_aggregate_gate": 1,
+      "status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "monster_count": 30,
+      "base_round_p95_ms": [
+        37.372,
+        31.337,
+        192.87,
+        32.825,
+        29.053,
+        29.348
+      ],
+      "candidate_round_p95_ms": [
+        30.511,
+        32.134,
+        29.592,
+        26.394,
+        147.203,
+        27.65
+      ],
+      "paired_delta_ms": [
+        -6.861000000000001,
+        0.7970000000000006,
+        -163.27800000000002,
+        -6.4310000000000045,
+        118.15,
+        -1.6980000000000004
+      ],
+      "base_median_p95_ms": 32.081,
+      "candidate_median_p95_ms": 30.051499999999997,
+      "gate_ms": 33.685050000000004,
+      "delta_from_base_ms": -2.029500000000006,
+      "excess_over_gate_ms": -3.6335500000000067,
+      "candidate_rounds_above_aggregate_gate": 1,
+      "status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "monster_count": 10,
+      "base_round_p95_ms": [
+        16.299,
+        16.075,
+        16.179,
+        16.036,
+        16.204,
+        16.576
+      ],
+      "candidate_round_p95_ms": [
+        16.16,
+        16.235,
+        16.077,
+        16.134,
+        16.232,
+        16.403
+      ],
+      "paired_delta_ms": [
+        -0.13899999999999935,
+        0.16000000000000014,
+        -0.10199999999999676,
+        0.09799999999999898,
+        0.027999999999998693,
+        -0.17300000000000182
+      ],
+      "base_median_p95_ms": 16.191499999999998,
+      "candidate_median_p95_ms": 16.195999999999998,
+      "gate_ms": 17.001075,
+      "delta_from_base_ms": 0.0045000000000001705,
+      "excess_over_gate_ms": -0.8050750000000022,
+      "candidate_rounds_above_aggregate_gate": 0,
+      "status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "monster_count": 20,
+      "base_round_p95_ms": [
+        19.564,
+        19.699,
+        22.991,
+        19.605,
+        19.863,
+        19.861
+      ],
+      "candidate_round_p95_ms": [
+        16.522,
+        16.429,
+        19.613,
+        18.942,
+        20.113,
+        19.552
+      ],
+      "paired_delta_ms": [
+        -3.0420000000000016,
+        -3.270000000000003,
+        -3.378,
+        -0.6630000000000003,
+        0.25,
+        -0.30900000000000105
+      ],
+      "base_median_p95_ms": 19.78,
+      "candidate_median_p95_ms": 19.247,
+      "gate_ms": 20.769000000000002,
+      "delta_from_base_ms": -0.5330000000000013,
+      "excess_over_gate_ms": -1.522000000000002,
+      "candidate_rounds_above_aggregate_gate": 0,
+      "status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "monster_count": 30,
+      "base_round_p95_ms": [
+        22.445,
+        22.461,
+        24.377,
+        22.051,
+        22.897,
+        22.048
+      ],
+      "candidate_round_p95_ms": [
+        21.521,
+        22.532,
+        22.821,
+        22.009,
+        22.516,
+        22.127
+      ],
+      "paired_delta_ms": [
+        -0.9239999999999995,
+        0.0710000000000015,
+        -1.5559999999999974,
+        -0.04199999999999804,
+        -0.3810000000000002,
+        0.07900000000000063
+      ],
+      "base_median_p95_ms": 22.453,
+      "candidate_median_p95_ms": 22.3215,
+      "gate_ms": 23.57565,
+      "delta_from_base_ms": -0.13149999999999906,
+      "excess_over_gate_ms": -1.2541499999999992,
+      "candidate_rounds_above_aggregate_gate": 0,
+      "status": "PASS"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair0.json",
+      "sha256": "36243292de882ea3cb75339a1fa09f5d1363aa311e1f5b3cda07649e3c22fb1c",
+      "label": "r3_a_pair0"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair1.json",
+      "sha256": "10076311c37869293bd830ccb4edc6de6ef5e6e4b5c606bedc98befeccc91b8e",
+      "label": "r3_b_pair1"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair3.json",
+      "sha256": "13b77eb43bd77aee85732b6b6f346575bc402f715354ab6d86e5fbae24317383",
+      "label": "r3_a_pair3"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair2.json",
+      "sha256": "14a8a9eba20d7323cd1f35a27d2331347349f370f24cc0eaa5602befc7b3e711",
+      "label": "r3_b_pair2"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair5.json",
+      "sha256": "c4f3807108d4764c45d2468003f0dc427ed17c3bc541d7e2388bb3968bdf3ae4",
+      "label": "r3_a_pair5"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair4.json",
+      "sha256": "6eb1833ae833ff1e29464fe2c0a6fc6e0f8f8a0c830c2f8ce8d2fcd7df0ddc89",
+      "label": "r3_b_pair4"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair7.json",
+      "sha256": "ecf55925eb79b04543ffe6c31751f953b3a4e5a9ebe10ba8873c63076dd62e14",
+      "label": "r3_a_pair7"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair6.json",
+      "sha256": "d9cede2602b7603d0cdba965b7c98388999047bd78f57892bb331adc95a462d6",
+      "label": "r3_b_pair6"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair9.json",
+      "sha256": "b8a7a974fc08b398fb1fffb8c7f4c0358dc49e1566dd31444267ca192d695cff",
+      "label": "r3_a_pair9"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair8.json",
+      "sha256": "a43e1539a11fafa04bb5b682e289fc19ee7b0e54c4e6958d119f2265e26ce912",
+      "label": "r3_b_pair8"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair11.json",
+      "sha256": "85a5c01c42b27f9cf5015a58ed0d230bc99be7050e02fbfd8ea217aabe929b3c",
+      "label": "r3_a_pair11"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair10.json",
+      "sha256": "0be5e347d4c9edafc52b322ce972c8b328ffc759c0e3f19e48cbc8e8ace70b86",
+      "label": "r3_b_pair10"
+    }
+  ],
+  "head_labels_are_not_independent_build_proof": true,
+  "stimulus_equivalence_and_process_exit_status": "REQUIRES_RUNNER_EVIDENCE_SEPARATE_REVIEW",
+  "estimator": "median_of_round_p95_not_pooled_frame_p95",
+  "rounds_excluded": 0
+}

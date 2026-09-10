@@ -1,0 +1,36 @@
+{
+ "base_head": "d446bebae1717ccee17fb8259c8b32c5dcb9d2a3",
+ "candidate_head": "49501f19e2ff9f4c0f8781a2e39550c21a5e1506",
+ "minimum_pairs": 6,
+ "pairs": [
+  {
+   "base": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair0.json",
+   "candidate": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair1.json"
+  },
+  {
+   "base": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair3.json",
+   "candidate": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair2.json"
+  },
+  {
+   "base": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair5.json",
+   "candidate": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair4.json"
+  },
+  {
+   "base": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair7.json",
+   "candidate": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair6.json"
+  },
+  {
+   "base": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair9.json",
+   "candidate": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair8.json"
+  },
+  {
+   "base": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_a_pair11.json",
+   "candidate": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\hc_monster_ai_package\\rev07_r3_b_pair10.json"
+  }
+ ],
+ "order_fixed_in_advance": "prerun A, prerun B (untallied), then AB BA AB BA AB BA",
+ "side_A": "diagnostics d446beba production enemy bff8986c (R2 bytes)",
+ "side_B": "prune 49501f19 production enemy f74a044c (R1 bytes)",
+ "engine": "Godot 4.7.stable.official.5b4e0cb0f headless",
+ "fixture": "hardcore.rev07.real_actor_world_scenarios.v1 unchanged"
+}
