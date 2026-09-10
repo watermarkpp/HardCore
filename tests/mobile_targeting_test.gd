@@ -93,8 +93,16 @@ func _run() -> void:
 		"touch_id": 3,
 		"source": &"touch",
 	}
+	var pointer_down_before := _count_diagnostics(game, "pointer_down")
+	var fresh_down_before := _count_diagnostics(game, "attack_action_started:fresh_down")
+	var live_hold_before := _count_diagnostics(game, "attack_action_started:live_hold")
+	var sequence_before_hold: int = game.player._combat_action_sequence
 	game._on_mobile_attack_input_started(hold_token, 3, &"touch")
 	game._process(0.0)
+	assert(
+		game.player._combat_action_sequence == sequence_before_hold + 1,
+		"按住后的第一刀没有把普通攻击动作序号+1"
+	)
 	assert(
 		game.locked_target == first
 		and ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(
@@ -102,8 +110,51 @@ func _run() -> void:
 		),
 		"按住攻击的重复输入没有保持锁定并持续转向目标"
 	)
+	# Exactly one DOWN was delivered above. After the target moves, the frame
+	# loop alone must start the next swing once the cooldown AND the action
+	# lock have expired, and the new swing must face the moved live target.
+	_place_at_tile_offset(game, first, player_tile, Vector2i(-4, -2))
+	var second_swing_started := false
+	for _frame in range(150):
+		game.player._physics_process(1.0 / 60.0)
+		game._process(1.0 / 60.0)
+		if game.player._combat_action_sequence >= sequence_before_hold + 2:
+			second_swing_started = true
+			break
+	assert(
+		second_swing_started
+		and game.player._combat_action_sequence == sequence_before_hold + 2,
+		"冷却和动作结束后帧循环没有恰好续出第二刀"
+	)
+	assert(
+		ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(
+			_expected_melee_facing(game.player, first)
+		),
+		"第二刀没有转向移动后的攻击锁定"
+	)
+	assert(
+		_count_diagnostics(game, "pointer_down") == pointer_down_before + 1,
+		"持续按住期间出现了额外DOWN（续攻不得依赖新DOWN）"
+	)
+	assert(
+		_count_diagnostics(game, "attack_action_started:live_hold") == live_hold_before + 1
+		and _count_diagnostics(game, "attack_action_started:fresh_down") == fresh_down_before + 1,
+		"首刀与续攻的发起来源不符合fresh_down+live_hold各一次的记录"
+	)
 	game.hud.attack_button._active_inputs.erase(3)
 	game._on_mobile_attack_input_ended(hold_token, 3, &"touch")
+	var sequence_after_release: int = game.player._combat_action_sequence
+	for _frame in range(200):
+		game.player._physics_process(1.0 / 60.0)
+		game._process(1.0 / 60.0)
+	assert(
+		game.player._combat_action_sequence == sequence_after_release,
+		"松手后的多个合法攻击窗口内仍新开了普通攻击"
+	)
+	assert(
+		game.player._attack_action_timer == 0.0,
+		"松手后已经开始的一刀没有自然收尾"
+	)
 
 	game._on_mobile_attack_pressed()
 	game._on_mobile_attack_released()
@@ -397,6 +448,23 @@ func _find_open_rightward_movement_origin(game: Node) -> Vector2:
 				return candidate
 	assert(false, "找不到向右移动开放夹具")
 	return Vector2.ZERO
+
+
+func _count_diagnostics(game: Node, kind_key: String) -> int:
+	# kind_key is either a bare kind ("pointer_down") or
+	# "attack_action_started:<origin>" for the recorded start reason.
+	var count := 0
+	for entry: Variant in game._attack_action_diagnostic_events:
+		var record: Dictionary = entry
+		var kind := str(record.get("kind", ""))
+		if kind_key.begins_with("attack_action_started:"):
+			if kind != "attack_action_started":
+				continue
+			if str(record.get("reason", "")) == kind_key.get_slice(":", 1):
+				count += 1
+		elif kind == kind_key:
+			count += 1
+	return count
 
 
 func _expected_melee_facing(actor: Node2D, target: Node2D) -> Vector2:
