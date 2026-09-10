@@ -22,3 +22,10 @@
 ## 归档索引（docs/monster/m30_r3_closure/evidence/）
 
 installer/{candidate.patch,manifest.json}、perf_report_r3closure.json（新口径）、reclassified_sidecars/（旧档侧车）、safe-verbose 双归档与 freeze/八方向三次运行位于 docs/monster/m30_r4r3/evidence/r3_2026*（run_probe 自动唯一目录，SHA256_MANIFEST 齐全）。
+
+## 集成放行补档（M30-R3 裁决后）
+
+- **A. 合并后 11/11 原始短测**：`acceptance_battery_runner/`（34 文件：runner_results_adhoc_20260910_211910_375_8136.json 原件 + 11 场景 stdout/stderr/engine log + SHA256 manifest；实际执行 head=43f31718、Godot 4.7.stable.official.5b4e0cb0f d8055fb8）
+- **B. 最终组合一次八方向**：`docs/monster/m30_r4r3/evidence/r3_20260910_134321_7ab31672/`（head=d5d73183、enemy=f74a044c；**functional PASS / runtime PASS**，cleanup FAIL=原签名落例外边界；三次 b78baf3a 旧记录保留且已注明生产版本差异，不冒充最终组合）
+- **C. 债项登记**：`M30-CLEANUP-001.md`（GameRoot/CombatRuntime 生产对象所有权待定位；例外边界与处置约束原文）
+- acceptance 线新提交：本补档提交（证据与报告说明限定，生产零变化）
