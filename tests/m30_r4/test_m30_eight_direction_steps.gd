@@ -4,6 +4,8 @@ extends Node
 const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 const Geometry := preload("res://tests/m30_r4_r2/fixture_geometry.gd")
 const Sampler := preload("res://tests/m30_r4_r2/lab_sampler.gd")
+const ArtWaitFreeze := preload("res://tests/m30_r3_closure/art_wait_freeze.gd")
+const MIN_ART_FREEZE_MS: int = 650
 const MONSTER_ID: int = 64
 const BASE_SHA := "cfe1b81f892ba6dd8ebe82012c9b700b65e5314f"
 var _sampler: Node
@@ -94,20 +96,29 @@ func _run_case(d: int) -> bool:
 	check(is_instance_valid(_actor), "dir %d exact-ID spawn" % d)
 	if not is_instance_valid(_actor):
 		return false
-	# Same call stack as creation: no physics tick can precede this freeze.
-	_actor.set_physics_process(false)
+	# Fence both actor and child Timer callbacks in the creation call stack.
+	var art_freeze := ArtWaitFreeze.new()
+	if not art_freeze.begin(_actor, _actor.visual):
+		check(false, "dir %d freeze could not be established" % d)
+		_actor.queue_free()
+		return false
 	var spawned := _actor.spatial_index_position()
 	check(spawned.distance_to(start) < 0.015, "dir %d spawn identity/position invariant" % d)
 	var art_deadline := Time.get_ticks_msec() + 8000
-	while is_instance_valid(_actor) and not _actor.visual.uses_final_art() and Time.get_ticks_msec() < art_deadline:
+	while is_instance_valid(_actor) and (not _actor.visual.uses_final_art() or art_freeze.elapsed_msec() < MIN_ART_FREEZE_MS) and Time.get_ticks_msec() < art_deadline:
 		await _sampler.after_visual
 	if not is_instance_valid(_actor) or not _actor.visual.uses_final_art():
 		check(false, "dir %d art readiness timeout" % d)
+		art_freeze.restore()
+		if is_instance_valid(_actor):
+			_actor.queue_free()
 		return false
+	check(art_freeze.intact(), "dir %d scheduling fence remained intact" % d)
 	check(_actor._hc_starts == 0, "dir %d zero attacks consumed during art-wait" % d)
 	check(_actor.spatial_index_position().distance_to(start) < 0.015, "dir %d no art-wait displacement" % d)
-	if _actor._hc_starts != 0 or _actor.spatial_index_position().distance_to(start) >= 0.015:
+	if not art_freeze.intact() or _actor._hc_starts != 0 or _actor.spatial_index_position().distance_to(start) >= 0.015:
 		_cases.append({"dir": d, "status": "FAIL", "stage": "art_wait_position_or_attack_changed", "requested_start": [start.x, start.y], "spawned_point": [spawned.x, spawned.y]})
+		art_freeze.restore()
 		_actor.queue_free()
 		return false
 	var baseline: Dictionary = _actor.visual.hc_m30_motion_snapshot()
@@ -123,7 +134,8 @@ func _run_case(d: int) -> bool:
 	var reached := false
 	var case_failures := _failures.size()
 	_armed = true
-	_actor.set_physics_process(true)
+	# Restore original schedules; the existing wake Timer owns activation.
+	check(art_freeze.restore(), "dir %d scheduling modes restored" % d)
 	var deadline := Time.get_ticks_msec() + 8000
 	while Time.get_ticks_msec() < deadline and is_instance_valid(_actor):
 		await _sampler.after_visual
@@ -203,8 +215,13 @@ func _run() -> void:
 	if not is_instance_valid(probe):
 		_finish("FAIL", "preflight_actor_missing")
 		return
-	probe.set_physics_process(false)
+	var probe_freeze := ArtWaitFreeze.new()
+	if not probe_freeze.begin(probe, probe.visual):
+		probe.queue_free()
+		_finish("FAIL", "preflight_freeze_missing")
+		return
 	_center = await _verified_center(probe)
+	check(probe_freeze.restore(), "preflight scheduling modes restored")
 	probe.queue_free()
 	await _sampler.after_visual
 	await _sampler.after_physics
