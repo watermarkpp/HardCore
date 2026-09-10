@@ -8,7 +8,11 @@ const GothicFrameFactoryScript = preload("res://scripts/gothic_frame_factory.gd"
 const UIItemTextureCacheScript = preload("res://scripts/ui_item_texture_cache.gd")
 const TouchScrollSupportScript = preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript = preload("res://scripts/ui_runtime_layout_overrides.gd")
-const ItemDetailPresenterScript = preload("res://scripts/item_detail_presenter.gd")
+const ItemDetailPresenterScript = preload("res://scripts/item_detail_docked_presenter.gd")
+
+const UIItemDetailDockScript := preload("res://scripts/ui_item_detail_dock.gd")
+const UIItemSelectionVisualScript := preload("res://scripts/ui_item_selection_visual.gd")
+const UISelectionDismissGuardScript := preload("res://scripts/ui_selection_dismiss_guard.gd")
 
 signal closed
 
@@ -125,6 +129,7 @@ func _ready() -> void:
 	_initialize_bag_cells(BAG_VISIBLE_CAPACITY)
 	refresh()
 	_continue_bag_cell_initialization.call_deferred()
+	UISelectionDismissGuardScript.attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -428,6 +433,7 @@ func _on_equipment_data_changed() -> void:
 
 func _on_visibility_changed() -> void:
 	if not visible:
+		_ui_dismiss_selection()
 		return
 	# The background builder normally finishes before the first interaction. If
 	# the player opens the panel immediately after READY, preserve the visible
@@ -450,9 +456,9 @@ func refresh() -> void:
 	_refresh_pending = false
 	_refresh_scheduled = false
 	_refresh_execution_count += 1
+	_reconcile_selection()
 	_refresh_equipment_slots()
 	_refresh_character_stats()
-	_reconcile_selection()
 	_refresh_bag_grid()
 	if character_preview != null:
 		character_preview.refresh()
@@ -524,10 +530,10 @@ func _refresh_equipment_slots() -> void:
 			button.tooltip_text = _equipment_tooltip(slot, record)
 		else:
 			_set_button_texture(button, null)
-		button.set_pressed_no_signal(slot == selected_equipment_slot)
-		button.theme_type_variation = "GothicSelectedEquipmentSlotButton" if slot == selected_equipment_slot else "GothicEquipmentSlotButton"
+		UIItemSelectionVisualScript.apply(button, slot == selected_equipment_slot, &"GothicEquipmentSlotButton", &"GothicSelectedEquipmentSlotButton")
 		compatibility_lines.append(_compatibility_equipment_text(slot, record))
 	equipment_label.text = "　".join(compatibility_lines)
+	_ui_sync_empty_destinations()
 
 
 func _refresh_character_stats() -> void:
@@ -559,6 +565,8 @@ func _refresh_bag_grid() -> void:
 		_update_bag_cell(inventory_index, _inventory_record(inventory_index))
 	_stabilize_bag_layout()
 	bag_summary_label.text = "金币 %d　负重 %d/%d" % [PlayerState.gold, PlayerState.inventory_weight(), PlayerState.max_inventory_weight()]
+	if item_detail_presenter != null and item_detail_presenter.is_message_active():
+		return
 	if selected_inventory_index >= 0:
 		_show_inventory_detail(selected_inventory_index)
 	elif selected_equipment_slot.is_empty():
@@ -650,7 +658,7 @@ func _update_bag_cell(index: int, stack: Dictionary) -> void:
 	button.disabled = not occupied and not can_receive_unequip
 	button.mouse_filter = Control.MOUSE_FILTER_STOP if occupied or can_receive_unequip else Control.MOUSE_FILTER_IGNORE
 	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else ("卸下到此格" if can_receive_unequip else "空物品格")
-	button.theme_type_variation = "GothicComponentSelectedSlotButton" if occupied and selected_inventory_indices.has(index) else "GothicComponentSlotButton"
+	UIItemSelectionVisualScript.apply(button, occupied and selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 	_set_button_texture(button, _item_texture(GameData.get_item_record(stack), "inventoryIcon") if occupied else null)
 	var count_label := cell.get_node("StackCount") as Label
 	var count := int(stack.get("count", 1))
@@ -739,80 +747,15 @@ func _reconcile_selection() -> void:
 			selected_equipment_ref.clear()
 
 
-func _selection_control_context(control: Control, extra: Dictionary = {}) -> Dictionary:
-	var selected_rect := Rect2(control.get_global_transform_with_canvas().origin, control.size) if control != null and is_instance_valid(control) else Rect2()
-	var panel_rect := Rect2(get_global_transform_with_canvas().origin, size)
-	var avoid_rects: Array = []
-	var presentation_zone := str(extra.get("presentation_zone", "inventory"))
-	if presentation_zone == "equipment":
-		var equipment_panel := get_node_or_null("EquipmentPanel") as Control
-		var equipment_safe := Rect2(equipment_panel.get_global_transform_with_canvas().origin, equipment_panel.size).grow(-12.0) if equipment_panel != null else panel_rect.grow(-18.0)
-		for slot_name: String in equipment_buttons.keys():
-			var equipment_button := equipment_buttons[slot_name] as Control
-			if equipment_button != null and equipment_button.visible and slot_name != str(extra.get("slot", "")):
-				avoid_rects.append(Rect2(equipment_button.get_global_transform_with_canvas().origin, equipment_button.size))
-		var equipment_context := {
-			"selected_rect": selected_rect,
-			"safe_rect": equipment_safe,
-			"avoid_rects": avoid_rects,
-			"placement_constraints": {"selected_overlap_ratio": 0.0, "avoid_full_overlap_ratio": 0.98},
-		}
-		for key: Variant in extra.keys():
-			equipment_context[key] = extra[key]
-		return equipment_context
-	for path in ["EquipmentPanel", "BagPanel/InventoryActions", "CloseButton"]:
-		var node := get_node_or_null(path) as Control
-		if node != null and node.visible:
-			avoid_rects.append(Rect2(node.get_global_transform_with_canvas().origin, node.size))
-	# Occupied cells are the only bag cells that must be preserved as selection
-	# targets.  Empty cells form the first-class placement area below.
-	for index in range(mini(BAG_VISIBLE_CAPACITY, _bag_cells.size())):
-		if _inventory_record(index).is_empty():
-			continue
-		var occupied_button := _bag_cells[index].get_child(0) as Control
-		if occupied_button != null and occupied_button.visible:
-			avoid_rects.append(Rect2(occupied_button.get_global_transform_with_canvas().origin, occupied_button.size))
-	var context := {
-		"selected_rect": selected_rect,
-		"safe_rect": panel_rect.grow(-18.0),
-		"avoid_rects": avoid_rects,
-		"preferred_rects": _empty_bag_region_candidates(),
-		"placement_constraints": {"selected_overlap_ratio": 0.5, "continuous_selected_remainder": true, "avoid_full_overlap_ratio": 0.98},
-	}
-	for key: Variant in extra.keys():
-		context[key] = extra[key]
+func _selection_control_context(_control: Control, extra: Dictionary = {}) -> Dictionary:
+	var context := {"presentation_zone": "inventory"}
+	context.merge(extra, true)
 	return context
 
 
 func _empty_bag_region_candidates() -> Array[Rect2]:
-	var result: Array[Rect2] = []
-	var visible_rows := ceili(float(BAG_VISIBLE_CAPACITY) / float(BAG_COLUMNS))
-	if _bag_cells.size() < BAG_COLUMNS or visible_rows <= 0:
-		return result
-	# Enumerate every contiguous empty rectangle in the visible grid.  The
-	# presenter filters these by its measured width/height, so a short potion
-	# can use a small gap while a long equipment detail naturally asks for more
-	# cells.  This replaces the old fixed 5x3 requirement.
-	for row in range(visible_rows):
-		for column in range(BAG_COLUMNS):
-			for region_rows in range(1, visible_rows - row + 1):
-				for region_columns in range(1, BAG_COLUMNS - column + 1):
-					var empty_region := true
-					for region_row in range(region_rows):
-						for region_column in range(region_columns):
-							var index := (row + region_row) * BAG_COLUMNS + column + region_column
-							if index >= _bag_cells.size() or not _inventory_record(index).is_empty():
-								empty_region = false
-					if not empty_region:
-						break
-					var first_cell := _bag_cells[row * BAG_COLUMNS + column] as Control
-					var last_cell := _bag_cells[(row + region_rows - 1) * BAG_COLUMNS + column + region_columns - 1] as Control
-					if first_cell == null or last_cell == null:
-						continue
-					var first_rect := Rect2(first_cell.get_global_transform_with_canvas().origin, first_cell.size)
-					var last_rect := Rect2(last_cell.get_global_transform_with_canvas().origin, last_cell.size)
-					result.append(Rect2(first_rect.position, Vector2(last_rect.end.x - first_rect.position.x, last_rect.end.y - first_rect.position.y)))
-	return result
+	# Compatibility only. R5 never places details on empty item cells.
+	return []
 
 
 func _hide_item_detail() -> void:
@@ -834,6 +777,8 @@ func _select_inventory_item(index: int) -> void:
 	if _inventory_record(index).is_empty():
 		if _can_receive_unequip_to_index(index):
 			_unequip_to_inventory_slot(index)
+		else:
+			_ui_dismiss_selection()
 		return
 	if _suppress_next_pressed_index == index:
 		_suppress_next_pressed_index = -1
@@ -872,8 +817,8 @@ func _refresh_bag_cell_selection(index: int) -> void:
 	if index < 0 or index >= _bag_cells.size():
 		return
 	_selection_cell_update_count += 1
-	var button := (_bag_cells[index] as Control).get_child(0) as Button
-	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected_inventory_indices.has(index) else "GothicComponentSlotButton"
+	var button := _bag_cells[index].get_child(0) as Button
+	UIItemSelectionVisualScript.apply(button, selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 
 
 func _clear_inventory_selection_styles() -> void:
@@ -932,7 +877,7 @@ func _select_equipment_slot(slot: String) -> void:
 				# intact; result.reason is the authority signal, never its prose.
 				_show_inventory_detail(source_index)
 			return
-	if selected_equipment_slot == slot and not selected_equipment_ref.is_empty():
+	if selected_equipment_slot == slot:
 		_clear_equipment_selection()
 		return
 	selected_equipment_slot = slot
@@ -1027,18 +972,16 @@ func _show_inventory_detail(index: int) -> void:
 func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 	var stack := _inventory_record(index)
 	if stack.is_empty():
-		if _can_receive_unequip_to_index(index):
-			# Empty destination cells are single-click targets.  They must remain
-			# outside the long-press/double-activation path used by item cells.
-			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-				_select_inventory_item(index)
-			elif event is InputEventScreenTouch and event.pressed:
-				_select_inventory_item(index)
-			return
+		# A populated equipment selection turns an empty cell into an explicit
+		# unequip destination. Do not execute on DOWN: pressed will execute ONCE.
+		if event is InputEventScreenTouch and event.pressed:
+			_press_cancelled = false
+		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			_press_cancelled = false
 		return
 	if _is_double_activation_event(event):
 		_cancel_long_press()
-		selected_inventory_indices.clear()
+		_clear_inventory_selection_styles()
 		var item := GameData.get_item_record(stack)
 		if str(item.get("kind", "")) == "equipment":
 			_select_inventory_item(index)
@@ -1315,12 +1258,21 @@ func _on_discard_pressed() -> void:
 		return
 	var indices: Array = selected_inventory_indices.keys()
 	_clear_inventory_action_feedback()
-	GothicUIThemeScript.set_button_feedback(discard_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "inventory.discard")
 	var result: Dictionary = PlayerState.destroy_inventory_indices(indices)
-	_clear_inventory_selection_styles()
+	var destroyed := int(result.get("destroyed", 0))
+	var complete := bool(result.get("success", false)) and destroyed == indices.size()
+	_ui_dismiss_selection()
 	refresh()
-	item_detail_presenter.show_message("[color=#e8c277]丢弃 %d 个物品格[/color]" % int(result.get("destroyed", 0)))
-	_show_inventory_action_result(discard_button, int(result.get("destroyed", 0)) > 0, "inventory.discard")
+	if complete:
+		# This is the deliberately removed success toast. No transient "丢弃N格",
+		# no selected source/destination, no green action flash after completion.
+		# The paired, minimal destroy_inventory_indices patch only returns
+		# success after persistence succeeds; the UI never performs another save.
+		return
+	var message := str(result.get("message", ""))
+	if message.is_empty():
+		message = "部分物品未能丢弃，请重新选择后重试。" if destroyed > 0 else "物品状态已变化，未能丢弃，请重新选择。"
+	item_detail_presenter.show_message(message)
 
 
 func _show_inventory_action_result(button: Button, success: bool, group: String) -> void:
@@ -1540,8 +1492,47 @@ func _section_title(text_value: String, section_width: float) -> Label:
 
 
 func _close() -> void:
+	_ui_dismiss_selection()
 	_clear_inventory_action_feedback()
 	_cancel_long_press()
 	context_menu.hide()
 	hide()
 	closed.emit()
+
+
+func _ui_detail_region(context: Dictionary) -> Dictionary:
+	if str(context.get("presentation_zone", "inventory")) == "equipment":
+		return UIItemDetailDockScript.equipment_region(self, equipment_buttons)
+	return UIItemDetailDockScript.side_region(self, get_node_or_null("BagPanel/InventoryScroll") as Control, "right")
+
+func _ui_selection_token() -> Array:
+	return [selected_inventory_refs.duplicate(true), selected_inventory_indices.duplicate(), selected_equipment_slot, selected_equipment_ref.duplicate(true), _selection_revision, item_detail_presenter.content_epoch() if item_detail_presenter != null else -1]
+
+func _ui_dismiss_selection() -> void:
+	_clear_inventory_action_feedback()
+	if _press_timer != null:
+		_cancel_long_press()
+	_press_cancelled = false
+	_suppress_next_pressed_index = -1
+	if context_menu != null:
+		context_menu.hide()
+	selected_equipment_slot = ""
+	selected_equipment_ref.clear()
+	_clear_inventory_selection_styles()
+	_hide_item_detail()
+	if not equipment_buttons.is_empty():
+		_refresh_equipment_slots()
+
+func _ui_sync_empty_destinations() -> void:
+	# A no-selection empty cell is passive; an unequip destination is functional.
+	# Refresh these flags immediately on equipment selection, not on a later
+	# inventory_changed signal, so the first empty-cell click already works.
+	for index in range(_bag_cells.size()):
+		if not _inventory_record(index).is_empty():
+			continue
+		var button := _bag_cells[index].get_child(0) as Button
+		var functional := _can_receive_unequip_to_index(index)
+		button.disabled = not functional
+		button.mouse_filter = Control.MOUSE_FILTER_STOP if functional else Control.MOUSE_FILTER_IGNORE
+		button.tooltip_text = "卸下到此格" if functional else ""
+		UIItemSelectionVisualScript.apply(button, false, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")

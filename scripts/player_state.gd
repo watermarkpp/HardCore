@@ -1015,12 +1015,16 @@ func destroy_inventory_indices(indices: Array) -> Dictionary:
 		targets.append(index)
 	if targets.is_empty():
 		return {"success": true, "destroyed": 0, "reason": "empty_selection"}
+	var inventory_before := inventory.duplicate(true)
 	for index: int in targets:
 		inventory[index] = {}
 	_trim_inventory_empty_tail()
+	if not _commit_save():
+		inventory = inventory_before
+		return {"success": false, "destroyed": 0, "reason": "save_failed", "message": "丢弃存档失败，物品未改变。"}
+	# Observers never see a successful removal that subsequently rolls back.
 	inventory_changed.emit()
 	profile_changed.emit()
-	_commit_save()
 	return {"success": true, "destroyed": targets.size(), "reason": ""}
 
 
