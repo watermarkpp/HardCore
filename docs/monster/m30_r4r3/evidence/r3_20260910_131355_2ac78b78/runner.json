@@ -1,0 +1,74 @@
+{
+  "schema": "m30.r3.closure.runner.v2",
+  "classification": {
+    "schema": "m30.r3.closure.log_classification.v1",
+    "functional_status": "FAIL",
+    "runtime_error_status": "FAIL",
+    "cleanup_status": "FAIL",
+    "overall_status": "FAIL",
+    "case": "safe",
+    "observed_markers": [
+      "PASS"
+    ],
+    "exit_code": 0,
+    "timeout": false,
+    "head_and_tree_unchanged": true,
+    "runtime_errors": [
+      {
+        "stream": "stderr",
+        "line": 3,
+        "text": "ERROR: Cannot get path of node as it is not in a scene tree."
+      },
+      {
+        "stream": "stderr",
+        "line": 5,
+        "text": "ERROR: 1 resources still in use at exit."
+      }
+    ],
+    "cleanup_findings": [
+      {
+        "stream": "stderr",
+        "line": 1,
+        "text": "WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+        "kind": "objectdb_exit",
+        "count": 3
+      }
+    ],
+    "other_warnings": [],
+    "raw_logs_modified": false,
+    "historical_results_rewritten": false,
+    "performance_status": "NOT_RUN"
+  },
+  "run_id": "r3_20260910_131355_2ac78b78",
+  "head": "49501f19e2ff9f4c0f8781a2e39550c21a5e1506",
+  "production_blobs": {
+    "scripts/enemy.gd": "f74a044c595d90e1a3c4a4a2cc2eeca151f7264c",
+    "scripts/game_root.gd": "49b43b52e202d6357296edfcf3571fd299b26a85",
+    "scripts/player.gd": "5331483e3140169474404846d5f666e43602bdf6",
+    "scripts/player_state.gd": "349e81e9779b22aaf7cb8cef54b902243b632cdc",
+    "scripts/monster_ai_package/m30/summon_queue.gd": "c2a681f5672f37b30156bddca7ef08b87eb1721e"
+  },
+  "command": [
+    "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+    "--headless",
+    "--verbose",
+    "--path",
+    "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2",
+    "tests/m30_r4_r2/test_safe_projection.tscn"
+  ],
+  "godot_binary_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "case": "safe",
+  "survival_mode": "observe",
+  "preflight_evidence": null,
+  "raw_site_source": null,
+  "elapsed_seconds": 7.203000000001339,
+  "watchdog_seconds": 150,
+  "timeout": false,
+  "exit_code": 0,
+  "pass_marker_found": true,
+  "engine_error_count": 2,
+  "head_and_tracked_tree_unchanged": true,
+  "result": "FAIL",
+  "isolated_user_data": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\m30_r4r3_user_data\\r3_20260910_131355_2ac78b78",
+  "performance_acceptance": "NOT_RUN"
+}

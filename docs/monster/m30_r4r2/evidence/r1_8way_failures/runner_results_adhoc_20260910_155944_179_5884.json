@@ -1,0 +1,26 @@
+{
+  "total": 1,
+  "git_head": "da3e80c91bcb5563228fab27c91bf8ee1e6705c1",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "performance_comparison_test",
+      "test_path": "tests/hc_monster_ai/performance_comparison_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;timeout_60s;non_zero_exit_code_-1"
+    }
+  ],
+  "generated_at": "2026-09-10T15:59:44.1797080+08:00",
+  "passed": 0,
+  "failed": 1
+}

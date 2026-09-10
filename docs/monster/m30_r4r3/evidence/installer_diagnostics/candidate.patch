@@ -1,0 +1,704 @@
+--- a/tests/m30_r4_r2/test_safe_projection.gd
++++ b/tests/m30_r4_r2/test_safe_projection.gd
+@@ -1,17 +1,19 @@
+ extends Node
+ 
+-# Actual GameRoot read-only seam vs its frozen pre-R2 formula. No _ready/world.
++# Preserve the actual pre-R2 rule. Padding selects the destination AFTER the
++# centre enters a circle; it does not expand the trigger circle. Polygon
++# ejection is deliberately not introduced by this repair.
+ const Game := preload("res://scripts/game_root.gd")
+ const Rules := preload("res://scripts/world_spatial_rules.gd")
+ const Reference := preload("res://tests/m30_r4_r2/fixture_geometry.gd")
+-var failures := 0
+-var checks := 0
++var failures: int = 0
++var checks: int = 0
+ 
+ func check(ok: bool, label: String) -> void:
+ 	checks += 1
+ 	if not ok:
+ 		failures += 1
+-		push_error("M30_R2_SAFE " + label)
++		push_error("M30_R3_SAFE " + label)
+ 
+ func _ready() -> void:
+ 	var host := Game.new()
+@@ -21,20 +23,38 @@
+ 	host._safe_zone_context = Rules.compile_safe_zone_context(host.current_map_id, 1, 1, raw)
+ 	host._active_safe_zones = host._safe_zone_context["zones"]
+ 	check(host._safe_zone_context_is_valid(), "compiled fixture must be valid")
+-	var radius := 0.4
+-	var inside_padding := Vector2(11.2, 10)
+-	check(not Rules.point_inside_safe_zones_ground_gu(inside_padding, host._active_safe_zones), "centre is outside: old preflight accepted")
+-	var projected: Vector2 = host.hc_m30_stable_enemy_ground_point(inside_padding, radius, host.current_map_id)
+-	check(projected.is_finite() and not projected.is_equal_approx(inside_padding), "body padding still requires relocation")
+-	check(projected.is_equal_approx(Reference.stable_reference(host, inside_padding, radius)), "exact pre-R2 projection preserved")
++	var radius: float = 0.4
++	var outside: Vector2 = Vector2(11.2, 10)
++	check(not Rules.point_inside_safe_zones_ground_gu(outside, host._active_safe_zones), "centre outside trigger")
++	var projected: Vector2 = host.hc_m30_stable_enemy_ground_point(outside, radius, host.current_map_id)
++	check(projected.is_equal_approx(outside), "outside centre unchanged even when body overlaps circle")
++	check(projected.is_equal_approx(Reference.stable_reference(host, outside, radius)), "frozen formula for exterior preserved")
++	var inside := Vector2(10.5, 10)
++	projected = host.hc_m30_stable_enemy_ground_point(inside, radius, host.current_map_id)
++	check(projected.is_equal_approx(Vector2(11.45, 10)), "inside centre moves to radius plus body/padding")
++	check(projected.is_equal_approx(Reference.stable_reference(host, inside, radius)), "frozen formula for interior preserved")
++	check(host.hc_m30_stable_enemy_ground_point(projected, radius, host.current_map_id).is_equal_approx(projected), "second application is stable")
+ 	for d: int in range(8):
+-		var point := Vector2(10, 10) + Vector2.from_angle(TAU * d / 8.0) * 2.0
+-		check(host.hc_m30_stable_enemy_ground_point(point, radius, host.current_map_id).is_equal_approx(point), "clear point unchanged direction %d" % d)
+-	check(not host.hc_m30_stable_enemy_ground_point(inside_padding, radius, host.current_map_id + 1).is_finite(), "wrong-map owner fails closed")
+-	check(not host.hc_m30_stable_enemy_ground_point(Vector2.INF, radius, host.current_map_id).is_finite(), "nonfinite point rejected")
+-	check(not host.hc_m30_stable_enemy_ground_point(inside_padding, -1.0, host.current_map_id).is_finite(), "negative radius rejected")
++		var point := Vector2(10, 10) + Vector2.from_angle(TAU * float(d) / 8.0) * 2.0
++		check(host.hc_m30_stable_enemy_ground_point(point, radius, host.current_map_id).is_equal_approx(point), "clear exterior direction %d" % d)
++	var centre_projected: Vector2 = host.hc_m30_stable_enemy_ground_point(Vector2(10, 10), radius, host.current_map_id)
++	check(centre_projected.is_equal_approx(Reference.stable_reference(host, Vector2(10, 10), radius)), "zero-direction fallback unchanged")
++	var boundary := Vector2(11, 10)
++	check(host.hc_m30_stable_enemy_ground_point(boundary, radius, host.current_map_id).is_equal_approx(Reference.stable_reference(host, boundary, radius)), "inclusive boundary/epsilon unchanged")
++	check(not host.hc_m30_stable_enemy_ground_point(outside, radius, host.current_map_id + 1).is_finite(), "wrong-map rejects")
++	check(not host.hc_m30_stable_enemy_ground_point(Vector2.INF, radius, host.current_map_id).is_finite(), "nonfinite rejects")
++	check(not host.hc_m30_stable_enemy_ground_point(outside, -1.0, host.current_map_id).is_finite(), "negative radius rejects")
++	host._safe_zone_context["valid"] = false
++	check(not host.hc_m30_stable_enemy_ground_point(outside, radius, host.current_map_id).is_finite(), "invalid Bich context rejects")
++	host._safe_zone_context["valid"] = true
++	var polygon := PackedVector2Array([Vector2(9,9), Vector2(11,9), Vector2(11,11), Vector2(9,11)])
++	raw = [{"shape": "polygon", "polygon_ground_gu": polygon}]
++	host._safe_zone_context = Rules.compile_safe_zone_context(host.current_map_id, 2, 1, raw)
++	host._active_safe_zones = host._safe_zone_context["zones"]
++	check(host._safe_zone_context_is_valid(), "valid polygon fixture")
++	check(host.hc_m30_stable_enemy_ground_point(Vector2(10, 10), radius, host.current_map_id).is_equal_approx(Vector2(10, 10)), "projection helper does not acquire new polygon ejection semantics")
+ 	host.current_map_id = 777
+-	check(host.hc_m30_stable_enemy_ground_point(inside_padding, radius, 777).is_equal_approx(inside_padding), "non-Bich policy unchanged")
++	check(host.hc_m30_stable_enemy_ground_point(outside, radius, 777).is_equal_approx(outside), "non-Bich unchanged")
+ 	host.free()
+-	print("M30_R2_SAFE_PROJECTION_%s checks=%d failures=%d" % ["PASS" if failures == 0 else "FAIL", checks, failures])
++	print("M30_R2_SAFE_PROJECTION_%s checks=%d failures=%d contract=pre_R2_centre_trigger" % ["PASS" if failures == 0 else "FAIL", checks, failures])
+ 	get_tree().quit(0 if failures == 0 else 1)
+--- /dev/null
++++ b/tests/m30_r4_r3/survival_guard.gd
+@@ -0,0 +1,52 @@
++extends RefCounted
++
++# Test fixture only. Never a production invulnerability policy.
++# Observe mode never attaches this guard. Guarded mode records every repair.
++const HP_MARGIN: int = 1000000000
++var _player_ref: WeakRef
++var repairs: int = 0
++var profile_events: int = 0
++var last_before: Dictionary = {}
++var rejected_dead_state: bool = false
++
++func attach(player: PlayerCharacter) -> bool:
++	if _player_ref != null or not PlayerState.test_mode or not is_instance_valid(player):
++		return false
++	if player._dead or player.current_hp <= 0 or player.combat_transition_is_active():
++		return false
++	_player_ref = weakref(player)
++	# Player._ready() connected _apply_profile_stats before this subscription.
++	# The accompanying real-player regression verifies this ordering.
++	PlayerState.profile_changed.connect(_after_profile_changed)
++	_maintain_margin()
++	return true
++
++func _after_profile_changed() -> void:
++	profile_events += 1
++	_maintain_margin()
++
++func _maintain_margin() -> void:
++	var player: PlayerCharacter = _player_ref.get_ref() as PlayerCharacter if _player_ref != null else null
++	if not is_instance_valid(player) or not PlayerState.test_mode:
++		return
++	last_before = {"hp": player.current_hp, "max_hp": player.max_hp, "dead": player._dead,
++		"transition": player.combat_transition_is_active(), "physics_tick": Engine.get_physics_frames()}
++	if player._dead or player.current_hp <= 0 or player.combat_transition_is_active():
++		rejected_dead_state = true
++		return # NEVER revive, release an input lock, or undo a combat epoch.
++	if player.max_hp < HP_MARGIN:
++		# Explicitly restore the lab survival margin after the production profile
++		# recalculator. This is not an assertion about real gameplay HP semantics.
++		var deficit: int = maxi(0, player.max_hp - player.current_hp)
++		player.max_hp = HP_MARGIN
++		player.current_hp = maxi(1, HP_MARGIN - deficit)
++		repairs += 1
++
++func snapshot() -> Dictionary:
++	return {"enabled": _player_ref != null, "repairs": repairs, "profile_events": profile_events,
++		"last_before": last_before.duplicate(), "rejected_dead_state": rejected_dead_state}
++
++func detach() -> void:
++	if PlayerState.profile_changed.is_connected(_after_profile_changed):
++		PlayerState.profile_changed.disconnect(_after_profile_changed)
++	_player_ref = null
+--- /dev/null
++++ b/tests/m30_r4_r3/site_inspector.gd
+@@ -0,0 +1,111 @@
++extends RefCounted
++
++# Read-only lab sampling; not called by production. Coordinates are explicitly
++# named, and missing objects stay missing rather than invented defaults.
++const GU := preload("res://scripts/ground_unit_space.gd")
++
++static func vector_json(point: Vector2) -> Array:
++	return [point.x, point.y] if point.is_finite() else []
++
++static func capture(game: Node, source: EnemyActor) -> Dictionary:
++	var out: Dictionary = {"tick": Engine.get_physics_frames(), "msec": Time.get_ticks_msec(),
++		"source_present": is_instance_valid(source)}
++	if not is_instance_valid(game):
++		out["classification"] = "HOST_MISSING"
++		return out
++	out["map_id"] = int(game.current_map_id)
++	out["generation"] = int(game._zone_generation)
++	out["paused"] = game.get_tree().paused
++	out["map_transition"] = bool(game._map_transition_in_progress)
++	out["bootstrap"] = bool(game._world_bootstrap_in_progress)
++	out["input_enabled"] = game.gameplay_input_is_enabled()
++	out["queue"] = game.hc_m30_summon_snapshot()
++	var player: PlayerCharacter = game.player
++	if not is_instance_valid(player):
++		out["classification"] = "PLAYER_MISSING"
++		return out
++	out["player"] = {
++		"instance_id": player.get_instance_id(), "hp": player.current_hp, "max_hp": player.max_hp,
++		"dead": player._dead, "transition": player.combat_transition_is_active(), "epoch": player.combat_epoch,
++		"position_screen_px": vector_json(player.global_position),
++		"position_ground_gu": vector_json(game._canonical_screen_px_to_ground_gu(player.global_position)),
++		"stealthed": player.is_stealthed(), "control_seconds": player.control_time,
++		"physics_enabled": player.is_physics_processing(), "can_process": player.can_process(),
++	}
++	if not is_instance_valid(source):
++		out["classification"] = "SOURCE_NOT_CURRENTLY_ALIVE"
++		return out
++	var live_target: Node2D = source.target if is_instance_valid(source.target) else null
++	var timer: Timer = source.get_node_or_null("BackgroundAIWakeupTimer") as Timer
++	var delta_gu: Vector2 = GU.screen_delta_px_to_ground_delta_gu(player.global_position - source.global_position)
++	var rule: Dictionary = source.summon_rule
++	out["source"] = {
++		"instance_id": source.get_instance_id(), "life": int(source.get_meta("hc_combat_life_epoch", -1)),
++		"monster_id": source.monster_id, "slot": str(source.get_meta("spawn_slot_id", "")),
++		"map_id": source.runtime_map_id, "generation": int(source.get_meta("zone_generation", -1)),
++		"same_parent": source.get_parent() == game,
++		"hp": source.current_hp, "dying": source._dying, "death_pending": source._death_pending,
++		"physics_enabled": source.is_physics_processing(), "can_process": source.can_process(),
++		"deep_sleeping": source._background_deep_sleeping,
++		"wake_timer_exists": timer != null,
++		"wake_timer_stopped": timer.is_stopped() if timer != null else true,
++		"wake_timer_time_left": timer.time_left if timer != null else -1.0,
++		"retarget_timer": source._retarget_timer,
++		"combat_enabled": source.combat_enabled, "dormant": source.dormant, "burrowed": source._burrowed,
++		"stationary": source.stationary, "control_seconds": source.control_time, "charm_seconds": source.charm_time,
++		"rule_enabled": bool(rule.get("enabled", false)), "max_active": int(rule.get("maxActive", 0)),
++		"count": int(rule.get("count", 0)), "child_ids": rule.get("monsterIds", []).duplicate(),
++		"warning": source._summon_warning, "cooldown": source._summon_cooldown,
++		"release_serial": int(source.get_meta("m30_summon_release_serial", 0)),
++		"warning_life": int(source.get_meta("m30_summon_warning_life", -1)),
++		"target_id": live_target.get_instance_id() if live_target != null else 0,
++		"target_is_player": live_target == player,
++		"target_usable": source._hc_target_usable(live_target),
++		"player_live_candidate": source._target_candidate_is_live(player),
++		"player_in_safe_zone": source._point_inside_safe_zone(player.global_position),
++		"player_in_initial_acquisition": source._initial_acquisition_contains_ground_delta_gu(delta_gu),
++		"player_initial_static_los": source._initial_acquisition_static_los_clear(player),
++		"distance_to_player_gu": delta_gu.length(),
++		"position_screen_px": vector_json(source.global_position),
++		"position_ground_gu": vector_json(source.spatial_index_position()),
++		"attack_interval": source._attack_interval,
++	}
++	out["classification"] = classify(out)
++	return out
++
++static func classify(data: Dictionary) -> String:
++	var p: Dictionary = data.get("player", {})
++	var s: Dictionary = data.get("source", {})
++	if p.is_empty():
++		return "PLAYER_MISSING"
++	if bool(p.get("dead", false)) or int(p.get("hp", 0)) <= 0:
++		return "PLAYER_DEAD_NO_TARGET_ALLOWED"
++	if bool(p.get("transition", false)):
++		return "PLAYER_TRANSITION_NO_TARGET_ALLOWED"
++	if bool(data.get("paused", false)) or bool(data.get("map_transition", false)) or bool(data.get("bootstrap", false)):
++		return "WORLD_PROCESSING_OR_TRANSITION_LOCK"
++	if s.is_empty():
++		return "SOURCE_NOT_CURRENTLY_ALIVE"
++	if int(s.get("hp", 0)) <= 0 or bool(s.get("dying", false)) or bool(s.get("death_pending", false)):
++		return "SOURCE_DYING"
++	if not bool(s.get("combat_enabled", false)) or not bool(s.get("rule_enabled", false)):
++		return "SOURCE_COMBAT_OR_RULE_DISABLED"
++	if float(s.get("control_seconds", 0.0)) > 0.0 or float(s.get("charm_seconds", 0.0)) > 0.0 or bool(s.get("dormant", false)) or bool(s.get("burrowed", false)):
++		return "SOURCE_ACTION_LOCKED"
++	if not bool(s.get("can_process", false)):
++		return "SOURCE_PROCESS_MODE_BLOCKED"
++	if not bool(s.get("physics_enabled", false)) and not bool(s.get("deep_sleeping", false)):
++		return "SOURCE_PHYSICS_DISABLED_WITHOUT_SLEEP"
++	if bool(s.get("deep_sleeping", false)) and bool(s.get("wake_timer_stopped", true)):
++		return "SOURCE_SLEEP_TIMER_STOPPED_AT_SAMPLE"
++	if not bool(s.get("target_usable", false)):
++		if not bool(s.get("player_live_candidate", false)) or bool(s.get("player_in_safe_zone", false)):
++			return "NO_TARGET_PLAYER_NOT_ELIGIBLE"
++		if not bool(s.get("player_in_initial_acquisition", false)) or not bool(s.get("player_initial_static_los", false)):
++			return "NO_TARGET_ACQUISITION_RANGE_OR_STATIC_LOS"
++		return "NO_TARGET_DESPITE_SAMPLED_ACQUISITION_GATES"
++	if float(s.get("warning", 0.0)) > 0.0:
++		return "SUMMON_WARNING_ACTIVE"
++	if float(s.get("cooldown", 0.0)) > 0.0:
++		return "SUMMON_COOLDOWN_ACTIVE"
++	return "READY_AT_SAMPLE_NEEDS_PRODUCER_SIGNAL_TIMELINE"
+--- /dev/null
++++ b/tests/m30_r4_r3/site_probe.gd
+@@ -0,0 +1,392 @@
++extends Node
++
++# Real authored map + natural respawn. This is an observation/integrity fixture,
++# never a performance PASS. Run with an isolated user-data directory only.
++const Bridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
++const Rules := preload("res://scripts/world_spatial_rules.gd")
++const Sampler := preload("res://tests/m30_r4_r2/lab_sampler.gd")
++const Inspector := preload("res://tests/m30_r4_r3/site_inspector.gd")
++const SurvivalGuard := preload("res://tests/m30_r4_r3/survival_guard.gd")
++var _guard
++var _finished: bool = false
++var _watching: bool = false
++var _phase: String = "bootstrap"
++var _mode: String = "preflight"
++var _survival: String = "observe"
++var _next_diagnostic_ms: int = 0
++var _diagnostics: Array[Dictionary] = []
++var _profile_records: Array[Dictionary] = []
++var _signal_counts: Dictionary = {}
++var _observed_sources: Dictionary = {}
++var _muted_ref: WeakRef
++var _muted_requests: int = 0
++var _receiver_ablated: bool = false
++var _latest_snapshot: Dictionary = {}
++var _game: Node
++var _sampler: Node
++var _records: Array[Dictionary] = []
++var _slot := ""
++var _map_id := -1
++var _generation := -1
++var _key := ""
++var _checks: Array[String] = []
++
++func _children() -> Array[EnemyActor]:
++	var out: Array[EnemyActor] = []
++	for value: Node in get_tree().get_nodes_in_group("enemies"):
++		if value is EnemyActor:
++			var e := value as EnemyActor
++			if e.monster_id == 127 and e.can_receive_damage() and e.runtime_map_id == _map_id and int(e.get_meta("zone_generation", -1)) == _generation and str(e.get_meta("summoner_spawn_slot", "")) == _slot:
++				out.append(e)
++	return out
++
++func _has_child_from(source_id: int) -> bool:
++	for child: EnemyActor in _children():
++		var context: Dictionary = child.get_meta("spawn_context", {})
++		if int(context.get("m30_source_instance_id", -1)) == source_id:
++			return true
++	return false
++
++func _mother(excluded_id: int = 0) -> EnemyActor:
++	for value: Node in get_tree().get_nodes_in_group("enemies"):
++		if value is EnemyActor:
++			var e := value as EnemyActor
++			if e.monster_id == 126 and e.can_receive_damage() and e.runtime_map_id == _map_id and int(e.get_meta("zone_generation", -1)) == _generation and e.get_instance_id() != excluded_id:
++				if _slot.is_empty() or str(e.get_meta("spawn_slot_id", "")) == _slot:
++					return e
++	return null
++
++func _world_unchanged() -> bool:
++	return int(_game.current_map_id) == _map_id and int(_game._zone_generation) == _generation
++
++func _window(label: String, seconds: float) -> void:
++	_phase = label
++	var before: Dictionary = _game.hc_m30_summon_snapshot()
++	var actors_before := get_tree().get_nodes_in_group("enemies").size()
++	_sampler.begin_window()
++	var deadline := Time.get_ticks_msec() + int(seconds * 1000.0)
++	while Time.get_ticks_msec() < deadline and _world_unchanged():
++		await _tick()
++		if _finished:
++			return
++	_sampler.capture = false
++	var ids: Array[int] = []
++	var starts := 0
++	for child: EnemyActor in _children():
++		ids.append(child.get_instance_id())
++		starts += child._hc_starts
++	_records.append({
++		"phase": label, "map_id": _map_id, "generation": _generation,
++		"owner_slot": _slot, "child_ids": ids, "child_attack_starts_cumulative": starts,
++		"world_unchanged": _world_unchanged(),
++		"all_enemies_before": actors_before,
++		"all_enemies_after": get_tree().get_nodes_in_group("enemies").size(),
++		"queue_before": before, "queue_after": _game.hc_m30_summon_snapshot(),
++		"process_wall_ms": _sampler.render_intervals_ms.duplicate(),
++		"physics_wall_ms": _sampler.physics_intervals_ms.duplicate(),
++		"process_summary": Sampler.statistics(_sampler.render_intervals_ms),
++		"physics_summary": Sampler.statistics(_sampler.physics_intervals_ms),
++	})
++
++func _finish(status: String, reason: String) -> void:
++	if _finished:
++		return
++	_finished = true
++	if is_instance_valid(_sampler):
++		_sampler.capture = false
++	var guard_data: Dictionary = _guard.snapshot() if _guard != null else {"enabled": false}
++	_restore_receiver()
++	if _guard != null:
++		_guard.detach()
++	if PlayerState.profile_changed.is_connected(_on_profile_changed):
++		PlayerState.profile_changed.disconnect(_on_profile_changed)
++	var tag := OS.get_environment("HARDCORE_M30_RUN_TAG")
++	if not tag.is_valid_identifier():
++		tag = "manual_%d" % Time.get_ticks_usec()
++	var path := "res://outputs/m30_r4r3/pig_%s_%s_%s_%s.json" % [_key, _mode, _survival, tag]
++	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
++	var file := FileAccess.open(path, FileAccess.WRITE)
++	if file == null:
++		push_error("site evidence write failed")
++		get_tree().quit(1)
++		return
++	file.store_string(JSON.stringify({
++		"schema": "m30.r4r3.pig_site.v1", "run_head": OS.get_environment("HARDCORE_REVIEW_HEAD"),
++		"map_key": _key, "map_id": _map_id, "generation": _generation, "slot": _slot,
++		"status": status, "reason": reason, "mode": _mode, "survival_mode": _survival,
++		"checks": _checks, "phases": _records, "diagnostics": _diagnostics,
++		"profile_events_after_production_recalculation": _profile_records,
++		"observed_producer_signals_by_instance": _signal_counts,
++		"last_diagnostic": _latest_snapshot, "survival_guard": guard_data,
++		"receiver_ablation_enabled": _receiver_ablated, "receiver_intercepted_requests": _muted_requests,
++		"performance_status": "NOT_RUN", "performance_status_reason": "instrumented lifecycle observation only, not a performance gate",
++		"gpu_time": "NOT_MEASURED", "natural_respawn_tested": _mode == "natural" and status == "PASS"
++	}, "\t"))
++	file.close()
++	print("M30_R3_PIG_%s reason=%s mode=%s survival=%s meaning=fixture_or_lifecycle_not_performance" % [status, reason, _mode, _survival])
++	get_tree().quit(0 if status == "PASS" else (2 if status == "BLOCKED" else 1))
++
++
++func _run() -> void:
++	_mode = OS.get_environment("HARDCORE_M30_PROBE_MODE")
++	if _mode.is_empty():
++		_mode = "preflight"
++	_survival = OS.get_environment("HARDCORE_M30_SURVIVAL")
++	if _survival.is_empty():
++		_survival = "observe"
++	if _mode not in ["preflight", "natural"] or _survival not in ["observe", "guarded"]:
++		_key = "invalid"
++		_finish("BLOCKED", "invalid_probe_mode")
++		return
++	PlayerState.test_mode = true
++	PlayerState.reset_progress()
++	MonsterVisual.set_synchronous_loading_for_tests(false)
++	_sampler = Sampler.new()
++	add_child(_sampler)
++	_key = OS.get_environment("HARDCORE_M30_MAP_KEY")
++	if _key.is_empty():
++		_key = "mengzhong_stone_tomb_f3"
++	if _key not in ["mengzhong_stone_tomb_f3", "mengzhong_stone_tomb_f4"]:
++		_key = "invalid"
++		_finish("BLOCKED", "unsupported_map_key")
++		return
++	for mid: int in Bridge.released_map_ids():
++		if str(Bridge._release_entry(mid).get("map_key", "")) == _key:
++			_map_id = mid
++	if _map_id < 0 or not Bridge.is_formal_playable(_map_id):
++		_finish("BLOCKED", "map_not_formally_playable")
++		return
++	_game = load("res://scenes/main.tscn").instantiate()
++	add_child(_game)
++	var ready_deadline := Time.get_ticks_msec() + 60000
++	while not _game.gameplay_input_is_enabled() and Time.get_ticks_msec() < ready_deadline:
++		await _tick()
++		if _finished:
++			return
++	if not _game.gameplay_input_is_enabled():
++		_finish("BLOCKED", "initial_world_not_ready")
++		return
++	MonsterVisual.set_synchronous_loading_for_tests(false)
++	# Connect after production Player._ready; record profile-reset evidence BEFORE
++	# the optional guard repairs the explicitly requested lab survival margin.
++	PlayerState.profile_changed.connect(_on_profile_changed)
++	if _survival == "guarded":
++		_guard = SurvivalGuard.new()
++		if not _guard.attach(_game.player):
++			_finish("BLOCKED", "cannot_arm_lab_survival_guard")
++			return
++	else:
++		_game.player.max_hp = SurvivalGuard.HP_MARGIN
++		_game.player.current_hp = SurvivalGuard.HP_MARGIN
++	_game.travel_to_map(_map_id) # Existing production loading/actor/respawn authority.
++	ready_deadline = Time.get_ticks_msec() + 60000
++	while Time.get_ticks_msec() < ready_deadline:
++		await _tick()
++		if _finished:
++			return
++		if int(_game.current_map_id) == _map_id and _game.gameplay_input_is_enabled():
++			break
++	if int(_game.current_map_id) != _map_id or not _game.gameplay_input_is_enabled():
++		_finish("BLOCKED", "production_travel_not_ready")
++		return
++	_generation = int(_game._zone_generation)
++	var mother := _mother()
++	if not is_instance_valid(mother):
++		_finish("BLOCKED", "authored_mother126_missing")
++		return
++	_slot = str(mother.get_meta("spawn_slot_id", ""))
++	var respawn_seconds := float(mother.get_meta("respawn_seconds", 0.0))
++	if _slot.is_empty() or not bool(mother.get_meta("respawn_enabled", false)) or respawn_seconds <= 0.0 or respawn_seconds > 650.0:
++		_finish("BLOCKED", "natural_respawn_not_available_within_runner_envelope")
++		return
++	var radius := Rules.actor_combat_radius_gu_from_screen_radius_px(ArtSpec.PLAYER_COLLISION_RADIUS_PX)
++	var near: Vector2 = _game._find_valid_enemy_landing(mother.global_position, 2.0, 3.0, radius, null)
++	if not near.is_finite() or near == mother.global_position:
++		_finish("BLOCKED", "no_legal_nearby_player_position")
++		return
++	_game._set_player_world_position(near)
++	_game.player.set_touch_vector(Vector2.ZERO)
++	_watching = true
++	_collect_diagnostic(true)
++	var initial_issue := _player_precondition_issue()
++	if not initial_issue.is_empty():
++		_finish("BLOCKED", initial_issue)
++		return
++	var old_id := mother.get_instance_id()
++	var old_life := int(mother.get_meta("hc_combat_life_epoch", -1))
++	_records.append({"phase": "identity", "mother_id": 126, "child_id": 127, "instance_id": old_id, "life": old_life, "respawn_seconds": respawn_seconds, "spawn_context": mother.get_meta("spawn_context", {}), "map_key": _key, "slot": _slot})
++	await _window("before_first_kill", 8.0)
++	if _finished:
++		return
++	if not is_instance_valid(mother) or not mother.can_receive_damage():
++		_finish("FAIL", "mother_died_before_intended_first_kill")
++		return
++	if _children().is_empty():
++		_collect_diagnostic(true)
++		_finish("FAIL", "first_life_producer_or_acquisition_failed_see_diagnostic")
++		return
++	mother.take_damage(999999999, _game.player, {"source": "m30_r3_site_first_kill"})
++	await _window("after_first_kill", 5.0)
++	if _finished:
++		return
++	_collect_diagnostic(true)
++	if _mode == "preflight":
++		if is_instance_valid(mother) and mother.can_receive_damage():
++			_finish("FAIL", "first_kill_not_committed")
++		else:
++			_checks.append("short fixture survived first production kill/profile settlement; natural respawn NOT_RUN")
++			_finish("PASS", "short_preflight_only_natural_respawn_not_run")
++		return
++	_phase = "natural_respawn_wait"
++	# Do NOT call _respawn_later manually, change time_scale, or alter policy data.
++	var respawn_deadline := Time.get_ticks_msec() + int((respawn_seconds + 45.0) * 1000.0)
++	var second: EnemyActor
++	while Time.get_ticks_msec() < respawn_deadline and _world_unchanged():
++		second = _mother(old_id)
++		if is_instance_valid(second):
++			break
++		await _tick()
++		if _finished:
++			return
++	if not is_instance_valid(second) or not _world_unchanged():
++		_finish("FAIL", "natural_respawn_not_observed")
++		return
++	_records.append({"phase": "natural_respawn", "instance_id": second.get_instance_id(), "life": second.get_meta("hc_combat_life_epoch", -1), "spawn_slot": second.get_meta("spawn_slot_id", "")})
++	_phase = "second_life_birth_window"
++	_collect_diagnostic(true)
++	var births_deadline := Time.get_ticks_msec() + 25000
++	while is_instance_valid(second) and (_children().size() < 3 or not _has_child_from(second.get_instance_id())) and Time.get_ticks_msec() < births_deadline and _world_unchanged():
++		await _tick()
++		if _finished:
++			return
++	if not is_instance_valid(second) or _children().size() < 3 or not _has_child_from(second.get_instance_id()):
++		_collect_diagnostic(true)
++		_finish("FAIL", "missing_three_children_or_new_life_birth_see_upstream_diagnostic")
++		return
++	await _window("respawned_mother_with_children", 12.0)
++	if _finished:
++		return
++	if OS.get_environment("HARDCORE_M30_RECEIVER_ABLATION") == "1":
++		if not _mute_receiver(second):
++			_finish("BLOCKED", "exact_receiver_connection_not_found")
++			return
++		await _window("alive_mother_receiver_muted_children_retained", 8.0)
++		if _finished:
++			return
++		_restore_receiver()
++		if _muted_requests == 0:
++			_collect_diagnostic(true)
++			_finish("FAIL", "receiver_ablation_saw_no_producer_signal")
++			return
++	var survivors: Array[EnemyActor] = _children()
++	if not is_instance_valid(second) or not second.can_receive_damage():
++		_finish("FAIL", "second_mother_not_alive_at_second_kill")
++		return
++	second.take_damage(999999999, _game.player, {"source": "m30_r3_site_second_kill"})
++	await _window("after_second_kill_same_children", 12.0)
++	if _finished:
++		return
++	for child: EnemyActor in survivors:
++		if not is_instance_valid(child) or not child.can_receive_damage():
++			_finish("FAIL", "surviving_child_lost_after_mother_death")
++			return
++	var queue: Dictionary = _game.hc_m30_summon_snapshot()
++	if int(queue.get("max_probes_in_tick", 999)) > 8 or int(queue.get("max_materializations_in_tick", 999)) > 1:
++		_finish("FAIL", "global_queue_budget_violation")
++		return
++	if int((queue.get("reserved_by_slot", {}) as Dictionary).get(_slot, 0)) != 0:
++		_finish("FAIL", "dead_mother_slot_still_reserved")
++		return
++	if not _world_unchanged() or _game.player.current_hp <= 0:
++		_finish("FAIL", "world_or_player_state_changed")
++		return
++	_checks.append("natural production death->respawn->second death observed; no authored actors removed")
++	_finish("PASS", "site_lifecycle_observed_raw_performance_requires_comparison")
++
++func _ready() -> void:
++	_run.call_deferred()
++
++
++func _player_precondition_issue() -> String:
++	if not is_instance_valid(_game) or not is_instance_valid(_game.player):
++		return "PLAYER_MISSING"
++	var p: PlayerCharacter = _game.player
++	if p._dead or p.current_hp <= 0:
++		return "PLAYER_DEAD_LAB_PRECONDITION_LOST"
++	if p.combat_transition_is_active():
++		return "PLAYER_TRANSITION_LAB_PRECONDITION_LOST"
++	if not _world_unchanged():
++		return "WORLD_CHANGED_LAB_PRECONDITION_LOST"
++	if get_tree().paused or not _game.gameplay_input_is_enabled():
++		return "WORLD_OR_INPUT_PAUSED_LAB_PRECONDITION_LOST"
++	if p.max_hp < SurvivalGuard.HP_MARGIN:
++		return "ONE_SHOT_HP_MARGIN_REPLACED_BY_PROFILE_RECALCULATION"
++	return ""
++
++func _on_profile_changed() -> void:
++	if not is_instance_valid(_game) or not is_instance_valid(_game.player):
++		return
++	if _profile_records.size() < 256:
++		_profile_records.append({"msec": Time.get_ticks_msec(), "phase": _phase,
++			"hp": _game.player.current_hp, "max_hp": _game.player.max_hp,
++			"dead": _game.player._dead, "transition": _game.player.combat_transition_is_active(),
++			"epoch": _game.player.combat_epoch, "level": PlayerState.level,
++			"note": "after existing player listener; before optional lab guard"})
++
++func _tick() -> void:
++	await _sampler.after_visual
++	if _finished or not _watching:
++		return
++	_collect_diagnostic(false)
++	var issue := _player_precondition_issue()
++	if not issue.is_empty():
++		_collect_diagnostic(true)
++		_finish("BLOCKED", issue)
++
++func _collect_diagnostic(force: bool) -> void:
++	var now := Time.get_ticks_msec()
++	if not force and now < _next_diagnostic_ms:
++		return
++	_next_diagnostic_ms = now + 500
++	var source := _mother()
++	if is_instance_valid(source) and not _observed_sources.has(source.get_instance_id()):
++		_observed_sources[source.get_instance_id()] = true
++		source.summon_requested.connect(_notice_release)
++	_latest_snapshot = Inspector.capture(_game, source)
++	_latest_snapshot["phase"] = _phase
++	_latest_snapshot["producer_signals_seen"] = int(_signal_counts.get(str(source.get_instance_id()), 0)) if is_instance_valid(source) else 0
++	if _diagnostics.size() < 2048:
++		_diagnostics.append(_latest_snapshot.duplicate(true))
++
++func _notice_release(source: EnemyActor, _ids: Array, _count: int, _limit: int) -> void:
++	var key := str(source.get_instance_id())
++	_signal_counts[key] = int(_signal_counts.get(key, 0)) + 1
++
++func _mute_receiver(source: EnemyActor) -> bool:
++	var original := Callable(_game, "_on_boss_summon_requested")
++	if not source.summon_requested.is_connected(original):
++		return false
++	_muted_ref = weakref(source)
++	source.summon_requested.disconnect(original)
++	source.summon_requested.connect(_receive_without_enqueue)
++	_receiver_ablated = true
++	return true
++
++func _receive_without_enqueue(source: EnemyActor, ids: Array, count: int, limit: int) -> void:
++	# Test receiver only. Never disable summon_rule, remove a body or manipulate
++	# warning/cooldown. Other sources keep the original receiver.
++	var expected: EnemyActor = _muted_ref.get_ref() as EnemyActor if _muted_ref != null else null
++	if source == expected and source.runtime_map_id == _map_id and int(source.get_meta("zone_generation", -1)) == _generation:
++		_muted_requests += 1
++		return
++	_game._on_boss_summon_requested(source, ids, count, limit)
++
++func _restore_receiver() -> void:
++	var source: EnemyActor = _muted_ref.get_ref() as EnemyActor if _muted_ref != null else null
++	if is_instance_valid(source) and is_instance_valid(_game):
++		if source.summon_requested.is_connected(_receive_without_enqueue):
++			source.summon_requested.disconnect(_receive_without_enqueue)
++		var original := Callable(_game, "_on_boss_summon_requested")
++		if not source.summon_requested.is_connected(original):
++			source.summon_requested.connect(original)
++	_muted_ref = null
+--- /dev/null
++++ b/tests/m30_r4_r3/test_profile_survival.gd
+@@ -0,0 +1,41 @@
++extends Node
++const Guard := preload("res://tests/m30_r4_r3/survival_guard.gd")
++var failures: int = 0
++
++func check(ok: bool, label: String) -> void:
++	if not ok:
++		failures += 1
++		push_error("M30_R3_PROFILE " + label)
++
++func _ready() -> void:
++	_run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true
++	PlayerState.reset_progress()
++	var player := PlayerCharacter.new()
++	add_child(player) # Actual production _ready/profile_changed subscriber.
++	player.max_hp = Guard.HP_MARGIN
++	player.current_hp = Guard.HP_MARGIN
++	var original_profile_max: int = int(PlayerState.computed_stats.get("max_hp", 120))
++	PlayerState.profile_changed.emit() # Deterministic fixture event, not an actual kill.
++	check(player.max_hp == original_profile_max and player.max_hp < Guard.HP_MARGIN,
++		"one-shot max_hp override is replaced by production profile recalculation")
++	check(player.current_hp > 0 and not player._dead, "profile recalculation alone is NOT proof of death")
++	print("M30_R3_PROFILE_OBSERVED after_profile_max_hp=%d" % player.max_hp)
++	var guard := Guard.new()
++	check(guard.attach(player), "explicit lab guard attaches after actual player subscriber")
++	player.current_hp -= 100
++	PlayerState.profile_changed.emit()
++	check(player.max_hp == Guard.HP_MARGIN and player.current_hp > 0,
++		"lab margin survives synchronous profile recalculation")
++	check(guard.profile_events == 1 and guard.repairs >= 2, "every repair is accounted for")
++	player._dead = true
++	player.current_hp = 0
++	PlayerState.profile_changed.emit()
++	check(player.current_hp == 0 and player._dead and guard.rejected_dead_state,
++		"guard cannot resurrect a zero-HP/dead player")
++	guard.detach()
++	player.queue_free()
++	print("M30_R3_PROFILE_SURVIVAL_%s failures=%d meaning=fixture_contract_not_pig_site_root_proof" % ["PASS" if failures == 0 else "FAIL", failures])
++	get_tree().quit(0 if failures == 0 else 1)
+--- /dev/null
++++ b/tests/m30_r4_r3/site_probe.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/m30_r4_r3/site_probe.gd" id="1"]
++
++[node name="M30R3SiteProbe" type="Node"]
++script = ExtResource("1")
+--- /dev/null
++++ b/tests/m30_r4_r3/test_profile_survival.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/m30_r4_r3/test_profile_survival.gd" id="1"]
++
++[node name="M30R3TestProfileSurvival" type="Node"]
++script = ExtResource("1")

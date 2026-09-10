@@ -1,0 +1,34 @@
+{
+  "schema": "m30.r4r3.runner.v1",
+  "run_id": "r3_20260910_115704_4f8d64d0",
+  "head": "1933d077477144ef0195011bbf5b6dec5e9c1992",
+  "production_blobs": {
+    "scripts/enemy.gd": "bff8986ce7d3af5968a785bd40162c124ec9750a",
+    "scripts/game_root.gd": "49b43b52e202d6357296edfcf3571fd299b26a85",
+    "scripts/player.gd": "5331483e3140169474404846d5f666e43602bdf6",
+    "scripts/player_state.gd": "349e81e9779b22aaf7cb8cef54b902243b632cdc",
+    "scripts/monster_ai_package/m30/summon_queue.gd": "c2a681f5672f37b30156bddca7ef08b87eb1721e"
+  },
+  "command": [
+    "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2",
+    "tests/m30_r4_r3/site_probe.tscn"
+  ],
+  "godot_binary_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "case": "site",
+  "survival_mode": "guarded",
+  "preflight_evidence": null,
+  "raw_site_source": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\m30_r4r3\\pig_mengzhong_stone_tomb_f4_preflight_guarded_r3_20260910_115704_4f8d64d0.json",
+  "elapsed_seconds": 24.04699999999866,
+  "watchdog_seconds": 150,
+  "timeout": false,
+  "exit_code": 0,
+  "pass_marker_found": true,
+  "engine_error_count": 1,
+  "head_and_tracked_tree_unchanged": true,
+  "result": "FAIL",
+  "isolated_user_data": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\m30-r4r2\\outputs\\m30_r4r3_user_data\\r3_20260910_115704_4f8d64d0",
+  "performance_acceptance": "NOT_RUN"
+}

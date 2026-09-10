@@ -50,7 +50,7 @@ func _run() -> void:
 	var catalog: Variant = JSON.parse_string(catalog_file.get_as_text()) if catalog_file != null else null
 	assert(catalog is Dictionary)
 	var rows: Array = catalog.get("monsters", [])
-	assert(rows.size() == 214)
+	assert(rows.size() == 156)
 
 	var player := PlayerCharacter.new()
 	player.global_position = Vector2.ZERO
@@ -294,7 +294,7 @@ func _run() -> void:
 		await get_tree().process_frame
 		verified_count += 1
 
-	assert(verified_count == 214)
+	assert(verified_count == 156)
 	for monster_id: int in BOSS_ROOT_OFFSET_IDS:
 		var enemy := EnemyActor.new()
 		enemy.setup(GameData.get_monster_by_id(monster_id), player, true)

@@ -3576,16 +3576,12 @@ func _enforce_enemy_outside_bich_safe_zone(enemy: EnemyActor) -> void:
 	var current_ground_gu := _canonical_screen_px_to_ground_gu(
 		enemy.global_position
 	)
-	var padding_gu: float = (
-		float(enemy.combat_radius_gu) + SAFE_ZONE_ACTOR_PADDING_GU
+	var legal_ground_gu: Vector2 = hc_m30_stable_enemy_ground_point(
+		current_ground_gu, float(enemy.combat_radius_gu), enemy.runtime_map_id
 	)
-	var legal_ground_gu := (
-		WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
-			current_ground_gu,
-			_active_safe_zones,
-			padding_gu
-		)
-	)
+	if not legal_ground_gu.is_finite():
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return
 	if not legal_ground_gu.is_equal_approx(current_ground_gu):
 		enemy.set_combat_position(
 			_canonical_ground_gu_to_screen_px(legal_ground_gu),
@@ -4055,6 +4051,8 @@ func _spawn_enemy(
 	add_child(enemy)
 	var enemy_instance_id := enemy.get_instance_id()
 	_active_enemy_cache[enemy_instance_id] = enemy
+	if is_instance_valid(_hc_m30_summon_queue):
+		_hc_m30_summon_queue.track_child(enemy)
 	if enemy.is_boss:
 		_active_boss_cache[enemy_instance_id] = enemy
 	enemy.tree_exiting.connect(
@@ -5076,47 +5074,14 @@ func _blocking_neighbor_count(enemy: EnemyActor) -> int:
 func _on_boss_summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int) -> void:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or monster_ids.is_empty():
 		return
-	if int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
+	if enemy.current_hp <= 0 or enemy._dying or enemy._death_pending:
 		return
-	var owner_slot := str(enemy.get_meta("spawn_slot_id", ""))
-	var active := 0
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if value is EnemyActor and not value.is_queued_for_deletion():
-			if str(value.get_meta("summoner_spawn_slot", "")) == owner_slot:
-				active += 1
-	var allowed := mini(maxi(0, count), maxi(0, max_active - active))
-	for index in range(allowed):
-		var monster_id := GameData.canonical_monster_id(
-			monster_ids[index % monster_ids.size()]
-		)
-		if monster_id <= 0:
-			continue
-		var monster := GameData.get_monster_by_id(monster_id)
-		if monster.is_empty():
-			continue
-		var landing := _find_valid_enemy_landing(
-			enemy.global_position,
-			1.5,
-			6.0,
-			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				ArtSpec.MONSTER_COLLISION_RADIUS_PX
-			),
-			null
-		)
-		if landing == enemy.global_position:
-			continue
-		_spawn_enemy(
-			monster,
-			landing,
-			false,
-			DEFAULT_NORMAL_RESPAWN_SECONDS,
-			{
-				"spawn_group_id": "%s:summons" % owner_slot,
-				"respawn_enabled": false,
-				"summoner_spawn_slot": owner_slot,
-				"summon_monster_id": monster_id,
-			}
-		)
+	if enemy.runtime_map_id != current_map_id or int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
+		return
+	if _map_transition_in_progress or _world_bootstrap_in_progress:
+		return
+	_hc_m30_get_summon_queue().enqueue(enemy, monster_ids, count, max_active)
+
 
 
 func _on_boss_relocation_requested(enemy: EnemyActor, radius_gu: float) -> void:
@@ -5167,64 +5132,17 @@ func _find_valid_enemy_landing(
 	combat_radius_gu: float,
 	ignored_enemy: EnemyActor
 ) -> Vector2:
-	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
-		origin_screen_px
-	)
-	var footprint_radius_px := (
-		WorldSpatialRulesScript.actor_screen_radius_px_from_combat_radius_gu(
-			combat_radius_gu
-		)
-	)
-	for _attempt in range(96):
-		var candidate_ground_gu := (
-			origin_ground_gu
-			+ Vector2.from_angle(_rng.randf_range(0.0, TAU))
-			* _rng.randf_range(minimum_distance_gu, maximum_distance_gu)
-		)
-		if WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
-			candidate_ground_gu,
-			_active_safe_zones
-		):
-			continue
-		var candidate_screen_px := _canonical_ground_gu_to_screen_px(
-			candidate_ground_gu
-		)
-		if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
-			background,
-			candidate_screen_px,
-			footprint_radius_px
-		):
-			continue
-		var player_combat_radius_gu := (
-			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				ArtSpec.PLAYER_COLLISION_RADIUS_PX
-			)
-		)
-		if (
-			is_instance_valid(player)
-			and GroundUnitSpaceScript.distance_gu(
-				_canonical_screen_px_to_ground_gu(player.global_position),
-				candidate_ground_gu
-			)
-			< combat_radius_gu
-			+ player_combat_radius_gu
-			+ ACTOR_LANDING_CLEARANCE_GU
-		):
-			continue
-		var occupied := false
-		for value: Variant in get_tree().get_nodes_in_group("enemies"):
-			if not value is EnemyActor or value == ignored_enemy or value.is_queued_for_deletion():
-				continue
-			var other := value as EnemyActor
-			if GroundUnitSpaceScript.distance_gu(
-				_canonical_screen_px_to_ground_gu(other.global_position),
-				candidate_ground_gu
-			) < combat_radius_gu + other.combat_radius_gu + ENEMY_LANDING_CLEARANCE_GU:
-				occupied = true
-				break
-		if not occupied:
-			return candidate_screen_px
+	# Relocation retains its old synchronous 96-attempt API and origin sentinel.
+	# Enemy summons instead call ONE probe through the global frame-budget queue.
+	var origin_gu: Vector2 = _canonical_screen_px_to_ground_gu(origin_screen_px)
+	if not origin_gu.is_finite():
+		return origin_screen_px
+	for _attempt: int in range(96):
+		var candidate_gu: Vector2 = origin_gu + Vector2.from_angle(_rng.randf_range(0.0, TAU)) * _rng.randf_range(minimum_distance_gu, maximum_distance_gu)
+		if _hc_m30_landing_clear(candidate_gu, combat_radius_gu, ignored_enemy):
+			return _canonical_ground_gu_to_screen_px(candidate_gu)
 	return origin_screen_px
+
 
 
 func _cycle_target() -> void:
@@ -12799,3 +12717,87 @@ func _try_ordinary_attack_intent(origin: StringName) -> bool:
 		# This means action STARTED; it does NOT mean damage has been committed.
 		_record_attack_action_diagnostic(&"attack_action_started", origin)
 	return accepted
+
+# HCM30-R4: adapters are deliberately kept in GameRoot, the existing authority.
+const HCM30SummonQueueScript := preload("res://scripts/monster_ai_package/m30/summon_queue.gd")
+var _hc_m30_summon_queue: HCM30SummonQueue
+var _hc_m30_landing_scratch: Array = []
+
+func _hc_m30_get_summon_queue() -> HCM30SummonQueue:
+	if not is_instance_valid(_hc_m30_summon_queue):
+		_hc_m30_summon_queue = HCM30SummonQueueScript.new()
+		_hc_m30_summon_queue.configure(self)
+		add_child(_hc_m30_summon_queue)
+	return _hc_m30_summon_queue
+
+func _hc_m30_probe_landing(origin_screen_px: Vector2) -> Vector2:
+	var origin_gu: Vector2 = _canonical_screen_px_to_ground_gu(origin_screen_px)
+	if not origin_gu.is_finite():
+		return Vector2.INF
+	# Preserve the existing angle/radius distribution (NOT uniform-area sampling).
+	var candidate_gu: Vector2 = origin_gu + Vector2.from_angle(_rng.randf_range(0.0, TAU)) * _rng.randf_range(1.5, 6.0)
+	# This is deliberately the SAME radius as the original summon call site.
+	var radius_gu: float = WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(ArtSpec.MONSTER_COLLISION_RADIUS_PX)
+	return _canonical_ground_gu_to_screen_px(candidate_gu) if _hc_m30_landing_clear(candidate_gu, radius_gu, null) else Vector2.INF
+
+func _hc_m30_landing_clear(candidate_gu: Vector2, radius_gu: float, ignored_enemy: EnemyActor) -> bool:
+	if not candidate_gu.is_finite() or not is_finite(radius_gu) or radius_gu < 0.0:
+		return false
+	if not is_instance_valid(background) or _combat_spatial_index == null or current_map_id < 0:
+		return false
+	if not bool(_safe_zone_context.get("valid", false)):
+		return false
+	if WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(candidate_gu, _active_safe_zones):
+		return false
+	var candidate_px: Vector2 = _canonical_ground_gu_to_screen_px(candidate_gu)
+	var radius_px: float = WorldSpatialRulesScript.actor_screen_radius_px_from_combat_radius_gu(radius_gu)
+	if not candidate_px.is_finite() or WorldSpatialRulesScript.environment_blocks_actor_screen_px(background, candidate_px, radius_px):
+		return false
+	if is_instance_valid(player):
+		var player_gu: Vector2 = _canonical_screen_px_to_ground_gu(player.global_position)
+		var player_radius: float = WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(ArtSpec.PLAYER_COLLISION_RADIUS_PX)
+		if not player_gu.is_finite() or player_gu.distance_to(candidate_gu) < radius_gu + player_radius + ACTOR_LANDING_CLEARANCE_GU:
+			return false
+	# Degenerate segment = point AABB. The index itself adds max actor bounds.
+	# Use the unsorted API: occupancy is existence, not a selected damage victim.
+	_combat_spatial_index.query_enemy_nodes_segment_unsorted_into(
+		current_map_id, candidate_gu, candidate_gu,
+		radius_gu + ENEMY_LANDING_CLEARANCE_GU, _hc_m30_landing_scratch)
+	for raw: Variant in _hc_m30_landing_scratch:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other: EnemyActor = raw as EnemyActor
+		if other == ignored_enemy or other.is_queued_for_deletion() or other.current_hp <= 0 or other._death_pending or other._dying:
+			continue
+		if other.runtime_map_id != current_map_id or int(other.get_meta("zone_generation", -1)) != _zone_generation:
+			continue
+		var other_gu: Vector2 = other.spatial_index_position()
+		if not other_gu.is_finite():
+			return false
+		if other_gu.distance_to(candidate_gu) < radius_gu + other.combat_radius_gu + ENEMY_LANDING_CLEARANCE_GU:
+			return false
+	return true
+
+func _hc_m30_materialize(monster: Dictionary, candidate_px: Vector2, context: Dictionary) -> EnemyActor:
+	# Return through the canonical spawn authority; no parallel EnemyActor factory.
+	return _spawn_enemy(monster, candidate_px, false, DEFAULT_NORMAL_RESPAWN_SECONDS, context)
+
+func hc_m30_summon_snapshot() -> Dictionary:
+	return _hc_m30_summon_queue.snapshot() if is_instance_valid(_hc_m30_summon_queue) else {"pending_batches": 0}
+
+func _hc_m30_resolve_monster(raw_id: Variant) -> Dictionary:
+	var monster_id: int = GameData.canonical_monster_id(raw_id)
+	return GameData.get_monster_by_id(monster_id) if monster_id > 0 else {}
+
+func hc_m30_stable_enemy_ground_point(point: Vector2, radius_gu: float, expected_map_id: int) -> Vector2:
+	# Read-only projection shared by existing Bich enforcement and navigation.
+	# Does NOT modify positions, safe zones, attack reach or attack eligibility.
+	if expected_map_id != current_map_id or not point.is_finite() or not is_finite(radius_gu) or radius_gu < 0.0:
+		return Vector2.INF
+	if current_map_id != BICH_RUNTIME_MAP_ID:
+		return point
+	if not _safe_zone_context_is_valid():
+		return Vector2.INF
+	return WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
+		point, _active_safe_zones, radius_gu + SAFE_ZONE_ACTOR_PADDING_GU
+	)

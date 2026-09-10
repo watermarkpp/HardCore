@@ -1,6 +1,8 @@
 class_name HCMonsterPathSearch
 extends RefCounted
 
+const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
+
 # Resumable, bounded A*. World occupancy remains owned by the existing policy.
 const Terrain := preload("res://scripts/monster_terrain_navigation_policy.gd")
 const MAX_RECORDS := 8192
@@ -15,17 +17,26 @@ static var shared_walkability: Dictionary = {}
 static var shared_walkability_order: Array = []
 static var shared_goal_fields: Dictionary = {}
 static var shared_goal_field_order: Array = []
+static var diagnostic_frontier_rebuilds := 0
+static var diagnostic_frontier_rebuild_usec := 0
+static var diagnostic_frontier_rebuild_max_cells := 0
 static var diagnostic_shared_field_services := 0
 static var diagnostic_shared_field_expansions := 0
 static var diagnostic_shared_field_fallbacks := 0
 
 static func reset_diagnostics() -> void:
+	diagnostic_frontier_rebuilds = 0
+	diagnostic_frontier_rebuild_usec = 0
+	diagnostic_frontier_rebuild_max_cells = 0
 	diagnostic_shared_field_services = 0
 	diagnostic_shared_field_expansions = 0
 	diagnostic_shared_field_fallbacks = 0
 
 static func diagnostics() -> Dictionary:
 	return {
+		"m30_frontier_rebuilds": diagnostic_frontier_rebuilds,
+		"m30_frontier_rebuild_usec": diagnostic_frontier_rebuild_usec,
+		"m30_frontier_rebuild_max_cells": diagnostic_frontier_rebuild_max_cells,
 		"shared_field_services": diagnostic_shared_field_services,
 		"shared_field_expansions": diagnostic_shared_field_expansions,
 		"shared_field_fallbacks": diagnostic_shared_field_fallbacks,
@@ -171,6 +182,7 @@ class StaticGoalField:
 		return float(maxi(delta.x, delta.y)) + (DIAGONAL_COST - 1.0) * float(mini(delta.x, delta.y))
 
 	func _rebuild_frontier_priorities() -> void:
+		var m30_started: int = Time.get_ticks_usec()
 		heap.clear()
 		for raw_cell: Variant in distance:
 			var cell: Vector2i = raw_cell
@@ -178,6 +190,10 @@ class StaticGoalField:
 				continue
 			var score := float(distance[cell])
 			_push([score + _active_heuristic(cell), score, cell.y, cell.x, cell])
+		HCMonsterPathSearch.diagnostic_frontier_rebuilds += 1
+		HCMonsterPathSearch.diagnostic_frontier_rebuild_usec += Time.get_ticks_usec() - m30_started
+		HCMonsterPathSearch.diagnostic_frontier_rebuild_max_cells = maxi(HCMonsterPathSearch.diagnostic_frontier_rebuild_max_cells, distance.size())
+
 
 	func path_from(from_cell: Vector2i) -> PackedVector2Array:
 		var result := PackedVector2Array()
@@ -258,7 +274,7 @@ func configure(ctx: Dictionary, from: Vector2i, destinations: Dictionary, r: flo
 	heap.clear()
 	g.clear()
 	heuristic_cache = {}
-	walkable_cache.clear()
+	walkable_cache = {}
 	parent.clear()
 	closed.clear()
 	path.clear()
@@ -275,7 +291,7 @@ func configure(ctx: Dictionary, from: Vector2i, destinations: Dictionary, r: flo
 	# context/radius; per-actor edge_blocked remains outside this cache.
 	var blocked: Variant = context.get("blocked_cells")
 	if context.is_read_only() and blocked is Dictionary and (blocked as Dictionary).is_read_only():
-		var walkable_scope := [context, radius]
+		var walkable_scope := [HCM30ContextTokenScript.token(context), radius]
 		if shared_walkability.has(walkable_scope):
 			walkable_cache = shared_walkability[walkable_scope]
 		else:
@@ -418,7 +434,7 @@ func _try_attach_shared_goal_field() -> void:
 	if not Terrain.cell_walkable(context, start, radius):
 		return
 	goals.make_read_only()
-	var field_scope := [shared_static_scope, context, radius, goals]
+	var field_scope := [shared_static_scope, HCM30ContextTokenScript.token(context), radius, goals]
 	if shared_goal_fields.has(field_scope):
 		shared_goal_field = shared_goal_fields[field_scope]
 	else:

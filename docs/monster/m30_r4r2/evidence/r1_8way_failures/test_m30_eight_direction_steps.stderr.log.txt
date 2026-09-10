@@ -1,0 +1,64 @@
+ERROR: M30STEPS_R1 direction 0 has readable outer attack
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:133)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 direction 1 has readable outer attack
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:133)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 direction 2 has readable outer attack
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:133)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 direction 4 reaches preferred distance
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:131)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 direction 5 spawn must not be silently relocated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:90)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 direction 5 reaches preferred distance
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:131)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 direction 5 has at least two rendered walk samples, no vacuous PASS
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:132)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 direction 6 reaches preferred distance
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:131)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 direction 6 has at least two rendered walk samples, no vacuous PASS
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:132)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+ERROR: M30STEPS_R1 all eight directions must complete; no pass-by-skip
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4/test_m30_eight_direction_steps.gd:13)
+       [1] _run (res://tests/m30_r4/test_m30_eight_direction_steps.gd:141)
+       [2] _process (res://tests/m30_r4_r1/r1_lab_sampler.gd:29)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

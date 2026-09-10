@@ -1,0 +1,26 @@
+rounds: v72=6 fcc=6 r4r1=5
+dense_crowd              10 | v72 17.236 | fcc 17.024 | r4r1 16.917 | gate_fcc 18.097 PASS gate_r4r1(vs fcc) 17.875 PASS vs-v72 PASS
+dense_crowd              20 | v72 24.643 | fcc 24.846 | r4r1 23.061 | gate_fcc 25.875 PASS gate_r4r1(vs fcc) 26.088 PASS vs-v72 PASS
+dense_crowd              30 | v72 30.768 | fcc 28.928 | r4r1 28.919 | gate_fcc 32.307 PASS gate_r4r1(vs fcc) 30.375 PASS vs-v72 PASS | hist 12.31: FAIL
+open_pursuit             10 | v72 16.756 | fcc 17.080 | r4r1 16.561 | gate_fcc 17.594 PASS gate_r4r1(vs fcc) 17.934 PASS vs-v72 PASS
+open_pursuit             20 | v72 22.451 | fcc 22.061 | r4r1 21.348 | gate_fcc 23.574 PASS gate_r4r1(vs fcc) 23.164 PASS vs-v72 PASS
+open_pursuit             30 | v72 25.883 | fcc 26.386 | r4r1 24.549 | gate_fcc 27.177 PASS gate_r4r1(vs fcc) 27.706 PASS vs-v72 PASS
+sustained_close_attacks  10 | v72 18.709 | fcc 18.096 | r4r1 17.719 | gate_fcc 19.644 PASS gate_r4r1(vs fcc) 19.001 PASS vs-v72 PASS
+sustained_close_attacks  20 | v72 27.047 | fcc 23.969 | r4r1 24.423 | gate_fcc 28.399 PASS gate_r4r1(vs fcc) 25.167 PASS vs-v72 PASS
+sustained_close_attacks  30 | v72 32.702 | fcc 34.468 | r4r1 30.931 | gate_fcc 34.337 FAIL gate_r4r1(vs fcc) 36.191 PASS vs-v72 PASS | hist 12.56: FAIL
+world_obstacles          10 | v72 16.299 | fcc 16.237 | r4r1 16.319 | gate_fcc 17.114 PASS gate_r4r1(vs fcc) 17.049 PASS vs-v72 PASS
+world_obstacles          20 | v72 19.712 | fcc 19.915 | r4r1 19.578 | gate_fcc 20.698 PASS gate_r4r1(vs fcc) 20.910 PASS vs-v72 PASS
+world_obstacles          30 | v72 22.590 | fcc 22.647 | r4r1 22.531 | gate_fcc 23.720 PASS gate_r4r1(vs fcc) 23.779 PASS vs-v72 PASS
+
+('dense_crowd', 10) r4r1 rounds: [16.962, 16.917, 17.327, 16.62, 16.54]
+('dense_crowd', 20) r4r1 rounds: [22.02, 22.273, 23.061, 24.334, 23.228]
+('dense_crowd', 30) r4r1 rounds: [28.364, 26.539, 28.919, 29.439, 29.721]
+('open_pursuit', 10) r4r1 rounds: [17.971, 16.524, 16.561, 16.805, 16.533]
+('open_pursuit', 20) r4r1 rounds: [23.968, 20.602, 20.945, 22.055, 21.348]
+('open_pursuit', 30) r4r1 rounds: [28.058, 24.123, 24.549, 25.143, 24.27]
+('sustained_close_attacks', 10) r4r1 rounds: [17.469, 18.135, 18.449, 17.719, 17.669]
+('sustained_close_attacks', 20) r4r1 rounds: [24.297, 24.963, 26.601, 23.465, 24.423]
+('sustained_close_attacks', 30) r4r1 rounds: [36.392, 30.931, 30.548, 36.155, 28.145]
+('world_obstacles', 10) r4r1 rounds: [16.396, 16.188, 16.319, 16.42, 16.062]
+('world_obstacles', 20) r4r1 rounds: [18.726, 20.18, 19.578, 19.493, 19.846]
+('world_obstacles', 30) r4r1 rounds: [23.077, 22.531, 22.398, 22.329, 22.588]

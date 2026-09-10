@@ -1,0 +1,48 @@
+=== RUN label=r4r1_r1 head=da3e80c91bcb5563228fab27c91bf8ee1e6705c1 ===
+[PASS] performance_comparison_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore-worktrees\m30-r4r1\outputs\test_logs\runner_results_adhoc_20260910_155842_873_5884.json
+TEST_SUMMARY suite=adhoc passed=1 failed=0 engine_log_errors=0
+RUN_EXIT label=r4r1_r1 exit=0
+=== RUN label=r4r1_r2 head=da3e80c91bcb5563228fab27c91bf8ee1e6705c1 ===
+[FAIL] performance_comparison_test - missing_pass_marker;process_did_not_exit;timeout_60s;non_zero_exit_code_-1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+HC_REV07_START head=da3e80c91bcb5563228fab27c91bf8ee1e6705c1
+HC_REV07_CASE_BEGIN scenario=open_pursuit count=10
+HC_REV07_CASE_BEGIN scenario=open_pursuit count=20
+HC_REV07_CASE_BEGIN scenario=open_pursuit count=30
+HC_REV07_CASE_BEGIN scenario=sustained_close_attacks count=10
+HC_REV07_CASE_BEGIN scenario=sustained_close_attacks count=20
+HC_REV07_CASE_BEGIN scenario=sustained_close_attacks count=30
+HC_REV07_CASE_BEGIN scenario=world_obstacles count=10
+HC_REV07_CASE_BEGIN scenario=world_obstacles count=20
+HC_REV07_CASE_BEGIN scenario=world_obstacles count=30
+HC_REV07_CASE_BEGIN scenario=dense_crowd count=10
+HC_REV07_CASE_BEGIN scenario=dense_crowd count=20
+HC_REV07_CASE_BEGIN scenario=dense_crowd count=30
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore-worktrees\m30-r4r1\outputs\test_logs\runner_results_adhoc_20260910_155944_179_5884.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=0
+FAILED_TESTS=performance_comparison_test (missing_pass_marker;process_did_not_exit;timeout_60s;non_zero_exit_code_-1)
+RUN_EXIT label=r4r1_r2 exit=1
+=== RUN label=r4r1_r3 head=da3e80c91bcb5563228fab27c91bf8ee1e6705c1 ===
+[PASS] performance_comparison_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore-worktrees\m30-r4r1\outputs\test_logs\runner_results_adhoc_20260910_160033_189_5884.json
+TEST_SUMMARY suite=adhoc passed=1 failed=0 engine_log_errors=0
+RUN_EXIT label=r4r1_r3 exit=0
+=== RUN label=r4r1_r4 head=da3e80c91bcb5563228fab27c91bf8ee1e6705c1 ===
+[PASS] performance_comparison_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore-worktrees\m30-r4r1\outputs\test_logs\runner_results_adhoc_20260910_160122_163_5884.json
+TEST_SUMMARY suite=adhoc passed=1 failed=0 engine_log_errors=0
+RUN_EXIT label=r4r1_r4 exit=0
+=== RUN label=r4r1_r5 head=da3e80c91bcb5563228fab27c91bf8ee1e6705c1 ===
+[PASS] performance_comparison_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore-worktrees\m30-r4r1\outputs\test_logs\runner_results_adhoc_20260910_160210_791_5884.json
+TEST_SUMMARY suite=adhoc passed=1 failed=0 engine_log_errors=0
+RUN_EXIT label=r4r1_r5 exit=0
+=== RUN label=r4r1_r6 head=da3e80c91bcb5563228fab27c91bf8ee1e6705c1 ===
+[PASS] performance_comparison_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore-worktrees\m30-r4r1\outputs\test_logs\runner_results_adhoc_20260910_160259_617_5884.json
+TEST_SUMMARY suite=adhoc passed=1 failed=0 engine_log_errors=0
+RUN_EXIT label=r4r1_r6 exit=0
+R4R1_PERF_DONE

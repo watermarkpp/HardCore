@@ -1,0 +1,42 @@
+{
+  "schema": "m30.r3.closure.log_classification.v1",
+  "functional_status": "FAIL",
+  "runtime_error_status": "FAIL",
+  "cleanup_status": "FAIL",
+  "overall_status": "FAIL",
+  "case": "site",
+  "observed_markers": [
+    "BLOCKED"
+  ],
+  "exit_code": 2,
+  "timeout": false,
+  "head_and_tree_unchanged": true,
+  "runtime_errors": [
+    {
+      "stream": "stderr",
+      "line": 1,
+      "text": "ERROR: Parameter \"t\" is null."
+    }
+  ],
+  "cleanup_findings": [
+    {
+      "stream": "stderr",
+      "line": 17,
+      "text": "WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "kind": "objectdb_exit",
+      "count": 3
+    },
+    {
+      "stream": "stderr",
+      "line": 19,
+      "text": "ERROR: 1 resources still in use at exit (run with --verbose for details).",
+      "kind": "resource_exit",
+      "count": 1
+    }
+  ],
+  "other_warnings": [],
+  "raw_logs_modified": false,
+  "historical_results_rewritten": false,
+  "performance_status": "NOT_RUN",
+  "original_runner_result": "FAIL"
+}

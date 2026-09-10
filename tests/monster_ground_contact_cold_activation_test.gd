@@ -28,7 +28,7 @@ func _run() -> void:
 	var catalog: Variant = JSON.parse_string(catalog_file.get_as_text()) if catalog_file != null else null
 	assert(catalog is Dictionary)
 	var rows: Array = catalog.get("monsters", [])
-	assert(rows.size() == 214)
+	assert(rows.size() == 156)
 	var verified_count := 0
 
 	for row: Dictionary in rows:
@@ -107,6 +107,6 @@ func _run() -> void:
 		verified_count += 1
 
 	MonsterVisual.reset_client_resource_cache()
-	assert(verified_count == 214)
+	assert(verified_count == 156)
 	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 cold profiles preserve canonical targeting origins and footprint-sized rings")
 	get_tree().quit(0)

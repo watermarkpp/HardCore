@@ -1,0 +1,26 @@
+{
+  "git_head": "fcc85acd5a7a4bca75372f900c46a35a3a425fb2",
+  "passed": 1,
+  "engine_log_errors": 0,
+  "total": 1,
+  "failed": 0,
+  "results": [
+    {
+      "test_name": "test_m30_ablation_d",
+      "test_path": "tests/m30_r4/test_m30_ablation_d.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-10T14:30:57.9280027+08:00",
+  "suite": "adhoc"
+}

@@ -1,0 +1,250 @@
+--- a/tests/m30_r4/test_m30_eight_direction_steps.gd
++++ b/tests/m30_r4/test_m30_eight_direction_steps.gd
+@@ -4,6 +4,8 @@
+ const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
+ const Geometry := preload("res://tests/m30_r4_r2/fixture_geometry.gd")
+ const Sampler := preload("res://tests/m30_r4_r2/lab_sampler.gd")
++const ArtWaitFreeze := preload("res://tests/m30_r3_closure/art_wait_freeze.gd")
++const MIN_ART_FREEZE_MS: int = 650
+ const MONSTER_ID: int = 64
+ const BASE_SHA := "cfe1b81f892ba6dd8ebe82012c9b700b65e5314f"
+ var _sampler: Node
+@@ -94,20 +96,29 @@
+ 	check(is_instance_valid(_actor), "dir %d exact-ID spawn" % d)
+ 	if not is_instance_valid(_actor):
+ 		return false
+-	# Same call stack as creation: no physics tick can precede this freeze.
+-	_actor.set_physics_process(false)
++	# Fence both actor and child Timer callbacks in the creation call stack.
++	var art_freeze := ArtWaitFreeze.new()
++	if not art_freeze.begin(_actor, _actor.visual):
++		check(false, "dir %d freeze could not be established" % d)
++		_actor.queue_free()
++		return false
+ 	var spawned := _actor.spatial_index_position()
+ 	check(spawned.distance_to(start) < 0.015, "dir %d spawn identity/position invariant" % d)
+ 	var art_deadline := Time.get_ticks_msec() + 8000
+-	while is_instance_valid(_actor) and not _actor.visual.uses_final_art() and Time.get_ticks_msec() < art_deadline:
++	while is_instance_valid(_actor) and (not _actor.visual.uses_final_art() or art_freeze.elapsed_msec() < MIN_ART_FREEZE_MS) and Time.get_ticks_msec() < art_deadline:
+ 		await _sampler.after_visual
+ 	if not is_instance_valid(_actor) or not _actor.visual.uses_final_art():
+ 		check(false, "dir %d art readiness timeout" % d)
+-		return false
++		art_freeze.restore()
++		if is_instance_valid(_actor):
++			_actor.queue_free()
++		return false
++	check(art_freeze.intact(), "dir %d scheduling fence remained intact" % d)
+ 	check(_actor._hc_starts == 0, "dir %d zero attacks consumed during art-wait" % d)
+ 	check(_actor.spatial_index_position().distance_to(start) < 0.015, "dir %d no art-wait displacement" % d)
+-	if _actor._hc_starts != 0 or _actor.spatial_index_position().distance_to(start) >= 0.015:
++	if not art_freeze.intact() or _actor._hc_starts != 0 or _actor.spatial_index_position().distance_to(start) >= 0.015:
+ 		_cases.append({"dir": d, "status": "FAIL", "stage": "art_wait_position_or_attack_changed", "requested_start": [start.x, start.y], "spawned_point": [spawned.x, spawned.y]})
++		art_freeze.restore()
+ 		_actor.queue_free()
+ 		return false
+ 	var baseline: Dictionary = _actor.visual.hc_m30_motion_snapshot()
+@@ -123,7 +134,8 @@
+ 	var reached := false
+ 	var case_failures := _failures.size()
+ 	_armed = true
+-	_actor.set_physics_process(true)
++	# Restore original schedules; the existing wake Timer owns activation.
++	check(art_freeze.restore(), "dir %d scheduling modes restored" % d)
+ 	var deadline := Time.get_ticks_msec() + 8000
+ 	while Time.get_ticks_msec() < deadline and is_instance_valid(_actor):
+ 		await _sampler.after_visual
+@@ -203,8 +215,13 @@
+ 	if not is_instance_valid(probe):
+ 		_finish("FAIL", "preflight_actor_missing")
+ 		return
+-	probe.set_physics_process(false)
++	var probe_freeze := ArtWaitFreeze.new()
++	if not probe_freeze.begin(probe, probe.visual):
++		probe.queue_free()
++		_finish("FAIL", "preflight_freeze_missing")
++		return
+ 	_center = await _verified_center(probe)
++	check(probe_freeze.restore(), "preflight scheduling modes restored")
+ 	probe.queue_free()
+ 	await _sampler.after_visual
+ 	await _sampler.after_physics
+--- /dev/null
++++ b/tests/m30_r3_closure/art_wait_freeze.gd
+@@ -0,0 +1,76 @@
++extends RefCounted
++
++## Test fixture only. Freeze scheduled actor/Timer work without stopping art.
++## Never clears target, cooldown, attack count, position, or pending impact.
++## Saved nodes are weak references: this guard cannot keep a dead actor alive.
++var _saved: Array[Dictionary] = []
++var _actor_ref: WeakRef
++var _active: bool = false
++var _entered_msec: int = -1
++
++func begin(actor: Node, visual: Node) -> bool:
++	if _active or not is_instance_valid(actor) or not is_instance_valid(visual):
++		return false
++	if not actor.is_inside_tree() or not actor.is_ancestor_of(visual):
++		return false
++	_actor_ref = weakref(actor)
++	_entered_msec = Time.get_ticks_msec()
++	var nodes: Array[Node] = [actor]
++	var cursor: int = 0
++	while cursor < nodes.size():
++		var node: Node = nodes[cursor]
++		cursor += 1
++		if node == visual:
++			_saved.append({"ref": weakref(node), "mode": node.process_mode, "art": true})
++			# Art's own residency timer and frame updates may continue.
++			node.process_mode = Node.PROCESS_MODE_ALWAYS
++			continue
++		var record: Dictionary = {"ref": weakref(node), "mode": node.process_mode, "art": false}
++		if node is CollisionObject2D:
++			var body := node as CollisionObject2D
++			record["disable_mode"] = body.disable_mode
++			# Prevent the freeze itself from removing a body's existing collision.
++			body.disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE
++		_saved.append(record)
++		node.process_mode = Node.PROCESS_MODE_DISABLED
++		for child: Node in node.get_children(true):
++			nodes.append(child)
++	_active = true
++	return true
++
++func intact() -> bool:
++	if not _active:
++		return false
++	for record: Dictionary in _saved:
++		var node: Node = (record["ref"] as WeakRef).get_ref() as Node
++		if not is_instance_valid(node) or node.is_queued_for_deletion():
++			return false
++		if bool(record["art"]):
++			if node.process_mode != Node.PROCESS_MODE_ALWAYS:
++				return false
++		else:
++			if node.process_mode != Node.PROCESS_MODE_DISABLED or node.can_process():
++				return false
++	return true
++
++func elapsed_msec() -> int:
++	return maxi(0, Time.get_ticks_msec() - _entered_msec) if _entered_msec >= 0 else 0
++
++func restore() -> bool:
++	if not _active:
++		return false
++	var complete: bool = true
++	# Children first, parent last; no frame is yielded in this restoration.
++	for index: int in range(_saved.size() - 1, -1, -1):
++		var record: Dictionary = _saved[index]
++		var node: Node = (record["ref"] as WeakRef).get_ref() as Node
++		if not is_instance_valid(node):
++			complete = false
++			continue
++		node.process_mode = int(record["mode"])
++		if node is CollisionObject2D and record.has("disable_mode"):
++			(node as CollisionObject2D).disable_mode = int(record["disable_mode"])
++	_saved.clear()
++	_actor_ref = null
++	_active = false
++	return complete
+--- /dev/null
++++ b/tests/m30_r3_closure/test_art_wait_freeze.gd
+@@ -0,0 +1,88 @@
++extends Node
++
++const Freeze := preload("res://tests/m30_r3_closure/art_wait_freeze.gd")
++var failures: int = 0
++
++class Art:
++	extends Node
++	var frames: int = 0
++	func _process(_delta: float) -> void:
++		frames += 1
++
++class Actor:
++	extends CharacterBody2D
++	var physics_calls: int = 0
++	var wakes: int = 0
++	var timer: Timer
++	var art: Node
++	func _ready() -> void:
++		art = Art.new()
++		add_child(art)
++		timer = Timer.new()
++		timer.wait_time = 0.05
++		timer.one_shot = true
++		timer.process_callback = Timer.TIMER_PROCESS_PHYSICS
++		# Explicit ALWAYS also tests that a descendant cannot bypass the fence.
++		timer.process_mode = Node.PROCESS_MODE_ALWAYS
++		add_child(timer)
++		timer.timeout.connect(_wake)
++		set_physics_process(false)
++		timer.start()
++	func _wake() -> void:
++		wakes += 1
++		set_physics_process(true)
++	func _physics_process(_delta: float) -> void:
++		physics_calls += 1
++
++func check(ok: bool, label: String) -> void:
++	if not ok:
++		failures += 1
++		push_error("M30_CLOSURE_FREEZE " + label)
++
++func wait_real_seconds(seconds: float) -> void:
++	var deadline: int = Time.get_ticks_msec() + int(seconds * 1000.0)
++	while Time.get_ticks_msec() < deadline:
++		await get_tree().process_frame
++
++func _run() -> void:
++	var legacy := Actor.new()
++	add_child(legacy)
++	legacy.set_physics_process(false)
++	await wait_real_seconds(0.65)
++	check(legacy.wakes == 1 and legacy.physics_calls > 0, "control: child timer reopens a false physics flag")
++	legacy.queue_free()
++	await get_tree().process_frame
++	await get_tree().process_frame
++
++	var actor := Actor.new()
++	add_child(actor)
++	var old_mode: int = actor.process_mode
++	var old_art_mode: int = actor.art.process_mode
++	var old_timer_mode: int = actor.timer.process_mode
++	var old_disable_mode: int = actor.disable_mode
++	var old_timer_left: float = actor.timer.time_left
++	var freeze := Freeze.new()
++	check(freeze.begin(actor, actor.art), "guard begin")
++	check(not freeze.begin(actor, actor.art), "reject double begin")
++	await wait_real_seconds(0.65)
++	check(freeze.intact(), "all nonvisual scheduling remains disabled")
++	check(actor.wakes == 0 and actor.physics_calls == 0, "no timer or actor work during long art wait")
++	check(int(actor.art.get("frames")) > 1, "art still processes")
++	check(is_equal_approx(actor.timer.time_left, old_timer_left), "timer countdown is not consumed")
++	check(actor.disable_mode == CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE, "body not removed by pause")
++	check(freeze.restore(), "restore survives complete wait")
++	check(actor.process_mode == old_mode and actor.art.process_mode == old_art_mode, "actor and art modes restored")
++	check(actor.timer.process_mode == old_timer_mode and actor.disable_mode == old_disable_mode, "timer and body modes restored")
++	check(not actor.is_physics_processing(), "guard does not force wake or reset state at release")
++	await wait_real_seconds(0.65)
++	check(actor.wakes == 1 and actor.physics_calls > 0, "production-like timer resumes its normal wake")
++	check(not freeze.restore(), "double restore is rejected")
++	actor.queue_free()
++	freeze = null
++	await get_tree().process_frame
++	await get_tree().process_frame
++	print("M30_CLOSURE_FREEZE_%s failures=%d" % ["PASS" if failures == 0 else "FAIL", failures])
++	get_tree().quit(0 if failures == 0 else 1)
++
++func _ready() -> void:
++	_run.call_deferred()
+--- /dev/null
++++ b/tests/m30_r3_closure/test_art_wait_freeze.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/m30_r3_closure/test_art_wait_freeze.gd" id="1"]
++
++[node name="ArtWaitFreezeRegression" type="Node"]
++script = ExtResource("1")

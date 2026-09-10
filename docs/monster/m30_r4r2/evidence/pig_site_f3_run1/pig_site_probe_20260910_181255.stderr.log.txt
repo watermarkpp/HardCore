@@ -1,0 +1,21 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] request_client_profile (res://scripts/monster_visual_streaming_coordinator.gd:126)
+       [1] request_visual_resources (res://scripts/monster_visual_streaming_coordinator.gd:744)
+       [2] _client_resources (res://scripts/monster_visual.gd:762)
+       [3] _resources_for (res://scripts/monster_visual.gd:492)
+       [4] _activate_resources (res://scripts/monster_visual.gd:427)
+       [5] _update_resource_residency (res://scripts/monster_visual.gd:315)
+       [6] streaming_residency_poll (res://scripts/monster_visual.gd:395)
+       [7] _poll_visual_residency (res://scripts/monster_visual_streaming_coordinator.gd:1144)
+       [8] poll_once (res://scripts/monster_visual_streaming_coordinator.gd:294)
+       [9] _process (res://scripts/game_root.gd:1634)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _physics_process (res://scripts/player.gd:300)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

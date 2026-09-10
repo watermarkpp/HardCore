@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "failed": 1,
+  "git_head": "45ea7884fbb65872c384000ad2211f2c160d8be7",
+  "engine_log_errors": 1,
+  "results": [
+    {
+      "test_name": "monster_ground_contact_runtime_test",
+      "test_path": "tests/monster_ground_contact_runtime_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "total": 1,
+  "generated_at": "2026-09-10T14:09:02.5702861+08:00",
+  "passed": 0
+}

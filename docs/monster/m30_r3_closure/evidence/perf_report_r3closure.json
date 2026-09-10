@@ -1,0 +1,145 @@
+{
+  "schema": "m30.r3.closure.aggregate_recheck.v1",
+  "arithmetic_status": "PASS",
+  "relative_gate_status": "PASS",
+  "passed_gates": 12,
+  "lower_median_cases": 10,
+  "estimator": "arithmetic_mean_of_sorted_positions_3_and_4_for_six_rounds",
+  "raw_round_files_reverified": false,
+  "frames_remeasured": false,
+  "device_status": "NOT_RUN",
+  "rows": [
+    {
+      "scenario": "dense_crowd",
+      "monster_count": 10,
+      "base_median_p95_ms": 16.5815,
+      "candidate_median_p95_ms": 16.855,
+      "gate_ms": 17.410574999999998,
+      "delta_from_base_ms": 0.2735000000000021,
+      "upper_middle_delta_ms": 0.3520000000000003,
+      "candidate_rounds_above_gate": 0,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "dense_crowd",
+      "monster_count": 20,
+      "base_median_p95_ms": 23.424,
+      "candidate_median_p95_ms": 23.032,
+      "gate_ms": 24.595200000000002,
+      "delta_from_base_ms": -0.39199999999999946,
+      "upper_middle_delta_ms": -0.3509999999999991,
+      "candidate_rounds_above_gate": 0,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "dense_crowd",
+      "monster_count": 30,
+      "base_median_p95_ms": 29.075,
+      "candidate_median_p95_ms": 28.591,
+      "gate_ms": 30.528750000000002,
+      "delta_from_base_ms": -0.4839999999999982,
+      "upper_middle_delta_ms": -0.47199999999999775,
+      "candidate_rounds_above_gate": 1,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "open_pursuit",
+      "monster_count": 10,
+      "base_median_p95_ms": 16.469,
+      "candidate_median_p95_ms": 16.375,
+      "gate_ms": 17.292450000000002,
+      "delta_from_base_ms": -0.0940000000000012,
+      "upper_middle_delta_ms": -0.05600000000000094,
+      "candidate_rounds_above_gate": 0,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "open_pursuit",
+      "monster_count": 20,
+      "base_median_p95_ms": 21.605,
+      "candidate_median_p95_ms": 21.034,
+      "gate_ms": 22.68525,
+      "delta_from_base_ms": -0.5710000000000015,
+      "upper_middle_delta_ms": -0.5719999999999992,
+      "candidate_rounds_above_gate": 1,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "open_pursuit",
+      "monster_count": 30,
+      "base_median_p95_ms": 24.6035,
+      "candidate_median_p95_ms": 24.4285,
+      "gate_ms": 25.833675000000003,
+      "delta_from_base_ms": -0.1750000000000007,
+      "upper_middle_delta_ms": -0.2690000000000019,
+      "candidate_rounds_above_gate": 1,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "monster_count": 10,
+      "base_median_p95_ms": 18.2125,
+      "candidate_median_p95_ms": 18.0115,
+      "gate_ms": 19.123124999999998,
+      "delta_from_base_ms": -0.20099999999999696,
+      "upper_middle_delta_ms": -0.11399999999999721,
+      "candidate_rounds_above_gate": 1,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "monster_count": 20,
+      "base_median_p95_ms": 24.755499999999998,
+      "candidate_median_p95_ms": 23.886,
+      "gate_ms": 25.993275,
+      "delta_from_base_ms": -0.8694999999999986,
+      "upper_middle_delta_ms": -0.9149999999999991,
+      "candidate_rounds_above_gate": 1,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "monster_count": 30,
+      "base_median_p95_ms": 32.081,
+      "candidate_median_p95_ms": 30.051499999999997,
+      "gate_ms": 33.685050000000004,
+      "delta_from_base_ms": -2.029500000000006,
+      "upper_middle_delta_ms": -2.3140000000000036,
+      "candidate_rounds_above_gate": 1,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "monster_count": 10,
+      "base_median_p95_ms": 16.191499999999998,
+      "candidate_median_p95_ms": 16.195999999999998,
+      "gate_ms": 17.001075,
+      "delta_from_base_ms": 0.0045000000000001705,
+      "upper_middle_delta_ms": 0.027999999999998693,
+      "candidate_rounds_above_gate": 0,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "monster_count": 20,
+      "base_median_p95_ms": 19.78,
+      "candidate_median_p95_ms": 19.247,
+      "gate_ms": 20.769000000000002,
+      "delta_from_base_ms": -0.5330000000000013,
+      "upper_middle_delta_ms": -0.30900000000000105,
+      "candidate_rounds_above_gate": 0,
+      "gate_status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "monster_count": 30,
+      "base_median_p95_ms": 22.453,
+      "candidate_median_p95_ms": 22.3215,
+      "gate_ms": 23.57565,
+      "delta_from_base_ms": -0.13149999999999906,
+      "upper_middle_delta_ms": 0.054999999999999716,
+      "candidate_rounds_above_gate": 0,
+      "gate_status": "PASS"
+    }
+  ]
+}

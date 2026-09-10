@@ -1,0 +1,30 @@
+{
+  "head": "f7477361c6566d7448db3a0ebe420f3b02d52dd7",
+  "status": "APPLIED_NOT_COMMITTED",
+  "scope": "tests_only",
+  "production_blobs": {
+    "scripts/enemy.gd": "bff8986ce7d3af5968a785bd40162c124ec9750a",
+    "scripts/game_root.gd": "49b43b52e202d6357296edfcf3571fd299b26a85",
+    "scripts/player.gd": "5331483e3140169474404846d5f666e43602bdf6",
+    "scripts/player_state.gd": "349e81e9779b22aaf7cb8cef54b902243b632cdc",
+    "scripts/monster_ai_package/m30/summon_queue.gd": "c2a681f5672f37b30156bddca7ef08b87eb1721e"
+  },
+  "targets": {
+    "tests/m30_r4/test_m30_eight_direction_steps.gd": {
+      "before_blob": "c97e9e6ad878a8db014ba337bdf5fda816ef2623",
+      "after_blob": "233a8cc86b460901772844184526d1982bf107d5"
+    },
+    "tests/m30_r3_closure/art_wait_freeze.gd": {
+      "before_blob": null,
+      "after_blob": "407e72ce49a1dd16164f9f99cc348dbf9c950a0a"
+    },
+    "tests/m30_r3_closure/test_art_wait_freeze.gd": {
+      "before_blob": null,
+      "after_blob": "790792f6b019233c1a37798094773cb12b84ed24"
+    },
+    "tests/m30_r3_closure/test_art_wait_freeze.tscn": {
+      "before_blob": null,
+      "after_blob": "223f44b0ea6e710a094ec71f5452fcb3c8d1807f"
+    }
+  }
+}

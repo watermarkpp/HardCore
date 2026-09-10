@@ -111,17 +111,20 @@ func _run() -> void:
 	before=actor._hc_starts
 	actor._physics_process_internal(1.0/60.0)
 	check(actor._hc_starts==before+1,"T02","A legal opportunity after actual movement starts in same tick")
-	# Cooldown does not pin the actor at the outer ring. Do not change speed.
+	# R4R1: an independent physics pose expires while cooldown remains positive.
+	# Do not reset cooldown to zero to make this test pass.
 	actor.set_combat_position(ground_to_screen(Vector2(21.8,20)),&"hc_test_position")
 	actor._clear_autonomous_step_state()
 	actor._attack_timer=999.0
 	actor._hc_close_session=true
 	var source_speed:=actor.move_speed_gu_per_sec
+	var starts_before_close:=actor._hc_starts
 	for frame in range(120):
 		await get_tree().physics_frame
 		actor._physics_process_internal(1.0/60.0)
 	var d:=screen_to_ground(actor.global_position).distance_to(Vector2(20,20))
-	check(d<=actor._hc_preferred(player)+0.003,"S02-runtime","Cooldown actor converges toward preferred contact")
+	check(d<=actor._hc_preferred(player)+0.003,"S02-runtime","Positive cooldown actor converges after the finite pose expires")
+	check(actor._attack_timer>0.0 and actor._hc_starts==starts_before_close,"S02-no-reset","Closing does not require a new attack or clearing cooldown")
 	check(is_equal_approx(actor.move_speed_gu_per_sec,source_speed),"S10-speed","Source movement speed remains unchanged")
 	check(Warrior.thrust_footprint_slot_for_direction_ground_gu(Vector2(20,20),screen_to_ground(actor.global_position),actor.combat_radius_gu,Vector2.RIGHT)==1,"S04-runtime","Stationary warrior does not get a permanent outer-slot target")
 	# Dynamic front obstacle, including same-tick movement and death.

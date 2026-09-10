@@ -1,0 +1,605 @@
+{
+  "status": "PASS",
+  "meaning": "archived_table_arithmetic_only",
+  "estimator": "median_of_per_round_p95; not pooled p95; not every-round pass",
+  "metadata": {
+    "fixture_contract": "hardcore.rev07.real_actor_world_scenarios.v1",
+    "frame_clock": "Time.get_ticks_usec_adjacent_process_callbacks",
+    "display_driver": "headless",
+    "renderer": "opengl3",
+    "map_id": 1,
+    "monster_id": 64,
+    "layout_seed": 20260909,
+    "warmup_frames": 45,
+    "sample_frames": 150
+  },
+  "files": [
+    {
+      "file": "rev07_v72_r1.json",
+      "sha256": "af12b062b7d14787fc2f192674467d310e7cd67b15e771acc7b2b4629277853f",
+      "recorded_head": "909821c928ddb66e5fd48f7cef718baa2e8bfe03"
+    },
+    {
+      "file": "rev07_v72_r2.json",
+      "sha256": "6e244f834f9ee3b43cdd2e2f88ca841d19bd8d114e4075886761e67fdfd1afb4",
+      "recorded_head": "909821c928ddb66e5fd48f7cef718baa2e8bfe03"
+    },
+    {
+      "file": "rev07_v72_r3.json",
+      "sha256": "1c61f0c751d3661a2a5935045eaf38ec9e5b31ae502ad1a802b9262db2ce5bc6",
+      "recorded_head": "909821c928ddb66e5fd48f7cef718baa2e8bfe03"
+    },
+    {
+      "file": "rev07_v72_r4.json",
+      "sha256": "b4b7490d2421afa5c9366b5c7c1f465bdabcf13dc875fad5d93507ecfc554423",
+      "recorded_head": "909821c928ddb66e5fd48f7cef718baa2e8bfe03"
+    },
+    {
+      "file": "rev07_v72_r5.json",
+      "sha256": "8ad0873b9db4b26fcc5303bb5b597252e1554e1bd724fd83e6e45accb67709e2",
+      "recorded_head": "909821c928ddb66e5fd48f7cef718baa2e8bfe03"
+    },
+    {
+      "file": "rev07_v72_r6.json",
+      "sha256": "5c3dd8384477a6d30287d8dc25fc1a64e07dbaac51c3f910f105d212c35dbfdc",
+      "recorded_head": "909821c928ddb66e5fd48f7cef718baa2e8bfe03"
+    },
+    {
+      "file": "rev07_cand_r1.json",
+      "sha256": "d1a5f5ab984a784be71be4b3cb9330538ae7a10640495cbbf678b81d52556bd2",
+      "recorded_head": "6116e85b04288f6d2612b2d7f9b7b58ee3e239cf"
+    },
+    {
+      "file": "rev07_cand_r2.json",
+      "sha256": "ac331b7853bb102105d2a7eb0cc395ca1d50c002c7dd0f75585b65971fa6c282",
+      "recorded_head": "6116e85b04288f6d2612b2d7f9b7b58ee3e239cf"
+    },
+    {
+      "file": "rev07_cand_r3.json",
+      "sha256": "c55195ba40165c989c487e7d8a6c2eacbadb8390882b8425477420f118265e64",
+      "recorded_head": "6116e85b04288f6d2612b2d7f9b7b58ee3e239cf"
+    },
+    {
+      "file": "rev07_cand_r4.json",
+      "sha256": "5bdc6ea123769375ebbbc290e12511908a56dbd3de331f8737149b40e0bcba9e",
+      "recorded_head": "6116e85b04288f6d2612b2d7f9b7b58ee3e239cf"
+    },
+    {
+      "file": "rev07_cand_r5.json",
+      "sha256": "21c35ca87d367c1687e2efa196bc948a0073f1c73cfde6ed013d96b2ea75d6b3",
+      "recorded_head": "6116e85b04288f6d2612b2d7f9b7b58ee3e239cf"
+    },
+    {
+      "file": "rev07_cand_r6.json",
+      "sha256": "9e67d6937ee334910f797c0b170d2d7d1653668d34cc43a81c94af84639912fc",
+      "recorded_head": "6116e85b04288f6d2612b2d7f9b7b58ee3e239cf"
+    },
+    {
+      "file": "rev07_r4r1_r1.json",
+      "sha256": "95ee519c05be4f3d2a660481ab5e75e4bd341feb00eb3864dc195be31c69e60e",
+      "recorded_head": "da3e80c91bcb5563228fab27c91bf8ee1e6705c1"
+    },
+    {
+      "file": "rev07_r4r1_r3.json",
+      "sha256": "7915d45eb6e664cc8f088016f293c8b8641afdc456b522e6f292da2f11683a03",
+      "recorded_head": "da3e80c91bcb5563228fab27c91bf8ee1e6705c1"
+    },
+    {
+      "file": "rev07_r4r1_r4.json",
+      "sha256": "a7a26be0ca08790c1b4f2fea318e553623fd08b07867e68f4dd0a8c0bd81288e",
+      "recorded_head": "da3e80c91bcb5563228fab27c91bf8ee1e6705c1"
+    },
+    {
+      "file": "rev07_r4r1_r5.json",
+      "sha256": "7859fb2b598f3488a538db755f68d02fceee273f7f86e2cf77e71d7bd4963dac",
+      "recorded_head": "da3e80c91bcb5563228fab27c91bf8ee1e6705c1"
+    },
+    {
+      "file": "rev07_r4r1_r6.json",
+      "sha256": "727414387050c2bf01a704442a9d2596ce3ec33e1863f20a9f421d3928a5741b",
+      "recorded_head": "da3e80c91bcb5563228fab27c91bf8ee1e6705c1"
+    }
+  ],
+  "rows": [
+    {
+      "scenario": "dense_crowd",
+      "count": 10,
+      "round_p95_ms": {
+        "v72": [
+          17.354,
+          17.202,
+          17.245,
+          18.037,
+          17.226,
+          16.209
+        ],
+        "cand": [
+          17.598,
+          16.686,
+          17.791,
+          16.931,
+          17.012,
+          17.036
+        ],
+        "r4r1": [
+          16.962,
+          16.917,
+          17.327,
+          16.62,
+          16.54
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 17.235500000000002,
+        "cand": 17.024,
+        "r4r1": 16.917
+      },
+      "gate_vs_v72": 18.097275000000003,
+      "gate_vs_fcc": 17.875200000000003,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 0,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 0
+    },
+    {
+      "scenario": "dense_crowd",
+      "count": 20,
+      "round_p95_ms": {
+        "v72": [
+          24.539,
+          24.747,
+          25.939,
+          24.868,
+          24.082,
+          24.204
+        ],
+        "cand": [
+          25.11,
+          24.891,
+          24.801,
+          25.09,
+          22.969,
+          22.353
+        ],
+        "r4r1": [
+          22.02,
+          22.273,
+          23.061,
+          24.334,
+          23.228
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 24.643,
+        "cand": 24.845999999999997,
+        "r4r1": 23.061
+      },
+      "gate_vs_v72": 25.87515,
+      "gate_vs_fcc": 26.088299999999997,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 0,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 0
+    },
+    {
+      "scenario": "dense_crowd",
+      "count": 30,
+      "round_p95_ms": {
+        "v72": [
+          29.49,
+          28.335,
+          35.268,
+          31.703,
+          33.028,
+          29.834
+        ],
+        "cand": [
+          28.093,
+          29.586,
+          28.271,
+          30.68,
+          27.021,
+          30.948
+        ],
+        "r4r1": [
+          28.364,
+          26.539,
+          28.919,
+          29.439,
+          29.721
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 30.7685,
+        "cand": 28.9285,
+        "r4r1": 28.919
+      },
+      "gate_vs_v72": 32.306925,
+      "gate_vs_fcc": 30.374925,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 0,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 0
+    },
+    {
+      "scenario": "open_pursuit",
+      "count": 10,
+      "round_p95_ms": {
+        "v72": [
+          17.883,
+          16.328,
+          17.142,
+          18.116,
+          16.371,
+          16.365
+        ],
+        "cand": [
+          18.362,
+          17.475,
+          17.104,
+          17.056,
+          16.486,
+          16.381
+        ],
+        "r4r1": [
+          17.971,
+          16.524,
+          16.561,
+          16.805,
+          16.533
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 16.7565,
+        "cand": 17.08,
+        "r4r1": 16.561
+      },
+      "gate_vs_v72": 17.594325,
+      "gate_vs_fcc": 17.933999999999997,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 1,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 1
+    },
+    {
+      "scenario": "open_pursuit",
+      "count": 20,
+      "round_p95_ms": {
+        "v72": [
+          23.763,
+          21.461,
+          22.57,
+          22.333,
+          23.249,
+          21.533
+        ],
+        "cand": [
+          21.978,
+          24.28,
+          24.927,
+          21.132,
+          22.114,
+          22.007
+        ],
+        "r4r1": [
+          23.968,
+          20.602,
+          20.945,
+          22.055,
+          21.348
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 22.4515,
+        "cand": 22.0605,
+        "r4r1": 21.348
+      },
+      "gate_vs_v72": 23.574075,
+      "gate_vs_fcc": 23.163525000000003,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 1,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 1
+    },
+    {
+      "scenario": "open_pursuit",
+      "count": 30,
+      "round_p95_ms": {
+        "v72": [
+          25.822,
+          25.944,
+          27.547,
+          27.837,
+          25.707,
+          25.681
+        ],
+        "cand": [
+          26.346,
+          29.353,
+          26.652,
+          26.427,
+          25.615,
+          25.331
+        ],
+        "r4r1": [
+          28.058,
+          24.123,
+          24.549,
+          25.143,
+          24.27
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 25.883,
+        "cand": 26.386499999999998,
+        "r4r1": 24.549
+      },
+      "gate_vs_v72": 27.17715,
+      "gate_vs_fcc": 27.705825,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 1,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 1
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "count": 10,
+      "round_p95_ms": {
+        "v72": [
+          19.352,
+          18.997,
+          18.923,
+          18.32,
+          18.35,
+          18.494
+        ],
+        "cand": [
+          18.402,
+          18.31,
+          17.657,
+          18.003,
+          18.189,
+          17.977
+        ],
+        "r4r1": [
+          17.469,
+          18.135,
+          18.449,
+          17.719,
+          17.669
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 18.7085,
+        "cand": 18.096,
+        "r4r1": 17.719
+      },
+      "gate_vs_v72": 19.643925000000003,
+      "gate_vs_fcc": 19.0008,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 0,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 0
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "count": 20,
+      "round_p95_ms": {
+        "v72": [
+          28.423,
+          27.467,
+          26.626,
+          24.798,
+          26.319,
+          27.479
+        ],
+        "cand": [
+          25.609,
+          27.053,
+          23.761,
+          23.614,
+          23.839,
+          24.099
+        ],
+        "r4r1": [
+          24.297,
+          24.963,
+          26.601,
+          23.465,
+          24.423
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 27.0465,
+        "cand": 23.969,
+        "r4r1": 24.423
+      },
+      "gate_vs_v72": 28.398825000000002,
+      "gate_vs_fcc": 25.167450000000002,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 0,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 1
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "count": 30,
+      "round_p95_ms": {
+        "v72": [
+          36.249,
+          33.296,
+          32.062,
+          32.108,
+          31.612,
+          34.152
+        ],
+        "cand": [
+          32.941,
+          27.753,
+          37.068,
+          35.995,
+          36.091,
+          32.904
+        ],
+        "r4r1": [
+          36.392,
+          30.931,
+          30.548,
+          36.155,
+          28.145
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 32.702,
+        "cand": 34.468,
+        "r4r1": 30.931
+      },
+      "gate_vs_v72": 34.3371,
+      "gate_vs_fcc": 36.19140000000001,
+      "fcc_vs_v72_status": "FAIL",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 2,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 1
+    },
+    {
+      "scenario": "world_obstacles",
+      "count": 10,
+      "round_p95_ms": {
+        "v72": [
+          16.106,
+          16.272,
+          16.326,
+          16.186,
+          16.65,
+          16.339
+        ],
+        "cand": [
+          16.114,
+          16.872,
+          16.155,
+          16.255,
+          16.254,
+          16.22
+        ],
+        "r4r1": [
+          16.396,
+          16.188,
+          16.319,
+          16.42,
+          16.062
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 16.299,
+        "cand": 16.237000000000002,
+        "r4r1": 16.319
+      },
+      "gate_vs_v72": 17.11395,
+      "gate_vs_fcc": 17.04885,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 0,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 0
+    },
+    {
+      "scenario": "world_obstacles",
+      "count": 20,
+      "round_p95_ms": {
+        "v72": [
+          19.891,
+          19.774,
+          19.702,
+          16.973,
+          19.722,
+          16.513
+        ],
+        "cand": [
+          20.16,
+          20.465,
+          19.692,
+          19.845,
+          19.826,
+          19.984
+        ],
+        "r4r1": [
+          18.726,
+          20.18,
+          19.578,
+          19.493,
+          19.846
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 19.712000000000003,
+        "cand": 19.9145,
+        "r4r1": 19.578
+      },
+      "gate_vs_v72": 20.697600000000005,
+      "gate_vs_fcc": 20.910225,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 0,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 0
+    },
+    {
+      "scenario": "world_obstacles",
+      "count": 30,
+      "round_p95_ms": {
+        "v72": [
+          22.617,
+          22.163,
+          22.843,
+          22.439,
+          22.564,
+          22.7
+        ],
+        "cand": [
+          22.558,
+          23.214,
+          22.511,
+          22.898,
+          22.541,
+          22.736
+        ],
+        "r4r1": [
+          23.077,
+          22.531,
+          22.398,
+          22.329,
+          22.588
+        ]
+      },
+      "median_of_round_p95_ms": {
+        "v72": 22.5905,
+        "cand": 22.647,
+        "r4r1": 22.531
+      },
+      "gate_vs_v72": 23.720025,
+      "gate_vs_fcc": 23.77935,
+      "fcc_vs_v72_status": "PASS",
+      "r1_vs_v72_status": "PASS",
+      "r1_vs_fcc_status": "PASS",
+      "r1_rounds_over_v72_median_gate_diagnostic": 0,
+      "r1_rounds_over_fcc_median_gate_diagnostic": 0
+    }
+  ],
+  "excluded_r1_round": {
+    "round": 2,
+    "reason": "timeout reported by delivery; verify raw runner/stdout separately",
+    "evidence_verification": "NOT_RUN"
+  },
+  "source_tree_contents_verified_from_head_labels": false,
+  "contemporaneous_three_way_interleaving_verified": false,
+  "historical_absolute_target_or_device_acceptance": "NOT_RUN"
+}

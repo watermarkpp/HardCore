@@ -1,0 +1,41 @@
+{
+  "suite": "adhoc",
+  "total": 2,
+  "failed": 1,
+  "git_head": "c885ad4ea53c60d7eb6bf9c28222b797dff592a1",
+  "passed": 1,
+  "results": [
+    {
+      "test_name": "test_safe_projection",
+      "test_path": "tests/m30_r4_r2/test_safe_projection.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "test_m30_eight_direction_steps",
+      "test_path": "tests/m30_r4/test_m30_eight_direction_steps.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-10T18:03:52.7817985+08:00",
+  "engine_log_errors": 1
+}
