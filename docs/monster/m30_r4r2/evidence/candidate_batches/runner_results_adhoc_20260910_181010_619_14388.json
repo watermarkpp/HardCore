@@ -1,0 +1,71 @@
+{
+  "failed": 0,
+  "results": [
+    {
+      "test_name": "test_m30_ablation_d",
+      "test_path": "tests/m30_r4/test_m30_ablation_d.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "ordinary_attack_tap_release_test",
+      "test_path": "tests/ordinary_attack_tap_release_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "ordinary_attack_hold_kill_release_test",
+      "test_path": "tests/ordinary_attack_hold_kill_release_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "ordinary_attack_hold_kill_retarget_test",
+      "test_path": "tests/ordinary_attack_hold_kill_retarget_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "c885ad4ea53c60d7eb6bf9c28222b797dff592a1",
+  "passed": 4,
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-10T18:10:10.6196415+08:00",
+  "total": 4,
+  "suite": "adhoc"
+}

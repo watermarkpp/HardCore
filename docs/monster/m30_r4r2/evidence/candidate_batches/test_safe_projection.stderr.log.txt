@@ -1,0 +1,9 @@
+ERROR: M30_R2_SAFE body padding still requires relocation
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/m30_r4_r2/test_safe_projection.gd:14)
+       [1] _ready (res://tests/m30_r4_r2/test_safe_projection.gd:28)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
