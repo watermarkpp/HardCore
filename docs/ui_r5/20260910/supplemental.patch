@@ -1,0 +1,69 @@
+# UI R5 supplemental fixes by implementing agent (2026-09-10)
+
+diff --git "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\scripts/ui_selection_dismiss_guard.gd" b/scripts/ui_selection_dismiss_guard.gd
+index b25d6555..7632268b 100644
+--- "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\scripts/ui_selection_dismiss_guard.gd"
++++ b/scripts/ui_selection_dismiss_guard.gd
+@@ -209,5 +209,5 @@ func _move_observer_last() -> void:
+ 		get_parent().move_child(self, get_parent().get_child_count() - 1)
+ 
+ func _exit_tree() -> void:
+-	if get_tree() != null and get_tree().root.get_meta(NAME, null) == self:
++	if get_tree() != null and get_tree().root.has_meta(NAME) and get_tree().root.get_meta(NAME) == self:
+ 		get_tree().root.remove_meta(NAME)
+diff --git "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\tests/ui_r5_core_test.gd" b/tests/ui_r5_core_test.gd
+index f12224f2..8999cd3c 100644
+--- "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\tests/ui_r5_core_test.gd"
++++ b/tests/ui_r5_core_test.gd
+@@ -84,6 +84,11 @@ func _run() -> void:
+ 	var chosen := StyleBoxFlat.new()
+ 	theme_resource.set_stylebox("normal", "R5Plain", plain)
+ 	theme_resource.set_stylebox("normal", "R5Chosen", chosen)
++	# Godot 4.7 resolves a custom type variation through the theme chain only
++	# when it is registered against the base type, as every production Gothic
++	# variation in gothic_ui_theme.gd does before use.
++	theme_resource.set_type_variation("R5Plain", "Button")
++	theme_resource.set_type_variation("R5Chosen", "Button")
+ 	button.theme = theme_resource
+ 	scope.add_child(button)
+ 	Visual.apply(button, true, &"R5Plain", &"R5Chosen")
+@@ -156,5 +161,5 @@ func _run() -> void:
+ func _finish() -> void:
+ 	for failure: String in failures:
+ 		push_error("UI_R5_CORE: " + failure)
+-	print("UI_R5_CORE %s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
++	print("UI_R5_CORE_%s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
+ 	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\tests/ui_r5_audio_test.gd" b/tests/ui_r5_audio_test.gd
+index c8f53c7d..4247c61a 100644
+--- "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\tests/ui_r5_audio_test.gd"
++++ b/tests/ui_r5_audio_test.gd
+@@ -88,5 +88,5 @@ func _run() -> void:
+ 	AudioPreferences._apply()
+ 	for failure: String in failures:
+ 		push_error("UI_R5_AUDIO: " + failure)
+-	print("UI_R5_AUDIO %s checks=%d failures=%d evidence=%s" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size(), directory])
++	print("UI_R5_AUDIO_%s checks=%d failures=%d evidence=%s" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size(), directory])
+ 	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\tests/ui_r5_delete_test.gd" b/tests/ui_r5_delete_test.gd
+index ab3a816c..3308171f 100644
+--- "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\tests/ui_r5_delete_test.gd"
++++ b/tests/ui_r5_delete_test.gd
+@@ -55,5 +55,5 @@ func _ready() -> void:
+ 		expect(result["success"] and result["destroyed"] == 0, "empty selection remains a no-op")
+ 	for failure: String in failures:
+ 		push_error("UI_R5_DELETE: " + failure)
+-	print("UI_R5_DELETE %s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
++	print("UI_R5_DELETE_%s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
+ 	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\tests/ui_r5_panels_test.gd" b/tests/ui_r5_panels_test.gd
+index 194b70b6..85cc0db7 100644
+--- "a/C:\\Users\\Administrator\\Documents\\HardCore_UI_R5_package\\HardCore_UI_R5_Complete_20260910\\payload\\tests/ui_r5_panels_test.gd"
++++ b/tests/ui_r5_panels_test.gd
+@@ -136,5 +136,5 @@ func _run() -> void:
+ 	await get_tree().process_frame
+ 	for failure: String in failures:
+ 		push_error("UI_R5_PANELS: " + failure)
+-	print("UI_R5_PANELS %s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
++	print("UI_R5_PANELS_%s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
+ 	get_tree().quit(0 if failures.is_empty() else 1)

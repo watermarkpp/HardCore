@@ -235,15 +235,16 @@ func _run() -> void:
 		var occupied_rect := (panel.item_grid.get_child(occupied_index) as Control).get_global_rect()
 		if panel.item_detail_presenter.get_global_rect().intersects(occupied_rect):
 			assert(panel.item_detail_presenter.get_global_rect().intersection(occupied_rect).get_area() < occupied_rect.get_area(), "详情浮窗完全遮住了可操作物品格：%d" % occupied_index)
-	var empty_regions := panel._empty_bag_region_candidates()
-	assert(empty_regions.size() > 0, "背包存在连续空格却没有提供详情浮窗候选区")
-	var has_small_empty_region := false
-	var bag_cell_size: Vector2 = (panel.item_grid.get_child(0) as Control).size
-	for region_variant: Variant in empty_regions:
-		if region_variant is Rect2 and ((region_variant as Rect2).size.x < bag_cell_size.x * 5.0 or (region_variant as Rect2).size.y < bag_cell_size.y * 3.0):
-			has_small_empty_region = true
-			break
-	assert(has_small_empty_region, "详情空区候选仍被固定为5列×3行，无法适配短内容")
+	# R5 布局更新（用户要求：背包详情停靠在背包格右侧，不再浮在格子上）：
+	# 旧断言“必须枚举连续空格作为浮窗候选区/支持小于5列×3行空区”与停靠设计冲突，
+	# docs/01 §六与 docs/04 明示详情“不再依赖空格分布”。新断言加严为：
+	# 停靠详情可见且与全部背包格零重叠。
+	assert(panel.item_detail_presenter.visible, "选中物品后停靠详情未显示")
+	var docked_presenter_rect: Rect2 = panel.item_detail_presenter.get_global_rect()
+	assert(docked_presenter_rect.size != Vector2.ZERO, "停靠详情没有按内容生成尺寸")
+	for bag_index in range(mini(InventoryPanel.BAG_VISIBLE_CAPACITY, panel.item_grid.get_child_count())):
+		var docked_cell_rect := (panel.item_grid.get_child(bag_index) as Control).get_global_rect()
+		assert(docked_presenter_rect.intersection(docked_cell_rect).get_area() <= 0.001, "停靠详情覆盖了背包格：%d" % bag_index)
 	# Dense fallback regression: a long instance detail must still leave the
 	# selected cell at least half clickable and every other occupied cell with
 	# some actionable surface when no empty-cell region exists.
@@ -268,11 +269,14 @@ func _run() -> void:
 	await get_tree().process_frame
 	panel._select_inventory_item(0)
 	var dense_presenter_rect: Rect2 = panel.item_detail_presenter.get_global_rect()
-	var dense_safe_rect := Rect2(panel.get_global_transform_with_canvas().origin, panel.size).grow(-18.0)
+	# R5 停靠语义（用户要求：详情停靠背包格右侧）：边界权威是视口安全区
+	# （UIItemDetailDock.EDGE=18，与屏幕边缘保持 18px），不再是浮窗时代的
+	# “面板矩形内缩 18px”。格子不覆盖的不变量原样保留。
+	var dense_safe_rect: Rect2 = panel.get_viewport().get_visible_rect().grow(-18.0)
 	var dense_selected_rect := (panel.item_grid.get_child(0) as Control).get_global_rect()
 	var dense_selected_overlap: float = dense_presenter_rect.intersection(dense_selected_rect).get_area()
-	assert(dense_safe_rect.encloses(dense_presenter_rect), "满背包长详情浮窗越出安全区")
-	assert(dense_selected_overlap / dense_selected_rect.get_area() <= 0.5 + 0.001, "满背包长详情遮挡选中格超过一半")
+	assert(dense_safe_rect.encloses(dense_presenter_rect), "满背包长停靠详情越出屏幕安全区")
+	assert(dense_selected_overlap <= 0.001, "满背包长停靠详情覆盖选中格")
 	for dense_index in range(1, InventoryPanel.BAG_VISIBLE_CAPACITY):
 		var dense_occupied_rect := (panel.item_grid.get_child(dense_index) as Control).get_global_rect()
 		assert(

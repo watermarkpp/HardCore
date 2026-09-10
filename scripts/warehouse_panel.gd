@@ -6,7 +6,11 @@ const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
-const ItemDetailPresenterScript = preload("res://scripts/item_detail_presenter.gd")
+const ItemDetailPresenterScript = preload("res://scripts/item_detail_docked_presenter.gd")
+
+const UIItemDetailDockScript := preload("res://scripts/ui_item_detail_dock.gd")
+const UIItemSelectionVisualScript := preload("res://scripts/ui_item_selection_visual.gd")
+const UISelectionDismissGuardScript := preload("res://scripts/ui_selection_dismiss_guard.gd")
 
 signal closed
 signal warehouse_sort_requested
@@ -127,6 +131,7 @@ func _ready() -> void:
 	_initialize_grid_cells(GRID_VISIBLE_SLOTS)
 	refresh()
 	_continue_grid_cell_initialization.call_deferred()
+	UISelectionDismissGuardScript.attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -368,6 +373,9 @@ func _on_profile_changed() -> void:
 
 
 func _on_visibility_changed() -> void:
+	if not visible:
+		_ui_dismiss_selection()
+		return
 	if visible and _refresh_pending:
 		refresh()
 
@@ -570,7 +578,7 @@ func _update_item_cell(
 	var button := cell.get_node("ItemButton") as Button
 	button.set_meta("side", side)
 	button.set_meta("data_index", data_index)
-	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected else "GothicComponentSlotButton"
+	UIItemSelectionVisualScript.apply(button, selected, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 	button.disabled = record.is_empty()
 	button.mouse_filter = Control.MOUSE_FILTER_IGNORE if record.is_empty() else Control.MOUSE_FILTER_STOP
 	button.tooltip_text = str(record.get("name", "空物品格"))
@@ -635,34 +643,25 @@ func _select_item(side: String, index: int) -> void:
 
 
 func _refresh_transfer_selection_visuals() -> void:
-	# Repaint from the two authoritative sets so rapid toggles and side switches
-	# cannot leave a stale selected frame on a reused cell.
-	for cell: Control in _bag_cells:
-		var button := cell.get_node("ItemButton") as Button
-		var data_index := int(button.get_meta("data_index", -1))
-		button.theme_type_variation = (
-			"GothicComponentSelectedSlotButton"
-			if selected_bag_indices.has(data_index)
-			else "GothicComponentSlotButton"
-		)
-	for cell: Control in _stash_cells:
-		var button := cell.get_node("ItemButton") as Button
-		var data_index := int(button.get_meta("data_index", -1))
-		button.theme_type_variation = (
-			"GothicComponentSelectedSlotButton"
-			if selected_stash_indices.has(data_index)
-			else "GothicComponentSlotButton"
-		)
-	bag_list.deselect_all()
-	stash_list.deselect_all()
-	for raw_index: Variant in selected_bag_indices.keys():
-		var index := int(raw_index)
-		if index >= 0 and index < bag_list.item_count:
-			bag_list.select(index, false)
-	for raw_index: Variant in selected_stash_indices.keys():
-		var index := int(raw_index)
-		if index >= 0 and index < stash_list.item_count:
-			stash_list.select(index, false)
+	for side: String in ["bag", "stash"]:
+		var cells: Array[Control] = _bag_cells if side == "bag" else _stash_cells
+		var selection: Dictionary = selected_bag_indices if side == "bag" else selected_stash_indices
+		for cell: Control in cells:
+			var button := cell.get_node("ItemButton") as Button
+			var data_index := int(button.get_meta("data_index", -1))
+			UIItemSelectionVisualScript.apply(button, selection.has(data_index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
+	if bag_list != null:
+		bag_list.deselect_all()
+		for raw_index: Variant in selected_bag_indices.keys():
+			var index := int(raw_index)
+			if index >= 0 and index < bag_list.item_count:
+				bag_list.select(index, false)
+	if stash_list != null:
+		stash_list.deselect_all()
+		for raw_index: Variant in selected_stash_indices.keys():
+			var index := int(raw_index)
+			if index >= 0 and index < stash_list.item_count:
+				stash_list.select(index, false)
 
 
 func _sync_primary_selection_indices() -> void:
@@ -833,7 +832,7 @@ func _refresh_cell_selection(side: String, data_index: int, selected: bool) -> v
 	if display_index < 0 or display_index >= cells.size():
 		return
 	var button := (cells[display_index] as Control).get_node("ItemButton") as Button
-	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected else "GothicComponentSlotButton"
+	UIItemSelectionVisualScript.apply(button, selected, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 
 
 func _change_warehouse_page(delta: int) -> void:
@@ -893,19 +892,8 @@ func _update_detail_presenter() -> void:
 	item_detail_presenter.show_item(item, record, _presenter_context(side, index))
 
 
-func _presenter_context(side: String, index: int) -> Dictionary:
-	var cell: Control = null
-	var display_index := index if side == "bag" else index - warehouse_page * WAREHOUSE_PAGE_CAPACITY
-	var cells := _bag_cells if side == "bag" else _stash_cells
-	if display_index >= 0 and display_index < cells.size():
-		cell = cells[display_index].get_node("ItemButton") as Control
-	var selected_rect := Rect2(cell.get_global_transform_with_canvas().origin, cell.size) if cell != null else Rect2()
-	var panel_rect := Rect2(get_global_transform_with_canvas().origin, size)
-	var avoid_rects: Array = [
-		Rect2((get_node("StashSection").get_global_transform_with_canvas().origin), (get_node("StashSection") as Control).size),
-		Rect2((get_node("BagSection").get_global_transform_with_canvas().origin), (get_node("BagSection") as Control).size),
-	]
-	return {"selected_rect": selected_rect, "safe_rect": panel_rect.grow(-18.0), "avoid_rects": avoid_rects}
+func _presenter_context(side: String, _index: int) -> Dictionary:
+	return {"side": side}
 
 
 func _fill_compatibility_list(list: ItemList, records: Array, selected_indices: Dictionary) -> void:
@@ -1345,8 +1333,37 @@ func _section_title(node_name: String, text_value: String, width: float) -> Labe
 
 
 func _close() -> void:
+	_ui_dismiss_selection()
 	_clear_transfer_feedback()
 	GothicUIThemeScript.clear_button_feedback(previous_page_button)
 	GothicUIThemeScript.clear_button_feedback(next_page_button)
 	hide()
 	closed.emit()
+
+
+func _ui_detail_region(context: Dictionary) -> Dictionary:
+	var side := str(context.get("side", "bag"))
+	var path := "StashSection/StashScroll" if side == "stash" else "BagSection/BagScroll"
+	return UIItemDetailDockScript.side_region(self, get_node_or_null(path) as Control, "left" if side == "stash" else "right")
+
+func _ui_selection_token() -> Array:
+	return [selected_bag_refs.duplicate(true), selected_stash_refs.duplicate(true), selected_ref.duplicate(true), warehouse_page, _selection_revision, _bank_status_message, item_detail_presenter.content_epoch() if item_detail_presenter != null else -1]
+
+func _ui_dismiss_selection() -> void:
+	selected_bag_indices.clear()
+	selected_stash_indices.clear()
+	selected_bag_refs.clear()
+	selected_stash_refs.clear()
+	selected_ref.clear()
+	selected_bag_index = -1
+	selected_stash_index = -1
+	_active_selection_side = ""
+	_bank_status_message = ""
+	_clear_transfer_feedback()
+	_refresh_transfer_selection_visuals()
+	if item_detail_presenter != null:
+		item_detail_presenter.hide_detail()
+	if transfer_detail_label != null:
+		transfer_detail_label.text = "选择两侧物品"
+	if deposit_button != null and withdraw_button != null:
+		_refresh_transfer_action_states()

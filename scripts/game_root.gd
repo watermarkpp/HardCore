@@ -1793,9 +1793,9 @@ func _build_system_menu() -> void:
 	_system_menu_panel.save_and_exit_requested.connect(_exit_game)
 	_system_menu_panel.audio_setting_changed.connect(_on_system_menu_audio_setting_changed)
 	_system_menu_layer.add_child(_system_menu_panel)
-	_system_menu_panel.set_audio_settings(
-		_audio_bus_enabled("Music"),
-		_audio_bus_enabled("SFX")
+	_system_menu_panel.set_audio_levels(
+		AudioPreferences.music_volume,
+		AudioPreferences.sfx_volume
 	)
 
 
@@ -1885,17 +1885,15 @@ func _audio_bus_enabled(bus_name: StringName) -> bool:
 
 
 func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
-	if str(request.get("contract_id", "")) != "ui.audio.setting.v1":
-		return
-	var setting_id := str(request.get("setting_id", ""))
-	var bus_name := "Music" if setting_id == "audio.music.enabled" else "SFX"
-	if setting_id not in ["audio.music.enabled", "audio.sfx.enabled"]:
-		return
-	if setting_id == "audio.sfx.enabled" and is_instance_valid(_audio_runtime_service):
-		_audio_runtime_service.set_sfx_enabled(bool(request.get("enabled", true)))
-	var bus_index := AudioServer.get_bus_index(bus_name)
-	if bus_index >= 0:
-		AudioServer.set_bus_mute(bus_index, not bool(request.get("enabled", true)))
+	var contract_id := str(request.get("contract_id", ""))
+	if contract_id == "ui.audio.setting.v2":
+		AudioPreferences.set_level(str(request.get("channel", "")), request.get("value", null))
+	elif contract_id == "ui.audio.setting.v1":
+		var setting_id := str(request.get("setting_id", ""))
+		if setting_id not in ["audio.music.enabled", "audio.sfx.enabled"]:
+			return
+		var channel := "music" if setting_id == "audio.music.enabled" else "sfx"
+		AudioPreferences.set_level(channel, 1.0 if bool(request.get("enabled", true)) else 0.0)
 
 
 func _on_shop_sell_quotes_requested(items: Array) -> void:

@@ -8,7 +8,11 @@ const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.g
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
-const ItemDetailPresenterScript := preload("res://scripts/item_detail_presenter.gd")
+const ItemDetailPresenterScript := preload("res://scripts/item_detail_docked_presenter.gd")
+
+const UIItemDetailDockScript := preload("res://scripts/ui_item_detail_dock.gd")
+const UIItemSelectionVisualScript := preload("res://scripts/ui_item_selection_visual.gd")
+const UISelectionDismissGuardScript := preload("res://scripts/ui_selection_dismiss_guard.gd")
 
 signal closed
 signal buy_quotes_requested(stock: Array)
@@ -114,6 +118,7 @@ func _ready() -> void:
 	_refresh_gold()
 	_refresh_repair_preview()
 	_apply_layout_profile_once("shop_buy")
+	UISelectionDismissGuardScript.attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -429,7 +434,7 @@ func set_buy_quotes(quotes: Array) -> void:
 
 func apply_buy_result(result: Dictionary) -> void:
 	_show_transaction_result_feedback(buy_button, bool(result.get("success", false)), "shop.buy")
-	detail_label.text = "[color=#e8c277]%s[/color]" % str(result.get("message", "购买请求已处理。"))
+	_ui_show_shop_message("[color=#e8c277]%s[/color]" % str(result.get("message", "购买请求已处理。")))
 	if result.get("quotes", null) is Array:
 		set_buy_quotes(result.get("quotes", []))
 	_refresh_gold()
@@ -704,11 +709,15 @@ func _select_shop_item(index: int) -> void:
 		return
 	if index < 0 or index >= stock.size():
 		return
+	if index == _selected_buy_index:
+		_ui_dismiss_selection()
+		return
 	item_list.select(index)
 	_on_item_selected(index)
 
 
 func _set_trade_mode(mode: String) -> void:
+	_ui_dismiss_selection()
 	_stop_quantity_hold()
 	_clear_transaction_feedback()
 	_trade_mode = "sell" if mode == "sell" else "buy"
@@ -724,7 +733,7 @@ func _set_trade_mode(mode: String) -> void:
 			_clear_goods_cards()
 		else:
 			_rebuild_goods_cards()
-		detail_label.text = "[color=#cdbb9e]选择商品查看属性、价格与穿戴要求。[/color]"
+		_ui_show_shop_message("[color=#cdbb9e]选择商品查看属性、价格与穿戴要求。[/color]")
 		_refresh_buy_action_enabled()
 	else:
 		_selected_sell_index = -1
@@ -735,7 +744,7 @@ func _set_trade_mode(mode: String) -> void:
 		_sell_quotes.clear()
 		_set_sell_actions_enabled(false)
 		_update_sell_quantity_label()
-		detail_label.text = "[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]"
+		_ui_show_shop_message("[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]")
 		_request_sell_quotes()
 	_apply_layout_profile_once("shop_sell" if not buying else "shop_buy")
 
@@ -791,7 +800,7 @@ func _reclamp_sell_quantities() -> void:
 
 func apply_sell_result(result: Dictionary) -> void:
 	var message := str(result.get("message", "出售请求已处理。"))
-	detail_label.text = "[color=#e8c277]%s[/color]" % message
+	_ui_show_shop_message("[color=#e8c277]%s[/color]" % message)
 	if result.get("quotes", null) is Dictionary:
 		_sell_quotes = result.get("quotes", {}).duplicate(true)
 	_refresh_gold()
@@ -864,6 +873,8 @@ func _select_sell_item(inventory_index: int) -> void:
 		if changed_card != null:
 			_set_shop_card_selected(changed_card, _selected_sell_indices.has(changed_index))
 	if _selected_sell_index < 0:
+		if item_detail_presenter != null:
+			item_detail_presenter.hide_detail()
 		_sell_quantity = 1
 		_update_sell_quantity_label()
 		_set_sell_actions_enabled(false)
@@ -900,26 +911,10 @@ func _show_sell_detail(inventory_index: int, quote: Dictionary) -> void:
 	_show_shop_detail(str(record.get("name", "物品")), _sell_item_detail(record, item, quote), inventory_index, true)
 
 
-func _show_shop_detail(title: String, body: String, index: int, selling: bool) -> void:
+func _show_shop_detail(title: String, body: String, _index: int, _selling: bool) -> void:
 	if item_detail_presenter == null:
 		return
-	var anchor: Control = null
-	if selling:
-		anchor = _sell_card_for_inventory_index(index)
-	elif index >= 0 and index < goods_buttons.size():
-		anchor = goods_buttons[index]
-	var selected_rect := Rect2(anchor.get_global_transform_with_canvas().origin, anchor.size) if anchor != null else Rect2()
-	var panel_rect := Rect2(get_global_transform_with_canvas().origin, size)
-	var avoid_rects: Array = []
-	for path in ["GoodsPanel", "DetailPanel/BuyButton", "DetailPanel/SellQuantityRow", "DetailPanel/RepairButton", "CloseButton"]:
-		var node := get_node_or_null(path) as Control
-		if node != null and node.visible:
-			avoid_rects.append(Rect2(node.get_global_transform_with_canvas().origin, node.size))
-	item_detail_presenter.show_text(title, body, {
-		"selected_rect": selected_rect,
-		"safe_rect": panel_rect.grow(-18.0),
-		"avoid_rects": avoid_rects,
-	})
+	item_detail_presenter.show_text(title, body, {"presentation_zone": "shop"})
 	detail_label = item_detail_presenter.detail_label
 
 
@@ -934,7 +929,7 @@ func _sell_item_detail(record: Dictionary, item: Dictionary, quote: Dictionary) 
 			var maximum_durability := int(record.get("max_durability", item.get("maxDurability", 1)))
 			lines.append("耐久：%d/%d" % [current_durability, maximum_durability])
 			lines.append(_equipment_stat_text(item))
-			lines.append("穿戴要求：%s" % EquipmentRulesScript.requirement_label(item))
+			lines.append("穿戴要求：%s" % _player_requirement_label(item))
 		elif not str(item.get("description", "")).is_empty():
 			lines.append(str(item.get("description", "")))
 	if bool(quote.get("sellable", false)):
@@ -1090,7 +1085,7 @@ func _emit_sell_request(request: Dictionary) -> void:
 		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
 		"shop.sell",
 	)
-	detail_label.text = "[color=#d8bd8c]出售请求已提交，等待玩法层返回交易结果。[/color]"
+	_ui_show_shop_message("[color=#d8bd8c]出售请求已提交，等待玩法层返回交易结果。[/color]")
 	sell_requested.emit(request.duplicate(true))
 
 
@@ -1122,7 +1117,7 @@ func _on_inventory_changed() -> void:
 
 func _on_visibility_changed() -> void:
 	if not visible:
-		_stop_quantity_hold()
+		_ui_dismiss_selection()
 		return
 	if visible and _inventory_refresh_pending and _trade_mode == "sell":
 		_apply_inventory_change()
@@ -1287,14 +1282,7 @@ func _player_requirement_label(item: Dictionary) -> String:
 
 
 func _set_shop_card_selected(card: Button, selected: bool) -> void:
-	card.set_pressed_no_signal(selected)
-	card.theme_type_variation = (
-		"GothicComponentSelectedShopCard"
-		if selected
-		else "GothicComponentShopCard"
-	)
-	if not selected:
-		card.release_focus()
+	UIItemSelectionVisualScript.apply(card, selected, &"GothicComponentShopCard", &"GothicComponentSelectedShopCard")
 
 
 func _sell_card_for_inventory_index(inventory_index: int) -> Button:
@@ -1313,7 +1301,7 @@ func _repair_all() -> void:
 	)
 	var equipment_before := PlayerState.equipment.duplicate(true)
 	var gold_before := PlayerState.gold
-	detail_label.text = PlayerState.repair_all_equipment(_active_merchant_context())
+	_ui_show_shop_message(PlayerState.repair_all_equipment(_active_merchant_context()))
 	_refresh_gold()
 	var repair_changed_state := (
 		PlayerState.gold < gold_before
@@ -1327,15 +1315,15 @@ func _buy_selected() -> void:
 		return
 	var selected := item_list.get_selected_items()
 	if selected.is_empty():
-		detail_label.text = "请先选择商品。"
+		_ui_show_shop_message("请先选择商品。")
 		return
 	var stock_index := int(selected[0])
 	var quote := _buy_quote_for_index(stock_index)
 	if not bool(quote.get("valid", false)):
-		detail_label.text = str(quote.get("reason", "该商品暂时无法购买。"))
+		_ui_show_shop_message(str(quote.get("reason", "该商品暂时无法购买。")))
 		return
 	_clear_transaction_feedback()
-	detail_label.text = "[color=#d8bd8c]购买请求已提交，等待玩法层返回交易结果。[/color]"
+	_ui_show_shop_message("[color=#d8bd8c]购买请求已提交，等待玩法层返回交易结果。[/color]")
 	GothicUIThemeScript.set_button_feedback(
 		buy_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_BUSY,
@@ -1425,9 +1413,45 @@ func _value(value: Variant) -> String:
 
 
 func _close() -> void:
+	_ui_dismiss_selection()
 	_stop_quantity_hold()
 	_clear_transaction_feedback()
 	sell_confirmation.close_confirmation()
 	_pending_sell_request.clear()
 	hide()
 	closed.emit()
+
+
+func _ui_detail_region(_context: Dictionary) -> Dictionary:
+	return UIItemDetailDockScript.shop_region(self)
+
+func _ui_selection_token() -> Array:
+	return [_trade_mode, _selected_buy_index, _selected_sell_index, _selected_sell_indices.duplicate(), _sell_quantities.duplicate(), _buy_lock_serial, item_detail_presenter.content_epoch() if item_detail_presenter != null else -1]
+
+func _ui_show_shop_message(message: String) -> void:
+	if item_detail_presenter != null:
+		item_detail_presenter.show_message(message, {"presentation_zone": "shop"})
+
+func _ui_dismiss_selection() -> void:
+	_stop_quantity_hold()
+	_clear_transaction_feedback()
+	_selected_buy_index = -1
+	_selected_sell_index = -1
+	_selected_sell_indices.clear()
+	_sell_quantities.clear()
+	_sell_quantity = 1
+	# Do not reset _buy_request_locked/_buy_lock_serial: presentation clearing
+	# is not transaction cancellation and must not enable duplicate requests.
+	if sell_confirmation != null:
+		sell_confirmation.close_confirmation()
+	_pending_sell_request.clear()
+	if item_list != null:
+		item_list.deselect_all()
+	for card: Button in goods_buttons:
+		_set_shop_card_selected(card, false)
+	if item_detail_presenter != null:
+		item_detail_presenter.hide_detail()
+	_refresh_buy_action_enabled()
+	if sell_quantity_button != null:
+		_set_sell_actions_enabled(false)
+	_update_sell_quantity_label()
