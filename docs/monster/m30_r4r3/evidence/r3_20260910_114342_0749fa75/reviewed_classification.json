@@ -1,0 +1,36 @@
+{
+  "schema": "m30.r3.closure.log_classification.v1",
+  "functional_status": "PASS",
+  "runtime_error_status": "PASS",
+  "cleanup_status": "FAIL",
+  "overall_status": "FAIL",
+  "case": "safe",
+  "observed_markers": [
+    "PASS"
+  ],
+  "exit_code": 0,
+  "timeout": false,
+  "head_and_tree_unchanged": true,
+  "runtime_errors": [],
+  "cleanup_findings": [
+    {
+      "stream": "stderr",
+      "line": 1,
+      "text": "WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+      "kind": "objectdb_exit",
+      "count": 3
+    },
+    {
+      "stream": "stderr",
+      "line": 3,
+      "text": "ERROR: 1 resources still in use at exit (run with --verbose for details).",
+      "kind": "resource_exit",
+      "count": 1
+    }
+  ],
+  "other_warnings": [],
+  "raw_logs_modified": false,
+  "historical_results_rewritten": false,
+  "performance_status": "NOT_RUN",
+  "original_runner_result": "FAIL"
+}
