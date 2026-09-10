@@ -1,6 +1,10 @@
 class_name EnemyActor
 extends CharacterBody2D
 
+const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
+const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
+var _hc_m30_attack_move_cutoff: float = INF
+
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const MonsterGroundRuntimeDiagnosticOverlayScript := preload(
@@ -478,6 +482,12 @@ var _terrain_failed_cell_until_ms := 0
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
 	set_meta("hc_combat_life_epoch", int(get_meta("hc_combat_life_epoch", 0)) + 1)
+	_hc_m30_attack_move_cutoff = INF
+	_summon_warning = 0.0
+	_summon_cooldown = 0.0
+	set_meta("m30_summon_warning_life", -1)
+	set_meta("m30_summon_release_serial", 0)
+	set_meta("m30_last_queued_release", Vector2i(-1, -1))
 	_special_delivery_settled_targets.clear()
 	_special_delivery_settlement_order.clear()
 	_special_delivery_settlement_floor_serial = _spatial_release_serial
@@ -5700,28 +5710,33 @@ func _emit_fixed_area_ground_spike_descriptor(
 func _update_behavior_summon(delta: float) -> bool:
 	if not combat_enabled or not bool(summon_rule.get("enabled", false)):
 		return false
+	# Cancelling the warning prevents a stale pre-control/pre-death release.
+	if _dying or _death_pending or current_hp <= 0 or is_queued_for_deletion() or control_time > 0.0 or charm_time > 0.0 or dormant or _burrowed:
+		if _summon_warning > 0.0:
+			_summon_cooldown = maxf(_summon_cooldown, _attack_interval)
+		_summon_warning = 0.0
+		return true
 	if _summon_warning > 0.0:
 		_summon_warning -= delta
 		if _summon_warning <= 0.0:
+			_summon_warning = 0.0
+			# Reserve cooldown and release identity BEFORE arbitrary signal callbacks.
+			_summon_cooldown = _attack_interval
+			if int(get_meta("m30_summon_warning_life", -1)) != _hc_life(self) or not _hc_target_usable(target):
+				return true
 			var ids: Array = summon_rule.get("monsterIds", []).duplicate()
 			if not ids.is_empty():
-				summon_requested.emit(
-					self,
-					ids,
-					maxi(1, int(summon_rule.get("count", 1))),
-					maxi(1, int(summon_rule.get("maxActive", 15)))
-				)
-			_summon_cooldown = _attack_interval
+				set_meta("m30_summon_release_serial", int(get_meta("m30_summon_release_serial", 0)) + 1)
+				summon_requested.emit(self, ids, maxi(1, int(summon_rule.get("count", 1))), maxi(1, int(summon_rule.get("maxActive", 15))))
 	elif _summon_cooldown > 0.0:
 		_summon_cooldown = maxf(0.0, _summon_cooldown - delta)
-	elif is_instance_valid(target):
+	elif _hc_target_usable(target):
+		set_meta("m30_summon_warning_life", _hc_life(self))
 		_summon_warning = maxf(0.001, float(summon_rule.get("delaySeconds", 0.5)))
-		# Summon warning is a separate ability action, not an accepted monster
-		# attack.  Preserve its existing visual timing without manufacturing the
-		# source phase-2 attack sound.
 		if visual != null:
 			visual.play_attack(maxf(_attack_animation_duration, _summon_warning))
 	return true
+
 
 
 func _target_combat_radius_gu(target_node: Node2D) -> float:
@@ -7456,7 +7471,9 @@ func _hc_try_start(hit_target: Node2D, after_motion_attempt := false) -> bool:
 		_pending_attack_target = hit_target
 		_pending_attack_damage = int(record.damage)
 		_pending_attack_release_record = record
-	_play_attack_animation(maxf(_attack_animation_duration, 0.62))
+	var m30_clip: float = HCM30WalkPhaseScript.attack_clip_seconds(_attack_animation_duration, _attack_timer, _attack_hit_delay)
+	_hc_m30_attack_move_cutoff = maxf(0.0, _attack_timer - m30_clip)
+	_play_attack_animation(m30_clip)
 	if _attack_hit_delay <= 0.0:
 		_hc_settle(record)
 	return true
@@ -7547,6 +7564,8 @@ func _hc_finalize_boss_facing() -> void:
 
 
 func _hc_tick_melee(delta: float, physics_delta: float) -> void:
+	if visual != null:
+		visual.hc_m30_begin_melee_tick()
 	if not HCPolicy.valid() or not _hc_target_usable(target):
 		velocity = Vector2.ZERO
 		return
@@ -7588,6 +7607,10 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	# The range comparison uses the already-projected offset. Avoid rebuilding
 	# the same target/safe-zone/projection gate twice for an obviously distant
 	# target; a post-movement endpoint still runs the complete access check.
+	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and HCM30WalkPhaseScript.attack_movement_locked(_attack_timer, _hc_m30_attack_move_cutoff):
+		velocity = Vector2.ZERO
+		_hc_last_reason = "ATTACK_POSE_COMMIT"
+		return
 	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and _hc_try_start(target):
 		return
 	_hc_refresh_observation()
@@ -7650,6 +7673,8 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	_advance_autonomous_step(physics_delta)
 	_hc_owned_movement_call = false
 	var after := _screen_position_px_to_ground_position_gu(global_position)
+	if current.is_finite() and after.is_finite() and visual != null:
+		visual.hc_m30_accept_ground_motion(current.distance_to(after))
 	if after.is_finite() and after.distance_to(desired_target) < current.distance_to(desired_target) - GroundUnitSpace.EPSILON_GU:
 		_hc_close_debt = false
 	# Actual, post-movement endpoints; no extra movement budget in this tick.
@@ -7658,14 +7683,15 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 func _hc_step_can_end() -> bool:
 	if not _hc_standard_melee() or not _hc_target_usable(target):
 		return false
-	var access := _hc_access(target)
-	if access != "CLEAR":
+	# Pure gates FIRST; do not run WORLD+frontline queries at both ends of every
+	# physics move when neither arrival nor attack start is possible.
+	var distance: float = _ground_delta_gu_between_screen_positions(global_position, target.global_position).length()
+	var arrived: bool = distance <= _hc_preferred(target) + GroundUnitSpace.EPSILON_GU
+	var may_attack: bool = _attack_timer <= 0.0 and _pending_attack_time < 0.0 and not _hc_close_debt and _hc_last_start_tick != Engine.get_physics_frames()
+	if not arrived and not may_attack:
 		return false
-	var distance := _ground_delta_gu_between_screen_positions(global_position, target.global_position).length()
-	return (
-		(_attack_timer <= 0.0 and _pending_attack_time < 0.0 and not _hc_close_debt and _hc_last_start_tick != Engine.get_physics_frames())
-		or distance <= _hc_preferred(target) + GroundUnitSpace.EPSILON_GU
-	)
+	return _hc_access(target) == "CLEAR"
+
 
 func _hc_world_between(a: Vector2, b: Vector2) -> bool:
 	_hc_refresh_static_query_cache()
@@ -7876,7 +7902,7 @@ func _hc_goal_cache_key(anchor: Vector2, preferred_tier: bool) -> Array:
 		return []
 	return [
 		_hc_static_query_scope(true),
-		_terrain_navigation_context,
+		HCM30ContextTokenScript.token(_terrain_navigation_context),
 		anchor,
 		preferred_tier,
 		combat_radius_gu,

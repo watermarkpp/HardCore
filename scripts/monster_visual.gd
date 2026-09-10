@@ -318,10 +318,7 @@ func _update_animation_frame(delta: float) -> void:
 		current_state = "attack"
 	elif _hit_remaining > 0.0:
 		current_state = "hit"
-	elif (
-		actor.ground_velocity_gu_per_sec().length_squared()
-		> MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC * MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC
-	):
+	elif _hc_m30_is_walking():
 		current_state = "walk"
 	else:
 		current_state = "idle"
@@ -337,6 +334,8 @@ func _update_animation_frame(delta: float) -> void:
 	elif current_state in ["attack", "hit", "death"]:
 		var progress := clampf(_elapsed / maxf(_action_duration, 0.001), 0.0, 0.999)
 		current_frame = mini(frame_count - 1, int(floor(progress * frame_count)))
+	elif current_state == "walk" and _hc_m30_melee_tick == Engine.get_physics_frames():
+		current_frame = _hc_m30_walk.frame_index(frame_count)
 	else:
 		var fps := MonsterAnimationPolicy.loop_fps(StringName(current_state))
 		current_frame = int(floor(_elapsed * fps)) % frame_count
@@ -891,6 +890,7 @@ func _load_client_texture(path: String, expected_size: Vector2i) -> Texture2D:
 
 
 func play_attack(duration := 0.46) -> void:
+	_hc_m30_walk.interrupt_pose()
 	if _death_remaining > 0.0:
 		return
 	_attack_remaining = duration
@@ -899,6 +899,7 @@ func play_attack(duration := 0.46) -> void:
 
 
 func play_hit(duration := 0.22) -> void:
+	_hc_m30_walk.interrupt_pose()
 	if _death_remaining > 0.0:
 		return
 	_hit_remaining = duration
@@ -915,6 +916,7 @@ func death_animation_duration() -> float:
 
 
 func play_death(duration := -1.0) -> float:
+	_hc_m30_walk.interrupt_pose()
 	var resolved_duration := (
 		death_animation_duration()
 		if duration <= 0.0
@@ -990,3 +992,53 @@ func fallback_attack_angle(direction_px: Vector2) -> float:
 	if not is_fallback_attacking():return 0.0
 	var side:=signf(direction_px.x) if absf(direction_px.x)>0.05 else 1.0
 	return side*sin(fallback_attack_progress()*TAU)*0.12
+
+# HCM30-R4: authoritative physical movement feeds a presentation-only phase.
+const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
+var _hc_m30_walk: HCM30WalkPhase = HCM30WalkPhaseScript.new()
+var _hc_m30_melee_tick: int = -1
+var _hc_m30_stride_configured: bool = false
+
+func hc_m30_begin_melee_tick() -> void:
+	_hc_m30_melee_tick = Engine.get_physics_frames()
+
+func hc_m30_accept_ground_motion(distance_gu: float) -> void:
+	if not is_finite(distance_gu) or distance_gu <= 0.000001:
+		return
+	if _death_remaining > 0.0 or _death_pose_held:
+		return
+	if not _hc_m30_stride_configured and not active_resources.is_empty() and is_instance_valid(actor):
+		var count: int = MonsterAnimationPolicy.frame_count(active_resources, &"walk")
+		var fps: float = MonsterAnimationPolicy.loop_fps(&"walk")
+		var nominal_speed: float = actor.move_speed_gu_per_sec
+		if count > 0 and fps > 0.0 and nominal_speed > 0.000001:
+			# At normal full speed this exactly preserves the existing walk FPS.
+			# Slow/blocked/short actual movement advances only its travelled fraction.
+			_hc_m30_walk.configure_cycle(nominal_speed * float(count) / fps)
+			_hc_m30_stride_configured = true
+	_hc_m30_walk.accept_distance(distance_gu, Engine.get_physics_frames())
+	# The existing physics path already forbids movement during pending impact.
+	# Cancel ONLY the settled attack's visual tail; do not change hit/cooldown.
+	if is_instance_valid(actor) and actor._pending_attack_time < 0.0:
+		_attack_remaining = 0.0
+
+func _hc_m30_is_walking() -> bool:
+	if _hc_m30_melee_tick == Engine.get_physics_frames():
+		return _hc_m30_walk.moving_on(Engine.get_physics_frames())
+	# Charmed/special/legacy movement did not enter the new ordinary-melee tick.
+	# Preserve its existing presentation instead of accidentally showing idle.
+	return actor.ground_velocity_gu_per_sec().length_squared() > MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC * MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC
+
+func hc_m30_motion_snapshot() -> Dictionary:
+	# On-demand diagnostics only; do not JSON-log every actor every frame.
+	return {
+		"physics_tick": Engine.get_physics_frames(),
+		"melee_tick": _hc_m30_melee_tick,
+		"last_motion_tick": _hc_m30_walk.last_motion_tick,
+		"walk_phase": _hc_m30_walk.phase,
+		"reference_cycle_gu": _hc_m30_walk.cycle_gu,
+		"actual_distance_gu": _hc_m30_walk.total_ground_distance_gu,
+		"state": current_state, "frame": current_frame,
+		"attack_visual_remaining": _attack_remaining,
+		"pending_impact": actor._pending_attack_time if is_instance_valid(actor) else -1.0,
+	}
