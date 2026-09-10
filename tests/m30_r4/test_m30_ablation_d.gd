@@ -46,15 +46,17 @@ func _run() -> void:
 	# Sustained post-birth combat window with all six children engaged.
 	var sustained_frames := 240
 	var peak_frame_ms := 0.0
+	var last_usec := Time.get_ticks_usec()
 	for tick: int in range(sustained_frames):
 		await get_tree().physics_frame
-		var frame_ms: float = Time.get_ticks_usec() / 1000.0 % 1000.0
-		peak_frame_ms = maxf(peak_frame_ms, frame_ms)
+		var now_usec := Time.get_ticks_usec()
+		peak_frame_ms = maxf(peak_frame_ms, float(now_usec - last_usec) / 1000.0)
+		last_usec = now_usec
 	for monster: EnemyActor in cold_spawns + hot_spawns:
 		if is_instance_valid(monster):
 			monster.take_damage(999999, caster, {"source": "m30_ablation_d"})
 			monster.queue_free()
-	print("M30_ABLATION_D_PASS cold_spawns=%d hot_spawns=%d" % [cold_spawns.size(), hot_spawns.size()])
+	print("M30_ABLATION_D_PASS cold_spawns=%d hot_spawns=%d peak_frame_ms=%.3f" % [cold_spawns.size(), hot_spawns.size(), peak_frame_ms])
 	for line: String in _timings:
 		print("M30ABLD_EVIDENCE " + line)
 	get_tree().quit(0)
