@@ -70,7 +70,7 @@
 1. loading_transition 偶发 dummy 渲染器纹理 RID 竞态（headless 环境家族问题，断言全过；竞态路径代码与已验收基线一致；非本轮引入，未修）
 2. 真机退出清理与内存增长观察未执行（依赖设备）；M30-CLEANUP-001 桌面侧已 RESOLVED（`c5ca7ad2`），台账保留历史 FAIL
 3. 构建隔离现场保留诊断：`C:\Users\Administrator\Documents\HardCore-android-staging\d8dc755f43a2-20260911-064120-264fad0b`（确认后可清理）
-4. tools/verify_apk_runtime_resources.ps1 的 `-RequireRuntimeChangesFromBaseline` 对增量发布过严（本版以显式字节级对比表代替）
+4. tools/verify_apk_runtime_resources.ps1 的 `-RequireRuntimeChangesFromBaseline` 对增量发布过严（本版以显式字节级对比表代替；后续版本可用新增 `-AllowedUnchangedEntries` 显式声明预期不变的条目，每次放行均打印 ALLOWED_UNCHANGED_FROM_BASELINE 留痕）
 
 ## 12. 证据包（无秘密）
 桌面 `HardCore-ui5-m30-closure\evidence\`：build_v74_pipeline.log、R3 闭包日志、字节码探针 runner JSON、门禁批 runner JSON ×2、防退化 JSON、函数级 diff、基线冻结清单；`checksums.sha256.txt` 覆盖全部交付物。
