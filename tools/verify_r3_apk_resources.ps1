@@ -35,7 +35,11 @@ try {
         'circular_touch_button', 'virtual_joystick',
         'caster_skill_sky_strike_visual_effect',
         'monster_ai_package/policy', 'monster_ai_package/path_search',
-        'monster_ai_package/path_scheduler', 'monster_ai_package/delivery_geometry'
+        'monster_ai_package/path_scheduler', 'monster_ai_package/delivery_geometry',
+        'ui_selection_dismiss_guard', 'audio_preferences', 'ui_runtime_layout_overrides',
+        'touch_scroll_support', 'character_select', 'gothic_confirmation_panel',
+        'system_menu_panel', 'equipment_character_preview', 'loading_transition_overlay',
+        'monster_target_magic_effect', 'layers/runtime/combat_runtime_service'
     )
     foreach ($Script in $Scripts) {
         $null = Require-Entry "assets/scripts/$Script.gdc"
@@ -103,7 +107,42 @@ try {
             throw "R3 APK canonical monster $MonsterId noncombat gate missing"
         }
     }
-    Write-Output "R3_APK_RESOURCE_CLOSURE_PASS scripts=$($Scripts.Count) svg_import_closures=$($Visuals.Count)"
+    # UI R5 + M30 closure additions (2026-09-11): layout contract, HUD runtime
+    # textures and character skill icons must ship with their compiled imports.
+    $LayoutEntry = Require-Entry 'assets/assets/data/ui/manual_layout_overrides.json'
+    $LayoutStream = $LayoutEntry.Open()
+    try {
+        $LayoutBytes = [byte[]]::new($LayoutEntry.Length)
+        $Read = 0
+        while ($Read -lt $LayoutBytes.Length) {
+            $Read += $LayoutStream.Read($LayoutBytes, $Read, $LayoutBytes.Length - $Read)
+        }
+    } finally {
+        $LayoutStream.Dispose()
+    }
+    $LayoutHash = [BitConverter]::ToString(
+        [Security.Cryptography.SHA256]::Create().ComputeHash($LayoutBytes)).Replace('-', '')
+    if ($LayoutHash -cne 'DDFDBFC3418D8286EE6264AC24FB725B5BB0B5E1285410EE62CC31837B349496') {
+        throw "UI R5 layout contract hash mismatch in APK: $LayoutHash"
+    }
+    $HudTextures = @(
+        'ui/gothic_hud/v2/runtime/target_bar_v2.png',
+        'ui/gothic_hud/v2/runtime/utility_stack_v2.png',
+        'ui/gothic_hud/v2/runtime/joystick_v2.png',
+        'ui/gothic_hud/v2/runtime/bottom_chassis_v2.png',
+        'ui/gothic_hud/v2/runtime/round_action_frame_v3.png',
+        'art/characters/taoist/skill_icons/defense.png',
+        'art/characters/taoist/skill_icons/magic_defense.png',
+        'art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png'
+    )
+    foreach ($Texture in $HudTextures) {
+        $Import = Read-Entry "assets/assets/$Texture.import"
+        $Match = [regex]::Match($Import, 'path="res://([^"\r\n]+\.ctex)"')
+        if (-not $Match.Success) { throw "UI R5 texture has no compiled import: $Texture" }
+        $null = Require-Entry ('assets/' + $Match.Groups[1].Value)
+    }
+    $null = Require-Entry 'assets/assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader'
+    Write-Output "R3_APK_RESOURCE_CLOSURE_PASS scripts=$($Scripts.Count) svg_import_closures=$($Visuals.Count) ui_r5_textures=$($HudTextures.Count)"
 } finally {
     $Archive.Dispose()
 }
