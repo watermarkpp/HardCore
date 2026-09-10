@@ -93,7 +93,13 @@ func _read_valid(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return {}
 	var config := ConfigFile.new()
-	if config.load(path) != OK or int(config.get_value("meta", "version", -1)) != 2:
+	if config.load(path) != OK:
+		return {}
+	# Same strict type contract as the writer: a true TYPE_INT 2. Reject
+	# floats, strings, bools, arrays and dictionaries BEFORE any numeric
+	# conversion so 2.9 can never truncate into a valid version.
+	var version: Variant = config.get_value("meta", "version", null)
+	if typeof(version) != TYPE_INT or version != 2:
 		return {}
 	var music: Variant = config.get_value("audio", "music_volume", null)
 	var sfx: Variant = config.get_value("audio", "sfx_volume", null)

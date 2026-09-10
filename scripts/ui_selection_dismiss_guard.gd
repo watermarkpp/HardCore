@@ -18,6 +18,7 @@ var _functional: Array[WeakRef] = []
 var _modals: Array[WeakRef] = []
 var _pointers: Dictionary = {}
 var _generation := 0
+var _order_refresh_queued := false
 
 static func attach(scope: Control) -> void:
 	if scope == null or scope.get_tree() == null:
@@ -34,17 +35,41 @@ static func attach(scope: Control) -> void:
 	observer.register_scope(scope)
 
 func register_scope(scope: Control) -> void:
-	for reference: WeakRef in _scopes:
-		if reference.get_ref() == scope:
-			return
-	_scopes.append(weakref(scope))
+	if not is_instance_valid(scope):
+		return
+	var registered := false
+	# Prune dead scopes while checking so the list cannot grow across world
+	# re-entries; surviving order maintenance runs deferred below.
+	for index in range(_scopes.size() - 1, -1, -1):
+		var existing := _scopes[index].get_ref() as Control
+		if not is_instance_valid(existing):
+			_scopes.remove_at(index)
+		elif existing == scope:
+			registered = true
+	if not registered:
+		_scopes.append(weakref(scope))
+	_queue_observer_order_refresh()
+
+
+func _queue_observer_order_refresh() -> void:
+	if not is_inside_tree() or _order_refresh_queued:
+		return
+	_order_refresh_queued = true
+	_flush_observer_order_refresh.call_deferred()
+
+
+func _flush_observer_order_refresh() -> void:
+	_order_refresh_queued = false
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
+	_move_observer_last()
 
 func _ready() -> void:
 	# Pausable on purpose: the game menu must own its own sliders/buttons.
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_scan_existing(get_tree().root)
 	get_tree().node_added.connect(_register_node)
-	_move_observer_last.call_deferred()
+	_queue_observer_order_refresh()
 
 func _scan_existing(node: Node) -> void:
 	_register_node(node)
@@ -56,6 +81,13 @@ func _script_name(node: Node) -> String:
 	return script.resource_path.get_file() if script != null else ""
 
 func _register_node(node: Node) -> void:
+	# Any later root direct child would be dispatched before this observer in
+	# reverse-DFS _input order and could consume half the touch sequence (for
+	# example a scroll helper eating the release). Re-assert the observer's
+	# last-child position (deferred merge) whenever one enters; keep every
+	# existing modal / functional registration below unchanged.
+	if node != self and node.get_parent() == get_tree().root:
+		_queue_observer_order_refresh()
 	if node is Window and node != get_tree().root:
 		_modals.append(weakref(node))
 		return

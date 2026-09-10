@@ -12,6 +12,12 @@ const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
 const EXPECTED_HASH := "DDFDBFC3418D8286EE6264AC24FB725B5BB0B5E1285410EE62CC31837B349496"
 
 func _ready() -> void:
+	# This fixture instantiates the real character hall. In test_mode the
+	# production code skips its background main-scene threaded preload; without
+	# that seam an in-flight load outlives quit(), compiles world scripts
+	# during engine teardown (hud/enemy/png preload failures) and leaves the
+	# process hanging — the original FAIL signature of this test.
+	PlayerState.test_mode = true
 	assert(FileAccess.file_exists(CONTRACT), "tracked UI layout contract missing")
 	assert(FileAccess.get_sha256(CONTRACT).to_upper() == EXPECTED_HASH, "UI layout contract hash changed")
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONTRACT))
@@ -81,6 +87,10 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
+	assert(
+		character_hall._launch_scene_preload_request_count == 0,
+		"test_mode 下角色页不得启动后台世界预加载（退出期异步残留）",
+	)
 	var runtime_stats_text := "runtime stats sentinel"
 	var runtime_detail_text := "runtime detail sentinel"
 	var runtime_summary_text := "runtime summary sentinel"

@@ -1322,6 +1322,10 @@ func _cancel_map_transition_movement_input() -> void:
 func _init() -> void:
 	if OS.is_debug_build():
 		_loading_handoff_init_usec = Time.get_ticks_usec()
+	# Lifetime is owned by this GameRoot, including instances never added
+	# to SceneTree. Do not create another service or change combat math.
+	_combat_runtime.name = "CombatRuntimeService"
+	add_child(_combat_runtime)
 
 
 func _enter_tree() -> void:

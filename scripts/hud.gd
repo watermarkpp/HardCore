@@ -215,11 +215,29 @@ var _background_prewarm_requested := false
 var _catalog_icon_prewarm_in_progress := false
 var _catalog_icon_prewarm_complete := false
 var _panel_prewarm_user_interaction := false
+# Safe-area viewport binding owned by this HUD instance. The connection target
+# is a static-script Callable, so Godot's duplicate-connect check cannot tell
+# two worlds apart; the exact callable is stored so world teardown can release
+# it and re-entry never stacks a dead binding onto the shared viewport.
+var _safe_area_size_changed_callable := Callable()
 var _panel_script_warm_refs: Array[Script] = []
 
 
 func _ready() -> void:
 	_build_approved_hud()
+
+
+func _exit_tree() -> void:
+	if not _safe_area_size_changed_callable.is_valid():
+		return
+	var viewport := get_viewport()
+	if (
+		viewport != null
+		and is_instance_valid(viewport)
+		and viewport.size_changed.is_connected(_safe_area_size_changed_callable)
+	):
+		viewport.size_changed.disconnect(_safe_area_size_changed_callable)
+	_safe_area_size_changed_callable = Callable()
 
 
 func _hud_loading_profile_mark(
@@ -265,7 +283,12 @@ func _build_approved_hud() -> void:
 			profile_started_usec,
 		)
 	MobileLayoutRules.apply_display_safe_area(root, get_viewport())
-	get_viewport().size_changed.connect(MobileLayoutRules.apply_display_safe_area.bind(root, get_viewport()))
+	_safe_area_size_changed_callable = (
+		MobileLayoutRules
+		.apply_display_safe_area
+		.bind(root, get_viewport())
+	)
+	get_viewport().size_changed.connect(_safe_area_size_changed_callable)
 	if loading_profile_enabled:
 		stage_started_usec = _hud_loading_profile_mark(
 			loading_profile,
