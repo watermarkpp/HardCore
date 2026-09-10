@@ -114,6 +114,9 @@ func _ready() -> void:
 		_build_event_players()
 		prewarm_runtime_streams()
 	_apply_sfx_gain()
+	var preferences := get_node_or_null("/root/AudioPreferences")
+	if preferences != null:
+		preferences.bind_sfx_service(self)
 
 
 func _load_runtime_config() -> void:

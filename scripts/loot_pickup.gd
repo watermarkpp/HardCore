@@ -16,7 +16,6 @@ var item_id := -1
 var item_record: Dictionary = {}
 var gold_amount := 0
 var target: PlayerCharacter
-var _bob_time := 0.0
 var icon_sprite: Sprite2D
 var _overweight_retry_remaining := 0.0
 var _collection_pending := false
@@ -284,16 +283,9 @@ func manager_reset_attempt_context() -> void:
 		_overweight_retry_remaining = 0.0
 
 
-func manager_visual_tick(delta_seconds: float) -> void:
-	_bob_time += maxf(0.0, delta_seconds)
-	if icon_sprite != null:
-		icon_sprite.position.y = -5.0 + sin(_bob_time * 3.0) * 2.0
-		RuntimeDiagnostics.increment_performance_counter(&"loot_visual_updates")
-	else:
-		RuntimeDiagnostics.increment_performance_counter(
-			&"loot_fallback_redraw_requests"
-		)
-		queue_redraw()
+func manager_visual_tick(_delta_seconds: float) -> void:
+	if is_instance_valid(icon_sprite) and not icon_sprite.position.is_equal_approx(Vector2(0.0, -5.0)):
+		icon_sprite.position = Vector2(0.0, -5.0)
 
 
 func _arm_collection_retry_cooldown() -> void:
@@ -345,9 +337,6 @@ static func target_is_within_collection_range_screen_px(
 func _draw() -> void:
 	if icon_sprite != null:
 		return
-	var bob := sin(_bob_time * 3.0) * 3.0
-	var color: Color = _visual_descriptor.get(
-		"fallback_draw_color", Color(0.95, 0.67, 0.12)
-	)
-	draw_colored_polygon(PackedVector2Array([Vector2(0, -11 + bob), Vector2(10, bob), Vector2(0, 11 + bob), Vector2(-10, bob)]), color)
-	draw_polyline(PackedVector2Array([Vector2(0, -11 + bob), Vector2(10, bob), Vector2(0, 11 + bob), Vector2(-10, bob), Vector2(0, -11 + bob)]), Color(1.0, 0.93, 0.55), 2.0)
+	var color: Color = _visual_descriptor.get("fallback_draw_color", Color(0.95, 0.67, 0.12))
+	draw_colored_polygon(PackedVector2Array([Vector2(0, -11), Vector2(10, 0), Vector2(0, 11), Vector2(-10, 0)]), color)
+	draw_polyline(PackedVector2Array([Vector2(0, -11), Vector2(10, 0), Vector2(0, 11), Vector2(-10, 0), Vector2(0, -11)]), Color(1.0, 0.93, 0.55), 2.0)

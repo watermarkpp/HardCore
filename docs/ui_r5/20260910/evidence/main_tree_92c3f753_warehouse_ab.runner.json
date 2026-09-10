@@ -1,0 +1,41 @@
+{
+  "passed": 1,
+  "generated_at": "2026-09-10T21:08:03.5232560+08:00",
+  "engine_log_errors": 1,
+  "total": 2,
+  "failed": 1,
+  "git_head": "92c3f753a0b22a248e6e4a6e906cfae5ac4b793a",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "system_menu_gothic_ui_test",
+      "test_path": "tests/system_menu_gothic_ui_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "warehouse_gothic_ui_test",
+      "test_path": "tests/warehouse_gothic_ui_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

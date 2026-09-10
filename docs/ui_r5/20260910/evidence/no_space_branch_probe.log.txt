@@ -1,0 +1,12 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+ERROR: UI_R5_DOCK_NO_SPACE: TinyRegionOwner [P: (0.0, 0.0), S: (90.0, 60.0)]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _relayout (res://scripts/item_detail_docked_presenter.gd:140)
+       [1] _set_content (res://scripts/item_detail_docked_presenter.gd:97)
+       [2] show_text (res://scripts/item_detail_docked_presenter.gd:79)
+       [3] _run (res://tests/probe_no_space_r5_v2.gd:23)
+NO_SPACE_BRANCH alpha=0.0 layout_ok=false visible_property=true body_mouse_filter=2 (IGNORE=2)
+RECOVERED_BRANCH alpha=1.0 layout_ok=true
