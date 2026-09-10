@@ -1,0 +1,45 @@
+--- a/scripts/enemy.gd
++++ b/scripts/enemy.gd
+@@ -5,8 +5,6 @@
+ const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
+ var _hc_m30_attack_move_cutoff: float = INF # R4 compatibility diagnostic only
+ var _hc_m30_attack_pose_remaining: float = 0.0
+-var _hc_m30_stable_point_policy := Callable()
+-var _hc_m30_has_stable_point_policy := false
+ 
+ const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
+ const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
+@@ -2178,10 +2176,6 @@
+ 	if monster_id < 0 or bool(get_meta("canonical_rejected", false)):
+ 		queue_free()
+ 		return
+-	# R2: bind once; preserve isolated fixtures without a GameRoot owner.
+-	var stable_owner := get_parent()
+-	_hc_m30_has_stable_point_policy = stable_owner != null and stable_owner.has_method("hc_m30_stable_enemy_ground_point")
+-	_hc_m30_stable_point_policy = Callable(stable_owner, "hc_m30_stable_enemy_ground_point") if _hc_m30_has_stable_point_policy else Callable()
+ 	MonsterVisualScript.configure_actor_y_sort_item(self, "actor_root")
+ 	add_to_group("enemies")
+ 	input_pickable = true
+@@ -7875,7 +7869,7 @@
+ 	return int(_hc_failed_edges.get(_hc_edge_key(a, b), 0)) > Time.get_ticks_msec()
+ 
+ func _hc_point_walkable(p: Vector2) -> bool:
+-	if not p.is_finite() or not _hc_m30_navigation_point_stable(p):
++	if not p.is_finite():
+ 		return false
+ 	var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
+ 	if not MonsterTerrainNavigationPolicyScript.cell_walkable(_terrain_navigation_context, cell, combat_radius_gu):
+@@ -8093,13 +8087,3 @@
+ 	_hc_motion_window = 0.0
+ 	_hc_window_remaining = remaining_after
+ 	return stalled
+-
+-func _hc_m30_navigation_point_stable(point: Vector2) -> bool:
+-	# An isolated fixture without GameRoot retains its existing authority.
+-	# A configured but stale/reparented production owner must fail closed.
+-	if not _hc_m30_has_stable_point_policy:
+-		return true
+-	if not _hc_m30_stable_point_policy.is_valid() or _hc_m30_stable_point_policy.get_object() != get_parent():
+-		return false
+-	var stable: Variant = _hc_m30_stable_point_policy.call(point, combat_radius_gu, runtime_map_id)
+-	return stable is Vector2 and (stable as Vector2).is_finite() and (stable as Vector2).is_equal_approx(point)
