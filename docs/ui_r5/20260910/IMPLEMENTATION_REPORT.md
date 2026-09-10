@@ -134,6 +134,6 @@
 - **新增/变更稳定 ID**：无新增；复用既有 `ui.audio.setting.v2`、`shop.sell.risky_item`、`UI_R5_DOCK_NO_SPACE`、`setting_id=audio.music.volume|audio.sfx.volume`。
 - **integration 所需跨系统接入**：正式合并由 integration 最终审查后另行执行（本报告 §三 提供合并与冲突依据）；临时树保留在 `HardCore-worktrees\ui-r5-tmp-integration-20260910`（结果提交 `0b25e1e0`）。
 - **当前提交哈希**：
-  - R1 修订提交：`f9716ac1`（分支 `codex/ui-r5-dock-audio-dismiss`，已推送）
-  - 临时集成结果：`0b25e1e0`（分支 `codex/ui-r5-tmp-integration-20260910`，仅本地）
-  - 交付提交：见 git log 顶部（报告 + 证据入库）
+  - R1 修订提交：`f9716ac158c4480d696bc112461e525e978ea603`（分支 `codex/ui-r5-dock-audio-dismiss`，已推送）
+  - 临时集成结果：`0b25e1e07615d58b98e48a5e6610bbe4227309e2`（分支 `codex/ui-r5-tmp-integration-20260910`，仅本地）
+  - 交付提交：`6a2beba83ef70eb676a7fbe1cb00e2d2f97e7b5e`（本报告 + 最终审计 + 补充差异 + 全部 runner 证据入库，已推送）
