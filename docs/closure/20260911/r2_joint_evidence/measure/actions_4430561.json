@@ -1,0 +1,42 @@
+{
+  "complete": false,
+  "completed": {
+    "buy": 0,
+    "equip": 0
+  },
+  "expected": {
+    "buy": 0,
+    "equip": 0
+  },
+  "failures": [
+    "VALIDATED_PROFILE_LOAD_FAILED"
+  ],
+  "rows": [],
+  "schema": "hc.r2.actions.v1",
+  "scope": "synthetic_GUI_release_to_post_draw_PROXY_not_android_presentation",
+  "spec": {
+    "case_id": "hot_medium_r1",
+    "equipment_cases": [
+      {
+        "names": [
+          "木剑",
+          "铁剑"
+        ],
+        "slot": "武器"
+      }
+    ],
+    "merchant_stock_key": "medicine",
+    "profile_id": "1789112604_5542",
+    "repetitions": 10.0,
+    "schema": "hc.r2.qa.seed.v1",
+    "seed_files": {
+      "character_profiles.json": "65d3196bc06c318b0b3828f36b00a8ea355e311fac23b7c2513e2a0606825e21",
+      "characters/1789112604_5542.json": "86778513855ab6f765769c8464b357b4ec3fd75579bfeeeb43b7dfda0b6d96a6",
+      "shared_warehouse.json": "300d929e2e8e0bb838eda31e4e6791fb9017ffc3b7b8f48fffde7214f8c153da"
+    },
+    "source_sha": "dc250d1576e555def231fb44c9db012a5b40d098",
+    "stock_index": 0.0,
+    "storage_root": "user://r2_fixture/hot_medium_r1/"
+  },
+  "test_mode": false
+}
