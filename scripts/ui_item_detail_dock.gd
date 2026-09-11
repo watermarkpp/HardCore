@@ -42,37 +42,7 @@ static func side_region(owner_control: Control, scroll: Control, side: String) -
 	return {"region": Rect2(left, top, maxf(0.0, right - left), maxf(0.0, bottom - top)), "expanded_region": Rect2(left, safe.position.y, maxf(0.0, right - left), safe.size.y), "side": side}
 
 static func shop_region(owner: Control) -> Dictionary:
-	var panel := owner.get_node_or_null("DetailPanel") as Control
-	var decoration := owner.get_node_or_null("DetailPanel/DetailPanelDecoration") as Control
-	var title := owner.get_node_or_null("DetailPanel/DetailTitle") as Control
-	if panel == null or decoration == null or title == null:
-		return {"region": Rect2(), "side": "center"}
-	var transform := owner.get_global_transform_with_canvas()
-	if absf(transform.determinant()) < 0.000001:
-		return {"region": Rect2(), "side": "center"}
-	# Use the ACTUAL calibrated second-level decoration and its measured opening,
-	# not the uncalibrated logical DetailPanel rectangle. No manual JSON edits.
-	var inset: Vector4 = preload("res://scripts/gothic_frame_factory.gd").INSET_FRAME_V3_INNER_INSETS
-	var local_opening := Rect2(
-		Vector2(inset.x, inset.y),
-		decoration.size - Vector2(inset.x + inset.z, inset.y + inset.w)
-	)
-	if local_opening.size.x <= 0.0 or local_opening.size.y <= 0.0:
-		return {"region": Rect2(), "side": "center"}
-	var relative := transform.affine_inverse() * decoration.get_global_transform_with_canvas()
-	var opening := transformed_rect(relative, local_opening).grow(-8.0)
-	var region := opening.intersection(viewport_in(owner))
-	var title_rect := rect_in(owner, title)
-	var top := maxf(region.position.y, title_rect.end.y + GAP)
-	var bottom := region.end.y
-	for property_name: String in ["buy_button", "repair_button", "sell_quantity_row", "sell_quantity_button"]:
-		var control: Variant = owner.get(property_name)
-		if control is Control and (control as Control).is_visible_in_tree():
-			bottom = minf(bottom, rect_in(owner, control).position.y - GAP)
-	return {
-		"region": Rect2(Vector2(region.position.x, top), Vector2(maxf(0.0, region.size.x), maxf(0.0, bottom - top))),
-		"side": "center",
-	}
+	return preload("res://scripts/ui_shop_detail_space.gd").region(owner)
 
 static func equipment_region(owner_control: Control, buttons: Dictionary) -> Dictionary:
 	# Equipped-item details stay in the central paper-doll column. BAG items

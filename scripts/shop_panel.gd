@@ -123,6 +123,7 @@ func _ready() -> void:
 	_refresh_repair_preview()
 	_apply_layout_profile_once("shop_buy")
 	UISelectionDismissGuardScript.attach(self)
+	preload("res://scripts/ui_item_selection_lifecycle.gd").attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -1134,7 +1135,10 @@ func _on_inventory_changed() -> void:
 
 
 func _on_visibility_changed() -> void:
-	if not visible:
+	var session := get_node_or_null("R3SelectionLifecycle")
+	if session != null:
+		session.call("sync_visibility")
+	if not is_visible_in_tree():
 		_ui_l1_repair_dirty = true
 		_ui_dismiss_selection()
 		return
@@ -1222,7 +1226,7 @@ func _refresh_repair_preview() -> void:
 		return
 	_ui_l1_repair_plan_count += 1
 	var cost := PlayerState.repair_cost(context)
-	repair_button.text = "维修全部（%d金币）" % cost if cost > 0 else "装备无需维修"
+	repair_button.text = "维修全部\n（%d金币）" % cost if cost > 0 else "装备无需维修"
 
 
 func _on_item_selected(index: int) -> void:

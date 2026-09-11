@@ -8,18 +8,14 @@ const Formatter := preload("res://scripts/item_detail_presenter.gd")
 const Dock := preload("res://scripts/ui_item_detail_dock.gd")
 const TITLE_SIZE := 20
 const BODY_SIZE := 14
-const MARGIN := 14.0
-const MAX_WIDTH := 280.0
-const PREFERRED_WIDTH := 220.0
-const MIN_WIDTH := 140.0
-const PORTRAIT_RATIO := 1.12
-const TITLE_GAP := 8.0
+const MARGIN := 18.0
+const PREFERRED_WIDTH := 220.0 # soft aesthetic preference, NOT a width limit
+const MIN_WIDTH := 100.0
+const TITLE_GAP := 12.0
 const MEASURE_PAD := 4.0
-# R2: shrink whitespace only, never fonts, text, ratio, or allowed geometry.
-const COMPACT_MARGIN := 8.0
-const COMPACT_TITLE_GAP := 4.0
-const COMPACT_MEASURE_PAD := 2.0
-const REVISION := 8
+const WIDTH_STEPS := 12
+const REVISION := 9
+const ShopSpace := preload("res://scripts/ui_shop_detail_space.gd")
 
 var title_label: Label
 var detail_label: RichTextLabel
@@ -39,7 +35,9 @@ var _connections: Array = []
 var _name_style: Dictionary = {}
 var _title_color := NameStyle.DEFAULT_COLOR
 var _test_suppress_expected_layout_error := false
-var _r2_density := "normal"
+var _r2_density := "comfortable"
+var _r3_spec: Dictionary = {}
+var _r3_session_epoch := -1
 
 func _init() -> void:
 	name = "ItemDetailPresenter"
@@ -204,6 +202,12 @@ func show_message(message: String, context: Dictionary = {}) -> void:
 	_set_content("提示", message, context, true)
 
 func _set_content(title: String, body: String, context: Dictionary, message: bool) -> void:
+	var parent := get_parent() as Control
+	var session := parent.get_node_or_null("R3SelectionLifecycle") if parent != null else null
+	if session != null:
+		if not parent.is_visible_in_tree():
+			return # an old result must not repopulate a closed detail panel
+		_r3_session_epoch = int(session.get("epoch"))
 	_content_epoch += 1
 	_message_active = message
 	_context = context.duplicate()
@@ -252,6 +256,7 @@ func debug_layout_valid() -> bool:
 func debug_layout_snapshot() -> Dictionary:
 	return {
 		"valid": _layout_ok, "error": _layout_error, "layouts": _layout_count, "density": _r2_density,
+		"margin": MARGIN, "title_gap": TITLE_GAP, "space_spec": _r3_spec.duplicate(),
 		"name_style": _name_style.duplicate(), "title_color": title_label.get_theme_color("font_color"),
 		"title": title_label.text, "body": detail_label.get_parsed_text(),
 		"rect": Rect2(position, size), "title_rect": Rect2(title_label.position, title_label.size),
@@ -288,81 +293,86 @@ func _relayout() -> void:
 	var owner := get_parent() as Control
 	if owner == null or not owner.has_method("_ui_detail_region"):
 		return
+	var session := owner.get_node_or_null("R3SelectionLifecycle")
+	if session != null and not bool(session.call("allows_presentation", _r3_session_epoch)):
+		hide_detail()
+		return
+	# Reflowing the shop action band emits geometry signals. Ignore those while
+	# solving, then key the final geometry. No perpetual deferred-layout loop.
+	_laying_out = true
 	var spec: Dictionary = owner.call("_ui_detail_region", _context)
 	var region: Rect2 = spec.get("region", Rect2())
-	var side := str(spec.get("side", "center"))
 	var expanded: Rect2 = spec.get("expanded_region", region)
-	var key: Array = [region, expanded, side, _title_source, _body_source]
+	var shop := str(spec.get("kind", "")) == "shop"
+	var side := str(spec.get("side", "center"))
+	var key: Array = [region, expanded, side, shop, spec.get("screen_scale", Vector2.ONE), _title_source, _body_source]
 	if key == _layout_key:
+		_laying_out = false
 		return
 	_layout_key = key
+	_r3_spec = spec.duplicate()
 	_layout_count += 1
-	_laying_out = true
 	_layout_error = ""
 	_layout_ok = false
-	if region.size.x < 100.0 or region.size.y < 80.0:
-		_fail_layout("NO_SPACE")
-		return
-	var chosen_width := 0.0
-	var chosen_height := 0.0
-	var measured := Vector2.ZERO
-	var chosen_margin := MARGIN
-	var chosen_gap := TITLE_GAP
-	_r2_density = "normal"
-	# All candidates use the owner's existing safe region; do not enlarge frames.
+	_r2_density = "comfortable"
 	var regions: Array[Rect2] = [region]
 	if expanded.has_area() and expanded != region:
 		regions.append(expanded)
-	for candidate_region: Rect2 in regions:
-		var upper_width := floorf(minf(MAX_WIDTH, minf(candidate_region.size.x, candidate_region.size.y / PORTRAIT_RATIO)))
-		# Keep normal spacing where it fits. Compact spacing is a bounded fallback.
-		for density in range(2):
-			var margin := MARGIN if density == 0 else COMPACT_MARGIN
-			var gap := TITLE_GAP if density == 0 else COMPACT_TITLE_GAP
-			var pad := MEASURE_PAD if density == 0 else COMPACT_MEASURE_PAD
-			var width := minf(PREFERRED_WIDTH, upper_width)
-			if width < 100.0:
+	title_label.text = _title_source
+	detail_label.text = _body_source
+	var chosen: Dictionary = {}
+	for candidate: Rect2 in regions:
+		var upper := floorf(candidate.size.x)
+		if upper < MIN_WIDTH or candidate.size.y < 80.0:
+			continue
+		var lower := minf(160.0, upper)
+		var best_cost := INF
+		# Both axes adapt. Portrait is a visual requirement only in non-shop
+		# domains. The shop may be modestly landscape (W <= 1.3 H).
+		for n in range(WIDTH_STEPS + 1):
+			var trial_width := floorf(lerpf(lower, upper, float(n) / float(WIDTH_STEPS)))
+			var trial_extent := _measure_at(trial_width)
+			var natural := MARGIN * 2.0 + trial_extent.x + TITLE_GAP + trial_extent.y
+			var trial_height := ceilf(maxf(natural, trial_width / 1.3 if shop else trial_width + 4.0))
+			if trial_height > floorf(candidate.size.y):
 				continue
-			while width <= upper_width:
-				var extent := _measure_at(width, margin, pad)
-				var height := maxf(ceilf(width * PORTRAIT_RATIO), margin * 2.0 + extent.x + gap + extent.y)
-				if height <= floorf(candidate_region.size.y):
-					chosen_width = width
-					chosen_height = height
-					measured = extent
-					chosen_margin = margin
-					chosen_gap = gap
-					_r2_density = "normal" if density == 0 else "compact"
-					region = candidate_region
-					break
-				if width >= upper_width:
-					break
-				width = minf(upper_width, width + 12.0)
-			if chosen_width > 0.0:
-				break
-		if chosen_width > 0.0:
+			var target_ratio := 1.0 if shop else 1.38
+			var ratio := trial_height / trial_width
+			var cost := absf(ratio - target_ratio) + 0.12 * trial_width * trial_height / maxf(1.0, candidate.get_area())
+			if not shop:
+				cost += 0.08 * absf(trial_width - PREFERRED_WIDTH) / PREFERRED_WIDTH
+			if cost < best_cost:
+				best_cost = cost
+				chosen = {"width": trial_width, "height": trial_height, "region": candidate}
+		if not chosen.is_empty():
 			break
-	if chosen_width <= 0.0:
-		# An impossible layout remains an explicit release-blocking error. Never
-		# truncate descriptions, restore scrolling or silently shrink typography.
-		_fail_layout("CONTENT_OVERFLOW")
+	if chosen.is_empty():
+		_fail_layout("SPACE_PLAN_REQUIRED")
 		return
-	var fitted := Dock.fit_rect(region, Vector2(chosen_width, chosen_height), side)
+	var width: float = chosen.width
+	var height: float = chosen.height
+	region = chosen.region
+	# Candidate measurements mutate the controls. Re-shape the actual winner.
+	var extent := _measure_at(width)
+	var fitted := Dock.fit_rect(region, Vector2(width, height), side)
 	set_anchors_preset(Control.PRESET_TOP_LEFT)
-	position = fitted.position.round()
+	position = fitted.position
 	size = fitted.size
-	var text_width := chosen_width - chosen_margin * 2.0
-	title_label.position = Vector2(chosen_margin, chosen_margin)
-	title_label.size = Vector2(text_width, measured.x)
-	detail_label.position = Vector2(chosen_margin, chosen_margin + measured.x + chosen_gap)
-	detail_label.size = Vector2(text_width, chosen_height - chosen_margin * 2.0 - measured.x - chosen_gap)
+	var text_width := width - 2.0 * MARGIN
+	title_label.position = Vector2(MARGIN, MARGIN)
+	title_label.size = Vector2(text_width, extent.x)
+	detail_label.position = Vector2(MARGIN, MARGIN + extent.x + TITLE_GAP)
+	detail_label.size = Vector2(text_width, height - MARGIN * 2.0 - extent.x - TITLE_GAP)
 	_layout_ok = (
 		float(detail_label.get_content_height()) <= detail_label.size.y
-		and float(detail_label.get_content_width()) <= detail_label.size.x + 1.0
+		and float(detail_label.get_content_width()) <= detail_label.size.x + 0.5
 		and title_label.get_minimum_size().y <= title_label.size.y
 		and not title_label.text.strip_edges().is_empty()
-		and region.grow(1.0).encloses(Rect2(position, size))
+		and region.grow(0.05).encloses(Rect2(position, size))
 	)
+	for r: Rect2 in spec.get("protected", []):
+		if Rect2(position, size).intersects(r):
+			_layout_ok = false
 	if not _layout_ok:
 		_fail_layout("POST_LAYOUT_OVERFLOW")
 		return
@@ -376,9 +386,23 @@ func _relayout() -> void:
 func _fail_layout(reason: String) -> void:
 	_layout_error = reason
 	_layout_ok = false
-	modulate.a = 0.0
+	var available: Rect2 = _r3_spec.get("region", Rect2())
+	if available.size.x >= 100.0 and available.size.y >= 80.0:
+		position = available.position
+		size = available.size
+		title_label.position = Vector2(MARGIN, MARGIN)
+		title_label.size = Vector2(maxf(1.0, size.x - MARGIN * 2.0), 30.0)
+		detail_label.position = Vector2(MARGIN, MARGIN + 34.0)
+		detail_label.size = Vector2(maxf(1.0, size.x - MARGIN * 2.0), maxf(1.0, size.y - MARGIN * 2.0 - 34.0))
+		detail_label.text = "说明区空间不足。"
+		modulate.a = 1.0
+	else:
+		modulate.a = 0.0
+	# This error surface is NOT a successful item detail. All normal catalog
+	# cases must pass original body equality + geometry gates before release.
 	detail_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if not _dock_error_reported and not _test_suppress_expected_layout_error:
 		push_error("HC_UI6_DETAIL_%s: %s" % [reason, _title_source])
 		_dock_error_reported = true
 	_laying_out = false
+

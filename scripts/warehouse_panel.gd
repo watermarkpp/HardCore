@@ -134,6 +134,7 @@ func _ready() -> void:
 	refresh()
 	_continue_grid_cell_initialization.call_deferred()
 	UISelectionDismissGuardScript.attach(self)
+	preload("res://scripts/ui_item_selection_lifecycle.gd").attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -380,7 +381,10 @@ func _on_profile_changed() -> void:
 
 
 func _on_visibility_changed() -> void:
-	if not visible:
+	var session := get_node_or_null("R3SelectionLifecycle")
+	if session != null:
+		session.call("sync_visibility")
+	if not is_visible_in_tree():
 		_ui_l1_bank_dirty = true
 		_ui_dismiss_selection()
 		return

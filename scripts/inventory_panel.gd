@@ -132,6 +132,7 @@ func _ready() -> void:
 	refresh()
 	_continue_bag_cell_initialization.call_deferred()
 	UISelectionDismissGuardScript.attach(self)
+	preload("res://scripts/ui_item_selection_lifecycle.gd").attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -435,7 +436,10 @@ func _on_equipment_data_changed() -> void:
 
 
 func _on_visibility_changed() -> void:
-	if not visible:
+	var session := get_node_or_null("R3SelectionLifecycle")
+	if session != null:
+		session.call("sync_visibility")
+	if not is_visible_in_tree():
 		_ui_dismiss_selection()
 		return
 	# The background builder normally finishes before the first interaction. If
