@@ -9,6 +9,11 @@ extends Node
 ## recorded, never abort early; the scene exits non-zero when any row failed.
 
 @export var zone := "inventory_bag"
+# Optional id-window for zones whose one-time panel construction (e.g. the
+# 188-card shop goods list) cannot fit the runner cap in a single scene; a
+# split keeps full per-ID coverage across parts. [0, 0] = the whole range.
+@export var id_from := 0
+@export var id_to := 0
 
 const Helper := preload("res://tests/r6_1_review/detail_visible_assertions.gd")
 const Common := preload("res://tests/r6_1_review/real_panel_matrix_common.gd")
@@ -36,12 +41,12 @@ func _grids() -> Array:
 		grids.append(scroll)
 	return grids
 
-func _spec() -> Dictionary:
-	return panel.call("_ui_detail_region", {})
+func _spec(context: Dictionary = {}) -> Dictionary:
+	return panel.call("_ui_detail_region", context)
 
-func _inspect(expected: Dictionary, record: Dictionary, body_source: String) -> Array[String]:
+func _inspect(expected: Dictionary, record: Dictionary, body_source: String, context: Dictionary = {}) -> Array[String]:
 	var view := _presenter()
-	var spec: Dictionary = _spec()
+	var spec: Dictionary = _spec(context)
 	var allowed: Array[Rect2] = []
 	var base_region: Rect2 = spec.get("region", Rect2())
 	var expanded_region: Rect2 = spec.get("expanded_region", Rect2())
@@ -70,7 +75,7 @@ func _inspect(expected: Dictionary, record: Dictionary, body_source: String) -> 
 		"item_id": int(expected.item_id),
 		"name": str(expected.name),
 		"instance_id": str(record.get("instance_id", "")),
-		"affixes": Common.instance_affixes(record),
+		"affix": Common.instance_affixes(record),
 		"expected_group": str(expected.group),
 		"expected_color": str(expected.color),
 		"actual_color": str(snapshot.get("title_color", "")),
@@ -93,6 +98,10 @@ func _record(zone_name: String, expected: Dictionary, record: Dictionary, errors
 	checked += 1
 	var row: Dictionary = rows.back() if not rows.is_empty() else {}
 	row["seed_note"] = seed_note
+	row["ms"] = int(Time.get_ticks_msec() - _record_started_ms)
+	print("R61_T zone=%s id=%d ms=%d" % [zone, int(expected.item_id), row["ms"]])
+	_record_started_ms = Time.get_ticks_msec()
+	row["seed_note"] = seed_note
 	if not errors.is_empty():
 		for error: String in errors:
 			failures.append("%s|%s|%s" % [zone_name, str(expected.name), error])
@@ -102,8 +111,15 @@ func _run() -> void:
 		push_error("R61_MATRIX data not loaded")
 		get_tree().quit(1)
 		return
-	var expected_all := Common.expected_items()
-	print("R61_MATRIX zone=%s expected_ids=%d" % [zone, expected_all.size()])
+	# A level-1 warrior cannot even RECEIVE the heavy legendary gear (weight
+	# contract). Raise the fixture character so every catalog id can enter the
+	# real receive path; the weight/level rules themselves stay untouched.
+	PlayerState.level = 60
+	var expected_all: Array[Dictionary] = Common.expected_items()
+	if id_to > 0:
+		expected_all = expected_all.filter(func(e: Dictionary) -> bool: return int(e.item_id) >= id_from and int(e.item_id) <= id_to)
+	var zone_tag := zone if id_to <= 0 else "%s_%d_%d" % [zone, id_from, id_to]
+	print("R61_MATRIX zone=%s expected_ids=%d" % [zone_tag, expected_all.size()])
 	match zone:
 		"inventory_bag":
 			await _run_inventory_bag(expected_all)
@@ -121,29 +137,44 @@ func _run() -> void:
 			push_error("R61_MATRIX unknown zone " + zone)
 			get_tree().quit(1)
 			return
-	var out := FileAccess.open("user://r61_review_matrix_%s.json" % zone, FileAccess.WRITE)
+	var out := FileAccess.open("user://r61_review_matrix_%s.json" % zone_tag, FileAccess.WRITE)
 	if out != null:
-		out.store_string(JSON.stringify({"zone": zone, "checked": checked, "failures": failures, "rows": rows}, "  ", false))
+		out.store_string(JSON.stringify({"zone": zone_tag, "checked": checked, "failures": failures, "rows": rows}, "  ", false))
 		out.close()
 	for message: String in failures:
 		push_error("R61_MATRIX " + zone + " " + message)
 	print("R61_MATRIX_%s_%s checked=%d failures=%d" % [zone.to_upper(), "PASS" if failures.is_empty() else "FAIL", checked, failures.size()])
 	get_tree().quit(0 if failures.is_empty() else 1)
 
+var showcase_budget := 0
+var _record_started_ms := 0
+
 func _showcase(expected: Dictionary) -> void:
-	# §3.3 screenshots for the named showcase kinds while iterating.
-	var wanted := {"技能书": "skillbook", "回城卷": "townscroll", "药": "potion", "手镯": "bracelet", "头盔": "helmet"}
+	# §3.3 screenshots: strictly budgeted per zone (2 max) and only when a shot
+	# directory is provided, so per-ID iteration stays inside the runner cap.
+	var wanted := ["技能书", "回城卷", "药", "手镯", "头盔"]
+	if showcase_budget <= 0 or OS.get_environment("R6_SHOT_DIR").is_empty():
+		return
 	for key: String in wanted:
 		if str(expected.name).contains(key):
-			await _snap("matrix_%s_showcase_%s_%d" % [zone, wanted[key], int(expected.item_id)])
+			await _snap("matrix_%s_showcase_%s_%d" % [zone, key, int(expected.item_id)])
+			showcase_budget -= 1
+			return
 
 func _snap(name_value: String) -> void:
+	# Headless runs have no render target: capturing there would abort the
+	# coroutine and stall the whole matrix. §3.3 shots are taken by dedicated
+	# windowed capture runs with R6_SHOT_DIR set; runner runs never snap.
+	if DisplayServer.get_name() == "headless" or OS.get_environment("R6_SHOT_DIR").is_empty():
+		print("R61_SHOT skipped=", name_value, " (headless or no shot dir)")
+		return
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()
 	image.save_png(OS.get_environment("R6_SHOT_DIR") + "/" + name_value + ".png")
 	print("R61_SHOT saved=", name_value)
 
 func _run_inventory_bag(expected_all: Array[Dictionary]) -> void:
+	showcase_budget = 2
 	var InventoryScript := load("res://scripts/inventory_panel.gd")
 	panel = InventoryScript.new()
 	add_child(panel)
@@ -170,6 +201,7 @@ func _run_inventory_bag(expected_all: Array[Dictionary]) -> void:
 	await settle()
 
 func _run_inventory_equipment(expected_all: Array[Dictionary]) -> void:
+	showcase_budget = 2
 	var InventoryScript := load("res://scripts/inventory_panel.gd")
 	panel = InventoryScript.new()
 	add_child(panel)
@@ -203,7 +235,8 @@ func _run_inventory_equipment(expected_all: Array[Dictionary]) -> void:
 		panel.call("_select_equipment_slot", slot)
 		await settle()
 		var body_source: String = str(_presenter().get("detail_label").text if _presenter() != null else "")
-		var errors := _inspect(expected, record, body_source)
+		# Production equipment-zone placement contract: equipment region.
+		var errors: Array[String] = _inspect(expected, record, body_source, {"presentation_zone": "equipment", "slot": slot})
 		_record("inventory_equipment", expected, record, errors, "equip_inventory_index_result")
 		if _presenter() != null and is_instance_valid(_presenter()) and _presenter().visible and errors.is_empty():
 			await _showcase(expected)
@@ -217,6 +250,7 @@ func _run_inventory_equipment(expected_all: Array[Dictionary]) -> void:
 	await settle()
 
 func _run_warehouse(expected_all: Array[Dictionary], side: String) -> void:
+	showcase_budget = 2
 	var WarehouseScript := load("res://scripts/warehouse_panel.gd")
 	panel = WarehouseScript.new()
 	add_child(panel)
@@ -241,7 +275,8 @@ func _run_warehouse(expected_all: Array[Dictionary], side: String) -> void:
 		panel.call("_select_item", side, 0)
 		await settle()
 		var body_source: String = str(_presenter().get("detail_label").text if _presenter() != null else "")
-		var errors := _inspect(expected, record, body_source)
+		# Warehouse sides own different dock regions (stash left / bag right).
+		var errors: Array[String] = _inspect(expected, record, body_source, {"side": side})
 		_record(zone, expected, record, errors, "warehouse " + side)
 		if _presenter() != null and is_instance_valid(_presenter()) and _presenter().visible and errors.is_empty():
 			await _showcase(expected)
@@ -252,6 +287,7 @@ func _run_warehouse(expected_all: Array[Dictionary], side: String) -> void:
 	await settle()
 
 func _run_shop_buy(expected_all: Array[Dictionary]) -> void:
+	showcase_budget = 2
 	var ShopScript := load("res://scripts/shop_panel.gd")
 	panel = ShopScript.new()
 	add_child(panel)
@@ -269,6 +305,7 @@ func _run_shop_buy(expected_all: Array[Dictionary]) -> void:
 	await settle(2)
 	for i: int in range(expected_all.size()):
 		var expected: Dictionary = expected_all[i]
+		_record_started_ms = Time.get_ticks_msec()
 		panel.call("_on_item_selected", i)
 		await settle()
 		var view := _presenter()
@@ -301,8 +338,11 @@ func _run_shop_buy(expected_all: Array[Dictionary]) -> void:
 		})
 		for error: String in errors:
 			failures.append("shop_buy|%s|%s" % [str(expected.name), error])
-		if errors.is_empty() and (str(expected.name).contains("药") or str(expected.name).contains("书")):
+		print("R61_T zone=%s id=%d ms=%d" % [zone, int(expected.item_id), int(Time.get_ticks_msec() - _record_started_ms)])
+		_record_started_ms = Time.get_ticks_msec()
+		if errors.is_empty() and showcase_budget > 0 and (str(expected.name).contains("药") or str(expected.name).contains("书")):
 			await _snap("matrix_shop_buy_%d" % int(expected.item_id))
+			showcase_budget -= 1
 	panel.call("_ui_dismiss_selection")
 	panel.queue_free()
 	await settle()
@@ -311,6 +351,7 @@ func _grids_shop() -> Array:
 	return panel.find_children("*", "GridContainer", true, false)
 
 func _run_shop_sell(expected_all: Array[Dictionary]) -> void:
+	showcase_budget = 2
 	var ShopScript := load("res://scripts/shop_panel.gd")
 	panel = ShopScript.new()
 	add_child(panel)
@@ -352,7 +393,7 @@ func _run_shop_sell(expected_all: Array[Dictionary]) -> void:
 		var snapshot: Dictionary = view.call("debug_layout_snapshot")
 		rows.append({
 			"zone": zone, "item_id": int(expected.item_id), "name": str(expected.name),
-			"instance_id": str(record.get("instance_id", "")), "affixes": Common.instance_affixes(record),
+			"instance_id": str(record.get("instance_id", "")), "affix": Common.instance_affixes(record),
 			"expected_color": str(expected.color), "actual_color": str(snapshot.get("title_color", "")),
 			"body_text": body_text, "detail_rect": str(snapshot.get("rect", "")),
 			"body_content_height": float(snapshot.get("body_content_height", 0.0)),

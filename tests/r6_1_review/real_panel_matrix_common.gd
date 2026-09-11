@@ -43,11 +43,26 @@ static func seed_record(name_value: String) -> Dictionary:
 	return record.duplicate(true)
 
 static func instance_affixes(record: Dictionary) -> Array:
-	var instance: Variant = record.get("item_instance", record.get("instance", {}))
-	if instance is Dictionary:
-		var affixes: Variant = (instance as Dictionary).get("affixes", [])
-		return affixes if affixes is Array else []
-	return []
+	# W7 affixes are observable as the instance's modifiers array (the rules
+	# test asserts (affixed.item_instance.modifiers).size() == 1).
+	var modifiers: Variant = record.get("modifiers", [])
+	return modifiers if modifiers is Array else []
+
+static func affixed_drop_instance(identity_record: Dictionary, key_prefix: String, max_tries := 24) -> Dictionary:
+	# Legal random instances: the authoritative drop-rules factory rolls the
+	# 1/20 affix from a deterministic stable drop key; affixed instances are
+	# detected with the rules contract's own predicate.
+	var rules := load("res://scripts/item_drop_instance_rules.gd")
+	var catalog: Dictionary = identity_record.get("output_record", {})
+	for i: int in range(max_tries):
+		var created: Dictionary = PlayerState.create_drop_item_instance(identity_record, "%s:%d" % [key_prefix, i])
+		var instance: Dictionary = created.get("item_instance", {})
+		if instance.is_empty():
+			continue
+		if bool(rules.is_affixed_instance(instance, catalog)):
+			created["review_drop_key"] = "%s:%d" % [key_prefix, i]
+			return created
+	return {}
 
 static func base_row(zone: String, expected: Dictionary, record: Dictionary) -> Dictionary:
 	return {
