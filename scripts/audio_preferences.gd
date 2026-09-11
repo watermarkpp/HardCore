@@ -97,12 +97,14 @@ func _read_valid(path: String) -> Dictionary:
 		return {}
 	# Same strict type contract as the writer: a true TYPE_INT 2. Reject
 	# floats, strings, bools, arrays and dictionaries BEFORE any numeric
-	# conversion so 2.9 can never truncate into a valid version.
-	var version: Variant = config.get_value("meta", "version", null)
+	# conversion so 2.9 can never truncate into a valid version. The sentinel
+	# defaults keep ConfigFile.get_value from logging engine errors when a
+	# corrupt file is missing keys; both sentinels fail the checks below.
+	var version: Variant = config.get_value("meta", "version", -1)
 	if typeof(version) != TYPE_INT or version != 2:
 		return {}
-	var music: Variant = config.get_value("audio", "music_volume", null)
-	var sfx: Variant = config.get_value("audio", "sfx_volume", null)
+	var music: Variant = config.get_value("audio", "music_volume", NAN)
+	var sfx: Variant = config.get_value("audio", "sfx_volume", NAN)
 	if not valid_level(music) or not valid_level(sfx):
 		return {}
 	return {"music": float(music), "sfx": float(sfx)}

@@ -19,12 +19,36 @@ func _ready() -> void:
 
 func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(TEST_ROOT)
-	_assert_version_type_contract()
-	_assert_backup_fallback_and_double_corruption()
-	_assert_zero_levels_and_restore()
-	_assert_save_failure_keeps_dirty_and_data()
+	# Each sub-assert is a coroutine (it awaits frames); they MUST be awaited
+	# sequentially. A bare call suspends at its first await and returns, so the
+	# sub-asserts would otherwise all resume interleaved after _run finishes —
+	# racing on shared fixture state and truncated by quit().
+	await _assert_version_type_contract()
+	await _assert_backup_fallback_and_double_corruption()
+	await _assert_zero_levels_and_restore()
+	await _assert_save_failure_keeps_dirty_and_data()
+	# Test hygiene: the fixture root is test-owned; remove it so repeated runs
+	# do not accumulate stale config files under the runner's isolated user://.
+	# A failed assert aborts above and keeps the scene for diagnosis.
+	_remove_recursive(ProjectSettings.globalize_path(TEST_ROOT))
 	print("AUDIO_PREFERENCES_STRICT_CONFIG_PASS")
 	get_tree().quit(0)
+
+
+func _remove_recursive(absolute_path: String) -> void:
+	var dir := DirAccess.open(absolute_path)
+	if dir != null:
+		dir.list_dir_begin()
+		var entry := dir.get_next()
+		while entry != "":
+			if entry != "." and entry != "..":
+				if dir.current_is_dir():
+					_remove_recursive(absolute_path.path_join(entry))
+				else:
+					dir.remove(entry)
+			entry = dir.get_next()
+		dir.list_dir_end()
+		DirAccess.remove_absolute(absolute_path)
 
 
 func _make_prefs(storage_path: String) -> Node:

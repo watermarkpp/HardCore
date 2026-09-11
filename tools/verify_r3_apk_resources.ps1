@@ -39,7 +39,8 @@ try {
         'ui_selection_dismiss_guard', 'audio_preferences', 'ui_runtime_layout_overrides',
         'touch_scroll_support', 'character_select', 'gothic_confirmation_panel',
         'system_menu_panel', 'equipment_character_preview', 'loading_transition_overlay',
-        'monster_target_magic_effect', 'layers/runtime/combat_runtime_service'
+        'monster_target_magic_effect', 'layers/runtime/combat_runtime_service',
+        'item_detail_docked_presenter', 'ui_item_detail_dock', 'ui_item_selection_visual'
     )
     foreach ($Script in $Scripts) {
         $null = Require-Entry "assets/scripts/$Script.gdc"
@@ -115,7 +116,11 @@ try {
         $LayoutBytes = [byte[]]::new($LayoutEntry.Length)
         $Read = 0
         while ($Read -lt $LayoutBytes.Length) {
+            $Before = $Read
             $Read += $LayoutStream.Read($LayoutBytes, $Read, $LayoutBytes.Length - $Read)
+            if ($Read -le $Before) {
+                throw "UI R5 layout contract entry is truncated: read $Read of $($LayoutBytes.Length) bytes"
+            }
         }
     } finally {
         $LayoutStream.Dispose()

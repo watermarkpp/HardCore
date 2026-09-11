@@ -80,6 +80,7 @@ func _assert_world_reentry_single_service() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var first_service_ref: WeakRef = weakref(first_world._combat_runtime)
+	var first_service_instance_id := (first_service_ref.get_ref() as Node).get_instance_id()
 	_assert_single_owned_service(first_world)
 	first_world.queue_free()
 	await _await_world_released(first_world)
@@ -99,7 +100,7 @@ func _assert_world_reentry_single_service() -> void:
 		"再次进入后新世界必须持有有效 CombatRuntimeService",
 	)
 	assert(
-		second_service_ref.get_ref() != first_service_ref.get_ref(),
+		(second_service_ref.get_ref() as Node).get_instance_id() != first_service_instance_id,
 		"新世界服务必须是全新实例，不得复用旧世界服务",
 	)
 	second_world.queue_free()

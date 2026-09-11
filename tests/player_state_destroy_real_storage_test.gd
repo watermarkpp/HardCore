@@ -28,6 +28,9 @@ func expect(condition: bool, message: String) -> void:
 		failures.append(message)
 
 
+var _fixture_root := ""
+
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -42,6 +45,7 @@ func _fixture_inventory() -> Array:
 
 func _setup_isolated_fixture() -> String:
 	var test_root := "user://destroy_real_storage_%d" % Time.get_ticks_usec()
+	_fixture_root = test_root
 	PlayerState.profile_directory = test_root.path_join("characters")
 	PlayerState.profile_index_path = test_root.path_join("profiles.json")
 	PlayerState.shared_warehouse_path = test_root.path_join("shared.json")
@@ -159,8 +163,29 @@ func _run() -> void:
 	PlayerState.profile_changed.disconnect(on_profile_changed)
 	for failure: String in failures:
 		push_error("DESTROY_REAL_STORAGE: " + failure)
+	# Test hygiene: drop the timestamped fixture root so repeated runs do not
+	# accumulate dirs under the runner's isolated user://. Failed asserts abort
+	# above and keep the scene for diagnosis. Best-effort: a cleanup failure is
+	# hygiene noise, not a contract failure.
+	_remove_recursive(ProjectSettings.globalize_path(_fixture_root))
 	print(
 		"DESTROY_REAL_STORAGE_%s checks=%d failures=%d"
 		% ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()]
 	)
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+
+func _remove_recursive(absolute_path: String) -> void:
+	var dir := DirAccess.open(absolute_path)
+	if dir != null:
+		dir.list_dir_begin()
+		var entry := dir.get_next()
+		while entry != "":
+			if entry != "." and entry != "..":
+				if dir.current_is_dir():
+					_remove_recursive(absolute_path.path_join(entry))
+				else:
+					dir.remove(entry)
+			entry = dir.get_next()
+		dir.list_dir_end()
+		DirAccess.remove_absolute(absolute_path)
