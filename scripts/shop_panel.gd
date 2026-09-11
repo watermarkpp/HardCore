@@ -1,6 +1,10 @@
 class_name ShopPanel
 extends Panel
 
+const UIActivationOnceScript := preload("res://scripts/ui_activation_once.gd")
+
+const UIItemNameStyleScript := preload("res://scripts/ui_item_name_style.gd")
+
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
@@ -507,7 +511,7 @@ func _ensure_goods_card_capacity(required_count: int) -> void:
 		card.focus_mode = Control.FOCUS_NONE
 		card.theme_type_variation = "GothicComponentShopCard"
 		card.hide()
-		card.pressed.connect(_on_goods_card_pressed.bind(card))
+		UIActivationOnceScript.attach(card, _on_goods_card_pressed.bind(card))
 		goods_grid.add_child(card)
 		_goods_card_pool.append(card)
 		if PlayerState.test_mode:
@@ -911,12 +915,24 @@ func _show_sell_detail(inventory_index: int, quote: Dictionary) -> void:
 	_show_shop_detail(str(record.get("name", "物品")), _sell_item_detail(record, item, quote), inventory_index, true)
 
 
-func _show_shop_detail(title: String, body: String, _index: int, _selling: bool) -> void:
+func _show_shop_detail(title: String, body: String, index: int, selling: bool) -> void:
 	if item_detail_presenter == null:
 		return
-	item_detail_presenter.show_text(title, body, {"presentation_zone": "shop"})
+	var instance: Dictionary = {}
+	var item_ref: Variant = {}
+	if selling:
+		instance = _inventory_record(index)
+		item_ref = instance
+	elif index >= 0 and index < stock.size():
+		item_ref = stock[index]
+	var item: Dictionary = GameData.get_item_record(item_ref)
+	var displayed_title := title.strip_edges()
+	if displayed_title.is_empty():
+		displayed_title = UIItemNameStyleScript.display_name(item, instance)
+	item_detail_presenter.show_text(displayed_title, body, {
+		"presentation_zone": "shop", "rarity_item": item, "rarity_instance": instance,
+	})
 	detail_label = item_detail_presenter.detail_label
-
 
 func _sell_item_detail(record: Dictionary, item: Dictionary, quote: Dictionary) -> String:
 	var lines: Array[String] = [

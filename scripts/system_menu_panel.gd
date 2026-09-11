@@ -369,37 +369,51 @@ func _ui_volume_row(node_name: String, caption: String, y: float, channel: Strin
 	var row := Control.new()
 	row.name = node_name
 	row.position = Vector2(72, y)
-	row.size = Vector2(356, 96)
+	row.size = Vector2(356, 76)
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.set_meta("calibration_layout_revision", 5)
+	row.set_meta("calibration_layout_revision", 7)
 	settings_page.add_child(row)
+	var frame := Button.new()
+	frame.name = "RowFrame"
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame.theme_type_variation = "GothicSystemSettingsRowGemButton"
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.focus_mode = Control.FOCUS_NONE
+	frame.set_meta("calibration_layout_revision", 7)
+	row.add_child(frame)
 	var title := Label.new()
 	title.name = "Caption"
 	title.text = caption
-	title.position = Vector2(12, 2)
-	title.size = Vector2(250, 30)
+	title.position = Vector2(20, 10)
+	title.size = Vector2(92, 56)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title.add_theme_font_size_override("font_size", 18)
 	title.add_theme_color_override("font_color", Color("f2d29b"))
+	title.set_meta("calibration_runtime_text", true)
+	title.set_meta("calibration_layout_revision", 7)
 	row.add_child(title)
 	var percent := Label.new()
 	percent.name = "Percent"
-	percent.position = Vector2(268, 2)
-	percent.size = Vector2(76, 30)
+	percent.position = Vector2(286, 10)
+	percent.size = Vector2(50, 56)
 	percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	percent.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	percent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	percent.set_meta("calibration_runtime_text", true)
+	percent.set_meta("calibration_layout_revision", 7)
 	row.add_child(percent)
 	var slider := HSlider.new()
 	slider.name = "Slider"
-	slider.position = Vector2(12, 36)
-	slider.size = Vector2(332, 48)
+	slider.position = Vector2(122, 10)
+	slider.size = Vector2(152, 56)
 	slider.min_value = 0.0
 	slider.max_value = 100.0
 	slider.step = 1.0
 	slider.scrollable = false
 	slider.mouse_filter = Control.MOUSE_FILTER_STOP
 	slider.set_meta("setting_id", "audio." + channel + ".volume")
-	slider.set_meta("calibration_layout_revision", 5)
+	slider.set_meta("calibration_layout_revision", 7)
 	var track := StyleBoxFlat.new()
 	track.bg_color = Color("241c15")
 	track.border_color = Color("705438")
@@ -413,7 +427,6 @@ func _ui_volume_row(node_name: String, caption: String, y: float, channel: Strin
 	slider.add_theme_stylebox_override("slider", track)
 	slider.add_theme_stylebox_override("grabber_area", fill)
 	slider.add_theme_stylebox_override("grabber_area_highlight", fill)
-	# Existing slider grabber texture/theme is retained; do not generate art.
 	slider.value_changed.connect(_ui_slider_changed.bind(channel))
 	row.add_child(slider)
 	return slider

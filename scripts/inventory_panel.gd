@@ -1,6 +1,8 @@
 class_name InventoryPanel
 extends Panel
 
+const UIActivationOnceScript := preload("res://scripts/ui_activation_once.gd")
+
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PreviewScript = preload("res://scripts/equipment_character_preview.gd")
 const GothicUIThemeScript = preload("res://scripts/gothic_ui_theme.gd")
@@ -380,7 +382,7 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	button.toggle_mode = true
 	button.tooltip_text = "%s：空" % slot
 	button.theme_type_variation = "GothicEquipmentSlotButton"
-	button.pressed.connect(_select_equipment_slot.bind(slot))
+	UIActivationOnceScript.attach(button, _select_equipment_slot.bind(slot))
 	button.gui_input.connect(_equipment_input.bind(slot, button))
 	holder.add_child(button)
 	var caption_plate := Panel.new()
@@ -618,7 +620,7 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.theme_type_variation = "GothicComponentSlotButton"
-	button.pressed.connect(_select_inventory_item.bind(index))
+	UIActivationOnceScript.attach(button, _select_inventory_item.bind(index))
 	button.gui_input.connect(_inventory_input.bind(index, button))
 	cell.add_child(button)
 	var count_label := Label.new()
@@ -980,7 +982,9 @@ func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 			_press_cancelled = false
 		return
 	if _is_double_activation_event(event):
+		UIActivationOnceScript.suppress_for(button)
 		_cancel_long_press()
+		_press_cancelled = false
 		_clear_inventory_selection_styles()
 		var item := GameData.get_item_record(stack)
 		if str(item.get("kind", "")) == "equipment":

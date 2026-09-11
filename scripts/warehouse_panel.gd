@@ -1,6 +1,8 @@
 class_name WarehousePanel
 extends Panel
 
+const UIActivationOnceScript := preload("res://scripts/ui_activation_once.gd")
+
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
@@ -550,7 +552,7 @@ func _create_item_cell(
 	button.disabled = true
 	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.tooltip_text = "空物品格"
-	button.pressed.connect(_select_grid_button.bind(button))
+	UIActivationOnceScript.attach(button, _select_grid_button.bind(button))
 	cell.add_child(button)
 	var count_label := Label.new()
 	count_label.name = "StackCount"

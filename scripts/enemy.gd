@@ -7996,27 +7996,51 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		if neighbor == Vector2i.ZERO:
 			neighbor = MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(intended - current)
 		var legal_neighbor := next == cell or MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, next, combat_radius_gu)
-		if legal_neighbor and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended) and _hc_motion_clear(current, intended):
+		var r6_direct_static_clear := legal_neighbor and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended)
+		var r6_motion_checked := false
+		var r6_motion_clear := false
+		if r6_direct_static_clear:
+			r6_motion_clear = _hc_motion_clear(current, intended)
+			r6_motion_checked = true
+		if r6_direct_static_clear and r6_motion_clear:
 			_hc_step_override = intended
 			_hc_route.clear()
 			_hc_route_index = 0
 			return neighbor
 		# A live-body block is NOT a static terrain failure. Try bounded flanks.
-		if not _hc_motion_clear(current, intended) or _hc_frontline_at(current, anchor, hit_target) > 0:
+		if not r6_motion_checked:
+			r6_motion_clear = _hc_motion_clear(current, intended)
+		if not r6_motion_clear or _hc_frontline_at(current, anchor, hit_target) > 0:
 			if Time.get_ticks_msec() < _hc_next_side_retry_ms:
 				return Vector2i.ZERO
 			_hc_next_side_retry_ms = Time.get_ticks_msec() + 100
 			var best := Vector2i.ZERO
 			var best_cost := INF
 			var preferred_sign := 1.0 if posmod(get_instance_id(), 2) == 0 else -1.0
-			for option: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
+			# Query the exact sixteen bucket envelopes once. Preserve option order,
+			# static legality, live narrow phases and the original cost tie-break.
+			var batched := _hc_prepare_flank_batch(current, anchor, cell)
+			for option_index in range(MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS.size()):
+				var option: Vector2i = MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS[option_index]
 				var endpoint := Vector2(cell + option) + Vector2(0.5, 0.5)
-				if not MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, cell + option, combat_radius_gu):
+				var query_offset := _hc_flank_option_offsets[option_index] if batched else -1
+				if batched:
+					if query_offset < 0:
+						continue
+				elif not MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, cell + option, combat_radius_gu) or not _hc_point_walkable(endpoint):
 					continue
-				if not _hc_point_walkable(endpoint) or not _hc_motion_clear(current, endpoint):
+				var motion_clear := (
+					_hc_motion_candidates(current, endpoint, _hc_flank_outputs[query_offset])
+					if batched else _hc_motion_clear(current, endpoint)
+				)
+				if not motion_clear:
 					continue
 				var cost := endpoint.distance_to(anchor) + (0.05 if Vector2(option).cross(anchor - current) * preferred_sign < 0.0 else 0.0)
-				if _hc_frontline_at(endpoint, anchor, hit_target) != 0:
+				var blocked := (
+					_hc_frontline_candidates(endpoint, anchor, hit_target, _hc_flank_outputs[query_offset + 1]) != 0
+					if batched else _hc_frontline_at(endpoint, anchor, hit_target) != 0
+				)
+				if blocked:
 					cost += 2.0
 				if cost < best_cost:
 					best = option
@@ -8087,3 +8111,71 @@ func _hc_track_motion(delta: float, remaining_before: float, remaining_after: fl
 	_hc_motion_window = 0.0
 	_hc_window_remaining = remaining_after
 	return stalled
+
+
+var _hc_flank_starts := PackedVector2Array()
+var _hc_flank_ends := PackedVector2Array()
+var _hc_flank_expansions := PackedFloat64Array()
+var _hc_flank_option_offsets := PackedInt32Array()
+var _hc_flank_outputs: Array = []
+var _hc_flank_scratch: Array = []
+
+
+## HC-M30-R6: exact existing narrow phases, with caller-supplied live candidates.
+## No callbacks/await, attack decisions, delays, cached hits or position writes.
+func _hc_frontline_candidates(a: Vector2, b: Vector2, hit_target: Node2D, candidates: Array) -> int:
+	var target_radius: float = _target_combat_radius_gu(hit_target)
+	for raw: Variant in candidates:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == hit_target or not other.can_receive_damage():
+			continue
+		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		var c := other.spatial_index_position()
+		if HCPolicy.frontline_blocks(a, b, c, combat_radius_gu, target_radius, other.combat_radius_gu, spatial_actor_runtime_id, other.spatial_actor_runtime_id):
+			return other.get_instance_id()
+	return 0
+
+func _hc_motion_candidates(a: Vector2, b: Vector2, candidates: Array) -> bool:
+	for raw: Variant in candidates:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == target or not other.can_receive_damage():
+			continue
+		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		var c := other.spatial_index_position()
+		if HCPolicy.core_crossed(a, b, c, combat_radius_gu, other.combat_radius_gu):
+			return false
+	return true
+
+func _hc_prepare_flank_batch(current: Vector2, anchor: Vector2, cell: Vector2i) -> bool:
+	if combat_spatial_index == null or runtime_map_id < 0:
+		return false
+	_hc_flank_starts.clear()
+	_hc_flank_ends.clear()
+	_hc_flank_expansions.clear()
+	_hc_flank_option_offsets.clear()
+	# Static predicates are read-only. Pre-filter first so an all-wall flank
+	# evaluates ZERO broadphase queries, not one unnecessary union query.
+	for option: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
+		var endpoint := Vector2(cell + option) + Vector2(0.5, 0.5)
+		if not MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, cell + option, combat_radius_gu) or not _hc_point_walkable(endpoint):
+			_hc_flank_option_offsets.append(-1)
+			continue
+		_hc_flank_option_offsets.append(_hc_flank_starts.size())
+		_hc_flank_starts.append(current)
+		_hc_flank_ends.append(endpoint)
+		_hc_flank_expansions.append(combat_radius_gu)
+		_hc_flank_starts.append(endpoint)
+		_hc_flank_ends.append(anchor)
+		_hc_flank_expansions.append(HCPolicy.LANE_GU)
+	if _hc_flank_starts.is_empty():
+		return true
+	return combat_spatial_index.query_enemy_nodes_segment_batch_into(
+		runtime_map_id, _hc_flank_starts, _hc_flank_ends, _hc_flank_expansions,
+		_hc_flank_outputs, _hc_flank_scratch,
+	)

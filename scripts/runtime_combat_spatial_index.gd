@@ -644,3 +644,70 @@ func _erase_entry(actor_runtime_id: int) -> void:
 		_buckets.erase(runtime_map_id)
 	_entries.erase(actor_runtime_id)
 	index_unregister_count += 1
+
+
+var index_enemy_node_batch_query_count := 0
+var index_enemy_node_batch_segment_count := 0
+
+
+## HC-M30-R6: exact batch of unordered bucket-envelope queries. This is NOT a
+## cross-frame cache. It is used only inside one synchronous flank evaluation.
+## Output i contains the same live nodes, in the same bucket traversal order,
+## as query_enemy_nodes_segment_unsorted_into for segment i at this instant.
+func query_enemy_nodes_segment_batch_into(
+	runtime_map_id: int,
+	starts: PackedVector2Array,
+	ends: PackedVector2Array,
+	expansions: PackedFloat64Array,
+	outputs: Array,
+	scratch: Array,
+) -> bool:
+	var count := starts.size()
+	for old: Variant in outputs:
+		if old is Array:
+			(old as Array).clear()
+	scratch.clear()
+	if runtime_map_id < 0 or count <= 0 or count > 32 or ends.size() != count or expansions.size() != count:
+		return false
+	outputs.resize(count)
+	var minimum_buckets: Array[Vector2i] = []
+	var maximum_buckets: Array[Vector2i] = []
+	var union_min := Vector2(INF, INF)
+	var union_max := Vector2(-INF, -INF)
+	for i in range(count):
+		if not starts[i].is_finite() or not ends[i].is_finite() or not is_finite(expansions[i]):
+			return false
+		if not outputs[i] is Array:
+			outputs[i] = []
+		var expansion := maxf(0.0, expansions[i]) + _max_actor_bounds_gu
+		var low := Vector2(minf(starts[i].x, ends[i].x), minf(starts[i].y, ends[i].y)) - Vector2.ONE * expansion
+		var high := Vector2(maxf(starts[i].x, ends[i].x), maxf(starts[i].y, ends[i].y)) + Vector2.ONE * expansion
+		minimum_buckets.append(_bucket_key(low))
+		maximum_buckets.append(_bucket_key(high))
+		union_min = Vector2(minf(union_min.x, low.x), minf(union_min.y, low.y))
+		union_max = Vector2(maxf(union_max.x, high.x), maxf(union_max.y, high.y))
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_enemy_node_segment_query_count += 1
+	index_enemy_node_batch_query_count += 1
+	index_enemy_node_batch_segment_count += count
+	_query_enemy_nodes_in_aabb(runtime_map_id, Rect2(union_min, union_max - union_min), scratch, _next_enemy_query_stamp(), false)
+	_finish_enemy_node_query(scratch)
+	for raw: Variant in scratch:
+		var enemy := raw as EnemyActor
+		if enemy == null:
+			continue
+		var entry: Dictionary = _entries.get(enemy.spatial_actor_runtime_id, {})
+		# Non-production fixtures with a deliberately unbound runtime id can use
+		# the untouched single-query path; never guess a bucket from live motion.
+		if entry.is_empty() or int(entry.get("node_instance_id", 0)) != enemy.get_instance_id():
+			for output: Array in outputs:
+				output.clear()
+			return false
+		var bucket: Vector2i = entry.get("bucket_key", Vector2i.ZERO)
+		for i in range(count):
+			var low := minimum_buckets[i]
+			var high := maximum_buckets[i]
+			if bucket.x >= low.x and bucket.x <= high.x and bucket.y >= low.y and bucket.y <= high.y:
+				(outputs[i] as Array).append(enemy)
+	return true

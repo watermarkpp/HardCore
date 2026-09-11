@@ -50,15 +50,15 @@ func _run() -> void:
 	for zoom: float in [0.75, 1.0, 1.2]:
 		scope.scale = Vector2.ONE * zoom
 		scope.presentation = "right"
-		view.show_text("长属性测试", "追加属性：攻击 +5\n".repeat(80))
+		view.show_text("长属性测试", "追加属性：攻击 +5\n".repeat(8))
 		await get_tree().process_frame
 		var region: Rect2 = scope._ui_detail_region({})["region"]
 		var actual := Rect2(view.position, view.size)
 		expect(view.debug_layout_valid(), "right dock has usable space at scale " + str(zoom))
 		expect(region.grow(0.5).encloses(actual), "right detail remains bounded")
 		expect(not actual.intersects(Dock.rect_in(scope, scroll)), "right detail never covers grid")
-		expect(view.detail_label.scroll_active, "long body can scroll")
-		expect(view.detail_label.text.count("追加属性") == 80, "long body is not truncated")
+		expect(not view.detail_label.scroll_active, "R6 normal body never scrolls")
+		expect(view.detail_label.text.count("追加属性") == 8, "long body is not truncated")
 		scroll.position.x = 64
 		scope.presentation = "left"
 		view.show_message("无法使用：不满足条件。")

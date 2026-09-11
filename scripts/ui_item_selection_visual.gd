@@ -13,6 +13,7 @@ static func apply(button: Button, selected: bool, normal_type: StringName, selec
 	for key: StringName in [&"hover", &"pressed", &"hover_pressed"]:
 		button.add_theme_stylebox_override(key, semantic_style)
 	button.add_theme_stylebox_override(&"focus", StyleBoxEmpty.new())
+	button.set_meta("ui_selection_authoritative_pressed", selected)
 	if button.toggle_mode:
 		button.set_pressed_no_signal(selected)
 	if not selected:
