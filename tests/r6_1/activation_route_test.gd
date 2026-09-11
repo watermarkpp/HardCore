@@ -12,14 +12,17 @@ func _ready() -> void:
 func touch(index: int, pressed: bool, point: Vector2, canceled: bool = false) -> void:
 	var event := InputEventScreenTouch.new()
 	event.index = index
-	event.position = point
+	# push_input expects WINDOW coordinates; the engine converts them with the
+	# final transform's inverse. Headless windows report a 0x0 client size, so
+	# the transform is a heavy downscale and raw canvas points miss the button.
+	event.position = get_viewport().get_final_transform() * point
 	event.pressed = pressed
 	event.canceled = canceled
 	get_viewport().push_input(event)
 func drag(index: int, point: Vector2) -> void:
 	var event := InputEventScreenDrag.new()
 	event.index = index
-	event.position = point
+	event.position = get_viewport().get_final_transform() * point
 	get_viewport().push_input(event)
 func selected() -> void:
 	count += 1

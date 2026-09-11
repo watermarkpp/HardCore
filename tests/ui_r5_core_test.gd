@@ -52,10 +52,17 @@ func _run() -> void:
 		scope.presentation = "right"
 		view.show_text("长属性测试", "追加属性：攻击 +5\n".repeat(8))
 		await get_tree().process_frame
-		var region: Rect2 = scope._ui_detail_region({})["region"]
+		var region_spec: Dictionary = scope._ui_detail_region({})
+		# The docked contract allows the same-side vertical safety expansion
+		# (expanded_region) when the base region cannot fit the content, so the
+		# bounded check must use the allowed union, while the grid-coverage
+		# check below stays strict.
+		var region: Rect2 = region_spec["region"]
+		var expanded: Rect2 = region_spec.get("expanded_region", region)
+		var bounded_region: Rect2 = expanded if expanded.has_area() and expanded != region else region
 		var actual := Rect2(view.position, view.size)
 		expect(view.debug_layout_valid(), "right dock has usable space at scale " + str(zoom))
-		expect(region.grow(0.5).encloses(actual), "right detail remains bounded")
+		expect(bounded_region.grow(0.5).encloses(actual), "right detail remains bounded")
 		expect(not actual.intersects(Dock.rect_in(scope, scroll)), "right detail never covers grid")
 		expect(not view.detail_label.scroll_active, "R6 normal body never scrolls")
 		expect(view.detail_label.text.count("追加属性") == 8, "long body is not truncated")
@@ -63,9 +70,12 @@ func _run() -> void:
 		scope.presentation = "left"
 		view.show_message("无法使用：不满足条件。")
 		await get_tree().process_frame
-		region = scope._ui_detail_region({})["region"]
+		var left_spec: Dictionary = scope._ui_detail_region({})
+		var left_region: Rect2 = left_spec["region"]
+		var left_expanded: Rect2 = left_spec.get("expanded_region", left_region)
+		var left_bounded: Rect2 = left_expanded if left_expanded.has_area() and left_expanded != left_region else left_region
 		actual = Rect2(view.position, view.size)
-		expect(region.grow(0.5).encloses(actual), "left detail remains bounded")
+		expect(left_bounded.grow(0.5).encloses(actual), "left detail remains bounded")
 		expect(actual.end.x <= Dock.rect_in(scope, scroll).position.x, "left detail stays left")
 		scroll.position.x = 640
 	scope.scale = Vector2.ONE
