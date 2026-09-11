@@ -1,0 +1,64 @@
+{
+  "review_base": "e1225399e7803b5153d6315cbcb48d34c10437e7",
+  "head": "e1225399e7803b5153d6315cbcb48d34c10437e7",
+  "states": {
+    "scripts/shop_panel.gd": {
+      "state": "INSTALLED",
+      "before_blob": "4672cf2f7d81f3253159635b7b7340dd1c2bc929",
+      "after_blob": "dfdfe06061b8f76117c3bac7b921a47d75c49aeb",
+      "sha256_lf": "f75ace5dc98ca6d3bc2851f42f88c4fd4b2b64ec4b027ba069d9717a0695f2c1"
+    },
+    "tests/r6_1_review/detail_visible_assertions.gd": {
+      "state": "INSTALLED",
+      "before_blob": null,
+      "after_blob": "7c35bfae3a23f8194827ce53a75c01c150c7818b",
+      "sha256_lf": "fea9525c3effe46184654adde567391371f99e0e5fac3a42ddd9f5fe0889c84e"
+    },
+    "tests/r6_1_review/shop_selection_identity_test.gd": {
+      "state": "INSTALLED",
+      "before_blob": null,
+      "after_blob": "bb37adfea2caa69b8d63ff0c586755d56373f017",
+      "sha256_lf": "685831ad149b175287c40faff488a1b15b13e50c41ed8b0232ecb02a36cd3b0c"
+    },
+    "tests/r6_1_review/shop_selection_identity_test.tscn": {
+      "state": "INSTALLED",
+      "before_blob": null,
+      "after_blob": "e15c21c4838cac19ced76d0ab143f73d6bdd3a17",
+      "sha256_lf": "4653706095d1270800cd8463632c1cfd83ee08fb0a54360e51b8662cf8ae9eb7"
+    }
+  },
+  "unchanged_other_tracked_paths": true,
+  "godot": "NOT_RUN_BY_INSTALLER",
+  "device": "NOT_RUN_BY_INSTALLER",
+  "status": "REVIEW_PATCH_INTACT_NOT_RUNTIME_ACCEPTANCE",
+  "utc": "2026-09-11T03:59:24.030326+00:00",
+  "untracked_paths": [
+    "docs/bugfix24/20260909/monster_delivery_inventory.actor.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.ai.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.attack.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.classification.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.server.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.shared.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.source.translation",
+    "docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation",
+    "tests/diag_activation_probe.tscn",
+    "tests/diag_bounded_probe.tscn",
+    "tests/diag_r6_screenshot_capture.gd",
+    "tests/diag_r6_screenshot_capture.tscn",
+    "tests/m30_r3_closure/art_wait_freeze.gd.uid",
+    "tests/m30_r3_closure/test_art_wait_freeze.gd.uid",
+    "tests/m30_r4_r2/fixture_geometry.gd.uid",
+    "tests/m30_r4_r2/lab_sampler.gd.uid",
+    "tests/m30_r4_r2/pig_site_probe.gd.uid",
+    "tests/m30_r4_r2/test_safe_projection.gd.uid",
+    "tests/m30_r4_r3/site_inspector.gd.uid",
+    "tests/m30_r4_r3/site_probe.gd.uid",
+    "tests/m30_r4_r3/survival_guard.gd.uid",
+    "tests/m30_r4_r3/test_profile_survival.gd.uid",
+    "tests/packaged_bytecode_contract_test.gd.uid"
+  ]
+}
