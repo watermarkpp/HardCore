@@ -74,11 +74,14 @@ func _clear_presentation() -> void:
 			target.call("cancel")
 	if panel.has_method("_ui_dismiss_selection"):
 		panel.call("_ui_dismiss_selection")
-	var viewport := panel.get_viewport()
-	if viewport != null:
-		var focus := viewport.gui_get_focus_owner()
-		if is_instance_valid(focus) and (focus == panel or panel.is_ancestor_of(focus)):
-			focus.release_focus()
+	# A leaving parent may still exist after some of its controls left the tree.
+	# Do not skip the semantic cleanup above; guard only viewport/focus operations.
+	if panel.is_inside_tree():
+		var viewport := panel.get_viewport()
+		if viewport != null:
+			var focus := viewport.gui_get_focus_owner()
+			if is_instance_valid(focus) and focus.is_inside_tree() and focus.has_focus() and (focus == panel or panel.is_ancestor_of(focus)):
+				focus.release_focus()
 	# The semantic owner clears selection and authoritative pressed metadata;
 	# never indiscriminately untoggle trade tabs or equipped-item data.
 	_clearing = false

@@ -9,6 +9,7 @@ const ACTION_CLEAR_PX := 36.0
 const ACTION_FRAME_PX := 18.0
 const ACTION_STACK_GAP_PX := 16.0
 const Frame := preload("res://scripts/gothic_frame_factory.gd")
+const VisualBounds := preload("res://scripts/ui_style_visual_bounds.gd")
 
 static func transformed(t: Transform2D, r: Rect2) -> Rect2:
 	var out := Rect2(t * r.position, Vector2.ZERO)
@@ -39,14 +40,10 @@ static func inset(r: Rect2, amount: Vector2) -> Rect2:
 	return Rect2(r.position + amount, Vector2(maxf(0.0, r.size.x - 2.0 * amount.x), maxf(0.0, r.size.y - 2.0 * amount.y)))
 
 static func visual_rect(owner: Control, c: Control) -> Rect2:
-	var r := Rect2(Vector2.ZERO, c.size)
-	if c is BaseButton:
-		# Include expand margins of ALL visual states, not just the text/hit box.
-		for state: StringName in [&"normal", &"hover", &"pressed", &"disabled", &"focus"]:
-			var style := c.get_theme_stylebox(state)
-			if style != null:
-				r = r.merge(style.get_draw_rect(Rect2(Vector2.ZERO, c.size)))
-	return rect_in(owner, c, r)
+	var bounds := VisualBounds.control_bounds(c)
+	if not bool(bounds.get("ok", false)):
+		return Rect2() # region() rejects unsupported actions before any reflow.
+	return rect_in(owner, c, bounds.get("rect", Rect2()))
 
 static func _shift_y(owner: Control, c: Control, delta: float) -> void:
 	if absf(delta) < 0.05:
@@ -100,6 +97,18 @@ static func region(owner: Control) -> Dictionary:
 	var safe := inset(opening, Vector2(FRAME_CLEAR_PX / scale.x, FRAME_CLEAR_PX / scale.y))
 	var top := maxf(safe.position.y, rect_in(owner, title).end.y + TITLE_CLEAR_PX / scale.y)
 	var actions := _visible_actions(owner)
+	# Validate before shifting/resizing anything. A future unknown custom style
+	# must not silently use a hit box and violate the 30px visual clearance.
+	for action: Control in actions:
+		var bounds := VisualBounds.control_bounds(action)
+		if not bool(bounds.get("ok", false)):
+			var reason := str(bounds.get("reason", "UNKNOWN_STYLE"))
+			if str(owner.get_meta("r31_bounds_error", "")) != reason:
+				owner.set_meta("r31_bounds_error", reason)
+				push_error("R31_ACTION_VISUAL_BOUNDS:" + reason)
+			return {"region": Rect2(), "side": "center", "kind": "shop", "error": reason}
+	if owner.has_meta("r31_bounds_error"):
+		owner.remove_meta("r31_bounds_error")
 	for c: Control in actions:
 		if not c.has_meta("r3_original_size"):
 			c.set_meta("r3_original_size", rect_in(owner, c).size)
