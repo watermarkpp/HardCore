@@ -1,0 +1,71 @@
+{
+  "total": 4,
+  "engine_log_errors": 28,
+  "passed": 0,
+  "git_head": "b3296528d7f85c7dff2c78adafaa0f5e4ec33c16",
+  "results": [
+    {
+      "test_name": "shop_space_0",
+      "test_path": "tests/r6_3/shop_space_0.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 7,
+      "engine_log_failure_count": 7,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_7;engine_log_failures_7"
+    },
+    {
+      "test_name": "shop_space_1",
+      "test_path": "tests/r6_3/shop_space_1.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 7,
+      "engine_log_failure_count": 7,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_7;engine_log_failures_7"
+    },
+    {
+      "test_name": "shop_space_2",
+      "test_path": "tests/r6_3/shop_space_2.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 7,
+      "engine_log_failure_count": 7,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_7;engine_log_failures_7"
+    },
+    {
+      "test_name": "shop_space_3",
+      "test_path": "tests/r6_3/shop_space_3.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 7,
+      "engine_log_failure_count": 7,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_7;engine_log_failures_7"
+    }
+  ],
+  "suite": "adhoc",
+  "failed": 4,
+  "generated_at": "2026-09-11T18:37:35.7186695+08:00"
+}

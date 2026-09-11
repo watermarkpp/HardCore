@@ -1,0 +1,135 @@
+{
+  "package": "HardCore.R3.layout-close-m30",
+  "base": "a96db29320606d72849e292002a6515ac454ce7a",
+  "head": "a96db29320606d72849e292002a6515ac454ce7a",
+  "branch": "codex/r3-layout-close-m30",
+  "status": "R3_CORE_INTACT_NOT_RUNTIME_ACCEPTANCE",
+  "targets": [
+    {
+      "path": "scripts/item_detail_docked_presenter.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "aaab60059afe292036907bb3e984aed28785aec576da84f70515d841fe9bc909",
+      "canonical_after_sha256": "b86473413a36da56ea3baa3cf024e4ff65a90612e5ec9a652ab790beae259b20",
+      "line_endings": "CRLF"
+    },
+    {
+      "path": "scripts/ui_item_detail_dock.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "9bba0e6c42f3ad90a5b51e3a192ffc64b67d6c36d9533859e1e4c22c3a0403ab",
+      "canonical_after_sha256": "b9695f3edfc9ae8bd0b9f023ef4209eeda9d7918acdfc18afebe460e9ee100ef",
+      "line_endings": "CRLF"
+    },
+    {
+      "path": "scripts/inventory_panel.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "6d2919dba5079347370ef637877218e939b653bcfbf47dbe1f0624270cf028a7",
+      "canonical_after_sha256": "0ceb4db0a97c2995bbe1ea9e8328439b3505b077df65c5a6f2690085b50729c7",
+      "line_endings": "CRLF"
+    },
+    {
+      "path": "scripts/warehouse_panel.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "ac5475c33550bec4dd56088cae41b75558c69742adb19fb96c63933dc73621a2",
+      "canonical_after_sha256": "c13b71e38bbc75b25ffca26748e5a19246f35df624baf860600f754bf30c986e",
+      "line_endings": "CRLF"
+    },
+    {
+      "path": "scripts/shop_panel.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "29ef71e80288609e34340c2f98928e6c048bd08996cf3e542b8adc17eed86671",
+      "canonical_after_sha256": "14a945c3dfa89144941f07da70289fe03124966bc81e5648bbae94d26bcb93d8",
+      "line_endings": "CRLF"
+    },
+    {
+      "path": "scripts/ui_item_selection_lifecycle.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "4accd200b6c542d9124bf1aec7e5c2e6f20531f20bae6fd4c73808124fb34e89",
+      "canonical_after_sha256": "4accd200b6c542d9124bf1aec7e5c2e6f20531f20bae6fd4c73808124fb34e89",
+      "line_endings": "LF"
+    },
+    {
+      "path": "scripts/ui_shop_detail_space.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "ee8ecb0e48fdd756395d0d08b4290cd67f4d039e0cb8b762d45c4858b253af1e",
+      "canonical_after_sha256": "ee8ecb0e48fdd756395d0d08b4290cd67f4d039e0cb8b762d45c4858b253af1e",
+      "line_endings": "LF"
+    },
+    {
+      "path": "tests/r6_3/close_selection_test.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "5f550e828c15d8aed657d1095e6ab68b3de28db7902938de0078a1249dae9a47",
+      "canonical_after_sha256": "5f550e828c15d8aed657d1095e6ab68b3de28db7902938de0078a1249dae9a47",
+      "line_endings": "LF"
+    },
+    {
+      "path": "tests/r6_3/close_selection_test.tscn",
+      "state": "INSTALLED",
+      "raw_before_sha256": "65477537d6b9f353efcd45177cad1f55c5df2282557e4f2dfe81d5153b86942e",
+      "canonical_after_sha256": "65477537d6b9f353efcd45177cad1f55c5df2282557e4f2dfe81d5153b86942e",
+      "line_endings": "LF"
+    },
+    {
+      "path": "tests/r6_3/shop_space_0.tscn",
+      "state": "INSTALLED",
+      "raw_before_sha256": "76399bf5143b7f9663f2c82c57d28b7f9a2bee76712bdafbf6ba8f657fcb4326",
+      "canonical_after_sha256": "76399bf5143b7f9663f2c82c57d28b7f9a2bee76712bdafbf6ba8f657fcb4326",
+      "line_endings": "LF"
+    },
+    {
+      "path": "tests/r6_3/shop_space_1.tscn",
+      "state": "INSTALLED",
+      "raw_before_sha256": "a7fe3faaf9c7196a615467aa06bf903a533c7ceabfa19d81127456f9909a24ba",
+      "canonical_after_sha256": "a7fe3faaf9c7196a615467aa06bf903a533c7ceabfa19d81127456f9909a24ba",
+      "line_endings": "LF"
+    },
+    {
+      "path": "tests/r6_3/shop_space_2.tscn",
+      "state": "INSTALLED",
+      "raw_before_sha256": "832324ac69481cb073c7f42520ff5e64af502e29a14538d284f85d991e1c4375",
+      "canonical_after_sha256": "832324ac69481cb073c7f42520ff5e64af502e29a14538d284f85d991e1c4375",
+      "line_endings": "LF"
+    },
+    {
+      "path": "tests/r6_3/shop_space_3.tscn",
+      "state": "INSTALLED",
+      "raw_before_sha256": "c882595ff394e962cd6aaa1d990ce9bff723d3d59501128f74ebcd85bee891c9",
+      "canonical_after_sha256": "c882595ff394e962cd6aaa1d990ce9bff723d3d59501128f74ebcd85bee891c9",
+      "line_endings": "LF"
+    },
+    {
+      "path": "tests/r6_3/shop_space_matrix.gd",
+      "state": "INSTALLED",
+      "raw_before_sha256": "526d32cfcc7ac85c2be6acfa0bf56932d8e8e8de59d586369d034471a09eea69",
+      "canonical_after_sha256": "526d32cfcc7ac85c2be6acfa0bf56932d8e8e8de59d586369d034471a09eea69",
+      "line_endings": "LF"
+    }
+  ],
+  "frozen": [
+    {
+      "path": "scripts/enemy.gd",
+      "same_as_a96": true,
+      "git_blob": "d9e8920bf3d8739008cb276312d0e6275065d698"
+    },
+    {
+      "path": "scripts/runtime_combat_spatial_index.gd",
+      "same_as_a96": true,
+      "git_blob": "5a1e07e30ade8e06dda66bd9b104ace911e9de0c"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "same_as_a96": true,
+      "git_blob": "efd1916f62740c570f0c8b58a565120e87b43207"
+    },
+    {
+      "path": "scripts/gothic_frame_factory.gd",
+      "same_as_a96": true,
+      "git_blob": "378db0eb6af75976892cf6372384ddf5d3c32536"
+    },
+    {
+      "path": "scripts/ui_activation_once.gd",
+      "same_as_a96": true,
+      "git_blob": "4550463c4f403919f84b857cfcfa0db5058cc215"
+    }
+  ],
+  "writes": 0
+}
