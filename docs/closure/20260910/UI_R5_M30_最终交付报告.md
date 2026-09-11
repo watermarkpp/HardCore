@@ -74,3 +74,10 @@
 
 ## 12. 证据包（无秘密）
 桌面 `HardCore-ui5-m30-closure\evidence\`：build_v74_pipeline.log、R3 闭包日志、字节码探针 runner JSON、门禁批 runner JSON ×2、防退化 JSON、函数级 diff、基线冻结清单；`checksums.sha256.txt` 覆盖全部交付物。
+
+## 13. 第二轮独立审查（2026-09-11，9cf178ca）
+- 新 eyes 审查（逐 blob/逐文件核验，非复述）：**SHIP** — 四项生产修复与授权范围完全一致；enemy/hot-path 文件全程逐字节不变；无断言弱化、无 stderr 全局白名单、无真实 user:// 触碰
+- 4 个 MINOR 全部修复：两个新存储测试的 user:// 夹具残留（退出前递归清理）；APK 核验器字节读取零进度死循环（改为抛错）；闭包清单补入 3 个 UI R5 dock 脚本（现 39 个）
+- NIT 处置：所有权测试"全新实例"断言改为真实 instance_id 对比（原为恒真）；`_audio_bus_enabled` 死代码与音频轮换 NIT 记录为下版清理
+- 审查连带发现并修复的实质缺陷：**ui_r5_audio_config_strict_test 的四个子断言是并发协程**（`_run` 未 await，原依赖 quit() 截断侥幸通过）；现已逐个 await，全部子断言首次完整执行并通过。连带修复 `audio_preferences._read_valid` 的 null 缺省触发引擎 ERROR 行问题（改哨兵缺省 -1/NAN，严格拒绝语义不变）——**已交付 v74 含噪声变体（功能正确，仅损坏配置时多打日志），v75 发版携带本修复**
+- 相邻复跑：ui_r5_audio、system_menu_gothic_ui、ui_r5_audio_config_strict（完整版）全部 PASS，engine_log_errors=0
