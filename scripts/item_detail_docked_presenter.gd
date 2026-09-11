@@ -15,7 +15,11 @@ const MIN_WIDTH := 140.0
 const PORTRAIT_RATIO := 1.12
 const TITLE_GAP := 8.0
 const MEASURE_PAD := 4.0
-const REVISION := 7
+# R2: shrink whitespace only, never fonts, text, ratio, or allowed geometry.
+const COMPACT_MARGIN := 8.0
+const COMPACT_TITLE_GAP := 4.0
+const COMPACT_MEASURE_PAD := 2.0
+const REVISION := 8
 
 var title_label: Label
 var detail_label: RichTextLabel
@@ -35,6 +39,7 @@ var _connections: Array = []
 var _name_style: Dictionary = {}
 var _title_color := NameStyle.DEFAULT_COLOR
 var _test_suppress_expected_layout_error := false
+var _r2_density := "normal"
 
 func _init() -> void:
 	name = "ItemDetailPresenter"
@@ -246,7 +251,7 @@ func debug_layout_valid() -> bool:
 
 func debug_layout_snapshot() -> Dictionary:
 	return {
-		"valid": _layout_ok, "error": _layout_error, "layouts": _layout_count,
+		"valid": _layout_ok, "error": _layout_error, "layouts": _layout_count, "density": _r2_density,
 		"name_style": _name_style.duplicate(), "title_color": title_label.get_theme_color("font_color"),
 		"title": title_label.text, "body": detail_label.get_parsed_text(),
 		"rect": Rect2(position, size), "title_rect": Rect2(title_label.position, title_label.size),
@@ -267,14 +272,14 @@ func _flush_layout() -> void:
 	if is_inside_tree() and is_visible_in_tree():
 		_relayout()
 
-func _measure_at(width: float) -> Vector2:
-	var text_width := floorf(width - MARGIN * 2.0)
+func _measure_at(width: float, margin: float = MARGIN, pad: float = MEASURE_PAD) -> Vector2:
+	var text_width := floorf(width - margin * 2.0)
 	title_label.size = Vector2(text_width, 1.0)
 	# Label's own shaped minimum includes CJK fallback metrics and wrapped lines.
-	var title_height := ceilf(title_label.get_minimum_size().y) + MEASURE_PAD
+	var title_height := ceilf(title_label.get_minimum_size().y) + pad
 	detail_label.size = Vector2(text_width, 1.0)
 	# Read the actual RichTextLabel (including BBCode, bold and fallback fonts).
-	var body_height := ceilf(float(detail_label.get_content_height())) + MEASURE_PAD
+	var body_height := ceilf(float(detail_label.get_content_height())) + pad
 	return Vector2(maxf(26.0, title_height), maxf(20.0, body_height))
 
 func _relayout() -> void:
@@ -301,27 +306,40 @@ func _relayout() -> void:
 	var chosen_width := 0.0
 	var chosen_height := 0.0
 	var measured := Vector2.ZERO
-	# A larger vertical extent may be used on the same side, never on the grid.
+	var chosen_margin := MARGIN
+	var chosen_gap := TITLE_GAP
+	_r2_density = "normal"
+	# All candidates use the owner's existing safe region; do not enlarge frames.
 	var regions: Array[Rect2] = [region]
 	if expanded.has_area() and expanded != region:
 		regions.append(expanded)
 	for candidate_region: Rect2 in regions:
 		var upper_width := floorf(minf(MAX_WIDTH, minf(candidate_region.size.x, candidate_region.size.y / PORTRAIT_RATIO)))
-		var width := minf(PREFERRED_WIDTH, upper_width)
-		if width < 100.0:
-			continue
-		while width <= upper_width:
-			var extent := _measure_at(width)
-			var height := maxf(ceilf(width * PORTRAIT_RATIO), MARGIN * 2.0 + extent.x + TITLE_GAP + extent.y)
-			if height <= floorf(candidate_region.size.y):
-				chosen_width = width
-				chosen_height = height
-				measured = extent
-				region = candidate_region
+		# Keep normal spacing where it fits. Compact spacing is a bounded fallback.
+		for density in range(2):
+			var margin := MARGIN if density == 0 else COMPACT_MARGIN
+			var gap := TITLE_GAP if density == 0 else COMPACT_TITLE_GAP
+			var pad := MEASURE_PAD if density == 0 else COMPACT_MEASURE_PAD
+			var width := minf(PREFERRED_WIDTH, upper_width)
+			if width < 100.0:
+				continue
+			while width <= upper_width:
+				var extent := _measure_at(width, margin, pad)
+				var height := maxf(ceilf(width * PORTRAIT_RATIO), margin * 2.0 + extent.x + gap + extent.y)
+				if height <= floorf(candidate_region.size.y):
+					chosen_width = width
+					chosen_height = height
+					measured = extent
+					chosen_margin = margin
+					chosen_gap = gap
+					_r2_density = "normal" if density == 0 else "compact"
+					region = candidate_region
+					break
+				if width >= upper_width:
+					break
+				width = minf(upper_width, width + 12.0)
+			if chosen_width > 0.0:
 				break
-			if width >= upper_width:
-				break
-			width = minf(upper_width, width + 12.0)
 		if chosen_width > 0.0:
 			break
 	if chosen_width <= 0.0:
@@ -333,13 +351,14 @@ func _relayout() -> void:
 	set_anchors_preset(Control.PRESET_TOP_LEFT)
 	position = fitted.position.round()
 	size = fitted.size
-	var text_width := chosen_width - MARGIN * 2.0
-	title_label.position = Vector2(MARGIN, MARGIN)
+	var text_width := chosen_width - chosen_margin * 2.0
+	title_label.position = Vector2(chosen_margin, chosen_margin)
 	title_label.size = Vector2(text_width, measured.x)
-	detail_label.position = Vector2(MARGIN, MARGIN + measured.x + TITLE_GAP)
-	detail_label.size = Vector2(text_width, chosen_height - MARGIN * 2.0 - measured.x - TITLE_GAP)
+	detail_label.position = Vector2(chosen_margin, chosen_margin + measured.x + chosen_gap)
+	detail_label.size = Vector2(text_width, chosen_height - chosen_margin * 2.0 - measured.x - chosen_gap)
 	_layout_ok = (
 		float(detail_label.get_content_height()) <= detail_label.size.y
+		and float(detail_label.get_content_width()) <= detail_label.size.x + 1.0
 		and title_label.get_minimum_size().y <= title_label.size.y
 		and not title_label.text.strip_edges().is_empty()
 		and region.grow(1.0).encloses(Rect2(position, size))

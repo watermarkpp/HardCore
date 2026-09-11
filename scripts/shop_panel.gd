@@ -1434,7 +1434,13 @@ func _item_texture(record: Dictionary) -> Texture2D:
 
 
 func _value(value: Variant) -> String:
-	return "—" if value == null else str(value)
+	if value == null:
+		return "—"
+	# JSON integral floats are the same stat, not a precision-bearing fraction.
+	# Do not truncate true fractions or coerce strings/bools/non-finite values.
+	if value is float and is_finite(value) and absf(value) <= 9007199254740991.0 and value == floorf(value):
+		return str(int(value))
+	return str(value)
 
 
 func _close() -> void:
