@@ -894,7 +894,7 @@ func _select_sell_item(inventory_index: int) -> void:
 	var sellable := bool(quote.get("sellable", false))
 	_set_sell_actions_enabled(sellable)
 	if quote.is_empty():
-		_show_shop_detail(str(record.get("name", "物品")), "数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % count, inventory_index, true)
+		_show_shop_detail(str(record.get("name", "物品")), "数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % count, _selected_sell_index, true)
 		return
 	_show_shop_detail(
 		str(record.get("name", "物品")),
@@ -903,7 +903,7 @@ func _select_sell_item(inventory_index: int) -> void:
 			GameData.get_item_record(str(record.get("name", ""))),
 			quote,
 		),
-		inventory_index,
+		_selected_sell_index,
 		true,
 	)
 
