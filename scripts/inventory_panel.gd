@@ -229,6 +229,7 @@ func _build_equipment_panel() -> void:
 	title.name = "EquipmentTitle"
 	panel.add_child(title)
 	character_preview = PreviewScript.new()
+	character_preview.equipment_updates_owned_by_parent = true
 	character_preview.name = "CharacterPreview"
 	character_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# Every paper-doll layer is placed relative to the manifest foot anchor;

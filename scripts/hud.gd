@@ -1630,8 +1630,13 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	if _all_panels_prewarmed:
 		return
 	if _panel_prewarm_in_progress:
+		# Explicit load-time callers must not wait behind an optional UI idle gate.
+		if not background_mode:
+			_ui_l1_finish_explicit_prewarm = true
 		while _panel_prewarm_in_progress and is_inside_tree():
 			await get_tree().process_frame
+		if not background_mode:
+			_ui_l1_finish_explicit_prewarm = false
 		return
 	_panel_prewarm_in_progress = true
 	var prewarm_started_usec := Time.get_ticks_usec()
@@ -1642,43 +1647,65 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 		"background_mode": background_mode,
 	}
 	_panel_prewarm_diagnostic["script_prefetch"] = await _prefetch_panel_scripts()
-	_start_catalog_icon_prewarm.call_deferred()
-	var panel_started_usec := Time.get_ticks_usec()
+	_start_catalog_icon_prewarm.call_deferred(background_mode)
+	var panel_started_usec := 0
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
 	_ensure_inventory_panel()
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["inventory"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
 	await get_tree().process_frame
-	panel_started_usec = Time.get_ticks_usec()
-	_ensure_map_panel()
-	_panel_prewarm_diagnostic["construction_ms_by_panel"]["map"] = (
-		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
-	)
-	await get_tree().process_frame
-	panel_started_usec = Time.get_ticks_usec()
-	_ensure_skill_panel()
-	_panel_prewarm_diagnostic["construction_ms_by_panel"]["skill"] = (
-		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
-	)
-	await get_tree().process_frame
-	panel_started_usec = Time.get_ticks_usec()
-	_ensure_quest_panel()
-	_panel_prewarm_diagnostic["construction_ms_by_panel"]["quest"] = (
-		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
-	)
-	await get_tree().process_frame
-	panel_started_usec = Time.get_ticks_usec()
-	_ensure_warehouse_panel()
-	_panel_prewarm_diagnostic["construction_ms_by_panel"]["warehouse"] = (
-		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
-	)
-	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
 	panel_started_usec = Time.get_ticks_usec()
 	_ensure_shop_panel()
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["shop"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
 	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_warehouse_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["warehouse"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_map_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["map"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_skill_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["skill"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_quest_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["quest"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
 	panel_started_usec = Time.get_ticks_usec()
 	_ensure_death_revival_panel()
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["death_revival"] = (
@@ -1687,6 +1714,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	# SkillPanel intentionally refreshes only when opened. Run the same public
 	# refresh once while hidden so its dynamic cards, icons and saved profile are
 	# ready before the first interaction as well.
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
 	skill_panel.refresh()
 	if inventory_panel.has_method("wait_until_runtime_ready"):
 		await inventory_panel.wait_until_runtime_ready()
@@ -1820,7 +1850,7 @@ func _prefetch_panel_scripts() -> Dictionary:
 	}
 
 
-func _start_catalog_icon_prewarm() -> void:
+func _start_catalog_icon_prewarm(background_mode: bool = true) -> void:
 	if _catalog_icon_prewarm_complete or _catalog_icon_prewarm_in_progress:
 		return
 	_catalog_icon_prewarm_in_progress = true
@@ -1840,6 +1870,9 @@ func _start_catalog_icon_prewarm() -> void:
 		paths.append(path)
 	const REQUEST_BATCH := 12
 	for start_index in range(0, paths.size(), REQUEST_BATCH):
+		if not await _ui_l1_wait_for_background_slot(background_mode):
+			_catalog_icon_prewarm_in_progress = false
+			return
 		var batch: Array[String] = []
 		for path_index in range(start_index, mini(start_index + REQUEST_BATCH, paths.size())):
 			batch.append(paths[path_index])
@@ -1847,6 +1880,9 @@ func _start_catalog_icon_prewarm() -> void:
 		UIItemTextureCacheScript.poll_threaded_paths()
 		await get_tree().process_frame
 	for _frame in 120:
+		if not await _ui_l1_wait_for_background_slot(background_mode):
+			_catalog_icon_prewarm_in_progress = false
+			return
 		UIItemTextureCacheScript.poll_threaded_paths()
 		if UIItemTextureCacheScript.threaded_pending_count() == 0:
 			break
@@ -2591,3 +2627,27 @@ func _close_modal_panels() -> void:
 		map_panel.hide()
 	if warehouse_panel != null:
 		warehouse_panel.hide()
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+# UI-L1: optional background preparation yields to active UI and held input.
+# This is NOT a timer/debounce on a user's action. _ensure_* on demand is unchanged.
+var _ui_l1_finish_explicit_prewarm := false
+
+func _ui_l1_background_blocked() -> bool:
+	if not is_inside_tree():
+		return true
+	if get_tree().paused or Input.is_anything_pressed():
+		return true
+	for panel: Variant in [inventory_panel, shop_panel, warehouse_panel, map_panel, skill_panel, quest_panel, death_revival_panel]:
+		if is_instance_valid(panel) and panel is CanvasItem and panel.is_visible_in_tree():
+			return true
+	return false
+
+func _ui_l1_wait_for_background_slot(background_mode: bool) -> bool:
+	if not background_mode:
+		return is_inside_tree()
+	while is_inside_tree() and not _ui_l1_finish_explicit_prewarm and _ui_l1_background_blocked():
+		await get_tree().process_frame
+	return is_inside_tree()
+# UI-L1 SUPPLEMENT END

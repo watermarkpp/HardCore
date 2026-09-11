@@ -116,7 +116,7 @@ func _ready() -> void:
 	detail_label = item_detail_presenter.detail_label
 	GothicFrameFactoryScript.seal_modal_rings(self)
 	PlayerState.profile_changed.connect(_refresh_gold)
-	PlayerState.equipment_changed.connect(_refresh_repair_preview)
+	PlayerState.equipment_changed.connect(_ui_l1_equipment_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
 	visibility_changed.connect(_on_visibility_changed)
 	_refresh_gold()
@@ -751,6 +751,8 @@ func _set_trade_mode(mode: String) -> void:
 		_ui_show_shop_message("[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]")
 		_request_sell_quotes()
 	_apply_layout_profile_once("shop_sell" if not buying else "shop_buy")
+	_ui_l1_repair_dirty = true
+	_ui_l1_queue_repair_view()
 
 
 func sell_quote_key(inventory_index: int, record: Dictionary) -> String:
@@ -1133,10 +1135,12 @@ func _on_inventory_changed() -> void:
 
 func _on_visibility_changed() -> void:
 	if not visible:
+		_ui_l1_repair_dirty = true
 		_ui_dismiss_selection()
 		return
 	if visible and _inventory_refresh_pending and _trade_mode == "sell":
 		_apply_inventory_change()
+	_ui_l1_flush_repair_view_if_dirty()
 
 
 func _apply_inventory_change() -> void:
@@ -1205,13 +1209,18 @@ func _refresh_gold() -> void:
 
 
 func _refresh_repair_preview() -> void:
+	if not is_inside_tree() or not is_visible_in_tree() or _trade_mode != "buy":
+		_ui_l1_repair_dirty = true
+		return
 	if repair_button == null:
 		return
+	_ui_l1_repair_dirty = false
 	var context := _active_merchant_context()
 	repair_button.visible = _trade_mode == "buy" and bool(context.get("supports_repair", false))
 	repair_button.disabled = not bool(context.get("supports_repair", false))
 	if repair_button.disabled:
 		return
+	_ui_l1_repair_plan_count += 1
 	var cost := PlayerState.repair_cost(context)
 	repair_button.text = "维修全部（%d金币）" % cost if cost > 0 else "装备无需维修"
 
@@ -1471,3 +1480,29 @@ func _ui_dismiss_selection() -> void:
 	if sell_quantity_button != null:
 		_set_sell_actions_enabled(false)
 	_update_sell_quantity_label()
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+# UI-L1: presentation refreshes are coalesced; actual repair/buy quotes are not.
+var _ui_l1_repair_dirty := true
+var _ui_l1_repair_queued := false
+var _ui_l1_repair_plan_count := 0
+
+func _ui_l1_equipment_changed() -> void:
+	_ui_l1_repair_dirty = true
+	_ui_l1_queue_repair_view()
+
+func _ui_l1_queue_repair_view() -> void:
+	if _ui_l1_repair_queued or not is_inside_tree() or not is_visible_in_tree() or _trade_mode != "buy":
+		return
+	_ui_l1_repair_queued = true
+	_ui_l1_flush_queued_repair_view.call_deferred()
+
+func _ui_l1_flush_queued_repair_view() -> void:
+	_ui_l1_repair_queued = false
+	_ui_l1_flush_repair_view_if_dirty()
+
+func _ui_l1_flush_repair_view_if_dirty() -> void:
+	if _ui_l1_repair_dirty and is_inside_tree() and is_visible_in_tree() and _trade_mode == "buy":
+		_refresh_repair_preview()
+# UI-L1 SUPPLEMENT END

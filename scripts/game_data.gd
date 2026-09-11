@@ -3498,28 +3498,37 @@ func get_item_shop_price(item_name: String) -> int:
 
 
 func get_item_price_record(item_ref: Variant) -> Dictionary:
-	_ensure_price_index()
-	var identity := _stable_identity(item_ref)
-	# Stable service identity is the strongest authority for a service record;
-	# item identity is next. Names are deliberately only a compatibility fallback
-	# for old saves that predate stable equipment IDs.
-	var service_index := int(identity.get("service_index", -1))
-	if service_index >= 0 and _price_by_service_index.has(service_index):
-		return (_price_by_service_index.get(service_index, {}) as Dictionary).duplicate(true)
-	var item_id := int(identity.get("item_id", -1))
-	if item_id >= 0 and _price_by_item_id.has(item_id):
-		return (_price_by_item_id.get(item_id, {}) as Dictionary).duplicate(true)
-	var canonical_name := _canonical_item_name(str(identity.get("name", "")))
-	# A late resource patch test (and a device hot patch) may remove only the
-	# name index while retaining the stable identity index. Recover that record
-	# without depending on the display text being re-registered.
-	var name_item_id := _item_id_for_name(canonical_name)
-	if name_item_id >= 0 and _price_by_item_id.has(name_item_id):
-		return (_price_by_item_id.get(name_item_id, {}) as Dictionary).duplicate(true)
-	return (_price_by_name.get(canonical_name, {}) as Dictionary).duplicate(true)
+	# No independent price cache. Read the existing primary-first indexes only.
+	# A missing higher-priority identity MUST run the original maintenance path.
+	# Its newly added candidate can be stronger than a currently available fallback.
+	if not _price_by_name.is_empty():
+		var identity := _stable_identity(item_ref)
+		var service_index := int(identity.get("service_index", -1))
+		var item_id := int(identity.get("item_id", -1))
+		if service_index >= 0:
+			if _price_by_service_index.has(service_index):
+				_ui_l1_price_fast_hits += 1
+				return (_price_by_service_index[service_index] as Dictionary).duplicate(true)
+		elif item_id >= 0:
+			if _price_by_item_id.has(item_id):
+				_ui_l1_price_fast_hits += 1
+				return (_price_by_item_id[item_id] as Dictionary).duplicate(true)
+		else:
+			var canonical_name := _canonical_item_name(str(identity.get("name", "")))
+			var name_item_id := _item_id_for_name(canonical_name)
+			if name_item_id >= 0:
+				if _price_by_item_id.has(name_item_id):
+					_ui_l1_price_fast_hits += 1
+					return (_price_by_item_id[name_item_id] as Dictionary).duplicate(true)
+			elif _price_by_name.has(canonical_name):
+				_ui_l1_price_fast_hits += 1
+				return (_price_by_name[canonical_name] as Dictionary).duplicate(true)
+	_ui_l1_price_slow_calls += 1
+	return _ui_l1_get_item_price_record_slow(item_ref)
 
 
 func _ensure_price_index() -> void:
+	_ui_l1_price_maintenance_count += 1
 	if _price_by_name.is_empty():
 		if service_item_catalog.is_empty():
 			_load_service_item_catalog()
@@ -3755,3 +3764,31 @@ func summary_text() -> String:
 	]
 
 # DPV2_V505_RUNTIME_SEAL: exact generated profile/ledger cardinalities and hashes above.
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+var _ui_l1_price_fast_hits := 0
+var _ui_l1_price_slow_calls := 0
+var _ui_l1_price_maintenance_count := 0
+
+func _ui_l1_get_item_price_record_slow(item_ref: Variant) -> Dictionary:
+	_ensure_price_index()
+	var identity := _stable_identity(item_ref)
+	# Stable service identity is the strongest authority for a service record;
+	# item identity is next. Names are deliberately only a compatibility fallback
+	# for old saves that predate stable equipment IDs.
+	var service_index := int(identity.get("service_index", -1))
+	if service_index >= 0 and _price_by_service_index.has(service_index):
+		return (_price_by_service_index.get(service_index, {}) as Dictionary).duplicate(true)
+	var item_id := int(identity.get("item_id", -1))
+	if item_id >= 0 and _price_by_item_id.has(item_id):
+		return (_price_by_item_id.get(item_id, {}) as Dictionary).duplicate(true)
+	var canonical_name := _canonical_item_name(str(identity.get("name", "")))
+	# A late resource patch test (and a device hot patch) may remove only the
+	# name index while retaining the stable identity index. Recover that record
+	# without depending on the display text being re-registered.
+	var name_item_id := _item_id_for_name(canonical_name)
+	if name_item_id >= 0 and _price_by_item_id.has(name_item_id):
+		return (_price_by_item_id.get(name_item_id, {}) as Dictionary).duplicate(true)
+	return (_price_by_name.get(canonical_name, {}) as Dictionary).duplicate(true)
+# UI-L1 SUPPLEMENT END
