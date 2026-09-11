@@ -127,9 +127,13 @@ static func control_bounds(control: Control, depth: int = 0) -> Dictionary:
 	if not _finite_rect(base):
 		return _bad("NONFINITE_CONTROL_SIZE")
 	var result := base
-	var states: Array[StringName] = STATES if control is BaseButton else []
-	if control is Panel or control is PanelContainer:
-		states = [&"panel"]
+	# R3.1.1: keep the empty branch typed and do not alias the constant array.
+	# A ternary with an untyped [] produces a runtime-incompatible Array.
+	var states: Array[StringName] = []
+	if control is BaseButton:
+		states.assign(STATES)
+	elif control is Panel or control is PanelContainer:
+		states.append(&"panel")
 	for state: StringName in states:
 		var bounds := style_bounds(control.get_theme_stylebox(state), base)
 		if not bool(bounds.ok):
