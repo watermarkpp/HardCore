@@ -1,8 +1,8 @@
 {
   "schema": "hc.r31.installer.v1",
-  "mode": "install-tests",
+  "mode": "audit",
   "base": "6c0f1479ff09a32f631bc712b30e0745c4a500c1",
-  "head": "6c0f1479ff09a32f631bc712b30e0745c4a500c1",
+  "head": "56ec4f51b31a71b47faa8e412877589bcb1389e4",
   "branch": "codex/r3-1-api-focus-fix",
   "targets": {
     "scripts/ui_shop_detail_space.gd": "INSTALLED",
@@ -22,14 +22,6 @@
     "scripts/ui_item_selection_lifecycle.gd": "c159328eeea45a9eb774a03d3723375bd989f6ff77fdce5400e8640a95651be9",
     "scripts/ui_style_visual_bounds.gd": "e1c462a9063e19732a5002786da33b4983da6621d8c113894da21d6157098991"
   },
-  "status": "TESTS_INSTALLED_NOT_STAGED",
-  "tests": [
-    "tests/r6_3_1/engine_api_probe.gd",
-    "tests/r6_3_1/engine_api_probe.tscn",
-    "tests/r6_3_1/selection_detach_smoke.gd",
-    "tests/r6_3_1/selection_detach_smoke.tscn",
-    "tests/r6_3_1/style_bounds_smoke.gd",
-    "tests/r6_3_1/style_bounds_smoke.tscn"
-  ],
-  "time_utc": "2026-09-11T12:31:11.907170+00:00"
+  "status": "R31_CORE_INTACT_NOT_RUNTIME_ACCEPTANCE",
+  "time_utc": "2026-09-11T13:13:00.616103+00:00"
 }
