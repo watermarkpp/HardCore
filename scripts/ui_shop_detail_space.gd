@@ -11,6 +11,32 @@ const ACTION_STACK_GAP_PX := 16.0
 const Frame := preload("res://scripts/gothic_frame_factory.gd")
 const VisualBounds := preload("res://scripts/ui_style_visual_bounds.gd")
 
+## R3.3: only one semantic heading while the detail card is visible.
+## The item title remains INSIDE the card, with its original font and rarity.
+## Only the redundant generic caption is temporarily hidden. Geometry, text,
+## colors, and the serialized calibration of that caption are never changed.
+static func sync_section_caption(owner: Control, card_active: bool) -> void:
+	if not is_instance_valid(owner):
+		return
+	var caption := owner.get_node_or_null("DetailPanel/DetailTitle") as Label
+	var decoration := owner.get_node_or_null("DetailPanel/DetailPanelDecoration") as Control
+	if caption == null or decoration == null:
+		return # Non-shop presenters retain their existing layout and headings.
+	var owned := bool(caption.get_meta("r33_card_heading_owned", false))
+	if card_active:
+		if not owned:
+			caption.set_meta("r33_saved_caption_visible", caption.visible)
+			caption.set_meta("r33_card_heading_owned", true)
+		if caption.visible:
+			caption.hide()
+	elif owned:
+		var was_visible := bool(caption.get_meta("r33_saved_caption_visible", true))
+		# Release ownership before changing visibility: callbacks may re-enter.
+		caption.remove_meta("r33_card_heading_owned")
+		caption.remove_meta("r33_saved_caption_visible")
+		if caption.visible != was_visible:
+			caption.visible = was_visible
+
 static func transformed(t: Transform2D, r: Rect2) -> Rect2:
 	var out := Rect2(t * r.position, Vector2.ZERO)
 	for p: Vector2 in [Vector2(r.end.x, r.position.y), r.end, Vector2(r.position.x, r.end.y)]:
@@ -95,7 +121,11 @@ static func region(owner: Control) -> Dictionary:
 	if not opening.has_area():
 		return {"region": Rect2(), "side": "center", "kind": "shop", "error": "EMPTY_FRAME_OPENING"}
 	var safe := inset(opening, Vector2(FRAME_CLEAR_PX / scale.x, FRAME_CLEAR_PX / scale.y))
-	var top := maxf(safe.position.y, rect_in(owner, title).end.y + TITLE_CLEAR_PX / scale.y)
+	# A hidden caption consumes no layout band. The card still contains its
+	# complete item heading; its OUTER border stays inside the 32px safe area.
+	var top := safe.position.y
+	if title.visible:
+		top = maxf(top, rect_in(owner, title).end.y + TITLE_CLEAR_PX / scale.y)
 	var actions := _visible_actions(owner)
 	# Validate before shifting/resizing anything. A future unknown custom style
 	# must not silently use a hit box and violate the 30px visual clearance.
@@ -184,5 +214,8 @@ static func region(owner: Control) -> Dictionary:
 	return {"region": area, "side": "center", "kind": "shop", "frame_opening": opening,
 		"screen_scale": scale, "protected": protected, "title_rect": rect_in(owner, title),
 		"action_layout": "row" if horizontal else "stack",
+		"caption_reserved": title.visible, "frame_safe_rect": safe,
+		"caption_reserved_height": maxf(0.0, top - safe.position.y),
+		"heading_mode": "card_title" if bool(title.get_meta("r33_card_heading_owned", false)) else "section_caption",
 		"action_gap_px": ACTION_CLEAR_PX, "frame_gap_px": FRAME_CLEAR_PX,
 		"pixel_scope": "viewport_only" if DisplayServer.get_name() == "headless" else "screen"}

@@ -41,6 +41,8 @@ var _r3_session_epoch := -1
 # Disabled unless an isolated diagnostic scene opts in; never serialized.
 var _r32_capture_candidates := false
 var _r32_candidates: Array = []
+var _r33_syncing_caption := false
+var _r33_exiting := false
 
 func _init() -> void:
 	name = "ItemDetailPresenter"
@@ -101,6 +103,8 @@ func _ready() -> void:
 	_invalidate_layout()
 
 func _notification(what: int) -> void:
+	if what == NOTIFICATION_ENTER_TREE:
+		_r33_exiting = false
 	if what == NOTIFICATION_THEME_CHANGED and is_node_ready():
 		_invalidate_layout()
 
@@ -152,6 +156,8 @@ func _bind_geometry() -> void:
 				_watch(node, &"visibility_changed")
 
 func _exit_tree() -> void:
+	_r33_exiting = true
+	_r33_sync_caption()
 	for connection: Array in _connections:
 		var node: Object = (connection[0] as WeakRef).get_ref()
 		var callback := Callable(self, "_invalidate_layout")
@@ -246,6 +252,7 @@ func hide_detail() -> void:
 	title_label.text = ""
 	detail_label.text = ""
 	visible = false
+	_r33_sync_caption()
 
 func is_message_active() -> bool:
 	return _message_active and visible
@@ -270,7 +277,21 @@ func debug_layout_snapshot() -> Dictionary:
 		"scroll_active": detail_label.scroll_active, "epoch": _content_epoch,
 	}
 
+func _r33_sync_caption() -> void:
+	if _r33_syncing_caption:
+		return
+	var owner := get_parent() as Control
+	if owner == null:
+		return
+	_r33_syncing_caption = true
+	var active := not _r33_exiting and is_inside_tree() and is_visible_in_tree() and not _title_source.is_empty()
+	ShopSpace.sync_section_caption(owner, active)
+	_r33_syncing_caption = false
+
 func _invalidate_layout() -> void:
+	if _r33_exiting or _r33_syncing_caption:
+		return
+	_r33_sync_caption()
 	if _laying_out or _queued or not is_inside_tree():
 		return
 	_layout_key.clear()
@@ -305,6 +326,7 @@ func _relayout() -> void:
 	# Reflowing the shop action band emits geometry signals. Ignore those while
 	# solving, then key the final geometry. No perpetual deferred-layout loop.
 	_laying_out = true
+	_r33_sync_caption()
 	var spec: Dictionary = owner.call("_ui_detail_region", _context)
 	var region: Rect2 = spec.get("region", Rect2())
 	var expanded: Rect2 = spec.get("expanded_region", region)
