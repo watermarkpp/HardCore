@@ -49,8 +49,16 @@ func inspect_row(key: String, domain: String, name_text: String, expected_body: 
 	check(float(v.detail_label.get_content_height()) <= v.detail_label.size.y, prefix + "vertical overflow")
 	check(float(v.detail_label.get_content_width()) <= v.detail_label.size.x + 1.0, prefix + "horizontal overflow")
 	var actual := Rect2(v.position, v.size)
-	var region: Rect2 = panel._ui_detail_region({}).get("region", Rect2())
-	check(region.grow(0.1).encloses(actual), prefix + "outside safe reading region")
+	var space_spec: Dictionary = panel._ui_detail_region({})
+	var region: Rect2 = space_spec.get("region", Rect2())
+	var expanded_region: Rect2 = space_spec.get("expanded_region", Rect2())
+	var in_preferred := region.has_area() and region.grow(0.1).encloses(actual)
+	var in_expanded := expanded_region.has_area() and expanded_region.grow(0.1).encloses(actual)
+	check(in_preferred or in_expanded, prefix + "outside all legal reading regions")
+	if not in_preferred:
+		check(str(space_spec.get("layout_policy", "")) == "preferred_then_legal_minimum",
+			prefix + "fallback used without two-tier layout contract")
+		check(in_expanded, prefix + "fallback card outside legal expanded region")
 	# User explicitly permits modest landscape for buy/sell, not a fixed 1.12.
 	check(v.size.x <= v.size.y * 1.3 + 0.5, prefix + "excessively flat shop rectangle")
 	check(v.title_label.get_theme_font_size("font_size") == 20, prefix + "title font reduced")
@@ -90,7 +98,9 @@ func inspect_row(key: String, domain: String, name_text: String, expected_body: 
 			check(not actual.intersects(Dock.rect_in(panel, c)), prefix + "overlaps " + str(c.name))
 	rows.append({"key": key, "domain": domain, "name": name_text, "body_bbcode": expected_body,
 		"quote": quote, "density": v.debug_layout_snapshot().get("density", "legacy"),
-		"rect": str(actual), "region": str(region), "content_h": v.detail_label.get_content_height(),
+		"rect": str(actual), "region": str(region), "expanded_region": str(expanded_region),
+		"used_fallback": not in_preferred and in_expanded,
+		"content_h": v.detail_label.get_content_height(),
 		"alpha": v.modulate.a, "pass": failures.size() == before,
 		"frame_gaps": gaps, "action_gaps": action_gaps,
 		"pixel_scope": "viewport_only" if DisplayServer.get_name() == "headless" else "screen"})
