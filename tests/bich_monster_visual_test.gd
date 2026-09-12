@@ -61,7 +61,21 @@ func _run() -> void:
 			assert(visual.current_state == "idle", "食人花固定怪状态错误")
 		else:
 			enemy.velocity = Vector2.RIGHT * 50.0
+			# Under suite load the WIL profile can still be streaming when the
+			# first frame renders; wait bounded for the declared direction contract
+			# to be active before judging the row mapping.
+			for _settle_frame in range(60):
+				if visual.active_resources.has("direction_mode"):
+					break
+				await get_tree().process_frame
 			visual._process(0.12)
+			var diag_mode := str(visual.active_resources.get("direction_mode", ""))
+			var diag_policy := str(visual.active_resources.get("direction_policy", ""))
+			var policy_expected := MonsterAnimationPolicy.direction_row(Vector2.RIGHT, StringName(diag_mode)) if diag_mode != "" else -1
+			print(
+				"BICH_DIRECTION_DIAG %s policy=%s mode=%s policy_expected=%d actual=%d"
+				% [monster_name, diag_policy, diag_mode, policy_expected, visual.current_direction],
+			)
 			assert(visual.current_state == "walk" and visual.current_direction == 2, "%s 移动方向错误" % monster_name)
 		visual.play_attack()
 		visual._process(0.05)

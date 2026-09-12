@@ -165,6 +165,9 @@ func _run() -> void:
 	# A cached service removed with an old GameRoot must not poison the next
 	# world. The first semantic lookup after invalidation discovers the new one.
 	probe.queue_free()
+	# The cached-service contract compares tree membership, so the fixture must
+	# wait for the actual exit instead of racing queue_free with one frame.
+	await probe.tree_exited
 	await get_tree().process_frame
 	var replacement_probe := AudioProbe.new()
 	add_child(replacement_probe)
@@ -249,6 +252,9 @@ func _run() -> void:
 	# With no service, repeated actors/events share one bounded group scan per
 	# negative-cache interval rather than scanning once per actor per frame.
 	probe.queue_free()
+	# The cached-service contract compares tree membership, so the fixture must
+	# wait for the actual exit instead of racing queue_free with one frame.
+	await probe.tree_exited
 	await get_tree().process_frame
 	var cache_observer := EnemyActor.new()
 	cache_observer.monster_id = 21
