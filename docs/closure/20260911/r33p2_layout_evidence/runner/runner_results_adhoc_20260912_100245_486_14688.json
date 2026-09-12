@@ -1,0 +1,26 @@
+{
+  "passed": 1,
+  "generated_at": "2026-09-12T10:02:45.4863484+08:00",
+  "git_head": "d2aa9e6ae2feda2723a95edbcaf9e951a475f5b8",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "header_geometry_test",
+      "test_path": "tests/r6_3_3/header_geometry_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 1,
+  "failed": 0
+}

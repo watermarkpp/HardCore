@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-09-12T12:06:55.3653183+08:00",
+  "suite": "adhoc",
+  "total": 1,
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "shop_space_3",
+      "test_path": "tests/r6_3/shop_space_3.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "passed": 1,
+  "git_head": "1b56c5821e4021de2fca978cdeaffd2157865af7"
+}
