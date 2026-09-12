@@ -2,6 +2,7 @@ extends Node
 
 const SELL_CONTRACT_PATH := "res://assets/ui/gothic_theme/v1/shop_sell_contract.json"
 const UI_LAYOUT_CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
+const UIOverrides := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 const STOCK := [
 	{"name": "匕首", "price": 120, "description": "测试武器"},
@@ -67,6 +68,15 @@ func _run() -> void:
 	panel.open_for("测试商店", STOCK)
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	await get_tree().process_frame
+	# The calibration profile transaction settles a few frames after the trade
+	# mode switch that requested it (the context loop above applied shop_sell)
+	# and replays captured `visible` state; the settled authority signal is the
+	# profile-ready meta, so wait for it before adjudicating any detail layout.
+	for _wait_frame in range(30):
+		if UIOverrides.profile_is_ready(panel, "shop_sell"):
+			break
+		await get_tree().process_frame
+	assert(UIOverrides.profile_is_ready(panel, "shop_sell"), "商店校准 profile 未能在有界帧内结算")
 	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "购买页签没有保持持久选中")
 	assert(panel.sell_tab_button.theme_type_variation == "GothicShopTradeTabGemButton", "未选中的出售页签错误高亮")
 	assert(panel.buy_button.get_theme_font_size("font_size") == panel.sell_quantity_button.get_theme_font_size("font_size"), "购买与出售操作按钮字号不一致")
@@ -98,12 +108,9 @@ func _run() -> void:
 	panel._select_shop_item(0)
 	assert(panel.item_list.get_selected_items() == PackedInt32Array([0]), "商品卡选择没有同步购买逻辑")
 	assert(panel.goods_buttons[0].theme_type_variation == "GothicComponentSelectedShopCard", "选中商品没有公共高亮状态")
-	# PRE/POST settle adjudication for the dagger detail space plan (ruling 6):
-	# record the presenter state right after selection, wait for the container
-	# layout to actually stabilize (rects unchanged across frames), then
-	# re-run the production detail path and record the final state.
-	var pre_snapshot: Dictionary = panel.item_detail_presenter.debug_layout_snapshot()
-	print("SHOP_SETTLE_PRE valid=%s error=%s rect=%s" % [pre_snapshot.get("valid"), pre_snapshot.get("error"), pre_snapshot.get("rect")])
+	# Ruling 6/20: the dagger detail must be adjudicated on the POST_SETTLE
+	# production snapshot only. Wait for real layout stability (panel/grid
+	# rects unchanged across frames), then assert the settled contract.
 	var panel_rect := panel.get_global_rect()
 	var grid_rect := panel.goods_grid.get_global_rect()
 	var stable_frames := 0
@@ -117,22 +124,70 @@ func _run() -> void:
 			panel_rect = panel.get_global_rect()
 			grid_rect = panel.goods_grid.get_global_rect()
 			stable_frames = 0
-	print("SHOP_SETTLE_STABLE frames=%d panel_rect=%s" % [stable_frames, panel_rect])
-	if not bool(panel.item_detail_presenter.debug_layout_snapshot().get("valid", false)):
-		panel._select_shop_item(0)
-	var post_snapshot: Dictionary = panel.item_detail_presenter.debug_layout_snapshot()
-	var post_spec: Dictionary = post_snapshot.get("space_spec", {})
-	print("SHOP_SETTLE_POST valid=%s error=%s rect=%s" % [post_snapshot.get("valid"), post_snapshot.get("error"), post_snapshot.get("rect")])
-	print("SHOP_SPEC region=%s expanded=%s opening=%s protected=%s action_layout=%s" % [post_spec.get("region", Rect2()), post_spec.get("expanded_region", Rect2()), post_spec.get("frame_opening", Rect2()), (post_spec.get("protected", []) as Array).size(), post_spec.get("action_layout", "?")])
-	print("SHOP_ACTIONS buy=%s repair=%s sell_row=%s sell_btn=%s buy_min=%s repair_min=%s" % [panel.buy_button.get_global_rect(), panel.repair_button.get_global_rect(), panel.sell_quantity_row.is_visible_in_tree(), panel.sell_quantity_button.is_visible_in_tree(), panel.buy_button.get_combined_minimum_size(), panel.repair_button.get_combined_minimum_size()])
-	var trace: Array = post_snapshot.get("candidate_trace", [])
-	var best := {"fits_height": false}
-	for entry: Dictionary in trace:
-		if bool(entry.get("fits_height", false)) or not bool(best.get("fits_height", false)):
-			if float(entry.get("natural_height", 0.0)) > float(best.get("natural_height", 0.0)) or bool(entry.get("fits_height", false)):
-				if not bool(best.get("fits_height", false)) or float(entry.get("natural_height", 0.0)) <= float(entry.get("available_height", 0.0)):
-					best = entry
-	print("SHOP_CANDIDATES count=%d widest_fitting=%s" % [trace.size(), best])
+	var settled: Dictionary = panel.item_detail_presenter.debug_layout_snapshot()
+	var settled_spec: Dictionary = settled.get("space_spec", {})
+	assert(bool(settled.get("valid", false)), "结算后匕首详情仍非有效布局：%s" % str(settled.get("error", "")))
+	assert(not bool(settled.get("scroll_active", false)), "普通匕首详情结算后不允许滚动")
+	assert(panel._trade_mode == "buy", "匕首详情结算时交易模式漂移")
+	assert(panel.sell_quantity_button.visible == false and not panel.sell_quantity_button.is_visible_in_tree(), "校准回放复活了 BUY 模式的出售按钮")
+	assert(panel.sell_quantity_row.visible == false, "校准回放复活了 BUY 模式的出售数量行")
+	assert(panel.buy_button.visible and panel.buy_button.is_visible_in_tree(), "BUY 模式缺少购买按钮")
+	assert(panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "商品详情没有响应卡片选择")
+	assert(panel.item_detail_presenter.title_label.get_theme_font_size("font_size") == 20, "详情标题没有使用正式 20 号字体")
+	assert(panel.item_detail_presenter.detail_label.get_theme_font_size("normal_font_size") == 14, "详情正文没有使用正式 14 号字体")
+	var detail_text: String = str(panel.item_detail_presenter.detail_label.text)
+	for required_line: String in ["类别", "耐久", "攻击", "穿戴要求", "价格"]:
+		assert(detail_text.contains(required_line), "匕首详情正文缺少 %s 行" % required_line)
+	# Every visible action BUTTON must sit inside the frame opening (ruling 14).
+	# The sell quantity row is a composite calibrated control whose frozen
+	# internal child contract is asserted in the sell section below; its own
+	# width is governed by that calibration, not by the button clamp.
+	var opening_local: Rect2 = settled_spec.get("frame_opening", Rect2())
+	assert(opening_local.has_area(), "结算快照缺少 frame_opening")
+	var panel_to_global := panel.get_global_transform_with_canvas()
+	var opening_global := Rect2(panel_to_global * opening_local.position, opening_local.size)
+	var last_action_rect := Rect2()
+	for action_name: String in ["buy_button", "repair_button", "sell_quantity_row", "sell_quantity_button"]:
+		var action_value: Variant = panel.get(action_name)
+		if action_value is Control and (action_value as Control).is_visible_in_tree():
+			var action_rect := (action_value as Control).get_global_rect()
+			if action_value is BaseButton:
+				assert(opening_global.encloses(action_rect.grow(-1.0)), "%s 越出详情框内开孔：%s / %s" % [action_name, action_rect, opening_global])
+			if last_action_rect.has_area():
+				assert(not last_action_rect.intersects(action_rect), "操作按钮相互重叠")
+			last_action_rect = action_rect
+	# BUY → SELL → BUY cycle (ruling 21): mode/action state must round-trip and
+	# the sell page must keep every stacked action inside the frame opening —
+	# the stack fallback clamps restored calibration widths to the opening.
+	panel._set_trade_mode("sell")
+	assert(not panel.buy_button.visible and not panel.repair_button.visible, "SELL 模式仍显示购买/维修按钮")
+	assert(panel.sell_quantity_row.visible and panel.sell_quantity_button.visible, "SELL 模式缺少出售数量行/按钮")
+	panel.set_sell_quotes(PlayerState.shop_sell_quotes(quote_batches[-1]))
+	panel._select_sell_item(0)
+	for _sell_frame in range(60):
+		await get_tree().process_frame
+		var sell_snapshot: Dictionary = panel.item_detail_presenter.debug_layout_snapshot()
+		if bool(sell_snapshot.get("valid", false)) or str(sell_snapshot.get("error", "")) == "NO_CONTENT":
+			break
+	var sell_settled: Dictionary = panel.item_detail_presenter.debug_layout_snapshot()
+	var sell_spec: Dictionary = sell_settled.get("space_spec", {})
+	var sell_opening: Rect2 = sell_spec.get("frame_opening", Rect2())
+	assert(sell_opening.has_area(), "SELL 结算快照缺少 frame_opening")
+	var sell_opening_global := Rect2(panel_to_global * sell_opening.position, sell_opening.size)
+	var sell_last := Rect2()
+	for action_name: String in ["buy_button", "repair_button", "sell_quantity_row", "sell_quantity_button"]:
+		var sell_action: Variant = panel.get(action_name)
+		if sell_action is Control and (sell_action as Control).is_visible_in_tree():
+			var sell_rect := (sell_action as Control).get_global_rect()
+			if sell_action is BaseButton:
+				assert(sell_opening_global.encloses(sell_rect.grow(-1.0)), "SELL 模式 %s 越出内开孔：%s / %s" % [action_name, sell_rect, sell_opening_global])
+			if sell_last.has_area():
+				assert(not sell_last.intersects(sell_rect), "SELL 操作控件相互重叠")
+			sell_last = sell_rect
+	panel._set_trade_mode("buy")
+	assert(panel.buy_button.visible and not panel.sell_quantity_button.visible and not panel.sell_quantity_row.visible, "BUY 回切未恢复第一组操作状态")
+	assert(not panel.repair_button.visible, "无维修商人 BUY 回切不应显示维修按钮")
+	panel._select_shop_item(0)
 	assert(panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "商品详情没有响应卡片选择")
 	var gold_before := PlayerState.gold
 	var buy_quote := panel._buy_quote_for_index(0)
@@ -192,7 +247,13 @@ func _run() -> void:
 	assert(panel.get_node_or_null("DetailPanel/SellOneButton") == null, "已退役 SellOneButton 仍存在")
 	assert("UI不会自行计算" not in panel.detail_label.text and "玩法层报价" not in panel.detail_label.text, "出售页仍显示无意义的内部报价备注")
 	assert(panel.sell_quantity_button.name == "SellQuantityButton" and panel.sell_quantity_button.text == "出售", "出售按钮文案或唯一稳定节点错误")
-	assert(panel.buy_button.size == panel.repair_button.size and panel.buy_button.size == Vector2(270, 51), "购买页两个操作按钮没有统一为出售按钮规格")
+	# Ruling 9: fixed 270x51 equality across modes was an implementation detail
+	# of the pre-R3.3 calibration; the R3.3 space planner legitimately varies
+	# action geometry per mode and region. Product constraints that remain:
+	# action font parity (asserted above), calibration revision retired
+	# (asserted below), and the settled opening/overlap/operability contract
+	# asserted in the POST_SETTLE blocks of both trade modes.
+	assert(panel.buy_button.get_theme_font_size("font_size") == panel.sell_quantity_button.get_theme_font_size("font_size"), "购买页操作按钮与出售按钮字号不一致")
 	assert(panel.buy_button.get_meta("calibration_layout_revision", 0) == 1 and panel.repair_button.get_meta("calibration_layout_revision", 0) == 1, "购买页按钮没有退役旧尺寸校准")
 	assert(panel.sell_quantity_button.get_meta("calibration_text_revision", 0) == 1, "出售按钮文案版本元数据缺失")
 	assert(not quote_batches.is_empty() and quote_batches[-1].size() == PlayerState.inventory_occupied_count(), "出售页没有跳过空洞并保持绝对背包索引报价")
