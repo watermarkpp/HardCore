@@ -192,10 +192,23 @@ static func region(owner: Control) -> Dictionary:
 					_shift_x(owner, b, left + actual_a.size.x + gap - actual_b.position.x)
 					horizontal = true
 	if not horizontal:
+		# The stack is the legal fallback, never a license to overflow the
+		# frame: a restored calibration width (e.g. 270px) inside a narrower
+		# opening pushes buttons past the decoration and starves the detail.
+		# Clamp every action BUTTON to the opening; the hit height is
+		# preserved. Composite calibrated controls (the sell quantity row)
+		# keep their frozen internal child layout and stay unclamped.
+		var stack_max := maxf(1.0, opening.size.x - 2.0 * ACTION_FRAME_PX / scale.x)
+		var stack_min := minf(96.0, stack_max)
 		for c: Control in actions:
-			if c is BaseButton:
-				_set_size_in_owner(owner, c, c.get_meta("r3_original_size"))
-				_shift_x(owner, c, opening.get_center().x - visual_rect(owner, c).get_center().x)
+			if not (c is BaseButton):
+				continue
+			if not c.has_meta("r3_original_size"):
+				continue
+			var original: Vector2 = c.get_meta("r3_original_size")
+			var stack_width := clampf(original.x, stack_min, stack_max)
+			_set_size_in_owner(owner, c, Vector2(stack_width, original.y))
+			_shift_x(owner, c, opening.get_center().x - visual_rect(owner, c).get_center().x)
 	# Reclaim unused lower space. Styles and all action handlers are
 	# preserved. This is stable per trade mode/viewport, NEVER per selected item.
 	var bottom := opening.end.y - ACTION_FRAME_PX / scale.y

@@ -730,10 +730,7 @@ func _set_trade_mode(mode: String) -> void:
 	var buying := _trade_mode == "buy"
 	buy_tab_button.theme_type_variation = "GothicShopTradeTabSelectedGemButton" if buying else "GothicShopTradeTabGemButton"
 	sell_tab_button.theme_type_variation = "GothicShopTradeTabGemButton" if buying else "GothicShopTradeTabSelectedGemButton"
-	buy_button.visible = buying
-	repair_button.visible = buying and bool(_active_merchant_context().get("supports_repair", false))
-	sell_quantity_row.visible = not buying
-	sell_quantity_button.visible = not buying
+	_sync_trade_action_visibility()
 	if buying:
 		if _buy_quotes.is_empty():
 			_clear_goods_cards()
@@ -755,6 +752,25 @@ func _set_trade_mode(mode: String) -> void:
 	_apply_layout_profile_once("shop_sell" if not buying else "shop_buy")
 	_ui_l1_repair_dirty = true
 	_ui_l1_queue_repair_view()
+
+
+## The single authority for shop action visibility. Trade mode owns it;
+## calibration profiles replay `visible` for captured nodes asynchronously and
+## would otherwise leave stale action buttons (e.g. the sell quantity button in
+## BUY mode), which silently changes the detail space plan and touch targets.
+func _sync_trade_action_visibility() -> void:
+	var buying := _trade_mode == "buy"
+	buy_button.visible = buying
+	repair_button.visible = buying and bool(_active_merchant_context().get("supports_repair", false))
+	sell_quantity_row.visible = not buying
+	sell_quantity_button.visible = not buying
+
+
+func _on_runtime_layout_profile_applied(_profile_id: String) -> void:
+	# The profile transaction settles a few frames after the mode change that
+	# requested it; re-assert business visibility so the calibration replay
+	# cannot resurrect actions the active trade mode has dismissed.
+	_sync_trade_action_visibility()
 
 
 func sell_quote_key(inventory_index: int, record: Dictionary) -> String:
