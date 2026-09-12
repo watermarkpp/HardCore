@@ -9,7 +9,7 @@ const CharacterHallScene := preload("res://scenes/character_select.tscn")
 const SystemMenuPanel := preload("res://scripts/system_menu_panel.gd")
 const ConfirmationPanel := preload("res://scripts/gothic_confirmation_panel.gd")
 const CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
-const EXPECTED_HASH := "DDFDBFC3418D8286EE6264AC24FB725B5BB0B5E1285410EE62CC31837B349496"
+const EXPECTED_HASH := "0EA858C9FE5867B8B7057DFC16FF32FB06DF68A7A6862992A702E45D470CBF10"
 
 func _ready() -> void:
 	# This fixture instantiates the real character hall. In test_mode the
