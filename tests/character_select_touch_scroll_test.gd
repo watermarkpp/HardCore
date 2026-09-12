@@ -19,6 +19,12 @@ func _run() -> void:
 	_prepare_profiles()
 	_old_viewport_size = get_tree().root.size
 	get_tree().root.size = Vector2i(2664, 1200)
+	# Real startup warms the GameRoot script chain (HUD textures, shaders) into
+	# the resource cache before the character select can request the launch
+	# scene. Warm the same chain synchronously so the launcher's threaded
+	# warm-up hits the cache like it does in production instead of compiling
+	# shader-bearing scripts on a worker thread.
+	assert(ResourceLoader.load("res://scripts/game_root.gd", "Script") != null, "launch chain warm-up failed")
 	var launcher: Control = load("res://scenes/character_select.tscn").instantiate()
 	launcher.suppress_scene_change_for_test = true
 	add_child(launcher)
@@ -110,6 +116,13 @@ func _run() -> void:
 	support.call("_continue_drag", touch_start + Vector2(0, 4), Vector2(0, 4))
 	assert(launcher.profile_scroll.scroll_vertical == threshold_start, "阈值内轻微移动被错误识别为滚动")
 	support.call("_end_drag")
+	# The launcher asynchronously warms the launch scene. Give the threaded
+	# warm-up a bounded window to settle before teardown so quitting does not
+	# abort a mid-flight resource load.
+	for _frame in range(180):
+		if not is_instance_valid(launcher) or launcher._launch_scene_preload_state != launcher.LAUNCH_PRELOAD_REQUESTED:
+			break
+		await get_tree().process_frame
 	launcher.queue_free()
 	get_tree().root.size = _old_viewport_size
 	_restore_profiles()
