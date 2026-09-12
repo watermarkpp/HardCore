@@ -223,7 +223,11 @@ func _run() -> void:
 	var potion_index_for_size_probe := _inventory_index_of("太阳水")
 	panel._select_inventory_item(potion_index_for_size_probe)
 	var potion_popup_size: Vector2 = panel.item_detail_presenter.size
-	assert(potion_popup_size.y < dagger_popup_size.y, "短药水详情没有按实际内容收紧高度：%s/%s" % [potion_popup_size, dagger_popup_size])
+	# R6.1 portrait contract (user mandate): non-shop details keep H > W via the
+	# portrait envelope even for short content, replacing the older
+	# tighten-to-content expectation.
+	assert(potion_popup_size.y > potion_popup_size.x, "短药水详情没有保持 portrait 形态：%s" % potion_popup_size)
+	assert(dagger_popup_size.y > dagger_popup_size.x, "匕首详情没有保持 portrait 形态：%s" % dagger_popup_size)
 	panel._clear_inventory_selection_styles()
 	panel._select_inventory_item(0)
 	var selected_item_rect := (panel.item_grid.get_child(0) as Control).get_global_rect()

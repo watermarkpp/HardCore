@@ -361,7 +361,12 @@ func _relayout() -> void:
 			var trial_width := floorf(lerpf(lower, upper, float(n) / float(WIDTH_STEPS)))
 			var trial_extent := _measure_at(trial_width)
 			var natural := MARGIN * 2.0 + trial_extent.x + TITLE_GAP + trial_extent.y
-			var trial_height := ceilf(maxf(natural, trial_width / 1.3 if shop else trial_width + 4.0))
+			# Non-shop details are contractually portrait (H > W). Short content
+			# (potions, books) must still fill the portrait envelope instead of
+			# collapsing to a near-square floor; long content keeps its natural
+			# height, which already exceeds the floor.
+			var target_ratio := 1.0 if shop else 1.38
+			var trial_height := ceilf(maxf(natural, trial_width / 1.3 if shop else maxf(trial_width + 4.0, trial_width * target_ratio)))
 			if _r32_capture_candidates:
 				_r32_candidates.append({
 					"region": candidate, "width": trial_width,
@@ -376,7 +381,6 @@ func _relayout() -> void:
 				})
 			if trial_height > floorf(candidate.size.y):
 				continue
-			var target_ratio := 1.0 if shop else 1.38
 			var ratio := trial_height / trial_width
 			var cost := absf(ratio - target_ratio) + 0.12 * trial_width * trial_height / maxf(1.0, candidate.get_area())
 			if not shop:
