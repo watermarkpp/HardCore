@@ -1,0 +1,633 @@
+diff --git a/scripts/item_detail_docked_presenter.gd b/scripts/item_detail_docked_presenter.gd
+index 136ea779..ad57b675 100644
+--- a/scripts/item_detail_docked_presenter.gd
++++ b/scripts/item_detail_docked_presenter.gd
+@@ -41,6 +41,8 @@ var _r3_session_epoch := -1
+ # Disabled unless an isolated diagnostic scene opts in; never serialized.
+ var _r32_capture_candidates := false
+ var _r32_candidates: Array = []
++var _r33_syncing_caption := false
++var _r33_exiting := false
+ 
+ func _init() -> void:
+ 	name = "ItemDetailPresenter"
+@@ -101,6 +103,8 @@ func _ready() -> void:
+ 	_invalidate_layout()
+ 
+ func _notification(what: int) -> void:
++	if what == NOTIFICATION_ENTER_TREE:
++		_r33_exiting = false
+ 	if what == NOTIFICATION_THEME_CHANGED and is_node_ready():
+ 		_invalidate_layout()
+ 
+@@ -152,6 +156,8 @@ func _bind_geometry() -> void:
+ 				_watch(node, &"visibility_changed")
+ 
+ func _exit_tree() -> void:
++	_r33_exiting = true
++	_r33_sync_caption()
+ 	for connection: Array in _connections:
+ 		var node: Object = (connection[0] as WeakRef).get_ref()
+ 		var callback := Callable(self, "_invalidate_layout")
+@@ -246,6 +252,7 @@ func hide_detail() -> void:
+ 	title_label.text = ""
+ 	detail_label.text = ""
+ 	visible = false
++	_r33_sync_caption()
+ 
+ func is_message_active() -> bool:
+ 	return _message_active and visible
+@@ -270,7 +277,21 @@ func debug_layout_snapshot() -> Dictionary:
+ 		"scroll_active": detail_label.scroll_active, "epoch": _content_epoch,
+ 	}
+ 
++func _r33_sync_caption() -> void:
++	if _r33_syncing_caption:
++		return
++	var owner := get_parent() as Control
++	if owner == null:
++		return
++	_r33_syncing_caption = true
++	var active := not _r33_exiting and is_inside_tree() and is_visible_in_tree() and not _title_source.is_empty()
++	ShopSpace.sync_section_caption(owner, active)
++	_r33_syncing_caption = false
++
+ func _invalidate_layout() -> void:
++	if _r33_exiting or _r33_syncing_caption:
++		return
++	_r33_sync_caption()
+ 	if _laying_out or _queued or not is_inside_tree():
+ 		return
+ 	_layout_key.clear()
+@@ -305,6 +326,7 @@ func _relayout() -> void:
+ 	# Reflowing the shop action band emits geometry signals. Ignore those while
+ 	# solving, then key the final geometry. No perpetual deferred-layout loop.
+ 	_laying_out = true
++	_r33_sync_caption()
+ 	var spec: Dictionary = owner.call("_ui_detail_region", _context)
+ 	var region: Rect2 = spec.get("region", Rect2())
+ 	var expanded: Rect2 = spec.get("expanded_region", region)
+diff --git a/scripts/ui_shop_detail_space.gd b/scripts/ui_shop_detail_space.gd
+index 3b233f20..a0e301c6 100644
+--- a/scripts/ui_shop_detail_space.gd
++++ b/scripts/ui_shop_detail_space.gd
+@@ -11,6 +11,32 @@ const ACTION_STACK_GAP_PX := 16.0
+ const Frame := preload("res://scripts/gothic_frame_factory.gd")
+ const VisualBounds := preload("res://scripts/ui_style_visual_bounds.gd")
+ 
++## R3.3: only one semantic heading while the detail card is visible.
++## The item title remains INSIDE the card, with its original font and rarity.
++## Only the redundant generic caption is temporarily hidden. Geometry, text,
++## colors, and the serialized calibration of that caption are never changed.
++static func sync_section_caption(owner: Control, card_active: bool) -> void:
++	if not is_instance_valid(owner):
++		return
++	var caption := owner.get_node_or_null("DetailPanel/DetailTitle") as Label
++	var decoration := owner.get_node_or_null("DetailPanel/DetailPanelDecoration") as Control
++	if caption == null or decoration == null:
++		return # Non-shop presenters retain their existing layout and headings.
++	var owned := bool(caption.get_meta("r33_card_heading_owned", false))
++	if card_active:
++		if not owned:
++			caption.set_meta("r33_saved_caption_visible", caption.visible)
++			caption.set_meta("r33_card_heading_owned", true)
++		if caption.visible:
++			caption.hide()
++	elif owned:
++		var was_visible := bool(caption.get_meta("r33_saved_caption_visible", true))
++		# Release ownership before changing visibility: callbacks may re-enter.
++		caption.remove_meta("r33_card_heading_owned")
++		caption.remove_meta("r33_saved_caption_visible")
++		if caption.visible != was_visible:
++			caption.visible = was_visible
++
+ static func transformed(t: Transform2D, r: Rect2) -> Rect2:
+ 	var out := Rect2(t * r.position, Vector2.ZERO)
+ 	for p: Vector2 in [Vector2(r.end.x, r.position.y), r.end, Vector2(r.position.x, r.end.y)]:
+@@ -95,7 +121,11 @@ static func region(owner: Control) -> Dictionary:
+ 	if not opening.has_area():
+ 		return {"region": Rect2(), "side": "center", "kind": "shop", "error": "EMPTY_FRAME_OPENING"}
+ 	var safe := inset(opening, Vector2(FRAME_CLEAR_PX / scale.x, FRAME_CLEAR_PX / scale.y))
+-	var top := maxf(safe.position.y, rect_in(owner, title).end.y + TITLE_CLEAR_PX / scale.y)
++	# A hidden caption consumes no layout band. The card still contains its
++	# complete item heading; its OUTER border stays inside the 32px safe area.
++	var top := safe.position.y
++	if title.visible:
++		top = maxf(top, rect_in(owner, title).end.y + TITLE_CLEAR_PX / scale.y)
+ 	var actions := _visible_actions(owner)
+ 	# Validate before shifting/resizing anything. A future unknown custom style
+ 	# must not silently use a hit box and violate the 30px visual clearance.
+@@ -184,5 +214,8 @@ static func region(owner: Control) -> Dictionary:
+ 	return {"region": area, "side": "center", "kind": "shop", "frame_opening": opening,
+ 		"screen_scale": scale, "protected": protected, "title_rect": rect_in(owner, title),
+ 		"action_layout": "row" if horizontal else "stack",
++		"caption_reserved": title.visible, "frame_safe_rect": safe,
++		"caption_reserved_height": maxf(0.0, top - safe.position.y),
++		"heading_mode": "card_title" if bool(title.get_meta("r33_card_heading_owned", false)) else "section_caption",
+ 		"action_gap_px": ACTION_CLEAR_PX, "frame_gap_px": FRAME_CLEAR_PX,
+ 		"pixel_scope": "viewport_only" if DisplayServer.get_name() == "headless" else "screen"}
+diff --git a/tests/r6_3_3/header_geometry_test.gd b/tests/r6_3_3/header_geometry_test.gd
+new file mode 100644
+index 00000000..a400e847
+--- /dev/null
++++ b/tests/r6_3_3/header_geometry_test.gd
+@@ -0,0 +1,79 @@
++extends Node
++## Synthetic geometry regression. Not a real merchant or a device test.
++const Space := preload("res://scripts/ui_shop_detail_space.gd")
++class Fixture:
++	extends Control
++	var buy_button: Button
++	var repair_button: Button
++	var sell_quantity_row: Control
++	var sell_quantity_button: Button
++var failures: Array[String] = []
++var checks := 0
++func check(ok: bool, message: String) -> void:
++	checks += 1
++	if not ok:
++		failures.append(message)
++func _ready() -> void:
++	_run.call_deferred()
++func _run() -> void:
++	var owner := Fixture.new()
++	owner.size = Vector2(1080, 620)
++	var section := Control.new()
++	section.name = "DetailPanel"
++	section.position = Vector2(674, 76)
++	owner.add_child(section)
++	var decoration := Control.new()
++	decoration.name = "DetailPanelDecoration"
++	decoration.position = Vector2(-4.1989136, -26.4)
++	decoration.size = Vector2(365.90863, 510)
++	section.add_child(decoration)
++	var caption := Label.new()
++	caption.name = "DetailTitle"
++	caption.text = "商品详情"
++	caption.position = Vector2(24, 12)
++	caption.size = Vector2(316, 34)
++	section.add_child(caption)
++	owner.buy_button = Button.new()
++	owner.buy_button.text = "购买"
++	owner.buy_button.size = Vector2(270, 51)
++	section.add_child(owner.buy_button)
++	add_child(owner)
++	await get_tree().process_frame
++	var initial_caption := Rect2(caption.position, caption.size)
++	var before: Dictionary = Space.region(owner)
++	var original_button := Rect2(owner.buy_button.position, owner.buy_button.size)
++	check(bool(before.get("caption_reserved", false)), "idle caption band missing")
++	Space.sync_section_caption(owner, true)
++	var after: Dictionary = Space.region(owner)
++	var old_area: Rect2 = before["region"]
++	var new_area: Rect2 = after["region"]
++	var safe: Rect2 = after["frame_safe_rect"]
++	check(not caption.visible, "redundant caption remained visible")
++	check(new_area.position.y == safe.position.y, "hidden caption still consumes height")
++	check(absf((new_area.size.y - old_area.size.y) - (old_area.position.y - safe.position.y)) < 0.05, "height not reclaimed exactly")
++	check(new_area.end.is_equal_approx(old_area.end), "button boundary or right edge moved")
++	check(absf(new_area.size.x - old_area.size.x) < 0.05, "reading width changed")
++	check(Rect2(owner.buy_button.position, owner.buy_button.size).is_equal_approx(original_button), "heading switch moved the button")
++	check(Rect2(caption.position, caption.size).is_equal_approx(initial_caption), "authored caption geometry modified")
++	check(caption.text == "商品详情", "generic caption text modified")
++	for i in range(6):
++		Space.sync_section_caption(owner, true)
++		check((Space.region(owner)["region"] as Rect2).is_equal_approx(new_area), "accumulating drift")
++	Space.sync_section_caption(owner, false)
++	check(caption.visible, "idle caption not restored")
++	check((Space.region(owner)["region"] as Rect2).is_equal_approx(old_area), "idle area not restored")
++	caption.hide()
++	Space.sync_section_caption(owner, true)
++	Space.sync_section_caption(owner, false)
++	check(not caption.visible, "authored hidden caption was incorrectly forced visible")
++	var ordinary := Control.new()
++	Space.sync_section_caption(ordinary, true)
++	Space.sync_section_caption(ordinary, false)
++	check(ordinary.get_child_count() == 0, "non-shop UI changed")
++	ordinary.free()
++	owner.queue_free()
++	await get_tree().process_frame
++	for item: String in failures:
++		push_error("R33_HEADER_GEOMETRY " + item)
++	print("R33_HEADER_GEOMETRY_%s checks=%d" % ["PASS" if failures.is_empty() else "FAIL", checks])
++	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/r6_3_3/header_geometry_test.tscn b/tests/r6_3_3/header_geometry_test.tscn
+new file mode 100644
+index 00000000..d5445bed
+--- /dev/null
++++ b/tests/r6_3_3/header_geometry_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/r6_3_3/header_geometry_test.gd" id="1"]
++[node name="R33HeaderGeometry" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/r6_3_3/header_session_test.gd b/tests/r6_3_3/header_session_test.gd
+new file mode 100644
+index 00000000..1f0cf004
+--- /dev/null
++++ b/tests/r6_3_3/header_session_test.gd
+@@ -0,0 +1,140 @@
++extends Node
++## REAL ShopPanel, real quotes. Short layout/lifecycle regression, NOT latency.
++const Shop := preload("res://scripts/shop_panel.gd")
++const Names := preload("res://scripts/ui_item_name_style.gd")
++const Space := preload("res://scripts/ui_shop_detail_space.gd")
++const Bounds := preload("res://scripts/ui_style_visual_bounds.gd")
++var panel
++var merchant: Dictionary = {}
++var failures: Array[String] = []
++var checks := 0
++var finished := false
++var started := 0
++func _ready() -> void:
++	started = Time.get_ticks_msec()
++	process_mode = Node.PROCESS_MODE_ALWAYS
++	PlayerState.test_mode = true
++	_run.call_deferred()
++func _process(_delta: float) -> void:
++	if not finished and Time.get_ticks_msec() - started > 40000:
++		failures.append("SESSION_WATCHDOG")
++		finish()
++func check(ok: bool, label: String) -> void:
++	checks += 1
++	if not ok:
++		failures.append(label)
++func frames(n: int = 3) -> void:
++	for i in range(n):
++		await get_tree().process_frame
++func buy_quotes(stock: Array) -> void:
++	panel.set_buy_quotes(PlayerState.shop_buy_quotes(stock, merchant))
++func sell_quotes(requests: Array) -> void:
++	panel.set_sell_quotes(PlayerState.shop_sell_quotes(requests))
++func inspect(expected_name: String, expected_body: String, item: Dictionary, instance: Dictionary) -> void:
++	var view = panel.item_detail_presenter
++	var snapshot: Dictionary = view.debug_layout_snapshot()
++	var caption: Label = panel.get_node("DetailPanel/DetailTitle")
++	check(view.debug_layout_valid(), expected_name + " invalid layout")
++	check(view.is_visible_in_tree() and view.modulate.a > 0.99, "detail invisible")
++	check(not caption.visible, "duplicate section caption")
++	check(view.title_label.is_visible_in_tree() and view.title_label.text == expected_name, "item title lost")
++	check(view.detail_label.text == expected_body, "body lost/rewritten")
++	check(view.title_label.get_theme_color("font_color") == Names.describe(item, instance)["color"], "rarity color changed")
++	check(not view.detail_label.scroll_active and not view.detail_label.get_v_scroll_bar().is_visible_in_tree(), "scrollbar")
++	check(float(view.detail_label.get_content_height()) <= view.detail_label.size.y, "body overflow")
++	check(view.title_label.get_theme_font_size("font_size") == 20 and view.detail_label.get_theme_font_size("normal_font_size") == 14, "fonts changed")
++	check(float(snapshot["margin"]) == 18.0 and float(snapshot["title_gap"]) == 12.0, "spacing compressed")
++	# Independent opening from the locked frame artwork, not planner.region.
++	var dec: Control = panel.get_node("DetailPanel/DetailPanelDecoration")
++	var opening: Rect2 = Space.rect_in(panel, dec, Rect2(Vector2(31, 26), dec.size - Vector2(62, 52)))
++	var actual := Rect2(view.position, view.size)
++	var scale: Vector2 = Space.screen_scale(panel)
++	check(scale.x > 0.0 and scale.y > 0.0, "invalid scale")
++	var gaps: Array[float] = [
++		(actual.position.x - opening.position.x) * scale.x,
++		(opening.end.x - actual.end.x) * scale.x,
++		(actual.position.y - opening.position.y) * scale.y,
++		(opening.end.y - actual.end.y) * scale.y,
++	]
++	for gap: float in gaps:
++		check(gap >= 30.0 - 0.05, "frame clearance below 30px")
++	for action: Variant in [panel.buy_button, panel.repair_button, panel.sell_quantity_row, panel.sell_quantity_button]:
++		if action is Control and action.is_visible_in_tree():
++			var bounds: Dictionary = Bounds.control_bounds(action)
++			check(bool(bounds.get("ok", false)), "action bounds invalid")
++			if bool(bounds.get("ok", false)):
++				var drawn: Rect2 = Space.rect_in(panel, action, bounds["rect"])
++				check((drawn.position.y - actual.end.y) * scale.y >= 32.0 - 0.05, "action clearance below 32px")
++	check(view.size.x <= 1.3 * view.size.y + 0.5, "overly flat rectangle")
++func _run() -> void:
++	if not GameData.ensure_loaded():
++		failures.append("DATA_MISSING"); finish(); return
++	PlayerState.reset_progress(false)
++	PlayerState.level = 60
++	PlayerState.gold = 1000000
++	PlayerState.recalculate_stats(false)
++	for stock_key: String in ["medicine", "general"]:
++		merchant = GameData.merchant_context(stock_key)
++		panel = Shop.new()
++		panel.buy_quotes_requested.connect(buy_quotes)
++		panel.sell_quotes_requested.connect(sell_quotes)
++		add_child(panel)
++		await frames(6)
++		var caption: Label = panel.get_node("DetailPanel/DetailTitle")
++		var caption_geometry := Rect2(caption.position, caption.size)
++		var caption_text := caption.text
++		for name_text: String in ["木剑", "匕首", "超级金创药", "超级魔法药", "铂金戒指"]:
++			var item: Dictionary = GameData.get_item_record(name_text)
++			check(not item.is_empty(), "item missing: " + name_text)
++			if item.is_empty(): continue
++			var entry: Dictionary = {"name": name_text, "pack_count": 1, "merchant_context": merchant.duplicate(true), "merchant_id": merchant.get("merchant_id", "")}
++			var canonical := int(Names.canonical_id(item))
++			if canonical > 0: entry["item_id"] = canonical
++			panel.open_for("R3.3标题与留白验收", [entry], merchant)
++			await frames(6)
++			var quote: Dictionary = panel._buy_quote_for_index(0)
++			check(not quote.is_empty(), "buy quote missing")
++			var quantity := maxi(1, int(quote.get("pack_count", 1)))
++			var price_line := "[color=#d3a763]价格：%d金币 × %d，共%d金币[/color]" % [int(quote.get("unit_price", 0)), quantity, int(quote.get("total_price", 0))] if bool(quote.get("valid", false)) else "[color=#b8a58a]%s[/color]" % str(quote.get("reason", "等待玩法价格报价"))
++			var expected_buy: String = price_line + "\n\n" + panel._buy_item_detail(name_text, item, entry)
++			panel.item_list.select(0)
++			panel._on_item_selected(0)
++			await frames()
++			inspect(name_text, expected_buy, item, {})
++			panel._ui_dismiss_selection()
++			check(not panel.item_detail_presenter.visible and caption.visible, "clear did not restore idle heading")
++			PlayerState.inventory = []
++			var received: Dictionary = PlayerState.add_item(name_text, 1)
++			check(bool(received.get("success", false)) and PlayerState.inventory.size() == 1, "sell fixture missing")
++			if PlayerState.inventory.size() != 1: continue
++			panel._set_trade_mode("sell")
++			await frames(6)
++			panel._request_sell_quotes()
++			var instance: Dictionary = PlayerState.inventory[0]
++			var sell_quote: Dictionary = panel._sell_quotes.get(panel.sell_quote_key(0, instance), {})
++			check(not sell_quote.is_empty(), "sell quote missing")
++			var expected_sell: String = panel._sell_item_detail(instance, item, sell_quote)
++			panel._select_sell_item(0)
++			await frames()
++			inspect(name_text, expected_sell, item, instance)
++			var snapshot: Dictionary = panel.item_detail_presenter.debug_layout_snapshot()
++			var layouts := int(snapshot.get("layouts", 0))
++			await frames(8)
++			check(int(panel.item_detail_presenter.debug_layout_snapshot().get("layouts", 0)) <= layouts + 1, "layout does not settle")
++			panel.hide()
++			await frames()
++			panel.show()
++			await frames()
++			check(not panel.item_detail_presenter.visible, "stale selection after reopening")
++			check(caption.visible and caption.text == caption_text, "empty-state heading not restored")
++			check(Rect2(caption.position, caption.size).is_equal_approx(caption_geometry), "caption calibration moved")
++		panel.queue_free()
++		await frames(2)
++	finish()
++func finish() -> void:
++	if finished: return
++	finished = true
++	for error: String in failures:
++		push_error("R33_HEADER_SESSION " + error)
++	print("R33_HEADER_SESSION_%s checks=%d" % ["PASS" if failures.is_empty() else "FAIL", checks])
++	get_tree().quit(0 if failures.is_empty() else 1)
+diff --git a/tests/r6_3_3/header_session_test.tscn b/tests/r6_3_3/header_session_test.tscn
+new file mode 100644
+index 00000000..7b316798
+--- /dev/null
++++ b/tests/r6_3_3/header_session_test.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/r6_3_3/header_session_test.gd" id="1"]
++[node name="R33HeaderSession" type="Node"]
++script = ExtResource("1")
+diff --git a/tests/r6_3_3/space_diagnostic.gd b/tests/r6_3_3/space_diagnostic.gd
+new file mode 100644
+index 00000000..c53f8d5d
+--- /dev/null
++++ b/tests/r6_3_3/space_diagnostic.gd
+@@ -0,0 +1,238 @@
++extends Node
++## DIAGNOSTIC ONLY. Does not certify rendering, transaction latency or Android.
++const Shop := preload("res://scripts/shop_panel.gd")
++const Names := preload("res://scripts/ui_item_name_style.gd")
++const Bounds := preload("res://scripts/ui_style_visual_bounds.gd")
++const Space := preload("res://scripts/ui_shop_detail_space.gd")
++const SOURCE_PATHS := [
++	"scripts/item_detail_docked_presenter.gd", "scripts/ui_shop_detail_space.gd",
++	"scripts/ui_style_visual_bounds.gd", "scripts/gothic_ui_theme.gd",
++	"scripts/shop_panel.gd", "scripts/ui_runtime_layout_overrides.gd",
++	"assets/data/ui/manual_layout_overrides.json", "project.godot",
++]
++var panel: Control
++var merchant: Dictionary = {}
++var active_stock_key := ""
++var rows: Array = []
++var problems: Array[String] = []
++var output_path := "res://outputs/test_logs/r33_geometry.json"
++var expected_title := ""
++var expected_body := ""
++var expected_color := Color.WHITE
++var completed := false
++var started := 0
++
++func _ready() -> void:
++	started = Time.get_ticks_msec()
++	process_mode = Node.PROCESS_MODE_ALWAYS
++	PlayerState.test_mode = true
++	_run.call_deferred()
++
++func _process(_delta: float) -> void:
++	if not completed and Time.get_ticks_msec() - started > 45000:
++		problems.append("DIAGNOSTIC_WATCHDOG_TIMEOUT")
++		finish(false)
++
++func json_value(value: Variant) -> Variant:
++	if value is Vector2 or value is Vector2i: return [value.x, value.y]
++	if value is Rect2: return [value.position.x, value.position.y, value.size.x, value.size.y]
++	if value is Color: return [value.r, value.g, value.b, value.a]
++	if value is Vector4: return [value.x, value.y, value.z, value.w]
++	if value is Dictionary:
++		var result: Dictionary = {}
++		for key: Variant in value: result[str(key)] = json_value(value[key])
++		return result
++	if value is Array:
++		var result: Array = []
++		for element: Variant in value: result.append(json_value(element))
++		return result
++	return value
++
++func frames(count: int) -> void:
++	for i in range(count): await get_tree().process_frame
++
++func on_buy(stock: Array) -> void:
++	panel.call("set_buy_quotes", PlayerState.shop_buy_quotes(stock, merchant))
++
++func on_sell(requests: Array) -> void:
++	panel.call("set_sell_quotes", PlayerState.shop_sell_quotes(requests))
++
++func state_row(name_text: String, domain: String, stage: String) -> Dictionary:
++	var view: Control = panel.get("item_detail_presenter") as Control
++	var result: Dictionary = {"name": name_text, "domain": domain, "stage": stage,
++		"merchant_context": merchant.duplicate(true), "stock_key": active_stock_key, "panel_rect": Rect2(panel.position, panel.size),
++		"viewport": get_viewport().get_visible_rect(), "window": get_window().size,
++		"owner_canvas_transform": str(panel.get_global_transform_with_canvas()),
++		"screen_transform": str(get_viewport().get_screen_transform()),
++		"snapshot": view.call("debug_layout_snapshot"), "actions": []}
++	for property: String in ["buy_button", "repair_button", "sell_quantity_row", "sell_quantity_button"]:
++		var control: Control = panel.get(property) as Control
++		if control == null: continue
++		var bounds: Dictionary = Bounds.control_bounds(control)
++		var action: Dictionary = {"property": property, "name": str(control.name),
++			"visible": control.is_visible_in_tree(), "position": control.position, "size": control.size,
++			"minimum": control.get_minimum_size(), "combined_minimum": control.get_combined_minimum_size(),
++			"custom_minimum": control.custom_minimum_size, "scale": control.scale,
++			"theme_variation": str(control.theme_type_variation), "bounds": bounds,
++			"owner_hit_rect": Space.rect_in(panel, control)}
++		if bool(bounds.get("ok", false)):
++			action["owner_visual_rect"] = Space.rect_in(panel, control, bounds.get("rect", Rect2()))
++		if control is Button:
++			action["text"] = (control as Button).text
++			action["font_size"] = control.get_theme_font_size("font_size")
++			var style_data: Array = []
++			for state: StringName in Bounds.STATES:
++				var style: StyleBox = control.get_theme_stylebox(state)
++				style_data.append({"state": str(state), "bounds": Bounds.style_bounds(style, Rect2(Vector2.ZERO, control.size)),
++					"class": style.get_class() if style != null else "null"})
++			action["styles"] = style_data
++		(result["actions"] as Array).append(action)
++	var title: Label = view.get("title_label") as Label
++	var body: RichTextLabel = view.get("detail_label") as RichTextLabel
++	result["title_font"] = title.get_theme_font("font").resource_path
++	result["body_font"] = body.get_theme_font("normal_font").resource_path
++	var snapshot: Dictionary = result["snapshot"]
++	var spec: Dictionary = snapshot.get("space_spec", {})
++	# Explicit top-level fields; do not infer pixels from null/missing metadata.
++	result["screen_scale"] = spec.get("screen_scale", null)
++	result["pixel_scope"] = spec.get("pixel_scope", null)
++	result["rectangle_units"] = "owner_local_coordinates"
++	result["expected_title"] = expected_title
++	result["expected_body_bbcode"] = expected_body
++	result["actual_body_bbcode"] = body.text
++	result["expected_title_color"] = expected_color
++	result["actual_title_color"] = title.get_theme_color("font_color")
++	result["title_visible"] = title.is_visible_in_tree()
++	result["body_visible"] = body.is_visible_in_tree()
++	result["panel_visible"] = view.is_visible_in_tree()
++	result["alpha"] = view.modulate.a
++	result["scrollbar_visible"] = body.get_v_scroll_bar().is_visible_in_tree()
++	result["title_font_size"] = title.get_theme_font_size("font_size")
++	result["body_font_size"] = body.get_theme_font_size("normal_font_size")
++	result["body_content_width"] = body.get_content_width()
++	var caption := panel.get_node("DetailPanel/DetailTitle") as Label
++	result["caption_visible"] = caption.visible
++	result["caption_text"] = caption.text
++	result["caption_rect"] = Space.rect_in(panel, caption)
++	result["frame_decoration_rect"] = Space.rect_in(panel, panel.get_node("DetailPanel/DetailPanelDecoration"))
++	return result
++
++func record(name_text: String, domain: String, stage: String) -> void:
++	rows.append(state_row(name_text, domain, stage))
++	write_capture(false) # Persist every sample BEFORE any terminal failure.
++
++func take_shot(name_text: String, domain: String) -> void:
++	if DisplayServer.get_name() == "headless" or OS.get_environment("HC_R33_CAPTURE_SHOTS") != "1": return
++	await RenderingServer.frame_post_draw
++	var image: Image = get_viewport().get_texture().get_image()
++	if image == null or image.is_empty():
++		problems.append("SCREENSHOT_UNAVAILABLE"); return
++	var path := "res://outputs/test_logs/r33_shots/" + (active_stock_key + "|" + str(merchant.get("merchant_id", "")) + "|" + name_text + "|" + domain).sha256_text().substr(0, 16) + ".png"
++	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
++	if image.save_png(ProjectSettings.globalize_path(path)) != OK:
++		problems.append("SCREENSHOT_WRITE_FAILED")
++		return
++	var sidecar := FileAccess.open(path + ".json", FileAccess.WRITE)
++	if sidecar == null:
++		problems.append("SCREENSHOT_SIDECAR_WRITE_FAILED")
++		return
++	sidecar.store_string(JSON.stringify(json_value({"stock_key": active_stock_key, "name": name_text,
++		"domain": domain, "image_size": image.get_size(), "row": rows.back(),
++		"scope": "raw_rendered_runtime_not_phone_not_acceptance"}), "  "))
++	sidecar.close()
++
++func _run() -> void:
++	if not GameData.ensure_loaded():
++		problems.append("DATA_UNAVAILABLE"); finish(false); return
++	PlayerState.reset_progress(false)
++	PlayerState.level = 60
++	PlayerState.recalculate_stats(false)
++	for stock_key: String in ["medicine", "general"]:
++		active_stock_key = stock_key
++		merchant = GameData.merchant_context(stock_key)
++		if str(merchant.get("merchant_id", "")).is_empty():
++			problems.append("MERCHANT_UNAVAILABLE:" + stock_key); continue
++		panel = Shop.new()
++		panel.connect("buy_quotes_requested", on_buy)
++		panel.connect("sell_quotes_requested", on_sell)
++		add_child(panel)
++		var view: Control = panel.get("item_detail_presenter") as Control
++		if view == null:
++			problems.append("PRESENTER_MISSING"); finish(false); return
++		# Suppression is permitted ONLY for collecting the failing baseline.
++		# The production/formal matrix never enables these flags.
++		view.set("_test_suppress_expected_layout_error", true)
++		view.set("_r32_capture_candidates", true)
++		await frames(6)
++		for name_text: String in ["木剑", "匕首", "超级金创药", "超级魔法药"]:
++			var item: Dictionary = GameData.get_item_record(name_text)
++			if item.is_empty():
++				problems.append("ITEM_UNAVAILABLE:" + name_text); continue
++			var entry: Dictionary = {"name": name_text, "pack_count": 1,
++				"merchant_context": merchant.duplicate(true), "merchant_id": merchant.get("merchant_id", "")}
++			var canonical := int(Names.canonical_id(item))
++			if canonical > 0: entry["item_id"] = canonical
++			panel.call("open_for", "R3.3空间诊断", [entry], merchant)
++			await frames(6)
++			var quote: Dictionary = panel.call("_buy_quote_for_index", 0)
++			var quantity := maxi(1, int(quote.get("pack_count", quote.get("quantity", 1))))
++			expected_title = name_text
++			var price_line := "[color=#d3a763]价格：%d金币 × %d，共%d金币[/color]" % [int(quote.get("unit_price", 0)), quantity, int(quote.get("total_price", 0))] if bool(quote.get("valid", false)) else "[color=#b8a58a]%s[/color]" % str(quote.get("reason", "等待玩法价格报价"))
++			expected_body = price_line + "\n\n" + str(panel.call("_buy_item_detail", name_text, item, entry))
++			expected_color = Names.describe(item, {}).get("color", Names.DEFAULT_COLOR)
++			panel.get("item_list").select(0)
++			panel.call("_on_item_selected", 0)
++			record(name_text, "buy", "synchronous")
++			await frames(1); record(name_text, "buy", "next_frame")
++			await frames(5); record(name_text, "buy", "settled")
++			await take_shot(name_text, "buy")
++			panel.call("_ui_dismiss_selection")
++			PlayerState.inventory = []
++			var received: Dictionary = PlayerState.add_item(name_text, 1)
++			if not bool(received.get("success", false)):
++				problems.append("RECEIVE_FAILED:" + name_text); continue
++			panel.call("_set_trade_mode", "sell")
++			await frames(6)
++			panel.call("_request_sell_quotes")
++			if PlayerState.inventory.size() != 1:
++				problems.append("SELL_FIXTURE_SIZE_INVALID"); continue
++			var instance: Dictionary = PlayerState.inventory[0]
++			var quote_key: String = panel.call("sell_quote_key", 0, instance)
++			var quotes: Dictionary = panel.get("_sell_quotes")
++			var sell_quote: Dictionary = quotes.get(quote_key, {})
++			if sell_quote.is_empty():
++				problems.append("SELL_QUOTE_MISSING"); continue
++			expected_body = str(panel.call("_sell_item_detail", instance, item, sell_quote))
++			expected_color = Names.describe(item, instance).get("color", Names.DEFAULT_COLOR)
++			panel.call("_select_sell_item", 0)
++			record(name_text, "sell", "synchronous")
++			await frames(1); record(name_text, "sell", "next_frame")
++			await frames(5); record(name_text, "sell", "settled")
++			await take_shot(name_text, "sell")
++			panel.call("_ui_dismiss_selection")
++		panel.queue_free()
++		await frames(2)
++	finish(problems.is_empty() and rows.size() == 48)
++
++func write_capture(complete: bool) -> void:
++	var hashes: Dictionary = {}
++	for path: String in SOURCE_PATHS:
++		hashes[path] = FileAccess.get_sha256("res://" + path)
++	var data: Dictionary = {"schema": "hc.r33.geometry.v1", "capture_complete": complete,
++		"layout_acceptance": "NOT_EVALUATED_DIAGNOSTIC_ONLY", "test_mode": PlayerState.test_mode,
++		"engine": Engine.get_version_info(), "source_hashes": hashes,
++		"loaded_project_root": ProjectSettings.globalize_path("res://"),
++		"rows": rows, "problems": problems, "expected_rows": 48}
++	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output_path.get_base_dir()))
++	var file: FileAccess = FileAccess.open(output_path, FileAccess.WRITE)
++	if file == null:
++		problems.append("CAPTURE_WRITE_FAILED"); return
++	file.store_string(JSON.stringify(json_value(data), "  "))
++	file.close()
++
++func finish(ok: bool) -> void:
++	if completed: return
++	completed = true
++	write_capture(ok)
++	print("R33_CAPTURE_PASS layout_acceptance=NOT_EVALUATED" if ok else "R33_CAPTURE_INCOMPLETE")
++	get_tree().quit(0 if ok and problems.is_empty() else 1)
+diff --git a/tests/r6_3_3/space_diagnostic.tscn b/tests/r6_3_3/space_diagnostic.tscn
+new file mode 100644
+index 00000000..e9aa5905
+--- /dev/null
++++ b/tests/r6_3_3/space_diagnostic.tscn
+@@ -0,0 +1,4 @@
++[gd_scene load_steps=2 format=3]
++[ext_resource type="Script" path="res://tests/r6_3_3/space_diagnostic.gd" id="1"]
++[node name="R33SpaceDiagnostic" type="Node"]
++script = ExtResource("1")

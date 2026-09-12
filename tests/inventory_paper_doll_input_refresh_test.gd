@@ -68,13 +68,35 @@ func _run() -> void:
 	PlayerState.equipment[weapon_slot] = {}
 	PlayerState.equipment[str(PreviewScript.PAPER_LAYER_SLOTS[2])] = {}
 	PlayerState.equipment_changed.emit()
-	assert(preview.render_revision() > revision_before, "Equipment change did not refresh the paper doll")
+	# UI-L1 contract: equipment data refresh is deferred and coalesced; the
+	# paper doll re-render settles within a few process frames.
+	var revision_settled := false
+	for _frame in range(3):
+		await get_tree().process_frame
+		if preview.render_revision() > revision_before:
+			revision_settled = true
+			break
+	assert(revision_settled, "Equipment change did not refresh the paper doll")
 	assert(preview.paper_layer_source_index(dress_slot) == 62)
 	assert(preview.original_stage_draw_commands().is_empty(), "Player inventory drew a complete Prguse background or slot frame")
 	assert(preview._body_texture != null, "Equipment refresh did not retain the dress layer")
 	assert(preview._paper_layers.size() == 1, "Paper doll did not retain the transparent base/dress composition")
 
-	(panel.equipment_buttons[dress_slot] as Button).pressed.emit()
+	# UI-L1 input contract: equipment slots arm through gui_input DOWN/UP
+	# (UIActivationOnce) and commit exactly once on pressed. A bare pressed
+	# emission is an un-armed duplicate and must stay inert.
+	var slot_button: Button = panel.equipment_buttons[dress_slot] as Button
+	var down_event := InputEventMouseButton.new()
+	down_event.button_index = MOUSE_BUTTON_LEFT
+	down_event.pressed = true
+	down_event.position = slot_button.size * 0.5
+	slot_button.gui_input.emit(down_event)
+	var up_event := InputEventMouseButton.new()
+	up_event.button_index = MOUSE_BUTTON_LEFT
+	up_event.pressed = false
+	up_event.position = slot_button.size * 0.5
+	slot_button.gui_input.emit(up_event)
+	slot_button.pressed.emit()
 	assert(panel.selected_equipment_slot == dress_slot, "Visual preview blocked equipment-slot selection")
 	hud.queue_free()
 

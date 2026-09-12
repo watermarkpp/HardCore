@@ -1,0 +1,48 @@
+--- a/scripts/item_detail_docked_presenter.gd
++++ b/scripts/item_detail_docked_presenter.gd
+@@ -38,6 +38,9 @@
+ var _r2_density := "comfortable"
+ var _r3_spec: Dictionary = {}
+ var _r3_session_epoch := -1
++# Disabled unless an isolated diagnostic scene opts in; never serialized.
++var _r32_capture_candidates := false
++var _r32_candidates: Array = []
+ 
+ func _init() -> void:
+ 	name = "ItemDetailPresenter"
+@@ -257,6 +260,8 @@
+ 	return {
+ 		"valid": _layout_ok, "error": _layout_error, "layouts": _layout_count, "density": _r2_density,
+ 		"margin": MARGIN, "title_gap": TITLE_GAP, "space_spec": _r3_spec.duplicate(),
++		"candidate_trace": _r32_candidates.duplicate(true),
++		"source_title": _title_source, "source_body": _body_source,
+ 		"name_style": _name_style.duplicate(), "title_color": title_label.get_theme_color("font_color"),
+ 		"title": title_label.text, "body": detail_label.get_parsed_text(),
+ 		"rect": Rect2(position, size), "title_rect": Rect2(title_label.position, title_label.size),
+@@ -315,6 +320,7 @@
+ 	_layout_error = ""
+ 	_layout_ok = false
+ 	_r2_density = "comfortable"
++	_r32_candidates.clear()
+ 	var regions: Array[Rect2] = [region]
+ 	if expanded.has_area() and expanded != region:
+ 		regions.append(expanded)
+@@ -334,6 +340,18 @@
+ 			var trial_extent := _measure_at(trial_width)
+ 			var natural := MARGIN * 2.0 + trial_extent.x + TITLE_GAP + trial_extent.y
+ 			var trial_height := ceilf(maxf(natural, trial_width / 1.3 if shop else trial_width + 4.0))
++			if _r32_capture_candidates:
++				_r32_candidates.append({
++					"region": candidate, "width": trial_width,
++					"height": trial_height, "available_height": floorf(candidate.size.y),
++					"title_measured_h": trial_extent.x, "body_measured_h": trial_extent.y,
++					"natural_height": natural, "requested_text_width": floorf(trial_width - MARGIN * 2.0),
++					"actual_title_width": title_label.size.x,
++					"actual_body_width": detail_label.size.x,
++					"body_content_width": detail_label.get_content_width(),
++					"body_line_count": detail_label.get_line_count(),
++					"fits_height": trial_height <= floorf(candidate.size.y),
++				})
+ 			if trial_height > floorf(candidate.size.y):
+ 				continue
+ 			var target_ratio := 1.0 if shop else 1.38

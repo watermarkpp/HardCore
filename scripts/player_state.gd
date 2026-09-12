@@ -1099,12 +1099,18 @@ func shop_buy_quotes(stock: Array, context := {}) -> Array:
 	return _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial)
 
 
-func _build_shop_buy_quotes(stock: Array, context: Dictionary, quote_serial: int) -> Array:
+func _build_shop_buy_quotes(stock: Array, context: Dictionary, quote_serial: int, only_stock_index: int = -1) -> Array:
 	var quotes: Array = []
-	for stock_index in range(stock.size()):
+	# A transaction validates its requested row; the returned UI quote list stays full.
+	if only_stock_index < -1 or only_stock_index >= stock.size():
+		return quotes
+	var first := only_stock_index if only_stock_index >= 0 else 0
+	var last := only_stock_index + 1 if only_stock_index >= 0 else stock.size()
+	for stock_index in range(first, last):
 		var raw_entry: Variant = stock[stock_index]
 		if not raw_entry is Dictionary:
 			continue
+		_ui_l1_buy_quote_rows += 1
 		var entry: Dictionary = raw_entry
 		var item_name := str(entry.get("name", ""))
 		var entry_context: Dictionary = context.duplicate(true)
@@ -1135,7 +1141,7 @@ func buy_shop_item(request: Dictionary, stock: Array, context := {}) -> Dictiona
 	var stock_index := int(request.get("stock_index", -1))
 	if stock_index < 0 or stock_index >= stock.size():
 		return _shop_buy_result(false, "购买商品已经变化，请重新选择。", stock, context)
-	var current_quotes := _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial)
+	var current_quotes := _build_shop_buy_quotes(stock, context, _shop_buy_quote_serial, stock_index)
 	var quote: Dictionary = {}
 	for candidate: Variant in current_quotes:
 		if candidate is Dictionary and int(candidate.get("stock_index", -1)) == stock_index:
@@ -7213,3 +7219,8 @@ func _commit_save(update_profile_index := true) -> bool:
 		"profile_index_skipped": not update_profile_index,
 	}
 	return success
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+var _ui_l1_buy_quote_rows := 0
+# UI-L1 SUPPLEMENT END

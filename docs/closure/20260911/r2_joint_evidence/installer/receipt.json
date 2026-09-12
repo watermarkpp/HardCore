@@ -1,0 +1,37 @@
+{
+  "base": "9b9362219753557edc8def1e05b61db62bb928f2",
+  "observed_head": "9b9362219753557edc8def1e05b61db62bb928f2",
+  "status": "R2_CORE_INTACT_NOT_RUNTIME_ACCEPTANCE",
+  "files": {
+    "scripts/item_detail_docked_presenter.gd": {
+      "state": "INSTALLED",
+      "actual_sha256": "d6901e18615fd2398634f06ecd61e4e4940b64d0887de134d11fcae37f80316b",
+      "expected_sha256": "d6901e18615fd2398634f06ecd61e4e4940b64d0887de134d11fcae37f80316b"
+    },
+    "scripts/shop_panel.gd": {
+      "state": "INSTALLED",
+      "actual_sha256": "1603b183f399cd87e6ee12a59deceb70b4f61712d17ad47cef42a9101c5aea62",
+      "expected_sha256": "1603b183f399cd87e6ee12a59deceb70b4f61712d17ad47cef42a9101c5aea62"
+    },
+    "tests/hud_background_prewarm_test.gd": {
+      "state": "INSTALLED",
+      "actual_sha256": "0d2e5df8761e71933c97e3076ec0dd795196d8759743a81caf10eb93dd6d37ba",
+      "expected_sha256": "0d2e5df8761e71933c97e3076ec0dd795196d8759743a81caf10eb93dd6d37ba"
+    },
+    "tests/equipment_character_preview_body_foot_contact_test.gd": {
+      "state": "INSTALLED",
+      "actual_sha256": "8c50d52f49d3e3ab7347d6ea73ac57616b075094c78c885471f41b169e67405f",
+      "expected_sha256": "8c50d52f49d3e3ab7347d6ea73ac57616b075094c78c885471f41b169e67405f"
+    },
+    "tests/r6_2/shop_layout_matrix.gd": {
+      "state": "INSTALLED",
+      "actual_sha256": "61a16c57f9916eb0cb70083420bd70187a0d8a184f24ca038b287a57c7cd4d92",
+      "expected_sha256": "61a16c57f9916eb0cb70083420bd70187a0d8a184f24ca038b287a57c7cd4d92"
+    },
+    "tests/r6_2/shop_layout_matrix.tscn": {
+      "state": "INSTALLED",
+      "actual_sha256": "2794e05d26d2dfbcf6ad793963aa33afa4746199d939752cc9213bded8dc4611",
+      "expected_sha256": "2794e05d26d2dfbcf6ad793963aa33afa4746199d939752cc9213bded8dc4611"
+    }
+  }
+}

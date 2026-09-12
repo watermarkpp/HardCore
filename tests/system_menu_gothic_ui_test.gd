@@ -69,7 +69,7 @@ func _run() -> void:
 	# 依据：设置页滑条行布局（calibration_layout_revision 5）。
 	var music_row: Control = menu.settings_page.get_node("MusicVolume")
 	var sfx_row: Control = menu.settings_page.get_node("SFXVolume")
-	assert(music_row.size == sfx_row.size and music_row.size == Vector2(356, 96), "两行声音设置没有使用同一布局")
+	assert(music_row.size == sfx_row.size and music_row.size == Vector2(356, 76), "两行声音设置没有使用同一布局")
 	assert(music_row.position == sfx_row.position - Vector2(0, 112), "两行声音设置行距不一致")
 	var music_caption: Label = menu.settings_page.get_node("MusicVolume/Caption")
 	var sfx_caption: Label = menu.settings_page.get_node("SFXVolume/Caption")

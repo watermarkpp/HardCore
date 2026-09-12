@@ -93,8 +93,10 @@ func _ready() -> void:
 	if profession_name.is_empty():
 		profession_name = str(PlayerState.profession)
 	_load_paper_mappings()
-	if not PlayerState.equipment_changed.is_connected(refresh):
-		PlayerState.equipment_changed.connect(refresh)
+	if not equipment_updates_owned_by_parent and not PlayerState.equipment_changed.is_connected(_ui_l1_preview_equipment_changed):
+		PlayerState.equipment_changed.connect(_ui_l1_preview_equipment_changed)
+	if not visibility_changed.is_connected(_ui_l1_preview_visibility_changed):
+		visibility_changed.connect(_ui_l1_preview_visibility_changed)
 	refresh()
 
 
@@ -135,6 +137,10 @@ func configure_presentation_mode(mode: String) -> void:
 
 
 func refresh() -> void:
+	_ui_l1_preview_pending = false
+	_ui_l1_preview_refresh_count += 1
+	# Pin only the old texture references during replacement, not across frames.
+	var ui_l1_keep_alive: Array = [_base_texture, _body_texture, _weapon_texture, _helmet_texture]
 	if _paper_mappings.is_empty():
 		_load_paper_mappings()
 	_base_texture = _base_source_texture
@@ -177,6 +183,7 @@ func refresh() -> void:
 	_recalculate_composition_opaque_bounds()
 	_render_revision += 1
 	queue_redraw()
+	ui_l1_keep_alive.clear()
 
 
 func _draw() -> void:
@@ -1208,3 +1215,35 @@ func paper_layer_source_record(slot: String) -> Dictionary:
 		if str(layer.get("equipmentSlot", "")) == slot:
 			return layer.duplicate(true)
 	return {}
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+# A real InventoryPanel already owns inventory/equipment signal coalescing.
+# Set this BEFORE add_child. Standalone previews retain their own subscription.
+var equipment_updates_owned_by_parent := false
+var _ui_l1_preview_pending := false
+var _ui_l1_preview_queued := false
+var _ui_l1_preview_refresh_count := 0
+
+func _ui_l1_preview_equipment_changed() -> void:
+	if equipment_updates_owned_by_parent or _use_equipment_snapshot:
+		return
+	_ui_l1_preview_pending = true
+	if is_visible_in_tree():
+		_ui_l1_queue_preview_refresh()
+
+func _ui_l1_preview_visibility_changed() -> void:
+	if not equipment_updates_owned_by_parent and _ui_l1_preview_pending and is_visible_in_tree():
+		_ui_l1_queue_preview_refresh()
+
+func _ui_l1_queue_preview_refresh() -> void:
+	if _ui_l1_preview_queued or not is_inside_tree():
+		return
+	_ui_l1_preview_queued = true
+	_ui_l1_flush_preview_refresh.call_deferred()
+
+func _ui_l1_flush_preview_refresh() -> void:
+	_ui_l1_preview_queued = false
+	if _ui_l1_preview_pending and is_inside_tree() and is_visible_in_tree():
+		refresh()
+# UI-L1 SUPPLEMENT END

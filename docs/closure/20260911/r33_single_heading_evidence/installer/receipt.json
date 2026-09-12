@@ -1,0 +1,23 @@
+{
+  "schema": "hc.r33.install.v1",
+  "base": "d2aa9e6ae2feda2723a95edbcaf9e951a475f5b8",
+  "head": "d2aa9e6ae2feda2723a95edbcaf9e951a475f5b8",
+  "branch": "codex/r3-3-single-heading",
+  "mode": "audit",
+  "targets": {
+    "scripts/item_detail_docked_presenter.gd": {
+      "state": "INSTALLED",
+      "before": "6d8bb417f4b8a11d55210714960a02bc66744df086aa9aeb38f781628c117c8b",
+      "after": "e9fe369c17cc994cf5117b370f2a1e74e357e7a171893d23fa9e11afae9ffd64"
+    },
+    "scripts/ui_shop_detail_space.gd": {
+      "state": "INSTALLED",
+      "before": "eb60a1871676e746bcf3b9558fe223057c19188582bd41b8165dac3d089231fc",
+      "after": "a4ea436ea1e7dc4ad79a5126218630ab437eca585dd2d2b1d766678b2e1f8573"
+    }
+  },
+  "runtime": "NOT_RUN",
+  "modified": [],
+  "status": "R33_CODE_INTACT_NOT_LAYOUT_ACCEPTANCE",
+  "candidate_scope": "one heading per visible shop card; no typography or button budget changes"
+}

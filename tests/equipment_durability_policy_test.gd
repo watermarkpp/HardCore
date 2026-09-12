@@ -74,7 +74,24 @@ func _run() -> void:
 	shop.open_for("比奇铁匠", GameData.merchant_stock("starter_gear"))
 	assert(shop.repair_button.text == "装备无需维修", "商店维修按钮初始预览错误")
 	PlayerState.damage_equipment_durability("武器", 1)
-	assert("金币" in shop.repair_button.text and str(PlayerState.repair_cost(blacksmith_context)) in shop.repair_button.text, "商店没有显示唯一维修价格预览")
+	# UI-L1 contract: equipment_changed refresh is deferred and coalesced, so
+	# the repair preview settles within a few process frames instead of the
+	# same call stack.  Allow up to 3 frames and verify the exact preview.
+	var repair_expected := str(PlayerState.repair_cost(blacksmith_context))
+	var repair_settled := false
+	for _frame in range(3):
+		await get_tree().process_frame
+		if "金币" in shop.repair_button.text and repair_expected in shop.repair_button.text:
+			repair_settled = true
+			break
+	assert(repair_settled, "商店没有显示唯一维修价格预览")
+	var repair_plan_count := int(shop._ui_l1_repair_plan_count)
+	for _frame in range(3):
+		await get_tree().process_frame
+	assert(
+		int(shop._ui_l1_repair_plan_count) == repair_plan_count,
+		"UI-L1 维修计划计数每帧持续增长",
+	)
 
 	_verify_batch_all_equipment_contract(blacksmith_context)
 	_verify_live_high_gear_repair_contract(blacksmith_context)

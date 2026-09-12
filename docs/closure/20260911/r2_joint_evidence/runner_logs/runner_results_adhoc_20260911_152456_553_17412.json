@@ -1,0 +1,41 @@
+{
+  "engine_log_errors": 294,
+  "total": 2,
+  "passed": 1,
+  "results": [
+    {
+      "test_name": "shop_layout_matrix",
+      "test_path": "tests/r6_2/shop_layout_matrix.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 294,
+      "engine_log_failure_count": 294,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;timeout_60s;non_zero_exit_code_-1;stderr_failures_294;engine_log_failures_294"
+    },
+    {
+      "test_name": "hud_background_prewarm_test",
+      "test_path": "tests/hud_background_prewarm_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "b3296528d7f85c7dff2c78adafaa0f5e4ec33c16",
+  "failed": 1,
+  "generated_at": "2026-09-11T15:24:56.5538249+08:00",
+  "suite": "adhoc"
+}

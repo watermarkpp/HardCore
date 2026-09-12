@@ -1,0 +1,37 @@
+{
+  "schema": "hc.r311.install.v1",
+  "base": "c0afa4b35ac3c6ab207a01aae810e1f86bb07745",
+  "head": "c0afa4b35ac3c6ab207a01aae810e1f86bb07745",
+  "branch": "codex/r3-1-1-typed-array-fix",
+  "mode": "audit",
+  "checks": {
+    "state": "INSTALLED",
+    "frozen": {
+      "scripts/ui_shop_detail_space.gd": {
+        "blob": "090a9380818d4ff26b35bc554894d98150a1582a",
+        "same_as_base": true
+      },
+      "scripts/ui_item_selection_visual.gd": {
+        "blob": "ec41fb716c4f3e81d7089b0d0dd1bd2ae0600c26",
+        "same_as_base": true
+      },
+      "scripts/ui_item_selection_lifecycle.gd": {
+        "blob": "4fe72fc9182f4585bde8b9794efb08cdd30542ba",
+        "same_as_base": true
+      },
+      "scripts/adaptive_button_style_box.gd": {
+        "blob": "009364f87150022b9eb7b7efc807308ba44dad4a",
+        "same_as_base": true
+      },
+      "tests/hc_monster_ai/performance_comparison_test.gd": {
+        "blob": "e120da226b5aa6ed399053707f3da69a56c6481b",
+        "same_as_base": true
+      }
+    }
+  },
+  "runtime": "NOT_RUN",
+  "target": "scripts/ui_style_visual_bounds.gd",
+  "before_sha256": "e1c462a9063e19732a5002786da33b4983da6621d8c113894da21d6157098991",
+  "after_sha256": "13c099965a3e24253b2a56b6f7fe48571aa587ea8dd4e8c45e7847eca4138f57",
+  "status": "R311_CORE_INTACT_NOT_RUNTIME_ACCEPTANCE"
+}

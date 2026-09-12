@@ -1,0 +1,26 @@
+{
+  "failed": 1,
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "shop_space_0",
+      "test_path": "tests/r6_3/shop_space_0.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 44,
+      "engine_log_failure_count": 44,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_44;engine_log_failures_44"
+    }
+  ],
+  "total": 1,
+  "suite": "adhoc",
+  "git_head": "b3296528d7f85c7dff2c78adafaa0f5e4ec33c16",
+  "generated_at": "2026-09-11T18:38:22.9632504+08:00",
+  "engine_log_errors": 44
+}

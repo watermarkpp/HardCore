@@ -1,6 +1,8 @@
 class_name WarehousePanel
 extends Panel
 
+const UIActivationOnceScript := preload("res://scripts/ui_activation_once.gd")
+
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
@@ -132,6 +134,7 @@ func _ready() -> void:
 	refresh()
 	_continue_grid_cell_initialization.call_deferred()
 	UISelectionDismissGuardScript.attach(self)
+	preload("res://scripts/ui_item_selection_lifecycle.gd").attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -364,6 +367,7 @@ func open_panel() -> void:
 
 
 func _on_inventory_changed() -> void:
+	_ui_l1_bank_dirty = true
 	_selection_revision += 1
 	if not visible:
 		_refresh_pending = true
@@ -372,15 +376,21 @@ func _on_inventory_changed() -> void:
 
 
 func _on_profile_changed() -> void:
-	_refresh_bank_state()
+	_ui_l1_bank_dirty = true
+	_ui_l1_queue_bank_view()
 
 
 func _on_visibility_changed() -> void:
-	if not visible:
+	var session := get_node_or_null("R3SelectionLifecycle")
+	if session != null:
+		session.call("sync_visibility")
+	if not is_visible_in_tree():
+		_ui_l1_bank_dirty = true
 		_ui_dismiss_selection()
 		return
 	if visible and _refresh_pending:
 		refresh()
+	_ui_l1_flush_bank_view_if_dirty()
 
 
 func refresh() -> void:
@@ -410,6 +420,11 @@ func refresh() -> void:
 	next_page_button.disabled = warehouse_page >= WAREHOUSE_PAGE_COUNT - 1
 	_refresh_transfer_action_states()
 	_refresh_transfer_detail()
+	# Restore full view-sync responsibility: refresh() must also flush the
+	# bank view so any gold mutation while the panel is visible reaches
+	# bank_balance_label. _refresh_bank_state self-guards on
+	# is_visible_in_tree + dirty, keeping the L1 hidden-panel skip intact.
+	_refresh_bank_state()
 	if not _layout_initialized:
 		_layout_initialized = true
 		_layout_apply_count += 1
@@ -550,7 +565,7 @@ func _create_item_cell(
 	button.disabled = true
 	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.tooltip_text = "空物品格"
-	button.pressed.connect(_select_grid_button.bind(button))
+	UIActivationOnceScript.attach(button, _select_grid_button.bind(button))
 	cell.add_child(button)
 	var count_label := Label.new()
 	count_label.name = "StackCount"
@@ -706,7 +721,7 @@ func _sanitize_transfer_selections() -> void:
 func _refresh_transfer_action_states() -> void:
 	deposit_button.disabled = selected_bag_indices.is_empty() or _first_free_slot_on_current_page() < 0
 	withdraw_button.disabled = selected_stash_indices.is_empty() or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
-	_refresh_bank_state()
+	_ui_l1_flush_bank_view_if_dirty()
 
 
 func _bank_transfer_amount() -> int:
@@ -729,8 +744,14 @@ func _bank_boundary_message(deposit: bool, player_gold: int, shared_gold: int) -
 
 
 func _refresh_bank_state() -> void:
+	if not is_inside_tree() or not is_visible_in_tree():
+		_ui_l1_bank_dirty = true
+		_ui_l1_hidden_bank_skips += 1
+		return
 	if bank_balance_label == null or bank_deposit_button == null or bank_withdraw_button == null:
 		return
+	_ui_l1_bank_dirty = false
+	_ui_l1_bank_read_count += 1
 	var player_gold := int(PlayerState.gold)
 	var shared_gold := int(PlayerState.shared_gold_balance())
 	bank_balance_label.text = "金币：%d\n共享：%d" % [player_gold, shared_gold]
@@ -1370,3 +1391,26 @@ func _ui_dismiss_selection() -> void:
 		transfer_detail_label.text = "选择两侧物品"
 	if deposit_button != null and withdraw_button != null:
 		_refresh_transfer_action_states()
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+# UI-L1: these fields own the VIEW only; they are never a money authority.
+var _ui_l1_bank_dirty := true
+var _ui_l1_bank_queued := false
+var _ui_l1_bank_read_count := 0
+var _ui_l1_hidden_bank_skips := 0
+
+func _ui_l1_queue_bank_view() -> void:
+	if _ui_l1_bank_queued or not is_inside_tree() or not is_visible_in_tree():
+		return
+	_ui_l1_bank_queued = true
+	_ui_l1_flush_queued_bank_view.call_deferred()
+
+func _ui_l1_flush_queued_bank_view() -> void:
+	_ui_l1_bank_queued = false
+	_ui_l1_flush_bank_view_if_dirty()
+
+func _ui_l1_flush_bank_view_if_dirty() -> void:
+	if _ui_l1_bank_dirty and is_inside_tree() and is_visible_in_tree():
+		_refresh_bank_state()
+# UI-L1 SUPPLEMENT END

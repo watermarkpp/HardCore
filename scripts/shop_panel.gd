@@ -1,11 +1,16 @@
 class_name ShopPanel
 extends Panel
 
+const UIActivationOnceScript := preload("res://scripts/ui_activation_once.gd")
+
+const UIItemNameStyleScript := preload("res://scripts/ui_item_name_style.gd")
+
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const ItemDetailPresenterScript := preload("res://scripts/item_detail_docked_presenter.gd")
@@ -112,13 +117,14 @@ func _ready() -> void:
 	detail_label = item_detail_presenter.detail_label
 	GothicFrameFactoryScript.seal_modal_rings(self)
 	PlayerState.profile_changed.connect(_refresh_gold)
-	PlayerState.equipment_changed.connect(_refresh_repair_preview)
+	PlayerState.equipment_changed.connect(_ui_l1_equipment_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
 	visibility_changed.connect(_on_visibility_changed)
 	_refresh_gold()
 	_refresh_repair_preview()
 	_apply_layout_profile_once("shop_buy")
 	UISelectionDismissGuardScript.attach(self)
+	preload("res://scripts/ui_item_selection_lifecycle.gd").attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -507,7 +513,7 @@ func _ensure_goods_card_capacity(required_count: int) -> void:
 		card.focus_mode = Control.FOCUS_NONE
 		card.theme_type_variation = "GothicComponentShopCard"
 		card.hide()
-		card.pressed.connect(_on_goods_card_pressed.bind(card))
+		UIActivationOnceScript.attach(card, _on_goods_card_pressed.bind(card))
 		goods_grid.add_child(card)
 		_goods_card_pool.append(card)
 		if PlayerState.test_mode:
@@ -724,10 +730,7 @@ func _set_trade_mode(mode: String) -> void:
 	var buying := _trade_mode == "buy"
 	buy_tab_button.theme_type_variation = "GothicShopTradeTabSelectedGemButton" if buying else "GothicShopTradeTabGemButton"
 	sell_tab_button.theme_type_variation = "GothicShopTradeTabGemButton" if buying else "GothicShopTradeTabSelectedGemButton"
-	buy_button.visible = buying
-	repair_button.visible = buying and bool(_active_merchant_context().get("supports_repair", false))
-	sell_quantity_row.visible = not buying
-	sell_quantity_button.visible = not buying
+	_sync_trade_action_visibility()
 	if buying:
 		if _buy_quotes.is_empty():
 			_clear_goods_cards()
@@ -747,6 +750,27 @@ func _set_trade_mode(mode: String) -> void:
 		_ui_show_shop_message("[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]")
 		_request_sell_quotes()
 	_apply_layout_profile_once("shop_sell" if not buying else "shop_buy")
+	_ui_l1_repair_dirty = true
+	_ui_l1_queue_repair_view()
+
+
+## The single authority for shop action visibility. Trade mode owns it;
+## calibration profiles replay `visible` for captured nodes asynchronously and
+## would otherwise leave stale action buttons (e.g. the sell quantity button in
+## BUY mode), which silently changes the detail space plan and touch targets.
+func _sync_trade_action_visibility() -> void:
+	var buying := _trade_mode == "buy"
+	buy_button.visible = buying
+	repair_button.visible = buying and bool(_active_merchant_context().get("supports_repair", false))
+	sell_quantity_row.visible = not buying
+	sell_quantity_button.visible = not buying
+
+
+func _on_runtime_layout_profile_applied(_profile_id: String) -> void:
+	# The profile transaction settles a few frames after the mode change that
+	# requested it; re-assert business visibility so the calibration replay
+	# cannot resurrect actions the active trade mode has dismissed.
+	_sync_trade_action_visibility()
 
 
 func sell_quote_key(inventory_index: int, record: Dictionary) -> String:
@@ -890,7 +914,7 @@ func _select_sell_item(inventory_index: int) -> void:
 	var sellable := bool(quote.get("sellable", false))
 	_set_sell_actions_enabled(sellable)
 	if quote.is_empty():
-		_show_shop_detail(str(record.get("name", "物品")), "数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % count, inventory_index, true)
+		_show_shop_detail(str(record.get("name", "物品")), "数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % count, _selected_sell_index, true)
 		return
 	_show_shop_detail(
 		str(record.get("name", "物品")),
@@ -899,7 +923,7 @@ func _select_sell_item(inventory_index: int) -> void:
 			GameData.get_item_record(str(record.get("name", ""))),
 			quote,
 		),
-		inventory_index,
+		_selected_sell_index,
 		true,
 	)
 
@@ -911,12 +935,24 @@ func _show_sell_detail(inventory_index: int, quote: Dictionary) -> void:
 	_show_shop_detail(str(record.get("name", "物品")), _sell_item_detail(record, item, quote), inventory_index, true)
 
 
-func _show_shop_detail(title: String, body: String, _index: int, _selling: bool) -> void:
+func _show_shop_detail(title: String, body: String, index: int, selling: bool) -> void:
 	if item_detail_presenter == null:
 		return
-	item_detail_presenter.show_text(title, body, {"presentation_zone": "shop"})
+	var instance: Dictionary = {}
+	var item_ref: Variant = {}
+	if selling:
+		instance = _inventory_record(index)
+		item_ref = instance
+	elif index >= 0 and index < stock.size():
+		item_ref = stock[index]
+	var item: Dictionary = GameData.get_item_record(item_ref)
+	var displayed_title := title.strip_edges()
+	if displayed_title.is_empty():
+		displayed_title = UIItemNameStyleScript.display_name(item, instance)
+	item_detail_presenter.show_text(displayed_title, body, {
+		"presentation_zone": "shop", "rarity_item": item, "rarity_instance": instance,
+	})
 	detail_label = item_detail_presenter.detail_label
-
 
 func _sell_item_detail(record: Dictionary, item: Dictionary, quote: Dictionary) -> String:
 	var lines: Array[String] = [
@@ -930,8 +966,10 @@ func _sell_item_detail(record: Dictionary, item: Dictionary, quote: Dictionary) 
 			lines.append("耐久：%d/%d" % [current_durability, maximum_durability])
 			lines.append(_equipment_stat_text(item))
 			lines.append("穿戴要求：%s" % _player_requirement_label(item))
-		elif not str(item.get("description", "")).is_empty():
-			lines.append(str(item.get("description", "")))
+		else:
+			var description := PlayerCopy.description(item.get("description", ""))
+			if not description.is_empty():
+				lines.append(description)
 	if bool(quote.get("sellable", false)):
 		lines.append("[color=#d3a763]单件售价：%d金币[/color]" % int(quote.get("unit_price", 0)))
 		var risk_text := _sell_risk_text(quote)
@@ -1116,11 +1154,16 @@ func _on_inventory_changed() -> void:
 
 
 func _on_visibility_changed() -> void:
-	if not visible:
+	var session := get_node_or_null("R3SelectionLifecycle")
+	if session != null:
+		session.call("sync_visibility")
+	if not is_visible_in_tree():
+		_ui_l1_repair_dirty = true
 		_ui_dismiss_selection()
 		return
 	if visible and _inventory_refresh_pending and _trade_mode == "sell":
 		_apply_inventory_change()
+	_ui_l1_flush_repair_view_if_dirty()
 
 
 func _apply_inventory_change() -> void:
@@ -1189,15 +1232,20 @@ func _refresh_gold() -> void:
 
 
 func _refresh_repair_preview() -> void:
+	if not is_inside_tree() or not is_visible_in_tree() or _trade_mode != "buy":
+		_ui_l1_repair_dirty = true
+		return
 	if repair_button == null:
 		return
+	_ui_l1_repair_dirty = false
 	var context := _active_merchant_context()
 	repair_button.visible = _trade_mode == "buy" and bool(context.get("supports_repair", false))
 	repair_button.disabled = not bool(context.get("supports_repair", false))
 	if repair_button.disabled:
 		return
+	_ui_l1_repair_plan_count += 1
 	var cost := PlayerState.repair_cost(context)
-	repair_button.text = "维修全部（%d金币）" % cost if cost > 0 else "装备无需维修"
+	repair_button.text = "维修全部\n（%d金币）" % cost if cost > 0 else "装备无需维修"
 
 
 func _on_item_selected(index: int) -> void:
@@ -1263,22 +1311,24 @@ func _buy_item_detail(item_name: String, item: Dictionary, entry: Dictionary) ->
 			lines.append("耐久上限：%d" % maximum_durability)
 		lines.append(_equipment_stat_text(item))
 		lines.append("穿戴要求：%s" % _player_requirement_label(item))
-	var entry_description := str(entry.get("description", ""))
+	var entry_description := PlayerCopy.description(entry.get("description", ""))
 	if not entry_description.is_empty():
 		lines.append(entry_description)
 	return "\n".join(lines)
 
 
 func _player_requirement_label(item: Dictionary) -> String:
-	# EquipmentRules is authoritative for the requirement type/value. Strip its
-	# source/confidence suffix from the player-facing label; those are audit
-	# metadata, not gameplay instructions.
-	var label := EquipmentRulesScript.requirement_label(item)
-	for marker: String in ["（", "("]:
-		var marker_index := label.find(marker)
-		if marker_index >= 0:
-			label = label.substr(0, marker_index)
-	return label
+	# Player copy reads the authoritative type/value, never an audit sentence.
+	# EquipmentRules and its source/contract/confidence data remain unchanged.
+	var requirement: Dictionary = EquipmentRulesScript.requirement_for(item)
+	var labels := {
+		EquipmentRulesScript.NEED_LEVEL: "等级",
+		EquipmentRulesScript.NEED_ATTACK: "攻击",
+		EquipmentRulesScript.NEED_MAGIC: "魔法",
+		EquipmentRulesScript.NEED_TAO: "道术",
+	}
+	var need_type := int(requirement.get("type", EquipmentRulesScript.NEED_LEVEL))
+	return "%s%d" % [str(labels.get(need_type, "类型%d" % need_type)), int(requirement.get("value", 0))]
 
 
 func _set_shop_card_selected(card: Button, selected: bool) -> void:
@@ -1409,7 +1459,13 @@ func _item_texture(record: Dictionary) -> Texture2D:
 
 
 func _value(value: Variant) -> String:
-	return "—" if value == null else str(value)
+	if value == null:
+		return "—"
+	# JSON integral floats are the same stat, not a precision-bearing fraction.
+	# Do not truncate true fractions or coerce strings/bools/non-finite values.
+	if value is float and is_finite(value) and absf(value) <= 9007199254740991.0 and value == floorf(value):
+		return str(int(value))
+	return str(value)
 
 
 func _close() -> void:
@@ -1455,3 +1511,29 @@ func _ui_dismiss_selection() -> void:
 	if sell_quantity_button != null:
 		_set_sell_actions_enabled(false)
 	_update_sell_quantity_label()
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+# UI-L1: presentation refreshes are coalesced; actual repair/buy quotes are not.
+var _ui_l1_repair_dirty := true
+var _ui_l1_repair_queued := false
+var _ui_l1_repair_plan_count := 0
+
+func _ui_l1_equipment_changed() -> void:
+	_ui_l1_repair_dirty = true
+	_ui_l1_queue_repair_view()
+
+func _ui_l1_queue_repair_view() -> void:
+	if _ui_l1_repair_queued or not is_inside_tree() or not is_visible_in_tree() or _trade_mode != "buy":
+		return
+	_ui_l1_repair_queued = true
+	_ui_l1_flush_queued_repair_view.call_deferred()
+
+func _ui_l1_flush_queued_repair_view() -> void:
+	_ui_l1_repair_queued = false
+	_ui_l1_flush_repair_view_if_dirty()
+
+func _ui_l1_flush_repair_view_if_dirty() -> void:
+	if _ui_l1_repair_dirty and is_inside_tree() and is_visible_in_tree() and _trade_mode == "buy":
+		_refresh_repair_preview()
+# UI-L1 SUPPLEMENT END

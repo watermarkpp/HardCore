@@ -1,0 +1,124 @@
+--- a/scripts/item_detail_docked_presenter.gd
++++ b/scripts/item_detail_docked_presenter.gd
+@@ -41,6 +41,8 @@
+ # Disabled unless an isolated diagnostic scene opts in; never serialized.
+ var _r32_capture_candidates := false
+ var _r32_candidates: Array = []
++var _r33_syncing_caption := false
++var _r33_exiting := false
+ 
+ func _init() -> void:
+ 	name = "ItemDetailPresenter"
+@@ -101,6 +103,8 @@
+ 	_invalidate_layout()
+ 
+ func _notification(what: int) -> void:
++	if what == NOTIFICATION_ENTER_TREE:
++		_r33_exiting = false
+ 	if what == NOTIFICATION_THEME_CHANGED and is_node_ready():
+ 		_invalidate_layout()
+ 
+@@ -152,6 +156,8 @@
+ 				_watch(node, &"visibility_changed")
+ 
+ func _exit_tree() -> void:
++	_r33_exiting = true
++	_r33_sync_caption()
+ 	for connection: Array in _connections:
+ 		var node: Object = (connection[0] as WeakRef).get_ref()
+ 		var callback := Callable(self, "_invalidate_layout")
+@@ -246,6 +252,7 @@
+ 	title_label.text = ""
+ 	detail_label.text = ""
+ 	visible = false
++	_r33_sync_caption()
+ 
+ func is_message_active() -> bool:
+ 	return _message_active and visible
+@@ -270,7 +277,21 @@
+ 		"scroll_active": detail_label.scroll_active, "epoch": _content_epoch,
+ 	}
+ 
++func _r33_sync_caption() -> void:
++	if _r33_syncing_caption:
++		return
++	var owner := get_parent() as Control
++	if owner == null:
++		return
++	_r33_syncing_caption = true
++	var active := not _r33_exiting and is_inside_tree() and is_visible_in_tree() and not _title_source.is_empty()
++	ShopSpace.sync_section_caption(owner, active)
++	_r33_syncing_caption = false
++
+ func _invalidate_layout() -> void:
++	if _r33_exiting or _r33_syncing_caption:
++		return
++	_r33_sync_caption()
+ 	if _laying_out or _queued or not is_inside_tree():
+ 		return
+ 	_layout_key.clear()
+@@ -305,6 +326,7 @@
+ 	# Reflowing the shop action band emits geometry signals. Ignore those while
+ 	# solving, then key the final geometry. No perpetual deferred-layout loop.
+ 	_laying_out = true
++	_r33_sync_caption()
+ 	var spec: Dictionary = owner.call("_ui_detail_region", _context)
+ 	var region: Rect2 = spec.get("region", Rect2())
+ 	var expanded: Rect2 = spec.get("expanded_region", region)
+--- a/scripts/ui_shop_detail_space.gd
++++ b/scripts/ui_shop_detail_space.gd
+@@ -10,6 +10,32 @@
+ const ACTION_STACK_GAP_PX := 16.0
+ const Frame := preload("res://scripts/gothic_frame_factory.gd")
+ const VisualBounds := preload("res://scripts/ui_style_visual_bounds.gd")
++
++## R3.3: only one semantic heading while the detail card is visible.
++## The item title remains INSIDE the card, with its original font and rarity.
++## Only the redundant generic caption is temporarily hidden. Geometry, text,
++## colors, and the serialized calibration of that caption are never changed.
++static func sync_section_caption(owner: Control, card_active: bool) -> void:
++	if not is_instance_valid(owner):
++		return
++	var caption := owner.get_node_or_null("DetailPanel/DetailTitle") as Label
++	var decoration := owner.get_node_or_null("DetailPanel/DetailPanelDecoration") as Control
++	if caption == null or decoration == null:
++		return # Non-shop presenters retain their existing layout and headings.
++	var owned := bool(caption.get_meta("r33_card_heading_owned", false))
++	if card_active:
++		if not owned:
++			caption.set_meta("r33_saved_caption_visible", caption.visible)
++			caption.set_meta("r33_card_heading_owned", true)
++		if caption.visible:
++			caption.hide()
++	elif owned:
++		var was_visible := bool(caption.get_meta("r33_saved_caption_visible", true))
++		# Release ownership before changing visibility: callbacks may re-enter.
++		caption.remove_meta("r33_card_heading_owned")
++		caption.remove_meta("r33_saved_caption_visible")
++		if caption.visible != was_visible:
++			caption.visible = was_visible
+ 
+ static func transformed(t: Transform2D, r: Rect2) -> Rect2:
+ 	var out := Rect2(t * r.position, Vector2.ZERO)
+@@ -95,7 +121,11 @@
+ 	if not opening.has_area():
+ 		return {"region": Rect2(), "side": "center", "kind": "shop", "error": "EMPTY_FRAME_OPENING"}
+ 	var safe := inset(opening, Vector2(FRAME_CLEAR_PX / scale.x, FRAME_CLEAR_PX / scale.y))
+-	var top := maxf(safe.position.y, rect_in(owner, title).end.y + TITLE_CLEAR_PX / scale.y)
++	# A hidden caption consumes no layout band. The card still contains its
++	# complete item heading; its OUTER border stays inside the 32px safe area.
++	var top := safe.position.y
++	if title.visible:
++		top = maxf(top, rect_in(owner, title).end.y + TITLE_CLEAR_PX / scale.y)
+ 	var actions := _visible_actions(owner)
+ 	# Validate before shifting/resizing anything. A future unknown custom style
+ 	# must not silently use a hit box and violate the 30px visual clearance.
+@@ -184,5 +214,8 @@
+ 	return {"region": area, "side": "center", "kind": "shop", "frame_opening": opening,
+ 		"screen_scale": scale, "protected": protected, "title_rect": rect_in(owner, title),
+ 		"action_layout": "row" if horizontal else "stack",
++		"caption_reserved": title.visible, "frame_safe_rect": safe,
++		"caption_reserved_height": maxf(0.0, top - safe.position.y),
++		"heading_mode": "card_title" if bool(title.get_meta("r33_card_heading_owned", false)) else "section_caption",
+ 		"action_gap_px": ACTION_CLEAR_PX, "frame_gap_px": FRAME_CLEAR_PX,
+ 		"pixel_scope": "viewport_only" if DisplayServer.get_name() == "headless" else "screen"}

@@ -1,15 +1,22 @@
 class_name ItemDetailDockedPresenter
 extends Panel
 
-## Read-only presenter. Formatting remains in the existing, audited formatter.
-## Explicit children (not a VBox minimum-size chain) guarantee that long text
-## cannot push this panel outside the region or over a transaction button.
+## HC-UI6: content is owned by the existing formatter; this class owns layout only.
+## No per-frame poll, no scrollbars, no BBCode stripping, no truncated item title.
+const NameStyle := preload("res://scripts/ui_item_name_style.gd")
 const Formatter := preload("res://scripts/item_detail_presenter.gd")
 const Dock := preload("res://scripts/ui_item_detail_dock.gd")
 const TITLE_SIZE := 20
 const BODY_SIZE := 14
-const MARGIN := 14.0
-const MAX_WIDTH := 340.0
+const MARGIN := 18.0
+const PREFERRED_WIDTH := 220.0 # soft aesthetic preference, NOT a width limit
+const MIN_WIDTH := 100.0
+const TITLE_GAP := 12.0
+const MEASURE_PAD := 4.0
+const WIDTH_STEPS := 12
+const REVISION := 9
+const ShopSpace := preload("res://scripts/ui_shop_detail_space.gd")
+
 var title_label: Label
 var detail_label: RichTextLabel
 var _context: Dictionary = {}
@@ -18,93 +25,234 @@ var _message_active := false
 var _content_epoch := 0
 var _dock_error_reported := false
 var _layout_ok := false
-var _stripper := RegEx.new()
+var _queued := false
+var _laying_out := false
+var _layout_count := 0
+var _layout_error := ""
+var _title_source := ""
+var _body_source := ""
+var _connections: Array = []
+var _name_style: Dictionary = {}
+var _title_color := NameStyle.DEFAULT_COLOR
+var _test_suppress_expected_layout_error := false
+var _r2_density := "comfortable"
+var _r3_spec: Dictionary = {}
+var _r3_session_epoch := -1
+# Disabled unless an isolated diagnostic scene opts in; never serialized.
+var _r32_capture_candidates := false
+var _r32_candidates: Array = []
+var _r33_syncing_caption := false
+var _r33_exiting := false
 
 func _init() -> void:
 	name = "ItemDetailPresenter"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	focus_mode = Control.FOCUS_NONE
-	set_meta("calibration_runtime_text", true)
-	set_meta("calibration_layout_revision", 5)
-	_stripper.compile("\\[[^\\]]+\\]")
+	clip_contents = false
+	_mark_runtime(self)
 	title_label = Label.new()
 	title_label.name = "Title"
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_label.clip_text = true
+	title_label.clip_text = false
+	title_label.visible_characters = -1
 	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_label.add_theme_font_size_override("font_size", TITLE_SIZE)
 	title_label.add_theme_color_override("font_color", Color("f2c783"))
+	_mark_runtime(title_label)
 	add_child(title_label)
 	detail_label = RichTextLabel.new()
 	detail_label.name = "Body"
 	detail_label.bbcode_enabled = true
+	detail_label.threaded = false
 	detail_label.fit_content = false
-	detail_label.scroll_active = true
+	detail_label.scroll_active = false
 	detail_label.scroll_following = false
 	detail_label.selection_enabled = false
+	detail_label.context_menu_enabled = false
+	detail_label.visible_characters = -1
 	detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_label.theme_type_variation = "GothicDetailText"
 	detail_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	# Own the content box: inherited style margins must not invalidate measurement.
+	detail_label.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+	detail_label.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	detail_label.add_theme_font_size_override("normal_font_size", BODY_SIZE)
 	detail_label.add_theme_color_override("default_color", Color("ddc9a9"))
-	detail_label.set_meta("calibration_runtime_text", true)
+	_mark_runtime(detail_label)
 	add_child(detail_label)
 	visible = false
 
+static func _mark_runtime(node: Control) -> void:
+	node.set_meta("calibration_runtime_text", true)
+	node.set_meta("calibration_layout_revision", REVISION)
+
 func _ready() -> void:
-	var surface := StyleBoxFlat.new()
-	surface.bg_color = Color(0.055, 0.039, 0.027, 0.97)
-	surface.border_color = Color("8a6336")
-	surface.set_border_width_all(1)
-	surface.set_corner_radius_all(6)
-	add_theme_stylebox_override("panel", surface)
-	if visible:
-		_relayout()
+	set_process(false)
+	var box := StyleBoxFlat.new()
+	box.bg_color = Color(0.055, 0.039, 0.027, 0.97)
+	box.border_color = Color("8a6336")
+	box.set_border_width_all(1)
+	box.set_corner_radius_all(6)
+	add_theme_stylebox_override("panel", box)
+	visibility_changed.connect(_invalidate_layout)
+	_bind_geometry()
+	# Inventory builds the presenter before its EquipmentPanel siblings.
+	_bind_geometry.call_deferred()
+	_invalidate_layout()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_ENTER_TREE:
+		_r33_exiting = false
+	if what == NOTIFICATION_THEME_CHANGED and is_node_ready():
+		_invalidate_layout()
+
+func _watch(node: Object, signal_name: StringName) -> void:
+	if not is_instance_valid(node) or not node.has_signal(signal_name):
+		return
+	var callback := Callable(self, "_invalidate_layout")
+	if not node.is_connected(signal_name, callback):
+		node.connect(signal_name, callback)
+		_connections.append([weakref(node), signal_name])
+
+func _bind_geometry() -> void:
+	var owner := get_parent() as Control
+	if owner == null:
+		return
+	_watch(owner, &"item_rect_changed")
+	_watch(owner, &"visibility_changed")
+	var ancestor := owner.get_parent()
+	while ancestor != null:
+		if ancestor is Control:
+			_watch(ancestor, &"item_rect_changed")
+		ancestor = ancestor.get_parent()
+	_watch(get_viewport(), &"size_changed")
+	_watch(title_label, &"theme_changed")
+	_watch(detail_label, &"theme_changed")
+	for node: Node in owner.find_children("*", "ScrollContainer", true, false):
+		_watch(node, &"item_rect_changed")
+	# Watch only authored geometric dependencies, never all 100 inventory cells.
+	for path: String in [
+		"BagPanel", "BagPanel/InventoryScroll", "EquipmentPanel",
+		"StashSection", "StashSection/StashScroll", "BagSection", "BagSection/BagScroll",
+		"DetailPanel", "DetailPanel/DetailPanelDecoration", "DetailPanel/DetailTitle",
+	]:
+		var node := owner.get_node_or_null(NodePath(path)) as Control
+		if node != null:
+			_watch(node, &"item_rect_changed")
+			_watch(node, &"visibility_changed")
+	var equipment := owner.get_node_or_null("EquipmentPanel")
+	if equipment != null:
+		for child: Node in equipment.find_children("*", "Control", true, false):
+			if child is BaseButton or str(child.name).begins_with("EquipmentHolder_"):
+				_watch(child, &"item_rect_changed")
+	# Owners differ; use their existing named action references when present.
+	for property: Dictionary in owner.get_property_list():
+		if str(property.name) in ["buy_button", "repair_button", "sell_quantity_row", "sell_quantity_button"]:
+			var node: Variant = owner.get(str(property.name))
+			if node is Control:
+				_watch(node, &"item_rect_changed")
+				_watch(node, &"visibility_changed")
+
+func _exit_tree() -> void:
+	_r33_exiting = true
+	_r33_sync_caption()
+	for connection: Array in _connections:
+		var node: Object = (connection[0] as WeakRef).get_ref()
+		var callback := Callable(self, "_invalidate_layout")
+		if is_instance_valid(node) and node.is_connected(connection[1], callback):
+			node.disconnect(connection[1], callback)
+	_connections.clear()
+	_queued = false
+
+static func _item_title(item: Dictionary, instance: Dictionary) -> String:
+	return NameStyle.display_name(item, instance)
+
+func _set_name_style(item: Dictionary, instance: Dictionary = {}) -> void:
+	_name_style = NameStyle.describe(item, instance)
+	_title_color = _name_style["color"]
+	title_label.add_theme_color_override("font_color", _title_color)
+
+func _reset_name_style(message: bool = false) -> void:
+	_name_style.clear()
+	_title_color = NameStyle.MESSAGE_COLOR if message else NameStyle.DEFAULT_COLOR
+	title_label.add_theme_color_override("font_color", _title_color)
+
 
 func show_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary = {}) -> void:
 	if item.is_empty():
 		hide_detail()
 		return
-	_set_content(str(instance.get("name", item.get("name", "未知物品"))), Formatter.format_item(item, instance, context), context, false)
+	_set_name_style(item, instance)
+	_set_content(_item_title(item, instance), Formatter.format_item(item, instance, context), context, false)
 
 func show_multi(count: int, context: Dictionary = {}) -> void:
 	if count <= 0:
 		hide_detail()
 		return
+	_reset_name_style()
 	_set_content("已选择 %d 件物品" % count, "多选状态下不可直接穿戴。", context, false)
 
 func show_text(title: String, body: String, context: Dictionary = {}) -> void:
+	var item: Variant = context.get("rarity_item", {})
+	var instance: Variant = context.get("rarity_instance", {})
+	if item is Dictionary and not (item as Dictionary).is_empty():
+		_set_name_style(item, instance if instance is Dictionary else {})
+	else:
+		_reset_name_style()
 	_set_content(title, body, context, false)
 
 func show_message(message: String, context: Dictionary = {}) -> void:
 	if message.is_empty():
 		hide_detail()
 		return
+	_reset_name_style(true)
 	_set_content("提示", message, context, true)
 
 func _set_content(title: String, body: String, context: Dictionary, message: bool) -> void:
+	var parent := get_parent() as Control
+	var session := parent.get_node_or_null("R3SelectionLifecycle") if parent != null else null
+	if session != null:
+		if not parent.is_visible_in_tree():
+			return # an old result must not repopulate a closed detail panel
+		_r3_session_epoch = int(session.get("epoch"))
 	_content_epoch += 1
 	_message_active = message
-	title_label.text = title
-	detail_label.text = body
 	_context = context.duplicate()
+	_title_source = title.strip_edges()
+	if _title_source.is_empty():
+		_title_source = "提示" if message else "未知物品"
+	_body_source = body
+	title_label.text = _title_source
+	detail_label.text = _body_source
+	title_label.add_theme_color_override("font_color", _title_color)
+	title_label.show()
+	detail_label.show()
+	title_label.visible_characters = -1
+	detail_label.visible_characters = -1
+	detail_label.scroll_active = false
+	visible = true
 	_layout_key.clear()
-	detail_label.scroll_to_line(0)
-	visible = not title.is_empty() or not body.is_empty()
-	if is_inside_tree() and visible:
+	# Synchronous shaping is available in the current Godot branch. The deferred
+	# coalesced pass also catches the owner's calibration/visibility transaction.
+	if is_inside_tree():
 		_relayout()
+	_invalidate_layout()
 
 func hide_detail() -> void:
 	_content_epoch += 1
 	_message_active = false
 	_layout_ok = false
 	_context.clear()
+	_reset_name_style()
 	_layout_key.clear()
+	_title_source = ""
+	_body_source = ""
 	title_label.text = ""
 	detail_label.text = ""
 	visible = false
+	_r33_sync_caption()
 
 func is_message_active() -> bool:
 	return _message_active and visible
@@ -115,52 +263,241 @@ func content_epoch() -> int:
 func debug_layout_valid() -> bool:
 	return _layout_ok
 
-func _process(_delta: float) -> void:
-	if is_visible_in_tree():
-		# A small geometry key only; no empty-cell enumeration or raster search.
+func debug_layout_snapshot() -> Dictionary:
+	return {
+		"valid": _layout_ok, "error": _layout_error, "layouts": _layout_count, "density": _r2_density,
+		"margin": MARGIN, "title_gap": TITLE_GAP, "space_spec": _r3_spec.duplicate(),
+		"candidate_trace": _r32_candidates.duplicate(true),
+		"source_title": _title_source, "source_body": _body_source,
+		"name_style": _name_style.duplicate(), "title_color": title_label.get_theme_color("font_color"),
+		"title": title_label.text, "body": detail_label.get_parsed_text(),
+		"rect": Rect2(position, size), "title_rect": Rect2(title_label.position, title_label.size),
+		"body_rect": Rect2(detail_label.position, detail_label.size),
+		"body_content_height": detail_label.get_content_height(),
+		"scroll_active": detail_label.scroll_active, "epoch": _content_epoch,
+	}
+
+func _r33_sync_caption() -> void:
+	if _r33_syncing_caption:
+		return
+	var owner := get_parent() as Control
+	if owner == null:
+		return
+	_r33_syncing_caption = true
+	var active := not _r33_exiting and is_inside_tree() and is_visible_in_tree() and not _title_source.is_empty()
+	ShopSpace.sync_section_caption(owner, active)
+	_r33_syncing_caption = false
+
+func _invalidate_layout() -> void:
+	if _r33_exiting or _r33_syncing_caption:
+		return
+	_r33_sync_caption()
+	if _laying_out or _queued or not is_inside_tree():
+		return
+	_layout_key.clear()
+	_queued = true
+	_flush_layout.call_deferred()
+
+func _flush_layout() -> void:
+	_queued = false
+	if is_inside_tree() and is_visible_in_tree():
 		_relayout()
 
+func _measure_at(width: float, margin: float = MARGIN, pad: float = MEASURE_PAD) -> Vector2:
+	var text_width := floorf(width - margin * 2.0)
+	title_label.size = Vector2(text_width, 1.0)
+	# Label's own shaped minimum includes CJK fallback metrics and wrapped lines.
+	var title_height := ceilf(title_label.get_minimum_size().y) + pad
+	detail_label.size = Vector2(text_width, 1.0)
+	# Read the actual RichTextLabel (including BBCode, bold and fallback fonts).
+	var body_height := ceilf(float(detail_label.get_content_height())) + pad
+	return Vector2(maxf(26.0, title_height), maxf(20.0, body_height))
+
 func _relayout() -> void:
-	var owner_control := get_parent() as Control
-	if owner_control == null or not owner_control.has_method("_ui_detail_region"):
+	if _laying_out or not visible or not is_inside_tree():
 		return
-	var spec: Dictionary = owner_control.call("_ui_detail_region", _context)
+	var owner := get_parent() as Control
+	if owner == null or not owner.has_method("_ui_detail_region"):
+		return
+	var session := owner.get_node_or_null("R3SelectionLifecycle")
+	if session != null and not bool(session.call("allows_presentation", _r3_session_epoch)):
+		hide_detail()
+		return
+	# Reflowing the shop action band emits geometry signals. Ignore those while
+	# solving, then key the final geometry. No perpetual deferred-layout loop.
+	_laying_out = true
+	_r33_sync_caption()
+	var spec: Dictionary = owner.call("_ui_detail_region", _context)
 	var region: Rect2 = spec.get("region", Rect2())
+	var expanded: Rect2 = spec.get("expanded_region", region)
+	var shop := str(spec.get("kind", "")) == "shop"
 	var side := str(spec.get("side", "center"))
-	var key: Array = [region, side, title_label.text, detail_label.text]
+	var key: Array = [region, expanded, side, shop, spec.get("screen_scale", Vector2.ONE), _title_source, _body_source]
 	if key == _layout_key:
+		_laying_out = false
 		return
 	_layout_key = key
-	_layout_ok = region.size.x >= 100.0 and region.size.y >= 80.0
-	if not _layout_ok:
-		modulate.a = 0.0
-		detail_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		if not _dock_error_reported:
-			_dock_error_reported = true
-			push_error("UI_R5_DOCK_NO_SPACE: " + str(owner_control.name) + " " + str(region))
+	_r3_spec = spec.duplicate()
+	_layout_count += 1
+	_layout_error = ""
+	_layout_ok = false
+	_r2_density = "comfortable"
+	_r32_candidates.clear()
+	var regions: Array[Rect2] = [region]
+	if expanded.has_area() and expanded != region:
+		regions.append(expanded)
+	title_label.text = _title_source
+	detail_label.text = _body_source
+	var chosen: Dictionary = {}
+	for candidate: Rect2 in regions:
+		var upper := floorf(candidate.size.x)
+		if upper < MIN_WIDTH or candidate.size.y < 80.0:
+			continue
+		var lower := minf(160.0, upper)
+		var best_cost := INF
+		# Both axes adapt. Portrait is a visual requirement only in non-shop
+		# domains. The shop may be modestly landscape (W <= 1.3 H).
+		for n in range(WIDTH_STEPS + 1):
+			var trial_width := floorf(lerpf(lower, upper, float(n) / float(WIDTH_STEPS)))
+			var trial_extent := _measure_at(trial_width)
+			var natural := MARGIN * 2.0 + trial_extent.x + TITLE_GAP + trial_extent.y
+			# Non-shop details are contractually portrait (H > W). Short content
+			# (potions, books) must still fill the portrait envelope instead of
+			# collapsing to a near-square floor; long content keeps its natural
+			# height, which already exceeds the floor.
+			var target_ratio := 1.0 if shop else 1.38
+			var trial_height := ceilf(maxf(natural, trial_width / 1.3 if shop else maxf(trial_width + 4.0, trial_width * target_ratio)))
+			if _r32_capture_candidates:
+				_r32_candidates.append({
+					"region": candidate, "width": trial_width,
+					"height": trial_height, "available_height": floorf(candidate.size.y),
+					"title_measured_h": trial_extent.x, "body_measured_h": trial_extent.y,
+					"natural_height": natural, "requested_text_width": floorf(trial_width - MARGIN * 2.0),
+					"actual_title_width": title_label.size.x,
+					"actual_body_width": detail_label.size.x,
+					"body_content_width": detail_label.get_content_width(),
+					"body_line_count": detail_label.get_line_count(),
+					"fits_height": trial_height <= floorf(candidate.size.y),
+				})
+			if trial_height > floorf(candidate.size.y):
+				continue
+			var ratio := trial_height / trial_width
+			var cost := absf(ratio - target_ratio) + 0.12 * trial_width * trial_height / maxf(1.0, candidate.get_area())
+			if not shop:
+				cost += 0.08 * absf(trial_width - PREFERRED_WIDTH) / PREFERRED_WIDTH
+			if cost < best_cost:
+				best_cost = cost
+				chosen = {"width": trial_width, "height": trial_height, "region": candidate}
+		if not chosen.is_empty():
+			break
+	if chosen.is_empty():
+		# Ninth-section scroll contract: after exhausting every legal layout
+		# candidate, a body whose natural height still exceeds the dock falls
+		# back to presenter-managed, BODY-ONLY vertical scrolling instead of
+		# failing the whole detail. The title stays fixed at the top, the full
+		# body text stays reachable by scrolling, scroll_active reports the
+		# measured state honestly, and the region/aspect contracts still hold.
+		var fallback: Rect2 = region
+		if expanded.has_area() and expanded.get_area() > fallback.get_area():
+			fallback = expanded
+		var max_height := floorf(fallback.size.y)
+		var max_width := floorf(fallback.size.x)
+		# The clamped card keeps the domain aspect rule: non-shop stays
+		# portrait (H > W), the shop keeps its modest landscape allowance.
+		var width_cap := max_height / 1.3 if shop else max_height / 1.38
+		var scroll_width := floorf(clampf(minf(PREFERRED_WIDTH, width_cap), MIN_WIDTH, max_width))
+		if max_height < 80.0 or max_width < MIN_WIDTH or scroll_width < MIN_WIDTH:
+			_fail_layout("SPACE_PLAN_REQUIRED")
+			return
+		var scroll_extent := _measure_at(scroll_width)
+		var scroll_height := minf(ceilf(MARGIN * 2.0 + scroll_extent.x + TITLE_GAP + scroll_extent.y), max_height)
+		scroll_height = maxf(scroll_height, scroll_width / 1.3 if shop else scroll_width + 4.0)
+		scroll_height = minf(scroll_height, max_height)
+		var fitted := Dock.fit_rect(fallback, Vector2(scroll_width, scroll_height), side)
+		set_anchors_preset(Control.PRESET_TOP_LEFT)
+		position = fitted.position
+		size = fitted.size
+		region = fallback
+		var text_width := scroll_width - 2.0 * MARGIN
+		title_label.position = Vector2(MARGIN, MARGIN)
+		title_label.size = Vector2(text_width, scroll_extent.x)
+		detail_label.position = Vector2(MARGIN, MARGIN + scroll_extent.x + TITLE_GAP)
+		detail_label.size = Vector2(text_width, scroll_height - MARGIN * 2.0 - scroll_extent.x - TITLE_GAP)
+		detail_label.scroll_active = float(detail_label.get_content_height()) > detail_label.size.y + 0.5
+		_layout_ok = (
+			float(detail_label.get_content_width()) <= detail_label.size.x + 0.5
+			and title_label.get_minimum_size().y <= title_label.size.y
+			and not title_label.text.strip_edges().is_empty()
+			and region.grow(0.05).encloses(Rect2(position, size))
+			and detail_label.text == _body_source
+		)
+		for r: Rect2 in spec.get("protected", []):
+			if Rect2(position, size).intersects(r):
+				_layout_ok = false
+		if not _layout_ok:
+			_fail_layout("POST_LAYOUT_OVERFLOW")
+			return
+		modulate.a = 1.0
+		title_label.modulate = Color.WHITE
+		title_label.self_modulate = Color.WHITE
+		detail_label.mouse_filter = Control.MOUSE_FILTER_STOP
+		_dock_error_reported = false
+		_laying_out = false
 		return
-	_dock_error_reported = false
-	modulate.a = 1.0
-	detail_label.mouse_filter = Control.MOUSE_FILTER_STOP
-	var title_font := title_label.get_theme_font("font")
-	var body_font := detail_label.get_theme_font("normal_font")
-	var plain_body := _stripper.sub(detail_label.text, "", true)
-	var natural_width := title_font.get_string_size(title_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, TITLE_SIZE).x
-	for line: String in plain_body.split("\n"):
-		natural_width = maxf(natural_width, body_font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1.0, BODY_SIZE).x)
-	var width := minf(minf(MAX_WIDTH, region.size.x), maxf(160.0, natural_width + MARGIN * 2.0 + 12.0))
-	var text_width := maxf(1.0, width - MARGIN * 2.0)
-	var title_extent := title_font.get_multiline_string_size(title_label.text, HORIZONTAL_ALIGNMENT_LEFT, text_width, TITLE_SIZE)
-	# A very long name may wrap, but must always leave a usable body viewport.
-	var title_height := clampf(title_extent.y, 26.0, minf(70.0, region.size.y * 0.35))
-	var body_extent := body_font.get_multiline_string_size(plain_body, HORIZONTAL_ALIGNMENT_LEFT, maxf(1.0, text_width - 12.0), BODY_SIZE)
-	var header := MARGIN * 2.0 + title_height + 8.0
-	var height := minf(region.size.y, header + maxf(28.0, body_extent.y + 12.0))
+	var width: float = chosen.width
+	var height: float = chosen.height
+	region = chosen.region
+	# Candidate measurements mutate the controls. Re-shape the actual winner.
+	var extent := _measure_at(width)
 	var fitted := Dock.fit_rect(region, Vector2(width, height), side)
 	set_anchors_preset(Control.PRESET_TOP_LEFT)
 	position = fitted.position
 	size = fitted.size
+	var text_width := width - 2.0 * MARGIN
 	title_label.position = Vector2(MARGIN, MARGIN)
-	title_label.size = Vector2(text_width, title_height)
-	detail_label.position = Vector2(MARGIN, MARGIN + title_height + 8.0)
-	detail_label.size = Vector2(text_width, maxf(1.0, height - header))
+	title_label.size = Vector2(text_width, extent.x)
+	detail_label.position = Vector2(MARGIN, MARGIN + extent.x + TITLE_GAP)
+	detail_label.size = Vector2(text_width, height - MARGIN * 2.0 - extent.x - TITLE_GAP)
+	_layout_ok = (
+		float(detail_label.get_content_height()) <= detail_label.size.y
+		and float(detail_label.get_content_width()) <= detail_label.size.x + 0.5
+		and title_label.get_minimum_size().y <= title_label.size.y
+		and not title_label.text.strip_edges().is_empty()
+		and region.grow(0.05).encloses(Rect2(position, size))
+	)
+	for r: Rect2 in spec.get("protected", []):
+		if Rect2(position, size).intersects(r):
+			_layout_ok = false
+	if not _layout_ok:
+		_fail_layout("POST_LAYOUT_OVERFLOW")
+		return
+	modulate.a = 1.0
+	title_label.modulate = Color.WHITE
+	title_label.self_modulate = Color.WHITE
+	detail_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	_dock_error_reported = false
+	_laying_out = false
+
+func _fail_layout(reason: String) -> void:
+	_layout_error = reason
+	_layout_ok = false
+	var available: Rect2 = _r3_spec.get("region", Rect2())
+	if available.size.x >= 100.0 and available.size.y >= 80.0:
+		position = available.position
+		size = available.size
+		title_label.position = Vector2(MARGIN, MARGIN)
+		title_label.size = Vector2(maxf(1.0, size.x - MARGIN * 2.0), 30.0)
+		detail_label.position = Vector2(MARGIN, MARGIN + 34.0)
+		detail_label.size = Vector2(maxf(1.0, size.x - MARGIN * 2.0), maxf(1.0, size.y - MARGIN * 2.0 - 34.0))
+		detail_label.text = "说明区空间不足。"
+		modulate.a = 1.0
+	else:
+		modulate.a = 0.0
+	# This error surface is NOT a successful item detail. All normal catalog
+	# cases must pass original body equality + geometry gates before release.
+	detail_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if not _dock_error_reported and not _test_suppress_expected_layout_error:
+		push_error("HC_UI6_DETAIL_%s: %s" % [reason, _title_source])
+		_dock_error_reported = true
+	_laying_out = false
+

@@ -39,26 +39,10 @@ static func side_region(owner_control: Control, scroll: Control, side: String) -
 	var bottom := minf(safe.end.y, grid_view.end.y)
 	var left := safe.position.x if side == "left" else grid_view.end.x + GAP
 	var right := grid_view.position.x - GAP if side == "left" else safe.end.x
-	return {"region": Rect2(left, top, maxf(0.0, right - left), maxf(0.0, bottom - top)), "side": side}
+	return {"region": Rect2(left, top, maxf(0.0, right - left), maxf(0.0, bottom - top)), "expanded_region": Rect2(left, safe.position.y, maxf(0.0, right - left), safe.size.y), "side": side}
 
-static func shop_region(owner_control: Control) -> Dictionary:
-	var panel := owner_control.get_node_or_null("DetailPanel") as Control
-	var title := owner_control.get_node_or_null("DetailPanel/DetailTitle") as Control
-	if panel == null or title == null:
-		return {"region": Rect2(), "side": "center"}
-	var frame := rect_in(owner_control, panel)
-	var safe := viewport_in(owner_control)
-	var left := maxf(frame.position.x + 20.0, safe.position.x)
-	var right := minf(frame.end.x - 20.0, safe.end.x)
-	var top := maxf(rect_in(owner_control, title).end.y + GAP, safe.position.y)
-	var bottom := minf(frame.end.y - 20.0, safe.end.y)
-	# Disabled controls are still protected. They may become enabled while the
-	# same item detail is visible. Include the SELL action, not only its row.
-	for property: String in ["buy_button", "repair_button", "sell_quantity_row", "sell_quantity_button"]:
-		var control := owner_control.get(property) as Control
-		if is_instance_valid(control) and control.is_visible_in_tree():
-			bottom = minf(bottom, rect_in(owner_control, control).position.y - GAP)
-	return {"region": Rect2(left, top, maxf(0.0, right - left), maxf(0.0, bottom - top)), "side": "center"}
+static func shop_region(owner: Control) -> Dictionary:
+	return preload("res://scripts/ui_shop_detail_space.gd").region(owner)
 
 static func equipment_region(owner_control: Control, buttons: Dictionary) -> Dictionary:
 	# Equipped-item details stay in the central paper-doll column. BAG items

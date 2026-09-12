@@ -44,12 +44,16 @@ func _run_visual_sequence(deltas: Array[float]) -> Dictionary:
 	var manager: LootManagerScript = fixture["manager"]
 	var pickup: LootPickup = fixture["pickup"]
 	var elapsed := 0.0
+	var position_before: Vector2 = pickup.global_position
+	var item_before := pickup.item_name
 	for delta in deltas:
 		manager._process(delta)
 		elapsed += delta
 	var result := {
 		"elapsed": elapsed,
-		"bob_time": pickup._bob_time,
+		"position": pickup.global_position,
+		"position_stable": pickup.global_position == position_before,
+		"identity_stable": pickup.item_name == item_before,
 		"visual_updates": manager.manager_visual_update_count,
 		"registry_entries": manager.manager_visual_registry_entry_count,
 	}
@@ -88,26 +92,29 @@ func _ready() -> void:
 	var at_60: Dictionary = _run_visual_sequence(_uniform_deltas(60))
 	var at_120: Dictionary = _run_visual_sequence(_uniform_deltas(120))
 	var mixed: Dictionary = _run_visual_sequence(_mixed_deltas())
-	var bob_times: Array[float] = [
-		float(at_30["bob_time"]),
-		float(at_60["bob_time"]),
-		float(at_120["bob_time"]),
-		float(mixed["bob_time"]),
-	]
-	var min_bob: float = float(bob_times.min())
-	var max_bob: float = float(bob_times.max())
-	assert(
-		max_bob - min_bob <= 0.06,
-		"30/60/120/mixed FPS visual elapsed diverged: %s" % [bob_times],
-	)
-	assert(min_bob >= 0.96, "visual clock dropped too much game time: %s" % [bob_times])
+	# Static-loot contract (4004874f): ground loot must not drift over time and
+	# must keep its stable identity regardless of frame pacing.  The manager
+	# visual scheduler remains bounded at 30Hz.
+	for snapshot: Dictionary in [at_30, at_60, at_120, mixed]:
+		assert(
+			bool(snapshot["position_stable"]),
+			"static loot position drifted under time advance: %s" % [snapshot["position"]],
+		)
+		assert(
+			bool(snapshot["identity_stable"]),
+			"static loot identity changed under time advance",
+		)
+		assert(
+			int(snapshot["registry_entries"]) >= 1,
+			"static loot lost its runtime registry entry: %s" % [snapshot],
+		)
 	for snapshot: Dictionary in [at_30, at_60, at_120, mixed]:
 		assert(
 			int(snapshot["visual_updates"]) <= 31,
 			"visual scheduler exceeded the existing 30Hz bound: %s" % [snapshot],
 		)
 	print(
-		"LOOT_VISUAL_CLOCK_PASS: 30/60/120/mixed delta bob parity and 30Hz bound %s"
-		% [bob_times],
+		"LOOT_VISUAL_CLOCK_PASS: static-loot position/identity stability and 30Hz bound %s"
+		% [at_30["visual_updates"]],
 	)
 	get_tree().quit(0)

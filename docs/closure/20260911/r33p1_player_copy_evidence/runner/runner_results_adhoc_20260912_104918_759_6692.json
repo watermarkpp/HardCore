@@ -1,0 +1,26 @@
+{
+  "git_head": "bc14c63b6048fac2f4a87a430240a2eef0083707",
+  "failed": 1,
+  "passed": 0,
+  "engine_log_errors": 6,
+  "total": 1,
+  "generated_at": "2026-09-12T10:49:18.7595432+08:00",
+  "results": [
+    {
+      "test_name": "header_session_test",
+      "test_path": "tests/r6_3_3/header_session_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 6,
+      "engine_log_failure_count": 6,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_6;engine_log_failures_6"
+    }
+  ],
+  "suite": "adhoc"
+}
