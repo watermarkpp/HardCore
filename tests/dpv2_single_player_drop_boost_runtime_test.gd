@@ -1,4 +1,6 @@
 extends Node
+## Counters and ID138 oil expectation reconciled with the already accepted
+## e3821597 V5.0.5 authority (7611 rows); this repair changes only cap 9 -> 15.
 
 const LootRuntimeScript := preload(
 	"res://scripts/layers/runtime/loot_runtime_service.gd"
@@ -22,10 +24,10 @@ func _run() -> void:
 	_test_production_service_uses_effective_probability()
 	_test_overflow_contract_is_unchanged()
 	print(
-		"DPV2_SINGLE_PLAYER_DROP_BOOST_RUNTIME_PASS: records=6809 "
-		+ "auto=4546 common=1357 gold=128 boss=324 unclassified=454 "
-		+ "candidate_common=1597 candidate_gold=134 candidate_unclassified=490 "
-		+ "ceiling=2203 disabled_mismatch=0 rng_before_overflow=1 ground_limit=9"
+		"DPV2_SINGLE_PLAYER_DROP_BOOST_RUNTIME_PASS: records=7611 "
+		+ "auto=5075 common=1529 gold=135 boss=324 unclassified=548 "
+		+ "candidate_common=1769 candidate_gold=141 candidate_unclassified=584 "
+		+ "ceiling=1435 disabled_mismatch=0 rng_before_overflow=1 ground_limit=15"
 	)
 	get_tree().quit(0)
 
@@ -78,7 +80,7 @@ func _test_authority_and_complete_ledger() -> void:
 	assert(int(gold_multiplier.get("denominator", 0)) == 1)
 	assert(str(production.get("required_global_drop_rate_preset", "")) == "1x")
 	var records: Array = effective.get("records", [])
-	assert(records.size() == 6809)
+	assert(records.size() == 7611)
 	var uids: Dictionary = {}
 	for raw_record: Variant in records:
 		assert(raw_record is Dictionary)
@@ -97,19 +99,19 @@ func _test_authority_and_complete_ledger() -> void:
 			assert(record.has(field) == direct.has(field), "%s:%s" % [uid, field])
 			if record.has(field):
 				assert(record.get(field) == direct.get(field), "%s:%s" % [uid, field])
-	assert(uids.size() == 6809)
+	assert(uids.size() == 7611)
 	var summary: Dictionary = effective.get("summary", {})
 	var expected_policy_counts := {
-		"AUTO_BOOST": 4546,
-		"BYPASS_COMMON_RECOVERY": 1357,
-		"BYPASS_GOLD": 128,
+		"AUTO_BOOST": 5075,
+		"BYPASS_COMMON_RECOVERY": 1529,
+		"BYPASS_GOLD": 135,
 		"BYPASS_NEW_ARMOR_BOSS": 324,
-		"BYPASS_UNCLASSIFIED": 454,
+		"BYPASS_UNCLASSIFIED": 548,
 	}
 	var policy_counts: Dictionary = summary.get("effective_policy_counts", {})
 	for key: String in expected_policy_counts:
 		assert(int(policy_counts.get(key, -1)) == int(expected_policy_counts[key]))
-	assert(int(summary.get("ceiling_applied_slots", -1)) == 2203)
+	assert(int(summary.get("ceiling_applied_slots", -1)) == 1435)
 	assert(int(summary.get("disabled_counterfactual_mismatch", -1)) == 0)
 	assert(int(summary.get("base_mirror_mismatch", -1)) == 0)
 	assert(int(summary.get("probability_decreases", -1)) == 0)
@@ -154,7 +156,7 @@ func _test_real_slot_policies() -> void:
 		[118, "dpv2.direct.m118.slot_003", 4800, 192],
 		[129, "dpv2.direct.m129.slot_005", 4800, 192],
 		[132, "dpv2.direct.m132.slot_005", 4800, 192],
-		[138, "dpv2.direct.m138.slot_003", 1800, 72],
+		[138, "dpv2.direct.m138.slot_003", 4800, 192],
 	]
 	for sample: Array in war_god_oil_slots:
 		_assert_probability(
@@ -209,7 +211,7 @@ func _test_disabled_parity_and_single_global_scale() -> void:
 				== Vector2i(record.base_numerator, record.base_denominator)
 		)
 		parity_count += 1
-	assert(parity_count == 6809)
+	assert(parity_count == 7611)
 	GameData.dpv2_global_drop_rate_authority["active_preset"] = "0.5x"
 	var half := GameData.dpv2_effective_slot_probability(135, "dpv2.direct.m135.slot_124")
 	assert(Vector2i(half.final_numerator, half.final_denominator) == Vector2i(1, 10000))
@@ -243,7 +245,7 @@ func _test_gold_amount_overlay() -> void:
 		assert(int(probability.get("base_gold_amount", 0)) == int(record.gold_amount))
 		assert(int(probability.get("effective_gold_amount", 0)) == int(record.gold_amount) * 5)
 		assert(int(probability.get("final_gold_amount", 0)) == int(record.gold_amount) * 5)
-	assert(gold_records.size() == 134)
+	assert(gold_records.size() == 141)
 	production["enabled"] = false
 	for raw_record: Variant in gold_records:
 		var record: Dictionary = raw_record
@@ -254,9 +256,9 @@ func _test_gold_amount_overlay() -> void:
 		assert(bool(disabled.get("ok", false)), str(disabled))
 		assert(int(disabled.get("final_gold_amount", 0)) == int(record.gold_amount))
 	production["enabled"] = original_enabled
-	_assert_service_gold_amount(15000)
+	_assert_service_gold_amount(7500)
 	production["enabled"] = false
-	_assert_service_gold_amount(3000)
+	_assert_service_gold_amount(1500)
 	production["enabled"] = original_enabled
 
 
@@ -331,7 +333,7 @@ func _test_overflow_contract_is_unchanged() -> void:
 	var roll := service.roll_monster_drops(31, rng)
 	assert(bool(roll.get("configured", false)), str(roll))
 	assert(bool(roll.get("all_enabled_resolved_slots_rng_before_overflow", false)))
-	assert(int(roll.get("ground_output_count", 0)) <= 9)
+	assert(int(roll.get("ground_output_count", 0)) <= 15)
 	assert(
 		int(roll.get("ground_output_count", 0))
 			+ int(roll.get("overflow_discarded_count", 0))
@@ -373,8 +375,8 @@ func _assert_service_gold_amount(expected_amount: int) -> void:
 		if not gold_drops.is_empty():
 			assert(gold_drops == [expected_amount], str(roll))
 			var attempt: Dictionary = (roll.get("attempts", []) as Array)[0]
-			assert(int(attempt.get("base_gold_amount", 0)) == 3000)
-			assert(int(attempt.get("effective_gold_amount", 0)) == 15000)
+			assert(int(attempt.get("base_gold_amount", 0)) == 1500)
+			assert(int(attempt.get("effective_gold_amount", 0)) == 7500)
 			assert(int(attempt.get("final_gold_amount", 0)) == expected_amount)
 			found = true
 			break

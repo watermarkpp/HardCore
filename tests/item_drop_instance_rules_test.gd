@@ -22,7 +22,9 @@ func _run() -> void:
 	var affixed: Dictionary = {}
 	var ordinary: Dictionary = {}
 	for index in range(1000):
-		var created := PlayerState.create_drop_item_instance(identity, "rules:%d" % index)
+		# Frozen v1 generator remains a compatibility oracle after the v2 rollout.
+		var created := identity.duplicate(true)
+		created["item_instance"] = ItemDropInstanceRulesScript.create_legacy_instance(catalog, "rules:%d" % index)
 		assert(str(created.get("identity_status", "")) == "resolved", str(created))
 		var instance: Dictionary = created.get("item_instance", {})
 		assert(ItemDropInstanceRulesScript.validate_instance(instance, catalog))

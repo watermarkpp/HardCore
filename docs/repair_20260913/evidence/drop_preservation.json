@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "baseline": "e38215978c481b988df3203410bb1dda6b5b0968",
+  "files": [
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "unchanged_except": "probability_policy.post_rng_ground_slot_limit"
+    },
+    {
+      "path": "assets/data/drop/dpv2_drop_runtime_authority_v1.json",
+      "unchanged_except": "ground_overflow_policy.maximum_ground_slots"
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_drop_boost_v1.json",
+      "unchanged_except": "source_bindings.direct_baseline_sha256_raw"
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_effective_probability_v1.json",
+      "unchanged_except": "source_bindings.direct_baseline_sha256_raw"
+    },
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_manifest_v2.json",
+      "unchanged_except": "artifacts.direct_baseline_authority.sha256"
+    }
+  ],
+  "probabilities_priorities_ids_quantities_unchanged": true
+}

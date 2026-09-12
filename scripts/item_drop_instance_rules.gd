@@ -15,6 +15,11 @@ const MAX_WEAPON_CURSE := 10
 ## Persisted item.drop.affix.v1 records have frozen +1 semantics. Runtime rollout
 ## controls may change generation frequency, but must not reinterpret old saves.
 const AFFIX_V1_INCREMENT := 1
+const AFFIX_V2_RULES_PATH := "res://assets/data/item_drop_affix_rules_v2.json"
+const AFFIX_V2_CONTRACT := "item.drop.affix.v2"
+const RULES_V2_CONTRACT := "item.drop.affix.rules.v2"
+static var _v2_by_id: Dictionary = {}
+static var _v2_expected_cache: Dictionary = {}
 
 static var _rules_cache: Dictionary = {}
 static var _master_by_item_id: Dictionary = {}
@@ -22,6 +27,17 @@ static var _load_attempted := false
 
 
 static func create_instance(catalog_item: Dictionary, stable_drop_key: String) -> Dictionary:
+	var instance := create_legacy_instance(catalog_item, stable_drop_key)
+	if instance.is_empty() or not _ensure_v2_loaded():
+		return {}
+	var modifiers := _v2_modifiers(int(instance.item_id), str(instance.drop_key_digest))
+	instance["drop_rules_contract_id"] = RULES_V2_CONTRACT
+	instance["modifiers"] = modifiers
+	instance["drop_affix"] = {"contract_id": AFFIX_V2_CONTRACT, "applied": not modifiers.is_empty()}
+	return instance if validate_instance(instance, catalog_item) else {}
+
+
+static func create_legacy_instance(catalog_item: Dictionary, stable_drop_key: String) -> Dictionary:
 	if not _ensure_loaded() or not _valid_stable_drop_key(stable_drop_key):
 		return {}
 	var item_id := _exact_positive_integer(catalog_item.get("itemId", null))
@@ -94,7 +110,7 @@ static func validate_instance(instance: Dictionary, catalog_item: Dictionary) ->
 		or item_id != catalog_id
 		or str(catalog_item.get("kind", "")) != "equipment"
 		or str(instance.get("drop_instance_contract_id", "")) != INSTANCE_CONTRACT_ID
-		or str(instance.get("drop_rules_contract_id", "")) != INSTANCE_RULES_CONTRACT_ID
+		or str(instance.get("drop_rules_contract_id", "")) not in [INSTANCE_RULES_CONTRACT_ID, RULES_V2_CONTRACT]
 		or str(instance.get("name", "")) != str(catalog_item.get("name", ""))
 		or _exact_positive_integer(instance.get("count", null)) != 1
 	):
@@ -151,7 +167,72 @@ static func validate_instance(instance: Dictionary, catalog_item: Dictionary) ->
 			return false
 	elif instance.has("weapon_luck") or instance.has("weapon_curse"):
 		return false
+	if str(instance.drop_rules_contract_id) == RULES_V2_CONTRACT:
+		if not _ensure_v2_loaded():
+			return false
+		var expected := _v2_modifiers(item_id, digest)
+		if not instance.modifiers is Array or instance.modifiers.size() != expected.size():
+			return false
+		for index in range(expected.size()):
+			var actual: Variant = instance.modifiers[index]
+			if not actual is Dictionary or actual.size() != 3:
+				return false
+			if (str(actual.get("stat", "")) != str(expected[index].stat)
+				or str(actual.get("op", "")) != "add"
+				or _exact_positive_integer(actual.get("value", null)) != int(expected[index].value)):
+				return false
+		return (instance.drop_affix == {
+			"contract_id": AFFIX_V2_CONTRACT, "applied": not expected.is_empty(),
+		})
 	return _valid_affix(instance, _master_by_item_id.get(item_id, {}))
+
+
+static func _ensure_v2_loaded() -> bool:
+	if not _v2_by_id.is_empty():
+		return true
+	var data := _read_json(AFFIX_V2_RULES_PATH)
+	if str(data.get("contract_id", "")) != RULES_V2_CONTRACT or int(data.get("record_count", 0)) != 175:
+		return false
+	var records: Dictionary = {}
+	for record: Dictionary in data.get("records", []):
+		var item_id := int(record.get("item_id", -1))
+		if not _master_by_item_id.has(item_id) or records.has(item_id):
+			return false
+		records[item_id] = record.get("rolls", [])
+	if records.size() != 175:
+		return false
+	_v2_by_id = records
+	return true
+
+
+static func _v2_modifiers(item_id: int, digest: String) -> Array:
+	var result: Array = []
+	if not _v2_by_id.has(item_id):
+		return result
+	var cache_key := "%d:%s" % [item_id, digest]
+	if _v2_expected_cache.has(cache_key):
+		return _v2_expected_cache[cache_key]
+	if _v2_expected_cache.size() >= 4096:
+		_v2_expected_cache.clear()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = ("0x" + (AFFIX_V2_CONTRACT + "|" + digest).sha256_text().substr(0, 15)).hex_to_int()
+	# Immutable v2: 1/2 single-player entry gate, original independent inner rolls.
+	if rng.randi_range(0, 1) != 0:
+		result.make_read_only()
+		_v2_expected_cache[cache_key] = result
+		return result
+	for rule: Dictionary in _v2_by_id[item_id]:
+		var increment := 1
+		for trial in range(int(rule.trials)):
+			if rng.randi_range(0, int(rule.trial_denominator) - 1) == 0:
+				increment += 1
+		if rng.randi_range(0, int(rule.gate_denominator) - 1) == 0:
+			result.append({"stat": str(rule.stat), "op": "add", "value": increment})
+	for modifier: Dictionary in result:
+		modifier.make_read_only()
+	result.make_read_only()
+	_v2_expected_cache[cache_key] = result
+	return result
 
 
 static func is_affixed_instance(instance: Dictionary, catalog_item: Dictionary) -> bool:

@@ -29,6 +29,10 @@ static var _queries_this_physics_frame := 0
 static var _path_query_count := 0
 static var _path_budget_rejection_count := 0
 static var _path_expansion_count := 0
+static var _walkability_context_caches: Array[Dictionary] = []
+const MAX_WALKABILITY_CONTEXTS := 8
+const MAX_WALKABILITY_RADII := 16
+const MAX_WALKABILITY_CELLS := 4096
 
 
 static func build_context(
@@ -126,6 +130,54 @@ static func cell_walkable(
 	cell: Vector2i,
 	combat_radius_gu: float,
 	extra_blocked_cell := Vector2i(-2147483648, -2147483648),
+) -> bool:
+	# Only immutable authored terrain can be memoized. Dynamic environment,
+	# safe zones and live bodies remain separately checked by the caller.
+	# Identity, exact radius and cell are the key; no map-ID or rounded-radius
+	# reuse is allowed across map rebuilds or actors with different footprints.
+	var blocked: Variant = context.get("blocked_cells")
+	if (
+		extra_blocked_cell != Vector2i(-2147483648, -2147483648)
+		or not context.is_read_only()
+		or not blocked is Dictionary or not (blocked as Dictionary).is_read_only()
+		or not is_finite(combat_radius_gu)
+	):
+		return _cell_walkable_uncached(context, cell, combat_radius_gu, extra_blocked_cell)
+	var cache := _walkability_cache_for(context, maxf(0.0, combat_radius_gu))
+	var cached: Variant = cache.get(cell)
+	if cached is bool:
+		return cached
+	var result := _cell_walkable_uncached(context, cell, combat_radius_gu, extra_blocked_cell)
+	if cache.size() >= MAX_WALKABILITY_CELLS:
+		cache.clear()
+	cache[cell] = result
+	return result
+
+
+static func _walkability_cache_for(context: Dictionary, radius: float) -> Dictionary:
+	var radii: Dictionary = {}
+	var found := false
+	for entry: Dictionary in _walkability_context_caches:
+		if is_same(entry["context"], context):
+			radii = entry["radii"]
+			found = true
+			break
+	if not found:
+		if _walkability_context_caches.size() >= MAX_WALKABILITY_CONTEXTS:
+			_walkability_context_caches.pop_front()
+		_walkability_context_caches.append({"context": context, "radii": radii})
+	if not radii.has(radius):
+		if radii.size() >= MAX_WALKABILITY_RADII:
+			radii.clear()
+		radii[radius] = {}
+	return radii[radius]
+
+
+static func _cell_walkable_uncached(
+	context: Dictionary,
+	cell: Vector2i,
+	combat_radius_gu: float,
+	extra_blocked_cell: Vector2i,
 ) -> bool:
 	if not context_valid(context):
 		return false

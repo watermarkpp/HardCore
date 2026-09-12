@@ -78,7 +78,7 @@ func _measure_visual_registry(count: int) -> Dictionary:
 	var scan_count := 3
 	var started_usec := Time.get_ticks_usec()
 	for _scan in range(scan_count):
-		manager._update_visuals(1.0 / 30.0)
+		manager._process(1.0 / 30.0)
 	var elapsed_usec := Time.get_ticks_usec() - started_usec
 	var result := {
 		"count": count,
@@ -109,8 +109,8 @@ func _ready() -> void:
 	for result: Dictionary in index_results:
 		assert(int(result["candidate_count"]) == int(result["count"]))
 	for result: Dictionary in visual_results:
-		assert(int(result["registry_entries"]) == int(result["count"]) * int(result["scan_count"]))
-		assert(int(result["visual_updates"]) == int(result["registry_entries"]))
+		assert(int(result["registry_entries"]) == 0, "static loot must not scan the registry")
+		assert(int(result["visual_updates"]) == 0, "static loot must not receive redundant visual ticks")
 	print("LOOT_REGISTRY_BENCHMARK_PASS: O01/O02 controlled counts only")
 	print("LOOT_O01_MEASUREMENTS=" + JSON.stringify(index_results))
 	print("LOOT_O02_MEASUREMENTS=" + JSON.stringify(visual_results))

@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "contractId": "equipment.blessing_luck.v2",
+  "schemaVersion": 3,
+  "contractId": "equipment.blessing_luck.v3",
   "baseline": "M2Server源码规则 + 用户授权R=0边界修订",
   "sourcePolicy": {
     "lane": "server_rules",
@@ -53,7 +53,9 @@
     },
     "luck1To2": {
       "denominator": "R+6",
-      "successRoll": 1
+      "successRoll": 1,
+      "onFailure": "independent upper-stage Random(R*40)==1",
+      "unconditionalImproveProbability": "(19/20)*(1/(R+6)+(1-1/(R+6))/(R*40))"
     },
     "luck3To6": {
       "denominator": "R*40",
@@ -68,7 +70,7 @@
     "1/20失败：有幸运则幸运-1，否则诅咒+1至10",
     "成功路径优先诅咒-1",
     "幸运低于1必定+1",
-    "幸运1—2按R+6判定",
+    "幸运1—2按R+6判定，失败后继续独立R×40判定",
     "幸运3—6按R×40判定",
     "其余无效"
   ],
@@ -79,7 +81,9 @@
   "totalLuckFormula": "sum(all_equipped_item.luck)-sum(all_equipped_item.curse)+weapon_instance.weapon_luck-weapon_instance.weapon_curse",
   "compatibility": {
     "nonWeaponCurseField": "curse",
-    "existingCurseValuesInvented": false
+    "existingCurseValuesInvented": false,
+    "legacyDualWeaponFields": "preserve effective luck-minus-curse; normalize exclusively on next oil mutation",
+    "display": "show one net luck or curse term; omit zero"
   },
   "runtime": "weapon_luck/weapon_curse保存在武器实例；所有装备支持基础luck/curse；零耐久时随其他属性一起失效，维修后恢复参与结算。"
 }

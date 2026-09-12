@@ -367,6 +367,7 @@ var _death_jobs_max_per_frame_override := -1
 var _drop_nodes_max_per_frame_override := -1
 var _test_force_loot_materialization_failure_count := 0
 var _pending_loot_collections: Array = []
+var _prepared_loot_collection: Dictionary = {}
 var _loot_collection_flush_queued := false
 ## Legacy loot candidates are rejected unless a focused test explicitly opts
 ## into the old fixture shape. Formal pickups always carry map/generation
@@ -1582,6 +1583,10 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if not _prepared_loot_collection.is_empty():
+		_prepared_loot_collection.plan.writer.cancel()
+		_prepared_loot_collection.plan.writer.result(true)
+		_prepared_loot_collection.clear()
 	if is_instance_valid(_audio_runtime_service):
 		_audio_runtime_service.stop_all_audio("world_exited")
 	if PlayerState.levels_gained.is_connected(_on_player_levels_gained):
@@ -1627,6 +1632,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	preload("res://scripts/monster_source_frames.gd").poll()
+	if not _prepared_loot_collection.is_empty(): _poll_prepared_loot_collection()
 	var process_started_usec := RuntimeDiagnostics.timing_start()
 	# R3X-4: advance deferred death settlement/materialization in bounded main
 	# thread slices.  The queue is deliberately pumped before ordinary world
@@ -2010,7 +2017,7 @@ func _drain_loot_collection_queue_for_logout() -> Dictionary:
 				"reason": "safe_logout_loot_retry_pending",
 				"loot_queue": manager_result,
 			}
-	if _pending_loot_collections.is_empty():
+	if _pending_loot_collections.is_empty() and _prepared_loot_collection.is_empty():
 		return {
 			"success": true,
 			"save_performed": false,
@@ -12355,11 +12362,19 @@ func _queue_loot_collection(candidate: Dictionary) -> bool:
 	_pending_loot_collections.append(queued_candidate)
 	if not _loot_collection_flush_queued:
 		_loot_collection_flush_queued = true
-		call_deferred("_flush_loot_collections")
+		call_deferred("_flush_loot_collections", true)
 	return true
 
 
-func _flush_loot_collections() -> Dictionary:
+func _flush_loot_collections(allow_background := false) -> Dictionary:
+	if not _prepared_loot_collection.is_empty():
+		if allow_background:
+			# This deferred call has been consumed. The in-flight completion must
+			# be allowed to schedule the next cohort queued during its write.
+			_loot_collection_flush_queued = false
+			return {"pending": true}
+		var finished := _poll_prepared_loot_collection(true)
+		if not bool(finished.get("success", false)) and not bool(finished.get("retry", false)): return finished
 	var profile_started_usec := Time.get_ticks_usec()
 	_loot_collection_flush_queued = false
 	if _pending_loot_collections.is_empty():
@@ -12386,13 +12401,54 @@ func _flush_loot_collections() -> Dictionary:
 			continue
 		transaction_pending.append(candidate)
 		candidates.append(candidate.duplicate(true))
+	if allow_background and not PlayerState.test_mode and not candidates.is_empty():
+		var plan := PlayerState.prepare_loot_save(candidates)
+		if not plan.has("immediate"):
+			_prepared_loot_collection = {"plan": plan, "pending": transaction_pending, "candidate_count": pending.size(), "stale_count": stale_count}
+			return {"pending": true}
+		return _finish_loot_collection_outcomes(transaction_pending, plan.immediate, pending.size(), stale_count, profile_started_usec)
 	var result: Dictionary = (
 		PlayerState.receive_loot_batch_partial(candidates)
 		if not candidates.is_empty()
 		else {"success": true, "saved": false, "outcomes": [], "success_count": 0}
 	)
+	return _finish_loot_collection_outcomes(transaction_pending, result, pending.size(), stale_count, profile_started_usec)
+
+
+func _poll_prepared_loot_collection(wait := false) -> Dictionary:
+	if _prepared_loot_collection.is_empty(): return {"success": true}
+	var cohort := _prepared_loot_collection
+	var started_usec := Time.get_ticks_usec()
+	var valid := true
+	for candidate: Dictionary in cohort.pending:
+		var pickup: Variant = candidate.get("pickup")
+		if (int(candidate.get("origin_map_id", -1)) != current_map_id
+			or int(candidate.get("origin_generation", -1)) != _zone_generation
+			or not pickup is LootPickup or not is_instance_valid(pickup)
+			or not pickup.collection_pending() or not _loot_collection_path_is_clear(pickup)):
+			valid = false
+			break
+	var result: Dictionary
+	if not valid:
+		cohort.plan.writer.cancel()
+		result = {"retry": true, "reason": "pickup_origin_changed"}
+	else:
+		result = PlayerState.finish_prepared_loot_save(cohort.plan, wait)
+	if bool(result.get("pending", false)): return result
+	_prepared_loot_collection = {}
+	if bool(result.get("retry", false)):
+		_pending_loot_collections.append_array(cohort.pending)
+	else:
+		result = _finish_loot_collection_outcomes(cohort.pending, result, int(cohort.candidate_count), int(cohort.stale_count), started_usec)
+	if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
+		_loot_collection_flush_queued = true
+		call_deferred("_flush_loot_collections", true)
+	return result
+
+
+func _finish_loot_collection_outcomes(transaction_pending: Array, result: Dictionary, candidate_count: int, stale_count: int, profile_started_usec: int) -> Dictionary:
 	var transaction_finished_usec := Time.get_ticks_usec()
-	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_authority_checks", pending.size())
+	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_authority_checks", candidate_count)
 	var outcomes: Array = result.get("outcomes", [])
 	var loot_feedback_names: Array = []
 	var collected_gold := 0
@@ -12423,14 +12479,14 @@ func _flush_loot_collections() -> Dictionary:
 		)
 		if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
 			_loot_collection_flush_queued = true
-			call_deferred("_flush_loot_collections")
+			call_deferred("_flush_loot_collections", true)
 	if collected_gold > 0 and is_instance_valid(_audio_runtime_service):
 		_audio_runtime_service.play_item_event("currency:gold", "loot_success", {"map_id": current_map_id})
 	if hud != null and not loot_feedback_names.is_empty():
 		hud.show_loot_batch(loot_feedback_names)
 	if CombatDiagnosticLogScript.capture_enabled():
 		print("[LootPickupProfile] ", JSON.stringify({
-			"candidate_count": pending.size(),
+			"candidate_count": candidate_count,
 			"transaction_ms": float(transaction_finished_usec - profile_started_usec) / 1000.0,
 			"feedback_ms": float(Time.get_ticks_usec() - transaction_finished_usec) / 1000.0,
 			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
@@ -12439,7 +12495,7 @@ func _flush_loot_collections() -> Dictionary:
 	return {
 		"success": bool(result.get("success", false)) and outcomes_complete,
 		"saved": bool(result.get("saved", false)),
-		"candidate_count": pending.size(),
+		"candidate_count": candidate_count,
 		"success_count": int(result.get("success_count", 0)),
 		"stale_count": stale_count,
 		"outcomes_count": outcomes.size(),

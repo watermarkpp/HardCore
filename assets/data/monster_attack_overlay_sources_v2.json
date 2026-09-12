@@ -1,0 +1,3597 @@
+{
+  "contract_id": "monster.attack.exact_overlay.v2",
+  "client_rule_evidence": [
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/AxeMon.pas",
+      "sha256": "7676d0f09b32817e3cafef3048526cd15fd8d311e1a47f96beee75a6edf02186"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/PlayScn.pas",
+      "sha256": "6c9d1d191368ebc841bb10e51d248e8bfe7e344013e866d30f70a775cc9694d4"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+      "sha256": "66606a4e495790f83e8a6fce3809ec54963882ff0b55ca390d1442b4e4699f3c"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/Client/PlayScn.pas",
+      "sha256": "0dcc555bf7fbd10fbd1ac240250bdc0bc28dead21ad188f664030c1af7426120"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/Client/magiceff.pas",
+      "sha256": "6ec23619b46747b810fd9cc413efb3a0b9bc71f96a85f8f7cd05ba74a301a850"
+    }
+  ],
+  "profile_by_monster_id": {
+    "46": "maggot_gas",
+    "60": "maggot_gas",
+    "70": "wooma_flame",
+    "76": "wooma_lightning",
+    "77": "wooma_lightning",
+    "235": "wooma_lightning",
+    "236": "wooma_lightning",
+    "239": "wooma_lightning",
+    "128": "moth_gas",
+    "79": "zombie_lightning",
+    "160": "zuma_flame",
+    "146": "elf_flame"
+  },
+  "profiles": {
+    "maggot_gas": {
+      "direction_count": 8,
+      "frame_count": 6,
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_00_0.png",
+          "source_index": 1444,
+          "x": 0,
+          "y": 0,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_00_1.png",
+          "source_index": 1445,
+          "x": 14,
+          "y": -41,
+          "empty": false,
+          "rgba_sha256": "07407b492e7e71d12d705917947fe51d3f4a49f7110a903d56506e6596bef873"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_00_2.png",
+          "source_index": 1446,
+          "x": -4,
+          "y": -90,
+          "empty": false,
+          "rgba_sha256": "d051feec50d871f96ca17627ca3d36fe4f75f9be4202c3d7d9b54231f2de7bf2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_00_3.png",
+          "source_index": 1447,
+          "x": -5,
+          "y": -90,
+          "empty": false,
+          "rgba_sha256": "c36718fea17d45cb420b65b1d7dc2cb1f4322528bd78d915aa391f00d2ef8014"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_00_4.png",
+          "source_index": 1448,
+          "x": -2,
+          "y": -92,
+          "empty": false,
+          "rgba_sha256": "42482ef047a52f1741b7b615534752a6d465759a3fcef348b9a2a3090d692b96"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_00_5.png",
+          "source_index": 1449,
+          "x": 4,
+          "y": -115,
+          "empty": false,
+          "rgba_sha256": "31d8975b2bd5cb4ed1569e9ca77f5923fc5313ce8b2a7fed3f417f2b51d13e88"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_01_0.png",
+          "source_index": 1454,
+          "x": 0,
+          "y": 0,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_01_1.png",
+          "source_index": 1455,
+          "x": 45,
+          "y": -29,
+          "empty": false,
+          "rgba_sha256": "ad03dcf8c725aeea96284f8d70f426729570770d44632e39de22a0c977165359"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_01_2.png",
+          "source_index": 1456,
+          "x": 47,
+          "y": -65,
+          "empty": false,
+          "rgba_sha256": "e9f3c5062c5426d2c34cc31edfc0b0effc2ac036b2d4e0bd9467b8ce4f5d809b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_01_3.png",
+          "source_index": 1457,
+          "x": 50,
+          "y": -69,
+          "empty": false,
+          "rgba_sha256": "f674ba58f725085b9ec396fb0589cca2bdbb4cfa3777e8b720671220cee2436b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_01_4.png",
+          "source_index": 1458,
+          "x": 56,
+          "y": -76,
+          "empty": false,
+          "rgba_sha256": "88865a0010b5aaf9156e75bfbee6ce6fcd92a6fef29ab46af36a9323d94a944c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_01_5.png",
+          "source_index": 1459,
+          "x": 61,
+          "y": -101,
+          "empty": false,
+          "rgba_sha256": "a9be18135588babbb492a15a529c2d9e14ef28adfdee0784f7307a12aec2a3bd"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_02_0.png",
+          "source_index": 1464,
+          "x": 0,
+          "y": 0,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_02_1.png",
+          "source_index": 1465,
+          "x": 53,
+          "y": -11,
+          "empty": false,
+          "rgba_sha256": "3ed2e0c7aa2a8de75c1311c57c9cff2f657c54cc18b9dec30ce364f48640974c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_02_2.png",
+          "source_index": 1466,
+          "x": 52,
+          "y": -20,
+          "empty": false,
+          "rgba_sha256": "d8c76a14e8a90023330e4152e26166341470ca245a966cff991e03e43ffe88bc"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_02_3.png",
+          "source_index": 1467,
+          "x": 56,
+          "y": -29,
+          "empty": false,
+          "rgba_sha256": "2c143578e664ce7a480886fae7176fe30a7241741da4458e58fe4910828f5f36"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_02_4.png",
+          "source_index": 1468,
+          "x": 65,
+          "y": -37,
+          "empty": false,
+          "rgba_sha256": "f4bcd58754e6a1ceab18660aee317d19a00105f1f9c9362ed865580a1312bb7b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_02_5.png",
+          "source_index": 1469,
+          "x": 73,
+          "y": -52,
+          "empty": false,
+          "rgba_sha256": "dfbef7af4e2621008878f043baeba51a1ff2b407358e5a51c6d434a179c91e85"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_03_0.png",
+          "source_index": 1474,
+          "x": 0,
+          "y": 0,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_03_1.png",
+          "source_index": 1475,
+          "x": 45,
+          "y": 12,
+          "empty": false,
+          "rgba_sha256": "336da604527c131a97c77365f310de746e56257b8dbb1bccf428e5570b3986b1"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_03_2.png",
+          "source_index": 1476,
+          "x": 42,
+          "y": 6,
+          "empty": false,
+          "rgba_sha256": "ee01cea0202e53536618d05f6236d4727eec18abceaf658b74e3583d575d7454"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_03_3.png",
+          "source_index": 1477,
+          "x": 41,
+          "y": 4,
+          "empty": false,
+          "rgba_sha256": "25ff4ffa49ce0d6cd2af17c5c5c0854f6ec61e420921aa9b0ab0ff5809c9c04f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_03_4.png",
+          "source_index": 1478,
+          "x": 50,
+          "y": 10,
+          "empty": false,
+          "rgba_sha256": "24c38d91b2ae03447eaef17ba8d92f1642b7c99ad26d911659789f2dc23fcf22"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_03_5.png",
+          "source_index": 1479,
+          "x": 53,
+          "y": -1,
+          "empty": false,
+          "rgba_sha256": "57240bf67185147b50a7749a66dbe8f37ed6b7526c2370c27be45dd7f520463e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_04_0.png",
+          "source_index": 1484,
+          "x": 0,
+          "y": 0,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_04_1.png",
+          "source_index": 1485,
+          "x": 15,
+          "y": 18,
+          "empty": false,
+          "rgba_sha256": "4d6532961ac731d6452aca25d501b9bcf3fcf6da1e18e36c6a6c02b7d70192a3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_04_2.png",
+          "source_index": 1486,
+          "x": 8,
+          "y": 17,
+          "empty": false,
+          "rgba_sha256": "53f2460852158901c68a45f424d9fcb2fde35f7ccef10a35a583cdeed9b4fd7b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_04_3.png",
+          "source_index": 1487,
+          "x": 2,
+          "y": 19,
+          "empty": false,
+          "rgba_sha256": "ed57736c89dea5e4c9994cc99992f681f29d170b1e636299c77cbfcdd495eec5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_04_4.png",
+          "source_index": 1488,
+          "x": 4,
+          "y": 28,
+          "empty": false,
+          "rgba_sha256": "b2b07b369f8329d5503fe0a43a0ac2cd09560cf8f5f946c922bb969cba01c67a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_04_5.png",
+          "source_index": 1489,
+          "x": -3,
+          "y": 35,
+          "empty": false,
+          "rgba_sha256": "19acd65b7b41c4e63172650d32dc3e12f3e6ff1ff08da93593eeaf7b60ccc2e4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_05_0.png",
+          "source_index": 1494,
+          "x": 0,
+          "y": 0,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_05_1.png",
+          "source_index": 1495,
+          "x": -29,
+          "y": 12,
+          "empty": false,
+          "rgba_sha256": "38f05d102ae244a4d5121b64b3c7ab04c435a5d3200e6df95291bede3b6c326a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_05_2.png",
+          "source_index": 1496,
+          "x": -62,
+          "y": 5,
+          "empty": false,
+          "rgba_sha256": "b52d3d2ac4ca5297acc97e3f213a5be8004ee91174673297082fac520ff7161d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_05_3.png",
+          "source_index": 1497,
+          "x": -96,
+          "y": 5,
+          "empty": false,
+          "rgba_sha256": "0d807e678f533192c25fc301cde4914fbb4b6bd45a42cec768ae4ac6707abd7d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_05_4.png",
+          "source_index": 1498,
+          "x": -94,
+          "y": 12,
+          "empty": false,
+          "rgba_sha256": "916fcbc43096350190d1b12cf070120819f604fee73b6136c7d1c155db55e452"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_05_5.png",
+          "source_index": 1499,
+          "x": -108,
+          "y": -7,
+          "empty": false,
+          "rgba_sha256": "752fb190a85ddfc650a7a8b90fd1427485d5b7090b538d4698006105fb237172"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_06_0.png",
+          "source_index": 1504,
+          "x": 0,
+          "y": 0,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_06_1.png",
+          "source_index": 1505,
+          "x": -39,
+          "y": -11,
+          "empty": false,
+          "rgba_sha256": "9174dd57644f037bb6e55ec36d4110e49fcca6334846692f2a2fb0503be25436"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_06_2.png",
+          "source_index": 1506,
+          "x": -74,
+          "y": -21,
+          "empty": false,
+          "rgba_sha256": "a8aeb5304006ae2768f07e33f5b20363060e0dfc862eef3dd417d7c907b5c68b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_06_3.png",
+          "source_index": 1507,
+          "x": -100,
+          "y": -28,
+          "empty": false,
+          "rgba_sha256": "7ab1b1489b5e95c6c2daa9de69c47461dffd551da8d20c365b0bd29e7e31bd0a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_06_4.png",
+          "source_index": 1508,
+          "x": -99,
+          "y": -36,
+          "empty": false,
+          "rgba_sha256": "ce9bb8afa6039cdfd2a693c2b5a7e50a7892719cd693160968d618509fa182ad"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_06_5.png",
+          "source_index": 1509,
+          "x": -105,
+          "y": -51,
+          "empty": false,
+          "rgba_sha256": "311a3aef919616c9b8b1a43561c16aed0ceac97d9f3508a9eec72f0da9b4fc64"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_07_0.png",
+          "source_index": 1514,
+          "x": 0,
+          "y": 0,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_07_1.png",
+          "source_index": 1515,
+          "x": -19,
+          "y": -30,
+          "empty": false,
+          "rgba_sha256": "19762bddeee026dd2cdf721ab84ba8245b7ba0c70d7fc0af4c12c08a89f9b50b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_07_2.png",
+          "source_index": 1516,
+          "x": -79,
+          "y": -67,
+          "empty": false,
+          "rgba_sha256": "3fbd09f3d116eca41c0f06f5f59e990cc23628813eb7a197ab611d509184cb92"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_07_3.png",
+          "source_index": 1517,
+          "x": -77,
+          "y": -69,
+          "empty": false,
+          "rgba_sha256": "4dcbb8ce141ea192e1d1d728cf97592a48fbfb9d5ce0895dd57dd8fee7063461"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_07_4.png",
+          "source_index": 1518,
+          "x": -67,
+          "y": -73,
+          "empty": false,
+          "rgba_sha256": "1ce90315ae8c87492f17deac4254d2c328d51c758722607d561db8ba3c980bcc"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/maggot_gas_07_5.png",
+          "source_index": 1519,
+          "x": -73,
+          "y": -98,
+          "empty": false,
+          "rgba_sha256": "fb31817abaa2b156f352f7b3ce756a1a7647f96e7a1e30407e58b0849cd46c2f"
+        }
+      ],
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+        "sha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+        "tier": "primary",
+        "distribution": "client.classic_raw_complete",
+        "rule": "MirClient/AxeMon.pas TGasKuDeGi.LoadSurface, TSculptureMon.LoadSurface, TWarriorElfMonster.RunFrameAction",
+        "frame_formula": "1444 + direction * 10 + frame"
+      }
+    },
+    "wooma_flame": {
+      "direction_count": 8,
+      "frame_count": 7,
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_00_0.png",
+          "source_index": 1800,
+          "x": 12,
+          "y": -68,
+          "empty": false,
+          "rgba_sha256": "5b3be40859a8a8a55eff5ce6db00cbd75f8bb1c1e53524bcb22e970ceddf2521"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_00_1.png",
+          "source_index": 1801,
+          "x": 6,
+          "y": -87,
+          "empty": false,
+          "rgba_sha256": "64bd73f765c2f769fe97fb42d02025fa18f58f5d6d83d37ea2c7652903722aea"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_00_2.png",
+          "source_index": 1802,
+          "x": 0,
+          "y": -99,
+          "empty": false,
+          "rgba_sha256": "7fc3b26925dc53b0e3e3c9eca9b89c2e9fefb6210351db5234735c3516750f37"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_00_3.png",
+          "source_index": 1803,
+          "x": -15,
+          "y": -90,
+          "empty": false,
+          "rgba_sha256": "94ed49b501a3e690963bdd330ac348b9ae8e82532e6761d7d9f1f06117cb78d3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_00_4.png",
+          "source_index": 1804,
+          "x": -29,
+          "y": -79,
+          "empty": false,
+          "rgba_sha256": "c1222f82a9a1df26908a8d1404a991230a75b1d2e891b8b0fd976b9938dc905f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_00_5.png",
+          "source_index": 1805,
+          "x": -3,
+          "y": -60,
+          "empty": false,
+          "rgba_sha256": "f04e1cf7d1cb170eb78310c391d362af7d40e02879c7594ff8f81f91a8c6844f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_00_6.png",
+          "source_index": 1806,
+          "x": 4,
+          "y": -89,
+          "empty": false,
+          "rgba_sha256": "7cff646c654723d3b26fbc3a3572638050ef2c2ea5e8ee9bbec7d73299098dab"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_01_0.png",
+          "source_index": 1810,
+          "x": 41,
+          "y": -48,
+          "empty": false,
+          "rgba_sha256": "2a6f0d684223dd3096b815ec36f56fd1010580c25a8f09b67a132765f8a713d2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_01_1.png",
+          "source_index": 1811,
+          "x": 51,
+          "y": -59,
+          "empty": false,
+          "rgba_sha256": "d9a274b9253dd0d52902a8f73bb630dd1660d95679306c024f91a120cd2c33b0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_01_2.png",
+          "source_index": 1812,
+          "x": 56,
+          "y": -68,
+          "empty": false,
+          "rgba_sha256": "aea21da786afd69bea7655d094855bfc3a73aa3ecc94f4b884cdf25c7a6bbf6c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_01_3.png",
+          "source_index": 1813,
+          "x": 54,
+          "y": -67,
+          "empty": false,
+          "rgba_sha256": "6d333e676bcf3019289c1e86e788fd41796f3870a354ec91ae0b6a988ac0ad02"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_01_4.png",
+          "source_index": 1814,
+          "x": 52,
+          "y": -64,
+          "empty": false,
+          "rgba_sha256": "a01197a6c86a07c846c27ccfd0a642cca86b4540d4b682ab41dd174b95a56d5f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_01_5.png",
+          "source_index": 1815,
+          "x": 60,
+          "y": -52,
+          "empty": false,
+          "rgba_sha256": "74305cc3ccfcc73a7b91fe5bb05481359e77c72b9ec788899feee527915b922c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_01_6.png",
+          "source_index": 1816,
+          "x": 55,
+          "y": -78,
+          "empty": false,
+          "rgba_sha256": "aa998d952808aa58b64ab3a2efaf7dc0a0720f5103b513a064bcb7a81413a60e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_02_0.png",
+          "source_index": 1820,
+          "x": 52,
+          "y": -33,
+          "empty": false,
+          "rgba_sha256": "ed11c88c6275b085b994113a6bbe378844dc152ae43677f2781f6d421ff84fa8"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_02_1.png",
+          "source_index": 1821,
+          "x": 61,
+          "y": -41,
+          "empty": false,
+          "rgba_sha256": "07e615c971598b6efccdd761e61c1ae58f39662beaa5e346800a1ec53899c2b2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_02_2.png",
+          "source_index": 1822,
+          "x": 62,
+          "y": -55,
+          "empty": false,
+          "rgba_sha256": "f2afc9bdb5fab6384e77f097f007ccd9c9f75251c3e96b5e583cf370085f5f00"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_02_3.png",
+          "source_index": 1823,
+          "x": 62,
+          "y": -56,
+          "empty": false,
+          "rgba_sha256": "6c4c485ce860a67dbcebfc28a97eff31a45e995dbe74a60db1c90fde040e4336"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_02_4.png",
+          "source_index": 1824,
+          "x": 61,
+          "y": -49,
+          "empty": false,
+          "rgba_sha256": "ab38bc20486cea629e1edc88e064c004df8a7c3f64ff4223862c6a3abd8da9a7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_02_5.png",
+          "source_index": 1825,
+          "x": 53,
+          "y": -34,
+          "empty": false,
+          "rgba_sha256": "f19c54b7d57ae01663969cda7820894d749b96781245ba86f4fa5d842d65bb7b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_02_6.png",
+          "source_index": 1826,
+          "x": 68,
+          "y": -62,
+          "empty": false,
+          "rgba_sha256": "32ba983d51f4c0e8907340795f789657e3d1fabf6d3bfe76ef88fa225ebb6123"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_03_0.png",
+          "source_index": 1830,
+          "x": 43,
+          "y": -17,
+          "empty": false,
+          "rgba_sha256": "e5e8b8f415d8cfadd3c4f6c11690705b2c85c1103d3e47d426329afc587fa7f4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_03_1.png",
+          "source_index": 1831,
+          "x": 44,
+          "y": -20,
+          "empty": false,
+          "rgba_sha256": "7f03fb6aa9b031666c3f2e03766ec2d05d4df3b19627dd03a70fca0e944475a2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_03_2.png",
+          "source_index": 1832,
+          "x": 43,
+          "y": -28,
+          "empty": false,
+          "rgba_sha256": "2e54da68ca25ca3a39be34039369fc6131a93e3c60e69de3df33f8b547f4d4d6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_03_3.png",
+          "source_index": 1833,
+          "x": 43,
+          "y": -33,
+          "empty": false,
+          "rgba_sha256": "d2ab78a92a7355336169b461f5e63191d2965ec18c3db26d79c3a21bd3b32aca"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_03_4.png",
+          "source_index": 1834,
+          "x": 44,
+          "y": -29,
+          "empty": false,
+          "rgba_sha256": "8b771f6559768f949c73172edf465c412e32784d27e9254a6be776e94b43b358"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_03_5.png",
+          "source_index": 1835,
+          "x": 32,
+          "y": -15,
+          "empty": false,
+          "rgba_sha256": "66f59f4b1349926bb65c714ca08c8aa5cbcb1b782a2dac8c028f8da80596a9aa"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_03_6.png",
+          "source_index": 1836,
+          "x": 53,
+          "y": -43,
+          "empty": false,
+          "rgba_sha256": "6d6aba75515e47e568cdc9391b1807e93ce5d4362b121c707312f650c0141102"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_04_0.png",
+          "source_index": 1840,
+          "x": 12,
+          "y": -11,
+          "empty": false,
+          "rgba_sha256": "efc16f2e5a00bb6fae0e5a05e3b2d7292bbff685f27aaef80e7ef54ebd53fdf3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_04_1.png",
+          "source_index": 1841,
+          "x": 6,
+          "y": -12,
+          "empty": false,
+          "rgba_sha256": "46ea7017271b003fa6be944e54fe452a7c0bae4f181e13fa4ec10eb99a92a131"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_04_2.png",
+          "source_index": 1842,
+          "x": -11,
+          "y": -17,
+          "empty": false,
+          "rgba_sha256": "db435b9c1813f2827f9c343b01843aaa6b97ea3cda567651f2c7e27e736a7fc4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_04_3.png",
+          "source_index": 1843,
+          "x": -21,
+          "y": -23,
+          "empty": false,
+          "rgba_sha256": "30480307cc00caa710107a7f27d88bd78e159607b6e924531991ba552e667770"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_04_4.png",
+          "source_index": 1844,
+          "x": -29,
+          "y": -17,
+          "empty": false,
+          "rgba_sha256": "9d7872d54c5615e437daef5911cd2fa78f46e7afa956c671e2123d6707e39c3e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_04_5.png",
+          "source_index": 1845,
+          "x": -13,
+          "y": -2,
+          "empty": false,
+          "rgba_sha256": "9fc2c4cb7dad295b918506aa1971f2dc622a7bc3b93c44039f80b1bee7dc42bf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_04_6.png",
+          "source_index": 1846,
+          "x": 6,
+          "y": -28,
+          "empty": false,
+          "rgba_sha256": "3bb4d4a66c36f1277dac10de2a82e0eb808b1be1e0b966b89bc7f774e9ce238f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_05_0.png",
+          "source_index": 1850,
+          "x": -20,
+          "y": -17,
+          "empty": false,
+          "rgba_sha256": "3dfbf48dae77220d9f524fad48507ef2f7c1771e918cc003e5df5d0bb98df220"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_05_1.png",
+          "source_index": 1851,
+          "x": -33,
+          "y": -20,
+          "empty": false,
+          "rgba_sha256": "d6cf63898a0103f8a296bc02ba13419e17fd50e6760571337969a180d1e387f2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_05_2.png",
+          "source_index": 1852,
+          "x": -43,
+          "y": -26,
+          "empty": false,
+          "rgba_sha256": "ed04e7d10818e30de8f401c3ee303d8934d64fdb9933b31c8865cde73f09578d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_05_3.png",
+          "source_index": 1853,
+          "x": -61,
+          "y": -34,
+          "empty": false,
+          "rgba_sha256": "f030621d0c48690640962688d01a0058fe4f2d769ac1accaaf0d7d05651de9f2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_05_4.png",
+          "source_index": 1854,
+          "x": -71,
+          "y": -27,
+          "empty": false,
+          "rgba_sha256": "a39c03619b9187393bf4c6cdbc145d7c7f2fdc419757b375fe6ce831a936df2c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_05_5.png",
+          "source_index": 1855,
+          "x": -62,
+          "y": -13,
+          "empty": false,
+          "rgba_sha256": "007e7173cb3c858f79afb011d21edce45ceca12b10ee2764005b283de374cd75"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_05_6.png",
+          "source_index": 1856,
+          "x": -65,
+          "y": -49,
+          "empty": false,
+          "rgba_sha256": "777e76184bbb7821e90c96192531960d15a06930ecdf21d59a9d18baa415128e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_06_0.png",
+          "source_index": 1860,
+          "x": -33,
+          "y": -36,
+          "empty": false,
+          "rgba_sha256": "69b9c0cb2edb597631fbab2eaa542ceb07a63e406578912a481bd5bd9f661efe"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_06_1.png",
+          "source_index": 1861,
+          "x": -47,
+          "y": -41,
+          "empty": false,
+          "rgba_sha256": "18972ff96d69cdb9eff4a914aa2bc0bcd002ac4cb0844a32fd399c0dd3e3688c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_06_2.png",
+          "source_index": 1862,
+          "x": -76,
+          "y": -48,
+          "empty": false,
+          "rgba_sha256": "052204f4bbc1c68bd104c0127c0d5a767c936982ba18dea6483eda7a720e9779"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_06_3.png",
+          "source_index": 1863,
+          "x": -90,
+          "y": -55,
+          "empty": false,
+          "rgba_sha256": "30ec5d3d0ec3269ee84b0aed78495a082b5d43ee9765097d9aeb346b5f6d600f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_06_4.png",
+          "source_index": 1864,
+          "x": -101,
+          "y": -47,
+          "empty": false,
+          "rgba_sha256": "24714373db15ab49fc8e504cd1e3aab0acc91fc951a79b7964e2eeadb029929b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_06_5.png",
+          "source_index": 1865,
+          "x": -86,
+          "y": -36,
+          "empty": false,
+          "rgba_sha256": "ccac05ffdf57ad4aebaf0579fbb526e34c0c068c5461b9ae19c6154add134d56"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_06_6.png",
+          "source_index": 1866,
+          "x": -72,
+          "y": -63,
+          "empty": false,
+          "rgba_sha256": "5cdd118e841acbaa2dfa226ef14641702b4c8a045d7d39ea4bdcbfd9970a6475"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_07_0.png",
+          "source_index": 1870,
+          "x": -21,
+          "y": -54,
+          "empty": false,
+          "rgba_sha256": "d29cd712c1970092d427dad01bf0f3f838956bce63af6eab945f4852eaf69bbf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_07_1.png",
+          "source_index": 1871,
+          "x": -40,
+          "y": -54,
+          "empty": false,
+          "rgba_sha256": "6ea86673547b4fdea0a3a0bcb3de425b41c2584728a2dfa2670ce4ac5150b2e3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_07_2.png",
+          "source_index": 1872,
+          "x": -55,
+          "y": -60,
+          "empty": false,
+          "rgba_sha256": "2d918ca744f947405e8655cf057dde6a2503de4c44901e92b728347c10cde159"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_07_3.png",
+          "source_index": 1873,
+          "x": -75,
+          "y": -70,
+          "empty": false,
+          "rgba_sha256": "a0c86744ba16a27ec5ee6d8259e43d56136fc79c14ac660fdea4a4f0e4f0b186"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_07_4.png",
+          "source_index": 1874,
+          "x": -83,
+          "y": -61,
+          "empty": false,
+          "rgba_sha256": "2b89c6e842cc82ccfa18f6a4cf8b7c78e9d14f467be59459c6f85fb0491ed835"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_07_5.png",
+          "source_index": 1875,
+          "x": -66,
+          "y": -54,
+          "empty": false,
+          "rgba_sha256": "26c73a4001d643d6229803561853beca22742ffc4a10e19504fc97b47fe468f6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_flame_07_6.png",
+          "source_index": 1876,
+          "x": -60,
+          "y": -84,
+          "empty": false,
+          "rgba_sha256": "12bd563172cdbc323e86e8ed47b050439a11c6c39910d1d7d5088fb29e2decae"
+        }
+      ],
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
+        "sha256": "6a46fc8d8fd093181bde0a8ceca8c25b8d3faf71752dbf47bbbd0a6e5fad5412",
+        "tier": "primary",
+        "distribution": "client.classic_raw_complete",
+        "rule": "MirClient/AxeMon.pas TGasKuDeGi.LoadSurface, TSculptureMon.LoadSurface, TWarriorElfMonster.RunFrameAction",
+        "frame_formula": "1800 + direction * 10 + frame"
+      }
+    },
+    "wooma_lightning": {
+      "direction_count": 8,
+      "frame_count": 6,
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_00_0.png",
+          "source_index": 1900,
+          "x": -26,
+          "y": -70,
+          "empty": false,
+          "rgba_sha256": "acb76e506af7b2e718c7e7d91d709adf15a65480fd7d607a7d9924d24468c455"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_00_1.png",
+          "source_index": 1901,
+          "x": -35,
+          "y": -82,
+          "empty": false,
+          "rgba_sha256": "949cd59a0277bc1e64e22b4cc7a4a2cf1ae334dd88a885c932209e4d126e6403"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_00_2.png",
+          "source_index": 1902,
+          "x": -30,
+          "y": -91,
+          "empty": false,
+          "rgba_sha256": "15cc0e1751b046509d5341d223ffb60714d2fd7efc5031ae3a4d802873d9ebbb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_00_3.png",
+          "source_index": 1903,
+          "x": -18,
+          "y": -94,
+          "empty": false,
+          "rgba_sha256": "deb06c5653db40f4612dc38b81a094e90407a03022ba5babc762bef22a06d5d5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_00_4.png",
+          "source_index": 1904,
+          "x": -35,
+          "y": -76,
+          "empty": false,
+          "rgba_sha256": "4e21b528f9e89eb1296ca2e008f5a0f61d388de9c6e7962d54dfb7c4cf66f663"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_00_5.png",
+          "source_index": 1905,
+          "x": -47,
+          "y": -91,
+          "empty": false,
+          "rgba_sha256": "a38ad0543066c3c5c86a34deece41ab784c46ad586c870af61ea3692f6e7cafa"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_01_0.png",
+          "source_index": 1910,
+          "x": 6,
+          "y": -73,
+          "empty": false,
+          "rgba_sha256": "dec55724fda4125d7df995c9cdd5407954afadbe212fcbbab230c679b72e8a85"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_01_1.png",
+          "source_index": 1911,
+          "x": -9,
+          "y": -93,
+          "empty": false,
+          "rgba_sha256": "08817f6d68555883f320be2092289097e5cc7a56fd1adfd2c195e6a55eaa3a1c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_01_2.png",
+          "source_index": 1912,
+          "x": -16,
+          "y": -104,
+          "empty": false,
+          "rgba_sha256": "9e459529b66aec7f0d6dfd7dde073cc361519ff5ed9bd7d9645fe1e229c09e21"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_01_3.png",
+          "source_index": 1913,
+          "x": 5,
+          "y": -93,
+          "empty": false,
+          "rgba_sha256": "3d2e25221c714e34e830d38894dd23669c251dc24adbae4899562e08379560b3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_01_4.png",
+          "source_index": 1914,
+          "x": 11,
+          "y": -66,
+          "empty": false,
+          "rgba_sha256": "0679d762897ac37654356319bdd732ecfffc16ed136c9d68f2f0749377420944"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_01_5.png",
+          "source_index": 1915,
+          "x": 6,
+          "y": -90,
+          "empty": false,
+          "rgba_sha256": "e9488e84611fd12962fc8c201a499181e535f80876f77b0c0520c920b7962826"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_02_0.png",
+          "source_index": 1920,
+          "x": 27,
+          "y": -61,
+          "empty": false,
+          "rgba_sha256": "40d590b76c08f85b11f2b4bdd88ada181aef1805728e5cebd23e7df8b30d288e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_02_1.png",
+          "source_index": 1921,
+          "x": -9,
+          "y": -91,
+          "empty": false,
+          "rgba_sha256": "ec62659f1e74563d04459e08f08fa7b42782bd8aeb2b21efb798aebf63c20b7c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_02_2.png",
+          "source_index": 1922,
+          "x": -34,
+          "y": -109,
+          "empty": false,
+          "rgba_sha256": "557e5e3965c2f368b1ec66f787976c588e4c02252813277a44bd52257d4a27c8"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_02_3.png",
+          "source_index": 1923,
+          "x": 19,
+          "y": -87,
+          "empty": false,
+          "rgba_sha256": "809a451795158229ed1018265d12d5d7b3b7a343591abe5659afc11bc9e098fc"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_02_4.png",
+          "source_index": 1924,
+          "x": 42,
+          "y": -43,
+          "empty": false,
+          "rgba_sha256": "bc27ffbd4b75c990bdf2f71f51661dbcafbb94212c46414f301223c414456555"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_02_5.png",
+          "source_index": 1925,
+          "x": 39,
+          "y": -56,
+          "empty": false,
+          "rgba_sha256": "9ed4094a0db5e9292c7957102d35b3a5d1eef5b477667053706cd944ae242288"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_03_0.png",
+          "source_index": 1930,
+          "x": -1,
+          "y": -41,
+          "empty": false,
+          "rgba_sha256": "12eba2bce9138121f1d82d8cc983fa4c6cc7cd64a8825a9638fd50618ee44bc4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_03_1.png",
+          "source_index": 1931,
+          "x": -38,
+          "y": -76,
+          "empty": false,
+          "rgba_sha256": "969190c97e068d8114c5c51d3b60926b3860bafc72211bb7caf9e212c94223d3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_03_2.png",
+          "source_index": 1932,
+          "x": -59,
+          "y": -103,
+          "empty": false,
+          "rgba_sha256": "cf82d0efe6ac1483b5af63ee9b565e4625ece8b02344d859b0868f2ceb12a79e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_03_3.png",
+          "source_index": 1933,
+          "x": -5,
+          "y": -72,
+          "empty": false,
+          "rgba_sha256": "a17dada0637704ebd61687c907cb06e6a566af4576071d122409799fb28d92c7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_03_4.png",
+          "source_index": 1934,
+          "x": 21,
+          "y": -14,
+          "empty": false,
+          "rgba_sha256": "8fd5af901367b984356228ba42f06f2bbc8743850d3429f8258c3707a7d0c8f6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_03_5.png",
+          "source_index": 1935,
+          "x": 12,
+          "y": -19,
+          "empty": false,
+          "rgba_sha256": "30f758d25e773644b953117b6a91a650611924096f79f6af2b61c55c966a6732"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_04_0.png",
+          "source_index": 1940,
+          "x": -33,
+          "y": -24,
+          "empty": false,
+          "rgba_sha256": "96c2c529dd143aaa06599121eeac3a7f7c67c9d4b0765375086d84d882a7fbb7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_04_1.png",
+          "source_index": 1941,
+          "x": -51,
+          "y": -65,
+          "empty": false,
+          "rgba_sha256": "c74dcdd4916456ddd6f99a4e58abc34e17950a83d0ac0733cf43a7f034100e3a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_04_2.png",
+          "source_index": 1942,
+          "x": -55,
+          "y": -97,
+          "empty": false,
+          "rgba_sha256": "dcade5306ab1df51d745889f52ef0906281b59754702f09b1897fb31a8d3e658"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_04_3.png",
+          "source_index": 1943,
+          "x": -29,
+          "y": -62,
+          "empty": false,
+          "rgba_sha256": "c3d3361b50f9dce7925c9c67cf617bca8941cc4c05efea82cc2714c69269a6ee"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_04_4.png",
+          "source_index": 1944,
+          "x": -25,
+          "y": 7,
+          "empty": false,
+          "rgba_sha256": "3104302b4c9b5f7525049706f684482b8ef03bfdc2f6112523911b151440814e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_04_5.png",
+          "source_index": 1945,
+          "x": -39,
+          "y": 0,
+          "empty": false,
+          "rgba_sha256": "013135f6cd2369b2c66774b61b06a758e6261e9af67675406c07197d32911705"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_05_0.png",
+          "source_index": 1950,
+          "x": -50,
+          "y": -43,
+          "empty": false,
+          "rgba_sha256": "b6246974fa27828f29b9d0f8ffa55704fc52ca991bfd2cf567887b7bf310b4db"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_05_1.png",
+          "source_index": 1951,
+          "x": -36,
+          "y": -86,
+          "empty": false,
+          "rgba_sha256": "24d57f98778354e62e73f3307d0a5762a7dd21895f90481fda3b0a75454d7f99"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_05_2.png",
+          "source_index": 1952,
+          "x": -21,
+          "y": -114,
+          "empty": false,
+          "rgba_sha256": "1f1043e122642198f0e32305fbb13ff17fd0d1a9e1315f514beb432e192ec943"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_05_3.png",
+          "source_index": 1953,
+          "x": -38,
+          "y": -76,
+          "empty": false,
+          "rgba_sha256": "2144ee811ef87a675d705317f1ca2b3f109e20550576b6fcb2ef3ff267c9e7f9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_05_4.png",
+          "source_index": 1954,
+          "x": -73,
+          "y": -3,
+          "empty": false,
+          "rgba_sha256": "6c9ff2b9ed8eb15fc276a8a3188e9d7f6a55b7f3163e70d2d1df29d6a5262349"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_05_5.png",
+          "source_index": 1955,
+          "x": -85,
+          "y": -10,
+          "empty": false,
+          "rgba_sha256": "02a310d6bad2a6cc3a2236fc0f0c968ad35695b24edf2215ce778df3fa16fa15"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_06_0.png",
+          "source_index": 1960,
+          "x": -39,
+          "y": -66,
+          "empty": false,
+          "rgba_sha256": "24a5c04a905f9285c33a209cb53fa76f9d48f977fdcf9bf752fe104f29df68ec"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_06_1.png",
+          "source_index": 1961,
+          "x": -26,
+          "y": -95,
+          "empty": false,
+          "rgba_sha256": "9f2b0fd20652e7d760599384cc6584ab2bb7648ca82d50f738e8529c4ba63d42"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_06_2.png",
+          "source_index": 1962,
+          "x": -13,
+          "y": -110,
+          "empty": false,
+          "rgba_sha256": "b8f2c010a1d276c8e6d05e9bc838c4d97d4c796c0913222166ef41527aa41bef"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_06_3.png",
+          "source_index": 1963,
+          "x": -31,
+          "y": -92,
+          "empty": false,
+          "rgba_sha256": "cbfb0390c22f68c2aadf6decae769687cc201e90f74231c7412fe819432e091a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_06_4.png",
+          "source_index": 1964,
+          "x": -79,
+          "y": -36,
+          "empty": false,
+          "rgba_sha256": "1883e5a2b21de6ad01d33fe972dedcbea9f67c3f9e4f75c257239fbc97312890"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_06_5.png",
+          "source_index": 1965,
+          "x": -93,
+          "y": -44,
+          "empty": false,
+          "rgba_sha256": "bff1ac06b42c33305e95367128c820e91035672fc11ec35f57df7c196657f27a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_07_0.png",
+          "source_index": 1970,
+          "x": -39,
+          "y": -77,
+          "empty": false,
+          "rgba_sha256": "07dd8f4dfe77588f5b61367eed352955935935b3a2cfc1cee3f17dd50f56b3a6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_07_1.png",
+          "source_index": 1971,
+          "x": -35,
+          "y": -85,
+          "empty": false,
+          "rgba_sha256": "bda686bcc664b4830b78aa2100450ec7c1c70f36a405aec452e2ff4773f2c778"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_07_2.png",
+          "source_index": 1972,
+          "x": -19,
+          "y": -89,
+          "empty": false,
+          "rgba_sha256": "51e1240b049fdfd4ad82c218612c3bfe1f83a8645f3e7a61ecb5eaefe1fa67d2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_07_3.png",
+          "source_index": 1973,
+          "x": -29,
+          "y": -100,
+          "empty": false,
+          "rgba_sha256": "d165252ddd2bc9eff680fea196095cad130e72c17f58d3f28a240e1071cedc09"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_07_4.png",
+          "source_index": 1974,
+          "x": -65,
+          "y": -71,
+          "empty": false,
+          "rgba_sha256": "80b88a935ea782a5317d0c2d67314d13d28a6258a1ee48f5a03aa19350152fee"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/wooma_lightning_07_5.png",
+          "source_index": 1975,
+          "x": -92,
+          "y": -80,
+          "empty": false,
+          "rgba_sha256": "dc9d963c6bd53b47fbd95fa80cec9dbedc82caa722411b201ec2bc760447e09c"
+        }
+      ],
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
+        "sha256": "6a46fc8d8fd093181bde0a8ceca8c25b8d3faf71752dbf47bbbd0a6e5fad5412",
+        "tier": "primary",
+        "distribution": "client.classic_raw_complete",
+        "rule": "MirClient/AxeMon.pas TGasKuDeGi.LoadSurface, TSculptureMon.LoadSurface, TWarriorElfMonster.RunFrameAction",
+        "frame_formula": "1900 + direction * 10 + frame"
+      }
+    },
+    "moth_gas": {
+      "direction_count": 8,
+      "frame_count": 6,
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_00_0.png",
+          "source_index": 3590,
+          "x": 17,
+          "y": -80,
+          "empty": false,
+          "rgba_sha256": "9c79605058b57e23221d7299615ab614396ac9314a6bc7867c1671d25b9a2f4c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_00_1.png",
+          "source_index": 3591,
+          "x": 12,
+          "y": -121,
+          "empty": false,
+          "rgba_sha256": "45e785ac9bb643d4bb02523b325d17d436f5fbb28c9b50f105aa496ee10134e8"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_00_2.png",
+          "source_index": 3592,
+          "x": 6,
+          "y": -136,
+          "empty": false,
+          "rgba_sha256": "18453513bcef1ac35919574c63ff8a9957330b99029ce5dab0e6999397bd3b5b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_00_3.png",
+          "source_index": 3593,
+          "x": 7,
+          "y": -125,
+          "empty": false,
+          "rgba_sha256": "6a035d1237591453ec464a9c8d54e7b2efa15b3ccb86c4fff4ec19e094c71e41"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_00_4.png",
+          "source_index": 3594,
+          "x": 0,
+          "y": -129,
+          "empty": false,
+          "rgba_sha256": "bc93822278bd87c06649b33026918b57c3f0bb8c1a080e272ede0f51948230ee"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_00_5.png",
+          "source_index": 3595,
+          "x": 6,
+          "y": -122,
+          "empty": false,
+          "rgba_sha256": "10ec60d0e6b16e184ba3500481aa36c462f561c760fa6d7884316151e56f354b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_01_0.png",
+          "source_index": 3600,
+          "x": 33,
+          "y": -78,
+          "empty": false,
+          "rgba_sha256": "fc7a76d2e3442f1fc1418d8fa5d83c192ba93a068436b211d9c81ffaa932770e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_01_1.png",
+          "source_index": 3601,
+          "x": 45,
+          "y": -119,
+          "empty": false,
+          "rgba_sha256": "6c1e0110cf61f9c820e51537a048e7ba4897746b08129f81c795116aa4595621"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_01_2.png",
+          "source_index": 3602,
+          "x": 63,
+          "y": -135,
+          "empty": false,
+          "rgba_sha256": "7aba8a9b1c3b251ac3a5dc69b1f6e8def19a3bffd9ad2ceb548a6702db585b3a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_01_3.png",
+          "source_index": 3603,
+          "x": 62,
+          "y": -124,
+          "empty": false,
+          "rgba_sha256": "9e1903caf83597bdd488bac7d843b5a4fa3166bb97cc2c48b159039eba579ebb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_01_4.png",
+          "source_index": 3604,
+          "x": 61,
+          "y": -113,
+          "empty": false,
+          "rgba_sha256": "5136ca9717f3f2a11f8bf4eff6ff738e15779d68fe0043babc6c45b8de92236b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_01_5.png",
+          "source_index": 3605,
+          "x": 71,
+          "y": -99,
+          "empty": false,
+          "rgba_sha256": "96899e51bcc1bbe1c81528842b43e3dc97f4f860ba63dded36049214eb3650e3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_02_0.png",
+          "source_index": 3610,
+          "x": 35,
+          "y": -60,
+          "empty": false,
+          "rgba_sha256": "0af317c13c9c15346a89493a566d4ec9f8fc3354e307c5aadf42c00c914e05df"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_02_1.png",
+          "source_index": 3611,
+          "x": 51,
+          "y": -82,
+          "empty": false,
+          "rgba_sha256": "e9c4a26d26920bbbf0ebb04eac05e2567ec6d765f4c9580cf237dcd02d906258"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_02_2.png",
+          "source_index": 3612,
+          "x": 74,
+          "y": -74,
+          "empty": false,
+          "rgba_sha256": "a6b0aba89417c95695969cf66da563245feee5968bea46fde1eabe421f4b5c9d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_02_3.png",
+          "source_index": 3613,
+          "x": 71,
+          "y": -61,
+          "empty": false,
+          "rgba_sha256": "f6f45d69384ec8e3a3390c8a2c0a269af6f026314c337ee3e04bdbced4066fc5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_02_4.png",
+          "source_index": 3614,
+          "x": 64,
+          "y": -62,
+          "empty": false,
+          "rgba_sha256": "aab50ae1de82611f56b9176c258a4bea34fe1999f30d072e9913e0c3306869ec"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_02_5.png",
+          "source_index": 3615,
+          "x": 49,
+          "y": -58,
+          "empty": false,
+          "rgba_sha256": "0a00cf68a0131de15c24327f25242fe5b831695314c4665b98994999add713f9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_03_0.png",
+          "source_index": 3620,
+          "x": 30,
+          "y": -53,
+          "empty": false,
+          "rgba_sha256": "423fe584f7555b0359b34b0e980861494919be4b3e99d87c66c71853652fe942"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_03_1.png",
+          "source_index": 3621,
+          "x": 41,
+          "y": -54,
+          "empty": false,
+          "rgba_sha256": "652d1264a78442a082619d4717c79b2b2bb2f8fc8f24903e87b2d0debe694bee"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_03_2.png",
+          "source_index": 3622,
+          "x": 58,
+          "y": -31,
+          "empty": false,
+          "rgba_sha256": "fa882025234b47733dcec99119fc4640a194f481be6f35bd40aa99e35a45bcba"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_03_3.png",
+          "source_index": 3623,
+          "x": 57,
+          "y": -32,
+          "empty": false,
+          "rgba_sha256": "ffb6e465d748fd085c5506d436704bee282f8976ee5a50357a9b09a8556523a4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_03_4.png",
+          "source_index": 3624,
+          "x": 51,
+          "y": -39,
+          "empty": false,
+          "rgba_sha256": "60dfaf85d0dacf62588e6865ba8a081ce52488f510ead6e2f18543bb7c52bcb6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_03_5.png",
+          "source_index": 3625,
+          "x": 42,
+          "y": -45,
+          "empty": false,
+          "rgba_sha256": "8c564560e81730a8e61b1abdaaa958827c7e1bc4ca19b15b26e298438219e577"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_04_0.png",
+          "source_index": 3630,
+          "x": 16,
+          "y": -50,
+          "empty": false,
+          "rgba_sha256": "d71995e12ab03261876c7027dfc990908af36620b5fd9587f0512642b91945b7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_04_1.png",
+          "source_index": 3631,
+          "x": 2,
+          "y": -49,
+          "empty": false,
+          "rgba_sha256": "a821ff00d5f701a5635bf422738812b33924161dcd92c9b60a941b1916e66b3e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_04_2.png",
+          "source_index": 3632,
+          "x": 1,
+          "y": -19,
+          "empty": false,
+          "rgba_sha256": "7b623a5b952a06bcab46e1056b2da0d213c19ce508588b365e0cd68f82709c64"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_04_3.png",
+          "source_index": 3633,
+          "x": 3,
+          "y": -25,
+          "empty": false,
+          "rgba_sha256": "456bbdfd20116a3a5cb60a748feb42f9d291985b276675fa5309246a9d3ae4d0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_04_4.png",
+          "source_index": 3634,
+          "x": 7,
+          "y": -32,
+          "empty": false,
+          "rgba_sha256": "d498dfdc60f27ee1c92d8e574268ef28011f7d30a5c758d998659c21fb98228c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_04_5.png",
+          "source_index": 3635,
+          "x": 5,
+          "y": -26,
+          "empty": false,
+          "rgba_sha256": "39758bb9c73241020d13c8afda534718718ee525917be6b349c5e9c998a92120"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_05_0.png",
+          "source_index": 3640,
+          "x": -1,
+          "y": -52,
+          "empty": false,
+          "rgba_sha256": "2e4c8a74c56c9168a26bbcc0833f628e8c0b1e71135fe6fce9be105666e7ebde"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_05_1.png",
+          "source_index": 3641,
+          "x": -58,
+          "y": -54,
+          "empty": false,
+          "rgba_sha256": "2dfa015a3cf0d06c67fd8fe2607a30e9ff3c419882bbe51ac76ff427a7e078d9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_05_2.png",
+          "source_index": 3642,
+          "x": -72,
+          "y": -30,
+          "empty": false,
+          "rgba_sha256": "bd28eb2e87698c7fa2bc04a7e23ae21c46a3e30626c55842c9a09b126d116b2a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_05_3.png",
+          "source_index": 3643,
+          "x": -60,
+          "y": -33,
+          "empty": false,
+          "rgba_sha256": "29b4518bae06f7ba965c39f455256563bee6fcb89dd620551fae31e95fe973df"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_05_4.png",
+          "source_index": 3644,
+          "x": -58,
+          "y": -39,
+          "empty": false,
+          "rgba_sha256": "8fc68c6abee3850c8e136e38202e75acedacaf797e5055931ea9b981269ae86f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_05_5.png",
+          "source_index": 3645,
+          "x": -59,
+          "y": -33,
+          "empty": false,
+          "rgba_sha256": "b2b0e16b580ef6dec27f1100ed35b3e61cd28d51443529c6f2fff29237243174"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_06_0.png",
+          "source_index": 3650,
+          "x": -18,
+          "y": -56,
+          "empty": false,
+          "rgba_sha256": "66c0c12c0178b4ab4627d0bf280b3c8a3bf581cbee3c1272f28d54694f258440"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_06_1.png",
+          "source_index": 3651,
+          "x": -63,
+          "y": -82,
+          "empty": false,
+          "rgba_sha256": "1f7c63e3b5d3a0278b45cd8854aa43424667889ebbe64b9fd70e0c8863f4aa92"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_06_2.png",
+          "source_index": 3652,
+          "x": -103,
+          "y": -75,
+          "empty": false,
+          "rgba_sha256": "ad4f222eb4f7eb28eb5f362f77e3da13599a3db808079bd712c8105389de8762"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_06_3.png",
+          "source_index": 3653,
+          "x": -93,
+          "y": -67,
+          "empty": false,
+          "rgba_sha256": "f22612adbcc9f99152d1cb0a592161855a25102df352c3916366ad2404269049"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_06_4.png",
+          "source_index": 3654,
+          "x": -94,
+          "y": -61,
+          "empty": false,
+          "rgba_sha256": "16fdb9d0c8a6f6d0afb9ed9d3a7e980f4f8638aadaae0491427b79f2bfc6416a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_06_5.png",
+          "source_index": 3655,
+          "x": -87,
+          "y": -54,
+          "empty": false,
+          "rgba_sha256": "b9686ad2a27cf33bec7f30cdd9ef628a230e7d64730f34dbb4c74eb18f3073f7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_07_0.png",
+          "source_index": 3660,
+          "x": -11,
+          "y": -80,
+          "empty": false,
+          "rgba_sha256": "fd7f8acdd637c1b115d1da72d24dee4f1978a8504ac634edb2671368d9af475b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_07_1.png",
+          "source_index": 3661,
+          "x": -50,
+          "y": -121,
+          "empty": false,
+          "rgba_sha256": "5337268afd8460445caef715d77b305f4da170f73cfc19a471480764c5aaa200"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_07_2.png",
+          "source_index": 3662,
+          "x": -97,
+          "y": -135,
+          "empty": false,
+          "rgba_sha256": "af1dad3a8738c8f80ed3eeddf594cd194a5f912bbe308a7d8b3ba1eb6f909f1c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_07_3.png",
+          "source_index": 3663,
+          "x": -90,
+          "y": -127,
+          "empty": false,
+          "rgba_sha256": "4ec4d47c4a2715ea511e078b1868b73ab2be2992ea4644e1d754d3122281a222"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_07_4.png",
+          "source_index": 3664,
+          "x": -97,
+          "y": -123,
+          "empty": false,
+          "rgba_sha256": "7841165b88f231957a9b08a7bcfa5cc53dcd0d92bc32f038fb59aed1ed13d591"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/moth_gas_07_5.png",
+          "source_index": 3665,
+          "x": -82,
+          "y": -109,
+          "empty": false,
+          "rgba_sha256": "685166a251b4697b588a9b3f3fcdff1d8df3c84db626d551bebb005e564831c7"
+        }
+      ],
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon4.wil",
+        "sha256": "6a46fc8d8fd093181bde0a8ceca8c25b8d3faf71752dbf47bbbd0a6e5fad5412",
+        "tier": "primary",
+        "distribution": "client.classic_raw_complete",
+        "rule": "MirClient/AxeMon.pas TGasKuDeGi.LoadSurface, TSculptureMon.LoadSurface, TWarriorElfMonster.RunFrameAction",
+        "frame_formula": "3590 + direction * 10 + frame"
+      }
+    },
+    "zombie_lightning": {
+      "direction_count": 16,
+      "frame_count": 6,
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_00_0.png",
+          "source_index": 350,
+          "x": -55,
+          "y": -333,
+          "empty": false,
+          "rgba_sha256": "081538c44857214b3d22ee25790ae56188a4afca98fca540c11d24e5f1e7d85b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_00_1.png",
+          "source_index": 351,
+          "x": -54,
+          "y": -322,
+          "empty": false,
+          "rgba_sha256": "3e96c5f332d074d56a5bc3f496997c75596431cde9e6477085b5dc1e8f6004e2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_00_2.png",
+          "source_index": 352,
+          "x": -53,
+          "y": -320,
+          "empty": false,
+          "rgba_sha256": "ca9a8948d5e2ac26c48d4a6c72a9da29bf94555a3c7fade54e8463c2aabcf317"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_00_3.png",
+          "source_index": 353,
+          "x": -50,
+          "y": -321,
+          "empty": false,
+          "rgba_sha256": "e57f2dccfe558f15b38eceb30059e232c381485e5ea9b8b0c2b74c5aac485bfd"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_00_4.png",
+          "source_index": 354,
+          "x": -40,
+          "y": -321,
+          "empty": false,
+          "rgba_sha256": "3279e6361ac7c84a4bd8dc06258957d47b0eee283899a14131446d3887f8e747"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_00_5.png",
+          "source_index": 355,
+          "x": -63,
+          "y": -335,
+          "empty": false,
+          "rgba_sha256": "7479e3b31f8b80f23f731d23ac7f3f8d45d23dd6ec116b31b73801aa0c6f50b7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_01_0.png",
+          "source_index": 360,
+          "x": -20,
+          "y": -304,
+          "empty": false,
+          "rgba_sha256": "f829e910799684be8b579db345e22fae58271afff159667a2a11a06a13d0acbf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_01_1.png",
+          "source_index": 361,
+          "x": -21,
+          "y": -298,
+          "empty": false,
+          "rgba_sha256": "3652811937324c8558cc2db05fd81b05db264c8d1229e5a58095c820ad33c29d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_01_2.png",
+          "source_index": 362,
+          "x": -19,
+          "y": -293,
+          "empty": false,
+          "rgba_sha256": "44d715e17aad4794f24a48075081f3ab7159f17ab8a8d9f74fd74caac3181674"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_01_3.png",
+          "source_index": 363,
+          "x": -27,
+          "y": -296,
+          "empty": false,
+          "rgba_sha256": "3993afbcc70f3a8d37768c003a80ea643c8f6d18645635e7280dbb3dc50ddd1d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_01_4.png",
+          "source_index": 364,
+          "x": -22,
+          "y": -295,
+          "empty": false,
+          "rgba_sha256": "1dd47d4db332797e4cd84bcc3e89e6e01b9ea5cad627cc6b15805821ae94d00c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_01_5.png",
+          "source_index": 365,
+          "x": -19,
+          "y": -299,
+          "empty": false,
+          "rgba_sha256": "197878c4609a1a6d3f73ee9d28c782a0cb3c339864f6fca64d2376f2758e693a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_02_0.png",
+          "source_index": 370,
+          "x": -13,
+          "y": -253,
+          "empty": false,
+          "rgba_sha256": "b32e297c0c26aa96d1c6476f707b7165c4397cb259def5dcd265f5b603ce8de7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_02_1.png",
+          "source_index": 371,
+          "x": -13,
+          "y": -246,
+          "empty": false,
+          "rgba_sha256": "cb03528492ffca32336fe2b65237aeba725e0a3a4e06432d609ccefaac5b0894"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_02_2.png",
+          "source_index": 372,
+          "x": -14,
+          "y": -244,
+          "empty": false,
+          "rgba_sha256": "40d51a4c1df84042dfd4196f63715b0acc910176c461f11cc9468a3d795e003b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_02_3.png",
+          "source_index": 373,
+          "x": -17,
+          "y": -244,
+          "empty": false,
+          "rgba_sha256": "3601c3c4d01067649d23a5866732fc8bd80e2dc2aa944a00da8d81f8584f3d6c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_02_4.png",
+          "source_index": 374,
+          "x": -14,
+          "y": -246,
+          "empty": false,
+          "rgba_sha256": "bc152d97ca5c67c977892cf49c124e837e5cb5b0f5cde986e1f019043ef8fcd5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_02_5.png",
+          "source_index": 375,
+          "x": -17,
+          "y": -247,
+          "empty": false,
+          "rgba_sha256": "0cd47a46ccd180463ab690c8a635dfe23364bbfde697a1187836198f0f55540d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_03_0.png",
+          "source_index": 380,
+          "x": -10,
+          "y": -174,
+          "empty": false,
+          "rgba_sha256": "6434d31588ba232bd17e637608b13a0c16ce1ab9eac292aa260e2aa2b215bbf1"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_03_1.png",
+          "source_index": 381,
+          "x": -11,
+          "y": -170,
+          "empty": false,
+          "rgba_sha256": "9f553313a3aa70f2effe372bc1c2ad310a015f68c86a3c4fb70317c94b421f98"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_03_2.png",
+          "source_index": 382,
+          "x": -12,
+          "y": -172,
+          "empty": false,
+          "rgba_sha256": "566182765b1eb64e8e8aea5eff4caefc66c17fbb03a96f4cded38b6e2199b00c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_03_3.png",
+          "source_index": 383,
+          "x": -12,
+          "y": -166,
+          "empty": false,
+          "rgba_sha256": "16ad5951185630db468c787294a0ef5f4119ae42d07bfe39de4fde6b856f1597"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_03_4.png",
+          "source_index": 384,
+          "x": -12,
+          "y": -170,
+          "empty": false,
+          "rgba_sha256": "519b7175248e6f5960bae78a5582f638444d73b699357f2ac887a5791c51852f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_03_5.png",
+          "source_index": 385,
+          "x": -14,
+          "y": -173,
+          "empty": false,
+          "rgba_sha256": "e758d8a6983c10f726607ec0529d86c7d5a83bbc8a49ce0442da132495608671"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_04_0.png",
+          "source_index": 390,
+          "x": -12,
+          "y": -97,
+          "empty": false,
+          "rgba_sha256": "ca1e6b47df3ae9876a21a24ef279608e64f63dbf3a71938d3505ca0eda9683f6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_04_1.png",
+          "source_index": 391,
+          "x": -9,
+          "y": -96,
+          "empty": false,
+          "rgba_sha256": "2e7999f1f0b265255b1420c59d303a9779d11cab81c93157d3c54032e7249673"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_04_2.png",
+          "source_index": 392,
+          "x": -11,
+          "y": -101,
+          "empty": false,
+          "rgba_sha256": "3009951c56af7f780ea8e7105c9a815a539a89014e2a0306b983f2101138ab6c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_04_3.png",
+          "source_index": 393,
+          "x": -11,
+          "y": -100,
+          "empty": false,
+          "rgba_sha256": "4c97a8d1f95215cc9c373b3b24e553435c84770e947987ddafdeb091f34a5469"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_04_4.png",
+          "source_index": 394,
+          "x": -9,
+          "y": -97,
+          "empty": false,
+          "rgba_sha256": "3e4b6787d44cd653805c5acaad260c08f239a3b015eb0cfc95ac4df5ac8e80b9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_04_5.png",
+          "source_index": 395,
+          "x": -13,
+          "y": -97,
+          "empty": false,
+          "rgba_sha256": "9a22133a0a8d3982cf9af7cc9837302e37338f23b6d39e4449b5e639df77fedc"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_05_0.png",
+          "source_index": 400,
+          "x": -11,
+          "y": -77,
+          "empty": false,
+          "rgba_sha256": "b77cffefc32b7efc08ca52713f5ef3902b3c35c80e18d7b30e3b1a22516823cd"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_05_1.png",
+          "source_index": 401,
+          "x": -13,
+          "y": -75,
+          "empty": false,
+          "rgba_sha256": "220861aa8088376b49ce37156c7deabed7490cb3d4f2b7bab2d6408d93dc52af"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_05_2.png",
+          "source_index": 402,
+          "x": -16,
+          "y": -86,
+          "empty": false,
+          "rgba_sha256": "b4e4ad4740e80d77b6bd480015aa602a87799cf7bf9eb9471ba432af62ebee5a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_05_3.png",
+          "source_index": 403,
+          "x": -16,
+          "y": -85,
+          "empty": false,
+          "rgba_sha256": "1031a1815e579984cdf0aadeb5bd245a8df85d57c99de94e3a60b64f7310660e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_05_4.png",
+          "source_index": 404,
+          "x": -16,
+          "y": -79,
+          "empty": false,
+          "rgba_sha256": "b488fec27e95497ffc74a91e4b4c8c0457efc5f2e68c5362831416cce82b876b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_05_5.png",
+          "source_index": 405,
+          "x": -20,
+          "y": -83,
+          "empty": false,
+          "rgba_sha256": "be1ec25cc707c4deaa95d18c86ff53e0b4e4df2830205d6d2d3f882cfcaca491"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_06_0.png",
+          "source_index": 410,
+          "x": -12,
+          "y": -65,
+          "empty": false,
+          "rgba_sha256": "69dd7f541778c2b5a9896104946fb1bcb7e339a7435784a85583456e0b2e50f5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_06_1.png",
+          "source_index": 411,
+          "x": -10,
+          "y": -63,
+          "empty": false,
+          "rgba_sha256": "b4dd3c208da6195582a6b5ebd98f5804fcc8dc0dbfc56b2e7994d65dab7b6e1e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_06_2.png",
+          "source_index": 412,
+          "x": -15,
+          "y": -73,
+          "empty": false,
+          "rgba_sha256": "f00d0f40e84faf06d33a143e4f2e27e61ea8e0037f2cf306f11bf552de80f26b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_06_3.png",
+          "source_index": 413,
+          "x": -14,
+          "y": -71,
+          "empty": false,
+          "rgba_sha256": "19e555fb0bd665a80c458ae6ab5e552a36a3e24c3ca045f903c12ebacebb8760"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_06_4.png",
+          "source_index": 414,
+          "x": -11,
+          "y": -66,
+          "empty": false,
+          "rgba_sha256": "77649541621564ef235b72cda902829f1a73ef0bfe032a007fb42cea2a5dcb8c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_06_5.png",
+          "source_index": 415,
+          "x": -17,
+          "y": -71,
+          "empty": false,
+          "rgba_sha256": "bddb7d8426d5156885019c80b00f6f675931ecd73287050898b4f6dba431690c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_07_0.png",
+          "source_index": 420,
+          "x": -23,
+          "y": -62,
+          "empty": false,
+          "rgba_sha256": "9549c70c5bdb4f76930d8668da79f59f539bbb2f049fdaf9ff9d06fe0cede90e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_07_1.png",
+          "source_index": 421,
+          "x": -25,
+          "y": -61,
+          "empty": false,
+          "rgba_sha256": "123c812155c80af706ecf9dcbef565a8147f8734636aa89545c5144fc5aed99f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_07_2.png",
+          "source_index": 422,
+          "x": -24,
+          "y": -64,
+          "empty": false,
+          "rgba_sha256": "e1be929230fe94963121720b96ca70653c6cd573eb6f7270caf56e7b3b397d62"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_07_3.png",
+          "source_index": 423,
+          "x": -26,
+          "y": -69,
+          "empty": false,
+          "rgba_sha256": "580dac7a9a71c557191779c058bf64f3368f71e0a2abb700e3eed70dd41be5cc"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_07_4.png",
+          "source_index": 424,
+          "x": -22,
+          "y": -63,
+          "empty": false,
+          "rgba_sha256": "e666bd136003665c68bb7c125ee2a2c943fd665beee3a270407e309ac457f595"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_07_5.png",
+          "source_index": 425,
+          "x": -31,
+          "y": -67,
+          "empty": false,
+          "rgba_sha256": "74cb50f97e81973a6c79f5e33e0ed612aa1994fb3e54ab07f645c93b53b4d42f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_08_0.png",
+          "source_index": 430,
+          "x": -46,
+          "y": -63,
+          "empty": false,
+          "rgba_sha256": "a694a51b8210715c97e7d428e9cf88bceb822c3912632a5d14927f14e98c4ebe"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_08_1.png",
+          "source_index": 431,
+          "x": -47,
+          "y": -64,
+          "empty": false,
+          "rgba_sha256": "dcf31de257459db1b034ce8dc7dfa3d60ff4a542f472588385956963b3910692"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_08_2.png",
+          "source_index": 432,
+          "x": -40,
+          "y": -67,
+          "empty": false,
+          "rgba_sha256": "f4beb5bb4076353abdbb103286205ae28c09aa07d4c7b5910e182eb22878dbb2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_08_3.png",
+          "source_index": 433,
+          "x": -47,
+          "y": -66,
+          "empty": false,
+          "rgba_sha256": "70a9ab383a8fa8c51c0c1e3bcc373680978fb6be0fa551d1b084c3e64fb7852f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_08_4.png",
+          "source_index": 434,
+          "x": -51,
+          "y": -60,
+          "empty": false,
+          "rgba_sha256": "9dec4442f245d059651a12823cbf1aba5bde9fb34ebc749c3a04da4307d2dfc2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_08_5.png",
+          "source_index": 435,
+          "x": -49,
+          "y": -67,
+          "empty": false,
+          "rgba_sha256": "70a0be2b85833775f24b0ced43a5846e704a53bc2bf110c24f23a564b5d8bc26"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_09_0.png",
+          "source_index": 440,
+          "x": -310,
+          "y": -76,
+          "empty": false,
+          "rgba_sha256": "35077248ce1bbd02fe85a670b626d7431cf038abb80926254186f7cc55592efb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_09_1.png",
+          "source_index": 441,
+          "x": -307,
+          "y": -70,
+          "empty": false,
+          "rgba_sha256": "41f963bf4c377d2b9f799bc5b7d2ad5cb89ab822416513e65bbc0fc2e94b1715"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_09_2.png",
+          "source_index": 442,
+          "x": -300,
+          "y": -86,
+          "empty": false,
+          "rgba_sha256": "c4613c69da3cad4ea942f20fdb1f52003277aad844bbd9d2eabe593c96a904b5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_09_3.png",
+          "source_index": 443,
+          "x": -312,
+          "y": -71,
+          "empty": false,
+          "rgba_sha256": "dddfb7f12662e721b1672f8defc8812a43f299c2e3e0129acd3359edb46f6ce0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_09_4.png",
+          "source_index": 444,
+          "x": -309,
+          "y": -63,
+          "empty": false,
+          "rgba_sha256": "4ca64299efc20164f2b599a3213c1053a2b1a1ffe4d42711fa92c5d70d77a02c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_09_5.png",
+          "source_index": 445,
+          "x": -323,
+          "y": -81,
+          "empty": false,
+          "rgba_sha256": "64e823715cb53ab2af8774bc4b53bf9342951ac78efe6d742114c2235b9529d2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_10_0.png",
+          "source_index": 450,
+          "x": -399,
+          "y": -87,
+          "empty": false,
+          "rgba_sha256": "04191864a70baca2df964f6ca95a3602b333f5927d4c00988543a1649c3fab89"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_10_1.png",
+          "source_index": 451,
+          "x": -393,
+          "y": -78,
+          "empty": false,
+          "rgba_sha256": "e3d5effafef22375354e044aea24820e6df75f7d5c103a264c6fc4dfb8022b1f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_10_2.png",
+          "source_index": 452,
+          "x": -391,
+          "y": -100,
+          "empty": false,
+          "rgba_sha256": "d7b032890634a670c1c23332b5639e8390c8039410756debc586b01a6a390f72"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_10_3.png",
+          "source_index": 453,
+          "x": -402,
+          "y": -82,
+          "empty": false,
+          "rgba_sha256": "a4e520ca99a669505610ce5e76dcf2faf07d4da3f62853447cc19629fe1bd876"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_10_4.png",
+          "source_index": 454,
+          "x": -408,
+          "y": -72,
+          "empty": false,
+          "rgba_sha256": "fb1995368893069fe666c42938b1a8b79f160659b9825125745af655d9f27b9b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_10_5.png",
+          "source_index": 455,
+          "x": -409,
+          "y": -92,
+          "empty": false,
+          "rgba_sha256": "fa5785a1355fe4b9d10ba259df2d60fc5037e254164924e075c690728dce4aa7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_11_0.png",
+          "source_index": 460,
+          "x": -399,
+          "y": -87,
+          "empty": false,
+          "rgba_sha256": "0dc30eba1bd76832b4e18d4a62e8013759e91bacc2c408f50d58137e0d1aca30"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_11_1.png",
+          "source_index": 461,
+          "x": -391,
+          "y": -82,
+          "empty": false,
+          "rgba_sha256": "9e9f7321cde029647e1fec62711c7eebb647ed536ed786285fb5a47db053db90"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_11_2.png",
+          "source_index": 462,
+          "x": -387,
+          "y": -103,
+          "empty": false,
+          "rgba_sha256": "69776527b25547d66dd284ece41dad1971e00a8cb77cd264498f5d31d6da0b44"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_11_3.png",
+          "source_index": 463,
+          "x": -401,
+          "y": -85,
+          "empty": false,
+          "rgba_sha256": "7bdd5196f006e47b1af2185c42b6cbcf1d3a08cce08f92dbcd3eeca8c9f8756b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_11_4.png",
+          "source_index": 464,
+          "x": -405,
+          "y": -74,
+          "empty": false,
+          "rgba_sha256": "49bda6fadbc2afa8e10144fc5a6502f7e376ffe52dae3eafdd67739fad4d3b5e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_11_5.png",
+          "source_index": 465,
+          "x": -406,
+          "y": -90,
+          "empty": false,
+          "rgba_sha256": "2b55c8844c16a5adf7e82f42441c5c9224160dc6693e8e3f2c67aa37701bd281"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_12_0.png",
+          "source_index": 470,
+          "x": -433,
+          "y": -98,
+          "empty": false,
+          "rgba_sha256": "79554229e536c1909a0a837822bbd5a5fab938cce28489ae74715c9291292147"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_12_1.png",
+          "source_index": 471,
+          "x": -421,
+          "y": -98,
+          "empty": false,
+          "rgba_sha256": "d4ad142e29f6d552ad6390656bafc42346ee99438e50cdc842835881e74524c5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_12_2.png",
+          "source_index": 472,
+          "x": -419,
+          "y": -115,
+          "empty": false,
+          "rgba_sha256": "8c1f9d670d45da66057ffd0a3c5664499ad4e2340039589e7f04c8ae1191c74b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_12_3.png",
+          "source_index": 473,
+          "x": -431,
+          "y": -98,
+          "empty": false,
+          "rgba_sha256": "56dcee75f64fd0e7c739b084e28c76507dbdf2ca3b2f4bbb3cf774c639a99cea"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_12_4.png",
+          "source_index": 474,
+          "x": -446,
+          "y": -107,
+          "empty": false,
+          "rgba_sha256": "d432bdc8356b3d5d6295f3511b9b582a86da460f074fe88b3d63ff67cd1837bd"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_12_5.png",
+          "source_index": 475,
+          "x": -433,
+          "y": -106,
+          "empty": false,
+          "rgba_sha256": "fdc540820fec826cc0b7042c1433ef3998b907642c4230b748a2563a08e431fc"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_13_0.png",
+          "source_index": 480,
+          "x": -404,
+          "y": -178,
+          "empty": false,
+          "rgba_sha256": "9baa76d270f8eb5dd26a1501d67c25fcedf178d891ba2fb5c6de4ab62b8af5b0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_13_1.png",
+          "source_index": 481,
+          "x": -388,
+          "y": -177,
+          "empty": false,
+          "rgba_sha256": "63e14cccc95d675635a67dc2e59c91ffe2ded29337deb6d2007ed8570d4d58d7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_13_2.png",
+          "source_index": 482,
+          "x": -394,
+          "y": -171,
+          "empty": false,
+          "rgba_sha256": "b36976150df10724f72c8b3ad6bb9c828e7f2af8967beae5580c40d6389d90c7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_13_3.png",
+          "source_index": 483,
+          "x": -405,
+          "y": -173,
+          "empty": false,
+          "rgba_sha256": "cb2504bbded61900bbff1e278438f339f21fc62dff2dd88d4ef4b4f02feba2c4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_13_4.png",
+          "source_index": 484,
+          "x": -415,
+          "y": -169,
+          "empty": false,
+          "rgba_sha256": "9f2a16d26535b667aa398f737a12da9c64441c1464d42873b4b7a67c41cf15a5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_13_5.png",
+          "source_index": 485,
+          "x": -395,
+          "y": -194,
+          "empty": false,
+          "rgba_sha256": "c3bcc679258cdc75ff76f812328ede8d00d714c596e8efef211e82e0b0c7ed72"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_14_0.png",
+          "source_index": 490,
+          "x": -311,
+          "y": -251,
+          "empty": false,
+          "rgba_sha256": "e80a0048a869ede15e84515cbf5329629e1b842190f077759f4bcd184d96bcad"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_14_1.png",
+          "source_index": 491,
+          "x": -293,
+          "y": -248,
+          "empty": false,
+          "rgba_sha256": "6e0c854cb8c82a14390df16f8ebc20928bb0251b5a7224767949984a59ea7c87"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_14_2.png",
+          "source_index": 492,
+          "x": -295,
+          "y": -248,
+          "empty": false,
+          "rgba_sha256": "721bd270e1d5fd74fa53faa59143f92a2b1473c19bd21ef85fd50f7eada26334"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_14_3.png",
+          "source_index": 493,
+          "x": -305,
+          "y": -246,
+          "empty": false,
+          "rgba_sha256": "9198706efc30851e64c676b96781ef4adfbdc58d780b44d56ad3b79d5d26cb73"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_14_4.png",
+          "source_index": 494,
+          "x": -318,
+          "y": -242,
+          "empty": false,
+          "rgba_sha256": "7eee2f2fade3669ce243f6002470d96eab4bd353e6041fb38897aeb59c3b1c7b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_14_5.png",
+          "source_index": 495,
+          "x": -297,
+          "y": -268,
+          "empty": false,
+          "rgba_sha256": "ea2b02315e99f1bab9947c0f42fb15b526099668aabeb058333de07a92fc0e1d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_15_0.png",
+          "source_index": 500,
+          "x": -183,
+          "y": -314,
+          "empty": false,
+          "rgba_sha256": "4d9b6f2f17f2ca059c208839ce7c9cf7c11e8d990e0acfc5b12b1dc8a4fbbc60"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_15_1.png",
+          "source_index": 501,
+          "x": -171,
+          "y": -304,
+          "empty": false,
+          "rgba_sha256": "f398c51caa0fb21369ec3c533ba8a8db28b9acac2f1331182d52e3aa684fea88"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_15_2.png",
+          "source_index": 502,
+          "x": -175,
+          "y": -300,
+          "empty": false,
+          "rgba_sha256": "f9c19573db619f45bc864d4a9954d295a2abc375ca7edf992fb1b978f370dee1"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_15_3.png",
+          "source_index": 503,
+          "x": -182,
+          "y": -304,
+          "empty": false,
+          "rgba_sha256": "213b420bbcdcb088ae3dc6db5e822f0cf7d9bfadfdc7fe19e7fc6e3ff3a8390c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_15_4.png",
+          "source_index": 504,
+          "x": -189,
+          "y": -301,
+          "empty": false,
+          "rgba_sha256": "ad7fc37505760d81208c50379fdd3041375b29e3587eb3d157b9a42b6d971af8"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zombie_lightning_15_5.png",
+          "source_index": 505,
+          "x": -188,
+          "y": -323,
+          "empty": false,
+          "rgba_sha256": "dad212f652706f2073b9946e7b325cc19fab7616c9eeb991c7adf44e90375fc8"
+        }
+      ],
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon5.wil",
+        "sha256": "c7a89a9a75eb06cf2b50c4d21059f9112c80cdb09a6c31cef950e512f09b3ff4",
+        "tier": "primary",
+        "distribution": "client.classic_raw_complete",
+        "rule": "MirClient/AxeMon.pas TGasKuDeGi.LoadSurface, TSculptureMon.LoadSurface, TWarriorElfMonster.RunFrameAction",
+        "frame_formula": "350 + direction * 10 + frame"
+      }
+    },
+    "zuma_flame": {
+      "direction_count": 8,
+      "frame_count": 9,
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_0.png",
+          "source_index": 1680,
+          "x": -35,
+          "y": -105,
+          "empty": false,
+          "rgba_sha256": "ae4fe84174dc61d776cf07ef410076733c383dda5052ecf390db8610270dd4ec"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_1.png",
+          "source_index": 1681,
+          "x": -41,
+          "y": -146,
+          "empty": false,
+          "rgba_sha256": "a6c7f63f8a5ee4314f48d65abef4caf49f2a2f09726c30e6f466adb9524a575c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_2.png",
+          "source_index": 1682,
+          "x": -42,
+          "y": -145,
+          "empty": false,
+          "rgba_sha256": "90378025c1551663334f0cc52d15390d2885d32ec63309c6fec90c75b9f28e3f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_3.png",
+          "source_index": 1683,
+          "x": -42,
+          "y": -144,
+          "empty": false,
+          "rgba_sha256": "84b571a33cc729fb22cbef4bd6a594341f7f79e0562d54eb17d2503626ad8062"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_4.png",
+          "source_index": 1684,
+          "x": -42,
+          "y": -102,
+          "empty": false,
+          "rgba_sha256": "042ca46d935bb46d433ab9f5c2bbaf5cfbe4fb46c414c967df5fbb3e6e53131a"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_5.png",
+          "source_index": 1685,
+          "x": -65,
+          "y": -141,
+          "empty": false,
+          "rgba_sha256": "6872a169ce443d8fb16586facacd833ff05d8facac6c77790b5007354cd44db4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_6.png",
+          "source_index": 1686,
+          "x": -36,
+          "y": -130,
+          "empty": false,
+          "rgba_sha256": "a4d7969068f62dabf975a31f4bf6cd144a6dffef564abf4a827ce46258133ec9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_7.png",
+          "source_index": 1687,
+          "x": -35,
+          "y": -120,
+          "empty": false,
+          "rgba_sha256": "f01226d458a82594f0ad496c053b0e01c5448b2cdfb62c6341fea08ec3284598"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_00_8.png",
+          "source_index": 1688,
+          "x": 7,
+          "y": -44,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_0.png",
+          "source_index": 1690,
+          "x": -8,
+          "y": -98,
+          "empty": false,
+          "rgba_sha256": "aff02a2ad24d067852cf1b35bea2f38cc84d10e2ba610639c8e917d5d81dfa84"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_1.png",
+          "source_index": 1691,
+          "x": -13,
+          "y": -138,
+          "empty": false,
+          "rgba_sha256": "41f200efdc7a49884a0cb5c035b106d0e30f6c9a449a59df156adfd800e7bf7c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_2.png",
+          "source_index": 1692,
+          "x": -31,
+          "y": -142,
+          "empty": false,
+          "rgba_sha256": "b7e5c06240a452efe88c93ff2b2c1e0c81e4c0a9122f660cab4531be6c5de6d4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_3.png",
+          "source_index": 1693,
+          "x": -31,
+          "y": -141,
+          "empty": false,
+          "rgba_sha256": "24bb3b816c15af87ac964f78003820b5727a576a22140e7229f1712789d1f868"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_4.png",
+          "source_index": 1694,
+          "x": -14,
+          "y": -95,
+          "empty": false,
+          "rgba_sha256": "6fcb824e88489b4e1a6fa936ca29590f6a01369d0f394f865cbcf0a26e2d26ab"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_5.png",
+          "source_index": 1695,
+          "x": -37,
+          "y": -134,
+          "empty": false,
+          "rgba_sha256": "fafcc595e2f617ec2d0e926b66b89cf38b40de037f223b95d3a7c18243a1bae9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_6.png",
+          "source_index": 1696,
+          "x": -11,
+          "y": -116,
+          "empty": false,
+          "rgba_sha256": "7f145b2775c3eeddbef2df19d89ade010bb70586ee0359f0c8240a527780645d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_7.png",
+          "source_index": 1697,
+          "x": -9,
+          "y": -109,
+          "empty": false,
+          "rgba_sha256": "e482fa8ca0dfd812cbf30c8cf4b7070b0b1d1f63f927ca0be24eb965a98fa7cd"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_01_8.png",
+          "source_index": 1698,
+          "x": 7,
+          "y": -44,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_0.png",
+          "source_index": 1700,
+          "x": 3,
+          "y": -80,
+          "empty": false,
+          "rgba_sha256": "153ab9533a42be622f2f3609e83459a1b4e47dc69d8265ee0a35f4cb9383d343"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_1.png",
+          "source_index": 1701,
+          "x": 0,
+          "y": -119,
+          "empty": false,
+          "rgba_sha256": "3f549f37a09d0795088fcd58c250ce9aae8da3e4e329403799c4aec1a5070bcc"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_2.png",
+          "source_index": 1702,
+          "x": -26,
+          "y": -135,
+          "empty": false,
+          "rgba_sha256": "1689086b080921ed2c0c3dac4cfd081628caf34017efbe62eff8948a8215caed"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_3.png",
+          "source_index": 1703,
+          "x": -27,
+          "y": -134,
+          "empty": false,
+          "rgba_sha256": "f22f66d5bbe244a2245ec0e6cdbbf0b8890e343439e45396e89cd7ad1ea23bcf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_4.png",
+          "source_index": 1704,
+          "x": -1,
+          "y": -83,
+          "empty": false,
+          "rgba_sha256": "1bb35a547ac98d2556407d5a77e76d5a231ef47cd9fefadd272b7f96fc0473fc"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_5.png",
+          "source_index": 1705,
+          "x": -23,
+          "y": -125,
+          "empty": false,
+          "rgba_sha256": "920d1c4a0090e11a30514ed300df9a21a281a9fc2f1b4f82e2ad625032be55c6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_6.png",
+          "source_index": 1706,
+          "x": -8,
+          "y": -99,
+          "empty": false,
+          "rgba_sha256": "5879d6e700f1166ee232b027a04c1c97fae0bd3b55bdb14dd6b3cc7eaa4498fd"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_7.png",
+          "source_index": 1707,
+          "x": -8,
+          "y": -89,
+          "empty": false,
+          "rgba_sha256": "e309f8894535419f1aceaeda96c7f7d206952b8f6911bbe471d97223599fac19"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_02_8.png",
+          "source_index": 1708,
+          "x": 7,
+          "y": -44,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_0.png",
+          "source_index": 1710,
+          "x": -7,
+          "y": -61,
+          "empty": false,
+          "rgba_sha256": "58b5c4fc5178d47f1877081e7da4bcc3acf656329c4971c3587efc278b3a66d1"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_1.png",
+          "source_index": 1711,
+          "x": -12,
+          "y": -99,
+          "empty": false,
+          "rgba_sha256": "b601bcc7b30d74da447baa13d2ffe228cff8f256c08d30a66c03c8bb531a94ee"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_2.png",
+          "source_index": 1712,
+          "x": -31,
+          "y": -128,
+          "empty": false,
+          "rgba_sha256": "4a608eac76da5d26305334dd2aa4599644676153366aef958d0261752c1cd96e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_3.png",
+          "source_index": 1713,
+          "x": -31,
+          "y": -126,
+          "empty": false,
+          "rgba_sha256": "ef1483e448968b0b602f5516c73db55d1ed657dbf5f87e7dcc53b789eb88e221"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_4.png",
+          "source_index": 1714,
+          "x": -13,
+          "y": -83,
+          "empty": false,
+          "rgba_sha256": "a012c39c9f70826d83b921c14b435c59038e5c1b53cff36b341fa26246e45f4d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_5.png",
+          "source_index": 1715,
+          "x": -38,
+          "y": -122,
+          "empty": false,
+          "rgba_sha256": "5f86b7e24b598ce49479c3fea5a6a166728bb026d1e3a192bd9c3c1f83bb2305"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_6.png",
+          "source_index": 1716,
+          "x": -9,
+          "y": -84,
+          "empty": false,
+          "rgba_sha256": "5b0c524495265b67d976936930bbed89b5099e1b769d09b508b757cce019ec52"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_7.png",
+          "source_index": 1717,
+          "x": -8,
+          "y": -73,
+          "empty": false,
+          "rgba_sha256": "8533813f4d73d53da25a65a7eb7a3e97ccaa98e7f824d74d342f2b7d105fb57d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_03_8.png",
+          "source_index": 1718,
+          "x": 7,
+          "y": -44,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_0.png",
+          "source_index": 1720,
+          "x": -35,
+          "y": -54,
+          "empty": false,
+          "rgba_sha256": "87dc41f62c388e77cb2cbaf6b0dbef462e0b9d4ffe6b6afa90fbd5469ec17c00"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_1.png",
+          "source_index": 1721,
+          "x": -41,
+          "y": -91,
+          "empty": false,
+          "rgba_sha256": "ed8a308cb404e3b0f896d136bcef389893df341e893bd4b3f8b8a6b3dcb7e4a0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_2.png",
+          "source_index": 1722,
+          "x": -41,
+          "y": -125,
+          "empty": false,
+          "rgba_sha256": "fb8d3f71517a3ce17aa2ef80a5e01dec6e9f98f6a4eac6fa1bf5f213ae0875d1"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_3.png",
+          "source_index": 1723,
+          "x": -41,
+          "y": -123,
+          "empty": false,
+          "rgba_sha256": "1b24758ca1d126b3be2aa406e247c98e75e4a8012156210d0dc42c55918454b3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_4.png",
+          "source_index": 1724,
+          "x": -41,
+          "y": -72,
+          "empty": false,
+          "rgba_sha256": "c3ccbf0354bc85f039fe9b94e48ff7b03b639798e479f851a3740e1f8644bf0d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_5.png",
+          "source_index": 1725,
+          "x": -63,
+          "y": -124,
+          "empty": false,
+          "rgba_sha256": "467df1259a2fdb859bec4cdeb6dd76c9ac83f1f1c6cb3b689ffaddf9a85c624f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_6.png",
+          "source_index": 1726,
+          "x": -35,
+          "y": -109,
+          "empty": false,
+          "rgba_sha256": "1e3cc34d85bb013e616b90b8371d179cd02165e2d0b3f818f2419b4c83c92c1c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_7.png",
+          "source_index": 1727,
+          "x": -34,
+          "y": -60,
+          "empty": false,
+          "rgba_sha256": "eed47deea30ba3b0cb5227e17edef2d5c8e1095a5334f706e92bd69f42bd7d0c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_04_8.png",
+          "source_index": 1728,
+          "x": 7,
+          "y": -44,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_0.png",
+          "source_index": 1730,
+          "x": -63,
+          "y": -61,
+          "empty": false,
+          "rgba_sha256": "10bbd2760f8cbaee2db9a5f751fbde469b7ead84bbba955015e9f3d72f0a7549"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_1.png",
+          "source_index": 1731,
+          "x": -72,
+          "y": -99,
+          "empty": false,
+          "rgba_sha256": "42457987b220585ec6c36f36a51cd62b07bc21c42d095e1c24b12d166d96dfa5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_2.png",
+          "source_index": 1732,
+          "x": -52,
+          "y": -128,
+          "empty": false,
+          "rgba_sha256": "53985c01009f92e5f59ddf41e29478c3d1bc5d72ae1f10dc81e83920dde5886e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_3.png",
+          "source_index": 1733,
+          "x": -53,
+          "y": -126,
+          "empty": false,
+          "rgba_sha256": "0687da185bbbfbc33f73da957d38cb7ddf8aacccbadbfe62acdfbeb974799fb7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_4.png",
+          "source_index": 1734,
+          "x": -72,
+          "y": -83,
+          "empty": false,
+          "rgba_sha256": "64331fb88fa4e4cd104b2b5926024b7ae501be0ef77ef19e2cc273d4ed2eb167"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_5.png",
+          "source_index": 1735,
+          "x": -88,
+          "y": -122,
+          "empty": false,
+          "rgba_sha256": "8e34b6f925e10fd9e2ba850ef9bff32056ce0b637486771441f6847dc972b958"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_6.png",
+          "source_index": 1736,
+          "x": -64,
+          "y": -84,
+          "empty": false,
+          "rgba_sha256": "328351104a3d847d9ea2d7f1afae3fc5743b58816668df3bdd1a044acdaff748"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_7.png",
+          "source_index": 1737,
+          "x": -60,
+          "y": -73,
+          "empty": false,
+          "rgba_sha256": "094eeff5d1f8d3523f6c8b2ea735e63ddd60819129b6b46f6b50cfb8842db0a8"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_05_8.png",
+          "source_index": 1738,
+          "x": 7,
+          "y": -44,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_0.png",
+          "source_index": 1740,
+          "x": -75,
+          "y": -80,
+          "empty": false,
+          "rgba_sha256": "9857ee6a34b1ebab8afca9086183db50ae0cac51d91025788b7d7061b61fdf3e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_1.png",
+          "source_index": 1741,
+          "x": -83,
+          "y": -119,
+          "empty": false,
+          "rgba_sha256": "60b8df866aca6cb2ff1f206b70417ea84687f563fd3a150ed756c3d85902d0f1"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_2.png",
+          "source_index": 1742,
+          "x": -57,
+          "y": -135,
+          "empty": false,
+          "rgba_sha256": "5eabbd4d2651037a9b9646253791d3c713e2eee46ed1dec2558e3cc7e4ca09a4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_3.png",
+          "source_index": 1743,
+          "x": -57,
+          "y": -134,
+          "empty": false,
+          "rgba_sha256": "34a7947e17b629297bc58be9d631b13cac49086a12d5f3292b2a736f5e27c131"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_4.png",
+          "source_index": 1744,
+          "x": -84,
+          "y": -83,
+          "empty": false,
+          "rgba_sha256": "e7a579ddb1847830ce43176b873d59a82f16dc65aa668a224cf27fa08a9cb07f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_5.png",
+          "source_index": 1745,
+          "x": -104,
+          "y": -125,
+          "empty": false,
+          "rgba_sha256": "c7b70e5a701b338b0fb08cab2773ec68c252b77b4326f3e44fa18d16bd5feb54"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_6.png",
+          "source_index": 1746,
+          "x": -79,
+          "y": -99,
+          "empty": false,
+          "rgba_sha256": "10437f38f103d2f9c6333de2da2a16cee183a91e5c7679119dae130375ef4c54"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_7.png",
+          "source_index": 1747,
+          "x": -76,
+          "y": -89,
+          "empty": false,
+          "rgba_sha256": "4c74a20701699c2749f63efd2671745770e8b5337c561a549813d2387106c347"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_06_8.png",
+          "source_index": 1748,
+          "x": 7,
+          "y": -44,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_0.png",
+          "source_index": 1750,
+          "x": -65,
+          "y": -80,
+          "empty": false,
+          "rgba_sha256": "9857ee6a34b1ebab8afca9086183db50ae0cac51d91025788b7d7061b61fdf3e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_1.png",
+          "source_index": 1751,
+          "x": -70,
+          "y": -138,
+          "empty": false,
+          "rgba_sha256": "3c3efac39d10b990a6ee3b5e71873ec960bf67158f34be06c3e7ab70f7107d9f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_2.png",
+          "source_index": 1752,
+          "x": -52,
+          "y": -142,
+          "empty": false,
+          "rgba_sha256": "99ac720c8e782e5d78c98f4955cc408bbad0ad9488084748b33ebca19417d80e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_3.png",
+          "source_index": 1753,
+          "x": -53,
+          "y": -141,
+          "empty": false,
+          "rgba_sha256": "b4b8c88687684dff549a1a15d7bc2e844ecbedec52dd1b2b0ad85eeb6bd4c954"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_4.png",
+          "source_index": 1754,
+          "x": -71,
+          "y": -95,
+          "empty": false,
+          "rgba_sha256": "0f264d54f91ec86f81b516f6d56045559f20c11ef6ae4e392925bec4ce0c035b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_5.png",
+          "source_index": 1755,
+          "x": -90,
+          "y": -134,
+          "empty": false,
+          "rgba_sha256": "fbd63d53c0a6657fefef687aa6743ee7a1cf6f6a4f3638e2cea6d6c2c0e3a2af"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_6.png",
+          "source_index": 1756,
+          "x": -64,
+          "y": -117,
+          "empty": false,
+          "rgba_sha256": "2168e3a2920315f6e0fdb06963c7eb6010ebd8a44e1737b74621c32de22b853c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_7.png",
+          "source_index": 1757,
+          "x": -61,
+          "y": -109,
+          "empty": false,
+          "rgba_sha256": "33985add028ea2405a754e635ccb46b0c39e296c680ccab8154ec4a5069610cf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/zuma_flame_07_8.png",
+          "source_index": 1758,
+          "x": 7,
+          "y": -44,
+          "empty": true,
+          "rgba_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb"
+        }
+      ],
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon7.wil",
+        "sha256": "b4476c971fe9f9c326b96e987e3362c51649c73a5489197467634055ff270055",
+        "tier": "primary",
+        "distribution": "client.classic_raw_complete",
+        "rule": "MirClient/AxeMon.pas TGasKuDeGi.LoadSurface, TSculptureMon.LoadSurface, TWarriorElfMonster.RunFrameAction",
+        "frame_formula": "1680 + direction * 10 + frame"
+      }
+    },
+    "elf_flame": {
+      "direction_count": 8,
+      "frame_count": 5,
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_00_0.png",
+          "source_index": 821,
+          "x": -10,
+          "y": -159,
+          "empty": false,
+          "rgba_sha256": "fa600525e49b1b1aca31068beaf1658b2e44192270b13ea0c5e6777007ccd844"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_00_1.png",
+          "source_index": 822,
+          "x": -18,
+          "y": -190,
+          "empty": false,
+          "rgba_sha256": "e0d8cd810a09933c94f6beed485e92b7c4c4a408710d3851a4cdc34d2164aa5b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_00_2.png",
+          "source_index": 823,
+          "x": -14,
+          "y": -192,
+          "empty": false,
+          "rgba_sha256": "0925919083d2117e0c650d1344a55562db2cbb717176c30788bfd6c5d5a95f87"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_00_3.png",
+          "source_index": 824,
+          "x": -7,
+          "y": -184,
+          "empty": false,
+          "rgba_sha256": "ba181bb5e4aa39829d5feea9e366580dc5fd6f75429bd38dbe60527cd0093b66"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_00_4.png",
+          "source_index": 825,
+          "x": -4,
+          "y": -196,
+          "empty": false,
+          "rgba_sha256": "c4926b5ceaeedfc6854d23fbc63bbb7a5ebab6f8b5ab0b1b3ca6fe625b233771"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_01_0.png",
+          "source_index": 831,
+          "x": 41,
+          "y": -134,
+          "empty": false,
+          "rgba_sha256": "020108505158685350b93a46825296f0d57f3a07dd9843e582a551f7da2d5640"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_01_1.png",
+          "source_index": 832,
+          "x": 41,
+          "y": -156,
+          "empty": false,
+          "rgba_sha256": "29abb3bacf0b64f9a23eb8692899f55c58e5ee6ea4f547d569e1fdc0afff0d43"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_01_2.png",
+          "source_index": 833,
+          "x": 66,
+          "y": -153,
+          "empty": false,
+          "rgba_sha256": "71ec667c206e0c1f11ba98151b1cecb7c527610dee7fae43af3036411c03c59b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_01_3.png",
+          "source_index": 834,
+          "x": 87,
+          "y": -149,
+          "empty": false,
+          "rgba_sha256": "622eb6caa0bc7a19ba81ec0a100adc68074e240646d5cba53b56145f0cc890a2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_01_4.png",
+          "source_index": 835,
+          "x": 101,
+          "y": -154,
+          "empty": false,
+          "rgba_sha256": "17c32f9e8e412188cddc577ad8b9819b423782f789058819c9ffbd02efcd32b6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_02_0.png",
+          "source_index": 841,
+          "x": 57,
+          "y": -66,
+          "empty": false,
+          "rgba_sha256": "515f424bd492b85d487b2e14f7ebb8d990b5abda52ff9c09043cfff8b962ad35"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_02_1.png",
+          "source_index": 842,
+          "x": 53,
+          "y": -75,
+          "empty": false,
+          "rgba_sha256": "fcab49194e29ff126e6ef7f43f9241b05ecafbe483934cf10c09cdc912d3828e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_02_2.png",
+          "source_index": 843,
+          "x": 80,
+          "y": -75,
+          "empty": false,
+          "rgba_sha256": "3d776952c6536af366ccb60a1ac70279a5956416df99de50f69f9c8c5d9e2870"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_02_3.png",
+          "source_index": 844,
+          "x": 120,
+          "y": -70,
+          "empty": false,
+          "rgba_sha256": "d584a9a17e986b678e2cf1d700cd5bb8ba1798d2a0382cc072752f1603a2fdb7"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_02_4.png",
+          "source_index": 845,
+          "x": 146,
+          "y": -65,
+          "empty": false,
+          "rgba_sha256": "36b675338fc1dba3549f1a7732f267d6561e1c96a876a38b4bd4a7de4f4bd830"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_03_0.png",
+          "source_index": 851,
+          "x": 43,
+          "y": -31,
+          "empty": false,
+          "rgba_sha256": "bffb777d7c87d81ba8502d5962952d44bfef3821ada9855bd6952e3ca459dc28"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_03_1.png",
+          "source_index": 852,
+          "x": 41,
+          "y": -34,
+          "empty": false,
+          "rgba_sha256": "1660267b1e8e2b8fab9b9c9d4145f61ef85e7d17a47ec942a59110f87d10430f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_03_2.png",
+          "source_index": 853,
+          "x": 56,
+          "y": -20,
+          "empty": false,
+          "rgba_sha256": "2b888229d9b19862ac8c9d78e4ce37eed561d77e667cbd9a771d4a4528b5074f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_03_3.png",
+          "source_index": 854,
+          "x": 84,
+          "y": 7,
+          "empty": false,
+          "rgba_sha256": "3c0e179924c0d8750dad9aa75a9ecec8db543abbf675799848e3541fb0e77588"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_03_4.png",
+          "source_index": 855,
+          "x": 97,
+          "y": 23,
+          "empty": false,
+          "rgba_sha256": "643c22b4efeb92764433b72895f2287320871f158ea2ad52490207fc934b0d62"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_04_0.png",
+          "source_index": 861,
+          "x": -6,
+          "y": -17,
+          "empty": false,
+          "rgba_sha256": "6d422c55b5780ac9770581c2af81c9ba5d88d7830a94bd8440cfb13109ad2c88"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_04_1.png",
+          "source_index": 862,
+          "x": -14,
+          "y": -18,
+          "empty": false,
+          "rgba_sha256": "268e14f3ffe08dd2b75765184cfd2bf80cb45c5506c6d10ad5bcebab32efb823"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_04_2.png",
+          "source_index": 863,
+          "x": -15,
+          "y": 10,
+          "empty": false,
+          "rgba_sha256": "1d28f7cf818ac986879879982927c830856e114e88a38568f4973b96ced2cf7c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_04_3.png",
+          "source_index": 864,
+          "x": -12,
+          "y": 44,
+          "empty": false,
+          "rgba_sha256": "671c31798f498fab033deb7cfb7a49ede5c8f80a576e2352e8feba83181ce4ac"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_04_4.png",
+          "source_index": 865,
+          "x": 6,
+          "y": 77,
+          "empty": false,
+          "rgba_sha256": "0cb40ae22976e2a21fe1a9cd6c3015b519916f7bd9edbe15c4ab5c16457bd5b4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_05_0.png",
+          "source_index": 871,
+          "x": -88,
+          "y": -31,
+          "empty": false,
+          "rgba_sha256": "023523a5e85f2d953e2192f19545246ee440a807857ffe225f6bea48225fbe03"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_05_1.png",
+          "source_index": 872,
+          "x": -124,
+          "y": -33,
+          "empty": false,
+          "rgba_sha256": "d37acde6c8fb2829622a7ff0638304f1d462723eca7ecb8e826eaac53f056a9c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_05_2.png",
+          "source_index": 873,
+          "x": -130,
+          "y": -20,
+          "empty": false,
+          "rgba_sha256": "7f4360b55d4a43a2c97826e49d9f9c39612633d6b33378039c21280726629add"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_05_3.png",
+          "source_index": 874,
+          "x": -126,
+          "y": 4,
+          "empty": false,
+          "rgba_sha256": "0a10d939fa7c95123d5ea0babff61cb9ea65bf7d203798bf8af27166f8dbed23"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_05_4.png",
+          "source_index": 875,
+          "x": -129,
+          "y": 14,
+          "empty": false,
+          "rgba_sha256": "869fc30d12164315d5bbec9452592adb1ad022689437ebc4bfd2daa253f54153"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_06_0.png",
+          "source_index": 881,
+          "x": -121,
+          "y": -67,
+          "empty": false,
+          "rgba_sha256": "38637f40b58f9b3f04f030b60448c3c7be7cd0329b34ed41bf34e0db1ef2c566"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_06_1.png",
+          "source_index": 882,
+          "x": -166,
+          "y": -76,
+          "empty": false,
+          "rgba_sha256": "a6a11f9f7643289e3e8495a80c788db081c77f1712e2487f0afd66aed4af4040"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_06_2.png",
+          "source_index": 883,
+          "x": -177,
+          "y": -76,
+          "empty": false,
+          "rgba_sha256": "ae3ab57c844f528aa5a7105f7b69a08e03f7e1e896d763dc0f25c1889e498c94"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_06_3.png",
+          "source_index": 884,
+          "x": -172,
+          "y": -71,
+          "empty": false,
+          "rgba_sha256": "a244dca69b447aa183c113d720fdc38f875898f782ad63b51900b9b61e822cf4"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_06_4.png",
+          "source_index": 885,
+          "x": -180,
+          "y": -68,
+          "empty": false,
+          "rgba_sha256": "8e913ab1c9e2dab131b45ba459543bfceeeeb83d29a5f60d55a7c79ce608c951"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_07_0.png",
+          "source_index": 891,
+          "x": -87,
+          "y": -128,
+          "empty": false,
+          "rgba_sha256": "3063a907cc6a1fc7eb22885bc1ba8970d108caef2bbd49d3b0dfdb9a43487bc0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_07_1.png",
+          "source_index": 892,
+          "x": -114,
+          "y": -152,
+          "empty": false,
+          "rgba_sha256": "b81a2b7ad96cff1a267f154c6275df8f532f0a440506aa5f44ffa4824845e4c2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_07_2.png",
+          "source_index": 893,
+          "x": -109,
+          "y": -150,
+          "empty": false,
+          "rgba_sha256": "65ca097543aa3e99813680714fbfdd16df9c7b3d49c2e05e0c031944385bdd6f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_07_3.png",
+          "source_index": 894,
+          "x": -107,
+          "y": -146,
+          "empty": false,
+          "rgba_sha256": "7defe67d53c6a15b886988cffa697bdd76084fb7321f92f3d47fafe2d9ba8d7e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/elf_flame_07_4.png",
+          "source_index": 895,
+          "x": -106,
+          "y": -151,
+          "empty": false,
+          "rgba_sha256": "7eb87f4cb1eea5010d200d0c96712ffdd5d97da038a1e5197abec10f1ebc5e79"
+        }
+      ],
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon18.wil",
+        "sha256": "eab9850feaecd7a3bf89d3e6274317e3543f5c07ec3e771627e1aa11c4c74bbd",
+        "tier": "primary",
+        "distribution": "client.classic_raw_complete",
+        "rule": "MirClient/AxeMon.pas TGasKuDeGi.LoadSurface, TSculptureMon.LoadSurface, TWarriorElfMonster.RunFrameAction",
+        "frame_formula": "821 + direction * 10 + frame"
+      }
+    },
+    "cow_king": {
+      "monster_id": 224,
+      "direction_count": 1,
+      "frame_count": 20,
+      "frame_ms": 20,
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_00.png",
+          "source_index": 3580,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "7e3c5690adc93e43a8a76b271fd778925f8e7c18d803189eab053f599efc74a6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_01.png",
+          "source_index": 3581,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "f943108b23df50722b066eb059a2e39d71ed683384034e7f146e617adb93e149"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_02.png",
+          "source_index": 3582,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "65e055b2755fde44983f3e64b37759bdb22141bfb196ff7866f51b5799d9613f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_03.png",
+          "source_index": 3583,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "368e8de38a064dadde0fcfcfaa8c0a3ea0ce9cac11e3cbc617805d2bc92c2c00"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_04.png",
+          "source_index": 3584,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "b758b39cee76ded827883d7a6f2bf9d6e46f9294248c80250b1580856052e496"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_05.png",
+          "source_index": 3585,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "e6c832a64490f11389fbcffd471c097d7a614254056bc0de1e374040ccecb436"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_06.png",
+          "source_index": 3586,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "1d3e52d0216061529566a1280d2756bb75476b8d2153d3468793f14a511e3efd"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_07.png",
+          "source_index": 3587,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "2cad87b27b283ea3bd714123cf17abf9a789ec051a776f76c4393d343e803fb5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_08.png",
+          "source_index": 3588,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "6e935c66ced2c6e631f936bf205c62ee1b9d394d1704b230a667e35af40df7d9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_09.png",
+          "source_index": 3589,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "fddf658712c8ea17829382ed4868b4fd561498b86ab5044137eb555630dfd8c5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_10.png",
+          "source_index": 3590,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "c14b91c73b255802266f67f46fd215089cec27d828de72ed24b1f7857dac496d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_11.png",
+          "source_index": 3591,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "210f0971e12c44e3a9abffb80634c119ae460f396407ba0da081bb5199a28ba2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_12.png",
+          "source_index": 3592,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "52d21afccc31319f13160172fb9aee030f83bc0f12341e0d66347878b4de0fad"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_13.png",
+          "source_index": 3593,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "132c1bd63996c87f542c476270d873e1106dc37e813903a7ca10891b6ce7e512"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_14.png",
+          "source_index": 3594,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "5fd78982882762bee23df2c71644a064e39988fb92cab92919de9fb03fd67d19"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_15.png",
+          "source_index": 3595,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "d8091dba91d010b0ef76964706b806e5941ab1aadb1dd2bc453b44502a503c3c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_16.png",
+          "source_index": 3596,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "faf82a08b4a67f237f57562fa1d93f738876cf187000d1f429f31f1f4d0db4fa"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_17.png",
+          "source_index": 3597,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "a6633f07dc4b3f9057c02eb8e5e8d745f95bf2126ed0ca5d0d489080999620f1"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_18.png",
+          "source_index": 3598,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "21f4e58cf680aa2322effe08005b5262fcfca0ba369289e71807fa629b276925"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/attack_overlays_v2/cow_king_19.png",
+          "source_index": 3599,
+          "x": -295,
+          "y": -226,
+          "rgba_sha256": "7c271ac0be046d197845c24c3c828e2521b3c9f9e313d61eda57004661c82808"
+        }
+      ],
+      "source": {
+        "path": "dev_art_sources/external/mir2opensource_full/Data/Mon21.wil",
+        "sha256": "948e500fdb4c5677d73c4a500809057a08d858b92f2aa7cb59074f0ac0098106",
+        "tier": "auxiliary_1",
+        "distribution": "client.mir2opensource_2013_complete",
+        "fallback_evidence": {
+          "rule_evidence": [
+            {
+              "path": "dev_art_sources/reference/original_gameofmir/MirClient/AxeMon.pas",
+              "sha256": "7676d0f09b32817e3cafef3048526cd15fd8d311e1a47f96beee75a6edf02186"
+            },
+            {
+              "path": "dev_art_sources/reference/original_gameofmir/MirClient/PlayScn.pas",
+              "sha256": "6c9d1d191368ebc841bb10e51d248e8bfe7e344013e866d30f70a775cc9694d4"
+            },
+            {
+              "path": "dev_art_sources/reference/original_gameofmir/MirClient/magiceff.pas",
+              "sha256": "66606a4e495790f83e8a6fce3809ec54963882ff0b55ca390d1442b4e4699f3c"
+            },
+            {
+              "path": "dev_art_sources/reference/original_gameofmir/Client/PlayScn.pas",
+              "sha256": "0dcc555bf7fbd10fbd1ac240250bdc0bc28dead21ad188f664030c1af7426120"
+            },
+            {
+              "path": "dev_art_sources/reference/original_gameofmir/Client/magiceff.pas",
+              "sha256": "6ec23619b46747b810fd9cc413efb3a0b9bc71f96a85f8f7cd05ba74a301a850"
+            }
+          ],
+          "primary_missing_path": "dev_art_sources/reference/mir2_client_raw/Data/Mon21.wil",
+          "primary_query": "missing exact Mon21.wil",
+          "primary_rule_missing": "MirClient/magiceff.pas:461 mt13 constructor and PlayScn.pas:1724 dispatch commented out; active AxeMon.pas:1578 still requests mt13 number 32",
+          "auxiliary_rule_paths": [
+            "dev_art_sources/reference/original_gameofmir/Client/PlayScn.pas",
+            "dev_art_sources/reference/original_gameofmir/Client/magiceff.pas"
+          ]
+        }
+      }
+    }
+  },
+  "body_only_ids": [
+    18,
+    62,
+    103,
+    104,
+    168,
+    185
+  ],
+  "body_only_rule": "primary canonical RaceImg19 -> TCatMon; source has no independent spell layer"
+}

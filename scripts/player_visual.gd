@@ -75,6 +75,7 @@ var _weapon_frame_size := ArtSpec.WARRIOR_FRAME
 var _weapon_source_anchor := ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR
 var _weapon_attack_source_frames: Array = []
 var _equipment_layer_direction := -1
+var _equipment_layer_behind := false
 var _formal_base_loaded := false
 var _helmet_item_id := -1
 var _helmet_player_visual_id := "player.male.cloth_002"
@@ -789,6 +790,9 @@ func _refresh_equipment_visuals() -> void:
 func _update_equipment_layers() -> void:
 	if weapon_accent == null:
 		return
+	var behind_body := EquipmentRules.weapon_draws_behind_actor(
+		current_direction, _visual_action_key(), current_frame, PlayerState.gender
+	)
 	var direction := actor.facing.normalized()
 	if direction.length_squared() < 0.001:
 		direction = Vector2.DOWN
@@ -801,7 +805,7 @@ func _update_equipment_layers() -> void:
 		and worn_helmet_back_sprite != null
 		and worn_helmet_sprite != null
 		and head_occlusion_mask_sprite != null
-		and _equipment_layer_direction != current_direction
+		and (_equipment_layer_direction != current_direction or _equipment_layer_behind != behind_body)
 	):
 		# All appearance children must remain on the actor/wall Z=0 plane. Classic
 		# front/back overlap is expressed only by sibling order, otherwise a positive
@@ -815,7 +819,7 @@ func _update_equipment_layers() -> void:
 			&"head_occlusion_mask": head_occlusion_mask_sprite,
 		}
 		var layer_order: Array[StringName]
-		if EquipmentRules.weapon_draws_behind_actor(current_direction):
+		if behind_body:
 			layer_order = [
 				EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER,
 				&"helmet_back",
@@ -836,13 +840,14 @@ func _update_equipment_layers() -> void:
 		for layer_index: int in range(layer_order.size()):
 			move_child(layers[layer_order[layer_index]], layer_index)
 		_equipment_layer_direction = current_direction
+		_equipment_layer_behind = behind_body
 	# Helmet and body use the same 192x160 directional atlas grid.  Its region
 	# is updated with the body each frame, so it stays on the actual head rather
 	# than becoming an independent icon beside the health bar.
 
 
 func weapon_draws_behind(direction_row: int) -> bool:
-	return EquipmentRules.weapon_draws_behind_actor(direction_row)
+	return EquipmentRules.weapon_draws_behind_actor(direction_row, _visual_action_key(), current_frame, PlayerState.gender)
 
 
 func _on_database_reloaded() -> void:

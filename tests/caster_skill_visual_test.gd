@@ -166,9 +166,8 @@ func _ready() -> void:
 	assert(shield_render.anchor_rebase_pixels == [7.5, 0.0])
 	assert(shield_render.attachment_draw_order == "behind_attached_actor_same_footpoint")
 	assert(shield_sprite.fitted_visual_bounds().position == Vector2(-34.5, -80.0))
-	# Both sides of a half-pixel boundary preserve the exact actor footpoint.
-	# Ordering is owned by the explicit z=-1 effect lane rather than a positional
-	# epsilon, so stationary and moving actors use the same deterministic rule.
+	# Both sides of a half-pixel boundary preserve the exact actor and image
+	# footpoint. A compensated visual proxy shares the walls' world plane.
 	for owner_position: Vector2 in [
 		Vector2(123.4, 77.4),
 		Vector2(123.4, 77.6),
@@ -178,7 +177,9 @@ func _ready() -> void:
 		shield_visual._process(0.0)
 		assert(is_equal_approx(shield_visual.global_position.x, owner_position.x))
 		assert(shield_visual.global_position.is_equal_approx(owner_position))
-		assert(shield_visual.z_index < shield_owner.z_index)
+		assert(shield_visual.z_index == shield_owner.z_index)
+		assert(shield_visual._visual_sort_proxy.global_position.y < shield_owner.global_position.y)
+		assert(shield_sprite.global_position.is_equal_approx(owner_position))
 	shield_sprite._process(shield_sprite.animation_duration() + 0.01)
 	shield_visual._process(0.1)
 	assert(shield_sprite.playback_complete)

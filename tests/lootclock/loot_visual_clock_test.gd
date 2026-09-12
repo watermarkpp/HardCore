@@ -54,6 +54,8 @@ func _run_visual_sequence(deltas: Array[float]) -> Dictionary:
 		"position": pickup.global_position,
 		"position_stable": pickup.global_position == position_before,
 		"identity_stable": pickup.item_name == item_before,
+		"registered_count": manager.diagnostics_snapshot().registered_pickup_count,
+		"icon_position": pickup.icon_sprite.position,
 		"visual_updates": manager.manager_visual_update_count,
 		"registry_entries": manager.manager_visual_registry_entry_count,
 	}
@@ -94,7 +96,7 @@ func _ready() -> void:
 	var mixed: Dictionary = _run_visual_sequence(_mixed_deltas())
 	# Static-loot contract (4004874f): ground loot must not drift over time and
 	# must keep its stable identity regardless of frame pacing.  The manager
-	# visual scheduler remains bounded at 30Hz.
+	# icon is fixed at construction; no recurring visual scan is necessary.
 	for snapshot: Dictionary in [at_30, at_60, at_120, mixed]:
 		assert(
 			bool(snapshot["position_stable"]),
@@ -105,16 +107,18 @@ func _ready() -> void:
 			"static loot identity changed under time advance",
 		)
 		assert(
-			int(snapshot["registry_entries"]) >= 1,
+			int(snapshot["registered_count"]) == 1,
 			"static loot lost its runtime registry entry: %s" % [snapshot],
 		)
+		assert(snapshot["icon_position"] == Vector2(0, -5), "static icon anchor drifted")
+		assert(int(snapshot["registry_entries"]) == 0, "static loot was redundantly scanned")
 	for snapshot: Dictionary in [at_30, at_60, at_120, mixed]:
 		assert(
-			int(snapshot["visual_updates"]) <= 31,
-			"visual scheduler exceeded the existing 30Hz bound: %s" % [snapshot],
+			int(snapshot["visual_updates"]) == 0,
+			"static loot received unnecessary visual work: %s" % [snapshot],
 		)
 	print(
-		"LOOT_VISUAL_CLOCK_PASS: static-loot position/identity stability and 30Hz bound %s"
+		"LOOT_VISUAL_CLOCK_PASS: static-loot position/identity stability and zero visual work %s"
 		% [at_30["visual_updates"]],
 	)
 	get_tree().quit(0)

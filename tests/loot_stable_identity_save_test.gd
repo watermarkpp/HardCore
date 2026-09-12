@@ -93,6 +93,7 @@ func _run() -> void:
 	assert(not game._spawn_loot("金创药(小量)", game.player.global_position, wrong), "unresolved formal ID materialized as another item")
 	var valid: Dictionary = LootRuntime._drop_output_item_record(910013, "疾风药水")
 	var count_before := PlayerState.item_count("疾风药水")
+	PlayerState.test_mode = false
 	assert(game._spawn_loot("疾风药水", game.player.global_position, valid))
 	var pickup: LootPickup
 	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
@@ -102,9 +103,46 @@ func _run() -> void:
 	assert(pickup != null)
 	# Spawn can already request collection: use the idempotent pickup boundary.
 	pickup.manager_evaluate_collection(true, 1.0)
-	var ground_result: Dictionary = game._flush_loot_collections()
-	assert(PlayerState.item_count("疾风药水") == count_before + 1, "formal ground pickup failed to settle: %s inventory=%s" % [ground_result, PlayerState.inventory])
+	var ground_result: Dictionary = game._flush_loot_collections(true)
+	assert(ground_result.get("pending", false) and pickup.collection_pending())
+	assert(PlayerState.item_count("疾风药水") == count_before, "no credit before durable promotion")
+	# A second batch arriving during the first private write must be scheduled
+	# after its deferred flush observes the in-flight batch. No manual flush.
+	assert(game._spawn_loot("疾风药水", game.player.global_position, valid))
+	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
+		if node is LootPickup: node.manager_evaluate_collection(true, 1.0)
+	var deadline := Time.get_ticks_msec() + 2000
+	while PlayerState.item_count("疾风药水") < count_before + 2 and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+		ground_result = game._poll_prepared_loot_collection()
+
+	assert(PlayerState.item_count("疾风药水") == count_before + 2, "consecutive asynchronous ground batches stopped scheduling: %s inventory=%s" % [ground_result, PlayerState.inventory])
 	assert(int(PlayerState.inventory[0].get("item_id", -1)) == 910013)
+	# A generation change while I/O is pending must not credit a new world.
+	assert(game._spawn_loot("疾风药水", game.player.global_position, valid))
+	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
+		if node is LootPickup and not node.is_queued_for_deletion(): node.manager_evaluate_collection(true, 1.0)
+	assert(game._flush_loot_collections(true).get("pending", false))
+	game._zone_generation += 1
+	assert(game._poll_prepared_loot_collection().get("retry", false))
+	var stale_result: Dictionary = game._flush_loot_collections()
+	assert(int(stale_result.get("stale_count", 0)) == 1)
+	game._zone_generation -= 1 # restore fixture manager generation; real map transitions reconfigure it
+	assert(PlayerState.item_count("疾风药水") == count_before + 2)
+	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
+		if node is LootPickup: node.queue_free()
+	await get_tree().process_frame
+	# Safe logout joins the private write and uses the same durable commit gate.
+	assert(game._spawn_loot("疾风药水", game.player.global_position, valid))
+	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
+		if node is LootPickup: node.manager_evaluate_collection(true, 1.0)
+	assert(game._flush_loot_collections(true).get("pending", false))
+	assert(game._prepare_safe_logout().get("success", false))
+	assert(game._prepared_loot_collection.is_empty())
+	assert(PlayerState.item_count("疾风药水") == count_before + 3)
+	var final_saved := PlayerState._read_json(PlayerState._profile_path(PlayerState.active_profile_id))
+	assert(final_saved.inventory == JSON.parse_string(JSON.stringify(PlayerState.inventory)))
+	PlayerState.test_mode = true
 	game.queue_free()
 	await get_tree().process_frame
 	print("LOOT_STABLE_IDENTITY_SAVE_TEST_PASS")

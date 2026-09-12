@@ -216,6 +216,10 @@ var _loot_batch_debug: Dictionary = {
 	"save_commits": 0,
 }
 var _last_runtime_commit_profile: Dictionary = {}
+const LootPreparedFile := preload("res://scripts/loot_prepared_file.gd")
+var _atomic_write_generation := 0
+var _atomic_write_phases: Dictionary = {}
+var _last_save_phase_profile: Dictionary = {}
 var _last_loot_batch_profile: Dictionary = {}
 var _last_death_settlement_profile: Dictionary = {}
 var _loot_inventory_catalog_cache: Dictionary = {}
@@ -1811,30 +1815,36 @@ func _blessing_oil_rolls(
 	weapon_value: Dictionary,
 	rng: RandomNumberGenerator
 ) -> Dictionary:
-	var item := GameData.get_item(str(weapon_value.get("name", "")))
+	var item := GameData.get_item_record(weapon_value)
 	var attack_min := int(item.get("attackMin", 0) if item.get("attackMin", null) != null else 0)
 	var attack_max := int(item.get("attackMax", attack_min) if item.get("attackMax", null) != null else attack_min)
-	var luck := int(weapon_value.get("weapon_luck", 0))
+	var state := EquipmentRulesScript.weapon_luck_state(weapon_value)
+	var luck := int(state.luck)
 	var unlucky_roll := rng.randi_range(0, EquipmentRulesScript.BLESSING_UNLUCKY_RATE - 1)
 	var success_roll := 0
-	if unlucky_roll != 1:
+	var upper_stage_roll := -1
+	if unlucky_roll != 1 and int(state.curse) == 0 and luck >= EquipmentRulesScript.LUCK_POINT_1:
 		var denominator := EquipmentRulesScript.blessing_success_denominator(
 			luck,
 			attack_min,
 			attack_max
 		)
 		success_roll = rng.randi_range(0, denominator - 1) if denominator > 1 else 0
-	return {"unlucky_roll": unlucky_roll, "success_roll": success_roll}
+		if luck < EquipmentRulesScript.LUCK_POINT_2 and success_roll != 1:
+			var upper_denominator := EquipmentRulesScript.blessing_span_factor(attack_min, attack_max) * EquipmentRulesScript.LUCK_POINT_3_RATE
+			upper_stage_roll = rng.randi_range(0, upper_denominator - 1)
+	return {"unlucky_roll": unlucky_roll, "success_roll": success_roll, "upper_stage_roll": upper_stage_roll}
 
 
 func _apply_blessing_oil_effect_with_rolls(
 	unlucky_roll: int,
-	success_roll: int
+	success_roll: int,
+	upper_stage_roll := -1
 ) -> Dictionary:
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
 		return {"ok": false, "message": "需要先装备武器"}
-	var item := GameData.get_item(str(weapon_value.get("name", "")))
+	var item := GameData.get_item_record(weapon_value)
 	if item.is_empty():
 		return {"ok": false, "reason": "invalid_weapon", "message": "武器数据无效"}
 	var attack_min := int(item.get("attackMin", 0) if item.get("attackMin", null) != null else 0)
@@ -1847,7 +1857,8 @@ func _apply_blessing_oil_effect_with_rolls(
 		attack_min,
 		attack_max,
 		unlucky_roll,
-		success_roll
+		success_roll,
+		upper_stage_roll
 	)
 	weapon_value["weapon_luck"] = int(outcome.get("luck", luck))
 	weapon_value["weapon_curse"] = int(outcome.get("curse", curse))
@@ -1864,18 +1875,19 @@ func apply_blessing_oil(rng: RandomNumberGenerator) -> String:
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
 		return "需要先装备武器"
-	if GameData.get_item(str(weapon_value.get("name", ""))).is_empty():
+	if GameData.get_item_record(weapon_value).is_empty():
 		return "武器数据无效"
 	var rolls := _blessing_oil_rolls(weapon_value, rng)
 	return apply_blessing_oil_with_rolls(
 		int(rolls.get("unlucky_roll", 0)),
-		int(rolls.get("success_roll", 0))
+		int(rolls.get("success_roll", 0)),
+		int(rolls.get("upper_stage_roll", -1))
 	)
 
 
-func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int) -> String:
+func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int, upper_stage_roll := -1) -> String:
 	var equipment_before := equipment.duplicate(true)
-	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll)
+	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll, upper_stage_roll)
 	if not bool(effect_result.get("ok", false)):
 		return str(effect_result.get("message", "祝福油使用失败"))
 	recalculate_stats(false)
@@ -1904,20 +1916,22 @@ func use_blessing_oil_inventory_index(
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
 		return {"ok": false, "reason": "no_weapon", "message": "需要先装备武器"}
-	if GameData.get_item(str(weapon_value.get("name", ""))).is_empty():
+	if GameData.get_item_record(weapon_value).is_empty():
 		return {"ok": false, "reason": "invalid_weapon", "message": "武器数据无效"}
 	var rolls := _blessing_oil_rolls(weapon_value, rng)
 	return use_blessing_oil_inventory_index_with_rolls(
 		index,
 		int(rolls.get("unlucky_roll", 0)),
-		int(rolls.get("success_roll", 0))
+		int(rolls.get("success_roll", 0)),
+		int(rolls.get("upper_stage_roll", -1))
 	)
 
 
 func use_blessing_oil_inventory_index_with_rolls(
 	index: int,
 	unlucky_roll: int,
-	success_roll: int
+	success_roll: int,
+	upper_stage_roll := -1
 ) -> Dictionary:
 	var oil_catalog := GameData.get_item_record("祝福油")
 	if (
@@ -1939,7 +1953,7 @@ func use_blessing_oil_inventory_index_with_rolls(
 	var equipment_before := equipment.duplicate(true)
 	if not _consume_inventory_index_without_commit(index):
 		return {"ok": false, "reason": "invalid_oil", "message": "物品数量不足"}
-	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll)
+	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll, upper_stage_roll)
 	if not bool(effect_result.get("ok", false)):
 		inventory = inventory_before
 		equipment = equipment_before
@@ -4098,26 +4112,41 @@ func _read_json(path: String) -> Dictionary:
 
 
 func _write_json_atomic(path: String, data: Dictionary) -> bool:
+	var phase_usec := Time.get_ticks_usec()
+	_atomic_write_phases = {}
 	if test_mode and _test_force_atomic_write_failure:
 		return false
+	# Validate the serialized JSON representation once. Both disk readbacks
+	# below must match these exact validated bytes, so promotion does not need
+	# a second identical parse and inventory/affix validation pass.
+	var serialized := JSON.stringify(data, "\t")
+	var parsed: Variant = JSON.parse_string(serialized)
+	var validator := _json_validator_for_path(path)
+	if not parsed is Dictionary or not bool(_validate_json_candidate(parsed, validator).get("valid", false)):
+		return false
+	_atomic_write_phases["serialize_validate_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
+	phase_usec = Time.get_ticks_usec()
+	var expected_bytes := serialized.to_utf8_buffer()
 	var temporary := path + ".tmp"
-	var backup := path + ".bak"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return false
-	file.store_string(JSON.stringify(data, "\t"))
+	file.store_buffer(expected_bytes)
 	file.flush()
 	file.close()
-	# Never move the current profile until the complete temporary document has
-	# been reparsed successfully. This keeps a failed/partial write fail-closed.
-	var validator := _json_validator_for_path(path)
-	var temporary_document := _read_json_document(temporary)
-	if (
-		not bool(temporary_document.get("valid", false))
-		or not bool(_validate_json_candidate(temporary_document.get("data", {}), validator).get("valid", false))
-	):
+	# Never move the current profile until all bytes of the validated temporary
+	# document have been read back. Valid-but-different JSON is also rejected.
+	if not _file_matches_validated_bytes(temporary, expected_bytes):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
 		return false
+	_atomic_write_phases["temp_write_flush_read_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
+	return _promote_verified_json(path, temporary, expected_bytes)
+
+
+func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray) -> bool:
+	var validator := _json_validator_for_path(path)
+	var backup := path + ".bak"
+	var phase_usec := Time.get_ticks_usec()
 	var absolute_path := ProjectSettings.globalize_path(path)
 	var absolute_temp := ProjectSettings.globalize_path(temporary)
 	var absolute_backup := ProjectSettings.globalize_path(backup)
@@ -4129,6 +4158,8 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 	):
 		DirAccess.remove_absolute(absolute_temp)
 		return false
+	_atomic_write_phases["previous_read_validate_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
+	phase_usec = Time.get_ticks_usec()
 	var moved_valid_main := false
 	var quarantine_path := ""
 	if bool(current_document.get("exists", false)):
@@ -4160,11 +4191,29 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 		elif not quarantine_path.is_empty():
 			DirAccess.rename_absolute(ProjectSettings.globalize_path(quarantine_path), absolute_path)
 		return false
-	var promoted := _read_json_document(path)
-	return (
-		bool(promoted.get("valid", false))
-		and bool(_validate_json_candidate(promoted.get("data", {}), validator).get("valid", false))
-	)
+	var verified := _file_matches_validated_bytes(path, expected_bytes)
+	_atomic_write_phases["rotate_promote_read_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
+	if verified:
+		_atomic_write_generation += 1
+	else:
+		# A post-promotion mismatch must not leave valid-but-unexpected JSON as
+		# the next load's primary authority after this transaction reports failure.
+		var rejected_path := ProjectSettings.globalize_path(_next_quarantine_path(path))
+		if DirAccess.rename_absolute(absolute_path, rejected_path) == OK:
+			if moved_valid_main:
+				DirAccess.rename_absolute(absolute_backup, absolute_path)
+			elif not quarantine_path.is_empty():
+				DirAccess.rename_absolute(ProjectSettings.globalize_path(quarantine_path), absolute_path)
+	return verified
+
+
+func _file_matches_validated_bytes(path: String, expected: PackedByteArray) -> bool:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return false
+	var matches := file.get_length() == expected.size() and file.get_buffer(expected.size()) == expected
+	file.close()
+	return matches
 
 
 func _shared_warehouse_empty_document() -> Dictionary:
@@ -4642,24 +4691,24 @@ func _write_shared_warehouse(records: Array) -> bool:
 	return _write_shared_warehouse_document_atomic(document)
 
 
-func save_game(update_profile_index := true) -> bool:
+func _prepare_character_save_payload() -> Dictionary:
 	if _warehouse_transaction_locked and not _persistence_transaction_in_progress:
 		last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked"}
-		return false
+		return {}
 	if active_profile_id.is_empty():
 		last_save_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
 			"success": false,
 			"reason": "active_profile_missing",
 		}
-		return false
+		return {}
 	if not _valid_profile_storage_id(active_profile_id):
 		last_save_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
 			"success": false,
 			"reason": "invalid_profile_id",
 		}
-		return false
+		return {}
 	if active_profile_id == _save_blocked_profile_id:
 		last_save_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
@@ -4667,10 +4716,9 @@ func save_game(update_profile_index := true) -> bool:
 			"reason": "profile_save_blocked_after_invalid_load",
 			"load_failure_reason": _save_blocked_reason,
 		}
-		return false
+		return {}
 	_refresh_taoist_main_pet_runtime_states_for_save()
 	_ensure_skill_progression_matches_legacy()
-	var profile_path := _profile_path(active_profile_id)
 	var legacy_isolated_profile_fixture := (
 		profile_directory != PROFILE_DIRECTORY
 		and not _shared_warehouse_test_isolation_enabled()
@@ -4685,7 +4733,7 @@ func save_game(update_profile_index := true) -> bool:
 			"success": false,
 			"reason": "shared_warehouse_unavailable",
 		}
-		return false
+		return {}
 	if (
 		not legacy_isolated_profile_fixture
 		and _active_profile_legacy_warehouse_pending
@@ -4696,7 +4744,7 @@ func save_game(update_profile_index := true) -> bool:
 			"success": false,
 			"reason": "shared_warehouse_legacy_source_changed",
 		}
-		return false
+		return {}
 	var payload := {
 		"save_version": SAVE_VERSION,
 		"profile_id": active_profile_id,
@@ -4740,7 +4788,20 @@ func save_game(update_profile_index := true) -> bool:
 		payload["taoist_main_pet_runtime_states"] = (
 			taoist_main_pet_runtime_states.duplicate(true)
 		)
-	if not _write_json_atomic(profile_path, payload):
+	return payload
+
+
+func save_game(update_profile_index := true) -> bool:
+	var save_started_usec := Time.get_ticks_usec()
+	_last_save_phase_profile = {}
+	var payload := _prepare_character_save_payload()
+	if payload.is_empty(): return false
+	_last_save_phase_profile["runtime_snapshot_ms"] = float(Time.get_ticks_usec() - save_started_usec) / 1000.0
+	var profile_path := _profile_path(active_profile_id)
+	var write_started_usec := Time.get_ticks_usec()
+	var write_success := _write_json_atomic(profile_path, payload)
+	_last_save_phase_profile["atomic_write_ms"] = float(Time.get_ticks_usec() - write_started_usec) / 1000.0
+	if not write_success:
 		last_save_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
 			"success": false,
@@ -4757,6 +4818,7 @@ func save_game(update_profile_index := true) -> bool:
 		"path": profile_path,
 		"profile_index_updated": index_updated,
 		"profile_index_skipped": not update_profile_index,
+		"save_phases": _last_save_phase_profile.duplicate(),
 	}
 	if not index_updated:
 		push_warning("角色存档已写入，但角色索引更新失败：%s" % active_profile_id)
@@ -6322,7 +6384,7 @@ func _warehouse_transfer_commit(_inventory_before: Array, _warehouse_before: Arr
 
 ## Partial atomic pickup transaction. Each candidate is simulated in order;
 ## failures do not prevent later candidates from being attempted.
-func receive_loot_batch_partial(candidates: Array) -> Dictionary:
+func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dictionary:
 	var profile_started_usec := Time.get_ticks_usec()
 	# working_inventory is the only copy mutated during planning. Keep the live
 	# array itself as the rollback snapshot; it remains untouched until commit.
@@ -6485,6 +6547,8 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		outcomes.append({"success": true, "item_name": item_name})
 	if not changed:
 		return {"success": true, "saved": false, "outcomes": outcomes, "success_count": 0}
+	if prepare_only:
+		return {"prepared": true, "inventory_before": inventory.duplicate(true), "gold_before": gold, "inventory_after": working_inventory, "gold_after": working_gold, "outcomes": outcomes}
 	var planning_finished_usec := Time.get_ticks_usec()
 	inventory = working_inventory
 	gold = working_gold
@@ -6527,6 +6591,64 @@ func receive_loot_batch_partial(candidates: Array) -> Dictionary:
 		"success": true,
 	}
 	return {"success": true, "saved": true, "outcomes": outcomes, "success_count": success_count}
+
+
+func prepare_loot_save(candidates: Array) -> Dictionary:
+	var plan := receive_loot_batch_partial(candidates, true)
+	if not bool(plan.get("prepared", false)): return {"immediate": plan}
+	var payload := _prepare_character_save_payload()
+	if payload.is_empty(): return {"immediate": _loot_save_failure(plan.outcomes)}
+	payload["inventory"] = plan.inventory_after
+	payload["gold"] = plan.gold_after
+	var path := _profile_path(active_profile_id)
+	var text := JSON.stringify(payload)
+	var parsed: Variant = JSON.parse_string(text)
+	if not parsed is Dictionary or not bool(_validate_json_candidate(parsed, _json_validator_for_path(path)).get("valid", false)):
+		return {"immediate": _loot_save_failure(plan.outcomes)}
+	plan["profile_id"] = active_profile_id
+	plan["write_generation"] = _atomic_write_generation
+	plan["path"] = path
+	plan["bytes"] = text.to_utf8_buffer()
+	var writer := LootPreparedFile.new()
+	plan["writer"] = writer
+	writer.start(path + ".pickup-%d.tmp" % writer.get_instance_id(), plan.bytes)
+	return plan
+
+
+func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
+	var state: Dictionary = plan.writer.result(wait)
+	if not bool(state.finished): return {"pending": true}
+	if (str(plan.profile_id) != active_profile_id or int(plan.write_generation) != _atomic_write_generation
+		or inventory != plan.inventory_before or gold != int(plan.gold_before)):
+		plan.writer.cancel()
+		return {"retry": true, "reason": "newer_character_state"}
+	if not bool(state.success) or not _promote_verified_json(str(plan.path), str(plan.writer.path), plan.bytes):
+		plan.writer.cancel()
+		return _loot_save_failure(plan.outcomes)
+	var inventory_changed_value: bool = inventory != plan.inventory_after
+	var gold_changed: bool = gold != int(plan.gold_after)
+	inventory = plan.inventory_after
+	gold = int(plan.gold_after)
+	_active_profile_legacy_warehouse_pending = false
+	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": true, "reason": "", "path": plan.path, "profile_index_updated": true, "profile_index_skipped": true}
+	last_receive_result = {"success": true, "outcomes": plan.outcomes}
+	if inventory_changed_value: inventory_changed.emit()
+	if gold_changed: profile_changed.emit()
+	var successes := 0
+	for outcome: Dictionary in plan.outcomes:
+		if bool(outcome.get("success", false)): successes += 1
+	_loot_batch_debug["save_commits"] = int(_loot_batch_debug.get("save_commits", 0)) + 1
+	return {"success": true, "saved": true, "outcomes": plan.outcomes, "success_count": successes}
+
+
+func _loot_save_failure(outcomes: Array) -> Dictionary:
+	var rejected := outcomes.duplicate(true)
+	for outcome: Dictionary in rejected:
+		if bool(outcome.get("success", false)):
+			outcome["success"] = false
+			outcome["reason"] = "save_failed"
+			outcome["message"] = "拾取存档失败，物品和金币均未改变。"
+	return {"success": false, "saved": false, "outcomes": rejected, "success_count": 0, "reason": "save_failed"}
 
 
 func _drop_instance_id_already_present(instance_id: String, working_inventory: Array) -> bool:

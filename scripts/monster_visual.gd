@@ -1,6 +1,10 @@
 class_name MonsterVisual
 extends Node2D
 
+const SourceFrames := preload("res://scripts/monster_source_frames.gd")
+const AttackOverlay := preload("res://scripts/monster_attack_source_overlay.gd")
+const ProjectileVisual := preload("res://scripts/monster_ranged_projectile_effect.gd")
+
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
@@ -422,6 +426,11 @@ func _sync_process_tier() -> void:
 
 
 func _activate_resources() -> void:
+	var effect_profile := SourceFrames.profile_for_id(actor.monster_id)
+	var effect_direction := 0 if int(effect_profile.get("direction_count", 8)) == 1 else _direction_row(actor.facing)
+	if int(effect_profile.get("direction_count", 8)) == 16: effect_direction *= 2
+	SourceFrames.request_profile(effect_profile, effect_direction)
+	ProjectileVisual.prewarm_for_monster_id(actor.monster_id)
 	if not active_resources.is_empty():
 		return
 	var resources := _resources_for(actor.monster_data)
@@ -915,6 +924,15 @@ func play_attack(duration := 0.46) -> void:
 	_hc_m30_walk.interrupt_pose()
 	if _death_remaining > 0.0:
 		return
+	if visible and not SourceFrames.profile_for_id(actor.monster_id).is_empty() and actor.monster_id != 224:
+		var overlay := AttackOverlay.new()
+		var direction8 := _direction_row(actor.facing)
+		var direction16 := direction8 * 2
+		if is_instance_valid(actor.target):
+			direction16 = ProjectileVisual._direction16_for_line(actor.global_position, actor.target.global_position)
+		var count := maxi(1, MonsterAnimationPolicy.frame_count(active_resources, &"attack"))
+		overlay.setup(actor.monster_id, direction8, direction16, duration / float(count), Vector2(actor_ground_offset))
+		add_child(overlay)
 	_attack_remaining = duration
 	_hc_m30_attack_duration = float(duration)
 	_action_duration = duration

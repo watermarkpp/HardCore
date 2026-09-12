@@ -28,7 +28,7 @@ func _run() -> void:
 	var file := FileAccess.open("res://assets/data/equipment_luck_rules.json", FileAccess.READ)
 	assert(file != null, "装备幸运规则来源表缺失")
 	var source: Variant = JSON.parse_string(file.get_as_text())
-	assert(source is Dictionary and source.get("contractId", "") == "equipment.blessing_luck.v2", "祝福油规则合同错误")
+	assert(source is Dictionary and source.get("contractId", "") == "equipment.blessing_luck.v3", "祝福油规则合同错误")
 	assert(source.get("sourcePolicy", {}).get("distribution", "") == "source.original_gameofmir.server_suite", "祝福油没有使用server_rules主源")
 	assert(int(source.defaults.get("unluckyRate", 0)) == 20, "祝福油失败率来源错误")
 	var luck_points: Array = source.defaults.get("luckPoints", [])
@@ -204,7 +204,7 @@ func _run() -> void:
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
-	assert("幸运+4" in panel.equipment_label.text, "装备面板没有显示武器幸运")
+	assert("幸运+3" in panel.equipment_label.text and not "幸运+4" in panel.equipment_label.text, "装备面板必须显示旧双字段的净幸运3")
 
 	GameData._catalog_by_item_id[ring_id] = ring_original_by_id
 	GameData._catalog_by_name["古铜戒指"] = ring_original_by_name

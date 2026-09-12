@@ -15,7 +15,6 @@ const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd"
 const CONTRACT_ID := "hardcore.loot.runtime_manager.map_scoped.v1"
 const COLLECTION_RADIUS_GU := 0.75
 const FAIL_SAFE_INTERVAL_SECONDS := 0.1
-const VISUAL_UPDATE_INTERVAL_SECONDS := 1.0 / 30.0
 
 var _spatial_index: LootIndexScript = LootIndexScript.new()
 var _player: PlayerCharacter
@@ -26,9 +25,7 @@ var _ground_to_screen := Callable()
 var collection_path_is_clear := Callable()
 var _registration_sequence := 0
 var _fail_safe_remaining := 0.0
-var _visual_update_remaining := 0.0
 var _collection_elapsed := 0.0
-var _visual_elapsed := 0.0
 var _player_ground_gu := Vector2.INF
 var _player_screen_position_px := Vector2.INF
 var _registered_pickups: Dictionary = {}
@@ -76,9 +73,7 @@ func configure_map(
 	_screen_to_ground = screen_to_ground if screen_to_ground is Callable else Callable()
 	_ground_to_screen = ground_to_screen if ground_to_screen is Callable else Callable()
 	_fail_safe_remaining = 0.0
-	_visual_update_remaining = 0.0
 	_collection_elapsed = 0.0
-	_visual_elapsed = 0.0
 	_player_ground_gu = Vector2.INF
 	_candidate_scratch.clear()
 	_previous_candidate_ids.clear()
@@ -114,7 +109,6 @@ func clear_all() -> void:
 	_candidate_ids.clear()
 	_logout_blocked_pickup_ids.clear()
 	_collection_elapsed = 0.0
-	_visual_elapsed = 0.0
 	_player_ground_gu = Vector2.INF
 
 
@@ -256,9 +250,8 @@ func diagnostics_snapshot() -> Dictionary:
 		"manager_exact_range_check_count": manager_exact_range_check_count,
 		"manager_collection_request_count": manager_collection_request_count,
 		"manager_visual_update_count": manager_visual_update_count,
-		# `manager_full_scan_count` is deliberately collection-only.  The
-		# presentation path may inspect the registered WeakRef registry at 30 Hz;
-		# expose that separately instead of claiming the whole manager is scan-free.
+		# Static loot has no scheduled presentation pass. Retain the diagnostic
+		# fields (zero) for existing Device Lab consumers.
 		"manager_full_scan_count": manager_full_scan_count,
 		"collection_full_scan_count": manager_full_scan_count,
 		"visual_registry_scan_count": manager_visual_registry_scan_count,
@@ -282,9 +275,7 @@ func _process(delta: float) -> void:
 		return
 	var safe_delta := maxf(0.0, delta)
 	_collection_elapsed += safe_delta
-	_visual_elapsed += safe_delta
 	_fail_safe_remaining -= safe_delta
-	_visual_update_remaining -= safe_delta
 	if _fail_safe_remaining <= 0.0:
 		_fail_safe_remaining = FAIL_SAFE_INTERVAL_SECONDS
 		manager_fail_safe_check_count += 1
@@ -293,10 +284,6 @@ func _process(delta: float) -> void:
 		)
 		_run_collection_pass(_collection_elapsed)
 		_collection_elapsed = 0.0
-	if _visual_update_remaining <= 0.0:
-		_visual_update_remaining = VISUAL_UPDATE_INTERVAL_SECONDS
-		_update_visuals(_visual_elapsed)
-		_visual_elapsed = 0.0
 
 
 func _run_collection_pass(delta_seconds: float) -> void:
@@ -381,32 +368,6 @@ func _check_registered_pickup(
 		RuntimeDiagnosticsScript.increment_performance_counter(
 			&"loot_manager_collection_requests"
 		)
-
-
-func _update_visuals(delta_seconds: float) -> void:
-	# Visual motion is intentionally manager-owned and low-frequency.  Invalid
-	# weak refs are cleaned by the index query; no collection work is performed
-	# here and no LootPickup has an individual process callback.
-	manager_visual_registry_scan_count += 1
-	manager_visual_registry_entry_count += _registered_pickups.size()
-	RuntimeDiagnosticsScript.increment_performance_counter(
-		&"loot_manager_visual_registry_scans"
-	)
-	RuntimeDiagnosticsScript.increment_performance_counter(
-		&"loot_manager_visual_registry_entries",
-		_registered_pickups.size(),
-	)
-	for raw_ref: Variant in _registered_pickups.values():
-		if not raw_ref is WeakRef:
-			continue
-		var pickup: Variant = (raw_ref as WeakRef).get_ref()
-		if pickup is LootPickup and is_instance_valid(pickup):
-			if (pickup as CanvasItem).is_visible_in_tree():
-				(pickup as LootPickup).manager_visual_tick(delta_seconds)
-				manager_visual_update_count += 1
-				RuntimeDiagnosticsScript.increment_performance_counter(
-					&"loot_manager_visual_updates"
-				)
 
 
 func _refresh_player_ground() -> bool:

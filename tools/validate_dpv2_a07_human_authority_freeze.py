@@ -182,7 +182,7 @@ def main() -> int:
 
     require(runtime["schema"] == "hardcore.dpv2.drop_runtime_authority.v1", "runtime Authority schema drift")
     require(runtime["activation"]["production_active"] is True, "runtime Authority inactive")
-    require(runtime["ground_overflow_policy"]["maximum_ground_slots"] == 9, "ground slot limit drift")
+    require(runtime["ground_overflow_policy"]["maximum_ground_slots"] == 15, "2026-09-13 ground slot limit drift")
     require(len(runtime["item_overflow_records"]) == 233, "overflow item coverage drift")
 	# Runtime overflow priority is derived from the resolved DPV2 tier, never
 	# from item_type or source-array order. Ordinary equipment/books are useful

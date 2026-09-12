@@ -16,6 +16,10 @@ func _run() -> void:
 	var frozen_record := _find_affixed_record(identity, catalog)
 	assert(not frozen_record.is_empty())
 	var frozen_instance: Dictionary = frozen_record.item_instance.duplicate(true)
+	var expected_attack_bonus := 0
+	for modifier: Dictionary in frozen_instance.modifiers:
+		if str(modifier.stat) == "attack_max": expected_attack_bonus += int(modifier.value)
+	assert(expected_attack_bonus > 0)
 	var instance_id := str(frozen_instance.instance_id)
 
 	var invalid_record := frozen_record.duplicate(true)
@@ -87,14 +91,14 @@ func _run() -> void:
 	var equipped := PlayerState.equip_inventory_index_result(0, "武器", instance_id)
 	assert(equipped.success, str(equipped))
 	_assert_same_instance(PlayerState.equipment["武器"], frozen_instance, "equip changed the instance")
-	assert(float(PlayerState.computed_stats.attack_max) == catalog_only_attack_max + 1.0,
+	assert(float(PlayerState.computed_stats.attack_max) == catalog_only_attack_max + expected_attack_bonus,
 		"the frozen modifiers Array was not consumed by real equipment aggregation")
 	var saved_q := PlayerState._read_json(PlayerState._profile_path("q"))
 	_assert_same_instance(saved_q.equipment["武器"], frozen_instance, "equipped save changed the instance")
 	PlayerState.load_save()
 	assert(PlayerState.last_load_result.success)
 	_assert_same_instance(PlayerState.equipment["武器"], frozen_instance, "equipped instance changed after reload")
-	assert(float(PlayerState.computed_stats.attack_max) == catalog_only_attack_max + 1.0)
+	assert(float(PlayerState.computed_stats.attack_max) == catalog_only_attack_max + expected_attack_bonus)
 
 	var duplicate_document := PlayerState._read_json(PlayerState._profile_path("q"))
 	duplicate_document["inventory"] = [frozen_instance.duplicate(true)]
@@ -178,7 +182,8 @@ func _find_affixed_record(identity: Dictionary, catalog: Dictionary) -> Dictiona
 	for index in range(1000):
 		var record := PlayerState.create_drop_item_instance(identity, "p:death-1:%d" % index)
 		if ItemDropInstanceRulesScript.is_affixed_instance(record.get("item_instance", {}), catalog):
-			return record
+			for modifier: Dictionary in record.item_instance.modifiers:
+				if str(modifier.stat) == "attack_max": return record
 	return {}
 
 

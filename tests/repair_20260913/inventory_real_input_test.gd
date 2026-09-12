@@ -81,6 +81,32 @@ func _run() -> void:
 		await settle()
 		hud._toggle_inventory()
 		await settle()
+	# The user's level-30 炼狱 -> 井中月 report: real bag tap then weapon-slot tap,
+	# twice in one open panel. No direct activation callbacks or scene re-entry.
+	panel._ui_dismiss_selection()
+	PlayerState.level = 30
+	PlayerState.profession = "战士"
+	var old_weapon := GameData.get_item_record({"item_id": 99})
+	var new_weapon := GameData.get_item_record({"item_id": 102})
+	PlayerState.equipment["武器"] = PlayerState._make_item_instance(str(old_weapon.name), old_weapon, 99130)
+	PlayerState.inventory = [PlayerState._make_item_instance(str(new_weapon.name), new_weapon, 102130)]
+	PlayerState.recalculate_stats(false)
+	panel.refresh()
+	await settle()
+	for expected_id: int in [102, 99]:
+		var revision := PlayerState.equipment_transaction_revision
+		var bag_point := point_for(0)
+		send_touch(bag_point, true)
+		send_touch(bag_point, false)
+		await settle()
+		var slot: Control = panel.equipment_buttons["武器"]
+		var slot_point := slot.get_global_transform_with_canvas() * (slot.size * 0.5)
+		send_touch(slot_point, true)
+		send_touch(slot_point, false)
+		await settle()
+		expect(int(GameData.get_item_record(PlayerState.equipment["武器"]).get("itemId", -1)) == expected_id, "native weapon replacement without re-entry")
+		expect(PlayerState.equipment_transaction_revision == revision + 1, "single equip commit")
+		expect(panel.item_detail_presenter.title_label.text == str(GameData.get_item_record({"item_id":expected_id}).name), "equipped detail follows new instance")
 	hud.queue_free()
 	await settle()
 	for message in failures:

@@ -306,6 +306,14 @@ func _query_enemy_nodes_in_aabb(
 				if not raw_entry is Dictionary:
 					continue
 				var entry := raw_entry as Dictionary
+				# Existential melee queries need only the inclusive segment envelope,
+				# not every actor in its coarse 4-GU buckets. Position transactions
+				# update this value synchronously, including forced moves. The caller
+				# still performs its live, exact body/segment narrow phase.
+				if not stable_order:
+					var indexed_position: Vector2 = entry.get("absolute_ground_gu", Vector2.INF)
+					if not _point_in_inclusive_bounds(indexed_position, bounds_ground_gu.position, bounds_ground_gu.end):
+						continue
 				if int(entry.get("_enemy_query_stamp", 0)) == query_stamp:
 					continue
 				entry["_enemy_query_stamp"] = query_stamp
@@ -646,11 +654,15 @@ func _erase_entry(actor_runtime_id: int) -> void:
 	index_unregister_count += 1
 
 
+static func _point_in_inclusive_bounds(point: Vector2, low: Vector2, high: Vector2) -> bool:
+	return point.x >= low.x and point.x <= high.x and point.y >= low.y and point.y <= high.y
+
+
 var index_enemy_node_batch_query_count := 0
 var index_enemy_node_batch_segment_count := 0
 
 
-## HC-M30-R6: exact batch of unordered bucket-envelope queries. This is NOT a
+## Exact batch of unordered inclusive segment-envelope queries. This is NOT a
 ## cross-frame cache. It is used only inside one synchronous flank evaluation.
 ## Output i contains the same live nodes, in the same bucket traversal order,
 ## as query_enemy_nodes_segment_unsorted_into for segment i at this instant.
@@ -670,8 +682,8 @@ func query_enemy_nodes_segment_batch_into(
 	if runtime_map_id < 0 or count <= 0 or count > 32 or ends.size() != count or expansions.size() != count:
 		return false
 	outputs.resize(count)
-	var minimum_buckets: Array[Vector2i] = []
-	var maximum_buckets: Array[Vector2i] = []
+	var minimum_points := PackedVector2Array()
+	var maximum_points := PackedVector2Array()
 	var union_min := Vector2(INF, INF)
 	var union_max := Vector2(-INF, -INF)
 	for i in range(count):
@@ -682,8 +694,8 @@ func query_enemy_nodes_segment_batch_into(
 		var expansion := maxf(0.0, expansions[i]) + _max_actor_bounds_gu
 		var low := Vector2(minf(starts[i].x, ends[i].x), minf(starts[i].y, ends[i].y)) - Vector2.ONE * expansion
 		var high := Vector2(maxf(starts[i].x, ends[i].x), maxf(starts[i].y, ends[i].y)) + Vector2.ONE * expansion
-		minimum_buckets.append(_bucket_key(low))
-		maximum_buckets.append(_bucket_key(high))
+		minimum_points.append(low)
+		maximum_points.append(high)
 		union_min = Vector2(minf(union_min.x, low.x), minf(union_min.y, low.y))
 		union_max = Vector2(maxf(union_max.x, high.x), maxf(union_max.y, high.y))
 	_neighbor_stale_actor_ids.clear()
@@ -704,10 +716,8 @@ func query_enemy_nodes_segment_batch_into(
 			for output: Array in outputs:
 				output.clear()
 			return false
-		var bucket: Vector2i = entry.get("bucket_key", Vector2i.ZERO)
+		var indexed_position: Vector2 = entry.get("absolute_ground_gu", Vector2.INF)
 		for i in range(count):
-			var low := minimum_buckets[i]
-			var high := maximum_buckets[i]
-			if bucket.x >= low.x and bucket.x <= high.x and bucket.y >= low.y and bucket.y <= high.y:
+			if _point_in_inclusive_bounds(indexed_position, minimum_points[i], maximum_points[i]):
 				(outputs[i] as Array).append(enemy)
 	return true

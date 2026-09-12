@@ -166,9 +166,8 @@ func _run() -> void:
 	_manager.player_position_changed(_player.global_position)
 	assert(_collection_events.size() == 3, "leaving range did not reset retry context")
 
-	# Visual motion is manager-owned at 30 Hz and must skip hidden pickups.  The
-	# same 200-node fixture therefore exercises the presentation gate without
-	# turning collection back into a full per-pickup process loop.
+	# Static loot keeps the same anchor without recurring presentation work,
+	# regardless of whether the registered pickup is visible or hidden.
 	var visual_count_before := int(
 		_manager.diagnostics_snapshot().manager_visual_update_count
 	)
@@ -182,16 +181,11 @@ func _run() -> void:
 		_manager.diagnostics_snapshot().manager_visual_update_count
 	)
 	var visual_snapshot: Dictionary = _manager.diagnostics_snapshot()
-	assert(int(visual_snapshot.get("visual_registry_scan_count", 0)) > 0)
+	assert(int(visual_snapshot.get("visual_registry_scan_count", -1)) == 0)
 	assert(int(visual_snapshot.get("collection_full_scan_count", -1)) == 0)
-	var visible_registered_count := (
-		int(_manager.diagnostics_snapshot().registered_pickup_count)
-		- near_pickups.size()
-		+ visible_pickup_count
-	)
 	assert(
-		visual_count_after - visual_count_before <= visible_registered_count,
-		"hidden loot received a manager visual update",
+		visual_count_after == visual_count_before,
+		"static loot received a manager visual update",
 	)
 	for pickup: LootPickup in near_pickups:
 		pickup.visible = true

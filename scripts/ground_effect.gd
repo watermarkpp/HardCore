@@ -14,8 +14,10 @@ const RELEASE_FOOTPRINT_CONTRACT_ID := (
 	"skills.ground_effect.ground_exact.shared_release_snapshot.v1"
 )
 const RUNTIME_TICK_CLAIM_RETENTION_MSEC := 60000
-const FIRE_WALL_RENDER_Z_INDEX := -1
+const WorldRender := preload("res://scripts/world_effect_render_order.gd")
+const FIRE_WALL_RENDER_Z_INDEX := 0
 const FIRE_WALL_RENDER_ALPHA := 0.78
+const FIRE_WALL_HEIGHT_SCALE := 0.6
 
 const VISUAL_PATHS := {
 	"wizard.fire_wall": "res://assets/art/characters/wizard/effects/fire_wall.png",
@@ -44,6 +46,7 @@ var visual_rejection_reason := ""
 var _snapshot_validation_context: Dictionary = {}
 var _tick_timer := 0.0
 var _sprite: Sprite2D
+var _visual_sort_proxy: Node2D
 
 static var _runtime_tick_claims: Dictionary = {}
 
@@ -92,11 +95,7 @@ func setup_ground_unit_effect(
 
 func _ready() -> void:
 	add_to_group("zone_content")
-	if skill_id == FIRE_WALL_SKILL_ID:
-		z_index = FIRE_WALL_RENDER_Z_INDEX
-		z_as_relative = true
-	else:
-		z_as_relative = true
+	_visual_sort_proxy = WorldRender.create_proxy(self)
 	_install_visual()
 	queue_redraw()
 
@@ -281,8 +280,9 @@ func _install_visual() -> void:
 		return
 	if skill_id == FIRE_WALL_SKILL_ID:
 		candidate.modulate = Color(1.0, 1.0, 1.0, FIRE_WALL_RENDER_ALPHA)
+		candidate.scale.y *= FIRE_WALL_HEIGHT_SCALE
 	_sprite = candidate
-	add_child(_sprite)
+	WorldRender.add_visual(_visual_sort_proxy, _sprite)
 
 
 func _physics_process(delta: float) -> void:

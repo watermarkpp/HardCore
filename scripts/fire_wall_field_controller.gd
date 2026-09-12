@@ -77,6 +77,8 @@ func setup_fire_wall_field(
 	combat_spatial_index: SpatialIndexScript = null,
 	runtime_map_id: int = -1
 ) -> void:
+	# Propagate root world sorting through the logical field to each cell proxy.
+	y_sort_enabled = true
 	source_actor = source
 	stable_skill_id = stable_skill_id_value
 	raw_power = maxi(0, int(effect.get("raw_power", 0)))

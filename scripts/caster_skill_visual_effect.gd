@@ -2,6 +2,7 @@ class_name CasterSkillVisualEffect
 extends Node2D
 
 const AnimationPlayerScript := preload("res://scripts/caster_skill_animation_player.gd")
+const WorldRender := preload("res://scripts/world_effect_render_order.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
@@ -13,9 +14,9 @@ const MAGIC_SHIELD_VISUAL_CONTRACT_ID := (
 	"skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1"
 )
 const ACTOR_VISIBILITY_RENDER_CONTRACT_ID := (
-	"skills.caster.effect.actor_visibility_negative_one_render_lane.v1"
+	"skills.effect.world_footpoint_y_sort.v2"
 )
-const ACTOR_VISIBILITY_Z_INDEX := -1
+const ACTOR_VISIBILITY_Z_INDEX := 0
 const ATTACHMENT_DRAW_ORDER_BEHIND_ACTOR := "behind_attached_actor_same_footpoint"
 const SINGLE_ACTIVE_LASER_VISUAL_GROUP := "wizard_laser_single_active_visual"
 const SINGLE_ACTIVE_LASER_VISUAL_CONTRACT_ID := (
@@ -46,6 +47,7 @@ var _skip_legacy_laser_single_active := false
 var _elapsed := 0.0
 var _completion_elapsed := 0.0
 var _sprites: Array[Sprite2D] = []
+var _visual_sort_proxy: Node2D
 var _playback_strategy := "frame_sequence"
 var _attachment_policy := "world_anchor"
 var _attachment_draw_order := ""
@@ -237,12 +239,8 @@ func _ready() -> void:
 		set_meta("magic_shield_visual_contract", MAGIC_SHIELD_VISUAL_CONTRACT_ID)
 	var entry := CasterSkillVisualRegistry.profile(skill_id)
 	visual_role = str(entry.get("role", ""))
-	# Generic spell visuals live in the actor-composited world, while projectiles,
-	# ground fields and summons have dedicated runtimes.  A fixed z=-1 lane keeps
-	# every generic effect below z=0 actors without lifting the player above map
-	# occluders or monsters.  Relying on a tiny y-sort offset was not a draw-order
-	# contract: equal/near-equal footpoints could still make a full-frame effect
-	# cover the actor, and the result changed while the actor moved.
+	# World walls and spell visuals share one footpoint-sorted plane. The visual
+	# proxy sorts just before a same-footpoint actor without changing geometry.
 	z_as_relative = true
 	z_index = ACTOR_VISIBILITY_Z_INDEX
 	set_meta(
@@ -320,10 +318,21 @@ func _process(delta: float) -> void:
 
 
 func _sync_actor_attachment_position() -> void:
-	# Preserve the exact fractional actor footpoint. Draw order is owned by the
-	# explicit actor-visibility z lane above; position is never perturbed to fake
-	# sorting, so attached effects cannot flicker across half-pixel boundaries.
+	# The visual proxy owns ordering; this remains the exact gameplay footpoint.
 	global_position = target_node.global_position
+
+
+func _uses_shared_world_sort() -> bool:
+	return true
+
+
+func _add_world_visual(visual: Node2D) -> void:
+	if not _uses_shared_world_sort():
+		add_child(visual)
+		return
+	if not is_instance_valid(_visual_sort_proxy):
+		_visual_sort_proxy = WorldRender.create_proxy(self)
+	WorldRender.add_visual(_visual_sort_proxy, visual)
 
 
 func is_persistent_magic_shield_visual() -> bool:
@@ -388,7 +397,7 @@ func _install_single() -> void:
 		sprite.queue_free()
 		return
 	_apply_line_decoration_policy(sprite)
-	add_child(sprite)
+	_add_world_visual(sprite)
 	_sprites.append(sprite)
 
 
@@ -445,7 +454,7 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 		_apply_line_decoration_policy(sprite)
 		sprite.set_manual_frame(frame_index)
 		sprite.visible = false
-		add_child(sprite)
+		_add_world_visual(sprite)
 		_sprites.append(sprite)
 	_advance_hellfire_trail()
 	lifetime = maxf(
@@ -494,7 +503,7 @@ func _update_hellfire_sprites() -> void:
 			continue
 		var record: Dictionary = _hellfire_records[index]
 		sprite.visible = true
-		sprite.position = (record.get("position", Vector2.ZERO) as Vector2).round()
+		sprite.position = (record.get("position", Vector2.ZERO) as Vector2).round() + Vector2(0.0, WorldRender.SORT_EPSILON_PX)
 		sprite.call("set_manual_frame", int(record.get("age", 0)))
 
 
@@ -613,7 +622,7 @@ func _install_formal_snapshot_visual_core() -> void:
 		core_polygon.polygon = polygon_screen_offset_px
 		core_polygon.color = core_color
 		core_polygon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-		add_child(core_polygon)
+		_add_world_visual(core_polygon)
 		_formal_core_polygons.append(core_polygon)
 	if not _formal_core_polygons.is_empty():
 		_formal_core_polygon = _formal_core_polygons[0]
@@ -637,7 +646,7 @@ func _install_formal_line_visual_core() -> void:
 	_formal_core_polygon.polygon = _formal_core_polygon_screen_offset_px
 	_formal_core_polygon.color = palette.outer_fill
 	_formal_core_polygon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	add_child(_formal_core_polygon)
+	_add_world_visual(_formal_core_polygon)
 	_formal_core_polygons.append(_formal_core_polygon)
 	# Presentation uses nested fills wholly contained by the authoritative quad.
 	# No edge outline, cross or axis is drawn in the production effect; debug
@@ -653,7 +662,7 @@ func _install_formal_line_visual_core() -> void:
 		)
 		glow_layer.color = layer_spec.color
 		glow_layer.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-		add_child(glow_layer)
+		_add_world_visual(glow_layer)
 		_formal_core_glow_layers.append(glow_layer)
 	set_meta("formal_line_visual_core_contract", FORMAL_LINE_VISUAL_CORE_CONTRACT_ID)
 	set_meta("formal_line_snapshot_id", str(
@@ -718,7 +727,7 @@ func _install_debug_skill_visual_geometry_overlay() -> void:
 
 	_debug_geometry_overlay = Node2D.new()
 	_debug_geometry_overlay.name = "SkillVisualGeometryDebugOverlay"
-	add_child(_debug_geometry_overlay)
+	_add_world_visual(_debug_geometry_overlay)
 	# Wide expected lines stay visible below the thinner actual lines when both
 	# geometries agree exactly. These colors never exist unless the plan opts in.
 	_add_debug_geometry_line(

@@ -74,8 +74,8 @@ func _run() -> void:
 			break
 	assert(controller != null, "fire wall must create a field controller")
 	assert(
-		controller.visual_cells.size() == 4,
-		"fire wall controller must own 4 visual cells"
+		controller.visual_cells.size() == 9,
+		"user-authorized 3x3 fire wall must own 9 visual cells"
 	)
 	controller_snapshot = controller.visual_cells[0].skill_footprint_snapshot
 	_assert_v2(controller_snapshot, "fire wall canonical")

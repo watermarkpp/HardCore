@@ -402,10 +402,9 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		var requirement := _requirement_label(item)
 		if not requirement.is_empty():
 			lines.append("穿戴要求：%s" % requirement)
-		var luck := int(instance.get("luck", instance.get("weapon_luck", 0)))
-		var curse := int(instance.get("curse", instance.get("weapon_curse", 0)))
-		if luck != 0 or curse != 0:
-			lines.append("幸运 %+d　诅咒 %+d" % [luck, curse])
+		var net_luck := EquipmentRulesScript.equipment_luck_contribution(item, instance, str(item.get("category", "")) == "武器")
+		if net_luck != 0:
+			lines.append("幸运 +%d" % net_luck if net_luck > 0 else "诅咒 +%d" % -net_luck)
 		var modifier_parts := _instance_modifier_lines(instance)
 		if not modifier_parts.is_empty():
 			lines.append("追加属性：%s" % "　".join(modifier_parts))
@@ -429,7 +428,7 @@ static func _stat_line(item: Dictionary) -> String:
 
 static func _advanced_stat_line(item: Dictionary, instance: Dictionary = {}) -> String:
 	var parts: Array[String] = []
-	for pair: Array in [["accuracy", "准确"], ["agility", "敏捷"], ["luck", "幸运"], ["hpBonus", "生命"], ["mpBonus", "魔法值"]]:
+	for pair: Array in [["accuracy", "准确"], ["agility", "敏捷"], ["hpBonus", "生命"], ["mpBonus", "魔法值"]]:
 		var value_variant: Variant = instance.get(pair[0], item.get(pair[0], null))
 		if value_variant != null and float(value_variant) != 0.0:
 			parts.append("%s %+d" % [pair[1], int(value_variant)])

@@ -13,6 +13,7 @@ func _check(ok: bool, message: String) -> void:
 
 func _run() -> void:
 	_check(GameData.is_dpv2_direct_baseline_loaded(), "baseline must load")
+	_check(GameData.dpv2_ground_slot_limit() == 15, "production authority must enable fifteen slots")
 	_check(GameData.is_dpv2_single_player_drop_boost_loaded(), "SPB must load: " + GameData.load_error)
 	if failed:
 		get_tree().quit(1)
@@ -34,7 +35,7 @@ func _run() -> void:
 		var result: Dictionary = service.roll_monster_drops(mid, rng, true)
 		_check(str(result.get("reason", "")) == "", "roll must resolve: %d" % mid)
 		_check(int(result.get("canonical_monster_id", -1)) == mid, "exact monster identity")
-		_check(int(result.get("ground_output_count", 0)) <= 9, "nine-slot cap")
+		_check(int(result.get("ground_output_count", 0)) <= 15, "fifteen-slot cap")
 		_check(bool(result.get("ground_output_plus_discarded_equals_successful", false)), "reward accounting")
 		for attempt: Dictionary in result.get("attempts", []):
 			var n := int(attempt.final_numerator)
@@ -53,7 +54,8 @@ func _run() -> void:
 		_check(int(probability.get("final_numerator", 0)) == 1 and int(probability.get("final_denominator", 0)) == 60, "armor 1/60")
 		for slot: Dictionary in profile.slots:
 			candidates.append({"slot_uid": slot.slot_uid, "policy": slot, "reward": {}, "attempt": {}})
-		var selected: Dictionary = service.call("_select_ground_rewards", candidates, rng, 9)
+		var selected: Dictionary = service.call("_select_ground_rewards", candidates, rng, GameData.dpv2_ground_slot_limit())
+		_check((selected.selected as Array).size() == mini(15, candidates.size()), "all-success overflow fills fifteen slots")
 		var retained := false
 		for row: Dictionary in selected.selected:
 			retained = retained or str(row.slot_uid) == target

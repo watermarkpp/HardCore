@@ -20,6 +20,7 @@ from collections import Counter, defaultdict
 from fractions import Fraction
 from pathlib import Path
 from typing import Any
+from dpv2_ground_capacity import GROUND_SLOT_LIMIT
 
 ROOT = Path(__file__).resolve().parents[1]
 MIGRATION_BASE = "342891ab884150c0e81084c932df8205484e6388"
@@ -489,6 +490,7 @@ def desired_direct_documents() -> dict[str, Any]:
         "baseline_freeze": {"migration_base_sha": MIGRATION_BASE, "migration_base_compiled_slots": sum(len(p["slots"]) for p in old_baseline["profiles"]), "migration_authority": SOURCE_AUTHORITY, "stable_uid_reuse": True},
         "profiles": new_profiles,
     }
+    baseline["probability_policy"]["post_rng_ground_slot_limit"] = GROUND_SLOT_LIMIT
     require(baseline["summary"]["runtime_allowed_monsters"] == 153, "RUNTIME_ALLOWED_COUNT")
     require(baseline["summary"]["drop_enabled_monsters"] == 144, "DROP_ENABLED_COUNT")
     require(baseline["summary"]["explicit_non_loot_monsters"] == 9, "NON_LOOT_COUNT")

@@ -63,7 +63,12 @@ static func inspect(
 	var local := Rect2(Vector2.ZERO, view.size)
 	if not local.grow(0.5).encloses(Rect2(title.position, title.size)) or not local.grow(0.5).encloses(Rect2(body.position, body.size)):
 		errors.append("TEXT_OUTSIDE_DETAIL_PANEL")
-	if view.size.y < view.size.x * 1.12 - 1.0:
+	# R3.3 shop contract allows W <= 1.3 H; non-shop cards keep portrait.
+	# See header_session_test and the current UIShopDetailSpace authority.
+	if owner_control is ShopPanel:
+		if view.size.x > view.size.y * 1.3 + 0.5:
+			errors.append("SHOP_DETAIL_ASPECT_OVERFLOW")
+	elif view.size.y < view.size.x * 1.12 - 1.0:
 		errors.append("NON_PORTRAIT_DETAIL")
 	var actual := _rect_in(owner_control, view)
 	var inside_allowed := false

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build/check the production DPV2 probability and nine-slot authorities.
+"""Build/check the production DPV2 probability and ground-capacity authorities.
 
 The 7,032 canonical source rows are deliberately outside this builder's write
 set.  It only activates the frozen A0.7 role/tier decisions and adds explicit
@@ -14,6 +14,7 @@ import hashlib
 import json
 from pathlib import Path
 from typing import Any
+from dpv2_ground_capacity import GROUND_SLOT_LIMIT
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -379,7 +380,7 @@ def build_runtime_authority(
             **slot_gate,
         },
         "ground_overflow_policy": {
-            "maximum_ground_slots": 9,
+            "maximum_ground_slots": GROUND_SLOT_LIMIT,
             "selection_stage": "after_all_probability_rolls",
             "priority_order": [
                 {"class": "PROTECTED_PROGRESS", "priority": 400},
@@ -457,14 +458,14 @@ def main() -> int:
     if args.write:
         for path, rendered in outputs.items():
             path.write_text(rendered, encoding="utf-8", newline="\n")
-        print("DPV2_DROP_RUNTIME_AUTHORITY_BUILD_PASS: items=233 monsters=156 ground_slots=9")
+        print(f"DPV2_DROP_RUNTIME_AUTHORITY_BUILD_PASS: items=233 monsters=156 ground_slots={GROUND_SLOT_LIMIT}")
         return 0
     mismatches = [path for path, rendered in outputs.items() if path.read_text(encoding="utf-8") != rendered]
     if mismatches:
         for path in mismatches:
             print(f"ERROR: {path.relative_to(ROOT)} differs from generated authority")
         return 1
-    print("DPV2_DROP_RUNTIME_AUTHORITY_CHECK_PASS: items=233 monsters=156 ground_slots=9")
+    print(f"DPV2_DROP_RUNTIME_AUTHORITY_CHECK_PASS: items=233 monsters=156 ground_slots={GROUND_SLOT_LIMIT}")
     return 0
 
 

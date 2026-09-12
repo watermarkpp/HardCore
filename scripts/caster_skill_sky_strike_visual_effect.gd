@@ -25,6 +25,11 @@ var _lifecycle_clock := 0.0
 var _debug_metadata: Dictionary = {}
 
 
+func _uses_shared_world_sort() -> bool:
+	# SkyStrike already compensates its dedicated tracked-footpoint sort proxy.
+	return false
+
+
 func setup(
 	position_value: Vector2,
 	source_skill_id: String,
@@ -270,7 +275,7 @@ func _refresh_sky_strike_debug_metadata() -> void:
 		"warning": _lifecycle_warning_seconds,
 		"impact": _lifecycle_impact_seconds,
 		"duration": _lifecycle_duration_seconds,
-		"render_lane": "world_y_sort" if _uses_world_footpoint_render_lane() else "actor_visibility_negative_one",
+		"render_lane": "world_y_sort",
 		"world_footpoint_y_sort": _uses_world_footpoint_render_lane(),
 		"same_footpoint_body_visibility": _uses_world_footpoint_render_lane(),
 		"six_frame_gate_preserved": skill_id == "wizard.lightning",
@@ -301,9 +306,8 @@ func _uses_world_footpoint_render_lane() -> bool:
 func _configure_world_footpoint_render_lane() -> void:
 	if not _uses_world_footpoint_render_lane():
 		return
-	# Generic caster visuals intentionally use z=-1.  Lightning is the one
-	# world-target effect that must participate in the root's y-sort at the
-	# target footpoint, so its own Node2D is restored to the root actor lane.
+	# Lightning retains its independently verified target-footpoint proxy.
+	# Generic visuals now share the world plane through WorldEffectRenderOrder.
 	# `_apply_profile_anchor` keeps the drawable child at the exact snapped
 	# footpoint and gives the parent a sub-pixel proxy key on the pinned runtime.
 	z_as_relative = true

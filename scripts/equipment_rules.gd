@@ -66,8 +66,22 @@ const SET_PIECES_BY_NAME := {
 }
 
 
-static func weapon_draws_behind_actor(direction_row: int) -> bool:
-	return posmod(direction_row, 8) in [7, 0, 1]
+static var _weapon_frame_order: Dictionary = {}
+
+static func weapon_draws_behind_actor(direction_row: int, action_name := "idle", frame := 0, gender := "男") -> bool:
+	if _weapon_frame_order.is_empty():
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+			"res://assets/data/equipment_weapon_frame_order.json"
+		))
+		if not parsed is Dictionary or str(parsed.get("contract_id", "")) != "equipment.weapon.primary_frame_order.v1":
+			return false
+		_weapon_frame_order = parsed
+	var starts: Dictionary = _weapon_frame_order.get("action_starts", {})
+	if not starts.has(action_name) or direction_row < 0 or direction_row > 7 or frame < 0 or frame > 7:
+		return false
+	var source_frame := int(starts[action_name]) + direction_row * 8 + frame
+	var table: Array = _weapon_frame_order.get("genders", [])[1 if gender == "女" else 0]
+	return source_frame < table.size() and int(table[source_frame]) == 0
 
 
 static func world_helmet_runtime_policy() -> Dictionary:
@@ -249,9 +263,10 @@ static func repair_cost(item: Dictionary, durability: int, max_durability: int) 
 	return int(quote.get("total_price", 0)) if bool(quote.get("valid", false)) else 0
 
 
-static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max: int, unlucky_roll: int, success_roll: int) -> Dictionary:
-	var next_luck := clampi(luck, 0, LUCK_POINT_3)
-	var next_curse := clampi(curse, 0, MAX_WEAPON_CURSE)
+static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max: int, unlucky_roll: int, success_roll: int, upper_stage_roll := -1) -> Dictionary:
+	var state := weapon_luck_state({"weapon_luck": luck, "weapon_curse": curse})
+	var next_luck := int(state.luck)
+	var next_curse := int(state.curse)
 	if blessing_is_unlucky_roll(unlucky_roll):
 		if next_luck > 0:
 			next_luck -= 1
@@ -267,6 +282,10 @@ static func blessing_outcome(luck: int, curse: int, attack_min: int, attack_max:
 	if next_luck < LUCK_POINT_2:
 		var denominator := span_factor + LUCK_POINT_2_RATE
 		if denominator > 1 and success_roll == 1:
+			return {"result": "improved", "luck": next_luck + 1, "curse": next_curse}
+		# Original WeaptonMakeLuck chains complete conditions with else-if.
+		# A failed lower-stage roll therefore reaches the independent upper roll.
+		if upper_stage_roll == 1:
 			return {"result": "improved", "luck": next_luck + 1, "curse": next_curse}
 	elif next_luck < LUCK_POINT_3:
 		var denominator := span_factor * LUCK_POINT_3_RATE
@@ -306,13 +325,19 @@ static func equipment_luck_contribution(item: Dictionary, instance: Dictionary =
 
 
 static func weapon_luck_label(instance: Dictionary) -> String:
-	var luck := int(instance.get("weapon_luck", 0))
-	var curse := int(instance.get("weapon_curse", 0))
-	if luck > 0:
-		return "幸运+%d" % luck
-	if curse > 0:
-		return "诅咒+%d" % curse
-	return "幸运0"
+	var state := weapon_luck_state(instance)
+	if int(state.luck) > 0:
+		return "幸运+%d" % int(state.luck)
+	if int(state.curse) > 0:
+		return "诅咒+%d" % int(state.curse)
+	return ""
+
+
+static func weapon_luck_state(instance: Dictionary) -> Dictionary:
+	# Legacy saves may contain both fields. Preserve their effective difference;
+	# new oil mutations write an exclusive pair instead of inventing a bonus.
+	var net := clampi(int(instance.get("weapon_luck", 0)), 0, LUCK_POINT_3) - clampi(int(instance.get("weapon_curse", 0)), 0, MAX_WEAPON_CURSE)
+	return {"luck": maxi(0, net), "curse": maxi(0, -net)}
 
 
 static func special_effect_for(item: Dictionary) -> Dictionary:

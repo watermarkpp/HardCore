@@ -24,6 +24,9 @@ const UNIT_X_PX := 48.0
 const UNIT_Y_PX := 32.0
 const ORIGINAL_DRAW_Y_OFFSET_PX := -46.0
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const EXACT_SOURCE_PATH := "res://assets/data/monster_projectile_exact_sources_v2.json"
+static var _exact_sources: Dictionary = {}
+const SourceFrames := preload("res://scripts/monster_source_frames.gd")
 
 # WEffectImg metadata returned by TWMImages.GetCachedImage. These are the
 # original per-direction hotspots, not hand-tuned visual offsets.
@@ -61,6 +64,23 @@ var _source_frame_index := SOURCE_ARCHER_BASE
 var _source_frame_offset := Vector2.ZERO
 var _previous_world_px := Vector2.ZERO
 var _sprite: Sprite2D
+var _exact_profile: Dictionary = {}
+var _animation_frame := -1
+
+
+static func _profile_has_id(profile: Dictionary, monster_id: int) -> bool:
+	for value: Variant in profile.get("monster_ids", []):
+		if int(value) == monster_id: return true
+	return false
+
+
+static func prewarm_for_monster_id(monster_id: int) -> void:
+	if _exact_sources.is_empty():
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(EXACT_SOURCE_PATH))
+		if parsed is Dictionary: _exact_sources = parsed
+	for profile: Dictionary in _exact_sources.get("profiles", {}).values():
+		if _profile_has_id(profile, monster_id):
+			SourceFrames.request_profile(profile)
 
 
 static func create_visual(descriptor: Dictionary) -> Node2D:
@@ -76,6 +96,17 @@ func setup(descriptor: Dictionary) -> void:
 	if str(release_descriptor.get("effect_id", "")) != EFFECT_ID:
 		_reject_visual()
 		return
+	if _exact_sources.is_empty():
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(EXACT_SOURCE_PATH))
+		if parsed is Dictionary: _exact_sources = parsed
+	var source_monster_id := int(release_descriptor.get("source_monster_id", -1))
+	if _profile_has_id({"monster_ids": _exact_sources.get("body_only_monster_ids", [])}, source_monster_id):
+		_reject_visual()
+		return
+	for profile: Dictionary in _exact_sources.get("profiles", {}).values():
+		if _profile_has_id(profile, source_monster_id):
+			_exact_profile = profile
+			break
 	release_id = str(release_descriptor.get("release_id", ""))
 	var origin_value: Variant = release_descriptor.get("origin_world_px", Vector2.ZERO)
 	var target_value: Variant = release_descriptor.get("target_world_px", origin_value)
@@ -100,14 +131,24 @@ func setup(descriptor: Dictionary) -> void:
 
 func _ready() -> void:
 	z_as_relative = true
-	z_index = 1
+	z_index = 0
 	add_to_group("zone_content")
 	_install_source_frame()
 	set_process(visible and _sprite != null)
+	if _finished: queue_free()
 
 
 func _install_source_frame() -> void:
 	if not visible or _sprite != null:
+		return
+	if not _exact_profile.is_empty():
+		SourceFrames.request_profile(_exact_profile, _direction16)
+		_sprite = Sprite2D.new()
+		_sprite.name = "SourceFrame"
+		_sprite.centered = false
+		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		add_child(_sprite)
+		_update_exact_frame()
 		return
 	var source_texture := load(source_texture_path()) as Texture2D
 	if source_texture == null:
@@ -136,8 +177,21 @@ func _process(delta: float) -> void:
 		return
 	global_position = next_world_px
 	_previous_world_px = next_world_px
+	if not _exact_profile.is_empty(): _update_exact_frame()
 	if progress >= 1.0:
 		_finish(false)
+
+
+func _update_exact_frame() -> void:
+	var frame := int(_elapsed_seconds / 0.05) % 3
+	if frame == _animation_frame and _sprite.texture != null: return
+	_animation_frame = frame
+	var record: Dictionary = _exact_profile.frames[_direction16 * 3 + frame]
+	var path := str(record.path)
+	_sprite.texture = SourceFrames.texture(path)
+	_sprite.position = Vector2(float(record.hot_x) - 24.0, float(record.hot_y) - 16.0)
+	_source_frame_index = int(record.source_index)
+	_source_frame_offset = Vector2(float(record.hot_x), float(record.hot_y))
 
 
 func _world_segment_is_clear(from_world_px: Vector2, to_world_px: Vector2) -> bool:
@@ -239,6 +293,8 @@ func collision_interrupted() -> bool:
 
 
 func source_texture_path() -> String:
+	if not _exact_profile.is_empty():
+		return str(_exact_profile.frames[_direction16 * 3 + maxi(0, _animation_frame)].path)
 	return "%s/Effect_%05d.png" % [SOURCE_FRAME_ROOT, _source_frame_index]
 
 
@@ -251,12 +307,12 @@ func visual_descriptor() -> Dictionary:
 		"duration_seconds": duration_seconds,
 		"damage_owner": "enemy.physical_projectile_release",
 		"release_policy": "frozen_path_once_then_queue_free",
-		"source_manifest_path": SOURCE_MANIFEST_PATH,
+		"source_manifest_path": EXACT_SOURCE_PATH if not _exact_profile.is_empty() else SOURCE_MANIFEST_PATH,
 		"source_texture_path": source_texture_path(),
 		"source_frame_index": _source_frame_index,
 		"source_frame_offset_px": _source_frame_offset,
 		"source_direction16": _direction16,
-		"source_frame_time_ms": SOURCE_FRAME_TIME_MS,
+		"source_frame_time_ms": 50 if not _exact_profile.is_empty() else SOURCE_FRAME_TIME_MS,
 		"background_policy": "transparent_source_wil_frame",
 		"collision_policy": "continuous_world_mask_visual_cutoff",
 	}

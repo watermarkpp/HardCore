@@ -1,6 +1,7 @@
 extends Node
 ## D×4 extreme detail gate (release closure).
-## Proves the REAL production chain - real data -> item formatter -> docked
+## Exercises synthetic extreme catalog records through the REAL production chain:
+## exact-ID lookup -> item formatter -> docked
 ## presenter -> production panel -> settled geometry validation - for extreme
 ## content. Adds only the missing extreme-content protection; every frozen
 ## contract (ninth-section scroll contract, shop action authority, title 20 /
@@ -12,6 +13,7 @@ const UIOverrides := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
 var failures: Array[String] = []
 var checks := 0
+var fixture_id := 990900
 
 func expect(condition: bool, message: String) -> void:
 	checks += 1
@@ -58,6 +60,7 @@ func _d_block(case_name: String, panel_name: String, presenter, expected_title: 
 	return valid and title_ok and body_full and honest_scroll and no_h_scroll and last_line_reachable
 
 func _run() -> void:
+	assert(GameData.ensure_loaded())
 	PlayerState.test_mode = true
 	await _d1_long_text_item()
 	await _d2_extreme_equipment()
@@ -68,10 +71,22 @@ func _run() -> void:
 	print("UI_EXTREME_D_GATE_%s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
 	get_tree().quit(0 if failures.is_empty() else 1)
 
+func _catalog_fixture(name_value: String, description: String, equipment := false, overrides: Dictionary = {}) -> Dictionary:
+	fixture_id += 1
+	var catalog := GameData.get_item_record({"item_id": 80} if equipment else "金创药(小量)")
+	assert(not catalog.is_empty())
+	catalog.merge(overrides, true)
+	catalog["itemId"] = fixture_id
+	catalog["name"] = name_value
+	catalog["description"] = description
+	GameData._catalog_by_item_id[fixture_id] = catalog
+	GameData._catalog_by_name[name_value] = catalog
+	return {"item_id":fixture_id,"name":name_value,"count":1,"durability":18,"max_durability":32}
+
 func _d1_long_text_item() -> void:
 	var long_name := "D1长名物品名称超长测试用例名四十字符整占位".repeat(2)
 	var description := "D1标记行：追加属性描述 +9\n".repeat(40) + "D1结尾标记行"
-	PlayerState.inventory = [{"name": long_name, "count": 1, "description": description, "category": "消耗品", "price": 88}]
+	PlayerState.inventory = [_catalog_fixture(long_name, description)]
 	var inventory := Inventory.new()
 	add_child(inventory)
 	await inventory.wait_until_runtime_ready()
@@ -90,7 +105,7 @@ func _d2_extreme_equipment() -> void:
 		"attackSpeedTier": 3, "level": 40, "price": 999999,
 		"description": "D2词条行：随机属性加成验证 +7\n".repeat(30) + "D2结尾标记行",
 	}
-	PlayerState.inventory = [extreme]
+	PlayerState.inventory = [_catalog_fixture(extreme.name, extreme.description, true, extreme)]
 	var inventory := Inventory.new()
 	add_child(inventory)
 	await inventory.wait_until_runtime_ready()
@@ -120,8 +135,8 @@ func _d3_shop_extreme() -> void:
 	var spec: Dictionary = snapshot.get("space_spec", {})
 	var opening: Rect2 = spec.get("frame_opening", Rect2())
 	expect(opening.has_area(), "D3 settled snapshot has frame_opening")
-	var to_global := shop.item_detail_presenter.get_global_transform()
-	var opening_global := Rect2(to_global * opening.position, opening.size)
+	var to_global: Transform2D = shop.get_global_transform()
+	var opening_global := UIShopDetailSpace.transformed(to_global, opening)
 	# C6 action authority 在极端文本下必须原样成立（裁决 20 复用）。
 	expect(shop.buy_button.visible and not shop.sell_quantity_button.visible, "D3 buy-mode action authority intact")
 	expect(shop.buy_button is BaseButton, "D3 buy button is a button")
@@ -129,7 +144,7 @@ func _d3_shop_extreme() -> void:
 	expect(opening_global.grow(-1.0).encloses(buy_rect), "D3 buy button inside frame opening")
 	var body: RichTextLabel = shop.item_detail_presenter.detail_label
 	expect(not body.get_global_rect().intersects(buy_rect), "D3 body never covers the buy button")
-	expect(shop.buy_button.get_global_rect().y >= body.get_global_rect().end.y - 0.5, "D3 actions stay below the scrolled body")
+	expect(shop.buy_button.get_global_rect().position.y >= body.get_global_rect().end.y - 0.5, "D3 actions stay below the scrolled body")
 	await _d_block("D3_shop_extreme", "shop", shop.item_detail_presenter, stock_name, stock_description)
 	shop.queue_free()
 	await get_tree().process_frame
@@ -137,7 +152,8 @@ func _d3_shop_extreme() -> void:
 func _d4_warehouse_extreme() -> void:
 	var item_name := "D4仓库极端物品名三十字符超长名称占位测试终"
 	var description := "D4仓库正文行：极端详情验证 +3\n".repeat(50) + "D4结尾标记行"
-	PlayerState.warehouse_inventory = [{"name": item_name, "count": 1, "description": description, "category": "材料"}]
+	PlayerState.warehouse_inventory = []
+	PlayerState.inventory = [_catalog_fixture(item_name, description)]
 	var warehouse := Warehouse.new()
 	add_child(warehouse)
 	await warehouse.wait_until_runtime_ready()

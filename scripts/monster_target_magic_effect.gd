@@ -12,6 +12,10 @@ const COW_PRIEST_PRESENTATION_EFFECT_ID := "monster.cow_priest.fly.primary.v1"
 const SOURCE_MANIFEST_PATH := "res://assets/data/monster_target_magic_sources_v1.json"
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
+const Frames := preload("res://scripts/monster_source_frames.gd")
+const RenderOrder := preload("res://scripts/world_effect_render_order.gd")
+const COW_KING_ID := 224
+const COW_KING_PRESENTATION_EFFECT_ID := "monster.cow_king.mt13.source.v2"
 const COW_MAGE_ID := 220
 const COW_PRIEST_ID := 222
 const MAGE_FRAME_SECONDS := 0.05
@@ -52,6 +56,10 @@ var _fly_duration_seconds := 0.0
 var _fly_previous_world_px := Vector2.ZERO
 var _fly_blocked_by_world := false
 var _finished := false
+var _king_frames: Array = []
+var _target_sprite: Sprite2D
+var _cast_sprite: Sprite2D
+var _fly_sprite: Sprite2D
 var _mage_frames: Array = []
 var _priest_cast_frames: Array = []
 var _priest_fly_frames: Array = []
@@ -65,6 +73,8 @@ static func create_visual(descriptor: Dictionary) -> Node2D:
 
 static func presentation_effect_id_for_monster_id(monster_id: int) -> String:
 	match monster_id:
+		COW_KING_ID:
+			return COW_KING_PRESENTATION_EFFECT_ID
 		COW_MAGE_ID:
 			return COW_MAGE_PRESENTATION_EFFECT_ID
 		COW_PRIEST_ID:
@@ -74,6 +84,10 @@ static func presentation_effect_id_for_monster_id(monster_id: int) -> String:
 
 
 static func source_profile_for_monster_id(monster_id: int) -> Dictionary:
+	if monster_id == COW_KING_ID:
+		var king := Frames.profile_for_id(monster_id).duplicate(true)
+		king["presentation_effect_id"] = COW_KING_PRESENTATION_EFFECT_ID
+		return king
 	var effects: Variant = _source_manifest().get("effects_by_monster_id", {})
 	if not effects is Dictionary:
 		return {}
@@ -117,7 +131,12 @@ func setup(descriptor: Dictionary) -> void:
 	fly_direction16 = _client_fly_direction16(source_to_target)
 	source_direction8 = _resolve_source_direction8(release_descriptor, source_to_target)
 	_load_profile_frames(profile)
-	if source_monster_id == COW_MAGE_ID:
+	if source_monster_id == COW_KING_ID:
+		_king_frames = profile.get("frames", [])
+		Frames.request_profile(profile)
+		_duration_seconds = CLIENT_MAGIC_RELEASE_SECONDS + 0.02 * float(_king_frames.size())
+		if _king_frames.size() != 20: _reject_visual()
+	elif source_monster_id == COW_MAGE_ID:
 		_duration_seconds = (
 			CLIENT_MAGIC_RELEASE_SECONDS
 			+ MAGE_FRAME_SECONDS * float(_mage_frames.size())
@@ -139,9 +158,20 @@ func setup(descriptor: Dictionary) -> void:
 
 func _ready() -> void:
 	z_as_relative = true
-	z_index = 2
+	z_index = 0
 	add_to_group("zone_content")
-	queue_redraw()
+	if not visible:
+		queue_free()
+		return
+	_target_sprite = _make_world_sprite("Target")
+	if source_monster_id == COW_PRIEST_ID:
+		_cast_sprite = _make_world_sprite("Cast")
+		_fly_sprite = _make_world_sprite("Fly")
+	elif source_monster_id == COW_KING_ID:
+		var additive := CanvasItemMaterial.new()
+		additive.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+		_target_sprite.material = additive
+	_update_presentation()
 	set_process(visible and _duration_seconds > 0.0)
 
 
@@ -154,7 +184,7 @@ func _process(delta: float) -> void:
 	)
 	if source_monster_id == COW_PRIEST_ID:
 		_update_priest_fly_world_occlusion()
-	queue_redraw()
+	_update_presentation()
 	if _elapsed_seconds >= _duration_seconds:
 		_finished = true
 		set_process(false)
@@ -162,58 +192,52 @@ func _process(delta: float) -> void:
 		queue_free()
 
 
-func _draw() -> void:
-	if not visible or _duration_seconds <= 0.0:
-		return
-	if source_monster_id == COW_MAGE_ID:
-		_draw_mage_thunder()
+func _make_world_sprite(label: String) -> Sprite2D:
+	var proxy := RenderOrder.create_proxy(self)
+	proxy.name = label + "Footpoint"
+	var visual := Sprite2D.new()
+	visual.name = label + "Frame"
+	visual.centered = false
+	visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	proxy.add_child(visual)
+	return visual
+
+
+func _update_presentation() -> void:
+	if _target_sprite == null: return
+	var released := _elapsed_seconds >= CLIENT_MAGIC_RELEASE_SECONDS
+	_target_sprite.visible = released and source_monster_id != COW_PRIEST_ID
+	if source_monster_id == COW_MAGE_ID and released:
+		var frame := mini(_mage_frames.size() - 1, int((_elapsed_seconds - CLIENT_MAGIC_RELEASE_SECONDS) / MAGE_FRAME_SECONDS))
+		_set_atlas_frame(_target_sprite, MAGE_THUNDER_TEXTURE, _mage_frames[frame], Vector2.ZERO, CLIENT_MAGIC_DRAW_OFFSET)
+	elif source_monster_id == COW_KING_ID and released:
+		var frame := mini(_king_frames.size() - 1, int((_elapsed_seconds - CLIENT_MAGIC_RELEASE_SECONDS) / 0.02))
+		var record: Dictionary = _king_frames[frame]
+		_target_sprite.texture = Frames.texture(str(record.path))
+		_target_sprite.position = Vector2(float(record.x), float(record.y)) + CLIENT_MAGIC_DRAW_OFFSET + Vector2(0, RenderOrder.SORT_EPSILON_PX)
 	elif source_monster_id == COW_PRIEST_ID:
-		_draw_priest_magic()
+		var source_relative := source_world_px - target_world_px
+		var cast_frame := mini(5, int(_elapsed_seconds / PRIEST_CAST_FRAME_SECONDS))
+		_set_atlas_frame(_cast_sprite, PRIEST_CAST_TEXTURE, _priest_cast_frames[source_direction8 * 6 + cast_frame], source_relative, Vector2.ZERO)
+		_cast_sprite.visible = _elapsed_seconds < PRIEST_CAST_FRAME_SECONDS * 6.0
+		var fly_elapsed := _elapsed_seconds - CLIENT_MAGIC_RELEASE_SECONDS
+		_fly_sprite.visible = released and not _fly_blocked_by_world and fly_elapsed <= _fly_duration_seconds
+		if _fly_sprite.visible:
+			var frame := int(fly_elapsed / PRIEST_FLY_FRAME_SECONDS) % 6
+			var progress := clampf(fly_elapsed / maxf(_fly_duration_seconds, PRIEST_FLY_FRAME_SECONDS), 0.0, 1.0)
+			_set_atlas_frame(_fly_sprite, PRIEST_FLY_TEXTURE, _priest_fly_frames[fly_direction16 * 6 + frame], source_relative.lerp(Vector2.ZERO, progress), CLIENT_MAGIC_DRAW_OFFSET)
 
 
-func _draw_mage_thunder() -> void:
-	if _elapsed_seconds < CLIENT_MAGIC_RELEASE_SECONDS:
-		return
-	var thunder_elapsed := _elapsed_seconds - CLIENT_MAGIC_RELEASE_SECONDS
-	var frame_index := mini(
-		_mage_frames.size() - 1,
-		int(floor(thunder_elapsed / MAGE_FRAME_SECONDS)),
-	)
-	_draw_source_frame(
-		MAGE_THUNDER_TEXTURE,
-		_mage_frames[frame_index],
-		CLIENT_MAGIC_DRAW_OFFSET,
-	)
-
-
-func _draw_priest_magic() -> void:
-	var cast_frame := mini(5, int(floor(_elapsed_seconds / PRIEST_CAST_FRAME_SECONDS)))
-	var cast_record_index := source_direction8 * 6 + cast_frame
-	var source_relative := source_world_px - target_world_px
-	_draw_source_frame(
-		PRIEST_CAST_TEXTURE,
-		_priest_cast_frames[cast_record_index],
-		source_relative,
-	)
-	if _elapsed_seconds < CLIENT_MAGIC_RELEASE_SECONDS:
-		return
-	if _fly_blocked_by_world:
-		return
-	var fly_elapsed := _elapsed_seconds - CLIENT_MAGIC_RELEASE_SECONDS
-	if fly_elapsed > _fly_duration_seconds:
-		return
-	var fly_frame := int(floor(fly_elapsed / PRIEST_FLY_FRAME_SECONDS)) % 6
-	var fly_record_index := fly_direction16 * 6 + fly_frame
-	var fly_progress := clampf(
-		fly_elapsed / maxf(_fly_duration_seconds, PRIEST_FLY_FRAME_SECONDS),
-		0.0,
-		1.0,
-	)
-	_draw_source_frame(
-		PRIEST_FLY_TEXTURE,
-		_priest_fly_frames[fly_record_index],
-		source_relative.lerp(Vector2.ZERO, fly_progress) + CLIENT_MAGIC_DRAW_OFFSET,
-	)
+func _set_atlas_frame(visual: Sprite2D, texture: Texture2D, frame: Dictionary, footpoint: Vector2, origin: Vector2) -> void:
+	var region: Array = frame.get("atlas_region", [])
+	var hot: Array = frame.get("source_offset", [])
+	if region.size() != 4 or hot.size() != 2: return
+	visual.texture = texture
+	visual.region_enabled = true
+	visual.region_filter_clip_enabled = true
+	visual.region_rect = Rect2(float(region[0]), float(region[1]), float(region[2]), float(region[3]))
+	(visual.get_parent() as Node2D).position = footpoint - Vector2(0, RenderOrder.SORT_EPSILON_PX)
+	visual.position = origin + Vector2(float(hot[0]), float(hot[1])) + Vector2(0, RenderOrder.SORT_EPSILON_PX)
 
 
 func _update_priest_fly_world_occlusion() -> void:
@@ -257,24 +281,6 @@ func _world_segment_is_clear(from_world_px: Vector2, to_world_px: Vector2) -> bo
 	return physics_space.intersect_ray(query).is_empty()
 
 
-func _draw_source_frame(texture: Texture2D, frame: Dictionary, anchor: Vector2) -> void:
-	var region_values: Array = frame.get("atlas_region", [])
-	var offset_values: Array = frame.get("source_offset", [])
-	if region_values.size() != 4 or offset_values.size() != 2:
-		return
-	var source_region := Rect2(
-		float(region_values[0]),
-		float(region_values[1]),
-		float(region_values[2]),
-		float(region_values[3]),
-	)
-	var destination := Rect2(
-		anchor + Vector2(float(offset_values[0]), float(offset_values[1])),
-		source_region.size,
-	)
-	draw_texture_rect_region(texture, destination, source_region)
-
-
 func current_progress() -> float:
 	return clampf(_elapsed_seconds / maxf(_duration_seconds, 0.001), 0.0, 1.0)
 
@@ -289,7 +295,7 @@ func visual_descriptor() -> Dictionary:
 		"target_world_px": target_world_px,
 		"duration_seconds": _duration_seconds,
 		"damage_owner": "enemy.target_magic_release",
-		"visual_source_manifest": SOURCE_MANIFEST_PATH,
+		"visual_source_manifest": Frames.MANIFEST if source_monster_id == COW_KING_ID else SOURCE_MANIFEST_PATH,
 		"background_policy": "transparent_source_policy_compliant_client_frames_only",
 		"world_collision_policy": (
 			"swept_world_mask_body_and_area"

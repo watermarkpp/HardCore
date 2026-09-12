@@ -498,11 +498,11 @@
         ]
       },
       "required_tests": [
-			"slaying_proc_table_exact",
-			"slaying_dc_bonus_exact",
-			"slaying_accuracy_bonus_exact",
-			"slaying_scope_all_body_modes",
-			"slaying_training_only_on_proc"
+        "slaying_proc_table_exact",
+        "slaying_dc_bonus_exact",
+        "slaying_accuracy_bonus_exact",
+        "slaying_scope_all_body_modes",
+        "slaying_training_only_on_proc"
       ]
     },
     {
@@ -560,17 +560,17 @@
         "shape": "line",
         "length_tiles": 3,
         "width_tiles": 1,
-		"maximum_reach_tiles": 3.0,
-		"endpoint_tolerance_tiles": 0.5,
-		"primary_segment_reach_tiles": 1.5,
+        "maximum_reach_tiles": 3.0,
+        "endpoint_tolerance_tiles": 0.5,
+        "primary_segment_reach_tiles": 1.5,
         "maximum_targets": -1,
         "maximum_targets_semantics": "unlimited_within_valid_geometry",
         "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
-		"range_bonus_cap_tiles": 0.0,
-		"unit_override": "ground_gu",
-		"project_override_contract_id": "gameplay.warrior.thrusting.fixed_3gu_two_segment.v1",
-		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
-		"raw_pixel_geometry_forbidden": true,
+        "range_bonus_cap_tiles": 0.0,
+        "unit_override": "ground_gu",
+        "project_override_contract_id": "gameplay.warrior.thrusting.fixed_3gu_two_segment.v1",
+        "coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
+        "raw_pixel_geometry_forbidden": true,
         "stop_on_terrain": true
       },
       "timing": {
@@ -704,17 +704,21 @@
         "relation": "hostile"
       },
       "geometry": {
-		"shape": "project_canonical_four_target_arc",
-		"primary_cell": "front_1",
-		"side_cells": "continuous_120_degree_fan_side_bands",
-		"relative_direction_offsets": [7, 0, 1],
-		"arc_angle_degrees": 120.0,
-		"base_reach_tiles": 2.0,
-		"endpoint_tolerance_tiles": 0.5,
-		"range_bonus_cap_tiles": 0.0,
-		"unit_override": "ground_gu",
-		"project_override_contract_id": "gameplay.warrior.half_moon.fixed_2gu_120deg.v1",
-		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
+        "shape": "project_canonical_four_target_arc",
+        "primary_cell": "front_1",
+        "side_cells": "continuous_120_degree_fan_side_bands",
+        "relative_direction_offsets": [
+          7,
+          0,
+          1
+        ],
+        "arc_angle_degrees": 120.0,
+        "base_reach_tiles": 2.0,
+        "endpoint_tolerance_tiles": 0.5,
+        "range_bonus_cap_tiles": 0.0,
+        "unit_override": "ground_gu",
+        "project_override_contract_id": "gameplay.warrior.half_moon.fixed_2gu_120deg.v1",
+        "coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
         "maximum_targets": -1,
         "maximum_targets_semantics": "unlimited_within_valid_geometry",
         "target_count_policy_id": "gameplay.warrior.melee_target_count.v1",
@@ -998,16 +1002,16 @@
       },
       "geometry": {
         "shape": "none_until_next_melee_hit",
-		"runtime_melee_reach_tiles": 2.0,
-		"maximum_targets": 1,
-		"range_bonus_cap_tiles": 0.0,
-		"coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
-		"requires_valid_target_at_input": true,
-		"empty_swing_policy": "reject_without_valid_target_at_input",
-		"fallback_to_other_melee_modes": false,
-		"fallback_priority_order": [],
-		"release_snapshot_is_sole_geometry_truth": true,
-		"raw_pixel_geometry_forbidden": true
+        "runtime_melee_reach_tiles": 2.0,
+        "maximum_targets": 1,
+        "range_bonus_cap_tiles": 0.0,
+        "coordinate_space": "fractional_canonical_map_tiles_from_footpoints",
+        "requires_valid_target_at_input": true,
+        "empty_swing_policy": "reject_without_valid_target_at_input",
+        "fallback_to_other_melee_modes": false,
+        "fallback_priority_order": [],
+        "release_snapshot_is_sole_geometry_truth": true,
+        "raw_pixel_geometry_forbidden": true
       },
       "timing": {
         "body_action": "cast_or_weapon_charge",
@@ -1037,8 +1041,8 @@
           2.2,
           2.6
         ],
-		"consume_on": "next_valid_melee_damage_attempt",
-		"direct_toggle_cooldown_commit": "only_after_legal_hit_or_miss_resolution",
+        "consume_on": "next_valid_melee_damage_attempt",
+        "direct_toggle_cooldown_commit": "only_after_legal_hit_or_miss_resolution",
         "auto_cast": false,
         "refresh_existing_charge": "replace_and_restart_duration",
         "stack_count_max": 1,
@@ -1078,10 +1082,10 @@
         ]
       },
       "required_tests": [
-			"fire_sword_never_auto_casts",
-			"fire_sword_multiplier_exact",
-			"fire_sword_requires_target_before_action",
-			"fire_sword_charge_expires",
+        "fire_sword_never_auto_casts",
+        "fire_sword_multiplier_exact",
+        "fire_sword_requires_target_before_action",
+        "fire_sword_charge_expires",
         "fire_sword_consumed_once",
         "fire_sword_cooldown_independent_from_charge_lifetime"
       ]
@@ -2221,11 +2225,11 @@
       },
       "geometry": {
         "shape": "square",
-        "width_tiles": 2,
-        "height_tiles": 2,
-        "center_policy": "snap selected point to canonical 2x2 anchor",
+        "width_tiles": 3,
+        "height_tiles": 3,
+        "center_policy": "selected grid cell centered in exact 3x3 square",
         "status": "project_canonical",
-        "conflict_note": "CN 1.76文字明确2×2；部分开源源码为十字，Vanilla在本项目冻结为2×2。"
+        "conflict_note": "2026-09-13 user request 5 overrides the previous 2x2 project geometry; timing, damage and stacking unchanged."
       },
       "timing": {
         "body_action": "cast_8dir_6f",
@@ -2290,7 +2294,7 @@
         ]
       },
       "required_tests": [
-        "fire_wall_exact_2x2",
+        "fire_wall_exact_3x3",
         "fire_wall_duration_scales",
         "fire_wall_tick_once_per_caster",
         "fire_wall_refresh_not_stack",

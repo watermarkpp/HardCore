@@ -4334,6 +4334,7 @@ func _emit_monster_special_delivery_descriptor(release_record: Dictionary) -> vo
 	var first_record := first_record_value as Dictionary
 	var projectile_descriptor := {
 		"effect_id": MonsterRangedProjectileEffectScript.EFFECT_ID,
+		"source_monster_id": monster_id,
 		"release_id": str(release_record.get("release_id", "")),
 		"origin_world_px": release_record.get("origin_world_px", Vector2.INF),
 		"target_world_px": first_record.get("target_world_px", Vector2.INF),

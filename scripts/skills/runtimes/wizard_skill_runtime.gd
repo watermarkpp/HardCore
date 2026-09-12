@@ -62,8 +62,8 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 		"wizard.fire_wall":
 			var primary_stat_roll := int(context.get("primary_stat_roll", 0))
 			var field := _damage_effect(definition, request, rng, "persistent_ground_damage")
-			field["width_grid_steps"] = 2
-			field["height_grid_steps"] = 2
+			field["width_grid_steps"] = int(definition.get("geometry", {}).get("width_grid_steps", 3))
+			field["height_grid_steps"] = int(definition.get("geometry", {}).get("height_grid_steps", 3))
 			field["tick_interval_ms"] = int(definition.get("timing", {}).get("tick_interval_ms", 1000))
 			field["max_ticks_per_target_per_caster"] = 1
 			field["duration_seconds"] = maxi(
