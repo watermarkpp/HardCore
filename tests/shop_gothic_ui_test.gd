@@ -98,6 +98,41 @@ func _run() -> void:
 	panel._select_shop_item(0)
 	assert(panel.item_list.get_selected_items() == PackedInt32Array([0]), "商品卡选择没有同步购买逻辑")
 	assert(panel.goods_buttons[0].theme_type_variation == "GothicComponentSelectedShopCard", "选中商品没有公共高亮状态")
+	# PRE/POST settle adjudication for the dagger detail space plan (ruling 6):
+	# record the presenter state right after selection, wait for the container
+	# layout to actually stabilize (rects unchanged across frames), then
+	# re-run the production detail path and record the final state.
+	var pre_snapshot: Dictionary = panel.item_detail_presenter.debug_layout_snapshot()
+	print("SHOP_SETTLE_PRE valid=%s error=%s rect=%s" % [pre_snapshot.get("valid"), pre_snapshot.get("error"), pre_snapshot.get("rect")])
+	var panel_rect := panel.get_global_rect()
+	var grid_rect := panel.goods_grid.get_global_rect()
+	var stable_frames := 0
+	for _frame in range(120):
+		await get_tree().process_frame
+		if panel.get_global_rect() == panel_rect and panel.goods_grid.get_global_rect() == grid_rect:
+			stable_frames += 1
+			if stable_frames >= 3:
+				break
+		else:
+			panel_rect = panel.get_global_rect()
+			grid_rect = panel.goods_grid.get_global_rect()
+			stable_frames = 0
+	print("SHOP_SETTLE_STABLE frames=%d panel_rect=%s" % [stable_frames, panel_rect])
+	if not bool(panel.item_detail_presenter.debug_layout_snapshot().get("valid", false)):
+		panel._select_shop_item(0)
+	var post_snapshot: Dictionary = panel.item_detail_presenter.debug_layout_snapshot()
+	var post_spec: Dictionary = post_snapshot.get("space_spec", {})
+	print("SHOP_SETTLE_POST valid=%s error=%s rect=%s" % [post_snapshot.get("valid"), post_snapshot.get("error"), post_snapshot.get("rect")])
+	print("SHOP_SPEC region=%s expanded=%s opening=%s protected=%s action_layout=%s" % [post_spec.get("region", Rect2()), post_spec.get("expanded_region", Rect2()), post_spec.get("frame_opening", Rect2()), (post_spec.get("protected", []) as Array).size(), post_spec.get("action_layout", "?")])
+	print("SHOP_ACTIONS buy=%s repair=%s sell_row=%s sell_btn=%s buy_min=%s repair_min=%s" % [panel.buy_button.get_global_rect(), panel.repair_button.get_global_rect(), panel.sell_quantity_row.is_visible_in_tree(), panel.sell_quantity_button.is_visible_in_tree(), panel.buy_button.get_combined_minimum_size(), panel.repair_button.get_combined_minimum_size()])
+	var trace: Array = post_snapshot.get("candidate_trace", [])
+	var best := {"fits_height": false}
+	for entry: Dictionary in trace:
+		if bool(entry.get("fits_height", false)) or not bool(best.get("fits_height", false)):
+			if float(entry.get("natural_height", 0.0)) > float(best.get("natural_height", 0.0)) or bool(entry.get("fits_height", false)):
+				if not bool(best.get("fits_height", false)) or float(entry.get("natural_height", 0.0)) <= float(entry.get("available_height", 0.0)):
+					best = entry
+	print("SHOP_CANDIDATES count=%d widest_fitting=%s" % [trace.size(), best])
 	assert(panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "商品详情没有响应卡片选择")
 	var gold_before := PlayerState.gold
 	var buy_quote := panel._buy_quote_for_index(0)
