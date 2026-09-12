@@ -1,0 +1,30 @@
+--- a/tests/r6_3/shop_space_matrix.gd
++++ b/tests/r6_3/shop_space_matrix.gd
+@@ -2,6 +2,7 @@
+ ## Real ShopPanel + real pricing callbacks. Synthetic catalog offers extend layout
+ ## coverage beyond actual merchant stock; this is NOT transaction/performance proof.
+ const Shop := preload("res://scripts/shop_panel.gd")
++const VisualBounds := preload("res://scripts/ui_style_visual_bounds.gd")
+ const Dock := preload("res://scripts/ui_item_detail_dock.gd")
+ const NameStyle := preload("res://scripts/ui_item_name_style.gd")
+ @export var offset := 0
+@@ -71,12 +72,13 @@
+ 	var action_gaps: Array = []
+ 	for c: Variant in [panel.buy_button, panel.repair_button, panel.sell_quantity_row, panel.sell_quantity_button]:
+ 		if c is Control and c.is_visible_in_tree():
+-			var bounds := Rect2(Vector2.ZERO, c.size)
+-			if c is BaseButton:
+-				for style_name: StringName in [&"normal", &"pressed", &"hover", &"disabled", &"focus"]:
+-					var style: StyleBox = c.get_theme_stylebox(style_name)
+-					if style != null:
+-						bounds = bounds.merge(style.get_draw_rect(Rect2(Vector2.ZERO, c.size)))
++			# R3.2 API migration: shared low-level bounds adapter is independently
++			# tested with known expansion/shadow cases; all clearance gates remain.
++			var measured: Dictionary = VisualBounds.control_bounds(c as Control)
++			check(bool(measured.get("ok", false)), prefix + "action visual bounds unavailable")
++			if not bool(measured.get("ok", false)):
++				continue
++			var bounds: Rect2 = measured.get("rect", Rect2())
+ 			var rt: Transform2D = panel.get_global_transform_with_canvas().affine_inverse() * c.get_global_transform_with_canvas()
+ 			var drawn := Dock.transformed_rect(rt, bounds)
+ 			var clearance := (drawn.position.y - actual.end.y) * sy

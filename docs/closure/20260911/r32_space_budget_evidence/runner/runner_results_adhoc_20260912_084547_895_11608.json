@@ -1,0 +1,26 @@
+{
+  "passed": 0,
+  "generated_at": "2026-09-12T08:45:47.8953447+08:00",
+  "suite": "adhoc",
+  "total": 1,
+  "git_head": "b3296528d7f85c7dff2c78adafaa0f5e4ec33c16",
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "drawn_budget_test",
+      "test_path": "tests/r6_3_2/drawn_budget_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 4,
+      "engine_log_failure_count": 4,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_4;engine_log_failures_4"
+    }
+  ],
+  "engine_log_errors": 4
+}

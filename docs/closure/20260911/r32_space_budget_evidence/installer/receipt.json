@@ -1,0 +1,28 @@
+{
+  "schema": "hc.r32.install.v1",
+  "base": "3468de45f49adb2cbe30da2b08bfeebe17c7de0e",
+  "head": "3468de45f49adb2cbe30da2b08bfeebe17c7de0e",
+  "branch": "codex/r3-2-space-budget",
+  "mode": "audit",
+  "targets": {
+    "scripts/item_detail_docked_presenter.gd": {
+      "state": "INSTALLED",
+      "before": "b86473413a36da56ea3baa3cf024e4ff65a90612e5ec9a652ab790beae259b20",
+      "after": "6d8bb417f4b8a11d55210714960a02bc66744df086aa9aeb38f781628c117c8b"
+    },
+    "scripts/ui_shop_detail_space.gd": {
+      "state": "INSTALLED",
+      "before": "27700403442d3e3bad756cceaf522375609b4bd7b3103e7fae43ba62fadee880",
+      "after": "eb60a1871676e746bcf3b9558fe223057c19188582bd41b8165dac3d089231fc"
+    },
+    "tests/r6_3/shop_space_matrix.gd": {
+      "state": "INSTALLED",
+      "before": "526d32cfcc7ac85c2be6acfa0bf56932d8e8e8de59d586369d034471a09eea69",
+      "after": "150bb559131f0af03bde24a60b3c4285cf3159929735272b3dbece03219d0dc7"
+    }
+  },
+  "runtime": "NOT_RUN",
+  "modified": [],
+  "status": "R32_CODE_INTACT_NOT_LAYOUT_ACCEPTANCE",
+  "candidate_scope": "drawn action budget; complete shop failure attribution requires runtime capture"
+}

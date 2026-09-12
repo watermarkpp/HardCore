@@ -1,0 +1,55 @@
+--- a/scripts/ui_shop_detail_space.gd
++++ b/scripts/ui_shop_detail_space.gd
+@@ -71,7 +71,7 @@
+ 		c.size = local_size
+ 
+ static func _minimum_size_in_owner(owner: Control, c: Control) -> Vector2:
+-	var minimum := c.get_minimum_size()
++	var minimum := c.get_combined_minimum_size()
+ 	var own := owner.get_global_transform_with_canvas()
+ 	var ct := c.get_global_transform_with_canvas()
+ 	return Vector2(minimum.x * ct.x.length() / maxf(own.x.length(), 0.000001), minimum.y * ct.y.length() / maxf(own.y.length(), 0.000001))
+@@ -131,15 +131,30 @@
+ 		var bw := maxf(128.0, bmin.x + 8.0)
+ 		if aw + bw + gap <= usable:
+ 			var target_h := maxf(51.0, maxf(amin.y, bmin.y) + 4.0)
++			# R3.2: reserve the DRAWN minima first. The old allocation filled the
++			# complete hit-box budget, so any positive ornament expansion made a
++			# feasible row fail its subsequent visual-width check.
+ 			_set_size_in_owner(owner, a, Vector2(aw, target_h))
+-			_set_size_in_owner(owner, b, Vector2(usable - aw - gap, target_h))
+-			var left := opening.position.x + ACTION_FRAME_PX / scale.x
++			_set_size_in_owner(owner, b, Vector2(bw, target_h))
+ 			var actual_a := visual_rect(owner, a)
+ 			var actual_b := visual_rect(owner, b)
+-			if actual_a.size.x + actual_b.size.x + gap <= usable + 0.05:
+-				_shift_x(owner, a, left - actual_a.position.x)
+-				_shift_x(owner, b, left + actual_a.size.x + gap - actual_b.position.x)
+-				horizontal = true
++			var drawn_minimum := actual_a.size.x + actual_b.size.x + gap
++			if actual_a.has_area() and actual_b.has_area() and drawn_minimum <= usable + 0.05:
++				var spare := maxf(0.0, usable - drawn_minimum - 0.5)
++				if spare > 0.0:
++					_set_size_in_owner(owner, b, Vector2(bw + spare, target_h))
++					actual_b = visual_rect(owner, b)
++					# A responsive style may change family at the wider size. Keep
++					# the already verified minimal row rather than guessing bounds.
++					if not actual_b.has_area() or actual_a.size.x + actual_b.size.x + gap > usable + 0.05:
++						_set_size_in_owner(owner, b, Vector2(bw, target_h))
++						actual_b = visual_rect(owner, b)
++				var drawn_width := actual_a.size.x + actual_b.size.x + gap
++				if actual_b.has_area() and drawn_width <= usable + 0.05:
++					var left := opening.get_center().x - drawn_width * 0.5
++					_shift_x(owner, a, left - actual_a.position.x)
++					_shift_x(owner, b, left + actual_a.size.x + gap - actual_b.position.x)
++					horizontal = true
+ 	if not horizontal:
+ 		for c: Control in actions:
+ 			if c is BaseButton:
+@@ -168,5 +183,6 @@
+ 	area = area.intersection(viewport_rect)
+ 	return {"region": area, "side": "center", "kind": "shop", "frame_opening": opening,
+ 		"screen_scale": scale, "protected": protected, "title_rect": rect_in(owner, title),
++		"action_layout": "row" if horizontal else "stack",
+ 		"action_gap_px": ACTION_CLEAR_PX, "frame_gap_px": FRAME_CLEAR_PX,
+ 		"pixel_scope": "viewport_only" if DisplayServer.get_name() == "headless" else "screen"}
