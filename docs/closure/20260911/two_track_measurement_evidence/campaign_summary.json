@@ -1,0 +1,1838 @@
+{
+ "schema": "hardcore.m30_320frame_summary.v1",
+ "sides": {
+  "before": "8dd1d092 (m30-r3-integration M30 frozen baseline)",
+  "after": "bf887623 (current production)"
+ },
+ "engine": "Godot 4.7 stable, same exe, headless, isolated appdata per tree",
+ "sampling": "320 physics frames per case (fixture contract), full process-interval raw array kept",
+ "cases": {
+  "after_open_pursuit_12": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.902,
+     "p95": 10.515,
+     "p99": 11.419,
+     "min": 0.012,
+     "max": 15.917,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.012,
+     "p50": 6.902,
+     "p95": 10.514,
+     "p99": 11.179,
+     "max": 15.917
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r1_open_pursuit_12"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.902,
+     "p95": 10.425,
+     "p99": 11.415,
+     "min": 0.013,
+     "max": 16.503,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.013,
+     "p50": 6.902,
+     "p95": 10.424,
+     "p99": 11.406,
+     "max": 16.503
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r2_open_pursuit_12"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.904,
+     "p95": 10.499,
+     "p99": 11.467,
+     "min": 0.013,
+     "max": 13.429,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.013,
+     "p50": 6.904,
+     "p95": 10.491,
+     "p99": 11.459,
+     "max": 13.429
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r3_open_pursuit_12"
+   }
+  ],
+  "after_open_pursuit_15": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.901,
+     "p95": 11.604,
+     "p99": 12.738,
+     "min": 0.013,
+     "max": 18.615,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.013,
+     "p50": 6.901,
+     "p95": 11.597,
+     "p99": 12.308,
+     "max": 18.615
+    },
+    "tails": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r1_open_pursuit_15"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.901,
+     "p95": 11.428,
+     "p99": 12.49,
+     "min": 0.015,
+     "max": 13.928,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 6.901,
+     "p95": 11.427,
+     "p99": 12.411,
+     "max": 13.928
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r2_open_pursuit_15"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.9,
+     "p95": 11.274,
+     "p99": 12.105,
+     "min": 0.01,
+     "max": 19.882,
+     "samples": 774
+    },
+    "recomputed": {
+     "min": 0.01,
+     "p50": 6.9,
+     "p95": 11.273,
+     "p99": 12.085,
+     "max": 19.882
+    },
+    "tails": {
+     "over_16_67ms": 2,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 2,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r3_open_pursuit_15"
+   }
+  ],
+  "after_open_pursuit_30": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.277,
+     "p95": 16.082,
+     "p99": 19.682,
+     "min": 0.014,
+     "max": 25.518,
+     "samples": 771
+    },
+    "recomputed": {
+     "min": 0.014,
+     "p50": 6.277,
+     "p95": 16.082,
+     "p99": 19.605,
+     "max": 25.518
+    },
+    "tails": {
+     "over_16_67ms": 28,
+     "over_25ms": 1,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 28,
+     "over_25ms": 1,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r1_open_pursuit_30"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.042,
+     "p95": 16.128,
+     "p99": 20.12,
+     "min": 0.015,
+     "max": 21.869,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 6.091,
+     "p95": 16.102,
+     "p99": 20.048,
+     "max": 21.869
+    },
+    "tails": {
+     "over_16_67ms": 25,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 25,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r2_open_pursuit_30"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.446,
+     "p95": 15.493,
+     "p99": 19.745,
+     "min": 0.018,
+     "max": 21.498,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.018,
+     "p50": 6.449,
+     "p95": 15.484,
+     "p99": 19.618,
+     "max": 21.498
+    },
+    "tails": {
+     "over_16_67ms": 25,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 25,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r3_open_pursuit_30"
+   }
+  ],
+  "after_sustained_close_attacks_12": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.9,
+     "p95": 11.241,
+     "p99": 13.876,
+     "min": 0.016,
+     "max": 16.826,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.016,
+     "p50": 6.9,
+     "p95": 11.218,
+     "p99": 13.782,
+     "max": 16.826
+    },
+    "tails": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r1_sustained_close_attacks_12"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.902,
+     "p95": 10.974,
+     "p99": 13.824,
+     "min": 0.017,
+     "max": 16.546,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.017,
+     "p50": 6.902,
+     "p95": 10.964,
+     "p99": 13.745,
+     "max": 16.546
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r2_sustained_close_attacks_12"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.902,
+     "p95": 11.732,
+     "p99": 12.504,
+     "min": 0.014,
+     "max": 15.151,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.014,
+     "p50": 6.902,
+     "p95": 11.672,
+     "p99": 12.5,
+     "max": 15.151
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r3_sustained_close_attacks_12"
+   }
+  ],
+  "after_sustained_close_attacks_15": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.902,
+     "p95": 12.296,
+     "p99": 17.192,
+     "min": 0.017,
+     "max": 17.933,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.017,
+     "p50": 6.902,
+     "p95": 12.293,
+     "p99": 17.133,
+     "max": 17.933
+    },
+    "tails": {
+     "over_16_67ms": 12,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 12,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r1_sustained_close_attacks_15"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.901,
+     "p95": 12.451,
+     "p99": 17.403,
+     "min": 0.017,
+     "max": 17.809,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.017,
+     "p50": 6.901,
+     "p95": 12.378,
+     "p99": 17.198,
+     "max": 17.809
+    },
+    "tails": {
+     "over_16_67ms": 16,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 16,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r2_sustained_close_attacks_15"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.899,
+     "p95": 12.251,
+     "p99": 16.99,
+     "min": 0.015,
+     "max": 18.064,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 6.899,
+     "p95": 12.17,
+     "p99": 16.973,
+     "max": 18.064
+    },
+    "tails": {
+     "over_16_67ms": 12,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 12,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r3_sustained_close_attacks_15"
+   }
+  ],
+  "after_sustained_close_attacks_30": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 5.523,
+     "p95": 23.696,
+     "p99": 29.472,
+     "min": 0.014,
+     "max": 32.11,
+     "samples": 717
+    },
+    "recomputed": {
+     "min": 0.014,
+     "p50": 5.523,
+     "p95": 23.622,
+     "p99": 29.472,
+     "max": 32.11
+    },
+    "tails": {
+     "over_16_67ms": 71,
+     "over_25ms": 32,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 71,
+     "over_25ms": 32,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r1_sustained_close_attacks_30"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.111,
+     "p95": 25.995,
+     "p99": 32.887,
+     "min": 0.017,
+     "max": 40.097,
+     "samples": 695
+    },
+    "recomputed": {
+     "min": 0.017,
+     "p50": 6.111,
+     "p95": 25.749,
+     "p99": 32.821,
+     "max": 40.097
+    },
+    "tails": {
+     "over_16_67ms": 74,
+     "over_25ms": 38,
+     "over_33_3ms": 6,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 74,
+     "over_25ms": 38,
+     "over_33_3ms": 6,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r2_sustained_close_attacks_30"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.066,
+     "p95": 25.319,
+     "p99": 35.061,
+     "min": 0.015,
+     "max": 36.207,
+     "samples": 703
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 6.066,
+     "p95": 25.319,
+     "p99": 35.061,
+     "max": 36.207
+    },
+    "tails": {
+     "over_16_67ms": 70,
+     "over_25ms": 37,
+     "over_33_3ms": 12,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 70,
+     "over_25ms": 37,
+     "over_33_3ms": 12,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "after_r3_sustained_close_attacks_30"
+   }
+  ],
+  "before_open_pursuit_12": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.901,
+     "p95": 10.497,
+     "p99": 11.664,
+     "min": 0.011,
+     "max": 13.822,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.011,
+     "p50": 6.901,
+     "p95": 10.456,
+     "p99": 11.651,
+     "max": 13.822
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r1_open_pursuit_12"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.899,
+     "p95": 10.55,
+     "p99": 11.644,
+     "min": 0.013,
+     "max": 13.769,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.013,
+     "p50": 6.899,
+     "p95": 10.469,
+     "p99": 11.602,
+     "max": 13.769
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r2_open_pursuit_12"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.901,
+     "p95": 10.58,
+     "p99": 11.297,
+     "min": 0.013,
+     "max": 17.354,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.013,
+     "p50": 6.901,
+     "p95": 10.554,
+     "p99": 11.18,
+     "max": 17.354
+    },
+    "tails": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r3_open_pursuit_12"
+   }
+  ],
+  "before_open_pursuit_15": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.9,
+     "p95": 11.48,
+     "p99": 12.526,
+     "min": 0.014,
+     "max": 19.751,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.014,
+     "p50": 6.9,
+     "p95": 11.475,
+     "p99": 12.505,
+     "max": 19.751
+    },
+    "tails": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r1_open_pursuit_15"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.902,
+     "p95": 11.553,
+     "p99": 13.097,
+     "min": 0.015,
+     "max": 15.284,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 6.902,
+     "p95": 11.543,
+     "p99": 12.582,
+     "max": 15.284
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r2_open_pursuit_15"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.901,
+     "p95": 11.614,
+     "p99": 12.656,
+     "min": 0.022,
+     "max": 18.92,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.022,
+     "p50": 6.901,
+     "p95": 11.6,
+     "p99": 12.65,
+     "max": 18.92
+    },
+    "tails": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r3_open_pursuit_15"
+   }
+  ],
+  "before_open_pursuit_30": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.264,
+     "p95": 16.197,
+     "p99": 20.339,
+     "min": 0.013,
+     "max": 24.389,
+     "samples": 770
+    },
+    "recomputed": {
+     "min": 0.013,
+     "p50": 6.264,
+     "p95": 16.197,
+     "p99": 20.299,
+     "max": 24.389
+    },
+    "tails": {
+     "over_16_67ms": 26,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 26,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r1_open_pursuit_30"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.346,
+     "p95": 15.399,
+     "p99": 22.698,
+     "min": 0.014,
+     "max": 28.081,
+     "samples": 766
+    },
+    "recomputed": {
+     "min": 0.014,
+     "p50": 6.346,
+     "p95": 15.399,
+     "p99": 21.617,
+     "max": 28.081
+    },
+    "tails": {
+     "over_16_67ms": 18,
+     "over_25ms": 3,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 18,
+     "over_25ms": 3,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r2_open_pursuit_30"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.123,
+     "p95": 16.329,
+     "p99": 20.039,
+     "min": 0.015,
+     "max": 22.321,
+     "samples": 770
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 6.123,
+     "p95": 16.329,
+     "p99": 20.02,
+     "max": 22.321
+    },
+    "tails": {
+     "over_16_67ms": 31,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 31,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r3_open_pursuit_30"
+   }
+  ],
+  "before_sustained_close_attacks_12": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.9,
+     "p95": 11.963,
+     "p99": 13.646,
+     "min": 0.016,
+     "max": 16.556,
+     "samples": 771
+    },
+    "recomputed": {
+     "min": 0.016,
+     "p50": 6.9,
+     "p95": 11.963,
+     "p99": 13.329,
+     "max": 16.556
+    },
+    "tails": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 0,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r1_sustained_close_attacks_12"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.9,
+     "p95": 11.349,
+     "p99": 15.236,
+     "min": 0.015,
+     "max": 17.151,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 6.9,
+     "p95": 11.342,
+     "p99": 15.13,
+     "max": 17.151
+    },
+    "tails": {
+     "over_16_67ms": 2,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 2,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r2_sustained_close_attacks_12"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.9,
+     "p95": 11.345,
+     "p99": 15.296,
+     "min": 0.016,
+     "max": 17.213,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.016,
+     "p50": 6.9,
+     "p95": 10.994,
+     "p99": 15.234,
+     "max": 17.213
+    },
+    "tails": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 1,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r3_sustained_close_attacks_12"
+   }
+  ],
+  "before_sustained_close_attacks_15": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 6.9,
+     "p95": 12.547,
+     "p99": 18.415,
+     "min": 0.014,
+     "max": 19.454,
+     "samples": 773
+    },
+    "recomputed": {
+     "min": 0.014,
+     "p50": 6.9,
+     "p95": 12.537,
+     "p99": 18.365,
+     "max": 19.454
+    },
+    "tails": {
+     "over_16_67ms": 14,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 14,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r1_sustained_close_attacks_15"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 6.901,
+     "p95": 12.751,
+     "p99": 17.872,
+     "min": 0.016,
+     "max": 19.547,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.016,
+     "p50": 6.901,
+     "p95": 12.63,
+     "p99": 16.68,
+     "max": 19.547
+    },
+    "tails": {
+     "over_16_67ms": 9,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 9,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r2_sustained_close_attacks_15"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 6.901,
+     "p95": 12.826,
+     "p99": 18.197,
+     "min": 0.016,
+     "max": 19.56,
+     "samples": 772
+    },
+    "recomputed": {
+     "min": 0.016,
+     "p50": 6.902,
+     "p95": 12.705,
+     "p99": 18.071,
+     "max": 19.56
+    },
+    "tails": {
+     "over_16_67ms": 12,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 12,
+     "over_25ms": 0,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r3_sustained_close_attacks_15"
+   }
+  ],
+  "before_sustained_close_attacks_30": [
+   {
+    "round": 1,
+    "fixture": {
+     "p50": 5.839,
+     "p95": 22.385,
+     "p99": 25.722,
+     "min": 0.015,
+     "max": 34.276,
+     "samples": 702
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 5.839,
+     "p95": 22.385,
+     "p99": 25.722,
+     "max": 34.276
+    },
+    "tails": {
+     "over_16_67ms": 101,
+     "over_25ms": 9,
+     "over_33_3ms": 1,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 101,
+     "over_25ms": 9,
+     "over_33_3ms": 1,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r1_sustained_close_attacks_30"
+   },
+   {
+    "round": 2,
+    "fixture": {
+     "p50": 5.096,
+     "p95": 24.73,
+     "p99": 29.122,
+     "min": 0.015,
+     "max": 32.568,
+     "samples": 707
+    },
+    "recomputed": {
+     "min": 0.015,
+     "p50": 5.096,
+     "p95": 24.73,
+     "p99": 29.122,
+     "max": 32.568
+    },
+    "tails": {
+     "over_16_67ms": 78,
+     "over_25ms": 35,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 78,
+     "over_25ms": 35,
+     "over_33_3ms": 0,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r2_sustained_close_attacks_30"
+   },
+   {
+    "round": 3,
+    "fixture": {
+     "p50": 5.028,
+     "p95": 23.442,
+     "p99": 28.672,
+     "min": 0.013,
+     "max": 33.987,
+     "samples": 721
+    },
+    "recomputed": {
+     "min": 0.013,
+     "p50": 5.028,
+     "p95": 23.442,
+     "p99": 28.672,
+     "max": 33.987
+    },
+    "tails": {
+     "over_16_67ms": 94,
+     "over_25ms": 22,
+     "over_33_3ms": 1,
+     "over_50ms": 0
+    },
+    "tail_fixture": {
+     "over_16_67ms": 94,
+     "over_25ms": 22,
+     "over_33_3ms": 1,
+     "over_50ms": 0
+    },
+    "checks": {
+     "ticks_320": true,
+     "raw_matches_samples": true,
+     "actor_count_ok": true,
+     "hashes_present": true,
+     "actors_with_motion": true
+    },
+    "label": "before_r3_sustained_close_attacks_30"
+   }
+  ]
+ },
+ "problems": [],
+ "paired": [
+  {
+   "scenario": "open_pursuit",
+   "count": 12,
+   "round": 1,
+   "p95_before": 10.456,
+   "p95_after": 10.514,
+   "p95_gate_pass": true,
+   "p99_before": 11.651,
+   "p99_after": 11.179,
+   "max_before": 13.822,
+   "max_after": 15.917,
+   "tails_before": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "open_pursuit",
+   "count": 12,
+   "round": 2,
+   "p95_before": 10.469,
+   "p95_after": 10.424,
+   "p95_gate_pass": true,
+   "p99_before": 11.602,
+   "p99_after": 11.406,
+   "max_before": 13.769,
+   "max_after": 16.503,
+   "tails_before": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "open_pursuit",
+   "count": 12,
+   "round": 3,
+   "p95_before": 10.554,
+   "p95_after": 10.491,
+   "p95_gate_pass": true,
+   "p99_before": 11.18,
+   "p99_after": 11.459,
+   "max_before": 17.354,
+   "max_after": 13.429,
+   "tails_before": {
+    "over_16_67ms": 1,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "open_pursuit",
+   "count": 15,
+   "round": 1,
+   "p95_before": 11.475,
+   "p95_after": 11.597,
+   "p95_gate_pass": true,
+   "p99_before": 12.505,
+   "p99_after": 12.308,
+   "max_before": 19.751,
+   "max_after": 18.615,
+   "tails_before": {
+    "over_16_67ms": 1,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 1,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "open_pursuit",
+   "count": 15,
+   "round": 2,
+   "p95_before": 11.543,
+   "p95_after": 11.427,
+   "p95_gate_pass": true,
+   "p99_before": 12.582,
+   "p99_after": 12.411,
+   "max_before": 15.284,
+   "max_after": 13.928,
+   "tails_before": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "open_pursuit",
+   "count": 15,
+   "round": 3,
+   "p95_before": 11.6,
+   "p95_after": 11.273,
+   "p95_gate_pass": true,
+   "p99_before": 12.65,
+   "p99_after": 12.085,
+   "max_before": 18.92,
+   "max_after": 19.882,
+   "tails_before": {
+    "over_16_67ms": 1,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 2,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "open_pursuit",
+   "count": 30,
+   "round": 1,
+   "p95_before": 16.197,
+   "p95_after": 16.082,
+   "p95_gate_pass": true,
+   "p99_before": 20.299,
+   "p99_after": 19.605,
+   "max_before": 24.389,
+   "max_after": 25.518,
+   "tails_before": {
+    "over_16_67ms": 26,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 28,
+    "over_25ms": 1,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "open_pursuit",
+   "count": 30,
+   "round": 2,
+   "p95_before": 15.399,
+   "p95_after": 16.102,
+   "p95_gate_pass": true,
+   "p99_before": 21.617,
+   "p99_after": 20.048,
+   "max_before": 28.081,
+   "max_after": 21.869,
+   "tails_before": {
+    "over_16_67ms": 18,
+    "over_25ms": 3,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 25,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "open_pursuit",
+   "count": 30,
+   "round": 3,
+   "p95_before": 16.329,
+   "p95_after": 15.484,
+   "p95_gate_pass": true,
+   "p99_before": 20.02,
+   "p99_after": 19.618,
+   "max_before": 22.321,
+   "max_after": 21.498,
+   "tails_before": {
+    "over_16_67ms": 31,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 25,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 12,
+   "round": 1,
+   "p95_before": 11.963,
+   "p95_after": 11.218,
+   "p95_gate_pass": true,
+   "p99_before": 13.329,
+   "p99_after": 13.782,
+   "max_before": 16.556,
+   "max_after": 16.826,
+   "tails_before": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 1,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 12,
+   "round": 2,
+   "p95_before": 11.342,
+   "p95_after": 10.964,
+   "p95_gate_pass": true,
+   "p99_before": 15.13,
+   "p99_after": 13.745,
+   "max_before": 17.151,
+   "max_after": 16.546,
+   "tails_before": {
+    "over_16_67ms": 2,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 12,
+   "round": 3,
+   "p95_before": 10.994,
+   "p95_after": 11.672,
+   "p95_gate_pass": false,
+   "p99_before": 15.234,
+   "p99_after": 12.5,
+   "max_before": 17.213,
+   "max_after": 15.151,
+   "tails_before": {
+    "over_16_67ms": 1,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 0,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 15,
+   "round": 1,
+   "p95_before": 12.537,
+   "p95_after": 12.293,
+   "p95_gate_pass": true,
+   "p99_before": 18.365,
+   "p99_after": 17.133,
+   "max_before": 19.454,
+   "max_after": 17.933,
+   "tails_before": {
+    "over_16_67ms": 14,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 12,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 15,
+   "round": 2,
+   "p95_before": 12.63,
+   "p95_after": 12.378,
+   "p95_gate_pass": true,
+   "p99_before": 16.68,
+   "p99_after": 17.198,
+   "max_before": 19.547,
+   "max_after": 17.809,
+   "tails_before": {
+    "over_16_67ms": 9,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 16,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 15,
+   "round": 3,
+   "p95_before": 12.705,
+   "p95_after": 12.17,
+   "p95_gate_pass": true,
+   "p99_before": 18.071,
+   "p99_after": 16.973,
+   "max_before": 19.56,
+   "max_after": 18.064,
+   "tails_before": {
+    "over_16_67ms": 12,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 12,
+    "over_25ms": 0,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 30,
+   "round": 1,
+   "p95_before": 22.385,
+   "p95_after": 23.622,
+   "p95_gate_pass": false,
+   "p99_before": 25.722,
+   "p99_after": 29.472,
+   "max_before": 34.276,
+   "max_after": 32.11,
+   "tails_before": {
+    "over_16_67ms": 101,
+    "over_25ms": 9,
+    "over_33_3ms": 1,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 71,
+    "over_25ms": 32,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 30,
+   "round": 2,
+   "p95_before": 24.73,
+   "p95_after": 25.749,
+   "p95_gate_pass": true,
+   "p99_before": 29.122,
+   "p99_after": 32.821,
+   "max_before": 32.568,
+   "max_after": 40.097,
+   "tails_before": {
+    "over_16_67ms": 78,
+    "over_25ms": 35,
+    "over_33_3ms": 0,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 74,
+    "over_25ms": 38,
+    "over_33_3ms": 6,
+    "over_50ms": 0
+   }
+  },
+  {
+   "scenario": "sustained_close_attacks",
+   "count": 30,
+   "round": 3,
+   "p95_before": 23.442,
+   "p95_after": 25.319,
+   "p95_gate_pass": false,
+   "p99_before": 28.672,
+   "p99_after": 35.061,
+   "max_before": 33.987,
+   "max_after": 36.207,
+   "tails_before": {
+    "over_16_67ms": 94,
+    "over_25ms": 22,
+    "over_33_3ms": 1,
+    "over_50ms": 0
+   },
+   "tails_after": {
+    "over_16_67ms": 70,
+    "over_25ms": 37,
+    "over_33_3ms": 12,
+    "over_50ms": 0
+   }
+  }
+ ]
+}
