@@ -6,6 +6,7 @@ extends PanelContainer
 ## node never owns an item list or mutates gameplay state.
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
+const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
 
 const MAX_OUTER_WIDTH := 340.0
 const SAFE_MARGIN := 18.0
@@ -410,7 +411,7 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 			lines.append("追加属性：%s" % "　".join(modifier_parts))
 	elif count > 1:
 		lines.append("数量：%d" % count)
-	var description := str(item.get("description", context.get("description", "")))
+	var description := PlayerCopy.description(item.get("description", context.get("description", "")))
 	if not description.is_empty():
 		lines.append(description)
 	if lines.is_empty():

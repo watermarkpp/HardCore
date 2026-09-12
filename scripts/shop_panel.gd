@@ -10,6 +10,7 @@ const GothicFrameFactoryScript := preload("res://scripts/gothic_frame_factory.gd
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const ItemDetailPresenterScript := preload("res://scripts/item_detail_docked_presenter.gd")
@@ -949,8 +950,10 @@ func _sell_item_detail(record: Dictionary, item: Dictionary, quote: Dictionary) 
 			lines.append("耐久：%d/%d" % [current_durability, maximum_durability])
 			lines.append(_equipment_stat_text(item))
 			lines.append("穿戴要求：%s" % _player_requirement_label(item))
-		elif not str(item.get("description", "")).is_empty():
-			lines.append(str(item.get("description", "")))
+		else:
+			var description := PlayerCopy.description(item.get("description", ""))
+			if not description.is_empty():
+				lines.append(description)
 	if bool(quote.get("sellable", false)):
 		lines.append("[color=#d3a763]单件售价：%d金币[/color]" % int(quote.get("unit_price", 0)))
 		var risk_text := _sell_risk_text(quote)
@@ -1292,22 +1295,24 @@ func _buy_item_detail(item_name: String, item: Dictionary, entry: Dictionary) ->
 			lines.append("耐久上限：%d" % maximum_durability)
 		lines.append(_equipment_stat_text(item))
 		lines.append("穿戴要求：%s" % _player_requirement_label(item))
-	var entry_description := str(entry.get("description", ""))
+	var entry_description := PlayerCopy.description(entry.get("description", ""))
 	if not entry_description.is_empty():
 		lines.append(entry_description)
 	return "\n".join(lines)
 
 
 func _player_requirement_label(item: Dictionary) -> String:
-	# EquipmentRules is authoritative for the requirement type/value. Strip its
-	# source/confidence suffix from the player-facing label; those are audit
-	# metadata, not gameplay instructions.
-	var label := EquipmentRulesScript.requirement_label(item)
-	for marker: String in ["（", "("]:
-		var marker_index := label.find(marker)
-		if marker_index >= 0:
-			label = label.substr(0, marker_index)
-	return label
+	# Player copy reads the authoritative type/value, never an audit sentence.
+	# EquipmentRules and its source/contract/confidence data remain unchanged.
+	var requirement: Dictionary = EquipmentRulesScript.requirement_for(item)
+	var labels := {
+		EquipmentRulesScript.NEED_LEVEL: "等级",
+		EquipmentRulesScript.NEED_ATTACK: "攻击",
+		EquipmentRulesScript.NEED_MAGIC: "魔法",
+		EquipmentRulesScript.NEED_TAO: "道术",
+	}
+	var need_type := int(requirement.get("type", EquipmentRulesScript.NEED_LEVEL))
+	return "%s%d" % [str(labels.get(need_type, "类型%d" % need_type)), int(requirement.get("value", 0))]
 
 
 func _set_shop_card_selected(card: Button, selected: bool) -> void:
