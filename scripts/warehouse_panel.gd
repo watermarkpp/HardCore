@@ -420,6 +420,11 @@ func refresh() -> void:
 	next_page_button.disabled = warehouse_page >= WAREHOUSE_PAGE_COUNT - 1
 	_refresh_transfer_action_states()
 	_refresh_transfer_detail()
+	# Restore full view-sync responsibility: refresh() must also flush the
+	# bank view so any gold mutation while the panel is visible reaches
+	# bank_balance_label. _refresh_bank_state self-guards on
+	# is_visible_in_tree + dirty, keeping the L1 hidden-panel skip intact.
+	_refresh_bank_state()
 	if not _layout_initialized:
 		_layout_initialized = true
 		_layout_apply_count += 1
