@@ -35,16 +35,35 @@ func _run() -> void:
 	var detail_rect := Rect2(inventory.item_detail_presenter.position, inventory.item_detail_presenter.size)
 	expect(inventory.item_detail_presenter.debug_layout_valid() and inventory.item_detail_presenter.modulate.a == 1.0, "calibrated inventory has side space (alpha 1, not just visible)")
 	expect(bag_region.grow(0.5).encloses(detail_rect), "inventory detail lies outside whole bag")
-	# R5-R1 边界：长文本必须真实可滚动，且滚动不移动停靠几何
-	inventory.item_detail_presenter.show_text("长属性测试", "追加属性：攻击 +5\n".repeat(80), {"presentation_zone": "inventory"})
+	# R5-R1 边界（第九节滚动合同）：长正文在 presenter 用尽合法布局手段后由
+	# presenter 统一管理为正文区纵向滚动；标题稳定、全文相等、末行可达、
+	# scroll_active 真实反映、无横向滚动、字体合同不变。
+	var expected_long_body := "追加属性：攻击 +5\n".repeat(80)
+	inventory.item_detail_presenter.show_text("长属性测试", expected_long_body, {"presentation_zone": "inventory"})
 	await get_tree().process_frame
 	expect(inventory.item_detail_presenter.debug_layout_valid() and inventory.item_detail_presenter.modulate.a == 1.0, "long body keeps usable space")
-	expect(inventory.item_detail_presenter.detail_label.scroll_active, "long body can scroll in real panel")
+	expect(inventory.item_detail_presenter.detail_label.text == expected_long_body, "long body keeps full text equality")
+	expect(inventory.item_detail_presenter.title_label.text == "长属性测试", "long body keeps the full title")
+	expect(inventory.item_detail_presenter.title_label.get_theme_font_size("font_size") == 20, "long body keeps title 20")
+	expect(inventory.item_detail_presenter.detail_label.get_theme_font_size("normal_font_size") == 14, "long body keeps body 14")
+	expect(inventory.item_detail_presenter.detail_label.scroll_active, "extreme body engages presenter-managed body scroll")
+	expect(float(inventory.item_detail_presenter.detail_label.get_content_width()) <= float(inventory.item_detail_presenter.detail_label.size.x) + 0.5, "long body wraps with no horizontal overflow")
 	var dock_after_show := Rect2(inventory.item_detail_presenter.position, inventory.item_detail_presenter.size)
 	inventory.item_detail_presenter.detail_label.scroll_to_line(40)
 	await get_tree().process_frame
 	expect(inventory.item_detail_presenter.detail_label.get_v_scroll_bar().value > 0.0, "body actually scrolled")
 	expect(Rect2(inventory.item_detail_presenter.position, inventory.item_detail_presenter.size).is_equal_approx(dock_after_show), "scrolling body does not move the dock")
+	inventory.item_detail_presenter.detail_label.scroll_to_line(79)
+	await get_tree().process_frame
+	var long_vbar: ScrollBar = inventory.item_detail_presenter.detail_label.get_v_scroll_bar()
+	# RichTextLabel 的滚动条 max_value 为全文高度，真实末端 = max - page。
+	expect(long_vbar.value >= long_vbar.max_value - long_vbar.page - 0.5, "long body last line is reachable at scroll end")
+	var inv_snapshot: Dictionary = inventory.item_detail_presenter.debug_layout_snapshot()
+	print("UI_R5_EVIDENCE case=inventory_long_body panel=inventory profile=static-bag settled=%s rect=%s scroll_active=%s body_width=%.1f body_content=%.1f body_label=%.1f" % [
+		inv_snapshot.get("valid"), inv_snapshot.get("rect"), inv_snapshot.get("scroll_active"),
+		float(inventory.item_detail_presenter.detail_label.get_content_width()),
+		float(inventory.item_detail_presenter.detail_label.get_content_height()),
+		float(inventory.item_detail_presenter.detail_label.size.y)])
 	inventory._select_inventory_item(1)
 	expect(inventory.selected_inventory_indices.size() == 2, "multi-selection retained")
 	inventory._select_inventory_item(1)
@@ -74,16 +93,29 @@ func _run() -> void:
 	var stash_grid_rect: Rect2 = Dock.rect_in(warehouse, warehouse.get_node("StashSection/StashScroll"))
 	expect(stash_region.end.x <= stash_grid_rect.position.x + 0.5, "stash detail region stays left of warehouse grid")
 	# R5-R1 边界：仓库背包格侧详情停靠背包格右侧，不覆盖任一格
-	var bag_side_region: Rect2 = warehouse._ui_detail_region({"side": "bag"})["region"]
+	var bag_side_spec: Dictionary = warehouse._ui_detail_region({"side": "bag"})
+	var bag_side_region: Rect2 = bag_side_spec["region"]
+	var bag_side_expanded: Rect2 = bag_side_spec.get("expanded_region", bag_side_region)
 	var bag_grid_rect: Rect2 = Dock.rect_in(warehouse, warehouse.get_node("BagSection/BagScroll"))
 	expect(bag_side_region.size.x > 100.0 and bag_side_region.size.y > 80.0, "warehouse bag side has dock space")
 	expect(bag_side_region.position.x >= bag_grid_rect.end.x - 0.5, "bag-side region starts right of warehouse bag grid")
-	warehouse.item_detail_presenter.show_text("仓库背包侧", "属性：防御 +5\n".repeat(60), {"side": "bag"})
+	var expected_bag_body := "属性：防御 +5\n".repeat(60)
+	warehouse.item_detail_presenter.show_text("仓库背包侧", expected_bag_body, {"side": "bag"})
 	await get_tree().process_frame
 	detail_rect = Rect2(warehouse.item_detail_presenter.position, warehouse.item_detail_presenter.size)
 	expect(warehouse.item_detail_presenter.debug_layout_valid() and warehouse.item_detail_presenter.modulate.a == 1.0, "bag-side detail is real visible and layout valid")
-	expect(bag_side_region.grow(0.5).encloses(detail_rect), "bag-side detail docks right of bag grid")
+	expect(warehouse.item_detail_presenter.detail_label.text == expected_bag_body, "bag-side long body keeps full text equality")
+	expect(warehouse.item_detail_presenter.title_label.text == "仓库背包侧", "bag-side long body keeps the full title")
+	expect(warehouse.item_detail_presenter.detail_label.scroll_active, "bag-side extreme body engages presenter-managed scroll")
+	expect(float(warehouse.item_detail_presenter.detail_label.get_content_width()) <= float(warehouse.item_detail_presenter.detail_label.size.x) + 0.5, "bag-side long body wraps with no horizontal overflow")
+	expect(bag_side_expanded.grow(0.5).encloses(detail_rect), "bag-side detail docks right of bag grid (expanded legal region)")
 	expect(not detail_rect.intersects(bag_grid_rect) and not detail_rect.intersects(stash_grid_rect), "bag-side detail covers neither grid")
+	var wh_snapshot: Dictionary = warehouse.item_detail_presenter.debug_layout_snapshot()
+	print("UI_R5_EVIDENCE case=warehouse_bag_long_body panel=warehouse profile=static-bag settled=%s rect=%s scroll_active=%s body_width=%.1f body_content=%.1f body_label=%.1f" % [
+		wh_snapshot.get("valid"), wh_snapshot.get("rect"), wh_snapshot.get("scroll_active"),
+		float(warehouse.item_detail_presenter.detail_label.get_content_width()),
+		float(warehouse.item_detail_presenter.detail_label.get_content_height()),
+		float(warehouse.item_detail_presenter.detail_label.size.y)])
 	warehouse._ui_dismiss_selection()
 	expect(not detail_rect.intersects(Dock.rect_in(warehouse, warehouse.withdraw_button)), "withdraw remains unobscured")
 	warehouse._select_item("bag", 0)

@@ -391,7 +391,58 @@ func _relayout() -> void:
 		if not chosen.is_empty():
 			break
 	if chosen.is_empty():
-		_fail_layout("SPACE_PLAN_REQUIRED")
+		# Ninth-section scroll contract: after exhausting every legal layout
+		# candidate, a body whose natural height still exceeds the dock falls
+		# back to presenter-managed, BODY-ONLY vertical scrolling instead of
+		# failing the whole detail. The title stays fixed at the top, the full
+		# body text stays reachable by scrolling, scroll_active reports the
+		# measured state honestly, and the region/aspect contracts still hold.
+		var fallback: Rect2 = region
+		if expanded.has_area() and expanded.get_area() > fallback.get_area():
+			fallback = expanded
+		var max_height := floorf(fallback.size.y)
+		var max_width := floorf(fallback.size.x)
+		# The clamped card keeps the domain aspect rule: non-shop stays
+		# portrait (H > W), the shop keeps its modest landscape allowance.
+		var width_cap := max_height / 1.3 if shop else max_height / 1.38
+		var scroll_width := floorf(clampf(minf(PREFERRED_WIDTH, width_cap), MIN_WIDTH, max_width))
+		if max_height < 80.0 or max_width < MIN_WIDTH or scroll_width < MIN_WIDTH:
+			_fail_layout("SPACE_PLAN_REQUIRED")
+			return
+		var scroll_extent := _measure_at(scroll_width)
+		var scroll_height := minf(ceilf(MARGIN * 2.0 + scroll_extent.x + TITLE_GAP + scroll_extent.y), max_height)
+		scroll_height = maxf(scroll_height, scroll_width / 1.3 if shop else scroll_width + 4.0)
+		scroll_height = minf(scroll_height, max_height)
+		var fitted := Dock.fit_rect(fallback, Vector2(scroll_width, scroll_height), side)
+		set_anchors_preset(Control.PRESET_TOP_LEFT)
+		position = fitted.position
+		size = fitted.size
+		region = fallback
+		var text_width := scroll_width - 2.0 * MARGIN
+		title_label.position = Vector2(MARGIN, MARGIN)
+		title_label.size = Vector2(text_width, scroll_extent.x)
+		detail_label.position = Vector2(MARGIN, MARGIN + scroll_extent.x + TITLE_GAP)
+		detail_label.size = Vector2(text_width, scroll_height - MARGIN * 2.0 - scroll_extent.x - TITLE_GAP)
+		detail_label.scroll_active = float(detail_label.get_content_height()) > detail_label.size.y + 0.5
+		_layout_ok = (
+			float(detail_label.get_content_width()) <= detail_label.size.x + 0.5
+			and title_label.get_minimum_size().y <= title_label.size.y
+			and not title_label.text.strip_edges().is_empty()
+			and region.grow(0.05).encloses(Rect2(position, size))
+			and detail_label.text == _body_source
+		)
+		for r: Rect2 in spec.get("protected", []):
+			if Rect2(position, size).intersects(r):
+				_layout_ok = false
+		if not _layout_ok:
+			_fail_layout("POST_LAYOUT_OVERFLOW")
+			return
+		modulate.a = 1.0
+		title_label.modulate = Color.WHITE
+		title_label.self_modulate = Color.WHITE
+		detail_label.mouse_filter = Control.MOUSE_FILTER_STOP
+		_dock_error_reported = false
+		_laying_out = false
 		return
 	var width: float = chosen.width
 	var height: float = chosen.height
