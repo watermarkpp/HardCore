@@ -34,14 +34,14 @@ func _run() -> void:
 		out["error"] = "SELECT_FAILED"
 		_finish(out)
 		return
-	var save_path: String = ProjectSettings.globalize_path(PlayerState.SAVE_PATH)
+	var save_path: String = ProjectSettings.globalize_path("user://player_save_v03.json")
 	out["gold"] = PlayerState.gold
 	out["weapon"] = str(PlayerState.equipment.get("武器", {}).get("name", ""))
 	out["jinchuang_count"] = PlayerState.item_count("超级金创药")
 	out["dagger_in_inventory"] = PlayerState.item_count("匕首")
-	out["save_exists"] = FileAccess.file_exists(PlayerState.SAVE_PATH)
+	out["save_exists"] = FileAccess.file_exists(save_path)
 	if bool(out.save_exists):
-		out["save_sha256_12"] = FileAccess.get_sha256(PlayerState.SAVE_PATH).substr(0, 12)
+		out["save_sha256_12"] = FileAccess.get_sha256(save_path).substr(0, 12)
 	out["test_mode"] = PlayerState.test_mode
 	_finish(out)
 
