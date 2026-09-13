@@ -23,9 +23,9 @@ func _run() -> void:
 	_test_protected_overflow_selection()
 	print(
 		"DPV2_21CQ_DIRECT_RUNTIME_PASS: profiles=156 runtime_allowed=153 "
-		+ "enabled=144 explicit_non_loot=9 runtime_disabled=3 slots=6809 "
+		+ "enabled=144 explicit_non_loot=9 runtime_disabled=3 slots=7611 "
 		+ "10x=1/20_to_1/2 clamp=1/1 "
-		+ "direct_id_rng=independent protected_first cap=9"
+		+ "direct_id_rng=independent protected_first cap=15"
 	)
 	get_tree().quit(0)
 
@@ -58,10 +58,10 @@ func _test_loader_contract() -> void:
 	var gate: Dictionary = GameData.dpv2_source_slot_gate()
 	assert(str(gate.get("authority", "")) == "dpv2.direct_baseline.v2")
 	assert(bool(gate.get("available", false)))
-	assert(total_slots == 6809)
-	assert(int(gate.get("compiled_slots", -1)) == 6809)
+	assert(total_slots == 7611)
+	assert(int(gate.get("compiled_slots", -1)) == 7611)
 	assert(int(gate.get("logical_source_rows", -1)) == 9590)
-	assert(int(gate.get("drop_enabled_source_slots", -1)) == 6809)
+	assert(int(gate.get("drop_enabled_source_slots", -1)) == 7611)
 	assert(int(gate.get("explicit_non_loot_source_rows", -1)) == 223)
 	assert(int(gate.get("retired_source_rows", -1)) == 2558)
 	assert(int(gate.get("excluded_source_rows", -1)) == 2781)
@@ -69,16 +69,18 @@ func _test_loader_contract() -> void:
 	assert(int(gate.get("drop_enabled_monsters", -1)) == 144)
 	assert(int(gate.get("explicit_non_loot_monsters", -1)) == 9)
 	assert(int(gate.get("runtime_disabled_monsters", -1)) == 3)
-	assert(int(gate.get("maximum_ground_slots", -1)) == 9)
+	assert(int(gate.get("maximum_ground_slots", -1)) == 15)
 	assert(bool(gate.get("all_enabled_resolved_slots_rng_before_overflow", false)))
 
 
 func _test_semantic_frozen_profiles() -> void:
 	var service := LootRuntimeScript.new()
+	# V505 frozen full 21CQ captures supersede the old 6809-slot migration
+	# snapshot. Current values are cross-checked by audit_current_drop_tables.py.
 	var expected_direct := {
-		79: 59, 81: 60, 83: 59, 85: 59, 87: 59,
-		226: 1, 227: 36, 228: 51, 229: 36, 230: 64,
-		231: 57, 232: 95, 233: 96, 234: 82,
+		79: 28, 81: 31, 83: 31, 85: 30, 87: 31,
+		226: 1, 227: 36, 228: 52, 229: 36, 230: 67,
+		231: 58, 232: 98, 233: 106, 234: 85,
 	}
 	for raw_id: Variant in expected_direct.keys():
 		var monster_id := int(raw_id)
@@ -93,7 +95,7 @@ func _test_semantic_frozen_profiles() -> void:
 	var gold_slots_226: Array = GameData.dpv2_direct_profile(226).get("slots", [])
 	assert(gold_slots_226.size() == 1)
 	var gold_226: Dictionary = gold_slots_226[0]
-	assert(int(gold_226.get("gold_amount", -1)) == 3000)
+	assert(int(gold_226.get("gold_amount", -1)) == 1500)
 	assert(str(GameData.dpv2_direct_resolve_slot_reward(gold_226).get("kind", "")) == "gold")
 
 	var semantic: Dictionary = GameData.dpv2_monster_drop_semantic_authority
@@ -150,7 +152,7 @@ func _test_direct_identity_resolution() -> void:
 				resolved_items += 1
 				assert(int(reward.get("canonical_item_id", -1)) > 0)
 				assert(not str(reward.get("item_name", "")).is_empty())
-	assert(all_slots == 6809)
+	assert(all_slots == 7611)
 	assert(resolved_items > 0)
 	assert(resolved_gold > 0)
 	var rejected := GameData.dpv2_direct_resolve_slot_reward({
@@ -273,7 +275,7 @@ func _test_independent_slot_rng_and_diagnostics() -> void:
 	assert(int(roll.get("rng_roll_count", -1)) == slots.size())
 	assert(bool(roll.get("all_resolved_slots_rng", false)))
 	assert(bool(roll.get("all_enabled_resolved_slots_rng_before_overflow", false)))
-	assert(int(roll.get("ground_output_count", 0)) <= 9)
+	assert(int(roll.get("ground_output_count", 0)) <= 15)
 	assert(
 		int(roll.get("ground_output_count", 0))
 			+ int(roll.get("overflow_discarded_count", 0))

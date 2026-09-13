@@ -12,12 +12,12 @@ func _run() -> void:
 	_run_gameplay_experience_threshold_contract()
 	_run_levels_gained_signal_contract()
 	PlayerState.reset_progress()
-	assert(PlayerState.experience_to_next_level() == 3, "Gameplay level 1 experience threshold is invalid")
+	assert(PlayerState.experience_to_next_level() == 2, "Gameplay level 1 experience threshold is invalid")
 	while PlayerState.level < 22:
 		var previous_level := PlayerState.level
 		PlayerState.add_experience(PlayerState.experience_to_next_level())
 		assert(PlayerState.level == previous_level + 1, "Level progression skipped or stalled")
-	assert(PlayerState.experience_to_next_level() == 10000, "Gameplay level 22 to 23 should require 10000 experience")
+	assert(PlayerState.experience_to_next_level() == 7000, "Gameplay level 22 to 23 should require 7000 experience")
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
@@ -148,17 +148,26 @@ func _run_gameplay_experience_threshold_contract() -> void:
 	assert(GameData.ensure_loaded(), "Experience policy fixture could not load GameData")
 	assert(GameData.service_exp_to_next_level(1) == 100, "Raw service level 1 experience changed")
 	assert(GameData.service_exp_to_next_level(23) == 350000, "Raw service level 23 experience changed")
-	assert(PlayerState._gameplay_experience_threshold(45) == 2, "Threshold rounding policy is not nearest integer")
+	# Every formal service level uses 70% of the PREVIOUS rounded gameplay value.
+	# Source monster/quest rewards and existing saved XP remain unchanged.
+	var original_level := PlayerState.level
+	for level_value in range(1, 61):
+		PlayerState.level = level_value
+		var raw := GameData.service_exp_to_next_level(level_value)
+		var previous := maxi(1, roundi(float(raw) / 30.0))
+		assert(PlayerState.experience_to_next_level() == maxi(1, roundi(previous * 0.7)), "70%% threshold mismatch at %d" % level_value)
+	PlayerState.level = original_level
+	assert(PlayerState._gameplay_experience_threshold(45) == 1, "Threshold rounding policy is not nearest integer")
 	assert(PlayerState._gameplay_experience_threshold(0) == 1, "Threshold minimum policy is not 1")
 	assert(PlayerState._gameplay_experience_threshold(-1) == 1, "Negative source threshold did not fail closed to 1")
-	assert(PlayerState.experience_to_next_level() == 3, "Gameplay threshold did not scale the raw level 1 value")
-	PlayerState.add_experience(2)
-	assert(PlayerState.level == 1 and PlayerState.experience == 2, "Sub-threshold experience changed level")
+	assert(PlayerState.experience_to_next_level() == 2, "Gameplay threshold did not scale the raw level 1 value")
 	PlayerState.add_experience(1)
-	assert(PlayerState.level == 2 and PlayerState.experience == 0, "Scaled threshold did not level at 3 raw reward XP")
+	assert(PlayerState.level == 1 and PlayerState.experience == 1, "Sub-threshold experience changed level")
+	PlayerState.add_experience(1)
+	assert(PlayerState.level == 2 and PlayerState.experience == 0, "Scaled threshold did not level at 2 raw reward XP")
 	PlayerState.level = 23
 	PlayerState.experience = 0
-	assert(PlayerState.experience_to_next_level() == 11667, "Gameplay threshold did not scale the raw level 23 value")
+	assert(PlayerState.experience_to_next_level() == 8167, "Gameplay threshold did not scale the raw level 23 value")
 
 	# Exercise the production kill settlement boundary with an active quest.  The
 	# source monster reward remains 12 per kill; only the level threshold is tuned.
@@ -189,13 +198,13 @@ func _run_gameplay_experience_threshold_contract() -> void:
 	assert(
 		bool(settled_batch.get("success", false))
 			and int(settled_batch.get("experience_gained", 0)) == kill_experience * 3
-			and PlayerState.level == 5
-			and PlayerState.experience == 12
+			and PlayerState.level == 6
+			and PlayerState.experience == 8
 			and PlayerState.quest_progress("bich_beginner_gear") == 3
 			and str(PlayerState.quest_states["bich_beginner_gear"].get("status", "")) == "ready",
 		"Real kill/quest settlement did not use the scaled threshold consistently",
 	)
-	assert(PlayerState.experience_to_next_level() == 20, "Multi-level kill settlement left the wrong next threshold")
+	assert(PlayerState.experience_to_next_level() == 21, "Multi-level kill settlement left the wrong next threshold")
 	var level_before_claim := PlayerState.level
 	var experience_before_claim := PlayerState.experience
 	var gold_before_claim := PlayerState.gold
@@ -205,7 +214,7 @@ func _run_gameplay_experience_threshold_contract() -> void:
 	assert(
 		PlayerState.level == level_before_claim
 			and PlayerState.experience == experience_before_claim
-			and PlayerState.experience_to_next_level() == 20
+			and PlayerState.experience_to_next_level() == 21
 			and PlayerState.gold > gold_before_claim
 			and str(PlayerState.quest_states["bich_beginner_gear"].get("status", "")) == "claimed",
 		"Actual quest claim changed scaled XP/threshold or did not commit its reward",
@@ -222,7 +231,7 @@ func _run_levels_gained_signal_contract() -> void:
 	PlayerState.reset_progress()
 	PlayerState.add_experience(0)
 	assert(events.is_empty(), "Zero XP unexpectedly emitted levels_gained")
-	PlayerState.add_experience(2)
+	PlayerState.add_experience(1)
 	assert(PlayerState.level == 1 and events.is_empty(), "Sub-threshold XP emitted levels_gained")
 	PlayerState.add_experience(1)
 	assert(
@@ -234,7 +243,7 @@ func _run_levels_gained_signal_contract() -> void:
 
 	events.clear()
 	PlayerState.reset_progress()
-	PlayerState.add_experience(10)
+	PlayerState.add_experience(7)
 	assert(
 		PlayerState.level == 3
 			and PlayerState.experience == 0
@@ -246,12 +255,12 @@ func _run_levels_gained_signal_contract() -> void:
 	events.clear()
 	PlayerState.reset_progress()
 	var no_level_batch := PlayerState.record_kills_and_experience_batch([
-		{"monster_name": "signal_test", "experience": 2},
+		{"monster_name": "signal_test", "experience": 1},
 	], true)
 	assert(
 		bool(no_level_batch.get("success", false))
 			and PlayerState.level == 1
-			and PlayerState.experience == 2
+			and PlayerState.experience == 1
 			and events.is_empty(),
 		"Successful non-leveling kill batch emitted levels_gained",
 	)
@@ -278,7 +287,7 @@ func _run_levels_gained_signal_contract() -> void:
 	assert(
 		bool(multi_level_batch.get("success", false))
 			and PlayerState.level == 5
-			and PlayerState.experience == 3
+			and PlayerState.experience == 13
 			and events.size() == 1
 			and events[0] == [1, 5],
 		"Multi-level kill batch did not emit one aggregate event",

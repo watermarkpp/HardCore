@@ -76,16 +76,16 @@ func _run() -> void:
 func _run_experience_penalty_contract() -> void:
 	PlayerState.level = 7
 	var level_requirement := PlayerState.experience_to_next_level()
-	assert(level_requirement == 40, "level 7 threshold must use the newly reduced source requirement")
+	assert(level_requirement == 28, "level 7 threshold must use 70% of the previous requirement")
 	var expected_loss := int(floor(float(level_requirement) * 0.10))
-	assert(expected_loss == 4, "death penalty must floor 10% of the current level requirement")
+	assert(expected_loss == 2, "death penalty must floor 10% of the current level requirement")
 	for entry in [
 		{"experience": 0, "expected_loss": 0},
 		{"experience": 1, "expected_loss": 1},
-		{"experience": 3, "expected_loss": 3},
-		{"experience": 4, "expected_loss": 4},
-		{"experience": 39, "expected_loss": 4},
-		{"experience": 500, "expected_loss": 4},
+		{"experience": 2, "expected_loss": 2},
+		{"experience": 3, "expected_loss": 2},
+		{"experience": 27, "expected_loss": 2},
+		{"experience": 500, "expected_loss": 2},
 	]:
 		var starting_experience := int(entry["experience"])
 		var expected_entry_loss := int(entry["expected_loss"])

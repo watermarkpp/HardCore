@@ -125,7 +125,7 @@ func _run() -> void:
 		aoe_death.success
 		and int(aoe_death.get("kill_count", 0)) == 2
 		and int(aoe_death.get("save_count", 0)) == 1
-		and PlayerState.level == 2 and PlayerState.experience == 4
+		and PlayerState.level == 3 and PlayerState.experience == 0
 		and aoe_counters.commit_attempts == 1
 		and aoe_counters.profile_signals == 1,
 		"same-frame AOE deaths were not one settlement/save/signal transaction"

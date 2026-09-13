@@ -26,6 +26,7 @@ const MODIFIER_LABELS := {
 	"defense_max": "防御上限", "defenseMax": "防御上限",
 	"mdef": "魔防", "mdef_min": "魔防下限", "mdefMin": "魔防下限",
 	"mdef_max": "魔防上限", "mdefMax": "魔防上限",
+	"magic_defense_min": "魔防下限", "magic_defense_max": "魔防上限",
 	"accuracy": "准确", "agility": "敏捷", "luck": "幸运",
 	"hpBonus": "生命", "hp_bonus": "生命", "mpBonus": "魔法值", "mp_bonus": "魔法值",
 	"magicEvasionPercent": "魔法躲避", "magic_evasion_percent": "魔法躲避",
@@ -395,7 +396,9 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		var maximum_durability := int(instance.get("max_durability", item.get("maxDurability", item.get("max_durability", 0))))
 		if maximum_durability > 0:
 			lines.append("耐久：%d/%d" % [current_durability, maximum_durability])
-		lines.append(_stat_line(item))
+		var stats_text := _stat_line(item)
+		if not stats_text.is_empty():
+			lines.append(stats_text)
 		var advanced_line := _advanced_stat_line(item, instance)
 		if not advanced_line.is_empty():
 			lines.append(advanced_line)
@@ -408,8 +411,11 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		var modifier_parts := _instance_modifier_lines(instance)
 		if not modifier_parts.is_empty():
 			lines.append("追加属性：%s" % "　".join(modifier_parts))
-	elif count > 1:
-		lines.append("数量：%d" % count)
+	else:
+		if count > 1:
+			lines.append("数量：%d" % count)
+		var use_lines := _usage_lines(item)
+		lines.append_array(use_lines)
 	var description := PlayerCopy.description(item.get("description", context.get("description", "")))
 	if not description.is_empty():
 		lines.append(description)
@@ -419,11 +425,41 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 
 
 static func _stat_line(item: Dictionary) -> String:
-	return "攻击 %s-%s　魔法 %s-%s\n道术 %s-%s　防御 %s-%s\n魔防 %s-%s" % [
-		_value(item.get("attackMin")), _value(item.get("attackMax")), _value(item.get("magicMin")), _value(item.get("magicMax")),
-		_value(item.get("taoMin")), _value(item.get("taoMax")), _value(item.get("defenseMin")), _value(item.get("defenseMax")),
-		_value(item.get("mdefMin")), _value(item.get("mdefMax")),
-	]
+	var parts: Array[String] = []
+	for pair: Array in [["攻击", "attackMin", "attackMax"], ["魔法", "magicMin", "magicMax"], ["道术", "taoMin", "taoMax"], ["防御", "defenseMin", "defenseMax"], ["魔防", "mdefMin", "mdefMax"]]:
+		var minimum := int(_value(item.get(pair[1])))
+		var maximum := int(_value(item.get(pair[2])))
+		if minimum != 0 or maximum != 0:
+			parts.append("%s %d-%d" % [pair[0], minimum, maximum])
+	var rows: Array[String] = []
+	for i in range(0, parts.size(), 2):
+		rows.append(parts[i] + ("　" + parts[i + 1] if i + 1 < parts.size() else ""))
+	return "\n".join(rows)
+
+
+static func _usage_lines(item: Dictionary) -> Array[String]:
+	var lines: Array[String] = []
+	var stats: Dictionary = item.get("stats", {}) if item.get("stats", {}) is Dictionary else {}
+	var hp := int(_value(item.get("restoreHealth", item.get("healthRestore", stats.get("HP", 0)))))
+	var mp := int(_value(item.get("restoreMana", item.get("manaRestore", stats.get("MP", 0)))))
+	var effect := str(item.get("useEffect", ""))
+	var profile := GameData.potion_recovery_profile(PlayerState.level, hp, mp, effect)
+	for pair: Array in [["生命", hp], ["魔法", mp]]:
+		if int(pair[1]) <= 0:
+			continue
+		if str(profile.get("effect_type", "")) == "delayed_restore":
+			lines.append("持续恢复%s：每%.2f秒%d点" % [pair[0], float(profile.tick_interval_seconds), int(profile.tick_amount)])
+			lines.append("%s总恢复：%d点" % [pair[0], pair[1]])
+		else:
+			lines.append("立即恢复%s：%d点" % pair)
+	if bool(item.get("usable", str(item.get("kind", "")) == "consumable")):
+		var effect_copy := {
+			"town_teleport": "双击使用，回到最近的城镇。",
+			"dungeon_escape": "双击使用，离开当前地牢返回城镇。",
+			"random_teleport": "双击使用，传送到当前地图的随机可用位置。",
+		}
+		lines.append(str(effect_copy.get(effect, "双击使用")))
+	return lines
 
 
 static func _advanced_stat_line(item: Dictionary, instance: Dictionary = {}) -> String:
@@ -487,7 +523,11 @@ static func _modifier_lines_from_container(container: Variant) -> Array[String]:
 		var value := float(value_variant)
 		if is_zero_approx(value):
 			continue
-		var label := str(MODIFIER_LABELS.get(stat, stat))
+		# Unknown persisted keys are internal schema, never player-facing prose.
+		# Adding a supported attribute requires an explicit localized label.
+		if not MODIFIER_LABELS.has(stat):
+			continue
+		var label := str(MODIFIER_LABELS[stat])
 		var operation := str(entry.get("op", "add"))
 		var value_text := _modifier_value_text(stat, operation, value)
 		result.append("%s %s" % [label, value_text])
@@ -510,6 +550,8 @@ static func _modifier_value_text(stat: String, operation: String, value: float) 
 static func _requirement_label(item: Dictionary) -> String:
 	var requirement: Dictionary = EquipmentRulesScript.requirement_for(item)
 	if requirement.is_empty():
+		return ""
+	if int(requirement.get("value", 0)) == 0:
 		return ""
 	var labels := {
 		EquipmentRulesScript.NEED_LEVEL: "等级",

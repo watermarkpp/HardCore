@@ -666,7 +666,7 @@ func _update_bag_cell(index: int, stack: Dictionary) -> void:
 	button.mouse_filter = Control.MOUSE_FILTER_STOP if occupied or can_receive_unequip else Control.MOUSE_FILTER_IGNORE
 	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else ("卸下到此格" if can_receive_unequip else "空物品格")
 	UIItemSelectionVisualScript.apply(button, occupied and selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
-	_set_button_texture(button, _item_texture(GameData.get_item_record(stack), "inventoryIcon") if occupied else null)
+	_set_button_texture(button, UIItemTextureCacheScript.texture_for_item(stack) if occupied else null)
 	var count_label := cell.get_node("StackCount") as Label
 	var count := int(stack.get("count", 1))
 	count_label.text = str(count)

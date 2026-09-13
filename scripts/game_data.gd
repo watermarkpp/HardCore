@@ -2534,7 +2534,7 @@ func _register_price_record(raw: Variant) -> void:
 	var source_name := str(source_record.get("name", source_record.get("serviceName", "")))
 	var canonical_name := _canonical_item_name(source_name)
 	var base_price := maxi(0, int(source_record.get("price", 0)))
-	if canonical_name.is_empty() or base_price <= 0:
+	if canonical_name.is_empty() or base_price <= 0 or _price_by_name.has(canonical_name):
 		return
 	var service_index := _service_index(source_record)
 	var item_id := _stable_item_id(source_record)
@@ -2545,8 +2545,6 @@ func _register_price_record(raw: Variant) -> void:
 	if item_id < 0:
 		item_id = _item_id_for_name(canonical_name)
 	if service_index < 0 and str(source_record.get("kind", "")) == "equipment" and item_id < 0:
-		return
-	if _price_by_name.has(canonical_name):
 		return
 	if service_index >= 0 and _price_by_service_index.has(service_index):
 		return
@@ -3467,10 +3465,33 @@ func item_world_appearance(item_id: int, gender: String) -> Dictionary:
 
 
 func get_item_record(item_ref: Variant) -> Dictionary:
+	return _item_record_for_read(item_ref).duplicate(true)
+
+
+func get_item_art_path(item_ref: Variant, field := "inventoryIcon") -> String:
+	# UI icon refreshes need one string, not a deep copy of source provenance,
+	# every animation and all equipment rules. Resolve through the same indexes.
+	var record := _item_record_for_read(item_ref)
+	var art: Variant = record.get("art", {})
+	if not art is Dictionary:
+		return ""
+	var source: Variant = art.get(field, {})
+	return str(source.get("path", "")) if source is Dictionary else str(source)
+
+
+func get_item_rules_record(item_ref: Variant) -> Dictionary:
+	# Independent rule snapshot; art frame/provenance arrays are irrelevant to
+	# pricing and save validation. All gameplay/identity fields stay identical.
+	var record := _item_record_for_read(item_ref).duplicate()
+	record.erase("art")
+	return record.duplicate(true)
+
+
+func _item_record_for_read(item_ref: Variant) -> Dictionary:
 	var identity := _stable_identity(item_ref)
 	var item_id := int(identity.get("item_id", -1))
 	if item_id >= 0 and _catalog_by_item_id.has(item_id):
-		return (_catalog_by_item_id.get(item_id, {}) as Dictionary).duplicate(true)
+		return _catalog_by_item_id.get(item_id, {}) as Dictionary
 	# Direct-drop reserved identities (notably 920xxx skill books) are exact
 	# authority IDs even when the legacy presentation catalog has serviceIndex
 	# only. Resolve through that explicit ID map, never through caller text.
@@ -3488,16 +3509,49 @@ func get_item_record(item_ref: Variant) -> Dictionary:
 		return {}
 	var service_index := int(identity.get("service_index", -1))
 	if service_index >= 0 and _catalog_by_service_index.has(service_index):
-		return (_catalog_by_service_index.get(service_index, {}) as Dictionary).duplicate(true)
+		return _catalog_by_service_index.get(service_index, {}) as Dictionary
 	var canonical_name := _canonical_item_name(str(identity.get("name", "")))
-	return (_catalog_by_name.get(canonical_name, {}) as Dictionary).duplicate(true)
+	return _catalog_by_name.get(canonical_name, {}) as Dictionary
+
+
+func validate_item_drop_instance(instance: Dictionary) -> bool:
+	# The validator reads this authoritative record without exposing a mutable
+	# catalog reference to callers or copying unrelated artwork/rule metadata.
+	return ItemDropInstanceRules.validate_instance(instance, _item_record_for_read({"item_id": instance.get("item_id", -1)}))
 
 
 func get_item_shop_price(item_name: String) -> int:
 	return PricingServiceScript.adjusted_database_price(get_item_price_record(item_name))
 
 
+func get_item_price_records_by_name(item_names: Array) -> Dictionary:
+	# Legacy inventory records have names only. Resolve the existing exact,
+	# ambiguity-rejecting name contract once per batch, never once per row.
+	var requested: Dictionary = {}
+	for value: Variant in item_names:
+		requested[_canonical_item_name(str(value))] = -1
+	var ambiguous: Dictionary = {}
+	for raw: Variant in items:
+		if not raw is Dictionary: continue
+		var name_text := _canonical_item_name(str(raw.get("name", "")))
+		if not requested.has(name_text): continue
+		var item_id := _stable_item_id(raw)
+		if item_id < 0: continue
+		var previous := int(requested[name_text])
+		if previous >= 0 and previous != item_id: ambiguous[name_text] = true
+		requested[name_text] = item_id
+	for name_text: String in ambiguous: requested[name_text] = -1
+	var result: Dictionary = {}
+	for value: Variant in item_names:
+		result[str(value)] = _get_item_price_record(value, requested)
+	return result
+
+
 func get_item_price_record(item_ref: Variant) -> Dictionary:
+	return _get_item_price_record(item_ref)
+
+
+func _get_item_price_record(item_ref: Variant, name_id_snapshot: Dictionary = {}) -> Dictionary:
 	# No independent price cache. Read the existing primary-first indexes only.
 	# A missing higher-priority identity MUST run the original maintenance path.
 	# Its newly added candidate can be stronger than a currently available fallback.
@@ -3515,7 +3569,7 @@ func get_item_price_record(item_ref: Variant) -> Dictionary:
 				return (_price_by_item_id[item_id] as Dictionary).duplicate(true)
 		else:
 			var canonical_name := _canonical_item_name(str(identity.get("name", "")))
-			var name_item_id := _item_id_for_name(canonical_name)
+			var name_item_id := int(name_id_snapshot[canonical_name]) if name_id_snapshot.has(canonical_name) else _item_id_for_name(canonical_name)
 			if name_item_id >= 0:
 				if _price_by_item_id.has(name_item_id):
 					_ui_l1_price_fast_hits += 1

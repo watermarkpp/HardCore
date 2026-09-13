@@ -13,31 +13,16 @@ const ACTION_STACK_GAP_PX := 16.0
 const Frame := preload("res://scripts/gothic_frame_factory.gd")
 const VisualBounds := preload("res://scripts/ui_style_visual_bounds.gd")
 
-## R3.3: only one semantic heading while the detail card is visible.
-## The item title remains INSIDE the card, with its original font and rarity.
-## Only the redundant generic caption is temporarily hidden. Geometry, text,
-## colors, and the serialized calibration of that caption are never changed.
-static func sync_section_caption(owner: Control, card_active: bool) -> void:
+## The shop section heading remains visible above the independent item card.
+static func sync_section_caption(owner: Control, _card_active: bool) -> void:
 	if not is_instance_valid(owner):
 		return
 	var caption := owner.get_node_or_null("DetailPanel/DetailTitle") as Label
 	var decoration := owner.get_node_or_null("DetailPanel/DetailPanelDecoration") as Control
 	if caption == null or decoration == null:
 		return # Non-shop presenters retain their existing layout and headings.
-	var owned := bool(caption.get_meta("r33_card_heading_owned", false))
-	if card_active:
-		if not owned:
-			caption.set_meta("r33_saved_caption_visible", caption.visible)
-			caption.set_meta("r33_card_heading_owned", true)
-		if caption.visible:
-			caption.hide()
-	elif owned:
-		var was_visible := bool(caption.get_meta("r33_saved_caption_visible", true))
-		# Release ownership before changing visibility: callbacks may re-enter.
-		caption.remove_meta("r33_card_heading_owned")
-		caption.remove_meta("r33_saved_caption_visible")
-		if caption.visible != was_visible:
-			caption.visible = was_visible
+	if not caption.visible:
+		caption.show()
 
 static func transformed(t: Transform2D, r: Rect2) -> Rect2:
 	var out := Rect2(t * r.position, Vector2.ZERO)
@@ -73,37 +58,6 @@ static func visual_rect(owner: Control, c: Control) -> Rect2:
 		return Rect2() # region() rejects unsupported actions before any reflow.
 	return rect_in(owner, c, bounds.get("rect", Rect2()))
 
-static func _shift_y(owner: Control, c: Control, delta: float) -> void:
-	if absf(delta) < 0.05:
-		return
-	var parent := c.get_parent() as CanvasItem
-	if parent == null:
-		return
-	var relative := parent.get_global_transform_with_canvas().affine_inverse() * owner.get_global_transform_with_canvas()
-	c.position += (relative * Vector2(0.0, delta)) - (relative * Vector2.ZERO)
-
-static func _shift_x(owner: Control, c: Control, delta: float) -> void:
-	if absf(delta) < 0.05:
-		return
-	var parent := c.get_parent() as CanvasItem
-	if parent == null:
-		return
-	var t := parent.get_global_transform_with_canvas().affine_inverse() * owner.get_global_transform_with_canvas()
-	c.position += (t * Vector2(delta, 0.0)) - (t * Vector2.ZERO)
-
-static func _set_size_in_owner(owner: Control, c: Control, extent: Vector2) -> void:
-	var own := owner.get_global_transform_with_canvas()
-	var ct := c.get_global_transform_with_canvas()
-	var local_size := Vector2(extent.x * own.x.length() / maxf(ct.x.length(), 0.000001), extent.y * own.y.length() / maxf(ct.y.length(), 0.000001))
-	if not c.size.is_equal_approx(local_size):
-		c.size = local_size
-
-static func _minimum_size_in_owner(owner: Control, c: Control) -> Vector2:
-	var minimum := c.get_combined_minimum_size()
-	var own := owner.get_global_transform_with_canvas()
-	var ct := c.get_global_transform_with_canvas()
-	return Vector2(minimum.x * ct.x.length() / maxf(own.x.length(), 0.000001), minimum.y * ct.y.length() / maxf(own.y.length(), 0.000001))
-
 static func _visible_actions(owner: Control) -> Array[Control]:
 	var out: Array[Control] = []
 	for name_value: String in ["buy_button", "repair_button", "sell_quantity_row", "sell_quantity_button"]:
@@ -124,8 +78,7 @@ static func region(owner: Control) -> Dictionary:
 		return {"region": Rect2(), "side": "center", "kind": "shop", "error": "EMPTY_FRAME_OPENING"}
 	var safe := inset(opening, Vector2(FRAME_CLEAR_PX / scale.x, FRAME_CLEAR_PX / scale.y))
 	var minimum_safe := inset(opening, Vector2(FRAME_CLEAR_MIN_PX / scale.x, FRAME_CLEAR_MIN_PX / scale.y))
-	# A hidden caption consumes no layout band. The card still contains its
-	# complete item heading; its OUTER border stays inside the 32px safe area.
+	# Reserve the persistent section caption independently of the item title.
 	var top := safe.position.y
 	var minimum_top := minimum_safe.position.y
 	if title.visible:
@@ -145,79 +98,8 @@ static func region(owner: Control) -> Dictionary:
 			return {"region": Rect2(), "side": "center", "kind": "shop", "error": reason}
 	if owner.has_meta("r31_bounds_error"):
 		owner.remove_meta("r31_bounds_error")
-	for c: Control in actions:
-		if not c.has_meta("r3_original_size"):
-			c.set_meta("r3_original_size", rect_in(owner, c).size)
-	if actions.size() == 1 and actions[0] == owner.get("buy_button"):
-		var original: Vector2 = actions[0].get_meta("r3_original_size")
-		_set_size_in_owner(owner, actions[0], original)
-		_shift_x(owner, actions[0], opening.get_center().x - visual_rect(owner, actions[0]).get_center().x)
-	# Buy+repair may use one well-spaced row when their REAL text/style minima
-	# fit. No smaller font, no ellipsis, no hidden repair function. Other modes
-	# retain their vertical order. This also reserves enough reading height.
-	var horizontal := false
-	if actions.size() == 2 and actions[0] == owner.get("buy_button") and actions[1] == owner.get("repair_button"):
-		var a := actions[0] as Button
-		var b := actions[1] as Button
-		var usable := opening.size.x - 2.0 * ACTION_FRAME_PX / scale.x
-		var gap := ACTION_STACK_GAP_PX / scale.x
-		var amin := _minimum_size_in_owner(owner, a)
-		var bmin := _minimum_size_in_owner(owner, b)
-		var aw := maxf(88.0, amin.x + 8.0)
-		var bw := maxf(128.0, bmin.x + 8.0)
-		if aw + bw + gap <= usable:
-			var target_h := maxf(51.0, maxf(amin.y, bmin.y) + 4.0)
-			# R3.2: reserve the DRAWN minima first. The old allocation filled the
-			# complete hit-box budget, so any positive ornament expansion made a
-			# feasible row fail its subsequent visual-width check.
-			_set_size_in_owner(owner, a, Vector2(aw, target_h))
-			_set_size_in_owner(owner, b, Vector2(bw, target_h))
-			var actual_a := visual_rect(owner, a)
-			var actual_b := visual_rect(owner, b)
-			var drawn_minimum := actual_a.size.x + actual_b.size.x + gap
-			if actual_a.has_area() and actual_b.has_area() and drawn_minimum <= usable + 0.05:
-				var spare := maxf(0.0, usable - drawn_minimum - 0.5)
-				if spare > 0.0:
-					_set_size_in_owner(owner, b, Vector2(bw + spare, target_h))
-					actual_b = visual_rect(owner, b)
-					# A responsive style may change family at the wider size. Keep
-					# the already verified minimal row rather than guessing bounds.
-					if not actual_b.has_area() or actual_a.size.x + actual_b.size.x + gap > usable + 0.05:
-						_set_size_in_owner(owner, b, Vector2(bw, target_h))
-						actual_b = visual_rect(owner, b)
-				var drawn_width := actual_a.size.x + actual_b.size.x + gap
-				if actual_b.has_area() and drawn_width <= usable + 0.05:
-					var left := opening.get_center().x - drawn_width * 0.5
-					_shift_x(owner, a, left - actual_a.position.x)
-					_shift_x(owner, b, left + actual_a.size.x + gap - actual_b.position.x)
-					horizontal = true
-	if not horizontal:
-		# The stack is the legal fallback, never a license to overflow the
-		# frame: a restored calibration width (e.g. 270px) inside a narrower
-		# opening pushes buttons past the decoration and starves the detail.
-		# Clamp every action BUTTON to the opening; the hit height is
-		# preserved. Composite calibrated controls (the sell quantity row)
-		# keep their frozen internal child layout and stay unclamped.
-		var stack_max := maxf(1.0, opening.size.x - 2.0 * ACTION_FRAME_PX / scale.x)
-		var stack_min := minf(96.0, stack_max)
-		for c: Control in actions:
-			if not (c is BaseButton):
-				continue
-			if not c.has_meta("r3_original_size"):
-				continue
-			var original: Vector2 = c.get_meta("r3_original_size")
-			var stack_width := clampf(original.x, stack_min, stack_max)
-			_set_size_in_owner(owner, c, Vector2(stack_width, original.y))
-			_shift_x(owner, c, opening.get_center().x - visual_rect(owner, c).get_center().x)
-	# Reclaim unused lower space. Styles and all action handlers are
-	# preserved. This is stable per trade mode/viewport, NEVER per selected item.
-	var bottom := opening.end.y - ACTION_FRAME_PX / scale.y
-	for idx in range(actions.size() - 1, -1, -1):
-		var c := actions[idx]
-		var r := visual_rect(owner, c)
-		_shift_y(owner, c, bottom - r.end.y)
-		if not horizontal:
-			bottom -= r.size.y + ACTION_STACK_GAP_PX / scale.y
+	# Calibration owns action positions and dimensions (reference v72 APK).
+	# Measuring an item card must never rearrange buy/repair/quantity controls.
 	var action_top := safe.end.y + ACTION_CLEAR_PX / scale.y
 	var minimum_action_top := minimum_safe.end.y + ACTION_CLEAR_MIN_PX / scale.y
 	var protected: Array[Rect2] = []
@@ -253,11 +135,11 @@ static func region(owner: Control) -> Dictionary:
 	return {"region": area, "expanded_region": expanded_area,
 		"side": "center", "kind": "shop", "frame_opening": opening,
 		"screen_scale": scale, "protected": protected, "title_rect": rect_in(owner, title),
-		"action_layout": "row" if horizontal else "stack",
+		"action_layout": "calibrated",
 		"caption_reserved": title.visible, "frame_safe_rect": safe,
 		"minimum_frame_safe_rect": minimum_safe,
 		"caption_reserved_height": maxf(0.0, top - safe.position.y),
-		"heading_mode": "card_title" if bool(title.get_meta("r33_card_heading_owned", false)) else "section_caption",
+		"heading_mode": "section_caption",
 		"action_gap_px": ACTION_CLEAR_PX, "frame_gap_px": FRAME_CLEAR_PX,
 		"minimum_action_gap_px": ACTION_CLEAR_MIN_PX,
 		"minimum_frame_gap_px": FRAME_CLEAR_MIN_PX,

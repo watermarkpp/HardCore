@@ -13,7 +13,12 @@ const AUDIT_SOURCES := [
 	"source.minipizza_mir2.server",
 ]
 const SOURCE_LABELS := ["source:", "source：", "来源:", "来源：", "数据来源:", "数据来源："]
-const INTERNAL_LABELS := ["internal note:", "internal note：", "debug note:", "debug note：", "内部程序备注：", "内部程序备注:"]
+const INTERNAL_LABELS := [
+	"internal note:", "internal note：", "debug note:", "debug note：",
+	"implementation note:", "authoring note:", "debug:", "internal:",
+	"todo:", "fixme:", "//", "/*", "*/",
+	"内部程序备注：", "内部程序备注:", "内部注释：", "内部注释:", "调试备注：", "调试备注:",
+]
 
 static func description(value: Variant) -> String:
 	if not (value is String or value is StringName):

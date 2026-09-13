@@ -14,6 +14,8 @@ const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 const ItemDetailPresenterScript := preload("res://scripts/item_detail_docked_presenter.gd")
+const ItemFormatter := preload("res://scripts/item_detail_presenter.gd")
+const ShopSpace := preload("res://scripts/ui_shop_detail_space.gd")
 
 const UIItemDetailDockScript := preload("res://scripts/ui_item_detail_dock.gd")
 const UIItemSelectionVisualScript := preload("res://scripts/ui_item_selection_visual.gd")
@@ -411,6 +413,9 @@ func open_for(display_name: String, new_stock: Array, merchant_context: Dictiona
 	_refresh_gold()
 	_refresh_repair_preview()
 	show()
+	# CanvasItem propagates child visibility after the parent's signal. At this
+	# boundary the action children are visible and their row can be measured.
+	_layout_trade_actions()
 	buy_quotes_requested.emit(stock.duplicate(true))
 
 
@@ -469,7 +474,7 @@ func _rebuild_goods_cards() -> void:
 		_build_card_contents(
 			card,
 			display_name,
-			_item_texture(GameData.get_item_record(catalog_name)),
+			UIItemTextureCacheScript.texture_for_item(entry),
 			"%d 金币" % int(quote.get("total_price", 0)),
 			true,
 		)
@@ -584,26 +589,17 @@ func _rebind_sell_structure(
 	_sell_structure_indices = occupied_indices.duplicate()
 	_sell_structure_tokens = structure_tokens.duplicate()
 	_set_active_sell_card_count(occupied_indices.size())
-	var catalog_cache: Dictionary = {}
 	var texture_cache: Dictionary = {}
 	for display_index in range(occupied_indices.size()):
 		var inventory_index := occupied_indices[display_index]
 		var record := _inventory_record(inventory_index)
-		var catalog_name := str(record.get("name", ""))
-		var catalog: Dictionary
-		if catalog_cache.has(catalog_name):
-			catalog = catalog_cache[catalog_name]
+		var path := GameData.get_item_art_path(record)
+		var texture: Texture2D
+		if texture_cache.has(path):
+			texture = texture_cache[path] as Texture2D
 		else:
-			catalog = GameData.get_item_record(catalog_name)
-			catalog_cache[catalog_name] = catalog
-			if PlayerState.test_mode:
-				_sell_catalog_lookup_count += 1
-		var texture: Texture2D = null
-		if texture_cache.has(catalog_name):
-			texture = texture_cache[catalog_name] as Texture2D
-		else:
-			texture = _item_texture(catalog)
-			texture_cache[catalog_name] = texture
+			texture = UIItemTextureCacheScript.texture_at_path(path)
+			texture_cache[path] = texture
 			if PlayerState.test_mode:
 				_sell_texture_lookup_count += 1
 		var card: Button = goods_buttons[display_index]
@@ -736,7 +732,7 @@ func _set_trade_mode(mode: String) -> void:
 			_clear_goods_cards()
 		else:
 			_rebuild_goods_cards()
-		_ui_show_shop_message("[color=#cdbb9e]选择商品查看属性、价格与穿戴要求。[/color]")
+
 		_refresh_buy_action_enabled()
 	else:
 		_selected_sell_index = -1
@@ -747,11 +743,12 @@ func _set_trade_mode(mode: String) -> void:
 		_sell_quotes.clear()
 		_set_sell_actions_enabled(false)
 		_update_sell_quantity_label()
-		_ui_show_shop_message("[color=#cdbb9e]出售页只显示人物背包物品；已穿戴装备不会出现在这里。[/color]")
+
 		_request_sell_quotes()
 	_apply_layout_profile_once("shop_sell" if not buying else "shop_buy")
 	_ui_l1_repair_dirty = true
 	_ui_l1_queue_repair_view()
+	_layout_trade_actions()
 
 
 ## The single authority for shop action visibility. Trade mode owns it;
@@ -771,6 +768,15 @@ func _on_runtime_layout_profile_applied(_profile_id: String) -> void:
 	# requested it; re-assert business visibility so the calibration replay
 	# cannot resurrect actions the active trade mode has dismissed.
 	_sync_trade_action_visibility()
+	_layout_trade_actions()
+
+
+func _layout_trade_actions() -> void:
+	# Actions own their geometry even with no selected item or visible card.
+	if not is_inside_tree() or not is_visible_in_tree():
+		return
+	ShopSpace.sync_section_caption(self, false)
+	ShopSpace.region(self)
 
 
 func sell_quote_key(inventory_index: int, record: Dictionary) -> String:
@@ -954,40 +960,12 @@ func _show_shop_detail(title: String, body: String, index: int, selling: bool) -
 	})
 	detail_label = item_detail_presenter.detail_label
 
-func _sell_item_detail(record: Dictionary, item: Dictionary, quote: Dictionary) -> String:
-	var lines: Array[String] = [
-		"数量：%d" % maxi(1, int(record.get("count", 1))),
-	]
-	if not item.is_empty():
-		lines.append("类别：%s　重量：%d" % [str(item.get("category", "未分类")), int(item.get("weight", 0))])
-		if str(item.get("kind", "")) == "equipment":
-			var current_durability := int(record.get("durability", item.get("maxDurability", 1)))
-			var maximum_durability := int(record.get("max_durability", item.get("maxDurability", 1)))
-			lines.append("耐久：%d/%d" % [current_durability, maximum_durability])
-			lines.append(_equipment_stat_text(item))
-			lines.append("穿戴要求：%s" % _player_requirement_label(item))
-		else:
-			var description := PlayerCopy.description(item.get("description", ""))
-			if not description.is_empty():
-				lines.append(description)
-	if bool(quote.get("sellable", false)):
-		lines.append("[color=#d3a763]单件售价：%d金币[/color]" % int(quote.get("unit_price", 0)))
-		var risk_text := _sell_risk_text(quote)
-		if not risk_text.is_empty():
-			lines.append("[color=#ef9f63]出售提示：%s[/color]" % risk_text)
-	else:
-		lines.append("[color=#b8a58a]不可出售：%s[/color]" % str(quote.get("reason", "暂时无法报价")))
-	return "\n".join(lines)
+func _sell_item_detail(record: Dictionary, item: Dictionary, _quote: Dictionary) -> String:
+	return ItemFormatter.format_item(item, record)
 
 
 func _equipment_stat_text(item: Dictionary) -> String:
-	return "攻击 %s-%s　魔法 %s-%s\n道术 %s-%s　防御 %s-%s\n魔防 %s-%s" % [
-		_value(item.get("attackMin")), _value(item.get("attackMax")),
-		_value(item.get("magicMin")), _value(item.get("magicMax")),
-		_value(item.get("taoMin")), _value(item.get("taoMax")),
-		_value(item.get("defenseMin")), _value(item.get("defenseMax")),
-		_value(item.get("mdefMin")), _value(item.get("mdefMax")),
-	]
+	return ItemFormatter._stat_line(item)
 
 
 func _change_sell_quantity(delta: int) -> void:
@@ -1164,6 +1142,7 @@ func _on_visibility_changed() -> void:
 	if visible and _inventory_refresh_pending and _trade_mode == "sell":
 		_apply_inventory_change()
 	_ui_l1_flush_repair_view_if_dirty()
+	_layout_trade_actions()
 
 
 func _apply_inventory_change() -> void:
@@ -1246,6 +1225,7 @@ func _refresh_repair_preview() -> void:
 	_ui_l1_repair_plan_count += 1
 	var cost := PlayerState.repair_cost(context)
 	repair_button.text = "维修全部\n（%d金币）" % cost if cost > 0 else "装备无需维修"
+	_layout_trade_actions()
 
 
 func _on_item_selected(index: int) -> void:
@@ -1260,61 +1240,14 @@ func _on_item_selected(index: int) -> void:
 			_set_shop_card_selected(goods_buttons[card_index], card_index == index)
 	var entry: Dictionary = stock[index]
 	var item_name := str(entry.get("name", ""))
-	var item := GameData.get_item_record(item_name)
+	var item := GameData.get_item_record(entry)
 	var description := _buy_item_detail(item_name, item, entry)
-	var quote := _buy_quote_for_index(index)
-	var pack_count := maxi(1, int(quote.get("pack_count", quote.get("quantity", 1))))
-	var price_line := (
-		"[color=#d3a763]价格：%d金币 × %d，共%d金币[/color]" % [
-			int(quote.get("unit_price", 0)), pack_count, int(quote.get("total_price", 0)),
-		]
-		if bool(quote.get("valid", false))
-		else "[color=#b8a58a]%s[/color]" % str(quote.get("reason", "等待玩法价格报价"))
-	)
-	_show_shop_detail(item_name, "%s\n\n%s" % [price_line, description], index, false)
+	_show_shop_detail(item_name, description, index, false)
 	_refresh_buy_action_enabled()
 
 
-func _buy_item_detail(item_name: String, item: Dictionary, entry: Dictionary) -> String:
-	var lines: Array[String] = []
-	var summary := GameData.item_usage_summary(item_name)
-	if not item.is_empty() and str(summary.get("kind", item.get("kind", ""))) == "consumable":
-		lines.append("类别：%s" % str(summary.get("category", item.get("category", "药品"))))
-		var restore_health := int(summary.get("restore_health", 0))
-		var restore_mana := int(summary.get("restore_mana", 0))
-		var delayed := str(summary.get("effect_type", "instant")) == "delayed_restore"
-		var tick_amount := int(summary.get("tick_amount", 0))
-		var tick_interval := float(summary.get("tick_interval_seconds", 0.0))
-		var recovery_per_second := float(summary.get("recovery_per_second", 0.0))
-		var duration_seconds := float(summary.get("duration_seconds", 0.0))
-		if restore_health > 0:
-			if delayed:
-				lines.append("持续恢复生命：每%.2f秒%d点（约%.1f点/秒）" % [tick_interval, tick_amount, recovery_per_second])
-				lines.append("生命总恢复：%d点，持续约%.2f秒" % [restore_health, duration_seconds])
-			else:
-				lines.append("立即恢复生命：%d点" % restore_health)
-		if restore_mana > 0:
-			if delayed:
-				lines.append("持续恢复魔法：每%.2f秒%d点（约%.1f点/秒）" % [tick_interval, tick_amount, recovery_per_second])
-				lines.append("魔法总恢复：%d点，持续约%.2f秒" % [restore_mana, duration_seconds])
-			else:
-				lines.append("立即恢复魔法：%d点" % restore_mana)
-		if restore_health <= 0 and restore_mana <= 0:
-			lines.append("效果：%s" % str(summary.get("use_effect", "消耗品")))
-		lines.append("使用方式：双击使用")
-		lines.append("可叠加：是")
-		return "\n".join(lines)
-	if not item.is_empty():
-		lines.append("类别：%s　重量：%d" % [str(item.get("category", "")), int(item.get("weight", 0))])
-		var maximum_durability := int(item.get("maxDurability", item.get("serviceDuraMax", 0)))
-		if maximum_durability > 0:
-			lines.append("耐久上限：%d" % maximum_durability)
-		lines.append(_equipment_stat_text(item))
-		lines.append("穿戴要求：%s" % _player_requirement_label(item))
-	var entry_description := PlayerCopy.description(entry.get("description", ""))
-	if not entry_description.is_empty():
-		lines.append(entry_description)
-	return "\n".join(lines)
+func _buy_item_detail(_item_name: String, item: Dictionary, entry: Dictionary) -> String:
+	return ItemFormatter.format_item(item, {}, {"description": entry.get("description", "")})
 
 
 func _player_requirement_label(item: Dictionary) -> String:

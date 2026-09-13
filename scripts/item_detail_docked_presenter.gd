@@ -16,6 +16,7 @@ const MEASURE_PAD := 4.0
 const WIDTH_STEPS := 12
 const REVISION := 9
 const ShopSpace := preload("res://scripts/ui_shop_detail_space.gd")
+const TouchScroll := preload("res://scripts/touch_scroll_support.gd")
 
 var title_label: Label
 var detail_label: RichTextLabel
@@ -68,6 +69,12 @@ func _init() -> void:
 	detail_label.threaded = false
 	detail_label.fit_content = false
 	detail_label.scroll_active = false
+	var scroll_bar := detail_label.get_v_scroll_bar()
+	scroll_bar.visibility_changed.connect(func() -> void:
+		if scroll_bar.visible:
+			scroll_bar.hide()
+	)
+	scroll_bar.hide()
 	detail_label.scroll_following = false
 	detail_label.selection_enabled = false
 	detail_label.context_menu_enabled = false
@@ -98,6 +105,10 @@ func _ready() -> void:
 	add_theme_stylebox_override("panel", box)
 	visibility_changed.connect(_invalidate_layout)
 	_bind_geometry()
+	# Register while short/empty too: overflow is decided later by layout.
+	var touch_support := TouchScroll.attach_tree(self)
+	if touch_support != null:
+		touch_support.register_control(detail_label)
 	# Inventory builds the presenter before its EquipmentPanel siblings.
 	_bind_geometry.call_deferred()
 	_invalidate_layout()
@@ -226,6 +237,7 @@ func _set_content(title: String, body: String, context: Dictionary, message: boo
 	_body_source = body
 	title_label.text = _title_source
 	detail_label.text = _body_source
+	detail_label.get_v_scroll_bar().value = 0.0
 	title_label.add_theme_color_override("font_color", _title_color)
 	title_label.show()
 	detail_label.show()

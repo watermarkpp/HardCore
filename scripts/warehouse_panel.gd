@@ -718,10 +718,13 @@ func _sanitize_transfer_selections() -> void:
 	_sync_primary_selection_indices()
 
 
+var _transfer_pending := false
+
 func _refresh_transfer_action_states() -> void:
-	deposit_button.disabled = selected_bag_indices.is_empty() or _first_free_slot_on_current_page() < 0
-	withdraw_button.disabled = selected_stash_indices.is_empty() or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
-	_ui_l1_flush_bank_view_if_dirty()
+	deposit_button.disabled = _transfer_pending or selected_bag_indices.is_empty() or _first_free_slot_on_current_page() < 0
+	withdraw_button.disabled = _transfer_pending or selected_stash_indices.is_empty() or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
+	# Item selection does not mutate gold. Bank refresh belongs to the actual
+	# visibility/data/transaction boundary, not every selection cleanup pass.
 
 
 func _bank_transfer_amount() -> int:
@@ -759,8 +762,8 @@ func _refresh_bank_state() -> void:
 	var busy_text := "共享金币操作处理中，请稍候。" if _bank_transfer_pending else ""
 	var deposit_boundary := _bank_boundary_message(true, player_gold, shared_gold)
 	var withdraw_boundary := _bank_boundary_message(false, player_gold, shared_gold)
-	bank_deposit_button.disabled = _bank_transfer_pending or not deposit_boundary.is_empty()
-	bank_withdraw_button.disabled = _bank_transfer_pending or not withdraw_boundary.is_empty()
+	bank_deposit_button.disabled = _bank_transfer_pending or _transfer_pending or not deposit_boundary.is_empty()
+	bank_withdraw_button.disabled = _bank_transfer_pending or _transfer_pending or not withdraw_boundary.is_empty()
 	bank_deposit_button.tooltip_text = (
 		busy_text
 		if not busy_text.is_empty()
@@ -931,6 +934,7 @@ func _fill_compatibility_list(list: ItemList, records: Array, selected_indices: 
 
 
 func _deposit() -> void:
+	if _transfer_pending: return
 	_sanitize_transfer_selections()
 	if _active_selection_side != "bag" or selected_bag_indices.is_empty():
 		return
@@ -943,7 +947,15 @@ func _deposit() -> void:
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(deposit_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.deposit")
 	var target_slots := _free_slots_on_current_page(source_indices.size())
-	var result: Dictionary = PlayerState.deposit_to_warehouse_batch(source_indices, target_slots)
+	_transfer_pending = true
+	_refresh_transfer_action_states()
+	bank_deposit_button.disabled = true
+	bank_withdraw_button.disabled = true
+	var result: Dictionary = await PlayerState.transfer_warehouse_prepared("deposit", source_indices, target_slots)
+	_transfer_pending = false
+	if not is_visible_in_tree():
+		_ui_l1_bank_dirty = true
+		return
 	var transferred := int(result.get("transferred", 0))
 	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
 	for raw_index: Variant in result.get("completed_source_indices", []):
@@ -958,6 +970,7 @@ func _deposit() -> void:
 
 
 func _withdraw() -> void:
+	if _transfer_pending: return
 	_sanitize_transfer_selections()
 	if _active_selection_side != "stash" or selected_stash_indices.is_empty():
 		return
@@ -969,7 +982,15 @@ func _withdraw() -> void:
 			moving_refs.append(_selection_ref("stash", int(raw_index), record))
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(withdraw_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.withdraw")
-	var result: Dictionary = PlayerState.withdraw_from_warehouse_batch(source_indices)
+	_transfer_pending = true
+	_refresh_transfer_action_states()
+	bank_deposit_button.disabled = true
+	bank_withdraw_button.disabled = true
+	var result: Dictionary = await PlayerState.transfer_warehouse_prepared("withdraw", source_indices)
+	_transfer_pending = false
+	if not is_visible_in_tree():
+		_ui_l1_bank_dirty = true
+		return
 	var transferred := int(result.get("transferred", 0))
 	var failure_message := "" if bool(result.get("complete", false)) else str(result.get("message", "仓库存取失败。"))
 	for raw_index: Variant in result.get("completed_warehouse_slots", []):
@@ -1299,9 +1320,7 @@ func _trim_empty_warehouse_tail() -> void:
 func _item_texture(record: Dictionary) -> Texture2D:
 	if record.is_empty():
 		return null
-	return UIItemTextureCacheScript.texture_for(
-		GameData.get_item_record(record), "inventoryIcon"
-	)
+	return UIItemTextureCacheScript.texture_for_item(record)
 
 
 func _set_button_texture(button: Button, texture: Texture2D) -> void:

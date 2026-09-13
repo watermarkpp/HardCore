@@ -27,6 +27,7 @@ func _ready() -> void:
 		check(Copy.description("[color=#999999]" + source + "[/color]") == "", "whole-line metadata wrapper")
 	check(Copy.description("Internal note: renderer compatibility\n真实效果：生命+20") == "真实效果：生命+20", "internal note removal")
 	check(Copy.description("第一行\nDebug note: migration only\n第二行") == "第一行\n第二行", "removed row retained height")
+	check(Copy.description("// renderer-only offset\n双击使用\nTODO: migrate source\n内部注释：字段尚未合并") == "双击使用", "code comments leaked")
 	check(Copy.description("[b]来源：project.hardcore.equipment_attribute_master.v2[/b]\nHP +20") == "HP +20", "balanced styling")
 	check(Copy.description("[color=#eeeeee]\n真实效果\n[/color]") == "[color=#eeeeee]\n真实效果\n[/color]", "multiline bbcode damage")
 	check(Copy.description("[color=#eeeeee]道术17（project.hardcore.equipment_attribute_master.v2/A）[/color]") == "[color=#eeeeee]道术17[/color]", "inline tag integrity")

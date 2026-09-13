@@ -24,6 +24,7 @@ static var _v2_expected_cache: Dictionary = {}
 static var _rules_cache: Dictionary = {}
 static var _master_by_item_id: Dictionary = {}
 static var _load_attempted := false
+static var _validated_snapshots: Dictionary = {}
 
 
 static func create_instance(catalog_item: Dictionary, stable_drop_key: String) -> Dictionary:
@@ -101,6 +102,26 @@ static func create_legacy_instance(catalog_item: Dictionary, stable_drop_key: St
 
 
 static func validate_instance(instance: Dictionary, catalog_item: Dictionary) -> bool:
+	# Transactions validate identical immutable drop payloads repeatedly (profile,
+	# shared file, WAL and readback). Reuse a positive result only for a complete
+	# equal payload and all catalog fields consumed by the validator. A changed
+	# durability, luck, modifier, unknown field or identity always revalidates.
+	var key := str(instance.get("instance_id", "")) + ":" + str(hash(instance))
+	var catalog_signature: Array = []
+	for field: String in ["itemId", "kind", "name", "category", "maxDurability"]:
+		catalog_signature.append(catalog_item.get(field, null))
+	var cached: Dictionary = _validated_snapshots.get(key, {})
+	if not cached.is_empty() and cached.instance == instance and cached.catalog == catalog_signature:
+		return true
+	if not _validate_instance_uncached(instance, catalog_item):
+		return false
+	if _validated_snapshots.size() >= 2048:
+		_validated_snapshots.clear()
+	_validated_snapshots[key] = {"instance": instance.duplicate(true), "catalog": catalog_signature}
+	return true
+
+
+static func _validate_instance_uncached(instance: Dictionary, catalog_item: Dictionary) -> bool:
 	if not _ensure_loaded():
 		return false
 	var item_id := _exact_positive_integer(instance.get("item_id", null))
@@ -181,7 +202,7 @@ static func validate_instance(instance: Dictionary, catalog_item: Dictionary) ->
 				or str(actual.get("op", "")) != "add"
 				or _exact_positive_integer(actual.get("value", null)) != int(expected[index].value)):
 				return false
-		return (instance.drop_affix == {
+		return (instance.drop_affix is Dictionary and instance.drop_affix == {
 			"contract_id": AFFIX_V2_CONTRACT, "applied": not expected.is_empty(),
 		})
 	return _valid_affix(instance, _master_by_item_id.get(item_id, {}))

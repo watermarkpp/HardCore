@@ -35,6 +35,7 @@ func _run() -> void:
 	section.add_child(caption)
 	owner.buy_button = Button.new()
 	owner.buy_button.text = "购买"
+	owner.buy_button.position = Vector2(47, 318)
 	owner.buy_button.size = Vector2(270, 51)
 	section.add_child(owner.buy_button)
 	add_child(owner)
@@ -48,9 +49,9 @@ func _run() -> void:
 	var old_area: Rect2 = before["region"]
 	var new_area: Rect2 = after["region"]
 	var safe: Rect2 = after["frame_safe_rect"]
-	check(not caption.visible, "redundant caption remained visible")
-	check(new_area.position.y == safe.position.y, "hidden caption still consumes height")
-	check(absf((new_area.size.y - old_area.size.y) - (old_area.position.y - safe.position.y)) < 0.05, "height not reclaimed exactly")
+	check(caption.visible, "persistent caption missing")
+	check(new_area.position.y > safe.position.y, "caption space not reserved")
+	check(new_area.is_equal_approx(old_area), "selection changed detail bounds")
 	check(new_area.end.is_equal_approx(old_area.end), "button boundary or right edge moved")
 	check(absf(new_area.size.x - old_area.size.x) < 0.05, "reading width changed")
 	check(Rect2(owner.buy_button.position, owner.buy_button.size).is_equal_approx(original_button), "heading switch moved the button")
@@ -65,7 +66,7 @@ func _run() -> void:
 	caption.hide()
 	Space.sync_section_caption(owner, true)
 	Space.sync_section_caption(owner, false)
-	check(not caption.visible, "authored hidden caption was incorrectly forced visible")
+	check(caption.visible, "persistent heading did not recover")
 	var ordinary := Control.new()
 	Space.sync_section_caption(ordinary, true)
 	Space.sync_section_caption(ordinary, false)

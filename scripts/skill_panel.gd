@@ -537,9 +537,11 @@ func _ensure_skill_list_bottom_clearance() -> void:
 
 
 func _rebuild_skill_cards() -> void:
-	for child: Node in skill_list_container.get_children():
-		child.free()
-	skill_buttons.clear()
+	# Slots keep their controls, calibrated geometry and input bindings across
+	# refreshes. Only the current profession's excess tail is retired.
+	while skill_buttons.size() > skill_entries.size():
+		var retired: Button = skill_buttons.pop_back()
+		retired.free()
 	for index in range(skill_entries.size()):
 		var entry: Dictionary = skill_entries[index]
 		var skill_name := str(entry.get("skillName", "技能"))
@@ -547,28 +549,34 @@ func _rebuild_skill_cards() -> void:
 		var has_book := PlayerState.has_item(skill_name)
 		var level := int(PlayerState.learned_skills.get(skill_name, 0))
 		var interaction_label := _skill_presentation_label(skill_name)
-		var status := "已学会" if learned else ("未学会" if has_book else "未学会")
+		var status := "已学会" if learned else "未学会"
 		var detail_status := "Lv.%d · %s" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
-		var button := Button.new()
-		button.name = "SkillCard_%d" % index
-		button.set_meta("calibration_layout_revision", 1)
-		button.custom_minimum_size = Vector2(266, 80)
-		button.toggle_mode = true
 		var card_text := "%s（%s）\n%s" % [skill_name, status, detail_status]
-		button.text = ""
-		button.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		button.add_theme_font_size_override("font_size", 15)
-		button.set_meta("calibration_runtime_text", true)
+		var button: Button
+		if index < skill_buttons.size():
+			button = skill_buttons[index]
+		else:
+			button = Button.new()
+			button.name = "SkillCard_%d" % index
+			button.set_meta("calibration_layout_revision", 1)
+			button.custom_minimum_size = Vector2(266, 80)
+			button.toggle_mode = true
+			button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+			button.add_theme_font_size_override("font_size", 15)
+			button.set_meta("calibration_runtime_text", true)
+			button.pressed.connect(_on_skill_selected.bind(index))
+			button.gui_input.connect(_skill_card_input.bind(index))
+			skill_list_container.add_child(button)
+			_add_centered_button_label(button, card_text, 15, SKILL_CARD_TEXT_X_OFFSET)
+			skill_buttons.append(button)
 		button.set_pressed_no_signal(index == selected_skill_index)
-		button.theme_type_variation = "GothicSkillListSelectedGemButton" if index == selected_skill_index else "GothicSkillListGemButton"
-		button.pressed.connect(_on_skill_selected.bind(index))
-		button.gui_input.connect(_skill_card_input.bind(index))
+		var variation: StringName = &"GothicSkillListSelectedGemButton" if index == selected_skill_index else &"GothicSkillListGemButton"
+		if button.theme_type_variation != variation:
+			button.theme_type_variation = variation
+		(button.get_node("CenteredText") as Label).text = card_text
 		button.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 		button.set_meta("learned", learned)
 		button.set_meta("assignment_eligible", _skill_interaction_mode(skill_name) != "passive")
-		skill_list_container.add_child(button)
-		_add_centered_button_label(button, card_text, 15, SKILL_CARD_TEXT_X_OFFSET)
-		skill_buttons.append(button)
 
 
 func _add_centered_button_label(button: Button, text_value: String, font_size: int, horizontal_offset: float) -> void:

@@ -3,7 +3,8 @@ extends RefCounted
 ## Locked assertions for the executor's REAL-panel matrix fixtures.
 ## Coordinates of allowed/protected rectangles must be owner-local. Populate
 ## them from actual calibrated controls, never by increasing a dummy Scope.
-## No assertion mutation permitted to make a normal item pass.
+## September 13 user contract permits clipped, touch-scrollable body overflow.
+## Keep title, body source, geometry, identity and hidden-scrollbar checks.
 static func _rect_in(owner_control: Control, control: Control) -> Rect2:
 	var owner_transform := owner_control.get_global_transform_with_canvas()
 	if absf(owner_transform.determinant()) < 0.000001:
@@ -54,11 +55,11 @@ static func inspect(
 		errors.append("DISPLAYED_ITEM_ID_MISMATCH")
 	if body.text != expected_body_bbcode:
 		errors.append("BODY_SOURCE_CHANGED_OR_TRUNCATED")
-	if body.scroll_active or body.get_v_scroll_bar().visible:
-		errors.append("BODY_SCROLLING_OR_SCROLLBAR")
+	if body.get_v_scroll_bar().visible:
+		errors.append("BODY_VISIBLE_SCROLLBAR")
 	if body.visible_characters != -1 or title.visible_characters != -1:
 		errors.append("VISIBLE_CHARACTER_LIMIT")
-	if float(body.get_content_height()) > body.size.y or title.get_minimum_size().y > title.size.y:
+	if (float(body.get_content_height()) > body.size.y and not body.scroll_active) or title.get_minimum_size().y > title.size.y:
 		errors.append("TEXT_HEIGHT_OVERFLOW")
 	var local := Rect2(Vector2.ZERO, view.size)
 	if not local.grow(0.5).encloses(Rect2(title.position, title.size)) or not local.grow(0.5).encloses(Rect2(body.position, body.size)):

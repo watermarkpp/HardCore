@@ -10,22 +10,26 @@ static var _headless_prefetch_failures: Dictionary = {}
 static var _test_force_threaded_prefetch := false
 
 
+static func texture_for_item(item_ref: Variant, field := "inventoryIcon") -> Texture2D:
+	return texture_at_path(GameData.get_item_art_path(item_ref, field))
+
+
 static func texture_for(record: Dictionary, field := "inventoryIcon") -> Texture2D:
 	var art: Variant = record.get("art", {})
 	if not art is Dictionary:
 		return null
 	var source: Variant = art.get(field, {})
 	var path := str(source.get("path", "")) if source is Dictionary else str(source)
-	if path.is_empty() or not ResourceLoader.exists(path):
+	if path.is_empty():
 		return null
 	return texture_at_path(path)
 
 
 static func texture_at_path(path: String) -> Texture2D:
-	if path.is_empty() or not ResourceLoader.exists(path):
-		return null
 	if _textures.has(path):
 		return _textures[path] as Texture2D
+	if path.is_empty() or not ResourceLoader.exists(path):
+		return null
 	if _use_headless_serial_prefetch() and _headless_prefetch_failures.has(path):
 		return null
 	if _threaded_paths.has(path) and ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_LOADED:

@@ -117,9 +117,10 @@ const CHARACTER_DELETE_CONTRACT_ID := "player_state.character.delete.v1"
 const STARTER_WEAPON_ITEM_NAME := "木剑"
 const STARTER_ARMOR_BY_GENDER := {"男": "布衣(男)", "女": "布衣(女)"}
 # The service table remains the raw/source authority.  This is the explicit
-# gameplay-only tuning policy for the current character: level thresholds use
-# one third of the prior 10% value (1/30 of source), rounded and never below 1.
+# gameplay-only tuning policy: first retain the previous rounded 1/30 threshold,
+# then apply the user's 2026-09-13 70% adjustment, rounded and never below 1.
 const GAMEPLAY_EXPERIENCE_THRESHOLD_SCALE := 1.0 / 30.0
+const GAMEPLAY_EXPERIENCE_CURRENT_THRESHOLD_RATIO := 0.70
 const GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM := 1
 const VERIFIED_EXPERIENCE_1_TO_22 := {
 	1: 100, 2: 200, 3: 300, 4: 400, 5: 600, 6: 900, 7: 1200, 8: 1700, 9: 2500,
@@ -250,6 +251,7 @@ var temporary_item_buff_revision := 0
 
 func _notification(what: int) -> void:
 	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_CLOSE_REQUEST]:
+		if _warehouse_active_preparation != null: _warehouse_active_preparation.cancel()
 		_commit_save()
 
 
@@ -523,9 +525,10 @@ func _build_receive_result_for_record(
 	record: Dictionary,
 	base_inventory: Array,
 	reject_existing_drop_instance := false,
+	owned_batch_weight := -1,
 ) -> Dictionary:
 	var amount := maxi(1, int(record.get("count", 1)))
-	var catalog_item := GameData.get_item_record(record)
+	var catalog_item := GameData.get_item_rules_record(record)
 	var item_name := str(catalog_item.get("name", record.get("name", "")))
 	if record.has("item_id") and int(record.get("item_id", -1)) != int(catalog_item.get("itemId", -2)):
 		return _receive_failure("unknown_item", "物品身份无效。")
@@ -546,7 +549,7 @@ func _build_receive_result_for_record(
 		return _receive_failure("duplicate_item_instance", "掉落实例已入账。")
 	var canonical_record := record.duplicate(true)
 	canonical_record["name"] = item_name
-	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, canonical_record)
+	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, canonical_record, owned_batch_weight)
 
 
 func _build_receive_result_for_template(
@@ -554,11 +557,14 @@ func _build_receive_result_for_template(
 	amount: int,
 	catalog_item: Dictionary,
 	base_inventory: Array,
-	template: Dictionary
+	template: Dictionary,
+	owned_batch_weight := -1,
 ) -> Dictionary:
 	if amount <= 0:
 		return _receive_failure("invalid_amount", "数量无效。")
-	var next_inventory: Array = base_inventory.duplicate(true)
+	# An owned warehouse plan may share unchanged records between successive
+	# previews. Changed stacks are copied below; public previews remain defensive.
+	var next_inventory: Array = base_inventory.duplicate(owned_batch_weight < 0)
 	var is_stackable := bool(catalog_item.get("stackable", false)) and str(catalog_item.get("kind", "")) != "equipment"
 	var max_stack := _max_stack_for_item(catalog_item) if is_stackable else 1
 	var opaque_instance_id := str(template.get("instance_id", ""))
@@ -601,6 +607,9 @@ func _build_receive_result_for_template(
 			if available <= 0:
 				continue
 			var moved := mini(available, remaining)
+			if owned_batch_weight >= 0:
+				existing = existing.duplicate(true)
+				next_inventory[index] = existing
 			existing["count"] = int(existing.get("count", 0)) + moved
 			if template.has("item_id"):
 				existing["item_id"] = int(template.get("item_id", -1))
@@ -622,8 +631,8 @@ func _build_receive_result_for_template(
 		if not _place_inventory_record_in_first_free_slot(next_inventory, new_record):
 			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
 		remaining -= moved
-	var weight_before := inventory_weight(base_inventory)
-	var weight_after := inventory_weight(next_inventory)
+	var weight_before := inventory_weight(base_inventory) if owned_batch_weight < 0 else owned_batch_weight
+	var weight_after := inventory_weight(next_inventory) if owned_batch_weight < 0 else mini(MAX_SAFE_WEIGHT, weight_before + inventory_weight([{"name": item_name, "count": amount}]))
 	var max_weight := max_inventory_weight()
 	# Compatibility rule: an old save may already exceed the new cap, but no
 	# operation may increase that burden. This also lets a swap/unequip preserve
@@ -768,8 +777,10 @@ func spend_gold(amount: int) -> bool:
 func shared_gold_balance() -> int:
 	if not _ensure_shared_warehouse_ready():
 		return 0
-	var shared := _read_json(shared_warehouse_path)
-	return int(shared.get("bank_gold", 0)) if _validate_shared_warehouse_document(shared) else 0
+	var status := _read_json_with_status(shared_warehouse_path)
+	# The path-routed reader already validates the complete warehouse and its
+	# migration/profile dependencies, including backup recovery.
+	return int((status.get("data", {}) as Dictionary).get("bank_gold", 0)) if bool(status.get("success", false)) else 0
 
 
 func next_shared_gold_transaction_sequence() -> int:
@@ -1085,6 +1096,16 @@ func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
 func shop_sell_quotes(items: Array) -> Dictionary:
 	var quotes: Dictionary = {}
 	var lookup_cache := _new_shop_quote_lookup_cache()
+	var names: Array = []
+	for raw_request: Variant in items:
+		if not raw_request is Dictionary: continue
+		var index := int(raw_request.get("inventory_index", -1))
+		if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary: continue
+		var name_text := str(inventory[index].get("name", ""))
+		if not name_text.is_empty() and name_text not in names: names.append(name_text)
+	lookup_cache["price_by_name"] = GameData.get_item_price_records_by_name(names)
+	if test_mode:
+		_shop_quote_debug["price_record_lookups"] = int(_shop_quote_debug.get("price_record_lookups", 0)) + names.size()
 	for raw_item: Variant in items:
 		if not raw_item is Dictionary:
 			continue
@@ -1398,20 +1419,20 @@ func _shop_sell_merchant_context(
 func _shop_sell_catalog(item_name: String, lookup_cache: Dictionary) -> Dictionary:
 	var cache: Dictionary = lookup_cache.get("catalog_by_name", {})
 	if cache.has(item_name):
-		return (cache[item_name] as Dictionary).duplicate(true)
-	var catalog := GameData.get_item_record(item_name)
+		return cache[item_name] as Dictionary
+	var catalog := GameData.get_item_rules_record(item_name)
 	if test_mode:
 		_shop_quote_debug["catalog_lookups"] = int(_shop_quote_debug.get("catalog_lookups", 0)) + 1
-	cache[item_name] = catalog.duplicate(true)
+	cache[item_name] = catalog
 	lookup_cache["catalog_by_name"] = cache
 	return catalog
 
 
-func _shop_sell_price_record(item_name: String, lookup_cache: Dictionary) -> Dictionary:
+func _shop_sell_price_record(item_name: String, lookup_cache: Dictionary, item_ref: Variant = null) -> Dictionary:
 	var cache: Dictionary = lookup_cache.get("price_by_name", {})
 	if cache.has(item_name):
 		return (cache[item_name] as Dictionary).duplicate(true)
-	var price_record := GameData.get_item_price_record(item_name)
+	var price_record := GameData.get_item_price_record(item_ref if item_ref != null else item_name)
 	if test_mode:
 		_shop_quote_debug["price_record_lookups"] = int(_shop_quote_debug.get("price_record_lookups", 0)) + 1
 	cache[item_name] = price_record.duplicate(true)
@@ -1485,7 +1506,7 @@ func _shop_sell_quote(request: Dictionary, lookup_cache := {}) -> Dictionary:
 	):
 		return rejection
 	var catalog := _shop_sell_catalog(item_name, cache)
-	var price_record := _shop_sell_price_record(item_name, cache)
+	var price_record := _shop_sell_price_record(item_name, cache, record)
 	var base_price := _shop_sell_base_price_cached(item_name, price_record, cache)
 	var count := maxi(1, int(record.get("count", 1)))
 	if test_mode:
@@ -2156,9 +2177,13 @@ func experience_to_next_level() -> int:
 
 
 func _gameplay_experience_threshold(source_experience: int) -> int:
-	return maxi(
+	var previous_threshold := maxi(
 		GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM,
 		roundi(float(maxi(0, source_experience)) * GAMEPLAY_EXPERIENCE_THRESHOLD_SCALE),
+	)
+	return maxi(
+		GAMEPLAY_EXPERIENCE_THRESHOLD_MINIMUM,
+		roundi(float(previous_threshold) * GAMEPLAY_EXPERIENCE_CURRENT_THRESHOLD_RATIO),
 	)
 
 
@@ -3545,6 +3570,8 @@ func _profile_path(profile_id: String) -> String:
 	return "%s/%s.json" % [profile_directory, profile_id]
 
 
+var _json_parse_snapshots: Dictionary = {}
+
 func _read_json_document(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return {"exists": false, "valid": false, "data": {}}
@@ -3553,9 +3580,18 @@ func _read_json_document(path: String) -> Dictionary:
 		return {"exists": true, "valid": false, "data": {}}
 	var serialized := file.get_as_text()
 	file.close()
+	# Always read current bytes; neither timestamps nor file size prove identity.
+	# Only JSON parsing is reused. Business validators still run on every read.
+	var content_hash := serialized.sha256_text()
+	var cached: Dictionary = _json_parse_snapshots.get(path, {})
+	if not cached.is_empty() and str(cached.hash) == content_hash:
+		return {"exists": true, "valid": true, "data": (cached.data as Dictionary).duplicate(true)}
 	var parser := JSON.new()
 	var parse_error := parser.parse(serialized)
 	var parsed: Variant = parser.data if parse_error == OK else null
+	if parsed is Dictionary and serialized.length() <= 2097152:
+		if _json_parse_snapshots.size() >= 16: _json_parse_snapshots.clear()
+		_json_parse_snapshots[path] = {"hash": content_hash, "data": (parsed as Dictionary).duplicate(true)}
 	return {
 		"exists": true,
 		"valid": parsed is Dictionary,
@@ -3713,6 +3749,21 @@ func _valid_saved_position(value: Variant) -> bool:
 
 
 func _validate_saved_item_records(value: Variant, capacity: int) -> bool:
+	# Reuse only inside one synchronous transaction: the catalog and rule authority
+	# cannot change mid-call. File reads and migration dependencies are NOT cached.
+	if not _warehouse_validation_scope or not value is Array:
+		return _validate_saved_item_records_uncached(value, capacity)
+	var key := hash([capacity, value])
+	var cached: Dictionary = _warehouse_validated_collections.get(key, {})
+	if not cached.is_empty() and cached.capacity == capacity and cached.value == value:
+		return true
+	if not _validate_saved_item_records_uncached(value, capacity):
+		return false
+	_warehouse_validated_collections[key] = {"capacity": capacity, "value": value.duplicate(true)}
+	return true
+
+
+func _validate_saved_item_records_uncached(value: Variant, capacity: int) -> bool:
 	if not value is Array or (value as Array).size() > capacity:
 		return false
 	var seen_drop_instance_ids: Dictionary = {}
@@ -3765,8 +3816,7 @@ func _validated_drop_instance_id(record: Dictionary) -> String:
 	var raw_item_id: Variant = record.get("item_id", null)
 	if not _is_integral_json_number(raw_item_id) or int(raw_item_id) <= 0:
 		return "#invalid"
-	var catalog := GameData.get_item_record({"item_id": int(raw_item_id)})
-	if not ItemDropInstanceRulesScript.validate_instance(record, catalog):
+	if not GameData.validate_item_drop_instance(record):
 		return "#invalid"
 	return str(record.get("instance_id", ""))
 
@@ -4087,7 +4137,7 @@ func _read_json_with_status(path: String, validator := Callable()) -> Dictionary
 			return {
 				"success": true,
 				"reason": "primary",
-				"data": primary.get("data", {}).duplicate(true),
+				"data": primary.get("data", {}),
 			}
 		if bool(validation.get("terminal", false)):
 			return {
@@ -4119,7 +4169,7 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 	# Validate the serialized JSON representation once. Both disk readbacks
 	# below must match these exact validated bytes, so promotion does not need
 	# a second identical parse and inventory/affix validation pass.
-	var serialized := JSON.stringify(data, "\t")
+	var serialized := JSON.stringify(data)
 	var parsed: Variant = JSON.parse_string(serialized)
 	var validator := _json_validator_for_path(path)
 	if not parsed is Dictionary or not bool(_validate_json_candidate(parsed, validator).get("valid", false)):
@@ -4143,15 +4193,25 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 	return _promote_verified_json(path, temporary, expected_bytes)
 
 
-func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray) -> bool:
+func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray, validated_previous_bytes: Variant = null) -> bool:
 	var validator := _json_validator_for_path(path)
 	var backup := path + ".bak"
 	var phase_usec := Time.get_ticks_usec()
 	var absolute_path := ProjectSettings.globalize_path(path)
 	var absolute_temp := ProjectSettings.globalize_path(temporary)
 	var absolute_backup := ProjectSettings.globalize_path(backup)
-	var current_document := _read_json_document(path)
-	var current_validation := _validate_json_candidate(current_document.get("data", {}), validator)
+	var current_document: Dictionary
+	var current_validation: Dictionary
+	if validated_previous_bytes is PackedByteArray:
+		# A prepared transaction already validated this exact previous document.
+		# Byte comparison still detects every external change before rotation.
+		if not _file_matches_validated_bytes(path, validated_previous_bytes):
+			return false
+		current_document = {"exists": true, "valid": true}
+		current_validation = _validation_result(true)
+	else:
+		current_document = _read_json_document(path)
+		current_validation = _validate_json_candidate(current_document.get("data", {}), validator)
 	if (
 		bool(current_document.get("valid", false))
 		and bool(current_validation.get("terminal", false))
@@ -4230,11 +4290,35 @@ func _shared_warehouse_empty_document() -> Dictionary:
 	}
 
 
+var _shared_digest_cache: Dictionary = {}
+var _shared_digest_snapshots: Dictionary = {}
+
 func _shared_digest(value: Variant) -> String:
-	# Hash the JSON round-trip representation so integers/floats and typed Arrays
-	# compare identically after an atomic file is parsed back from disk.
-	var normalized: Variant = JSON.parse_string(JSON.stringify(value))
-	return JSON.stringify(normalized).sha256_text()
+	# Preserve the persisted JSON-round-trip hash contract. Repeated WAL and
+	# readback comparisons share the normalization of identical serialized input;
+	# changed fields produce a different SHA-256 key and are normalized anew.
+	var is_container := value is Array or value is Dictionary
+	var snapshot_key := hash(value) if is_container else 0
+	if is_container:
+		var cached: Dictionary = _shared_digest_snapshots.get(snapshot_key, {})
+		if not cached.is_empty() and typeof(cached.value) == typeof(value) and cached.value == value:
+			return str(cached.digest)
+	var serialized := JSON.stringify(value)
+	var input_hash := serialized.sha256_text()
+	if _shared_digest_cache.has(input_hash):
+		var known_digest := str(_shared_digest_cache[input_hash])
+		if is_container:
+			if _shared_digest_snapshots.size() >= 16: _shared_digest_snapshots.clear()
+			_shared_digest_snapshots[snapshot_key] = {"value": value.duplicate(true), "digest": known_digest}
+		return known_digest
+	var normalized: Variant = JSON.parse_string(serialized)
+	var digest := JSON.stringify(normalized).sha256_text()
+	if _shared_digest_cache.size() >= 256: _shared_digest_cache.clear()
+	_shared_digest_cache[input_hash] = digest
+	if is_container:
+		if _shared_digest_snapshots.size() >= 16: _shared_digest_snapshots.clear()
+		_shared_digest_snapshots[snapshot_key] = {"value": value.duplicate(true), "digest": digest}
+	return digest
 
 
 func _shared_warehouse_read_inventory() -> Array:
@@ -4639,8 +4723,8 @@ func _remove_persistence_file(path: String) -> bool:
 	return DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK
 
 
-func _shared_document_for_records(records: Array) -> Dictionary:
-	var current := _read_json(shared_warehouse_path)
+func _shared_document_for_records(records: Array, current_snapshot: Dictionary = {}) -> Dictionary:
+	var current := _read_json(shared_warehouse_path) if current_snapshot.is_empty() else current_snapshot
 	var document := _shared_warehouse_empty_document()
 	document["revision"] = int(current.get("revision", 0)) + 1
 	document["warehouse_inventory"] = records.duplicate(true)
@@ -4893,7 +4977,7 @@ func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictiona
 
 
 ## Moves one selected batch with one two-file persistence transaction.
-func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array) -> Dictionary:
+func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array, prepare_only := false) -> Dictionary:
 	var requested := inventory_indices.size()
 	var result := {
 		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
@@ -4964,14 +5048,20 @@ func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array
 		working_warehouse[normalized_slots[move_offset]] = records_to_move[move_offset]
 	for source_offset in range(transfer_count - 1, -1, -1):
 		_clear_inventory_slot(working_inventory, normalized_indices[source_offset])
-	inventory = working_inventory
-	warehouse_inventory = working_warehouse
-	if not _warehouse_transfer_commit(inventory_before, warehouse_before):
-		inventory = inventory_before
-		warehouse_inventory = warehouse_before
-		result["message"] = "仓库存档失败，物品未改变。"
-		return result
-	inventory_changed.emit()
+	if prepare_only:
+		result["_inventory_before"] = inventory_before
+		result["_warehouse_before"] = warehouse_before
+		result["_prepared_inventory"] = working_inventory
+		result["_prepared_warehouse"] = working_warehouse
+	else:
+		inventory = working_inventory
+		warehouse_inventory = working_warehouse
+		if not _warehouse_transfer_commit(inventory_before, warehouse_before):
+			inventory = inventory_before
+			warehouse_inventory = warehouse_before
+			result["message"] = "仓库存档失败，物品未改变。"
+			return result
+		inventory_changed.emit()
 	result["success"] = true
 	result["complete"] = transfer_count == requested
 	result["transferred"] = transfer_count
@@ -4994,7 +5084,7 @@ func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
 
 
 ## Moves the largest valid prefix with one two-file persistence transaction.
-func withdraw_from_warehouse_batch(warehouse_slots: Array) -> Dictionary:
+func withdraw_from_warehouse_batch(warehouse_slots: Array, prepare_only := false) -> Dictionary:
 	var requested := warehouse_slots.size()
 	var result := {
 		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
@@ -5034,14 +5124,16 @@ func withdraw_from_warehouse_batch(warehouse_slots: Array) -> Dictionary:
 	var completed_slots: Array[int] = []
 	var failure_message := ""
 	var failure_reason := ""
+	var working_weight := inventory_weight(working_inventory)
 	for warehouse_slot: int in normalized_slots:
 		var record: Dictionary = working_warehouse[warehouse_slot]
-		var preview := _build_receive_result_for_record(record, working_inventory)
+		var preview := _build_receive_result_for_record(record, working_inventory, false, working_weight)
 		if not bool(preview.get("success", false)):
 			failure_message = str(preview.get("message", INVENTORY_WEIGHT_REJECTION))
 			failure_reason = str(preview.get("reason", "rejected"))
 			break
-		working_inventory = (preview.get("inventory", working_inventory) as Array).duplicate(true)
+		working_inventory = preview.get("inventory", working_inventory) as Array
+		working_weight = int(preview.weight_after)
 		working_warehouse[warehouse_slot] = {}
 		completed_slots.append(warehouse_slot)
 	if completed_slots.is_empty():
@@ -5051,14 +5143,20 @@ func withdraw_from_warehouse_batch(warehouse_slots: Array) -> Dictionary:
 		return result
 	while not working_warehouse.is_empty() and not _inventory_slot_is_occupied(working_warehouse.back()):
 		working_warehouse.pop_back()
-	inventory = working_inventory
-	warehouse_inventory = working_warehouse
-	if not _warehouse_transfer_commit(inventory_before, warehouse_before):
-		inventory = inventory_before
-		warehouse_inventory = warehouse_before
-		result["message"] = "仓库存档失败，物品未改变。"
-		return result
-	inventory_changed.emit()
+	if prepare_only:
+		result["_inventory_before"] = inventory_before
+		result["_warehouse_before"] = warehouse_before
+		result["_prepared_inventory"] = working_inventory
+		result["_prepared_warehouse"] = working_warehouse
+	else:
+		inventory = working_inventory
+		warehouse_inventory = working_warehouse
+		if not _warehouse_transfer_commit(inventory_before, warehouse_before):
+			inventory = inventory_before
+			warehouse_inventory = warehouse_before
+			result["message"] = "仓库存档失败，物品未改变。"
+			return result
+		inventory_changed.emit()
 	result["success"] = true
 	result["complete"] = completed_slots.size() == requested
 	result["transferred"] = completed_slots.size()
@@ -6310,6 +6408,140 @@ func _commit_warehouse_transaction_snapshots(
 	return false
 
 
+var _warehouse_preparation_pending := false
+var _warehouse_active_preparation: RefCounted
+
+
+func transfer_warehouse_prepared(operation: String, source_indices: Array, target_slots: Array = []) -> Dictionary:
+	if test_mode and not _shared_warehouse_test_isolation_enabled():
+		return deposit_to_warehouse_batch(source_indices, target_slots) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices)
+	if _warehouse_preparation_pending:
+		return _warehouse_preparation_failure("仓库存取正在处理中。")
+	_warehouse_preparation_pending = true
+	var result: Dictionary = await _prepare_warehouse_transfer(operation, source_indices, target_slots)
+	_warehouse_preparation_pending = false
+	_warehouse_active_preparation = null
+	return result
+
+
+func _warehouse_preparation_failure(message: String) -> Dictionary:
+	return {"success": false, "complete": false, "transferred": 0, "message": message}
+
+
+func _prepare_warehouse_transfer(operation: String, source_indices: Array, target_slots: Array) -> Dictionary:
+	if operation not in ["deposit", "withdraw"]:
+		return _warehouse_preparation_failure("仓库存取操作无效。")
+	var plan := deposit_to_warehouse_batch(source_indices, target_slots, true) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, true)
+	if not bool(plan.get("success", false)):
+		return plan
+	var profile_id := active_profile_id
+	var generation := _atomic_write_generation
+	var paths := {"profile": _profile_path(profile_id), "shared": shared_warehouse_path, "journal": shared_warehouse_transaction_log_path}
+	await get_tree().process_frame
+	var before_profile := _read_json(str(paths.profile))
+	await get_tree().process_frame
+	var before_shared := _read_json(str(paths.shared))
+	await get_tree().process_frame
+	var previous_profile_bytes := FileAccess.get_file_as_bytes(paths.profile)
+	var previous_shared_bytes := FileAccess.get_file_as_bytes(paths.shared)
+	# Bind the validated snapshots to the exact disk bytes, including file edits
+	# made between reading / validating and capturing the preparation input.
+	var captured_profile: Variant = JSON.parse_string(previous_profile_bytes.get_string_from_utf8())
+	var captured_shared: Variant = JSON.parse_string(previous_shared_bytes.get_string_from_utf8())
+	if (before_profile.is_empty() or before_shared.is_empty()
+		or not captured_profile is Dictionary or not captured_shared is Dictionary
+		or captured_profile != before_profile or captured_shared != before_shared):
+		return _warehouse_preparation_failure("仓库存档已变化，物品未改变。")
+	await get_tree().process_frame
+	var after_profile := before_profile.duplicate()
+	after_profile["inventory"] = plan._prepared_inventory
+	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
+	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
+	after_profile.erase("warehouse_inventory")
+	var after_shared := _shared_document_for_records(plan._prepared_warehouse, before_shared)
+	var job := preload("res://scripts/warehouse_prepared_transaction.gd").new()
+	_warehouse_active_preparation = job
+	job.start(paths, {"before_profile": before_profile, "after_profile": after_profile, "before_shared": before_shared, "after_shared": after_shared}, WAREHOUSE_TRANSFER_CONTRACT_ID, profile_id)
+	while not bool(job.result().finished):
+		await get_tree().process_frame
+	if not bool(job.result().success):
+		job.cancel()
+		return _warehouse_preparation_failure("仓库存档准备失败，物品未改变。")
+	# Validate the actual normalized JSON which the worker wrote, on the main
+	# thread. Separate document checks keep a 500-item transaction responsive.
+	for key: String in ["before_profile", "after_profile"]:
+		await get_tree().process_frame
+		if not bool(_validate_profile_document_status(job.documents[key], profile_id, false).valid):
+			job.cancel()
+			return _warehouse_preparation_failure("角色存档校验失败，物品未改变。")
+	for key: String in ["before_shared", "after_shared"]:
+		await get_tree().process_frame
+		if not _validate_shared_warehouse_document(job.documents[key]):
+			job.cancel()
+			return _warehouse_preparation_failure("仓库存档校验失败，物品未改变。")
+	for prefix: String in ["before_", "after_"]:
+		await get_tree().process_frame
+		if not _profile_and_shared_drop_instances_are_disjoint(job.documents[prefix + "profile"], job.documents[prefix + "shared"]):
+			job.cancel()
+			return _warehouse_preparation_failure("物品实例校验失败，物品未改变。")
+	await get_tree().process_frame
+	var current: bool = (active_profile_id == profile_id and _profile_path(profile_id) == paths.profile
+		and shared_warehouse_path == paths.shared and shared_warehouse_transaction_log_path == paths.journal
+		and _atomic_write_generation == generation and not _warehouse_transaction_locked
+		and not _persistence_transaction_in_progress and not FileAccess.file_exists(paths.journal)
+		and inventory == plan._inventory_before and warehouse_inventory == plan._warehouse_before
+		and _file_matches_validated_bytes(paths.profile, previous_profile_bytes)
+		and _file_matches_validated_bytes(paths.shared, previous_shared_bytes))
+	if not current or not bool(job.result().success):
+		job.cancel()
+		return _warehouse_preparation_failure("物品或存档已变化，请重新操作。")
+	# The journal was constructed from these four normalized snapshots. The
+	# operation cannot change either gold authority or skip the revision step.
+	if (int(job.documents.before_profile.get("gold", 0)) != int(job.documents.after_profile.get("gold", 0))
+		or _bank_fields_snapshot(job.documents.before_shared) != _bank_fields_snapshot(job.documents.after_shared)
+		or int(job.documents.after_shared.get("revision", -1)) != int(job.documents.before_shared.get("revision", -1)) + 1):
+		job.cancel()
+		return _warehouse_preparation_failure("仓库交易校验失败，物品未改变。")
+	var committed := _promote_prepared_warehouse(job, previous_profile_bytes, previous_shared_bytes)
+	job.cancel() # removes remaining private files only; promoted paths are absent.
+	if not committed:
+		return _warehouse_preparation_failure("仓库存档失败，物品未改变。")
+	inventory = plan._prepared_inventory
+	warehouse_inventory = plan._prepared_warehouse
+	for key: String in ["_inventory_before", "_warehouse_before", "_prepared_inventory", "_prepared_warehouse"]:
+		plan.erase(key)
+	inventory_changed.emit()
+	return plan
+
+
+func _promote_prepared_warehouse(job: RefCounted, previous_profile_bytes: PackedByteArray, previous_shared_bytes: PackedByteArray) -> bool:
+	if test_mode and _test_force_atomic_write_failure:
+		return false
+	# This final phase contains no await. Gameplay mutations cannot interleave
+	# between the optimistic checks, file promotion and the inventory handoff.
+	for key: String in ["journal", "shared", "profile"]:
+		if not _file_matches_validated_bytes(job.temporary_paths[key], job.bytes[key]): return false
+	if not _promote_verified_json(job.paths.journal, job.temporary_paths.journal, job.bytes.journal):
+		return false
+	_warehouse_transaction_locked = true
+	_persistence_transaction_in_progress = true
+	var shared_ok := not (test_mode and _test_fail_shared_write)
+	if shared_ok: shared_ok = _promote_verified_json(job.paths.shared, job.temporary_paths.shared, job.bytes.shared, previous_shared_bytes)
+	var profile_ok := shared_ok and not (test_mode and _test_fail_profile_write)
+	if profile_ok: profile_ok = _promote_verified_json(job.paths.profile, job.temporary_paths.profile, job.bytes.profile, previous_profile_bytes)
+	_persistence_transaction_in_progress = false
+	if shared_ok and profile_ok and _file_matches_validated_bytes(job.paths.profile, job.bytes.profile) and _file_matches_validated_bytes(job.paths.shared, job.bytes.shared):
+		_warehouse_transaction_locked = not _remove_persistence_file(job.paths.journal)
+		return true
+	var restored := false
+	if not (test_mode and _test_fail_warehouse_rollback_write):
+		var shared_restored := _write_json_atomic(job.paths.shared, job.documents.before_shared)
+		var profile_restored := _write_json_atomic(job.paths.profile, job.documents.before_profile)
+		restored = shared_restored and profile_restored and _shared_digest(_read_json(job.paths.profile)) == _shared_digest(job.documents.before_profile) and _shared_digest(_read_json(job.paths.shared)) == _shared_digest(job.documents.before_shared)
+	if restored: _warehouse_transaction_locked = not _remove_persistence_file(job.paths.journal)
+	return false
+
+
 func _bank_transfer_commit(
 	before_profile: Dictionary,
 	before_shared: Dictionary,
@@ -6345,7 +6577,19 @@ func _bank_transfer_commit(
 	)
 
 
+var _warehouse_validation_scope := false
+var _warehouse_validated_collections: Dictionary = {}
+
 func _warehouse_transfer_commit(_inventory_before: Array, _warehouse_before: Array) -> bool:
+	_warehouse_validation_scope = true
+	_warehouse_validated_collections.clear()
+	var result := _warehouse_transfer_commit_validated(_inventory_before, _warehouse_before)
+	_warehouse_validation_scope = false
+	_warehouse_validated_collections.clear()
+	return result
+
+
+func _warehouse_transfer_commit_validated(_inventory_before: Array, _warehouse_before: Array) -> bool:
 	if test_mode and not _shared_warehouse_test_isolation_enabled():
 		return _commit_save()
 	if not _ensure_shared_warehouse_ready():
@@ -6370,7 +6614,7 @@ func _warehouse_transfer_commit(_inventory_before: Array, _warehouse_before: Arr
 	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
 	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
 	after_profile.erase("warehouse_inventory")
-	var after_shared := _shared_document_for_records(warehouse_inventory)
+	var after_shared := _shared_document_for_records(warehouse_inventory, before_shared)
 	if not _validate_shared_warehouse_document(after_shared):
 		return false
 	return _commit_warehouse_transaction_snapshots(
