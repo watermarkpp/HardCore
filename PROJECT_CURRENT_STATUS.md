@@ -1,6 +1,14 @@
 # HardCore Current Status
 
-Branch: `codex/integration`。Updated: 2026-09-13。
+Branch: `codex/integration`。Updated: 2026-09-14。
+
+## 2026-09-14：人物成长、神水、地面过滤与掉率 v80
+
+- 源码 `fa4a1ffa88f7d2ec20d83a8548afc2d4b99d1393`，三职业裸属性统一到主服务端生成链；神水正式计时到期、单个与旧堆叠无损拆分、当前仓库页整理、JP范围合并及★、药水颜色说明、三挡即时过滤与600秒地面回收。
+- 按用户DOCX明确倍率调整765原槽并向M159复制17槽，原台账/优先级/15上限保留；Excel仅比对，不参与规则。
+- 26场景分批最终PASS；固定源码3/3 PASS。APK 80 / `hardcore 1.0 正式版` 已在桌面 `HardCore-1.0-v80-release.apk`，465,996,946 bytes，SHA256 `D8B9E5FF0C395F354997A0F0ED8E7E4F996C1433191D07C04CA5C7F76746F52D`。
+- APK同签名升级和内容核对PASS，221其他脚本/8979其他资源项与v79不变；已接受校准布局冻结。手机性能/设备NOT_RUN，既存冷UI及故障回滚延迟保留明确记录。
+- 快进合并integration；源码里程碑 `milestone-hardcore-1.0-v80`，旧标签与桌面旧包保留。详见 `docs/progression_loot_20260913/DELIVERY.md`。
 
 ## 2026-09-13：人物属性与稀有度复核 v79
 

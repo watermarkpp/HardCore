@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "source_commit": "fa4a1ffa88f7d2ec20d83a8548afc2d4b99d1393",
+  "build_info": {
+    "git_head": "fa4a1ffa88f7d2ec20d83a8548afc2d4b99d1393",
+    "version_code": 80,
+    "build_timestamp_utc": "2026-09-13T16:59:54.2284779Z",
+    "git_short_head": "fa4a1ffa",
+    "build_type": "development",
+    "version_name": "hardcore 1.0 正式版",
+    "git_dirty": false,
+    "git_branch": "HEAD"
+  },
+  "baseline_commit": "98b38830ea074084cde49e964b3ca1da15263417",
+  "apk": "C:/Users/Administrator/Desktop/HardCore-1.0-v80-release.apk",
+  "size_bytes": 465996946,
+  "sha256": "d8b9e5ff0c395f354997a0f0ed8e7e4f996c1433191d07c04ca5c7f76746f52d",
+  "changed_scripts": [
+    "assets/scripts/drop/user_drop_balance.gdc",
+    "assets/scripts/equipment_rules.gdc",
+    "assets/scripts/game_data.gdc",
+    "assets/scripts/game_root.gdc",
+    "assets/scripts/generated/character_base_growth_v1.gdc",
+    "assets/scripts/generated/drop_balance_v80_seal.gdc",
+    "assets/scripts/item_detail_presenter.gdc",
+    "assets/scripts/layers/runtime/loot_runtime_service.gdc",
+    "assets/scripts/loot_pickup.gdc",
+    "assets/scripts/loot_pickup_runtime_manager.gdc",
+    "assets/scripts/loot_preferences.gdc",
+    "assets/scripts/player.gdc",
+    "assets/scripts/player_state.gdc",
+    "assets/scripts/profession_rules.gdc",
+    "assets/scripts/shop_panel.gdc",
+    "assets/scripts/special_consumable_stacks.gdc",
+    "assets/scripts/system_menu_panel.gdc",
+    "assets/scripts/ui_item_name_style.gdc"
+  ],
+  "new_scripts": [
+    "assets/scripts/drop/user_drop_balance.gdc",
+    "assets/scripts/generated/character_base_growth_v1.gdc",
+    "assets/scripts/generated/drop_balance_v80_seal.gdc",
+    "assets/scripts/loot_preferences.gdc",
+    "assets/scripts/special_consumable_stacks.gdc"
+  ],
+  "changed_data": [
+    "assets/assets/data/drop/single_player_balance_v80.json",
+    "assets/assets/data/drop/single_player_balance_v80_policy.json",
+    "assets/assets/data/item_runtime_authority_v1.json",
+    "assets/assets/data/ui/item_name_rarity_policy_v2.json",
+    "assets/assets/data/ui/item_name_rarity_v1.json",
+    "assets/assets/data/vanilla_176/character_base_growth_source_v1.json"
+  ],
+  "unchanged_scripts": 221,
+  "unchanged_asset_entries": 8979,
+  "device": "NOT_RUN"
+}

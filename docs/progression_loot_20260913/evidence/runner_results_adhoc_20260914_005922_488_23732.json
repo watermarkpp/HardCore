@@ -1,0 +1,56 @@
+{
+  "suite": "adhoc",
+  "failed": 0,
+  "git_head": "fa4a1ffa88f7d2ec20d83a8548afc2d4b99d1393",
+  "passed": 3,
+  "engine_log_errors": 0,
+  "total": 3,
+  "generated_at": "2026-09-14T00:59:22.4886188+08:00",
+  "results": [
+    {
+      "test_name": "base_growth_test",
+      "test_path": "tests/progression_loot_20260913/base_growth_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "drop_balance_test",
+      "test_path": "tests/progression_loot_20260913/drop_balance_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "legacy_stack_storage_test",
+      "test_path": "tests/progression_loot_20260913/legacy_stack_storage_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}
