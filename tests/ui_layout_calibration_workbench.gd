@@ -58,6 +58,9 @@ var _level_up_preview_restart_remaining := -1.0
 var _inventory_attribute_preview_requested := false
 var _inventory_attribute_preview_capture_path := ""
 var _inventory_attribute_preview_capture_done := false
+var _character_stats_preview_requested := false
+var _character_stats_capture_path := ""
+var _presentation_review_capture := false
 
 
 func _ready() -> void:
@@ -76,6 +79,8 @@ func _ready() -> void:
 		_start_requested_level_up_preview.call_deferred()
 	if _inventory_attribute_preview_requested:
 		_start_requested_inventory_attribute_preview.call_deferred()
+	elif _character_stats_preview_requested:
+		_start_character_stats_preview.call_deferred()
 
 
 func _process(delta: float) -> void:
@@ -104,7 +109,16 @@ func _process(delta: float) -> void:
 
 func _parse_level_up_preview_args(user_args: PackedStringArray) -> void:
 	for argument: String in user_args:
-		if argument == LEVEL_UP_PREVIEW_ARG:
+		if argument == "--character-stats-preview":
+			_character_stats_preview_requested = true
+		elif argument == "--presentation-review-capture":
+			_character_stats_preview_requested = true
+			_presentation_review_capture = true
+		elif argument.begins_with("--capture-character-stats-preview="):
+			_character_stats_capture_path = _resolve_project_local_capture_path(argument.trim_prefix("--capture-character-stats-preview="))
+			assert(not _character_stats_capture_path.is_empty(), "character capture must be project-local PNG")
+			_character_stats_preview_requested = true
+		elif argument == LEVEL_UP_PREVIEW_ARG:
 			_level_up_preview_requested = true
 		elif argument.begins_with(LEVEL_UP_PREVIEW_CAPTURE_ARG_PREFIX):
 			var raw_path := argument.trim_prefix(LEVEL_UP_PREVIEW_CAPTURE_ARG_PREFIX).strip_edges()
@@ -198,6 +212,51 @@ func _start_requested_inventory_attribute_preview() -> void:
 			presenter.get_global_rect(),
 		])
 	print("UI_INVENTORY_ATTRIBUTE_PREVIEW_READY candidate=匕首 index=%d presenter=%s" % [candidate_index, presenter.get_global_rect()])
+
+
+func _start_character_stats_preview() -> void:
+	await _show_panel(1)
+	var panel := hud.get("inventory_panel") as Control
+	panel_picker.select(1)
+	# The inspector remains usable; hide selection paint for an unobscured view.
+	overlay.hide()
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	if not _character_stats_capture_path.is_empty():
+		DirAccess.make_dir_recursive_absolute(_character_stats_capture_path.get_base_dir())
+		assert(get_viewport().get_texture().get_image().save_png(_character_stats_capture_path) == OK)
+	for path: String in ["AttributePanel/AttributePanelDecoration/AttributePanelFrame", "AttributePanel/AttributeTitle", "AttributePanel/CharacterIdentity", "AttributePanel/CharacterStats"]:
+		print("CHARACTER_STATS_PREVIEW_RECT %s %s" % [path, (panel.get_node(path) as Control).get_global_rect()])
+	print("CHARACTER_STATS_PREVIEW_READY capture=%s" % _character_stats_capture_path)
+	if _presentation_review_capture:
+		await _capture_presentation_review(panel)
+		get_tree().quit()
+
+
+func _capture_presentation_review(panel: Control) -> void:
+	var directory := "res://outputs/ui_calibration/presentation_review_20260913"
+	DirAccess.make_dir_recursive_absolute(directory)
+	var identity_before: Rect2 = panel.character_identity_label.get_global_rect()
+	for value: int in [99, 999]:
+		var stats := PlayerState.computed_stats.duplicate(true)
+		for key: String in ["max_hp", "max_mp", "attack_min", "attack_max", "magic_min", "magic_max", "tao_min", "tao_max", "defense_min", "defense_max", "magic_defense_min", "magic_defense_max", "accuracy", "agility"]:
+			stats[key] = value
+		panel.equipment_stats_label.text = panel._character_stats_text(stats)
+		panel._layout_character_attributes()
+		await RenderingServer.frame_post_draw
+		assert(panel.character_identity_label.get_global_rect().is_equal_approx(identity_before))
+		assert(panel.equipment_stats_label.get_line_count() == 10)
+		assert(get_viewport().get_texture().get_image().save_png(directory + "/stats_%d.png" % value) == OK)
+	panel._refresh_character_stats()
+	for item_id: int in [108, 232, 130]:
+		var item := GameData.get_item_record(item_id)
+		PlayerState.inventory = [PlayerState._make_item_instance(str(item.name), item)]
+		panel.refresh()
+		panel._select_inventory_item(0)
+		for i in range(3): await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		assert(get_viewport().get_texture().get_image().save_png(directory + "/name_%d.png" % item_id) == OK)
+	print("PRESENTATION_REVIEW_CAPTURE_PASS directory=%s" % directory)
 
 
 func _start_level_up_preview_auto_cycle() -> void:
@@ -315,6 +374,12 @@ func _build_panel_picker() -> void:
 func _build_production_game() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	if _character_stats_preview_requested:
+		PlayerState.character_name = "ok"
+		PlayerState.profession = "法师"
+		PlayerState.level = 30
+		PlayerState.experience = 12345
+		PlayerState.recalculate_stats(false)
 	PlayerState.inventory = []
 	PlayerState.add_item("强效太阳水", 82)
 	PlayerState.add_item("魔法药(中量)", 94)

@@ -314,11 +314,13 @@ func _run_shop_buy(expected_all: Array[Dictionary]) -> void:
 			failures.append("shop_buy|%s|PRESENTER_MISSING" % str(expected.name))
 			continue
 		var body_text := str(view.get("detail_label").text)
-		# Real quote text must surface the fixture price line and the record
-		# attributes; substring checks are executor-side, the helper keeps the
-		# full-text/no-truncation gate.
-		if not body_text.contains("价格：1金币"):
-			failures.append("shop_buy|%s|QUOTE_PRICE_LINE_MISSING" % str(expected.name))
+		# The accepted detail contract omits duplicate pricing from properties.
+		# Verify the real quoted price remains on its corresponding goods card.
+		var price_label := panel.goods_buttons[i].get_node("Price") as Label
+		if price_label.text != "1 金币":
+			failures.append("shop_buy|%s|CARD_QUOTE_PRICE_MISSING" % str(expected.name))
+		if body_text.contains("价格：") or body_text.contains("售价"):
+			failures.append("shop_buy|%s|DUPLICATE_DETAIL_PRICE" % str(expected.name))
 		var spec: Dictionary = _spec()
 		var allowed: Array[Rect2] = [spec.get("region", Rect2())]
 		var expanded_region: Rect2 = spec.get("expanded_region", Rect2())

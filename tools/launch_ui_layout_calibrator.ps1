@@ -3,6 +3,8 @@ param(
     [string]$CaptureLevelUpPreview = '',
     [switch]$InventoryAttributePreview,
     [string]$CaptureInventoryAttributePreview = '',
+    [switch]$CharacterStatsPreview,
+    [string]$CaptureCharacterStatsPreview = '',
     [switch]$Visible
 )
 
@@ -59,6 +61,13 @@ if ($InventoryAttributePreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($
 if (-not [string]::IsNullOrWhiteSpace($CaptureInventoryAttributePreview)) {
     $InventoryCaptureArgument = Resolve-ProjectLocalPngArgument $CaptureInventoryAttributePreview
     $PreviewUserArguments += "--capture-inventory-attribute-preview=$InventoryCaptureArgument"
+}
+if ($CharacterStatsPreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureCharacterStatsPreview)) {
+    $PreviewUserArguments += '--character-stats-preview'
+}
+if (-not [string]::IsNullOrWhiteSpace($CaptureCharacterStatsPreview)) {
+    $CharacterCaptureArgument = Resolve-ProjectLocalPngArgument $CaptureCharacterStatsPreview
+    $PreviewUserArguments += "--capture-character-stats-preview=$CharacterCaptureArgument"
 }
 
 $Arguments = @(

@@ -11,6 +11,7 @@ static var _loaded := false
 static var _valid := false
 static var _records: Dictionary = {}
 static var _colors: Dictionary = {}
+static var _outlines: Dictionary = {}
 
 static func ensure_loaded() -> bool:
 	if _loaded:
@@ -34,6 +35,7 @@ static func ensure_loaded() -> bool:
 			return false
 		_colors[group] = Color(str(palette[group]))
 	_records = records
+	_outlines = data.get("outline_styles", {})
 	_valid = true
 	return true
 
@@ -85,6 +87,20 @@ static func describe(item: Dictionary, instance: Dictionary = {}) -> Dictionary:
 		"tier": str(row.get("source_tier", "UNCLASSIFIED")),
 		"group": group,
 		"color": _colors.get(group, DEFAULT_COLOR),
+		"outline": _outlines.get(group, {}),
 		"identity_conflict": conflict,
 		"known": not row.is_empty(),
 	}
+
+
+static func apply_label_style(label: Label, style: Dictionary, fallback_color := DEFAULT_COLOR) -> void:
+	label.add_theme_color_override("font_color", style.get("color", fallback_color))
+	var outline: Dictionary = style.get("outline", {})
+	if not outline.is_empty():
+		label.add_theme_color_override("font_outline_color", Color(str(outline["color"])))
+		label.add_theme_constant_override("outline_size", int(outline["size"]))
+	else:
+		# Reused detail titles, shop cards and toast labels must shed the rare
+		# outline when they next display an ordinary item, message or currency.
+		label.remove_theme_color_override("font_outline_color")
+		label.remove_theme_constant_override("outline_size")

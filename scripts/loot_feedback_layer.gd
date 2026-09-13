@@ -232,7 +232,6 @@ func _rebuild_toasts() -> void:
 		panel.size.x = toast_width
 		label.text = display_text
 		var item_color: Color = KIND_COLORS.get(str(entry.get("item_kind", "material")), Color("dfccb0"))
-		if ItemNameStyle.canonical_id(entry) > 0:
-			item_color = ItemNameStyle.describe(entry).color
-		label.add_theme_color_override("font_color", item_color)
+		var name_style := ItemNameStyle.describe(entry) if ItemNameStyle.canonical_id(entry) > 0 else {}
+		ItemNameStyle.apply_label_style(label, name_style, item_color)
 		panel.show()

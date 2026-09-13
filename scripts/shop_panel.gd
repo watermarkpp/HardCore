@@ -477,6 +477,7 @@ func _rebuild_goods_cards() -> void:
 			UIItemTextureCacheScript.texture_for_item(entry),
 			"%d 金币" % int(quote.get("total_price", 0)),
 			true,
+			GameData.get_item_rules_record(entry),
 		)
 
 
@@ -555,7 +556,7 @@ func _bind_sell_card_identity(
 	card.set_meta("quote_key", quote_key)
 	card.set_meta("catalog_name", catalog_name)
 	_set_shop_card_selected(card, _selected_sell_indices.has(inventory_index))
-	_build_card_contents(card, display_name, texture, "", false)
+	_build_card_contents(card, display_name, texture, "", false, GameData.get_item_rules_record(record))
 
 
 func _apply_sell_quote_to_card(card: Button, quote: Dictionary) -> void:
@@ -655,6 +656,7 @@ func _build_card_contents(
 	texture: Texture2D,
 	price_text := "",
 	show_price := true,
+	item: Dictionary = {},
 ) -> void:
 	if PlayerState.test_mode:
 		_goods_card_content_update_count += 1
@@ -685,6 +687,7 @@ func _build_card_contents(
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(name_label)
 	name_label.text = display_name
+	UIItemNameStyleScript.apply_label_style(name_label, UIItemNameStyleScript.describe(item))
 	name_label.position = Vector2(84, 11 if show_price else 22)
 	name_label.size = Vector2(184, 28)
 	name_label.show()

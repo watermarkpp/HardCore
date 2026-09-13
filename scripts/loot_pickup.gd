@@ -188,6 +188,8 @@ func _ready() -> void:
 		template_item_color,
 	)
 	label.add_theme_color_override("font_color", item_color)
+	var name_style := preload("res://scripts/ui_item_name_style.gd")
+	name_style.apply_label_style(label, name_style.describe({"item_id": LootVisualEffectScript.exact_item_id(item_record)}) if gold_amount <= 0 else {}, item_color)
 	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	label.add_theme_constant_override("shadow_offset_x", 1)
 	label.add_theme_constant_override("shadow_offset_y", 1)

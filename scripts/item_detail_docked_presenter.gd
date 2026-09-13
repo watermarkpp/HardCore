@@ -188,12 +188,12 @@ static func _item_title(item: Dictionary, instance: Dictionary) -> String:
 func _set_name_style(item: Dictionary, instance: Dictionary = {}) -> void:
 	_name_style = NameStyle.describe(item, instance)
 	_title_color = _name_style["color"]
-	title_label.add_theme_color_override("font_color", _title_color)
+	NameStyle.apply_label_style(title_label, _name_style)
 
 func _reset_name_style(message: bool = false) -> void:
 	_name_style.clear()
 	_title_color = NameStyle.MESSAGE_COLOR if message else NameStyle.DEFAULT_COLOR
-	title_label.add_theme_color_override("font_color", _title_color)
+	NameStyle.apply_label_style(title_label, {}, _title_color)
 
 
 func show_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary = {}) -> void:

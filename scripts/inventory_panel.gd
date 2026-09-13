@@ -29,6 +29,7 @@ const BAG_CAPACITY := 100
 const BAG_BACKGROUND_CELL_BATCH := 10
 const EQUIPMENT_SLOT_LAYOUT_REVISION := 1
 const ITEM_DETAIL_LAYOUT_REVISION := 1
+const CHARACTER_STATS_FONT_SIZE := 16
 const BAG_CELL_SIZE := Vector2(56, 64)
 const BAG_HORIZONTAL_SEPARATION := 1
 const BAG_VERTICAL_SEPARATION := 4
@@ -50,6 +51,8 @@ var item_grid: GridContainer
 var detail_label: RichTextLabel
 var equipment_stats_label: RichTextLabel
 var character_attribute_help: Node
+var character_identity_label: RichTextLabel
+var character_identity_help: Node
 var bag_summary_label: Label
 var character_preview: Control
 var equipment_buttons: Dictionary = {}
@@ -173,26 +176,47 @@ func _build_attribute_panel() -> void:
 	var panel := _section_panel("AttributePanel", Vector2(32, 72), Vector2(250, 566))
 	var title := _section_title("人物属性", 250)
 	title.name = "AttributeTitle"
-	title.hide()
-	title.set_meta("calibration_layout_revision", 1)
+	title.set_meta("calibration_layout_revision", 2)
 	panel.add_child(title)
+	character_identity_label = RichTextLabel.new()
+	character_identity_label.name = "CharacterIdentity"
+	character_identity_label.set_meta("calibration_runtime_text", true)
+	character_identity_label.set_meta("ui_dismiss_protected", true)
+	character_identity_label.fit_content = false
+	character_identity_label.scroll_active = false
+	character_identity_label.bbcode_enabled = true
+	character_identity_label.theme_type_variation = "GothicDetailText"
+	character_identity_label.add_theme_font_size_override("normal_font_size", 16)
+	character_identity_label.add_theme_color_override("font_color", Color("ddc9a9"))
+	panel.add_child(character_identity_label)
+	character_identity_help = preload("res://scripts/item_attribute_help.gd").attach(panel, character_identity_label)
+	character_identity_help.explanation_resolver = _character_attribute_explanation
 	equipment_stats_label = RichTextLabel.new()
 	equipment_stats_label.name = "CharacterStats"
 	equipment_stats_label.set_meta("calibration_runtime_text", true)
-	equipment_stats_label.set_meta("calibration_layout_revision", 1)
+	equipment_stats_label.set_meta("calibration_layout_revision", 3)
 	equipment_stats_label.set_meta("ui_dismiss_protected", true)
 	equipment_stats_label.position = Vector2(16, 16)
 	equipment_stats_label.size = Vector2(218, 534)
 	equipment_stats_label.fit_content = false
 	equipment_stats_label.scroll_active = false
 	equipment_stats_label.bbcode_enabled = true
-	equipment_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	equipment_stats_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	equipment_stats_label.theme_type_variation = "GothicDetailText"
 	equipment_stats_label.add_theme_font_size_override("normal_font_size", 16)
 	equipment_stats_label.add_theme_color_override("font_color", Color("ddc9a9"))
 	panel.add_child(equipment_stats_label)
 	character_attribute_help = preload("res://scripts/item_attribute_help.gd").attach(panel, equipment_stats_label)
 	character_attribute_help.explanation_resolver = _character_attribute_explanation
+	character_identity_label.meta_clicked.connect(func(_meta: Variant) -> void: character_attribute_help.dismiss())
+	equipment_stats_label.meta_clicked.connect(func(_meta: Variant) -> void: character_identity_help.dismiss())
+	# The visible second-level frame has its own calibrated bounds. Follow that
+	# frame instead of centering against the invisible section's old rectangle.
+	var decoration := panel.get_node("AttributePanelDecoration") as Control
+	var frame := decoration.get_node("AttributePanelFrame") as Control
+	decoration.item_rect_changed.connect(_layout_character_attributes)
+	frame.item_rect_changed.connect(_layout_character_attributes)
+	_layout_character_attributes()
 	var divider := HSeparator.new()
 	divider.position = Vector2(16, 270)
 	divider.size = Vector2(218, 8)
@@ -556,17 +580,53 @@ func _refresh_character_stats() -> void:
 		return
 	if character_attribute_help != null:
 		character_attribute_help.dismiss()
+	if character_identity_help != null:
+		character_identity_help.dismiss()
+	var font_size := CHARACTER_STATS_FONT_SIZE
+	character_identity_label.text = "[center][font_size=%d]%s[/font_size]\n\n[font_size=%d]%s    [url=attribute:等级][color=#8dbce8][u]等级：%d[/u][/color][/url][/font_size][/center]" % [
+		font_size + 3, PlayerState.character_name.replace("[", "[lb]"),
+		font_size + 1, PlayerState.profession.replace("[", "[lb]"), PlayerState.level,
+	]
 	equipment_stats_label.text = _character_stats_text(PlayerState.computed_stats)
+	_layout_character_attributes()
+
+
+func _layout_character_attributes() -> void:
+	if equipment_stats_label == null or character_identity_label == null:
+		return
+	var panel := get_node("AttributePanel") as Control
+	var decoration := panel.get_node("AttributePanelDecoration") as Control
+	var frame := decoration.get_node("AttributePanelFrame") as Control
+	var frame_rect := Rect2(decoration.position + frame.position, frame.size)
+	var center_x := frame_rect.get_center().x
+	var title := panel.get_node("AttributeTitle") as Label
+	title.position = Vector2(center_x - 125.0, frame_rect.position.y)
+	title.size = Vector2(250.0, 30.0)
+	# At the reference 2664x1200 device, 30 logical units are 50 device pixels.
+	# The reviewed candidate moved the old name down 100 px; the user's final
+	# adjustment raises all content below the title by 50 px together.
+	character_identity_label.position = Vector2(center_x - 109.0, 46.0)
+	character_identity_label.size = Vector2(218.0, 88.0)
+	# One width for the complete block, shaped from its longest complete row.
+	# Values may widen/recenter the block, but cannot wrap pairs onto new rows.
+	var body_width := 0.0
+	var font := equipment_stats_label.get_theme_font("normal_font")
+	var lines := equipment_stats_label.get_parsed_text().split("\n")
+	var font_size := CHARACTER_STATS_FONT_SIZE
+	var style := equipment_stats_label.get_theme_stylebox("normal")
+	var margins := style.get_margin(SIDE_LEFT) + style.get_margin(SIDE_RIGHT)
+	for line: String in lines:
+		body_width = maxf(body_width, font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x)
+	# The approved range is zero through three digits. Keep the reviewed font
+	# size while changing only the complete block's width and horizontal offset.
+	equipment_stats_label.add_theme_font_size_override("normal_font_size", font_size)
+	body_width = ceilf(body_width + margins)
+	equipment_stats_label.position = Vector2(center_x - body_width * 0.5, 142.0)
+	equipment_stats_label.size = Vector2(body_width, maxf(1.0, frame_rect.end.y - 158.0))
 
 
 func _character_stats_text(stats: Dictionary) -> String:
 	var help := preload("res://scripts/item_attribute_help.gd")
-	var font_size := equipment_stats_label.get_theme_font_size("normal_font_size")
-	var character_name := PlayerState.character_name.replace("[", "[lb]")
-	var heading := "[font_size=%d]%s[/font_size]\n\n[font_size=%d]%s %s[/font_size]\n\n" % [
-		font_size + 3, character_name, font_size + 1, PlayerState.profession,
-		help.decorate("等级：%d" % PlayerState.level),
-	]
 	var body := "生命 %d　魔法值 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d\n幸运 %d\n远程与魔法躲避 %d%%\n速度 %+d\n暴击 %.1f%%\n穿戴重量 %d/%d" % [
 		int(stats.get("max_hp", 0)), int(stats.get("max_mp", 0)),
 		int(stats.get("attack_min", 0)), int(stats.get("attack_max", 0)),
@@ -579,7 +639,7 @@ func _character_stats_text(stats: Dictionary) -> String:
 		float(stats.get("critical_chance", 0.0)) * 100.0,
 		int(stats.get("wear_weight", 0)), int(stats.get("max_wear_weight", 0)),
 	]
-	return heading + help.decorate(body)
+	return help.decorate(body)
 
 
 func _character_attribute_explanation(term: String) -> String:

@@ -1,6 +1,6 @@
 {
   "contract_id": "ui.item_name.rarity.policy.v2",
-  "authority": "user_20260913_hardcore_1_0_name_color_request",
+  "authority": "user_20260913_docx_classification_with_explicit_armor_and_ironman_overrides",
   "scope": "presentation_only_no_drop_or_equipment_attribute_changes",
   "membership_source": "assets/data/drop/dpv2_item_tier_authority_v1.json",
   "equipment_membership_source": "assets/data/equipment_attribute_master.json",
@@ -9,7 +9,7 @@
     "wooma": "#FFD86B",
     "zuma": "#FF943D",
     "redmoon": "#C48CFF",
-    "ultra_rare": "#C48CFF"
+    "ultra_rare": "#C83B35"
   },
   "tier_styles": {
     "WOOMA_GEAR": "wooma",
@@ -27,18 +27,902 @@
     "BOOK_35": "ultra_rare"
   },
   "exact_id_overrides": {
+    "80": "default",
+    "81": "default",
+    "82": "default",
+    "83": "default",
+    "84": "default",
+    "85": "default",
+    "86": "default",
+    "87": "default",
+    "88": "default",
+    "89": "default",
+    "90": "default",
+    "91": "default",
+    "92": "default",
+    "93": "default",
+    "94": "default",
+    "95": "default",
+    "96": "default",
+    "97": "default",
+    "98": "default",
     "99": "wooma",
     "100": "wooma",
     "101": "wooma",
-    "102": "wooma",
-    "104": "wooma",
-    "103": "zuma",
+    "102": "zuma",
+    "103": "ultra_rare",
+    "104": "zuma",
+    "105": "zuma",
+    "106": "zuma",
+    "107": "zuma",
+    "108": "ultra_rare",
+    "109": "ultra_rare",
+    "110": "zuma",
+    "111": "ultra_rare",
+    "112": "ultra_rare",
+    "113": "ultra_rare",
+    "114": "ultra_rare",
+    "115": "ultra_rare",
+    "116": "default",
+    "117": "default",
+    "118": "default",
+    "119": "default",
+    "120": "default",
+    "121": "default",
+    "122": "default",
+    "123": "default",
+    "124": "default",
+    "125": "default",
+    "126": "default",
+    "127": "default",
+    "128": "zuma",
+    "129": "zuma",
+    "130": "zuma",
+    "131": "zuma",
+    "132": "zuma",
+    "133": "zuma",
+    "140": "redmoon",
+    "141": "redmoon",
+    "142": "redmoon",
+    "143": "redmoon",
+    "144": "redmoon",
+    "145": "redmoon",
+    "146": "default",
+    "147": "default",
+    "148": "default",
+    "149": "default",
+    "150": "default",
     "151": "zuma",
+    "152": "default",
+    "153": "default",
+    "154": "default",
+    "155": "default",
+    "156": "default",
+    "157": "default",
+    "158": "default",
+    "159": "default",
+    "160": "default",
+    "161": "default",
+    "162": "default",
+    "163": "default",
+    "164": "default",
+    "165": "default",
+    "166": "default",
+    "167": "default",
+    "168": "wooma",
+    "169": "wooma",
+    "170": "wooma",
+    "171": "zuma",
+    "172": "zuma",
+    "173": "zuma",
+    "174": "default",
+    "175": "default",
+    "176": "default",
+    "177": "default",
+    "178": "default",
+    "179": "default",
+    "180": "default",
+    "181": "default",
+    "182": "default",
+    "183": "default",
+    "184": "default",
+    "185": "default",
+    "186": "default",
+    "187": "default",
+    "188": "default",
+    "189": "wooma",
+    "190": "wooma",
+    "191": "zuma",
     "192": "zuma",
+    "193": "zuma",
+    "194": "zuma",
+    "195": "wooma",
+    "196": "zuma",
+    "197": "default",
+    "198": "default",
+    "199": "default",
+    "200": "default",
+    "201": "default",
+    "202": "default",
+    "203": "default",
+    "204": "default",
+    "205": "default",
+    "206": "default",
+    "207": "default",
+    "208": "default",
+    "209": "default",
+    "210": "default",
+    "211": "default",
+    "212": "wooma",
+    "213": "wooma",
+    "214": "wooma",
+    "215": "zuma",
+    "216": "zuma",
+    "217": "zuma",
+    "218": "wooma",
+    "219": "wooma",
+    "220": "wooma",
+    "221": "zuma",
+    "222": "zuma",
+    "223": "zuma",
+    "224": "zuma",
+    "225": "zuma",
+    "226": "zuma",
+    "227": "zuma",
+    "228": "ultra_rare",
+    "229": "ultra_rare",
+    "230": "ultra_rare",
+    "231": "ultra_rare",
+    "232": "redmoon",
+    "233": "redmoon",
+    "234": "redmoon",
+    "235": "redmoon",
+    "236": "redmoon",
+    "237": "redmoon",
+    "238": "redmoon",
+    "239": "redmoon",
+    "240": "redmoon",
+    "241": "redmoon",
+    "242": "redmoon",
+    "243": "redmoon",
+    "244": "zuma",
+    "245": "zuma",
+    "246": "zuma",
+    "247": "zuma",
+    "248": "zuma",
+    "249": "zuma",
     "250": "ultra_rare",
     "251": "ultra_rare",
+    "252": "ultra_rare",
+    "253": "ultra_rare",
+    "254": "ultra_rare",
+    "255": "ultra_rare",
+    "256": "ultra_rare",
+    "257": "ultra_rare",
+    "258": "ultra_rare",
+    "259": "ultra_rare",
+    "260": "default",
     "920007": "default",
     "920023": "wooma",
     "920032": "zuma"
+  },
+  "classification_document": {
+    "name": "传奇1.76装备稀有度分类_21CQ核对版.docx",
+    "sha256": "651940DC77814B604659BAEA7D699544ACEEA8CAA919B1B78F9310BF6BAFA4A1",
+    "user_overrides": {
+      "128-133": "战神盔甲、恶魔长袍、幽灵战衣的男女装按祖玛橙色",
+      "ultra_rare": "红字暗金边，赤月保持紫色"
+    },
+    "unavailable_categories": [
+      "荣誉勋章：现有正式装备主表无对应条目，不新增装备或猜测 ID"
+    ]
+  },
+  "outline_styles": {
+    "ultra_rare": {
+      "color": "#B08A3E",
+      "size": 2
+    }
+  },
+  "equipment_classification_evidence": {
+    "80": {
+      "canonical_name": "木剑",
+      "document_section": "2_T1"
+    },
+    "81": {
+      "canonical_name": "匕首",
+      "document_section": "2_T1"
+    },
+    "82": {
+      "canonical_name": "乌木剑",
+      "document_section": "2_T1"
+    },
+    "83": {
+      "canonical_name": "青铜剑",
+      "document_section": "2_T1"
+    },
+    "84": {
+      "canonical_name": "短剑",
+      "document_section": "2_T1"
+    },
+    "85": {
+      "canonical_name": "铁剑",
+      "document_section": "2_T1"
+    },
+    "86": {
+      "canonical_name": "鹤嘴锄",
+      "document_section": "2_T1"
+    },
+    "87": {
+      "canonical_name": "青铜斧",
+      "document_section": "2_T1"
+    },
+    "88": {
+      "canonical_name": "罗刹",
+      "document_section": "8_quest_equipment"
+    },
+    "89": {
+      "canonical_name": "八荒",
+      "document_section": "2_T1"
+    },
+    "90": {
+      "canonical_name": "海魂",
+      "document_section": "2_T1"
+    },
+    "91": {
+      "canonical_name": "半月",
+      "document_section": "2_T1"
+    },
+    "92": {
+      "canonical_name": "凌风",
+      "document_section": "2_T1"
+    },
+    "93": {
+      "canonical_name": "破魂",
+      "document_section": "2_T1"
+    },
+    "94": {
+      "canonical_name": "斩马刀",
+      "document_section": "2_T1"
+    },
+    "95": {
+      "canonical_name": "偃月",
+      "document_section": "2_T1"
+    },
+    "96": {
+      "canonical_name": "降魔",
+      "document_section": "2_T1"
+    },
+    "97": {
+      "canonical_name": "修罗",
+      "document_section": "2_T1"
+    },
+    "98": {
+      "canonical_name": "凝霜",
+      "document_section": "2_T1"
+    },
+    "99": {
+      "canonical_name": "炼狱",
+      "document_section": "3_T2"
+    },
+    "100": {
+      "canonical_name": "魔杖",
+      "document_section": "3_T2"
+    },
+    "101": {
+      "canonical_name": "银蛇",
+      "document_section": "3_T2"
+    },
+    "102": {
+      "canonical_name": "井中月",
+      "document_section": "4_T3"
+    },
+    "103": {
+      "canonical_name": "血饮",
+      "document_section": "6_T5"
+    },
+    "104": {
+      "canonical_name": "无极棍",
+      "document_section": "4_T3"
+    },
+    "105": {
+      "canonical_name": "裁决之杖",
+      "document_section": "4_T3"
+    },
+    "106": {
+      "canonical_name": "骨玉权杖",
+      "document_section": "4_T3"
+    },
+    "107": {
+      "canonical_name": "龙纹剑",
+      "document_section": "4_T3"
+    },
+    "108": {
+      "canonical_name": "屠龙",
+      "document_section": "6_T5"
+    },
+    "109": {
+      "canonical_name": "嗜魂法杖",
+      "document_section": "6_T5"
+    },
+    "110": {
+      "canonical_name": "命运之刃",
+      "document_section": "8_quest_equipment"
+    },
+    "111": {
+      "canonical_name": "落魄神兵",
+      "document_section": "8_quest_equipment"
+    },
+    "112": {
+      "canonical_name": "赤血魔剑",
+      "document_section": "8_quest_equipment"
+    },
+    "113": {
+      "canonical_name": "怒斩",
+      "document_section": "6_T5"
+    },
+    "114": {
+      "canonical_name": "龙牙",
+      "document_section": "6_T5"
+    },
+    "115": {
+      "canonical_name": "逍遥扇",
+      "document_section": "6_T5"
+    },
+    "116": {
+      "canonical_name": "布衣(男)",
+      "document_section": "2_T1"
+    },
+    "117": {
+      "canonical_name": "布衣(女)",
+      "document_section": "2_T1"
+    },
+    "118": {
+      "canonical_name": "轻型盔甲(男)",
+      "document_section": "2_T1"
+    },
+    "119": {
+      "canonical_name": "轻型盔甲(女)",
+      "document_section": "2_T1"
+    },
+    "120": {
+      "canonical_name": "中型盔甲(男)",
+      "document_section": "2_T1"
+    },
+    "121": {
+      "canonical_name": "中型盔甲(女)",
+      "document_section": "2_T1"
+    },
+    "122": {
+      "canonical_name": "重盔甲(男)",
+      "document_section": "2_T1"
+    },
+    "123": {
+      "canonical_name": "重盔甲(女)",
+      "document_section": "2_T1"
+    },
+    "124": {
+      "canonical_name": "魔法长袍(男)",
+      "document_section": "2_T1"
+    },
+    "125": {
+      "canonical_name": "魔法长袍(女)",
+      "document_section": "2_T1"
+    },
+    "126": {
+      "canonical_name": "灵魂战衣(男)",
+      "document_section": "2_T1"
+    },
+    "127": {
+      "canonical_name": "灵魂战衣(女)",
+      "document_section": "2_T1"
+    },
+    "128": {
+      "canonical_name": "战神盔甲(男)",
+      "document_section": "user_explicit_armor_override"
+    },
+    "129": {
+      "canonical_name": "战神盔甲(女)",
+      "document_section": "user_explicit_armor_override"
+    },
+    "130": {
+      "canonical_name": "恶魔长袍(男)",
+      "document_section": "user_explicit_armor_override"
+    },
+    "131": {
+      "canonical_name": "恶魔长袍(女)",
+      "document_section": "user_explicit_armor_override"
+    },
+    "132": {
+      "canonical_name": "幽灵战衣(男)",
+      "document_section": "user_explicit_armor_override"
+    },
+    "133": {
+      "canonical_name": "幽灵战衣(女)",
+      "document_section": "user_explicit_armor_override"
+    },
+    "140": {
+      "canonical_name": "天魔神甲",
+      "document_section": "5_T4"
+    },
+    "141": {
+      "canonical_name": "圣战宝甲",
+      "document_section": "5_T4"
+    },
+    "142": {
+      "canonical_name": "法神披风",
+      "document_section": "5_T4"
+    },
+    "143": {
+      "canonical_name": "霓裳羽衣",
+      "document_section": "5_T4"
+    },
+    "144": {
+      "canonical_name": "天尊道袍",
+      "document_section": "5_T4"
+    },
+    "145": {
+      "canonical_name": "天师长袍",
+      "document_section": "5_T4"
+    },
+    "146": {
+      "canonical_name": "精灵头盔",
+      "document_section": "2_T1"
+    },
+    "147": {
+      "canonical_name": "青铜头盔",
+      "document_section": "2_T1"
+    },
+    "148": {
+      "canonical_name": "魔法头盔",
+      "document_section": "2_T1"
+    },
+    "149": {
+      "canonical_name": "道士头盔",
+      "document_section": "2_T1"
+    },
+    "150": {
+      "canonical_name": "骷髅头盔",
+      "document_section": "2_T1"
+    },
+    "151": {
+      "canonical_name": "黑铁头盔",
+      "document_section": "4_T3"
+    },
+    "152": {
+      "canonical_name": "祈福项链",
+      "document_section": "8_quest_equipment"
+    },
+    "153": {
+      "canonical_name": "金项链",
+      "document_section": "2_T1"
+    },
+    "154": {
+      "canonical_name": "传统项链",
+      "document_section": "2_T1"
+    },
+    "155": {
+      "canonical_name": "白金项链",
+      "document_section": "2_T1"
+    },
+    "156": {
+      "canonical_name": "黑色水晶项链",
+      "document_section": "2_T1"
+    },
+    "157": {
+      "canonical_name": "黑檀项链",
+      "document_section": "2_T1"
+    },
+    "158": {
+      "canonical_name": "黄色水晶项链",
+      "document_section": "2_T1"
+    },
+    "159": {
+      "canonical_name": "白色虎齿项链",
+      "document_section": "2_T1"
+    },
+    "160": {
+      "canonical_name": "躲避手链",
+      "document_section": "2_T1"
+    },
+    "161": {
+      "canonical_name": "魔鬼项链",
+      "document_section": "2_T1"
+    },
+    "162": {
+      "canonical_name": "琥珀项链",
+      "document_section": "2_T1"
+    },
+    "163": {
+      "canonical_name": "凤凰明珠",
+      "document_section": "2_T1"
+    },
+    "164": {
+      "canonical_name": "灯笼项链",
+      "document_section": "2_T1"
+    },
+    "165": {
+      "canonical_name": "蓝翡翠项链",
+      "document_section": "2_T1"
+    },
+    "166": {
+      "canonical_name": "放大镜",
+      "document_section": "2_T1"
+    },
+    "167": {
+      "canonical_name": "竹笛",
+      "document_section": "2_T1"
+    },
+    "168": {
+      "canonical_name": "幽灵项链",
+      "document_section": "3_T2"
+    },
+    "169": {
+      "canonical_name": "生命项链",
+      "document_section": "3_T2"
+    },
+    "170": {
+      "canonical_name": "天珠项链",
+      "document_section": "3_T2"
+    },
+    "171": {
+      "canonical_name": "绿色项链",
+      "document_section": "4_T3"
+    },
+    "172": {
+      "canonical_name": "恶魔铃铛",
+      "document_section": "4_T3"
+    },
+    "173": {
+      "canonical_name": "灵魂项链",
+      "document_section": "4_T3"
+    },
+    "174": {
+      "canonical_name": "铁手镯",
+      "document_section": "2_T1"
+    },
+    "175": {
+      "canonical_name": "小手镯",
+      "document_section": "2_T1"
+    },
+    "176": {
+      "canonical_name": "银手镯",
+      "document_section": "2_T1"
+    },
+    "177": {
+      "canonical_name": "皮制手套",
+      "document_section": "2_T1"
+    },
+    "178": {
+      "canonical_name": "钢手镯",
+      "document_section": "2_T1"
+    },
+    "179": {
+      "canonical_name": "大手镯",
+      "document_section": "2_T1"
+    },
+    "180": {
+      "canonical_name": "夏普儿手镯",
+      "document_section": "2_T1"
+    },
+    "181": {
+      "canonical_name": "辟邪手镯",
+      "document_section": "2_T1"
+    },
+    "182": {
+      "canonical_name": "坚固手套",
+      "document_section": "2_T1"
+    },
+    "183": {
+      "canonical_name": "魔法手镯",
+      "document_section": "2_T1"
+    },
+    "184": {
+      "canonical_name": "黑檀手镯",
+      "document_section": "2_T1"
+    },
+    "185": {
+      "canonical_name": "道士手镯",
+      "document_section": "2_T1"
+    },
+    "186": {
+      "canonical_name": "魔力手镯",
+      "document_section": "2_T1"
+    },
+    "187": {
+      "canonical_name": "死神手套",
+      "document_section": "2_T1"
+    },
+    "188": {
+      "canonical_name": "金手镯",
+      "document_section": "2_T1"
+    },
+    "189": {
+      "canonical_name": "幽灵手套",
+      "document_section": "3_T2"
+    },
+    "190": {
+      "canonical_name": "思贝儿手镯",
+      "document_section": "3_T2"
+    },
+    "191": {
+      "canonical_name": "三眼手镯",
+      "document_section": "4_T3"
+    },
+    "192": {
+      "canonical_name": "阎罗手套",
+      "document_section": "4_T3"
+    },
+    "193": {
+      "canonical_name": "骑士手镯",
+      "document_section": "4_T3"
+    },
+    "194": {
+      "canonical_name": "龙之手镯",
+      "document_section": "4_T3"
+    },
+    "195": {
+      "canonical_name": "心灵手镯",
+      "document_section": "3_T2"
+    },
+    "196": {
+      "canonical_name": "黑铁手套",
+      "document_section": "8_quest_equipment"
+    },
+    "197": {
+      "canonical_name": "古铜戒指",
+      "document_section": "2_T1"
+    },
+    "198": {
+      "canonical_name": "六角戒指",
+      "document_section": "2_T1"
+    },
+    "199": {
+      "canonical_name": "玻璃戒指",
+      "document_section": "2_T1"
+    },
+    "200": {
+      "canonical_name": "牛角戒指",
+      "document_section": "2_T1"
+    },
+    "201": {
+      "canonical_name": "生铁戒指",
+      "document_section": "2_T1"
+    },
+    "202": {
+      "canonical_name": "蓝色水晶戒指",
+      "document_section": "2_T1"
+    },
+    "203": {
+      "canonical_name": "黑色水晶戒指",
+      "document_section": "2_T1"
+    },
+    "204": {
+      "canonical_name": "蛇眼戒指",
+      "document_section": "2_T1"
+    },
+    "205": {
+      "canonical_name": "珍珠戒指",
+      "document_section": "2_T1"
+    },
+    "206": {
+      "canonical_name": "金戒指",
+      "document_section": "2_T1"
+    },
+    "207": {
+      "canonical_name": "骷髅戒指",
+      "document_section": "2_T1"
+    },
+    "208": {
+      "canonical_name": "魅力戒指",
+      "document_section": "2_T1"
+    },
+    "209": {
+      "canonical_name": "道德戒指",
+      "document_section": "2_T1"
+    },
+    "210": {
+      "canonical_name": "珊瑚戒指",
+      "document_section": "2_T1"
+    },
+    "211": {
+      "canonical_name": "降妖除魔戒指",
+      "document_section": "2_T1"
+    },
+    "212": {
+      "canonical_name": "龙之戒指",
+      "document_section": "3_T2"
+    },
+    "213": {
+      "canonical_name": "红宝石戒指",
+      "document_section": "3_T2"
+    },
+    "214": {
+      "canonical_name": "铂金戒指",
+      "document_section": "3_T2"
+    },
+    "215": {
+      "canonical_name": "力量戒指",
+      "document_section": "4_T3"
+    },
+    "216": {
+      "canonical_name": "紫碧螺",
+      "document_section": "4_T3"
+    },
+    "217": {
+      "canonical_name": "泰坦戒指",
+      "document_section": "4_T3"
+    },
+    "218": {
+      "canonical_name": "神秘头盔",
+      "document_section": "7_special_sets"
+    },
+    "219": {
+      "canonical_name": "神秘腰带",
+      "document_section": "7_special_sets"
+    },
+    "220": {
+      "canonical_name": "神秘戒指",
+      "document_section": "7_special_sets"
+    },
+    "221": {
+      "canonical_name": "狂风项链",
+      "document_section": "7_special_sets"
+    },
+    "222": {
+      "canonical_name": "狂风戒指",
+      "document_section": "7_special_sets"
+    },
+    "223": {
+      "canonical_name": "祈祷之刃",
+      "document_section": "7_special_sets"
+    },
+    "224": {
+      "canonical_name": "祈祷头盔",
+      "document_section": "7_special_sets"
+    },
+    "225": {
+      "canonical_name": "祈祷项链",
+      "document_section": "7_special_sets"
+    },
+    "226": {
+      "canonical_name": "祈祷手镯",
+      "document_section": "7_special_sets"
+    },
+    "227": {
+      "canonical_name": "祈祷戒指",
+      "document_section": "7_special_sets"
+    },
+    "228": {
+      "canonical_name": "记忆头盔",
+      "document_section": "7_special_sets"
+    },
+    "229": {
+      "canonical_name": "记忆项链",
+      "document_section": "7_special_sets"
+    },
+    "230": {
+      "canonical_name": "记忆手镯",
+      "document_section": "7_special_sets"
+    },
+    "231": {
+      "canonical_name": "记忆戒指",
+      "document_section": "7_special_sets"
+    },
+    "232": {
+      "canonical_name": "圣战头盔",
+      "document_section": "5_T4"
+    },
+    "233": {
+      "canonical_name": "圣战项链",
+      "document_section": "5_T4"
+    },
+    "234": {
+      "canonical_name": "圣战手镯",
+      "document_section": "5_T4"
+    },
+    "235": {
+      "canonical_name": "圣战戒指",
+      "document_section": "5_T4"
+    },
+    "236": {
+      "canonical_name": "法神头盔",
+      "document_section": "5_T4"
+    },
+    "237": {
+      "canonical_name": "法神项链",
+      "document_section": "5_T4"
+    },
+    "238": {
+      "canonical_name": "法神手镯",
+      "document_section": "5_T4"
+    },
+    "239": {
+      "canonical_name": "法神戒指",
+      "document_section": "5_T4"
+    },
+    "240": {
+      "canonical_name": "天尊头盔",
+      "document_section": "5_T4"
+    },
+    "241": {
+      "canonical_name": "天尊项链",
+      "document_section": "5_T4"
+    },
+    "242": {
+      "canonical_name": "天尊手镯",
+      "document_section": "5_T4"
+    },
+    "243": {
+      "canonical_name": "天尊戒指",
+      "document_section": "5_T4"
+    },
+    "244": {
+      "canonical_name": "魔血戒指",
+      "document_section": "7_special_sets"
+    },
+    "245": {
+      "canonical_name": "魔血手镯",
+      "document_section": "7_special_sets"
+    },
+    "246": {
+      "canonical_name": "魔血项链",
+      "document_section": "7_special_sets"
+    },
+    "247": {
+      "canonical_name": "虹魔戒指",
+      "document_section": "7_special_sets"
+    },
+    "248": {
+      "canonical_name": "虹魔手镯",
+      "document_section": "7_special_sets"
+    },
+    "249": {
+      "canonical_name": "虹魔项链",
+      "document_section": "7_special_sets"
+    },
+    "250": {
+      "canonical_name": "技巧项链",
+      "document_section": "6_T5"
+    },
+    "251": {
+      "canonical_name": "探测项链",
+      "document_section": "6_T5"
+    },
+    "252": {
+      "canonical_name": "麻痹戒指",
+      "document_section": "6_T5"
+    },
+    "253": {
+      "canonical_name": "隐身戒指",
+      "document_section": "6_T5"
+    },
+    "254": {
+      "canonical_name": "传送戒指",
+      "document_section": "6_T5"
+    },
+    "255": {
+      "canonical_name": "防御戒指",
+      "document_section": "6_T5"
+    },
+    "256": {
+      "canonical_name": "复活戒指",
+      "document_section": "6_T5"
+    },
+    "257": {
+      "canonical_name": "护身戒指",
+      "document_section": "6_T5"
+    },
+    "258": {
+      "canonical_name": "超负载戒指",
+      "document_section": "6_T5"
+    },
+    "259": {
+      "canonical_name": "火焰戒指",
+      "document_section": "6_T5"
+    },
+    "260": {
+      "canonical_name": "求婚戒指",
+      "document_section": "8_quest_equipment"
+    }
   }
 }

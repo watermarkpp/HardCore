@@ -86,6 +86,12 @@ func _assert_view_for(index: int, label: String) -> void:
 	var actual_color: Color = view.title_label.get_theme_color("font_color")
 	var expected_color: Color = expected.color
 	expect(actual_color.is_equal_approx(expected_color), label + ": title color matches displayed record")
+	for name_label: Label in [view.title_label, shop.goods_buttons[index].get_node("ItemName")]:
+		expect(name_label.get_theme_color("font_color").is_equal_approx(expected_color), label + ": card and title share name color")
+		if str(expected.group) == "ultra_rare":
+			expect(name_label.get_theme_color("font_outline_color") == Color("B08A3E") and name_label.get_theme_constant("outline_size") == 2, label + ": rare red text has gold edge")
+		else:
+			expect(not name_label.has_theme_color_override("font_outline_color"), label + ": ordinary title/card clears rare edge")
 	rows.append({"case": label, "expected_id": record.item_id, "actual_id": name_style.get("item_id", -1), "expected_group": expected.group, "actual_group": name_style.get("group", ""), "title": actual.get("title", "")})
 
 func _run() -> void:

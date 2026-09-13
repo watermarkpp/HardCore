@@ -18,6 +18,13 @@ def build():
     records = json.loads(source.read_text(encoding="utf-8"))["records"]
     equipment_source = ROOT / policy["equipment_membership_source"]
     equipment = json.loads(equipment_source.read_text(encoding="utf-8"))["records"]
+    evidence = policy["equipment_classification_evidence"]
+    if set(evidence) != {str(row["itemId"]) for row in equipment}:
+        raise ValueError("Classification must cover the exact equipment master ID set")
+    for row in equipment:
+        key = str(row["itemId"])
+        if evidence[key]["canonical_name"] != row["name"] or key not in policy["exact_id_overrides"]:
+            raise ValueError(f"Missing or mismatched exact equipment classification: {key}")
     tier_ids = {row["canonical_item_id"] for row in records}
     records += [{"canonical_item_id": row["itemId"], "canonical_name": row["name"], "tier": "UNCLASSIFIED"}
                 for row in equipment if row["itemId"] not in tier_ids]
@@ -45,7 +52,7 @@ def build():
         "equipment_membership_source_sha256": source_hash(equipment_source),
         "presentation_policy": POLICY.relative_to(ROOT).as_posix(),
         "presentation_policy_sha256": source_hash(POLICY),
-        "palette": policy["palette"], "records": result,
+        "palette": policy["palette"], "outline_styles": policy["outline_styles"], "records": result,
     }
     OUTPUT.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"ITEM_NAME_RARITY_BUILD_PASS records={len(result)}")
