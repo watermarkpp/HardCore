@@ -1,6 +1,11 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$ApkPath
+    [string]$ApkPath,
+
+    # Keep the original R3/R5 snapshot as the default. Later approved layouts
+    # must supply their independently verified source hash explicitly.
+    [ValidatePattern('^[0-9A-Fa-f]{64}$')]
+    [string]$ExpectedLayoutSha256 = 'DDFDBFC3418D8286EE6264AC24FB725B5BB0B5E1285410EE62CC31837B349496'
 )
 
 # Supplement verify_android_build.ps1 with this release's resource closure.
@@ -127,9 +132,10 @@ try {
     }
     $LayoutHash = [BitConverter]::ToString(
         [Security.Cryptography.SHA256]::Create().ComputeHash($LayoutBytes)).Replace('-', '')
-    if ($LayoutHash -cne 'DDFDBFC3418D8286EE6264AC24FB725B5BB0B5E1285410EE62CC31837B349496') {
-        throw "UI R5 layout contract hash mismatch in APK: $LayoutHash"
+    if ($LayoutHash -cne $ExpectedLayoutSha256.ToUpperInvariant()) {
+        throw "UI layout contract hash mismatch in APK: $LayoutHash, expected $ExpectedLayoutSha256"
     }
+    Write-Output "APK_LAYOUT_SOURCE_HASH_PASS sha256=$LayoutHash"
     $HudTextures = @(
         'ui/gothic_hud/v2/runtime/target_bar_v2.png',
         'ui/gothic_hud/v2/runtime/utility_stack_v2.png',
