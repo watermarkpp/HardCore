@@ -27,6 +27,15 @@
 ## 发布
 
 版本码 79，名称仍为 `hardcore 1.0 正式版`；保留桌面 v78 APK 与 `milestone-hardcore-1.0` 标签。
-最终源码 SHA、包体校验、分段仓库结果及桌面 APK 路径将在发布证据中补充。设备验收与自动测试分别记录。
+- APK 源码：`98b38830ea074084cde49e964b3ca1da15263417`，独立干净构建；后续文档提交不改变包内源码。
+- 桌面文件：`C:/Users/Administrator/Desktop/HardCore-1.0-v79-release.apk`，465,961,383 bytes。
+- SHA256：`3FEE8F55D649090C52C8C5165DF9CBC1ABD006FEADA09CD3F07536CD0FABCDA8`。
+- Android 版本 79 / `hardcore 1.0 正式版`，包名 `com.personal.mafaoffline`、可见名 HardCore、arm64-v8a，原 debug 签名保留；与 v78 覆盖安装资格校验 PASS。
+- APK 资源专项 PASS；包内 6 个预期脚本改变，其余 228 个运行时脚本和 603 项数据与 v78 字节一致。两个显示分类 JSON 与固定提交一致；无 tests/docs 测试材料进入包体。
+- 导入期 16 条报错来自 8 个故意损坏的 runner fixture，已逐条分类，非生产脚本失败；导出 stderr 为空。完整构建目录保留以供诊断。
+- 最终源码提交专项 3/3 PASS，合并 integration 后冒烟 1/1 PASS；原始结果与源码身份均在同名 evidence 目录。
+- 源码已快进合并至 `codex/integration`；补充标签 `milestone-hardcore-1.0-v79` 指向 APK 源，保留原 `milestone-hardcore-1.0`。
+- 手机未连接，新 APK 实机安装/体验 `NOT_RUN`；不把自动测试和打包成功作为手机验收。
+- 用户未提交的 `AGENTS.md` 与既有未跟踪 UID/translation 文件保留，未进入本轮提交。
 
 - 仓库分段最终结果：5/5 PASS、0 engine errors，188 个不重复 ID；原始 runner 与覆盖 ID 清单保存在 `ui_character_review_20260913_evidence/`。
