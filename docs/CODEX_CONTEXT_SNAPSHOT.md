@@ -1,5 +1,12 @@
 # Codex 精简上下文快照
 
+## 2026-09-13：hardcore 1.0 正式版
+
+- 用户接受 v77 其余功能。本轮仅改人物属性展示与说明、精确 ID 名称颜色及地面／拾取一致性、抗拒火环的视觉和八格判定中心；其他已验收内容冻结。
+- APK 源 `00ca013d032346fc2e0020388933de9ad23ec8dc`；78 / `hardcore 1.0 正式版`。桌面 `HardCore-1.0-release.apk`，SHA `E687CB8F6A871B2BAD9B2BDDBF83A427FA24047FF16B7BDB57BD5ECA3E379E01`。
+- 核心最终提交复验 4/4 PASS；相关 18 个场景分批 PASS；合并主副本后修复旧类缓存并复验通过。包内 225 个其余脚本、603 项其余数据与 v77 字节相同；本轮未重测已接受的多怪性能，手机新版本 NOT_RUN。
+- `milestone-hardcore-1.0` 标记 APK 源，`codex/integration` 已包含本轮及 v77 的所有已接受提交。主工作目录恢复 integration；用户 AGENTS.md 未提交改动保留。完整交付见 `milestone_1_0/DELIVERY.md`。
+
 ## 2026-09-09：V3/R3 与24项最终测试包阶段
 
 - 最终生产909821c928ddb66e5fd48f7cef718baa2e8bfe03，文档提交不改变包内身份。功能集成及用户批准属性面板完成，源码/证据保留在主树；原用户V3暂存树不覆盖。

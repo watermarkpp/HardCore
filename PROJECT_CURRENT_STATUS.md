@@ -1,6 +1,13 @@
 # HardCore Current Status
 
-Branch: `codex/integration`。Updated: 2026-09-09。
+Branch: `codex/integration`。Updated: 2026-09-13。
+
+## 2026-09-13 hardcore 1.0 正式版里程碑
+
+- 用户接受 v77 的其他功能后，本轮完成完整人物属性与点击说明、精确名称颜色三端统一、抗拒火环动画和判定中心修正。源码固定 `00ca013d032346fc2e0020388933de9ad23ec8dc`。
+- 版本 78 / `hardcore 1.0 正式版`；桌面 `HardCore-1.0-release.apk`，465,955,859 bytes，SHA-256 `E687CB8F6A871B2BAD9B2BDDBF83A427FA24047FF16B7BDB57BD5ECA3E379E01`。原包名与签名保留，覆盖安装资格、包内源码与冻结资源校验 PASS；新 APK 未安装手机。
+- 18 个不同专项场景分批 PASS；源码提交后核心 4/4 PASS，合并后主副本缓存刷新并复验通过。9 个预期脚本改变，其余 225 个运行时脚本和 603 项数据与 v77 字节一致。
+- 标签 `milestone-hardcore-1.0` 固定 APK 源码；主工作副本恢复 `codex/integration`。详细规则、原始失败和证据见 `docs/milestone_1_0/DELIVERY.md`。下文旧阶段记录仅作历史，不替代本轮结果。
 
 ## 2026-09-09 V3/R3 与 24 项整合
 
