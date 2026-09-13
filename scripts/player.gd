@@ -133,6 +133,7 @@ var _pending_potion_mana := 0
 var _potion_tick_remaining := 0.0
 var _attack_speed_tier := 0
 var _cast_speed_multiplier := 1.0
+var _equipment_spell_time_scale := 1.0
 var _dead := false
 var _combat_transition_token := ""
 var combat_epoch := 0
@@ -537,11 +538,11 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	var action_lock_seconds := maxf(
 		0.0,
 		float(total_action_lock_ms) / 1000.0
-	) / _cast_speed_multiplier
+	) * _equipment_spell_time_scale / _cast_speed_multiplier
 	var cooldown_seconds := maxf(
 		0.0,
 		float(cooldown_ms) / 1000.0
-	) / _cast_speed_multiplier
+	) * _equipment_spell_time_scale / _cast_speed_multiplier
 	_attack_timer = action_lock_seconds
 	if cooldown_seconds > 0.0:
 		_skill_cooldown_remaining[stable_skill_id] = cooldown_seconds
@@ -549,7 +550,8 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 			## Shared dual-defence cooldown: both skill ids enter the same
 			## cooldown from one action so neither button can bypass the gate.
 			_skill_cooldown_remaining[partner_skill_id] = cooldown_seconds
-	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0)
+	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0) * _equipment_spell_time_scale
+	var release_seconds := maxf(0.0, float(release_ms) / 1000.0) * _equipment_spell_time_scale
 	_attack_action_timer = action_duration
 	reset_locomotion()
 	var primary_visual_duration := (
@@ -566,13 +568,12 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		# FireGun trail and 900ms recast gate do not hold the actor in place.
 		_movement_visual_lock_timer = maxf(
 			_movement_visual_lock_timer,
-			float(explicit_movement_lock_ms) / 1000.0
+			float(explicit_movement_lock_ms) / 1000.0 * _equipment_spell_time_scale
 		)
 	elif primary_visual_duration > 0.0:
-		var release_seconds := maxf(0.0, float(release_ms) / 1000.0)
 		var movement_contract_seconds := maxf(
 			action_duration,
-			float(total_action_lock_ms) / 1000.0
+			float(total_action_lock_ms) / 1000.0 * _equipment_spell_time_scale
 		)
 		_movement_visual_lock_timer = maxf(
 			_movement_visual_lock_timer,
@@ -589,7 +590,7 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	_emit_skill_after_windup(
 		skill_name,
 		0,
-		maxf(0.0, float(release_ms) / 1000.0),
+		release_seconds,
 		action_id,
 		facing.normalized(),
 		locked_target_instance_id,
@@ -672,6 +673,24 @@ func take_damage(
 	)
 
 
+func _resolve_incoming_evasion(amount: int, forced_roll := -1) -> Dictionary:
+	var roll := forced_roll if forced_roll >= 0 else _rng.randi_range(0, 9)
+	return CombatResolutionRules.resolve_magic_damage_for_target_stats("", amount, PlayerState.computed_stats, roll, true)
+
+
+func take_ranged_damage(amount: int, causes_struck := true, force_struck_reaction := false, forced_evasion_roll := -1) -> Dictionary:
+	if _dead or amount <= 0 or combat_transition_is_active():
+		return {"applied_damage": 0, "final_damage": 0, "success": false}
+	var result := _resolve_incoming_evasion(amount, forced_evasion_roll)
+	var hp_before := current_hp
+	if not bool(result.magic_evaded):
+		take_damage(amount, causes_struck, {}, force_struck_reaction)
+	result["applied_damage"] = maxi(0, hp_before - current_hp)
+	result["final_damage"] = int(result.applied_damage)
+	result["success"] = true
+	return result
+
+
 func take_monster_mixed_damage(
 	physical_raw: int,
 	magic_raw: int,
@@ -684,6 +703,11 @@ func take_monster_mixed_damage(
 		return {"success": false, "applied_damage": 0, "failure_reason": "player_combat_isolated"}
 	if physical_raw < 0 or magic_raw < 0:
 		return {"success": false, "applied_damage": 0, "failure_reason": "invalid_mixed_damage"}
+	# This is one incoming release, so avoid both components with one roll.
+	var evasion := _resolve_incoming_evasion(physical_raw + magic_raw)
+	if bool(evasion.magic_evaded):
+		evasion.merge({"success": true, "applied_damage": 0, "pipeline_input": 0, "physical_damage": 0, "magic_damage": 0, "final_damage": 0, "release_id": str(context.get("release_id", ""))})
+		return evasion
 	var ac_roll := (
 		_rng.randi_range(defense_min, defense_max)
 		if defense_max >= defense_min else defense_min
@@ -761,7 +785,8 @@ func take_direct_spell_damage(
 		raw_damage,
 		adapted_stats,
 		checked_anti_magic_roll,
-		magic_defense_adapter
+		magic_defense_adapter,
+		true # User policy: every incoming magic release, including monster AoE.
 	)
 	resolution["runtime_contract"] = DIRECT_SPELL_DAMAGE_RUNTIME_ID
 	resolution["mac_buff_applied"] = active_mac_buff
@@ -1531,6 +1556,10 @@ func _apply_profile_stats() -> void:
 	_attack_speed_tier = int(stats.get("attack_speed_tier", 0))
 	attack_cooldown = WarriorCombatMath.physical_attack_interval_seconds(_attack_speed_tier)
 	_cast_speed_multiplier = clampf(1.0 + float(stats.get("cast_speed_percent", 0.0)), 0.2, 6.0)
+	_equipment_spell_time_scale = (
+		CombatResolutionRules.equipment_spell_time_scale(_attack_speed_tier)
+		if PlayerState.profession in ["法师", "道士"] else 1.0
+	)
 	defense_min = int(stats.get("defense_min", 0))
 	defense_max = maxi(defense_min, int(stats.get("defense_max", 0)))
 	# Gold loss and equipment durability can emit profile_changed during the

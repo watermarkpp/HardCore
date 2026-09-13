@@ -721,8 +721,8 @@ func _sanitize_transfer_selections() -> void:
 var _transfer_pending := false
 
 func _refresh_transfer_action_states() -> void:
-	deposit_button.disabled = _transfer_pending or selected_bag_indices.is_empty() or _first_free_slot_on_current_page() < 0
-	withdraw_button.disabled = _transfer_pending or selected_stash_indices.is_empty() or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
+	deposit_button.disabled = _transfer_pending or _bank_transfer_pending or selected_bag_indices.is_empty() or _first_free_slot_on_current_page() < 0
+	withdraw_button.disabled = _transfer_pending or _bank_transfer_pending or selected_stash_indices.is_empty() or PlayerState.inventory_occupied_count() >= BAG_CAPACITY
 	# Item selection does not mutate gold. Bank refresh belongs to the actual
 	# visibility/data/transaction boundary, not every selection cleanup pass.
 
@@ -753,17 +753,22 @@ func _refresh_bank_state() -> void:
 		return
 	if bank_balance_label == null or bank_deposit_button == null or bank_withdraw_button == null:
 		return
-	_ui_l1_bank_dirty = false
-	_ui_l1_bank_read_count += 1
+	# Pending transfers own their async authority reads. Rendering a busy state
+	# must not synchronously revalidate hundreds of unrelated stored items.
+	if not _bank_transfer_pending:
+		_ui_l1_bank_dirty = false
+		_ui_l1_bank_read_count += 1
+		_bank_view_snapshot = PlayerState.shared_gold_view_snapshot()
 	var player_gold := int(PlayerState.gold)
-	var shared_gold := int(PlayerState.shared_gold_balance())
+	var shared_gold := int(_bank_view_snapshot.get("bank_gold", 0))
+	var unavailable := _bank_view_snapshot.is_empty() or str(_bank_view_snapshot.get("profile_id", "")) != PlayerState.active_profile_id
 	bank_balance_label.text = "金币：%d\n共享：%d" % [player_gold, shared_gold]
 	bank_balance_label.tooltip_text = "身上金币：%d；共享金币：%d" % [player_gold, shared_gold]
 	var busy_text := "共享金币操作处理中，请稍候。" if _bank_transfer_pending else ""
 	var deposit_boundary := _bank_boundary_message(true, player_gold, shared_gold)
 	var withdraw_boundary := _bank_boundary_message(false, player_gold, shared_gold)
-	bank_deposit_button.disabled = _bank_transfer_pending or _transfer_pending or not deposit_boundary.is_empty()
-	bank_withdraw_button.disabled = _bank_transfer_pending or _transfer_pending or not withdraw_boundary.is_empty()
+	bank_deposit_button.disabled = unavailable or _bank_transfer_pending or _transfer_pending or not deposit_boundary.is_empty()
+	bank_withdraw_button.disabled = unavailable or _bank_transfer_pending or _transfer_pending or not withdraw_boundary.is_empty()
 	bank_deposit_button.tooltip_text = (
 		busy_text
 		if not busy_text.is_empty()
@@ -803,18 +808,17 @@ func _bank_result_message(deposit: bool, result: Dictionary) -> String:
 
 
 func _on_bank_transfer_pressed(deposit: bool) -> void:
-	if _bank_transfer_pending:
+	if _bank_transfer_pending or _transfer_pending:
 		return
-	_refresh_bank_state()
 	var player_gold := int(PlayerState.gold)
-	var shared_gold := int(PlayerState.shared_gold_balance())
+	var shared_gold := int(_bank_view_snapshot.get("bank_gold", 0))
 	var boundary := _bank_boundary_message(deposit, player_gold, shared_gold)
 	if not boundary.is_empty():
 		_bank_status_message = boundary
 		transfer_detail_label.text = boundary
 		return
-	var transaction_sequence := int(PlayerState.next_shared_gold_transaction_sequence())
-	if transaction_sequence <= 0:
+	var transaction_sequence := int(_bank_view_snapshot.get("next_sequence", -1))
+	if transaction_sequence <= 0 or str(_bank_view_snapshot.get("profile_id", "")) != PlayerState.active_profile_id:
 		_bank_status_message = "共享金币事务不可用，请稍后重试。"
 		transfer_detail_label.text = _bank_status_message
 		_refresh_bank_state()
@@ -837,7 +841,10 @@ func _submit_bank_transfer(deposit: bool, transaction_id: String, transaction_se
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.bank")
 	_refresh_bank_state()
-	var result: Dictionary = PlayerState.transfer_shared_gold(deposit, transaction_id, transaction_sequence)
+	_refresh_transfer_action_states()
+	var result: Dictionary = await PlayerState.transfer_shared_gold_prepared(deposit, transaction_id, transaction_sequence)
+	# Persistence is owned by PlayerState and completes if this UI was freed.
+	# A live but closed window keeps only its result state for the next open.
 	_last_bank_transfer_result = result.duplicate(true)
 	_bank_status_message = _bank_result_message(deposit, result)
 	transfer_detail_label.text = _bank_status_message
@@ -849,6 +856,7 @@ func _submit_bank_transfer(deposit: bool, transaction_id: String, transaction_se
 		await get_tree().process_frame
 	_bank_transfer_pending = false
 	_refresh_bank_state()
+	_refresh_transfer_action_states()
 
 
 func _refresh_cell_selection(side: String, data_index: int, selected: bool) -> void:
@@ -1415,6 +1423,7 @@ func _ui_dismiss_selection() -> void:
 
 # UI-L1: these fields own the VIEW only; they are never a money authority.
 var _ui_l1_bank_dirty := true
+var _bank_view_snapshot: Dictionary = {}
 var _ui_l1_bank_queued := false
 var _ui_l1_bank_read_count := 0
 var _ui_l1_hidden_bank_skips := 0

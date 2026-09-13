@@ -268,6 +268,9 @@ func load_database() -> bool:
 	_load_equipment_price_candidates()
 	_load_merchant_catalog()
 	_build_indexes()
+	if not ItemDropInstanceRules.prepare_runtime():
+		load_error = "item_drop_affix_rules_not_ready"
+		return false
 	load_error = ""
 	_initial_load_complete = true
 	database_reloaded.emit()

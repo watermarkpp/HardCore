@@ -1,6 +1,8 @@
 class_name ItemDropInstanceRules
 extends RefCounted
 
+const AffixV3 := preload("res://scripts/item_drop_affix_v3_rules.gd")
+
 const RULES_PATH := "res://assets/data/item_drop_instance_rules_v1.json"
 const INSTANCE_RULES_CONTRACT_ID := "item.drop.instance.rules.v1"
 const INSTANCE_CONTRACT_ID := "item.drop.instance.v1"
@@ -27,7 +29,37 @@ static var _load_attempted := false
 static var _validated_snapshots: Dictionary = {}
 
 
+## Parse and validate the immutable affix catalog during startup, before loot
+## can be created on a gameplay frame.
+static func prepare_runtime() -> bool:
+	return _ensure_loaded() and AffixV3.ensure_loaded(_master_by_item_id.keys())
+
+
 static func create_instance(catalog_item: Dictionary, stable_drop_key: String) -> Dictionary:
+	var instance := create_legacy_instance(catalog_item, stable_drop_key)
+	if instance.is_empty():
+		return {}
+	# Extension equipment outside the 175-ID authority keeps the existing plain
+	# instance contract. It must not disappear or borrow another item's JP type.
+	if not _master_by_item_id.has(int(instance.item_id)):
+		return instance
+	if not AffixV3.ensure_loaded(_master_by_item_id.keys()):
+		return {}
+	var expected := AffixV3.for_seed(int(instance.item_id), str(instance.drop_key_digest))
+	if expected.is_empty():
+		return {}
+	instance["drop_rules_contract_id"] = AffixV3.CONTRACT
+	instance["modifiers"] = expected.modifiers
+	var maximum := mini(AffixV3.MAXIMUM_DURABILITY_RAW, int(instance.max_durability_raw) + int(expected.durability_bonus_raw))
+	instance["durability_raw"] = maximum
+	instance["max_durability_raw"] = maximum
+	instance["durability"] = int(ceil(maximum / 1000.0))
+	instance["max_durability"] = instance.durability
+	instance["drop_affix"] = {"contract_id": AffixV3.AFFIX_CONTRACT, "applied": not expected.modifiers.is_empty() or int(expected.durability_bonus_raw) > 0}
+	return instance if validate_instance(instance, catalog_item) else {}
+
+
+static func create_v2_instance(catalog_item: Dictionary, stable_drop_key: String) -> Dictionary:
 	var instance := create_legacy_instance(catalog_item, stable_drop_key)
 	if instance.is_empty() or not _ensure_v2_loaded():
 		return {}
@@ -131,7 +163,7 @@ static func _validate_instance_uncached(instance: Dictionary, catalog_item: Dict
 		or item_id != catalog_id
 		or str(catalog_item.get("kind", "")) != "equipment"
 		or str(instance.get("drop_instance_contract_id", "")) != INSTANCE_CONTRACT_ID
-		or str(instance.get("drop_rules_contract_id", "")) not in [INSTANCE_RULES_CONTRACT_ID, RULES_V2_CONTRACT]
+		or str(instance.get("drop_rules_contract_id", "")) not in [INSTANCE_RULES_CONTRACT_ID, RULES_V2_CONTRACT, AffixV3.CONTRACT]
 		or str(instance.get("name", "")) != str(catalog_item.get("name", ""))
 		or _exact_positive_integer(instance.get("count", null)) != 1
 	):
@@ -188,6 +220,23 @@ static func _validate_instance_uncached(instance: Dictionary, catalog_item: Dict
 			return false
 	elif instance.has("weapon_luck") or instance.has("weapon_curse"):
 		return false
+	if str(instance.drop_rules_contract_id) == AffixV3.CONTRACT:
+		var expected := AffixV3.for_seed(item_id, digest)
+		if expected.is_empty() or not instance.modifiers is Array or instance.modifiers.size() != expected.modifiers.size():
+			return false
+		for index in range(expected.modifiers.size()):
+			var actual: Variant = instance.modifiers[index]
+			var value: Variant = actual.get("value") if actual is Dictionary else null
+			if (not actual is Dictionary or actual.size() != 3
+				or str(actual.get("stat", "")) != str(expected.modifiers[index].stat)
+				or str(actual.get("op", "")) != "add"
+				or not (value is int or value is float) or not is_finite(float(value))
+				or float(value) != float(expected.modifiers[index].value)):
+				return false
+		return instance.drop_affix is Dictionary and instance.drop_affix == {
+			"contract_id": AffixV3.AFFIX_CONTRACT,
+			"applied": not expected.modifiers.is_empty() or int(expected.durability_bonus_raw) > 0,
+		}
 	if str(instance.drop_rules_contract_id) == RULES_V2_CONTRACT:
 		if not _ensure_v2_loaded():
 			return false
@@ -324,11 +373,19 @@ static func _valid_durability(instance: Dictionary, catalog_item: Dictionary) ->
 	var current_display := _exact_nonnegative_integer(instance.get("durability", null))
 	var maximum_display := _exact_positive_integer(instance.get("max_durability", null))
 	var catalog_maximum := maxi(1, int(catalog_item.get("maxDurability", 1)))
+	var initial_maximum_raw := catalog_maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+	if str(instance.get("drop_rules_contract_id", "")) == AffixV3.CONTRACT:
+		if not AffixV3.ensure_loaded(_master_by_item_id.keys()):
+			return false
+		var expected := AffixV3.for_seed(int(instance.item_id), str(instance.drop_key_digest))
+		if expected.is_empty():
+			return false
+		initial_maximum_raw = mini(AffixV3.MAXIMUM_DURABILITY_RAW, initial_maximum_raw + int(expected.durability_bonus_raw))
 	if (
 		current_raw < 0
 		or maximum_raw <= 0
 		or current_raw > maximum_raw
-		or maximum_raw > catalog_maximum * DURABILITY_RAW_UNITS_PER_DISPLAY
+		or maximum_raw > initial_maximum_raw
 	):
 		return false
 	var expected_maximum_display := int(ceil(float(maximum_raw) / DURABILITY_RAW_UNITS_PER_DISPLAY))

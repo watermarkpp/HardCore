@@ -12,15 +12,15 @@ var _finished := false
 var _success := false
 var _cancelled := false
 
-func start(target_paths: Dictionary, snapshots: Dictionary, contract_id: String, profile_id: String) -> void:
+func start(target_paths: Dictionary, snapshots: Dictionary, contract_id: String, profile_id: String, operation_kind := "warehouse_items") -> void:
 	paths = target_paths.duplicate(true)
 	documents = snapshots.duplicate(true)
 	var serial := str(Time.get_ticks_usec())
 	for key: String in ["profile", "shared", "journal"]:
 		temporary_paths[key] = str(paths[key]) + ".prepare." + serial + ".tmp"
-	task_id = WorkerThreadPool.add_task(_prepare.bind(contract_id, profile_id), false, "Prepare warehouse transaction")
+	task_id = WorkerThreadPool.add_task(_prepare.bind(contract_id, profile_id, operation_kind), false, "Prepare warehouse transaction")
 
-func _prepare(contract_id: String, profile_id: String) -> void:
+func _prepare(contract_id: String, profile_id: String, operation_kind: String) -> void:
 	var valid := true
 	var digests: Dictionary = {}
 	for key: String in ["before_profile", "after_profile", "before_shared", "after_shared"]:
@@ -34,7 +34,7 @@ func _prepare(contract_id: String, profile_id: String) -> void:
 		if key.begins_with("after_"): bytes[key.trim_prefix("after_")] = serialized.to_utf8_buffer()
 	if valid:
 		var journal := {
-			"contract_id": contract_id, "state": "PREPARED", "operation_kind": "warehouse_items",
+			"contract_id": contract_id, "state": "PREPARED", "operation_kind": operation_kind,
 			"profile_id": profile_id, "profile_path": paths.profile,
 		}
 		for key: String in digests:

@@ -4194,6 +4194,7 @@ func _settle_monster_special_victim(
 			victim,
 			raw_damage,
 			bool(delivery_contract.get("use_accuracy", false)),
+			-1, false, -1, true,
 		)
 		return
 	var magic_damage := raw_damage
@@ -4217,7 +4218,7 @@ func _apply_monster_special_magic_damage(
 		"take_direct_spell_damage",
 		"",
 		maxi(0, raw_damage),
-		0,
+		-1,
 	)
 	if not raw_resolution is Dictionary:
 		return false
@@ -4473,7 +4474,7 @@ func _settle_physical_projectile_release(release_record: Dictionary) -> void:
 		return
 	if not _world_attack_path_is_clear_for_release(release_record):
 		return
-	_apply_attack_damage(hit_target, int(release_record.get("damage", 0)))
+	_apply_attack_damage(hit_target, int(release_record.get("damage", 0)), true, -1, false, -1, true)
 
 
 func _physical_projectile_release_target_is_valid(
@@ -4863,6 +4864,7 @@ func _apply_attack_damage(
 	forced_roll := -1,
 	force_struck_reaction := false,
 	forced_control_roll := -1,
+	ranged := false,
 ) -> void:
 	if not combat_enabled:
 		return
@@ -4870,7 +4872,11 @@ func _apply_attack_damage(
 		# A miss consumes the existing attack event/timer and damage roll but
 		# submits no damage or on-hit side effects.
 		return
-	if force_struck_reaction and hit_target is PlayerCharacter:
+	if ranged and hit_target is PlayerCharacter:
+		var result := (hit_target as PlayerCharacter).take_ranged_damage(dealt_damage, true, force_struck_reaction)
+		if not bool(result.get("success", false)) or bool(result.get("magic_evaded", false)):
+			return
+	elif force_struck_reaction and hit_target is PlayerCharacter:
 		(hit_target as PlayerCharacter).take_damage(dealt_damage, true, {}, true)
 	else:
 		hit_target.take_damage(dealt_damage)
@@ -4901,8 +4907,8 @@ func _apply_on_hit_control(hit_target: Node2D, forced_control_roll := -1) -> voi
 func _target_anti_poison_for_control(hit_target: Node2D) -> int:
 	if hit_target is PlayerCharacter:
 		# The original server reads the struck target's m_btAntiPoison here.
-		# HardCore does not yet project a player equipment anti-poison stat, so
-		# the missing-key default deliberately preserves the original base 0.
+		# Validated accessory affixes add the original raw points to this stat;
+		# an unequipped character retains the original base 0.
 		return maxi(0, int(PlayerState.computed_stats.get("anti_poison", 0)))
 	for property: Dictionary in hit_target.get_property_list():
 		if str(property.get("name", "")) == "anti_poison":
@@ -5317,7 +5323,8 @@ func _deal_area_magic_damage(victim: Node2D, dealt_damage: int) -> void:
 	last_magic_attack_resolution["delivery_kind"] = "area_magic"
 	last_magic_attack_resolution["success"] = true
 	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
-	_apply_area_magic_status(victim)
+	if not bool(last_magic_attack_resolution.get("magic_evaded", false)):
+		_apply_area_magic_status(victim)
 
 
 func _apply_area_magic_status(victim: Node2D) -> void:

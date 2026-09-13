@@ -550,7 +550,7 @@ func _refresh_character_stats() -> void:
 
 
 func _character_stats_text(stats: Dictionary) -> String:
-	return "%s　等级 %d\n生命 %d　魔法 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d　幸运 %d\n魔法躲避 %d%%　攻击速度 %+d\n暴击 %.1f%%\n穿戴重量 %d/%d" % [
+	return "%s　等级 %d\n生命 %d　魔法 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d　幸运 %d\n远程与魔法躲避 %d%%　攻击速度 %+d\n暴击 %.1f%%\n穿戴重量 %d/%d" % [
 		PlayerState.profession, PlayerState.level,
 		int(stats.get("max_hp", 0)), int(stats.get("max_mp", 0)),
 		int(stats.get("attack_min", 0)), int(stats.get("attack_max", 0)),
@@ -1391,7 +1391,7 @@ func _advanced_stat_line(item: Dictionary) -> String:
 		if item.get(pair[0], null) != null and float(item.get(pair[0], 0)) != 0.0:
 			parts.append("%s %+d" % [pair[1], int(item.get(pair[0], 0))])
 	if item.get("magicEvasionPercent", null) != null and int(item.get("magicEvasionPercent", 0)) != 0:
-		parts.append("魔法躲避 %+d%%" % int(item.get("magicEvasionPercent", 0)))
+		parts.append("远程与魔法躲避 %+d%%" % int(item.get("magicEvasionPercent", 0)))
 	if item.get("attackSpeedTier", null) != null and int(item.get("attackSpeedTier", 0)) != 0:
 		parts.append("攻击速度 %+d" % int(item.get("attackSpeedTier", 0)))
 	var modifiers: Variant = item.get("modifiers", {})

@@ -31,6 +31,8 @@ func _run() -> void:
 	# after that boundary so the multi-case fixture cannot die between channels.
 	player.max_hp = 100000
 	player.current_hp = player.max_hp
+	# Isolate delivery geometry/status/defense from player random evasion.
+	PlayerState.computed_stats["anti_magic_points"] = 0
 	await _test_spit_immediate_and_world()
 	await _test_spit_status_uses_post_defense_damage()
 	await _test_special_accuracy_and_named_fallback_boundaries()

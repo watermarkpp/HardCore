@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "baseline": "e38215978c481b988df3203410bb1dda6b5b0968",
+  "protected": [
+    {
+      "path": "assets/maps",
+      "status": "PASS",
+      "baseline_git_object": "c46ea4b3146096113ae793236a87e4ceceb7812d"
+    },
+    {
+      "path": "map_editor_workspace",
+      "status": "PASS",
+      "baseline_git_object": "fa6c3e7a67d389e555cdf4140337f37cf0ee88f2"
+    },
+    {
+      "path": "assets/data/equipment_attribute_master.json",
+      "status": "PASS",
+      "baseline_git_object": "fd8262dbc67bd65b978f63e38da728a84e2ecf37"
+    },
+    {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "status": "PASS",
+      "baseline_git_object": "9331d165fd92e48f459d40d463b426d213e64f09"
+    },
+    {
+      "path": "assets/ui",
+      "status": "PASS",
+      "baseline_git_object": "990bbde8a34c2b1f384df05fb9ee9d8a6aa5440c"
+    },
+    {
+      "path": "assets/data/ui/manual_layout_overrides.json",
+      "status": "PASS",
+      "baseline_git_object": "5d4c4ca3936f292c78f482c5e2205c58fc851270"
+    },
+    {
+      "path": "assets/data/ui/item_name_rarity_v1.json",
+      "status": "PASS",
+      "baseline_git_object": "ae1d4fdab6581147912d0c67a8dfc05257a9042d"
+    }
+  ]
+}

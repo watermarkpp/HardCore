@@ -17,6 +17,8 @@ const WIDTH_STEPS := 12
 const REVISION := 9
 const ShopSpace := preload("res://scripts/ui_shop_detail_space.gd")
 const TouchScroll := preload("res://scripts/touch_scroll_support.gd")
+const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
+var attribute_help: Node
 
 var title_label: Label
 var detail_label: RichTextLabel
@@ -82,6 +84,8 @@ func _init() -> void:
 	detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail_label.theme_type_variation = "GothicDetailText"
 	detail_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	# Attribute links are functional input, not a blank tap that clears selection.
+	detail_label.set_meta("ui_dismiss_protected", true)
 	# Own the content box: inherited style margins must not invalidate measurement.
 	detail_label.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
 	detail_label.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
@@ -97,6 +101,7 @@ static func _mark_runtime(node: Control) -> void:
 
 func _ready() -> void:
 	set_process(false)
+	attribute_help = AttributeHelp.attach(self, detail_label)
 	var box := StyleBoxFlat.new()
 	box.bg_color = Color(0.055, 0.039, 0.027, 0.97)
 	box.border_color = Color("8a6336")
@@ -222,6 +227,7 @@ func show_message(message: String, context: Dictionary = {}) -> void:
 	_set_content("提示", message, context, true)
 
 func _set_content(title: String, body: String, context: Dictionary, message: bool) -> void:
+	if attribute_help != null: attribute_help.dismiss()
 	var parent := get_parent() as Control
 	var session := parent.get_node_or_null("R3SelectionLifecycle") if parent != null else null
 	if session != null:
@@ -234,7 +240,7 @@ func _set_content(title: String, body: String, context: Dictionary, message: boo
 	_title_source = title.strip_edges()
 	if _title_source.is_empty():
 		_title_source = "提示" if message else "未知物品"
-	_body_source = body
+	_body_source = body if message else AttributeHelp.decorate(body)
 	title_label.text = _title_source
 	detail_label.text = _body_source
 	detail_label.get_v_scroll_bar().value = 0.0
@@ -253,6 +259,7 @@ func _set_content(title: String, body: String, context: Dictionary, message: boo
 	_invalidate_layout()
 
 func hide_detail() -> void:
+	if attribute_help != null: attribute_help.dismiss()
 	_content_epoch += 1
 	_message_active = false
 	_layout_ok = false

@@ -17,7 +17,7 @@ func _run() -> void:
 	# Expected independent weapon gates: 0.5 * (1 - (14/15)^3) = 9.348%.
 	# Per-stat entry is 1/30; increment has Binomial(12, 1/15) + 1 distribution.
 	for i in range(20000):
-		var instance := Rules.create_instance(catalog, "jp-v2-sample:%d" % i)
+		var instance := Rules.create_v2_instance(catalog, "jp-v2-sample:%d" % i)
 		assert(not instance.is_empty())
 		if instance.modifiers.size() > 0: applied += 1
 		if instance.modifiers.size() > 1: multiple += 1
@@ -48,6 +48,6 @@ func _run() -> void:
 	assert(not Rules.validate_instance(roundtrip, catalog), "forged but in-range modifier rejected")
 	for id in Rules._master_by_item_id:
 		var item := GameData.get_item_record({"item_id": id})
-		assert(not Rules.create_instance(item, "all175:%d" % id).is_empty())
+		assert(not Rules.create_v2_instance(item, "all175:%d" % id).is_empty())
 	print("AFFIX_DISTRIBUTION_TEST_PASS sampled=20000 applied=%d multi=%d above_one=%d gates=%s" % [applied, multiple, above_one, counts])
 	get_tree().quit(0)

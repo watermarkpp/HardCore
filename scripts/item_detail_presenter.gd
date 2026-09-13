@@ -7,6 +7,8 @@ extends PanelContainer
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
+const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
+var attribute_help: Node
 
 const MAX_OUTER_WIDTH := 340.0
 const SAFE_MARGIN := 18.0
@@ -28,9 +30,10 @@ const MODIFIER_LABELS := {
 	"mdef_max": "魔防上限", "mdefMax": "魔防上限",
 	"magic_defense_min": "魔防下限", "magic_defense_max": "魔防上限",
 	"accuracy": "准确", "agility": "敏捷", "luck": "幸运",
+	"anti_magic_points": "远程与魔法躲避", "anti_poison": "毒物躲避", "weapon_strong": "强度",
 	"hpBonus": "生命", "hp_bonus": "生命", "mpBonus": "魔法值", "mp_bonus": "魔法值",
-	"magicEvasionPercent": "魔法躲避", "magic_evasion_percent": "魔法躲避",
-	"attackSpeedTier": "攻击速度", "attack_speed_tier": "攻击速度",
+	"magicEvasionPercent": "远程与魔法躲避", "magic_evasion_percent": "远程与魔法躲避",
+	"attackSpeedTier": "速度", "attack_speed_tier": "速度",
 	"attack_speed_percent": "攻击速度", "cast_speed_percent": "施法速度",
 	"criticalChance": "暴击", "critical_chance": "暴击",
 	"criticalDamageBonus": "暴击伤害", "critical_damage_bonus": "暴击伤害",
@@ -74,11 +77,13 @@ func _init() -> void:
 	# The root is transparent to game input.  Only the bounded body may consume
 	# wheel/drag input when the detail text itself needs scrolling.
 	detail_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	detail_label.set_meta("ui_dismiss_protected", true)
 	detail_label.set_meta("calibration_runtime_text", true)
 	content.add_child(detail_label)
 
 
 func _ready() -> void:
+	attribute_help = AttributeHelp.attach(self, detail_label)
 	var surface := StyleBoxFlat.new()
 	surface.bg_color = Color(0.055, 0.039, 0.027, 0.96)
 	surface.border_color = Color("8a6336")
@@ -96,18 +101,20 @@ func _ready() -> void:
 
 
 func show_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary = {}) -> void:
+	if attribute_help != null: attribute_help.dismiss()
 	if item.is_empty():
 		hide_detail()
 		return
 	if title_label == null or detail_label == null:
 		return
 	title_label.text = str(instance.get("name", item.get("name", "未知物品")))
-	detail_label.text = format_item(item, instance, context)
+	detail_label.text = AttributeHelp.decorate(format_item(item, instance, context))
 	visible = true
 	_place_from_context(context)
 
 
 func show_multi(count: int, context: Dictionary = {}) -> void:
+	if attribute_help != null: attribute_help.dismiss()
 	if title_label == null or detail_label == null:
 		return
 	title_label.text = "已选择 %d 件物品" % maxi(0, count)
@@ -117,6 +124,7 @@ func show_multi(count: int, context: Dictionary = {}) -> void:
 
 
 func show_message(message: String, context: Dictionary = {}) -> void:
+	if attribute_help != null: attribute_help.dismiss()
 	if title_label == null or detail_label == null:
 		return
 	title_label.text = "物品属性"
@@ -126,15 +134,17 @@ func show_message(message: String, context: Dictionary = {}) -> void:
 
 
 func show_text(title: String, body: String, context: Dictionary = {}) -> void:
+	if attribute_help != null: attribute_help.dismiss()
 	if title_label == null or detail_label == null:
 		return
 	title_label.text = title
-	detail_label.text = body
+	detail_label.text = AttributeHelp.decorate(body)
 	visible = not title.is_empty() or not body.is_empty()
 	_place_from_context(context)
 
 
 func hide_detail() -> void:
+	if attribute_help != null: attribute_help.dismiss()
 	visible = false
 	_last_anchor = Rect2()
 
@@ -470,10 +480,10 @@ static func _advanced_stat_line(item: Dictionary, instance: Dictionary = {}) -> 
 			parts.append("%s %+d" % [pair[1], int(value_variant)])
 	var evasion := int(item.get("magicEvasionPercent", 0))
 	if evasion != 0:
-		parts.append("魔法躲避 %+d%%" % evasion)
+		parts.append("远程与魔法躲避 %+d%%" % evasion)
 	var speed := int(item.get("attackSpeedTier", 0))
 	if speed != 0:
-		parts.append("攻击速度 %+d" % speed)
+		parts.append("速度 %+d" % speed)
 	var modifiers: Variant = item.get("modifiers", {})
 	if modifiers is Dictionary:
 		var critical := float((modifiers as Dictionary).get("criticalChance", 0.0))
@@ -535,6 +545,8 @@ static func _modifier_lines_from_container(container: Variant) -> Array[String]:
 
 
 static func _modifier_value_text(stat: String, operation: String, value: float) -> String:
+	if stat in ["anti_magic_points", "anti_poison"] and operation == "add":
+		return "%+d%%" % int(value * 10.0)
 	var percent_stat := stat in [
 		"criticalChance", "critical_chance", "attack_speed_percent", "cast_speed_percent",
 		"magicEvasionPercent", "magic_evasion_percent",

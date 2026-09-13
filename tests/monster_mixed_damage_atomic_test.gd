@@ -33,6 +33,8 @@ func _run() -> void:
 	player.defense_buff = 0
 	PlayerState.computed_stats["magic_defense_min"] = 3
 	PlayerState.computed_stats["magic_defense_max"] = 3
+	# Isolate AC/MAC/shield atomicity from the new incoming-evasion policy.
+	PlayerState.computed_stats["anti_magic_points"] = 0
 	var context := {"source_monster_id": 76, "source_instance_id": 1, "release_id": "mixed-atomic-test"}
 	context.make_read_only()
 	var first := player.take_monster_mixed_damage(10, 10, context)

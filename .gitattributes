@@ -4,6 +4,7 @@
 # representation.  Keep clean worktrees and isolated Android build worktrees
 # byte-identical so the fail-closed runtime and final gate remain portable.
 assets/data/canonical_monster_drop_source_v2.json text eol=crlf
+docs/drop/v5/source/monster_*.bin text eol=crlf
 assets/data/drop/dpv2_direct_baseline_v2.json text eol=lf
 assets/data/drop/dpv2_21cq_source_provenance_v1.json text eol=lf
 assets/data/drop/dpv2_single_player_item_boost_classification_v1.json text eol=crlf

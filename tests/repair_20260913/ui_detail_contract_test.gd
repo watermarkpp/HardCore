@@ -74,7 +74,9 @@ func _run() -> void:
 	await frames()
 	shop._select_shop_item(0)
 	await frames()
-	var body: String = shop.detail_label.text
+	# Link markup is intentionally new; all player-visible copy must still be
+	# identical to the shared formatter used by inventory and warehouse.
+	var body: String = shop.detail_label.get_parsed_text()
 	check(body == Formatter.format_item(scroll), "shop formatter diverges from bag")
 	check(body.contains("双击使用") and body.contains("城镇") and not body.contains("穿戴要求") and not body.contains("价格") and not body.contains("攻击"), "scroll contains equipment or pricing copy")
 	var caption: Label = shop.get_node("DetailPanel/DetailTitle")

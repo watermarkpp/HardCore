@@ -775,31 +775,33 @@ func spend_gold(amount: int) -> bool:
 
 
 func shared_gold_balance() -> int:
+	return int(shared_gold_view_snapshot().get("bank_gold", 0))
+
+
+## A single validated read for the bank view. This is not a transfer authority:
+## every submitted request rechecks the persisted balance and high-water mark.
+func shared_gold_view_snapshot() -> Dictionary:
 	if not _ensure_shared_warehouse_ready():
-		return 0
+		return {}
 	var status := _read_json_with_status(shared_warehouse_path)
 	# The path-routed reader already validates the complete warehouse and its
 	# migration/profile dependencies, including backup recovery.
-	return int((status.get("data", {}) as Dictionary).get("bank_gold", 0)) if bool(status.get("success", false)) else 0
+	if not bool(status.get("success", false)):
+		return {}
+	var shared: Dictionary = status.get("data", {})
+	return {"bank_gold": int(shared.get("bank_gold", 0)),
+		"next_sequence": int(shared.get("bank_transaction_high_water", 0)) + 1,
+		"profile_id": active_profile_id}
 
 
 func next_shared_gold_transaction_sequence() -> int:
-	if not _ensure_shared_warehouse_ready():
-		return -1
-	var shared := _read_json(shared_warehouse_path)
-	if not _validate_shared_warehouse_document(shared):
-		return -1
-	return int(shared.get("bank_transaction_high_water", 0)) + 1
+	return int(shared_gold_view_snapshot().get("next_sequence", -1))
 
 
 ## `transaction_sequence` is an account-wide monotonic request identity. The
 ## bounded audit history may prune old rows, while the persisted high-water
 ## mark continues to reject every replayed old request.
-func transfer_shared_gold(
-	deposit: bool,
-	transaction_id: String,
-	transaction_sequence: int = -1,
-) -> Dictionary:
+func _bank_request_preflight(transaction_id: String, transaction_sequence: int) -> Dictionary:
 	var result := {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "storage_unavailable"}
 	if not _valid_bank_transaction_id(transaction_id):
 		result["reason"] = "invalid_transaction_id"
@@ -809,8 +811,11 @@ func transfer_shared_gold(
 		return result
 	if _warehouse_transaction_locked or _persistence_transaction_in_progress or not _ensure_shared_warehouse_ready():
 		return result
-	var shared := _read_json(shared_warehouse_path)
-	var profile := _read_json(_profile_path(active_profile_id))
+	return {"success": true}
+
+
+func _shared_gold_plan(deposit: bool, transaction_id: String, transaction_sequence: int, shared: Dictionary, profile: Dictionary) -> Dictionary:
+	var result := {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "storage_unavailable"}
 	if (
 		not _validate_shared_warehouse_document(shared)
 		or not bool(_validate_profile_document_status(profile, active_profile_id, false).get("valid", false))
@@ -850,20 +855,24 @@ func transfer_shared_gold(
 		"bank_transaction_high_water": transaction_sequence,
 		"bank_transactions": processed,
 	}
-	if not _bank_transfer_commit(profile, shared, next_gold, bank_update):
-		result["reason"] = "save_failed"
-		return result
-	gold = next_gold
+	return {"success": true, "_bank_before_profile": profile, "_bank_before_shared": shared,
+		"_next_gold": next_gold, "_gold_before": gold, "_bank_update": bank_update,
+		"_inventory_before": inventory.duplicate(true), "_warehouse_before": warehouse_inventory.duplicate(true),
+		"transaction_id": transaction_id, "transaction_sequence": transaction_sequence}
+
+
+func transfer_shared_gold(deposit: bool, transaction_id: String, transaction_sequence: int = -1) -> Dictionary:
+	var ready := _bank_request_preflight(transaction_id, transaction_sequence)
+	if not bool(ready.success): return ready
+	var plan := _shared_gold_plan(deposit, transaction_id, transaction_sequence, _read_json(shared_warehouse_path), _read_json(_profile_path(active_profile_id)))
+	if not bool(plan.success): return plan
+	if not _bank_transfer_commit(plan._bank_before_profile, plan._bank_before_shared, int(plan._next_gold), plan._bank_update):
+		return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "save_failed"}
+	gold = int(plan._next_gold)
 	profile_changed.emit()
-	result.merge({
-		"success": true,
-		"reason": "",
-		"player_gold": gold,
-		"shared_gold": bank,
-		"transaction_id": transaction_id,
-		"transaction_sequence": transaction_sequence,
-	}, true)
-	return result
+	return {"success": true, "contract_id": BANK_CONTRACT_ID, "reason": "", "player_gold": gold,
+		"shared_gold": int(plan._bank_update.bank_gold), "transaction_id": transaction_id,
+		"transaction_sequence": transaction_sequence}
 
 
 ## Freeze one resolved drop identity into the exact equipment instance carried
@@ -2704,6 +2713,7 @@ func recalculate_stats(emit_profile_change := true) -> void:
 		"critical_chance": 0.0,
 		"critical_damage_multiplier": 1.5,
 		"anti_magic_points": CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS,
+		"anti_poison": 0,
 		"magic_evasion_percent": CombatResolutionRules.anti_magic_display_percent(CombatResolutionRules.BASE_CHARACTER_ANTI_MAGIC_POINTS),
 		"attack_speed_tier": 0,
 		"attack_speed_percent": 0.0,
@@ -3403,14 +3413,21 @@ func _durability_roll(context: Dictionary, key: String, minimum: int, maximum: i
 func _weapon_strong(weapon: Dictionary, context: Dictionary) -> int:
 	if context.has("weapon_strong"):
 		return maxi(0, int(context.get("weapon_strong", 0)))
+	var catalog := GameData.get_item_rules_record(weapon)
+	var added := 0
+	if weapon.has("drop_instance_contract_id"):
+		if not ItemDropInstanceRulesScript.validate_instance(weapon, catalog):
+			return 0
+		for modifier: Dictionary in weapon.get("modifiers", []):
+			if str(modifier.get("stat", "")) == "weapon_strong":
+				added += int(modifier.value)
 	for key: String in ["weapon_strong", "WeaponStrong", "strong", "Strong"]:
 		if weapon.has(key):
-			return maxi(0, int(weapon.get(key, 0)))
-	var catalog := GameData.get_item_record(weapon)
+			return maxi(0, int(weapon.get(key, 0)) + added)
 	for key: String in ["weaponStrong", "WeaponStrong", "strong", "Strong"]:
 		if catalog.has(key):
-			return maxi(0, int(catalog.get(key, 0)))
-	return 0
+			return maxi(0, int(catalog.get(key, 0)) + added)
+	return added
 
 
 func repair_cost(context := {}) -> int:
@@ -4558,22 +4575,25 @@ func _bank_transaction_transition_is_valid(
 	before_shared: Dictionary,
 	after_shared: Dictionary,
 ) -> bool:
-	var before_profile_fixed := before_profile.duplicate(true)
-	var after_profile_fixed := after_profile.duplicate(true)
+	# Only remove top-level transaction fields. Nested records are immutable
+	# during this check; structural equality avoids re-encoding 500 items just
+	# to prove that a gold-only transaction preserved them.
+	var before_profile_fixed := before_profile.duplicate()
+	var after_profile_fixed := after_profile.duplicate()
 	for field: String in ["gold", "updated_at", "warehouse_storage_contract_id", "warehouse_inventory"]:
 		before_profile_fixed.erase(field)
 		after_profile_fixed.erase(field)
-	if _shared_digest(before_profile_fixed) != _shared_digest(after_profile_fixed):
+	if before_profile_fixed != after_profile_fixed:
 		return false
-	var before_shared_fixed := before_shared.duplicate(true)
-	var after_shared_fixed := after_shared.duplicate(true)
+	var before_shared_fixed := before_shared.duplicate()
+	var after_shared_fixed := after_shared.duplicate()
 	for field: String in [
 		"revision", "bank_gold", "bank_contract_id",
 		"bank_transaction_high_water", "bank_transactions",
 	]:
 		before_shared_fixed.erase(field)
 		after_shared_fixed.erase(field)
-	if _shared_digest(before_shared_fixed) != _shared_digest(after_shared_fixed):
+	if before_shared_fixed != after_shared_fixed:
 		return false
 	if int(after_shared.get("revision", -1)) != int(before_shared.get("revision", -1)) + 1:
 		return false
@@ -6412,6 +6432,42 @@ var _warehouse_preparation_pending := false
 var _warehouse_active_preparation: RefCounted
 
 
+func transfer_shared_gold_prepared(deposit: bool, transaction_id: String, transaction_sequence: int) -> Dictionary:
+	if _warehouse_preparation_pending:
+		return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "storage_unavailable"}
+	_warehouse_preparation_pending = true
+	var result: Dictionary = await _prepare_shared_gold_request(deposit, transaction_id, transaction_sequence)
+	_warehouse_preparation_pending = false
+	_warehouse_active_preparation = null
+	if not bool(result.get("success", false)) and not result.has("reason"):
+		result = {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "save_failed"}
+	return result
+
+
+func _prepare_shared_gold_request(deposit: bool, transaction_id: String, transaction_sequence: int) -> Dictionary:
+	var ready := _bank_request_preflight(transaction_id, transaction_sequence)
+	if not bool(ready.success): return ready
+	var profile_id := active_profile_id
+	var profile_path := _profile_path(profile_id)
+	var shared_path := shared_warehouse_path
+	var generation := _atomic_write_generation
+	var previous_gold := gold
+	# Each authority read/validation gets its own frame; the following identity
+	# and generation check rejects interleaving changes before planning.
+	await get_tree().process_frame
+	var shared := _read_json(shared_path)
+	await get_tree().process_frame
+	var profile := _read_json(profile_path)
+	await get_tree().process_frame
+	if (active_profile_id != profile_id or _profile_path(profile_id) != profile_path
+		or shared_warehouse_path != shared_path or _atomic_write_generation != generation
+		or gold != previous_gold or _warehouse_transaction_locked or _persistence_transaction_in_progress):
+		return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "stale_profile"}
+	var plan := _shared_gold_plan(deposit, transaction_id, transaction_sequence, shared, profile)
+	if not bool(plan.success): return plan
+	return await _prepare_warehouse_transfer("bank", [], [], plan)
+
+
 func transfer_warehouse_prepared(operation: String, source_indices: Array, target_slots: Array = []) -> Dictionary:
 	if test_mode and not _shared_warehouse_test_isolation_enabled():
 		return deposit_to_warehouse_batch(source_indices, target_slots) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices)
@@ -6428,10 +6484,20 @@ func _warehouse_preparation_failure(message: String) -> Dictionary:
 	return {"success": false, "complete": false, "transferred": 0, "message": message}
 
 
-func _prepare_warehouse_transfer(operation: String, source_indices: Array, target_slots: Array) -> Dictionary:
-	if operation not in ["deposit", "withdraw"]:
+func _captured_json_matches_document(path: String, bytes: PackedByteArray, document: Dictionary) -> bool:
+	var serialized := bytes.get_string_from_utf8()
+	var cached: Dictionary = _json_parse_snapshots.get(path, {})
+	if not cached.is_empty() and str(cached.hash) == serialized.sha256_text():
+		return cached.data == document
+	var parsed: Variant = JSON.parse_string(serialized)
+	return parsed is Dictionary and parsed == document
+
+
+func _prepare_warehouse_transfer(operation: String, source_indices: Array, target_slots: Array, bank_plan: Dictionary = {}) -> Dictionary:
+	if operation not in ["deposit", "withdraw", "bank"]:
 		return _warehouse_preparation_failure("仓库存取操作无效。")
-	var plan := deposit_to_warehouse_batch(source_indices, target_slots, true) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, true)
+	var is_bank := operation == "bank"
+	var plan := bank_plan if is_bank else (deposit_to_warehouse_batch(source_indices, target_slots, true) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, true))
 	if not bool(plan.get("success", false)):
 		return plan
 	var profile_id := active_profile_id
@@ -6446,22 +6512,28 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 	var previous_shared_bytes := FileAccess.get_file_as_bytes(paths.shared)
 	# Bind the validated snapshots to the exact disk bytes, including file edits
 	# made between reading / validating and capturing the preparation input.
-	var captured_profile: Variant = JSON.parse_string(previous_profile_bytes.get_string_from_utf8())
-	var captured_shared: Variant = JSON.parse_string(previous_shared_bytes.get_string_from_utf8())
 	if (before_profile.is_empty() or before_shared.is_empty()
-		or not captured_profile is Dictionary or not captured_shared is Dictionary
-		or captured_profile != before_profile or captured_shared != before_shared):
+		or not _captured_json_matches_document(paths.profile, previous_profile_bytes, before_profile)
+		or not _captured_json_matches_document(paths.shared, previous_shared_bytes, before_shared)):
 		return _warehouse_preparation_failure("仓库存档已变化，物品未改变。")
 	await get_tree().process_frame
 	var after_profile := before_profile.duplicate()
-	after_profile["inventory"] = plan._prepared_inventory
+	if is_bank:
+		if before_profile != plan._bank_before_profile or before_shared != plan._bank_before_shared:
+			return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "stale_profile"}
+		after_profile["gold"] = int(plan._next_gold)
+	else:
+		after_profile["inventory"] = plan._prepared_inventory
 	after_profile["warehouse_storage_contract_id"] = SHARED_WAREHOUSE_CONTRACT_ID
 	after_profile["updated_at"] = int(Time.get_unix_time_from_system())
 	after_profile.erase("warehouse_inventory")
-	var after_shared := _shared_document_for_records(plan._prepared_warehouse, before_shared)
+	var after_shared := before_shared.duplicate() if is_bank else _shared_document_for_records(plan._prepared_warehouse, before_shared)
+	if is_bank:
+		after_shared["revision"] = int(before_shared.get("revision", 0)) + 1
+		after_shared.merge(plan._bank_update, true)
 	var job := preload("res://scripts/warehouse_prepared_transaction.gd").new()
 	_warehouse_active_preparation = job
-	job.start(paths, {"before_profile": before_profile, "after_profile": after_profile, "before_shared": before_shared, "after_shared": after_shared}, WAREHOUSE_TRANSFER_CONTRACT_ID, profile_id)
+	job.start(paths, {"before_profile": before_profile, "after_profile": after_profile, "before_shared": before_shared, "after_shared": after_shared}, WAREHOUSE_TRANSFER_CONTRACT_ID, profile_id, "bank" if is_bank else "warehouse_items")
 	while not bool(job.result().finished):
 		await get_tree().process_frame
 	if not bool(job.result().success):
@@ -6490,6 +6562,7 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 		and _atomic_write_generation == generation and not _warehouse_transaction_locked
 		and not _persistence_transaction_in_progress and not FileAccess.file_exists(paths.journal)
 		and inventory == plan._inventory_before and warehouse_inventory == plan._warehouse_before
+		and (not is_bank or gold == int(plan._gold_before))
 		and _file_matches_validated_bytes(paths.profile, previous_profile_bytes)
 		and _file_matches_validated_bytes(paths.shared, previous_shared_bytes))
 	if not current or not bool(job.result().success):
@@ -6497,7 +6570,11 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 		return _warehouse_preparation_failure("物品或存档已变化，请重新操作。")
 	# The journal was constructed from these four normalized snapshots. The
 	# operation cannot change either gold authority or skip the revision step.
-	if (int(job.documents.before_profile.get("gold", 0)) != int(job.documents.after_profile.get("gold", 0))
+	if is_bank:
+		if not _bank_transaction_transition_is_valid(profile_id, job.documents.before_profile, job.documents.after_profile, job.documents.before_shared, job.documents.after_shared):
+			job.cancel()
+			return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "save_failed"}
+	elif (int(job.documents.before_profile.get("gold", 0)) != int(job.documents.after_profile.get("gold", 0))
 		or _bank_fields_snapshot(job.documents.before_shared) != _bank_fields_snapshot(job.documents.after_shared)
 		or int(job.documents.after_shared.get("revision", -1)) != int(job.documents.before_shared.get("revision", -1)) + 1):
 		job.cancel()
@@ -6506,6 +6583,12 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 	job.cancel() # removes remaining private files only; promoted paths are absent.
 	if not committed:
 		return _warehouse_preparation_failure("仓库存档失败，物品未改变。")
+	if is_bank:
+		gold = int(plan._next_gold)
+		profile_changed.emit()
+		return {"success": true, "contract_id": BANK_CONTRACT_ID, "reason": "", "player_gold": gold,
+			"shared_gold": int(plan._bank_update.bank_gold), "transaction_id": plan.transaction_id,
+			"transaction_sequence": plan.transaction_sequence}
 	inventory = plan._prepared_inventory
 	warehouse_inventory = plan._prepared_warehouse
 	for key: String in ["_inventory_before", "_warehouse_before", "_prepared_inventory", "_prepared_warehouse"]:

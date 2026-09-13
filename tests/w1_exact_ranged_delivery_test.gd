@@ -109,6 +109,9 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	# Delivery/range assertions require hits. Evasion is exercised separately
+	# by ranged_magic_evasion_test, including the new default player policy.
+	PlayerState.computed_stats["anti_magic_points"] = 0
 
 	_run_special_classification_hold()
 	await _run_special_noncombat_actor_matrix()
