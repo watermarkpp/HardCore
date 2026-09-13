@@ -1937,7 +1937,7 @@ func _on_quest_abandon_requested(quest_id: String) -> void:
 
 func _on_warehouse_sort_requested() -> void:
 	if is_instance_valid(hud):
-		hud.apply_warehouse_sort_result(PlayerState.sort_warehouse())
+		hud.apply_warehouse_sort_result(PlayerState.sort_warehouse(hud.warehouse_panel.warehouse_page))
 
 
 func _prepare_safe_logout() -> Dictionary:
@@ -12231,6 +12231,8 @@ func _resolve_loot_ground_position(desired_px: Vector2, death_origin := Vector2.
 func _loot_collection_path_is_clear(pickup: LootPickup) -> bool:
 	if not is_instance_valid(pickup) or not is_instance_valid(player) or not gameplay_input_is_enabled():
 		return false
+	if pickup.filtered or pickup.is_queued_for_deletion():
+		return false
 	var origin_gu := _canonical_screen_px_to_ground_gu(player.global_position)
 	var target_gu := _canonical_screen_px_to_ground_gu(pickup.global_position)
 	if origin_gu.distance_to(target_gu) >= LootPickupRuntimeManagerScript.COLLECTION_RADIUS_GU:
@@ -12465,7 +12467,8 @@ func _finish_loot_collection_outcomes(transaction_pending: Array, result: Dictio
 				loot_feedback_names.append("金币 +%d" % int(candidate.get("amount", 0)))
 			else:
 				var display_item_id := LootVisualEffectScript.exact_item_id(pickup.item_record) if pickup is LootPickup and is_instance_valid(pickup) else int(candidate.get("item_id", -1))
-				loot_feedback_names.append({"item_name": str(candidate.get("item_name", "")), "item_id": display_item_id})
+				var display_name := ("★" if pickup is LootPickup and is_instance_valid(pickup) and LootVisualEffectScript.affix_is_valid(pickup.item_record) else "") + str(candidate.get("item_name", ""))
+				loot_feedback_names.append({"item_name": display_name, "item_id": display_item_id})
 			if pickup is LootPickup and is_instance_valid(pickup) and (pickup as LootPickup).collection_pending():
 				pickup.confirm_collect()
 		elif pickup is LootPickup and is_instance_valid(pickup) and (pickup as LootPickup).collection_pending():

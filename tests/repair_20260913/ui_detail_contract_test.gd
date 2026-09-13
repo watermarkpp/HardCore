@@ -45,7 +45,8 @@ func _run() -> void:
 		check(str(GameData.get_item_record(raw).get("name", "")) != "test-only mutation", "catalog copy leaked")
 	check(Formatter._stat_line({"attackMin": 0, "attackMax": 1, "magicMin": 1, "magicMax": 0}) == "攻击 0-1　魔法 1-0", "nonzero endpoints must survive")
 	var example := Formatter.format_item({"kind": "equipment"}, {"modifiers": [{"stat": "magic_defense_max", "value": 2}, {"stat": "internal_debug_field", "value": 5}]})
-	check(example.contains("魔防上限") and not example.contains("magic_defense") and not example.contains("internal_debug"), "internal stat names visible")
+	# User v80 contract merges additive range bonuses into the standard stat line.
+	check(example.contains("魔防 0-2") and not example.contains("magic_defense") and not example.contains("internal_debug"), "internal stat names visible")
 	shop = ShopPanel.new()
 	shop.hide()
 	shop.buy_quotes_requested.connect(func(stock: Array) -> void: shop.set_buy_quotes(PlayerState.shop_buy_quotes(stock, merchant)))

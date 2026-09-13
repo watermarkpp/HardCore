@@ -15,6 +15,10 @@ const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd"
 const CONTRACT_ID := "hardcore.loot.runtime_manager.map_scoped.v1"
 const COLLECTION_RADIUS_GU := 0.75
 const FAIL_SAFE_INTERVAL_SECONDS := 0.1
+const GROUND_LIFETIME_SECONDS := 600.0
+var _ground_age := 0.0
+var _expiry_queue: Array = []
+var _expiry_cursor := 0
 
 var _spatial_index: LootIndexScript = LootIndexScript.new()
 var _player: PlayerCharacter
@@ -49,6 +53,13 @@ var manager_visual_registry_entry_count := 0
 
 func _ready() -> void:
 	set_process(true)
+	LootPreferences.filter_changed.connect(_on_filter_changed)
+
+
+func _on_filter_changed(_level: int) -> void:
+	# Labels are updated by pickups synchronously. Resume auto-collection on
+	# the next frame, after all signal subscribers have applied the new filter.
+	_fail_safe_remaining = 0.0
 
 
 func configure_player(player: PlayerCharacter) -> void:
@@ -101,6 +112,9 @@ func clear_map(runtime_map_id: int) -> void:
 
 
 func clear_all() -> void:
+	_expiry_queue.clear()
+	_expiry_cursor = 0
+	_ground_age = 0.0
 	_spatial_index.clear_all()
 	_registered_pickups.clear()
 	_registered_pickup_maps.clear()
@@ -131,6 +145,7 @@ func register_pickup(pickup: LootPickup) -> bool:
 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_registers")
 	_registered_pickups[pickup_id] = weakref(pickup)
 	_registered_pickup_maps[pickup_id] = _runtime_map_id
+	_expiry_queue.append({"pickup": weakref(pickup), "deadline": _ground_age + GROUND_LIFETIME_SECONDS})
 	pickup.set_collection_manager(self)
 	pickup.set_meta("loot_runtime_map_id", _runtime_map_id)
 	pickup.set_meta("loot_zone_generation", _zone_generation)
@@ -263,6 +278,7 @@ func diagnostics_snapshot() -> Dictionary:
 
 
 func _process(delta: float) -> void:
+	_expire_ground_loot(maxf(0.0, delta))
 	if not is_instance_valid(_player):
 		return
 	# Movement/teleport setters normally notify the manager immediately.  Keep
@@ -284,6 +300,28 @@ func _process(delta: float) -> void:
 		)
 		_run_collection_pass(_collection_elapsed)
 		_collection_elapsed = 0.0
+
+
+func _expire_ground_loot(delta: float) -> void:
+	_ground_age += delta
+	# Birth order makes deadlines sorted. Work scales with expirations only,
+	# never with all ground items each frame. Bound node deletion bursts.
+	for _step in range(32):
+		if _expiry_cursor >= _expiry_queue.size():
+			break
+		var entry: Dictionary = _expiry_queue[_expiry_cursor]
+		var pickup: LootPickup = entry.pickup.get_ref()
+		if is_instance_valid(pickup):
+			if float(entry.deadline) > _ground_age or pickup.collection_pending():
+				break
+			pickup.queue_free()
+		_expiry_cursor += 1
+	if _expiry_cursor == _expiry_queue.size():
+		_expiry_queue.clear()
+		_expiry_cursor = 0
+	elif _expiry_cursor >= 1024:
+		_expiry_queue = _expiry_queue.slice(_expiry_cursor)
+		_expiry_cursor = 0
 
 
 func _run_collection_pass(delta_seconds: float) -> void:

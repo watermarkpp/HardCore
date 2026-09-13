@@ -57,8 +57,8 @@ const SKILL_CATALOG := {
 	"taoist.summon_divine_beast": "召唤神兽",
 }
 
-# 运行时成长入口。精确逐级官服数值将在等级经验/属性表完成考据后替换，
-# 所有调用方只依赖此处，避免把职业公式散落到角色、HUD和技能代码中。
+# Historical export metadata only. Runtime base growth is compiled from the
+# primary server by build_character_base_growth.py; this is never a fallback.
 const BASE_STATS := {
 	"战士": {"hp_base": 100, "hp_per_level": 20, "mp_base": 20, "mp_per_level": 4, "attack_min": 2, "attack_max": 5},
 	"法师": {"hp_base": 55, "hp_per_level": 8, "mp_base": 55, "mp_per_level": 18, "attack_min": 1, "attack_max": 3},
@@ -163,6 +163,7 @@ const COMBAT_REACTION_POLICY := {
 }
 
 static var _runtime_data: Dictionary = {}
+static var _base_growth_cache: Dictionary = {}
 static var _skill_ids_by_name: Dictionary = {}
 
 
@@ -219,20 +220,24 @@ static func skill_input_metadata(skill_name_or_id: String) -> Dictionary:
 
 
 static func stats_for_level(profession: String, level: int) -> Dictionary:
-	var resolved_profession := profession_display_name(profession)
-	var selected := resolved_profession if is_valid_profession(resolved_profession) else "战士"
-	if GameData != null and not GameData.service_reference.is_empty():
-		var service_stats := GameData.service_profession_stats(selected, level)
-		if not service_stats.is_empty():
-			return service_stats
-	var source: Dictionary = _data().get("baseStats", BASE_STATS)[selected]
-	var safe_level := maxi(1, level)
-	return {
-		"max_hp": int(source.hp_base) + safe_level * int(source.hp_per_level),
-		"max_mp": int(source.mp_base) + safe_level * int(source.mp_per_level),
-		"attack_min": int(source.attack_min),
-		"attack_max": int(source.attack_max),
-	}
+	return _base_growth_row(profession, level).duplicate()
+
+
+static func base_stat_for_level(profession: String, level: int, stat: String) -> int:
+	return int(_base_growth_row(profession, level)[stat])
+
+
+static func _base_growth_row(profession: String, level: int) -> Dictionary:
+	var display := profession_display_name(profession)
+	if display not in PROFESSIONS:
+		display = "战士"
+	var normalized_level := maxi(1, level)
+	var key := "%s:%d" % [display, normalized_level]
+	if not _base_growth_cache.has(key):
+		var row := preload("res://scripts/generated/character_base_growth_v1.gd").stats_for_level(display, normalized_level)
+		row.make_read_only()
+		_base_growth_cache[key] = row
+	return _base_growth_cache[key]
 
 
 static func skill_profile(skill_name_or_id: String) -> Dictionary:

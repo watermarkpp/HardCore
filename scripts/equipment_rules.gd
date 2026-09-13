@@ -140,34 +140,15 @@ static func actor_visual_layer_order(direction_row: int) -> Array[StringName]:
 
 
 static func max_wear_weight(profession: String, level: int) -> int:
-	var safe_level := maxi(1, level)
-	match profession:
-		"法师": return 15 + int(round((safe_level / 100.0) * safe_level))
-		"道士": return 15 + int(round((safe_level / 50.0) * safe_level))
-		_: return 15 + int(round((safe_level / 20.0) * safe_level))
+	return ProfessionRules.base_stat_for_level(profession, level, "max_wear_weight")
 
 
 static func max_hand_weight(profession: String, level: int) -> int:
-	var safe_level := maxi(1, level)
-	match profession:
-		"法师": return 12 + int(round((safe_level / 90.0) * safe_level))
-		"道士": return 12 + int(round((safe_level / 42.0) * safe_level))
-		_: return 12 + int(round((safe_level / 13.0) * safe_level))
+	return ProfessionRules.base_stat_for_level(profession, level, "max_hand_weight")
 
 
-## Canonical inventory/bag carrying capacity. This is separate from the
-## classic hand/wear equipment requirements: bag capacity is consumed by every
-## non-currency inventory record. Keep this formula in one authority so callers
-## cannot drift on division or profession-name mapping.
 static func max_bag_weight(profession: String, level: int) -> int:
-	var safe_level := maxi(1, level)
-	var profession_id := ProfessionRules.profession_id(profession)
-	var divisor := 3.0
-	match profession_id:
-		"wizard": divisor = 5.0
-		"taoist": divisor = 4.0
-		_: divisor = 3.0
-	return 50 + roundi(float(safe_level) / divisor * float(safe_level))
+	return ProfessionRules.base_stat_for_level(profession, level, "max_bag_weight")
 
 
 static func attribute_source_distribution(item: Dictionary) -> String:

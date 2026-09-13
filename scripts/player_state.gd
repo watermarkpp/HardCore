@@ -91,6 +91,7 @@ const SHOP_SELL_CONTRACT_ID := PRICING_CONTRACT_ID
 const QUEST_ABANDON_CONTRACT_ID := "gameplay.quest.abandon_authority.v1"
 const WAREHOUSE_SORT_CONTRACT_ID := "gameplay.warehouse.sort_authority.v1"
 const WAREHOUSE_CAPACITY := 500
+const WAREHOUSE_PAGE_SIZE := 100
 const INVENTORY_CAPACITY := 100
 const INVENTORY_WEIGHT_CONTRACT_ID := "gameplay.inventory.weight_authority.v1"
 const INVENTORY_WEIGHT_REJECTION := "超过负重，无法拾取。"
@@ -181,6 +182,7 @@ var saved_map_id := 910001
 var saved_position := Vector2.ZERO
 var saved_ground_position_gu := Vector2.ZERO
 var saved_ground_position_gu_valid := false
+var base_stats: Dictionary = {}
 var computed_stats: Dictionary = {}
 var computed_special_effects: Dictionary = {}
 var test_mode := false
@@ -217,6 +219,7 @@ var _loot_batch_debug: Dictionary = {
 	"save_commits": 0,
 }
 var _last_runtime_commit_profile: Dictionary = {}
+const SpecialConsumableStacks = preload("res://scripts/special_consumable_stacks.gd")
 const LootPreparedFile := preload("res://scripts/loot_prepared_file.gd")
 var _atomic_write_generation := 0
 var _atomic_write_phases: Dictionary = {}
@@ -256,6 +259,7 @@ func _notification(what: int) -> void:
 
 
 func _process(delta: float) -> void:
+	advance_temporary_item_buffs(delta)
 	if test_mode or active_profile_id.is_empty():
 		return
 	_autosave_elapsed += delta
@@ -1008,8 +1012,8 @@ func remove_item(item_name: String, amount := 1) -> bool:
 func _consume_inventory_index(index: int, amount := 1) -> bool:
 	if not _consume_inventory_index_without_commit(index, amount):
 		return false
-	inventory_changed.emit()
 	_commit_save()
+	inventory_changed.emit()
 	return true
 
 
@@ -1053,9 +1057,11 @@ func destroy_inventory_indices(indices: Array) -> Dictionary:
 
 
 func sort_inventory_deterministic() -> Dictionary:
+	var inventory_before := inventory
+	var working_inventory := SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
 	var decorated: Array = []
-	for index in range(inventory.size()):
-		var record: Variant = inventory[index]
+	for index in range(working_inventory.size()):
+		var record: Variant = working_inventory[index]
 		if record is Dictionary and not (record as Dictionary).is_empty():
 			var item := GameData.get_item_record(str(record.get("name", "")))
 			decorated.append({"record": record, "index": index, "key": "%s|%s|%s|%08d" % [str(item.get("kind", "")), str(item.get("category", "")), str(record.get("name", "")), index]})
@@ -1071,12 +1077,14 @@ func sort_inventory_deterministic() -> Dictionary:
 				sorted_inventory.back()["item_id"] = int(record.get("item_id", -1))
 		else:
 			sorted_inventory.append(record)
-	var changed := sorted_inventory != inventory
+	var changed := sorted_inventory != inventory_before
 	if changed:
 		inventory = sorted_inventory
+		if not _commit_save():
+			inventory = inventory_before
+			return {"success":false,"changed":false,"reason":"save_failed"}
 		inventory_changed.emit()
 		profile_changed.emit()
-		_commit_save()
 	return {"success": true, "changed": changed, "count": inventory_occupied_count()}
 
 
@@ -1730,15 +1738,22 @@ func use_inventory_index(index: int) -> String:
 		var profile: Variant = item.get("effectProfile", {})
 		if not profile is Dictionary:
 			return "%s效果配置无效" % item_name
-		var buff_result := apply_temporary_item_buff(item_name, profile)
+		var buffs_before := temporary_item_buffs.duplicate(true)
+		var revision_before := temporary_item_buff_revision
+		var inventory_before := inventory.duplicate(true)
+		var buff_result := apply_temporary_item_buff(item_name, profile, false)
 		if not bool(buff_result.get("ok", false)):
 			return str(buff_result.get("reason", "增益效果应用失败"))
-		if _consume_inventory_index(index):
-			recalculate_stats()
-			if _last_item_commit_succeeded():
-				_emit_item_audio_committed(item, "use_success")
-			return "使用：%s" % item_name
-		return "物品数量不足"
+		if not _consume_inventory_index_without_commit(index) or not _commit_save():
+			inventory = inventory_before
+			temporary_item_buffs = buffs_before
+			temporary_item_buff_revision = revision_before
+			recalculate_stats(false)
+			return "使用失败，物品和原有效果已保留"
+		recalculate_stats()
+		inventory_changed.emit()
+		_emit_item_audio_committed(item, "use_success")
+		return "使用：%s" % item_name
 	if _consume_inventory_index(index):
 		consumable_requested.emit(item_name)
 		if _last_item_commit_succeeded():
@@ -2486,13 +2501,16 @@ func abandon_quest(quest_id: String) -> Dictionary:
 	return result
 
 
-func sort_warehouse() -> Dictionary:
+func sort_warehouse(page := 0) -> Dictionary:
 	var result := {
 		"contract_id": WAREHOUSE_SORT_CONTRACT_ID,
 		"success": false,
 		"message": "仓库整理失败。",
 	}
 	var legacy_test_memory := test_mode and not _shared_warehouse_test_isolation_enabled()
+	if page < 0 or page >= 5:
+		result["message"] = "仓库页码无效。"
+		return result
 	if not legacy_test_memory and not _ensure_shared_warehouse_ready():
 		result["message"] = "公共仓库不可用，已拒绝整理。"
 		return result
@@ -2500,7 +2518,10 @@ func sort_warehouse() -> Dictionary:
 		result["message"] = "仓库数据超过容量，已拒绝整理以避免丢失物品。"
 		return result
 	var records: Array[Dictionary] = []
-	for raw_record: Variant in warehouse_inventory:
+	var first_slot := page * 100
+	var page_end := mini(first_slot + 100, warehouse_inventory.size())
+	for index in range(first_slot, page_end):
+		var raw_record: Variant = warehouse_inventory[index]
 		if raw_record is Dictionary and not (raw_record as Dictionary).is_empty():
 			records.append((raw_record as Dictionary).duplicate(true))
 	records.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
@@ -2511,9 +2532,9 @@ func sort_warehouse() -> Dictionary:
 		return a_name < b_name
 	)
 	var warehouse_before := warehouse_inventory.duplicate(true)
-	warehouse_inventory = []
-	for record: Dictionary in records:
-		warehouse_inventory.append(record)
+	for index in range(first_slot, page_end):
+		var local_index := index - first_slot
+		warehouse_inventory[index] = records[local_index] if local_index < records.size() else {}
 	inventory_changed.emit()
 	if not legacy_test_memory and not _write_shared_warehouse(warehouse_inventory):
 		warehouse_inventory = warehouse_before
@@ -2521,7 +2542,8 @@ func sort_warehouse() -> Dictionary:
 		result["message"] = "仓库存档失败，原有顺序已恢复。"
 		return result
 	result["success"] = true
-	result["message"] = "仓库已整理，共%d件物品。" % records.size()
+	result["page"] = page
+	result["message"] = "第%d页已整理，共%d件物品。" % [page + 1, records.size()]
 	return result
 
 
@@ -2686,6 +2708,7 @@ func _migrate_quest_states() -> void:
 
 func recalculate_stats(emit_profile_change := true) -> void:
 	var base := ProfessionRules.stats_for_level(profession, level)
+	base_stats = base.duplicate(true)
 	computed_special_effects = {}
 	var set_powers := {"magic_blood": 0, "rainbow_demon": 0}
 	var set_pieces := {"magic_blood": {}, "rainbow_demon": {}}
@@ -2694,16 +2717,16 @@ func recalculate_stats(emit_profile_change := true) -> void:
 		"max_mp": int(base.get("max_mp", 40)),
 		"attack_min": int(base.get("attack_min", 2)),
 		"attack_max": int(base.get("attack_max", 5)),
-		"magic_min": 0,
-		"magic_max": 0,
-		"tao_min": 0,
-		"tao_max": 0,
-		"defense_min": 0,
-		"defense_max": 0,
-		"magic_defense_min": 0,
-		"magic_defense_max": 0,
-		"accuracy": WarriorCombatMath.BASE_HIT,
-		"agility": WarriorCombatMath.BASE_AGILITY,
+		"magic_min": int(base["magic_min"]),
+		"magic_max": int(base["magic_max"]),
+		"tao_min": int(base["tao_min"]),
+		"tao_max": int(base["tao_max"]),
+		"defense_min": int(base["defense_min"]),
+		"defense_max": int(base["defense_max"]),
+		"magic_defense_min": int(base["magic_defense_min"]),
+		"magic_defense_max": int(base["magic_defense_max"]),
+		"accuracy": int(base["accuracy"]),
+		"agility": int(base["agility"]),
 		"luck": 0,
 		"max_wear_weight": EquipmentRulesScript.max_wear_weight(profession, level),
 		"max_hand_weight": EquipmentRulesScript.max_hand_weight(profession, level),
@@ -5341,6 +5364,10 @@ func load_save() -> void:
 	equipment = migrate_equipment_slots(saved_equipment)
 	_migrate_item_collection_durability(inventory)
 	_migrate_item_collection_durability(warehouse_inventory)
+	inventory = SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	var split_warehouse := SpecialConsumableStacks.split_available(warehouse_inventory, WAREHOUSE_CAPACITY, WAREHOUSE_PAGE_SIZE)
+	if split_warehouse != warehouse_inventory and (legacy_isolated_profile_fixture or _write_shared_warehouse(split_warehouse)):
+		warehouse_inventory = split_warehouse
 	# Pay the immutable catalog lookup cost during profile loading instead of on
 	# the first combat pickup. Runtime weight checks then read the session cache.
 	_prewarm_loot_inventory_catalog(inventory)
@@ -5426,6 +5453,11 @@ func load_save() -> void:
 		or int(parsed.get("content_schema_version", 0)) < CURRENT_CONTENT_SCHEMA_VERSION
 	):
 		_commit_save()
+	# Buffs are session-local and never persisted. Loading another character
+	# must not inherit the previous character's unexpired divine-water effect.
+	if not temporary_item_buffs.is_empty():
+		temporary_item_buffs.clear()
+		temporary_item_buff_revision += 1
 	recalculate_stats()
 
 
@@ -6500,6 +6532,9 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 	var plan := bank_plan if is_bank else (deposit_to_warehouse_batch(source_indices, target_slots, true) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, true))
 	if not bool(plan.get("success", false)):
 		return plan
+	if not is_bank:
+		plan._prepared_inventory = SpecialConsumableStacks.split_available(plan._prepared_inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+		plan._prepared_warehouse = SpecialConsumableStacks.split_available(plan._prepared_warehouse, WAREHOUSE_CAPACITY, WAREHOUSE_PAGE_SIZE)
 	var profile_id := active_profile_id
 	var generation := _atomic_write_generation
 	var paths := {"profile": _profile_path(profile_id), "shared": shared_warehouse_path, "journal": shared_warehouse_transaction_log_path}
@@ -6664,6 +6699,8 @@ var _warehouse_validation_scope := false
 var _warehouse_validated_collections: Dictionary = {}
 
 func _warehouse_transfer_commit(_inventory_before: Array, _warehouse_before: Array) -> bool:
+	inventory = SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	warehouse_inventory = SpecialConsumableStacks.split_available(warehouse_inventory, WAREHOUSE_CAPACITY, WAREHOUSE_PAGE_SIZE)
 	_warehouse_validation_scope = true
 	_warehouse_validated_collections.clear()
 	var result := _warehouse_transfer_commit_validated(_inventory_before, _warehouse_before)
@@ -7180,7 +7217,7 @@ func ensure_zuma_test_character() -> void:
 
 
 
-func apply_temporary_item_buff(item_name: String, effect_profile: Dictionary) -> Dictionary:
+func apply_temporary_item_buff(item_name: String, effect_profile: Dictionary, emit_updates := true) -> Dictionary:
 	if effect_profile.is_empty() or item_name.is_empty():
 		return {"ok": false, "reason": "invalid_arguments"}
 	if str(effect_profile.get("contractId", "")) != "item.temporary_stat_buff.v1":
@@ -7214,7 +7251,7 @@ func apply_temporary_item_buff(item_name: String, effect_profile: Dictionary) ->
 		"remaining": duration_seconds,
 	}
 	temporary_item_buff_revision += 1
-	recalculate_stats()
+	recalculate_stats(emit_updates)
 	return {"ok": true, "item_name": item_name, "revision": temporary_item_buff_revision}
 
 
@@ -7658,10 +7695,14 @@ func _migrate_single_save_to_profile() -> void:
 
 
 func _commit_save(update_profile_index := true) -> bool:
+	var before_split := inventory
+	inventory = SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
 	var started_usec := Time.get_ticks_usec()
 	if test_mode:
 		_test_transaction_counters["commit_attempts"] = int(_test_transaction_counters.get("commit_attempts", 0)) + 1
 	var success := save_game(update_profile_index) if not test_mode else not _test_force_atomic_write_failure
+	if not success:
+		inventory = before_split
 	_last_runtime_commit_profile = {
 		"duration_ms": float(Time.get_ticks_usec() - started_usec) / 1000.0,
 		"success": success,

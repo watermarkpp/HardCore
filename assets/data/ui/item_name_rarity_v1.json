@@ -8,13 +8,15 @@
   "equipment_membership_source": "assets/data/equipment_attribute_master.json",
   "equipment_membership_source_sha256": "a13f1a53f4fcd87f4a260384fab9fb391479b2ca7a3aecd408da178c91e8de27",
   "presentation_policy": "assets/data/ui/item_name_rarity_policy_v2.json",
-  "presentation_policy_sha256": "c77b5678826bbbf067f38e32819f99f1b2dca2389e145baf55bdbb376b3214b5",
+  "presentation_policy_sha256": "67ce4783dbafe34d52e92593fae011f65bda446490fcda2605fd0865f3c49660",
   "palette": {
     "default": "#E6DDCB",
     "wooma": "#FFD86B",
     "zuma": "#FF943D",
     "redmoon": "#C48CFF",
-    "ultra_rare": "#C83B35"
+    "ultra_rare": "#C83B35",
+    "potion": "#A8D8FF",
+    "divine_water": "#70B8F0"
   },
   "outline_styles": {
     "ultra_rare": {
@@ -901,72 +903,72 @@
     "910001": {
       "canonical_name": "体力强效神水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910002": {
       "canonical_name": "魔力强效神水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910003": {
       "canonical_name": "疾风神水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910004": {
       "canonical_name": "攻击神水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910005": {
       "canonical_name": "魔力神水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910006": {
       "canonical_name": "精神神水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910007": {
       "canonical_name": "疗伤药",
       "source_tier": "POTION_STRONG",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "910008": {
       "canonical_name": "HP强化水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910009": {
       "canonical_name": "MP强化水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910010": {
       "canonical_name": "攻击力药水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910011": {
       "canonical_name": "魔法力药水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910012": {
       "canonical_name": "道术力药水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "910013": {
       "canonical_name": "疾风药水",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "divine_water"
     },
     "920001": {
       "canonical_name": "万年雪霜",
       "source_tier": "POTION_STRONG",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920002": {
       "canonical_name": "冰咆哮",
@@ -1031,7 +1033,7 @@
     "920014": {
       "canonical_name": "太阳水",
       "source_tier": "SOLAR_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920015": {
       "canonical_name": "幽灵盾",
@@ -1041,12 +1043,12 @@
     "920016": {
       "canonical_name": "强效太阳水",
       "source_tier": "SOLAR_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920017": {
       "canonical_name": "超级金创药",
       "source_tier": "POTION_STRONG",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920018": {
       "canonical_name": "心灵启示",
@@ -1056,7 +1058,7 @@
     "920019": {
       "canonical_name": "战神油",
       "source_tier": "FUNCTIONAL_SPECIAL",
-      "name_style": "ultra_rare"
+      "name_style": "potion"
     },
     "920020": {
       "canonical_name": "抗拒火环",
@@ -1126,7 +1128,7 @@
     "920033": {
       "canonical_name": "祝福油",
       "source_tier": "RARE_CONSUMABLE",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920034": {
       "canonical_name": "神圣战甲术",
@@ -1171,7 +1173,7 @@
     "920042": {
       "canonical_name": "超级魔法药",
       "source_tier": "POTION_STRONG",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920043": {
       "canonical_name": "野蛮冲撞",
@@ -1181,12 +1183,12 @@
     "920044": {
       "canonical_name": "金创药(中量)",
       "source_tier": "POTION_COMMON",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920045": {
       "canonical_name": "金创药(小量)",
       "source_tier": "POTION_COMMON",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920046": {
       "canonical_name": "隐身术",
@@ -1221,12 +1223,12 @@
     "920052": {
       "canonical_name": "魔法药(中量)",
       "source_tier": "POTION_COMMON",
-      "name_style": "default"
+      "name_style": "potion"
     },
     "920053": {
       "canonical_name": "魔法药(小量)",
       "source_tier": "POTION_COMMON",
-      "name_style": "default"
+      "name_style": "potion"
     }
   }
 }

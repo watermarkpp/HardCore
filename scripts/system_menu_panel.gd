@@ -25,6 +25,7 @@ var settings_button: Button
 var save_exit_button: Button
 var music_slider: HSlider
 var sfx_slider: HSlider
+var loot_filter_slider: HSlider
 var audio_save_note: Label
 var music_toggle: CheckButton
 var sfx_toggle: CheckButton
@@ -136,14 +137,37 @@ func _build_settings_page() -> void:
 	settings_page.name = "SettingsPage"
 	settings_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	modal.add_child(settings_page)
-	settings_title = _title_bar(settings_page, "游戏设置", "声音")
+	settings_title = _title_bar(settings_page, "游戏设置", "声音与物品")
 	music_slider = _ui_volume_row("MusicVolume", "游戏音乐", 148.0, "music")
 	sfx_slider = _ui_volume_row("SFXVolume", "游戏音效", 260.0, "sfx")
+	loot_filter_slider = _ui_volume_row("LootFilter", "物品过滤", 372.0, "loot_filter")
+	loot_filter_slider.max_value = 2.0
+	loot_filter_slider.tick_count = 3
+	loot_filter_slider.ticks_on_borders = true
+	loot_filter_slider.set_value_no_signal(LootPreferences.filter_level)
+	loot_filter_slider.position = Vector2(30, 34)
+	loot_filter_slider.size = Vector2(296, 30)
+	loot_filter_slider.set_meta("setting_id", "loot.filter.level")
+	var filter_row := loot_filter_slider.get_parent() as Control
+	filter_row.get_node("Percent").hide()
+	var caption := filter_row.get_node("Caption") as Label
+	caption.position = Vector2(20, 4)
+	caption.size = Vector2(316, 30)
+	var labels := ["关闭", "沃玛以下不显示", "祖玛以下不显示"]
+	for index in range(3):
+		var label := Label.new()
+		label.text = labels[index]
+		label.position = Vector2(-28 + index * 148, 76)
+		label.size = Vector2(132, 22)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 11)
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		filter_row.add_child(label)
 	music_status_label = settings_page.get_node("MusicVolume/Percent") as Label
 	sfx_status_label = settings_page.get_node("SFXVolume/Percent") as Label
 	audio_save_note = Label.new()
 	audio_save_note.name = "VolumeSaveNote"
-	audio_save_note.position = Vector2(72, 372)
+	audio_save_note.position = Vector2(72, 478)
 	audio_save_note.size = Vector2(356, 42)
 	audio_save_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	audio_save_note.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -151,9 +175,10 @@ func _build_settings_page() -> void:
 	audio_save_note.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	audio_save_note.theme_type_variation = "GothicMutedLabel"
 	audio_save_note.text = "拖动即时生效，关闭菜单时自动保存"
-	audio_save_note.set_meta("calibration_layout_revision", 5)
+	audio_save_note.set_meta("calibration_layout_revision", 8)
 	settings_page.add_child(audio_save_note)
-	settings_back_button = _menu_button(settings_page, "SettingsBackButton", "返回游戏菜单", 430, "system_menu.settings.back")
+	settings_back_button = _menu_button(settings_page, "SettingsBackButton", "返回游戏菜单", 524, "system_menu.settings.back")
+	settings_back_button.set_meta("calibration_layout_revision", 8)
 	settings_back_button.theme_type_variation = "GothicSystemSettingsBackGemButton"
 	settings_back_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	settings_back_button.pressed.connect(show_main_page)
@@ -283,6 +308,7 @@ func _ensure_layout_initialized() -> void:
 
 func show_settings_page() -> void:
 	set_audio_levels(AudioPreferences.music_volume, AudioPreferences.sfx_volume)
+	loot_filter_slider.set_value_no_signal(LootPreferences.filter_level)
 	_clear_action_feedback()
 	_show_menu_action_result(settings_button, true, "system_menu.settings")
 	current_page = "settings"
@@ -303,7 +329,7 @@ func _refresh_audio_status() -> void:
 	music_status_label.text = "%d%%" % roundi(music_slider.value)
 	sfx_status_label.text = "%d%%" % roundi(sfx_slider.value)
 	if audio_save_note != null:
-		audio_save_note.text = "设置尚未保存，请关闭菜单后重试" if AudioPreferences.last_save_error != OK else "拖动即时生效，关闭菜单时自动保存"
+		audio_save_note.text = "设置尚未保存，请关闭菜单后重试" if AudioPreferences.last_save_error != OK or LootPreferences.last_save_error != OK else "拖动即时生效，关闭菜单时自动保存"
 
 
 func _on_music_toggled(enabled: bool) -> void:
@@ -439,6 +465,9 @@ func set_audio_levels(music: float, sfx: float) -> void:
 	_refresh_audio_status()
 
 func _ui_slider_changed(percent: float, channel: String) -> void:
+	if channel == "loot_filter":
+		LootPreferences.set_filter_level(roundi(percent))
+		return
 	_ui_emit_volume_setting(channel, clampf(percent / 100.0, 0.0, 1.0))
 	_refresh_audio_status()
 
@@ -447,6 +476,7 @@ func _ui_emit_volume_setting(channel: String, value: float) -> void:
 
 func _ui_flush_audio() -> void:
 	AudioPreferences.flush()
+	LootPreferences.flush()
 	_refresh_audio_status()
 
 func _ui_audio_visibility_changed() -> void:
@@ -455,3 +485,4 @@ func _ui_audio_visibility_changed() -> void:
 
 func _exit_tree() -> void:
 	AudioPreferences.flush()
+	LootPreferences.flush()

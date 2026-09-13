@@ -29,7 +29,7 @@ static func ensure_loaded() -> bool:
 	if not records is Dictionary or not palette is Dictionary:
 		push_error("R6_NAME_STYLE_SCHEMA_INVALID")
 		return false
-	for group: String in ["default", "wooma", "zuma", "redmoon", "ultra_rare"]:
+	for group: String in ["default", "wooma", "zuma", "redmoon", "ultra_rare", "potion", "divine_water"]:
 		if not palette.has(group) or not Color.html_is_valid(str(palette[group])):
 			push_error("R6_NAME_STYLE_PALETTE_INVALID")
 			return false
@@ -59,6 +59,15 @@ static func canonical_id(record: Dictionary) -> int:
 	return -1
 
 static func display_name(item: Dictionary, instance: Dictionary = {}) -> String:
+	var plain := _plain_display_name(item, instance)
+	var actual := instance if not instance.is_empty() else item
+	if actual.has("drop_instance_contract_id"):
+		var catalog := GameData.get_item_rules_record({"item_id": canonical_id(actual)})
+		if preload("res://scripts/item_drop_instance_rules.gd").is_affixed_instance(actual, catalog):
+			return "★" + plain.trim_prefix("★")
+	return plain
+
+static func _plain_display_name(item: Dictionary, instance: Dictionary = {}) -> String:
 	for record: Dictionary in [instance, item]:
 		for key: String in ["name", "display_name", "item_name", "itemName"]:
 			var value: Variant = record.get(key, "")
@@ -81,6 +90,13 @@ static func describe(item: Dictionary, instance: Dictionary = {}) -> Dictionary:
 		item_id = instance_item_id
 	var row: Dictionary = _records.get(str(item_id), {}) if not conflict else {}
 	var group := str(row.get("name_style", "default"))
+	var catalog := item if item.has("kind") else GameData.get_item_rules_record({"item_id":item_id})
+	if not conflict:
+		var effect := str(catalog.get("useEffect", ""))
+		if effect == "temporary_stat_buff":
+			group = "divine_water"
+		elif str(catalog.get("kind", "")) == "consumable" or effect in ["repair_oil", "war_god_oil", "blessing_oil"]:
+			group = "potion"
 	return {
 		"item_id": item_id,
 		"name": display_name(item, instance),

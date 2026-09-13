@@ -9,7 +9,9 @@
     "wooma": "#FFD86B",
     "zuma": "#FF943D",
     "redmoon": "#C48CFF",
-    "ultra_rare": "#C83B35"
+    "ultra_rare": "#C83B35",
+    "potion": "#A8D8FF",
+    "divine_water": "#70B8F0"
   },
   "tier_styles": {
     "WOOMA_GEAR": "wooma",
@@ -24,7 +26,10 @@
     "SPECIAL_RING": "ultra_rare",
     "FUNCTIONAL_SPECIAL": "ultra_rare",
     "RARE_LEGACY": "ultra_rare",
-    "BOOK_35": "ultra_rare"
+    "BOOK_35": "ultra_rare",
+    "POTION_COMMON": "potion",
+    "POTION_STRONG": "potion",
+    "SOLAR_CONSUMABLE": "potion"
   },
   "exact_id_overrides": {
     "80": "default",
@@ -204,7 +209,21 @@
     "260": "default",
     "920007": "default",
     "920023": "wooma",
-    "920032": "zuma"
+    "920032": "zuma",
+    "910001": "divine_water",
+    "910002": "divine_water",
+    "910003": "divine_water",
+    "910004": "divine_water",
+    "910005": "divine_water",
+    "910006": "divine_water",
+    "910008": "divine_water",
+    "910009": "divine_water",
+    "910010": "divine_water",
+    "910011": "divine_water",
+    "910012": "divine_water",
+    "910013": "divine_water",
+    "920019": "potion",
+    "920033": "potion"
   },
   "classification_document": {
     "name": "传奇1.76装备稀有度分类_21CQ核对版.docx",

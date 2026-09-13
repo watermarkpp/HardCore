@@ -1,0 +1,193 @@
+{
+	"rows": [
+		{
+			"action": "deposit.100.into.400",
+			"ms": 309.689
+		},
+		{
+			"action": "component.raw_read",
+			"ms": 3.679
+		},
+		{
+			"action": "component.validate_shared",
+			"ms": 10.006
+		},
+		{
+			"action": "component.validate_items",
+			"ms": 8.112
+		},
+		{
+			"action": "component.catalog500",
+			"ms": 12.343
+		},
+		{
+			"action": "component.drop500",
+			"ms": 7.78
+		},
+		{
+			"action": "component.raw_read",
+			"ms": 5.154
+		},
+		{
+			"action": "component.validate_shared",
+			"ms": 9.495
+		},
+		{
+			"action": "component.validate_items",
+			"ms": 8.157
+		},
+		{
+			"action": "component.catalog500",
+			"ms": 12.902
+		},
+		{
+			"action": "component.drop500",
+			"ms": 7.935
+		},
+		{
+			"action": "component.raw_read",
+			"ms": 5.058
+		},
+		{
+			"action": "component.validate_shared",
+			"ms": 9.505
+		},
+		{
+			"action": "component.validate_items",
+			"ms": 8.28
+		},
+		{
+			"action": "component.catalog500",
+			"ms": 14.309
+		},
+		{
+			"action": "component.drop500",
+			"ms": 7.55
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 79.919
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 15.189
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 27.939
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 17.6
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 24.127
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 15.983
+		},
+		{
+			"action": "withdraw.100.from.500",
+			"ms": 267.85
+		},
+		{
+			"action": "deposit.100.into.400",
+			"ms": 279.18
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 43.876
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 14.618
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 21.87
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 13.533
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 20.947
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 14.526
+		},
+		{
+			"action": "withdraw.100.from.500",
+			"ms": 258.74
+		},
+		{
+			"action": "deposit.100.into.400",
+			"ms": 271.035
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 45.518
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 15.085
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 33.446
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 14.993
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 24.807
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 15.477
+		},
+		{
+			"action": "withdraw.100.from.500",
+			"ms": 255.759
+		},
+		{
+			"action": "deposit.100.into.400",
+			"ms": 293.424
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 49.224
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 15.451
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 23.121
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 14.878
+		},
+		{
+			"action": "warehouse.open.saved500",
+			"ms": 22.616
+		},
+		{
+			"action": "bank.read.saved500",
+			"ms": 14.799
+		},
+		{
+			"action": "withdraw.100.from.500",
+			"ms": 253.789
+		}
+	],
+	"scope": "real isolated storage with 500 validated drop instances"
+}

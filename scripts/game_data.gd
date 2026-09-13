@@ -3775,34 +3775,8 @@ func service_home_point(red_name := false) -> Vector2i:
 
 
 func service_profession_stats(profession_name: String, level_value: int) -> Dictionary:
-	var n := maxi(1, level_value)
-	if profession_name == ProfessionRules.PROFESSIONS[1]:
-		var wizard_hp_divisor := float(service_setup_value("LevelValueOfWizardHP", 15))
-		var wizard_hp_rate := float(service_setup_value("LevelValueOfWizardHPRate", 1.8))
-		return {
-			"max_hp": 14 + int(round(((float(n) / wizard_hp_divisor + wizard_hp_rate) * float(n)))),
-			"max_mp": 13 + int(round((float(n) / 5.0 + 2.0) * 2.2 * float(n))),
-			"attack_min": 1,
-			"attack_max": 3,
-		}
-	if profession_name == ProfessionRules.PROFESSIONS[2]:
-		var tao_hp_divisor := float(service_setup_value("LevelValueOfTaosHP", 6))
-		var tao_hp_rate := float(service_setup_value("LevelValueOfTaosHPRate", 2.5))
-		var tao_mp_divisor := float(service_setup_value("LevelValueOfTaosMP", 8))
-		return {
-			"max_hp": 14 + int(round(((float(n) / tao_hp_divisor + tao_hp_rate) * float(n)))),
-			"max_mp": 13 + int(round(((float(n) / tao_mp_divisor) * 2.2 * float(n)))),
-			"attack_min": 1,
-			"attack_max": 4,
-		}
-	var warrior_hp_divisor := float(service_setup_value("LevelValueOfWarrHP", 4))
-	var warrior_hp_rate := float(service_setup_value("LevelValueOfWarrHPRate", 4.5))
-	return {
-		"max_hp": 14 + int(round(((float(n) / warrior_hp_divisor + warrior_hp_rate + float(n) / 20.0) * float(n)))),
-		"max_mp": 11 + int(round(float(n) * 3.5)),
-		"attack_min": 2,
-		"attack_max": 5,
-	}
+	# Compatibility API, same authoritative computation as every other consumer.
+	return ProfessionRules.stats_for_level(profession_name, level_value)
 
 
 func get_profession_skills(profession: String) -> Array:

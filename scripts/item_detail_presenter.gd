@@ -107,7 +107,8 @@ func show_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary 
 		return
 	if title_label == null or detail_label == null:
 		return
-	title_label.text = str(instance.get("name", item.get("name", "未知物品")))
+	title_label.text = UIItemNameStyle.display_name(item, instance)
+	UIItemNameStyle.apply_label_style(title_label, UIItemNameStyle.describe(item, instance))
 	detail_label.text = AttributeHelp.decorate(format_item(item, instance, context))
 	visible = true
 	_place_from_context(context)
@@ -406,7 +407,7 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		var maximum_durability := int(instance.get("max_durability", item.get("maxDurability", item.get("max_durability", 0))))
 		if maximum_durability > 0:
 			lines.append("耐久：%d/%d" % [current_durability, maximum_durability])
-		var stats_text := _stat_line(item)
+		var stats_text := _stat_line(item, instance)
 		if not stats_text.is_empty():
 			lines.append(stats_text)
 		var advanced_line := _advanced_stat_line(item, instance)
@@ -434,11 +435,29 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 	return "\n".join(lines)
 
 
-static func _stat_line(item: Dictionary) -> String:
+const RANGE_STATS := {"attack_min":"attackMin", "attack_max":"attackMax", "magic_min":"magicMin", "magic_max":"magicMax", "tao_min":"taoMin", "tao_max":"taoMax", "defense_min":"defenseMin", "defense_max":"defenseMax", "magic_defense_min":"mdefMin", "magic_defense_max":"mdefMax"}
+
+static func _stat_line(item: Dictionary, instance: Dictionary = {}) -> String:
+	var displayed := item.duplicate()
+	# Drop rolls are additive to catalog attributes. Legacy instance modifiers
+	# replace catalog modifiers, matching the combat stat consumer.
+	var containers: Array = [instance.get("modifiers", item.get("modifiers", []))]
+	if instance.has("drop_instance_contract_id"):
+		containers = [item.get("modifiers", []), instance.get("modifiers", [])]
+	for container: Variant in containers:
+		if not container is Array:
+			continue
+		for modifier: Variant in container:
+			if not modifier is Dictionary or str(modifier.get("op", "add")) != "add":
+				continue
+			var stat := str(modifier.get("stat", ""))
+			if RANGE_STATS.has(stat):
+				var field := str(RANGE_STATS[stat])
+				displayed[field] = int(_value(displayed.get(field))) + int(modifier.get("value", 0))
 	var parts: Array[String] = []
 	for pair: Array in [["攻击", "attackMin", "attackMax"], ["魔法", "magicMin", "magicMax"], ["道术", "taoMin", "taoMax"], ["防御", "defenseMin", "defenseMax"], ["魔防", "mdefMin", "mdefMax"]]:
-		var minimum := int(_value(item.get(pair[1])))
-		var maximum := int(_value(item.get(pair[2])))
+		var minimum := int(_value(displayed.get(pair[1])))
+		var maximum := int(_value(displayed.get(pair[2])))
 		if minimum != 0 or maximum != 0:
 			parts.append("%s %d-%d" % [pair[0], minimum, maximum])
 	var rows: Array[String] = []
@@ -449,6 +468,19 @@ static func _stat_line(item: Dictionary) -> String:
 
 static func _usage_lines(item: Dictionary) -> Array[String]:
 	var lines: Array[String] = []
+	if str(item.get("useEffect", "")) == "temporary_stat_buff":
+		var effect_profile: Dictionary = item.get("effectProfile", {})
+		var modifiers: Dictionary = effect_profile.get("modifiers", {})
+		var names := {"max_hp":"最大生命值", "max_mp":"最大魔法值", "attack_min":"攻击", "attack_max":"攻击", "magic_min":"魔法", "magic_max":"魔法", "tao_min":"道术", "tao_max":"道术", "attack_speed_tier":"速度", "attack_speed_percent":"攻击速度", "cast_speed_percent":"施法速度"}
+		var seen: Dictionary = {}
+		for stat: String in modifiers:
+			if not names.has(stat): continue
+			var text := "使用后%s%s" % [names[stat], _modifier_value_text(stat, "add", float(modifiers[stat]))]
+			if not seen.has(text):
+				lines.append(text)
+				seen[text] = true
+		lines.append("持续%d秒，同类效果刷新持续时间。" % int(effect_profile.get("durationSeconds", 0)))
+		return lines
 	var stats: Dictionary = item.get("stats", {}) if item.get("stats", {}) is Dictionary else {}
 	var hp := int(_value(item.get("restoreHealth", item.get("healthRestore", stats.get("HP", 0)))))
 	var mp := int(_value(item.get("restoreMana", item.get("manaRestore", stats.get("MP", 0)))))
@@ -490,7 +522,7 @@ static func _advanced_stat_line(item: Dictionary, instance: Dictionary = {}) -> 
 		if critical != 0.0:
 			parts.append("暴击 +%d%%" % int(critical * 100.0))
 	elif modifiers is Array:
-		parts.append_array(_modifier_lines_from_container(modifiers))
+		parts.append_array(_modifier_lines_from_container(modifiers, true))
 	return "　".join(parts)
 
 
@@ -498,20 +530,20 @@ static func _instance_modifier_lines(instance: Dictionary) -> Array[String]:
 	var lines: Array[String] = []
 	var seen: Dictionary = {}
 	for container: Variant in [instance.get("modifiers", null), instance.get("random_modifiers", null)]:
-		for line: String in _modifier_lines_from_container(container):
+		for line: String in _modifier_lines_from_container(container, true):
 			if not seen.has(line):
 				seen[line] = true
 				lines.append(line)
 	var drop_affix: Variant = instance.get("drop_affix", {})
 	if drop_affix is Dictionary and bool((drop_affix as Dictionary).get("applied", false)):
-		for line: String in _modifier_lines_from_container([drop_affix]):
+		for line: String in _modifier_lines_from_container([drop_affix], true):
 			if not seen.has(line):
 				seen[line] = true
 				lines.append(line)
 	return lines
 
 
-static func _modifier_lines_from_container(container: Variant) -> Array[String]:
+static func _modifier_lines_from_container(container: Variant, omit_ranges := false) -> Array[String]:
 	var entries: Array[Dictionary] = []
 	if container is Array:
 		for raw_entry: Variant in container:
@@ -525,6 +557,8 @@ static func _modifier_lines_from_container(container: Variant) -> Array[String]:
 	var result: Array[String] = []
 	for entry: Dictionary in entries:
 		var stat := str(entry.get("stat", ""))
+		if omit_ranges and RANGE_STATS.has(stat) and str(entry.get("op", "add")) == "add":
+			continue
 		if stat.is_empty() or not entry.has("value"):
 			continue
 		var value_variant: Variant = entry.get("value")

@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://tests/progression_loot_20260913/map_growth_test.gd" id="1"]
+[node name="MapGrowthTest" type="Node"]
+script = ExtResource("1")

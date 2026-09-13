@@ -1,0 +1,67 @@
+{
+	"rows": [
+		{
+			"operation": "synchronous_bank",
+			"wall_ms": 322.171
+		},
+		{
+			"operation": "synchronous_bank",
+			"wall_ms": 294.492
+		},
+		{
+			"expected_success": true,
+			"frames": 28,
+			"max_gap_ms": 21.055,
+			"operation": "prepared_bank",
+			"synchronous_submit_ms": 0.069,
+			"wall_ms": 233.311
+		},
+		{
+			"expected_success": true,
+			"frames": 29,
+			"max_gap_ms": 17.09,
+			"operation": "prepared_bank",
+			"synchronous_submit_ms": 0.035,
+			"wall_ms": 221.175
+		},
+		{
+			"expected_success": false,
+			"frames": 32,
+			"max_gap_ms": 18.397,
+			"operation": "prepared_bank",
+			"synchronous_submit_ms": 0.027,
+			"wall_ms": 249.872
+		},
+		{
+			"expected_success": false,
+			"frames": 29,
+			"max_gap_ms": 163.093,
+			"operation": "prepared_bank",
+			"synchronous_submit_ms": 0.039,
+			"wall_ms": 375.794
+		},
+		{
+			"expected_success": false,
+			"frames": 28,
+			"max_gap_ms": 118.803,
+			"operation": "prepared_bank",
+			"synchronous_submit_ms": 0.031,
+			"wall_ms": 313.796
+		},
+		{
+			"expected_success": false,
+			"frames": 28,
+			"max_gap_ms": 15.317,
+			"operation": "prepared_bank",
+			"synchronous_submit_ms": 0.032,
+			"wall_ms": 208.398
+		},
+		{
+			"frames": 29,
+			"max_gap_ms": 23.095,
+			"operation": "actual_bank_button",
+			"synchronous_submit_ms": 5.518,
+			"wall_ms": 246.384
+		}
+	]
+}

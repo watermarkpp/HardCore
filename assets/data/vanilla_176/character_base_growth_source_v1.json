@@ -1,0 +1,34 @@
+{
+  "contract_id": "character.base_growth.primary.v1",
+  "authority_lane": "server_rules",
+  "distribution": "source.original_gameofmir.server_suite",
+  "tier": "primary",
+  "source_procedure": "TBaseObject.RecalcLevelAbilitys",
+  "hit_procedure": "TBaseObject.RecalcHitSpeed",
+  "sources": [
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas",
+      "sha256": "65d59610b8a1f7f4dcf76058a753651d1a97997ad273fc4df8e468e65a989262"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirServer/Mir200/!Setup.txt",
+      "sha256": "c1dd4a6de2a53be3f2bc520b8d42571a0112c4fa58f05292c869942fbd8e146b"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+      "sha256": "9e1505be616d55a362151150ba92712b9c8439f0a32e35b13c666ae07a33c085"
+    }
+  ],
+  "setup_values": {
+    "LevelValueOfTaosHP": "6",
+    "LevelValueOfTaosHPRate": "2.5",
+    "LevelValueOfTaosMP": "8",
+    "LevelValueOfWizardHP": "15",
+    "LevelValueOfWizardHPRate": "1.8",
+    "LevelValueOfWarrHP": "4",
+    "LevelValueOfWarrHPRate": "4.5"
+  },
+  "runtime": "scripts/generated/character_base_growth_v1.gd",
+  "rounding": "Delphi nearest even",
+  "lower_priority_sources_used": []
+}

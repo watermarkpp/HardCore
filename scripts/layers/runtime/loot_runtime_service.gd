@@ -39,6 +39,7 @@ const FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID := {
 # V5 trace is opt-in and debug-build-only. It never fabricates actor IDs.
 var _v5_trace_enabled := OS.has_feature("debug") and OS.get_environment("HARDCORE_DPV2_TRACE") == "1"
 var _v5_roll_sequence := 0
+var _user_balance := preload("res://scripts/drop/user_drop_balance.gd").new()
 var _overflow_telemetry_by_monster_id: Dictionary = {}
 var _lean_profile_by_monster_id: Dictionary = {}
 var _lean_probability_by_key: Dictionary = {}
@@ -46,10 +47,24 @@ var _lean_reward_by_slot_uid: Dictionary = {}
 var _lean_cache_misses := {"profile": 0, "probability": 0, "reward": 0}
 
 
+func _production_profile(monster_id: int) -> Dictionary:
+	return _user_balance.extend_profile(GameData.dpv2_direct_profile(monster_id), monster_id)
+
+
+func _production_probability(monster_id: int, slot_uid: String) -> Dictionary:
+	var row: Dictionary = _user_balance.records.get(slot_uid, {})
+	var source_id := int(row.get("source_monster_id", monster_id))
+	var source_uid := str(row.get("source_uid", slot_uid))
+	var probability := GameData.dpv2_effective_slot_probability(source_id, source_uid)
+	if bool(probability.get("ok", false)):
+		probability = _apply_drop_probability_policy(probability, GameData.canonical_monster_classification(source_id))
+	return _user_balance.apply(probability, slot_uid, monster_id)
+
+
 func _lean_profile(monster_id: int) -> Dictionary:
 	if not _lean_profile_by_monster_id.has(monster_id):
 		_lean_cache_misses["profile"] = int(_lean_cache_misses.get("profile", 0)) + 1
-		_lean_profile_by_monster_id[monster_id] = GameData.dpv2_direct_profile(monster_id)
+		_lean_profile_by_monster_id[monster_id] = _production_profile(monster_id)
 	return _lean_profile_by_monster_id.get(monster_id, {})
 
 
@@ -67,7 +82,7 @@ func _lean_probability(monster_id: int, slot_uid: String) -> Dictionary:
 	]
 	if not _lean_probability_by_key.has(cache_key):
 		_lean_cache_misses["probability"] = int(_lean_cache_misses.get("probability", 0)) + 1
-		_lean_probability_by_key[cache_key] = GameData.dpv2_effective_slot_probability(
+		_lean_probability_by_key[cache_key] = _production_probability(
 			monster_id,
 			slot_uid,
 		)
@@ -149,8 +164,9 @@ func roll_monster_drops(
 			),
 			"identity_key": "canonical_monster_id",
 			"fallback_forbidden": true,
+			"user_balance_authority_id": "drop.user_balance.v80",
 			"probability_formula": (
-				"SPB enabled: effective x required 1x; "
+				"SPB enabled: effective x required 1x x runtime denominator policy x user balance; "
 				+ "SPB disabled: base x global exactly once"
 			),
 		},
@@ -203,7 +219,7 @@ func roll_monster_drops(
 	# The direct profile is joined by canonical_monster_id. Its display/profile
 	# token is telemetry only and is never used to locate a runtime drop table.
 	var profile := (
-		GameData.dpv2_direct_profile(resolved_id)
+		_production_profile(resolved_id)
 		if include_audit
 		else _lean_profile(resolved_id)
 	)
@@ -252,7 +268,7 @@ func roll_monster_drops(
 		var slot: Dictionary = raw_slot
 		var slot_uid := str(slot.get("slot_uid", ""))
 		var probability := (
-			GameData.dpv2_effective_slot_probability(resolved_id, slot_uid)
+			_production_probability(resolved_id, slot_uid)
 			if include_audit
 			else _lean_probability(resolved_id, slot_uid)
 		)
@@ -305,27 +321,13 @@ func roll_monster_drops(
 		return result
 
 	var successful_rewards: Array = []
-	var monster_classification := GameData.canonical_monster_classification(resolved_id)
 	for raw_resolved: Variant in resolved_slots:
 		var resolved: Dictionary = raw_resolved
 		var slot: Dictionary = resolved.get("slot", {})
 		var probability: Dictionary = resolved.get("probability", {})
-		var denominator_multiplier := _drop_denominator_multiplier(
-			probability,
-			monster_classification,
-		)
-		if include_audit and denominator_multiplier > 1:
-			probability = _apply_drop_probability_policy(
-				probability,
-				monster_classification,
-			)
 		var reward: Dictionary = resolved.get("reward", {})
 		var slot_uid := str(slot.get("slot_uid", ""))
-		var denominator := (
-			int(probability.get("final_denominator", 0))
-			if include_audit and denominator_multiplier > 1
-			else int(probability.get("final_denominator", 0)) * denominator_multiplier
-		)
+		var denominator := int(probability.get("final_denominator", 0))
 		var numerator := int(probability.get("final_numerator", 0))
 		result.rng_roll_count += 1
 		var draw := rng.randi_range(1, denominator)
@@ -706,6 +708,10 @@ func _build_attempt(
 		"drop_denominator_multiplier": int(
 			probability.get("drop_denominator_multiplier", 1)
 		),
+		"user_balance_reason": str(probability.get("user_balance_reason", "")),
+		"user_balance_source_uid": str(probability.get("user_balance_source_uid", "")),
+		"pre_user_balance_numerator": int(probability.get("pre_user_balance_numerator", 0)),
+		"pre_user_balance_denominator": int(probability.get("pre_user_balance_denominator", 0)),
 		"draw": draw,
 		"draw_success": success,
 		"success": success,

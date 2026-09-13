@@ -549,7 +549,8 @@ func _bind_sell_card_identity(
 ) -> void:
 	var catalog_name := str(record.get("name", "物品"))
 	var count := maxi(1, int(record.get("count", 1)))
-	var display_name := "%s ×%d" % [catalog_name, count] if count > 1 else catalog_name
+	var presented_name := UIItemNameStyleScript.display_name(GameData.get_item_rules_record(record), record)
+	var display_name := "%s ×%d" % [presented_name, count] if count > 1 else presented_name
 	card.name = "SellCard_%d" % inventory_index
 	card.set_meta("trade_mode", "sell")
 	card.set_meta("inventory_index", inventory_index)

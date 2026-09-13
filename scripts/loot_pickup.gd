@@ -17,6 +17,9 @@ var item_record: Dictionary = {}
 var gold_amount := 0
 var target: PlayerCharacter
 var icon_sprite: Sprite2D
+var name_label: Label
+var _filter_threshold := 0
+var filtered := false
 var _overweight_retry_remaining := 0.0
 var _collection_pending := false
 var _collection_authority_check_count := 0
@@ -178,7 +181,7 @@ func _ready() -> void:
 		icon_sprite.position = Vector2(0, -5)
 		add_child(icon_sprite)
 	var label := Label.new()
-	label.text = "金币 %d" % gold_amount if gold_amount > 0 else item_name
+	label.text = "金币 %d" % gold_amount if gold_amount > 0 else ("★" if LootVisualEffectScript.affix_is_valid(item_record) else "") + item_name
 	label.position = Vector2(-48, -36)
 	label.size = Vector2(96, 24)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -194,9 +197,23 @@ func _ready() -> void:
 	label.add_theme_constant_override("shadow_offset_x", 1)
 	label.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(label)
+	name_label = label
+	var catalog: Dictionary = item_record.get("output_record", {})
+	if gold_amount <= 0 and str(catalog.get("kind", "")) == "equipment" and not LootVisualEffectScript.affix_is_valid(item_record):
+		_filter_threshold = LootPreferences.filter_threshold_for_item(LootVisualEffectScript.exact_item_id(item_record))
+	LootPreferences.filter_changed.connect(_apply_filter)
+	_apply_filter(LootPreferences.filter_level)
 	if icon_sprite == null:
 		RuntimeDiagnostics.increment_performance_counter(&"loot_fallback_redraw_requests")
 		queue_redraw()
+
+
+func _apply_filter(level: int) -> void:
+	filtered = _filter_threshold > 0 and level >= _filter_threshold
+	if is_instance_valid(name_label):
+		name_label.visible = not filtered
+	if not filtered:
+		_overweight_retry_remaining = 0.0
 
 
 func _configure_instance_visual() -> void:
@@ -248,7 +265,7 @@ func set_collection_manager(manager: Node) -> void:
 ## emits the same signals in the same stable candidate order.
 func manager_evaluate_collection(in_range: bool, delta_seconds: float) -> bool:
 	manager_advance_time(delta_seconds)
-	if is_queued_for_deletion():
+	if is_queued_for_deletion() or filtered:
 		return false
 	if not in_range:
 		manager_reset_attempt_context()

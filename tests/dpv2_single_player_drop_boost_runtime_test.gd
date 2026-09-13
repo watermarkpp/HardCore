@@ -319,7 +319,8 @@ func _test_production_service_uses_effective_probability() -> void:
 	assert(not attempt.is_empty())
 	assert(Vector2i(attempt.base_numerator, attempt.base_denominator) == Vector2i(1, 5000))
 	assert(Vector2i(attempt.effective_numerator, attempt.effective_denominator) == Vector2i(1, 200))
-	assert(Vector2i(attempt.final_numerator, attempt.final_denominator) == Vector2i(1, 200))
+	# v80 explicitly multiplies the current elite high-tier item draw by four.
+	assert(Vector2i(attempt.final_numerator, attempt.final_denominator) == Vector2i(1, 50))
 	assert(str(attempt.get("boost_policy", "")) == "AUTO_BOOST")
 	assert(str(attempt.get("global_preset", "")) == "1x")
 	assert(int(attempt.get("global_scale_numerator", 0)) == 1)

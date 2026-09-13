@@ -1541,6 +1541,7 @@ func _draw() -> void:
 
 func _apply_profile_stats() -> void:
 	var old_max := maxi(1, max_hp)
+	var previous_hp := current_hp
 	# A lethal physical hit applies incoming durability before it marks `_dead`.
 	# That durability transaction emits profile_changed synchronously. Preserve
 	# an already-zero HP value during that transition; treating zero as a full
@@ -1577,7 +1578,7 @@ func _apply_profile_stats() -> void:
 		_last_temporary_item_buff_revision = buff_revision
 		# When a buff activates or expires, keep the absolute current values
 		# and only clamp to the new caps.
-		current_hp = mini(current_hp, max_hp)
+		current_hp = 0 if _dead or hp_was_zero else mini(previous_hp, max_hp)
 		current_mp = mini(current_mp, max_mp)
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
