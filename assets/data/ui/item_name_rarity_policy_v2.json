@@ -1,0 +1,44 @@
+{
+  "contract_id": "ui.item_name.rarity.policy.v2",
+  "authority": "user_20260913_hardcore_1_0_name_color_request",
+  "scope": "presentation_only_no_drop_or_equipment_attribute_changes",
+  "membership_source": "assets/data/drop/dpv2_item_tier_authority_v1.json",
+  "equipment_membership_source": "assets/data/equipment_attribute_master.json",
+  "palette": {
+    "default": "#E6DDCB",
+    "wooma": "#FFD86B",
+    "zuma": "#FF943D",
+    "redmoon": "#C48CFF",
+    "ultra_rare": "#C48CFF"
+  },
+  "tier_styles": {
+    "WOOMA_GEAR": "wooma",
+    "PRAYER_MEMORY": "wooma",
+    "ZUMA_GEAR": "zuma",
+    "HIGH_CLASS_WEAPON": "zuma",
+    "MAGICBLOOD_RAINBOW": "zuma",
+    "REDMOON_SET": "redmoon",
+    "EXPANDED_HIGH_WEAPON": "ultra_rare",
+    "NEW_CLOTHES": "ultra_rare",
+    "LEGENDARY_WEAPON": "ultra_rare",
+    "SPECIAL_RING": "ultra_rare",
+    "FUNCTIONAL_SPECIAL": "ultra_rare",
+    "RARE_LEGACY": "ultra_rare",
+    "BOOK_35": "ultra_rare"
+  },
+  "exact_id_overrides": {
+    "99": "wooma",
+    "100": "wooma",
+    "101": "wooma",
+    "102": "wooma",
+    "104": "wooma",
+    "103": "zuma",
+    "151": "zuma",
+    "192": "zuma",
+    "250": "ultra_rare",
+    "251": "ultra_rare",
+    "920007": "default",
+    "920023": "wooma",
+    "920032": "zuma"
+  }
+}

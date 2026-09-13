@@ -8,6 +8,7 @@ extends Node2D
 ## construction, so the pickup remains the sole lifetime owner.
 const TIER_AUTHORITY_PATH := "res://assets/data/drop/dpv2_item_tier_authority_v1.json"
 const ItemDropInstanceRulesScript := preload("res://scripts/item_drop_instance_rules.gd")
+const ItemNameStyle := preload("res://scripts/ui_item_name_style.gd")
 const VISUAL_CONTRACT := "loot.ground_visual.tier_beam_affix_label.v1"
 const AFFIX_CONTRACT_ID := "item.drop.affix.v1"
 const GOLDEN_BEAM_COLOR := Color("f6c75b")
@@ -103,9 +104,10 @@ static func has_golden_beam_for_record(identity_record: Dictionary) -> bool:
 
 
 static func label_color_for_record(identity_record: Dictionary, template_color: Color) -> Color:
-	# This decision is per instance.  Never cache it with the template descriptor
-	# because two drops of one item ID can differ in their W7 affix.
-	return AFFIX_LABEL_COLOR if affix_is_valid(identity_record) else template_color
+	# Names share the same exact-ID palette as the inventory and pickup toast.
+	# The instance's affix and golden beam remain independent visual metadata.
+	var id := exact_item_id(identity_record)
+	return ItemNameStyle.describe({"item_id": id}).color if id > 0 else template_color
 
 
 static func affix_is_valid(identity_record: Dictionary) -> bool:

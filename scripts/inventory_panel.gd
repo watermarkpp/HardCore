@@ -49,6 +49,7 @@ const CONTEXT_MENU_ENABLED := false
 var item_grid: GridContainer
 var detail_label: RichTextLabel
 var equipment_stats_label: RichTextLabel
+var character_attribute_help: Node
 var bag_summary_label: Label
 var character_preview: Control
 var equipment_buttons: Dictionary = {}
@@ -172,19 +173,26 @@ func _build_attribute_panel() -> void:
 	var panel := _section_panel("AttributePanel", Vector2(32, 72), Vector2(250, 566))
 	var title := _section_title("人物属性", 250)
 	title.name = "AttributeTitle"
+	title.hide()
+	title.set_meta("calibration_layout_revision", 1)
 	panel.add_child(title)
 	equipment_stats_label = RichTextLabel.new()
 	equipment_stats_label.name = "CharacterStats"
 	equipment_stats_label.set_meta("calibration_runtime_text", true)
-	equipment_stats_label.position = Vector2(16, 44)
-	equipment_stats_label.size = Vector2(218, 220)
+	equipment_stats_label.set_meta("calibration_layout_revision", 1)
+	equipment_stats_label.set_meta("ui_dismiss_protected", true)
+	equipment_stats_label.position = Vector2(16, 16)
+	equipment_stats_label.size = Vector2(218, 534)
 	equipment_stats_label.fit_content = false
-	equipment_stats_label.scroll_active = true
+	equipment_stats_label.scroll_active = false
+	equipment_stats_label.bbcode_enabled = true
 	equipment_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	equipment_stats_label.theme_type_variation = "GothicDetailText"
 	equipment_stats_label.add_theme_font_size_override("normal_font_size", 16)
 	equipment_stats_label.add_theme_color_override("font_color", Color("ddc9a9"))
 	panel.add_child(equipment_stats_label)
+	character_attribute_help = preload("res://scripts/item_attribute_help.gd").attach(panel, equipment_stats_label)
+	character_attribute_help.explanation_resolver = _character_attribute_explanation
 	var divider := HSeparator.new()
 	divider.position = Vector2(16, 270)
 	divider.size = Vector2(218, 8)
@@ -546,12 +554,20 @@ func _refresh_equipment_slots() -> void:
 func _refresh_character_stats() -> void:
 	if equipment_stats_label == null:
 		return
+	if character_attribute_help != null:
+		character_attribute_help.dismiss()
 	equipment_stats_label.text = _character_stats_text(PlayerState.computed_stats)
 
 
 func _character_stats_text(stats: Dictionary) -> String:
-	return "%s　等级 %d\n生命 %d　魔法 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d　幸运 %d\n远程与魔法躲避 %d%%　攻击速度 %+d\n暴击 %.1f%%\n穿戴重量 %d/%d" % [
-		PlayerState.profession, PlayerState.level,
+	var help := preload("res://scripts/item_attribute_help.gd")
+	var font_size := equipment_stats_label.get_theme_font_size("normal_font_size")
+	var character_name := PlayerState.character_name.replace("[", "[lb]")
+	var heading := "[font_size=%d]%s[/font_size]\n\n[font_size=%d]%s %s[/font_size]\n\n" % [
+		font_size + 3, character_name, font_size + 1, PlayerState.profession,
+		help.decorate("等级：%d" % PlayerState.level),
+	]
+	var body := "生命 %d　魔法值 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d\n幸运 %d\n远程与魔法躲避 %d%%\n速度 %+d\n暴击 %.1f%%\n穿戴重量 %d/%d" % [
 		int(stats.get("max_hp", 0)), int(stats.get("max_mp", 0)),
 		int(stats.get("attack_min", 0)), int(stats.get("attack_max", 0)),
 		int(stats.get("magic_min", 0)), int(stats.get("magic_max", 0)),
@@ -563,6 +579,13 @@ func _character_stats_text(stats: Dictionary) -> String:
 		float(stats.get("critical_chance", 0.0)) * 100.0,
 		int(stats.get("wear_weight", 0)), int(stats.get("max_wear_weight", 0)),
 	]
+	return heading + help.decorate(body)
+
+
+func _character_attribute_explanation(term: String) -> String:
+	if term == "等级":
+		return "%d/%d" % [PlayerState.experience, PlayerState.experience_to_next_level()]
+	return ""
 
 
 func _refresh_bag_grid() -> void:

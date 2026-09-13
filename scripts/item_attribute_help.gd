@@ -3,6 +3,8 @@ extends Node
 ## Local attribute links, never external URLs or data-supplied executable text.
 const TouchScroll := preload("res://scripts/touch_scroll_support.gd")
 const ENTRIES := {
+	"等级": "人物当前等级。升级所需经验随等级变化。",
+	"穿戴重量": "当前已穿戴装备的重量／角色可承受的穿戴负重上限。",
 	"攻击": "决定物理攻击的伤害范围。下限与上限之间的实际取值还会受到幸运或诅咒影响，命中后再计算目标防御。",
 	"魔法": "法师技能使用的魔法攻击力。具体伤害还由技能等级、技能公式和目标魔防共同决定。",
 	"道术": "道士技能使用的道术能力。影响相关技能的伤害或效果，具体按该技能规则计算。",
@@ -37,6 +39,7 @@ var _layer: CanvasLayer
 var _bubble: Panel
 var _copy: RichTextLabel
 var active_attribute := ""
+var explanation_resolver := Callable()
 var _anchor := Vector2.ZERO
 var _host_rect := Rect2()
 
@@ -102,7 +105,11 @@ func _on_meta_clicked(meta: Variant) -> void:
 	_ensure_bubble()
 	active_attribute = term
 	_host_rect = host.get_global_rect()
-	_copy.text = term + "\n" + str(ENTRIES[term])
+	var explanation := str(ENTRIES[term])
+	if explanation_resolver.is_valid():
+		var resolved: String = explanation_resolver.call(term)
+		if not resolved.is_empty(): explanation = resolved
+	_copy.text = term + "\n" + explanation
 	var viewport_rect := host.get_viewport_rect().grow(-10.0)
 	var width := minf(300.0, viewport_rect.size.x)
 	_copy.size = Vector2(maxf(1.0, width - 24.0), 1.0)

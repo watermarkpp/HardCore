@@ -2197,13 +2197,7 @@ func set_auto_target_enabled(enabled: bool) -> void:
 
 
 func show_loot(item_name: String) -> void:
-	show_loot_feedback({
-		"event_type": "pickup_success",
-		"item_name": item_name,
-		"count": 1,
-		"item_kind": GameData.get_item_kind(item_name),
-		"emphasis": "normal",
-	})
+	show_loot_batch([item_name])
 
 
 func show_loot_batch(item_names: Array) -> void:
@@ -2211,10 +2205,12 @@ func show_loot_batch(item_names: Array) -> void:
 		return
 	var events: Array = []
 	for raw_name: Variant in item_names:
-		var item_name := str(raw_name)
+		var identity: Dictionary = raw_name if raw_name is Dictionary else GameData.get_item_record(str(raw_name))
+		var item_name := str(raw_name.get("item_name", "")) if raw_name is Dictionary else str(raw_name)
 		events.append({
 			"event_type": "pickup_success",
 			"item_name": item_name,
+			"item_id": preload("res://scripts/ui_item_name_style.gd").canonical_id(identity),
 			"count": 1,
 			"item_kind": GameData.get_item_kind(item_name),
 			"emphasis": "normal",

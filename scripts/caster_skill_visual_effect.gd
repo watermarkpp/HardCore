@@ -383,6 +383,9 @@ func _replace_existing_laser_visual() -> void:
 
 func _install_single() -> void:
 	var sprite := AnimationPlayerScript.new()
+	var presentation_overrides := {}
+	if skill_id == "wizard.repulsion_ring":
+		presentation_overrides["anchor_policy"] = "center_sequence_bounds_on_geometry_origin"
 	if not sprite.configure(
 		skill_id,
 		direction,
@@ -392,7 +395,8 @@ func _install_single() -> void:
 		_desired_sprite_footprint_px,
 		_desired_sprite_axis_extent_px,
 		_visual_axis_screen_px,
-		_desired_sprite_cross_axis_extent_px
+		_desired_sprite_cross_axis_extent_px,
+		presentation_overrides
 	):
 		sprite.queue_free()
 		return

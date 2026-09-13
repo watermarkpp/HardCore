@@ -1,15 +1,19 @@
 {
   "schema_version": 1,
   "contract_id": "ui.item_name.rarity.v1",
-  "scope": "title_color_only_no_gameplay_mutation",
+  "scope": "name_color_in_ui_ground_and_pickup_no_gameplay_mutation",
   "membership_source": "assets/data/drop/dpv2_item_tier_authority_v1.json",
+  "hash_encoding": "utf8_lf",
   "membership_source_sha256": "8f7ad07fade03033c336bdd32633670e5f3224a4a4be109c41d71ed794235b7a",
-  "baseline_sha": "519dca099e0ac134f3e6e753ed27e2aeeb659e9f",
+  "equipment_membership_source": "assets/data/equipment_attribute_master.json",
+  "equipment_membership_source_sha256": "a13f1a53f4fcd87f4a260384fab9fb391479b2ca7a3aecd408da178c91e8de27",
+  "presentation_policy": "assets/data/ui/item_name_rarity_policy_v2.json",
+  "presentation_policy_sha256": "1bc478f11ef92728b4c0d6ae7d8942f5a838f9d5282976e187438af32d416be5",
   "palette": {
     "default": "#E6DDCB",
     "wooma": "#FFD86B",
-    "zuma": "#C6A04B",
-    "redmoon": "#FF943D",
+    "zuma": "#FF943D",
+    "redmoon": "#C48CFF",
     "ultra_rare": "#C48CFF"
   },
   "records": {
@@ -111,47 +115,47 @@
     "99": {
       "canonical_name": "炼狱",
       "source_tier": "EQUIP_MID",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "100": {
       "canonical_name": "魔杖",
       "source_tier": "EQUIP_MID",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "101": {
       "canonical_name": "银蛇",
       "source_tier": "EQUIP_MID",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "102": {
       "canonical_name": "井中月",
       "source_tier": "EQUIP_HIGH_MID",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "103": {
       "canonical_name": "血饮",
       "source_tier": "UNCLASSIFIED",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "104": {
       "canonical_name": "无极棍",
       "source_tier": "EQUIP_MID",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "105": {
       "canonical_name": "裁决之杖",
       "source_tier": "HIGH_CLASS_WEAPON",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "106": {
       "canonical_name": "骨玉权杖",
       "source_tier": "HIGH_CLASS_WEAPON",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "107": {
       "canonical_name": "龙纹剑",
       "source_tier": "HIGH_CLASS_WEAPON",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "108": {
       "canonical_name": "屠龙",
@@ -181,17 +185,17 @@
     "113": {
       "canonical_name": "怒斩",
       "source_tier": "EXPANDED_HIGH_WEAPON",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "114": {
       "canonical_name": "龙牙",
       "source_tier": "EXPANDED_HIGH_WEAPON",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "115": {
       "canonical_name": "逍遥扇",
       "source_tier": "EXPANDED_HIGH_WEAPON",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "116": {
       "canonical_name": "布衣(男)",
@@ -286,32 +290,32 @@
     "140": {
       "canonical_name": "天魔神甲",
       "source_tier": "NEW_CLOTHES",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "141": {
       "canonical_name": "圣战宝甲",
       "source_tier": "NEW_CLOTHES",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "142": {
       "canonical_name": "法神披风",
       "source_tier": "NEW_CLOTHES",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "143": {
       "canonical_name": "霓裳羽衣",
       "source_tier": "NEW_CLOTHES",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "144": {
       "canonical_name": "天尊道袍",
       "source_tier": "NEW_CLOTHES",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "145": {
       "canonical_name": "天师长袍",
       "source_tier": "NEW_CLOTHES",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "146": {
       "canonical_name": "精灵头盔",
@@ -341,7 +345,7 @@
     "151": {
       "canonical_name": "黑铁头盔",
       "source_tier": "EQUIP_HIGH_MID",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "152": {
       "canonical_name": "祈福项链",
@@ -546,7 +550,7 @@
     "192": {
       "canonical_name": "阎罗手套",
       "source_tier": "EQUIP_HIGH_MID",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "193": {
       "canonical_name": "骑士手镯",
@@ -701,47 +705,47 @@
     "223": {
       "canonical_name": "祈祷之刃",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "224": {
       "canonical_name": "祈祷头盔",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "225": {
       "canonical_name": "祈祷项链",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "226": {
       "canonical_name": "祈祷手镯",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "227": {
       "canonical_name": "祈祷戒指",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "228": {
       "canonical_name": "记忆头盔",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "229": {
       "canonical_name": "记忆项链",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "230": {
       "canonical_name": "记忆手镯",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "231": {
       "canonical_name": "记忆戒指",
       "source_tier": "PRAYER_MEMORY",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "232": {
       "canonical_name": "圣战头盔",
@@ -806,42 +810,42 @@
     "244": {
       "canonical_name": "魔血戒指",
       "source_tier": "MAGICBLOOD_RAINBOW",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "245": {
       "canonical_name": "魔血手镯",
       "source_tier": "MAGICBLOOD_RAINBOW",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "246": {
       "canonical_name": "魔血项链",
       "source_tier": "MAGICBLOOD_RAINBOW",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "247": {
       "canonical_name": "虹魔戒指",
       "source_tier": "MAGICBLOOD_RAINBOW",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "248": {
       "canonical_name": "虹魔手镯",
       "source_tier": "MAGICBLOOD_RAINBOW",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "249": {
       "canonical_name": "虹魔项链",
       "source_tier": "MAGICBLOOD_RAINBOW",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "250": {
       "canonical_name": "技巧项链",
       "source_tier": "EQUIP_MID",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "251": {
       "canonical_name": "探测项链",
       "source_tier": "EQUIP_LOW",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "252": {
       "canonical_name": "麻痹戒指",
@@ -961,7 +965,7 @@
     "920002": {
       "canonical_name": "冰咆哮",
       "source_tier": "BOOK_35",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "920003": {
       "canonical_name": "刺杀剑术",
@@ -976,7 +980,7 @@
     "920005": {
       "canonical_name": "召唤神兽",
       "source_tier": "BOOK_35",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "920006": {
       "canonical_name": "召唤骷髅",
@@ -986,7 +990,7 @@
     "920007": {
       "canonical_name": "回城卷",
       "source_tier": "FUNCTIONAL_SPECIAL",
-      "name_style": "ultra_rare"
+      "name_style": "default"
     },
     "920008": {
       "canonical_name": "困魔咒",
@@ -1066,7 +1070,7 @@
     "920023": {
       "canonical_name": "沃玛号角",
       "source_tier": "BOSS_KEY_ITEM",
-      "name_style": "default"
+      "name_style": "wooma"
     },
     "920024": {
       "canonical_name": "治愈术",
@@ -1091,7 +1095,7 @@
     "920028": {
       "canonical_name": "烈火剑法",
       "source_tier": "BOOK_35",
-      "name_style": "default"
+      "name_style": "ultra_rare"
     },
     "920029": {
       "canonical_name": "爆裂火焰",
@@ -1111,7 +1115,7 @@
     "920032": {
       "canonical_name": "祖玛头像",
       "source_tier": "BOSS_KEY_ITEM",
-      "name_style": "default"
+      "name_style": "zuma"
     },
     "920033": {
       "canonical_name": "祝福油",

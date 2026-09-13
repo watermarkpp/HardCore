@@ -585,7 +585,8 @@ static func create_cell_union(
 	release_id: String,
 	origin_ground_gu: Vector2,
 	geometry_cells_grid_steps: Array[Vector2i],
-	coordinate_context := {}
+	coordinate_context := {},
+	cell_origin_offset_gu := Vector2.ZERO
 ) -> Dictionary:
 	var coordinate_fields := _coordinate_fields_from_context(
 		coordinate_context
@@ -600,7 +601,7 @@ static func create_cell_union(
 	var polygons_screen_offset_px: Array[PackedVector2Array] = []
 	var copied_cells_grid_steps: Array[Vector2i] = []
 	for cell_grid_steps: Vector2i in geometry_cells_grid_steps:
-		var center_ground_gu := Vector2(cell_grid_steps)
+		var center_ground_gu := Vector2(cell_grid_steps) + cell_origin_offset_gu
 		var cell_polygon_ground_gu := PackedVector2Array([
 			center_ground_gu + Vector2(-0.5, -0.5),
 			center_ground_gu + Vector2(0.5, -0.5),
@@ -652,6 +653,8 @@ static func create_cell_union(
 		),
 		"visual_space": "screen_px_derived_only",
 	}
+	if cell_origin_offset_gu != Vector2.ZERO:
+		snapshot["cell_origin_offset_gu"] = cell_origin_offset_gu
 	snapshot.merge(coordinate_fields, true)
 	snapshot.make_read_only()
 	return snapshot
@@ -923,6 +926,7 @@ static func validate(
 		"axis_screen_direction_px",
 		"start_ground_gu",
 		"end_ground_gu",
+		"cell_origin_offset_gu",
 	]:
 		if snapshot.has(vector_key) and not _vector2_is_finite(
 			snapshot.get(vector_key, Vector2.ZERO) as Vector2
@@ -1188,7 +1192,7 @@ static func _ground_aabb_cell_union(snapshot: Dictionary) -> Dictionary:
 	for raw_cell: Variant in raw_cells as Array:
 		if not raw_cell is Vector2i:
 			return _ground_aabb_failure("cell_union_cell_invalid")
-		var center_ground_gu := Vector2(raw_cell as Vector2i)
+		var center_ground_gu := Vector2(raw_cell as Vector2i) + Vector2(snapshot.get("cell_origin_offset_gu", Vector2.ZERO))
 		min_ground_gu = min_ground_gu.min(
 			center_ground_gu - Vector2.ONE * 0.5
 		)
@@ -1679,7 +1683,7 @@ static func _cell_union_intersects_circle_inclusive_ground_gu(
 	for raw_cell: Variant in raw_cells:
 		if not raw_cell is Vector2i:
 			continue
-		var delta_ground_gu := target_center_ground_gu - Vector2(raw_cell)
+		var delta_ground_gu := target_center_ground_gu - Vector2(raw_cell) - Vector2(snapshot.get("cell_origin_offset_gu", Vector2.ZERO))
 		var nearest_delta_ground_gu := Vector2(
 			maxf(absf(delta_ground_gu.x) - 0.5, 0.0),
 			maxf(absf(delta_ground_gu.y) - 0.5, 0.0)

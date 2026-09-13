@@ -13,15 +13,14 @@ func _run() -> void:
 	expect(Style.ensure_loaded(), "generated UI identity map loads")
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(Style.DATA_PATH))
 	var source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/drop/dpv2_item_tier_authority_v1.json"))
-	var expected_groups := {
-		"WOOMA_GEAR": "wooma", "ZUMA_GEAR": "zuma", "REDMOON_SET": "redmoon",
-		"LEGENDARY_WEAPON": "ultra_rare", "SPECIAL_RING": "ultra_rare",
-		"FUNCTIONAL_SPECIAL": "ultra_rare", "RARE_LEGACY": "ultra_rare",
-	}
+	# The user promoted equivalent sets/weapons into the display tiers for 1.0.
+	# Drop-tier records themselves remain frozen; presentation has its own policy.
+	var policy: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/ui/item_name_rarity_policy_v2.json"))
+	var expected_groups: Dictionary = policy.tier_styles
 	var covered := {"wooma": 0, "zuma": 0, "redmoon": 0, "ultra_rare": 0}
 	for row: Dictionary in source["records"]:
 		var item_id := int(row["canonical_item_id"])
-		var expected := str(expected_groups.get(row["tier"], "default"))
+		var expected := str(policy.exact_id_overrides.get(str(item_id), expected_groups.get(row["tier"], "default")))
 		var result := Style.describe({"itemId": item_id, "name": row["canonical_name"]})
 		expect(result["group"] == expected, "exact tier color id=" + str(item_id))
 		expect((result["color"] as Color).is_equal_approx(Color(data["palette"][expected])), "palette id=" + str(item_id))

@@ -171,11 +171,11 @@ func _test_loot_visual_authority_and_lifecycle() -> void:
 	assert(LootVisualEffectScript.has_golden_beam_for_record(affixed), "affix unexpectedly changed tier beam authority")
 	assert(
 		LootVisualEffectScript.label_color_for_record(affixed, Color("112233")) == LootVisualEffectScript.AFFIX_LABEL_COLOR,
-		"affix label color was not instance-local",
+		"Woma affix name must use the shared bright gold name color",
 	)
 	assert(
-		LootVisualEffectScript.label_color_for_record(wooma, Color("112233")) == Color("112233"),
-		"ordinary instance inherited an affix label color",
+		LootVisualEffectScript.label_color_for_record(wooma, Color("112233")) == Color("ffd86b"),
+		"ordinary Woma name must use the same tier color as its UI title",
 	)
 	var forged_name := wooma.duplicate(true)
 	(forged_name["output_record"] as Dictionary)["name"] = "屠龙"
@@ -189,7 +189,8 @@ func _test_loot_visual_authority_and_lifecycle() -> void:
 	}
 	assert(not LootVisualEffectScript.has_golden_beam_for_record(potion), "consumable received equipment beam")
 	var invalid_affix := affixed.duplicate(true)
-	(invalid_affix["item_instance"] as Dictionary)["modifiers"][0]["value"] = "bad"
+	# V3 also permits durability-only affixes, with an empty modifier array.
+	(invalid_affix["item_instance"] as Dictionary)["modifiers"].append({"stat":"attack_max", "op":"add", "value":"bad"})
 	assert(not LootVisualEffectScript.affix_is_valid(invalid_affix), "malformed modifier received affix highlight")
 	var top_level_only := ordinary.duplicate(true)
 	top_level_only["drop_affix"] = (affixed["item_instance"] as Dictionary)["drop_affix"].duplicate(true)

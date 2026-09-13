@@ -6,6 +6,7 @@ const INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC := 60000
 const TownMusicControllerScript := preload("res://scripts/town_music_controller.gd")
 const AudioRuntimeServiceScript := preload("res://scripts/audio_runtime_service.gd")
 const LevelUpEffectScript := preload("res://scripts/ui_level_up_preview.gd")
+const LootVisualEffectScript := preload("res://scripts/loot_visual_effect.gd")
 
 var _town_music_controller: Node
 var _audio_runtime_service: Node
@@ -7607,7 +7608,7 @@ func _canonical_target_context(
 				):
 					continue
 				if (
-					not adjacent_ring_cells.is_empty()
+					not exact_snapshot_valid and not adjacent_ring_cells.is_empty()
 					and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
 						adjacent_ring_cells,
 						_canonical_screen_px_to_ground_gu(node.global_position),
@@ -12460,11 +12461,11 @@ func _finish_loot_collection_outcomes(transaction_pending: Array, result: Dictio
 		if bool(outcome.get("success", false)):
 			if bool(candidate.get("gold", false)):
 				collected_gold += maxi(0, int(candidate.get("amount", 0)))
-			loot_feedback_names.append(
-				"金币 +%d" % int(candidate.get("amount", 0))
-				if bool(candidate.get("gold", false))
-				else str(candidate.get("item_name", ""))
-			)
+			if bool(candidate.get("gold", false)):
+				loot_feedback_names.append("金币 +%d" % int(candidate.get("amount", 0)))
+			else:
+				var display_item_id := LootVisualEffectScript.exact_item_id(pickup.item_record) if pickup is LootPickup and is_instance_valid(pickup) else int(candidate.get("item_id", -1))
+				loot_feedback_names.append({"item_name": str(candidate.get("item_name", "")), "item_id": display_item_id})
 			if pickup is LootPickup and is_instance_valid(pickup) and (pickup as LootPickup).collection_pending():
 				pickup.confirm_collect()
 		elif pickup is LootPickup and is_instance_valid(pickup) and (pickup as LootPickup).collection_pending():

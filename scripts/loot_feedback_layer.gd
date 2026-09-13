@@ -2,6 +2,7 @@ class_name LootFeedbackLayer
 extends Control
 
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
+const ItemNameStyle := preload("res://scripts/ui_item_name_style.gd")
 
 const CONTRACT_ID := "ui.loot.feedback.v1"
 const MAX_TOASTS := 3
@@ -230,5 +231,8 @@ func _rebuild_toasts() -> void:
 		panel.position.x = (toast_container.size.x - toast_width) * 0.5
 		panel.size.x = toast_width
 		label.text = display_text
-		label.add_theme_color_override("font_color", KIND_COLORS.get(str(entry.get("item_kind", "material")), Color("dfccb0")))
+		var item_color: Color = KIND_COLORS.get(str(entry.get("item_kind", "material")), Color("dfccb0"))
+		if ItemNameStyle.canonical_id(entry) > 0:
+			item_color = ItemNameStyle.describe(entry).color
+		label.add_theme_color_override("font_color", item_color)
 		panel.show()
