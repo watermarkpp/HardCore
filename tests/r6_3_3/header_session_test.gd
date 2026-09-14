@@ -4,6 +4,7 @@ const Shop := preload("res://scripts/shop_panel.gd")
 const Names := preload("res://scripts/ui_item_name_style.gd")
 const Space := preload("res://scripts/ui_shop_detail_space.gd")
 const Bounds := preload("res://scripts/ui_style_visual_bounds.gd")
+const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
 var panel
 var merchant: Dictionary = {}
 var failures: Array[String] = []
@@ -37,8 +38,8 @@ func inspect(expected_name: String, expected_body: String, item: Dictionary, ins
 	check(view.debug_layout_valid(), expected_name + " invalid layout")
 	check(view.is_visible_in_tree() and view.modulate.a > 0.99, "detail invisible")
 	check(caption.visible, "persistent section caption missing")
-	check(view.title_label.is_visible_in_tree() and view.title_label.text == expected_name, "item title lost")
-	check(view.detail_label.text == expected_body, "body lost/rewritten")
+	check(view.title_label.is_visible_in_tree() and view.title_label.text == expected_name.trim_prefix("★"), "item title lost")
+	check(view.detail_label.text == AttributeHelp.decorate(expected_body), "body lost/rewritten")
 	check(view.title_label.get_theme_color("font_color") == Names.describe(item, instance)["color"], "rarity color changed")
 	check(not view.detail_label.get_v_scroll_bar().is_visible_in_tree(), "visible scrollbar")
 	check(float(view.detail_label.get_content_height()) <= view.detail_label.size.y or view.detail_label.scroll_active, "unreachable body overflow")
@@ -65,7 +66,7 @@ func inspect(expected_name: String, expected_body: String, item: Dictionary, ins
 			if bool(bounds.get("ok", false)):
 				var drawn: Rect2 = Space.rect_in(panel, action, bounds["rect"])
 				check((drawn.position.y - actual.end.y) * scale.y >= 32.0 - 0.05, "action clearance below 32px")
-	check(view.size.x <= 1.3 * view.size.y + 0.5, "overly flat rectangle")
+	check(view.detail_label.size.y - view.detail_label.get_content_height() <= 5.0 or view.detail_label.scroll_active, "v81 content height has artificial padding")
 func _run() -> void:
 	if not GameData.ensure_loaded():
 		failures.append("DATA_MISSING"); finish(); return

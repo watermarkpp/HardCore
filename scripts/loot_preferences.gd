@@ -29,11 +29,11 @@ func set_filter_level(value: int) -> void:
 func filter_threshold_for_item(item_id: int) -> int:
 	if _tiers.is_empty():
 		# User-approved exact-ID rarity membership is the filter's classification.
-		# Named special groups are exempt even when their color is Wooma-tier.
+		# Memory, rainbow and magicblood now follow their Wooma name tier.
 		var table: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/ui/item_name_rarity_v1.json"))
 		for id: String in table.get("records", {}):
 			var row: Dictionary = table.records[id]
-			var exempt := str(row.get("source_tier", "")) in ["PRAYER_MEMORY","MYSTERY_SIGNATURE","MAGICBLOOD_RAINBOW","SPECIAL_RING","FUNCTIONAL_SPECIAL"]
+			var exempt := str(row.get("source_tier", "")) in ["MYSTERY_SIGNATURE","SPECIAL_RING","FUNCTIONAL_SPECIAL"]
 			var style := str(row.get("name_style", "default"))
 			_tiers[int(id)] = 0 if exempt or style not in ["default", "wooma"] else (1 if style == "default" else 2)
 	return int(_tiers.get(item_id, 0))

@@ -9519,6 +9519,7 @@ func _register_ongoing_heal(
 	if target_instance_id <= 0 or heal_per_tick <= 0 or tick_count <= 0:
 		return
 	_ongoing_heals.append({
+		"started_at_usec": Time.get_ticks_usec(),
 		"target_instance_id": target_instance_id,
 		"heal_per_tick": heal_per_tick,
 		"remaining_ticks": tick_count,
@@ -9607,24 +9608,36 @@ func _update_stealth_alpha() -> void:
 func _update_taoist_buff_hints() -> void:
 	if hud == null or not is_instance_valid(player):
 		return
-	var entries: Array[String] = []
-	var defence_snapshot := player.defence_buff_snapshot()
-	if player.is_stealthed():
-		entries.append("隐身 %ds" % int(ceil(maxf(0.0, player.stealth_time))))
-	var heal_ticks := _ongoing_heal_remaining_ticks(player.get_instance_id())
-	if heal_ticks > 0:
-		entries.append("恢复 %ds" % int(ceil(float(heal_ticks) * 0.8)))
-	var hint_text := "%s|%d|%d|%d|%d" % [
-		"｜".join(entries),
-		int(defence_snapshot.get("ac_bonus", 0)),
-		int(ceil(float(defence_snapshot.get("ac_remaining_seconds", 0.0)))),
-		int(defence_snapshot.get("mac_bonus", 0)),
-		int(ceil(float(defence_snapshot.get("mac_remaining_seconds", 0.0)))),
-	]
+	var entries := _status_buff_entries()
+	var signature: Array = []
+	for entry: Dictionary in entries:
+		signature.append([entry.id, ceili(entry.remaining), entry.started_at, entry.get("item_id", -1)])
+	var hint_text := str(signature)
 	if hint_text == _last_taoist_buff_hint_text:
 		return
 	_last_taoist_buff_hint_text = hint_text
-	hud.update_taoist_buff_hints(entries, defence_snapshot)
+	hud.update_status_buffs(entries)
+
+func _status_buff_entries() -> Array:
+	var entries: Array = []
+	for spec: Array in [["ac", player.defense_buff_time, player.defense_buff > 0], ["mac", player.mac_buff_time, player.mac_buff > 0], ["shield", player.shield_time, player.shield_capacity > 0.0], ["stealth", player.stealth_time, player.is_stealthed()]]:
+		if not bool(spec[2]) or (float(spec[1]) <= 0.0 and spec[0] != "stealth"): continue
+		var entry := {"id":spec[0], "remaining":spec[1], "started_at":int(player.status_buff_started_at.get(spec[0], 0))}
+		if spec[0] == "shield": entry.skill = "魔法盾"
+		if spec[0] == "stealth": entry.skill = "隐身术"
+		entries.append(entry)
+	var heal_remaining := 0.0
+	var heal_started := 9223372036854775807
+	for heal: Dictionary in _ongoing_heals:
+		if int(heal.target_instance_id) != player.get_instance_id(): continue
+		heal_remaining = maxf(heal_remaining, int(heal.remaining_ticks) * float(heal.tick_interval_seconds) - float(heal.elapsed))
+		heal_started = mini(heal_started, int(heal.get("started_at_usec", 0)))
+	if heal_remaining > 0.0:
+		entries.append({"id":"heal", "skill":"治愈术", "remaining":heal_remaining, "started_at":heal_started})
+	for buff: Dictionary in PlayerState.temporary_item_buffs.values():
+		if float(buff.remaining) <= 0.0: continue
+		entries.append({"id":"item:" + str(buff.buffGroup), "item_id":int(buff.get("item_id", -1)), "remaining":float(buff.remaining), "started_at":int(buff.get("started_at_usec", 0))})
+	return entries
 
 
 func _canonical_friendly_candidates() -> Array:

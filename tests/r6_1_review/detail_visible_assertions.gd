@@ -46,7 +46,7 @@ static func inspect(
 		ancestor = ancestor.get_parent()
 	if title.self_modulate.a <= 0.0 or body.self_modulate.a <= 0.0 or body.modulate.a <= 0.0:
 		errors.append("ZERO_TEXT_ALPHA")
-	if title.text.strip_edges().is_empty() or title.text != expected_title:
+	if title.text.strip_edges().is_empty() or title.text != expected_title.trim_prefix("★"):
 		errors.append("TITLE_MISMATCH_OR_EMPTY")
 	if not title.get_theme_color("font_color").is_equal_approx(expected_color):
 		errors.append("NAME_COLOR_MISMATCH")
@@ -64,13 +64,17 @@ static func inspect(
 	var local := Rect2(Vector2.ZERO, view.size)
 	if not local.grow(0.5).encloses(Rect2(title.position, title.size)) or not local.grow(0.5).encloses(Rect2(body.position, body.size)):
 		errors.append("TEXT_OUTSIDE_DETAIL_PANEL")
-	# R3.3 shop contract allows W <= 1.3 H; non-shop cards keep portrait.
-	# See header_session_test and the current UIShopDetailSpace authority.
-	if owner_control is ShopPanel:
-		if view.size.x > view.size.y * 1.3 + 0.5:
-			errors.append("SHOP_DETAIL_ASPECT_OVERFLOW")
-	elif view.size.y < view.size.x * 1.12 - 1.0:
-		errors.append("NON_PORTRAIT_DETAIL")
+	# The plain name and longest body line are independently centered.
+	if title.get_minimum_size().x > title.size.x + 0.5:
+		errors.append("TITLE_WIDTH_OVERFLOW")
+	var marker := view.get_node("AffixMarker") as Label
+	if marker.visible != expected_title.begins_with("★"):
+		errors.append("AFFIX_MARKER_MISMATCH")
+	var content_axis := view.size.x * 0.5
+	if absf(title.position.x + title.size.x * 0.5 - content_axis) > 0.5:
+		errors.append("PLAIN_NAME_NOT_CENTERED")
+	if absf(body.position.x + float(body.get_content_width()) * 0.5 - content_axis) > 0.01:
+		errors.append("BODY_CONTENT_BLOCK_NOT_CENTERED")
 	var actual := _rect_in(owner_control, view)
 	var inside_allowed := false
 	for allowed: Rect2 in allowed_rects:

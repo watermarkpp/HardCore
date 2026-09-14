@@ -137,28 +137,38 @@ func _build_settings_page() -> void:
 	settings_page.name = "SettingsPage"
 	settings_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	modal.add_child(settings_page)
-	settings_title = _title_bar(settings_page, "游戏设置", "声音与物品")
+	settings_title = _title_bar(settings_page, "游戏设置", "")
+	# Accepted in the production calibrator on 2026-09-14. Keep this header
+	# inside the modal opening; the old y=18 placed it beneath the top ornament.
+	var title_frame := settings_title.get_parent() as Control
+	title_frame.position.y = 66.0
+	title_frame.set_meta("calibration_layout_revision", 9)
+	settings_title.set_meta("calibration_layout_revision", 9)
+	settings_title.size.y = 34.0
+	title_frame.get_node("Subtitle").hide()
+	title_frame.get_node("Subtitle").set_meta("calibration_layout_revision", 9)
 	music_slider = _ui_volume_row("MusicVolume", "游戏音乐", 148.0, "music")
-	sfx_slider = _ui_volume_row("SFXVolume", "游戏音效", 260.0, "sfx")
-	loot_filter_slider = _ui_volume_row("LootFilter", "物品过滤", 372.0, "loot_filter")
+	sfx_slider = _ui_volume_row("SFXVolume", "游戏音效", 230.0, "sfx")
+	loot_filter_slider = _ui_volume_row("LootFilter", "物品过滤", 312.0, "loot_filter")
 	loot_filter_slider.max_value = 2.0
 	loot_filter_slider.tick_count = 3
 	loot_filter_slider.ticks_on_borders = true
 	loot_filter_slider.set_value_no_signal(LootPreferences.filter_level)
-	loot_filter_slider.position = Vector2(30, 34)
-	loot_filter_slider.size = Vector2(296, 30)
+	loot_filter_slider.position = Vector2(70, 36)
+	loot_filter_slider.size = Vector2(216, 28)
 	loot_filter_slider.set_meta("setting_id", "loot.filter.level")
 	var filter_row := loot_filter_slider.get_parent() as Control
+	filter_row.size.y = 100.0
 	filter_row.get_node("Percent").hide()
 	var caption := filter_row.get_node("Caption") as Label
-	caption.position = Vector2(20, 4)
-	caption.size = Vector2(316, 30)
+	caption.position = Vector2(20, 12)
+	caption.size = Vector2(316, 22)
 	var labels := ["关闭", "沃玛以下不显示", "祖玛以下不显示"]
 	for index in range(3):
 		var label := Label.new()
 		label.text = labels[index]
-		label.position = Vector2(-28 + index * 148, 76)
-		label.size = Vector2(132, 22)
+		label.position = Vector2(16 + index * 108, 68)
+		label.size = Vector2(108, 20)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.add_theme_font_size_override("font_size", 11)
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -167,18 +177,19 @@ func _build_settings_page() -> void:
 	sfx_status_label = settings_page.get_node("SFXVolume/Percent") as Label
 	audio_save_note = Label.new()
 	audio_save_note.name = "VolumeSaveNote"
-	audio_save_note.position = Vector2(72, 478)
-	audio_save_note.size = Vector2(356, 42)
+	audio_save_note.position = Vector2(72, 496)
+	audio_save_note.size = Vector2(356, 32)
 	audio_save_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	audio_save_note.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	audio_save_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	audio_save_note.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	audio_save_note.theme_type_variation = "GothicMutedLabel"
-	audio_save_note.text = "拖动即时生效，关闭菜单时自动保存"
-	audio_save_note.set_meta("calibration_layout_revision", 8)
+	audio_save_note.text = ""
+	audio_save_note.hide()
+	audio_save_note.set_meta("calibration_layout_revision", 9)
 	settings_page.add_child(audio_save_note)
-	settings_back_button = _menu_button(settings_page, "SettingsBackButton", "返回游戏菜单", 524, "system_menu.settings.back")
-	settings_back_button.set_meta("calibration_layout_revision", 8)
+	settings_back_button = _menu_button(settings_page, "SettingsBackButton", "返回游戏菜单", 430, "system_menu.settings.back")
+	settings_back_button.set_meta("calibration_layout_revision", 9)
 	settings_back_button.theme_type_variation = "GothicSystemSettingsBackGemButton"
 	settings_back_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	settings_back_button.pressed.connect(show_main_page)
@@ -329,7 +340,9 @@ func _refresh_audio_status() -> void:
 	music_status_label.text = "%d%%" % roundi(music_slider.value)
 	sfx_status_label.text = "%d%%" % roundi(sfx_slider.value)
 	if audio_save_note != null:
-		audio_save_note.text = "设置尚未保存，请关闭菜单后重试" if AudioPreferences.last_save_error != OK or LootPreferences.last_save_error != OK else "拖动即时生效，关闭菜单时自动保存"
+		var failed := AudioPreferences.last_save_error != OK or LootPreferences.last_save_error != OK
+		audio_save_note.text = "设置尚未保存，请关闭菜单后重试" if failed else ""
+		audio_save_note.visible = failed
 
 
 func _on_music_toggled(enabled: bool) -> void:

@@ -1,0 +1,56 @@
+{
+  "results": [
+    {
+      "test_name": "loot_stable_identity_save_test",
+      "test_path": "tests/loot_stable_identity_save_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "header_session_test",
+      "test_path": "tests/r6_3_3/header_session_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "drop_balance_test",
+      "test_path": "tests/progression_loot_20260913/drop_balance_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 3,
+  "failed": 0,
+  "passed": 3,
+  "suite": "adhoc",
+  "generated_at": "2026-09-14T12:42:15.0477834+08:00",
+  "git_head": "d35519f87e5ccfc020ed2b8ead3651006ac8b01c",
+  "engine_log_errors": 0
+}

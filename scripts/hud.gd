@@ -165,6 +165,8 @@ var health_orb: Control
 var mana_orb: Control
 var taoist_buff_hint_label: Label
 var taoist_buff_icon_strip: Control
+var _status_buff_icons: Dictionary = {}
+var _status_buff_first_seen: Dictionary = {}
 var taoist_ac_buff_icon: TextureRect
 var taoist_ac_buff_seconds: Label
 var taoist_mac_buff_icon: TextureRect
@@ -593,6 +595,7 @@ func _build_bottom_chassis(root: Control) -> void:
 		Vector2(TAOIST_BUFF_ICON_SIZE.x + 6.0, 0.0)
 	)
 	taoist_mac_buff_seconds = taoist_mac_buff_icon.get_node("Seconds") as Label
+	_status_buff_icons = {"ac":taoist_ac_buff_icon, "mac":taoist_mac_buff_icon}
 
 	taoist_buff_hint_label = Label.new()
 	taoist_buff_hint_label.name = "TaoistBuffHint"
@@ -781,8 +784,8 @@ func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
 			hud_item_buttons[index].get_global_rect()
 		)
 	var safe_root_global_rect := root.get_global_rect()
-	var center_offset_x := (
-		item_bar_global_rect.get_center().x
+	var left_offset_x := (
+		hud_item_buttons[0].get_global_rect().position.x
 		- safe_root_global_rect.get_center().x
 	)
 	var item_bar_top_offset_from_safe_bottom := (
@@ -790,7 +793,7 @@ func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
 		- safe_root_global_rect.end.y
 	)
 	taoist_buff_icon_strip.offset_left = (
-		center_offset_x - TAOIST_BUFF_STRIP_SIZE.x * 0.5
+		left_offset_x
 	)
 	taoist_buff_icon_strip.offset_right = (
 		taoist_buff_icon_strip.offset_left + TAOIST_BUFF_STRIP_SIZE.x
@@ -2153,6 +2156,41 @@ func update_taoist_buff_hints(entries: Array, defence_snapshot := {}) -> void:
 		int(snapshot.get("mac_bonus", 0)),
 		float(snapshot.get("mac_remaining_seconds", 0.0))
 	)
+
+func update_status_buffs(entries: Array) -> void:
+	if taoist_buff_icon_strip == null: return
+	taoist_buff_hint_label.hide()
+	for icon: TextureRect in _status_buff_icons.values(): icon.hide()
+	var ordered := entries.duplicate(true)
+	var active: Dictionary = {}
+	for entry: Dictionary in ordered:
+		active[entry.id] = true
+		if not _status_buff_first_seen.has(entry.id): _status_buff_first_seen[entry.id] = Time.get_ticks_usec()
+		if int(entry.started_at) <= 0: entry.started_at = _status_buff_first_seen[entry.id]
+	for id: String in _status_buff_first_seen.keys():
+		if not active.has(id): _status_buff_first_seen.erase(id)
+	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if int(a.started_at) != int(b.started_at): return int(a.started_at) < int(b.started_at)
+		return str(a.id) < str(b.id))
+	var index := 0
+	for entry: Dictionary in ordered:
+		var id := str(entry.id)
+		var icon: TextureRect = _status_buff_icons.get(id)
+		if icon == null:
+			icon = _build_taoist_defence_buff_icon(taoist_buff_icon_strip, "StatusBuff_%d" % _status_buff_icons.size(), "hud.buff." + id, null, Vector2.ZERO)
+			_status_buff_icons[id] = icon
+		var item_id := int(entry.get("item_id", -1))
+		if item_id > 0:
+			if int(icon.get_meta("item_id", -1)) != item_id:
+				icon.texture = UIItemTextureCacheScript.texture_at_path(GameData.get_item_art_path({"item_id":item_id}))
+				icon.set_meta("item_id", item_id)
+		elif entry.has("skill"):
+			icon.texture = HUDSkillIconCatalogScript.SKILL_TEXTURES.get(str(entry.skill))
+		icon.position = Vector2(index * (TAOIST_BUFF_ICON_SIZE.x + 6.0), 0)
+		icon.show()
+		var seconds := icon.get_node("Seconds") as Label
+		seconds.text = str(ceili(float(entry.remaining))) if float(entry.remaining) > 0.0 else ""
+		index += 1
 
 
 func _update_taoist_defence_buff_icon(

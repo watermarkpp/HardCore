@@ -167,6 +167,11 @@ func setup_gold(amount: int, player_target: PlayerCharacter) -> void:
 
 
 func _ready() -> void:
+	# Map ground is -20, ground decoration -5..-3, actors and skills >= 0.
+	# This absolute plane keeps icons/beam/fallback draw below every actor even
+	# when the pickup footpoint sorts after the player in GameRoot's Y-sort.
+	z_as_relative = false
+	z_index = -2
 	add_to_group("loot_pickups")
 	if _visual_descriptor.is_empty():
 		_visual_descriptor = ground_visual_descriptor(item_name)
@@ -198,6 +203,9 @@ func _ready() -> void:
 	label.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(label)
 	name_label = label
+	# Names remain readable above world actors; the item artwork stays at -2.
+	name_label.z_as_relative = false
+	name_label.z_index = 1
 	var catalog: Dictionary = item_record.get("output_record", {})
 	if gold_amount <= 0 and str(catalog.get("kind", "")) == "equipment" and not LootVisualEffectScript.affix_is_valid(item_record):
 		_filter_threshold = LootPreferences.filter_threshold_for_item(LootVisualEffectScript.exact_item_id(item_record))

@@ -18,49 +18,51 @@ func _run() -> void:
 	PlayerState.reset_progress(false)
 	PlayerState.active_profile_id = "loot_identity_test"
 	PlayerState.character_name = "物品身份回归"
-	PlayerState.inventory = [{"name": "疾风药水", "count": 1}]
+	# v80 divine waters are deliberately nonstackable. Use the exact-ID ordinary
+	# potion to retain the legacy/stable stack merge and real-save coverage.
+	PlayerState.inventory = [{"name": "金创药(小量)", "count": 1}]
 	# Exercise the actual profile write, not the test-mode commit stub.
 	PlayerState.test_mode = false
 	var result := PlayerState.receive_loot_batch_partial([
-		{"item_id": 910013, "item_name": "stale_display_text"},
-		{"item_id": 910013, "item_name": "疾风药水"},
+		{"item_id": 920045, "item_name": "stale_display_text"},
+		{"item_id": 920045, "item_name": "金创药(小量)"},
 	])
 	assert(result.success and result.success_count == 2, "stable identity pickup failed")
 	assert(PlayerState.inventory.size() == 1, "legacy and ID-bearing stacks did not merge")
-	assert(int(PlayerState.inventory[0].get("item_id", -1)) == 910013)
-	assert(PlayerState.inventory[0].name == "疾风药水" and PlayerState.inventory[0].count == 3)
+	assert(int(PlayerState.inventory[0].get("item_id", -1)) == 920045)
+	assert(PlayerState.inventory[0].name == "金创药(小量)" and PlayerState.inventory[0].count == 3)
 	var before := PlayerState.inventory.duplicate(true)
 	var rejected := PlayerState.receive_loot_batch_partial([
-		{"item_id": 2147483647, "item_name": "疾风药水"},
+		{"item_id": 2147483647, "item_name": "金创药(小量)"},
 	])
 	assert(rejected.success_count == 0 and PlayerState.inventory == before, "invalid explicit identity fell back to display name")
-	assert(GameData.get_item_record({"item_id": 2147483647, "name": "疾风药水"}).is_empty(), "public catalog fell back from invalid explicit ID")
+	assert(GameData.get_item_record({"item_id": 2147483647, "name": "金创药(小量)"}).is_empty(), "public catalog fell back from invalid explicit ID")
 	PlayerState.test_mode = true
 	PlayerState._test_force_atomic_write_failure = true
-	var failed := PlayerState.receive_loot_batch_partial([{"item_id": 910013}])
+	var failed := PlayerState.receive_loot_batch_partial([{"item_id": 920045}])
 	PlayerState._test_force_atomic_write_failure = false
 	assert(not failed.success and PlayerState.inventory == before, "ID-bearing pickup failed rollback")
 	var saved: Dictionary = PlayerState._read_json(PlayerState._profile_path(PlayerState.active_profile_id))
-	assert(int(saved.inventory[0].get("item_id", -1)) == 910013, "save dropped stable ID")
+	assert(int(saved.inventory[0].get("item_id", -1)) == 920045, "save dropped stable ID")
 	PlayerState.test_mode = false
 	PlayerState.load_save()
 	PlayerState.test_mode = true
 	# Godot's JSON parser restores numbers as floats; compare semantic fields.
 	assert(PlayerState.inventory.size() == 1 and PlayerState.inventory[0].size() == before[0].size())
-	assert(int(PlayerState.inventory[0].get("item_id", -1)) == 910013)
+	assert(int(PlayerState.inventory[0].get("item_id", -1)) == 920045)
 	assert(int(PlayerState.inventory[0].get("count", -1)) == 3)
-	assert(str(PlayerState.inventory[0].get("name", "")) == "疾风药水", "save reload changed canonical name")
+	assert(str(PlayerState.inventory[0].get("name", "")) == "金创药(小量)", "save reload changed canonical name")
 	var catalog := GameData.get_item_record(PlayerState.inventory[0])
-	assert(int(catalog.get("itemId", -1)) == 910013)
-	assert(str(catalog.art.inventoryIcon.path).ends_with("Items_00420.png"), "reloaded potion resolved placeholder")
+	assert(int(catalog.get("itemId", -1)) == 920045)
+	assert(str(catalog.art.inventoryIcon.path).ends_with("Items_00398.png"), "reloaded potion resolved placeholder")
 	assert(PlayerState._inventory_records_mergeable(
-		PlayerState.inventory[0], {"name": "疾风药水", "count": 1},
+		PlayerState.inventory[0], {"name": "金创药(小量)", "count": 1},
 	), "old name-only receive cannot merge with stable stack")
 	assert(not PlayerState._inventory_records_mergeable(
-		PlayerState.inventory[0], {"name": "疾风药水", "count": 1, "item_id": 1},
+		PlayerState.inventory[0], {"name": "金创药(小量)", "count": 1, "item_id": 1},
 	), "conflicting explicit IDs merged")
 	assert(not PlayerState._inventory_records_mergeable(
-		PlayerState.inventory[0], {"name": "疾风药水", "count": 1, "bound": true},
+		PlayerState.inventory[0], {"name": "金创药(小量)", "count": 1, "bound": true},
 	), "opaque instance data was discarded during merge")
 	var book := GameData.get_item_record({"item_id": 920043, "name": "stale_display"})
 	assert(int(book.get("itemId", -1)) == 920043, "formal skill-book ID has no catalog bridge")
@@ -72,32 +74,32 @@ func _run() -> void:
 	assert(int(PlayerState.inventory.back().get("item_id", -1)) == 920043, "reserved skill-book ID lost after real reload")
 	PlayerState.test_mode = true
 	for stable_first: bool in [false, true]:
-		var legacy := {"name": "疾风药水", "count": 1}
-		var stable := {"name": "疾风药水", "count": 1, "item_id": 910013}
+		var legacy := {"name": "金创药(小量)", "count": 1}
+		var stable := {"name": "金创药(小量)", "count": 1, "item_id": 920045}
 		PlayerState.inventory = [stable, legacy] if stable_first else [legacy, stable]
 		PlayerState.sort_inventory_deterministic()
 		assert(PlayerState.inventory.size() == 1)
-		assert(int(PlayerState.inventory[0].get("item_id", -1)) == 910013, "sort discarded incoming stable identity")
+		assert(int(PlayerState.inventory[0].get("item_id", -1)) == 920045, "sort discarded incoming stable identity")
 		assert(int(PlayerState.inventory[0].get("count", 0)) == 2)
 	var merged := PlayerState._build_receive_result_for_record(
-		{"name": "疾风药水", "count": 1, "item_id": 910013},
-		[{"name": "疾风药水", "count": 1}],
+		{"name": "金创药(小量)", "count": 1, "item_id": 920045},
+		[{"name": "金创药(小量)", "count": 1}],
 	)
-	assert(merged.success and int(merged.inventory[0].get("item_id", -1)) == 910013)
+	assert(merged.success and int(merged.inventory[0].get("item_id", -1)) == 920045)
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	game.process_mode = Node.PROCESS_MODE_DISABLED
-	var wrong: Dictionary = LootRuntime._drop_output_item_record(910013, "金创药(小量)")
-	assert(not game._spawn_loot("金创药(小量)", game.player.global_position, wrong), "unresolved formal ID materialized as another item")
-	var valid: Dictionary = LootRuntime._drop_output_item_record(910013, "疾风药水")
-	var count_before := PlayerState.item_count("疾风药水")
+	var wrong: Dictionary = LootRuntime._drop_output_item_record(920045, "魔法药(小量)")
+	assert(not game._spawn_loot("魔法药(小量)", game.player.global_position, wrong), "unresolved formal ID materialized as another item")
+	var valid: Dictionary = LootRuntime._drop_output_item_record(920045, "金创药(小量)")
+	var count_before := PlayerState.item_count("金创药(小量)")
 	PlayerState.test_mode = false
-	assert(game._spawn_loot("疾风药水", game.player.global_position, valid))
+	assert(game._spawn_loot("金创药(小量)", game.player.global_position, valid))
 	var pickup: LootPickup
 	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
-		if node is LootPickup and node.item_id == 910013:
+		if node is LootPickup and node.item_id == 920045:
 			pickup = node
 			break
 	assert(pickup != null)
@@ -105,21 +107,21 @@ func _run() -> void:
 	pickup.manager_evaluate_collection(true, 1.0)
 	var ground_result: Dictionary = game._flush_loot_collections(true)
 	assert(ground_result.get("pending", false) and pickup.collection_pending())
-	assert(PlayerState.item_count("疾风药水") == count_before, "no credit before durable promotion")
+	assert(PlayerState.item_count("金创药(小量)") == count_before, "no credit before durable promotion")
 	# A second batch arriving during the first private write must be scheduled
 	# after its deferred flush observes the in-flight batch. No manual flush.
-	assert(game._spawn_loot("疾风药水", game.player.global_position, valid))
+	assert(game._spawn_loot("金创药(小量)", game.player.global_position, valid))
 	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
 		if node is LootPickup: node.manager_evaluate_collection(true, 1.0)
 	var deadline := Time.get_ticks_msec() + 2000
-	while PlayerState.item_count("疾风药水") < count_before + 2 and Time.get_ticks_msec() < deadline:
+	while PlayerState.item_count("金创药(小量)") < count_before + 2 and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
 		ground_result = game._poll_prepared_loot_collection()
 
-	assert(PlayerState.item_count("疾风药水") == count_before + 2, "consecutive asynchronous ground batches stopped scheduling: %s inventory=%s" % [ground_result, PlayerState.inventory])
-	assert(int(PlayerState.inventory[0].get("item_id", -1)) == 910013)
+	assert(PlayerState.item_count("金创药(小量)") == count_before + 2, "consecutive asynchronous ground batches stopped scheduling: %s inventory=%s" % [ground_result, PlayerState.inventory])
+	assert(int(PlayerState.inventory[0].get("item_id", -1)) == 920045)
 	# A generation change while I/O is pending must not credit a new world.
-	assert(game._spawn_loot("疾风药水", game.player.global_position, valid))
+	assert(game._spawn_loot("金创药(小量)", game.player.global_position, valid))
 	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
 		if node is LootPickup and not node.is_queued_for_deletion(): node.manager_evaluate_collection(true, 1.0)
 	assert(game._flush_loot_collections(true).get("pending", false))
@@ -128,18 +130,18 @@ func _run() -> void:
 	var stale_result: Dictionary = game._flush_loot_collections()
 	assert(int(stale_result.get("stale_count", 0)) == 1)
 	game._zone_generation -= 1 # restore fixture manager generation; real map transitions reconfigure it
-	assert(PlayerState.item_count("疾风药水") == count_before + 2)
+	assert(PlayerState.item_count("金创药(小量)") == count_before + 2)
 	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
 		if node is LootPickup: node.queue_free()
 	await get_tree().process_frame
 	# Safe logout joins the private write and uses the same durable commit gate.
-	assert(game._spawn_loot("疾风药水", game.player.global_position, valid))
+	assert(game._spawn_loot("金创药(小量)", game.player.global_position, valid))
 	for node: Node in get_tree().get_nodes_in_group("loot_pickups"):
 		if node is LootPickup: node.manager_evaluate_collection(true, 1.0)
 	assert(game._flush_loot_collections(true).get("pending", false))
 	assert(game._prepare_safe_logout().get("success", false))
 	assert(game._prepared_loot_collection.is_empty())
-	assert(PlayerState.item_count("疾风药水") == count_before + 3)
+	assert(PlayerState.item_count("金创药(小量)") == count_before + 3)
 	var final_saved := PlayerState._read_json(PlayerState._profile_path(PlayerState.active_profile_id))
 	assert(final_saved.inventory == JSON.parse_string(JSON.stringify(PlayerState.inventory)))
 	PlayerState.test_mode = true

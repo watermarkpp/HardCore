@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "test_name": "runtime_followup_test",
+      "test_path": "tests/loot_ui_20260914/runtime_followup_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "buff_strip_test",
+      "test_path": "tests/loot_ui_20260914/buff_strip_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+    }
+  ],
+  "generated_at": "2026-09-14T12:28:10.8026515+08:00",
+  "total": 2,
+  "git_head": "d35519f87e5ccfc020ed2b8ead3651006ac8b01c",
+  "failed": 2,
+  "engine_log_errors": 3,
+  "suite": "adhoc",
+  "passed": 0
+}

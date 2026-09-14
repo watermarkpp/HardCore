@@ -7237,14 +7237,18 @@ func apply_temporary_item_buff(item_name: String, effect_profile: Dictionary, em
 			return {"ok": false, "reason": "stat_not_allowed", "stat": stat_name}
 	# Same buffGroup: refresh duration, do not stack.
 	# Different buffGroup: add as separate entry.
+	var started_at := Time.get_ticks_usec()
 	for existing_key: String in temporary_item_buffs:
 		var existing: Dictionary = temporary_item_buffs[existing_key]
 		if str(existing.get("buffGroup", "")) == buff_group:
+			started_at = int(existing.get("started_at_usec", started_at))
 			temporary_item_buffs.erase(existing_key)
 			break
 	temporary_item_buffs[item_name] = {
 		"contract_id": TEMPORARY_ITEM_BUFF_CONTRACT_ID,
 		"item_name": item_name,
+		"item_id": GameData._stable_item_id(GameData.get_item_rules_record(item_name)),
+		"started_at_usec": started_at,
 		"buffGroup": buff_group,
 		"modifiers": (modifiers as Dictionary).duplicate(true),
 		"duration": duration_seconds,

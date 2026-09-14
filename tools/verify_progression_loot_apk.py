@@ -1,4 +1,4 @@
-"""Verify v80 payload identity and frozen v79 assets against the exact source commit."""
+"""Verify payload identity and frozen prior-version assets against the source commit."""
 import argparse
 import hashlib
 import json
@@ -17,12 +17,13 @@ def git(*args):
 def main():
     p=argparse.ArgumentParser()
     for arg in ['apk','baseline','commit','output']: p.add_argument('--'+arg,required=True)
+    p.add_argument('--version-code',type=int,default=80)
     a=p.parse_args()
     with zipfile.ZipFile(a.apk) as current, zipfile.ZipFile(a.baseline) as baseline:
         info=parsed(current.read('assets/assets/generated/build_info.json'))
         old=parsed(baseline.read('assets/assets/generated/build_info.json'))
         assert info['git_head']==a.commit and info['git_dirty'] is False
-        assert info['version_code']==80 and old['version_code']==79
+        assert info['version_code']==a.version_code and old['version_code']==a.version_code-1
         assert info['version_name']=='hardcore 1.0 正式版'
         changed=set(git('diff','--name-only',old['git_head'],a.commit,'--','scripts','assets/data').decode().splitlines())
         script_changes={'assets/'+s[:-3]+'.gdc' for s in changed if s.startswith('scripts/') and s.endswith('.gd')}
@@ -52,6 +53,6 @@ def main():
                 'changed_scripts':sorted(script_changes),'new_scripts':sorted(new_scripts),'changed_data':sorted(data_changes),
                 'unchanged_scripts':frozen_scripts,'unchanged_asset_entries':frozen_data,'device':'NOT_RUN'}
     Path(a.output).write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    print('V80_APK_PAYLOAD_PASS',report['sha256'],report['unchanged_asset_entries'])
+    print(f'V{a.version_code}_APK_PAYLOAD_PASS',report['sha256'],report['unchanged_asset_entries'])
 
 if __name__=='__main__':main()

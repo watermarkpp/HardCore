@@ -40,6 +40,7 @@ const FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID := {
 var _v5_trace_enabled := OS.has_feature("debug") and OS.get_environment("HARDCORE_DPV2_TRACE") == "1"
 var _v5_roll_sequence := 0
 var _user_balance := preload("res://scripts/drop/user_drop_balance.gd").new()
+var _user_additions := preload("res://scripts/drop/user_drop_additions_v81.gd").new()
 var _overflow_telemetry_by_monster_id: Dictionary = {}
 var _lean_profile_by_monster_id: Dictionary = {}
 var _lean_probability_by_key: Dictionary = {}
@@ -48,10 +49,12 @@ var _lean_cache_misses := {"profile": 0, "probability": 0, "reward": 0}
 
 
 func _production_profile(monster_id: int) -> Dictionary:
-	return _user_balance.extend_profile(GameData.dpv2_direct_profile(monster_id), monster_id)
+	return _user_additions.extend_profile(_user_balance.extend_profile(GameData.dpv2_direct_profile(monster_id), monster_id), monster_id)
 
 
 func _production_probability(monster_id: int, slot_uid: String) -> Dictionary:
+	if _user_additions.owns(monster_id, slot_uid):
+		return _user_additions.probability(_production_probability(monster_id, str(_user_additions.policy.reference_slot_uid)))
 	var row: Dictionary = _user_balance.records.get(slot_uid, {})
 	var source_id := int(row.get("source_monster_id", monster_id))
 	var source_uid := str(row.get("source_uid", slot_uid))
@@ -95,8 +98,13 @@ func _lean_reward(slot: Dictionary) -> Dictionary:
 		return GameData.dpv2_direct_resolve_slot_reward(slot)
 	if not _lean_reward_by_slot_uid.has(slot_uid):
 		_lean_cache_misses["reward"] = int(_lean_cache_misses.get("reward", 0)) + 1
-		_lean_reward_by_slot_uid[slot_uid] = GameData.dpv2_direct_resolve_slot_reward(slot)
+		_lean_reward_by_slot_uid[slot_uid] = _production_reward(slot)
 	return _lean_reward_by_slot_uid.get(slot_uid, {})
+
+func _production_reward(slot: Dictionary) -> Dictionary:
+	if _user_additions.owns(76, str(slot.get("slot_uid", ""))):
+		return _user_additions.reward(slot)
+	return GameData.dpv2_direct_resolve_slot_reward(slot)
 
 
 func clear_runtime_resolution_cache_for_test() -> void:
@@ -165,6 +173,7 @@ func roll_monster_drops(
 			"identity_key": "canonical_monster_id",
 			"fallback_forbidden": true,
 			"user_balance_authority_id": "drop.user_balance.v80",
+			"user_additions_authority_id": "drop.user_additions.v81",
 			"probability_formula": (
 				"SPB enabled: effective x required 1x x runtime denominator policy x user balance; "
 				+ "SPB disabled: base x global exactly once"
@@ -281,7 +290,7 @@ func roll_monster_drops(
 			continue
 		result.probability_resolved_enabled_slots += 1
 		var reward := (
-			GameData.dpv2_direct_resolve_slot_reward(slot)
+			_production_reward(slot)
 			if include_audit
 			else _lean_reward(slot)
 		)
@@ -419,7 +428,7 @@ func _drop_output_item_record(
 	# The direct-table source ID is retained separately because the explicit
 	# female-equipment presentation map changes the display to the male record.
 	var attempted_item_id := canonical_item_id
-	var direct_identity := GameData.dpv2_direct_item_identity(canonical_item_id)
+	var direct_identity := _user_additions.item_identity(canonical_item_id) if canonical_item_id == 110 else GameData.dpv2_direct_item_identity(canonical_item_id)
 	var canonical_name := str(direct_identity.get("canonical_item_name", ""))
 	if direct_identity.is_empty() or canonical_name.is_empty():
 		return _unresolved_drop_item_record(

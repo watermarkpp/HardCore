@@ -9,18 +9,18 @@ const Dock := preload("res://scripts/ui_item_detail_dock.gd")
 const TITLE_SIZE := 20
 const BODY_SIZE := 14
 const MARGIN := 18.0
-const PREFERRED_WIDTH := 220.0 # soft aesthetic preference, NOT a width limit
 const MIN_WIDTH := 100.0
 const TITLE_GAP := 12.0
 const MEASURE_PAD := 4.0
 const WIDTH_STEPS := 12
-const REVISION := 9
+const REVISION := 10
 const ShopSpace := preload("res://scripts/ui_shop_detail_space.gd")
 const TouchScroll := preload("res://scripts/touch_scroll_support.gd")
 const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
 var attribute_help: Node
 
 var title_label: Label
+var affix_marker: Label
 var detail_label: RichTextLabel
 var _context: Dictionary = {}
 var _layout_key: Array = []
@@ -57,7 +57,7 @@ func _init() -> void:
 	title_label.name = "Title"
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	title_label.clip_text = false
 	title_label.visible_characters = -1
 	title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -65,6 +65,15 @@ func _init() -> void:
 	title_label.add_theme_color_override("font_color", Color("f2c783"))
 	_mark_runtime(title_label)
 	add_child(title_label)
+	affix_marker = Label.new()
+	affix_marker.name = "AffixMarker"
+	affix_marker.text = "★"
+	affix_marker.add_theme_font_size_override("font_size", TITLE_SIZE)
+	affix_marker.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	affix_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_mark_runtime(affix_marker)
+	add_child(affix_marker)
+	affix_marker.hide()
 	detail_label = RichTextLabel.new()
 	detail_label.name = "Body"
 	detail_label.bbcode_enabled = true
@@ -189,11 +198,13 @@ func _set_name_style(item: Dictionary, instance: Dictionary = {}) -> void:
 	_name_style = NameStyle.describe(item, instance)
 	_title_color = _name_style["color"]
 	NameStyle.apply_label_style(title_label, _name_style)
+	NameStyle.apply_label_style(affix_marker, _name_style)
 
 func _reset_name_style(message: bool = false) -> void:
 	_name_style.clear()
 	_title_color = NameStyle.MESSAGE_COLOR if message else NameStyle.DEFAULT_COLOR
 	NameStyle.apply_label_style(title_label, {}, _title_color)
+	NameStyle.apply_label_style(affix_marker, {}, _title_color)
 
 
 func show_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary = {}) -> void:
@@ -241,7 +252,7 @@ func _set_content(title: String, body: String, context: Dictionary, message: boo
 	if _title_source.is_empty():
 		_title_source = "提示" if message else "未知物品"
 	_body_source = body if message else AttributeHelp.decorate(body)
-	title_label.text = _title_source
+	_sync_title()
 	detail_label.text = _body_source
 	detail_label.get_v_scroll_bar().value = 0.0
 	title_label.add_theme_color_override("font_color", _title_color)
@@ -269,6 +280,7 @@ func hide_detail() -> void:
 	_title_source = ""
 	_body_source = ""
 	title_label.text = ""
+	affix_marker.hide()
 	detail_label.text = ""
 	visible = false
 	_r33_sync_caption()
@@ -332,6 +344,34 @@ func _measure_at(width: float, margin: float = MARGIN, pad: float = MEASURE_PAD)
 	var body_height := ceilf(float(detail_label.get_content_height())) + pad
 	return Vector2(maxf(26.0, title_height), maxf(20.0, body_height))
 
+func _sync_title() -> void:
+	affix_marker.visible = _title_source.begins_with("★")
+	title_label.text = _title_source.trim_prefix("★") if affix_marker.visible else _title_source
+
+func _title_required_width() -> float:
+	var marker_width := affix_marker.get_minimum_size().x + 2.0 if affix_marker.visible else 0.0
+	return ceilf(title_label.get_minimum_size().x + 2.0 * (MARGIN + marker_width))
+
+func _place_affix_marker() -> void:
+	# The plain name stays centered. The marker is separate from its alignment.
+	var name_width := title_label.get_minimum_size().x
+	var marker_width := affix_marker.get_minimum_size().x
+	title_label.position.x = (size.x - name_width) * 0.5
+	title_label.size.x = name_width
+	affix_marker.position = Vector2((size.x - name_width) * 0.5 - marker_width - 2.0, MARGIN)
+	affix_marker.size = Vector2(marker_width, title_label.size.y)
+
+func _center_body_block() -> void:
+	# A long title can widen the card beyond its body. Keep each paragraph's
+	# original left alignment while centering the entire shaped content block.
+	# Round up with one pixel of breathing room to retain the measured wrapping.
+	var body_width := minf(detail_label.size.x, ceilf(float(detail_label.get_content_width())) + 1.0)
+	detail_label.size.x = maxf(1.0, body_width)
+	# Re-read after the final width is applied. Center the longest actual line,
+	# excluding the extra wrap-safety pixel of the RichTextLabel content box.
+	var longest_line_width := float(detail_label.get_content_width())
+	detail_label.position.x = (size.x - longest_line_width) * 0.5
+
 func _relayout() -> void:
 	if _laying_out or not visible or not is_inside_tree():
 		return
@@ -365,27 +405,23 @@ func _relayout() -> void:
 	var regions: Array[Rect2] = [region]
 	if expanded.has_area() and expanded != region:
 		regions.append(expanded)
-	title_label.text = _title_source
+	_sync_title()
 	detail_label.text = _body_source
+	var title_width := _title_required_width()
 	var chosen: Dictionary = {}
 	for candidate: Rect2 in regions:
 		var upper := floorf(candidate.size.x)
-		if upper < MIN_WIDTH or candidate.size.y < 80.0:
+		if upper < maxf(MIN_WIDTH, title_width) or candidate.size.y < 80.0:
 			continue
-		var lower := minf(160.0, upper)
+		var lower := minf(maxf(160.0, title_width), upper)
 		var best_cost := INF
-		# Both axes adapt. Portrait is a visual requirement only in non-shop
-		# domains. The shop may be modestly landscape (W <= 1.3 H).
+		# Fit the actual shaped content. Short items no longer inherit an
+		# artificial portrait-height floor; extra properties grow the card.
 		for n in range(WIDTH_STEPS + 1):
 			var trial_width := floorf(lerpf(lower, upper, float(n) / float(WIDTH_STEPS)))
 			var trial_extent := _measure_at(trial_width)
 			var natural := MARGIN * 2.0 + trial_extent.x + TITLE_GAP + trial_extent.y
-			# Non-shop details are contractually portrait (H > W). Short content
-			# (potions, books) must still fill the portrait envelope instead of
-			# collapsing to a near-square floor; long content keeps its natural
-			# height, which already exceeds the floor.
-			var target_ratio := 1.0 if shop else 1.38
-			var trial_height := ceilf(maxf(natural, trial_width / 1.3 if shop else maxf(trial_width + 4.0, trial_width * target_ratio)))
+			var trial_height := ceilf(natural)
 			if _r32_capture_candidates:
 				_r32_candidates.append({
 					"region": candidate, "width": trial_width,
@@ -400,10 +436,7 @@ func _relayout() -> void:
 				})
 			if trial_height > floorf(candidate.size.y):
 				continue
-			var ratio := trial_height / trial_width
-			var cost := absf(ratio - target_ratio) + 0.12 * trial_width * trial_height / maxf(1.0, candidate.get_area())
-			if not shop:
-				cost += 0.08 * absf(trial_width - PREFERRED_WIDTH) / PREFERRED_WIDTH
+			var cost := trial_width * trial_height
 			if cost < best_cost:
 				best_cost = cost
 				chosen = {"width": trial_width, "height": trial_height, "region": candidate}
@@ -415,22 +448,18 @@ func _relayout() -> void:
 		# back to presenter-managed, BODY-ONLY vertical scrolling instead of
 		# failing the whole detail. The title stays fixed at the top, the full
 		# body text stays reachable by scrolling, scroll_active reports the
-		# measured state honestly, and the region/aspect contracts still hold.
+		# measured state honestly, and the region clearance still holds.
 		var fallback: Rect2 = region
 		if expanded.has_area() and expanded.get_area() > fallback.get_area():
 			fallback = expanded
 		var max_height := floorf(fallback.size.y)
 		var max_width := floorf(fallback.size.x)
-		# The clamped card keeps the domain aspect rule: non-shop stays
-		# portrait (H > W), the shop keeps its modest landscape allowance.
-		var width_cap := max_height / 1.3 if shop else max_height / 1.38
-		var scroll_width := floorf(clampf(minf(PREFERRED_WIDTH, width_cap), MIN_WIDTH, max_width))
-		if max_height < 80.0 or max_width < MIN_WIDTH or scroll_width < MIN_WIDTH:
+		var scroll_width := max_width
+		if max_height < 80.0 or max_width < maxf(MIN_WIDTH, title_width):
 			_fail_layout("SPACE_PLAN_REQUIRED")
 			return
 		var scroll_extent := _measure_at(scroll_width)
 		var scroll_height := minf(ceilf(MARGIN * 2.0 + scroll_extent.x + TITLE_GAP + scroll_extent.y), max_height)
-		scroll_height = maxf(scroll_height, scroll_width / 1.3 if shop else scroll_width + 4.0)
 		scroll_height = minf(scroll_height, max_height)
 		var fitted := Dock.fit_rect(fallback, Vector2(scroll_width, scroll_height), side)
 		set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -440,8 +469,10 @@ func _relayout() -> void:
 		var text_width := scroll_width - 2.0 * MARGIN
 		title_label.position = Vector2(MARGIN, MARGIN)
 		title_label.size = Vector2(text_width, scroll_extent.x)
+		_place_affix_marker()
 		detail_label.position = Vector2(MARGIN, MARGIN + scroll_extent.x + TITLE_GAP)
 		detail_label.size = Vector2(text_width, scroll_height - MARGIN * 2.0 - scroll_extent.x - TITLE_GAP)
+		_center_body_block()
 		detail_label.scroll_active = float(detail_label.get_content_height()) > detail_label.size.y + 0.5
 		_layout_ok = (
 			float(detail_label.get_content_width()) <= detail_label.size.x + 0.5
@@ -475,8 +506,10 @@ func _relayout() -> void:
 	var text_width := width - 2.0 * MARGIN
 	title_label.position = Vector2(MARGIN, MARGIN)
 	title_label.size = Vector2(text_width, extent.x)
+	_place_affix_marker()
 	detail_label.position = Vector2(MARGIN, MARGIN + extent.x + TITLE_GAP)
 	detail_label.size = Vector2(text_width, height - MARGIN * 2.0 - extent.x - TITLE_GAP)
+	_center_body_block()
 	_layout_ok = (
 		float(detail_label.get_content_height()) <= detail_label.size.y
 		and float(detail_label.get_content_width()) <= detail_label.size.x + 0.5

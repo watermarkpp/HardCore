@@ -73,8 +73,9 @@ func _run() -> void:
 	menu.show_settings_page()
 	var filter_row := menu.loot_filter_slider.get_parent() as Control
 	assert(filter_row.position.y > menu.sfx_slider.get_parent().position.y)
-	assert(filter_row.position.y + 98 <= menu.audio_save_note.position.y)
-	assert(menu.audio_save_note.position.y + menu.audio_save_note.size.y <= menu.settings_back_button.position.y)
+	assert(filter_row.position.y + filter_row.size.y <= menu.settings_back_button.position.y)
+	assert(not menu.audio_save_note.visible)
+	assert(menu.settings_back_button.position == Vector2(72,430))
 	assert(menu.settings_back_button.position.y + menu.settings_back_button.size.y <= menu.modal.size.y)
 	assert(menu.loot_filter_slider.step == 1 and menu.loot_filter_slider.max_value == 2)
 	menu.loot_filter_slider.value = 2

@@ -306,9 +306,12 @@ static func _v2_modifiers(item_id: int, digest: String) -> Array:
 
 
 static func is_affixed_instance(instance: Dictionary, catalog_item: Dictionary) -> bool:
+	# Keep the persisted roll/validation contract intact: a durability-only roll
+	# is valid equipment, but it is not a small-jackpot item for UI or filtering.
 	return (
 		validate_instance(instance, catalog_item)
 		and bool((instance.get("drop_affix", {}) as Dictionary).get("applied", false))
+		and not (instance.get("modifiers", []) as Array).is_empty()
 	)
 
 

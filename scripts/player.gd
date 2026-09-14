@@ -97,6 +97,7 @@ var defense_buff := 0
 var defense_buff_time := 0.0
 var mac_buff := 0
 var mac_buff_time := 0.0
+var status_buff_started_at: Dictionary = {}
 var control_time := 0.0
 var poison_time := 0.0
 var _monster_source_poison := MonsterSourcePoisonStateScript.new()
@@ -1378,6 +1379,8 @@ func spend_mana(amount: int) -> bool:
 
 func apply_magic_shield(seconds: float, reduction: float) -> void:
 	var applied_duration := maxf(0.0, seconds)
+	if applied_duration > 0.0 and (shield_time <= 0.0 or shield_capacity <= 0.0):
+		status_buff_started_at["shield"] = Time.get_ticks_usec()
 	shield_time = maxf(shield_time, applied_duration)
 	shield_initial_duration = maxf(shield_initial_duration, applied_duration)
 	damage_reduction = maxf(damage_reduction, clampf(reduction, 0.0, 0.8))
@@ -1424,6 +1427,8 @@ func magic_shield_requires_refresh(
 
 
 func apply_stealth(seconds: float) -> void:
+	if seconds > 0.0 and not is_stealthed():
+		status_buff_started_at["stealth"] = Time.get_ticks_usec()
 	_stealth_break_override = false
 	stealth_time = maxf(stealth_time, seconds)
 	queue_redraw()
@@ -1449,6 +1454,7 @@ func apply_ac_buff(seconds: float, amount: int) -> void:
 		return
 	var safe_amount := maxi(0, amount)
 	if defense_buff_time <= 0.0:
+		status_buff_started_at["ac"] = Time.get_ticks_usec()
 		defense_buff = safe_amount
 	else:
 		defense_buff = maxi(defense_buff, safe_amount)
@@ -1459,6 +1465,8 @@ func apply_ac_buff(seconds: float, amount: int) -> void:
 func apply_mac_buff(seconds: float, amount: int) -> void:
 	if seconds <= 0.0:
 		return
+	if mac_buff_time <= 0.0:
+		status_buff_started_at["mac"] = Time.get_ticks_usec()
 	mac_buff_time = maxf(mac_buff_time, seconds)
 	mac_buff = maxi(mac_buff, maxi(0, amount))
 	queue_redraw()

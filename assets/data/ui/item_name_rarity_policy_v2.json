@@ -174,10 +174,10 @@
     "225": "zuma",
     "226": "zuma",
     "227": "zuma",
-    "228": "ultra_rare",
-    "229": "ultra_rare",
-    "230": "ultra_rare",
-    "231": "ultra_rare",
+    "228": "wooma",
+    "229": "wooma",
+    "230": "wooma",
+    "231": "wooma",
     "232": "redmoon",
     "233": "redmoon",
     "234": "redmoon",
@@ -190,12 +190,12 @@
     "241": "redmoon",
     "242": "redmoon",
     "243": "redmoon",
-    "244": "zuma",
-    "245": "zuma",
-    "246": "zuma",
-    "247": "zuma",
-    "248": "zuma",
-    "249": "zuma",
+    "244": "wooma",
+    "245": "wooma",
+    "246": "wooma",
+    "247": "wooma",
+    "248": "wooma",
+    "249": "wooma",
     "250": "ultra_rare",
     "251": "ultra_rare",
     "252": "ultra_rare",
@@ -943,5 +943,25 @@
       "canonical_name": "求婚戒指",
       "document_section": "8_quest_equipment"
     }
+  },
+  "user_followup_20260914": {
+    "authority": "user Word requirements and continuation",
+    "document_sha256": "94F3C6C7F7E497F9241FD84A20A6FD44950D3C7411C86E33479E051A1BF4FA7A",
+    "wooma_item_ids": [
+      228,
+      229,
+      230,
+      231,
+      244,
+      245,
+      246,
+      247,
+      248,
+      249
+    ],
+    "zuma_item_ids": [
+      110
+    ],
+    "filter_rule": "follow name tier, including memory/rainbow/magicblood"
   }
 }
