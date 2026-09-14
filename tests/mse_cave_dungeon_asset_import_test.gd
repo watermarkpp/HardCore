@@ -47,7 +47,10 @@ func _ready() -> void:
 		assert(ManualCollisionPolicy.is_visual_only_wall(effective_wall))
 		assert(str(effective_wall.get("collision_policy", "")) == "none")
 		assert((effective_wall.get("collision_cells", []) as Array).is_empty())
-		assert(effective_wall.get("collision_footprint_tiles", []) == [0, 0])
+		# Calibration overrides round-trip through JSON, so numeric zeros come
+		# back as floats; compare with float literals (same convention as the
+		# calibrated-wall assert below).
+		assert(effective_wall.get("collision_footprint_tiles", []) == [0.0, 0.0])
 		assert(str(effective_wall.get("navigation_policy", "")) == "ignore")
 		assert(str(effective_wall.get("collision_policy_id", "")) == ManualCollisionPolicy.POLICY_ID)
 	var calibration_path := "user://mse_wall_collision_default_override.json"
@@ -77,7 +80,10 @@ func _ready() -> void:
 	assert((placed.instance.collision_cells as Array).is_empty())
 	assert(placed.instance.collision_footprint_tiles == [0, 0])
 	assert(bool(placed.instance.manual_collision_expected))
-	assert(str(placed.instance.map_collision_override) == "default")
+	# The new-instance manual-collision-only contract disables catalog-driven
+	# collision overrides for placed visual-only walls (see
+	# MapEditorInstanceService._apply_new_instance_collision_policy).
+	assert(str(placed.instance.map_collision_override) == "disabled")
 	var overlapping := MapEditorInstanceService.create_instance(document, str(first_straight_wall.asset_id), "terrain", Vector2i(20, 20), "terrain_base")
 	assert(overlapping.ok, str(overlapping.get("errors", [])))
 	var wall_asset := MapAssetCatalogService.find_asset(str(placed.instance.asset_id))
@@ -103,17 +109,25 @@ func _ready() -> void:
 
 	var pillar_asset := MapAssetCatalogService.find_asset("cave_dungeon.rock_pillar_01")
 	assert(not pillar_asset.is_empty())
-	assert(str(pillar_asset.get("collision_policy", "none")) != "none")
+	# Project props are manual-collision-only now: the catalog no longer authors
+	# collision for them and resizing must never resurrect it (same contract as
+	# the visual-only wall block above).
+	assert(str(pillar_asset.get("collision_policy", "none")) == "none")
+	assert(str(pillar_asset.get("collision_profile_id", "none_visual")) == "none_visual")
+	var pillar_fp: Array = pillar_asset.get("collision_footprint_tiles", [])
+	assert(pillar_fp.size() == 2 and int(pillar_fp[0]) == 0 and int(pillar_fp[1]) == 0)
 	var pillar_document := MapEditorTypes.new_map("cave_prop_resize_test", 990161, "Cave Prop Resize", Vector2i(64, 64))
 	var pillar := MapEditorInstanceService.create_instance(pillar_document, str(pillar_asset.asset_id), "terrain", Vector2i(24, 24))
 	assert(pillar.ok, str(pillar.get("errors", [])))
 	var pillar_scale_before := float(pillar.instance.scale[0])
 	var pillar_before := MapEditorCollisionService.build_walkability(pillar_document)
+	assert(pillar_before.blocked_count == 0)
 	var pillar_resized := MapEditorInstanceService.resize_instance(pillar_document, str(pillar.instance.instance_id), -1)
 	assert(pillar_resized.ok, str(pillar_resized.get("errors", [])))
 	var pillar_after := MapEditorCollisionService.build_walkability(pillar_document)
 	assert(float(pillar_resized.instance.scale[0]) < pillar_scale_before)
-	assert(pillar_after.blocked_count < pillar_before.blocked_count)
+	assert(pillar_after.blocked_count == 0)
+	assert(pillar_resized.instance.collision_footprint_tiles == [0, 0])
 
 	print("MSE_CAVE_DUNGEON_ASSET_IMPORT_PASS assets=%d walls=%d sheets=%d" % [extension_assets.size(), wall_count, sheet_count])
 	get_tree().quit(0)

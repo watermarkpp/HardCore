@@ -9,7 +9,7 @@ const GENERATED_POLICIES := [
 
 func _ready() -> void:
 	MapAssetCatalogService.invalidate_cache()
-	var asset := _find_automatic_collision_asset()
+	var asset := _find_manual_collision_fixture_asset()
 	assert(not asset.is_empty())
 	var document := MapEditorTypes.new_map(
 		"manual_collision_only_test",
@@ -165,17 +165,23 @@ func _ready() -> void:
 	get_tree().quit(0)
 
 
-func _find_automatic_collision_asset() -> Dictionary:
+func _find_manual_collision_fixture_asset() -> Dictionary:
 	for asset: Dictionary in MapAssetCatalogService.all_assets():
 		var policy := str(asset.get("collision_policy", "none"))
 		if (
 			bool(asset.get("placeable", false))
 			and str(asset.get("asset_type", "")) != "ground_brush"
-			and policy != "none"
-			and policy not in GENERATED_POLICIES
 			and (asset.get("footprint_tiles", []) as Array).size() == 2
 		):
-			return asset
+			# Palette contract: placeable non-ground assets are
+			# manual-collision-only. Only the generated structural policies
+			# (walls, terrain stamps) may still author collision.
+			assert(
+				policy == "none" or policy in GENERATED_POLICIES,
+				str(asset.get("asset_id", "")) + ":authored_collision_policy"
+			)
+			if policy == "none":
+				return asset
 	return {}
 
 

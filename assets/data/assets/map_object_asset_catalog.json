@@ -100,8 +100,8 @@
       ],
       "default_layer": "object_base",
       "default_object_role": "interactable",
-      "collision_policy": "preset",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -115,7 +115,16 @@
       "output_sha256": "c714839ac57629d2dca687f8953a24374a65fbdb157d417b66229c9b5860a7be",
       "thumbnail_source_sha256": "c714839ac57629d2dca687f8953a24374a65fbdb157d417b66229c9b5860a7be",
       "raw_import_path": "assets/raw_import/map_assets/object_sources/03_storage_props/03_storage_props_01_r01_c01.png",
-      "processing": "green_key_remove_crop_proportional_resize"
+      "processing": "green_key_remove_crop_proportional_resize",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "building.gothic_tent_01",
@@ -158,8 +167,8 @@
       ],
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -173,7 +182,16 @@
       "output_sha256": "71a7edc404a48ddc6e599d016b136f8ba0dd1d9834af7ccac7ab0f28a6c59554",
       "thumbnail_source_sha256": "71a7edc404a48ddc6e599d016b136f8ba0dd1d9834af7ccac7ab0f28a6c59554",
       "raw_import_path": "assets/raw_import/map_assets/object_sources/02_tents/02_tents_01_r01_c01.png",
-      "processing": "green_key_remove_crop_proportional_resize"
+      "processing": "green_key_remove_crop_proportional_resize",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "building.blacksmith_forge_01",
@@ -216,8 +234,8 @@
       ],
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -231,7 +249,16 @@
       "output_sha256": "004044aeb97980f88a93d8d85ac44d5d885ddde2691dc1ee1fddda2d5efed5d7",
       "thumbnail_source_sha256": "004044aeb97980f88a93d8d85ac44d5d885ddde2691dc1ee1fddda2d5efed5d7",
       "raw_import_path": "assets/raw_import/map_assets/object_sources/04_blacksmith_props/04_blacksmith_props_01_r01_c01.png",
-      "processing": "green_key_remove_crop_proportional_resize"
+      "processing": "green_key_remove_crop_proportional_resize",
+      "collision_profile_id": "none_visual",
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     }
   ],
   "problems": []

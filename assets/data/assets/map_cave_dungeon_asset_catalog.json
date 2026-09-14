@@ -437,8 +437,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        2,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -450,9 +450,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -476,7 +476,11 @@
         "terrain_overlay"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.ruin_overlay_4x4",
@@ -531,8 +535,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -544,9 +548,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -570,7 +574,11 @@
         "terrain_overlay"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.barrel_crates_01",
@@ -625,8 +633,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -638,9 +646,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -664,7 +672,11 @@
         "small_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.brazier_01",
@@ -719,8 +731,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -732,9 +744,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -758,7 +770,11 @@
         "small_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.campfire_01",
@@ -813,8 +829,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -826,9 +842,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -852,7 +868,11 @@
         "medium_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.hide_tent_01",
@@ -907,8 +927,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -920,9 +940,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -946,7 +966,11 @@
         "large_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.rock_cluster_01",
@@ -1001,8 +1025,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        3,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -1014,9 +1038,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -1040,7 +1064,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.ground_shadow_01",
@@ -3163,8 +3191,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        3,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -3176,9 +3204,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -3202,7 +3230,11 @@
         "terrain_wall"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.dark_edge_02",
@@ -3257,8 +3289,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        3,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -3270,9 +3302,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -3296,7 +3328,11 @@
         "terrain_wall"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.dark_edge_03",
@@ -3351,8 +3387,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        3,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -3364,9 +3400,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -3390,7 +3426,11 @@
         "terrain_wall"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.dark_edge_04",
@@ -3445,8 +3485,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        2,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -3458,9 +3498,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -3484,7 +3524,11 @@
         "terrain_wall"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.moss_patch_01",
@@ -4009,8 +4053,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4022,9 +4066,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4048,7 +4092,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.cliff_wall_02",
@@ -4103,8 +4151,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4116,9 +4164,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4142,7 +4190,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.cliff_wall_03",
@@ -4197,8 +4249,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4210,9 +4262,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4236,7 +4288,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.cliff_wall_04",
@@ -4291,8 +4347,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        5,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4304,9 +4360,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4330,7 +4386,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.rock_pillar_01",
@@ -4385,8 +4445,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4398,9 +4458,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4424,7 +4484,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.rock_pillar_02",
@@ -4479,8 +4543,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4492,9 +4556,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4518,7 +4582,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.rock_pillar_03",
@@ -4573,8 +4641,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4586,9 +4654,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4612,7 +4680,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.rock_pillar_04",
@@ -4667,8 +4739,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4680,9 +4752,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4706,7 +4778,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.pottery_cluster_01",
@@ -4761,8 +4837,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4774,9 +4850,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4800,7 +4876,11 @@
         "small_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.wood_crate_01",
@@ -4855,8 +4935,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4868,9 +4948,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4894,7 +4974,11 @@
         "small_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.wood_crate_02",
@@ -4949,8 +5033,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -4962,9 +5046,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -4988,7 +5072,11 @@
         "small_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.pottery_cluster_02",
@@ -5043,8 +5131,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        2,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5056,9 +5144,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5082,7 +5170,11 @@
         "small_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.broken_crate_01",
@@ -5137,8 +5229,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5150,9 +5242,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5176,7 +5268,11 @@
         "small_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.ruined_cart_01",
@@ -5231,8 +5327,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5244,9 +5340,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5270,7 +5366,11 @@
         "medium_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.rock_arch_01",
@@ -5325,8 +5425,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        3,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5338,9 +5438,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5364,7 +5464,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.ruined_temple_01",
@@ -5419,8 +5523,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        5,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5432,9 +5536,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5458,7 +5562,11 @@
         "large_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.thatched_house_01",
@@ -5513,8 +5621,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5526,9 +5634,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5552,7 +5660,11 @@
         "large_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.ruined_workshop_01",
@@ -5607,8 +5719,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5620,9 +5732,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5646,7 +5758,11 @@
         "large_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.shrine_pair_01",
@@ -5701,8 +5817,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        2,
-        2
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5714,9 +5830,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5740,7 +5856,11 @@
         "medium_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.cave_entrance_01",
@@ -5795,8 +5915,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5808,9 +5928,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5834,7 +5954,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.boss_rock_shrine_01",
@@ -5889,8 +6013,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5902,9 +6026,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -5928,7 +6052,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.monolith_cluster_01",
@@ -5983,8 +6111,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        6,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -5996,9 +6124,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "terrain",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -6022,7 +6150,11 @@
         "terrain_stamp"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.dark_ground_stamp_01",
@@ -7205,8 +7337,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -7218,9 +7350,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "interactable",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -7244,7 +7376,11 @@
         "effect_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.magic_fire_blue_01",
@@ -7299,8 +7435,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -7312,9 +7448,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "interactable",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -7338,7 +7474,11 @@
         "effect_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.magic_fire_green_01",
@@ -7393,8 +7533,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -7406,9 +7546,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "interactable",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -7432,7 +7572,11 @@
         "effect_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.magic_fire_gold_01",
@@ -7487,8 +7631,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -7500,9 +7644,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "interactable",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -7526,7 +7670,11 @@
         "effect_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "asset_id": "cave_dungeon.magic_fire_white_01",
@@ -7581,8 +7729,8 @@
         2
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -7594,9 +7742,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "interactable",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": false,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -7620,7 +7768,11 @@
         "effect_prop"
       ],
       "editable": true,
-      "runtime_export": true
+      "runtime_export": true,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "project_prop_manual_collision_only_v1"
     },
     {
       "schema_version": 1,
