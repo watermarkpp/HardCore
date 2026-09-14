@@ -37,9 +37,12 @@ func _run() -> void:
 	assert(controller.music_player.bus == &"Music", "主城BGM没有路由到Music bus")
 	assert(is_equal_approx(db_to_linear(controller.music_player.volume_db), 0.70), "主城BGM默认音量必须为原来的70%，不能改变总线音量")
 	assert(controller.music_player.stream != null, "用户主城BGM OGG没有加载")
+	assert(controller.music_player.stream is ControllerScript.PreparedMusicStream)
+	var source_stream: AudioStream = controller.music_player.stream.source_stream
 	assert(
-		controller.music_player.stream is AudioStreamOggVorbis
-			and not (controller.music_player.stream as AudioStreamOggVorbis).loop,
+		source_stream is AudioStreamOggVorbis
+			and source_stream.resource_path == ControllerScript.TOWN_MUSIC_PATH
+			and not (source_stream as AudioStreamOggVorbis).loop,
 		"主城BGM必须每次入城完整播放一遍后安静",
 	)
 	controller.delay_seconds = 0.05

@@ -10,6 +10,9 @@ const PATH_SEARCH_RESOURCE := "res://scripts/monster_ai_package/path_search.gd"
 const SpatialIndex := preload("res://scripts/runtime_combat_spatial_index.gd")
 const WorldRules := preload("res://scripts/world_spatial_rules.gd")
 const ArtSpec := preload("res://scripts/art_spec.gd")
+const FireWall := preload("res://scripts/fire_wall_field_controller.gd")
+const SpellGeometry := preload("res://scripts/skills/caster_spell_geometry.gd")
+const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 
 const MAP_ID := 1
 const MONSTER_ID := 64
@@ -89,6 +92,7 @@ class ProbeEnemy:
 		forced_roll := -1,
 		force_struck_reaction := false,
 		forced_control_roll := -1,
+		ranged := false,
 	) -> void:
 		probe_damage_applications += 1
 		super._apply_attack_damage(
@@ -98,7 +102,176 @@ class ProbeEnemy:
 			forced_roll,
 			force_struck_reaction,
 			forced_control_roll,
+			ranged,
 		)
+
+
+
+
+class DetailedProbeEnemy:
+	extends ProbeEnemy
+
+	static var section_usec: Dictionary = {}
+	static var section_calls: Dictionary = {}
+
+	func _record_probe_section(key: String, started: int) -> void:
+		section_usec[key] = int(section_usec.get(key, 0)) + Time.get_ticks_usec() - started
+		section_calls[key] = int(section_calls.get(key, 0)) + 1
+
+	func _audio_try_enter_combat_session() -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._audio_try_enter_combat_session()
+		_record_probe_section("_audio_try_enter_combat_session", started)
+		return result
+
+	func _audio_observe_visual_state() -> void:
+		var started := Time.get_ticks_usec()
+		super._audio_observe_visual_state()
+		_record_probe_section("_audio_observe_visual_state", started)
+
+	func _can_use_background_ai() -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._can_use_background_ai()
+		_record_probe_section("_can_use_background_ai", started)
+		return result
+
+	func _spatial_index_update() -> void:
+		var started := Time.get_ticks_usec()
+		super._spatial_index_update()
+		_record_probe_section("_spatial_index_update", started)
+
+	func _update_status_effects(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._update_status_effects(delta)
+		_record_probe_section("_update_status_effects", started)
+
+	func _update_natural_regen(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._update_natural_regen(delta)
+		_record_probe_section("_update_natural_regen", started)
+
+	func _update_entrapment_state(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._update_entrapment_state(delta)
+		_record_probe_section("_update_entrapment_state", started)
+
+	func _update_pending_attack(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._update_pending_attack(delta)
+		_record_probe_section("_update_pending_attack", started)
+
+	func _handle_safe_zone_target_return(physics_delta: float) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._handle_safe_zone_target_return(physics_delta)
+		_record_probe_section("_handle_safe_zone_target_return", started)
+		return result
+
+	func _update_area_attack(delta: float) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._update_area_attack(delta)
+		_record_probe_section("_update_area_attack", started)
+		return result
+
+	func _update_behavior_summon(delta: float) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._update_behavior_summon(delta)
+		_record_probe_section("_update_behavior_summon", started)
+		return result
+
+	func _hc_standard_melee() -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_standard_melee()
+		_record_probe_section("_hc_standard_melee", started)
+		return result
+
+	func _hc_tick_melee(delta: float, physics_delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._hc_tick_melee(delta, physics_delta)
+		_record_probe_section("_hc_tick_melee", started)
+
+
+	func _hc_target_usable(hit_target: Node2D) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_target_usable(hit_target)
+		_record_probe_section("_hc_target_usable", started)
+		return result
+
+	func _hc_access(hit_target: Node2D, tolerance := 0.0, fresh_world := false) -> String:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_access(hit_target, tolerance, fresh_world)
+		_record_probe_section("_hc_access", started)
+		return result
+
+	func _hc_frontline_at(a: Vector2, b: Vector2, hit_target: Node2D) -> int:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_frontline_at(a, b, hit_target)
+		_record_probe_section("_hc_frontline_at", started)
+		return result
+
+	func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_motion_clear(a, b)
+		_record_probe_section("_hc_motion_clear", started)
+		return result
+
+	func _hc_try_start(hit_target: Node2D, after_motion_attempt := false) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_try_start(hit_target, after_motion_attempt)
+		_record_probe_section("_hc_try_start", started)
+		return result
+
+	func _hc_world_between(a: Vector2, b: Vector2) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_world_between(a, b)
+		_record_probe_section("_hc_world_between", started)
+		return result
+
+	func _hc_point_inside_safe_zone(point_screen_px: Vector2) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_point_inside_safe_zone(point_screen_px)
+		_record_probe_section("_hc_point_inside_safe_zone", started)
+		return result
+
+	func _hc_refresh_observation() -> void:
+		var started := Time.get_ticks_usec()
+		super._hc_refresh_observation()
+		_record_probe_section("_hc_refresh_observation", started)
+
+	func _hc_preferred(hit_target: Node2D) -> float:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_preferred(hit_target)
+		_record_probe_section("_hc_preferred", started)
+		return result
+
+	func _advance_autonomous_step(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._advance_autonomous_step(delta)
+		_record_probe_section("_advance_autonomous_step", started)
+
+
+	func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vector2i:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_neighbor(current, hit_target, direct)
+		_record_probe_section("_hc_neighbor", started)
+		return result
+
+	func _hc_prepare_flank_batch(current: Vector2, anchor: Vector2, cell: Vector2i) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_prepare_flank_batch(current, anchor, cell)
+		_record_probe_section("_hc_prepare_flank_batch", started)
+		return result
+
+	func _hc_point_walkable(p: Vector2) -> bool:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_point_walkable(p)
+		_record_probe_section("_hc_point_walkable", started)
+		return result
+
+	func _hc_static_query_scope(include_safe_zone_owner: bool) -> Array:
+		var started := Time.get_ticks_usec()
+		var result := super._hc_static_query_scope(include_safe_zone_owner)
+		_record_probe_section("_hc_static_query_scope", started)
+		return result
 
 
 func _ready() -> void:
@@ -272,7 +445,12 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 			enemy.configure_terrain_navigation_context(context)
 	for _frame: int in range(WARMUP_FRAMES - 1):
 		await _await_real_frame()
+	var field_started := Time.get_ticks_usec()
+	var fields := _make_optional_fire_walls(player, index)
+	var field_setup_usec := Time.get_ticks_usec() - field_started if not fields.is_empty() else 0
 	_reset_probe_counters(enemies, player)
+	DetailedProbeEnemy.section_usec.clear()
+	DetailedProbeEnemy.section_calls.clear()
 	EnemyActor.reset_performance_diagnostics()
 	Terrain.reset_diagnostics()
 	_reset_path_search_diagnostics()
@@ -304,6 +482,12 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 		scheduler_after = _scheduler_snapshot(scheduler)
 	var actor_proof := _actor_proof(enemies, player, initial_ground_by_id)
 	var aggregate := _aggregate_actor_proof(actor_proof)
+	if not fields.is_empty():
+		var hits := 0
+		for field: FireWall in fields:
+			assert(field.visual_cells.size() == 9 and field.tick_count >= 5)
+			hits += field.damage_application_count
+		assert(hits > 0, "AOE sample must apply real controller-owned damage to the crowd")
 	var row := {
 		"scenario": scenario,
 		"monster_count": count,
@@ -325,6 +509,11 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 		"frame_delta_diagnostic_ms": _summary(_frame_delta_diagnostic_ms),
 		"godot_process_monitor_ms_diagnostic_only": _godot_process_monitor_summary(),
 		"enemy_metrics": enemy_metrics,
+		"fire_wall_fields": fields.size(),
+		"fire_wall_setup_usec": field_setup_usec,
+		"fire_wall_diagnostics": fields.map(func(field: FireWall) -> Dictionary: return field.fire_wall_controller_diagnostics()),
+		"optional_probe_section_usec": DetailedProbeEnemy.section_usec.duplicate(),
+		"optional_probe_section_calls": DetailedProbeEnemy.section_calls.duplicate(),
 		"terrain_metrics": terrain_metrics,
 		"path_search_metrics": path_search_metrics,
 		"scheduler_delta": _scheduler_delta(scheduler_before, scheduler_after),
@@ -347,6 +536,9 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 	# diluting the frame samples or replacing the live process evidence.
 	for enemy: EnemyActor in enemies:
 		enemy.set_physics_process(false)
+	for field: FireWall in fields:
+		field.set_physics_process(false)
+		field.queue_free()
 	var drain := await _drain_scheduler(scheduler)
 	row["post_sample_drain"] = drain
 	index.clear_map(MAP_ID)
@@ -357,6 +549,35 @@ func _sample_case(scenario: String, count: int) -> Dictionary:
 	for _frame: int in range(3):
 		await _await_real_frame()
 	return row
+
+
+func _make_optional_fire_walls(player: PlayerCharacter, index: SpatialIndex) -> Array[FireWall]:
+	var fields: Array[FireWall] = []
+	if OS.get_environment("HARDCORE_V82_FIRE_WALL") != "1":
+		return fields
+	for serial in range(6):
+		var anchor := _target_ground().floor() + Vector2((serial % 3) * 2 - 2, (serial / 3) * 2 - 1)
+		var context := Snapshot.make_absolute_runtime_context(MAP_ID, anchor, anchor, _ground_to_screen)
+		context["expected_runtime_map_id"] = MAP_ID
+		var cells: Array[Vector2i] = []
+		var positions: Array[Vector2] = []
+		for y in range(-1, 2):
+			for x in range(-1, 2):
+				cells.append(Vector2i(anchor) + Vector2i(x, y))
+				positions.append(_ground_to_screen(anchor + Vector2(x, y)))
+		var release_id := "v82:field:%d:%d" % [player.get_instance_id(), serial]
+		var snapshot := SpellGeometry.create_exact_cell_union_release_snapshot(
+			"wizard.fire_wall", release_id, anchor, cells, context)
+		var filters: Array[Callable] = []
+		var field := FireWall.new()
+		field.setup_fire_wall_field(player, "wizard.fire_wall",
+			{"raw_power": 1, "duration_seconds": 60.0, "tick_interval_ms": 1000},
+			positions, cells, filters,
+			func(enemy: EnemyActor, power: int) -> void: enemy.take_damage(power, player),
+			_screen_to_ground, release_id, snapshot, context, index, MAP_ID)
+		add_child(field)
+		fields.append(field)
+	return fields
 
 
 func _make_player(ground: Vector2) -> ProbePlayer:
@@ -383,7 +604,11 @@ func _make_enemy(
 	ground: Vector2,
 	serial: int,
 ) -> EnemyActor:
-	var enemy := ProbeEnemy.new()
+	var enemy := (
+		DetailedProbeEnemy.new()
+		if OS.get_environment("HARDCORE_V82_DETAIL_PROBE") == "1"
+		else ProbeEnemy.new()
+	)
 	enemy.setup(GameData.get_monster_by_id(MONSTER_ID), player, false)
 	enemy.set_spawn_facing_seed_for_test(LAYOUT_SEED + serial)
 	enemy.configure_runtime_map_projection(

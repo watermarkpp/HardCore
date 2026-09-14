@@ -1,0 +1,41 @@
+{
+  "total": 2,
+  "engine_log_errors": 0,
+  "failed": 0,
+  "git_head": "643d4185cfb3c67f86c0821d5c2393ba0c1581e2",
+  "results": [
+    {
+      "test_name": "static_query_cache_test",
+      "test_path": "tests/performance_v82/static_query_cache_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "path_test",
+      "test_path": "tests/hc_monster_ai/path_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "suite": "adhoc",
+  "passed": 2,
+  "generated_at": "2026-09-14T15:39:26.1673668+08:00"
+}

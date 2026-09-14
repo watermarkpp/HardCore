@@ -7292,6 +7292,21 @@ var _hc_world_collision_count := 0
 static var _hc_shared_static_query_tick := -1
 static var _hc_shared_safe_zone_tick_cache: Dictionary = {}
 static var _hc_shared_world_tick_cache: Dictionary = {}
+var _hc_world_scope: Array = []
+var _hc_safe_scope: Array = []
+var _hc_local_world_scope: Array = []
+var _hc_local_safe_scope: Array = []
+var _hc_local_world_tick := -1
+var _hc_local_safe_tick := -1
+var _hc_local_world_cache: Dictionary = {}
+var _hc_local_safe_cache: Dictionary = {}
+static var _hc_shared_walkable_tick_cache: Dictionary = {}
+var _hc_local_walkable_scope: Array = []
+var _hc_local_walkable_context: Dictionary = {}
+var _hc_local_walkable_radius := NAN
+var _hc_local_walkable_radius_px := NAN
+var _hc_local_walkable_tick := -1
+var _hc_local_walkable_cache: Dictionary = {}
 
 func _hc_standard_melee() -> bool:
 	# Empty delivery kind is the existing ordinary physical contact channel.
@@ -7344,7 +7359,9 @@ func _hc_preferred(hit_target: Node2D) -> float:
 func _hc_target_usable(hit_target: Node2D) -> bool:
 	return (
 		_target_candidate_is_live(hit_target)
-		and not _target_is_safe_player(hit_target)
+		# Standard melee's player gate already delegates to the cached point
+		# query below. Special/ranged actors retain their uncached player gate.
+		and (_hc_standard_melee() or not _target_is_safe_player(hit_target))
 		and not _hc_point_inside_safe_zone(hit_target.global_position)
 		and not _dying and not _death_pending and current_hp > 0
 		and not is_queued_for_deletion() and is_inside_tree()
@@ -7718,7 +7735,13 @@ func _hc_step_can_end() -> bool:
 func _hc_world_between(a: Vector2, b: Vector2) -> bool:
 	_hc_refresh_static_query_cache()
 	var scope := _hc_static_query_scope(false)
-	var cache: Dictionary = _hc_shared_world_tick_cache.get(scope, {})
+	if _hc_local_world_tick != _hc_shared_static_query_tick or not is_same(scope, _hc_local_world_scope):
+		_hc_local_world_tick = _hc_shared_static_query_tick
+		_hc_local_world_scope = scope
+		if not _hc_shared_world_tick_cache.has(scope):
+			_hc_shared_world_tick_cache[scope] = {}
+		_hc_local_world_cache = _hc_shared_world_tick_cache[scope]
+	var cache := _hc_local_world_cache
 	var key := Vector4(a.x, a.y, b.x, b.y)
 	if cache.has(key):
 		return bool(cache[key])
@@ -7730,7 +7753,6 @@ func _hc_world_between(a: Vector2, b: Vector2) -> bool:
 		false,
 	)
 	cache[key] = result
-	_hc_shared_world_tick_cache[scope] = cache
 	return result
 
 func _hc_refresh_static_query_cache() -> void:
@@ -7740,9 +7762,12 @@ func _hc_refresh_static_query_cache() -> void:
 	_hc_shared_static_query_tick = tick
 	_hc_shared_safe_zone_tick_cache.clear()
 	_hc_shared_world_tick_cache.clear()
+	_hc_shared_walkable_tick_cache.clear()
 
 func _hc_static_query_scope(include_safe_zone_owner: bool) -> Array:
 	var environment_id := environment_blocker.get_instance_id() if is_instance_valid(environment_blocker) else 0
+	var generation := int(get_meta("zone_generation", -1))
+	var environment_revision := _hc_environment_revision()
 	var safe_owner_id := 0
 	var safe_context_revision := -1
 	if include_safe_zone_owner:
@@ -7756,13 +7781,24 @@ func _hc_static_query_scope(include_safe_zone_owner: bool) -> Array:
 				or (legacy_context is Array and not (legacy_context as Array).is_empty())
 			else (get_parent().get_instance_id() if get_parent() != null else 0)
 		)
-	# Array dictionary keys retain full Callable equality after hash lookup. The
-	# query has no exclusions; WORLD mask/body/area flags are included explicitly.
-	return [
+	# Recheck every authority field on every call, including same-tick changes.
+	# Reuse the immutable key while those exact fields match. Local references
+	# then avoid repeatedly hashing the same eleven-field shared-cache key.
+	var prior := _hc_safe_scope if include_safe_zone_owner else _hc_world_scope
+	if prior.size() == 11 and (
+		prior[0] == runtime_map_id and prior[1] == generation
+		and prior[2] == environment_id and prior[3] == environment_revision
+		and prior[4] == runtime_ground_gu_to_screen_position_px
+		and prior[5] == runtime_screen_to_ground_position_px
+		and prior[9] == safe_owner_id and prior[10] == safe_context_revision
+	):
+		return prior
+	# Keys retain full Callable equality, never a lossy hash-only identity.
+	var scope := [
 		runtime_map_id,
-		int(get_meta("zone_generation", -1)),
+		generation,
 		environment_id,
-		_hc_environment_revision(),
+		environment_revision,
 		runtime_ground_gu_to_screen_position_px,
 		runtime_screen_to_ground_position_px,
 		WorldSpatialRulesScript.WORLD_MASK,
@@ -7771,16 +7807,27 @@ func _hc_static_query_scope(include_safe_zone_owner: bool) -> Array:
 		safe_owner_id,
 		safe_context_revision,
 	]
+	scope.make_read_only()
+	if include_safe_zone_owner:
+		_hc_safe_scope = scope
+	else:
+		_hc_world_scope = scope
+	return scope
 
 func _hc_point_inside_safe_zone(point_screen_px: Vector2) -> bool:
 	_hc_refresh_static_query_cache()
 	var scope := _hc_static_query_scope(true)
-	var cache: Dictionary = _hc_shared_safe_zone_tick_cache.get(scope, {})
+	if _hc_local_safe_tick != _hc_shared_static_query_tick or not is_same(scope, _hc_local_safe_scope):
+		_hc_local_safe_tick = _hc_shared_static_query_tick
+		_hc_local_safe_scope = scope
+		if not _hc_shared_safe_zone_tick_cache.has(scope):
+			_hc_shared_safe_zone_tick_cache[scope] = {}
+		_hc_local_safe_cache = _hc_shared_safe_zone_tick_cache[scope]
+	var cache := _hc_local_safe_cache
 	if cache.has(point_screen_px):
 		return bool(cache[point_screen_px])
 	var result := _point_inside_safe_zone_uncached(point_screen_px)
 	cache[point_screen_px] = result
-	_hc_shared_safe_zone_tick_cache[scope] = cache
 	return result
 
 func _hc_refresh_observation() -> void:
@@ -7879,6 +7926,42 @@ func _hc_edge_blocked(a: Vector2i, b: Vector2i) -> bool:
 func _hc_point_walkable(p: Vector2) -> bool:
 	if not p.is_finite():
 		return false
+	var blocked: Variant = _terrain_navigation_context.get("blocked_cells")
+	if (
+		not _terrain_navigation_context.is_read_only()
+		or not blocked is Dictionary or not (blocked as Dictionary).is_read_only()
+		or not is_finite(combat_radius_gu) or not is_finite(collision_radius_px)
+		or (is_instance_valid(environment_blocker) and not environment_blocker.has_method("environment_collision_revision"))
+	):
+		return _hc_point_walkable_uncached(p)
+	_hc_refresh_static_query_cache()
+	var scope := _hc_static_query_scope(true)
+	if (
+		_hc_local_walkable_tick != _hc_shared_static_query_tick
+		or not is_same(scope, _hc_local_walkable_scope)
+		or not is_same(_terrain_navigation_context, _hc_local_walkable_context)
+		or combat_radius_gu != _hc_local_walkable_radius
+		or collision_radius_px != _hc_local_walkable_radius_px
+	):
+		_hc_local_walkable_tick = _hc_shared_static_query_tick
+		_hc_local_walkable_scope = scope
+		_hc_local_walkable_context = _terrain_navigation_context
+		_hc_local_walkable_radius = combat_radius_gu
+		_hc_local_walkable_radius_px = collision_radius_px
+		# Keep radii as float Variants: packing them in Vector4 rounds to float32.
+		var key := [scope, HCM30ContextTokenScript.token(_terrain_navigation_context), combat_radius_gu, collision_radius_px]
+		if not _hc_shared_walkable_tick_cache.has(key):
+			_hc_shared_walkable_tick_cache[key] = {}
+		_hc_local_walkable_cache = _hc_shared_walkable_tick_cache[key]
+	# Exact point and both footprint radii; never cache live actor blocking.
+	var cached: Variant = _hc_local_walkable_cache.get(p)
+	if cached is bool:
+		return cached
+	var result := _hc_point_walkable_uncached(p)
+	_hc_local_walkable_cache[p] = result
+	return result
+
+func _hc_point_walkable_uncached(p: Vector2) -> bool:
 	var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
 	if not MonsterTerrainNavigationPolicyScript.cell_walkable(_terrain_navigation_context, cell, combat_radius_gu):
 		return false

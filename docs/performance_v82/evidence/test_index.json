@@ -1,0 +1,273 @@
+{
+  "status": "PASS",
+  "unique_scenes": 33,
+  "latest_per_scene": {
+    "tests/performance_v82/component_probe.tscn": {
+      "at": "2026-09-14T15:12:33.3954215+08:00",
+      "receipt": "runner_results_adhoc_20260914_151233_395_19428.json",
+      "result": "PASS",
+      "test_path": "tests/performance_v82/component_probe.tscn"
+    },
+    "tests/town_music_controller_test.tscn": {
+      "at": "2026-09-14T15:12:33.3954215+08:00",
+      "receipt": "runner_results_adhoc_20260914_151233_395_19428.json",
+      "result": "PASS",
+      "test_path": "tests/town_music_controller_test.tscn"
+    },
+    "tests/town_music_runtime_test.tscn": {
+      "at": "2026-09-14T15:12:33.3954215+08:00",
+      "receipt": "runner_results_adhoc_20260914_151233_395_19428.json",
+      "result": "PASS",
+      "test_path": "tests/town_music_runtime_test.tscn"
+    },
+    "tests/performance_v82/resource_reuse_test.tscn": {
+      "at": "2026-09-14T15:14:45.1176320+08:00",
+      "receipt": "runner_results_adhoc_20260914_151445_117_14836.json",
+      "result": "PASS",
+      "test_path": "tests/performance_v82/resource_reuse_test.tscn"
+    },
+    "tests/performance_v82/static_query_cache_test.tscn": {
+      "at": "2026-09-14T15:39:26.1673668+08:00",
+      "receipt": "runner_results_adhoc_20260914_153926_167_22588.json",
+      "result": "PASS",
+      "test_path": "tests/performance_v82/static_query_cache_test.tscn"
+    },
+    "tests/hc_monster_ai/runtime_test.tscn": {
+      "at": "2026-09-14T15:32:34.6716764+08:00",
+      "receipt": "runner_results_adhoc_20260914_153234_671_22376.json",
+      "result": "PASS",
+      "test_path": "tests/hc_monster_ai/runtime_test.tscn"
+    },
+    "tests/hc_monster_ai/combat_epoch_delivery_test.tscn": {
+      "at": "2026-09-14T15:32:34.6716764+08:00",
+      "receipt": "runner_results_adhoc_20260914_153234_671_22376.json",
+      "result": "PASS",
+      "test_path": "tests/hc_monster_ai/combat_epoch_delivery_test.tscn"
+    },
+    "tests/hc_monster_ai/world_obstacle_runtime_test.tscn": {
+      "at": "2026-09-14T15:32:34.6716764+08:00",
+      "receipt": "runner_results_adhoc_20260914_153234_671_22376.json",
+      "result": "PASS",
+      "test_path": "tests/hc_monster_ai/world_obstacle_runtime_test.tscn"
+    },
+    "tests/m30_r4_r1/r1_core_test.tscn": {
+      "at": "2026-09-14T15:32:34.6716764+08:00",
+      "receipt": "runner_results_adhoc_20260914_153234_671_22376.json",
+      "result": "PASS",
+      "test_path": "tests/m30_r4_r1/r1_core_test.tscn"
+    },
+    "tests/m30_r4_r2/test_safe_projection.tscn": {
+      "at": "2026-09-14T15:32:34.6716764+08:00",
+      "receipt": "runner_results_adhoc_20260914_153234_671_22376.json",
+      "result": "PASS",
+      "test_path": "tests/m30_r4_r2/test_safe_projection.tscn"
+    },
+    "tests/repair_20260913/monster_query_preservation_test.tscn": {
+      "at": "2026-09-14T15:32:34.6716764+08:00",
+      "receipt": "runner_results_adhoc_20260914_153234_671_22376.json",
+      "result": "PASS",
+      "test_path": "tests/repair_20260913/monster_query_preservation_test.tscn"
+    },
+    "tests/hc_monster_ai/path_test.tscn": {
+      "at": "2026-09-14T15:39:26.1673668+08:00",
+      "receipt": "runner_results_adhoc_20260914_153926_167_22588.json",
+      "result": "PASS",
+      "test_path": "tests/hc_monster_ai/path_test.tscn"
+    },
+    "tests/fire_wall_single_query_per_tick_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_single_query_per_tick_test.tscn"
+    },
+    "tests/fire_wall_single_exact_test_per_candidate_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_single_exact_test_per_candidate_test.tscn"
+    },
+    "tests/fire_wall_visual_cells_pure_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_visual_cells_pure_test.tscn"
+    },
+    "tests/fire_wall_hit_parity_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_hit_parity_test.tscn"
+    },
+    "tests/fire_wall_tick_claim_parity_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_tick_claim_parity_test.tscn"
+    },
+    "tests/fire_wall_boundary_target_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_boundary_target_test.tscn"
+    },
+    "tests/fire_wall_stacking_parity_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_stacking_parity_test.tscn"
+    },
+    "tests/fire_wall_runtime_map_isolation_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_runtime_map_isolation_test.tscn"
+    },
+    "tests/fire_wall_visual_cell_lifecycle_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_visual_cell_lifecycle_test.tscn"
+    },
+    "tests/fire_wall_candidate_reduction_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_candidate_reduction_test.tscn"
+    },
+    "tests/fire_wall_no_group_scan_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_no_group_scan_test.tscn"
+    },
+    "tests/fire_wall_canonical_snapshot_identity_test.tscn": {
+      "at": "2026-09-14T15:46:19.2309170+08:00",
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "result": "PASS",
+      "test_path": "tests/fire_wall_canonical_snapshot_identity_test.tscn"
+    },
+    "tests/caster_skill_animation_routing_test.tscn": {
+      "at": "2026-09-14T15:52:17.3488838+08:00",
+      "receipt": "runner_results_adhoc_20260914_155217_348_17696.json",
+      "result": "PASS",
+      "test_path": "tests/caster_skill_animation_routing_test.tscn"
+    },
+    "tests/caster_skill_visual_test.tscn": {
+      "at": "2026-09-14T15:48:48.0031558+08:00",
+      "receipt": "runner_results_adhoc_20260914_154848_002_12176.json",
+      "result": "PASS",
+      "test_path": "tests/caster_skill_visual_test.tscn"
+    },
+    "tests/caster_skill_visual_factory_entry_test.tscn": {
+      "at": "2026-09-14T15:48:48.0031558+08:00",
+      "receipt": "runner_results_adhoc_20260914_154848_002_12176.json",
+      "result": "PASS",
+      "test_path": "tests/caster_skill_visual_factory_entry_test.tscn"
+    },
+    "tests/skills/caster_snapshot_visual_projection_test.tscn": {
+      "at": "2026-09-14T15:53:25.1662254+08:00",
+      "receipt": "runner_results_adhoc_20260914_155325_166_5064.json",
+      "result": "PASS",
+      "test_path": "tests/skills/caster_snapshot_visual_projection_test.tscn"
+    },
+    "tests/caster_line_zero_geometry_visual_test.tscn": {
+      "at": "2026-09-14T15:48:48.0031558+08:00",
+      "receipt": "runner_results_adhoc_20260914_154848_002_12176.json",
+      "result": "PASS",
+      "test_path": "tests/caster_line_zero_geometry_visual_test.tscn"
+    },
+    "tests/milestone_1_0/repulsion_center_test.tscn": {
+      "at": "2026-09-14T15:48:48.0031558+08:00",
+      "receipt": "runner_results_adhoc_20260914_154848_002_12176.json",
+      "result": "PASS",
+      "test_path": "tests/milestone_1_0/repulsion_center_test.tscn"
+    },
+    "tests/repair_20260913/monster_exact_effects_test.tscn": {
+      "at": "2026-09-14T15:52:17.3488838+08:00",
+      "receipt": "runner_results_adhoc_20260914_155217_348_17696.json",
+      "result": "PASS",
+      "test_path": "tests/repair_20260913/monster_exact_effects_test.tscn"
+    },
+    "tests/caster_skill_ui_icon_routing_test.tscn": {
+      "at": "2026-09-14T15:48:48.0031558+08:00",
+      "receipt": "runner_results_adhoc_20260914_154848_002_12176.json",
+      "result": "PASS",
+      "test_path": "tests/caster_skill_ui_icon_routing_test.tscn"
+    },
+    "tests/hc_monster_ai/m30_sampling_copy.tscn": {
+      "at": "2026-09-14T15:44:08.1713032+08:00",
+      "receipt": "runner_results_adhoc_20260914_154408_171_17028.json",
+      "result": "PASS",
+      "test_path": "tests/hc_monster_ai/m30_sampling_copy.tscn"
+    }
+  },
+  "run_history": [
+    {
+      "receipt": "runner_results_adhoc_20260914_151233_395_19428.json",
+      "passed": 3,
+      "failed": 0,
+      "at": "2026-09-14T15:12:33.3954215+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_151445_117_14836.json",
+      "passed": 1,
+      "failed": 0,
+      "at": "2026-09-14T15:14:45.1176320+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_153234_671_22376.json",
+      "passed": 7,
+      "failed": 0,
+      "at": "2026-09-14T15:32:34.6716764+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_153926_167_22588.json",
+      "passed": 2,
+      "failed": 0,
+      "at": "2026-09-14T15:39:26.1673668+08:00"
+    },
+    {
+      "receipt": "runner_results_fire_wall_controller_critical_20260914_154619_230_14636.json",
+      "passed": 12,
+      "failed": 0,
+      "at": "2026-09-14T15:46:19.2309170+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_154848_002_12176.json",
+      "passed": 5,
+      "failed": 3,
+      "at": "2026-09-14T15:48:48.0031558+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_155000_941_8464.json",
+      "passed": 1,
+      "failed": 2,
+      "at": "2026-09-14T15:50:00.9417772+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_155217_348_17696.json",
+      "passed": 2,
+      "failed": 1,
+      "at": "2026-09-14T15:52:17.3488838+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_155325_166_5064.json",
+      "passed": 1,
+      "failed": 0,
+      "at": "2026-09-14T15:53:25.1662254+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_154408_171_17028.json",
+      "passed": 1,
+      "failed": 0,
+      "at": "2026-09-14T15:44:08.1713032+08:00"
+    },
+    {
+      "receipt": "runner_results_adhoc_20260914_152045_467_16132.json",
+      "passed": 0,
+      "failed": 1,
+      "at": "2026-09-14T15:20:45.4672709+08:00"
+    }
+  ],
+  "note": "Batched results on evolving task tree; exact-source gate recorded separately."
+}

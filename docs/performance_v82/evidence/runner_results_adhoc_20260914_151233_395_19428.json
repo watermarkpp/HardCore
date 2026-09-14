@@ -1,0 +1,56 @@
+{
+  "engine_log_errors": 0,
+  "failed": 0,
+  "results": [
+    {
+      "test_name": "component_probe",
+      "test_path": "tests/performance_v82/component_probe.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "town_music_controller_test",
+      "test_path": "tests/town_music_controller_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "town_music_runtime_test",
+      "test_path": "tests/town_music_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "passed": 3,
+  "total": 3,
+  "git_head": "643d4185cfb3c67f86c0821d5c2393ba0c1581e2",
+  "generated_at": "2026-09-14T15:12:33.3954215+08:00",
+  "suite": "adhoc"
+}

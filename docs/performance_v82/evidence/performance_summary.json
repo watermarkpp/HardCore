@@ -1,0 +1,346 @@
+{
+  "status": "PASS",
+  "measurement_scope": "desktop headless CPU and frame intervals; not Android/GPU",
+  "baseline_commit": "643d4185cfb3c67f86c0821d5c2393ba0c1581e2",
+  "source_hashes": {
+    "scripts/enemy.gd": {
+      "sha256": "66717f17dcc34c55650b4c53640414c1555b7f1a1d5ad5c41487eb7c98159b4d",
+      "lf_normalized_sha256": "c6c7be990ca62d8f80461d762f3d6998d91562d70c9726c949907637278276d3"
+    },
+    "scripts/caster_skill_visual_registry.gd": {
+      "sha256": "9815a2230e98ee88a2e007744caa1a7e65f5a579f3e94a8d7899ccb95c833181",
+      "lf_normalized_sha256": "4e928c2477f05493ec53b5587e6359f230728af37dc44c7ae558a2ae8773007e"
+    },
+    "scripts/prepared_music_stream.gd": {
+      "sha256": "d6ae68d55858f928338634c9b70c2f738f84b972cf2bf37ae59d60d96379f4e8",
+      "lf_normalized_sha256": "d6ae68d55858f928338634c9b70c2f738f84b972cf2bf37ae59d60d96379f4e8"
+    },
+    "scripts/town_music_controller.gd": {
+      "sha256": "96d41502a81bb1b743a55f000271451f26a729ebf6afeb1314123ed0d3a238dd",
+      "lf_normalized_sha256": "96d41502a81bb1b743a55f000271451f26a729ebf6afeb1314123ed0d3a238dd"
+    },
+    "tests/hc_monster_ai/m30_sampling_copy.gd": {
+      "sha256": "12bb72ef7d2965e119d964b1d001897b9a8f694ff205a08a793345dcd00c2349",
+      "lf_normalized_sha256": "d0a3a2252335070b7f89d0eeec10fb836136599c733b01ae926ffadbc433ef63"
+    }
+  },
+  "groups": {
+    "crowd:open_pursuit": {
+      "baseline": [
+        {
+          "label": "v82_final_crowd_baseline_r1",
+          "process_interval_count": 772,
+          "p95_ms": 14.335,
+          "max_ms": 22.25,
+          "enemy_physics_ms_per_tick": 6.47179375,
+          "attacks": 1,
+          "motion_gu": 134.329018479722,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_baseline_r2",
+          "process_interval_count": 773,
+          "p95_ms": 14.791,
+          "max_ms": 20.242,
+          "enemy_physics_ms_per_tick": 6.7077375,
+          "attacks": 1,
+          "motion_gu": 134.758418492391,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_baseline_r3",
+          "process_interval_count": 773,
+          "p95_ms": 14.313,
+          "max_ms": 19.884,
+          "enemy_physics_ms_per_tick": 6.450690625,
+          "attacks": 1,
+          "motion_gu": 134.502541149224,
+          "aoe_damage_applications": 0
+        }
+      ],
+      "candidate": [
+        {
+          "label": "v82_final_crowd_candidate_r1",
+          "process_interval_count": 773,
+          "p95_ms": 14.427,
+          "max_ms": 17.208,
+          "enemy_physics_ms_per_tick": 6.241234375,
+          "attacks": 1,
+          "motion_gu": 130.883346754781,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_candidate_r2",
+          "process_interval_count": 773,
+          "p95_ms": 14.369,
+          "max_ms": 18.155,
+          "enemy_physics_ms_per_tick": 6.208953125,
+          "attacks": 1,
+          "motion_gu": 133.944941680777,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_candidate_r3",
+          "process_interval_count": 773,
+          "p95_ms": 15.18,
+          "max_ms": 18.438,
+          "enemy_physics_ms_per_tick": 6.70336875,
+          "attacks": 1,
+          "motion_gu": 132.025416518911,
+          "aoe_damage_applications": 0
+        }
+      ],
+      "medians": {
+        "baseline": {
+          "p95_ms": 14.335,
+          "max_ms": 20.242,
+          "enemy_physics_ms_per_tick": 6.47179375
+        },
+        "candidate": {
+          "p95_ms": 14.427,
+          "max_ms": 18.155,
+          "enemy_physics_ms_per_tick": 6.241234375
+        }
+      },
+      "p95_reduction_percent": -0.6417858388559461
+    },
+    "crowd:sustained_close_attacks": {
+      "baseline": [
+        {
+          "label": "v82_final_crowd_baseline_r1",
+          "process_interval_count": 766,
+          "p95_ms": 17.82,
+          "max_ms": 25.708,
+          "enemy_physics_ms_per_tick": 7.4528,
+          "attacks": 36,
+          "motion_gu": 26.0420457824366,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_baseline_r2",
+          "process_interval_count": 768,
+          "p95_ms": 19.211,
+          "max_ms": 24.434,
+          "enemy_physics_ms_per_tick": 7.463415625,
+          "attacks": 36,
+          "motion_gu": 26.415700670681,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_baseline_r3",
+          "process_interval_count": 770,
+          "p95_ms": 17.623,
+          "max_ms": 22.271,
+          "enemy_physics_ms_per_tick": 7.487215625,
+          "attacks": 36,
+          "motion_gu": 26.2990370433545,
+          "aoe_damage_applications": 0
+        }
+      ],
+      "candidate": [
+        {
+          "label": "v82_final_crowd_candidate_r1",
+          "process_interval_count": 772,
+          "p95_ms": 17.173,
+          "max_ms": 23.548,
+          "enemy_physics_ms_per_tick": 7.1862875,
+          "attacks": 36,
+          "motion_gu": 26.5965828659246,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_candidate_r2",
+          "process_interval_count": 763,
+          "p95_ms": 17.93,
+          "max_ms": 34.113,
+          "enemy_physics_ms_per_tick": 7.40266875,
+          "attacks": 36,
+          "motion_gu": 26.3320909211179,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_candidate_r3",
+          "process_interval_count": 772,
+          "p95_ms": 17.198,
+          "max_ms": 24.126,
+          "enemy_physics_ms_per_tick": 7.094221875,
+          "attacks": 36,
+          "motion_gu": 26.133138766163,
+          "aoe_damage_applications": 0
+        }
+      ],
+      "medians": {
+        "baseline": {
+          "p95_ms": 17.82,
+          "max_ms": 24.434,
+          "enemy_physics_ms_per_tick": 7.463415625
+        },
+        "candidate": {
+          "p95_ms": 17.198,
+          "max_ms": 24.126,
+          "enemy_physics_ms_per_tick": 7.1862875
+        }
+      },
+      "p95_reduction_percent": 3.490460157126818
+    },
+    "crowd:dense_crowd": {
+      "baseline": [
+        {
+          "label": "v82_final_crowd_baseline_r1",
+          "process_interval_count": 770,
+          "p95_ms": 18.254,
+          "max_ms": 27.495,
+          "enemy_physics_ms_per_tick": 7.556315625,
+          "attacks": 29,
+          "motion_gu": 34.4706133247237,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_baseline_r2",
+          "process_interval_count": 769,
+          "p95_ms": 17.916,
+          "max_ms": 23.98,
+          "enemy_physics_ms_per_tick": 7.3865625,
+          "attacks": 29,
+          "motion_gu": 33.7654187477892,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_baseline_r3",
+          "process_interval_count": 770,
+          "p95_ms": 17.514,
+          "max_ms": 24.772,
+          "enemy_physics_ms_per_tick": 7.429609375,
+          "attacks": 29,
+          "motion_gu": 33.4129410238238,
+          "aoe_damage_applications": 0
+        }
+      ],
+      "candidate": [
+        {
+          "label": "v82_final_crowd_candidate_r1",
+          "process_interval_count": 773,
+          "p95_ms": 17.197,
+          "max_ms": 21.538,
+          "enemy_physics_ms_per_tick": 6.956965625,
+          "attacks": 26,
+          "motion_gu": 33.5540695929667,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_candidate_r2",
+          "process_interval_count": 773,
+          "p95_ms": 16.62,
+          "max_ms": 19.542,
+          "enemy_physics_ms_per_tick": 7.158775,
+          "attacks": 29,
+          "motion_gu": 33.5553664074978,
+          "aoe_damage_applications": 0
+        },
+        {
+          "label": "v82_final_crowd_candidate_r3",
+          "process_interval_count": 772,
+          "p95_ms": 16.757,
+          "max_ms": 20.511,
+          "enemy_physics_ms_per_tick": 7.018028125,
+          "attacks": 29,
+          "motion_gu": 33.7277462058119,
+          "aoe_damage_applications": 0
+        }
+      ],
+      "medians": {
+        "baseline": {
+          "p95_ms": 17.916,
+          "max_ms": 24.772,
+          "enemy_physics_ms_per_tick": 7.429609375
+        },
+        "candidate": {
+          "p95_ms": 16.757,
+          "max_ms": 20.511,
+          "enemy_physics_ms_per_tick": 7.018028125
+        }
+      },
+      "p95_reduction_percent": 6.469077919178378
+    },
+    "aoe:sustained_close_attacks": {
+      "baseline": [
+        {
+          "label": "v82_final_aoe_baseline_r1",
+          "process_interval_count": 760,
+          "p95_ms": 18.43,
+          "max_ms": 23.662,
+          "enemy_physics_ms_per_tick": 7.624646875,
+          "attacks": 36,
+          "motion_gu": 26.0151803912595,
+          "aoe_damage_applications": 159
+        },
+        {
+          "label": "v82_final_aoe_baseline_r2",
+          "process_interval_count": 748,
+          "p95_ms": 18.979,
+          "max_ms": 32.118,
+          "enemy_physics_ms_per_tick": 7.690509375,
+          "attacks": 36,
+          "motion_gu": 25.5815576054156,
+          "aoe_damage_applications": 159
+        },
+        {
+          "label": "v82_final_aoe_baseline_r3",
+          "process_interval_count": 753,
+          "p95_ms": 19.321,
+          "max_ms": 35.364,
+          "enemy_physics_ms_per_tick": 8.036778125,
+          "attacks": 36,
+          "motion_gu": 25.7875942727551,
+          "aoe_damage_applications": 159
+        }
+      ],
+      "candidate": [
+        {
+          "label": "v82_final_aoe_candidate_r1",
+          "process_interval_count": 769,
+          "p95_ms": 17.866,
+          "max_ms": 23.165,
+          "enemy_physics_ms_per_tick": 7.09820625,
+          "attacks": 36,
+          "motion_gu": 26.049049055553,
+          "aoe_damage_applications": 159
+        },
+        {
+          "label": "v82_final_aoe_candidate_r2",
+          "process_interval_count": 772,
+          "p95_ms": 16.856,
+          "max_ms": 20.506,
+          "enemy_physics_ms_per_tick": 7.135646875,
+          "attacks": 36,
+          "motion_gu": 25.8974264487624,
+          "aoe_damage_applications": 159
+        },
+        {
+          "label": "v82_final_aoe_candidate_r3",
+          "process_interval_count": 758,
+          "p95_ms": 17.728,
+          "max_ms": 34.564,
+          "enemy_physics_ms_per_tick": 7.49916875,
+          "attacks": 36,
+          "motion_gu": 25.6375914653763,
+          "aoe_damage_applications": 159
+        }
+      ],
+      "medians": {
+        "baseline": {
+          "p95_ms": 18.979,
+          "max_ms": 32.118,
+          "enemy_physics_ms_per_tick": 7.690509375
+        },
+        "candidate": {
+          "p95_ms": 17.728,
+          "max_ms": 23.165,
+          "enemy_physics_ms_per_tick": 7.135646875
+        }
+      },
+      "p95_reduction_percent": 6.591495863849506
+    }
+  },
+  "device": "NOT_RUN"
+}

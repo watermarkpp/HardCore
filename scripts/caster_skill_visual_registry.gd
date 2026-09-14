@@ -19,6 +19,20 @@ const PRIMARY_COMPLETION_GRACE_SECONDS := 0.05
 
 static var _manifest_cache: Dictionary = {}
 
+# ResourceLoader's cache does not retain unreferenced animation frames. Keep
+# recently drawn exact textures alive across frame changes and repeated casts.
+# Both limits bound this presentation-only ownership; sprites keep their own
+# reference when an entry is evicted, so eviction cannot remove a drawn frame.
+const TEXTURE_CACHE_BYTES := 32 * 1024 * 1024
+const TEXTURE_CACHE_ENTRIES := 512
+static var _frame_textures: Dictionary = {}
+static var _frame_texture_use: Dictionary = {}
+static var _frame_texture_bytes: Dictionary = {}
+static var _frame_texture_serial := 0
+static var _frame_texture_resident_bytes := 0
+static var _frame_texture_loads := 0
+static var _frame_texture_hits := 0
+
 
 static func profile(skill_name_or_id: String) -> Dictionary:
 	var skill_id := ProfessionRules.skill_id(skill_name_or_id)
@@ -122,9 +136,16 @@ static func icon_texture(skill_name_or_id: String) -> Texture2D:
 static func load_texture_path(path: String) -> Texture2D:
 	if path.is_empty():
 		return null
+	_frame_texture_serial += 1
+	if _frame_textures.has(path):
+		_frame_texture_use[path] = _frame_texture_serial
+		_frame_texture_hits += 1
+		return _frame_textures[path] as Texture2D
+	_frame_texture_loads += 1
 	if ResourceLoader.exists(path):
 		var imported := load(path) as Texture2D
 		if imported != null:
+			_retain_frame_texture(path, imported)
 			return imported
 	# Clean worktrees can run the safe headless test runner before Godot has
 	# imported newly generated PNGs. Decode the exact source PNG directly so
@@ -134,7 +155,54 @@ static func load_texture_path(path: String) -> Texture2D:
 	var image := Image.new()
 	if image.load(ProjectSettings.globalize_path(path)) != OK or image.is_empty():
 		return null
-	return ImageTexture.create_from_image(image)
+	var decoded := ImageTexture.create_from_image(image)
+	_retain_frame_texture(path, decoded)
+	return decoded
+
+
+static func _retain_frame_texture(path: String, loaded: Texture2D) -> void:
+	# RGBA plus a complete mip chain is a conservative bound for these 2D
+	# source/imported textures. Oversized textures still draw without retention.
+	var bytes := ceili(float(loaded.get_width() * loaded.get_height() * 4) * 4.0 / 3.0)
+	if bytes > TEXTURE_CACHE_BYTES:
+		return
+	while not _frame_textures.is_empty() and (
+		_frame_texture_resident_bytes + bytes > TEXTURE_CACHE_BYTES
+		or _frame_textures.size() >= TEXTURE_CACHE_ENTRIES
+	):
+		var oldest := ""
+		var oldest_serial := _frame_texture_serial + 1
+		for key: String in _frame_texture_use:
+			if int(_frame_texture_use[key]) < oldest_serial:
+				oldest = key
+				oldest_serial = int(_frame_texture_use[key])
+		_frame_texture_resident_bytes -= int(_frame_texture_bytes[oldest])
+		_frame_textures.erase(oldest)
+		_frame_texture_use.erase(oldest)
+		_frame_texture_bytes.erase(oldest)
+	_frame_textures[path] = loaded
+	_frame_texture_use[path] = _frame_texture_serial
+	_frame_texture_bytes[path] = bytes
+	_frame_texture_resident_bytes += bytes
+
+
+static func clear_frame_texture_cache() -> void:
+	_frame_textures.clear()
+	_frame_texture_use.clear()
+	_frame_texture_bytes.clear()
+	_frame_texture_resident_bytes = 0
+	_frame_texture_serial = 0
+	_frame_texture_loads = 0
+	_frame_texture_hits = 0
+
+
+static func frame_texture_cache_diagnostics() -> Dictionary:
+	return {
+		"entries": _frame_textures.size(),
+		"resident_bytes": _frame_texture_resident_bytes,
+		"loads": _frame_texture_loads,
+		"hits": _frame_texture_hits,
+	}
 
 
 static func animation_duration(skill_name_or_id: String, phase_id := "") -> float:

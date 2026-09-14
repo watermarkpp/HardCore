@@ -14,6 +14,7 @@ const CONTRACT_ID := "audio.town_music.v1"
 const LOADING_TRANSITION_CONTRACT_ID := "ui.loading.transition.v1"
 const TOWN_MUSIC_PATH := "res://assets/audio/town/main_city_bgm.ogg"
 const SOURCE_RECORD_PATH := "res://assets/audio/town/main_city_bgm.source.json"
+const PreparedMusicStream := preload("res://scripts/prepared_music_stream.gd")
 const MUSIC_BUS_NAME := &"Music"
 const DELAY_SECONDS := 6.0
 const DEFAULT_VOLUME_LINEAR := 0.70
@@ -65,11 +66,16 @@ func _build_audio_nodes() -> void:
 	music_player.autoplay = false
 	var stream := load(TOWN_MUSIC_PATH) as AudioStream
 	if stream != null:
-		music_player.stream = stream
 		if stream is AudioStreamOggVorbis:
 			# One city entry owns one complete track. A later entry must cross the
 			# leave/re-enter boundary before another play() is permitted.
 			(stream as AudioStreamOggVorbis).loop = false
+		var prepared := PreparedMusicStream.new()
+		prepared.source_stream = stream
+		# Vorbis header parsing/decoder allocation happens while constructing the
+		# loading scene, not at the later six-second audible-start boundary.
+		prepared.prepare()
+		music_player.stream = prepared
 	music_player.finished.connect(_on_music_finished)
 	add_child(music_player)
 
@@ -274,6 +280,8 @@ func _arm_delay() -> void:
 		_waiting_for_track_finish = true
 		return
 	_waiting_for_track_finish = false
+	if music_player != null and music_player.stream is PreparedMusicStream:
+		(music_player.stream as PreparedMusicStream).prepare()
 	_delay_callback = Callable(self, "_on_delay_timeout").bind(_entry_serial)
 	delay_timer.timeout.connect(_delay_callback)
 	delay_timer.start(maxf(0.0, delay_seconds))
