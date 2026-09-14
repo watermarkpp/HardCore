@@ -19013,8 +19013,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19026,9 +19026,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19047,7 +19047,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b04497d68cdcdb8c",
@@ -19102,8 +19106,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19115,9 +19119,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19136,7 +19140,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.0d19aae6e127fe6d",
@@ -19191,8 +19199,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19204,9 +19212,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19225,7 +19233,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.ee72b340a8cdfe93",
@@ -19280,8 +19292,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19293,9 +19305,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19314,7 +19326,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.9e34df682fcbf16e",
@@ -19369,8 +19385,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19382,9 +19398,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19403,7 +19419,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.d420f965cdc36cac",
@@ -19458,8 +19478,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19471,9 +19491,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19492,7 +19512,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.ab77eee07a0aca71",
@@ -19547,8 +19571,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19560,9 +19584,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19581,7 +19605,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.51bc31d9e1856a60",
@@ -19636,8 +19664,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19649,9 +19677,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19670,7 +19698,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.1366ad2255855f83",
@@ -19725,8 +19757,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19738,9 +19770,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19759,7 +19791,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.d82cfa6671afb53b",
@@ -19814,8 +19850,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19827,9 +19863,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19848,7 +19884,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.3ad1fc6c2505dac6",
@@ -19903,8 +19943,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -19916,9 +19956,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -19937,7 +19977,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.d3c477bcd0d11efc",
@@ -19992,8 +20036,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20005,9 +20049,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20026,7 +20070,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.031f446e22d52d34",
@@ -20081,8 +20129,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20094,9 +20142,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20115,7 +20163,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.ad097fb7e967eeca",
@@ -20170,8 +20222,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20183,9 +20235,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20204,7 +20256,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.6bded61bd890ed90",
@@ -20259,8 +20315,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20272,9 +20328,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20293,7 +20349,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.28b31525fb159e6f",
@@ -20348,8 +20408,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20361,9 +20421,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20382,7 +20442,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.54e5307095adbfc8",
@@ -20437,8 +20501,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20450,9 +20514,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20471,7 +20535,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.4eb174c586678780",
@@ -20526,8 +20594,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20539,9 +20607,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20560,7 +20628,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.52db4680f00f1a51",
@@ -20615,8 +20687,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20628,9 +20700,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20649,7 +20721,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.9ccd75cbbbf3147c",
@@ -20704,8 +20780,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20717,9 +20793,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20738,7 +20814,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.4407526951e20bbf",
@@ -20793,8 +20873,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20806,9 +20886,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20827,7 +20907,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.e125de5169507f30",
@@ -20882,8 +20966,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20895,9 +20979,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -20916,7 +21000,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.012a78051c528c67",
@@ -20971,8 +21059,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -20984,9 +21072,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21005,7 +21093,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.4aa52eb6fe11552e",
@@ -21060,8 +21152,8 @@
         8
       ],
       "collision_footprint_tiles": [
-        8,
-        8
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21073,9 +21165,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21094,7 +21186,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.703d8812e500a1f9",
@@ -21149,8 +21245,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21162,9 +21258,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21183,7 +21279,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.8a6d1d071e83bee8",
@@ -21238,8 +21338,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21251,9 +21351,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21272,7 +21372,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.3bb8d1b4041c2143",
@@ -21327,8 +21431,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21340,9 +21444,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21361,7 +21465,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.1afde605bfd14459",
@@ -21416,8 +21524,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21429,9 +21537,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21450,7 +21558,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.072a95259d95ef19",
@@ -21505,8 +21617,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21518,9 +21630,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21539,7 +21651,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.4ae1f7762f220226",
@@ -21594,8 +21710,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21607,9 +21723,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21628,7 +21744,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.30a8608124074260",
@@ -21683,8 +21803,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21696,9 +21816,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21717,7 +21837,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.8d3319f47001859e",
@@ -21772,8 +21896,8 @@
         4
       ],
       "collision_footprint_tiles": [
-        4,
-        4
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21785,9 +21909,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "building",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -21806,7 +21930,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.2e816d1c79e095e8",
@@ -21861,8 +21989,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21874,9 +22002,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -21895,7 +22023,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.372fca8cba840f8a",
@@ -21950,8 +22082,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -21963,9 +22095,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -21984,7 +22116,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.f4d42b9ba7d670b6",
@@ -22039,8 +22175,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22052,9 +22188,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22073,7 +22209,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.bdb580acdfab8b8a",
@@ -22128,8 +22268,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22141,9 +22281,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22162,7 +22302,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.565191cb20bc0fff",
@@ -22217,8 +22361,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22230,9 +22374,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22251,7 +22395,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.2c7897c89d3302a7",
@@ -22306,8 +22454,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22319,9 +22467,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22340,7 +22488,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b477d93a318cf6fb",
@@ -22395,8 +22547,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22408,9 +22560,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22429,7 +22581,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.9929f3d8f9c6315c",
@@ -22484,8 +22640,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22497,9 +22653,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22518,7 +22674,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.e3d0452f4609e6ec",
@@ -22573,8 +22733,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22586,9 +22746,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22607,7 +22767,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.26c46adb36a1148a",
@@ -22662,8 +22826,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22675,9 +22839,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22696,7 +22860,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.4167ff99cf2b60a3",
@@ -22751,8 +22919,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22764,9 +22932,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22785,7 +22953,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.31154f17024b168a",
@@ -22840,8 +23012,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22853,9 +23025,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22874,7 +23046,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.208eda8180dcddb2",
@@ -22929,8 +23105,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -22942,9 +23118,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -22963,7 +23139,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.cf01f40057f25293",
@@ -23018,8 +23198,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23031,9 +23211,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -23052,7 +23232,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.6b5ab0cd0826d0a4",
@@ -23107,8 +23291,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23120,9 +23304,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -23141,7 +23325,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.858a55fd0730983a",
@@ -23196,8 +23384,8 @@
         6
       ],
       "collision_footprint_tiles": [
-        3,
-        3
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23209,9 +23397,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": false,
@@ -23230,7 +23418,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.e9c1d367f3b0e824",
@@ -23285,8 +23477,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23298,9 +23490,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -23319,7 +23511,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.c88774d47ac64487",
@@ -23374,8 +23570,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23387,9 +23583,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -23408,7 +23604,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.d0c3e92640f21567",
@@ -23463,8 +23663,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23476,9 +23676,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -23497,7 +23697,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.1af9be2375ed5004",
@@ -23552,8 +23756,8 @@
         3
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23565,9 +23769,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "preset",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -23586,7 +23790,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.eb62724db3f83335",
@@ -23641,8 +23849,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        6,
-        5
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23654,9 +23862,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -23675,7 +23883,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.189fe88afe77097a",
@@ -23730,8 +23942,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        5,
-        5
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23743,9 +23955,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -23764,7 +23976,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.5deb556174ab1f3e",
@@ -23819,8 +24035,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        4,
-        5
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23832,9 +24048,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -23853,7 +24069,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.9505da16d89e5ea5",
@@ -23908,8 +24128,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        5,
-        5
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -23921,9 +24141,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -23942,7 +24162,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.a72ab58f355bd771",
@@ -23997,8 +24221,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        5,
-        5
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -24010,9 +24234,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -24031,7 +24255,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.cd60c638089c7c98",
@@ -24086,8 +24314,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        6,
-        5
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -24099,9 +24327,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -24120,7 +24348,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.af3f8e9cd10de904",
@@ -24175,8 +24407,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        5,
-        5
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -24188,9 +24420,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -24209,7 +24441,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.148c0d49946bdb4c",
@@ -24264,8 +24500,8 @@
         5
       ],
       "collision_footprint_tiles": [
-        5,
-        5
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -24277,9 +24513,9 @@
       "anchor_approved": true,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -24298,7 +24534,11 @@
       "editable": true,
       "allows_edge_clipping": false,
       "semantic_role": "",
-      "trigger_on_enter": false
+      "trigger_on_enter": false,
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.4dcc4061cc819096",
@@ -43530,8 +43770,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -43546,9 +43786,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -43600,7 +43840,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.a7bdda1f57f74917",
@@ -43661,8 +43905,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -43677,9 +43921,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -43731,7 +43975,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b4b0b2aadb9e7e69",
@@ -43792,8 +44040,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -43808,9 +44056,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -43862,7 +44110,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.11dcfbb176972b50",
@@ -43923,8 +44175,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -43939,9 +44191,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -43994,7 +44246,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.08ec0a4f6e3882a2",
@@ -44055,8 +44311,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -44071,9 +44327,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -44125,7 +44381,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.dac3dbd81ac88021",
@@ -44186,8 +44446,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -44202,9 +44462,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -44257,7 +44517,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.942939428bf03444",
@@ -44318,8 +44582,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -44334,9 +44598,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -44388,7 +44652,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.5357fd733b6a0198",
@@ -44449,8 +44717,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -44465,9 +44733,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -44520,7 +44788,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.615809c9db8afb34",
@@ -44581,8 +44853,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -44597,9 +44869,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -44649,7 +44921,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b4124cf5e03a7b80",
@@ -44710,8 +44986,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -44726,9 +45002,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -44781,7 +45057,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.7567ce1ebf045717",
@@ -44842,8 +45122,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -44858,9 +45138,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -44910,7 +45190,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.bc5e2e5831bfed2a",
@@ -44971,8 +45255,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -44987,9 +45271,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -45042,7 +45326,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b5aac682189864d4",
@@ -45103,8 +45391,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -45119,9 +45407,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -45173,7 +45461,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.8f651eb655566abb",
@@ -45234,8 +45526,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -45250,9 +45542,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -45305,7 +45597,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.22dd98bf993ccb45",
@@ -45366,8 +45662,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -45382,9 +45678,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -45434,7 +45730,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.5cdf1849da6a15d5",
@@ -45495,8 +45795,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -45511,9 +45811,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -45565,7 +45865,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.2521d070d4ac5790",
@@ -45626,8 +45930,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -45642,9 +45946,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -45696,7 +46000,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.e56ef95a75d05303",
@@ -45757,8 +46065,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -45773,9 +46081,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -45828,7 +46136,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.d30a4c7f7bf246bd",
@@ -45889,8 +46201,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -45905,9 +46217,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -45960,7 +46272,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.c4924f965de5ce7b",
@@ -46021,8 +46337,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -46037,9 +46353,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -46091,7 +46407,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.63587216a3d492b5",
@@ -46152,8 +46472,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -46168,9 +46488,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -46220,7 +46540,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b20b6f6bd7ced048",
@@ -46281,8 +46605,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -46297,9 +46621,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -46349,7 +46673,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.09b0250747890e17",
@@ -46410,8 +46738,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -46426,9 +46754,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -46481,7 +46809,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.c6ec695aa8e6cf5f",
@@ -46542,8 +46874,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -46558,9 +46890,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -46613,7 +46945,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.cef59003e49deab3",
@@ -46674,8 +47010,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -46690,9 +47026,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -46742,7 +47078,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.f4774b51043b5125",
@@ -46803,8 +47143,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -46819,9 +47159,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -46873,7 +47213,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.65a366e7ee24a0cd",
@@ -46934,8 +47278,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -46950,9 +47294,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -47002,7 +47346,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b3afebd4baa22baa",
@@ -47063,8 +47411,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -47079,9 +47427,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -47134,7 +47482,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.5a86606e367a4c7c",
@@ -47195,8 +47547,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -47211,9 +47563,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -47265,7 +47617,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.52e733e05b33ca26",
@@ -47326,8 +47682,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -47342,9 +47698,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -47396,7 +47752,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.aa46acf5bf8b294b",
@@ -47457,8 +47817,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -47473,9 +47833,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -47527,7 +47887,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.0f6c91f96a51514c",
@@ -47588,8 +47952,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -47604,9 +47968,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -47659,7 +48023,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.e4bf1bdf2f05c95e",
@@ -47720,8 +48088,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -47736,9 +48104,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -47790,7 +48158,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.67ce39fc31b363d1",
@@ -47851,8 +48223,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -47867,9 +48239,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -47919,7 +48291,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.fad48b87bf98c194",
@@ -47980,8 +48356,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -47996,9 +48372,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -48051,7 +48427,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.dcd292fac40abf83",
@@ -48112,8 +48492,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -48128,9 +48508,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -48183,7 +48563,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.49809458a2d2fb8c",
@@ -48244,8 +48628,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -48260,9 +48644,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -48314,7 +48698,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.02771cc43bb98978",
@@ -48375,8 +48763,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -48391,9 +48779,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -48443,7 +48831,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.37774e50d5e453eb",
@@ -48504,8 +48896,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -48520,9 +48912,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -48574,7 +48966,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.1384dcb398173a93",
@@ -48635,8 +49031,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -48651,9 +49047,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -48703,7 +49099,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.28d43d258bb9bc67",
@@ -48764,8 +49164,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -48780,9 +49180,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -48832,7 +49232,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.579a470a8534302d",
@@ -48893,8 +49297,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -48909,9 +49313,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -48961,7 +49365,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.8ef1be8fe5701083",
@@ -49022,8 +49430,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -49038,9 +49446,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -49092,7 +49500,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.7b7f513b10d798c6",
@@ -49153,8 +49565,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -49169,9 +49581,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -49223,7 +49635,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.368e27ecd97c65d7",
@@ -49284,8 +49700,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -49300,9 +49716,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -49352,7 +49768,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.37ac72208bd19b44",
@@ -49413,8 +49833,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -49429,9 +49849,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -49483,7 +49903,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.f687da407f332842",
@@ -49544,8 +49968,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -49560,9 +49984,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -49615,7 +50039,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.5cc44876b8744c68",
@@ -49676,8 +50104,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -49692,9 +50120,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -49747,7 +50175,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.af9dd8bf22aa3c77",
@@ -49808,8 +50240,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -49824,9 +50256,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -49878,7 +50310,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.c0f0bdfdaf7a22a4",
@@ -49939,8 +50375,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -49955,9 +50391,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -50009,7 +50445,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b99188307d0e20de",
@@ -50070,8 +50510,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -50086,9 +50526,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -50141,7 +50581,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.64c19b05d03e98f2",
@@ -50202,8 +50646,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -50218,9 +50662,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -50272,7 +50716,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.65a2a27d170c340b",
@@ -50333,8 +50781,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -50349,9 +50797,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -50401,7 +50849,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.68e9038d9c772e5b",
@@ -50462,8 +50914,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -50478,9 +50930,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -50532,7 +50984,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.ff473cedb433dcb3",
@@ -50593,8 +51049,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -50609,9 +51065,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -50661,7 +51117,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.6e027a839359fc91",
@@ -50722,8 +51182,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -50738,9 +51198,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -50790,7 +51250,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.ea86f560ded6a596",
@@ -50851,8 +51315,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -50867,9 +51331,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -50919,7 +51383,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.d9da156dac7aed99",
@@ -50980,8 +51448,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -50996,9 +51464,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -51048,7 +51516,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.920d3063e13b3d70",
@@ -51109,8 +51581,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -51125,9 +51597,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -51179,7 +51651,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.61ae41b8d78ed613",
@@ -51240,8 +51716,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -51256,9 +51732,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -51310,7 +51786,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.c3c3ac7a736ff8c1",
@@ -51371,8 +51851,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -51387,9 +51867,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -51439,7 +51919,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.6ad484cacfca058f",
@@ -51500,8 +51984,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -51516,9 +52000,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -51568,7 +52052,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b5e74471feaffc69",
@@ -51629,8 +52117,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -51645,9 +52133,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -51699,7 +52187,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b119e14d0eb516ef",
@@ -51760,8 +52252,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -51776,9 +52268,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -51831,7 +52323,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.325b5f4d2db3f9fe",
@@ -51892,8 +52388,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -51908,9 +52404,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -51960,7 +52456,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.237607a1a3dcca62",
@@ -52021,8 +52521,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -52037,9 +52537,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -52089,7 +52589,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.ff2f95496473221c",
@@ -52150,8 +52654,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -52166,9 +52670,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -52218,7 +52722,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.e53abea5a827ff39",
@@ -52279,8 +52787,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -52295,9 +52803,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -52347,7 +52855,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.20ff8a4bbda2be8f",
@@ -52408,8 +52920,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -52424,9 +52936,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -52476,7 +52988,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.b1e1953535320b68",
@@ -52537,8 +53053,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -52553,9 +53069,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -52605,7 +53121,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.dcbe182a39eeac4d",
@@ -52666,8 +53186,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -52682,9 +53202,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -52734,7 +53254,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.a9a10eda4df434a1",
@@ -52795,8 +53319,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -52811,9 +53335,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -52865,7 +53389,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.cc550f41a30720e1",
@@ -52926,8 +53454,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -52942,9 +53470,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -52996,7 +53524,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.cc6f230cb7447ade",
@@ -53057,8 +53589,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -53073,9 +53605,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -53125,7 +53657,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.2704c97e0340b88e",
@@ -53186,8 +53722,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -53202,9 +53738,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -53254,7 +53790,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.a11cabf621e415f8",
@@ -53315,8 +53855,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -53331,9 +53871,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -53383,7 +53923,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.bfd1ff2ef0998cb3",
@@ -53444,8 +53988,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -53460,9 +54004,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -53514,7 +54058,11 @@
           "col": 1
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.a52a07edf9772044",
@@ -53575,8 +54123,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -53591,9 +54139,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -53645,7 +54193,11 @@
           "col": 2
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.0c7ec839b124ed99",
@@ -53706,8 +54258,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -53722,9 +54274,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -53776,7 +54328,11 @@
           "col": 3
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.c1baa888043d6714",
@@ -53837,8 +54393,8 @@
         1
       ],
       "collision_footprint_tiles": [
-        1,
-        1
+        0,
+        0
       ],
       "tile_size": [
         64,
@@ -53853,9 +54409,9 @@
       "anchor_approved": false,
       "default_layer": "object_base",
       "default_object_role": "obstacle",
-      "collision_policy": "solid_footprint",
-      "collision_profile_id": "solid_logical_footprint",
-      "navigation_policy": "block_player_and_monster",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
       "occlusion": true,
       "content_layer": "personal_expansion",
       "placeable": true,
@@ -53905,7 +54461,11 @@
           "col": 4
         }
       ],
-      "segmentation_method": "connected_components_dominant_cell_v2"
+      "segmentation_method": "connected_components_dominant_cell_v2",
+      "collision_cells": [],
+      "manual_collision_expected": true,
+      "collision_authority": "manual_by_user",
+      "collision_policy_id": "user_palette_manual_collision_only_v1"
     },
     {
       "asset_id": "user.5cb7258bd03aec25",
