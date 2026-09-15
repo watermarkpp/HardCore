@@ -9311,6 +9311,11 @@ func _spawn_canonical_ground_effect(
 		),
 		Callable(self, "_canonical_screen_px_to_ground_gu")
 	)
+	# R1-B: give the self-managed tick the shared spatial candidate authority
+	# (the manager-owned path ignores it; the legacy group scan stays closed).
+	ground_effect.set_combat_spatial_context(
+		_combat_spatial_index, current_map_id
+	)
 	add_child(ground_effect)
 	if applies_damage:
 		_register_manager_ground_effect(
