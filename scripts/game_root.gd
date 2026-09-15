@@ -1746,14 +1746,16 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	# Fixed view height (user decision 2026-09-15): the gameplay camera never
-	# zooms dynamically. Per map, zoom = max(base, the minimum uniform zoom
-	# that keeps the viewport inside the map inner boundary), computed once
-	# and held for the whole session on that map. Position soft-follow, the
-	# center band clamp and the edge skirt stay active; only edge-pressure
-	# zoom pulling is removed, which also stops the per-frame zoom easing on
-	# small maps.
-	var fixed_zoom := _world_camera_fixed_map_zoom(design_size, viewport_half)
+	# Fixed view height (user decision 2026-09-15, reaffirmed by device test):
+	# the gameplay camera uses ONE global view height on every map — the
+	# Mengzhong-safe-zone baseline zoom (ArtSpec.CAMERA_ZOOM). The previous
+	# per-map minimum-fit adaptation is removed by explicit user ruling: it
+	# forced dungeons into a constant close view whose extra pixel coverage
+	# dropped frames even out of combat. Small maps keep the same height and
+	# expose the map edge instead of pulling the camera closer. The position
+	# soft-follow stays; where the viewport exceeds the map boundary the
+	# constraint degrades to a band-capped follow and the edge is shown.
+	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
 	var result := MapDiamondCameraConstraintScript.resolve_soft_follow(
 		design_size, viewport_half, fixed_zoom, player.global_position,
 		fixed_zoom.x
@@ -1762,40 +1764,6 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 	_world_camera.global_position = Vector2(
 		result.get("center", player.global_position)
 	)
-
-
-var _world_camera_fixed_zoom_map_id := -2147483648
-var _world_camera_fixed_zoom_viewport := Vector2.ZERO
-var _world_camera_fixed_zoom := Vector2.ZERO
-
-
-func _world_camera_fixed_map_zoom(
-	design_size: Vector2i,
-	viewport_half: Vector2
-) -> Vector2:
-	var base_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	if (
-		_world_camera_fixed_zoom_map_id == current_map_id
-		and _world_camera_fixed_zoom_viewport == viewport_half
-		and _world_camera_fixed_zoom != Vector2.ZERO
-	):
-		return _world_camera_fixed_zoom
-	var boundary: PackedVector2Array = (
-		MapDiamondCameraConstraintScript.CollisionGeometry
-		.map_inner_boundary_world(design_size)
-	)
-	var minimum_zoom_value := float(
-		MapDiamondCameraConstraintScript.minimum_uniform_zoom(
-			boundary, viewport_half
-		)
-	)
-	var fixed_value := ArtSpec.CAMERA_ZOOM
-	if is_finite(minimum_zoom_value):
-		fixed_value = maxf(ArtSpec.CAMERA_ZOOM, minimum_zoom_value)
-	_world_camera_fixed_zoom = Vector2.ONE * fixed_value
-	_world_camera_fixed_zoom_map_id = current_map_id
-	_world_camera_fixed_zoom_viewport = viewport_half
-	return _world_camera_fixed_zoom
 
 
 func _register_input_actions() -> void:
