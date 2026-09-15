@@ -3,8 +3,11 @@ extends Node
 ## SOT wizard.fire_wall stacking contract regression:
 ##   "same_caster_same_tile_refreshes_duration" — a recast on the same center
 ##   tile refreshes the existing field (no new controller, no new cells).
-##   "max_active_fields_per_caster": "config_required_default_8" — the oldest
-##   field is evicted once the canonical cap is exceeded.
+##   "max_active_fields_per_caster": "config_required_default_8" — the cap
+##   counts one caster's fields. The SOT records no ninth-field behavior, so
+##   the default cap policy fails closed to reject_new (no ninth field, no
+##   eviction); an explicit "cap_policy": "evict_oldest" opts into eviction.
+##   The registry key is source-aware (caster/map/generation/family/tile).
 ##   Field lifetime is wall-clock real time: an expired field frees on the
 ##   next simulated frame even when its duration countdown was frozen.
 
@@ -81,7 +84,9 @@ func _run() -> void:
 		"refresh must not add visual cells"
 	)
 
-	# 3) Different tiles stack until the canonical cap of 8, oldest evicted.
+	# 3) Default cap policy is fail-closed reject_new (GPT audit R1-P0: the
+	#    SOT records no ninth-field behavior): the ninth distinct tile
+	#    neither creates a field nor evicts the oldest one.
 	for field_index: int in range(1, 9):
 		var shifted_cells: Array[Vector2i] = []
 		for cell: Vector2i in field_a_cells:
@@ -98,10 +103,66 @@ func _run() -> void:
 		% _valid_controller_count()
 	)
 	assert(
+		is_instance_valid(controller_a),
+		"reject_new must not evict the oldest field"
+	)
+
+	# 3b) Explicit "cap_policy": "evict_oldest" opts into eviction: casts 9
+	#     and 10 evict this caster's oldest fields to stay at the cap.
+	var evict_effect: Dictionary = effect.duplicate()
+	evict_effect["cap_policy"] = "evict_oldest"
+	for field_index: int in range(9, 11):
+		var evict_cells: Array[Vector2i] = []
+		for cell: Vector2i in field_a_cells:
+			evict_cells.append(cell + Vector2i(10 * field_index, 0))
+		game._spawn_canonical_ground_field(
+			"wizard.fire_wall",
+			evict_cells,
+			game.player.global_position,
+			evict_effect
+		)
+	assert(
+		_valid_controller_count() == 8,
+		"evict_oldest must keep the caster at the cap: %d"
+		% _valid_controller_count()
+	)
+	assert(
 		not is_instance_valid(controller_a)
 		or controller_a.is_queued_for_deletion(),
-		"oldest field must be evicted beyond the cap"
+		"explicit evict_oldest must evict the oldest field"
 	)
+
+	# 3c) Registry key is source-aware (GPT audit R1-P0): caster identity,
+	#     skill family, tile, map and zone generation all participate, so two
+	#     casters on one tile own separate fields and never cross-refresh.
+	var key_a: String = game._fire_wall_registry_key(
+		game.player, "wizard.fire_wall", Vector2i(50, 50)
+	)
+	var other_caster := Node2D.new()
+	game.add_child(other_caster)
+	var key_other_caster: String = game._fire_wall_registry_key(
+		other_caster, "wizard.fire_wall", Vector2i(50, 50)
+	)
+	var key_other_family: String = game._fire_wall_registry_key(
+		game.player, "wizard.other", Vector2i(50, 50)
+	)
+	var key_other_tile: String = game._fire_wall_registry_key(
+		game.player, "wizard.fire_wall", Vector2i(51, 50)
+	)
+	var saved_generation: int = int(game._zone_generation)
+	game._zone_generation = saved_generation + 1
+	var key_other_generation: String = game._fire_wall_registry_key(
+		game.player, "wizard.fire_wall", Vector2i(50, 50)
+	)
+	game._zone_generation = saved_generation
+	assert(
+		key_a != key_other_caster
+		and key_a != key_other_family
+		and key_a != key_other_tile
+		and key_a != key_other_generation,
+		"registry key must separate caster, family, tile and generation"
+	)
+	other_caster.queue_free()
 
 	# 4) Wall-clock expiry: a field whose real-time deadline passed frees on
 	# the next simulated frame even if its duration countdown was frozen.

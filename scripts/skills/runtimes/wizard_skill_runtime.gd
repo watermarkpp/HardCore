@@ -74,6 +74,7 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			field["max_active_fields_per_caster"] = str(
 				mechanics.get("max_active_fields_per_caster", "")
 			)
+			field["cap_policy"] = str(mechanics.get("cap_policy", ""))
 			plan.effects = [field]
 		"wizard.laser":
 			var laser := _damage_effect(definition, request, rng, "piercing_line_damage")

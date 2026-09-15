@@ -969,6 +969,7 @@ static func _descriptors_of_kind(
 						"max_active_fields_per_caster": str(
 							effect.get("max_active_fields_per_caster", "")
 						),
+						"cap_policy": str(effect.get("cap_policy", "")),
 						"max_ticks_per_target_per_caster": int(
 							effect.get("max_ticks_per_target_per_caster", 1)
 						),

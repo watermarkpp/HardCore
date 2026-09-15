@@ -9042,16 +9042,22 @@ func _spawn_canonical_ground_field(
 		var empty_target_filters: Array[Callable] = []
 		# SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
 		# project_canonical): "same_caster_same_tile_refreshes_duration" with
-		# "max_active_fields_per_caster": "config_required_default_8". The
-		# execution-plan ground descriptor drops those fields upstream, so the
-		# runtime enforces the canonical defaults here until the data chain
-		# carries them through.
+		# "max_active_fields_per_caster": "config_required_default_8". The SOT
+		# records no ninth-field behavior, so the cap policy is explicit data
+		# and fails closed to reject_new when unconfigured (GPT audit R1-P0).
+		# The registry key is source-aware: caster/map/generation/family/tile,
+		# so two casters on one tile own separate fields instead of
+		# cross-refreshing each other.
 		var registry_center := _fire_wall_registry_center_cell(coverage_cells)
 		var registry_usable := not coverage_cells.is_empty()
+		var registry_key := ""
 		if registry_usable:
+			registry_key = _fire_wall_registry_key(
+				player, stable_skill_id, registry_center
+			)
 			_fire_wall_prune_invalid_registry_entries()
 			var existing_field: Variant = _fire_wall_field_registry.get(
-				registry_center
+				registry_key
 			)
 			if (
 				existing_field is FireWallFieldControllerScript
@@ -9063,6 +9069,10 @@ func _spawn_canonical_ground_field(
 					field_snapshot_validation_context,
 					release_id
 				)
+				return
+			if not _fire_wall_cap_allows_new_field(
+				effect, player, stable_skill_id
+			):
 				return
 		var field_controller := FireWallFieldControllerScript.new()
 		field_controller.setup_fire_wall_field(
@@ -9082,9 +9092,8 @@ func _spawn_canonical_ground_field(
 		)
 		add_child(field_controller)
 		if registry_usable:
-			_fire_wall_field_registry[registry_center] = field_controller
-			_fire_wall_field_order.append(registry_center)
-			_fire_wall_evict_excess_fire_wall_fields(effect)
+			_fire_wall_field_registry[registry_key] = field_controller
+			_fire_wall_field_order.append(registry_key)
 		for visual_cell: GroundSkillVisualCell in field_controller.visual_cells:
 			visual_cell.set_shared_anim_clock_ms(
 				Callable(field_controller, "fire_wall_anim_clock_ms")
@@ -9123,16 +9132,25 @@ func _spawn_canonical_ground_field(
 ##   "max_active_fields_per_caster": "config_required_default_8"
 ## The registry below restores that canonical stacking contract in the
 ## runtime: same center tile refreshes the existing field, different tiles
-## create fields up to the canonical cap (oldest evicted). The execution-plan
-## ground descriptor drop of these fields is threaded through separately;
-## until the data chain carries them, the canonical defaults apply here.
+## create fields up to the canonical cap. The registry key is source-aware
+## (GPT audit R1-P0): map, zone generation, caster identity, skill family
+## and the selected center tile — a tile alone is not the field identity, so
+## two casters on one tile own separate fields and never cross-refresh.
+## Cap policy (GPT audit R1-P0): the SOT fixes the cap default but records
+## no ninth-field behavior. The policy is therefore explicit data
+## ("cap_policy": "evict_oldest" | "reject_new"); when unconfigured the
+## runtime fails closed to reject_new — no ninth field is created and no
+## existing field is destroyed. The former implicit evict-oldest rule was
+## an unforced runtime invention and is no longer the default.
 const FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER := 8
+const FIRE_WALL_CAP_POLICY_EVICT_OLDEST := "evict_oldest"
+const FIRE_WALL_CAP_POLICY_REJECT_NEW := "reject_new"
 var _fire_wall_field_registry: Dictionary = {}
 var _fire_wall_field_order: Array = []
 
 
 func _fire_wall_registry_center_cell(coverage_cells: Array[Vector2i]) -> Vector2i:
-	## The registry key is the selected center tile of the field footprint.
+	## The registry center is the selected center tile of the field footprint.
 	## Coverage cells are absolute grid steps, so two casts on the same tile
 	## produce the same centered 3x3 cell set and therefore the same key.
 	if coverage_cells.is_empty():
@@ -9146,6 +9164,29 @@ func _fire_wall_registry_center_cell(coverage_cells: Array[Vector2i]) -> Vector2
 	return Vector2i(roundi(center.x), roundi(center.y))
 
 
+func _fire_wall_registry_key(
+	caster: Node2D,
+	family: String,
+	registry_center: Vector2i
+) -> String:
+	return "%d|%d|%d|%s|%d_%d" % [
+		current_map_id,
+		_zone_generation,
+		caster.get_instance_id() if is_instance_valid(caster) else 0,
+		family,
+		registry_center.x,
+		registry_center.y,
+	]
+
+
+func _fire_wall_registry_caster_prefix(caster: Node2D) -> String:
+	return "%d|%d|%d|" % [
+		current_map_id,
+		_zone_generation,
+		caster.get_instance_id() if is_instance_valid(caster) else 0,
+	]
+
+
 func _fire_wall_max_active_fields(effect: Dictionary) -> int:
 	var raw := str(effect.get("max_active_fields_per_caster", ""))
 	if raw.begins_with("config_required_default_"):
@@ -9155,6 +9196,37 @@ func _fire_wall_max_active_fields(effect: Dictionary) -> int:
 	if raw.is_valid_int():
 		return maxi(1, int(raw))
 	return FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER
+
+
+func _fire_wall_cap_policy(effect: Dictionary) -> String:
+	var raw := str(effect.get("cap_policy", "")).strip_edges().to_lower()
+	if raw == FIRE_WALL_CAP_POLICY_EVICT_OLDEST:
+		return FIRE_WALL_CAP_POLICY_EVICT_OLDEST
+	return FIRE_WALL_CAP_POLICY_REJECT_NEW
+
+
+func _fire_wall_cap_allows_new_field(
+	effect: Dictionary,
+	caster: Node2D,
+	_family: String
+) -> bool:
+	## Per-caster cap check: "max_active_fields_per_caster" counts the
+	## fields of THIS caster only, not the whole registry.
+	var max_fields := _fire_wall_max_active_fields(effect)
+	var caster_prefix := _fire_wall_registry_caster_prefix(caster)
+	var caster_fields := 0
+	for key: Variant in _fire_wall_field_order:
+		if str(key).begins_with(caster_prefix):
+			caster_fields += 1
+	if caster_fields < max_fields:
+		return true
+	if _fire_wall_cap_policy(effect) == FIRE_WALL_CAP_POLICY_EVICT_OLDEST:
+		_fire_wall_evict_oldest_field_for_caster(caster_prefix)
+		return true
+	RuntimeDiagnostics.increment_performance_counter(
+		&"fire_wall_cap_reject_new"
+	)
+	return false
 
 
 func _fire_wall_prune_invalid_registry_entries() -> void:
@@ -9171,15 +9243,16 @@ func _fire_wall_prune_invalid_registry_entries() -> void:
 		_fire_wall_field_order.erase(key)
 
 
-func _fire_wall_evict_excess_fire_wall_fields(effect: Dictionary) -> void:
-	var max_fields := _fire_wall_max_active_fields(effect)
-	while _fire_wall_field_order.size() > max_fields:
-		var oldest: Variant = _fire_wall_field_order.pop_front()
-		if oldest is Vector2i and _fire_wall_field_registry.has(oldest):
-			var controller: Variant = _fire_wall_field_registry.get(oldest)
-			if is_instance_valid(controller):
-				(controller as FireWallFieldController).cancel()
-			_fire_wall_field_registry.erase(oldest)
+func _fire_wall_evict_oldest_field_for_caster(caster_prefix: String) -> void:
+	for key: Variant in _fire_wall_field_order:
+		if not str(key).begins_with(caster_prefix):
+			continue
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		if is_instance_valid(controller):
+			(controller as FireWallFieldController).cancel()
+		_fire_wall_field_registry.erase(key)
+		_fire_wall_field_order.erase(key)
+		return
 
 
 func _clear_fire_wall_field_registry() -> void:
