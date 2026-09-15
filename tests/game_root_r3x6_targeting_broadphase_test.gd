@@ -450,11 +450,14 @@ func _test_canonical_context_and_summon_occupancy() -> void:
 		context_ids == expected_context_ids,
 		"canonical hostile context target order differs from group authority",
 	)
-	var query_count_before := _combat_spatial_index.index_enemy_node_aabb_query_count
+	# R1-B: the occupancy broadphase now routes through the shared
+	# CombatTargetQueryService, whose record query increments the index
+	# query counter (the old node-query counter no longer applies).
+	var query_count_before := _combat_spatial_index.index_query_count
 	var occupied := _canonical_summon_position_is_valid(Vector2(2.0, 0.0), 0.4, null)
 	_expect(not occupied, "summon occupancy ignored a nearby indexed enemy")
 	_expect(
-		_combat_spatial_index.index_enemy_node_aabb_query_count > query_count_before,
+		_combat_spatial_index.index_query_count > query_count_before,
 		"summon occupancy did not use the enemy spatial broadphase",
 	)
 	_skill_cast_target = null

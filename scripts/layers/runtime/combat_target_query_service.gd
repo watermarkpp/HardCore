@@ -74,8 +74,16 @@ func query(request: Dictionary) -> Array[Dictionary]:
 			request.get("rejection_reason", "shape_under_specified")
 		)
 		return []
+	## R1-B: the default epsilon guards float edges for anchored shapes.
+	## Envelope pass-through consumers that reconstruct a legacy index
+	## envelope bit-for-bit pass 0.0 so the broadphase candidate set stays
+	## exactly the one the replaced direct index query produced.
+	var epsilon := maxf(
+		0.0,
+		float(request.get("broadphase_epsilon_gu", BROADPHASE_EPSILON_GU))
+	)
 	var candidates: Array[Dictionary] = _combat_spatial_index.query_aabb_candidates(
-		_runtime_map_id, bounds, BROADPHASE_EPSILON_GU
+		_runtime_map_id, bounds, epsilon
 	)
 	var result: Array[Dictionary] = []
 	for candidate: Dictionary in candidates:
