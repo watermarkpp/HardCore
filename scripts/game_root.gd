@@ -1826,24 +1826,26 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	# Fixed view height (user decision 2026-09-15, reaffirmed by device test):
-	# the gameplay camera uses ONE global view height on every map — the
-	# Mengzhong-safe-zone baseline zoom (ArtSpec.CAMERA_ZOOM). The previous
-	# per-map minimum-fit adaptation is removed by explicit user ruling: it
-	# forced dungeons into a constant close view whose extra pixel coverage
-	# dropped frames even out of combat. Small maps keep the same height and
-	# expose the map edge instead of pulling the camera closer. The position
-	# soft-follow stays; where the viewport exceeds the map boundary the
-	# constraint degrades to a band-capped follow and the edge is shown.
+	# C1 CAMERA-EDGE (user ruling 2026-09-16): ONE global view height on
+	# every map (ArtSpec.CAMERA_ZOOM, the Mengzhong-safe-zone height) and a
+	# STRICT map-edge follow — the camera center is the constrained legal
+	# center: inside the map the camera equals the player; at the map edge
+	# the camera stops at the last legal center while the player keeps
+	# walking and may leave the screen center, minimizing the black area
+	# shown outside the map. The former 14% tanh central band and the
+	# edge-pressure zoom blend are removed entirely: no dynamic zoom exists
+	# anywhere in this path, and the constraint geometry is cached per
+	# (map design size, viewport, zoom) so the per-frame solve allocates
+	# nothing. Rendering stability (smoothing/pixel snap) is C2 and is
+	# deliberately NOT touched here.
 	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	var result := MapDiamondCameraConstraintScript.resolve_soft_follow(
-		design_size, viewport_half, fixed_zoom, player.global_position,
-		fixed_zoom.x
+	var camera_center := (
+		MapDiamondCameraConstraintScript.resolve_strict_follow_cached(
+			design_size, viewport_half, fixed_zoom, player.global_position
+		)
 	)
 	_world_camera.zoom = fixed_zoom
-	_world_camera.global_position = Vector2(
-		result.get("center", player.global_position)
-	)
+	_world_camera.global_position = camera_center
 
 
 func _register_input_actions() -> void:
