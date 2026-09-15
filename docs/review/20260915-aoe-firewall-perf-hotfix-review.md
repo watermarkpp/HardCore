@@ -277,7 +277,10 @@ R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每
 |---|---|---|
 | APK | `HardCore-20260915-aoe-fix-98afcf47-debug.apk` | `HardCore-20260915-aoe-fix-eb9ca528-debug.apk` |
 | 源 | 98afcf47（R1 弧线之前，含用户报告卡顿的原始战斗实现） | eb9ca528（R1-P0/R1-A/R1-B + PERF-1/2 + R1-C + max 诊断，共 16 提交） |
-| SHA256 | `3B2057F9…D5F57CA` | 构建完成后记录 |
+| SHA256 | `3B2057F9101E9A853439662896644399AAA8CD7DED31720DC025842B0D5F57CA` | `C6838DDE9D407E38F03295EAC93A0C8CF931147D30D22661314EC1410B0C8B7A` |
+| 身份 | versionCode=82, `com.personal.mafaoffline` | 同左（v2 签名验证通过；直装 versionCode 门对 A/B 并装不适用——同码 debug 可 `adb install -r` 重装或先卸载再装） |
+
+（0e2b9dc9 仅文档；实验组 APK 载荷 = eb9ca528。）
 
 **场景（每 APK 同脚本）**：
 1. 蜈蚣洞：15 普怪 + 2 钳虫 + 固定节奏火墙（固定周期施放，覆盖多 field 叠加与 claim 窗口）。
