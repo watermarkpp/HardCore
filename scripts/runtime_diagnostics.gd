@@ -372,6 +372,12 @@ static func frame_sampling_snapshot() -> Dictionary:
 	var p50 := _frame_percentile(samples, 0.50)
 	var p95 := _frame_percentile(samples, 0.95)
 	var p99 := _frame_percentile(samples, 0.99)
+	# PERF-EVIDENCE: worst retained frame. With an overflowed ring buffer
+	# this bounds only the retained window; frame_samples_dropped discloses
+	# the truncation.
+	var max_ms := 0.0
+	for raw_sample: Variant in samples:
+		max_ms = maxf(max_ms, float(raw_sample))
 	var over_16_67 := int(_frame_threshold_counts["over_16_67"])
 	var over_33_33 := int(_frame_threshold_counts["over_33_33"])
 	var over_50 := int(_frame_threshold_counts["over_50"])
@@ -418,6 +424,7 @@ static func frame_sampling_snapshot() -> Dictionary:
 		"p50_ms": p50,
 		"p95_ms": p95,
 		"p99_ms": p99,
+		"frame_ms_max": max_ms,
 		"frames_over_16_67ms": over_16_67,
 		"frames_over_16_67_ratio": _frame_ratio(over_16_67),
 		"frames_over_33_33ms": over_33_33,
@@ -435,6 +442,7 @@ static func frame_sampling_snapshot() -> Dictionary:
 			"p50_ms": p50,
 			"p95_ms": p95,
 			"p99_ms": p99,
+			"max_ms": max_ms,
 			"thresholds": thresholds,
 			"gpu": gpu,
 		},

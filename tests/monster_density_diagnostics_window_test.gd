@@ -133,6 +133,10 @@ func _run() -> void:
 	assert(is_equal_approx(float(frame_window.get("frame_ms_p50", -1.0)), 33.33))
 	assert(is_equal_approx(float(frame_window.get("frame_ms_p95", -1.0)), 100.01))
 	assert(is_equal_approx(float(frame_window.get("frame_ms_p99", -1.0)), 100.01))
+	assert(
+		is_equal_approx(float(frame_window.get("frame_ms_max", -1.0)), 100.01),
+		"frame window must report the worst retained frame (PERF-EVIDENCE)"
+	)
 	assert(int(frame_window.get("frames_over_16_67ms", -1)) == 5)
 	assert(is_equal_approx(float(frame_window.get("frames_over_16_67_ratio", -1.0)), 5.0 / 7.0))
 	assert(int(frame_window.get("frames_over_33_33ms", -1)) == 3)
