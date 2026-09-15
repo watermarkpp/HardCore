@@ -128,3 +128,11 @@ R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每
 - `tests/combat_target_query_service_oracle_test.gd`（新增）：独立参照实现（按形状合同手写、不调用服务）vs 服务，5 形状 × 160 随机查询（seed 固定）集合严格等价 + 稳定顺序断言 + 边界含闭/零半径用例 + 4 类 fail-closed（未知形状/负半径/非法方向/地图不可用）。首跑 PASS。
 - 静态门禁扩展：服务源码禁 `get_nodes_in_group(` / `take_damage(`。PASS。
 - 回归：persistent 10/10、fire_wall 12/12、plan 10/10（索引增补无回归）。
+
+## R5. R1-A 收尾（d1d015ba）
+
+- 火墙 controller broadphase 迁入 `CombatTargetQueryService`：新增 `SHAPE_AABB` 直通形状（包络即请求矩形；精确性仍由 controller 的 canonical snapshot 门决定，行为与原直连索引查询逐位一致）。
+- 迁移过程缺陷被 parity harness 当场抓获并修复：服务 origin 有限性守卫误拒无 origin 的 aabb 形状（`legacy=1 manager=0`）；修复后 origin 检查仅适用于锚定形状。
+- 证据：fire_wall_controller_critical 12/12（hit/claim parity、no_group_scan 全绿）、registry PASS、oracle PASS。
+- 现状：所有生产目标查询均经 `RuntimeCombatSpatialIndex`（controller 走统一服务入口）；组扫描/直连 take_damage 由静态门禁锁定。
+- 剩余 staged：GameRoot 特殊几何技能（半月/十字/野蛮/雷霆/冰暴）逐支迁移到描述符+形状策略（每支带 parity 证据，需独立施工轮）；实机 Gen1→Gen5 矩阵 NOT_RUN（待设备）。
