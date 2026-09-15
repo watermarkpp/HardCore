@@ -107,6 +107,14 @@ func _run() -> void:
 		and not manager_source.contains("query_aabb_candidates("),
 		"persistent ground effect manager must use the service fast path"
 	)
+	# R1-C: the manager must not deliver damage directly — every fallback
+	# delivery goes through the shared CombatRuntimeService authority.
+	assert(
+		manager_source.contains("apply_enemy_physical_damage(")
+		and not manager_source.contains("take_damage("),
+		"persistent ground effect manager must deliver damage only "
+		+ "through the shared runtime service"
+	)
 	assert(
 		controller_source.contains("query_envelope_into(")
 		and not controller_source.contains(".query({"),

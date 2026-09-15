@@ -1466,7 +1466,11 @@ func _ready() -> void:
 	# Q2-B: one scheduler for generic persistent ground effects. It reuses the
 	# shared enemy spatial index; FireWall's formal field path stays outside.
 	_ground_effect_manager = PersistentGroundEffectManagerScript.new(
-		_combat_spatial_index
+		_combat_spatial_index,
+		# R1-C: the manager's damage deliveries share GameRoot's owned
+		# CombatRuntimeService instance (M30 ownership contract); the manager
+		# never delivers damage outside the shared authority.
+		_combat_runtime
 	)
 	# Q2-D: one MonsterVisual streaming coordinator; MonsterVisual instances
 	# register needs and the coordinator owns the single global streaming poll.

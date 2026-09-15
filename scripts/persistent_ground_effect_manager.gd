@@ -19,6 +19,12 @@ const EXPANSION_EPSILON_GU := 0.05
 
 
 var _spatial_index: SpatialIndexScript
+## R1-C: shared damage-delivery authority for the callback-less fallback.
+## GameRoot injects its owned CombatRuntimeService instance (M30 ownership
+## contract); without an injection the fallback fails closed — the delivery
+## is refused and counted, never routed around the shared authority.
+var _combat_runtime: Node = null
+var damage_delivery_skip_count := 0
 ## PERF-1: the manager broadphase enters the shared target-query service
 ## (same instance pattern as the fire wall controller; the service is
 ## stateless between queries and is rebuilt when the map id or the index
@@ -47,8 +53,12 @@ var cross_map_rejection_count := 0
 var spatial_index_unavailable_count := 0
 
 
-func _init(spatial_index: SpatialIndexScript) -> void:
+func _init(
+	spatial_index: SpatialIndexScript,
+	combat_runtime: Node = null
+) -> void:
 	_spatial_index = spatial_index
+	_combat_runtime = combat_runtime
 
 
 func _effect_target_query_service(
@@ -319,7 +329,17 @@ func _apply_damage(
 	elif ground_effect.runtime_tick_adapter.is_valid():
 		ground_effect.runtime_tick_adapter.call(enemy, ground_effect.damage)
 	elif ground_effect.damage > 0:
-		enemy.take_damage(ground_effect.damage, ground_effect.source_actor)
+		# R1-C: the last direct-damage escape hatch is closed. The fallback
+		# delivers only through the shared CombatRuntimeService authority
+		# (same amount, same source attribution, service-side rejection and
+		# timing diagnostics); without an injected service the delivery is
+		# refused and counted.
+		if _combat_runtime != null and is_instance_valid(_combat_runtime):
+			_combat_runtime.apply_enemy_physical_damage(
+				enemy, ground_effect.damage, ground_effect.source_actor
+			)
+		else:
+			damage_delivery_skip_count += 1
 
 
 func _snapshot_bounds_ground_gu(snapshot: Dictionary) -> Rect2:

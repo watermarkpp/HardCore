@@ -260,6 +260,13 @@ R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每
 
 实现注记（裁决后执行）：manifest 为生成物，规则是改生成器侧的显示节奏派生（如新增 per-skill `visual_frame_time_ms` 覆盖字段），保留 `frame_time_ms: 40` 作为 SOT 取证记录，不得手改生成 JSON。
 
-## R7.6 下轮
+## R7.6 R1-C — damage 闭环：最后一个直连伤害口关闭
 
-ANIM-EVIDENCE（火墙动画取证：打印 wizard.fire_wall 实际 frame_count/frame_time_ms/cycle_ms 对照原版 SOT 240ms 周期，给用户 ×1.0/×1.25/×1.5 候选实机裁决）→ R1-C（CombatHitRequest damage 闭环）→ PERF-EVIDENCE（APK A/B 帧时间；此前"彻底根除"保持 BLOCKED）。
+1. **权威核实**：GPT 终审所称 "CombatHitRequest → CombatDamagePipeline" 在本仓的实体是 `scripts/layers/runtime/combat_runtime_service.gd`（autoload `CombatRuntime`；注入式消费先例：game_root:353 与 skill_projectile 各持自有实例，M30-CLEANUP-001 所有权合同）。manager `_apply_damage` 三级链：entry `damage_callback`（生产路径，game_root 注册时必带，绑 `_apply_canonical_ground_tick` → `apply_enemy_direct_spell_damage` 完整法术解析）→ effect `runtime_tick_adapter` → 兜底 `enemy.take_damage(...)`——兜底无任何生产或测试消费者（fixture 全部自带 callback），纯逃逸口。
+2. **改动**：`PersistentGroundEffectManager._init` 增加可选 `combat_runtime` 注入；game_root 传入其自有 `_combat_runtime` 实例（RefCounted 不自建 Node，避免 M30 孤儿类泄漏）；兜底分支改走 `apply_enemy_physical_damage`（同数值、同 source 归因、服务侧 `can_receive_damage` 复检 + `take_damage_usec` 计时诊断），**无注入时 fail-closed**：拒绝交付并计 `damage_delivery_skip_count`。生产数值零变化（兜底在生产不可达；服务路径 `maxi(1,·)` 与既有 `damage > 0` 守卫等价）。
+3. **门禁**：manager 必含 `apply_enemy_physical_damage(` 且**不得含 `take_damage(`**——直连伤害口从架构与门禁两层关闭。fire wall controller 与 GroundSkillEffect 的既有禁令保持。
+4. **证据**：新增 `persistent_ground_effect_service_damage_delivery_test`（注入 → 经服务精确交付 7 点；未注入 → hp 不变 + skip 计数 1）；门禁/parity/oracle PASS；persistent 10/10、fire_wall 12/12、r3x6 等 5 功能回归 5/5、plan 10/10、projection 6/6、wizard_line 3/3 —— 共 50 项 PASS。
+
+## R7.7 下轮
+
+PERF-EVIDENCE（最后一轮）：RuntimeDiagnostics 帧采样（P50/P95/P99/max + 120 帧恢复后窗口）→ APK A/B（基线 APK82@98afcf47 已在 vs 新 APK）：蜈蚣洞 15 普怪+2 钳虫+固定节奏火墙、祖玛寺庙、Gen1→Gen5 矩阵。APK A/B 数据出来前"彻底根除掉帧"保持 BLOCKED。火墙动画节奏（×1.0/×1.25/×1.5）待用户实机裁决，不阻塞本线。
