@@ -87,3 +87,36 @@
 - `RuntimeDiagnostics` 增 field/cell 计数、respawn pending/due、resume 后前 120 帧采样，为问题 ② 的恢复突发提供实测裁决。
 - cap=8 从常量升级为可配置（SOT `config_required_default_8` 本意）。
 - 修复 4 个基线预存失败（另一专项）。
+
+---
+
+# R1 增补（Combat Runtime R1 — 按 GPT 审计方案施工，2026-09-15）
+
+## R0. 对 GPT 审计的采纳记录
+
+全部接受并落地/排期：第 9 块策略不得擅自发明（已改）；registry key 源感知（已改）；"共享动画时钟"表述收敛（仅统一时间源，每格仍有 `_process`，中心调度器待 profiler 证据）；legacy 组扫描退出生产（已改）；直连 `take_damage` fallback 消灭（已改）。执行映射修正：GPT 规划的 PeriodicScheduler 角色由既有 `PersistentGroundEffectManager` 承担，不重复造轮子；特殊几何技能按 GPT"逐步搬掉"原则分批迁移。保护项（冻结，本轮未触碰）：Camera 1.06 裁决、火墙 40ms 原版节奏、刷新玩法、**用户 UI 解锁设定**（HUD/布局体系文件本轮零改动）。
+
+## R1. 本轮提交（基线 f8dda719 → HEAD）
+
+1. `153bf394` — 源感知 registry + 显式 fail-closed cap_policy。key=map|zone_generation|caster|family|中心格；上限按**单施法者**计数（原实现误计全局）；`cap_policy` 走执行合同透传（`reject_new` 默认=fail-closed，`evict_oldest` 仅显式数据）。测试扩展：默认第 9 块拒绝且最旧保留；显式 evict_oldest 驱逐；key 分离 caster/family/tile/generation。证据：registry 测试 PASS、fire_wall_controller_critical 12/12、skill_execution_plan_critical 10/10。
+2. `58422737` — 关闭 legacy 组扫描与直连 take_damage。`GroundSkillEffect._physics_process` 候选改由共享 `RuntimeCombatSpatialIndex` 供给（索引内置 `+max_actor_bounds_gu` 保守扩展，exact 门 `runtime_target_is_inside` 与 claim 门逐字保留=目标集合不变）；无注入空间上下文 → fail-closed 跳过并计数；adapter-only 投递。生产现状佐证：generic 效果本就走 `PersistentGroundEffectManager`（`manager_owned_damage_ticks=true`），火墙走 controller——本提交关闭的是最后一条敞开的 legacy 路径。claim-parity 测试 `fire_wall_runtime_overlap_test` 已移植到索引合同（PASS）。回归：persistent 10/10、fire_wall 12/12、plan 10/10、map_runtime_release 5/5。
+3. 静态门禁（本轮第 3 提交）— `tests/combat_authority_static_gate_test.gd`：源码级断言 ground_effect/controller 无组扫描、无 take_damage；cap_policy 与源感知 key 必须存在。PASS。
+
+## R2. 交付清单对照（GPT 12 项）
+
+1. BASE/HEAD/commits：f8dda719 → （见 R1 + 本文档提交），共 7 提交。
+2. 逐文件职责：见 §3 与 R1；`ground_effect.gd` 净语义=表现+自管 tick（索引候选/adapter 投递/fail-closed）；`game_root.gd` 增 registry/policy；contract/runtime 增 cap_policy 透传。
+3. production target-query 权威：`RuntimeCombatSpatialIndex`（game_root `_target_spatial_query_*`、manager、controller、自管 tick 注入）。
+4. production damage 权威：adapter/callback/manager 路由；ground_effect 直连 take_damage 已删。
+5. persistent/DOT 权威：`PersistentGroundEffectManager`（唯一 generic DOT 调度器）+ controller（火墙）。
+6. cap-policy 证据来源：SOT 仅 `config_required_default_8`，无第 9 块行为记录（已全文检索 cap/evict/第九/max_active）；故 reject_new=fail-closed 默认，evict_oldest 须显式数据。权威缺口如实记录。
+7. 残余 `get_nodes_in_group("enemies")` 分类：game_root `_aoe_reference_*`（oracle 参照，`reference_audit_mode/_test_enabled` 双 flag 门，生产默认关）；game_root boss-surrounded 邻域机制查询（非投递，staged→R1-A 迁移 `query_neighbor_enemy_nodes_into`）；game_root 随机传送占位检查（GPT 允许类）；device_lab×2/hc_r6_frame_probe（诊断 harness）。
+8. 残余 `.take_damage(` 分类：manager:285（generic DOT 唯一生产投递点，R1-C CombatHitRequest 改造对象）；skill_projectile:710、summon_actor:815（R1 后续）；enemy.gd×4（怪→人方向，独立管线）；combat_runtime_service:29（professions-skills 共享桥，staged）。
+9. GameRoot ability-id 特例枚举与描述符迁移：**staged**（R1-A 主体，下轮先建 CombatTargetQueryService + oracle 再逐支迁移，禁止无 parity 证据删除）。
+10. correctness oracle：**staged**（R1-A：穷举参照 vs 服务，随机化边界/半径/代际/cap/排序/LOS/零半径）。
+11. 性能矩阵：headless 套件全绿；3 图×17/30/60 怪×Gen1→Gen5 实机矩阵 NOT_RUN（需设备）。
+12. 未解决债务：equipment 套件 4 基线失败；complete_client_resource_catalog_test 需工作树生成 outputs 夹具；canonical_skill_production_entry/smoke_test/professions_combat_gu_contract 在 f8dda719 同签名失败（预存）；skills.json stacking 字段数据链回填；tick 权威差异（SOT 1000 vs combat_rules 3000）需回填时裁决。
+
+## R3. 下轮排期（R1-A 优先）
+
+CombatTargetQueryService（SINGLE/CIRCLE/SECTOR/CAPSULE/CROSS/CHAIN + 请求结构）→ 正确性 oracle → 火墙 controller broadphase 迁移（零行为差）→ GameRoot 特殊几何技能逐支迁移（每支带 parity 证据）→ 静态门禁扩展（禁止新增 ability-id 战斗分支）。合并门禁不变：GPT 复审 + 用户实机 + 明确授权前，不合 `codex/integration`。
