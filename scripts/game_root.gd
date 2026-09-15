@@ -1746,27 +1746,56 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	var target := MapDiamondCameraConstraintScript.resolve_soft_follow(
-		design_size, viewport_half, base_zoom, player.global_position
-	)
-	var target_zoom: Vector2 = target.get("recommended_zoom", base_zoom)
-	var zoom_alpha := 1.0 - exp(-6.0 * maxf(0.0, delta))
-	var resolved_zoom := _world_camera.zoom.lerp(target_zoom, zoom_alpha)
-	resolved_zoom.x = clampf(
-		resolved_zoom.x, ArtSpec.CAMERA_ZOOM,
-		MapDiamondCameraConstraintScript.DEFAULT_MAXIMUM_ZOOM
-	)
-	resolved_zoom.y = resolved_zoom.x
-	# Re-resolve the position at the zoom actually displayed this frame. This
-	# keeps the player inside the +/-14% screen band even while zoom is easing.
+	# Fixed view height (user decision 2026-09-15): the gameplay camera never
+	# zooms dynamically. Per map, zoom = max(base, the minimum uniform zoom
+	# that keeps the viewport inside the map inner boundary), computed once
+	# and held for the whole session on that map. Position soft-follow, the
+	# center band clamp and the edge skirt stay active; only edge-pressure
+	# zoom pulling is removed, which also stops the per-frame zoom easing on
+	# small maps.
+	var fixed_zoom := _world_camera_fixed_map_zoom(design_size, viewport_half)
 	var result := MapDiamondCameraConstraintScript.resolve_soft_follow(
-		design_size, viewport_half, resolved_zoom, player.global_position,
-		resolved_zoom.x
+		design_size, viewport_half, fixed_zoom, player.global_position,
+		fixed_zoom.x
 	)
-	_world_camera.zoom = resolved_zoom
+	_world_camera.zoom = fixed_zoom
 	_world_camera.global_position = Vector2(
 		result.get("center", player.global_position)
 	)
+
+
+var _world_camera_fixed_zoom_map_id := -2147483648
+var _world_camera_fixed_zoom_viewport := Vector2.ZERO
+var _world_camera_fixed_zoom := Vector2.ZERO
+
+
+func _world_camera_fixed_map_zoom(
+	design_size: Vector2i,
+	viewport_half: Vector2
+) -> Vector2:
+	var base_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	if (
+		_world_camera_fixed_zoom_map_id == current_map_id
+		and _world_camera_fixed_zoom_viewport == viewport_half
+		and _world_camera_fixed_zoom != Vector2.ZERO
+	):
+		return _world_camera_fixed_zoom
+	var boundary: PackedVector2Array = (
+		MapDiamondCameraConstraintScript.CollisionGeometry
+		.map_inner_boundary_world(design_size)
+	)
+	var minimum_zoom_value := float(
+		MapDiamondCameraConstraintScript.minimum_uniform_zoom(
+			boundary, viewport_half
+		)
+	)
+	var fixed_value := ArtSpec.CAMERA_ZOOM
+	if is_finite(minimum_zoom_value):
+		fixed_value = maxf(ArtSpec.CAMERA_ZOOM, minimum_zoom_value)
+	_world_camera_fixed_zoom = Vector2.ONE * fixed_value
+	_world_camera_fixed_zoom_map_id = current_map_id
+	_world_camera_fixed_zoom_viewport = viewport_half
+	return _world_camera_fixed_zoom
 
 
 func _register_input_actions() -> void:
@@ -2345,7 +2374,7 @@ func _on_map_teleport_requested(request: Dictionary) -> void:
 	if not bool(travel_profile.get("success", false)):
 		missing_projection_rejection_count += 1
 		projection_rejection_reason = str(travel_profile.get("reason", ""))
-		hud.show_message("map_projection_unavailable:%d" % destination_map_id)
+		hud.show_message("目标地图投影暂不可用（%d）" % destination_map_id)
 		return
 	var map_data := GameData.get_map_by_id(destination_map_id)
 	if map_data.is_empty():
@@ -2406,7 +2435,7 @@ func _request_map_travel(map_id: int) -> bool:
 		projection_rejection_reason = str(
 			travel_profile.get("reason", "")
 		)
-		hud.show_message("map_projection_unavailable:%d" % map_id)
+		hud.show_message("当前地图投影暂不可用（%d）" % map_id)
 		return false
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty():
@@ -6023,7 +6052,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 		)
 	)
 	if not bool(result.get("ok", false)):
-		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
+		hud.show_message("技能栏配置失败")
 		return
 	if not PlayerState.apply_skill_button_assignment(result):
 		if is_instance_valid(hud) and hud.has_method("set_skill_button_assignments"):
@@ -6738,7 +6767,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 	)
 	var hit_any := bool(execution.get("effect_success", false))
 	if not bool(execution.get("accepted", false)):
-		hud.show_message("技能释放失败：%s" % str(execution.get("reason", "runtime_rejected")), 1.5)
+		hud.show_message("技能释放失败", 1.5)
 		return
 	if hit_any:
 		_play_skill_audio_phase(stable_skill_id, "effect")
