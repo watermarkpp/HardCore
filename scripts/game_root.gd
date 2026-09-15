@@ -8172,7 +8172,9 @@ func _spawn_canonical_cast_nodes_from_plan(
 	var stable_skill_id := str(plan.get("skill_id", ""))
 	if stable_skill_id == FIRE_WALL_SKILL_ID:
 		# Q2-C/Q3-B: the formal fire wall release owns exactly ONE
-		# FireWallFieldController plus its 4 pure-visual cells. Never fall back
+		# FireWallFieldController plus its pure-visual cells (3x3 geometry =>
+		# 9 cells today; the old "4 cells" comment predates the 2026-09-13
+		# geometry override). Never fall back
 		# to the generic ground-dot factory or standalone GroundSkillEffect
 		# cells; the field controller is the single damage/visual owner.
 		var ground_effect := _canonical_plan_ground_effect(plan)
