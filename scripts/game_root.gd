@@ -9145,10 +9145,7 @@ func _spawn_canonical_ground_field(
 			var existing_field: Variant = _fire_wall_field_registry.get(
 				registry_key
 			)
-			if (
-				existing_field is FireWallFieldControllerScript
-				and is_instance_valid(existing_field)
-			):
+			if _fire_wall_registry_controller_is_active(existing_field):
 				(existing_field as FireWallFieldControllerScript).refresh_field(
 					effect,
 					canonical_snapshot,
@@ -9243,6 +9240,25 @@ const FIRE_WALL_CAP_POLICY_EVICT_OLDEST := "evict_oldest"
 const FIRE_WALL_CAP_POLICY_REJECT_NEW := "reject_new"
 var _fire_wall_field_registry: Dictionary = {}
 var _fire_wall_field_order: Array = []
+## R2-6 (GPT audit adoption): debug registry-invariant switch. The
+## functional-verification APK keeps it on; the dedicated performance A/B
+## build turns it off so lifecycle diagnostics cannot pollute frame-timing
+## percentiles during rapid fire-wall casting.
+var _fire_wall_registry_validation_enabled := true
+
+
+func _fire_wall_registry_controller_is_active(controller: Variant) -> bool:
+	## R2-6 (GPT audit adoption): CAST_ACTIVE = structural validity plus not
+	## queued for deletion. A queued controller is mid-release (expiry or
+	## cancel already ran; Godot frees it at frame end): refreshing it could
+	## not save it, and keeping it registered would swallow a same-tile
+	## recast for one frame. Prune and the same-tile refresh gate share this
+	## helper so both treat the window identically.
+	return (
+		controller is FireWallFieldControllerScript
+		and is_instance_valid(controller)
+		and not (controller as FireWallFieldController).is_queued_for_deletion()
+	)
 
 
 func _fire_wall_registry_center_cell(coverage_cells: Array[Vector2i]) -> Vector2i:
@@ -9329,10 +9345,10 @@ func _fire_wall_prune_invalid_registry_entries() -> void:
 	var stale_keys: Array = []
 	for key: Variant in _fire_wall_field_registry.keys():
 		var controller: Variant = _fire_wall_field_registry.get(key)
-		if not (
-			controller is FireWallFieldController
-			and is_instance_valid(controller)
-		):
+		# R2-6: CAST_ACTIVE check — a queued-for-deletion controller is
+		# stale NOW, so a same-tile recast inside the expiry frame creates
+		# a fresh field instead of refreshing a dying one.
+		if not _fire_wall_registry_controller_is_active(controller):
 			stale_keys.append(key)
 	for key: Variant in stale_keys:
 		_fire_wall_field_registry.erase(key)
@@ -9355,13 +9371,19 @@ func _on_fire_wall_field_tree_exited(
 
 
 func _debug_validate_fire_wall_registry(context := "") -> void:
-	## R2-5 (GPT audit adoption): debug-only registry invariant, executed at
-	## lifecycle boundaries (cast insert, eviction, expiry release, prune,
-	## map teardown). Guards against "the registry believes 8 fields are
-	## alive while fewer really are" class bugs: registry keys and order
-	## slots must stay 1:1 and every entry must reference a live,
-	## not-queued controller. Never runs per frame; stripped in release.
-	if not OS.is_debug_build():
+	## R2-5 (GPT audit adoption): debug-only STRUCTURAL invariant, executed
+	## at lifecycle boundaries (cast insert, eviction, expiry release, prune,
+	## map teardown): registry keys and order slots must stay 1:1 and every
+	## entry must reference a valid controller. STRUCTURAL_VALID means type
+	## correct + instance still valid — a queued-for-deletion entry is
+	## accepted as mid-release because its own tree_exited hook drops the
+	## slot within the same frame. CAST_ACTIVE (also !is_queued_for_deletion)
+	## is the separate production gate in
+	## _fire_wall_registry_controller_is_active(). Never runs per frame.
+	if (
+		not OS.is_debug_build()
+		or not _fire_wall_registry_validation_enabled
+	):
 		return
 	assert(
 		_fire_wall_field_registry.size() == _fire_wall_field_order.size(),
@@ -9391,8 +9413,8 @@ func _debug_validate_fire_wall_registry(context := "") -> void:
 		assert(
 			entry is FireWallFieldController
 			and is_instance_valid(entry),
-			"fire wall registry entry %s must reference a live controller (%s)"
-			% [str(key), context]
+			"fire wall registry entry %s must reference a structurally valid "
+			+ "controller (%s)" % [str(key), context]
 		)
 		assert(
 			order_keys.has(key),

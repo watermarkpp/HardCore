@@ -82,5 +82,31 @@ func _run() -> void:
 		+ "most one tick per caster per tick",
 		"canonical ground descriptor must keep the SOT stacking policy"
 	)
+	# R2-6 (GPT audit adoption): the FORMAL GameRoot fire-wall consumer does
+	# not read ground_effect_descriptors — it reads plan["gameplay_actions"]
+	# via _canonical_plan_ground_effect(). Gate that object too, so a
+	# contract change cannot drop the cap fields from the actions the
+	# production spawn path actually consumes.
+	var actions: Array = plan.get("gameplay_actions", [])
+	assert(
+		actions.size() == 1,
+		"fire wall plan must carry exactly one gameplay action: %d"
+		% actions.size()
+	)
+	var fire_wall_action: Dictionary = actions[0]
+	assert(
+		str(fire_wall_action.get("type", "")) == "persistent_ground_damage",
+		"the gameplay action must be the persistent ground damage effect"
+	)
+	assert(
+		str(fire_wall_action.get("cap_policy", "")) == "evict_oldest",
+		"gameplay_actions must carry the SOT cap_policy evict_oldest, "
+		+ "got '%s'" % str(fire_wall_action.get("cap_policy", ""))
+	)
+	assert(
+		str(fire_wall_action.get("max_active_fields_per_caster", ""))
+		== "config_required_default_8",
+		"gameplay_actions must carry the SOT cap default"
+	)
 	print("FIRE_WALL_CAP_POLICY_CANONICAL_PLAN_PASS")
 	get_tree().quit(0)

@@ -17,6 +17,10 @@ const FireWallFieldController := preload(
 	"res://scripts/fire_wall_field_controller.gd"
 )
 const SkillDataLoader := preload("res://scripts/skills/skill_data_loader.gd")
+const Router := preload("res://scripts/skills/skill_runtime_router.gd")
+const Fixtures := preload(
+	"res://tests/helpers/skill_execution_plan_test_fixtures.gd"
+)
 const FIXTURE_MONSTER_ID := 19
 
 var _game: Node
@@ -355,6 +359,175 @@ func _run() -> void:
 			% _valid_controller_count()
 		)
 	_game._debug_validate_fire_wall_registry("test:consecutive_casts")
+
+	# 6) R2-6 production bridge: real Router.build_canonical_plan -> the
+	#    FORMAL GameRoot plan consumer -> FireWallFieldController. No direct
+	#    _spawn_canonical_ground_field call: the consumer reads
+	#    gameplay_actions via _canonical_plan_ground_effect.
+	var bridge_tile: Vector2i = origin_cell + Vector2i(160, 0)
+	var bridge_cells: Array[Vector2i] = []
+	for offset_x: int in range(-1, 2):
+		for offset_y: int in range(-1, 2):
+			bridge_cells.append(bridge_tile + Vector2i(offset_x, offset_y))
+	var bridge_monster: Node = game._spawn_enemy(
+		monster_data,
+		game._canonical_grid_cell_to_screen_px(bridge_tile),
+		false,
+		-1.0,
+		{"respawn_enabled": false}
+	)
+	assert(bridge_monster != null, "bridge fixture monster must spawn")
+	await get_tree().physics_frame
+	bridge_monster.set_physics_process(false)
+	var bridge_hp_before: int = int(bridge_monster.current_hp)
+	var bridge_request: Dictionary = Fixtures.make_request(
+		"wizard.fire_wall",
+		1,
+		35,
+		Vector2i.ZERO,
+		Vector2i.DOWN,
+		Fixtures.default_target_context(true, bridge_tile, "r2:bridge:9th"),
+		Fixtures.default_resource_context(500)
+	)
+	var bridge_plan: Dictionary = Router.build_canonical_plan(
+		bridge_request,
+		Fixtures.canonical_context(
+			1,
+			"r2:bridge:9th",
+			7,
+			8,
+			Fixtures.circle_snapshot(
+				self,
+				"wizard.fire_wall",
+				"r2:bridge:9th",
+				1,
+				Vector2(0, 0),
+				2.0
+			)
+		)
+	)
+	assert(
+		bool(bridge_plan.get("rejection", {}).get("accepted", false)),
+		"bridge plan must be accepted, reason: %s" % str(
+			bridge_plan.get("rejection", {}).get("reason", "")
+		)
+	)
+	var bridge_effect: Dictionary = game._canonical_plan_ground_effect(
+		bridge_plan
+	)
+	assert(
+		str(bridge_effect.get("cap_policy", "")) == "evict_oldest",
+		"the formal consumer's gameplay action must carry evict_oldest"
+	)
+	# The consumer falls back to a deterministic game-projected union
+	# snapshot when the plan ships without a strict one; take that
+	# production-documented path so the controller holds a valid snapshot.
+	bridge_plan["canonical_snapshot"] = {}
+	var bridge_before := _valid_controllers()
+	assert(bridge_before.size() == 8, "bridge precondition: at the cap")
+	game._spawn_canonical_cast_nodes_from_plan(
+		bridge_plan,
+		game.player.global_position,
+		Vector2.DOWN,
+		null,
+		game.player.global_position
+	)
+	var bridge_after := _valid_controllers()
+	assert(
+		bridge_after.size() == 8,
+		"the formal plan cast must keep the caster at the cap: %d"
+		% bridge_after.size()
+	)
+	var bridge_newest: FireWallFieldController = null
+	for controller: FireWallFieldController in bridge_after:
+		if not bridge_before.has(controller):
+			bridge_newest = controller
+			break
+	assert(
+		bridge_newest != null,
+		"the formal plan consumer must create the replacement field"
+	)
+	assert(
+		bridge_newest.visual_cells.size() == 9,
+		"the bridge field must own nine visual cells: %d"
+		% bridge_newest.visual_cells.size()
+	)
+	assert(
+		bridge_newest._canonical_snapshot_valid,
+		"the bridge field must hold a valid game-projected snapshot"
+	)
+	bridge_newest._apply_field_tick()
+	assert(
+		bridge_newest.damage_application_count >= 1,
+		"the bridge field must apply damage through the production chain"
+	)
+	assert(
+		int(bridge_monster.current_hp) < bridge_hp_before,
+		"the bridge field must actually damage the monster: %d -> %d"
+		% [bridge_hp_before, int(bridge_monster.current_hp)]
+	)
+	game._debug_validate_fire_wall_registry("test:plan_bridge")
+
+	# 7) R2-6 lifecycle window: a queued-for-deletion field must not swallow
+	#    a same-tile immediate recast (expiry-frame race found by the audit:
+	#    queue_free is deferred, so the dying controller used to stay
+	#    registered and the recast refreshed it in vain).
+	var window_tile: Vector2i = origin_cell + Vector2i(170, 0)
+	var window_cells: Array[Vector2i] = []
+	for offset_x: int in range(-1, 2):
+		for offset_y: int in range(-1, 2):
+			window_cells.append(window_tile + Vector2i(offset_x, offset_y))
+	var window_key: String = game._fire_wall_registry_key(
+		game.player, "wizard.fire_wall", window_tile
+	)
+	game._spawn_canonical_ground_field(
+		"wizard.fire_wall",
+		window_cells,
+		game.player.global_position,
+		evict_effect
+	)
+	var dying: FireWallFieldController = (
+		_game._fire_wall_field_registry.get(window_key)
+	)
+	assert(
+		dying != null and not dying.is_queued_for_deletion(),
+		"window precondition: the field must be alive and registered"
+	)
+	dying.cancel()
+	assert(
+		dying.is_queued_for_deletion(),
+		"the cancelled field must be mid-release, not yet freed"
+	)
+	# Same-frame recast — deliberately NO await before this cast:
+	game._spawn_canonical_ground_field(
+		"wizard.fire_wall",
+		window_cells,
+		game.player.global_position,
+		evict_effect
+	)
+	var revived: FireWallFieldController = (
+		_game._fire_wall_field_registry.get(window_key)
+	)
+	assert(
+		revived != null and revived != dying,
+		"a queued same-tile recast must create a fresh field, "
+		+ "not refresh the dying one"
+	)
+	assert(
+		not revived.is_queued_for_deletion(),
+		"the fresh same-tile field must be fully alive"
+	)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(
+		is_instance_valid(revived),
+		"the fresh field must survive the dying field's release"
+	)
+	assert(
+		_game._fire_wall_field_registry.get(window_key) == revived,
+		"the registry key must track the fresh field"
+	)
+	_game._debug_validate_fire_wall_registry("test:queued_window")
 
 	game.queue_free()
 	await game.tree_exited
