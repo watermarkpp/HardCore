@@ -39,6 +39,9 @@ var _runtime_map_id := -1
 var _combat_spatial_index: SpatialIndexScript
 ## R1-A: the shared target-query service fronts every broadphase query.
 var _target_query_service: CombatTargetQueryService
+## PERF-1: caller-owned node scratch for the allocation-conscious envelope
+## fast path (no candidate records on the hot tick).
+var _target_node_scratch: Array[EnemyActor] = []
 ## FREEZE-P0.1: fail-closed projection diagnostics.
 var missing_projection_rejection_count := 0
 
@@ -299,17 +302,19 @@ func _apply_field_tick() -> void:
 			if is_instance_valid(visual_cell):
 				visual_cell.queue_redraw()
 		return
-	var candidates: Array[Dictionary] = (
-		_target_query_service.query({
-			"shape": CombatTargetQueryService.SHAPE_AABB,
-			"bounds_ground_gu": _snapshot_bounds_ground_gu(
-				_canonical_snapshot
-			),
-		})
-	)
-	if (
-		candidates.is_empty()
-		and _target_query_service.last_rejection_reason() != ""
+	# PERF-1: the controller broadphase uses the allocation-conscious
+	# service envelope path (caller-owned node output, query-stamp dedup,
+	# no candidate records). EXPANSION_EPSILON_GU keeps the exact candidate
+	# universe the previous record query produced (bounds + epsilon + the
+	# index max actor bounds); the canonical snapshot exact gate below is
+	# unchanged. Candidate counters now reflect live nodes (the replaced
+	# record path also counted dying registrations).
+	_target_node_scratch.clear()
+	if not _target_query_service.query_envelope_into(
+		_snapshot_bounds_ground_gu(_canonical_snapshot),
+		_target_node_scratch,
+		true,
+		EXPANSION_EPSILON_GU,
 	):
 		# Fail-closed parity with the previous direct-index behavior: a
 		# rejected service query delivers nothing for this tick.
@@ -317,13 +322,11 @@ func _apply_field_tick() -> void:
 			_target_query_service.last_rejection_reason()
 		)
 		return
-	candidate_count += candidates.size()
-	max_candidate_count = maxi(max_candidate_count, candidates.size())
-	for candidate: Dictionary in candidates:
-		var raw_node: Variant = candidate.get("node")
-		if not raw_node is EnemyActor:
-			continue
-		var enemy := raw_node as EnemyActor
+	candidate_count += _target_node_scratch.size()
+	max_candidate_count = maxi(
+		max_candidate_count, _target_node_scratch.size()
+	)
+	for enemy: EnemyActor in _target_node_scratch:
 		if (
 			not is_instance_valid(enemy)
 			or enemy.is_queued_for_deletion()

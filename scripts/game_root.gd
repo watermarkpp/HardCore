@@ -623,53 +623,26 @@ func _target_query_service() -> CombatTargetQueryService:
 	return _combat_target_query_service
 
 
-## R1-B: one service-backed envelope query for the special-geometry skills.
-## The aabb pass-through shape keeps each skill's canonical gate (melee
+## PERF-1: one allocation-conscious service call for the special-geometry
+## skills. The aabb pass-through keeps each skill's canonical gate (melee
 ## footprint/sector predicates, wizard snapshot gate) as the exact authority.
-## The request envelope is the same bounds the replaced index node query
-## used, and broadphase_epsilon_gu=0 keeps the service envelope identical to
-## it (the index still adds its max actor bounds), so the candidate set is
-## bitwise the one the old direct query produced. The live filter below
-## replicates the index node-query filter so the record-based service path
-## keeps candidate-set parity end to end.
-func _service_candidates_envelope_into(
-	request: Dictionary,
+## The service fast path delegates to the index caller-owned node query
+## (query-stamp dedup, inline live filter), so with epsilon 0 the candidate
+## set is exactly the one the legacy direct node queries produced and the
+## hot path allocates no request Dictionary and no candidate records.
+func _service_envelope_into(
+	bounds_ground_gu: Rect2,
 	output: Array[EnemyActor],
 ) -> bool:
-	output.clear()
 	var service := _target_query_service()
-	# broadphase_epsilon_gu=0 keeps the service envelope identical to the
-	# direct index node-query envelope these callers replaced; the index
-	# still adds its own max actor bounds. The live filter below then makes
-	# the record-based path candidate-set identical to the old node path.
-	request["broadphase_epsilon_gu"] = 0.0
-	var records := service.query(request)
-	if records.is_empty() and service.last_rejection_reason() != "":
+	var service_ready := service.query_envelope_into(
+		bounds_ground_gu, output, true
+	)
+	if not service_ready and service.last_rejection_reason() != "":
 		projection_rejection_reason = StringName(
 			"target_query_%s" % service.last_rejection_reason()
 		)
-		return false
-	for record: Dictionary in records:
-		var raw_node: Variant = record.get("node")
-		if (
-			raw_node is EnemyActor
-			and _aoe_service_enemy_broadphase_current(raw_node as EnemyActor)
-		):
-			output.append(raw_node as EnemyActor)
-	return true
-
-
-func _aoe_service_enemy_broadphase_current(enemy: EnemyActor) -> bool:
-	## Replicates the live filter of index.query_enemy_nodes_*_into so the
-	## record-based service path yields the same candidate set as the direct
-	## node queries it replaced.
-	return (
-		is_instance_valid(enemy)
-		and not enemy.is_queued_for_deletion()
-		and not enemy._dying
-		and not enemy._death_pending
-		and enemy.current_hp > 0
-	)
+	return service_ready
 
 
 func _target_spatial_query_aabb_into(
@@ -687,13 +660,7 @@ func _target_spatial_query_aabb_into(
 		if bounds_ground_gu.size.x < 0.0 or bounds_ground_gu.size.y < 0.0:
 			projection_rejection_reason = &"target_spatial_query_bounds_invalid"
 		return false
-	var service_ready := _service_candidates_envelope_into(
-		{
-			"shape": CombatTargetQueryService.SHAPE_AABB,
-			"bounds_ground_gu": bounds_ground_gu,
-		},
-		output,
-	)
+	var service_ready := _service_envelope_into(bounds_ground_gu, output)
 	var write_index := 0
 	for raw_enemy: Variant in output:
 		if not raw_enemy is EnemyActor:
@@ -723,9 +690,9 @@ func _target_spatial_query_segment_into(
 		if not is_finite(expansion_gu):
 			projection_rejection_reason = &"target_spatial_query_expansion_invalid"
 		return false
-	# R1-B: the segment broadphase enters the shared service as one expanded
-	# AABB with the exact envelope the index node query built (segment AABB
-	# expanded by the caller's expansion); with broadphase_epsilon_gu=0 the
+	# PERF-1: the segment broadphase enters the service fast path as one
+	# expanded AABB with the exact envelope the index node query built
+	# (segment AABB expanded by the caller's expansion); with epsilon 0 the
 	# service adds only the index max actor bounds on top, so the candidate
 	# set is identical to the direct node query it replaces.
 	var expansion := maxf(0.0, expansion_gu)
@@ -737,12 +704,8 @@ func _target_spatial_query_segment_into(
 		maxf(start_ground_gu.x, end_ground_gu.x),
 		maxf(start_ground_gu.y, end_ground_gu.y)
 	) + Vector2.ONE * expansion
-	var service_ready := _service_candidates_envelope_into(
-		{
-			"shape": CombatTargetQueryService.SHAPE_AABB,
-			"bounds_ground_gu": Rect2(min_gu, max_gu - min_gu),
-		},
-		output,
+	var service_ready := _service_envelope_into(
+		Rect2(min_gu, max_gu - min_gu), output
 	)
 	var write_index := 0
 	for raw_enemy: Variant in output:
@@ -836,12 +799,8 @@ func _aoe_query_enemy_candidates_aabb(
 				&"aoe_spatial_candidates", 0
 			)
 			return true
-		var query_ready := _service_candidates_envelope_into(
-			{
-				"shape": CombatTargetQueryService.SHAPE_AABB,
-				"bounds_ground_gu": bounds_ground_gu,
-			},
-			_aoe_candidate_scratch,
+		var query_ready := _service_envelope_into(
+			bounds_ground_gu, _aoe_candidate_scratch
 		)
 		RuntimeDiagnostics.increment_performance_counter(
 			&"aoe_spatial_candidates", _aoe_candidate_scratch.size()
@@ -887,12 +846,8 @@ func _aoe_query_enemy_candidates_segment(
 			maxf(start_ground_gu.x, end_ground_gu.x),
 			maxf(start_ground_gu.y, end_ground_gu.y)
 		) + Vector2.ONE * expansion
-		var query_ready := _service_candidates_envelope_into(
-			{
-				"shape": CombatTargetQueryService.SHAPE_AABB,
-				"bounds_ground_gu": Rect2(min_gu, max_gu - min_gu),
-			},
-			_aoe_candidate_scratch,
+		var query_ready := _service_envelope_into(
+			Rect2(min_gu, max_gu - min_gu), _aoe_candidate_scratch
 		)
 		RuntimeDiagnostics.increment_performance_counter(
 			&"aoe_spatial_candidates", _aoe_candidate_scratch.size()

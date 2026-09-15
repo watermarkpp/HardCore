@@ -194,3 +194,45 @@ R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每
 1. boss-surrounded 邻域组扫描（R2 第 7 项）仍 staged：组扫描在死亡窗口会计入已 `unregister` 的演员、并计入召唤物（不在敌方索引）；直接换 `query_neighbor_enemy_nodes_into` 需先裁决死亡窗口/召唤物的计数合同，本轮未动。
 2. 实机 Gen1→Gen5 矩阵 NOT_RUN（待设备）。
 3. 服务形状库（sector/capsule/circle/cross 作为精确门）尚未被任何生产技能消费——留待新技能描述符化时启用，本轮不发明消费者。
+
+---
+
+# R7. PERF-1 落地 — 热路径 allocation-conscious 收口（2026-09-15，GPT 终审采纳轮）
+
+## R7.0 对 GPT 终审的采纳与修正
+
+终审四项技术断言（`_query_aabb_candidates` 每查询分配、manager 绕过服务、manager:285 直连 take_damage、`_max_actor_bounds_gu` 只增不减）经实码逐行核实**全部属实**并采纳；"正确性 oracle ≠ 性能收尾证据"、"彻底根除 = BLOCKED"判定接受。一处文档修正：R4"唯一生产目标查询权威"表述过满（manager/ground_effect 自管 tick 当时仍直连索引），本轮起以精确表述替代。工程校准两点：manager 迁移直接落在零分配快路径上（不先迁 dict 版再迁一次）；R1-C damage 闭环排最后一轮（跨 professions-skills 共享桥，用户痛点优先）。
+
+## R7.1 施工内容
+
+1. `combat_target_query_service.gd`：新增 `query_envelope_into(bounds, output, stable_order=true, epsilon_gu=0.0)` 零分配快路径——原始参数（**无 request Dictionary**）、caller-owned 输出、委托索引 caller-owned 节点查询（query-stamp 去重 + 内联活体过滤 + 插入序）；拒绝语义镜像 `query()`（bool 返回 + `last_rejection_reason`：`spatial_index_unavailable/runtime_map_unavailable/bounds_invalid`），任何分支先清输出。**宇宙恒等式**：record 路径 = bounds+ε+max_bounds，快路径 = grow(ε) 后节点查询再加 max_bounds——ε 相同则逐位一致。dict `query()` 保留（oracle/锚定形状）。
+2. `runtime_combat_spatial_index.gd`：`query_enemy_nodes_aabb_into` 增加 `stable_order := true` 可选参数（默认不变，段查询同款先例），透传 `_query_enemy_nodes_in_aabb`。
+3. `game_root.gd`：四收口改经 `_service_envelope_into(bounds, output)`（ε=0）；request dict 构造与 record 解包消失；`_aoe_service_enemy_broadphase_current` 删除（节点查询内联同款过滤，复刻件不再需要）。
+4. `persistent_ground_effect_manager.gd`：broadphase 迁入服务（自建服务实例，controller 同款模式；map id/index 变化重建），ε=EXPANSION_EPSILON_GU=0.05 保持原 record 宇宙；精确门 `runtime_target_is_inside`、claim、damage 路由逐字不动；manager:285 直连 take_damage 保留（R1-C 对象，未隐瞒）。
+5. `fire_wall_field_controller.gd`：同轮迁快路径（ε=0.05 = d1d015ba 前直连值），canonical snapshot 精确门不动；至此**生产 broadphase 无任何 record 路径消费者**（`ground_effect` 自管 tick 为 R1-P0 门禁冻结的休眠合同——generic 效果全由 manager 拥有，火墙走 controller；留作 R1-C 一并处理）。
+6. 静态门禁：manager 禁 `query_aabb_candidates(` 且必含 `query_envelope_into(`；controller 同；服务必须保留快路径；四收口断言名更新。
+
+## R7.2 行为保持与语义漂移（如实）
+
+- 候选集：parity 测试三重断言（快路径 ≡ 直连节点查询；快路径 ≡ record∩活体过滤；默认 ε ⊇ ε=0，两路径各自成立）96 rect + 48 segment 全等。
+- 顺序：PERF-1 全部调用点 stable（插入序 + instance_id 决胜）；ORDER_NONE 切换留给 PERF-2（probe 类）。
+- fail-closed：manager/controller 对拒绝按"空候选集"处理（旧 record 查询对不可用 map 返回空、无拒绝）——净行为一致。
+- 诊断漂移：`candidate_count/total_candidate_count` 现统计**活体**节点（旧 record 路径把濒死注册者也计入）——仅诊断口径变化，已注释。
+
+## R7.3 测试证据（49 项全 PASS）
+
+| 套件 | 结果 |
+|---|---|
+| combat_authority_static_gate_test（含 PERF-1 新断言） | PASS |
+| game_root_special_geometry_service_parity_test（三重断言版） | PASS |
+| combat_target_query_service_oracle_test | PASS |
+| fire_wall_controller_critical | 12/12 |
+| persistent_ground_effect_critical | 10/10 |
+| skill_execution_plan_critical | 10/10 |
+| r3x6 / warrior_target_aligned / wizard_geometry / sky_strike / melee_parity | 5/5 |
+| wizard_line_geometry_critical | 3/3 |
+| combat_projection_fail_closed_critical | 6/6 |
+
+## R7.4 下轮（PERF-2 预告）
+
+`_max_actor_bounds_gu` dirty-flag 收缩 + probe 类路径 ORDER_NONE。性能结论仍 BLOCKED：APK A/B 帧时间数据（PERF-EVIDENCE 轮）出来前不宣布"彻底根除"。

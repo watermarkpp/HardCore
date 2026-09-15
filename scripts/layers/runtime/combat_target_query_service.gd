@@ -104,6 +104,51 @@ func query(request: Dictionary) -> Array[Dictionary]:
 	return result
 
 
+## PERF-1: allocation-conscious envelope fast path for per-frame hot
+## callers. Delegates to the index caller-owned node query (query-stamp
+## dedup, inline live filter, stable order by insertion): no request
+## Dictionary, no candidate records, no per-query seen/sort collections.
+## epsilon_gu widens the caller envelope before the index adds its own max
+## actor bounds, so epsilon_gu=0 reproduces the legacy direct node-query
+## envelope bit-for-bit and epsilon_gu=0.05 reproduces the record-query
+## universe (bounds + epsilon + max bounds). Rejection semantics mirror
+## query(): the output is cleared in every case and last_rejection_reason()
+## explains a false return. Ordering defaults to stable combat order;
+## existence probes may pass stable_order=false.
+func query_envelope_into(
+	bounds_ground_gu: Rect2,
+	output: Array,
+	stable_order: bool = true,
+	epsilon_gu: float = 0.0,
+) -> bool:
+	output.clear()
+	_last_rejection_reason = ""
+	if _combat_spatial_index == null or not is_instance_valid(
+		_combat_spatial_index
+	):
+		_last_rejection_reason = "spatial_index_unavailable"
+		return false
+	if _runtime_map_id < 0:
+		_last_rejection_reason = "runtime_map_unavailable"
+		return false
+	if (
+		not bounds_ground_gu.position.is_finite()
+		or not bounds_ground_gu.size.is_finite()
+		or bounds_ground_gu.size.x < 0.0
+		or bounds_ground_gu.size.y < 0.0
+	):
+		_last_rejection_reason = "bounds_invalid"
+		return false
+	var envelope := bounds_ground_gu
+	var epsilon := maxf(0.0, epsilon_gu)
+	if epsilon > 0.0:
+		envelope = envelope.grow(epsilon)
+	_combat_spatial_index.query_enemy_nodes_aabb_into(
+		_runtime_map_id, envelope, output, stable_order
+	)
+	return true
+
+
 func _broadphase_bounds(
 	shape: String,
 	request: Dictionary,

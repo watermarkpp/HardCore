@@ -1,14 +1,16 @@
 extends Node
 
-## R1-B parity evidence: the CombatTargetQueryService aabb pass-through must
-## produce the same candidate set as the direct index node queries it
-## replaced in game_root (melee release plans, wizard cell-union plans,
-## lightning sky strike, wild rush blocker segments). With
-## broadphase_epsilon_gu=0 the service envelope equals the legacy index
-## envelope, so the record-based path must be set-identical to the node
-## query, and the game_root live filter (dying / death-pending / queued /
-## dead actors) must keep that parity. Randomized envelopes plus fixed
-## boundary cases, seed-locked.
+## R1-B + PERF-1 parity evidence: the CombatTargetQueryService must produce
+## the same candidate set as the direct index node queries the game_root
+## special-geometry skills replaced (melee release plans, wizard cell-union
+## plans, lightning sky strike, wild rush blocker segments). Three ways must
+## agree on every randomized envelope:
+##   1. the allocation-conscious fast path (query_envelope_into, the
+##      production hot path since PERF-1) == the direct index node query;
+##   2. the fast path == the record-based query() path intersected with the
+##      legacy game_root live filter (dying / death-pending / queued / dead);
+##   3. the default-epsilon envelope stays a superset of the epsilon-0 one.
+## Randomized envelopes plus fixed boundary cases, seed-locked.
 
 const CombatTargetQueryServiceScript := preload(
 	"res://scripts/layers/runtime/combat_target_query_service.gd"
@@ -90,7 +92,18 @@ func _run() -> void:
 				query_index, str(service_ids), str(index_ids)
 			]
 		)
-		# The default-epsilon envelope stays a superset of the legacy one.
+		# PERF-1: the production fast path must equal the direct node query
+		# and the live-filtered record path on every envelope.
+		var fast_ids := _fast_path_ids(service, bounds)
+		assert(
+			_ids_equal(fast_ids, index_ids)
+			and _ids_equal(fast_ids, service_ids),
+			"rect fast path #%d diverged: fast=%s record=%s index=%s" % [
+				query_index, str(fast_ids), str(service_ids), str(index_ids)
+			]
+		)
+		# The default-epsilon envelope stays a superset of the legacy one
+		# on both the record path and the fast path.
 		var epsilon_ids := _service_ids_with_live_filter(
 			service,
 			{
@@ -98,9 +111,10 @@ func _run() -> void:
 				"bounds_ground_gu": bounds,
 			}
 		)
+		var fast_epsilon_ids := _fast_path_ids(service, bounds, 0.05)
 		for id: int in index_ids:
 			assert(
-				epsilon_ids.has(id),
+				epsilon_ids.has(id) and fast_epsilon_ids.has(id),
 				"default-epsilon envelope lost legacy candidate %d" % id
 			)
 
@@ -134,6 +148,14 @@ func _run() -> void:
 				query_index, str(service_ids), str(index_ids)
 			]
 		)
+		var fast_ids := _fast_path_ids(service, bounds)
+		assert(
+			_ids_equal(fast_ids, index_ids)
+			and _ids_equal(fast_ids, service_ids),
+			"segment fast path #%d diverged: fast=%s record=%s index=%s" % [
+				query_index, str(fast_ids), str(service_ids), str(index_ids)
+			]
+		)
 
 	# Position transaction parity: a moved actor leaves the old envelope on
 	# both paths and appears on neither until the move.
@@ -145,13 +167,7 @@ func _run() -> void:
 	var moved_instance_id: int = (
 		(actor_records[0]["enemy"] as EnemyActor).get_instance_id()
 	)
-	var moved_service_ids := _service_ids_with_live_filter(
-		service, {
-			"shape": "aabb",
-			"bounds_ground_gu": moved_bounds,
-			"broadphase_epsilon_gu": 0.0,
-		}
-	)
+	var moved_service_ids := _fast_path_ids(service, moved_bounds)
 	var moved_index_ids := _index_ids(index, RUNTIME_MAP_ID, moved_bounds)
 	assert(
 		not moved_service_ids.has(moved_instance_id)
@@ -162,20 +178,15 @@ func _run() -> void:
 	# Map clear parity: both paths must drain with the map.
 	index.clear_map(RUNTIME_MAP_ID)
 	var cleared_bounds := Rect2(Vector2(-50.0, -50.0), Vector2(200.0, 200.0))
-	var cleared_service_ids := _service_ids_with_live_filter(
-		service, {
-			"shape": "aabb",
-			"bounds_ground_gu": cleared_bounds,
-			"broadphase_epsilon_gu": 0.0,
-		}
-	)
+	var cleared_service_ids := _fast_path_ids(service, cleared_bounds)
 	var cleared_index_ids := _index_ids(index, RUNTIME_MAP_ID, cleared_bounds)
 	assert(
 		cleared_service_ids.is_empty() and cleared_index_ids.is_empty(),
 		"map clear left stale candidates on one path"
 	)
 
-	# Fail-closed parity: an unusable map answers empty with a reason.
+	# Fail-closed parity: an unusable map answers empty with a reason on
+	# both the record path and the fast path.
 	var broken_service: CombatTargetQueryService = (
 		CombatTargetQueryServiceScript.new(index, -1)
 	)
@@ -187,6 +198,27 @@ func _run() -> void:
 		and broken_service.last_rejection_reason() != "",
 		"unavailable map must fail closed with a reason"
 	)
+	var broken_nodes: Array = []
+	assert(
+		not broken_service.query_envelope_into(
+			Rect2(Vector2.ZERO, Vector2.ONE), broken_nodes
+		)
+		and broken_nodes.is_empty()
+		and broken_service.last_rejection_reason()
+			== "runtime_map_unavailable",
+		"unavailable map must fail closed on the fast path"
+	)
+	# Invalid envelopes fail closed on the fast path with the same reason
+	# the record path's bounds gate uses.
+	var invalid_nodes: Array = []
+	assert(
+		not service.query_envelope_into(
+			Rect2(Vector2.ZERO, Vector2(-1.0, -1.0)), invalid_nodes
+		)
+		and invalid_nodes.is_empty()
+		and service.last_rejection_reason() == "bounds_invalid",
+		"invalid envelope must fail closed on the fast path"
+	)
 
 	for enemy: EnemyActor in actors:
 		if is_instance_valid(enemy):
@@ -196,7 +228,7 @@ func _run() -> void:
 			enemy.queue_free()
 	print(
 		"GAME_ROOT_SPECIAL_GEOMETRY_SERVICE_PARITY_PASS ",
-		"rect=%d segment=%d" % [RECT_QUERIES, SEGMENT_QUERIES]
+		"rect=%d segment=%d fast_path=delegated" % [RECT_QUERIES, SEGMENT_QUERIES]
 	)
 	get_tree().quit(0)
 
@@ -229,8 +261,8 @@ func _service_ids_with_live_filter(
 	var ids: Dictionary = {}
 	for record: Dictionary in service.query(request):
 		var enemy: EnemyActor = record.get("node")
-		# Mirror of game_root._aoe_service_enemy_broadphase_current: the
-		# live filter that keeps the record path identical to the node path.
+		# Live filter mirroring the legacy game_root record-path wrapper
+		# (the index node query applies the same filter inline).
 		if (
 			is_instance_valid(enemy)
 			and not enemy.is_queued_for_deletion()
@@ -239,6 +271,23 @@ func _service_ids_with_live_filter(
 			and enemy.current_hp > 0
 		):
 			ids[enemy.get_instance_id()] = true
+	return ids
+
+
+func _fast_path_ids(
+	service: CombatTargetQueryService,
+	bounds: Rect2,
+	epsilon := 0.0
+) -> Dictionary:
+	var nodes: Array = []
+	assert(
+		service.query_envelope_into(bounds, nodes, true, epsilon),
+		"fast path unexpectedly rejected a valid query"
+	)
+	var ids: Dictionary = {}
+	for candidate: Variant in nodes:
+		if candidate is EnemyActor:
+			ids[(candidate as EnemyActor).get_instance_id()] = true
 	return ids
 
 

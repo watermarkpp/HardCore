@@ -18,6 +18,7 @@ const _GAME_ROOT_SOURCE := "res://scripts/game_root.gd"
 const _QUERY_SERVICE_SOURCE := (
 	"res://scripts/layers/runtime/combat_target_query_service.gd"
 )
+const _MANAGER_SOURCE := "res://scripts/persistent_ground_effect_manager.gd"
 
 
 func _ready() -> void:
@@ -71,7 +72,7 @@ func _run() -> void:
 	]:
 		var body := _function_source(game_root_source, func_name)
 		assert(
-			body.contains("_service_candidates_envelope_into("),
+			body.contains("_service_envelope_into("),
 			"%s must route through CombatTargetQueryService" % func_name
 		)
 		assert(
@@ -94,6 +95,21 @@ func _run() -> void:
 			game_root_source, "_hc_m30_landing_clear"
 		).contains("query_enemy_nodes_segment_unsorted_into"),
 		"the M30 landing probe stays a sanctioned direct index consumer"
+	)
+	# PERF-1: the manager and the fire wall controller broadphase enter the
+	# shared service through the allocation-conscious envelope fast path;
+	# the record query stays service-internal (oracle and rare anchored
+	# shapes). The fast path must survive in the service itself.
+	var manager_source := _read(_MANAGER_SOURCE)
+	assert(
+		manager_source.contains("query_envelope_into(")
+		and not manager_source.contains("query_aabb_candidates("),
+		"persistent ground effect manager must use the service fast path"
+	)
+	assert(
+		controller_source.contains("query_envelope_into(")
+		and not controller_source.contains(".query({"),
+		"fire wall controller must use the service fast path"
 	)
 	# R1-B: the GameRoot ability-id combat enumerations are frozen. Adding an
 	# ability-id combat branch requires a reviewed contract change, never a
@@ -145,6 +161,10 @@ func _run() -> void:
 	assert(
 		not query_service_source.contains("take_damage("),
 		"CombatTargetQueryService must never deliver damage"
+	)
+	assert(
+		query_service_source.contains("func query_envelope_into("),
+		"the target query service must keep the allocation-conscious fast path"
 	)
 	print("COMBAT_AUTHORITY_STATIC_GATE_PASS")
 	get_tree().quit(0)

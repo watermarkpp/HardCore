@@ -199,6 +199,7 @@ func query_enemy_nodes_aabb_into(
 	runtime_map_id: int,
 	bounds_ground_gu: Rect2,
 	output: Array,
+	stable_order := true,
 ) -> void:
 	output.clear()
 	_neighbor_stale_actor_ids.clear()
@@ -222,6 +223,7 @@ func query_enemy_nodes_aabb_into(
 		),
 		output,
 		query_stamp,
+		stable_order,
 	)
 	_finish_enemy_node_query(output)
 
