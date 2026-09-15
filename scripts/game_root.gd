@@ -9180,6 +9180,14 @@ func _spawn_canonical_ground_field(
 		if registry_usable:
 			_fire_wall_field_registry[registry_key] = field_controller
 			_fire_wall_field_order.append(registry_key)
+			# R2-2: the controller releases its registry slot the moment it
+			# leaves the tree (expiry/cancel/map teardown) instead of
+			# waiting for the next cast's lazy prune.
+			field_controller.tree_exited.connect(
+				_on_fire_wall_field_tree_exited.bind(
+					registry_key, field_controller
+				)
+			)
 		for visual_cell: GroundSkillVisualCell in field_controller.visual_cells:
 			visual_cell.set_shared_anim_clock_ms(
 				Callable(field_controller, "fire_wall_anim_clock_ms")
@@ -9328,6 +9336,18 @@ func _fire_wall_prune_invalid_registry_entries() -> void:
 	for key: Variant in stale_keys:
 		_fire_wall_field_registry.erase(key)
 		_fire_wall_field_order.erase(key)
+
+
+func _on_fire_wall_field_tree_exited(
+	registry_key: String,
+	controller: FireWallFieldController
+) -> void:
+	## R2-2: proactive registry release when a field controller leaves the
+	## tree. The identity guard keeps a stale signal from evicting a newer
+	## field that was registered under the same key (same-tile recast).
+	if _fire_wall_field_registry.get(registry_key) == controller:
+		_fire_wall_field_registry.erase(registry_key)
+		_fire_wall_field_order.erase(registry_key)
 
 
 func _fire_wall_evict_oldest_field_for_caster(caster_prefix: String) -> void:

@@ -4,16 +4,19 @@ extends Node
 ##   "same_caster_same_tile_refreshes_duration" — a recast on the same center
 ##   tile refreshes the existing field (no new controller, no new cells).
 ##   "max_active_fields_per_caster": "config_required_default_8" — the cap
-##   counts one caster's fields. The SOT records no ninth-field behavior, so
-##   the default cap policy fails closed to reject_new (no ninth field, no
-##   eviction); an explicit "cap_policy": "evict_oldest" opts into eviction.
-##   The registry key is source-aware (caster/map/generation/family/tile).
-##   Field lifetime is wall-clock real time: an expired field frees on the
-##   next simulated frame even when its duration countdown was frozen.
+##   counts one caster's fields. R2 ruling (user device ruling 2026-09-15):
+##   the SOT now records "cap_policy": "evict_oldest" — casting always
+##   succeeds and the oldest field is cancelled at the cap; UNCONFIGURED
+##   data still fails closed to reject_new. The registry key is
+##   source-aware (caster/map/generation/family/tile). Field lifetime is
+##   wall-clock real time: an expired field frees on the next simulated
+##   frame even when its duration countdown was frozen, and its registry
+##   slot is released proactively (R2-2 tree_exited hook), not lazily.
 
 const FireWallFieldController := preload(
 	"res://scripts/fire_wall_field_controller.gd"
 )
+const SkillDataLoader := preload("res://scripts/skills/skill_data_loader.gd")
 const FIXTURE_MONSTER_ID := 19
 
 var _game: Node
@@ -176,6 +179,66 @@ func _run() -> void:
 	assert(
 		doomed.is_queued_for_deletion(),
 		"wall-clock expired field must free on the next frame"
+	)
+	var doomed_key := ""
+	for key: Variant in _game._fire_wall_field_registry:
+		if _game._fire_wall_field_registry[key] == doomed:
+			doomed_key = str(key)
+			break
+	assert(doomed_key != "", "expired field must still own its registry slot")
+	var registry_size_before: int = _game._fire_wall_field_registry.size()
+
+	# 4b) R2-2 identity guard: a stale tree_exited signal must not evict a
+	#     newer field registered under the same key; the owner's signal does.
+	var guard_controller: FireWallFieldController = remaining[1]
+	var guard_key := ""
+	for key: Variant in _game._fire_wall_field_registry:
+		if _game._fire_wall_field_registry[key] == guard_controller:
+			guard_key = str(key)
+			break
+	assert(guard_key != "" and guard_key != doomed_key)
+	_game._on_fire_wall_field_tree_exited(guard_key, doomed)
+	assert(
+		_game._fire_wall_field_registry.get(guard_key) == guard_controller,
+		"stale controller signal must not evict the field owning the key"
+	)
+	_game._on_fire_wall_field_tree_exited(guard_key, guard_controller)
+	assert(
+		not _game._fire_wall_field_registry.has(guard_key),
+		"the owning controller's release must erase its registry slot"
+	)
+	assert(
+		not _game._fire_wall_field_order.has(guard_key),
+		"the owning controller's release must erase its order slot"
+	)
+
+	# 4c) R2-2 proactive lifecycle: once the expired controller actually
+	#     leaves the tree, its registry slot is gone WITHOUT any further
+	#     cast (no lazy-prune dependency).
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(
+		not is_instance_valid(doomed),
+		"expired controller must be freed by the engine"
+	)
+	assert(
+		_game._fire_wall_field_registry.size() == registry_size_before - 2,
+		"expired field must release its registry slot proactively: %d vs %d"
+		% [
+			_game._fire_wall_field_registry.size(),
+			registry_size_before - 2,
+		]
+	)
+	assert(
+		not _game._fire_wall_field_registry.has(doomed_key),
+		"the expired field's slot must be released by its tree_exited hook"
+	)
+	var data_mechanics: Dictionary = SkillDataLoader.skill(
+		"wizard.fire_wall"
+	).get("mechanics", {})
+	assert(
+		str(data_mechanics.get("cap_policy", "")) == "evict_oldest",
+		"SOT mechanics must record the R2 evict_oldest ruling"
 	)
 
 	game.queue_free()
