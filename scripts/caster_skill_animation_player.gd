@@ -22,6 +22,11 @@ var _frame_time_seconds := 0.05
 var _elapsed := 0.0
 var _loop := false
 var _manual_mode := false
+## External clock mode: when set, frame selection is derived from the shared
+## clock value (ms) instead of this player's own accumulator. Keeps the
+## canonical frame timing (frame_time_ms) unchanged while removing per-node
+## timer work when many cells share one field clock.
+var _shared_clock_ms: Callable = Callable()
 var _native_extent := 1.0
 var _desired_extent := 0.0
 var _desired_footprint := Vector2.ZERO
@@ -235,6 +240,9 @@ func configure(
 func _process(delta: float) -> void:
 	if not visual_loaded or playback_complete or _manual_mode:
 		return
+	if _shared_clock_ms.is_valid():
+		_apply_shared_clock_frame()
+		return
 	_elapsed += delta
 	while _elapsed >= _frame_time_seconds:
 		_elapsed -= _frame_time_seconds
@@ -250,6 +258,28 @@ func _process(delta: float) -> void:
 		_apply_frame(current_frame_index)
 		if playback_complete:
 			break
+
+
+func set_shared_clock_ms(clock_ms_provider: Callable) -> void:
+	_shared_clock_ms = clock_ms_provider
+
+
+func _apply_shared_clock_frame() -> void:
+	if _frames.is_empty() or _frame_time_seconds <= 0.0:
+		return
+	var raw: Variant = _shared_clock_ms.call()
+	if not (raw is float or raw is int):
+		return
+	var clock_ms := float(raw)
+	if clock_ms < 0.0:
+		return
+	var frame_time_ms := _frame_time_seconds * 1000.0
+	var cycle_ms := float(_frames.size()) * frame_time_ms
+	var frame_index := int(floor(fmod(clock_ms, cycle_ms) / frame_time_ms))
+	frame_index = clampi(frame_index, 0, _frames.size() - 1)
+	if frame_index != current_frame_index:
+		current_frame_index = frame_index
+		_apply_frame(current_frame_index)
 
 
 func set_manual_frame(frame_index: int) -> bool:

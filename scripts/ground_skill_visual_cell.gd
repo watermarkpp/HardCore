@@ -33,6 +33,13 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 
+## SOT same_caster_same_tile_refreshes_duration: a same-tile recast re-arms
+## the cell lifetime from the refreshed field duration so presentation nodes
+## never outlive (or die before) their controller.
+func refresh_lifetime(new_duration: float) -> void:
+	duration = maxf(0.1, new_duration)
+
+
 func runtime_diagnostics() -> Dictionary:
 	return {
 		"enemy_group_queries": 0,

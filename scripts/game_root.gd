@@ -3250,6 +3250,9 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# Every zone_content node (including ground effect visuals) is freed
 		# above; their manager registrations must not survive into the next map.
 		_ground_effect_manager.clear_all()
+	# FireWall field controllers are not zone_content members; free them
+	# explicitly so no field (or registry entry) crosses a map transition.
+	_clear_fire_wall_field_registry()
 	current_zone = zone_name
 	current_map_data = map_data.duplicate(true)
 	current_map_id = int(map_data.get("mapId", -1)) if not map_data.is_empty() else -1
@@ -9038,6 +9041,30 @@ func _spawn_canonical_ground_field(
 				)
 			)
 		var empty_target_filters: Array[Callable] = []
+		# SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
+		# project_canonical): "same_caster_same_tile_refreshes_duration" with
+		# "max_active_fields_per_caster": "config_required_default_8". The
+		# execution-plan ground descriptor drops those fields upstream, so the
+		# runtime enforces the canonical defaults here until the data chain
+		# carries them through.
+		var registry_center := _fire_wall_registry_center_cell(coverage_cells)
+		var registry_usable := not coverage_cells.is_empty()
+		if registry_usable:
+			_fire_wall_prune_invalid_registry_entries()
+			var existing_field: Variant = _fire_wall_field_registry.get(
+				registry_center
+			)
+			if (
+				existing_field is FireWallFieldControllerScript
+				and is_instance_valid(existing_field)
+			):
+				(existing_field as FireWallFieldControllerScript).refresh_field(
+					effect,
+					canonical_snapshot,
+					field_snapshot_validation_context,
+					release_id
+				)
+				return
 		var field_controller := FireWallFieldControllerScript.new()
 		field_controller.setup_fire_wall_field(
 			player,
@@ -9055,9 +9082,18 @@ func _spawn_canonical_ground_field(
 			current_map_id
 		)
 		add_child(field_controller)
-		# Q2-C: the controller owns the 4 GroundSkillVisualCell presentation
-		# nodes; no additional standalone GroundSkillEffect cells are spawned,
-		# so the base-class enemy-group scan can never run on this path.
+		if registry_usable:
+			_fire_wall_field_registry[registry_center] = field_controller
+			_fire_wall_field_order.append(registry_center)
+			_fire_wall_evict_excess_fire_wall_fields(effect)
+		for visual_cell: GroundSkillVisualCell in field_controller.visual_cells:
+			visual_cell.set_shared_anim_clock_ms(
+				Callable(field_controller, "fire_wall_anim_clock_ms")
+			)
+		# Q2-C: the controller owns the GroundSkillVisualCell presentation
+		# nodes (3x3 geometry => 9 cells today); no additional standalone
+		# GroundSkillEffect cells are spawned, so the base-class enemy-group
+		# scan can never run on this path.
 		return
 
 	# Generic persistent ground effects share one canonical validation context
@@ -9078,6 +9114,82 @@ func _spawn_canonical_ground_field(
 			skill_release_snapshot,
 			generic_snapshot_validation_context
 		)
+
+
+## SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
+## status project_canonical):
+##   "stacking_policy":
+##     "same_caster_same_tile_refreshes_duration; one target takes at most
+##      one tick per caster per tick"
+##   "max_active_fields_per_caster": "config_required_default_8"
+## The registry below restores that canonical stacking contract in the
+## runtime: same center tile refreshes the existing field, different tiles
+## create fields up to the canonical cap (oldest evicted). The execution-plan
+## ground descriptor drop of these fields is threaded through separately;
+## until the data chain carries them, the canonical defaults apply here.
+const FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER := 8
+var _fire_wall_field_registry: Dictionary = {}
+var _fire_wall_field_order: Array = []
+
+
+func _fire_wall_registry_center_cell(coverage_cells: Array[Vector2i]) -> Vector2i:
+	## The registry key is the selected center tile of the field footprint.
+	## Coverage cells are absolute grid steps, so two casts on the same tile
+	## produce the same centered 3x3 cell set and therefore the same key.
+	if coverage_cells.is_empty():
+		return Vector2i.ZERO
+	var minimum := Vector2i(2147483647, 2147483647)
+	var maximum := Vector2i(-2147483648, -2147483648)
+	for cell: Vector2i in coverage_cells:
+		minimum = Vector2i(mini(minimum.x, cell.x), mini(minimum.y, cell.y))
+		maximum = Vector2i(maxi(maximum.x, cell.x), maxi(maximum.y, cell.y))
+	var center := Vector2(minimum + maximum) * 0.5
+	return Vector2i(roundi(center.x), roundi(center.y))
+
+
+func _fire_wall_max_active_fields(effect: Dictionary) -> int:
+	var raw := str(effect.get("max_active_fields_per_caster", ""))
+	if raw.begins_with("config_required_default_"):
+		var suffix := raw.trim_prefix("config_required_default_")
+		if suffix.is_valid_int():
+			return maxi(1, int(suffix))
+	if raw.is_valid_int():
+		return maxi(1, int(raw))
+	return FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER
+
+
+func _fire_wall_prune_invalid_registry_entries() -> void:
+	var stale_keys: Array = []
+	for key: Variant in _fire_wall_field_registry.keys():
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		if not (
+			controller is FireWallFieldController
+			and is_instance_valid(controller)
+		):
+			stale_keys.append(key)
+	for key: Variant in stale_keys:
+		_fire_wall_field_registry.erase(key)
+		_fire_wall_field_order.erase(key)
+
+
+func _fire_wall_evict_excess_fire_wall_fields(effect: Dictionary) -> void:
+	var max_fields := _fire_wall_max_active_fields(effect)
+	while _fire_wall_field_order.size() > max_fields:
+		var oldest: Variant = _fire_wall_field_order.pop_front()
+		if oldest is Vector2i and _fire_wall_field_registry.has(oldest):
+			var controller: Variant = _fire_wall_field_registry.get(oldest)
+			if is_instance_valid(controller):
+				(controller as FireWallFieldController).cancel()
+			_fire_wall_field_registry.erase(oldest)
+
+
+func _clear_fire_wall_field_registry() -> void:
+	for key: Variant in _fire_wall_field_registry.keys():
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		if is_instance_valid(controller):
+			(controller as FireWallFieldController).cancel()
+	_fire_wall_field_registry.clear()
+	_fire_wall_field_order.clear()
 
 
 func _spawn_canonical_ground_effect(

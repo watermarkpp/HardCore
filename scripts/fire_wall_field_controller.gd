@@ -60,6 +60,14 @@ var spatial_index_unavailable_count := 0
 var expired := false
 var cancelled := false
 var _rejection_reason := ""
+## SOT wizard.fire_wall: field lifetime is real time. Wall-clock expiry keeps
+## running across menu pause (get_tree().paused) and app background, so a
+## recast on the same tile refreshes it instead of stacking frozen fields.
+var expires_at_ticks_msec := -1
+var refresh_count := 0
+## Shared animation clock (ms): one advancing source per field; the 9 visual
+## cells read the same value instead of each running an independent timer.
+var _anim_clock_ms := 0.0
 
 
 func setup_fire_wall_field(
@@ -167,6 +175,58 @@ func setup_fire_wall_field(
 		)
 		add_child(visual_cell)
 		visual_cells.append(visual_cell)
+	_arm_wall_clock_expiry()
+
+
+func _arm_wall_clock_expiry() -> void:
+	expires_at_ticks_msec = (
+		Time.get_ticks_msec() + int(round(duration * 1000.0))
+	)
+
+
+## SOT wizard.fire_wall mechanics
+## ("same_caster_same_tile_refreshes_duration", project_canonical): a recast
+## on the same tile refreshes the field lifetime, power and snapshot from the
+## latest cast without spawning a new controller or new visual cells. The
+## damage claim cadence is intentionally left untouched.
+func refresh_field(
+	effect: Dictionary,
+	release_snapshot: Dictionary,
+	snapshot_validation_context: Dictionary,
+	source_release_id: String
+) -> void:
+	raw_power = maxi(0, int(effect.get("raw_power", raw_power)))
+	duration = maxf(0.1, float(effect.get("duration_seconds", duration)))
+	tick_interval = maxf(
+		0.05,
+		float(effect.get("tick_interval_ms", tick_interval * 1000.0)) / 1000.0
+	)
+	_release_id = (
+		source_release_id if not source_release_id.is_empty() else _release_id
+	)
+	if release_snapshot is Dictionary and not release_snapshot.is_empty():
+		_canonical_snapshot = release_snapshot
+	if snapshot_validation_context is Dictionary:
+		_snapshot_validation_context = snapshot_validation_context
+	_canonical_snapshot_valid = bool(
+		SkillFootprintSnapshotScript.validate_for_consumer(
+			_canonical_snapshot,
+			_snapshot_validation_context,
+			SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+		).get("valid", false)
+	)
+	_snapshot_id = str(
+		_canonical_snapshot.get("snapshot_id", _release_id)
+	)
+	_arm_wall_clock_expiry()
+	for visual_cell: GroundSkillVisualCellScript in visual_cells:
+		if is_instance_valid(visual_cell):
+			visual_cell.refresh_lifetime(duration)
+	refresh_count += 1
+
+
+func fire_wall_anim_clock_ms() -> float:
+	return _anim_clock_ms
 
 
 func _ignore_visual_tick(_target: EnemyActor, _raw_power: int) -> void:
@@ -174,6 +234,17 @@ func _ignore_visual_tick(_target: EnemyActor, _raw_power: int) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Wall-clock expiry runs first: the field lifetime is real time (SOT),
+	# so fields expired during menu pause or app background free on the next
+	# simulated frame instead of surviving frozen.
+	if (
+		expires_at_ticks_msec >= 0
+		and Time.get_ticks_msec() >= expires_at_ticks_msec
+	):
+		expired = true
+		queue_free()
+		return
+	_anim_clock_ms += delta * 1000.0
 	if duration <= 0.0:
 		expired = true
 		queue_free()
@@ -362,6 +433,9 @@ func fire_wall_controller_diagnostics() -> Dictionary:
 		"snapshot_rebuild_count": snapshot_rebuild_count,
 		"spatial_index_unavailable_count": spatial_index_unavailable_count,
 		"missing_projection_rejection_count": missing_projection_rejection_count,
+		"expires_at_ticks_msec": expires_at_ticks_msec,
+		"refresh_count": refresh_count,
+		"anim_clock_ms": _anim_clock_ms,
 		"expired": expired,
 		"cancelled": cancelled,
 		"rejection_reason": _rejection_reason,

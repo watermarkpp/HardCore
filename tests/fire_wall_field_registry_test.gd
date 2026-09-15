@@ -1,0 +1,140 @@
+extends Node
+
+## SOT wizard.fire_wall stacking contract regression:
+##   "same_caster_same_tile_refreshes_duration" — a recast on the same center
+##   tile refreshes the existing field (no new controller, no new cells).
+##   "max_active_fields_per_caster": "config_required_default_8" — the oldest
+##   field is evicted once the canonical cap is exceeded.
+##   Field lifetime is wall-clock real time: an expired field frees on the
+##   next simulated frame even when its duration countdown was frozen.
+
+const FireWallFieldController := preload(
+	"res://scripts/fire_wall_field_controller.gd"
+)
+const FIXTURE_MONSTER_ID := 19
+
+var _game: Node
+
+
+func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
+	PlayerState.test_mode = true
+	var game: Node = load("res://scenes/main.tscn").instantiate()
+	_game = game
+	add_child(game)
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	for _bootstrap_wait in range(300):
+		if not bool(game.get("_world_bootstrap_in_progress")):
+			break
+		await get_tree().process_frame
+	await get_tree().process_frame
+	game._active_safe_zones = []
+	await get_tree().process_frame
+
+	var origin_cell: Vector2i = game._canonical_screen_px_to_grid_cell(
+		game.player.global_position
+	)
+	var field_a_cells: Array[Vector2i] = []
+	for offset_x: int in range(-1, 2):
+		for offset_y: int in range(-1, 2):
+			field_a_cells.append(origin_cell + Vector2i(offset_x, offset_y))
+
+	var effect := {
+		"raw_power": 5,
+		"radius_gu": 0.2,
+		"duration_seconds": 30.0,
+		"tick_interval_ms": 3000,
+	}
+
+	# 1) First cast on tile A creates exactly one controller with 9 cells.
+	game._spawn_canonical_ground_field(
+		"wizard.fire_wall", field_a_cells, game.player.global_position, effect
+	)
+	var controller_a := _only_controller()
+	assert(controller_a != null, "first cast must create one controller")
+	assert(
+		controller_a.visual_cells.size() == 9,
+		"3x3 footprint must own nine visual cells: %d"
+		% controller_a.visual_cells.size()
+	)
+
+	# 2) Recast on the same tile refreshes instead of stacking.
+	game._spawn_canonical_ground_field(
+		"wizard.fire_wall", field_a_cells, game.player.global_position, effect
+	)
+	assert(
+		_valid_controller_count() == 1,
+		"same-tile recast must not spawn a second controller"
+	)
+	assert(is_instance_valid(controller_a), "refresh reuses the same field")
+	assert(
+		int(controller_a.refresh_count) == 1,
+		"same-tile recast must refresh the field once: %d"
+		% int(controller_a.refresh_count)
+	)
+	assert(
+		controller_a.visual_cells.size() == 9,
+		"refresh must not add visual cells"
+	)
+
+	# 3) Different tiles stack until the canonical cap of 8, oldest evicted.
+	for field_index: int in range(1, 9):
+		var shifted_cells: Array[Vector2i] = []
+		for cell: Vector2i in field_a_cells:
+			shifted_cells.append(cell + Vector2i(10 * field_index, 0))
+		game._spawn_canonical_ground_field(
+			"wizard.fire_wall",
+			shifted_cells,
+			game.player.global_position,
+			effect
+		)
+	assert(
+		_valid_controller_count() == 8,
+		"active fields must cap at the canonical 8: %d"
+		% _valid_controller_count()
+	)
+	assert(
+		not is_instance_valid(controller_a)
+		or controller_a.is_queued_for_deletion(),
+		"oldest field must be evicted beyond the cap"
+	)
+
+	# 4) Wall-clock expiry: a field whose real-time deadline passed frees on
+	# the next simulated frame even if its duration countdown was frozen.
+	var remaining := _valid_controllers()
+	assert(not remaining.is_empty(), "capped fields must remain for expiry test")
+	var doomed: FireWallFieldController = remaining[0]
+	doomed.set_physics_process(true)
+	doomed.expires_at_ticks_msec = Time.get_ticks_msec() - 1
+	doomed._physics_process(0.016)
+	assert(doomed.expired, "wall-clock expired field must flag expired")
+	assert(
+		doomed.is_queued_for_deletion(),
+		"wall-clock expired field must free on the next frame"
+	)
+
+	game.queue_free()
+	await game.tree_exited
+	print("FIRE_WALL_FIELD_REGISTRY_PASS")
+	get_tree().quit(0)
+
+
+func _only_controller() -> FireWallFieldController:
+	var controllers := _valid_controllers()
+	return controllers[0] if controllers.size() == 1 else null
+
+
+func _valid_controllers() -> Array[FireWallFieldController]:
+	var controllers: Array[FireWallFieldController] = []
+	for child: Node in _game.get_children():
+		if child is FireWallFieldController and not child.is_queued_for_deletion():
+			controllers.append(child as FireWallFieldController)
+	return controllers
+
+
+func _valid_controller_count() -> int:
+	return _valid_controllers().size()
