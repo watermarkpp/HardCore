@@ -37,6 +37,8 @@ var _snapshot_validation_context: Dictionary = {}
 var _canonical_snapshot_valid := false
 var _runtime_map_id := -1
 var _combat_spatial_index: SpatialIndexScript
+## R1-A: the shared target-query service fronts every broadphase query.
+var _target_query_service: CombatTargetQueryService
 ## FREEZE-P0.1: fail-closed projection diagnostics.
 var missing_projection_rejection_count := 0
 
@@ -134,6 +136,11 @@ func setup_fire_wall_field(
 		_canonical_snapshot.get("runtime_map_id", runtime_map_id)
 	)
 	_combat_spatial_index = combat_spatial_index
+	# R1-A: every production target query enters through the shared service;
+	# the snapshot gate below stays the exact authority for this shape.
+	_target_query_service = CombatTargetQueryService.new(
+		combat_spatial_index, _runtime_map_id
+	)
 	visual_cells = []
 
 	var anchor_screen_px := (
@@ -293,12 +300,23 @@ func _apply_field_tick() -> void:
 				visual_cell.queue_redraw()
 		return
 	var candidates: Array[Dictionary] = (
-		_combat_spatial_index.query_aabb_candidates(
-			_runtime_map_id,
-			_snapshot_bounds_ground_gu(_canonical_snapshot),
-			EXPANSION_EPSILON_GU
-		)
+		_target_query_service.query({
+			"shape": CombatTargetQueryService.SHAPE_AABB,
+			"bounds_ground_gu": _snapshot_bounds_ground_gu(
+				_canonical_snapshot
+			),
+		})
 	)
+	if (
+		candidates.is_empty()
+		and _target_query_service.last_rejection_reason() != ""
+	):
+		# Fail-closed parity with the previous direct-index behavior: a
+		# rejected service query delivers nothing for this tick.
+		_rejection_reason = "target_query_%s" % (
+			_target_query_service.last_rejection_reason()
+		)
+		return
 	candidate_count += candidates.size()
 	max_candidate_count = maxi(max_candidate_count, candidates.size())
 	for candidate: Dictionary in candidates:

@@ -25,6 +25,11 @@ const SHAPE_CIRCLE := "circle"
 const SHAPE_SECTOR := "sector"
 const SHAPE_CAPSULE := "capsule"
 const SHAPE_CROSS := "cross"
+## Snapshot/rect pass-through: the envelope IS the request bounds and the
+## exact predicate is delegated to the consumer (e.g. the fire wall
+## controller's canonical snapshot gate). Exists so every production query
+## enters through this service without inventing a second shape semantics.
+const SHAPE_AABB := "aabb"
 
 const BROADPHASE_EPSILON_GU := 0.05
 
@@ -58,7 +63,9 @@ func query(request: Dictionary) -> Array[Dictionary]:
 	if _runtime_map_id < 0:
 		_last_rejection_reason = "runtime_map_unavailable"
 		return []
-	if not origin.is_finite():
+	# The aabb pass-through shape is envelope-only and needs no origin; every
+	# other shape is anchored at one and must receive a finite origin.
+	if shape != SHAPE_AABB and not origin.is_finite():
 		_last_rejection_reason = "origin_invalid"
 		return []
 	var bounds := _broadphase_bounds(shape, request, origin)
@@ -144,6 +151,17 @@ func _broadphase_bounds(
 				return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
 			var reach := arm + half_width
 			return _rect_around(origin, reach)
+		SHAPE_AABB:
+			var bounds: Variant = request.get("bounds_ground_gu", null)
+			if (
+				bounds is Rect2
+				and (bounds as Rect2).size.x >= 0.0
+				and (bounds as Rect2).position.is_finite()
+				and (bounds as Rect2).size.is_finite()
+			):
+				return bounds
+			request["rejection_reason"] = "bounds_invalid"
+			return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
 		_:
 			return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
 
@@ -202,6 +220,10 @@ func _exact_hit(
 				origin + Vector2(0.0, arm)
 			)
 			return vertical <= half_width + target_bounds
+		SHAPE_AABB:
+			# Exactness is delegated to the consumer's snapshot gate; the
+			# broadphase envelope already is the requested bounds.
+			return true
 		_:
 			return false
 
