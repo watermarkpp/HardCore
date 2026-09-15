@@ -240,6 +240,26 @@ R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每
 3. 诊断 `max_actor_bounds_gu` 语义：反映当前存储值（惰性，不主动刷新）。
 4. 证据：新增 max_bounds 测试 PASS；parity（含 unsorted ⊆ stable）PASS；门禁（索引 tripwire `_max_actor_bounds_dirty`）PASS；oracle PASS；r3x6 等 5 功能回归 5/5；fire_wall 12/12、persistent 10/10、plan 10/10、projection 6/6、wizard_line 3/3 —— 共 50 项全 PASS。
 
-## R7.5 下轮
+## R7.5 ANIM-EVIDENCE — 火墙动画节奏实测（取证完成，待用户裁决）
+
+实测链（2026-09-15，全部读自当前 HEAD 65a0de59）：
+
+1. **权威数据**（`assets/data/caster_skill_visuals.json` fire_wall 条目，生成器 `tools/build_caster_client_art.py` 产出）：`frame_time_ms: 40`、`frame_count: 6`（source_index 1630–1635 = FIREBURNBASE+0..5）、`playback: loop`。mapping_rule：原版 clEvent.pas `FIREBURNBASE=1630+((m_dwCurframe div 2) mod 6)`，m_dwCurframe 每 20ms 步进 → 可见帧 40ms → 6 帧 × 40ms = **240ms 循环**。
+2. **运行时消费**（`ground_effect.gd` `_install_visual` → `caster_skill_animation_player.gd`）：播放器从 manifest 读 frame_time（40ms）与 frame_count（6）；`configure()` 置 `current_frame_index=0` 起步。
+3. **相位语义**（`fire_wall_field_controller.gd`）：controller 持 `_anim_clock_ms`（`_physics_process` 累加 delta×1000，从 0 起步）→ 9 个 cell 经 `set_shared_anim_clock_ms` 共用同一现场时钟；`_apply_shared_clock_frame` 取 `fmod(clock,240)/40`。即：**每次施法现场独立计时、从帧 0 开始、全场 tile 同帧**——与原版每道火墙魔法各自 m_dwCurframe 从 0 步进、整墙同帧的语义一致。
+4. **结论**：现行视觉节奏 = 原版 SOT 逐项一致（240ms 周期、40ms/帧、帧 0 起步、现场级相位、循环）。唯一量化差：帧切换点由物理 tick（≈16.7ms）量化，最大偏差一个物理 tick；原版客户端同样受 20ms 逻辑 tick 量化，幅度同级。
+5. **伤害解耦**：伤害 tick（0.8s `tick_interval`）与 `_anim_clock_ms` 完全独立——任何视觉节奏改动不触碰伤害频率、claim 窗口与 SOT"每施法者每 tick 单 tick"合同。
+
+**待用户实机裁决的候选**（均只改 `frame_time_ms` 派生值，帧序列/索引/伤害不动）：
+
+| 候选 | frame_time_ms | 周期 | 与原版关系 |
+|---|---|---|---|
+| ×1.0（现状） | 40 | 240ms | 原版 A 级还原 |
+| ×1.25 | 50 | 300ms | 刻意放慢（火苗燃烧更舒缓） |
+| ×1.5 | 60 | 360ms | 刻意放慢（更明显） |
+
+实现注记（裁决后执行）：manifest 为生成物，规则是改生成器侧的显示节奏派生（如新增 per-skill `visual_frame_time_ms` 覆盖字段），保留 `frame_time_ms: 40` 作为 SOT 取证记录，不得手改生成 JSON。
+
+## R7.6 下轮
 
 ANIM-EVIDENCE（火墙动画取证：打印 wizard.fire_wall 实际 frame_count/frame_time_ms/cycle_ms 对照原版 SOT 240ms 周期，给用户 ×1.0/×1.25/×1.5 候选实机裁决）→ R1-C（CombatHitRequest damage 闭环）→ PERF-EVIDENCE（APK A/B 帧时间；此前"彻底根除"保持 BLOCKED）。
