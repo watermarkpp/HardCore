@@ -267,6 +267,23 @@ R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每
 3. **门禁**：manager 必含 `apply_enemy_physical_damage(` 且**不得含 `take_damage(`**——直连伤害口从架构与门禁两层关闭。fire wall controller 与 GroundSkillEffect 的既有禁令保持。
 4. **证据**：新增 `persistent_ground_effect_service_damage_delivery_test`（注入 → 经服务精确交付 7 点；未注入 → hp 不变 + skip 计数 1）；门禁/parity/oracle PASS；persistent 10/10、fire_wall 12/12、r3x6 等 5 功能回归 5/5、plan 10/10、projection 6/6、wizard_line 3/3 —— 共 50 项 PASS。
 
-## R7.7 下轮
+## R7.8 PERF-EVIDENCE — APK A/B 实测协议（已就绪，待设备执行）
 
-PERF-EVIDENCE（最后一轮）：RuntimeDiagnostics 帧采样（P50/P95/P99/max + 120 帧恢复后窗口）→ APK A/B（基线 APK82@98afcf47 已在 vs 新 APK）：蜈蚣洞 15 普怪+2 钳虫+固定节奏火墙、祖玛寺庙、Gen1→Gen5 矩阵。APK A/B 数据出来前"彻底根除掉帧"保持 BLOCKED。火墙动画节奏（×1.0/×1.25/×1.5）待用户实机裁决，不阻塞本线。
+**测量通道（已内建，无需新埋点）**：Device Lab mailbox 调试通道，`frame_sampling_snapshot` 全帧环形采样（capacity 环形缓冲，`frame_samples_dropped` 披露溢出）→ `frame_count`、`frame_ms_p50/p95/p99/max`（max 为 eb9ca528 新增字段，`monster_density_diagnostics_window_test` 已锁契约）+ `frames_over_16_67/33_33/50/100ms` 计数与比率。采样入口 `DeviceLabRuntime._process`（仅调试门放行，Release no-op）。
+
+**A/B 双方**（同 versionCode，安装覆盖）：
+
+| | 基线 | 实验组 |
+|---|---|---|
+| APK | `HardCore-20260915-aoe-fix-98afcf47-debug.apk` | `HardCore-20260915-aoe-fix-eb9ca528-debug.apk` |
+| 源 | 98afcf47（R1 弧线之前，含用户报告卡顿的原始战斗实现） | eb9ca528（R1-P0/R1-A/R1-B + PERF-1/2 + R1-C + max 诊断，共 16 提交） |
+| SHA256 | `3B2057F9…D5F57CA` | 构建完成后记录 |
+
+**场景（每 APK 同脚本）**：
+1. 蜈蚣洞：15 普怪 + 2 钳虫 + 固定节奏火墙（固定周期施放，覆盖多 field 叠加与 claim 窗口）。
+2. 祖玛寺庙：高密度巡场 2–3 分钟。
+3. Gen1→Gen5：生成矩阵冒烟（R6.4 遗留 NOT_RUN 项顺带补采）。
+
+**流程**：进入场景 → 预热 ≥60s（排除加载期帧）→ 开采样 → 执行固定动作序列 → 停止后取快照 A（战斗窗口）→ 静置取快照 B（恢复后 120 帧窗口，验证 p99/max 回落）。
+
+**裁决标准（GPT 终审方案）**：实验组 P95/P99/max 相对基线显著下降（重点 `frames_over_33_33ms`/`frames_over_50ms` 比率），且伤害节奏/命中/claim 行为无回归（本评审 R1–R7 各 parity 证据已在源层锁定行为不变）→ 解除"彻底根除掉帧 = BLOCKED"；数据不达标 → 如实记录并保持 BLOCKED。
