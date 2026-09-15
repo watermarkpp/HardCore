@@ -136,3 +136,61 @@ R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每
 - 证据：fire_wall_controller_critical 12/12（hit/claim parity、no_group_scan 全绿）、registry PASS、oracle PASS。
 - 现状：所有生产目标查询均经 `RuntimeCombatSpatialIndex`（controller 走统一服务入口）；组扫描/直连 take_damage 由静态门禁锁定。
 - 剩余 staged：GameRoot 特殊几何技能（半月/十字/野蛮/雷霆/冰暴）逐支迁移到描述符+形状策略（每支带 parity 证据，需独立施工轮）；实机 Gen1→Gen5 矩阵 NOT_RUN（待设备）。
+
+---
+
+# R6. R1-B 落地 — GameRoot 特殊几何技能 broadphase 迁入服务（2026-09-15 新会话续作）
+
+## R6.0 五技能的代码裁定映射
+
+评审 R5 的五名简称按生产代码落定为以下查询路径（每支的**canonical 精确门一字未动**）：
+
+| 简称 | skill_id | 迁移前 broadphase | 迁移后服务请求 |
+|---|---|---|---|
+| 半月 | warrior.half_moon | `_half_moon_secondary_targets` → `_aoe_query_enemy_candidates_aabb`（plan 包络） | 服务 `SHAPE_AABB(bounds=plan.ground_aabb)`；精确门仍为 `WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu`/target-aligned sector |
+| 十字 | warrior.thrusting（刺杀轴线三探针槽位判定，GPT 审计语境的"十字"判定组） | `_thrust_secondary_targets` → 同上 | 同上；精确门仍为 thrust slot/axis 合同 |
+| 野蛮 | warrior.wild_rush | `_wild_rush_has_dynamic_blocker` → `_target_spatial_query_segment_into`（segment 包络） | 服务 `SHAPE_AABB(segment AABB ± expansion)`；精确门仍为 forward/lateral 窗口 |
+| 雷霆 | wizard.lightning（雷电术 targeted_sky_strike 专支） | `_apply_canonical_spell_damage` → `_aoe_query_enemy_candidates_aabb` | 同 aabb 收口；精确门仍为 `node == primary` + snapshot 足迹 |
+| 冰暴 | wizard.ice_storm（及全部 cell-union 区域：hell_lightning/exploding_flame/repulsion_ring、径向 area_damage） | `_canonical_spell_geometry_targets` → 同上 | 同 aabb 收口；精确门仍为逐格 `declared_cells_intersect_actor_footprint`/snapshot |
+
+实施说明：五支共享同一 broadphase 收口函数，故本轮按收口点一次性迁移（每支的 parity 断言见 R6.2），而非五笔等价 diff。服务真实形状库（single/circle/sector/capsule/cross）保留给"形状即精确门"的未来技能；本轮各技能的精确权威（近战几何/法术 snapshot 门）比服务通用形状更丰富，按 d1d015ba 既定范式以 `SHAPE_AABB` 包络直通 + 原精确门执行。
+
+## R6.1 施工内容
+
+1. `scripts/game_root.gd`：
+   - `_target_query_service()`：game_root 持有的服务实例，map id 或 index 实例变化即重建（防陈旧绑定）。
+   - `_service_candidates_envelope_into()`：服务包络查询 + **活体过滤复刻**——服务记录路径不过滤 `_dying/_death_pending/hp<=0`，旧 `query_enemy_nodes_*_into` 过滤；wrapper 复刻旧活体过滤保持候选集逐位一致；拒绝时 fail-closed 并记 `projection_rejection_reason`。
+   - 四个收口函数（`_target_spatial_query_aabb_into/_target_spatial_query_segment_into/_aoe_query_enemy_candidates_aabb/_aoe_query_enemy_candidates_segment`）全部改走服务；非法包络/线段保持旧行为（空候选 + 无拒绝）；计数器语义保持（`aoe_spatial_queries/aoe_spatial_candidates`）。
+   - 保留直连索引的两处 sanctioned 站点：`_enforce_bich_safe_zone`（安全区执法）与 `_hc_m30_landing_clear`（M30 落点探针）——非五技能、非投递路径。
+2. `scripts/layers/runtime/combat_target_query_service.gd`：请求支持可选 `broadphase_epsilon_gu`（默认 `BROADPHASE_EPSILON_GU=0.05` 不变）。**parity 关键裁定**：game_root 包络直通传 `0.0`，使服务包络 = 旧索引包络（索引侧仍加 max_actor_bounds），候选集逐位一致——避免默认 0.05 epsilon 环使野蛮冲撞 blocker 的 lateral 窗口（+0.0001）在 0.1mm 级条带接受旧路径不返回的候选。
+3. 静态门禁扩展（`tests/combat_authority_static_gate_test.gd`）：四个收口函数必须经 `_service_candidates_envelope_into` 且不得直连索引节点查询；两个 sanctioned 直连站点存在性；五组 ability-id 战斗枚举（`CANONICAL_WIZARD_GEOMETRY_SKILLS/CONTINUOUS_WIZARD_LINE_SKILLS/GROUND_EXACT_SKILL_IDS/TARGET_FOOTPRINT_SKILL_IDS/ATTACHED_STATE_SKILL_IDS`）内容冻结——新增 ability-id 战斗分支即 FAIL。
+
+## R6.2 parity 证据
+
+1. 新增 `tests/game_root_special_geometry_service_parity_test.gd/.tscn`：随机包络（96 rect + 48 segment，种子 20260915）下 服务(ε=0)+活体过滤 ≡ 旧索引节点查询（集合严格相等）；默认 ε 包络 ⊇ 旧包络；濒死/死亡待决/0 HP 注册演员两侧同拒；`update_actor` 移动与 `clear_map` 两侧同排空；坏 map fail-closed 带原因。PASS。
+2. 中途问题归类（一次真实失败）：`game_root_r3x6_targeting_broadphase_test` 断言"召唤占位必须用敌方空间 broadphase"测量的是旧直连节点查询专用计数器 `index_enemy_node_aabb_query_count`；R1-B 后召唤占位经服务记录路径（行为不变、仍走共享索引），该计数器不再递增。生产正确、测量过时——按 TEST INTEGRITY 修测量为 `index_query_count`（服务记录路径递增的 broadphase 计数器），断言语义不变。修复后 PASS。
+3. 功能回归（迁移后）：warrior_target_aligned（半月/刺杀目标对齐）、wizard_geometry、sky_strike（雷电）、melee_spatial_broadphase_parity、r3x6 全部 PASS。
+
+## R6.3 测试矩阵
+
+| 套件/测试 | 结果 |
+|---|---|
+| game_root_special_geometry_service_parity_test（新增） | PASS |
+| combat_authority_static_gate_test（扩展） | PASS |
+| combat_target_query_service_oracle_test | PASS |
+| fire_wall_controller_critical | 12/12 PASS |
+| persistent_ground_effect_critical | 10/10 PASS |
+| skill_execution_plan_critical | 10/10 PASS |
+| wizard_line_geometry_critical（segment 路径） | 3/3 PASS |
+| combat_projection_fail_closed_critical | 6/6 PASS |
+| game_root_r3x6_targeting_broadphase_test | PASS（含测量修正） |
+| game_root_warrior_target_aligned_integration_test | PASS |
+| game_root_wizard_geometry_integration_test | PASS |
+| sky_strike_visual_contract_test | PASS |
+| player_melee_spatial_broadphase_parity_test | PASS |
+
+## R6.4 剩余 staged（如实）
+
+1. boss-surrounded 邻域组扫描（R2 第 7 项）仍 staged：组扫描在死亡窗口会计入已 `unregister` 的演员、并计入召唤物（不在敌方索引）；直接换 `query_neighbor_enemy_nodes_into` 需先裁决死亡窗口/召唤物的计数合同，本轮未动。
+2. 实机 Gen1→Gen5 矩阵 NOT_RUN（待设备）。
+3. 服务形状库（sector/capsule/circle/cross 作为精确门）尚未被任何生产技能消费——留待新技能描述符化时启用，本轮不发明消费者。
