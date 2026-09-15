@@ -114,6 +114,10 @@ func _ready() -> void:
 	assert(fire_wall.geometry_cells.size() == 9)
 	assert(fire_wall.effects[0].tick_interval_ms == 1000)
 	assert(fire_wall.effects[0].duration_seconds == 14)
+	# R2 ruling (user device ruling 2026-09-15): the SOT mechanics record the
+	# ninth-field behavior as "cap_policy": "evict_oldest"; the wizard runtime
+	# must thread it into the ground-effect descriptor unchanged.
+	assert(str(fire_wall.effects[0].cap_policy) == "evict_oldest")
 	assert(fire_wall.proficiency_event.is_empty())
 
 	var laser := _execute("wizard.laser", {

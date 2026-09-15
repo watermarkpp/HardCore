@@ -9125,10 +9125,13 @@ func _spawn_canonical_ground_field(
 		var empty_target_filters: Array[Callable] = []
 		# SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
 		# project_canonical): "same_caster_same_tile_refreshes_duration" with
-		# "max_active_fields_per_caster": "config_required_default_8". The SOT
-		# records no ninth-field behavior, so the cap policy is explicit data
-		# and fails closed to reject_new when unconfigured (GPT audit R1-P0).
-		# The registry key is source-aware: caster/map/generation/family/tile,
+		# "max_active_fields_per_caster": "config_required_default_8".
+		# R2 ruling (user device ruling 2026-09-15, GPT audit adoption): the
+		# ninth-field behavior is now recorded in the SOT mechanics as
+		# "cap_policy": "evict_oldest" — casting must always succeed and the
+		# oldest field is cancelled when the cap is reached. The runtime
+		# keeps fail-closed to reject_new ONLY for unconfigured data. The
+		# registry key is source-aware: caster/map/generation/family/tile,
 		# so two casters on one tile own separate fields instead of
 		# cross-refreshing each other.
 		var registry_center := _fire_wall_registry_center_cell(coverage_cells)
@@ -9219,12 +9222,13 @@ func _spawn_canonical_ground_field(
 ## (GPT audit R1-P0): map, zone generation, caster identity, skill family
 ## and the selected center tile — a tile alone is not the field identity, so
 ## two casters on one tile own separate fields and never cross-refresh.
-## Cap policy (GPT audit R1-P0): the SOT fixes the cap default but records
-## no ninth-field behavior. The policy is therefore explicit data
-## ("cap_policy": "evict_oldest" | "reject_new"); when unconfigured the
-## runtime fails closed to reject_new — no ninth field is created and no
-## existing field is destroyed. The former implicit evict-oldest rule was
-## an unforced runtime invention and is no longer the default.
+## Cap policy: explicit data from the SOT mechanics ("cap_policy":
+## "evict_oldest" | "reject_new"). R2 ruling (user device ruling
+## 2026-09-15): the SOT now records evict_oldest for wizard.fire_wall —
+## casting always succeeds and the oldest field is cancelled at the cap —
+## because the R1-P0 reject_new default locked the skill out for the whole
+## 10-40s field duration window. Unconfigured data still fails closed to
+## reject_new.
 const FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER := 8
 const FIRE_WALL_CAP_POLICY_EVICT_OLDEST := "evict_oldest"
 const FIRE_WALL_CAP_POLICY_REJECT_NEW := "reject_new"
