@@ -9188,6 +9188,7 @@ func _spawn_canonical_ground_field(
 					registry_key, field_controller
 				)
 			)
+			_debug_validate_fire_wall_registry("cast_insert")
 		for visual_cell: GroundSkillVisualCell in field_controller.visual_cells:
 			visual_cell.set_shared_anim_clock_ms(
 				Callable(field_controller, "fire_wall_anim_clock_ms")
@@ -9336,6 +9337,8 @@ func _fire_wall_prune_invalid_registry_entries() -> void:
 	for key: Variant in stale_keys:
 		_fire_wall_field_registry.erase(key)
 		_fire_wall_field_order.erase(key)
+	if not stale_keys.is_empty():
+		_debug_validate_fire_wall_registry("prune")
 
 
 func _on_fire_wall_field_tree_exited(
@@ -9348,6 +9351,54 @@ func _on_fire_wall_field_tree_exited(
 	if _fire_wall_field_registry.get(registry_key) == controller:
 		_fire_wall_field_registry.erase(registry_key)
 		_fire_wall_field_order.erase(registry_key)
+	_debug_validate_fire_wall_registry("tree_exited")
+
+
+func _debug_validate_fire_wall_registry(context := "") -> void:
+	## R2-5 (GPT audit adoption): debug-only registry invariant, executed at
+	## lifecycle boundaries (cast insert, eviction, expiry release, prune,
+	## map teardown). Guards against "the registry believes 8 fields are
+	## alive while fewer really are" class bugs: registry keys and order
+	## slots must stay 1:1 and every entry must reference a live,
+	## not-queued controller. Never runs per frame; stripped in release.
+	if not OS.is_debug_build():
+		return
+	assert(
+		_fire_wall_field_registry.size() == _fire_wall_field_order.size(),
+		"fire wall registry/order size mismatch (%s): %d vs %d" % [
+			context,
+			_fire_wall_field_registry.size(),
+			_fire_wall_field_order.size(),
+		]
+	)
+	var order_keys := {}
+	for key: Variant in _fire_wall_field_order:
+		assert(
+			not order_keys.has(key),
+			"fire wall order duplicates key %s (%s)" % [str(key), context]
+		)
+		order_keys[key] = true
+		assert(
+			_fire_wall_field_registry.has(key),
+			"fire wall order key %s missing from registry (%s)"
+			% [str(key), context]
+		)
+	for key: Variant in _fire_wall_field_registry:
+		var entry: Variant = _fire_wall_field_registry.get(key)
+		# A queued-for-deletion controller is mid-release: its own
+		# tree_exited hook drops the registry slot within the same frame
+		# (expiry/cancel window), so queued entries are still consistent.
+		assert(
+			entry is FireWallFieldController
+			and is_instance_valid(entry),
+			"fire wall registry entry %s must reference a live controller (%s)"
+			% [str(key), context]
+		)
+		assert(
+			order_keys.has(key),
+			"fire wall registry key %s missing from order (%s)"
+			% [str(key), context]
+		)
 
 
 func _fire_wall_evict_oldest_field_for_caster(caster_prefix: String) -> void:
@@ -9359,6 +9410,7 @@ func _fire_wall_evict_oldest_field_for_caster(caster_prefix: String) -> void:
 			(controller as FireWallFieldController).cancel()
 		_fire_wall_field_registry.erase(key)
 		_fire_wall_field_order.erase(key)
+		_debug_validate_fire_wall_registry("evict_oldest")
 		return
 
 
@@ -9369,6 +9421,7 @@ func _clear_fire_wall_field_registry() -> void:
 			(controller as FireWallFieldController).cancel()
 	_fire_wall_field_registry.clear()
 	_fire_wall_field_order.clear()
+	_debug_validate_fire_wall_registry("clear")
 
 
 func _spawn_canonical_ground_effect(
