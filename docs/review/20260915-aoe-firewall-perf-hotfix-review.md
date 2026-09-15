@@ -233,6 +233,13 @@ R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每
 | wizard_line_geometry_critical | 3/3 |
 | combat_projection_fail_closed_critical | 6/6 |
 
-## R7.4 下轮（PERF-2 预告）
+## R7.4 PERF-2 — max_bounds 收缩 + probe ORDER_NONE
 
-`_max_actor_bounds_gu` dirty-flag 收缩 + probe 类路径 ORDER_NONE。性能结论仍 BLOCKED：APK A/B 帧时间数据（PERF-EVIDENCE 轮）出来前不宣布"彻底根除"。
+1. **`_max_actor_bounds_gu` 惰性收缩**（终审 §14）：`unregister/_erase_entry/clear_map` 移除条目时，若其 bounds ≥ 当前 max 则置 `_max_actor_bounds_dirty`；五个查询入口（record aabb/segment、节点 aabb/segment、批量段）首行 `_maybe_refresh_max_actor_bounds()` 一次 O(在册) 重算。安全性：dirty 期间存量 max 偏大（保守方向），重算只缩不涨，superset 不变量（在册集上界）保持。新增 `runtime_combat_spatial_index_max_bounds_test`：5.0 大脚 actor 注销 → 查询前仍 5.0（惰性）→ 下次查询缩到 0.3 → 新 max 立即生效 → clear_map 缩到 0。
+2. **probe ORDER_NONE**：调用点逐一分类后仅 4 个纯探测切无序——野蛮冲撞 blocker（布尔）、召唤占位、随机传送占位（均为距离存在性判定，被滤掉的桶边 actor 必然不过精确门：center 超出 bounds+max_bounds ⇒ 身体够不到窗口）；**锁定/目标搜索/伤害投递路径全部保持 STABLE**（`7660` 为 canonical 伤害路径；`5511` 野蛮目标搜索先见者胜对平局顺序敏感；攻击锁定虽带 instance_id 决胜仍保守保持 stable）。parity 测试新增性质断言：无序结果 ⊆ 稳定结果（96 随机 rect）。
+3. 诊断 `max_actor_bounds_gu` 语义：反映当前存储值（惰性，不主动刷新）。
+4. 证据：新增 max_bounds 测试 PASS；parity（含 unsorted ⊆ stable）PASS；门禁（索引 tripwire `_max_actor_bounds_dirty`）PASS；oracle PASS；r3x6 等 5 功能回归 5/5；fire_wall 12/12、persistent 10/10、plan 10/10、projection 6/6、wizard_line 3/3 —— 共 50 项全 PASS。
+
+## R7.5 下轮
+
+ANIM-EVIDENCE（火墙动画取证：打印 wizard.fire_wall 实际 frame_count/frame_time_ms/cycle_ms 对照原版 SOT 240ms 周期，给用户 ×1.0/×1.25/×1.5 候选实机裁决）→ R1-C（CombatHitRequest damage 闭环）→ PERF-EVIDENCE（APK A/B 帧时间；此前"彻底根除"保持 BLOCKED）。

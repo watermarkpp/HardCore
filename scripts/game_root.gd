@@ -633,10 +633,11 @@ func _target_query_service() -> CombatTargetQueryService:
 func _service_envelope_into(
 	bounds_ground_gu: Rect2,
 	output: Array[EnemyActor],
+	stable_order: bool = true,
 ) -> bool:
 	var service := _target_query_service()
 	var service_ready := service.query_envelope_into(
-		bounds_ground_gu, output, true
+		bounds_ground_gu, output, stable_order
 	)
 	if not service_ready and service.last_rejection_reason() != "":
 		projection_rejection_reason = StringName(
@@ -648,6 +649,7 @@ func _service_envelope_into(
 func _target_spatial_query_aabb_into(
 	bounds_ground_gu: Rect2,
 	output: Array[EnemyActor],
+	stable_order: bool = true,
 ) -> bool:
 	output.clear()
 	if (
@@ -679,6 +681,7 @@ func _target_spatial_query_segment_into(
 	end_ground_gu: Vector2,
 	expansion_gu: float,
 	output: Array[EnemyActor],
+	stable_order: bool = true,
 ) -> bool:
 	output.clear()
 	if (
@@ -705,7 +708,7 @@ func _target_spatial_query_segment_into(
 		maxf(start_ground_gu.y, end_ground_gu.y)
 	) + Vector2.ONE * expansion
 	var service_ready := _service_envelope_into(
-		Rect2(min_gu, max_gu - min_gu), output
+		Rect2(min_gu, max_gu - min_gu), output, stable_order
 	)
 	var write_index := 0
 	for raw_enemy: Variant in output:
@@ -5647,6 +5650,9 @@ func _wild_rush_has_dynamic_blocker(
 			+ forward_ground_gu * WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_GU,
 		target_radius_gu,
 		_target_spatial_query_scratch,
+		# PERF-2: existence probe — the boolean blocker verdict is
+		# order-insensitive, so the broadphase may skip combat ordering.
+		false,
 	):
 		return false
 	for other: EnemyActor in _target_spatial_query_scratch:
@@ -10317,6 +10323,8 @@ func _canonical_summon_position_is_valid(
 			Vector2.ONE * enemy_query_radius_gu * 2.0,
 		),
 		_target_spatial_query_scratch,
+		# PERF-2: existence probe — occupancy is order-insensitive.
+		false,
 	):
 		return false
 	for enemy: EnemyActor in _target_spatial_query_scratch:
@@ -12906,6 +12914,8 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 				Vector2.ONE * enemy_query_radius_gu * 2.0,
 			),
 			_target_spatial_query_scratch,
+			# PERF-2: existence probe — occupancy is order-insensitive.
+			false,
 		):
 			return origin_screen_px
 		for enemy: EnemyActor in _target_spatial_query_scratch:

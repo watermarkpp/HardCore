@@ -102,6 +102,15 @@ func _run() -> void:
 				query_index, str(fast_ids), str(service_ids), str(index_ids)
 			]
 		)
+		# PERF-2: the unordered probe path may drop bucket-edge actors whose
+		# stored position sits outside the queried envelope, but it must
+		# never emit anything the stable path does not.
+		var unsorted_ids := _fast_path_ids_unsorted(service, bounds)
+		for id: int in unsorted_ids:
+			assert(
+				fast_ids.has(id),
+				"unordered probe emitted candidate %d outside the stable set" % id
+			)
 		# The default-epsilon envelope stays a superset of the legacy one
 		# on both the record path and the fast path.
 		var epsilon_ids := _service_ids_with_live_filter(
@@ -283,6 +292,22 @@ func _fast_path_ids(
 	assert(
 		service.query_envelope_into(bounds, nodes, true, epsilon),
 		"fast path unexpectedly rejected a valid query"
+	)
+	var ids: Dictionary = {}
+	for candidate: Variant in nodes:
+		if candidate is EnemyActor:
+			ids[(candidate as EnemyActor).get_instance_id()] = true
+	return ids
+
+
+func _fast_path_ids_unsorted(
+	service: CombatTargetQueryService,
+	bounds: Rect2
+) -> Dictionary:
+	var nodes: Array = []
+	assert(
+		service.query_envelope_into(bounds, nodes, false),
+		"unordered fast path unexpectedly rejected a valid query"
 	)
 	var ids: Dictionary = {}
 	for candidate: Variant in nodes:

@@ -23,6 +23,10 @@ const CONTRACT_ID := "hardcore.combat.spatial_index.map_ground_gu_buckets.v1"
 var _buckets: Dictionary = {}
 var _entries: Dictionary = {}
 var _max_actor_bounds_gu := 0.0
+## PERF-2: set when a removed entry carried the current maximum bounds so
+## the next query can shrink the expansion back to the live registered set
+## (lazy, one O(live) scan per dirty episode; never per-unregister work).
+var _max_actor_bounds_dirty := false
 var _bucket_size_gu := DEFAULT_BUCKET_SIZE_GU
 
 var index_register_count := 0
@@ -100,6 +104,8 @@ func unregister(actor_runtime_id: int) -> void:
 	var entry: Dictionary = _entries.get(actor_runtime_id, {})
 	if entry.is_empty():
 		return
+	if float(entry.get("bounds_gu", 0.0)) >= _max_actor_bounds_gu:
+		_max_actor_bounds_dirty = true
 	var node_instance_id := int(entry.get("node_instance_id", 0))
 	if node_instance_id > 0:
 		_stable_order_by_node_instance_id.erase(node_instance_id)
@@ -143,6 +149,8 @@ func clear_map(runtime_map_id: int) -> void:
 	for raw_id: Variant in _entries.keys():
 		var entry: Dictionary = _entries.get(raw_id, {})
 		if int(entry.get("runtime_map_id", -1)) == runtime_map_id:
+			if float(entry.get("bounds_gu", 0.0)) >= _max_actor_bounds_gu:
+				_max_actor_bounds_dirty = true
 			var node_instance_id := int(entry.get("node_instance_id", 0))
 			if node_instance_id > 0:
 				_stable_order_by_node_instance_id.erase(node_instance_id)
@@ -155,12 +163,31 @@ func registered_actor_count() -> int:
 	return _entries.size()
 
 
+## PERF-2: lazy shrink of the broadphase expansion bound. While dirty the
+## stored maximum is an upper bound (the removed max holder), so deferring
+## the recompute to the next query keeps every envelope conservative; the
+## recompute itself walks the live registered set once and can only shrink.
+func _maybe_refresh_max_actor_bounds() -> void:
+	if not _max_actor_bounds_dirty:
+		return
+	var maximum := 0.0
+	for raw_entry: Variant in _entries.values():
+		if raw_entry is Dictionary:
+			maximum = maxf(
+				maximum,
+				float((raw_entry as Dictionary).get("bounds_gu", 0.0))
+			)
+	_max_actor_bounds_gu = maximum
+	_max_actor_bounds_dirty = false
+
+
 func query_segment_candidates(
 	runtime_map_id: int,
 	start_ground_gu: Vector2,
 	end_ground_gu: Vector2,
 	expansion_gu: float
 ) -> Array[Dictionary]:
+	_maybe_refresh_max_actor_bounds()
 	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
 	var min_gu := Vector2(
 		minf(start_ground_gu.x, end_ground_gu.x),
@@ -181,6 +208,7 @@ func query_aabb_candidates(
 	bounds_ground_gu: Rect2,
 	expansion_gu := 0.0
 ) -> Array[Dictionary]:
+	_maybe_refresh_max_actor_bounds()
 	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
 	return _query_aabb_candidates(
 		runtime_map_id,
@@ -205,6 +233,7 @@ func query_enemy_nodes_aabb_into(
 	_neighbor_stale_actor_ids.clear()
 	index_query_count += 1
 	index_enemy_node_aabb_query_count += 1
+	_maybe_refresh_max_actor_bounds()
 	var query_stamp := _next_enemy_query_stamp()
 	if (
 		runtime_map_id < 0
@@ -242,6 +271,7 @@ func query_enemy_nodes_segment_into(
 	_neighbor_stale_actor_ids.clear()
 	index_query_count += 1
 	index_enemy_node_segment_query_count += 1
+	_maybe_refresh_max_actor_bounds()
 	var query_stamp := _next_enemy_query_stamp()
 	if (
 		runtime_map_id < 0
@@ -644,6 +674,8 @@ func _erase_entry(actor_runtime_id: int) -> void:
 	var entry: Dictionary = _entries.get(actor_runtime_id, {})
 	if entry.is_empty():
 		return
+	if float(entry.get("bounds_gu", 0.0)) >= _max_actor_bounds_gu:
+		_max_actor_bounds_dirty = true
 	var node_instance_id := int(entry.get("node_instance_id", 0))
 	if node_instance_id > 0:
 		_stable_order_by_node_instance_id.erase(node_instance_id)
@@ -680,6 +712,7 @@ func query_enemy_nodes_segment_batch_into(
 	outputs: Array,
 	scratch: Array,
 ) -> bool:
+	_maybe_refresh_max_actor_bounds()
 	var count := starts.size()
 	for old: Variant in outputs:
 		if old is Array:

@@ -19,6 +19,7 @@ const _QUERY_SERVICE_SOURCE := (
 	"res://scripts/layers/runtime/combat_target_query_service.gd"
 )
 const _MANAGER_SOURCE := "res://scripts/persistent_ground_effect_manager.gd"
+const _SPATIAL_INDEX_SOURCE := "res://scripts/runtime_combat_spatial_index.gd"
 
 
 func _ready() -> void:
@@ -165,6 +166,15 @@ func _run() -> void:
 	assert(
 		query_service_source.contains("func query_envelope_into("),
 		"the target query service must keep the allocation-conscious fast path"
+	)
+	# PERF-2: the broadphase expansion bound must keep its lazy shrink —
+	# a removed max-holder marks the bound dirty and the next query
+	# recomputes it from the live registered set.
+	var spatial_index_source := _read(_SPATIAL_INDEX_SOURCE)
+	assert(
+		spatial_index_source.contains("_max_actor_bounds_dirty")
+		and spatial_index_source.contains("_maybe_refresh_max_actor_bounds"),
+		"the spatial index must keep the lazy max-bounds shrink"
 	)
 	print("COMBAT_AUTHORITY_STATIC_GATE_PASS")
 	get_tree().quit(0)
