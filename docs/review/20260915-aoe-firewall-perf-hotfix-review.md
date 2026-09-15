@@ -119,4 +119,12 @@
 
 ## R3. 下轮排期（R1-A 优先）
 
-CombatTargetQueryService（SINGLE/CIRCLE/SECTOR/CAPSULE/CROSS/CHAIN + 请求结构）→ 正确性 oracle → 火墙 controller broadphase 迁移（零行为差）→ GameRoot 特殊几何技能逐支迁移（每支带 parity 证据）→ 静态门禁扩展（禁止新增 ability-id 战斗分支）。合并门禁不变：GPT 复审 + 用户实机 + 明确授权前，不合 `codex/integration`。
+R1-A 主体已落地（见 R4）；GameRoot 特殊几何技能逐支迁移（每支带 parity 证据）与静态门禁扩展（禁止新增 ability-id 战斗分支）为下一步。合并门禁不变：GPT 复审 + 用户实机 + 明确授权前，不合 `codex/integration`。
+
+## R4. R1-A 落地（本节替代 R3 首条）
+
+- `scripts/layers/runtime/combat_target_query_service.gd`（新增）：唯一生产目标查询权威。形状 `single/circle/sector/capsule/cross`（CHAIN 显式未实现→fail-closed 空结果）；两阶段查询：形状保守 AABB broadphase（索引侧再加全体注册者半径，superset 保证）→ 形状精确门（绝对 ground GU，`<=` 边界含闭）；输出沿用索引稳定序（stable_combat_order 升序）；未知/欠规范形状 fail-closed 空结果 + `last_rejection_reason()`；服务无状态变更、无投递、无组扫描。
+- `scripts/runtime_combat_spatial_index.gd`：`_query_aabb_candidates` 结果**纯增补** `position_ground_gu`（复用其已计算的 live 位置；既有消费者忽略新键，无行为变化）。
+- `tests/combat_target_query_service_oracle_test.gd`（新增）：独立参照实现（按形状合同手写、不调用服务）vs 服务，5 形状 × 160 随机查询（seed 固定）集合严格等价 + 稳定顺序断言 + 边界含闭/零半径用例 + 4 类 fail-closed（未知形状/负半径/非法方向/地图不可用）。首跑 PASS。
+- 静态门禁扩展：服务源码禁 `get_nodes_in_group(` / `take_damage(`。PASS。
+- 回归：persistent 10/10、fire_wall 12/12、plan 10/10（索引增补无回归）。

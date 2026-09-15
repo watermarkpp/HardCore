@@ -15,6 +15,9 @@ extends Node
 const _GROUND_EFFECT_SOURCE := "res://scripts/ground_effect.gd"
 const _CONTROLLER_SOURCE := "res://scripts/fire_wall_field_controller.gd"
 const _GAME_ROOT_SOURCE := "res://scripts/game_root.gd"
+const _QUERY_SERVICE_SOURCE := (
+	"res://scripts/layers/runtime/combat_target_query_service.gd"
+)
 
 
 func _ready() -> void:
@@ -55,6 +58,15 @@ func _run() -> void:
 	assert(
 		game_root_source.contains("_fire_wall_registry_key("),
 		"fire wall registry key must stay source-aware"
+	)
+	var query_service_source := _read(_QUERY_SERVICE_SOURCE)
+	assert(
+		not query_service_source.contains("get_nodes_in_group("),
+		"CombatTargetQueryService must never scan scene-tree groups"
+	)
+	assert(
+		not query_service_source.contains("take_damage("),
+		"CombatTargetQueryService must never deliver damage"
 	)
 	print("COMBAT_AUTHORITY_STATIC_GATE_PASS")
 	get_tree().quit(0)

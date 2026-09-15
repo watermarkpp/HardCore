@@ -536,6 +536,10 @@ func _query_aabb_candidates(
 					),
 					"node": node,
 					"bounds_gu": float(entry.get("bounds_gu", 0.0)),
+					# R1-A additive: expose the entry's live ground-GU position
+					# so shape services can run exact predicates without
+					# re-projecting nodes. Existing consumers ignore this key.
+					"position_ground_gu": live_position_gu,
 				})
 	result.sort_custom(
 		func(a: Dictionary, b: Dictionary) -> bool:
