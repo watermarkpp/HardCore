@@ -188,45 +188,47 @@ func _run() -> void:
 	assert(doomed_key != "", "expired field must still own its registry slot")
 	var registry_size_before: int = _game._fire_wall_field_registry.size()
 
-	# 4b) R2-2 identity guard: a stale tree_exited signal must not evict a
-	#     newer field registered under the same key; the owner's signal does.
-	var guard_controller: FireWallFieldController = remaining[1]
-	var guard_key := ""
-	for key: Variant in _game._fire_wall_field_registry:
-		if _game._fire_wall_field_registry[key] == guard_controller:
-			guard_key = str(key)
-			break
-	assert(guard_key != "" and guard_key != doomed_key)
-	_game._on_fire_wall_field_tree_exited(guard_key, doomed)
+	# 4b) R2-2 identity guard (dedicated probe — the live capped fields stay
+	#     untouched, so this test never fabricates untracked-live-controller
+	#     state): a stale tree_exited signal must not evict the field owning
+	#     the key; the owner's own signal must.
+	var probe: FireWallFieldController = FireWallFieldController.new()
+	_game.add_child(probe)
+	var probe_key: String = _game._fire_wall_registry_key(
+		_game.player, "wizard.fire_wall_guard_probe", Vector2i(9999, 9999)
+	)
+	_game._fire_wall_field_registry[probe_key] = probe
+	_game._fire_wall_field_order.append(probe_key)
+	_game._on_fire_wall_field_tree_exited(probe_key, doomed)
 	assert(
-		_game._fire_wall_field_registry.get(guard_key) == guard_controller,
+		_game._fire_wall_field_registry.get(probe_key) == probe,
 		"stale controller signal must not evict the field owning the key"
 	)
-	_game._on_fire_wall_field_tree_exited(guard_key, guard_controller)
+	_game._on_fire_wall_field_tree_exited(probe_key, probe)
 	assert(
-		not _game._fire_wall_field_registry.has(guard_key),
-		"the owning controller's release must erase its registry slot"
+		not _game._fire_wall_field_registry.has(probe_key)
+		and not _game._fire_wall_field_order.has(probe_key),
+		"the owning controller's release must erase registry and order slots"
 	)
-	assert(
-		not _game._fire_wall_field_order.has(guard_key),
-		"the owning controller's release must erase its order slot"
-	)
+	probe.queue_free()
 
 	# 4c) R2-2 proactive lifecycle: once the expired controller actually
 	#     leaves the tree, its registry slot is gone WITHOUT any further
-	#     cast (no lazy-prune dependency).
+	#     cast (no lazy-prune dependency), and the R2-5 debug invariant
+	#     still holds.
 	await get_tree().process_frame
 	await get_tree().process_frame
 	assert(
 		not is_instance_valid(doomed),
 		"expired controller must be freed by the engine"
 	)
+	_game._debug_validate_fire_wall_registry("test:post_expiry")
 	assert(
-		_game._fire_wall_field_registry.size() == registry_size_before - 2,
+		_game._fire_wall_field_registry.size() == registry_size_before - 1,
 		"expired field must release its registry slot proactively: %d vs %d"
 		% [
 			_game._fire_wall_field_registry.size(),
-			registry_size_before - 2,
+			registry_size_before - 1,
 		]
 	)
 	assert(
@@ -240,6 +242,119 @@ func _run() -> void:
 		str(data_mechanics.get("cap_policy", "")) == "evict_oldest",
 		"SOT mechanics must record the R2 evict_oldest ruling"
 	)
+
+	# 5) R2-4 ninth-field E2E: the replacement field must have real visuals,
+	#    a valid canonical snapshot and must actually burn a monster. The
+	#    user-visible bug was "cast animation + sound, but no visuals and no
+	#    damage" — locking only the registry size is not enough.
+	game.set_process(false)
+	game.set_physics_process(false)
+	var e2e_field_index := 12
+	var e2e_cells: Array[Vector2i] = []
+	for cell: Vector2i in field_a_cells:
+		e2e_cells.append(cell + Vector2i(10 * e2e_field_index, 0))
+	var e2e_center: Vector2i = e2e_cells[4]
+	var monster_data: Dictionary = GameData.get_monster_by_id(
+		FIXTURE_MONSTER_ID
+	)
+	assert(
+		not monster_data.is_empty(),
+		"fixture monster must exist in canonical monster data"
+	)
+	var monster: Node = game._spawn_enemy(
+		monster_data,
+		game._canonical_grid_cell_to_screen_px(e2e_center),
+		false,
+		-1.0,
+		{"respawn_enabled": false}
+	)
+	assert(monster != null, "E2E fixture monster must spawn")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	monster.set_physics_process(false)
+	var hp_before: int = int(monster.current_hp)
+	# Refill to the cap first (section 4's expiry freed one slot), so the
+	# E2E cast below exercises the evict-oldest replacement path exactly as
+	# the user's ninth-cast bug did.
+	var refill_cells: Array[Vector2i] = []
+	for cell: Vector2i in field_a_cells:
+		refill_cells.append(cell + Vector2i(110, 0))
+	game._spawn_canonical_ground_field(
+		"wizard.fire_wall",
+		refill_cells,
+		game.player.global_position,
+		evict_effect
+	)
+	assert(
+		_valid_controller_count() == 8,
+		"refill cast must restore the caster to the cap"
+	)
+	var controllers_before := _valid_controllers()
+	assert(
+		controllers_before.size() == 8,
+		"E2E precondition: the caster must be at the cap"
+	)
+	game._spawn_canonical_ground_field(
+		"wizard.fire_wall",
+		e2e_cells,
+		game.player.global_position,
+		evict_effect
+	)
+	var controllers_after := _valid_controllers()
+	assert(
+		controllers_after.size() == 8,
+		"the replacement cast must keep the caster at the cap: %d"
+		% controllers_after.size()
+	)
+	var newest: FireWallFieldController = null
+	for controller: FireWallFieldController in controllers_after:
+		if not controllers_before.has(controller):
+			newest = controller
+			break
+	assert(newest != null, "the ninth-class cast must create a new field")
+	assert(
+		not newest.is_queued_for_deletion(),
+		"the replacement field must stay alive"
+	)
+	assert(
+		newest.visual_cells.size() == 9,
+		"the replacement field must own nine visual cells: %d"
+		% newest.visual_cells.size()
+	)
+	assert(
+		newest._canonical_snapshot_valid,
+		"the replacement field must hold a valid canonical snapshot"
+	)
+	newest._apply_field_tick()
+	assert(newest.tick_count >= 1, "the replacement field must tick")
+	assert(
+		newest.damage_application_count >= 1,
+		"the replacement field must apply damage to the indexed monster"
+	)
+	assert(
+		int(monster.current_hp) < hp_before,
+		"the replacement field must actually damage the monster: %d -> %d"
+		% [hp_before, int(monster.current_hp)]
+	)
+	_game._debug_validate_fire_wall_registry("test:ninth_field_e2e")
+
+	# 5b) Consecutive ninth-class casts keep working (evict-oldest rolls on).
+	for followup_index: int in range(13, 15):
+		var followup_cells: Array[Vector2i] = []
+		for cell: Vector2i in field_a_cells:
+			followup_cells.append(cell + Vector2i(10 * followup_index, 0))
+		game._spawn_canonical_ground_field(
+			"wizard.fire_wall",
+			followup_cells,
+			game.player.global_position,
+			evict_effect
+		)
+		assert(
+			_valid_controller_count() == 8,
+			"consecutive ninth-class casts must keep working: %d"
+			% _valid_controller_count()
+		)
+	_game._debug_validate_fire_wall_registry("test:consecutive_casts")
 
 	game.queue_free()
 	await game.tree_exited
