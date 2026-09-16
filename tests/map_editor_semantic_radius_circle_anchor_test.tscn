@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/map_editor_semantic_radius_circle_anchor_test.gd" type="Script" id="1"]
+
+[node name="MapEditorSemanticRadiusCircleAnchorTest" type="Node"]
+script = ExtResource("1")

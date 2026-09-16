@@ -25925,6 +25925,74 @@
         1.0,
         4.0
       ]
+    },
+    "user.portal_gate.20260916.s01_r1_c1": {
+      "anchor_px": [
+        26,
+        83
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "placeable": true,
+      "calibration_status": "placeable",
+      "content_layer": "personal_expansion"
+    },
+    "user.portal_gate.20260916.s02_r1_c1": {
+      "anchor_px": [
+        26,
+        83
+      ],
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": false,
+      "placeable": true,
+      "calibration_status": "placeable",
+      "content_layer": "personal_expansion"
     }
   }
 }

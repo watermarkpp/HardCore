@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://batchportalv1"]
+
+[ext_resource type="Script" path="res://tests/mse_batch_portal_visual.gd" id="1"]
+
+[node name="BatchPortalVisual" type="Node"]
+script = ExtResource("1")
