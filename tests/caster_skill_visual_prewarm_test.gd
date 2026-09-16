@@ -87,16 +87,20 @@ func _run() -> void:
 	)
 
 	# 5) Source discipline: GameRoot prewarms learned skills inside the
-	# loading window (after FINALIZE, before the loading cover lifts).
+	# loading window (after FINALIZE, before the loading cover lifts). The
+	# call site is matched with its two-tab indentation so the function
+	# definition earlier in the file cannot satisfy this gate.
 	var source := FileAccess.get_file_as_string("res://scripts/game_root.gd")
 	assert(
-		source.contains("_prewarm_learned_skill_visuals()"),
-		"GameRoot must call the learned-skill prewarm"
+		source.contains("func _prewarm_learned_skill_visuals()"),
+		"GameRoot must define the learned-skill prewarm"
 	)
 	var finalize_index := source.find(
 		"WorldBootstrapCoordinator.Stage.FINALIZE"
 	)
-	var prewarm_index := source.find("_prewarm_learned_skill_visuals()")
+	var prewarm_index := source.find(
+		"\t\t_prewarm_learned_skill_visuals()"
+	)
 	var finish_index := source.find("hud.finish_loading_transition()")
 	assert(
 		finalize_index >= 0 and prewarm_index > finalize_index

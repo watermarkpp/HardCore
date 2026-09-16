@@ -205,6 +205,63 @@ static func frame_texture_cache_diagnostics() -> Dictionary:
 	}
 
 
+## FW-COLD (GPT audit 2026-09-16): the first real cast of a learned skill
+## must not synchronously load animation frames on the main thread. Resolve
+## the manifest animation(s) for the skill and load every frame of every
+## direction sequence through load_texture_path(), so the first real cast
+## is a pure cache hit. Loading-phase work only. With an empty phase_id the
+## default animation AND every declared animation phase are prewarmed; with
+## an explicit phase_id only that phase is prewarmed.
+static func prewarm_animation(
+	skill_name_or_id: String,
+	phase_id := ""
+) -> Dictionary:
+	var skill_id := ProfessionRules.skill_id(skill_name_or_id)
+	if skill_id.is_empty() or not is_runtime_ready(skill_id):
+		return {"ready": false, "sequences": 0, "frames": 0}
+	var phase_ids: Array[String] = []
+	if phase_id.is_empty():
+		# The unphased default animation ALWAYS participates: skills without
+		# animation_phases (fire wall) declare their frames there.
+		phase_ids.append("")
+		var phases: Dictionary = profile(skill_id).get(
+			"animation_phases", {}
+		)
+		for key: String in phases:
+			phase_ids.append(key)
+	else:
+		phase_ids.append(phase_id)
+	var sequence_count := 0
+	var frame_count := 0
+	for resolved_phase: String in phase_ids:
+		var animation := animation_profile(skill_id, resolved_phase)
+		if str(animation.get("contract", "")) != "caster_skill_animation.v1":
+			continue
+		var sequences: Variant = animation.get("sequences", [])
+		if not sequences is Array:
+			continue
+		for sequence: Variant in sequences:
+			if not sequence is Dictionary:
+				continue
+			var frames: Variant = sequence.get("frames", [])
+			if not frames is Array or frames.is_empty():
+				continue
+			sequence_count += 1
+			for frame: Variant in frames:
+				if not frame is Dictionary:
+					continue
+				var path := "res://%s" % str(frame.get("path", ""))
+				if path == "res://":
+					continue
+				if load_texture_path(path) != null:
+					frame_count += 1
+	return {
+		"ready": true,
+		"sequences": sequence_count,
+		"frames": frame_count,
+	}
+
+
 static func animation_duration(skill_name_or_id: String, phase_id := "") -> float:
 	if not is_runtime_ready(skill_name_or_id):
 		return 0.0

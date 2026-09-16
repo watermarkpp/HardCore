@@ -1826,18 +1826,20 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	# C1.1 CAMERA-EDGE-V2 (user ruling 2026-09-16, GPT audit): the camera
+	# C1.2 CAMERA-EDGE-V2 (user ruling 2026-09-16, GPT audit): the camera
 	# contract has ONE hard constraint and ONE optimization goal.
-	#   Hard: the player stays inside the 10%..90% window of each screen
-	#         axis, and the view height is exactly ArtSpec.CAMERA_ZOOM
-	#         (1.06) everywhere — no dynamic zoom exists in this path.
+	#   Hard: the player stays inside the visibility window - at least 15%
+	#         from every screen edge (central 70%) and never closer than
+	#         two ground cells - and the view height is exactly
+	#         ArtSpec.CAMERA_ZOOM (1.06); no dynamic zoom exists here.
 	#   Goal: the black area outside the map is minimized, NOT forbidden.
 	# Step 1 computes the zero-black ideal center (strict constrained
 	# solve, cached per map/viewport/zoom with a value-compared single
 	# slot). Step 2 re-follows the player by exactly the amount that
 	# exceeds the visibility window — and no more — so any black area is
-	# the minimum required to keep the player visible. Rendering stability
-	# (smoothing/pixel snap) is G2 and is deliberately NOT touched here.
+	# the minimum required to keep the player comfortable. Rendering
+	# stability (smoothing/pixel snap) is G2 and is deliberately NOT
+	# touched here.
 	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
 	var strict_center := (
 		MapDiamondCameraConstraintScript.resolve_strict_follow_cached(
@@ -1854,6 +1856,18 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 	)
 	_world_camera.zoom = fixed_zoom
 	_world_camera.global_position = camera_center
+
+
+## FW-COLD (GPT audit 2026-09-16): prewarm the caster-skill animation frames
+## of the player's learned skills during the loading window. Learned skills
+## are the superset of the hotbar contents, so this covers every skill the
+## player can actually cast first. Fire wall's six frames land here, killing
+## the first-cast main-thread texture load spike.
+func _prewarm_learned_skill_visuals() -> void:
+	if PlayerState.test_mode and PlayerState.learned_skills.is_empty():
+		return
+	for skill_name: String in PlayerState.learned_skills.keys():
+		CasterSkillVisualRegistry.prewarm_animation(skill_name)
 
 
 func _register_input_actions() -> void:
@@ -2857,6 +2871,13 @@ func _run_map_transition(
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
 	if _check_world_ready_contract():
 		_relocate_main_pets_after_map_arrival()
+		# FW-COLD (GPT audit 2026-09-16): while Loading still covers the
+		# gameplay, prewarm every animation frame of the player's learned
+		# skills (learned skills are a superset of the hotbar). The first
+		# real cast must be a pure texture-cache hit instead of a main-thread
+		# synchronous load spike. Loading-phase work only: damage, spatial
+		# index and fire wall systems are untouched.
+		_prewarm_learned_skill_visuals()
 		if is_instance_valid(_town_music_controller):
 			_town_music_controller.set_map_context(
 				current_map_id,
