@@ -1,5 +1,13 @@
 # Codex 精简上下文快照
 
+## 2026-09-16：传送门门图视觉波与全量发布
+
+- 门图资产包入库：蓝（双向）`user.portal_gate.20260916.s01_r1_c1` / 红（单向）`user.portal_gate.20260916.s02_r1_c1`，用户占位校准 footprint [1,1] anchor [26,83] 已推广至 overrides；批量工具 `mse_batch_portal_visual`（增量式+功能字段冻结+死链自愈）与 `mse_batch_publish_wave` 保留为常备工具。
+- 游戏侧仅视觉改动：`zone_portal.gd` 有链接视觉时不再绘制占位圆、标签上移至门顶（visual_top_offset_px=79 数据驱动）；`map_editor_runtime_bridge.gd` 门记录增补只读字段 linked_visual_asset_id / visual_top_offset_px。交互半径 105px、travel 链路零改动。
+- 67 图内容波：117 功能传送点全部链接门图（蓝 102 / 红 15），15 个 arrival 落点按用户裁决不放门，比奇省 2 条陈年死链清除并补蓝门；用户抉择之地 2 个 Boss 刷新点随波发布。
+- 验证：连接/功能电池 7/7 PASS（门点网络、双向策略、传送、缺失到达、引导复用、注册表、文档守卫）；内容合同 5/5 PASS（遮挡/深度/碰撞/战斗/相机）；静态三方 0 漂移；门视觉链专项探针 PASS 后清理。
+- 提交链 `4b3670b9..37353185`（资产包/视觉代码/编辑器修复/内容波/文档归档）；AGENTS.md 既有未提交改动与编辑器工作状态目录（stage6_semantics、wooma ground、3 个 .bak）保持未入库。APK v83 NOT_RUN：用户下次打包将自动携带本波全部内容（工件已 canonical 在树）。
+
 ## 2026-09-14：物品详情、Buff、设置与地面名称 v81
 
 - APK源码 `4f4462ad027714acf657c7a2ac28fa4f15a6e293`。最终明确按正文最长实际行宽居中、各行左对齐、名称与★独立；字号20/14不变，无固定右移。设置候选已由用户验收，已正式接入和功能复验。
