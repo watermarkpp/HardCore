@@ -292,19 +292,18 @@ try {
         if (-not (Test-Path -LiteralPath $BuildInfoScript -PathType Leaf)) {
             throw "Staged project has no build-info generator: $BuildInfoScript"
         }
-        & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -IgnoreAndroidBuildTemplate
+        & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -IgnoreAndroidBuildTemplate -VersionCodeOverride $VersionCode
         $BuildInfoExitCode = $LASTEXITCODE
         if ($BuildInfoExitCode -ne 0) {
             throw "Build-info generation failed with exit code $BuildInfoExitCode."
         }
         Write-Output "build_info.json generated in staged project"
 
-        # QA versionCode override (remote review 2026-09-16): inject after
-        # build-info generation so the generator still runs on the pure
-        # commit content (git_dirty stays false for the verify contract),
-        # then align the staged preset AND build_info.json to the QA code
-        # so the export manifest, build_info.json and the verify step all
-        # agree. The tracked preset is untouched.
+        # QA versionCode override (remote review 2026-09-16): inject the QA
+        # code into the staged export preset AFTER build-info generation
+        # (the generator records the same code via -VersionCodeOverride and
+        # still runs on the pure commit content, keeping git_dirty=false for
+        # the verify contract). The tracked preset is untouched.
         if ($VersionCode -gt 0) {
             $StagePresetPath = Join-Path $StageProjectPath "export_presets.cfg"
             $StagePresetText = [System.IO.File]::ReadAllText($StagePresetPath)
@@ -317,16 +316,6 @@ try {
                 [regex]::Replace($StagePresetText, '(?m)^version/code=\d+', "version/code=$VersionCode"),
                 $Utf8NoBomPreset
             )
-            $StageBuildInfoPath = Join-Path $StageProjectPath "build_info.json"
-            if (Test-Path -LiteralPath $StageBuildInfoPath -PathType Leaf) {
-                $StageBuildInfoText = [System.IO.File]::ReadAllText($StageBuildInfoPath)
-                $StageBuildInfoText = [regex]::Replace(
-                    $StageBuildInfoText,
-                    '("version_code"\s*:\s*)\d+',
-                    ('$1' + $VersionCode)
-                )
-                [System.IO.File]::WriteAllText($StageBuildInfoPath, $StageBuildInfoText, $Utf8NoBomPreset)
-            }
             Write-Output "VERSION_CODE_OVERRIDE=$VersionCode"
         }
 
