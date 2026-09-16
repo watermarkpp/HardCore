@@ -9,24 +9,24 @@ const STRICT_FOLLOW_CONTRACT_ID := "map_diamond_camera_strict_edge_follow_v1"
 const EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
 const PROJECTION_ITERATIONS := 32
 const EPSILON := 0.01
-## C1.3 visibility guard tuning (user device rulings 2026-09-16): the C1.2
-## build left the player's body sliding under the top monster HP bar. User
-## facts and rulings:
-##   - the character is TWO ground cells tall,
-##   - clearing the bar needs bar_bottom (93/720 of the content height,
-##     12.9%) + the two-cell body ~= 3.4 cells: the user's 3.5-cell figure
-##     is the zero-headroom mathematical minimum,
-##   - the uniform floor is therefore FOUR ground cells (user offered 3.5
-##     or 4; controller judged 4 - comfort wins, ~1.3 diamond heights of
-##     visible gap between the head and the bar),
-##   - PARAMETER-ONLY change by user directive: no HUD-rect coupling.
-## Both rules must hold, so the offset limit per axis is
-## min(15%-fraction limit, half-viewport - four-cell floor). The previous
-## build combined them with max(), which made the cell floor inert - the
-## real shipped margin was just the 15% fraction. The window never
-## collapses back into a central band (the C1 tanh band stays removed).
+## C1.4 visibility guard tuning (user device screenshot ruling 2026-09-16):
+## the user's counting unit is now pinned: ONE ground grid cell is 64x32
+## world px, and VERTICAL distances are counted in the cell's 32-px vertical
+## extent. The character is TWO vertical cells tall (2 x 32 = 64 world px,
+## confirmed by the 2664x1200 device capture). Every user margin figure is
+## in those vertical cells; the previous build used 4 x 64 = 256 world px,
+## i.e. EIGHT user cells - double the agreed 4-cell ceiling, which is why
+## the pinned head sat "at least six cells" (user counting) below the bar.
+## Measured facts in user cells: the actual monster HP bar panel is ~2.7
+## cells deep (87.7 world px, deeper than the 1.5-cell estimate), so
+## never-covered needs bar 2.7 + body 2.0 ~= 4.7 cells. Ruling (user
+## delegated, comfort first): margin = SIX user cells = 192 world px - the
+## body top keeps a visible ~40 world px gap below the bar while the
+## head-to-bar-top visual gap halves from ~6 to ~3.4 cells.
+## In this file's constants the unit is the 64-px tile width, so six user
+## cells = 3.0 here. PARAMETER-ONLY by standing user directive.
 const PLAYER_VISIBLE_SCREEN_MARGIN := 0.15
-const PLAYER_MIN_VISIBLE_GROUND_CELLS := 4.0
+const PLAYER_MIN_VISIBLE_GROUND_CELLS := 3.0
 
 
 ## C1/C1.1 CAMERA-EDGE (user ruling 2026-09-16, GPT audit): two-step edge
