@@ -1826,22 +1826,30 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	# C1 CAMERA-EDGE (user ruling 2026-09-16): ONE global view height on
-	# every map (ArtSpec.CAMERA_ZOOM, the Mengzhong-safe-zone height) and a
-	# STRICT map-edge follow — the camera center is the constrained legal
-	# center: inside the map the camera equals the player; at the map edge
-	# the camera stops at the last legal center while the player keeps
-	# walking and may leave the screen center, minimizing the black area
-	# shown outside the map. The former 14% tanh central band and the
-	# edge-pressure zoom blend are removed entirely: no dynamic zoom exists
-	# anywhere in this path, and the constraint geometry is cached per
-	# (map design size, viewport, zoom) so the per-frame solve allocates
-	# nothing. Rendering stability (smoothing/pixel snap) is C2 and is
-	# deliberately NOT touched here.
+	# C1.1 CAMERA-EDGE-V2 (user ruling 2026-09-16, GPT audit): the camera
+	# contract has ONE hard constraint and ONE optimization goal.
+	#   Hard: the player stays inside the 10%..90% window of each screen
+	#         axis, and the view height is exactly ArtSpec.CAMERA_ZOOM
+	#         (1.06) everywhere — no dynamic zoom exists in this path.
+	#   Goal: the black area outside the map is minimized, NOT forbidden.
+	# Step 1 computes the zero-black ideal center (strict constrained
+	# solve, cached per map/viewport/zoom with a value-compared single
+	# slot). Step 2 re-follows the player by exactly the amount that
+	# exceeds the visibility window — and no more — so any black area is
+	# the minimum required to keep the player visible. Rendering stability
+	# (smoothing/pixel snap) is G2 and is deliberately NOT touched here.
 	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	var camera_center := (
+	var strict_center := (
 		MapDiamondCameraConstraintScript.resolve_strict_follow_cached(
 			design_size, viewport_half, fixed_zoom, player.global_position
+		)
+	)
+	var camera_center := (
+		MapDiamondCameraConstraintScript.apply_player_visibility_guard(
+			strict_center,
+			player.global_position,
+			fixed_zoom,
+			viewport_half * 2.0
 		)
 	)
 	_world_camera.zoom = fixed_zoom

@@ -9,23 +9,33 @@ const STRICT_FOLLOW_CONTRACT_ID := "map_diamond_camera_strict_edge_follow_v1"
 const EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
 const PROJECTION_ITERATIONS := 32
 const EPSILON := 0.01
+## C1.1 visibility guard (GPT audit ruling 2026-09-16): the player must stay
+## inside the 10%..90% window of each screen axis. 10% is a tuning knob —
+## 8% keeps the player nearer the edge, 12% safer — but must never become a
+## central band again (the removed C1 14% tanh band stays removed).
+const PLAYER_VISIBLE_SCREEN_MARGIN := 0.10
 
 
-## C1 CAMERA-EDGE (user ruling 2026-09-16): strict map-edge follow. The
-## gameplay camera uses ONE global view height and its center is the
-## CONSTRAINED legal center from constrain_center(): inside the map the
-## camera equals the player; at the map edge the camera stops at the last
-## legal center while the player keeps walking and may leave the screen
-## center, minimizing the black area shown outside the map. The former
-## player_priority_soft_edge_v1 behaviour (14% tanh central band, edge
-## pressure, recommended-zoom blend) is removed by explicit ruling: no
-## dynamic zoom exists anywhere in this path.
-static var _strict_cache: Dictionary = {}
+## C1/C1.1 CAMERA-EDGE (user ruling 2026-09-16, GPT audit): two-step edge
+## follow. STEP 1 is the zero-black ideal position (strict solver below):
+## where the camera should be if only minimizing the black area outside the
+## map mattered. STEP 2 is the player visibility guard: the hard constraint
+## is that the player stays comfortably visible; minimizing black is the
+## OPTIMIZATION GOAL, not a hard zero-black contract. The camera re-follows
+## the player by exactly the amount that exceeds the visibility window —
+## and no more — so any black area shown is the minimum required to keep
+## the player visible. No dynamic zoom exists anywhere in this path.
+static var _cached_design_size := Vector2i.ZERO
+static var _cached_viewport_half := Vector2.ZERO
+static var _cached_zoom := Vector2.ZERO
+static var _cached_entry: Dictionary = {}
+static var _cache_valid := false
 static var _strict_cache_builds := 0
 
 
 static func clear_strict_cache() -> void:
-	_strict_cache.clear()
+	_cached_entry = {}
+	_cache_valid = false
 	_strict_cache_builds = 0
 
 
@@ -39,14 +49,26 @@ static func resolve_strict_follow_cached(
 	zoom: Vector2,
 	desired_center: Vector2
 ) -> Vector2:
-	## Per-frame camera entry. The constraint geometry is cached per
-	## (design_size, viewport, zoom) and the solve runs over flat arrays
-	## with the exact projection math of constrain_center(), so the
-	## returned center matches the reference solver and the per-frame
-	## path allocates nothing (no boundary, no Dictionary, no Array).
-	var entry: Dictionary = _strict_cache_entry(
-		design_size, viewport_half_pixels, zoom
-	)
+	## STEP 1: zero-black ideal center. Single-slot cache compared by plain
+	## values (design size, viewport half, zoom): the hit path constructs no
+	## String, Dictionary or Array — it only compares values and projects
+	## over prebuilt flat arrays. Rebuilt only when the map, the viewport or
+	## the zoom actually changes. The solve uses the exact projection math
+	## of constrain_center(), so the result matches the reference solver.
+	if (
+		not _cache_valid
+		or _cached_design_size != design_size
+		or _cached_viewport_half != viewport_half_pixels
+		or _cached_zoom != zoom
+	):
+		_cached_entry = _build_strict_entry(
+			design_size, viewport_half_pixels, zoom
+		)
+		_cached_design_size = design_size
+		_cached_viewport_half = viewport_half_pixels
+		_cached_zoom = zoom
+		_cache_valid = true
+	var entry: Dictionary = _cached_entry
 	if not bool(entry["feasible"]):
 		return entry["centroid"]
 	var points: Array[Vector2] = entry["points"]
@@ -69,23 +91,40 @@ static func resolve_strict_follow_cached(
 	return result_center
 
 
-static func _strict_cache_key(
-	design_size: Vector2i,
-	viewport_half_pixels: Vector2,
-	zoom: Vector2
-) -> String:
-	return "%s|%s|%s" % [design_size, viewport_half_pixels, zoom]
+static func apply_player_visibility_guard(
+	strict_center: Vector2,
+	player_center: Vector2,
+	zoom: Vector2,
+	viewport_size: Vector2
+) -> Vector2:
+	## STEP 2: player visibility guard over the zero-black ideal center.
+	## The player's screen offset from the ideal center is clamped to the
+	## 10%..90% window; the camera re-follows by exactly the excess. When
+	## the player is inside the window the camera stays on the ideal center
+	## (zero black). Pure value math: no allocation on the per-frame path.
+	var safe_zoom := Vector2(
+		maxf(absf(zoom.x), 0.0001),
+		maxf(absf(zoom.y), 0.0001)
+	)
+	var max_offset_px := Vector2(
+		maxf(0.0, 0.5 - PLAYER_VISIBLE_SCREEN_MARGIN)
+		* maxf(viewport_size.x, 1.0),
+		maxf(0.0, 0.5 - PLAYER_VISIBLE_SCREEN_MARGIN)
+		* maxf(viewport_size.y, 1.0)
+	)
+	var player_delta_px := (player_center - strict_center) * safe_zoom
+	var visible_delta_px := Vector2(
+		clampf(player_delta_px.x, -max_offset_px.x, max_offset_px.x),
+		clampf(player_delta_px.y, -max_offset_px.y, max_offset_px.y)
+	)
+	return player_center - visible_delta_px / safe_zoom
 
 
-static func _strict_cache_entry(
+static func _build_strict_entry(
 	design_size: Vector2i,
 	viewport_half_pixels: Vector2,
 	zoom: Vector2
 ) -> Dictionary:
-	var key := _strict_cache_key(design_size, viewport_half_pixels, zoom)
-	var cached: Variant = _strict_cache.get(key)
-	if cached is Dictionary:
-		return cached
 	var boundary := CollisionGeometry.map_inner_boundary_world(design_size)
 	var safe_zoom := Vector2(
 		maxf(absf(zoom.x), 0.0001),
@@ -119,15 +158,13 @@ static func _strict_cache_entry(
 			feasible = false
 			break
 	_strict_cache_builds += 1
-	var entry: Dictionary = {
+	return {
 		"points": points,
 		"normals": normals,
 		"supports": supports,
 		"centroid": centroid,
 		"feasible": feasible,
 	}
-	_strict_cache[key] = entry
-	return entry
 
 
 static func constrain_center(
