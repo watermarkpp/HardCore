@@ -124,7 +124,44 @@ static func get_theme(theme_id: String) -> Dictionary:
 	return THEMES.get(theme_id, {}).duplicate(true)
 
 
+## G0 (remote review 2026-09-16 authorization): get_map_profile() sits on
+## the per-frame camera/focus paths, and every miss rebuilt the whole
+## profile (props, world math, region-content lookups). Profiles are
+## immutable per-map catalog data, so memoize per map id and return the
+## SHARED reference. Every consumer is a read-only .get() reader (audited:
+## all 17 world_background call sites plus internal callers never assign
+## into the returned profile; world_background duplicates before mutating
+## its runtime copy). The build counter is the test-facing evidence:
+## entering a map builds once, a minute of gameplay adds nothing, and a
+## first visit to another map adds exactly one build.
+static var _map_profile_cache: Dictionary = {}
+static var _map_profile_build_count := 0
+
+
+static func environment_profile_build_count() -> int:
+	return _map_profile_build_count
+
+
+static func environment_profile_cache_size() -> int:
+	return _map_profile_cache.size()
+
+
+## Test/diagnostic hook only: production catalog data is immutable per map.
+static func invalidate_map_profile_cache() -> void:
+	_map_profile_cache.clear()
+
+
 static func get_map_profile(map_id: int) -> Dictionary:
+	if _map_profile_cache.has(map_id):
+		return _map_profile_cache[map_id]
+	var profile := _build_map_profile(map_id)
+	if not profile.is_empty():
+		_map_profile_cache[map_id] = profile
+		_map_profile_build_count += 1
+	return profile
+
+
+static func _build_map_profile(map_id: int) -> Dictionary:
 	if map_id == 4:
 		return _bich_profile()
 	if ORC_TOMB_SOURCE_LAYOUTS.has(map_id):
