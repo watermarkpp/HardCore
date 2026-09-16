@@ -9,7 +9,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(
-    r"C:\Users\Administrator\Documents\HardCore-worktrees\maps"
+    r"C:\Users\Administrator\Documents\HardCore"
 )
 
 SOURCE_ROOT = Path(

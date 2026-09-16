@@ -3,16 +3,17 @@ extends Node
 
 # Baselines captured from the corresponding source maps.  The source maps are
 # intentionally not staged in this task worktree, so the test also loads them
-# when they are available after integration.
+# when they are available after integration.  runtime_map_id is intentionally
+# NOT part of these baselines: after the formal map network canonicalization
+# the clone documents carry their own registered formal ids, and the authority
+# is the formal identity registry (asserted below), not the legacy source doc.
 const SOURCE_BASELINES := {
 	"cyxggc_2": {
-		"runtime_map_id": 990280,
 		"design_size": [96, 96],
 		"object_instances": 207,
 		"layer_counts": {"terrain_base": 181, "object_base": 26, "collision": 8, "map_exit_points": 2},
 	},
 	"cyxg_2": {
-		"runtime_map_id": 990330,
 		"design_size": [32, 128],
 		"object_instances": 334,
 		"layer_counts": {"terrain_base": 300, "object_base": 34, "collision": 16, "map_exit_points": 2},
@@ -58,7 +59,14 @@ func _assert_clone(spec: Dictionary) -> void:
 
 	assert(str(document.get("map_id", "")) == map_id, "%s map_id mismatch" % map_id)
 	assert(str(document.get("display_name", "")) == str(spec.display_name), "%s display_name mismatch" % map_id)
-	assert(int(document.get("runtime_map_id", -1)) == int(baseline.runtime_map_id), "%s runtime_map_id mismatch" % map_id)
+	var identity_check := MapEditorSaveService.validate_document_runtime_identity(document)
+	assert(
+		bool(identity_check.get("ok", false)),
+		"%s runtime_map_id not aligned with formal identity registry: %s" % [
+			map_id,
+			str(identity_check),
+		]
+	)
 	var design_size: Array = document.get("design", {}).get("design_size", [])
 	assert(design_size == baseline.design_size, "%s design_size mismatch" % map_id)
 
@@ -94,7 +102,6 @@ func _baseline_for(source_id: String) -> Dictionary:
 	var loaded := MapEditorLoadService.load_document(source_path, false)
 	assert(bool(loaded.get("ok", false)), "%s:%s" % [source_id, loaded.get("errors", [])])
 	var source: Dictionary = loaded.document
-	baseline["runtime_map_id"] = int(source.get("runtime_map_id", -1))
 	baseline["design_size"] = source.get("design", {}).get("design_size", [])
 	baseline["object_instances"] = MapEditorInstanceService.all_instances(source).size()
 	baseline["layer_counts"] = _layer_counts(source)
