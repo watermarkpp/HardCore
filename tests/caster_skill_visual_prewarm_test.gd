@@ -201,6 +201,14 @@ func _run() -> void:
 			not warm_body.contains(forbidden_token),
 			"the render warm-up must stay presentation-only: %s" % forbidden_token
 		)
+
+	# 7) Probe discipline: the generic long-frame probe arms only after the
+	# loading cover lifts, so bootstrap spikes cannot consume the one shot.
+	var arm_index := source.find("_first_combat_probe_armed = true")
+	assert(
+		arm_index > finish_index,
+		"the long-frame probe must arm only after the loading cover lifts"
+	)
 	print(
 		"CASTER_SKILL_VISUAL_PREWARM_PASS frames=%d loads=%d hits=%d"
 		% [

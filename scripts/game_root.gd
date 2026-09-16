@@ -376,8 +376,20 @@ var _drop_nodes_max_per_frame_override := -1
 var _test_force_loot_materialization_failure_count := 0
 var _pending_loot_collections: Array = []
 var _prepared_loot_collection: Dictionary = {}
-## FRAME-STALL probe: fires once per session on the first >250ms frame.
+## FRAME-STALL probe: fires once per session on the first >250ms frame, but
+## only after loading has ended (armed post-baseline), so bootstrap spikes
+## cannot consume it. Counters are facts only: absence of growth means no
+## tracked CPU cache grew - engine-side costs (render/driver/allocator) are
+## NOT observable through these counters and must not be inferred from them.
 var _first_long_frame_diagnosed := false
+var _first_combat_probe_armed := false
+## First fire wall cast probe (remote review 2026-09-16): on the first
+## wizard.fire_wall cast, record the next 12 rendered frame durations and
+## report them with 33.3/50/100 ms thresholds - no threshold guessing beyond
+## that, and no causal claims from cache counters.
+var _fw_first_cast_recorded := false
+var _fw_first_cast_frames_left := 0
+var _fw_first_cast_frame_ms: Array[float] = []
 var _loot_collection_flush_queued := false
 ## Legacy loot candidates are rejected unless a focused test explicitly opts
 ## into the old fixture shape. Formal pickups always carry map/generation
@@ -1512,6 +1524,7 @@ func _ready() -> void:
 	player.skill_requested.connect(_on_player_skill)
 	player.hc_world_skill_preflight = Callable(self, "_hc_skill_preflight")
 	player.skill_cast_started.connect(_on_skill_cast_audio_started)
+	player.skill_cast_started.connect(_on_first_fire_wall_cast_probe)
 	player.warrior_skill_state_changed.connect(_on_warrior_skill_state_changed)
 	player.stats_changed.connect(_on_player_stats_changed)
 	player.movement_performed.connect(_on_player_moved)
@@ -1715,12 +1728,11 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	# FRAME-STALL probe (user device report 2026-09-16): the incoming delta
-	# IS the total duration of the previous frame. Report the first frame
-	# over 250ms once per session with the resource-cache counters; the
-	# delta against the loading-window baseline localizes a first-combat
-	# stall (textures vs audio vs none-of-them = engine/shader compile).
-	if not _first_long_frame_diagnosed and delta > 0.25:
+	# FRAME-STALL probe (reworked per remote review 2026-09-16): armed only
+	# after loading ends so bootstrap spikes cannot consume the one shot.
+	# The counters are neutral facts: they show whether any tracked CPU
+	# cache grew during the frame and nothing more.
+	if _first_combat_probe_armed and not _first_long_frame_diagnosed and delta > 0.25:
 		_first_long_frame_diagnosed = true
 		print(
 			"[FRAME-STALL] long frame %.3fs at process frame %d: caster=%s presentation=%d monster_frames=%d"
@@ -1734,6 +1746,23 @@ func _process(delta: float) -> void:
 				).resident_texture_count()
 			]
 		)
+	# First fire wall cast window: record the 12 rendered frame durations
+	# that follow the first cast event, then report with fixed thresholds.
+	if _fw_first_cast_frames_left > 0:
+		_fw_first_cast_frame_ms.append(delta * 1000.0)
+		_fw_first_cast_frames_left -= 1
+		if _fw_first_cast_frames_left == 0:
+			var over33 := 0
+			var over50 := 0
+			var over100 := 0
+			for frame_ms: float in _fw_first_cast_frame_ms:
+				over33 += 1 if frame_ms > 33.3 else 0
+				over50 += 1 if frame_ms > 50.0 else 0
+				over100 += 1 if frame_ms > 100.0 else 0
+			print(
+				"[FW-FIRST-CAST] frames_ms=%s over33=%d over50=%d over100=%d"
+				% [str(_fw_first_cast_frame_ms), over33, over50, over100]
+			)
 	preload("res://scripts/monster_source_frames.gd").poll()
 	if not _prepared_loot_collection.is_empty(): _poll_prepared_loot_collection()
 	var process_started_usec := RuntimeDiagnostics.timing_start()
@@ -2998,6 +3027,10 @@ func _run_map_transition(
 		# frame-separated batches; this keeps Loading and gameplay input responsive
 		# while removing the one-time cost from the player's first panel click.
 		hud.finish_loading_transition()
+		# FRAME-STALL discipline (remote review 2026-09-16): arm the generic
+		# long-frame probe only now - loading has ended and the prewarm
+		# baseline has printed - so bootstrap spikes cannot consume it.
+		_first_combat_probe_armed = true
 		if PlayerState.test_mode and hud.loading_transition_overlay != null:
 			# Test-mode fast path hides the fade overlay immediately so tests
 			# can assert the bootstrap completed without waiting the fade tween.
@@ -6887,6 +6920,19 @@ func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, messag
 
 func _on_skill_cast_audio_started(stable_skill_id: String) -> void:
 	_play_skill_audio_phase(stable_skill_id, "cast")
+
+
+## FW-COLD2 diagnosis (remote review 2026-09-16): on the first fire wall
+## cast, open a 12-rendered-frame recording window. The following _process
+## deltas are the rendered frame durations (a cost inside frame N shows up
+## as the delta reported at frame N+1), reported once with fixed
+## 33.3/50/100 ms thresholds and no causal interpretation.
+func _on_first_fire_wall_cast_probe(stable_skill_id: String) -> void:
+	if _fw_first_cast_recorded or stable_skill_id != "wizard.fire_wall":
+		return
+	_fw_first_cast_recorded = true
+	_fw_first_cast_frame_ms.clear()
+	_fw_first_cast_frames_left = 12
 
 
 func _on_item_audio_committed(identity_domain: String, identity_id: int, semantic_event: String) -> void:
