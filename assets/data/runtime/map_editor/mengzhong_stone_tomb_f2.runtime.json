@@ -1,5 +1,5 @@
 {
-  "build_sha256": "c8778e37f11800cd623b2cb4ba21e9b7daeccb803f321e1f40ead3e3a522b475",
+  "build_sha256": "0f007546f0c3f9bd9fc19295b0cb02c10db8913952065543b71641f974abd6cc",
   "collision": {
     "blocked_count": 372.0,
     "blocked_tiles": [
@@ -3655,11 +3655,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000106",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": false,
       "map_collision_override": "default",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -3726,11 +3728,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000107",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": false,
       "map_collision_override": "default",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -3772,7 +3776,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         172.0,
-        110.55555725097656
+        110.555557250977
       ],
       "asset_id": "user.50579dc474c3f840",
       "collision_authority": "asset",
@@ -3796,7 +3800,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.38247011952191234,
+      "instance_base_scale": 0.382470119521912,
       "instance_custom_scale": true,
       "instance_id": "inst_000108",
       "instance_scale_level": -4.0,
@@ -3819,15 +3823,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         172.0,
-        110.55555725097656
+        110.555557250977
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.2294820717131473,
-        0.2294820717131473
+        0.229482071713147,
+        0.229482071713147
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3849,7 +3853,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         170.0,
-        110.1111068725586
+        110.111106872559
       ],
       "asset_id": "user.33ff89346abf48a1",
       "collision_authority": "asset",
@@ -3896,15 +3900,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         170.0,
-        110.1111068725586
+        110.111106872559
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.23040000000000005,
-        0.23040000000000005
+        0.2304,
+        0.2304
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3926,7 +3930,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         154.0,
-        71.33333587646484
+        71.3333358764648
       ],
       "asset_id": "user.b0718ccd448ca4a7",
       "collision_authority": "asset",
@@ -3950,7 +3954,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.4423963133640553,
+      "instance_base_scale": 0.442396313364055,
       "instance_custom_scale": true,
       "instance_id": "inst_000110",
       "instance_scale_level": -5.0,
@@ -3973,15 +3977,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         154.0,
-        71.33333587646484
+        71.3333358764648
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.22119815668202772,
-        0.22119815668202772
+        0.221198156682028,
+        0.221198156682028
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4027,7 +4031,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.41025641025641024,
+      "instance_base_scale": 0.41025641025641,
       "instance_custom_scale": true,
       "instance_id": "inst_000111",
       "instance_scale_level": -5.0,
@@ -4057,8 +4061,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.2051282051282051,
-        0.2051282051282051
+        0.205128205128205,
+        0.205128205128205
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4080,7 +4084,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         177.0,
-        73.33332824707031
+        73.3333282470703
       ],
       "asset_id": "user.916b24806f8dfdb6",
       "collision_authority": "asset",
@@ -4104,7 +4108,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.4304932735426009,
+      "instance_base_scale": 0.430493273542601,
       "instance_custom_scale": true,
       "instance_id": "inst_000112",
       "instance_scale_level": -5.0,
@@ -4127,15 +4131,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         177.0,
-        73.33332824707031
+        73.3333282470703
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.2152466367713005,
-        0.2152466367713005
+        0.2152466367713,
+        0.2152466367713
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4157,7 +4161,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         165.0,
-        110.1111068725586
+        110.111106872559
       ],
       "asset_id": "user.c8910d198a7cfd2a",
       "collision_authority": "asset",
@@ -4204,15 +4208,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         165.0,
-        110.1111068725586
+        110.111106872559
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.23040000000000005,
-        0.23040000000000005
+        0.2304,
+        0.2304
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4258,7 +4262,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.3764705882352941,
+      "instance_base_scale": 0.376470588235294,
       "instance_custom_scale": true,
       "instance_id": "inst_000114",
       "instance_scale_level": -5.0,
@@ -4365,8 +4369,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.6257779328102111,
-        0.6257779328102111
+        0.625777932810211,
+        0.625777932810211
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4388,7 +4392,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         62.0,
-        115.6428451538086
+        115.642845153809
       ],
       "asset_id": "cave_dungeon.wood_crate_01",
       "collision_authority": "asset",
@@ -4435,15 +4439,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         62.0,
-        115.6428451538086
+        115.642845153809
       ],
       "placement_rule": "non_overlapping",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.6309855999999999,
-        0.6309855999999999
+        0.6309856,
+        0.6309856
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4519,8 +4523,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.5000000000000001,
-        0.5000000000000001
+        0.5,
+        0.5
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4542,7 +4546,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         57.0,
-        58.33333587646485
+        58.3333358764649
       ],
       "asset_id": "cave_dungeon.broken_crate_01",
       "collision_authority": "manual_by_user",
@@ -4589,15 +4593,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         57.0,
-        58.33333587646485
+        58.3333358764649
       ],
       "placement_rule": "non_overlapping",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.6000000000000001,
-        0.6000000000000001
+        0.6,
+        0.6
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4618,7 +4622,7 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        79.28572845458984,
+        79.2857284545898,
         96.4285888671875
       ],
       "asset_id": "cave_dungeon.pottery_cluster_02",
@@ -4665,7 +4669,7 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        79.28572845458984,
+        79.2857284545898,
         96.4285888671875
       ],
       "placement_rule": "non_overlapping",
@@ -4696,7 +4700,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         62.0,
-        111.4166488647461
+        111.416648864746
       ],
       "asset_id": "cave_dungeon.wood_crate_01",
       "collision_authority": "asset",
@@ -4743,15 +4747,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         62.0,
-        111.4166488647461
+        111.416648864746
       ],
       "placement_rule": "non_overlapping",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.5408447999999999,
-        0.5408447999999999
+        0.5408448,
+        0.5408448
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4827,8 +4831,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4904,8 +4908,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4981,8 +4985,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -14457,10 +14461,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "ed0e046a737dc455b9d84cb3733c4cac280be3964c6502efc1026b15049714d3",
+      "authoring_sha256": "88ed9be6fee48be356c17b3977590739ccda4949291ec1b4f4c2e6b20d1c56ad",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 2.0,
-      "document_sha256": "74c31863081e21aafee4d5dab9cc7f03e5a43309bed53fc9d2374599567258a9",
+      "document_sha256": "9dc934fd28488b502646572dfd8c9ab79412a3c07796c84b058e0ba3ccecf9d6",
       "ground_manifest_sha256": "6f6b67e49bb1997b83687eed902f1bab2fa088a1a9b70618fe347082c182f6c4",
       "ground_state_sha256": "14875892c1986556c669d6ee2e17e568fdd21d7ac209994a2147183ad9a70191",
       "map_key": "mengzhong_stone_tomb_f2",

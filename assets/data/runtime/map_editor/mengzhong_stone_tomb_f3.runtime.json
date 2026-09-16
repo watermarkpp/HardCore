@@ -1,5 +1,5 @@
 {
-  "build_sha256": "f344e9902f8fc92abadc7d3cf7b018ec415b1cd229deffae7c4637061941aaf0",
+  "build_sha256": "6478c81e7788f7e6ce7d1196ca5d3dd2435af373cf3b4c5b114d64562637bc34",
   "collision": {
     "blocked_count": 387.0,
     "blocked_tiles": [
@@ -3549,11 +3549,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000106",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": false,
       "map_collision_override": "default",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -3620,11 +3622,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000107",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": false,
       "map_collision_override": "default",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -3666,7 +3670,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         172.0,
-        110.55555725097656
+        110.555557250977
       ],
       "asset_id": "user.50579dc474c3f840",
       "collision_authority": "asset",
@@ -3690,7 +3694,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.38247011952191234,
+      "instance_base_scale": 0.382470119521912,
       "instance_custom_scale": true,
       "instance_id": "inst_000108",
       "instance_scale_level": -4.0,
@@ -3713,15 +3717,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         172.0,
-        110.55555725097656
+        110.555557250977
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.2294820717131473,
-        0.2294820717131473
+        0.229482071713147,
+        0.229482071713147
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3838,7 +3842,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.4423963133640553,
+      "instance_base_scale": 0.442396313364055,
       "instance_id": "inst_000110",
       "layer": "object_base",
       "manual_collision_expected": false,
@@ -3866,8 +3870,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.4423963133640553,
-        0.4423963133640553
+        0.442396313364055,
+        0.442396313364055
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3909,7 +3913,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.41025641025641024,
+      "instance_base_scale": 0.41025641025641,
       "instance_id": "inst_000111",
       "layer": "object_base",
       "manual_collision_expected": false,
@@ -3937,8 +3941,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.41025641025641024,
-        0.41025641025641024
+        0.41025641025641,
+        0.41025641025641
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3980,7 +3984,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.4304932735426009,
+      "instance_base_scale": 0.430493273542601,
       "instance_id": "inst_000112",
       "layer": "object_base",
       "manual_collision_expected": false,
@@ -4008,8 +4012,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.4304932735426009,
-        0.4304932735426009
+        0.430493273542601,
+        0.430493273542601
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4122,7 +4126,7 @@
         3.0,
         3.0
       ],
-      "instance_base_scale": 0.3764705882352941,
+      "instance_base_scale": 0.376470588235294,
       "instance_id": "inst_000114",
       "layer": "object_base",
       "manual_collision_expected": false,
@@ -4150,8 +4154,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.3764705882352941,
-        0.3764705882352941
+        0.376470588235294,
+        0.376470588235294
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4169,7 +4173,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         112.0,
-        84.75001525878906
+        84.7500152587891
       ],
       "asset_id": "cave_dungeon.barrel_crates_01",
       "collision_authority": "asset",
@@ -4216,15 +4220,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         112.0,
-        84.75001525878906
+        84.7500152587891
       ],
       "placement_rule": "non_overlapping",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.8533335328102112,
-        0.8533335328102112
+        0.853333532810211,
+        0.853333532810211
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4246,7 +4250,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         62.0,
-        105.49998474121094
+        105.499984741211
       ],
       "asset_id": "cave_dungeon.wood_crate_01",
       "collision_authority": "asset",
@@ -4291,7 +4295,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         62.0,
-        105.49998474121094
+        105.499984741211
       ],
       "placement_rule": "non_overlapping",
       "position_mode": "tile_anchor",
@@ -4530,7 +4534,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         62.0,
-        105.49998474121094
+        105.499984741211
       ],
       "asset_id": "cave_dungeon.wood_crate_01",
       "collision_authority": "asset",
@@ -4575,7 +4579,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         62.0,
-        105.49998474121094
+        105.499984741211
       ],
       "placement_rule": "non_overlapping",
       "position_mode": "tile_anchor",
@@ -4655,8 +4659,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4732,8 +4736,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4755,7 +4759,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         83.0,
-        361.6666564941406
+        361.666656494141
       ],
       "asset_id": "user.ad858c6e7cd94cf1",
       "collision_authority": "asset",
@@ -4802,15 +4806,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         83.0,
-        361.6666564941406
+        361.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -14406,10 +14410,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "53e84f52e7631cd78bd4c72969abbdb167d294f808a2e3285e61cd0b1d21c344",
+      "authoring_sha256": "73d0fb9ad2e801cd6975a8cde958a275c1fa614b7685d70544c83c6df7c2e99a",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 2.0,
-      "document_sha256": "0070c5f3253d51f2c92858a70e6037d7d18c8bb5b64b8e5b58cc82b39da5668e",
+      "document_sha256": "60223ea71ed5b171d47e573deaefcdccbd9ef6df9cc3620db8816475b3dd9faf",
       "ground_manifest_sha256": "b7e28c27d481c2dd37d50dd63235149810a8117175e74aace89e6b2883fde6cb",
       "ground_state_sha256": "ac8fce042facb9eed55e627df5e8df939c250eabfdd47076ae1d4894c1d8704c",
       "map_key": "mengzhong_stone_tomb_f3",

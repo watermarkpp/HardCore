@@ -1,32 +1,34 @@
 extends SceneTree
 
-## Portal-doodle occlusion fix across all released maps (user order
-## 2026-09-16, replicating the user's own manual editor fix on the five
-## mengzhong dark-zone maps).
+## Portal-doodle occlusion fix v2 (geometric ground truth).
 ##
-## Detection: a portal point (map_exit_points / map_entrance_points) links
-## its portal visual via linked_visual_instance_id. A doodle is an
-## object_base decoration instance whose anchor tile equals the linked
-## portal visual's tile (the exact relation in the user's own fix:
-## mse.ground_graffiti.* on the portal tile, both material_layer_order 0,
-## doodle painting after the portal and covering it).
+## v1 failed the user: it flagged only doodles whose ANCHOR TILE equals the
+## portal visual's tile. chiyue_valley's graffiti is anchored one tile up-left
+## of the portal ([21,117] vs [22,118]) and its 3x3 visual still covers the
+## portal - anchor equality is not the occlusion relation.
 ##
-## Transform (exactly the user's editor operations):
-##   - "shrink 10% x3": instance_custom_scale = true, instance_scale_level
-##     decremented by 3 (their fix set -3 on previously-unscaled doodles)
-##   - "move down one layer": material_layer_order pushed strictly below
-##     the portal visual's value; multiple doodles on one portal get
-##     -1, -2, ... which reproduces the user's own -1/-2 outcome
-## Doodles already carrying scale_level <= -3 are treated as user-fixed
-## and skipped (the five dark-zone maps must not be double-shrunk).
-## Doodles without a portal on their tile are never touched.
+## v2 detects the actual occlusion relation the way the renderer does:
+##   1. build the authoritative painter order via
+##      MapEditorRuntimeVisualGeometryService.sorted_draw_commands
+##   2. world rects per command (texture size + runtime_command_geometry)
+##   3. a doodle COVERS a portal iff some doodle command paints AFTER the
+##      portal's last command and their world rects intersect
+## This is self-idempotent: after the fix the doodle paints before the
+## portal, so it is no longer "covering" and will not be re-flagged.
+##
+## Transform scope stays the user's demonstrated class: mse.ground_graffiti.*
+## (move material_layer_order strictly below the portal's, shrink 10% x3 =
+## instance_scale_level -3 + instance_custom_scale true). Other covering
+## instances are reported only.
 ##
 ## Modes:
 ##   godot --headless -s tools/map_editor/portal_doodle_fix.gd -- scan
 ##   godot --headless -s tools/map_editor/portal_doodle_fix.gd -- apply
+##   godot --headless -s tools/map_editor/portal_doodle_fix.gd -- verify
 
 const REGISTRY_PATH := "res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
-const PORTAL_POINT_COLLECTIONS := ["map_exit_points", "map_entrance_points"]
+const PORTAL_ASSET_PREFIX := "user.portal_gate."
+const DOODLE_ASSET_PREFIX := "mse.ground_graffiti."
 
 
 func _init() -> void:
@@ -34,19 +36,20 @@ func _init() -> void:
 	var mode := "scan"
 	if args.size() >= 1:
 		mode = args[0]
-	assert(mode == "scan" or mode == "apply", "mode must be scan|apply")
+	assert(mode in ["scan", "apply", "verify"], "mode must be scan|apply|verify")
 	var registry: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
 		REGISTRY_PATH
 	))
-	var totals := {"maps": 0, "portals": 0, "found": 0, "changed": 0, "skipped_fixed": 0}
+	var totals := {
+		"maps": 0, "portals": 0, "covering": 0, "fixed": 0, "other": 0,
+	}
 	for entry: Dictionary in registry.get("maps", []):
 		var map_key := str(entry.get("map_key", ""))
 		_process_map(map_key, mode, totals)
 	print(
-		"PORTAL_DOODLE_%s maps=%d portals=%d found=%d changed=%d already_fixed=%d" % [
+		"PORTAL_DOODLE2_%s maps=%d portals=%d covering=%d fixed=%d other=%d" % [
 			mode.to_upper(), int(totals["maps"]), int(totals["portals"]),
-			int(totals["found"]), int(totals["changed"]),
-			int(totals["skipped_fixed"]),
+			int(totals["covering"]), int(totals["fixed"]), int(totals["other"]),
 		]
 	)
 	quit(0)
@@ -57,118 +60,169 @@ func _process_map(map_key: String, mode: String, totals: Dictionary) -> void:
 		"res://map_editor_workspace/%s/%s.editor.json" % [map_key, map_key]
 	)
 	if not FileAccess.file_exists(path):
-		print("PORTAL_DOODLE_SKIP map=%s reason=no_editor_doc" % map_key)
 		return
 	var doc: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
-	var layer: Dictionary = doc.get("layers", {})
-	var portals: Array[Dictionary] = []
-	for collection_name: String in PORTAL_POINT_COLLECTIONS:
-		var points: Variant = layer.get(collection_name, [])
-		if points is Array:
-			for point: Dictionary in points:
-				var linked := str(point.get("linked_visual_instance_id", ""))
-				if not linked.is_empty():
-					portals.append({
-						"point_id": str(point.get("exit_id", point.get(
-							"entrance_id", ""
-						))),
-						"linked_instance_id": linked,
-					})
-	totals["portals"] = int(totals["portals"]) + portals.size()
-	if portals.is_empty():
+	var object_base: Array = doc.get("layers", {}).get("object_base", [])
+	if object_base.is_empty():
+		return
+	var design: Array = doc.get("design", {}).get("design_size", [32, 64])
+	var design_size := Vector2i(
+		int(design[0]) if design.size() > 0 else 32,
+		int(design[1]) if design.size() > 1 else 64
+	)
+	var commands := MapEditorRuntimeVisualGeometryService.sorted_draw_commands(
+		object_base
+	)
+	if commands.is_empty():
+		return
+	# Portal visual instance ids and their last command index (paint order).
+	var portal_last_index := {}
+	var doodle_commands: Array[Dictionary] = []
+	var texture_sizes := {}
+	for index: int in commands.size():
+		var command: Dictionary = commands[index]
+		var instance_id := str(command.get("instance", {}).get(
+			"instance_id", ""
+		))
+		var asset_id := str(command.get("instance", {}).get("asset_id", ""))
+		if asset_id.begins_with(PORTAL_ASSET_PREFIX):
+			portal_last_index[instance_id] = index
+		elif asset_id.begins_with(DOODLE_ASSET_PREFIX):
+			var image_path := str(command.get("image_path", ""))
+			if not texture_sizes.has(image_path):
+				var size := _load_texture_size(image_path)
+				texture_sizes[image_path] = size
+			var rect := _command_world_rect(
+				command, design_size, texture_sizes[image_path]
+			)
+			if rect.size.x > 0.0:
+				doodle_commands.append({
+					"instance_id": instance_id,
+					"index": index,
+					"rect": rect,
+					"asset_id": asset_id,
+				})
+	totals["portals"] = int(totals["portals"]) + portal_last_index.size()
+	if portal_last_index.is_empty() or doodle_commands.is_empty():
+		return
+	# Portal world rects (union of their commands).
+	var portal_rects := {}
+	for index: int in commands.size():
+		var command: Dictionary = commands[index]
+		var instance_id := str(command.get("instance", {}).get(
+			"instance_id", ""
+		))
+		if not portal_last_index.has(instance_id):
+			continue
+		var image_path := str(command.get("image_path", ""))
+		if not texture_sizes.has(image_path):
+			texture_sizes[image_path] = _load_texture_size(image_path)
+		var rect := _command_world_rect(
+			command, design_size, texture_sizes[image_path]
+		)
+		if rect.size.x <= 0.0:
+			continue
+		if not portal_rects.has(instance_id):
+			portal_rects[instance_id] = rect
+		else:
+			portal_rects[instance_id] = (portal_rects[instance_id] as Rect2).merge(
+				rect
+			)
+	# Covering detection: doodle command after portal's last command,
+	# rects intersect.
+	var covering_by_doodle := {}
+	var other_covering := {}
+	for portal_id: String in portal_last_index:
+		var portal_last := int(portal_last_index[portal_id])
+		var portal_rect: Rect2 = portal_rects.get(portal_id, Rect2())
+		if portal_rect.size.x <= 0.0:
+			continue
+		for doodle: Dictionary in doodle_commands:
+			if int(doodle["index"]) <= portal_last:
+				continue
+			if not (doodle["rect"] as Rect2).intersects(portal_rect):
+				continue
+			covering_by_doodle[str(doodle["instance_id"])] = portal_id
+	if covering_by_doodle.is_empty():
 		return
 	totals["maps"] = int(totals["maps"]) + 1
-	var object_base: Array = layer.get("object_base", [])
-	# Resolve each portal visual's tile and layer order.
-	var portal_by_id := {}
-	for portal: Dictionary in portals:
-		for instance: Dictionary in object_base:
-			if str(instance.get("instance_id", "")) == str(
-				portal["linked_instance_id"]
-			):
-				portal["tile"] = instance.get("tile", [])
-				portal["mlo"] = float(instance.get(
-					"material_layer_order", 0.0
-				))
-				portal_by_id[str(portal["linked_instance_id"])] = portal
-				break
-	# Find doodles anchored on a portal tile.
-	var changed := 0
-	var skipped := 0
-	var per_portal_depth := {}
-	var dirty := false
+	var object_index := {}
 	for instance: Dictionary in object_base:
-		var instance_id := str(instance.get("instance_id", ""))
-		if portal_by_id.has(instance_id):
+		object_index[str(instance.get("instance_id", ""))] = instance
+	var portal_min_mlo := {}
+	for doodle_id: String in covering_by_doodle:
+		var doodle: Dictionary = object_index.get(doodle_id, {})
+		var asset_id := str(doodle.get("asset_id", ""))
+		var portal_id := str(covering_by_doodle[doodle_id])
+		if not asset_id.begins_with(DOODLE_ASSET_PREFIX):
+			totals["other"] = int(totals["other"]) + 1
+			print(
+				"PORTAL_DOODLE2_OTHER map=%s doodle=%s(%s) covers=%s (left untouched)" % [
+					map_key, doodle_id, asset_id, portal_id,
+				]
+			)
 			continue
-		var tile: Variant = instance.get("tile", null)
-		if tile == null or not (tile is Array) or (tile as Array).size() < 2:
-			continue
-		for portal: Dictionary in portal_by_id.values():
-			if not portal.has("tile"):
-				continue
-			var portal_tile: Array = portal["tile"]
-			if _tile_matches(tile, portal_tile):
-				if int(instance.get("instance_scale_level", 0)) <= -3:
-					skipped += 1
-					print(
-						"PORTAL_DOODLE_SKIP_FIXED map=%s doodle=%s asset=%s tile=%s" % [
-							map_key, instance_id,
-							str(instance.get("asset_id", "")), str(tile),
-						]
-					)
-					break
-				# Transform scope: graffiti doodles only (the user's
-				# demonstrated asset class). Non-graffiti overlaps are
-				# reported but never modified.
-				var asset_id := str(instance.get("asset_id", ""))
-				if not asset_id.begins_with("mse.ground_graffiti."):
-					print(
-						"PORTAL_DOODLE_OTHER map=%s doodle=%s asset=%s tile=%s (not graffiti, left untouched)" % [
-							map_key, instance_id, asset_id, str(tile),
-						]
-					)
-					break
-				if mode == "apply":
-					instance["instance_custom_scale"] = true
-					instance["instance_scale_level"] = (
-						int(instance.get("instance_scale_level", 0)) - 3
-					)
-					var depth := int(per_portal_depth.get(
-						str(portal["linked_instance_id"]), 0
-					)) + 1
-					per_portal_depth[str(portal["linked_instance_id"])] = depth
-					var current_mlo := float(instance.get(
-						"material_layer_order", 0.0
-					))
-					if current_mlo >= float(portal.get("mlo", 0.0)):
-						instance["material_layer_order"] = (
-							float(portal.get("mlo", 0.0)) - float(depth)
-						)
-					dirty = true
-				changed += 1
-				print(
-					"PORTAL_DOODLE_HIT map=%s portal=%s(%s) doodle=%s asset=%s tile=%s" % [
-						map_key, str(portal["point_id"]),
-						str(portal["linked_instance_id"]), instance_id,
-						str(instance.get("asset_id", "")),
-						str(tile),
-					]
-				)
-				break
-	totals["found"] = int(totals["found"]) + changed + skipped
-	totals["skipped_fixed"] = int(totals["skipped_fixed"]) + skipped
-	if mode == "apply" and dirty:
-		changed = changed
+		if mode == "apply":
+			var portal: Dictionary = object_index.get(portal_id, {})
+			var portal_mlo := float(portal.get("material_layer_order", 0.0))
+			var depth := int(portal_min_mlo.get(portal_id, 0)) + 1
+			portal_min_mlo[portal_id] = depth
+			doodle["instance_custom_scale"] = true
+			doodle["instance_scale_level"] = (
+				int(doodle.get("instance_scale_level", 0)) - 3
+			)
+			doodle["material_layer_order"] = portal_mlo - float(depth)
+			totals["fixed"] = int(totals["fixed"]) + 1
+			print(
+				"PORTAL_DOODLE2_FIXED map=%s doodle=%s asset=%s mlo->%s scale_level->%d covers=%s" % [
+					map_key, doodle_id, asset_id,
+					str(doodle["material_layer_order"]),
+					int(doodle["instance_scale_level"]), portal_id,
+				]
+			)
+		else:
+			totals["covering"] = int(totals["covering"]) + 1
+			print(
+				"PORTAL_DOODLE2_HIT map=%s doodle=%s(%s) tile=%s covers=%s" % [
+					map_key, doodle_id, asset_id,
+					str(doodle.get("tile", [])), portal_id,
+				]
+			)
+	if mode == "apply":
 		var out := FileAccess.open(path, FileAccess.WRITE)
 		assert(out != null, "cannot write %s" % path)
 		out.store_string(JSON.stringify(doc, "  ") + "\n")
 		out.close()
-		totals["changed"] = int(totals["changed"]) + changed
-		print("PORTAL_DOODLE_SAVED map=%s changed=%d" % [map_key, changed])
 
 
-func _tile_matches(a: Variant, b: Array) -> bool:
-	if not (a is Array) or (a as Array).size() < 2:
-		return false
-	return int(a[0]) == int(b[0]) and int(a[1]) == int(b[1])
+func _command_world_rect(
+	command: Dictionary,
+	design_size: Vector2i,
+	texture_size: Vector2i
+) -> Rect2:
+	if texture_size.x <= 0:
+		return Rect2()
+	var geometry := MapEditorRuntimeVisualGeometryService.runtime_command_geometry(
+		command,
+		Vector2(design_size),
+		Vector2(texture_size),
+	)
+	if geometry.is_empty():
+		return Rect2()
+	var center: Vector2 = geometry.get("center", Vector2.ZERO)
+	var anchor: Vector2 = geometry.get("anchor", Vector2.ZERO)
+	var scale: Vector2 = geometry.get("visual_scale", Vector2.ONE)
+	var size := Vector2(texture_size) * scale
+	return Rect2(center - anchor * scale, size)
+
+
+func _load_texture_size(image_path: String) -> Vector2i:
+	if image_path.is_empty():
+		return Vector2i.ZERO
+	var resolved := image_path
+	if resolved.begins_with("res://"):
+		resolved = ProjectSettings.globalize_path(resolved)
+	var image := Image.load_from_file(resolved)
+	if image == null:
+		return Vector2i.ZERO
+	return image.get_size()

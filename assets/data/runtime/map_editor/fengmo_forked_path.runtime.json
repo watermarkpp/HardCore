@@ -1,5 +1,5 @@
 {
-  "build_sha256": "8eec05eb5ff5626eb4e754aff1c86122bcf09135b0beb80d13e2d06625f2a432",
+  "build_sha256": "ae7be13a17c3aad4496e5ee0e54a21f1ffa6f9557be19180ef93d45b1d17e8fb",
   "collision": {
     "blocked_count": 279.0,
     "blocked_tiles": [
@@ -2929,8 +2929,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3010,8 +3010,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3091,8 +3091,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3172,8 +3172,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3253,8 +3253,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3334,8 +3334,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3415,8 +3415,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3496,8 +3496,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3577,8 +3577,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3658,8 +3658,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3710,11 +3710,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000095",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -3789,11 +3791,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000096",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -11733,10 +11737,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "49f987937a5d42b045faa1d5be646ce13bcc93e569837e6fda42475e70d8a583",
+      "authoring_sha256": "216268b7f96f5a90be7a892a297a3f49846a24c77d69ca59055047605f9bfd45",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 13.0,
-      "document_sha256": "e92977543ba2441312ce02fe3e12cfff6e7c1f37f4334781fccc936712b61040",
+      "document_sha256": "3e2718d01b534c205ff40a33c47d539b66230b4cdc9b76f47b26041d86f04e0d",
       "ground_manifest_sha256": "70765b7c129eada78ad3d683daa5f6173cb25b66dc2553aee63df73af505901f",
       "ground_state_sha256": "347620765f3d9189580791180ae874d7a1fe4d28d1d7a38bc25aaa99585b089a",
       "map_key": "fengmo_forked_path",

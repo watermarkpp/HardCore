@@ -1,5 +1,5 @@
 {
-  "build_sha256": "4ae7fadd072d0ab3f95c347726413856582c80c1e53979f74f96682bdb22c6cf",
+  "build_sha256": "f126669765c1fb8bc203a618a39212774131a4be6c91b7198d7d4c155912049f",
   "collision": {
     "blocked_count": 558.0,
     "blocked_tiles": [
@@ -8979,8 +8979,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -9056,8 +9056,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -9133,8 +9133,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -9210,8 +9210,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -9287,8 +9287,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -9364,8 +9364,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -9441,8 +9441,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -9518,8 +9518,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10182,11 +10182,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000169",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": false,
       "map_collision_override": "default",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -10228,7 +10230,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         106.0,
-        433.6666564941406
+        433.666656494141
       ],
       "asset_id": "user.f7564d3abecf4ccf",
       "collision_authority": "asset",
@@ -10275,15 +10277,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         106.0,
-        433.6666564941406
+        433.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10305,7 +10307,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         119.0,
-        426.6666564941406
+        426.666656494141
       ],
       "asset_id": "user.90aa22e00955ff03",
       "collision_authority": "asset",
@@ -10352,15 +10354,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         119.0,
-        426.6666564941406
+        426.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10382,7 +10384,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         99.0,
-        428.6666564941406
+        428.666656494141
       ],
       "asset_id": "user.f9478653d287626d",
       "collision_authority": "asset",
@@ -10429,15 +10431,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         99.0,
-        428.6666564941406
+        428.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10459,7 +10461,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         116.0,
-        424.6666564941406
+        424.666656494141
       ],
       "asset_id": "user.11da767885267c89",
       "collision_authority": "asset",
@@ -10506,15 +10508,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         116.0,
-        424.6666564941406
+        424.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10536,7 +10538,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         106.0,
-        433.6666564941406
+        433.666656494141
       ],
       "asset_id": "user.f7564d3abecf4ccf",
       "collision_authority": "asset",
@@ -10583,15 +10585,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         106.0,
-        433.6666564941406
+        433.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10613,7 +10615,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         106.0,
-        433.6666564941406
+        433.666656494141
       ],
       "asset_id": "user.f7564d3abecf4ccf",
       "collision_authority": "asset",
@@ -10660,15 +10662,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         106.0,
-        433.6666564941406
+        433.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10690,7 +10692,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         106.0,
-        433.6666564941406
+        433.666656494141
       ],
       "asset_id": "user.f7564d3abecf4ccf",
       "collision_authority": "asset",
@@ -10737,15 +10739,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         106.0,
-        433.6666564941406
+        433.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10767,7 +10769,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         119.0,
-        426.6666564941406
+        426.666656494141
       ],
       "asset_id": "user.90aa22e00955ff03",
       "collision_authority": "asset",
@@ -10814,15 +10816,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         119.0,
-        426.6666564941406
+        426.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10844,7 +10846,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         119.0,
-        426.6666564941406
+        426.666656494141
       ],
       "asset_id": "user.90aa22e00955ff03",
       "collision_authority": "asset",
@@ -10891,15 +10893,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         119.0,
-        426.6666564941406
+        426.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10921,7 +10923,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         119.0,
-        426.6666564941406
+        426.666656494141
       ],
       "asset_id": "user.90aa22e00955ff03",
       "collision_authority": "asset",
@@ -10968,15 +10970,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         119.0,
-        426.6666564941406
+        426.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -10998,7 +11000,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         99.0,
-        428.6666564941406
+        428.666656494141
       ],
       "asset_id": "user.f9478653d287626d",
       "collision_authority": "asset",
@@ -11045,15 +11047,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         99.0,
-        428.6666564941406
+        428.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11075,7 +11077,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         99.0,
-        428.6666564941406
+        428.666656494141
       ],
       "asset_id": "user.f9478653d287626d",
       "collision_authority": "asset",
@@ -11122,15 +11124,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         99.0,
-        428.6666564941406
+        428.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11152,7 +11154,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         99.0,
-        428.6666564941406
+        428.666656494141
       ],
       "asset_id": "user.f9478653d287626d",
       "collision_authority": "asset",
@@ -11199,15 +11201,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         99.0,
-        428.6666564941406
+        428.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11229,7 +11231,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         116.0,
-        424.6666564941406
+        424.666656494141
       ],
       "asset_id": "user.11da767885267c89",
       "collision_authority": "asset",
@@ -11276,15 +11278,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         116.0,
-        424.6666564941406
+        424.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11306,7 +11308,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         116.0,
-        424.6666564941406
+        424.666656494141
       ],
       "asset_id": "user.11da767885267c89",
       "collision_authority": "asset",
@@ -11353,15 +11355,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         116.0,
-        424.6666564941406
+        424.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11383,7 +11385,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         116.0,
-        424.6666564941406
+        424.666656494141
       ],
       "asset_id": "user.11da767885267c89",
       "collision_authority": "asset",
@@ -11430,15 +11432,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         116.0,
-        424.6666564941406
+        424.666656494141
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11459,8 +11461,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        186.3333282470703,
-        261.66668701171875
+        186.33332824707,
+        261.666687011719
       ],
       "asset_id": "user.eda60a8613d91dcc",
       "base_footprint_tiles": [
@@ -11510,16 +11512,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        186.3333282470703,
-        261.66668701171875
+        186.33332824707,
+        261.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11540,8 +11542,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        159.6666717529297,
-        264.66668701171875
+        159.66667175293,
+        264.666687011719
       ],
       "asset_id": "user.e2bf9083d11fcc87",
       "base_footprint_tiles": [
@@ -11591,16 +11593,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        159.6666717529297,
-        264.66668701171875
+        159.66667175293,
+        264.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11621,8 +11623,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        200.3333282470703,
-        275.66668701171875
+        200.33332824707,
+        275.666687011719
       ],
       "asset_id": "user.13d727dbd14bceed",
       "base_footprint_tiles": [
@@ -11672,16 +11674,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        200.3333282470703,
-        275.66668701171875
+        200.33332824707,
+        275.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11702,8 +11704,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        149.6666717529297,
-        263.66668701171875
+        149.66667175293,
+        263.666687011719
       ],
       "asset_id": "user.919b42b0cea209d5",
       "base_footprint_tiles": [
@@ -11753,16 +11755,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        149.6666717529297,
-        263.66668701171875
+        149.66667175293,
+        263.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11784,7 +11786,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         118.0,
-        204.6666717529297
+        204.66667175293
       ],
       "asset_id": "user.d9de4f9e216fd3c6",
       "base_footprint_tiles": [
@@ -11835,15 +11837,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         118.0,
-        204.6666717529297
+        204.66667175293
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11865,7 +11867,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         118.0,
-        204.6666717529297
+        204.66667175293
       ],
       "asset_id": "user.d9de4f9e216fd3c6",
       "base_footprint_tiles": [
@@ -11916,15 +11918,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         118.0,
-        204.6666717529297
+        204.66667175293
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -11945,8 +11947,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        159.6666717529297,
-        264.66668701171875
+        159.66667175293,
+        264.666687011719
       ],
       "asset_id": "user.e2bf9083d11fcc87",
       "base_footprint_tiles": [
@@ -11996,16 +11998,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        159.6666717529297,
-        264.66668701171875
+        159.66667175293,
+        264.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -12026,8 +12028,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        159.6666717529297,
-        264.66668701171875
+        159.66667175293,
+        264.666687011719
       ],
       "asset_id": "user.e2bf9083d11fcc87",
       "base_footprint_tiles": [
@@ -12077,16 +12079,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        159.6666717529297,
-        264.66668701171875
+        159.66667175293,
+        264.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -12107,8 +12109,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        159.6666717529297,
-        264.66668701171875
+        159.66667175293,
+        264.666687011719
       ],
       "asset_id": "user.e2bf9083d11fcc87",
       "base_footprint_tiles": [
@@ -12158,16 +12160,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        159.6666717529297,
-        264.66668701171875
+        159.66667175293,
+        264.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -12189,7 +12191,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         118.0,
-        204.6666717529297
+        204.66667175293
       ],
       "asset_id": "user.d9de4f9e216fd3c6",
       "base_footprint_tiles": [
@@ -12240,15 +12242,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         118.0,
-        204.6666717529297
+        204.66667175293
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -12270,7 +12272,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         118.0,
-        204.6666717529297
+        204.66667175293
       ],
       "asset_id": "user.d9de4f9e216fd3c6",
       "base_footprint_tiles": [
@@ -12321,15 +12323,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         118.0,
-        204.6666717529297
+        204.66667175293
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -12350,8 +12352,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        186.3333282470703,
-        261.66668701171875
+        186.33332824707,
+        261.666687011719
       ],
       "asset_id": "user.eda60a8613d91dcc",
       "base_footprint_tiles": [
@@ -12401,16 +12403,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        186.3333282470703,
-        261.66668701171875
+        186.33332824707,
+        261.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -12431,8 +12433,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        186.3333282470703,
-        261.66668701171875
+        186.33332824707,
+        261.666687011719
       ],
       "asset_id": "user.eda60a8613d91dcc",
       "base_footprint_tiles": [
@@ -12482,16 +12484,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        186.3333282470703,
-        261.66668701171875
+        186.33332824707,
+        261.666687011719
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -24531,10 +24533,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "2b769a3fef3ef9eec39737250ce2d2b3878b06c502c2294bfecc9d70541563d7",
+      "authoring_sha256": "d2fcb1093146a4f4ec87e15f70204da939ac3ad54e3d4552d6b6d117f02341bd",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 2.0,
-      "document_sha256": "374a832482904fb7c5d874da43a53dd5fddf2e162985b37716002c995a8c1d17",
+      "document_sha256": "666e19cb467cf93e407ccb827a7f8fd462254109c38b69b68847cf7719e090b9",
       "ground_manifest_sha256": "6600ccb722aacbcdd231475e25eddc2e0da573e0bf1ce2f5b8c7536c8e211759",
       "ground_state_sha256": "93285bda85cf2f508bc00a0030c2db80628dbe3a742b132d31885196ac768c22",
       "map_key": "mengzhong_zuma_pavilion",

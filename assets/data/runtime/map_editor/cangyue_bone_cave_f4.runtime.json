@@ -1,5 +1,5 @@
 {
-  "build_sha256": "7c4f68e8831e348f08eafba2a1baaa5f42a539e4bfe13ebabd152dccf23c76f9",
+  "build_sha256": "b4d832e19e9da8a832555c098d393353a6920bb967e9f6fcd0c0ea8fa62f0fc8",
   "collision": {
     "blocked_count": 349.0,
     "blocked_tiles": [
@@ -3975,8 +3975,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4056,8 +4056,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4108,11 +4108,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000135",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -4187,11 +4189,13 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000136",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
@@ -4295,8 +4299,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4376,8 +4380,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4457,8 +4461,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4538,8 +4542,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4619,8 +4623,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4700,8 +4704,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4781,8 +4785,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4862,8 +4866,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4943,8 +4947,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5024,8 +5028,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5105,8 +5109,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5186,8 +5190,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5267,8 +5271,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5348,8 +5352,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5429,8 +5433,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5452,7 +5456,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         170.0,
-        104.33333587646484
+        104.333335876465
       ],
       "asset_id": "mse.small_decor.036",
       "base_footprint_tiles": [
@@ -5503,15 +5507,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         170.0,
-        104.33333587646484
+        104.333335876465
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5591,8 +5595,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5614,7 +5618,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         167.0,
-        141.33334350585938
+        141.333343505859
       ],
       "asset_id": "mse.small_decor.038",
       "base_footprint_tiles": [
@@ -5665,15 +5669,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         167.0,
-        141.33334350585938
+        141.333343505859
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -16597,10 +16601,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "4f97200943c529a66aab03f2f183f8700072c1a7d2d8c10e92fe551ea9310829",
+      "authoring_sha256": "5b48c8139e1ce4171afa2010f550602b14a43ccd2bfe7db9279996430b66a1e0",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 35.0,
-      "document_sha256": "5563c2aea34515b8ad96a51fbee4c87334ac4e9710a7d693897d8f5b430474d5",
+      "document_sha256": "85040627b9192b3b15a0da7f81a57a9c1c3f24159e8702ffbb8fb0d50226ccf0",
       "ground_manifest_sha256": "8a981e9abb4e3fb91e8620bdcbec9771a04b1a9e2661ab14f0c15ec8d9d81ede",
       "ground_state_sha256": "5c09587ddf9b7af313b4567f903a612efbbe2ac34dfc16529dfb4a9233414cd6",
       "map_key": "cangyue_bone_cave_f4",
