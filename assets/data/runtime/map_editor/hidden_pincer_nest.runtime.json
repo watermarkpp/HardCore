@@ -1,7 +1,7 @@
 {
-  "build_sha256": "fd6dcc402dc1c350eff62b731cf3ba75cc7439c77a8a62796d1e3235b635187f",
+  "build_sha256": "1c7f8cef9e5c9753158109b8425edf77a8406d8191c24c72261679fa6309c32e",
   "collision": {
-    "blocked_count": 152.0,
+    "blocked_count": 144.0,
     "blocked_tiles": [
       "0,0",
       "0,1",
@@ -37,7 +37,6 @@
       "0,9",
       "1,0",
       "1,1",
-      "1,13",
       "1,14",
       "1,15",
       "1,30",
@@ -47,10 +46,6 @@
       "11,0",
       "11,31",
       "12,0",
-      "12,1",
-      "12,2",
-      "12,29",
-      "12,30",
       "12,31",
       "13,0",
       "13,1",
@@ -75,7 +70,6 @@
       "19,0",
       "19,31",
       "2,0",
-      "2,13",
       "2,14",
       "2,15",
       "2,31",
@@ -98,7 +92,6 @@
       "28,0",
       "28,31",
       "29,0",
-      "29,13",
       "29,14",
       "29,15",
       "29,31",
@@ -106,7 +99,6 @@
       "3,31",
       "30,0",
       "30,1",
-      "30,13",
       "30,14",
       "30,15",
       "30,30",
@@ -1548,6 +1540,70 @@
         "tile": [
           22.0,
           13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          29.0
         ]
       }
     ],
@@ -3107,7 +3163,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         142.0,
-        525.0
+        445.0
       ],
       "asset_id": "user.9fb549fe32e9fe80",
       "base_footprint_tiles": [
@@ -3138,7 +3194,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000038",
-      "instance_scale_level": -8.0,
+      "instance_scale_level": -9.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -3158,15 +3214,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         142.0,
-        525.0
+        445.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.10000000000000014,
+        0.10000000000000014
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5926,9 +5982,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "boss",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 3600.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.hidden_pincer_nest.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.hidden_pincer_nest.boss_spawn.000001",
@@ -5984,12 +6037,12 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "dfe46101d461e3f3b3c0609934d42248fc42956e8ae31ada1eaa6e2f843fe2ac",
+      "authoring_sha256": "b1326b49b7fea3cedf2c03e9945e6e1fe89a2b630bf9f42abf5b678470f7e5f6",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 2.0,
-      "document_sha256": "a8d47361c67347b88c0a4f03230ea9e85069bae196fa374adc73ee64740130b5",
-      "ground_manifest_sha256": "fff57b600552ff3aa2494fef346a2f54e896a8d9dcceb9f142e6d63eb2285799",
-      "ground_state_sha256": "7148b001840a21d7282e0c12970984e880775d9e9cc990f74958bc12abb47a95",
+      "document_revision": 6.0,
+      "document_sha256": "ebafae1dffe5a7d5186fd8374367e218e3c89b1d87314895e144db188e07ff41",
+      "ground_manifest_sha256": "3d74ba08853fb767b5fcf890d463cad83e8b1f4ccac60a416301a4a9a0d3794a",
+      "ground_state_sha256": "cf56d33da0585055739341a0004bb469c10543b3dda72867657145722c0667be",
       "map_key": "hidden_pincer_nest",
       "runtime_map_id": 918006.0
     },
@@ -5997,7 +6050,7 @@
     "display_name": "钳虫巢穴",
     "editor_schema_version": 5.0,
     "map_id": "hidden_pincer_nest",
-    "revision": 2.0,
+    "revision": 6.0,
     "runtime_map_id": 918006.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1"

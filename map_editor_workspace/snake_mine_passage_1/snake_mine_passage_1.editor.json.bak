@@ -35,13 +35,16 @@
     "created_by": "human_codex_shared_tool",
     "default_connection_mode": "bidirectional",
     "exit_link_status": "intentionally_unlinked",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
     "phase1_map_production_complete": true,
     "phase1_network_version_id": "phase1_finished_map_network_v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2.0,
+    "revision": 3.0,
     "runtime_approved": true,
     "runtime_approved_revision": 2.0,
+    "source_editor_schema_version": 4.0,
     "template_kind": "existing_map_or_empty_template",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/snake_mine_passage_1",
     "workspace_status": "ready"
   },
@@ -55,14 +58,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1600.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/snake_mine_passage_1.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/snake_mine_passage_1.ground_paint_state.json",
@@ -72,8 +75,141 @@
     "workspace_manifest": "res://map_editor_workspace/snake_mine_passage_1/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/snake_mine_passage_1/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "elite",
+          "source_line": 50.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            47.0,
+            1.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "elite",
+          "source_line": 50.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            47.0,
+            1.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          13.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "elite",
+          "source_line": 50.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "尸王",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 89.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            47.0,
+            1.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33.0,
+          43.0
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -746,6 +882,70 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000043",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1.0,
+            49.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000044",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            7.0,
+            49.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000045",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            49,
+            1,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000046",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            49,
+            7,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -778,30 +978,40 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.snake_mine_passage_1.map_exit_000001.world_snake_valley.map_exit_000003",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "毒蛇山谷",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "official_connection_id": "portal.snake_mine_passage_1.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000003",
+        "reciprocal_map_key": "world_snake_valley",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "snake_mine_passage_1",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000003",
+        "target_map_id": 910002.0,
+        "target_map_key": "world_snake_valley",
+        "target_portal_id": "map_exit_000003",
+        "target_tile": [
+          46.0,
+          13.0
+        ],
         "tile": [
-          4,
-          46
+          4.0,
+          46.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -810,43 +1020,1533 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.snake_mine_passage_1.map_exit_000002.snake_mine_passage_2.map_exit_000002",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "连接通道2层",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "official_connection_id": "portal.snake_mine_passage_1.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "snake_mine_passage_2",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "snake_mine_passage_1",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000002",
+        "target_map_id": 912002.0,
+        "target_map_key": "snake_mine_passage_2",
+        "target_portal_id": "map_exit_000002",
+        "target_tile": [
+          4.0,
+          46.0
+        ],
         "tile": [
-          46,
-          4
+          46.0,
+          4.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "洞蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 46.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            94.0,
+            45.0,
+            1.0,
+            2037.0,
+            -48.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          46.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            42.0,
+            24.0,
+            2037.0,
+            -24.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25.0,
+          24.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          39.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2037.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            21.0,
+            1.0,
+            2037.0,
+            -48.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          46.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            19.0,
+            1.0,
+            2037.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2037.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2037.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2037.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          25.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2037.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          28.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            6.0,
+            1.0,
+            2037.0,
+            -42.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26.0,
+          43.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            19.0,
+            1.0,
+            2037.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            19.0,
+            1.0,
+            2037.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          43.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            19.0,
+            1.0,
+            2037.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          44.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            19.0,
+            1.0,
+            2037.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24.0,
+          27.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            19.0,
+            1.0,
+            2037.0,
+            -22.0,
+            -48.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          32.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            21.0,
+            1.0,
+            2037.0,
+            -48.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            21.0,
+            1.0,
+            2037.0,
+            -48.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            21.0,
+            1.0,
+            2037.0,
+            -48.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            21.0,
+            1.0,
+            2037.0,
+            -48.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          28.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          20.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          44.0,
+          40.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          45.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21.0,
+          28.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          18.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            2037.0,
+            -1.0,
+            -43.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          32.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            42.0,
+            24.0,
+            2037.0,
+            -24.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            42.0,
+            24.0,
+            2037.0,
+            -24.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          29.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            42.0,
+            24.0,
+            2037.0,
+            -24.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000030",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            42.0,
+            24.0,
+            2037.0,
+            -24.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000031",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            42.0,
+            24.0,
+            2037.0,
+            -24.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000032",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27.0,
+          46.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "snake_mine_passage_1",
+          "source_category_role": "ordinary",
+          "source_line": 49.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            21.0,
+            1.0,
+            2037.0,
+            -48.0,
+            -22.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.snake_mine_passage_1.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.snake_mine_passage_1.monster_spawn.000033",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          47.0,
+          39.0
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           176.0,
-          132.5
+          138.8571319580078
         ],
         "asset_id": "user.04e657319712d174",
         "collision_authority": "asset",
@@ -862,8 +2562,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -871,7 +2571,9 @@
           3.0
         ],
         "instance_base_scale": 0.3595505617977528,
+        "instance_custom_scale": true,
         "instance_id": "inst_000110",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -881,8 +2583,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -891,33 +2593,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           176.0,
-          132.5
+          138.8571319580078
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3595505617977528,
-          0.3595505617977528
+          0.2516853932584269,
+          0.2516853932584269
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          37.0
+          1,
+          38
         ],
         "tile_anchor": [
-          0.0,
-          37.0
+          1,
+          38
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           172.0,
-          126.5
+          112.33333587646484
         ],
         "asset_id": "user.03958ff6409f2772",
         "collision_authority": "asset",
@@ -933,8 +2639,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -942,7 +2648,9 @@
           3.0
         ],
         "instance_base_scale": 0.3764705882352941,
+        "instance_custom_scale": true,
         "instance_id": "inst_000111",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -952,8 +2660,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -962,33 +2670,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           172.0,
-          126.5
+          112.33333587646484
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3764705882352941,
-          0.3764705882352941
+          0.2258823529411764,
+          0.2258823529411764
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          21.0
+          11,
+          22
         ],
         "tile_anchor": [
-          10.0,
-          21.0
+          11,
+          22
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           170.0,
-          124.0
+          110.1111068725586
         ],
         "asset_id": "user.33ff89346abf48a1",
         "collision_authority": "asset",
@@ -1004,8 +2716,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1013,7 +2725,9 @@
           3.0
         ],
         "instance_base_scale": 0.384,
+        "instance_custom_scale": true,
         "instance_id": "inst_000112",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1023,8 +2737,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -1033,26 +2747,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           170.0,
-          124.0
+          110.1111068725586
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.384,
-          0.384
+          0.23040000000000005,
+          0.23040000000000005
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          23.0,
-          35.0
+          23,
+          35
         ],
         "tile_anchor": [
-          23.0,
-          35.0
+          23,
+          35
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
@@ -1075,8 +2793,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1084,7 +2802,9 @@
           4.0
         ],
         "instance_base_scale": 0.3950617283950617,
+        "instance_custom_scale": true,
         "instance_id": "inst_000113",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1094,8 +2814,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -1111,19 +2831,23 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3950617283950617,
-          0.3950617283950617
+          0.1975308641975308,
+          0.1975308641975308
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          8.0
+          28,
+          9
         ],
         "tile_anchor": [
-          26.0,
-          8.0
+          28,
+          9
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
@@ -1146,8 +2870,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1155,7 +2879,9 @@
           4.0
         ],
         "instance_base_scale": 0.392638036809816,
+        "instance_custom_scale": true,
         "instance_id": "inst_000114",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1165,8 +2891,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -1182,26 +2908,30 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.392638036809816,
-          0.392638036809816
+          0.1963190184049081,
+          0.1963190184049081
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          39.0,
-          10.0
+          39,
+          13
         ],
         "tile_anchor": [
-          39.0,
-          10.0
+          39,
+          13
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           171.0,
-          127.0
+          84.33333587646484
         ],
         "asset_id": "user.e4d917467d61c4e7",
         "collision_authority": "asset",
@@ -1217,8 +2947,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1226,7 +2956,9 @@
           3.0
         ],
         "instance_base_scale": 0.375,
+        "instance_custom_scale": true,
         "instance_id": "inst_000115",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1236,8 +2968,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -1246,33 +2978,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           171.0,
-          127.0
+          84.33333587646484
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.375,
-          0.375
+          0.18750000000000008,
+          0.18750000000000008
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          32.0,
-          37.0
+          33,
+          38
         ],
         "tile_anchor": [
-          32.0,
-          37.0
+          33,
+          38
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           161.0,
-          121.5
+          162.3333282470703
         ],
         "asset_id": "user.f40da4572b2f787b",
         "collision_authority": "asset",
@@ -1288,8 +3024,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1297,7 +3033,9 @@
           3.0
         ],
         "instance_base_scale": 0.39183673469387753,
+        "instance_custom_scale": true,
         "instance_id": "inst_000116",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1307,8 +3045,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -1317,33 +3055,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           161.0,
-          121.5
+          162.3333282470703
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.39183673469387753,
-          0.39183673469387753
+          0.1959183673469387,
+          0.1959183673469387
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          10.0
+          17,
+          11
         ],
         "tile_anchor": [
-          16.0,
-          10.0
+          17,
+          11
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           162.0,
-          142.0
+          189.6666717529297
         ],
         "asset_id": "user.c8f3f038eaa20e5a",
         "collision_authority": "asset",
@@ -1359,8 +3101,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1368,7 +3110,9 @@
           3.0
         ],
         "instance_base_scale": 0.3356643356643357,
+        "instance_custom_scale": true,
         "instance_id": "inst_000117",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1378,8 +3122,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -1388,33 +3132,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           162.0,
-          142.0
+          189.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3356643356643357,
-          0.3356643356643357
+          0.1678321678321678,
+          0.1678321678321678
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          13.0
+          8,
+          14
         ],
         "tile_anchor": [
-          7.0,
-          13.0
+          8,
+          14
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           172.0,
-          124.5
+          110.55555725097656
         ],
         "asset_id": "user.50579dc474c3f840",
         "collision_authority": "asset",
@@ -1430,8 +3178,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1439,7 +3187,9 @@
           3.0
         ],
         "instance_base_scale": 0.38247011952191234,
+        "instance_custom_scale": true,
         "instance_id": "inst_000118",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1449,8 +3199,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -1459,33 +3209,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           172.0,
-          124.5
+          110.55555725097656
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.38247011952191234,
-          0.38247011952191234
+          0.2294820717131473,
+          0.2294820717131473
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          42.0,
-          35.0
+          43,
+          36
         ],
         "tile_anchor": [
-          42.0,
-          35.0
+          43,
+          36
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           168.0,
-          124.0
+          110.1111068725586
         ],
         "asset_id": "user.7f6c3a92d4eb22eb",
         "collision_authority": "asset",
@@ -1501,8 +3255,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1510,7 +3264,9 @@
           3.0
         ],
         "instance_base_scale": 0.384,
+        "instance_custom_scale": true,
         "instance_id": "inst_000119",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1520,8 +3276,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -1530,26 +3286,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           168.0,
-          124.0
+          110.1111068725586
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.384,
-          0.384
+          0.23040000000000005,
+          0.23040000000000005
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          12.0,
-          33.0
+          12,
+          33
         ],
         "tile_anchor": [
-          12.0,
-          33.0
+          12,
+          33
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
@@ -1617,12 +3377,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          8.0
+          0,
+          8
         ],
         "tile_anchor": [
-          0.0,
-          8.0
+          0,
+          8
         ],
         "visual_footprint_tiles": [
           7.0,
@@ -1633,24 +3393,24 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -1658,18 +3418,20 @@
           1.0
         ],
         "instance_base_scale": 0.505263,
+        "instance_custom_scale": true,
         "instance_id": "inst_000122",
+        "instance_scale_level": -3,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -1678,50 +3440,54 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.505263,
-          0.505263
+          0.35368409999999995,
+          0.35368409999999995
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          49.0
+          1,
+          49
         ],
         "tile_anchor": [
-          1.0,
-          49.0
+          1,
+          49
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -1729,18 +3495,20 @@
           1.0
         ],
         "instance_base_scale": 0.505263,
+        "instance_custom_scale": true,
         "instance_id": "inst_000123",
+        "instance_scale_level": -3,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -1749,50 +3517,54 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.505263,
-          0.505263
+          0.35368409999999995,
+          0.35368409999999995
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          49.0
+          7,
+          49
         ],
         "tile_anchor": [
-          7.0,
-          49.0
+          7,
+          49
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -1800,18 +3572,20 @@
           1.0
         ],
         "instance_base_scale": 0.505263,
+        "instance_custom_scale": true,
         "instance_id": "inst_000124",
+        "instance_scale_level": -3,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -1820,50 +3594,54 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.505263,
-          0.505263
+          0.35368409999999995,
+          0.35368409999999995
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          49.0,
-          1.0
+          49,
+          1
         ],
         "tile_anchor": [
-          49.0,
-          1.0
+          49,
+          1
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -1871,18 +3649,20 @@
           1.0
         ],
         "instance_base_scale": 0.505263,
+        "instance_custom_scale": true,
         "instance_id": "inst_000125",
+        "instance_scale_level": -3,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -1891,26 +3671,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.505263,
-          0.505263
+          0.35368409999999995,
+          0.35368409999999995
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          49.0,
-          7.0
+          49,
+          7
         ],
         "tile_anchor": [
-          49.0,
-          7.0
+          49,
+          7
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
         ]
       },
       {
@@ -1927,8 +3711,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1950,7 +3734,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -1960,8 +3744,8 @@
           3.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1980,8 +3764,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3,
-          45
+          3.0,
+          45.0
         ],
         "tile_anchor": [
           3,
@@ -2006,8 +3790,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2029,7 +3813,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2039,8 +3823,8 @@
           3.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2059,8 +3843,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          45,
-          3
+          45.0,
+          3.0
         ],
         "tile_anchor": [
           45,
@@ -2146,8 +3930,8 @@
           49.0
         ],
         "tile_anchor": [
-          0.0,
-          49.0
+          0,
+          49
         ]
       },
       {
@@ -2217,8 +4001,8 @@
           49.0
         ],
         "tile_anchor": [
-          0.0,
-          49.0
+          0,
+          49
         ]
       },
       {
@@ -2288,8 +4072,8 @@
           47.0
         ],
         "tile_anchor": [
-          0.0,
-          47.0
+          0,
+          47
         ]
       },
       {
@@ -2359,8 +4143,8 @@
           44.0
         ],
         "tile_anchor": [
-          0.0,
-          44.0
+          0,
+          44
         ]
       },
       {
@@ -2430,8 +4214,8 @@
           37.0
         ],
         "tile_anchor": [
-          0.0,
-          37.0
+          0,
+          37
         ]
       },
       {
@@ -2501,8 +4285,8 @@
           37.0
         ],
         "tile_anchor": [
-          2.0,
-          37.0
+          2,
+          37
         ]
       },
       {
@@ -2572,8 +4356,8 @@
           37.0
         ],
         "tile_anchor": [
-          5.0,
-          37.0
+          5,
+          37
         ]
       },
       {
@@ -2643,8 +4427,8 @@
           45.0
         ],
         "tile_anchor": [
-          12.0,
-          45.0
+          12,
+          45
         ]
       },
       {
@@ -2714,8 +4498,8 @@
           45.0
         ],
         "tile_anchor": [
-          8.0,
-          45.0
+          8,
+          45
         ]
       },
       {
@@ -2785,8 +4569,8 @@
           29.0
         ],
         "tile_anchor": [
-          7.0,
-          29.0
+          7,
+          29
         ]
       },
       {
@@ -2856,8 +4640,8 @@
           48.0
         ],
         "tile_anchor": [
-          8.0,
-          48.0
+          8,
+          48
         ]
       },
       {
@@ -2927,8 +4711,8 @@
           41.0
         ],
         "tile_anchor": [
-          0.0,
-          41.0
+          0,
+          41
         ]
       },
       {
@@ -2998,8 +4782,8 @@
           38.0
         ],
         "tile_anchor": [
-          0.0,
-          38.0
+          0,
+          38
         ]
       },
       {
@@ -3069,8 +4853,8 @@
           45.0
         ],
         "tile_anchor": [
-          8.0,
-          45.0
+          8,
+          45
         ]
       },
       {
@@ -3140,8 +4924,8 @@
           34.0
         ],
         "tile_anchor": [
-          7.0,
-          34.0
+          7,
+          34
         ]
       },
       {
@@ -3211,8 +4995,8 @@
           30.0
         ],
         "tile_anchor": [
-          7.0,
-          30.0
+          7,
+          30
         ]
       },
       {
@@ -3282,8 +5066,8 @@
           42.0
         ],
         "tile_anchor": [
-          15.0,
-          42.0
+          15,
+          42
         ]
       },
       {
@@ -3353,8 +5137,8 @@
           49.0
         ],
         "tile_anchor": [
-          8.0,
-          49.0
+          8,
+          49
         ]
       },
       {
@@ -3424,8 +5208,8 @@
           41.0
         ],
         "tile_anchor": [
-          15.0,
-          41.0
+          15,
+          41
         ]
       },
       {
@@ -3495,8 +5279,8 @@
           41.0
         ],
         "tile_anchor": [
-          19.0,
-          41.0
+          19,
+          41
         ]
       },
       {
@@ -3566,8 +5350,8 @@
           41.0
         ],
         "tile_anchor": [
-          23.0,
-          41.0
+          23,
+          41
         ]
       },
       {
@@ -3637,8 +5421,8 @@
           41.0
         ],
         "tile_anchor": [
-          26.0,
-          41.0
+          26,
+          41
         ]
       },
       {
@@ -3708,8 +5492,8 @@
           26.0
         ],
         "tile_anchor": [
-          10.0,
-          26.0
+          10,
+          26
         ]
       },
       {
@@ -3779,8 +5563,8 @@
           22.0
         ],
         "tile_anchor": [
-          10.0,
-          22.0
+          10,
+          22
         ]
       },
       {
@@ -3850,8 +5634,8 @@
           21.0
         ],
         "tile_anchor": [
-          10.0,
-          21.0
+          10,
+          21
         ]
       },
       {
@@ -3921,8 +5705,8 @@
           21.0
         ],
         "tile_anchor": [
-          13.0,
-          21.0
+          13,
+          21
         ]
       },
       {
@@ -3992,8 +5776,8 @@
           21.0
         ],
         "tile_anchor": [
-          17.0,
-          21.0
+          17,
+          21
         ]
       },
       {
@@ -4063,8 +5847,8 @@
           24.0
         ],
         "tile_anchor": [
-          17.0,
-          24.0
+          17,
+          24
         ]
       },
       {
@@ -4134,8 +5918,8 @@
           27.0
         ],
         "tile_anchor": [
-          17.0,
-          27.0
+          17,
+          27
         ]
       },
       {
@@ -4205,8 +5989,8 @@
           30.0
         ],
         "tile_anchor": [
-          17.0,
-          30.0
+          17,
+          30
         ]
       },
       {
@@ -4276,8 +6060,8 @@
           39.0
         ],
         "tile_anchor": [
-          29.0,
-          39.0
+          29,
+          39
         ]
       },
       {
@@ -4347,8 +6131,8 @@
           35.0
         ],
         "tile_anchor": [
-          29.0,
-          35.0
+          29,
+          35
         ]
       },
       {
@@ -4418,8 +6202,8 @@
           31.0
         ],
         "tile_anchor": [
-          29.0,
-          31.0
+          29,
+          31
         ]
       },
       {
@@ -4489,8 +6273,8 @@
           24.0
         ],
         "tile_anchor": [
-          26.0,
-          24.0
+          26,
+          24
         ]
       },
       {
@@ -4560,8 +6344,8 @@
           9.0
         ],
         "tile_anchor": [
-          4.0,
-          9.0
+          4,
+          9
         ]
       },
       {
@@ -4631,8 +6415,8 @@
           9.0
         ],
         "tile_anchor": [
-          8.0,
-          9.0
+          8,
+          9
         ]
       },
       {
@@ -4702,8 +6486,8 @@
           9.0
         ],
         "tile_anchor": [
-          12.0,
-          9.0
+          12,
+          9
         ]
       },
       {
@@ -4773,8 +6557,8 @@
           9.0
         ],
         "tile_anchor": [
-          16.0,
-          9.0
+          16,
+          9
         ]
       },
       {
@@ -4844,8 +6628,8 @@
           6.0
         ],
         "tile_anchor": [
-          19.0,
-          6.0
+          19,
+          6
         ]
       },
       {
@@ -4915,8 +6699,8 @@
           33.0
         ],
         "tile_anchor": [
-          40.0,
-          33.0
+          40,
+          33
         ]
       },
       {
@@ -4986,8 +6770,8 @@
           37.0
         ],
         "tile_anchor": [
-          40.0,
-          37.0
+          40,
+          37
         ]
       },
       {
@@ -5057,8 +6841,8 @@
           17.0
         ],
         "tile_anchor": [
-          23.0,
-          17.0
+          23,
+          17
         ]
       },
       {
@@ -5128,8 +6912,8 @@
           17.0
         ],
         "tile_anchor": [
-          26.0,
-          17.0
+          26,
+          17
         ]
       },
       {
@@ -5199,8 +6983,8 @@
           17.0
         ],
         "tile_anchor": [
-          30.0,
-          17.0
+          30,
+          17
         ]
       },
       {
@@ -5270,8 +7054,8 @@
           17.0
         ],
         "tile_anchor": [
-          34.0,
-          17.0
+          34,
+          17
         ]
       },
       {
@@ -5341,8 +7125,8 @@
           17.0
         ],
         "tile_anchor": [
-          37.0,
-          17.0
+          37,
+          17
         ]
       },
       {
@@ -5412,8 +7196,8 @@
           17.0
         ],
         "tile_anchor": [
-          40.0,
-          17.0
+          40,
+          17
         ]
       },
       {
@@ -5483,8 +7267,8 @@
           21.0
         ],
         "tile_anchor": [
-          40.0,
-          21.0
+          40,
+          21
         ]
       },
       {
@@ -5554,8 +7338,8 @@
           25.0
         ],
         "tile_anchor": [
-          40.0,
-          25.0
+          40,
+          25
         ]
       },
       {
@@ -5625,8 +7409,8 @@
           29.0
         ],
         "tile_anchor": [
-          40.0,
-          29.0
+          40,
+          29
         ]
       },
       {
@@ -5696,8 +7480,8 @@
           8.0
         ],
         "tile_anchor": [
-          28.0,
-          8.0
+          28,
+          8
         ]
       },
       {
@@ -5767,8 +7551,8 @@
           8.0
         ],
         "tile_anchor": [
-          32.0,
-          8.0
+          32,
+          8
         ]
       },
       {
@@ -5838,8 +7622,8 @@
           8.0
         ],
         "tile_anchor": [
-          35.0,
-          8.0
+          35,
+          8
         ]
       },
       {
@@ -5909,8 +7693,8 @@
           8.0
         ],
         "tile_anchor": [
-          39.0,
-          8.0
+          39,
+          8
         ]
       },
       {
@@ -5980,8 +7764,8 @@
           8.0
         ],
         "tile_anchor": [
-          43.0,
-          8.0
+          43,
+          8
         ]
       },
       {
@@ -6051,8 +7835,8 @@
           8.0
         ],
         "tile_anchor": [
-          46.0,
-          8.0
+          46,
+          8
         ]
       },
       {
@@ -6122,8 +7906,8 @@
           8.0
         ],
         "tile_anchor": [
-          49.0,
-          8.0
+          49,
+          8
         ]
       },
       {
@@ -6193,8 +7977,8 @@
           40.0
         ],
         "tile_anchor": [
-          40.0,
-          40.0
+          40,
+          40
         ]
       },
       {
@@ -6264,8 +8048,8 @@
           43.0
         ],
         "tile_anchor": [
-          40.0,
-          43.0
+          40,
+          43
         ]
       },
       {
@@ -6335,8 +8119,8 @@
           24.0
         ],
         "tile_anchor": [
-          30.0,
-          24.0
+          30,
+          24
         ]
       },
       {
@@ -6406,8 +8190,8 @@
           24.0
         ],
         "tile_anchor": [
-          33.0,
-          24.0
+          33,
+          24
         ]
       },
       {
@@ -6477,8 +8261,8 @@
           33.0
         ],
         "tile_anchor": [
-          0.0,
-          33.0
+          0,
+          33
         ]
       },
       {
@@ -6548,8 +8332,8 @@
           29.0
         ],
         "tile_anchor": [
-          0.0,
-          29.0
+          0,
+          29
         ]
       },
       {
@@ -6619,8 +8403,8 @@
           25.0
         ],
         "tile_anchor": [
-          0.0,
-          25.0
+          0,
+          25
         ]
       },
       {
@@ -6690,8 +8474,8 @@
           21.0
         ],
         "tile_anchor": [
-          0.0,
-          21.0
+          0,
+          21
         ]
       },
       {
@@ -6761,8 +8545,8 @@
           17.0
         ],
         "tile_anchor": [
-          0.0,
-          17.0
+          0,
+          17
         ]
       },
       {
@@ -6832,8 +8616,8 @@
           13.0
         ],
         "tile_anchor": [
-          0.0,
-          13.0
+          0,
+          13
         ]
       },
       {
@@ -6903,8 +8687,8 @@
           9.0
         ],
         "tile_anchor": [
-          0.0,
-          9.0
+          0,
+          9
         ]
       },
       {
@@ -6974,8 +8758,8 @@
           5.0
         ],
         "tile_anchor": [
-          0.0,
-          5.0
+          0,
+          5
         ]
       },
       {
@@ -7045,8 +8829,8 @@
           1.0
         ],
         "tile_anchor": [
-          0.0,
-          1.0
+          0,
+          1
         ]
       },
       {
@@ -7116,8 +8900,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ]
       },
       {
@@ -7187,8 +8971,8 @@
           0.0
         ],
         "tile_anchor": [
-          1.0,
-          0.0
+          1,
+          0
         ]
       },
       {
@@ -7258,8 +9042,8 @@
           0.0
         ],
         "tile_anchor": [
-          5.0,
-          0.0
+          5,
+          0
         ]
       },
       {
@@ -7329,8 +9113,8 @@
           0.0
         ],
         "tile_anchor": [
-          9.0,
-          0.0
+          9,
+          0
         ]
       },
       {
@@ -7400,8 +9184,8 @@
           0.0
         ],
         "tile_anchor": [
-          13.0,
-          0.0
+          13,
+          0
         ]
       },
       {
@@ -7471,8 +9255,8 @@
           0.0
         ],
         "tile_anchor": [
-          17.0,
-          0.0
+          17,
+          0
         ]
       },
       {
@@ -7542,8 +9326,8 @@
           0.0
         ],
         "tile_anchor": [
-          21.0,
-          0.0
+          21,
+          0
         ]
       },
       {
@@ -7613,8 +9397,8 @@
           0.0
         ],
         "tile_anchor": [
-          25.0,
-          0.0
+          25,
+          0
         ]
       },
       {
@@ -7684,8 +9468,8 @@
           0.0
         ],
         "tile_anchor": [
-          29.0,
-          0.0
+          29,
+          0
         ]
       },
       {
@@ -7755,8 +9539,8 @@
           0.0
         ],
         "tile_anchor": [
-          33.0,
-          0.0
+          33,
+          0
         ]
       },
       {
@@ -7826,8 +9610,8 @@
           0.0
         ],
         "tile_anchor": [
-          37.0,
-          0.0
+          37,
+          0
         ]
       },
       {
@@ -7897,8 +9681,8 @@
           0.0
         ],
         "tile_anchor": [
-          41.0,
-          0.0
+          41,
+          0
         ]
       },
       {
@@ -7968,8 +9752,8 @@
           0.0
         ],
         "tile_anchor": [
-          45.0,
-          0.0
+          45,
+          0
         ]
       },
       {
@@ -8039,8 +9823,8 @@
           0.0
         ],
         "tile_anchor": [
-          46.0,
-          0.0
+          46,
+          0
         ]
       },
       {
@@ -8110,8 +9894,8 @@
           8.0
         ],
         "tile_anchor": [
-          49.0,
-          8.0
+          49,
+          8
         ]
       },
       {
@@ -8181,8 +9965,8 @@
           10.0
         ],
         "tile_anchor": [
-          49.0,
-          10.0
+          49,
+          10
         ]
       },
       {
@@ -8252,8 +10036,8 @@
           14.0
         ],
         "tile_anchor": [
-          49.0,
-          14.0
+          49,
+          14
         ]
       },
       {
@@ -8323,8 +10107,8 @@
           18.0
         ],
         "tile_anchor": [
-          49.0,
-          18.0
+          49,
+          18
         ]
       },
       {
@@ -8394,8 +10178,8 @@
           22.0
         ],
         "tile_anchor": [
-          49.0,
-          22.0
+          49,
+          22
         ]
       },
       {
@@ -8465,8 +10249,8 @@
           26.0
         ],
         "tile_anchor": [
-          49.0,
-          26.0
+          49,
+          26
         ]
       },
       {
@@ -8536,8 +10320,8 @@
           30.0
         ],
         "tile_anchor": [
-          49.0,
-          30.0
+          49,
+          30
         ]
       },
       {
@@ -8607,8 +10391,8 @@
           34.0
         ],
         "tile_anchor": [
-          49.0,
-          34.0
+          49,
+          34
         ]
       },
       {
@@ -8678,8 +10462,8 @@
           38.0
         ],
         "tile_anchor": [
-          49.0,
-          38.0
+          49,
+          38
         ]
       },
       {
@@ -8749,8 +10533,8 @@
           42.0
         ],
         "tile_anchor": [
-          49.0,
-          42.0
+          49,
+          42
         ]
       },
       {
@@ -8820,8 +10604,8 @@
           46.0
         ],
         "tile_anchor": [
-          49.0,
-          46.0
+          49,
+          46
         ]
       },
       {
@@ -8891,8 +10675,8 @@
           49.0
         ],
         "tile_anchor": [
-          46.0,
-          49.0
+          46,
+          49
         ]
       },
       {
@@ -8962,8 +10746,8 @@
           49.0
         ],
         "tile_anchor": [
-          42.0,
-          49.0
+          42,
+          49
         ]
       },
       {
@@ -9033,8 +10817,8 @@
           49.0
         ],
         "tile_anchor": [
-          38.0,
-          49.0
+          38,
+          49
         ]
       },
       {
@@ -9104,8 +10888,8 @@
           49.0
         ],
         "tile_anchor": [
-          34.0,
-          49.0
+          34,
+          49
         ]
       },
       {
@@ -9175,8 +10959,8 @@
           49.0
         ],
         "tile_anchor": [
-          30.0,
-          49.0
+          30,
+          49
         ]
       },
       {
@@ -9246,8 +11030,8 @@
           49.0
         ],
         "tile_anchor": [
-          26.0,
-          49.0
+          26,
+          49
         ]
       },
       {
@@ -9317,8 +11101,8 @@
           49.0
         ],
         "tile_anchor": [
-          22.0,
-          49.0
+          22,
+          49
         ]
       },
       {
@@ -9388,8 +11172,8 @@
           49.0
         ],
         "tile_anchor": [
-          18.0,
-          49.0
+          18,
+          49
         ]
       },
       {
@@ -9459,8 +11243,8 @@
           49.0
         ],
         "tile_anchor": [
-          14.0,
-          49.0
+          14,
+          49
         ]
       },
       {
@@ -9530,8 +11314,8 @@
           49.0
         ],
         "tile_anchor": [
-          11.0,
-          49.0
+          11,
+          49
         ]
       },
       {
@@ -9601,8 +11385,8 @@
           49.0
         ],
         "tile_anchor": [
-          8.0,
-          49.0
+          8,
+          49
         ]
       },
       {
@@ -9672,8 +11456,8 @@
           0.0
         ],
         "tile_anchor": [
-          49.0,
-          0.0
+          49,
+          0
         ]
       },
       {
@@ -9743,16 +11527,18 @@
           9.0
         ],
         "tile_anchor": [
-          1.0,
-          9.0
+          1,
+          9
         ]
       }
     ],
     "terrain_front": []
   },
+  "legacy_map_id": "connection_passage_1",
+  "legacy_runtime_map_id": 1544.0,
   "map_id": "snake_mine_passage_1",
-  "runtime_map_id": 1544.0,
-  "schema_version": 4.0,
+  "runtime_map_id": 912001.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "ok",

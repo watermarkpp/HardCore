@@ -50,8 +50,10 @@
     "default_connection_mode": "bidirectional",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2,
+    "revision": 4,
+    "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/mengzhong_zuma_leader_home"
   },
   "ground": {
@@ -64,14 +66,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1536.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/mengzhong_zuma_leader_home.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/mengzhong_zuma_leader_home.ground_paint_state.json",
@@ -123,8 +125,188 @@
         "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          15,
+          15.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛卫士00",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 159.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000002",
+        "spawn_rule": "boss",
+        "tile": [
+          12,
           10
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛卫士00",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 159.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000003",
+        "spawn_rule": "boss",
+        "tile": [
+          18,
+          11
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛卫士00",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 159.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000005",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000005",
+        "spawn_rule": "boss",
+        "tile": [
+          8,
+          12
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛卫士00",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 159.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000007",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000007",
+        "spawn_rule": "boss",
+        "tile": [
+          14,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛卫士00",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 159.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000008",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000008",
+        "spawn_rule": "boss",
+        "tile": [
+          19,
+          15
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛雕像3",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 155.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000009",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000009",
+        "spawn_rule": "boss",
+        "tile": [
+          9,
+          19
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛雕像3",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 155.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000010",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000010",
+        "spawn_rule": "boss",
+        "tile": [
+          11,
+          16
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛雕像3",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 155.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000012",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000012",
+        "spawn_rule": "boss",
+        "tile": [
+          18,
+          21
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛雕像3",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 155.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000015",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000015",
+        "spawn_rule": "boss",
+        "tile": [
+          23,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "祖玛弓箭手3",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 152.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.boss_spawn.000016",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.boss_spawn.000016",
+        "spawn_rule": "boss",
+        "tile": [
+          15.0,
+          15.0
         ]
       }
     ],
@@ -992,9 +1174,194 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000055",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            19.0,
+            4.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
-    "collision_erase": [],
+    "collision_erase": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          4.0
+        ]
+      }
+    ],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -1022,12 +1389,12 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_arrival_anchor",
         "target_configured": false,
-        "target_map_id": -1,
+        "target_map_id": -1.0,
         "tile": [
           15.0,
           41.0
@@ -1077,8 +1444,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.monster_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          4,
-          23
+          4.0,
+          23.0
         ]
       },
       {
@@ -1121,8 +1488,188 @@
         "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.monster_spawn.000002",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          19,
-          19
+          19.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_zuma_leader_home",
+          "source_category_role": "ordinary",
+          "source_line": 122.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "special",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "角蝇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 126.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            68.0,
+            16.0,
+            1.0,
+            1281.0,
+            -43.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21.0,
+          32.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_zuma_leader_home",
+          "source_category_role": "ordinary",
+          "source_line": 122.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "楔蛾",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 128.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            37.0,
+            21.0,
+            1.0,
+            1281.0,
+            -35.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_zuma_leader_home",
+          "source_category_role": "ordinary",
+          "source_line": 122.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "special",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "角蝇",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 126.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            68.0,
+            16.0,
+            1.0,
+            1281.0,
+            -43.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          13.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_zuma_leader_home",
+          "source_category_role": "ordinary",
+          "source_line": 122.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "楔蛾",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 128.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            37.0,
+            21.0,
+            1.0,
+            1281.0,
+            -35.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_zuma_leader_home.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.mengzhong_zuma_leader_home.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          32.0
         ]
       }
     ],
@@ -1193,12 +1740,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          14.0,
-          1.0
+          14,
+          1
         ],
         "tile_anchor": [
-          14.0,
-          1.0
+          14,
+          1
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -1270,12 +1817,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          0.0
+          13,
+          0
         ],
         "tile_anchor": [
-          13.0,
-          0.0
+          13,
+          0
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -1347,12 +1894,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          10.0
+          13,
+          10
         ],
         "tile_anchor": [
-          13.0,
-          10.0
+          13,
+          10
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -1424,12 +1971,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          20.0
+          13,
+          20
         ],
         "tile_anchor": [
-          13.0,
-          20.0
+          13,
+          20
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -1501,12 +2048,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          30.0
+          13,
+          30
         ],
         "tile_anchor": [
-          13.0,
-          30.0
+          13,
+          30
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -1578,12 +2125,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          38.0
+          13,
+          38
         ],
         "tile_anchor": [
-          13.0,
-          38.0
+          13,
+          38
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -1594,7 +2141,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           119.0,
-          440.0
+          426.6666564941406
         ],
         "asset_id": "user.90aa22e00955ff03",
         "collision_authority": "asset",
@@ -1621,7 +2168,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000050",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1641,26 +2188,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           119.0,
-          440.0
+          426.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29.0,
-          2.0
+          29,
+          2
         ],
         "tile_anchor": [
-          29.0,
-          2.0
+          29,
+          2
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -1671,7 +2218,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           106.0,
-          447.0
+          433.6666564941406
         ],
         "asset_id": "user.f7564d3abecf4ccf",
         "collision_authority": "asset",
@@ -1698,7 +2245,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000051",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1718,26 +2265,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           106.0,
-          447.0
+          433.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "tile_anchor": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -1748,7 +2295,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           116.0,
-          438.0
+          424.6666564941406
         ],
         "asset_id": "user.11da767885267c89",
         "collision_authority": "asset",
@@ -1775,7 +2322,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000052",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1795,26 +2342,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           116.0,
-          438.0
+          424.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          45.0
+          2,
+          45
         ],
         "tile_anchor": [
-          2.0,
-          45.0
+          2,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -1825,7 +2372,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           99.0,
-          442.0
+          428.6666564941406
         ],
         "asset_id": "user.f9478653d287626d",
         "collision_authority": "asset",
@@ -1852,7 +2399,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000053",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1872,26 +2419,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           99.0,
-          442.0
+          428.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29.0,
-          45.0
+          29,
+          45
         ],
         "tile_anchor": [
-          29.0,
-          45.0
+          29,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -1902,7 +2449,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           110.0,
-          309.0
+          269.0
         ],
         "asset_id": "user.d7b053c1a2085ec3",
         "collision_authority": "asset",
@@ -1929,7 +2476,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000054",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -1949,26 +2496,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           110.0,
-          309.0
+          269.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          4.0
+          11,
+          4
         ],
         "tile_anchor": [
-          11.0,
-          4.0
+          11,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -1979,7 +2526,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           110.0,
-          309.0
+          269.0
         ],
         "asset_id": "user.d7b053c1a2085ec3",
         "collision_authority": "asset",
@@ -2006,7 +2553,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000055",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -2026,26 +2573,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           110.0,
-          309.0
+          269.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          20.0,
-          4.0
+          19,
+          4
         ],
         "tile_anchor": [
-          20.0,
-          4.0
+          19,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -2123,8 +2670,8 @@
           40.0
         ],
         "tile_anchor": [
-          14.0,
-          40.0
+          14,
+          40
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -2209,8 +2756,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ]
       },
       {
@@ -2283,8 +2830,8 @@
           1.0
         ],
         "tile_anchor": [
-          0.0,
-          1.0
+          0,
+          1
         ]
       },
       {
@@ -2357,8 +2904,8 @@
           4.0
         ],
         "tile_anchor": [
-          0.0,
-          4.0
+          0,
+          4
         ]
       },
       {
@@ -2431,8 +2978,8 @@
           0.0
         ],
         "tile_anchor": [
-          4.0,
-          0.0
+          4,
+          0
         ]
       },
       {
@@ -2505,8 +3052,8 @@
           8.0
         ],
         "tile_anchor": [
-          0.0,
-          8.0
+          0,
+          8
         ]
       },
       {
@@ -2579,8 +3126,8 @@
           0.0
         ],
         "tile_anchor": [
-          8.0,
-          0.0
+          8,
+          0
         ]
       },
       {
@@ -2653,8 +3200,8 @@
           12.0
         ],
         "tile_anchor": [
-          0.0,
-          12.0
+          0,
+          12
         ]
       },
       {
@@ -2727,8 +3274,8 @@
           0.0
         ],
         "tile_anchor": [
-          12.0,
-          0.0
+          12,
+          0
         ]
       },
       {
@@ -2801,8 +3348,8 @@
           16.0
         ],
         "tile_anchor": [
-          0.0,
-          16.0
+          0,
+          16
         ]
       },
       {
@@ -2875,8 +3422,8 @@
           0.0
         ],
         "tile_anchor": [
-          16.0,
-          0.0
+          16,
+          0
         ]
       },
       {
@@ -2949,8 +3496,8 @@
           20.0
         ],
         "tile_anchor": [
-          0.0,
-          20.0
+          0,
+          20
         ]
       },
       {
@@ -3023,8 +3570,8 @@
           0.0
         ],
         "tile_anchor": [
-          20.0,
-          0.0
+          20,
+          0
         ]
       },
       {
@@ -3097,8 +3644,8 @@
           24.0
         ],
         "tile_anchor": [
-          0.0,
-          24.0
+          0,
+          24
         ]
       },
       {
@@ -3171,8 +3718,8 @@
           0.0
         ],
         "tile_anchor": [
-          24.0,
-          0.0
+          24,
+          0
         ]
       },
       {
@@ -3245,8 +3792,8 @@
           28.0
         ],
         "tile_anchor": [
-          0.0,
-          28.0
+          0,
+          28
         ]
       },
       {
@@ -3319,8 +3866,8 @@
           0.0
         ],
         "tile_anchor": [
-          28.0,
-          0.0
+          28,
+          0
         ]
       },
       {
@@ -3393,8 +3940,8 @@
           0.0
         ],
         "tile_anchor": [
-          31.0,
-          0.0
+          31,
+          0
         ]
       },
       {
@@ -3467,8 +4014,8 @@
           32.0
         ],
         "tile_anchor": [
-          0.0,
-          32.0
+          0,
+          32
         ]
       },
       {
@@ -3541,8 +4088,8 @@
           4.0
         ],
         "tile_anchor": [
-          31.0,
-          4.0
+          31,
+          4
         ]
       },
       {
@@ -3615,8 +4162,8 @@
           36.0
         ],
         "tile_anchor": [
-          0.0,
-          36.0
+          0,
+          36
         ]
       },
       {
@@ -3689,8 +4236,8 @@
           8.0
         ],
         "tile_anchor": [
-          31.0,
-          8.0
+          31,
+          8
         ]
       },
       {
@@ -3763,8 +4310,8 @@
           40.0
         ],
         "tile_anchor": [
-          0.0,
-          40.0
+          0,
+          40
         ]
       },
       {
@@ -3837,8 +4384,8 @@
           12.0
         ],
         "tile_anchor": [
-          31.0,
-          12.0
+          31,
+          12
         ]
       },
       {
@@ -3911,8 +4458,8 @@
           44.0
         ],
         "tile_anchor": [
-          0.0,
-          44.0
+          0,
+          44
         ]
       },
       {
@@ -3985,8 +4532,8 @@
           47.0
         ],
         "tile_anchor": [
-          0.0,
-          47.0
+          0,
+          47
         ]
       },
       {
@@ -4059,8 +4606,8 @@
           16.0
         ],
         "tile_anchor": [
-          31.0,
-          16.0
+          31,
+          16
         ]
       },
       {
@@ -4133,8 +4680,8 @@
           47.0
         ],
         "tile_anchor": [
-          4.0,
-          47.0
+          4,
+          47
         ]
       },
       {
@@ -4207,8 +4754,8 @@
           20.0
         ],
         "tile_anchor": [
-          31.0,
-          20.0
+          31,
+          20
         ]
       },
       {
@@ -4281,8 +4828,8 @@
           47.0
         ],
         "tile_anchor": [
-          8.0,
-          47.0
+          8,
+          47
         ]
       },
       {
@@ -4355,8 +4902,8 @@
           24.0
         ],
         "tile_anchor": [
-          31.0,
-          24.0
+          31,
+          24
         ]
       },
       {
@@ -4429,8 +4976,8 @@
           47.0
         ],
         "tile_anchor": [
-          12.0,
-          47.0
+          12,
+          47
         ]
       },
       {
@@ -4503,8 +5050,8 @@
           28.0
         ],
         "tile_anchor": [
-          31.0,
-          28.0
+          31,
+          28
         ]
       },
       {
@@ -4577,8 +5124,8 @@
           47.0
         ],
         "tile_anchor": [
-          16.0,
-          47.0
+          16,
+          47
         ]
       },
       {
@@ -4651,8 +5198,8 @@
           32.0
         ],
         "tile_anchor": [
-          31.0,
-          32.0
+          31,
+          32
         ]
       },
       {
@@ -4725,8 +5272,8 @@
           47.0
         ],
         "tile_anchor": [
-          20.0,
-          47.0
+          20,
+          47
         ]
       },
       {
@@ -4799,8 +5346,8 @@
           36.0
         ],
         "tile_anchor": [
-          31.0,
-          36.0
+          31,
+          36
         ]
       },
       {
@@ -4873,8 +5420,8 @@
           47.0
         ],
         "tile_anchor": [
-          24.0,
-          47.0
+          24,
+          47
         ]
       },
       {
@@ -4947,8 +5494,8 @@
           40.0
         ],
         "tile_anchor": [
-          31.0,
-          40.0
+          31,
+          40
         ]
       },
       {
@@ -5021,8 +5568,8 @@
           47.0
         ],
         "tile_anchor": [
-          28.0,
-          47.0
+          28,
+          47
         ]
       },
       {
@@ -5095,17 +5642,17 @@
           44.0
         ],
         "tile_anchor": [
-          31.0,
-          44.0
+          31,
+          44
         ]
       }
     ],
     "terrain_front": []
   },
   "legacy_map_id": "zmjzzj_2",
-  "legacy_runtime_map_id": 990100,
+  "legacy_runtime_map_id": 990100.0,
   "map_id": "mengzhong_zuma_leader_home",
-  "runtime_map_id": 913106,
-  "schema_version": 4.0,
+  "runtime_map_id": 913106.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable"
 }

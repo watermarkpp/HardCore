@@ -44,10 +44,16 @@
       16.0,
       16.0
     ],
+    "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
-    "revision": 1.0,
+    "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
+    "portal_contract_id": "unified_map_portal_endpoint_v1",
+    "revision": 47,
+    "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/chiyue_valley"
   },
   "ground": {
@@ -60,14 +66,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       4096.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/chiyue_valley.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/chiyue_valley.ground_paint_state.json",
@@ -77,6 +83,7 @@
     "workspace_manifest": "res://map_editor_workspace/chiyue_valley/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/chiyue_valley/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
     "boss_spawn": [],
     "collision": [
@@ -87,10 +94,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            31,
-            0,
-            1,
-            128
+            31.0,
+            0.0,
+            1.0,
+            128.0
           ]
         },
         "shape": "rect",
@@ -103,10 +110,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            0,
-            0,
-            32,
-            1
+            0.0,
+            0.0,
+            32.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -119,10 +126,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            0,
-            0,
-            1,
-            128
+            0.0,
+            0.0,
+            1.0,
+            128.0
           ]
         },
         "shape": "rect",
@@ -135,10 +142,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            0,
-            127,
-            32,
-            1
+            0.0,
+            127.0,
+            32.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -152,32 +159,32 @@
         "data": {
           "points": [
             [
-              1,
-              116
+              1.0,
+              116.0
             ],
             [
-              5,
-              117
+              5.0,
+              117.0
             ],
             [
-              7,
-              114
+              7.0,
+              114.0
             ],
             [
-              6,
-              110
+              6.0,
+              110.0
             ],
             [
-              4,
-              109
+              4.0,
+              109.0
             ],
             [
-              0,
-              107
+              0.0,
+              107.0
             ],
             [
-              1,
-              116
+              1.0,
+              116.0
             ]
           ]
         },
@@ -192,32 +199,32 @@
         "data": {
           "points": [
             [
-              1,
-              92
+              1.0,
+              92.0
             ],
             [
-              6,
-              91
+              6.0,
+              91.0
             ],
             [
-              7,
-              87
+              7.0,
+              87.0
             ],
             [
-              5,
-              86
+              5.0,
+              86.0
             ],
             [
-              1,
-              85
+              1.0,
+              85.0
             ],
             [
-              1,
-              83
+              1.0,
+              83.0
             ],
             [
-              5,
-              86
+              5.0,
+              86.0
             ]
           ]
         },
@@ -232,28 +239,28 @@
         "data": {
           "points": [
             [
-              5,
-              86
+              5.0,
+              86.0
             ],
             [
-              0,
-              82
+              0.0,
+              82.0
             ],
             [
-              1,
-              92
+              1.0,
+              92.0
             ],
             [
-              5,
-              90
+              5.0,
+              90.0
             ],
             [
-              6,
-              88
+              6.0,
+              88.0
             ],
             [
-              5,
-              86
+              5.0,
+              86.0
             ]
           ]
         },
@@ -268,48 +275,48 @@
         "data": {
           "points": [
             [
-              31,
-              119
+              31.0,
+              119.0
             ],
             [
-              24,
-              113
+              24.0,
+              113.0
             ],
             [
-              20,
-              108
+              20.0,
+              108.0
             ],
             [
-              18,
-              103
+              18.0,
+              103.0
             ],
             [
-              20,
-              98
+              20.0,
+              98.0
             ],
             [
-              23,
-              92
+              23.0,
+              92.0
             ],
             [
-              25,
-              86
+              25.0,
+              86.0
             ],
             [
-              25,
-              83
+              25.0,
+              83.0
             ],
             [
-              25,
-              81
+              25.0,
+              81.0
             ],
             [
-              31,
-              82
+              31.0,
+              82.0
             ],
             [
-              31,
-              119
+              31.0,
+              119.0
             ]
           ]
         },
@@ -324,32 +331,32 @@
         "data": {
           "points": [
             [
-              16,
-              62
+              16.0,
+              62.0
             ],
             [
-              20,
-              62
+              20.0,
+              62.0
             ],
             [
-              20,
-              60
+              20.0,
+              60.0
             ],
             [
-              18,
-              58
+              18.0,
+              58.0
             ],
             [
-              16,
-              57
+              16.0,
+              57.0
             ],
             [
-              15,
-              60
+              15.0,
+              60.0
             ],
             [
-              16,
-              62
+              16.0,
+              62.0
             ]
           ]
         },
@@ -364,36 +371,36 @@
         "data": {
           "points": [
             [
-              14,
-              47
+              14.0,
+              47.0
             ],
             [
-              19,
-              47
+              19.0,
+              47.0
             ],
             [
-              20,
-              45
+              20.0,
+              45.0
             ],
             [
-              18,
-              43
+              18.0,
+              43.0
             ],
             [
-              15,
-              42
+              15.0,
+              42.0
             ],
             [
-              14,
-              42
+              14.0,
+              42.0
             ],
             [
-              13,
-              44
+              13.0,
+              44.0
             ],
             [
-              14,
-              47
+              14.0,
+              47.0
             ]
           ]
         },
@@ -408,48 +415,48 @@
         "data": {
           "points": [
             [
-              4,
-              86
+              4.0,
+              86.0
             ],
             [
-              12,
-              87
+              12.0,
+              87.0
             ],
             [
-              13,
-              81
+              13.0,
+              81.0
             ],
             [
-              15,
-              78
+              15.0,
+              78.0
             ],
             [
-              14,
-              72
+              14.0,
+              72.0
             ],
             [
-              12,
-              67
+              12.0,
+              67.0
             ],
             [
-              8,
-              63
+              8.0,
+              63.0
             ],
             [
-              3,
-              59
+              3.0,
+              59.0
             ],
             [
-              0,
-              56
+              0.0,
+              56.0
             ],
             [
-              0,
-              85
+              0.0,
+              85.0
             ],
             [
-              4,
-              86
+              4.0,
+              86.0
             ]
           ]
         },
@@ -464,36 +471,36 @@
         "data": {
           "points": [
             [
-              1,
-              55
+              1.0,
+              55.0
             ],
             [
-              6,
-              57
+              6.0,
+              57.0
             ],
             [
-              9,
-              56
+              9.0,
+              56.0
             ],
             [
-              10,
-              52
+              10.0,
+              52.0
             ],
             [
-              8,
-              46
+              8.0,
+              46.0
             ],
             [
-              6,
-              43
+              6.0,
+              43.0
             ],
             [
-              3,
-              40
+              3.0,
+              40.0
             ],
             [
-              1,
-              40
+              1.0,
+              40.0
             ]
           ]
         },
@@ -508,32 +515,32 @@
         "data": {
           "points": [
             [
-              2,
-              40
+              2.0,
+              40.0
             ],
             [
-              4,
-              39
+              4.0,
+              39.0
             ],
             [
-              4,
-              37
+              4.0,
+              37.0
             ],
             [
-              2,
-              36
+              2.0,
+              36.0
             ],
             [
-              0,
-              35
+              0.0,
+              35.0
             ],
             [
-              1,
-              40
+              1.0,
+              40.0
             ],
             [
-              2,
-              40
+              2.0,
+              40.0
             ]
           ]
         },
@@ -548,28 +555,28 @@
         "data": {
           "points": [
             [
-              1,
-              24
+              1.0,
+              24.0
             ],
             [
-              4,
-              25
+              4.0,
+              25.0
             ],
             [
-              4,
-              23
+              4.0,
+              23.0
             ],
             [
-              3,
-              21
+              3.0,
+              21.0
             ],
             [
-              1,
-              20
+              1.0,
+              20.0
             ],
             [
-              1,
-              24
+              1.0,
+              24.0
             ]
           ]
         },
@@ -584,48 +591,48 @@
         "data": {
           "points": [
             [
-              14,
-              32
+              14.0,
+              32.0
             ],
             [
-              17,
-              32
+              17.0,
+              32.0
             ],
             [
-              17,
-              28
+              17.0,
+              28.0
             ],
             [
-              17,
-              16
+              17.0,
+              16.0
             ],
             [
-              15,
-              1
+              15.0,
+              1.0
             ],
             [
-              10,
-              1
+              10.0,
+              1.0
             ],
             [
-              10,
-              10
+              10.0,
+              10.0
             ],
             [
-              11,
-              21
+              11.0,
+              21.0
             ],
             [
-              12,
-              27
+              12.0,
+              27.0
             ],
             [
-              12,
-              30
+              12.0,
+              30.0
             ],
             [
-              14,
-              32
+              14.0,
+              32.0
             ]
           ]
         },
@@ -640,48 +647,593 @@
         "data": {
           "points": [
             [
-              31,
-              49
+              31.0,
+              49.0
             ],
             [
-              25,
-              44
+              25.0,
+              44.0
             ],
             [
-              24,
-              41
+              24.0,
+              41.0
             ],
             [
-              24,
-              39
+              24.0,
+              39.0
             ],
             [
-              25,
-              37
+              25.0,
+              37.0
             ],
             [
-              28,
-              33
+              28.0,
+              33.0
             ],
             [
-              32,
-              33
+              32.0,
+              33.0
             ],
             [
-              32,
-              50
+              32.0,
+              50.0
             ],
             [
-              31,
-              49
+              31.0,
+              49.0
             ]
           ]
         },
         "shape": "polygon",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000017",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            9.0,
+            54.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000018",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            9.0,
+            55.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000019",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            8.0,
+            56.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000020",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            81.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000021",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            82.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000022",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            83.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000023",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            84.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000024",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            4,
+            56,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000025",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            3,
+            56,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000026",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1,
+            55,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000027",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            6,
+            43,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000028",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            7,
+            44,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000029",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            9,
+            49,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000030",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            8,
+            46,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000031",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            3,
+            36,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000032",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            80,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000033",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            80,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000034",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            79,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000035",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            74,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000036",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            73,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000037",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            72,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000038",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            70,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000039",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            69,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
-    "collision_erase": [],
+    "collision_erase": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          81.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          82.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          83.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          83.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          83.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          82.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          82.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          42.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          57
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          60
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          59
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          58
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          61
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          59
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1,
+          23
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17,
+          58
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18,
+          58
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          58
+        ]
+      }
+    ],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -694,30 +1246,40 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "reverse",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.world_white_day_gate.map_exit_000002.chiyue_valley.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "白日门",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "official_connection_id": "portal.chiyue_valley.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "world_white_day_gate",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "chiyue_valley",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000002",
+        "target_map_id": 910006.0,
+        "target_map_key": "world_white_day_gate",
+        "target_portal_id": "map_exit_000002",
+        "target_tile": [
+          6.0,
+          6.0
+        ],
         "tile": [
-          22,
-          118
+          22.0,
+          118.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -726,36 +1288,1301 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.chiyue_valley.map_exit_000002.chiyue_valley_square.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "赤月峡谷广场",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "official_connection_id": "portal.chiyue_valley.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "chiyue_valley_square",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "source_map_key": "chiyue_valley",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 916002.0,
+        "target_map_key": "chiyue_valley_square",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          48.0,
+          90.0
+        ],
         "tile": [
-          23,
-          4
+          23.0,
+          4.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "月魔蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 168.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            74.0,
+            5.0,
+            5.0,
+            2557.0,
+            -60.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          59.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            91.0,
+            16.0,
+            1.0,
+            2557.0,
+            -126.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          108.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钢牙蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 172.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            84.0,
+            10.0,
+            1.0,
+            2557.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          1.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暴牙蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 174.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            49.0,
+            34.0,
+            1.0,
+            2557.0,
+            -105.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          105.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            36.0,
+            1.0,
+            2557.0,
+            -18.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          18.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "花吻蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 178.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            46.0,
+            1.0,
+            2557.0,
+            -80.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25.0,
+          78.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "花吻蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 178.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            46.0,
+            1.0,
+            2557.0,
+            -80.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          103.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "花吻蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 178.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            46.0,
+            1.0,
+            2557.0,
+            -80.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          60.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "花吻蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 178.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            46.0,
+            1.0,
+            2557.0,
+            -80.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "花吻蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 178.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            46.0,
+            1.0,
+            2557.0,
+            -80.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17.0,
+          36.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "月魔蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 168.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            74.0,
+            5.0,
+            5.0,
+            2557.0,
+            -60.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          97.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "月魔蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 168.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            74.0,
+            5.0,
+            5.0,
+            2557.0,
+            -60.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          73.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "月魔蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 168.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            74.0,
+            5.0,
+            5.0,
+            2557.0,
+            -60.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "月魔蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 168.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            74.0,
+            5.0,
+            5.0,
+            2557.0,
+            -60.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          39.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暴牙蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 174.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            49.0,
+            34.0,
+            1.0,
+            2557.0,
+            -105.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          67.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暴牙蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 174.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            49.0,
+            34.0,
+            1.0,
+            2557.0,
+            -105.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12.0,
+          64.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暴牙蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 174.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            49.0,
+            34.0,
+            1.0,
+            2557.0,
+            -105.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19.0,
+          41.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暴牙蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 174.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            49.0,
+            34.0,
+            1.0,
+            2557.0,
+            -105.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4.0,
+          9.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            91.0,
+            16.0,
+            1.0,
+            2557.0,
+            -126.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          57.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            91.0,
+            16.0,
+            1.0,
+            2557.0,
+            -126.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          69.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            91.0,
+            16.0,
+            1.0,
+            2557.0,
+            -126.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            91.0,
+            16.0,
+            1.0,
+            2557.0,
+            -126.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            36.0,
+            1.0,
+            2557.0,
+            -18.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          99.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            36.0,
+            1.0,
+            2557.0,
+            -18.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          74.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            36.0,
+            1.0,
+            2557.0,
+            -18.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          45.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            36.0,
+            1.0,
+            2557.0,
+            -18.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          61.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            36.0,
+            1.0,
+            2557.0,
+            -18.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_valley",
+          "source_category_role": "ordinary",
+          "source_line": 235.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            36.0,
+            1.0,
+            2557.0,
+            -18.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_valley.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.chiyue_valley.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21.0,
+          12.0
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {
@@ -772,8 +2599,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -782,8 +2609,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -793,18 +2620,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000302",
-        "instance_scale_level": 7,
+        "instance_scale_level": 7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -835,8 +2662,8 @@
           87
         ],
         "visual_footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ]
       },
       {
@@ -853,8 +2680,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -863,8 +2690,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -874,18 +2701,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000303",
-        "instance_scale_level": 4,
+        "instance_scale_level": 4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -916,8 +2743,8 @@
           109
         ],
         "visual_footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ]
       },
       {
@@ -934,8 +2761,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -957,7 +2784,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -967,8 +2794,8 @@
           3.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
@@ -1013,8 +2840,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1023,8 +2850,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1034,18 +2861,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000305",
-        "instance_scale_level": 5,
+        "instance_scale_level": 5.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ],
         "offset_px": [
           0.0,
@@ -1076,8 +2903,8 @@
           111
         ],
         "visual_footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ]
       },
       {
@@ -1094,8 +2921,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1104,8 +2931,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4,
-          4
+          4.0,
+          4.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1115,18 +2942,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000306",
-        "instance_scale_level": 4,
+        "instance_scale_level": 4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4,
-          4
+          4.0,
+          4.0
         ],
         "offset_px": [
           0.0,
@@ -1157,8 +2984,8 @@
           81
         ],
         "visual_footprint_tiles": [
-          4,
-          4
+          4.0,
+          4.0
         ]
       },
       {
@@ -1175,8 +3002,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1185,8 +3012,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1196,18 +3023,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000307",
-        "instance_scale_level": 5,
+        "instance_scale_level": 5.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ],
         "offset_px": [
           0.0,
@@ -1238,8 +3065,8 @@
           42
         ],
         "visual_footprint_tiles": [
-          5,
-          5
+          5.0,
+          5.0
         ]
       },
       {
@@ -1256,8 +3083,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1266,8 +3093,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1277,18 +3104,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000308",
-        "instance_scale_level": 3,
+        "instance_scale_level": 3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -1304,8 +3131,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.3000000000000003,
-          1.3000000000000003
+          1.3000000000000005,
+          1.3000000000000005
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -1319,8 +3146,8 @@
           44
         ],
         "visual_footprint_tiles": [
-          3,
-          3
+          3.0,
+          3.0
         ]
       },
       {
@@ -1337,8 +3164,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1360,7 +3187,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -1370,8 +3197,8 @@
           3.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
@@ -1416,8 +3243,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1426,8 +3253,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4,
-          4
+          4.0,
+          4.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1437,18 +3264,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000310",
-        "instance_scale_level": 4,
+        "instance_scale_level": 4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4,
-          4
+          4.0,
+          4.0
         ],
         "offset_px": [
           0.0,
@@ -1479,15 +3306,15 @@
           36
         ],
         "visual_footprint_tiles": [
-          4,
-          4
+          4.0,
+          4.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           45.0,
-          160.0
+          155.07691955566406
         ],
         "asset_id": "chiyue_valley_ground_rock_block_03",
         "base_footprint_tiles": [
@@ -1497,8 +3324,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1518,11 +3345,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000311",
-        "instance_scale_level": 5,
+        "instance_scale_level": 3,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -1538,15 +3365,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           45.0,
-          160.0
+          155.07691955566406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.5000000000000004,
-          1.5000000000000004
+          1.3000000000000003,
+          1.3000000000000003
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -1568,7 +3395,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           64.0,
-          88.0
+          97.14286041259766
         ],
         "asset_id": "chiyue_valley_ground_rock_block_02",
         "base_footprint_tiles": [
@@ -1588,8 +3415,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1,
+          1
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1597,57 +3424,59 @@
           2.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000312",
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1,
+          1
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           64.0,
-          88.0
+          97.14286041259766
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          0.7000000000000001,
+          0.7000000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1,
-          21
+          2,
+          22
         ],
         "tile_anchor": [
-          1,
-          21
+          2,
+          22
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           71.0,
-          48.0
+          42.66666793823242
         ],
         "asset_id": "chiyue_valley_ground_rock_block_01",
         "base_footprint_tiles": [
@@ -1667,8 +3496,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1676,57 +3505,59 @@
           3.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000313",
+        "instance_scale_level": -4,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           71.0,
-          48.0
+          42.66666793823242
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1,
-          22
+          2,
+          23
         ],
         "tile_anchor": [
-          1,
-          22
+          2,
+          23
         ],
         "visual_footprint_tiles": [
-          3.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           74.0,
-          104.0
+          112.0
         ],
         "asset_id": "chiyue_valley_ground_rock_block_04",
         "base_footprint_tiles": [
@@ -1746,8 +3577,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1755,35 +3586,37 @@
           3.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000314",
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           74.0,
-          104.0
+          112.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          0.8,
+          0.8
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -1797,15 +3630,15 @@
           60
         ],
         "visual_footprint_tiles": [
-          3.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           127.0,
-          221.0
+          207.6666717529297
         ],
         "asset_id": "user.e46ac879aee805eb",
         "base_footprint_tiles": [
@@ -1815,8 +3648,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1836,11 +3669,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000315",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 1,
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -1856,15 +3689,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           127.0,
-          221.0
+          207.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -1886,7 +3719,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           141.0,
-          188.0
+          174.6666717529297
         ],
         "asset_id": "user.2cebc1463b240891",
         "base_footprint_tiles": [
@@ -1896,8 +3729,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1917,11 +3750,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000316",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -1937,15 +3770,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           141.0,
-          188.0
+          174.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -1967,7 +3800,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           111.0,
-          223.0
+          209.6666717529297
         ],
         "asset_id": "user.2865e0a711845c17",
         "base_footprint_tiles": [
@@ -1977,8 +3810,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1998,11 +3831,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000317",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2018,15 +3851,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           111.0,
-          223.0
+          209.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -2048,7 +3881,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           115.0,
-          213.6666717529297
+          187.0
         ],
         "asset_id": "user.7b762f3109f73f4e",
         "base_footprint_tiles": [
@@ -2058,8 +3891,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2079,11 +3912,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000318",
-        "instance_scale_level": -7,
+        "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 1,
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2099,15 +3932,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           115.0,
-          213.6666717529297
+          187.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -2129,7 +3962,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           130.0,
-          199.0
+          159.0
         ],
         "asset_id": "user.72e309ca30846ca3",
         "base_footprint_tiles": [
@@ -2139,8 +3972,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2160,11 +3993,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000319",
-        "instance_scale_level": -6,
+        "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 1,
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2180,26 +4013,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           130.0,
-          199.0
+          159.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2,
-          56
+          1,
+          55
         ],
         "tile_anchor": [
-          2,
-          56
+          1,
+          55
         ],
         "visual_footprint_tiles": [
           1,
@@ -2210,7 +4043,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           112.0,
-          155.0
+          165.6666717529297
         ],
         "asset_id": "user.d1d2103ad1ebc2dc",
         "base_footprint_tiles": [
@@ -2230,8 +4063,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2,
-          2
+          1,
+          1
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2241,18 +4074,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000320",
-        "instance_scale_level": -5,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2,
-          2
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -2261,37 +4094,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           112.0,
-          155.0
+          165.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5000000000000001,
-          0.5000000000000001
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1,
-          34
+          2,
+          35
         ],
         "tile_anchor": [
-          1,
-          34
+          2,
+          35
         ],
         "visual_footprint_tiles": [
-          2,
-          2
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           134.0,
-          186.0
+          172.6666717529297
         ],
         "asset_id": "user.012d42c4d8832618",
         "base_footprint_tiles": [
@@ -2301,8 +4134,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2322,11 +4155,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000321",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2342,15 +4175,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           134.0,
-          186.0
+          172.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -2372,7 +4205,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           128.0,
-          205.0
+          165.0
         ],
         "asset_id": "user.f2475acf9bddb307",
         "base_footprint_tiles": [
@@ -2403,11 +4236,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000322",
-        "instance_scale_level": -6,
+        "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2423,15 +4256,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           128.0,
-          205.0
+          165.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -2453,7 +4286,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           115.0,
-          227.0
+          213.6666717529297
         ],
         "asset_id": "user.7b762f3109f73f4e",
         "base_footprint_tiles": [
@@ -2463,8 +4296,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2484,11 +4317,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000323",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 1,
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2504,15 +4337,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           115.0,
-          227.0
+          213.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -2534,7 +4367,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           127.0,
-          207.6666717529297
+          181.0
         ],
         "asset_id": "user.e46ac879aee805eb",
         "base_footprint_tiles": [
@@ -2544,8 +4377,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2565,11 +4398,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000324",
-        "instance_scale_level": -7,
+        "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 1,
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2585,26 +4418,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           127.0,
-          207.6666717529297
+          181.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
           1,
-          93
+          92
         ],
         "tile_anchor": [
           1,
-          93
+          92
         ],
         "visual_footprint_tiles": [
           1,
@@ -2615,7 +4448,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           127.0,
-          181.0
+          101.0
         ],
         "asset_id": "user.e46ac879aee805eb",
         "base_footprint_tiles": [
@@ -2625,8 +4458,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2646,11 +4479,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000325",
-        "instance_scale_level": -8,
+        "instance_scale_level": -9,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 1,
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2666,26 +4499,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           127.0,
-          181.0
+          101.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20000000000000015,
-          0.20000000000000015
+          0.10000000000000014,
+          0.10000000000000014
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1,
-          94
+          3,
+          91
         ],
         "tile_anchor": [
-          1,
-          94
+          3,
+          91
         ],
         "visual_footprint_tiles": [
           1,
@@ -2696,7 +4529,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           141.0,
-          174.6666717529297
+          148.0
         ],
         "asset_id": "user.2cebc1463b240891",
         "base_footprint_tiles": [
@@ -2706,8 +4539,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2727,92 +4560,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000326",
-        "instance_scale_level": -7,
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "disabled",
-        "material_layer_order": 0,
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          1,
-          1
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          141.0,
-          174.6666717529297
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.30000000000000016,
-          0.30000000000000016
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          1,
-          101
-        ],
-        "tile_anchor": [
-          1,
-          101
-        ],
-        "visual_footprint_tiles": [
-          1,
-          1
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          141.0,
-          148.0
-        ],
-        "asset_id": "user.2cebc1463b240891",
-        "base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0,
-          0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1,
-          1
-        ],
-        "gameplay_role": "none",
-        "instance_base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_custom_scale": true,
-        "instance_id": "inst_000327",
         "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2843,11 +4595,92 @@
         "selection_locked": false,
         "tile": [
           1,
-          98
+          101
         ],
         "tile_anchor": [
           1,
-          98
+          101
+        ],
+        "visual_footprint_tiles": [
+          1,
+          1
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          141.0,
+          68.0
+        ],
+        "asset_id": "user.2cebc1463b240891",
+        "base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1,
+          1
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000327",
+        "instance_scale_level": -9,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          1,
+          1
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          141.0,
+          68.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.10000000000000014,
+          0.10000000000000014
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          1,
+          99
+        ],
+        "tile_anchor": [
+          1,
+          99
         ],
         "visual_footprint_tiles": [
           1,
@@ -2858,7 +4691,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           134.0,
-          172.6666717529297
+          146.0
         ],
         "asset_id": "user.012d42c4d8832618",
         "base_footprint_tiles": [
@@ -2868,8 +4701,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2889,11 +4722,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000328",
-        "instance_scale_level": -7,
+        "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2909,15 +4742,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           134.0,
-          172.6666717529297
+          146.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -2939,7 +4772,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           111.0,
-          209.6666717529297
+          183.0
         ],
         "asset_id": "user.2865e0a711845c17",
         "base_footprint_tiles": [
@@ -2949,8 +4782,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2970,11 +4803,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000329",
-        "instance_scale_level": -7,
+        "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -2990,15 +4823,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           111.0,
-          209.6666717529297
+          183.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3020,7 +4853,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           141.0,
-          188.0
+          174.6666717529297
         ],
         "asset_id": "user.2cebc1463b240891",
         "base_footprint_tiles": [
@@ -3051,11 +4884,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000330",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -3071,26 +4904,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           141.0,
-          188.0
+          174.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2,
-          2
+          1,
+          1
         ],
         "tile_anchor": [
-          2,
-          2
+          1,
+          1
         ],
         "visual_footprint_tiles": [
           1,
@@ -3101,7 +4934,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           115.0,
-          227.0
+          187.0
         ],
         "asset_id": "user.7b762f3109f73f4e",
         "base_footprint_tiles": [
@@ -3111,8 +4944,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3132,11 +4965,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000331",
-        "instance_scale_level": -6,
+        "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -3152,15 +4985,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           115.0,
-          227.0
+          187.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3182,7 +5015,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           115.0,
-          187.0
+          107.0
         ],
         "asset_id": "user.7b762f3109f73f4e",
         "base_footprint_tiles": [
@@ -3192,8 +5025,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3213,11 +5046,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000332",
-        "instance_scale_level": -8,
+        "instance_scale_level": -9,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 1,
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -3233,15 +5066,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           115.0,
-          187.0
+          107.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20000000000000015,
-          0.20000000000000015
+          0.10000000000000014,
+          0.10000000000000014
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3263,7 +5096,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           141.0,
-          148.0
+          68.0
         ],
         "asset_id": "user.2cebc1463b240891",
         "base_footprint_tiles": [
@@ -3273,8 +5106,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3294,11 +5127,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000333",
-        "instance_scale_level": -8,
+        "instance_scale_level": -9,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 1,
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -3314,15 +5147,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           141.0,
-          148.0
+          68.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20000000000000015,
-          0.20000000000000015
+          0.10000000000000014,
+          0.10000000000000014
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3354,8 +5187,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3377,7 +5210,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -3387,8 +5220,8 @@
           3.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3407,8 +5240,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          21,
-          117
+          21.0,
+          117.0
         ],
         "tile_anchor": [
           21,
@@ -3433,8 +5266,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3456,7 +5289,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -3466,8 +5299,8 @@
           3.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3486,8 +5319,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22,
-          3
+          22.0,
+          3.0
         ],
         "tile_anchor": [
           22,
@@ -3580,8 +5413,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3662,8 +5495,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -3744,8 +5577,8 @@
           4.0
         ],
         "tile_anchor": [
-          0.0,
-          4.0
+          0,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3826,8 +5659,8 @@
           0.0
         ],
         "tile_anchor": [
-          4.0,
-          0.0
+          4,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -3908,8 +5741,8 @@
           8.0
         ],
         "tile_anchor": [
-          0.0,
-          8.0
+          0,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3990,8 +5823,8 @@
           0.0
         ],
         "tile_anchor": [
-          8.0,
-          0.0
+          8,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -4072,8 +5905,8 @@
           12.0
         ],
         "tile_anchor": [
-          0.0,
-          12.0
+          0,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -4154,8 +5987,8 @@
           0.0
         ],
         "tile_anchor": [
-          12.0,
-          0.0
+          12,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -4236,8 +6069,8 @@
           16.0
         ],
         "tile_anchor": [
-          0.0,
-          16.0
+          0,
+          16
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -4318,8 +6151,8 @@
           0.0
         ],
         "tile_anchor": [
-          16.0,
-          0.0
+          16,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -4396,8 +6229,8 @@
         "structure_id": "chiyue_valley.closed_loop.0_0_32_128",
         "structure_role": "edge_min_x_05",
         "tile": [
-          0,
-          20
+          0.0,
+          20.0
         ],
         "tile_anchor": [
           0,
@@ -4482,8 +6315,8 @@
           0.0
         ],
         "tile_anchor": [
-          20.0,
-          0.0
+          20,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -4564,8 +6397,8 @@
           24.0
         ],
         "tile_anchor": [
-          0.0,
-          24.0
+          0,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -4646,8 +6479,8 @@
           0.0
         ],
         "tile_anchor": [
-          24.0,
-          0.0
+          24,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -4728,8 +6561,8 @@
           28.0
         ],
         "tile_anchor": [
-          0.0,
-          28.0
+          0,
+          28
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -4810,8 +6643,8 @@
           0.0
         ],
         "tile_anchor": [
-          28.0,
-          0.0
+          28,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -4892,8 +6725,8 @@
           0.0
         ],
         "tile_anchor": [
-          31.0,
-          0.0
+          31,
+          0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -4974,8 +6807,8 @@
           32.0
         ],
         "tile_anchor": [
-          0.0,
-          32.0
+          0,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5056,8 +6889,8 @@
           4.0
         ],
         "tile_anchor": [
-          31.0,
-          4.0
+          31,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5138,8 +6971,8 @@
           36.0
         ],
         "tile_anchor": [
-          0.0,
-          36.0
+          0,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5220,8 +7053,8 @@
           8.0
         ],
         "tile_anchor": [
-          31.0,
-          8.0
+          31,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5302,8 +7135,8 @@
           40.0
         ],
         "tile_anchor": [
-          0.0,
-          40.0
+          0,
+          40
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5384,8 +7217,8 @@
           12.0
         ],
         "tile_anchor": [
-          31.0,
-          12.0
+          31,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5466,8 +7299,8 @@
           44.0
         ],
         "tile_anchor": [
-          0.0,
-          44.0
+          0,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5548,8 +7381,8 @@
           16.0
         ],
         "tile_anchor": [
-          31.0,
-          16.0
+          31,
+          16
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5630,8 +7463,8 @@
           48.0
         ],
         "tile_anchor": [
-          0.0,
-          48.0
+          0,
+          48
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5712,8 +7545,8 @@
           20.0
         ],
         "tile_anchor": [
-          31.0,
-          20.0
+          31,
+          20
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5794,8 +7627,8 @@
           52.0
         ],
         "tile_anchor": [
-          0.0,
-          52.0
+          0,
+          52
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5876,8 +7709,8 @@
           24.0
         ],
         "tile_anchor": [
-          31.0,
-          24.0
+          31,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5958,8 +7791,8 @@
           56.0
         ],
         "tile_anchor": [
-          0.0,
-          56.0
+          0,
+          56
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6040,8 +7873,8 @@
           28.0
         ],
         "tile_anchor": [
-          31.0,
-          28.0
+          31,
+          28
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6122,8 +7955,8 @@
           60.0
         ],
         "tile_anchor": [
-          0.0,
-          60.0
+          0,
+          60
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6204,8 +8037,8 @@
           32.0
         ],
         "tile_anchor": [
-          31.0,
-          32.0
+          31,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6286,8 +8119,8 @@
           64.0
         ],
         "tile_anchor": [
-          0.0,
-          64.0
+          0,
+          64
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6368,8 +8201,8 @@
           36.0
         ],
         "tile_anchor": [
-          31.0,
-          36.0
+          31,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6450,8 +8283,8 @@
           68.0
         ],
         "tile_anchor": [
-          0.0,
-          68.0
+          0,
+          68
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6532,8 +8365,8 @@
           40.0
         ],
         "tile_anchor": [
-          31.0,
-          40.0
+          31,
+          40
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6614,8 +8447,8 @@
           72.0
         ],
         "tile_anchor": [
-          0.0,
-          72.0
+          0,
+          72
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6696,8 +8529,8 @@
           44.0
         ],
         "tile_anchor": [
-          31.0,
-          44.0
+          31,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6778,8 +8611,8 @@
           76.0
         ],
         "tile_anchor": [
-          0.0,
-          76.0
+          0,
+          76
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6860,8 +8693,8 @@
           48.0
         ],
         "tile_anchor": [
-          31.0,
-          48.0
+          31,
+          48
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6942,8 +8775,8 @@
           80.0
         ],
         "tile_anchor": [
-          0.0,
-          80.0
+          0,
+          80
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7024,8 +8857,8 @@
           52.0
         ],
         "tile_anchor": [
-          31.0,
-          52.0
+          31,
+          52
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7106,8 +8939,8 @@
           84.0
         ],
         "tile_anchor": [
-          0.0,
-          84.0
+          0,
+          84
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7188,8 +9021,8 @@
           56.0
         ],
         "tile_anchor": [
-          31.0,
-          56.0
+          31,
+          56
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7270,8 +9103,8 @@
           88.0
         ],
         "tile_anchor": [
-          0.0,
-          88.0
+          0,
+          88
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7352,8 +9185,8 @@
           60.0
         ],
         "tile_anchor": [
-          31.0,
-          60.0
+          31,
+          60
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7434,8 +9267,8 @@
           92.0
         ],
         "tile_anchor": [
-          0.0,
-          92.0
+          0,
+          92
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7516,8 +9349,8 @@
           64.0
         ],
         "tile_anchor": [
-          31.0,
-          64.0
+          31,
+          64
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7548,8 +9381,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1,
-          4
+          1.0,
+          4.0
         ],
         "gameplay_role": "navigation_blocker",
         "generated_by": "MapEditorWallLoopService",
@@ -7560,7 +9393,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000041",
-        "instance_scale_level": 0,
+        "instance_scale_level": 0.0,
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7570,8 +9403,8 @@
         "object_role": "terrain",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          1,
-          4
+          1.0,
+          4.0
         ],
         "offset_px": [
           0.0,
@@ -7600,12 +9433,12 @@
           96.0
         ],
         "tile_anchor": [
-          0.0,
-          96.0
+          0,
+          96
         ],
         "visual_footprint_tiles": [
-          1,
-          4
+          1.0,
+          4.0
         ]
       },
       {
@@ -7682,8 +9515,8 @@
           68.0
         ],
         "tile_anchor": [
-          31.0,
-          68.0
+          31,
+          68
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7764,8 +9597,8 @@
           100.0
         ],
         "tile_anchor": [
-          0.0,
-          100.0
+          0,
+          100
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7846,8 +9679,8 @@
           72.0
         ],
         "tile_anchor": [
-          31.0,
-          72.0
+          31,
+          72
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7928,8 +9761,8 @@
           104.0
         ],
         "tile_anchor": [
-          0.0,
-          104.0
+          0,
+          104
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8010,8 +9843,8 @@
           76.0
         ],
         "tile_anchor": [
-          31.0,
-          76.0
+          31,
+          76
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8092,8 +9925,8 @@
           108.0
         ],
         "tile_anchor": [
-          0.0,
-          108.0
+          0,
+          108
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8174,8 +10007,8 @@
           80.0
         ],
         "tile_anchor": [
-          31.0,
-          80.0
+          31,
+          80
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8256,8 +10089,8 @@
           112.0
         ],
         "tile_anchor": [
-          0.0,
-          112.0
+          0,
+          112
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8338,8 +10171,8 @@
           84.0
         ],
         "tile_anchor": [
-          31.0,
-          84.0
+          31,
+          84
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8420,8 +10253,8 @@
           116.0
         ],
         "tile_anchor": [
-          0.0,
-          116.0
+          0,
+          116
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8502,8 +10335,8 @@
           88.0
         ],
         "tile_anchor": [
-          31.0,
-          88.0
+          31,
+          88
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8584,8 +10417,8 @@
           120.0
         ],
         "tile_anchor": [
-          0.0,
-          120.0
+          0,
+          120
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8666,8 +10499,8 @@
           92.0
         ],
         "tile_anchor": [
-          31.0,
-          92.0
+          31,
+          92
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8748,8 +10581,8 @@
           124.0
         ],
         "tile_anchor": [
-          0.0,
-          124.0
+          0,
+          124
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8830,8 +10663,8 @@
           127.0
         ],
         "tile_anchor": [
-          0.0,
-          127.0
+          0,
+          127
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8912,8 +10745,8 @@
           96.0
         ],
         "tile_anchor": [
-          31.0,
-          96.0
+          31,
+          96
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8994,8 +10827,8 @@
           127.0
         ],
         "tile_anchor": [
-          4.0,
-          127.0
+          4,
+          127
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9076,8 +10909,8 @@
           100.0
         ],
         "tile_anchor": [
-          31.0,
-          100.0
+          31,
+          100
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9158,8 +10991,8 @@
           127.0
         ],
         "tile_anchor": [
-          8.0,
-          127.0
+          8,
+          127
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9240,8 +11073,8 @@
           104.0
         ],
         "tile_anchor": [
-          31.0,
-          104.0
+          31,
+          104
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9322,8 +11155,8 @@
           127.0
         ],
         "tile_anchor": [
-          12.0,
-          127.0
+          12,
+          127
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9404,8 +11237,8 @@
           108.0
         ],
         "tile_anchor": [
-          31.0,
-          108.0
+          31,
+          108
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9486,8 +11319,8 @@
           127.0
         ],
         "tile_anchor": [
-          16.0,
-          127.0
+          16,
+          127
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9568,8 +11401,8 @@
           112.0
         ],
         "tile_anchor": [
-          31.0,
-          112.0
+          31,
+          112
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9650,8 +11483,8 @@
           127.0
         ],
         "tile_anchor": [
-          20.0,
-          127.0
+          20,
+          127
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9732,8 +11565,8 @@
           116.0
         ],
         "tile_anchor": [
-          31.0,
-          116.0
+          31,
+          116
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9814,8 +11647,8 @@
           127.0
         ],
         "tile_anchor": [
-          24.0,
-          127.0
+          24,
+          127
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9896,8 +11729,8 @@
           120.0
         ],
         "tile_anchor": [
-          31.0,
-          120.0
+          31,
+          120
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9978,8 +11811,8 @@
           127.0
         ],
         "tile_anchor": [
-          28.0,
-          127.0
+          28,
+          127
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10060,8 +11893,8 @@
           124.0
         ],
         "tile_anchor": [
-          31.0,
-          124.0
+          31,
+          124
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10139,8 +11972,8 @@
           116.0
         ],
         "tile_anchor": [
-          30.0,
-          116.0
+          30,
+          116
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10218,8 +12051,8 @@
           116.0
         ],
         "tile_anchor": [
-          29.0,
-          116.0
+          29,
+          116
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10297,8 +12130,8 @@
           115.0
         ],
         "tile_anchor": [
-          28.0,
-          115.0
+          28,
+          115
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10376,8 +12209,8 @@
           114.0
         ],
         "tile_anchor": [
-          27.0,
-          114.0
+          27,
+          114
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10455,8 +12288,8 @@
           113.0
         ],
         "tile_anchor": [
-          26.0,
-          113.0
+          26,
+          113
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10534,8 +12367,8 @@
           112.0
         ],
         "tile_anchor": [
-          25.0,
-          112.0
+          25,
+          112
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10613,8 +12446,8 @@
           111.0
         ],
         "tile_anchor": [
-          24.0,
-          111.0
+          24,
+          111
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10692,8 +12525,8 @@
           109.0
         ],
         "tile_anchor": [
-          23.0,
-          109.0
+          23,
+          109
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10771,8 +12604,8 @@
           107.0
         ],
         "tile_anchor": [
-          22.0,
-          107.0
+          22,
+          107
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10850,8 +12683,8 @@
           105.0
         ],
         "tile_anchor": [
-          21.0,
-          105.0
+          21,
+          105
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10929,8 +12762,8 @@
           103.0
         ],
         "tile_anchor": [
-          22.0,
-          103.0
+          22,
+          103
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11008,8 +12841,8 @@
           105.0
         ],
         "tile_anchor": [
-          23.0,
-          105.0
+          23,
+          105
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11087,8 +12920,8 @@
           101.0
         ],
         "tile_anchor": [
-          23.0,
-          101.0
+          23,
+          101
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11166,8 +12999,8 @@
           107.0
         ],
         "tile_anchor": [
-          24.0,
-          107.0
+          24,
+          107
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11245,8 +13078,8 @@
           103.0
         ],
         "tile_anchor": [
-          24.0,
-          103.0
+          24,
+          103
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11324,8 +13157,8 @@
           99.0
         ],
         "tile_anchor": [
-          24.0,
-          99.0
+          24,
+          99
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11403,8 +13236,8 @@
           108.0
         ],
         "tile_anchor": [
-          25.0,
-          108.0
+          25,
+          108
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11482,8 +13315,8 @@
           109.0
         ],
         "tile_anchor": [
-          26.0,
-          109.0
+          26,
+          109
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11561,8 +13394,8 @@
           110.0
         ],
         "tile_anchor": [
-          27.0,
-          110.0
+          27,
+          110
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11640,8 +13473,8 @@
           111.0
         ],
         "tile_anchor": [
-          28.0,
-          111.0
+          28,
+          111
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11719,8 +13552,8 @@
           111.0
         ],
         "tile_anchor": [
-          29.0,
-          111.0
+          29,
+          111
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11798,8 +13631,8 @@
           112.0
         ],
         "tile_anchor": [
-          30.0,
-          112.0
+          30,
+          112
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11877,8 +13710,8 @@
           112.0
         ],
         "tile_anchor": [
-          29.0,
-          112.0
+          29,
+          112
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11956,8 +13789,8 @@
           104.0
         ],
         "tile_anchor": [
-          25.0,
-          104.0
+          25,
+          104
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12035,8 +13868,8 @@
           100.0
         ],
         "tile_anchor": [
-          25.0,
-          100.0
+          25,
+          100
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12114,8 +13947,8 @@
           105.0
         ],
         "tile_anchor": [
-          26.0,
-          105.0
+          26,
+          105
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12193,8 +14026,8 @@
           106.0
         ],
         "tile_anchor": [
-          27.0,
-          106.0
+          27,
+          106
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12272,8 +14105,8 @@
           107.0
         ],
         "tile_anchor": [
-          28.0,
-          107.0
+          28,
+          107
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12351,8 +14184,8 @@
           107.0
         ],
         "tile_anchor": [
-          29.0,
-          107.0
+          29,
+          107
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12430,8 +14263,8 @@
           108.0
         ],
         "tile_anchor": [
-          30.0,
-          108.0
+          30,
+          108
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12509,8 +14342,8 @@
           101.0
         ],
         "tile_anchor": [
-          26.0,
-          101.0
+          26,
+          101
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12588,8 +14421,8 @@
           102.0
         ],
         "tile_anchor": [
-          27.0,
-          102.0
+          27,
+          102
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12667,8 +14500,8 @@
           103.0
         ],
         "tile_anchor": [
-          28.0,
-          103.0
+          28,
+          103
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12746,8 +14579,8 @@
           103.0
         ],
         "tile_anchor": [
-          29.0,
-          103.0
+          29,
+          103
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12825,8 +14658,8 @@
           104.0
         ],
         "tile_anchor": [
-          30.0,
-          104.0
+          30,
+          104
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12904,8 +14737,8 @@
           96.0
         ],
         "tile_anchor": [
-          25.0,
-          96.0
+          25,
+          96
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12983,8 +14816,8 @@
           97.0
         ],
         "tile_anchor": [
-          26.0,
-          97.0
+          26,
+          97
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13062,8 +14895,8 @@
           95.0
         ],
         "tile_anchor": [
-          26.0,
-          95.0
+          26,
+          95
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13141,8 +14974,8 @@
           98.0
         ],
         "tile_anchor": [
-          27.0,
-          98.0
+          27,
+          98
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13220,8 +15053,8 @@
           94.0
         ],
         "tile_anchor": [
-          27.0,
-          94.0
+          27,
+          94
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13299,8 +15132,8 @@
           99.0
         ],
         "tile_anchor": [
-          28.0,
-          99.0
+          28,
+          99
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13378,8 +15211,8 @@
           95.0
         ],
         "tile_anchor": [
-          28.0,
-          95.0
+          28,
+          95
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13457,8 +15290,8 @@
           91.0
         ],
         "tile_anchor": [
-          28.0,
-          91.0
+          28,
+          91
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13536,8 +15369,8 @@
           99.0
         ],
         "tile_anchor": [
-          29.0,
-          99.0
+          29,
+          99
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13615,8 +15448,8 @@
           95.0
         ],
         "tile_anchor": [
-          29.0,
-          95.0
+          29,
+          95
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13694,8 +15527,8 @@
           91.0
         ],
         "tile_anchor": [
-          29.0,
-          91.0
+          29,
+          91
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13773,8 +15606,8 @@
           100.0
         ],
         "tile_anchor": [
-          30.0,
-          100.0
+          30,
+          100
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13852,8 +15685,8 @@
           96.0
         ],
         "tile_anchor": [
-          30.0,
-          96.0
+          30,
+          96
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13931,8 +15764,8 @@
           92.0
         ],
         "tile_anchor": [
-          30.0,
-          92.0
+          30,
+          92
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14010,8 +15843,8 @@
           88.0
         ],
         "tile_anchor": [
-          30.0,
-          88.0
+          30,
+          88
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14089,8 +15922,8 @@
           86.0
         ],
         "tile_anchor": [
-          1.0,
-          86.0
+          1,
+          86
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14168,8 +16001,8 @@
           86.0
         ],
         "tile_anchor": [
-          2.0,
-          86.0
+          2,
+          86
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14247,8 +16080,8 @@
           85.0
         ],
         "tile_anchor": [
-          3.0,
-          85.0
+          3,
+          85
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14326,8 +16159,8 @@
           84.0
         ],
         "tile_anchor": [
-          4.0,
-          84.0
+          4,
+          84
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14405,8 +16238,8 @@
           82.0
         ],
         "tile_anchor": [
-          5.0,
-          82.0
+          5,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14484,8 +16317,8 @@
           82.0
         ],
         "tile_anchor": [
-          6.0,
-          82.0
+          6,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14563,8 +16396,8 @@
           82.0
         ],
         "tile_anchor": [
-          7.0,
-          82.0
+          7,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14642,8 +16475,8 @@
           82.0
         ],
         "tile_anchor": [
-          8.0,
-          82.0
+          8,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14721,8 +16554,8 @@
           82.0
         ],
         "tile_anchor": [
-          9.0,
-          82.0
+          9,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14800,8 +16633,8 @@
           81.0
         ],
         "tile_anchor": [
-          10.0,
-          81.0
+          10,
+          81
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14879,8 +16712,8 @@
           80.0
         ],
         "tile_anchor": [
-          11.0,
-          80.0
+          11,
+          80
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14958,8 +16791,8 @@
           78.0
         ],
         "tile_anchor": [
-          12.0,
-          78.0
+          12,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15037,8 +16870,8 @@
           77.0
         ],
         "tile_anchor": [
-          13.0,
-          77.0
+          13,
+          77
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15116,8 +16949,8 @@
           77.0
         ],
         "tile_anchor": [
-          14.0,
-          77.0
+          14,
+          77
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15195,8 +17028,8 @@
           73.0
         ],
         "tile_anchor": [
-          14.0,
-          73.0
+          14,
+          73
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15274,8 +17107,8 @@
           73.0
         ],
         "tile_anchor": [
-          13.0,
-          73.0
+          13,
+          73
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15353,8 +17186,8 @@
           70.0
         ],
         "tile_anchor": [
-          13.0,
-          70.0
+          13,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15432,8 +17265,8 @@
           69.0
         ],
         "tile_anchor": [
-          12.0,
-          69.0
+          12,
+          69
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15511,8 +17344,8 @@
           73.0
         ],
         "tile_anchor": [
-          12.0,
-          73.0
+          12,
+          73
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15590,8 +17423,8 @@
           75.0
         ],
         "tile_anchor": [
-          12.0,
-          75.0
+          12,
+          75
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15669,8 +17502,8 @@
           76.0
         ],
         "tile_anchor": [
-          11.0,
-          76.0
+          11,
+          76
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15748,8 +17581,8 @@
           72.0
         ],
         "tile_anchor": [
-          11.0,
-          72.0
+          11,
+          72
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15827,8 +17660,8 @@
           68.0
         ],
         "tile_anchor": [
-          12.0,
-          68.0
+          12,
+          68
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15906,8 +17739,8 @@
           68.0
         ],
         "tile_anchor": [
-          11.0,
-          68.0
+          11,
+          68
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15985,8 +17818,8 @@
           67.0
         ],
         "tile_anchor": [
-          11.0,
-          67.0
+          11,
+          67
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16064,8 +17897,8 @@
           78.0
         ],
         "tile_anchor": [
-          9.0,
-          78.0
+          9,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16143,8 +17976,8 @@
           82.0
         ],
         "tile_anchor": [
-          1.0,
-          82.0
+          1,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16222,8 +18055,8 @@
           82.0
         ],
         "tile_anchor": [
-          2.0,
-          82.0
+          2,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16301,8 +18134,8 @@
           81.0
         ],
         "tile_anchor": [
-          3.0,
-          81.0
+          3,
+          81
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16380,8 +18213,8 @@
           78.0
         ],
         "tile_anchor": [
-          1.0,
-          78.0
+          1,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16459,8 +18292,8 @@
           78.0
         ],
         "tile_anchor": [
-          2.0,
-          78.0
+          2,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16538,8 +18371,8 @@
           77.0
         ],
         "tile_anchor": [
-          3.0,
-          77.0
+          3,
+          77
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16617,8 +18450,8 @@
           80.0
         ],
         "tile_anchor": [
-          4.0,
-          80.0
+          4,
+          80
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16696,8 +18529,8 @@
           76.0
         ],
         "tile_anchor": [
-          4.0,
-          76.0
+          4,
+          76
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16775,8 +18608,8 @@
           78.0
         ],
         "tile_anchor": [
-          5.0,
-          78.0
+          5,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16854,8 +18687,8 @@
           78.0
         ],
         "tile_anchor": [
-          6.0,
-          78.0
+          6,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16933,8 +18766,8 @@
           78.0
         ],
         "tile_anchor": [
-          7.0,
-          78.0
+          7,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17012,8 +18845,8 @@
           78.0
         ],
         "tile_anchor": [
-          8.0,
-          78.0
+          8,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17091,8 +18924,8 @@
           77.0
         ],
         "tile_anchor": [
-          10.0,
-          77.0
+          10,
+          77
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17170,8 +19003,8 @@
           74.0
         ],
         "tile_anchor": [
-          9.0,
-          74.0
+          9,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17249,8 +19082,8 @@
           74.0
         ],
         "tile_anchor": [
-          8.0,
-          74.0
+          8,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17328,8 +19161,8 @@
           74.0
         ],
         "tile_anchor": [
-          7.0,
-          74.0
+          7,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17407,8 +19240,8 @@
           74.0
         ],
         "tile_anchor": [
-          6.0,
-          74.0
+          6,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17486,8 +19319,8 @@
           74.0
         ],
         "tile_anchor": [
-          5.0,
-          74.0
+          5,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17565,8 +19398,8 @@
           74.0
         ],
         "tile_anchor": [
-          1.0,
-          74.0
+          1,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17644,8 +19477,8 @@
           74.0
         ],
         "tile_anchor": [
-          2.0,
-          74.0
+          2,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17723,8 +19556,8 @@
           73.0
         ],
         "tile_anchor": [
-          3.0,
-          73.0
+          3,
+          73
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17802,8 +19635,8 @@
           72.0
         ],
         "tile_anchor": [
-          4.0,
-          72.0
+          4,
+          72
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17881,8 +19714,8 @@
           70.0
         ],
         "tile_anchor": [
-          1.0,
-          70.0
+          1,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17960,8 +19793,8 @@
           70.0
         ],
         "tile_anchor": [
-          2.0,
-          70.0
+          2,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18039,8 +19872,8 @@
           69.0
         ],
         "tile_anchor": [
-          3.0,
-          69.0
+          3,
+          69
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18118,8 +19951,8 @@
           66.0
         ],
         "tile_anchor": [
-          1.0,
-          66.0
+          1,
+          66
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18197,8 +20030,8 @@
           62.0
         ],
         "tile_anchor": [
-          1.0,
-          62.0
+          1,
+          62
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18276,8 +20109,8 @@
           66.0
         ],
         "tile_anchor": [
-          2.0,
-          66.0
+          2,
+          66
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18355,8 +20188,8 @@
           68.0
         ],
         "tile_anchor": [
-          4.0,
-          68.0
+          4,
+          68
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18434,8 +20267,8 @@
           70.0
         ],
         "tile_anchor": [
-          5.0,
-          70.0
+          5,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18513,8 +20346,8 @@
           70.0
         ],
         "tile_anchor": [
-          6.0,
-          70.0
+          6,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18592,8 +20425,8 @@
           70.0
         ],
         "tile_anchor": [
-          7.0,
-          70.0
+          7,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18671,8 +20504,8 @@
           70.0
         ],
         "tile_anchor": [
-          8.0,
-          70.0
+          8,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18750,8 +20583,8 @@
           70.0
         ],
         "tile_anchor": [
-          9.0,
-          70.0
+          9,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18829,8 +20662,8 @@
           73.0
         ],
         "tile_anchor": [
-          10.0,
-          73.0
+          10,
+          73
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18908,8 +20741,8 @@
           69.0
         ],
         "tile_anchor": [
-          10.0,
-          69.0
+          10,
+          69
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18987,8 +20820,8 @@
           65.0
         ],
         "tile_anchor": [
-          10.0,
-          65.0
+          10,
+          65
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19066,8 +20899,8 @@
           66.0
         ],
         "tile_anchor": [
-          9.0,
-          66.0
+          9,
+          66
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19145,8 +20978,8 @@
           66.0
         ],
         "tile_anchor": [
-          8.0,
-          66.0
+          8,
+          66
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19224,8 +21057,8 @@
           66.0
         ],
         "tile_anchor": [
-          7.0,
-          66.0
+          7,
+          66
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19303,8 +21136,8 @@
           66.0
         ],
         "tile_anchor": [
-          6.0,
-          66.0
+          6,
+          66
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19382,8 +21215,8 @@
           66.0
         ],
         "tile_anchor": [
-          5.0,
-          66.0
+          5,
+          66
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19461,8 +21294,8 @@
           65.0
         ],
         "tile_anchor": [
-          3.0,
-          65.0
+          3,
+          65
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19540,8 +21373,8 @@
           62.0
         ],
         "tile_anchor": [
-          2.0,
-          62.0
+          2,
+          62
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19619,8 +21452,8 @@
           64.0
         ],
         "tile_anchor": [
-          3.0,
-          64.0
+          3,
+          64
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19698,8 +21531,8 @@
           64.0
         ],
         "tile_anchor": [
-          4.0,
-          64.0
+          4,
+          64
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19777,8 +21610,8 @@
           62.0
         ],
         "tile_anchor": [
-          5.0,
-          62.0
+          5,
+          62
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19856,8 +21689,8 @@
           63.0
         ],
         "tile_anchor": [
-          6.0,
-          63.0
+          6,
+          63
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19935,8 +21768,8 @@
           65.0
         ],
         "tile_anchor": [
-          9.0,
-          65.0
+          9,
+          65
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20014,8 +21847,8 @@
           65.0
         ],
         "tile_anchor": [
-          8.0,
-          65.0
+          8,
+          65
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20093,8 +21926,8 @@
           65.0
         ],
         "tile_anchor": [
-          7.0,
-          65.0
+          7,
+          65
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20172,8 +22005,8 @@
           61.0
         ],
         "tile_anchor": [
-          4.0,
-          61.0
+          4,
+          61
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20251,8 +22084,8 @@
           61.0
         ],
         "tile_anchor": [
-          3.0,
-          61.0
+          3,
+          61
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20330,8 +22163,8 @@
           60.0
         ],
         "tile_anchor": [
-          2.0,
-          60.0
+          2,
+          60
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20409,8 +22242,8 @@
           59.0
         ],
         "tile_anchor": [
-          1.0,
-          59.0
+          1,
+          59
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20488,8 +22321,8 @@
           47.0
         ],
         "tile_anchor": [
-          30.0,
-          47.0
+          30,
+          47
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20567,8 +22400,8 @@
           46.0
         ],
         "tile_anchor": [
-          29.0,
-          46.0
+          29,
+          46
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20646,8 +22479,8 @@
           44.0
         ],
         "tile_anchor": [
-          28.0,
-          44.0
+          28,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20725,8 +22558,8 @@
           42.0
         ],
         "tile_anchor": [
-          29.0,
-          42.0
+          29,
+          42
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20804,8 +22637,8 @@
           43.0
         ],
         "tile_anchor": [
-          30.0,
-          43.0
+          30,
+          43
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20883,8 +22716,8 @@
           39.0
         ],
         "tile_anchor": [
-          30.0,
-          39.0
+          30,
+          39
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20962,8 +22795,8 @@
           50.0
         ],
         "tile_anchor": [
-          9.0,
-          50.0
+          9,
+          50
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21041,8 +22874,8 @@
           49.0
         ],
         "tile_anchor": [
-          7.0,
-          49.0
+          7,
+          49
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21120,8 +22953,8 @@
           51.0
         ],
         "tile_anchor": [
-          8.0,
-          51.0
+          8,
+          51
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21199,8 +23032,8 @@
           53.0
         ],
         "tile_anchor": [
-          7.0,
-          53.0
+          7,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21278,8 +23111,8 @@
           53.0
         ],
         "tile_anchor": [
-          6.0,
-          53.0
+          6,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21357,8 +23190,8 @@
           53.0
         ],
         "tile_anchor": [
-          5.0,
-          53.0
+          5,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21436,8 +23269,8 @@
           53.0
         ],
         "tile_anchor": [
-          4.0,
-          53.0
+          4,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21515,8 +23348,8 @@
           52.0
         ],
         "tile_anchor": [
-          3.0,
-          52.0
+          3,
+          52
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21594,8 +23427,8 @@
           51.0
         ],
         "tile_anchor": [
-          2.0,
-          51.0
+          2,
+          51
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21673,8 +23506,8 @@
           50.0
         ],
         "tile_anchor": [
-          1.0,
-          50.0
+          1,
+          50
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21752,8 +23585,8 @@
           47.0
         ],
         "tile_anchor": [
-          8.0,
-          47.0
+          8,
+          47
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21831,8 +23664,8 @@
           45.0
         ],
         "tile_anchor": [
-          7.0,
-          45.0
+          7,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21910,8 +23743,8 @@
           49.0
         ],
         "tile_anchor": [
-          6.0,
-          49.0
+          6,
+          49
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21989,8 +23822,8 @@
           49.0
         ],
         "tile_anchor": [
-          5.0,
-          49.0
+          5,
+          49
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22068,8 +23901,8 @@
           49.0
         ],
         "tile_anchor": [
-          4.0,
-          49.0
+          4,
+          49
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22147,8 +23980,8 @@
           48.0
         ],
         "tile_anchor": [
-          3.0,
-          48.0
+          3,
+          48
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22226,8 +24059,8 @@
           47.0
         ],
         "tile_anchor": [
-          2.0,
-          47.0
+          2,
+          47
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22305,8 +24138,8 @@
           46.0
         ],
         "tile_anchor": [
-          1.0,
-          46.0
+          1,
+          46
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22384,8 +24217,8 @@
           42.0
         ],
         "tile_anchor": [
-          1.0,
-          42.0
+          1,
+          42
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22463,8 +24296,8 @@
           43.0
         ],
         "tile_anchor": [
-          2.0,
-          43.0
+          2,
+          43
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22542,8 +24375,8 @@
           44.0
         ],
         "tile_anchor": [
-          3.0,
-          44.0
+          3,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22621,8 +24454,8 @@
           45.0
         ],
         "tile_anchor": [
-          4.0,
-          45.0
+          4,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22700,8 +24533,8 @@
           45.0
         ],
         "tile_anchor": [
-          5.0,
-          45.0
+          5,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22779,8 +24612,8 @@
           45.0
         ],
         "tile_anchor": [
-          6.0,
-          45.0
+          6,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22858,8 +24691,8 @@
           1.0
         ],
         "tile_anchor": [
-          14.0,
-          1.0
+          14,
+          1
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22937,8 +24770,8 @@
           5.0
         ],
         "tile_anchor": [
-          14.0,
-          5.0
+          14,
+          5
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23016,8 +24849,8 @@
           9.0
         ],
         "tile_anchor": [
-          14.0,
-          9.0
+          14,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23095,8 +24928,8 @@
           6.0
         ],
         "tile_anchor": [
-          15.0,
-          6.0
+          15,
+          6
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23174,8 +25007,8 @@
           10.0
         ],
         "tile_anchor": [
-          15.0,
-          10.0
+          15,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23253,8 +25086,8 @@
           11.0
         ],
         "tile_anchor": [
-          16.0,
-          11.0
+          16,
+          11
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23332,8 +25165,8 @@
           15.0
         ],
         "tile_anchor": [
-          16.0,
-          15.0
+          16,
+          15
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23411,8 +25244,8 @@
           14.0
         ],
         "tile_anchor": [
-          15.0,
-          14.0
+          15,
+          14
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23490,8 +25323,8 @@
           13.0
         ],
         "tile_anchor": [
-          14.0,
-          13.0
+          14,
+          13
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23569,8 +25402,8 @@
           18.0
         ],
         "tile_anchor": [
-          15.0,
-          18.0
+          15,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23648,8 +25481,8 @@
           17.0
         ],
         "tile_anchor": [
-          14.0,
-          17.0
+          14,
+          17
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23727,8 +25560,8 @@
           19.0
         ],
         "tile_anchor": [
-          16.0,
-          19.0
+          16,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23806,8 +25639,8 @@
           24.0
         ],
         "tile_anchor": [
-          17.0,
-          24.0
+          17,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23885,8 +25718,8 @@
           23.0
         ],
         "tile_anchor": [
-          16.0,
-          23.0
+          16,
+          23
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -23964,8 +25797,8 @@
           22.0
         ],
         "tile_anchor": [
-          14.0,
-          22.0
+          14,
+          22
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24043,8 +25876,8 @@
           22.0
         ],
         "tile_anchor": [
-          15.0,
-          22.0
+          15,
+          22
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24122,8 +25955,8 @@
           27.0
         ],
         "tile_anchor": [
-          16.0,
-          27.0
+          16,
+          27
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24201,8 +26034,8 @@
           26.0
         ],
         "tile_anchor": [
-          14.0,
-          26.0
+          14,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24280,8 +26113,8 @@
           26.0
         ],
         "tile_anchor": [
-          15.0,
-          26.0
+          15,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24359,8 +26192,8 @@
           119.0
         ],
         "tile_anchor": [
-          30.0,
-          119.0
+          30,
+          119
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24438,8 +26271,8 @@
           119.0
         ],
         "tile_anchor": [
-          29.0,
-          119.0
+          29,
+          119
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24517,8 +26350,8 @@
           118.0
         ],
         "tile_anchor": [
-          28.0,
-          118.0
+          28,
+          118
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24596,8 +26429,8 @@
           117.0
         ],
         "tile_anchor": [
-          27.0,
-          117.0
+          27,
+          117
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24675,8 +26508,8 @@
           116.0
         ],
         "tile_anchor": [
-          26.0,
-          116.0
+          26,
+          116
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24754,8 +26587,8 @@
           115.0
         ],
         "tile_anchor": [
-          25.0,
-          115.0
+          25,
+          115
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24833,8 +26666,8 @@
           114.0
         ],
         "tile_anchor": [
-          24.0,
-          114.0
+          24,
+          114
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24912,8 +26745,8 @@
           112.0
         ],
         "tile_anchor": [
-          23.0,
-          112.0
+          23,
+          112
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24991,8 +26824,8 @@
           110.0
         ],
         "tile_anchor": [
-          22.0,
-          110.0
+          22,
+          110
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25070,8 +26903,8 @@
           108.0
         ],
         "tile_anchor": [
-          21.0,
-          108.0
+          21,
+          108
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25149,8 +26982,8 @@
           89.0
         ],
         "tile_anchor": [
-          1.0,
-          89.0
+          1,
+          89
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25228,8 +27061,8 @@
           89.0
         ],
         "tile_anchor": [
-          2.0,
-          89.0
+          2,
+          89
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25307,8 +27140,8 @@
           88.0
         ],
         "tile_anchor": [
-          3.0,
-          88.0
+          3,
+          88
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25386,8 +27219,8 @@
           87.0
         ],
         "tile_anchor": [
-          4.0,
-          87.0
+          4,
+          87
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25465,8 +27298,8 @@
           85.0
         ],
         "tile_anchor": [
-          5.0,
-          85.0
+          5,
+          85
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25544,8 +27377,8 @@
           85.0
         ],
         "tile_anchor": [
-          6.0,
-          85.0
+          6,
+          85
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25623,8 +27456,8 @@
           85.0
         ],
         "tile_anchor": [
-          7.0,
-          85.0
+          7,
+          85
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25702,8 +27535,8 @@
           86.0
         ],
         "tile_anchor": [
-          9.0,
-          86.0
+          9,
+          86
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -25781,8 +27614,8 @@
           85.0
         ],
         "tile_anchor": [
-          10.0,
-          85.0
+          10,
+          85
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -25860,8 +27693,8 @@
           86.0
         ],
         "tile_anchor": [
-          10.0,
-          86.0
+          10,
+          86
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -25939,8 +27772,8 @@
           80.0
         ],
         "tile_anchor": [
-          13.0,
-          80.0
+          13,
+          80
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -26018,8 +27851,8 @@
           82.0
         ],
         "tile_anchor": [
-          11.0,
-          82.0
+          11,
+          82
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -26097,8 +27930,8 @@
           83.0
         ],
         "tile_anchor": [
-          10.0,
-          83.0
+          10,
+          83
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -26176,8 +28009,8 @@
           56.0
         ],
         "tile_anchor": [
-          7.0,
-          56.0
+          7,
+          56
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -26255,8 +28088,8 @@
           56.0
         ],
         "tile_anchor": [
-          5.0,
-          56.0
+          5,
+          56
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -26334,8 +28167,8 @@
           54.0
         ],
         "tile_anchor": [
-          1.0,
-          54.0
+          1,
+          54
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -26413,8 +28246,8 @@
           54.0
         ],
         "tile_anchor": [
-          2.0,
-          54.0
+          2,
+          54
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -26492,8 +28325,8 @@
           55.0
         ],
         "tile_anchor": [
-          3.0,
-          55.0
+          3,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -26571,8 +28404,8 @@
           56.0
         ],
         "tile_anchor": [
-          4.0,
-          56.0
+          4,
+          56
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -26650,8 +28483,8 @@
           55.0
         ],
         "tile_anchor": [
-          8.0,
-          55.0
+          8,
+          55
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -26729,8 +28562,8 @@
           54.0
         ],
         "tile_anchor": [
-          8.0,
-          54.0
+          8,
+          54
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -26808,8 +28641,8 @@
           54.0
         ],
         "tile_anchor": [
-          9.0,
-          54.0
+          9,
+          54
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -26887,8 +28720,8 @@
           55.0
         ],
         "tile_anchor": [
-          9.0,
-          55.0
+          9,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -26966,8 +28799,8 @@
           30.0
         ],
         "tile_anchor": [
-          15.0,
-          30.0
+          15,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27045,8 +28878,8 @@
           30.0
         ],
         "tile_anchor": [
-          16.0,
-          30.0
+          16,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27124,8 +28957,8 @@
           29.0
         ],
         "tile_anchor": [
-          14.0,
-          29.0
+          14,
+          29
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27203,8 +29036,8 @@
           27.0
         ],
         "tile_anchor": [
-          17.0,
-          27.0
+          17,
+          27
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27282,8 +29115,8 @@
           47.0
         ],
         "tile_anchor": [
-          28.0,
-          47.0
+          28,
+          47
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27361,8 +29194,8 @@
           49.0
         ],
         "tile_anchor": [
-          29.0,
-          49.0
+          29,
+          49
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27440,8 +29273,8 @@
           50.0
         ],
         "tile_anchor": [
-          30.0,
-          50.0
+          30,
+          50
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27451,8 +29284,10 @@
     ],
     "terrain_front": []
   },
+  "legacy_map_id": "cyxg_2",
+  "legacy_runtime_map_id": 990330.0,
   "map_id": "chiyue_valley",
-  "runtime_map_id": 990330.0,
-  "schema_version": 4.0,
+  "runtime_map_id": 916001.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable"
 }

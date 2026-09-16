@@ -50,8 +50,10 @@
     "default_connection_mode": "bidirectional",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2,
+    "revision": 21.0,
+    "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/cangyue_bull_temple_f4"
   },
   "ground": {
@@ -64,14 +66,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1536.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/cangyue_bull_temple_f4.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/cangyue_bull_temple_f4.ground_paint_state.json",
@@ -2276,6 +2278,70 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000138",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            78.0,
+            46.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000139",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            77.0,
+            45.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000140",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            77.0,
+            46.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000141",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            78.0,
+            45.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -2382,6 +2448,158 @@
           79.0,
           21.0
         ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          78.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          77.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          76.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          76.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          76.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          3.0
+        ]
       }
     ],
     "door_points": [],
@@ -2404,6 +2622,7 @@
         "display_name": "牛魔寺庙3层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000234",
         "official_connection_id": "portal.cangyue_bull_temple_f4.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -2413,14 +2632,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "cangyue_bull_temple_f4",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 917103,
+        "target_map_id": 917103.0,
         "target_map_key": "cangyue_bull_temple_f3",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
@@ -2445,6 +2664,7 @@
         "exit_id": "map_exit_000002",
         "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000235",
         "official_connection_id": "portal.cangyue_bull_temple_f4.map_exit_000002",
         "one_way": true,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -2452,14 +2672,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "cangyue_bull_temple_f4",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 917105,
+        "target_map_id": 917105.0,
         "target_map_key": "cangyue_bull_temple_hall",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -2617,7 +2837,7 @@
         "kind": "monster_spawn",
         "max_alive": 1.0,
         "monster_id": 234.0,
-        "radius_tiles": 3.0,
+        "radius_gu": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000004",
@@ -2638,7 +2858,7 @@
         "kind": "monster_spawn",
         "max_alive": 1.0,
         "monster_id": 233.0,
-        "radius_tiles": 3.0,
+        "radius_gu": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000005",
@@ -2659,7 +2879,7 @@
         "kind": "monster_spawn",
         "max_alive": 1.0,
         "monster_id": 232.0,
-        "radius_tiles": 3.0,
+        "radius_gu": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000006",
@@ -2704,7 +2924,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -2750,7 +2969,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -2796,7 +3014,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -2842,7 +3059,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -2888,7 +3104,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -2934,7 +3149,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -2980,7 +3194,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -2988,8 +3201,8 @@
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000013",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          11,
-          30
+          11.0,
+          30.0
         ]
       },
       {
@@ -3026,7 +3239,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3072,7 +3284,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3118,7 +3329,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3164,7 +3374,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3172,8 +3381,8 @@
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000017",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          52,
-          13
+          52.0,
+          13.0
         ]
       },
       {
@@ -3210,7 +3419,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3256,7 +3464,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3302,7 +3509,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3348,7 +3554,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3370,7 +3575,7 @@
         "kind": "monster_spawn",
         "max_alive": 1.0,
         "monster_id": 231.0,
-        "radius_tiles": 3.0,
+        "radius_gu": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000022",
@@ -3391,7 +3596,7 @@
         "kind": "monster_spawn",
         "max_alive": 1.0,
         "monster_id": 234.0,
-        "radius_tiles": 3.0,
+        "radius_gu": 3.0,
         "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000023",
@@ -3436,7 +3641,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3482,7 +3686,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3528,7 +3731,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3536,8 +3738,8 @@
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000026",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          46,
-          16
+          46.0,
+          16.0
         ]
       },
       {
@@ -3574,7 +3776,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3620,7 +3821,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "normal_cave",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -3672,8 +3872,8 @@
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000029",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          51,
-          16
+          51.0,
+          16.0
         ]
       },
       {
@@ -3716,8 +3916,8 @@
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000030",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          11,
-          27
+          11.0,
+          27.0
         ]
       },
       {
@@ -3754,16 +3954,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000031",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000031",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          39,
-          41
+          39.0,
+          41.0
         ]
       },
       {
@@ -3800,16 +3999,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000032",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000032",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          23,
-          2
+          23.0,
+          2.0
         ]
       },
       {
@@ -3846,16 +4044,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000033",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000033",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          29,
-          28
+          29.0,
+          28.0
         ]
       },
       {
@@ -3892,16 +4089,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000034",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000034",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          47,
-          12
+          47.0,
+          12.0
         ]
       },
       {
@@ -3938,16 +4134,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000035",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000035",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          67,
-          40
+          67.0,
+          40.0
         ]
       },
       {
@@ -3984,16 +4179,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000036",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000036",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          71,
-          34
+          71.0,
+          34.0
         ]
       },
       {
@@ -4030,16 +4224,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000037",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000037",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          32,
-          29
+          32.0,
+          29.0
         ]
       },
       {
@@ -4076,16 +4269,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000038",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000038",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          19,
-          2
+          19.0,
+          2.0
         ]
       },
       {
@@ -4122,16 +4314,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000039",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000039",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          16,
-          31
+          16.0,
+          31.0
         ]
       },
       {
@@ -4168,16 +4359,1140 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000040",
         "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000040",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          18,
-          16
+          18.0,
+          16.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛头魔",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 210.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            67.0,
+            1.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000041",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000041",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          65.0,
+          38.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛头魔",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 210.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            67.0,
+            1.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000042",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000042",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          50.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛头魔",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 210.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            67.0,
+            1.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000043",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000043",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          59.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛头魔",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 210.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            67.0,
+            1.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000044",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000044",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛头魔",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 210.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            67.0,
+            1.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000045",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000045",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          36.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛头魔",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 210.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            67.0,
+            1.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000046",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000046",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          31.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛头魔",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 210.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            67.0,
+            1.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000047",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000047",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15.0,
+          28.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔法师",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 220.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            36.0,
+            1.0,
+            3215.0,
+            -37.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000048",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000048",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33.0,
+          40.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔法师",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 220.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            36.0,
+            1.0,
+            3215.0,
+            -37.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000049",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000049",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔法师",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 220.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            36.0,
+            1.0,
+            3215.0,
+            -37.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000050",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000050",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔法师",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 220.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            36.0,
+            1.0,
+            3215.0,
+            -37.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000051",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000051",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          50.0,
+          13.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔法师",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 220.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            36.0,
+            1.0,
+            3215.0,
+            -37.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000052",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000052",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          64.0,
+          33.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔法师",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 220.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            36.0,
+            1.0,
+            3215.0,
+            -37.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000053",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000053",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔法师",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 220.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            36.0,
+            1.0,
+            3215.0,
+            -37.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000054",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000054",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31.0,
+          36.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔法师",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 220.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            39.0,
+            36.0,
+            1.0,
+            3215.0,
+            -37.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000055",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000055",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34.0,
+          30.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000056",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000056",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37.0,
+          43.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000057",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000057",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          71.0,
+          40.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000058",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000058",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          63.0,
+          30.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000059",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000059",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          13.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000060",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000060",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          49.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000061",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000061",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000062",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000062",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000063",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000063",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17.0,
+          12.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000064",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000064",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          28.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bull_temple_f4",
+          "source_category_role": "ordinary",
+          "source_line": 301.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "牛魔侍卫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 216.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            47.0,
+            25.0,
+            1.0,
+            3215.0,
+            -46.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bull_temple_f4.monster_spawn.000065",
+        "spawn_group_id": "mse.group.v1.cangyue_bull_temple_f4.monster_spawn.000065",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          24.0
         ]
       }
     ],
@@ -4187,7 +5502,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "asset_id": "user.9d5564a745e51214",
         "base_footprint_tiles": [
@@ -4218,7 +5533,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000092",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4238,15 +5553,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -4268,7 +5583,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "asset_id": "user.9d5564a745e51214",
         "base_footprint_tiles": [
@@ -4299,7 +5614,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000093",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4319,15 +5634,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5969,7 +7284,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           190.0,
-          373.0
+          359.6666564941406
         ],
         "asset_id": "user.f2fff8dc89de5453",
         "base_footprint_tiles": [
@@ -6000,7 +7315,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000217",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6020,15 +7335,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           190.0,
-          373.0
+          359.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6050,7 +7365,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           190.0,
-          373.0
+          359.6666564941406
         ],
         "asset_id": "user.f2fff8dc89de5453",
         "base_footprint_tiles": [
@@ -6081,7 +7396,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000218",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6101,15 +7416,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           190.0,
-          373.0
+          359.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6131,7 +7446,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "asset_id": "user.9d5564a745e51214",
         "base_footprint_tiles": [
@@ -6162,7 +7477,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000219",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6182,15 +7497,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6212,7 +7527,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "asset_id": "user.9d5564a745e51214",
         "base_footprint_tiles": [
@@ -6243,7 +7558,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000220",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6263,15 +7578,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6293,7 +7608,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "asset_id": "user.9d5564a745e51214",
         "base_footprint_tiles": [
@@ -6324,7 +7639,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000221",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6344,15 +7659,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6374,7 +7689,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "asset_id": "user.9d5564a745e51214",
         "base_footprint_tiles": [
@@ -6405,7 +7720,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000222",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6425,15 +7740,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6455,7 +7770,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "asset_id": "user.9d5564a745e51214",
         "base_footprint_tiles": [
@@ -6486,7 +7801,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000223",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6506,15 +7821,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           113.0,
-          408.6666564941406
+          382.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6536,7 +7851,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           215.0,
-          384.0
+          370.6666564941406
         ],
         "asset_id": "user.fd2ef972b3611919",
         "base_footprint_tiles": [
@@ -6567,7 +7882,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000224",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6587,26 +7902,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           215.0,
-          384.0
+          370.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "tile_anchor": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6617,7 +7932,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           140.0,
-          371.0
+          357.6666564941406
         ],
         "asset_id": "user.aa1eed4e6f085590",
         "base_footprint_tiles": [
@@ -6648,7 +7963,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000226",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6668,15 +7983,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           140.0,
-          371.0
+          357.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6698,7 +8013,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           152.0,
-          373.0
+          359.6666564941406
         ],
         "asset_id": "user.5bc26f0181587097",
         "base_footprint_tiles": [
@@ -6729,7 +8044,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000227",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6749,15 +8064,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           152.0,
-          373.0
+          359.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6779,7 +8094,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           160.0,
-          358.0
+          344.6666564941406
         ],
         "asset_id": "user.d2ca69e761034ea9",
         "base_footprint_tiles": [
@@ -6810,7 +8125,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000228",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6830,15 +8145,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           160.0,
-          358.0
+          344.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6860,7 +8175,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           201.0,
-          360.0
+          346.6666564941406
         ],
         "asset_id": "user.2a4ca216beb37aa9",
         "base_footprint_tiles": [
@@ -6891,7 +8206,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000229",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6911,15 +8226,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           201.0,
-          360.0
+          346.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -6931,87 +8246,6 @@
         "tile_anchor": [
           76.0,
           44.0
-        ],
-        "visual_footprint_tiles": [
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          152.0,
-          375.0
-        ],
-        "asset_id": "user.0da97f08519bd179",
-        "base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "none",
-        "instance_base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_custom_scale": true,
-        "instance_id": "inst_000231",
-        "instance_scale_level": -6.0,
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "disabled",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          152.0,
-          375.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.40000000000000013,
-          0.40000000000000013
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          76.0,
-          2.0
-        ],
-        "tile_anchor": [
-          76.0,
-          2.0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7174,6 +8408,164 @@
         "visual_footprint_tiles": [
           3.0,
           3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000234",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          76,
+          23
+        ],
+        "tile_anchor": [
+          76,
+          23
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s02_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000235",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          5,
+          5
+        ],
+        "tile_anchor": [
+          5,
+          5
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       }
     ],
@@ -15903,9 +17295,9 @@
     "terrain_front": []
   },
   "legacy_map_id": "nmsm_4",
-  "legacy_runtime_map_id": 990187,
+  "legacy_runtime_map_id": 990187.0,
   "map_id": "cangyue_bull_temple_f4",
-  "runtime_map_id": 917104,
-  "schema_version": 4.0,
+  "runtime_map_id": 917104.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable"
 }
