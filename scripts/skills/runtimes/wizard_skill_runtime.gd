@@ -71,6 +71,10 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				Formula.get_power(rng, rank, 10) + int(floor(float(primary_stat_roll) / 2.0))
 			)
 			field["stacking_policy"] = str(mechanics.get("stacking_policy", ""))
+			field["max_active_fields_per_caster"] = str(
+				mechanics.get("max_active_fields_per_caster", "")
+			)
+			field["cap_policy"] = str(mechanics.get("cap_policy", ""))
 			plan.effects = [field]
 		"wizard.laser":
 			var laser := _damage_effect(definition, request, rng, "piercing_line_damage")

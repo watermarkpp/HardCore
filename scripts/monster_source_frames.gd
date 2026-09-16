@@ -74,3 +74,9 @@ static func texture(path: String) -> Texture2D:
 		_queue.erase(path)
 		_queue.push_front(path)
 	return null
+
+
+static func resident_texture_count() -> int:
+	# FRAME-STALL diagnostics: how many monster frame textures are resident.
+	# Read by the GameRoot long-frame probe; no behavioral effect.
+	return _textures.size()

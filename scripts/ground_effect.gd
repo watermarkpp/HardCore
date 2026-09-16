@@ -47,6 +47,13 @@ var _snapshot_validation_context: Dictionary = {}
 var _tick_timer := 0.0
 var _sprite: Sprite2D
 var _visual_sort_proxy: Node2D
+## R1-B (GPT audit 2026-09-15): production candidate authority is the shared
+## RuntimeCombatSpatialIndex. The historical enemy-group scan is closed:
+## without an injected spatial context the self-managed tick fails closed
+## (no delivery, no group scan, no direct take_damage fallback).
+var _combat_spatial_index: RuntimeCombatSpatialIndex = null
+var _combat_map_id := -1
+var legacy_tick_delivery_skip_count := 0
 
 static var _runtime_tick_claims: Dictionary = {}
 
@@ -116,6 +123,24 @@ func configure_runtime_resolution(
 
 func configure_runtime_source(caster: Node2D) -> void:
 	source_actor = caster
+
+
+## R1-B: production combat context injection. The caller supplies the same
+## shared spatial index and runtime map id the manager-backed path uses.
+func set_combat_spatial_context(
+	spatial_index: RuntimeCombatSpatialIndex,
+	runtime_map_id: int
+) -> void:
+	_combat_spatial_index = spatial_index
+	_combat_map_id = runtime_map_id
+
+
+## Shared animation clock: lets one owner (e.g. FireWallFieldController)
+## drive the frame index of many ground-effect visuals so N cells read a
+## single advancing clock instead of each running an independent timer.
+func set_shared_anim_clock_ms(clock_ms_provider: Callable) -> void:
+	if _sprite != null and _sprite.has_method("set_shared_clock_ms"):
+		_sprite.set_shared_clock_ms(clock_ms_provider)
 
 
 func runtime_target_is_inside(target: Node2D) -> bool:
@@ -291,23 +316,83 @@ func _physics_process(delta: float) -> void:
 		_tick_timer -= delta
 		if _tick_timer <= 0.0:
 			_tick_timer = tick_interval
-			for node: Node in get_tree().get_nodes_in_group("enemies"):
-				if (
-					not node is EnemyActor
-					or node.is_queued_for_deletion()
-					or not runtime_target_is_inside(node)
-				):
-					continue
-				if runtime_damage_enabled and not claim_runtime_tick(node):
-					continue
-				if runtime_tick_adapter.is_valid():
-					runtime_tick_adapter.call(node, damage)
-				else:
-					node.take_damage(damage, source_actor)
+			_run_legacy_damage_tick()
 	if duration <= 0.0:
 		queue_free()
 	if _sprite == null:
 		queue_redraw()
+
+
+func _run_legacy_damage_tick() -> void:
+	## R1-B: the self-managed tick keeps its exact historical target-set
+	## semantics (runtime_target_is_inside gate, runtime claim gate, adapter
+	## delivery) but the candidate universe now comes from the shared
+	## RuntimeCombatSpatialIndex instead of a full enemy-group scan. Without
+	## an injected spatial context the tick fails closed: nothing is
+	## delivered and the skip counter advances. The historical direct
+	## take_damage fallback is removed (GPT audit R1-P0 item 5).
+	var projection_valid := runtime_screen_to_ground_position_px.is_valid()
+	if (
+		_combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+		or _combat_map_id < 0
+		or (
+			_snapshot_strict_ok(skill_footprint_snapshot)
+			and not projection_valid
+		)
+	):
+		legacy_tick_delivery_skip_count += 1
+		return
+	var bounds := _runtime_effect_bounds_ground_gu()
+	if bounds.size.x < 0.0:
+		legacy_tick_delivery_skip_count += 1
+		return
+	var candidates: Array[Dictionary] = (
+		_combat_spatial_index.query_aabb_candidates(
+			_combat_map_id, bounds, 0.05
+		)
+	)
+	for candidate: Dictionary in candidates:
+		var node: Variant = candidate.get("node")
+		if (
+			not node is EnemyActor
+			or (node as Node).is_queued_for_deletion()
+			or not runtime_target_is_inside(node)
+		):
+			continue
+		if runtime_damage_enabled and not claim_runtime_tick(node):
+			continue
+		if runtime_tick_adapter.is_valid():
+			runtime_tick_adapter.call(node, damage)
+		else:
+			legacy_tick_delivery_skip_count += 1
+
+
+func _runtime_effect_bounds_ground_gu() -> Rect2:
+	## Conservative ground-GU query bounds for the effect footprint: the
+	## nominal radius circle plus, when a strict snapshot is present, its
+	## absolute polygon bounds. The index adds every registered actor's own
+	## bounds on top, so the exact-phase gate alone decides the target set.
+	var effect_ground_gu := _runtime_screen_to_ground_position(global_position)
+	if not effect_ground_gu.is_finite():
+		return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
+	var radius := maxf(0.0, radius_gu)
+	var min_gu := effect_ground_gu - Vector2.ONE * radius
+	var max_gu := effect_ground_gu + Vector2.ONE * radius
+	if _snapshot_strict_ok(skill_footprint_snapshot):
+		for raw_polygon: Variant in skill_footprint_snapshot.get(
+			"polygons_ground_gu", []
+		):
+			if not raw_polygon is PackedVector2Array:
+				continue
+			for point: Vector2 in raw_polygon as PackedVector2Array:
+				if not point.is_finite():
+					continue
+				min_gu.x = minf(min_gu.x, point.x)
+				min_gu.y = minf(min_gu.y, point.y)
+				max_gu.x = maxf(max_gu.x, point.x)
+				max_gu.y = maxf(max_gu.y, point.y)
+	return Rect2(min_gu, max_gu - min_gu)
 
 
 func _draw() -> void:

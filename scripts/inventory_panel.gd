@@ -932,6 +932,15 @@ func _refresh_inventory_action_states() -> void:
 	discard_button.disabled = selected_inventory_indices.is_empty()
 
 
+## Center-screen timed toast via the owning HUD — the same channel as the
+## spell prompts (e.g. "目标被遮挡或已失效"). The HUD instantiates and owns
+## this panel (hud._ensure_inventory_panel), so the parent is the GameHUD.
+func _show_center_message(message: String, seconds := 2.0) -> void:
+	var hud_node := get_parent()
+	if hud_node != null and hud_node.has_method("show_message"):
+		hud_node.show_message(message, seconds)
+
+
 func _select_equipment_slot(slot: String) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
@@ -963,9 +972,14 @@ func _select_equipment_slot(slot: String) -> void:
 				refresh()
 				_show_equipment_detail(selected_equipment_slot)
 			else:
-				# Rejected transactions leave the original source selection and detail
-				# intact; result.reason is the authority signal, never its prose.
+				# Rejected transactions leave the original source selection and
+				# detail intact; result.reason is the authority signal, and its
+				# authoritative prose returns to the player via the center-screen
+				# toast (restored 2026-09-15).
 				_show_inventory_detail(source_index)
+				var rejection_message := str(result.get("message", ""))
+				if not rejection_message.is_empty():
+					_show_center_message(rejection_message, 2.0)
 			return
 	if selected_equipment_slot == slot:
 		_clear_equipment_selection()
@@ -1267,11 +1281,15 @@ func _on_context_action(id: int) -> void:
 			_hide_item_detail()
 	else:
 		# Failed transaction keeps the prior selection and presenter; no prose
-		# substring is used to infer the authority result.
+		# substring is used to infer the authority result. The authoritative
+		# message surfaces via the center-screen toast.
 		if not selected_inventory_ref.is_empty():
 			_show_inventory_detail(selected_inventory_index)
 		elif not selected_equipment_slot.is_empty():
 			_show_equipment_detail(selected_equipment_slot)
+		var action_rejection_message := str(result.get("message", ""))
+		if not action_rejection_message.is_empty():
+			_show_center_message(action_rejection_message, 2.0)
 
 
 # Direct action helpers remain available for automated tests and accessibility.
@@ -1315,6 +1333,9 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 			_show_equipment_detail(selected_equipment_slot)
 		else:
 			_show_inventory_detail(index)
+			var rejection_message := str(result.get("message", ""))
+			if not rejection_message.is_empty():
+				_show_center_message(rejection_message, 2.0)
 		return
 	var result_message := PlayerState.use_inventory_index(index)
 	_clear_inventory_selection_styles()

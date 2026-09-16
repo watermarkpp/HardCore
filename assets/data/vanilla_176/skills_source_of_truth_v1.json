@@ -2258,6 +2258,8 @@
         "defence_type": "MAC",
         "stacking_policy": "same_caster_same_tile_refreshes_duration; one target takes at most one tick per caster per tick",
         "max_active_fields_per_caster": "config_required_default_8",
+        "cap_policy": "evict_oldest",
+        "cap_policy_ruling": "user device ruling 2026-09-15: casting fire wall must always succeed; when the caster already holds max_active fields the oldest field is cancelled and the new field is created (classic behavior). The legacy source records no ninth-field behavior; the user is the ruling authority. Unconfigured data still fails closed to reject_new in the runtime.",
         "status": "project_canonical"
       },
       "proficiency_trigger": {

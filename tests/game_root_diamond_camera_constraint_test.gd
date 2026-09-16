@@ -1,11 +1,30 @@
 extends Node
 
+## C1.5 CAMERA-EDGE progressive-follow production contract (user device
+## rulings 2026-09-16, GPT audit): GameRoot composes the zero-black ideal
+## center (strict constrained solve) with the progressive player visibility
+## guard. The hard constraint is that the player stays inside the visibility
+## window of every screen axis - at least 15% from every edge (central 70%)
+## and never closer than two ground cells; minimizing the black area outside
+## the map is the optimization goal, NOT a hard zero-black contract. The
+## camera glides with the player as soon as they leave the anchor and tracks
+## 1:1 beyond the window, holding the player at PROGRESSIVE_TRACK_FRACTION
+## of the window (the old hold / drift / catch-up excess-only follow is
+## rejected by device ruling). The view height stays exactly
+## ArtSpec.CAMERA_ZOOM everywhere. The former "viewport corners always
+## inside the map" contract from C1 is REJECTED by device ruling and must
+## not be asserted here.
+
 const CameraConstraint := preload(
 	"res://scripts/map_editor/map_diamond_camera_constraint_service.gd"
 )
 
 
 func _ready() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
@@ -37,53 +56,174 @@ func _ready() -> void:
 	var probes: Array[Vector2] = [centroid]
 	for point: Vector2 in boundary:
 		probes.append(point)
-	for edge_index in boundary.size():
+	for edge_index: int in boundary.size():
 		var next_index := (edge_index + 1) % boundary.size()
 		probes.append((boundary[edge_index] + boundary[next_index]) * 0.5)
 	var viewport_size := game.get_viewport().get_visible_rect().size
-	var maximum_offset := viewport_size * (
-		CameraConstraint.DEFAULT_PLAYER_SCREEN_OFFSET_FRACTION
+	var max_offset_px := CameraConstraint.visibility_max_offset_px(
+		viewport_size, camera.zoom
 	)
+	var zero_black_probe_count := 0
 	for probe: Vector2 in probes:
 		game.player.global_position = probe
 		game._update_world_camera_constraint(2.0)
-		var screen_offset := Vector2(
-			absf(camera.global_position.x - probe.x) * camera.zoom.x,
-			absf(camera.global_position.y - probe.y) * camera.zoom.y
+		# The one global view height, exactly, at every position.
+		assert(
+			is_equal_approx(camera.zoom.x, ArtSpec.CAMERA_ZOOM)
+			and is_equal_approx(camera.zoom.y, ArtSpec.CAMERA_ZOOM)
+			and is_equal_approx(camera.zoom.x, camera.zoom.y),
+			"GameRoot camera zoom must stay exactly the fixed view height: %s"
+			% camera.zoom
+		)
+		# Production center == strict ideal composed with the guard.
+		var strict: Dictionary = CameraConstraint.constrain_center(
+			design_size, viewport_size * 0.5, camera.zoom, probe
+		)
+		var ideal_center := Vector2(strict.get("center", Vector2.INF))
+		var expected_center := CameraConstraint.apply_player_visibility_guard(
+			ideal_center, probe, camera.zoom, viewport_size
 		)
 		assert(
-			screen_offset.x <= maximum_offset.x + 0.1
-			and screen_offset.y <= maximum_offset.y + 0.1,
-			"player left the soft-follow screen band at %s: %s/%s" % [
-				probe, screen_offset, maximum_offset,
+			expected_center.distance_to(camera.global_position) <= 0.01,
+			"camera center must be the guarded ideal at %s: %s vs %s" % [
+				probe, camera.global_position, expected_center,
 			]
 		)
-		assert(
-			camera.zoom.x >= ArtSpec.CAMERA_ZOOM - 0.001
-			and camera.zoom.x
-				<= CameraConstraint.DEFAULT_MAXIMUM_ZOOM + 0.001
-			and is_equal_approx(camera.zoom.x, camera.zoom.y),
-			"GameRoot camera zoom is invalid: %s" % camera.zoom
-		)
-		var verification := CameraConstraint.resolve_soft_follow(
-			design_size, viewport_size * 0.5, camera.zoom, probe,
-			camera.zoom.x
+		# HARD CONSTRAINT: the player is always inside the visibility window.
+		var player_offset_px := Vector2(
+			absf(probe.x - camera.global_position.x) * camera.zoom.x,
+			absf(probe.y - camera.global_position.y) * camera.zoom.y
 		)
 		assert(
-			str(verification.get("mode_id", ""))
-			== CameraConstraint.SOFT_FOLLOW_MODE_ID
+			player_offset_px.x <= max_offset_px.x + 0.01
+			and player_offset_px.y <= max_offset_px.y + 0.01,
+			"the player left the visibility window at %s: %s" % [
+				probe, player_offset_px,
+			]
 		)
-		assert(
-			str(verification.get("edge_skirt_contract_id", ""))
-			== CameraConstraint.EDGE_SKIRT_CONTRACT_ID
-		)
+		# GOAL: progressive follow - the camera glides with the player inside
+		# the window and tracks 1:1 beyond it (C1.5 user device ruling).
+		var player_delta_px := (probe - ideal_center) * camera.zoom
+		if (
+			absf(player_delta_px.x) <= max_offset_px.x + 0.01
+			and absf(player_delta_px.y) <= max_offset_px.y + 0.01
+		):
+			zero_black_probe_count += 1
+			assert(
+				absf(player_offset_px.x) <= absf(player_delta_px.x) + 0.01
+				and absf(player_offset_px.y) <= absf(player_delta_px.y) + 0.01,
+				"the progressive follow must not overshoot the player at %s"
+				% probe
+			)
+		else:
+			var expected_ride_px := Vector2(
+				max_offset_px.x * CameraConstraint.PROGRESSIVE_TRACK_FRACTION,
+				max_offset_px.y * CameraConstraint.PROGRESSIVE_TRACK_FRACTION
+			)
+			if absf(player_delta_px.x) > max_offset_px.x + 0.01:
+				assert(
+					absf(player_offset_px.x - expected_ride_px.x) <= 0.01,
+					"a saturated X axis must hold the ride fraction at %s: %s"
+					% [probe, player_offset_px.x]
+				)
+			if absf(player_delta_px.y) > max_offset_px.y + 0.01:
+				assert(
+					absf(player_offset_px.y - expected_ride_px.y) <= 0.01,
+					"a saturated Y axis must hold the ride fraction at %s: %s"
+					% [probe, player_offset_px.y]
+				)
 	assert(
-		camera.global_position.distance_to(game.player.global_position)
-		< viewport_size.length() * 0.15,
-		"edge camera no longer prioritizes the player"
+		zero_black_probe_count >= 1,
+		"the probe set must contain zero-black positions"
+	)
+	# Map center: the camera equals the player exactly.
+	game.player.global_position = centroid
+	game._update_world_camera_constraint(2.0)
+	assert(
+		camera.global_position.is_equal_approx(centroid),
+		"map-center follow must keep the camera on the player"
+	)
+	# Walking far past the boundary: the player rests at the ride fraction
+	# inside the window and the saturated camera follows 1:1 with the player.
+	var corner: Vector2 = boundary[0]
+	var outward := (corner - centroid).normalized()
+	var previous_camera := Vector2.INF
+	var previous_player := Vector2.INF
+	var previous_saturated_x := false
+	var previous_saturated_y := false
+	var saturated := false
+	for step: int in range(1, 11):
+		game.player.global_position = corner + outward * (240.0 * float(step))
+		game._update_world_camera_constraint(2.0)
+		var player_offset_px := Vector2(
+			absf(game.player.global_position.x - camera.global_position.x)
+			* camera.zoom.x,
+			absf(game.player.global_position.y - camera.global_position.y)
+			* camera.zoom.y
+		)
+		assert(
+			player_offset_px.x <= max_offset_px.x + 0.01
+			and player_offset_px.y <= max_offset_px.y + 0.01,
+			"the player must never leave the visibility window (step %d)" % step
+		)
+		var saturated_x := player_offset_px.x >= (
+			max_offset_px.x * CameraConstraint.PROGRESSIVE_TRACK_FRACTION - 0.01
+		)
+		var saturated_y := player_offset_px.y >= (
+			max_offset_px.y * CameraConstraint.PROGRESSIVE_TRACK_FRACTION - 0.01
+		)
+		if saturated_x or saturated_y:
+			saturated = true
+			if not previous_camera.is_equal_approx(Vector2.INF):
+				var camera_delta: Vector2 = (
+					camera.global_position - previous_camera
+				)
+				var player_delta: Vector2 = (
+					game.player.global_position - previous_player
+				)
+				# A 1:1 follow holds on an axis only while BOTH steps are
+				# saturated on that axis; the transition step legitimately
+				# closes the accumulated gap in one move.
+				if saturated_x and previous_saturated_x:
+					assert(
+						absf(camera_delta.x - player_delta.x) <= 0.01,
+						"a saturated X guard must follow the player 1:1 (step %d)"
+						% step
+					)
+				if saturated_y and previous_saturated_y:
+					assert(
+						absf(camera_delta.y - player_delta.y) <= 0.01,
+						"a saturated Y guard must follow the player 1:1 (step %d)"
+						% step
+					)
+		previous_saturated_x = saturated_x
+		previous_saturated_y = saturated_y
+		previous_camera = camera.global_position
+		previous_player = game.player.global_position
+		assert(
+			is_equal_approx(camera.zoom.x, ArtSpec.CAMERA_ZOOM),
+			"edge walking must never change the view height"
+		)
+	assert(saturated, "the walk fixture must reach the guard-saturated regime")
+	# C1.1 discipline guard: the removed soft-follow machinery stays gone and
+	# the production path composes both steps.
+	var game_root_source := (
+		FileAccess.get_file_as_string("res://scripts/game_root.gd")
+	)
+	assert(
+		not game_root_source.contains("resolve_soft_follow")
+		and not game_root_source.contains("recommended_zoom")
+		and not game_root_source.contains("tanh(")
+		and game_root_source.contains("apply_player_visibility_guard"),
+		"GameRoot must compose the strict ideal with the visibility guard"
 	)
 	print(
 		"GAME_ROOT_DIAMOND_CAMERA_CONSTRAINT_PASS "
-		+ "player stays in center +/-14% band with smooth zoom and edge skirt"
+		+ "guarded edge follow, fixed zoom %0.2f, visibility margin %.2f, zero-black probes %d"
+		% [
+			ArtSpec.CAMERA_ZOOM,
+			CameraConstraint.PLAYER_VISIBLE_SCREEN_MARGIN,
+			zero_black_probe_count,
+		]
 	)
 	get_tree().quit(0)

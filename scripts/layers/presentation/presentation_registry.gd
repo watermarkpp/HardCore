@@ -58,3 +58,9 @@ func _resource(logical_path: String) -> Resource:
 	var resource := load(path) if not path.is_empty() and ResourceLoader.exists(path) else null
 	_cache[logical_path] = resource
 	return resource
+
+
+func cached_resource_count() -> int:
+	# FRAME-STALL diagnostics: how many presentation resources are cached.
+	# Read by the GameRoot long-frame probe; no behavioral effect.
+	return _cache.size()

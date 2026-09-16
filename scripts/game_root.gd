@@ -292,6 +292,13 @@ var _active_enemy_cache: Dictionary = {}
 var _active_boss_cache: Dictionary = {}
 var _safe_zone_enforcement_remaining := 0.0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+## R1-B: the shared target-query service fronts every special-geometry
+## broadphase query (d1d015ba pattern). The service is stateless between
+## queries; this instance is rebuilt whenever the map id or the index
+## instance changes so the runtime-map binding can never go stale.
+var _combat_target_query_service: CombatTargetQueryService
+var _combat_target_query_service_map_id := -2
+var _combat_target_query_service_index: RuntimeCombatSpatialIndexScript
 ## Shared caller-owned scratch for player-facing enemy broadphase queries.  All
 ## production consumers filter the current map generation after the index
 ## query; no SceneTree group fallback is permitted when this contract is not
@@ -369,6 +376,20 @@ var _drop_nodes_max_per_frame_override := -1
 var _test_force_loot_materialization_failure_count := 0
 var _pending_loot_collections: Array = []
 var _prepared_loot_collection: Dictionary = {}
+## FRAME-STALL probe: fires once per session on the first >250ms frame, but
+## only after loading has ended (armed post-baseline), so bootstrap spikes
+## cannot consume it. Counters are facts only: absence of growth means no
+## tracked CPU cache grew - engine-side costs (render/driver/allocator) are
+## NOT observable through these counters and must not be inferred from them.
+var _first_long_frame_diagnosed := false
+var _first_combat_probe_armed := false
+## First fire wall cast probe (remote review 2026-09-16): on the first
+## wizard.fire_wall cast, record the next 12 rendered frame durations and
+## report them with 33.3/50/100 ms thresholds - no threshold guessing beyond
+## that, and no causal claims from cache counters.
+var _fw_first_cast_recorded := false
+var _fw_first_cast_frames_left := 0
+var _fw_first_cast_frame_ms: Array[float] = []
 var _loot_collection_flush_queued := false
 ## Legacy loot candidates are rejected unless a focused test explicitly opts
 ## into the old fixture shape. Formal pickups always carry map/generation
@@ -602,9 +623,47 @@ func _target_spatial_enemy_is_current(enemy: EnemyActor) -> bool:
 	)
 
 
+func _target_query_service() -> CombatTargetQueryService:
+	if (
+		_combat_target_query_service == null
+		or _combat_target_query_service_map_id != current_map_id
+		or _combat_target_query_service_index != _combat_spatial_index
+	):
+		_combat_target_query_service = CombatTargetQueryService.new(
+			_combat_spatial_index, current_map_id
+		)
+		_combat_target_query_service_map_id = current_map_id
+		_combat_target_query_service_index = _combat_spatial_index
+	return _combat_target_query_service
+
+
+## PERF-1: one allocation-conscious service call for the special-geometry
+## skills. The aabb pass-through keeps each skill's canonical gate (melee
+## footprint/sector predicates, wizard snapshot gate) as the exact authority.
+## The service fast path delegates to the index caller-owned node query
+## (query-stamp dedup, inline live filter), so with epsilon 0 the candidate
+## set is exactly the one the legacy direct node queries produced and the
+## hot path allocates no request Dictionary and no candidate records.
+func _service_envelope_into(
+	bounds_ground_gu: Rect2,
+	output: Array[EnemyActor],
+	stable_order: bool = true,
+) -> bool:
+	var service := _target_query_service()
+	var service_ready := service.query_envelope_into(
+		bounds_ground_gu, output, stable_order
+	)
+	if not service_ready and service.last_rejection_reason() != "":
+		projection_rejection_reason = StringName(
+			"target_query_%s" % service.last_rejection_reason()
+		)
+	return service_ready
+
+
 func _target_spatial_query_aabb_into(
 	bounds_ground_gu: Rect2,
 	output: Array[EnemyActor],
+	stable_order: bool = true,
 ) -> bool:
 	output.clear()
 	if (
@@ -617,11 +676,7 @@ func _target_spatial_query_aabb_into(
 		if bounds_ground_gu.size.x < 0.0 or bounds_ground_gu.size.y < 0.0:
 			projection_rejection_reason = &"target_spatial_query_bounds_invalid"
 		return false
-	_combat_spatial_index.query_enemy_nodes_aabb_into(
-		current_map_id,
-		bounds_ground_gu,
-		output,
-	)
+	var service_ready := _service_envelope_into(bounds_ground_gu, output)
 	var write_index := 0
 	for raw_enemy: Variant in output:
 		if not raw_enemy is EnemyActor:
@@ -632,7 +687,7 @@ func _target_spatial_query_aabb_into(
 		output[write_index] = enemy
 		write_index += 1
 	output.resize(write_index)
-	return true
+	return service_ready
 
 
 func _target_spatial_query_segment_into(
@@ -640,6 +695,7 @@ func _target_spatial_query_segment_into(
 	end_ground_gu: Vector2,
 	expansion_gu: float,
 	output: Array[EnemyActor],
+	stable_order: bool = true,
 ) -> bool:
 	output.clear()
 	if (
@@ -651,12 +707,22 @@ func _target_spatial_query_segment_into(
 		if not is_finite(expansion_gu):
 			projection_rejection_reason = &"target_spatial_query_expansion_invalid"
 		return false
-	_combat_spatial_index.query_enemy_nodes_segment_into(
-		current_map_id,
-		start_ground_gu,
-		end_ground_gu,
-		expansion_gu,
-		output,
+	# PERF-1: the segment broadphase enters the service fast path as one
+	# expanded AABB with the exact envelope the index node query built
+	# (segment AABB expanded by the caller's expansion); with epsilon 0 the
+	# service adds only the index max actor bounds on top, so the candidate
+	# set is identical to the direct node query it replaces.
+	var expansion := maxf(0.0, expansion_gu)
+	var min_gu := Vector2(
+		minf(start_ground_gu.x, end_ground_gu.x),
+		minf(start_ground_gu.y, end_ground_gu.y)
+	) - Vector2.ONE * expansion
+	var max_gu := Vector2(
+		maxf(start_ground_gu.x, end_ground_gu.x),
+		maxf(start_ground_gu.y, end_ground_gu.y)
+	) + Vector2.ONE * expansion
+	var service_ready := _service_envelope_into(
+		Rect2(min_gu, max_gu - min_gu), output, stable_order
 	)
 	var write_index := 0
 	for raw_enemy: Variant in output:
@@ -668,7 +734,7 @@ func _target_spatial_query_segment_into(
 		output[write_index] = enemy
 		write_index += 1
 	output.resize(write_index)
-	return true
+	return service_ready
 
 
 func _aoe_build_query_plan(
@@ -735,19 +801,28 @@ func _aoe_query_enemy_candidates_aabb(
 ) -> bool:
 	_aoe_candidate_scratch.clear()
 	if _aoe_plan_is_ready(plan):
-		_combat_spatial_index.query_enemy_nodes_aabb_into(
-			current_map_id,
-			bounds_ground_gu,
-			_aoe_candidate_scratch,
-		)
 		RuntimeDiagnostics.increment_performance_counter(
 			&"aoe_spatial_queries"
 		)
-		RuntimeDiagnostics.increment_performance_counter(
-			&"aoe_spatial_candidates",
-			_aoe_candidate_scratch.size(),
+		if (
+			not bounds_ground_gu.position.is_finite()
+			or not bounds_ground_gu.size.is_finite()
+			or bounds_ground_gu.size.x < 0.0
+			or bounds_ground_gu.size.y < 0.0
+		):
+			# The replaced index node query answered invalid envelopes with
+			# an empty candidate set and no rejection; keep that behavior.
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_spatial_candidates", 0
+			)
+			return true
+		var query_ready := _service_envelope_into(
+			bounds_ground_gu, _aoe_candidate_scratch
 		)
-		return true
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_candidates", _aoe_candidate_scratch.size()
+		)
+		return query_ready
 	if allow_reference_fallback and _aoe_reference_fallback_allowed():
 		return _aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
 	_aoe_record_query_rejection(
@@ -765,21 +840,36 @@ func _aoe_query_enemy_candidates_segment(
 ) -> bool:
 	_aoe_candidate_scratch.clear()
 	if _aoe_plan_is_ready(plan):
-		_combat_spatial_index.query_enemy_nodes_segment_into(
-			current_map_id,
-			start_ground_gu,
-			end_ground_gu,
-			expansion_gu,
-			_aoe_candidate_scratch,
-		)
 		RuntimeDiagnostics.increment_performance_counter(
 			&"aoe_spatial_queries"
 		)
-		RuntimeDiagnostics.increment_performance_counter(
-			&"aoe_spatial_candidates",
-			_aoe_candidate_scratch.size(),
+		if (
+			not start_ground_gu.is_finite()
+			or not end_ground_gu.is_finite()
+			or not is_finite(expansion_gu)
+		):
+			# The replaced index node query answered invalid segments with
+			# an empty candidate set and no rejection; keep that behavior.
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_spatial_candidates", 0
+			)
+			return true
+		var expansion := maxf(0.0, expansion_gu)
+		var min_gu := Vector2(
+			minf(start_ground_gu.x, end_ground_gu.x),
+			minf(start_ground_gu.y, end_ground_gu.y)
+		) - Vector2.ONE * expansion
+		var max_gu := Vector2(
+			maxf(start_ground_gu.x, end_ground_gu.x),
+			maxf(start_ground_gu.y, end_ground_gu.y)
+		) + Vector2.ONE * expansion
+		var query_ready := _service_envelope_into(
+			Rect2(min_gu, max_gu - min_gu), _aoe_candidate_scratch
 		)
-		return true
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_candidates", _aoe_candidate_scratch.size()
+		)
+		return query_ready
 	if allow_reference_fallback and _aoe_reference_fallback_allowed():
 		return _aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
 	_aoe_record_query_rejection(
@@ -1390,7 +1480,11 @@ func _ready() -> void:
 	# Q2-B: one scheduler for generic persistent ground effects. It reuses the
 	# shared enemy spatial index; FireWall's formal field path stays outside.
 	_ground_effect_manager = PersistentGroundEffectManagerScript.new(
-		_combat_spatial_index
+		_combat_spatial_index,
+		# R1-C: the manager's damage deliveries share GameRoot's owned
+		# CombatRuntimeService instance (M30 ownership contract); the manager
+		# never delivers damage outside the shared authority.
+		_combat_runtime
 	)
 	# Q2-D: one MonsterVisual streaming coordinator; MonsterVisual instances
 	# register needs and the coordinator owns the single global streaming poll.
@@ -1430,6 +1524,7 @@ func _ready() -> void:
 	player.skill_requested.connect(_on_player_skill)
 	player.hc_world_skill_preflight = Callable(self, "_hc_skill_preflight")
 	player.skill_cast_started.connect(_on_skill_cast_audio_started)
+	player.skill_cast_started.connect(_on_first_fire_wall_cast_probe)
 	player.warrior_skill_state_changed.connect(_on_warrior_skill_state_changed)
 	player.stats_changed.connect(_on_player_stats_changed)
 	player.movement_performed.connect(_on_player_moved)
@@ -1633,6 +1728,41 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	# FRAME-STALL probe (reworked per remote review 2026-09-16): armed only
+	# after loading ends so bootstrap spikes cannot consume the one shot.
+	# The counters are neutral facts: they show whether any tracked CPU
+	# cache grew during the frame and nothing more.
+	if _first_combat_probe_armed and not _first_long_frame_diagnosed and delta > 0.25:
+		_first_long_frame_diagnosed = true
+		print(
+			"[FRAME-STALL] long frame %.3fs at process frame %d: caster=%s presentation=%d monster_frames=%d"
+			% [
+				delta,
+				Engine.get_process_frames(),
+				CasterSkillVisualRegistry.frame_texture_cache_diagnostics(),
+				PresentationAssets.cached_resource_count(),
+				preload(
+					"res://scripts/monster_source_frames.gd"
+				).resident_texture_count()
+			]
+		)
+	# First fire wall cast window: record the 12 rendered frame durations
+	# that follow the first cast event, then report with fixed thresholds.
+	if _fw_first_cast_frames_left > 0:
+		_fw_first_cast_frame_ms.append(delta * 1000.0)
+		_fw_first_cast_frames_left -= 1
+		if _fw_first_cast_frames_left == 0:
+			var over33 := 0
+			var over50 := 0
+			var over100 := 0
+			for frame_ms: float in _fw_first_cast_frame_ms:
+				over33 += 1 if frame_ms > 33.3 else 0
+				over50 += 1 if frame_ms > 50.0 else 0
+				over100 += 1 if frame_ms > 100.0 else 0
+			print(
+				"[FW-FIRST-CAST] frames_ms=%s over33=%d over50=%d over100=%d"
+				% [str(_fw_first_cast_frame_ms), over33, over50, over100]
+			)
 	preload("res://scripts/monster_source_frames.gd").poll()
 	if not _prepared_loot_collection.is_empty(): _poll_prepared_loot_collection()
 	var process_started_usec := RuntimeDiagnostics.timing_start()
@@ -1746,26 +1876,129 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	var target := MapDiamondCameraConstraintScript.resolve_soft_follow(
-		design_size, viewport_half, base_zoom, player.global_position
+	# C1.2 CAMERA-EDGE-V2 (user ruling 2026-09-16, GPT audit): the camera
+	# contract has ONE hard constraint and ONE optimization goal.
+	#   Hard: the player stays inside the visibility window - at least 15%
+	#         from every screen edge (central 70%) and never closer than
+	#         two ground cells - and the view height is exactly
+	#         ArtSpec.CAMERA_ZOOM (1.06); no dynamic zoom exists here.
+	#   Goal: the black area outside the map is minimized, NOT forbidden.
+	# Step 1 computes the zero-black ideal center (strict constrained
+	# solve, cached per map/viewport/zoom with a value-compared single
+	# slot). Step 2 re-follows the player by exactly the amount that
+	# exceeds the visibility window — and no more — so any black area is
+	# the minimum required to keep the player comfortable. Rendering
+	# stability (smoothing/pixel snap) is G2 and is deliberately NOT
+	# touched here.
+	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	var strict_center := (
+		MapDiamondCameraConstraintScript.resolve_strict_follow_cached(
+			design_size, viewport_half, fixed_zoom, player.global_position
+		)
 	)
-	var target_zoom: Vector2 = target.get("recommended_zoom", base_zoom)
-	var zoom_alpha := 1.0 - exp(-6.0 * maxf(0.0, delta))
-	var resolved_zoom := _world_camera.zoom.lerp(target_zoom, zoom_alpha)
-	resolved_zoom.x = clampf(
-		resolved_zoom.x, ArtSpec.CAMERA_ZOOM,
-		MapDiamondCameraConstraintScript.DEFAULT_MAXIMUM_ZOOM
+	var camera_center := (
+		MapDiamondCameraConstraintScript.apply_player_visibility_guard(
+			strict_center,
+			player.global_position,
+			fixed_zoom,
+			viewport_half * 2.0
+		)
 	)
-	resolved_zoom.y = resolved_zoom.x
-	# Re-resolve the position at the zoom actually displayed this frame. This
-	# keeps the player inside the +/-14% screen band even while zoom is easing.
-	var result := MapDiamondCameraConstraintScript.resolve_soft_follow(
-		design_size, viewport_half, resolved_zoom, player.global_position,
-		resolved_zoom.x
+	_world_camera.zoom = fixed_zoom
+	_world_camera.global_position = camera_center
+
+
+## FW-COLD (GPT audit 2026-09-16): prewarm the caster-skill animation frames
+## of the player's learned skills during the loading window. Learned skills
+## are the superset of the hotbar contents, so this covers every skill the
+## player can actually cast first. Fire wall's six frames land here, killing
+## the first-cast main-thread texture load spike.
+##
+## FIRST-COMBAT extension (user device report 2026-09-16): a one-time ~1s
+## hitch a few seconds after the first aggro. Static tracing determined the
+## only remaining first-combat synchronous loads on the main thread: the
+## weapon swing audio streams (PresentationAssets.audio resolves through a
+## sync load() on cache miss, first played on the first attack) and the
+## fallback presentation action textures. Everything else in the first
+## combat presentation path is already warm: paper doll and weapon action
+## atlases load at equipment refresh, monster action frames thread-load
+## off the main thread, and caster skill frames prewarm above. The audio
+## warming is idempotent (all three swing ids, whatever the equipped
+## weapon resolves to).
+func _prewarm_learned_skill_visuals() -> void:
+	if PlayerState.test_mode and PlayerState.learned_skills.is_empty():
+		return
+	for skill_name: String in PlayerState.learned_skills.keys():
+		CasterSkillVisualRegistry.prewarm_animation(skill_name)
+	for audio_id: String in ["sword", "wood", "fist"]:
+		PresentationAssets.audio(audio_id)
+	for action_key: String in ["attack", "hit", "cast", "death"]:
+		PresentationAssets.player_texture(action_key)
+	# FW-COLD2 Phase A (remote review 2026-09-16): the 32 MB frame cache is
+	# LRU-ordered, so a wizard with many learned skills can evict the earliest
+	# prewarmed frames during the sweep above. Re-touch the known first-cast
+	# skill LAST so its frames are the hottest entries, then prove residency
+	# before Loading ends - if this is not 6/6, FW-COLD is not complete.
+	CasterSkillVisualRegistry.prewarm_animation("wizard.fire_wall")
+	var fw_residency := CasterSkillVisualRegistry.animation_residency(
+		"wizard.fire_wall"
 	)
-	_world_camera.zoom = resolved_zoom
-	_world_camera.global_position = Vector2(
-		result.get("center", player.global_position)
+	var fw_missing: Array = fw_residency.get("missing_paths", [])
+	print(
+		"[FW-WARM] cpu_resident=%d/%d%s"
+		% [
+			int(fw_residency.get("resident_frames", 0)),
+			int(fw_residency.get("expected_frames", 0)),
+			"" if fw_missing.is_empty() else " missing=%s" % [fw_missing],
+		]
+	)
+
+
+## FW-COLD2 Phase B (remote review 2026-09-16): RESOURCE WARM is not RENDER
+## WARM. The device still showed a one-time first fire wall cast hitch while
+## the CPU texture cache was already hot; on this project's gl_compatibility
+## renderer that matches the first-render cold path (GPU texture upload,
+## first CanvasItem draw state, driver first-use). The officially recommended
+## Compatibility warm-up is to really draw the effect inside the viewport
+## once per frame texture while the loading overlay still fully covers the
+## screen. Presentation-only: no fire wall field controller, no damage, no
+## combat-side registration, no MP cost. The visual must stay visible -
+## visible=false or alpha 0 lets the renderer skip the draw - the loading
+## overlay is what hides it from the player.
+func _warm_fire_wall_render_path() -> void:
+	if DisplayServer.get_name() == "headless":
+		# Automated headless runs have no real rendering server; the CPU
+		# residency gate already proves everything headless can prove.
+		return
+	var warm_visual := CasterSkillAnimationPlayer.new()
+	if not warm_visual.configure("wizard.fire_wall", Vector2.DOWN):
+		warm_visual.free()
+		return
+	# Production GroundSkillEffect._install_visual presentation values.
+	warm_visual.modulate = Color(1.0, 1.0, 1.0, 0.78)
+	warm_visual.scale.y *= 0.6
+	if is_instance_valid(_world_camera):
+		warm_visual.global_position = _world_camera.get_screen_center_position()
+	elif is_instance_valid(player):
+		warm_visual.global_position = player.global_position
+	add_child(warm_visual)
+	for frame_index: int in warm_visual.frame_count():
+		warm_visual.set_manual_frame(frame_index)
+		await RenderingServer.frame_post_draw
+	warm_visual.queue_free()
+	await RenderingServer.frame_post_draw
+	# FRAME-STALL baseline: one print at the end of the loading window. The
+	# one-time long-frame probe (see _process) prints the same counters when
+	# the first >250ms frame occurs; the delta localizes the stall source.
+	print(
+		"[FRAME-STALL] baseline: caster=%s presentation=%d monster_frames=%d"
+		% [
+			CasterSkillVisualRegistry.frame_texture_cache_diagnostics(),
+			PresentationAssets.cached_resource_count(),
+			preload(
+				"res://scripts/monster_source_frames.gd"
+			).resident_texture_count()
+		]
 	)
 
 
@@ -2345,7 +2578,7 @@ func _on_map_teleport_requested(request: Dictionary) -> void:
 	if not bool(travel_profile.get("success", false)):
 		missing_projection_rejection_count += 1
 		projection_rejection_reason = str(travel_profile.get("reason", ""))
-		hud.show_message("map_projection_unavailable:%d" % destination_map_id)
+		hud.show_message("目标地图投影暂不可用（%d）" % destination_map_id)
 		return
 	var map_data := GameData.get_map_by_id(destination_map_id)
 	if map_data.is_empty():
@@ -2406,7 +2639,7 @@ func _request_map_travel(map_id: int) -> bool:
 		projection_rejection_reason = str(
 			travel_profile.get("reason", "")
 		)
-		hud.show_message("map_projection_unavailable:%d" % map_id)
+		hud.show_message("当前地图投影暂不可用（%d）" % map_id)
 		return false
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty():
@@ -2770,6 +3003,19 @@ func _run_map_transition(
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
 	if _check_world_ready_contract():
 		_relocate_main_pets_after_map_arrival()
+		# FW-COLD (GPT audit 2026-09-16): while Loading still covers the
+		# gameplay, prewarm every animation frame of the player's learned
+		# skills (learned skills are a superset of the hotbar). The first
+		# real cast must be a pure texture-cache hit instead of a main-thread
+		# synchronous load spike. Loading-phase work only: damage, spatial
+		# index and fire wall systems are untouched.
+		_prewarm_learned_skill_visuals()
+		# FW-COLD2 Phase B: really draw the fire wall visual once per frame
+		# texture while the loading overlay still covers the screen, so the
+		# first real cast skips the first-render cold path. Presentation-only.
+		await _warm_fire_wall_render_path()
+		if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+			return
 		if is_instance_valid(_town_music_controller):
 			_town_music_controller.set_map_context(
 				current_map_id,
@@ -2781,6 +3027,10 @@ func _run_map_transition(
 		# frame-separated batches; this keeps Loading and gameplay input responsive
 		# while removing the one-time cost from the player's first panel click.
 		hud.finish_loading_transition()
+		# FRAME-STALL discipline (remote review 2026-09-16): arm the generic
+		# long-frame probe only now - loading has ended and the prewarm
+		# baseline has printed - so bootstrap spikes cannot consume it.
+		_first_combat_probe_armed = true
 		if PlayerState.test_mode and hud.loading_transition_overlay != null:
 			# Test-mode fast path hides the fade overlay immediately so tests
 			# can assert the bootstrap completed without waiting the fade tween.
@@ -3250,6 +3500,9 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# Every zone_content node (including ground effect visuals) is freed
 		# above; their manager registrations must not survive into the next map.
 		_ground_effect_manager.clear_all()
+	# FireWall field controllers are not zone_content members; free them
+	# explicitly so no field (or registry entry) crosses a map transition.
+	_clear_fire_wall_field_registry()
 	current_zone = zone_name
 	current_map_data = map_data.duplicate(true)
 	current_map_id = int(map_data.get("mapId", -1)) if not map_data.is_empty() else -1
@@ -5574,6 +5827,9 @@ func _wild_rush_has_dynamic_blocker(
 			+ forward_ground_gu * WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_GU,
 		target_radius_gu,
 		_target_spatial_query_scratch,
+		# PERF-2: existence probe — the boolean blocker verdict is
+		# order-insensitive, so the broadphase may skip combat ordering.
+		false,
 	):
 		return false
 	for other: EnemyActor in _target_spatial_query_scratch:
@@ -6020,7 +6276,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 		)
 	)
 	if not bool(result.get("ok", false)):
-		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
+		hud.show_message("技能栏配置失败")
 		return
 	if not PlayerState.apply_skill_button_assignment(result):
 		if is_instance_valid(hud) and hud.has_method("set_skill_button_assignments"):
@@ -6666,6 +6922,19 @@ func _on_skill_cast_audio_started(stable_skill_id: String) -> void:
 	_play_skill_audio_phase(stable_skill_id, "cast")
 
 
+## FW-COLD2 diagnosis (remote review 2026-09-16): on the first fire wall
+## cast, open a 12-rendered-frame recording window. The following _process
+## deltas are the rendered frame durations (a cost inside frame N shows up
+## as the delta reported at frame N+1), reported once with fixed
+## 33.3/50/100 ms thresholds and no causal interpretation.
+func _on_first_fire_wall_cast_probe(stable_skill_id: String) -> void:
+	if _fw_first_cast_recorded or stable_skill_id != "wizard.fire_wall":
+		return
+	_fw_first_cast_recorded = true
+	_fw_first_cast_frame_ms.clear()
+	_fw_first_cast_frames_left = 12
+
+
 func _on_item_audio_committed(identity_domain: String, identity_id: int, semantic_event: String) -> void:
 	if identity_domain not in ["item", "service"] or identity_id < 0:
 		return
@@ -6735,7 +7004,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 	)
 	var hit_any := bool(execution.get("effect_success", false))
 	if not bool(execution.get("accepted", false)):
-		hud.show_message("技能释放失败：%s" % str(execution.get("reason", "runtime_rejected")), 1.5)
+		hud.show_message("技能释放失败", 1.5)
 		return
 	if hit_any:
 		_play_skill_audio_phase(stable_skill_id, "effect")
@@ -8140,7 +8409,9 @@ func _spawn_canonical_cast_nodes_from_plan(
 	var stable_skill_id := str(plan.get("skill_id", ""))
 	if stable_skill_id == FIRE_WALL_SKILL_ID:
 		# Q2-C/Q3-B: the formal fire wall release owns exactly ONE
-		# FireWallFieldController plus its 4 pure-visual cells. Never fall back
+		# FireWallFieldController plus its pure-visual cells (3x3 geometry =>
+		# 9 cells today; the old "4 cells" comment predates the 2026-09-13
+		# geometry override). Never fall back
 		# to the generic ground-dot factory or standalone GroundSkillEffect
 		# cells; the field controller is the single damage/visual owner.
 		var ground_effect := _canonical_plan_ground_effect(plan)
@@ -9038,6 +9309,40 @@ func _spawn_canonical_ground_field(
 				)
 			)
 		var empty_target_filters: Array[Callable] = []
+		# SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
+		# project_canonical): "same_caster_same_tile_refreshes_duration" with
+		# "max_active_fields_per_caster": "config_required_default_8".
+		# R2 ruling (user device ruling 2026-09-15, GPT audit adoption): the
+		# ninth-field behavior is now recorded in the SOT mechanics as
+		# "cap_policy": "evict_oldest" — casting must always succeed and the
+		# oldest field is cancelled when the cap is reached. The runtime
+		# keeps fail-closed to reject_new ONLY for unconfigured data. The
+		# registry key is source-aware: caster/map/generation/family/tile,
+		# so two casters on one tile own separate fields instead of
+		# cross-refreshing each other.
+		var registry_center := _fire_wall_registry_center_cell(coverage_cells)
+		var registry_usable := not coverage_cells.is_empty()
+		var registry_key := ""
+		if registry_usable:
+			registry_key = _fire_wall_registry_key(
+				player, stable_skill_id, registry_center
+			)
+			_fire_wall_prune_invalid_registry_entries()
+			var existing_field: Variant = _fire_wall_field_registry.get(
+				registry_key
+			)
+			if _fire_wall_registry_controller_is_active(existing_field):
+				(existing_field as FireWallFieldControllerScript).refresh_field(
+					effect,
+					canonical_snapshot,
+					field_snapshot_validation_context,
+					release_id
+				)
+				return
+			if not _fire_wall_cap_allows_new_field(
+				effect, player, stable_skill_id
+			):
+				return
 		var field_controller := FireWallFieldControllerScript.new()
 		field_controller.setup_fire_wall_field(
 			player,
@@ -9055,9 +9360,26 @@ func _spawn_canonical_ground_field(
 			current_map_id
 		)
 		add_child(field_controller)
-		# Q2-C: the controller owns the 4 GroundSkillVisualCell presentation
-		# nodes; no additional standalone GroundSkillEffect cells are spawned,
-		# so the base-class enemy-group scan can never run on this path.
+		if registry_usable:
+			_fire_wall_field_registry[registry_key] = field_controller
+			_fire_wall_field_order.append(registry_key)
+			# R2-2: the controller releases its registry slot the moment it
+			# leaves the tree (expiry/cancel/map teardown) instead of
+			# waiting for the next cast's lazy prune.
+			field_controller.tree_exited.connect(
+				_on_fire_wall_field_tree_exited.bind(
+					registry_key, field_controller
+				)
+			)
+			_debug_validate_fire_wall_registry("cast_insert")
+		for visual_cell: GroundSkillVisualCell in field_controller.visual_cells:
+			visual_cell.set_shared_anim_clock_ms(
+				Callable(field_controller, "fire_wall_anim_clock_ms")
+			)
+		# Q2-C: the controller owns the GroundSkillVisualCell presentation
+		# nodes (3x3 geometry => 9 cells today); no additional standalone
+		# GroundSkillEffect cells are spawned, so the base-class enemy-group
+		# scan can never run on this path.
 		return
 
 	# Generic persistent ground effects share one canonical validation context
@@ -9078,6 +9400,236 @@ func _spawn_canonical_ground_field(
 			skill_release_snapshot,
 			generic_snapshot_validation_context
 		)
+
+
+## SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
+## status project_canonical):
+##   "stacking_policy":
+##     "same_caster_same_tile_refreshes_duration; one target takes at most
+##      one tick per caster per tick"
+##   "max_active_fields_per_caster": "config_required_default_8"
+## The registry below restores that canonical stacking contract in the
+## runtime: same center tile refreshes the existing field, different tiles
+## create fields up to the canonical cap. The registry key is source-aware
+## (GPT audit R1-P0): map, zone generation, caster identity, skill family
+## and the selected center tile — a tile alone is not the field identity, so
+## two casters on one tile own separate fields and never cross-refresh.
+## Cap policy: explicit data from the SOT mechanics ("cap_policy":
+## "evict_oldest" | "reject_new"). R2 ruling (user device ruling
+## 2026-09-15): the SOT now records evict_oldest for wizard.fire_wall —
+## casting always succeeds and the oldest field is cancelled at the cap —
+## because the R1-P0 reject_new default locked the skill out for the whole
+## 10-40s field duration window. Unconfigured data still fails closed to
+## reject_new.
+const FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER := 8
+const FIRE_WALL_CAP_POLICY_EVICT_OLDEST := "evict_oldest"
+const FIRE_WALL_CAP_POLICY_REJECT_NEW := "reject_new"
+var _fire_wall_field_registry: Dictionary = {}
+var _fire_wall_field_order: Array = []
+## R2-6 (GPT audit adoption): debug registry-invariant switch. The
+## functional-verification APK keeps it on; the dedicated performance A/B
+## build turns it off so lifecycle diagnostics cannot pollute frame-timing
+## percentiles during rapid fire-wall casting.
+var _fire_wall_registry_validation_enabled := true
+
+
+func _fire_wall_registry_controller_is_active(controller: Variant) -> bool:
+	## R2-6 (GPT audit adoption): CAST_ACTIVE = structural validity plus not
+	## queued for deletion. A queued controller is mid-release (expiry or
+	## cancel already ran; Godot frees it at frame end): refreshing it could
+	## not save it, and keeping it registered would swallow a same-tile
+	## recast for one frame. Prune and the same-tile refresh gate share this
+	## helper so both treat the window identically.
+	return (
+		controller is FireWallFieldControllerScript
+		and is_instance_valid(controller)
+		and not (controller as FireWallFieldController).is_queued_for_deletion()
+	)
+
+
+func _fire_wall_registry_center_cell(coverage_cells: Array[Vector2i]) -> Vector2i:
+	## The registry center is the selected center tile of the field footprint.
+	## Coverage cells are absolute grid steps, so two casts on the same tile
+	## produce the same centered 3x3 cell set and therefore the same key.
+	if coverage_cells.is_empty():
+		return Vector2i.ZERO
+	var minimum := Vector2i(2147483647, 2147483647)
+	var maximum := Vector2i(-2147483648, -2147483648)
+	for cell: Vector2i in coverage_cells:
+		minimum = Vector2i(mini(minimum.x, cell.x), mini(minimum.y, cell.y))
+		maximum = Vector2i(maxi(maximum.x, cell.x), maxi(maximum.y, cell.y))
+	var center := Vector2(minimum + maximum) * 0.5
+	return Vector2i(roundi(center.x), roundi(center.y))
+
+
+func _fire_wall_registry_key(
+	caster: Node2D,
+	family: String,
+	registry_center: Vector2i
+) -> String:
+	return "%d|%d|%d|%s|%d_%d" % [
+		current_map_id,
+		_zone_generation,
+		caster.get_instance_id() if is_instance_valid(caster) else 0,
+		family,
+		registry_center.x,
+		registry_center.y,
+	]
+
+
+func _fire_wall_registry_caster_prefix(caster: Node2D) -> String:
+	return "%d|%d|%d|" % [
+		current_map_id,
+		_zone_generation,
+		caster.get_instance_id() if is_instance_valid(caster) else 0,
+	]
+
+
+func _fire_wall_max_active_fields(effect: Dictionary) -> int:
+	var raw := str(effect.get("max_active_fields_per_caster", ""))
+	if raw.begins_with("config_required_default_"):
+		var suffix := raw.trim_prefix("config_required_default_")
+		if suffix.is_valid_int():
+			return maxi(1, int(suffix))
+	if raw.is_valid_int():
+		return maxi(1, int(raw))
+	return FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER
+
+
+func _fire_wall_cap_policy(effect: Dictionary) -> String:
+	var raw := str(effect.get("cap_policy", "")).strip_edges().to_lower()
+	if raw == FIRE_WALL_CAP_POLICY_EVICT_OLDEST:
+		return FIRE_WALL_CAP_POLICY_EVICT_OLDEST
+	return FIRE_WALL_CAP_POLICY_REJECT_NEW
+
+
+func _fire_wall_cap_allows_new_field(
+	effect: Dictionary,
+	caster: Node2D,
+	_family: String
+) -> bool:
+	## Per-caster cap check: "max_active_fields_per_caster" counts the
+	## fields of THIS caster only, not the whole registry.
+	var max_fields := _fire_wall_max_active_fields(effect)
+	var caster_prefix := _fire_wall_registry_caster_prefix(caster)
+	var caster_fields := 0
+	for key: Variant in _fire_wall_field_order:
+		if str(key).begins_with(caster_prefix):
+			caster_fields += 1
+	if caster_fields < max_fields:
+		return true
+	if _fire_wall_cap_policy(effect) == FIRE_WALL_CAP_POLICY_EVICT_OLDEST:
+		_fire_wall_evict_oldest_field_for_caster(caster_prefix)
+		return true
+	RuntimeDiagnostics.increment_performance_counter(
+		&"fire_wall_cap_reject_new"
+	)
+	return false
+
+
+func _fire_wall_prune_invalid_registry_entries() -> void:
+	var stale_keys: Array = []
+	for key: Variant in _fire_wall_field_registry.keys():
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		# R2-6: CAST_ACTIVE check — a queued-for-deletion controller is
+		# stale NOW, so a same-tile recast inside the expiry frame creates
+		# a fresh field instead of refreshing a dying one.
+		if not _fire_wall_registry_controller_is_active(controller):
+			stale_keys.append(key)
+	for key: Variant in stale_keys:
+		_fire_wall_field_registry.erase(key)
+		_fire_wall_field_order.erase(key)
+	if not stale_keys.is_empty():
+		_debug_validate_fire_wall_registry("prune")
+
+
+func _on_fire_wall_field_tree_exited(
+	registry_key: String,
+	controller: FireWallFieldController
+) -> void:
+	## R2-2: proactive registry release when a field controller leaves the
+	## tree. The identity guard keeps a stale signal from evicting a newer
+	## field that was registered under the same key (same-tile recast).
+	if _fire_wall_field_registry.get(registry_key) == controller:
+		_fire_wall_field_registry.erase(registry_key)
+		_fire_wall_field_order.erase(registry_key)
+	_debug_validate_fire_wall_registry("tree_exited")
+
+
+func _debug_validate_fire_wall_registry(context := "") -> void:
+	## R2-5 (GPT audit adoption): debug-only STRUCTURAL invariant, executed
+	## at lifecycle boundaries (cast insert, eviction, expiry release, prune,
+	## map teardown): registry keys and order slots must stay 1:1 and every
+	## entry must reference a valid controller. STRUCTURAL_VALID means type
+	## correct + instance still valid — a queued-for-deletion entry is
+	## accepted as mid-release because its own tree_exited hook drops the
+	## slot within the same frame. CAST_ACTIVE (also !is_queued_for_deletion)
+	## is the separate production gate in
+	## _fire_wall_registry_controller_is_active(). Never runs per frame.
+	if (
+		not OS.is_debug_build()
+		or not _fire_wall_registry_validation_enabled
+	):
+		return
+	assert(
+		_fire_wall_field_registry.size() == _fire_wall_field_order.size(),
+		"fire wall registry/order size mismatch (%s): %d vs %d" % [
+			context,
+			_fire_wall_field_registry.size(),
+			_fire_wall_field_order.size(),
+		]
+	)
+	var order_keys := {}
+	for key: Variant in _fire_wall_field_order:
+		assert(
+			not order_keys.has(key),
+			"fire wall order duplicates key %s (%s)" % [str(key), context]
+		)
+		order_keys[key] = true
+		assert(
+			_fire_wall_field_registry.has(key),
+			"fire wall order key %s missing from registry (%s)"
+			% [str(key), context]
+		)
+	for key: Variant in _fire_wall_field_registry:
+		var entry: Variant = _fire_wall_field_registry.get(key)
+		# A queued-for-deletion controller is mid-release: its own
+		# tree_exited hook drops the registry slot within the same frame
+		# (expiry/cancel window), so queued entries are still consistent.
+		assert(
+			entry is FireWallFieldController
+			and is_instance_valid(entry),
+			"fire wall registry entry %s must reference a structurally valid "
+			+ "controller (%s)" % [str(key), context]
+		)
+		assert(
+			order_keys.has(key),
+			"fire wall registry key %s missing from order (%s)"
+			% [str(key), context]
+		)
+
+
+func _fire_wall_evict_oldest_field_for_caster(caster_prefix: String) -> void:
+	for key: Variant in _fire_wall_field_order:
+		if not str(key).begins_with(caster_prefix):
+			continue
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		if is_instance_valid(controller):
+			(controller as FireWallFieldController).cancel()
+		_fire_wall_field_registry.erase(key)
+		_fire_wall_field_order.erase(key)
+		_debug_validate_fire_wall_registry("evict_oldest")
+		return
+
+
+func _clear_fire_wall_field_registry() -> void:
+	for key: Variant in _fire_wall_field_registry.keys():
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		if is_instance_valid(controller):
+			(controller as FireWallFieldController).cancel()
+	_fire_wall_field_registry.clear()
+	_fire_wall_field_order.clear()
+	_debug_validate_fire_wall_registry("clear")
 
 
 func _spawn_canonical_ground_effect(
@@ -9126,6 +9678,11 @@ func _spawn_canonical_ground_effect(
 			)
 		),
 		Callable(self, "_canonical_screen_px_to_ground_gu")
+	)
+	# R1-B: give the self-managed tick the shared spatial candidate authority
+	# (the manager-owned path ignores it; the legacy group scan stays closed).
+	ground_effect.set_combat_spatial_context(
+		_combat_spatial_index, current_map_id
 	)
 	add_child(ground_effect)
 	if applies_damage:
@@ -10055,6 +10612,8 @@ func _canonical_summon_position_is_valid(
 			Vector2.ONE * enemy_query_radius_gu * 2.0,
 		),
 		_target_spatial_query_scratch,
+		# PERF-2: existence probe — occupancy is order-insensitive.
+		false,
 	):
 		return false
 	for enemy: EnemyActor in _target_spatial_query_scratch:
@@ -12644,6 +13203,8 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 				Vector2.ONE * enemy_query_radius_gu * 2.0,
 			),
 			_target_spatial_query_scratch,
+			# PERF-2: existence probe — occupancy is order-insensitive.
+			false,
 		):
 			return origin_screen_px
 		for enemy: EnemyActor in _target_spatial_query_scratch:

@@ -961,6 +961,18 @@ static func _descriptors_of_kind(
 						"tick_interval_ms": int(
 							effect.get("tick_interval_ms", 1000)
 						),
+						# SOT stacking contract must survive the plan boundary;
+						# the field registry consumes these when present.
+						"stacking_policy": str(
+							effect.get("stacking_policy", "")
+						),
+						"max_active_fields_per_caster": str(
+							effect.get("max_active_fields_per_caster", "")
+						),
+						"cap_policy": str(effect.get("cap_policy", "")),
+						"max_ticks_per_target_per_caster": int(
+							effect.get("max_ticks_per_target_per_caster", 1)
+						),
 						"operation": "ground_dot",
 					})
 			"summon":

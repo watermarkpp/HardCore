@@ -37,6 +37,11 @@ var _snapshot_validation_context: Dictionary = {}
 var _canonical_snapshot_valid := false
 var _runtime_map_id := -1
 var _combat_spatial_index: SpatialIndexScript
+## R1-A: the shared target-query service fronts every broadphase query.
+var _target_query_service: CombatTargetQueryService
+## PERF-1: caller-owned node scratch for the allocation-conscious envelope
+## fast path (no candidate records on the hot tick).
+var _target_node_scratch: Array[EnemyActor] = []
 ## FREEZE-P0.1: fail-closed projection diagnostics.
 var missing_projection_rejection_count := 0
 
@@ -60,6 +65,14 @@ var spatial_index_unavailable_count := 0
 var expired := false
 var cancelled := false
 var _rejection_reason := ""
+## SOT wizard.fire_wall: field lifetime is real time. Wall-clock expiry keeps
+## running across menu pause (get_tree().paused) and app background, so a
+## recast on the same tile refreshes it instead of stacking frozen fields.
+var expires_at_ticks_msec := -1
+var refresh_count := 0
+## Shared animation clock (ms): one advancing source per field; the 9 visual
+## cells read the same value instead of each running an independent timer.
+var _anim_clock_ms := 0.0
 
 
 func setup_fire_wall_field(
@@ -126,6 +139,11 @@ func setup_fire_wall_field(
 		_canonical_snapshot.get("runtime_map_id", runtime_map_id)
 	)
 	_combat_spatial_index = combat_spatial_index
+	# R1-A: every production target query enters through the shared service;
+	# the snapshot gate below stays the exact authority for this shape.
+	_target_query_service = CombatTargetQueryService.new(
+		combat_spatial_index, _runtime_map_id
+	)
 	visual_cells = []
 
 	var anchor_screen_px := (
@@ -167,6 +185,58 @@ func setup_fire_wall_field(
 		)
 		add_child(visual_cell)
 		visual_cells.append(visual_cell)
+	_arm_wall_clock_expiry()
+
+
+func _arm_wall_clock_expiry() -> void:
+	expires_at_ticks_msec = (
+		Time.get_ticks_msec() + int(round(duration * 1000.0))
+	)
+
+
+## SOT wizard.fire_wall mechanics
+## ("same_caster_same_tile_refreshes_duration", project_canonical): a recast
+## on the same tile refreshes the field lifetime, power and snapshot from the
+## latest cast without spawning a new controller or new visual cells. The
+## damage claim cadence is intentionally left untouched.
+func refresh_field(
+	effect: Dictionary,
+	release_snapshot: Dictionary,
+	snapshot_validation_context: Dictionary,
+	source_release_id: String
+) -> void:
+	raw_power = maxi(0, int(effect.get("raw_power", raw_power)))
+	duration = maxf(0.1, float(effect.get("duration_seconds", duration)))
+	tick_interval = maxf(
+		0.05,
+		float(effect.get("tick_interval_ms", tick_interval * 1000.0)) / 1000.0
+	)
+	_release_id = (
+		source_release_id if not source_release_id.is_empty() else _release_id
+	)
+	if release_snapshot is Dictionary and not release_snapshot.is_empty():
+		_canonical_snapshot = release_snapshot
+	if snapshot_validation_context is Dictionary:
+		_snapshot_validation_context = snapshot_validation_context
+	_canonical_snapshot_valid = bool(
+		SkillFootprintSnapshotScript.validate_for_consumer(
+			_canonical_snapshot,
+			_snapshot_validation_context,
+			SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
+		).get("valid", false)
+	)
+	_snapshot_id = str(
+		_canonical_snapshot.get("snapshot_id", _release_id)
+	)
+	_arm_wall_clock_expiry()
+	for visual_cell: GroundSkillVisualCellScript in visual_cells:
+		if is_instance_valid(visual_cell):
+			visual_cell.refresh_lifetime(duration)
+	refresh_count += 1
+
+
+func fire_wall_anim_clock_ms() -> float:
+	return _anim_clock_ms
 
 
 func _ignore_visual_tick(_target: EnemyActor, _raw_power: int) -> void:
@@ -174,6 +244,17 @@ func _ignore_visual_tick(_target: EnemyActor, _raw_power: int) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Wall-clock expiry runs first: the field lifetime is real time (SOT),
+	# so fields expired during menu pause or app background free on the next
+	# simulated frame instead of surviving frozen.
+	if (
+		expires_at_ticks_msec >= 0
+		and Time.get_ticks_msec() >= expires_at_ticks_msec
+	):
+		expired = true
+		queue_free()
+		return
+	_anim_clock_ms += delta * 1000.0
 	if duration <= 0.0:
 		expired = true
 		queue_free()
@@ -221,20 +302,31 @@ func _apply_field_tick() -> void:
 			if is_instance_valid(visual_cell):
 				visual_cell.queue_redraw()
 		return
-	var candidates: Array[Dictionary] = (
-		_combat_spatial_index.query_aabb_candidates(
-			_runtime_map_id,
-			_snapshot_bounds_ground_gu(_canonical_snapshot),
-			EXPANSION_EPSILON_GU
+	# PERF-1: the controller broadphase uses the allocation-conscious
+	# service envelope path (caller-owned node output, query-stamp dedup,
+	# no candidate records). EXPANSION_EPSILON_GU keeps the exact candidate
+	# universe the previous record query produced (bounds + epsilon + the
+	# index max actor bounds); the canonical snapshot exact gate below is
+	# unchanged. Candidate counters now reflect live nodes (the replaced
+	# record path also counted dying registrations).
+	_target_node_scratch.clear()
+	if not _target_query_service.query_envelope_into(
+		_snapshot_bounds_ground_gu(_canonical_snapshot),
+		_target_node_scratch,
+		true,
+		EXPANSION_EPSILON_GU,
+	):
+		# Fail-closed parity with the previous direct-index behavior: a
+		# rejected service query delivers nothing for this tick.
+		_rejection_reason = "target_query_%s" % (
+			_target_query_service.last_rejection_reason()
 		)
+		return
+	candidate_count += _target_node_scratch.size()
+	max_candidate_count = maxi(
+		max_candidate_count, _target_node_scratch.size()
 	)
-	candidate_count += candidates.size()
-	max_candidate_count = maxi(max_candidate_count, candidates.size())
-	for candidate: Dictionary in candidates:
-		var raw_node: Variant = candidate.get("node")
-		if not raw_node is EnemyActor:
-			continue
-		var enemy := raw_node as EnemyActor
+	for enemy: EnemyActor in _target_node_scratch:
 		if (
 			not is_instance_valid(enemy)
 			or enemy.is_queued_for_deletion()
@@ -362,6 +454,9 @@ func fire_wall_controller_diagnostics() -> Dictionary:
 		"snapshot_rebuild_count": snapshot_rebuild_count,
 		"spatial_index_unavailable_count": spatial_index_unavailable_count,
 		"missing_projection_rejection_count": missing_projection_rejection_count,
+		"expires_at_ticks_msec": expires_at_ticks_msec,
+		"refresh_count": refresh_count,
+		"anim_clock_ms": _anim_clock_ms,
 		"expired": expired,
 		"cancelled": cancelled,
 		"rejection_reason": _rejection_reason,
