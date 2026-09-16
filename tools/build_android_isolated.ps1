@@ -206,6 +206,16 @@ try {
     }
     $StageCreated = $true
 
+    $StageProjectPath = [System.IO.Path]::GetFullPath($StagePath)
+    $SafeStageParent = [System.IO.Path]::GetFullPath($StageParent) + [System.IO.Path]::DirectorySeparatorChar
+    if ($StageProjectPath -eq $ProjectRoot -or
+        -not $StageProjectPath.StartsWith($SafeStageParent, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw "Refusing unsafe isolated stage path: $StageProjectPath"
+    }
+    if (Test-Path -LiteralPath (Join-Path $StageProjectPath ".godot")) {
+        throw "Fresh isolated stage unexpectedly contains an existing Godot cache."
+    }
+
     if ($VersionCode -gt 0) {
         $StagePresetPath = Join-Path $StageProjectPath "export_presets.cfg"
         $StagePresetText = [System.IO.File]::ReadAllText($StagePresetPath)
@@ -219,16 +229,6 @@ try {
             $Utf8NoBom
         )
         Write-Output "VERSION_CODE_OVERRIDE=$VersionCode"
-    }
-
-    $StageProjectPath = [System.IO.Path]::GetFullPath($StagePath)
-    $SafeStageParent = [System.IO.Path]::GetFullPath($StageParent) + [System.IO.Path]::DirectorySeparatorChar
-    if ($StageProjectPath -eq $ProjectRoot -or
-        -not $StageProjectPath.StartsWith($SafeStageParent, [System.StringComparison]::OrdinalIgnoreCase)) {
-        throw "Refusing unsafe isolated stage path: $StageProjectPath"
-    }
-    if (Test-Path -LiteralPath (Join-Path $StageProjectPath ".godot")) {
-        throw "Fresh isolated stage unexpectedly contains an existing Godot cache."
     }
 
     # Bootstrap the host-managed Gradle template into the disposable stage
