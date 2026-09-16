@@ -131,9 +131,12 @@ static func get_theme(theme_id: String) -> Dictionary:
 ## SHARED reference. Every consumer is a read-only .get() reader (audited:
 ## all 17 world_background call sites plus internal callers never assign
 ## into the returned profile; world_background duplicates before mutating
-## its runtime copy). The build counter is the test-facing evidence:
-## entering a map builds once, a minute of gameplay adds nothing, and a
-## first visit to another map adds exactly one build.
+## its runtime copy). G0.1: negative results are cached as well, and the
+## build counter counts resolved lookups (positive and negative) so no
+## per-frame rebuild branch can hide from diagnostics. Behavior contract:
+## the first fetch of any map id resolves exactly once, a minute of
+## gameplay adds nothing, and a first fetch of another map id adds exactly
+## one.
 static var _map_profile_cache: Dictionary = {}
 static var _map_profile_build_count := 0
 
@@ -155,9 +158,14 @@ static func get_map_profile(map_id: int) -> Dictionary:
 	if _map_profile_cache.has(map_id):
 		return _map_profile_cache[map_id]
 	var profile := _build_map_profile(map_id)
-	if not profile.is_empty():
-		_map_profile_cache[map_id] = profile
-		_map_profile_build_count += 1
+	# G0.1 (remote review 2026-09-16): cache negative results too. The
+	# catalog is immutable - a map without a profile will never gain one
+	# mid-session - and per-frame callers on editor maps must not re-run
+	# the family probes every frame. The build counter now counts RESOLVED
+	# lookups (positive and negative), so diagnostics can no longer be
+	# blind to any per-frame rebuild branch.
+	_map_profile_cache[map_id] = profile
+	_map_profile_build_count += 1
 	return profile
 
 

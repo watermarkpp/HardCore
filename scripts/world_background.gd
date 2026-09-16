@@ -224,8 +224,14 @@ func set_zone(value: String) -> void:
 
 func set_focus_position(world_position: Vector2) -> void:
 	_focus_position = world_position
+	# G0.1 (remote review 2026-09-16): decide whether the profile is needed
+	# BEFORE fetching it. Without the source mask there is no focus work at
+	# all, and editor maps without a catalog profile must not pay even a
+	# cache lookup on this per-frame path.
+	if _source_mask_image == null:
+		return
 	var profile := environment_profile()
-	if _source_mask_image == null or str(profile.get("coordinate_projection", "")) != "isometric_64x32_full_size":
+	if str(profile.get("coordinate_projection", "")) != "isometric_64x32_full_size":
 		return
 	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
 	var focus_source := Vector2i(MapCoordinateMapperScript.world_to_source(world_position, source_size).round())

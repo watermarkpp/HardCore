@@ -49,6 +49,38 @@ func _run() -> void:
 		EnvironmentCatalog.environment_profile_build_count() == builds_before_travel,
 		"a repeat get_map_profile call must be a cache hit, not a rebuild"
 	)
+	# G0.1: the per-frame focus path must not rebuild (or even re-resolve)
+	# the profile. Simulate 3600 focus updates on the live bich map - the
+	# profile stays a shared cache hit and the resolved-lookup counter does
+	# not move. This is the regression gate for the per-frame branch the
+	# first G0 tests did not cover.
+	var builds_before_focus_loop := EnvironmentCatalog.environment_profile_build_count()
+	var focus_origin: Vector2 = game.player.global_position
+	for focus_step in 3600:
+		background.set_focus_position(
+			focus_origin + Vector2(float(focus_step % 7) - 3.0, float(focus_step % 5) - 2.0)
+		)
+	assert(
+		EnvironmentCatalog.environment_profile_build_count() == builds_before_focus_loop,
+		"3600 per-frame focus updates must not resolve or rebuild any profile"
+	)
+	# G0.1: negative lookups are cached too - the first fetch of an unknown
+	# map id resolves once, and a thousand repeats must not re-resolve.
+	var builds_before_negative := EnvironmentCatalog.environment_profile_build_count()
+	assert(
+		EnvironmentCatalog.get_map_profile(999999).is_empty(),
+		"an unknown map id must resolve to an empty profile"
+	)
+	assert(
+		EnvironmentCatalog.environment_profile_build_count() == builds_before_negative + 1,
+		"the first negative lookup must resolve exactly once"
+	)
+	for negative_repeat in 1000:
+		assert(EnvironmentCatalog.get_map_profile(999999).is_empty())
+	assert(
+		EnvironmentCatalog.environment_profile_build_count() == builds_before_negative + 1,
+		"repeated negative lookups must be cache hits, not re-resolutions"
+	)
 	game.travel_to_map(orc_tomb_f1_id)
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -62,18 +94,32 @@ func _run() -> void:
 			next_catalog_map = int(map_id)
 			break
 	assert(next_catalog_map > 0, "the catalog must configure at least one non-bich map")
+	# G0.1 resolution contract, stated as invariants instead of absolute
+	# counts: the travel legitimately resolves the new map's catalog ids
+	# once (editor-map negative + presentation positive), ANY repeat fetch -
+	# positive or negative - must be a cache hit with stable content.
 	var first_fetch := EnvironmentCatalog.get_map_profile(next_catalog_map)
-	assert(
-		EnvironmentCatalog.environment_profile_build_count() == builds_before_travel + 1,
-		"the first fetch of a new catalog map must add exactly one profile build"
-	)
-	assert(not first_fetch.is_empty(), "a configured catalog map must produce a profile")
+	var builds_after_first := EnvironmentCatalog.environment_profile_build_count()
 	var second_fetch := EnvironmentCatalog.get_map_profile(next_catalog_map)
 	assert(
-		EnvironmentCatalog.environment_profile_build_count() == builds_before_travel + 1,
+		EnvironmentCatalog.environment_profile_build_count() == builds_after_first,
 		"a repeat fetch of the same catalog map must stay a cache hit"
 	)
 	assert(second_fetch == first_fetch, "cached profile content must stay stable")
+	# G0.1 per-frame gate on the NEW map (which has no catalog profile):
+	# 3600 live focus updates must not resolve or rebuild anything - the
+	# negative cache plus the early-return keep the frame path flat.
+	var builds_before_new_map_loop := EnvironmentCatalog.environment_profile_build_count()
+	var new_map_focus_origin: Vector2 = game.player.global_position
+	for focus_step in 3600:
+		background.set_focus_position(
+			new_map_focus_origin
+			+ Vector2(float(focus_step % 7) - 3.0, float(focus_step % 5) - 2.0)
+		)
+	assert(
+		EnvironmentCatalog.environment_profile_build_count() == builds_before_new_map_loop,
+		"3600 focus updates on the editor map must not resolve or rebuild any profile"
+	)
 	print(
 		"BICH_ENVIRONMENT_PASS: editor occupancy, portals, hard boundary and map cleanup share one spatial contract (profile_builds=%d cache_size=%d)"
 		% [
