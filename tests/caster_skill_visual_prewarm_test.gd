@@ -174,6 +174,33 @@ func _run() -> void:
 			"first-combat presentation warming must sit in the prewarm body: %s"
 			% warming_call
 		)
+
+	# 6) FW-COLD2 Phase B source discipline: the render warm-up must sit in
+	# the loading window AFTER the CPU prewarm and BEFORE the cover lifts,
+	# and must stay presentation-only (no combat-side registration).
+	var warm_def_index := source.find("func _warm_fire_wall_render_path()")
+	var warm_call_index := source.find("await _warm_fire_wall_render_path()")
+	assert(
+		warm_def_index >= 0 and warm_call_index > prewarm_index
+		and warm_call_index < finish_index,
+		"the render warm-up must run inside the loading window, after the CPU prewarm and before the cover lifts"
+	)
+	var next_func_index := source.find("\nfunc ", warm_def_index + 8)
+	var warm_body := source.substr(
+		warm_def_index,
+		(next_func_index if next_func_index >= 0 else source.length())
+		- warm_def_index
+	)
+	for forbidden_token: String in [
+		"FireWallFieldController",
+		"take_damage",
+		".start_cooldown",
+		"consume_mp",
+	]:
+		assert(
+			not warm_body.contains(forbidden_token),
+			"the render warm-up must stay presentation-only: %s" % forbidden_token
+		)
 	print(
 		"CASTER_SKILL_VISUAL_PREWARM_PASS frames=%d loads=%d hits=%d"
 		% [

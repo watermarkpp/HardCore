@@ -1923,6 +1923,41 @@ func _prewarm_learned_skill_visuals() -> void:
 			"" if fw_missing.is_empty() else " missing=%s" % [fw_missing],
 		]
 	)
+
+
+## FW-COLD2 Phase B (remote review 2026-09-16): RESOURCE WARM is not RENDER
+## WARM. The device still showed a one-time first fire wall cast hitch while
+## the CPU texture cache was already hot; on this project's gl_compatibility
+## renderer that matches the first-render cold path (GPU texture upload,
+## first CanvasItem draw state, driver first-use). The officially recommended
+## Compatibility warm-up is to really draw the effect inside the viewport
+## once per frame texture while the loading overlay still fully covers the
+## screen. Presentation-only: no fire wall field controller, no damage, no
+## combat-side registration, no MP cost. The visual must stay visible -
+## visible=false or alpha 0 lets the renderer skip the draw - the loading
+## overlay is what hides it from the player.
+func _warm_fire_wall_render_path() -> void:
+	if DisplayServer.get_name() == "headless":
+		# Automated headless runs have no real rendering server; the CPU
+		# residency gate already proves everything headless can prove.
+		return
+	var warm_visual := CasterSkillAnimationPlayer.new()
+	if not warm_visual.configure("wizard.fire_wall", Vector2.DOWN):
+		warm_visual.free()
+		return
+	# Production GroundSkillEffect._install_visual presentation values.
+	warm_visual.modulate = Color(1.0, 1.0, 1.0, 0.78)
+	warm_visual.scale.y *= 0.6
+	if is_instance_valid(_world_camera):
+		warm_visual.global_position = _world_camera.get_screen_center_position()
+	elif is_instance_valid(player):
+		warm_visual.global_position = player.global_position
+	add_child(warm_visual)
+	for frame_index: int in warm_visual.frame_count():
+		warm_visual.set_manual_frame(frame_index)
+		await RenderingServer.frame_post_draw
+	warm_visual.queue_free()
+	await RenderingServer.frame_post_draw
 	# FRAME-STALL baseline: one print at the end of the loading window. The
 	# one-time long-frame probe (see _process) prints the same counters when
 	# the first >250ms frame occurs; the delta localizes the stall source.
@@ -2946,6 +2981,12 @@ func _run_map_transition(
 		# synchronous load spike. Loading-phase work only: damage, spatial
 		# index and fire wall systems are untouched.
 		_prewarm_learned_skill_visuals()
+		# FW-COLD2 Phase B: really draw the fire wall visual once per frame
+		# texture while the loading overlay still covers the screen, so the
+		# first real cast skips the first-render cold path. Presentation-only.
+		await _warm_fire_wall_render_path()
+		if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+			return
 		if is_instance_valid(_town_music_controller):
 			_town_music_controller.set_map_context(
 				current_map_id,
