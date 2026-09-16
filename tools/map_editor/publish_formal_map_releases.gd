@@ -15,10 +15,16 @@ const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_
 const RespawnPolicy := preload("res://scripts/monster_respawn_policy.gd")
 
 const EXPECTED_MAPS := 67
-const EXPECTED_MONSTER_SPAWNS := 1607
-const EXPECTED_BOSS_SPAWNS := 273
-const EXPECTED_RUNTIME_MONSTER_SPAWNS := 1604
-const EXPECTED_RUNTIME_BOSS_SPAWNS := 276
+## Placement totals for the merged 67-map content wave (user-verified
+## 2026-09-16) plus the elite re-lane repair: the three legacy elite rows on
+## world_fengmo_valley/world_white_day_gate now live in the boss_spawn lane
+## in the authoring documents themselves, so source and runtime totals are
+## identical for the first time (the old 3-row source/runtime divergence was
+## exactly the in-memory canonicalizer rebasing those rows).
+const EXPECTED_MONSTER_SPAWNS := 2302
+const EXPECTED_BOSS_SPAWNS := 345
+const EXPECTED_RUNTIME_MONSTER_SPAWNS := 2302
+const EXPECTED_RUNTIME_BOSS_SPAWNS := 345
 const VISUAL_CONTRACT_ID := "mse.map.runtime.visual.v1"
 const GROUND_CHUNK_STORE_CONTRACT_ID := "mse.map.runtime.ground_chunk_store.sha256.v1"
 const GROUND_COORDINATE_CONTRACT_ID := MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
