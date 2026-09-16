@@ -3,6 +3,8 @@ extends Control
 const CalibrationOverlayScript := preload("res://scripts/ui_layout_calibration_overlay.gd")
 const GothicConfirmationPanelScript := preload("res://scripts/gothic_confirmation_panel.gd")
 const LevelUpPreviewScript := preload("res://scripts/ui_level_up_preview.gd")
+const ChassisDesignsScript := preload("res://scripts/hud_chassis_designs.gd")
+const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 
 const DEVICE_PHYSICAL_SIZE := Vector2i(2664, 1200)
 const EXPECTED_DEVICE_LOGICAL_SIZE := Vector2(1598, 720)
@@ -15,6 +17,8 @@ const LEVEL_UP_PREVIEW_ARG := "--level-up-preview"
 const LEVEL_UP_PREVIEW_CAPTURE_ARG_PREFIX := "--capture-level-up-preview="
 const INVENTORY_ATTRIBUTE_PREVIEW_ARG := "--inventory-attribute-preview"
 const INVENTORY_ATTRIBUTE_PREVIEW_CAPTURE_ARG_PREFIX := "--capture-inventory-attribute-preview="
+const CHASSIS_DESIGN_COMPARE_ARG := "--chassis-design-compare"
+const CHASSIS_DESIGN_COMPARE_CAPTURE_ARG_PREFIX := "--capture-chassis-design-compare="
 const LEVEL_UP_PREVIEW_PEAK_PROGRESS := 0.48
 const LEVEL_UP_PREVIEW_RESTART_GAP_SECONDS := 0.65
 
@@ -61,6 +65,9 @@ var _inventory_attribute_preview_capture_done := false
 var _character_stats_preview_requested := false
 var _character_stats_capture_path := ""
 var _presentation_review_capture := false
+var _chassis_design_compare_requested := false
+var _chassis_design_compare_capture_dir := ""
+var _chassis_design_compare_windows: Array[Window] = []
 
 
 func _ready() -> void:
@@ -75,6 +82,8 @@ func _ready() -> void:
 	assert(process_mode == Node.PROCESS_MODE_ALWAYS, "calibration workbench must process while the game is paused")
 	active_panel = null
 	_print_geometry()
+	if _chassis_design_compare_requested:
+		_start_chassis_design_compare.call_deferred()
 	if _level_up_preview_requested:
 		_start_requested_level_up_preview.call_deferred()
 	if _inventory_attribute_preview_requested:
@@ -130,6 +139,16 @@ func _parse_level_up_preview_args(user_args: PackedStringArray) -> void:
 			_level_up_preview_requested = true
 		elif argument == INVENTORY_ATTRIBUTE_PREVIEW_ARG:
 			_inventory_attribute_preview_requested = true
+		elif argument == CHASSIS_DESIGN_COMPARE_ARG:
+			_chassis_design_compare_requested = true
+		elif argument.begins_with(CHASSIS_DESIGN_COMPARE_CAPTURE_ARG_PREFIX):
+			var capture_dir_raw := argument.trim_prefix(CHASSIS_DESIGN_COMPARE_CAPTURE_ARG_PREFIX).strip_edges()
+			var capture_dir := _resolve_project_local_capture_dir(capture_dir_raw)
+			if capture_dir.is_empty():
+				push_error("chassis design compare capture dir must be project-local: %s" % capture_dir_raw)
+				continue
+			_chassis_design_compare_capture_dir = capture_dir
+			_chassis_design_compare_requested = true
 		elif argument.begins_with(INVENTORY_ATTRIBUTE_PREVIEW_CAPTURE_ARG_PREFIX):
 			var inventory_capture_raw := argument.trim_prefix(INVENTORY_ATTRIBUTE_PREVIEW_CAPTURE_ARG_PREFIX).strip_edges()
 			var inventory_capture_path := _resolve_project_local_capture_path(inventory_capture_raw)
@@ -822,3 +841,312 @@ func _print_geometry() -> void:
 			active_panel.get_global_rect(),
 		]
 	)
+
+
+func _resolve_project_local_capture_dir(raw_path: String) -> String:
+	if raw_path.is_empty():
+		return ""
+	var project_root := ProjectSettings.globalize_path("res://").simplify_path()
+	var project_path := raw_path.replace("\\", "/")
+	if not project_path.begins_with("res://"):
+		project_path = "res://" + project_path.trim_prefix("/")
+	var absolute_path := ProjectSettings.globalize_path(project_path).simplify_path()
+	var normalized_root := project_root.replace("\\", "/").trim_suffix("/")
+	var normalized_path := absolute_path.replace("\\", "/")
+	if not normalized_path.to_lower().begins_with(normalized_root.to_lower() + "/"):
+		return ""
+	return absolute_path
+
+
+## Opens one native window per bottom-chassis candidate design so the active
+## frame variants can be compared side by side. Each window embeds the same
+## composition the production HUD uses (registry geometry, resource orbs, four
+## item slot fills, and the experience bar inside the design's dedicated slot).
+func _start_chassis_design_compare() -> void:
+	var design_ids: Array[String] = ChassisDesignsScript.COMPARE_DESIGN_IDS
+	var fill_stylebox := _resolve_production_slot_fill_stylebox()
+	# 2x2 grid of native windows filling the usable screen. Window coordinates
+	# follow the engine's screen space on every DPI setup because the window
+	# rect and the usable rect share the same coordinate system. Cells keep the
+	# 872x384 content aspect so the preview scales uniformly without bands.
+	var content_size := Vector2(872, 384)
+	var gap := 16
+	var decoration_margin := 56
+	var columns := 2
+	var rows := int(ceil(design_ids.size() / float(columns)))
+	var main_window := get_window()
+	var screen_rect := DisplayServer.screen_get_usable_rect(main_window.current_screen)
+	var cell_x := int((screen_rect.size.x - (columns + 1) * gap) / float(columns))
+	var cell_y := int(cell_x * content_size.y / content_size.x)
+	var grid_height := rows * cell_y + (rows + 1) * gap
+	var start_y := clampi(
+		(screen_rect.size.y - grid_height) / 2 + decoration_margin,
+		screen_rect.position.y + gap + decoration_margin,
+		maxi(screen_rect.position.y + gap + decoration_margin, screen_rect.end.y - grid_height - gap),
+	)
+	for index in range(design_ids.size()):
+		var design: Dictionary = ChassisDesignsScript.design(design_ids[index])
+		var window := Window.new()
+		window.process_mode = Node.PROCESS_MODE_ALWAYS
+		window.name = "ChassisDesignCompare_%s" % design_ids[index]
+		window.title = "主界面底框候选 %d/%d · %s" % [index + 1, design_ids.size(), design["display_name"]]
+		window.size = Vector2i(cell_x, cell_y)
+		window.min_size = Vector2i(cell_x, cell_y)
+		window.unresizable = true
+		# Window.visible defaults to true; set_force_native rejects the change
+		# for a "displayed" window, so hide first (same order as the inspector).
+		window.visible = false
+		window.force_native = true
+		window.always_on_top = true
+		window.close_requested.connect(window.hide)
+		var column := index % columns
+		var row := floori(index / float(columns))
+		var cell_position := screen_rect.position + Vector2i(
+			gap + column * (cell_x + gap),
+			start_y + row * (cell_y + gap),
+		)
+		if design_ids.size() == 1:
+			# A single review window parks on the right half so the production
+			# game window (loaded with the active design) stays visible.
+			cell_position.x = screen_rect.end.x - cell_x - gap
+		window.position = cell_position
+		add_child(window)
+		var preview := _build_chassis_design_preview(design, fill_stylebox)
+		var uniform_scale := minf(cell_x / content_size.x, cell_y / content_size.y)
+		preview.scale = Vector2(uniform_scale, uniform_scale)
+		preview.position = (Vector2(cell_x, cell_y) - content_size * uniform_scale) * 0.5
+		window.add_child(preview)
+		window.show()
+		_chassis_design_compare_windows.append(window)
+	print(
+		"UI_CHASSIS_DESIGN_COMPARE_READY windows=%d active_design=%s designs=%s" % [
+			_chassis_design_compare_windows.size(),
+			ChassisDesignsScript.ACTIVE_DESIGN_ID,
+			str(design_ids),
+		]
+	)
+	for index in range(_chassis_design_compare_windows.size()):
+		var window := _chassis_design_compare_windows[index]
+		if is_instance_valid(window):
+			print(
+				"UI_CHASSIS_DESIGN_COMPARE_WINDOW_RECT design=%s title=%s position=%s size=%s embedded=%s" % [
+					design_ids[index],
+					window.title,
+					window.position,
+					window.size,
+					window.is_embedded(),
+				]
+			)
+	if not _chassis_design_compare_capture_dir.is_empty():
+		_capture_chassis_design_compare_windows.call_deferred()
+
+
+func _resolve_production_slot_fill_stylebox() -> StyleBox:
+	var chassis := hud.get_node_or_null("MobileSafeRoot/IntegratedHUDChassis") as Control
+	if chassis == null:
+		return null
+	var production_fill := chassis.get_node_or_null("ItemSlotFill1") as Panel
+	if production_fill == null:
+		return null
+	var stylebox := production_fill.get_theme_stylebox("panel")
+	return stylebox.duplicate() if stylebox != null else null
+
+
+func _build_chassis_design_preview(design: Dictionary, fill_stylebox: StyleBox) -> Control:
+	var design_id: String = design["id"]
+	var display_name: String = design["display_name"]
+	# Fixed-size content root; the compare window scales it to its cell so the
+	# layout math stays identical to the 872x384 reference composition.
+	var content_size := Vector2(872, 384)
+	var host := Control.new()
+	host.name = "ChassisDesignPreview"
+	host.size = content_size
+	var background := ColorRect.new()
+	background.name = "Background"
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	background.color = Color(0.015, 0.015, 0.015)
+	host.add_child(background)
+	var title := Label.new()
+	title.name = "DesignTitle"
+	title.text = "候选 %s · %s" % [design_id, display_name]
+	title.position = Vector2(16, 8)
+	title.size = Vector2(560, 24)
+	title.add_theme_font_size_override("font_size", 17)
+	title.add_theme_color_override("font_color", Color("f2d797"))
+	host.add_child(title)
+
+	var chassis_root := Control.new()
+	chassis_root.name = "ChassisRoot"
+	chassis_root.position = Vector2((872.0 - ChassisDesignsScript.DISPLAY_SIZE.x) * 0.5, 34.0)
+	chassis_root.size = ChassisDesignsScript.DISPLAY_SIZE
+	chassis_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chassis_root.set_meta("design_id", design_id)
+	host.add_child(chassis_root)
+
+	var art := TextureRect.new()
+	art.name = "ChassisArt"
+	art.texture = ChassisDesignsScript.load_texture(design)
+	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	art.set_meta("stable_id", design["chassis_stable_id"])
+	chassis_root.add_child(art)
+
+	var orb_size: float = design["orb_display_size"]
+	var orb_specs := [
+		{"name": "HealthOrb", "center": design["health_orb_center_source"], "color": Color("a51422"), "resource": "生命", "value": 72},
+		{"name": "ManaOrb", "center": design["mana_orb_center_source"], "color": Color("174eaa"), "resource": "魔法", "value": 55},
+	]
+	for spec: Dictionary in orb_specs:
+		var orb := HUDResourceOrbScript.new()
+		orb.name = spec["name"]
+		orb.position = (
+			ChassisDesignsScript.source_to_local(design, spec["center"])
+			- Vector2(orb_size, orb_size) * 0.5
+		)
+		orb.size = Vector2(orb_size, orb_size)
+		orb.resource_name = spec["resource"]
+		orb.liquid_color = spec["color"]
+		orb.set_values(int(spec["value"]), 100)
+		chassis_root.add_child(orb)
+
+	var fill_size: Vector2 = design["item_slot_fill_display_size"]
+	# Mirror production: the fill well is oversized under the frame art.
+	fill_size = design.get("item_slot_fill_render_size", fill_size)
+	var slot_centers: Array = design["item_slot_centers_source"]
+	for index in range(slot_centers.size()):
+		var fill := Panel.new()
+		fill.name = "ItemSlotFill%d" % (index + 1)
+		if fill_stylebox != null:
+			fill.add_theme_stylebox_override("panel", fill_stylebox.duplicate())
+		else:
+			fill.theme_type_variation = "GothicArtItemFill"
+		fill.size = fill_size
+		fill.position = (
+			ChassisDesignsScript.source_to_local(design, slot_centers[index]) - fill_size * 0.5
+		)
+		fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		chassis_root.add_child(fill)
+		var slot_label := Label.new()
+		slot_label.name = "SlotNumber"
+		slot_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		slot_label.text = str(index + 1)
+		slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		slot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		slot_label.add_theme_font_size_override("font_size", 14)
+		slot_label.add_theme_color_override("font_color", Color("f2c783"))
+		slot_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+		slot_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		fill.add_child(slot_label)
+
+	var xp_rect: Rect2 = ChassisDesignsScript.source_rect_to_local(
+		design,
+		design["experience_slot_source_rect"],
+	)
+	var xp_render_bleed: Vector2 = design.get("experience_slot_render_bleed", Vector2.ZERO)
+	var xp_hole_rect: Rect2 = xp_rect
+	xp_rect.position -= xp_render_bleed * 0.5
+	xp_rect.size += xp_render_bleed
+	var bar := Control.new()
+	bar.name = "ExperienceBarPreview"
+	bar.position = xp_rect.position
+	bar.size = xp_rect.size
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chassis_root.add_child(bar)
+	var xp_backdrop := ColorRect.new()
+	xp_backdrop.name = "Backdrop"
+	xp_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	xp_backdrop.color = GameHUD.HUD_EXPERIENCE_BACKDROP_COLOR
+	xp_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(xp_backdrop)
+	var preview_progress := 0.62
+	var segment_gap := 3.0
+	var segment_width := (xp_rect.size.x - segment_gap * (GameHUD.HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / GameHUD.HUD_EXPERIENCE_SEGMENT_COUNT
+	for segment_index in range(GameHUD.HUD_EXPERIENCE_SEGMENT_COUNT):
+		var segment := ColorRect.new()
+		segment.name = "Segment%02d" % (segment_index + 1)
+		segment.position = Vector2(segment_index * (segment_width + segment_gap), 0.0)
+		segment.size = Vector2(segment_width, xp_rect.size.y)
+		segment.color = GameHUD.HUD_EXPERIENCE_EMPTY_COLOR
+		segment.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var fill := ColorRect.new()
+		fill.name = "Fill"
+		fill.position = Vector2.ZERO
+		# Same construction as production update_experience_bar: no anchors, the
+		# fill width expresses the fraction of this segment that is lit.
+		fill.size = Vector2(
+			segment_width * clampf(preview_progress * GameHUD.HUD_EXPERIENCE_SEGMENT_COUNT - segment_index, 0.0, 1.0),
+			xp_rect.size.y,
+		)
+		fill.color = GameHUD.HUD_EXPERIENCE_FILL_COLOR
+		fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		segment.add_child(fill)
+		bar.add_child(segment)
+
+	# Mirror production z-order: the frame art masks the oversized wells and
+	# experience bar so the cut well shapes (incl. pointed ends) stay visible.
+	chassis_root.move_child(art, chassis_root.get_child_count() - 1)
+
+	var caption := Label.new()
+	caption.name = "DesignCaption"
+	var health_center: Vector2 = ChassisDesignsScript.source_to_local(design, design["health_orb_center_source"])
+	var mana_center: Vector2 = ChassisDesignsScript.source_to_local(design, design["mana_orb_center_source"])
+	caption.text = "球心 (%.1f, %.1f)/(%.1f, %.1f) 球径%.0f · 物品槽%d×%d · 经验槽 %.0f×%.0f @(%.0f, %.0f)" % [
+		health_center.x, health_center.y, mana_center.x, mana_center.y, orb_size,
+		int(fill_size.x), int(fill_size.y),
+		xp_hole_rect.size.x, xp_hole_rect.size.y, xp_hole_rect.position.x, xp_hole_rect.position.y,
+	]
+	caption.position = Vector2(16, chassis_root.position.y + ChassisDesignsScript.DISPLAY_SIZE.y + 10.0)
+	caption.size = Vector2(840, 24)
+	caption.add_theme_font_size_override("font_size", 13)
+	caption.add_theme_color_override("font_color", Color("aa9a82"))
+	host.add_child(caption)
+	return host
+
+
+func _capture_chassis_design_compare_windows() -> void:
+	# Native child windows need several presented frames before their viewport
+	# textures carry content; warm up and retry until a window is not blank.
+	for _warmup in range(10):
+		await get_tree().process_frame
+	DirAccess.make_dir_recursive_absolute(_chassis_design_compare_capture_dir)
+	var captured := 0
+	for index in range(_chassis_design_compare_windows.size()):
+		var window := _chassis_design_compare_windows[index]
+		if not is_instance_valid(window):
+			continue
+		var image: Image = null
+		for _attempt in range(12):
+			await RenderingServer.frame_post_draw
+			image = window.get_viewport().get_texture().get_image()
+			if image != null and not image.is_empty() and not _image_is_uniform_black(image):
+				break
+			image = null
+		assert(image != null, "chassis design compare window never rendered: %s" % window.title)
+		var design_id: String = ChassisDesignsScript.COMPARE_DESIGN_IDS[index]
+		var path := _chassis_design_compare_capture_dir.path_join("chassis_design_compare_%s.png" % design_id)
+		assert(image.save_png(path) == OK, "chassis design compare capture failed: %s" % path)
+		print("UI_CHASSIS_DESIGN_COMPARE_CAPTURE_PASS design=%s path=%s" % [design_id, path])
+		captured += 1
+	assert(
+		captured == ChassisDesignsScript.COMPARE_DESIGN_IDS.size(),
+		"chassis design compare capture missing windows: %d/%d" % [captured, ChassisDesignsScript.COMPARE_DESIGN_IDS.size()],
+	)
+	print("UI_CHASSIS_DESIGN_COMPARE_CAPTURE_DONE count=%d" % captured)
+	get_tree().quit()
+
+
+func _image_is_uniform_black(image: Image) -> bool:
+	var steps_x := 12
+	var steps_y := 8
+	for gy in range(steps_y):
+		for gx in range(steps_x):
+			var point := Vector2i(
+				int((float(gx) + 0.5) / steps_x * image.get_width()),
+				int((float(gy) + 0.5) / steps_y * image.get_height()),
+			)
+			var pixel := image.get_pixelv(point)
+			if pixel.get_luminance() > 0.03 or pixel.a > 0.9:
+				return false
+	return true

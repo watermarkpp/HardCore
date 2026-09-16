@@ -34,7 +34,10 @@ func _run() -> void:
 	var fake_hud := FakeHud.new()
 	game.hud = fake_hud
 	game._wire_item_quick_slots_hud()
-	# 裸实例没有 player，需显式打开输入门才能验证使用动作。
+	# 裸实例没有场景，但 2ceb73b0 (2026-09-09) 将 gameplay_input_is_enabled
+	# 加固为"必须有活着的 player"。提供满足门的最小存活 player，才能验证
+	# 使用动作的真实生产链路（PlayerState.use_quick_item_slot）。
+	game.player = PlayerCharacter.new()
 	game._player_input_enabled = true
 	assert(
 		fake_hud.item_quick_slot_assignment_requested.get_connections().size() == 1,
@@ -153,5 +156,11 @@ func _run() -> void:
 		merged_hud.received_assignments == PlayerState.quick_item_slots_snapshot(),
 		"合并态 HUD 未收到快捷物品快照"
 	)
+	# 释放裸实例，避免退出时物理/画布 RID 泄漏干扰 runner 判定。
+	game.player.free()
+	game.free()
+	real_hud.free()
+	merged_hud.free()
+	fake_hud.free()
 	print("QUICK_ITEM_GAME_ROOT_WIRING_PASS")
 	get_tree().quit(0)

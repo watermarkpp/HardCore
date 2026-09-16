@@ -11,6 +11,7 @@ const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const ChassisDesignsScript := preload("res://scripts/hud_chassis_designs.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
@@ -50,6 +51,10 @@ const HUD_EXPERIENCE_BOTTOM_GAP := 7.0
 const HUD_EXPERIENCE_SEGMENT_GAP := 3.0
 const HUD_EXPERIENCE_EMPTY_COLOR := Color("241a16")
 const HUD_EXPERIENCE_FILL_COLOR := Color("b77a31")
+## Backing behind the experience bar when the active chassis design provides a
+## dedicated alpha-hole experience slot: the hole would otherwise show the
+## world between segments.
+const HUD_EXPERIENCE_BACKDROP_COLOR := Color("120d0a")
 const ITEM_QUICK_SLOT_COUNT := 4
 const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
 const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
@@ -560,10 +565,16 @@ func _build_bottom_chassis(root: Control) -> void:
 	chassis_root.set_meta("geometry_policy", "source_pixel_to_display_fit.v1")
 	root.add_child(chassis_root)
 
+	var chassis_design: Dictionary = ChassisDesignsScript.active_design()
+	var orb_display_size: float = chassis_design["orb_display_size"]
+	var orb_size := Vector2(orb_display_size, orb_display_size)
+	chassis_root.set_meta("active_design", ChassisDesignsScript.ACTIVE_DESIGN_ID)
 	health_orb = HUDResourceOrbScript.new()
 	health_orb.name = "HealthOrb"
-	health_orb.position = _chassis_source_to_local(HUD_HEALTH_ORB_SOURCE_CENTER) - HUD_RESOURCE_ORB_SIZE * 0.5
-	health_orb.size = HUD_RESOURCE_ORB_SIZE
+	health_orb.position = (
+		_chassis_source_to_local(chassis_design["health_orb_center_source"]) - orb_size * 0.5
+	)
+	health_orb.size = orb_size
 	health_orb.resource_name = "生命"
 	health_orb.liquid_color = Color("a51422")
 	chassis_root.add_child(health_orb)
@@ -601,7 +612,7 @@ func _build_bottom_chassis(root: Control) -> void:
 	taoist_buff_hint_label.name = "TaoistBuffHint"
 	taoist_buff_hint_label.position = (
 		health_orb.position
-		+ Vector2(10, HUD_RESOURCE_ORB_SIZE.y - 30)
+		+ Vector2(10, orb_size.y - 30)
 	)
 	taoist_buff_hint_label.size = Vector2(96, 28)
 	taoist_buff_hint_label.add_theme_font_size_override("font_size", 11)
@@ -617,46 +628,58 @@ func _build_bottom_chassis(root: Control) -> void:
 
 	mana_orb = HUDResourceOrbScript.new()
 	mana_orb.name = "ManaOrb"
-	mana_orb.position = _chassis_source_to_local(HUD_MANA_ORB_SOURCE_CENTER) - HUD_RESOURCE_ORB_SIZE * 0.5
-	mana_orb.size = HUD_RESOURCE_ORB_SIZE
+	mana_orb.position = (
+		_chassis_source_to_local(chassis_design["mana_orb_center_source"]) - orb_size * 0.5
+	)
+	mana_orb.size = orb_size
 	mana_orb.resource_name = "魔法"
 	mana_orb.liquid_color = Color("174eaa")
 	chassis_root.add_child(mana_orb)
 
-	for index in range(HUD_ITEM_SLOT_SOURCE_CENTERS.size()):
+	var item_slot_centers: Array = chassis_design["item_slot_centers_source"]
+	var slot_fill_size: Vector2 = chassis_design["item_slot_fill_display_size"]
+	# The fill well is drawn under the frame art and oversized so the opaque
+	# rim masks the anti-aliased well edge; the visible shape is the well.
+	var slot_render_size: Vector2 = chassis_design.get("item_slot_fill_render_size", slot_fill_size)
+	for index in range(item_slot_centers.size()):
 		var item_fill := Panel.new()
 		item_fill.name = "ItemSlotFill%d" % (index + 1)
 		item_fill.theme_type_variation = "GothicArtItemFill"
-		item_fill.size = HUD_ITEM_SLOT_FILL_SIZE
-		item_fill.position = _chassis_source_to_local(HUD_ITEM_SLOT_SOURCE_CENTERS[index]) - item_fill.size * 0.5
+		item_fill.size = slot_render_size
+		item_fill.position = _chassis_source_to_local(item_slot_centers[index]) - slot_render_size * 0.5
 		item_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		item_fill.set_meta("stable_id", "ui.hud.item_slot.metal_mask_fill.%d" % (index + 1))
 		item_fill.set_meta("geometry_policy", "source_pixel_center_metal_mask.v1")
 		chassis_root.add_child(item_fill)
 
-	var cleaned_chassis := HUDAssetSanitizerScript.without_alpha_component(
-		HUDChassisTexture,
-		Vector2i(1008, 260),
-	)
-	cleaned_chassis = HUDAssetSanitizerScript.without_chassis_legacy_skill_art(cleaned_chassis)
 	var chassis := TextureRect.new()
 	chassis.name = "DemonChassisArt"
 	chassis.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	chassis.texture = cleaned_chassis
+	if chassis_design["sanitize_policy"] == "v2_legacy_skill_mask.v1":
+		var cleaned_chassis := HUDAssetSanitizerScript.without_alpha_component(
+			HUDChassisTexture,
+			Vector2i(1008, 260),
+		)
+		cleaned_chassis = HUDAssetSanitizerScript.without_chassis_legacy_skill_art(cleaned_chassis)
+		chassis.texture = cleaned_chassis
+		chassis.set_meta("source_artifact_removed", "right_edge_alpha_component_1008_260")
+		chassis.set_meta("legacy_skill_art_mask", HUDAssetSanitizerScript.CHASSIS_LEGACY_SKILL_MASK_ID)
+	else:
+		# v3 candidate art ships clean with pre-cut alpha slot wells; no legacy
+		# mask applies and the measured hole geometry lives in the registry.
+		chassis.texture = ChassisDesignsScript.load_texture(chassis_design)
 	chassis.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	chassis.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	chassis.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	chassis.set_meta("stable_id", "ui.hud.gothic.v2.bottom_chassis")
-	chassis.set_meta("source_artifact_removed", "right_edge_alpha_component_1008_260")
-	chassis.set_meta("legacy_skill_art_mask", HUDAssetSanitizerScript.CHASSIS_LEGACY_SKILL_MASK_ID)
+	chassis.set_meta("stable_id", chassis_design["chassis_stable_id"])
 	chassis_root.add_child(chassis)
 
 	for index in range(4):
 		var item_button := Button.new()
 		item_button.name = "ItemSlot%d" % (index + 1)
 		item_button.theme_type_variation = "GothicHUDItemHitButton"
-		item_button.size = HUD_ITEM_SLOT_FILL_SIZE
-		item_button.position = _chassis_source_to_local(HUD_ITEM_SLOT_SOURCE_CENTERS[index]) - item_button.size * 0.5
+		item_button.size = slot_fill_size
+		item_button.position = _chassis_source_to_local(item_slot_centers[index]) - item_button.size * 0.5
 		item_button.text = str(index + 1)
 		item_button.tooltip_text = "快捷物品 %d" % (index + 1)
 		item_button.add_theme_font_size_override("font_size", 15)
@@ -680,11 +703,27 @@ func _build_bottom_chassis(root: Control) -> void:
 		item_quick_slot_icons.append(quick_icon)
 		var quick_count := Label.new()
 		quick_count.name = "ItemQuickSlotCount"
-		quick_count.position = Vector2(item_button.size.x - 34, item_button.size.y - 20)
-		quick_count.size = Vector2(30, 16)
 		quick_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		quick_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		quick_count.add_theme_font_size_override("font_size", 13)
+		# Bottom-right corner badge. Anchor-driven so the badge stays flush with
+		# the slot corner for any font metrics: the v3 candidate slots are only
+		# ~50px wide, the legacy v2 slots 72px, and the label's minimum line
+		# height varies with the theme font.
+		var badge_font_size := 13
+		if item_button.size.x < 64.0:
+			badge_font_size = 11
+		quick_count.add_theme_font_size_override("font_size", badge_font_size)
+		var badge_minimum := quick_count.get_combined_minimum_size()
+		quick_count.anchor_left = 1.0
+		quick_count.anchor_top = 1.0
+		quick_count.anchor_right = 1.0
+		quick_count.anchor_bottom = 1.0
+		quick_count.offset_left = -badge_minimum.x - 2.0
+		quick_count.offset_top = -badge_minimum.y
+		quick_count.offset_right = -2.0
+		quick_count.offset_bottom = 0.0
+		quick_count.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+		quick_count.grow_vertical = Control.GROW_DIRECTION_BEGIN
 		quick_count.add_theme_color_override("font_color", Color("f2c783"))
 		quick_count.add_theme_color_override("font_shadow_color", Color.BLACK)
 		quick_count.add_theme_constant_override("shadow_offset_x", 1)
@@ -693,32 +732,67 @@ func _build_bottom_chassis(root: Control) -> void:
 		item_button.add_child(quick_count)
 		item_quick_slot_count_labels.append(quick_count)
 	_build_experience_bar(chassis_root)
+	if chassis_design["experience_bar_policy"] == "chassis_design_xp_slot.v1":
+		# The frame art must sit above the oversized bar so the pointed well
+		# shape masks it; interactive buttons keep their higher sibling index.
+		chassis_root.move_child(experience_bar, 0)
 	_anchor_taoist_buff_strip_above_item_quick_slots(root)
 
 
 func _build_experience_bar(chassis_root: Control) -> void:
-	var item_slot_bounds := _item_quick_slot_outer_bounds()
-	var experience_size := Vector2(
-		item_slot_bounds.size.x if item_slot_bounds.size.x > 0.0 else HUD_EXPERIENCE_BAR_SIZE.x,
-		HUD_EXPERIENCE_BAR_HEIGHT,
-	)
+	var chassis_design: Dictionary = ChassisDesignsScript.active_design()
+	var experience_size: Vector2
+	var experience_position: Vector2
+	var geometry_policy: String
+	var outer_frame_source: String
+	if chassis_design["experience_bar_policy"] == "chassis_design_xp_slot.v1":
+		# The design art provides a dedicated experience slot: a wide thin alpha
+		# hole inside the bottom plaque. The bar is drawn UNDER the frame art
+		# and oversized so the opaque frame masks its edges; the pointed well
+		# shape is what stays visible.
+		var slot_rect: Rect2 = ChassisDesignsScript.source_rect_to_local(
+			chassis_design,
+			chassis_design["experience_slot_source_rect"],
+		)
+		var render_bleed: Vector2 = chassis_design.get("experience_slot_render_bleed", Vector2.ZERO)
+		experience_size = slot_rect.size + render_bleed
+		experience_position = slot_rect.position - render_bleed * 0.5
+		geometry_policy = "chassis_design_xp_slot.v1"
+		outer_frame_source = chassis_design["chassis_stable_id"]
+	else:
+		var item_slot_bounds := _item_quick_slot_outer_bounds()
+		experience_size = Vector2(
+			item_slot_bounds.size.x if item_slot_bounds.size.x > 0.0 else HUD_EXPERIENCE_BAR_SIZE.x,
+			HUD_EXPERIENCE_BAR_HEIGHT,
+		)
+		experience_position = Vector2(
+			item_slot_bounds.position.x
+				if item_slot_bounds.size.x > 0.0
+				else (HUD_CHASSIS_SIZE.x - experience_size.x) * 0.5,
+			HUD_CHASSIS_SIZE.y - HUD_EXPERIENCE_BOTTOM_GAP - experience_size.y,
+		)
+		geometry_policy = "item_quick_slot_outer_frame_union.v1"
+		outer_frame_source = "ItemSlot1.left_to_ItemSlot4.right"
 	experience_bar = Control.new()
 	experience_bar.name = "ExperienceBar"
 	experience_bar.size = experience_size
-	experience_bar.position = Vector2(
-		item_slot_bounds.position.x
-			if item_slot_bounds.size.x > 0.0
-			else (HUD_CHASSIS_SIZE.x - experience_bar.size.x) * 0.5,
-		HUD_CHASSIS_SIZE.y - HUD_EXPERIENCE_BOTTOM_GAP - experience_bar.size.y,
-	)
+	experience_bar.position = experience_position
 	experience_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	experience_bar.set_meta("stable_id", HUD_EXPERIENCE_BAR_STABLE_ID)
 	experience_bar.set_meta("segment_count", HUD_EXPERIENCE_SEGMENT_COUNT)
-	experience_bar.set_meta("geometry_policy", "item_quick_slot_outer_frame_union.v1")
-	experience_bar.set_meta("outer_frame_source", "ItemSlot1.left_to_ItemSlot4.right")
-	experience_bar.set_meta("calibrated_height", HUD_EXPERIENCE_BAR_HEIGHT)
+	experience_bar.set_meta("geometry_policy", geometry_policy)
+	experience_bar.set_meta("outer_frame_source", outer_frame_source)
+	experience_bar.set_meta("calibrated_height", experience_size.y)
 	experience_bar.set_meta("data_source", "PlayerState.experience / experience_to_next_level()")
 	chassis_root.add_child(experience_bar)
+	if geometry_policy == "chassis_design_xp_slot.v1":
+		var backdrop := ColorRect.new()
+		backdrop.name = "Backdrop"
+		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		backdrop.color = HUD_EXPERIENCE_BACKDROP_COLOR
+		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.set_meta("stable_id", "%s.backdrop" % HUD_EXPERIENCE_BAR_STABLE_ID)
+		experience_bar.add_child(backdrop)
 	experience_segments.clear()
 	var gap := HUD_EXPERIENCE_SEGMENT_GAP
 	var segment_width := (experience_bar.size.x - gap * (HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / HUD_EXPERIENCE_SEGMENT_COUNT
@@ -813,7 +887,8 @@ func _anchor_warrior_state_label(root: Control) -> void:
 		return
 	var root_inverse := root.get_global_transform().affine_inverse()
 	var chassis_global := chassis_root.get_global_rect()
-	var peak_global_y: float = (chassis_root.get_global_transform() * _chassis_source_to_local(HUD_CHASSIS_CENTER_PEAK_SOURCE)).y
+	var peak_source: Vector2 = ChassisDesignsScript.active_design()["center_peak_source"]
+	var peak_global_y: float = (chassis_root.get_global_transform() * _chassis_source_to_local(peak_source)).y
 	var label_width := minf(500.0, chassis_global.size.x)
 	warrior_state_label.position.x = (root_inverse * chassis_global.get_center()).x
 	warrior_state_label.position.x -= Vector2(label_width * 0.5, 0.0).x
@@ -1984,11 +2059,7 @@ func _ensure_death_revival_panel() -> void:
 
 
 func _chassis_source_to_local(source_point: Vector2) -> Vector2:
-	var source_size := Vector2(HUDChassisTexture.get_width(), HUDChassisTexture.get_height())
-	var scale := minf(HUD_CHASSIS_SIZE.x / source_size.x, HUD_CHASSIS_SIZE.y / source_size.y)
-	var render_size := source_size * scale
-	var render_origin := (HUD_CHASSIS_SIZE - render_size) * 0.5
-	return render_origin + source_point * scale
+	return ChassisDesignsScript.source_to_local(ChassisDesignsScript.active_design(), source_point)
 
 
 func _apply_control_rect(control: Control, rect: Rect2) -> void:

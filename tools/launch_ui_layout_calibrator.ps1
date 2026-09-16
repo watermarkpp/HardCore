@@ -5,6 +5,8 @@ param(
     [string]$CaptureInventoryAttributePreview = '',
     [switch]$CharacterStatsPreview,
     [string]$CaptureCharacterStatsPreview = '',
+    [switch]$ChassisDesignCompare,
+    [string]$CaptureChassisDesignCompare = '',
     [switch]$Visible
 )
 
@@ -47,6 +49,30 @@ function Resolve-ProjectLocalPngArgument {
     return "res://$relativeForGodot"
 }
 
+function Resolve-ProjectLocalDirArgument {
+    param([string]$CandidatePath)
+
+    $rawPath = $CandidatePath.Trim()
+    if ([string]::IsNullOrWhiteSpace($rawPath)) {
+        throw 'CaptureChassisDesignCompare must be a non-empty project-local directory.'
+    }
+    $projectRootFull = [IO.Path]::GetFullPath($ProjectRoot).TrimEnd('\', '/')
+    if ($rawPath.StartsWith('res://', [StringComparison]::OrdinalIgnoreCase)) {
+        $relativePath = $rawPath.Substring(6).Replace('/', '\')
+        $fullPath = [IO.Path]::GetFullPath((Join-Path $projectRootFull $relativePath))
+    } elseif ([IO.Path]::IsPathRooted($rawPath)) {
+        $fullPath = [IO.Path]::GetFullPath($rawPath)
+    } else {
+        $fullPath = [IO.Path]::GetFullPath((Join-Path $projectRootFull ($rawPath.Replace('/', '\'))))
+    }
+    $projectPrefix = $projectRootFull + [IO.Path]::DirectorySeparatorChar
+    if (-not $fullPath.StartsWith($projectPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        throw "CaptureChassisDesignCompare must remain inside the project: $CandidatePath"
+    }
+    $relativeForGodot = $fullPath.Substring($projectPrefix.Length).Replace('\', '/')
+    return "res://$relativeForGodot"
+}
+
 $PreviewUserArguments = @()
 if ($LevelUpPreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureLevelUpPreview)) {
     $PreviewUserArguments += '--level-up-preview'
@@ -68,6 +94,14 @@ if ($CharacterStatsPreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($Capt
 if (-not [string]::IsNullOrWhiteSpace($CaptureCharacterStatsPreview)) {
     $CharacterCaptureArgument = Resolve-ProjectLocalPngArgument $CaptureCharacterStatsPreview
     $PreviewUserArguments += "--capture-character-stats-preview=$CharacterCaptureArgument"
+}
+
+if ($ChassisDesignCompare.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureChassisDesignCompare)) {
+    $PreviewUserArguments += '--chassis-design-compare'
+}
+if (-not [string]::IsNullOrWhiteSpace($CaptureChassisDesignCompare)) {
+    $CaptureDirArgument = Resolve-ProjectLocalDirArgument $CaptureChassisDesignCompare
+    $PreviewUserArguments += "--capture-chassis-design-compare=$CaptureDirArgument"
 }
 
 $Arguments = @(

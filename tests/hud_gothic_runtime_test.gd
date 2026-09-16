@@ -4,6 +4,7 @@ const CHASSIS_PATH := "res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.p
 const ACTION_FRAME_PATH := "res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png"
 const MobileLayout := preload("res://scripts/mobile_layout.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
+const ChassisDesigns := preload("res://scripts/hud_chassis_designs.gd")
 
 
 func _ready() -> void:
@@ -46,27 +47,61 @@ func _run() -> void:
 	var chassis := root.get_node("IntegratedHUDChassis") as Control
 	assert(chassis != null and chassis.size == Vector2(820, 273))
 	assert(chassis.get_meta("contents") == ["health_orb", "four_item_slots", "mana_orb"])
+	assert(chassis.get_meta("active_design", "") == ChassisDesigns.ACTIVE_DESIGN_ID)
+	var design: Dictionary = ChassisDesigns.active_design()
 	var health_orb := chassis.get_node("HealthOrb") as Control
 	var mana_orb := chassis.get_node("ManaOrb") as Control
 	assert(health_orb != null and mana_orb != null)
 	var experience_bar := chassis.get_node("ExperienceBar") as Control
 	assert(experience_bar != null and experience_bar.get_meta("stable_id") == "ui.hud.experience_bar.10_segments.v1")
 	assert(experience_bar.get_meta("segment_count") == 10)
-	assert(experience_bar.get_meta("geometry_policy") == "item_quick_slot_outer_frame_union.v1")
-	assert(experience_bar.get_meta("outer_frame_source") == "ItemSlot1.left_to_ItemSlot4.right")
-	assert(experience_bar.size.y == GameHUD.HUD_EXPERIENCE_BAR_HEIGHT)
+	assert(experience_bar.get_meta("geometry_policy") == design["experience_bar_policy"])
 	assert((experience_bar.get_node("Segment01") as ColorRect).color == GameHUD.HUD_EXPERIENCE_EMPTY_COLOR)
 	assert((experience_bar.get_node("Segment01/Fill") as ColorRect).color == GameHUD.HUD_EXPERIENCE_FILL_COLOR)
-	var item_slot_bounds := Rect2(
-		(chassis.get_node("ItemSlot1") as Control).position,
-		(chassis.get_node("ItemSlot1") as Control).size,
-	)
-	for index in range(2, 5):
-		var item_slot := chassis.get_node("ItemSlot%d" % index) as Control
-		item_slot_bounds = item_slot_bounds.merge(Rect2(item_slot.position, item_slot.size))
-	assert(is_equal_approx(experience_bar.position.x, item_slot_bounds.position.x), "经验条左端没有对齐快捷物品第1槽外框")
-	assert(is_equal_approx(experience_bar.position.x + experience_bar.size.x, item_slot_bounds.end.x), "经验条右端没有对齐快捷物品第4槽外框")
-	assert(is_equal_approx(chassis.size.y - experience_bar.position.y - experience_bar.size.y, GameHUD.HUD_EXPERIENCE_BOTTOM_GAP))
+	if design["experience_bar_policy"] == "chassis_design_xp_slot.v1":
+		var xp_slot_rect: Rect2 = ChassisDesigns.source_rect_to_local(
+			design,
+			design["experience_slot_source_rect"],
+		)
+		var xp_render_bleed: Vector2 = design.get("experience_slot_render_bleed", Vector2.ZERO)
+		assert(experience_bar.get_meta("outer_frame_source") == design["chassis_stable_id"])
+		# The bar is oversized and drawn UNDER the frame art; the pointed well
+		# shape masks it, so the bar rect must cover the well rect exactly.
+		assert(
+			experience_bar.position.is_equal_approx(xp_slot_rect.position - xp_render_bleed * 0.5),
+			"经验条没有按外扩量居中盖住当前框体设计预留的经验槽",
+		)
+		assert(
+			experience_bar.size.is_equal_approx(xp_slot_rect.size + xp_render_bleed),
+			"经验条尺寸没有按外扩量盖住当前框体设计的经验槽",
+		)
+		assert(
+			experience_bar.get_rect().encloses(xp_slot_rect),
+			"经验条没有完整覆盖经验槽镂空区域",
+		)
+		var chassis_art := chassis.get_node("DemonChassisArt") as TextureRect
+		assert(
+			experience_bar.get_index() < chassis_art.get_index(),
+			"经验条必须画在框体画图之下，由画框压住外扩部分",
+		)
+		var backdrop := experience_bar.get_node("Backdrop") as ColorRect
+		assert(
+			backdrop != null and backdrop.color == GameHUD.HUD_EXPERIENCE_BACKDROP_COLOR,
+			"经验槽透明洞缺少背景垫层",
+		)
+	else:
+		assert(experience_bar.get_meta("outer_frame_source") == "ItemSlot1.left_to_ItemSlot4.right")
+		assert(experience_bar.size.y == GameHUD.HUD_EXPERIENCE_BAR_HEIGHT)
+		var item_slot_bounds := Rect2(
+			(chassis.get_node("ItemSlot1") as Control).position,
+			(chassis.get_node("ItemSlot1") as Control).size,
+		)
+		for index in range(2, 5):
+			var item_slot := chassis.get_node("ItemSlot%d" % index) as Control
+			item_slot_bounds = item_slot_bounds.merge(Rect2(item_slot.position, item_slot.size))
+		assert(is_equal_approx(experience_bar.position.x, item_slot_bounds.position.x), "经验条左端没有对齐快捷物品第1槽外框")
+		assert(is_equal_approx(experience_bar.position.x + experience_bar.size.x, item_slot_bounds.end.x), "经验条右端没有对齐快捷物品第4槽外框")
+		assert(is_equal_approx(chassis.size.y - experience_bar.position.y - experience_bar.size.y, GameHUD.HUD_EXPERIENCE_BOTTOM_GAP))
 	for index in range(1, 5):
 		assert(not experience_bar.get_global_rect().intersects((chassis.get_node("ItemSlot%d" % index) as Control).get_global_rect()))
 	var required_exp := maxi(1, int(PlayerState.experience_to_next_level()))
@@ -84,7 +119,8 @@ func _run() -> void:
 			var expected_ratio := clampf(actual_progress * 10.0 - index, 0.0, 1.0)
 			assert(is_equal_approx(float(segment.get_meta("fill_ratio")), expected_ratio))
 			assert(is_equal_approx(fill.size.x, segment.size.x * expected_ratio))
-	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "血蓝球没有恢复为与框体透明孔匹配的既定尺寸")
+	var expected_orb_size := Vector2(design["orb_display_size"], design["orb_display_size"])
+	assert(health_orb.size == expected_orb_size and mana_orb.size == expected_orb_size, "血蓝球尺寸没有匹配当前框体设计的透明孔")
 	var buff_strip := root.get_node("TaoistDefenseBuffStrip") as Control
 	assert(buff_strip != null)
 	assert(buff_strip.get_meta("stable_id") == GameHUD.TAOIST_BUFF_STRIP_STABLE_ID)
@@ -99,9 +135,13 @@ func _run() -> void:
 		buff_strip.get_global_rect().end.y,
 		item_bar_global_rect.position.y - GameHUD.TAOIST_BUFF_STRIP_ITEM_BAR_GAP
 	))
+	# v81 accepted anchor contract (4f4462ad): the buff strip is left-aligned to
+	# the item quick-slot bar (offset_left = ItemSlot1.global_left). The old
+	# union-center expectation predates it, is not part of any formal suite and
+	# already failed on the untouched v81 baseline.
 	assert(is_equal_approx(
-		buff_strip.get_global_rect().get_center().x,
-		item_bar_global_rect.get_center().x
+		buff_strip.get_global_rect().position.x,
+		item_bar_global_rect.position.x
 	))
 	assert(buff_strip.get_index() > chassis.get_index())
 	var ac_buff_icon := buff_strip.get_node("TaoistACBuffIcon") as TextureRect
@@ -144,23 +184,26 @@ func _run() -> void:
 	assert(health_orb.get_meta("stable_id") == "ui.hud.resource_orb.metal_mask_fit.v2" and mana_orb.get_meta("stable_id") == "ui.hud.resource_orb.metal_mask_fit.v2")
 	assert(is_equal_approx(float(health_orb.get_meta("liquid_radius_ratio")), 0.49), "血球没有扩大到金属内孔")
 	assert(is_equal_approx(float(mana_orb.get_meta("liquid_radius_ratio")), 0.49), "蓝球没有扩大到金属内孔")
-	assert(is_equal_approx(health_orb.position.x + health_orb.size.x * 0.5, 181.6875), "生命球圆心偏离框体透明孔")
-	assert(is_equal_approx(mana_orb.position.x + mana_orb.size.x * 0.5, 638.3125), "魔法球圆心偏离框体透明孔")
+	var expected_health_center := ChassisDesigns.source_to_local(design, design["health_orb_center_source"])
+	var expected_mana_center := ChassisDesigns.source_to_local(design, design["mana_orb_center_source"])
+	assert(is_equal_approx(health_orb.position.x + health_orb.size.x * 0.5, expected_health_center.x), "生命球圆心偏离框体透明孔")
+	assert(is_equal_approx(mana_orb.position.x + mana_orb.size.x * 0.5, expected_mana_center.x), "魔法球圆心偏离框体透明孔")
 	assert(is_equal_approx(health_orb.position.y + health_orb.size.y * 0.5, mana_orb.position.y + mana_orb.size.y * 0.5), "血蓝球纵向不对称")
-	assert(is_equal_approx(health_orb.position.y + health_orb.size.y * 0.5, 187.28125), "血蓝球仍保留旧的向南取整偏移")
-	var expected_item_centers := [
-		Vector2(284.0625, 190.9375),
-		Vector2(367.34375, 190.53125),
-		Vector2(453.875, 190.53125),
-		Vector2(537.96875, 190.53125),
-	]
+	assert(is_equal_approx(health_orb.position.y + health_orb.size.y * 0.5, expected_health_center.y), "血蓝球纵向偏离框体透明孔")
+	var expected_item_centers: Array[Vector2] = []
+	for slot_center: Variant in design["item_slot_centers_source"]:
+		expected_item_centers.append(ChassisDesigns.source_to_local(design, slot_center))
+	var expected_fill_size: Vector2 = design["item_slot_fill_display_size"]
+	var expected_fill_render_size: Vector2 = design.get("item_slot_fill_render_size", expected_fill_size)
 	var chassis_art := chassis.get_node("DemonChassisArt") as TextureRect
 	for index in range(4):
 		var item_fill := chassis.get_node("ItemSlotFill%d" % (index + 1)) as Panel
 		var item_slot := chassis.get_node("ItemSlot%d" % (index + 1)) as Button
 		assert(item_slot != null and item_slot.get_meta("stable_id") == "hud.item_slot.%d" % (index + 1))
-		assert(item_fill != null and item_fill.size == Vector2(72, 72), "物品框底色没有填满金属内孔")
-		assert(item_slot.size == Vector2(72, 72) and item_slot.get_meta("metal_masked", false), "物品框触控层没有按金属内孔建立")
+		# The fill well is oversized under the frame art so the opaque rim
+		# masks the anti-aliased well edge; the touch slot keeps the well size.
+		assert(item_fill != null and item_fill.size == expected_fill_render_size, "物品框底色没有按外扩尺寸盖住金属内孔")
+		assert(item_slot.size == expected_fill_size and item_slot.get_meta("metal_masked", false), "物品框触控层没有按金属内孔建立")
 		assert(item_fill.position + item_fill.size * 0.5 == expected_item_centers[index], "物品框底色没有使用底框源像素坐标")
 		assert(item_slot.position + item_slot.size * 0.5 == expected_item_centers[index], "物品框没有使用底框源像素坐标")
 		assert(item_fill.get_index() < chassis_art.get_index() and chassis_art.get_index() < item_slot.get_index(), "物品填充、金属框与触控层次序错误")
@@ -292,57 +335,81 @@ func _run() -> void:
 	assert(root.get_node("JoystickArt").get_meta("stable_id") == "ui.hud.gothic.v2.joystick")
 	assert(root.get_node_or_null("RightControlsArt") == null, "含左边缘污染碎片的旧右侧合成图仍在运行时")
 	assert(root.get_node("AttackFrame").get_meta("stable_id") == "ui.hud.gothic.v3.attack_frame")
-	assert(chassis_art.get_meta("stable_id") == "ui.hud.gothic.v2.bottom_chassis")
-	assert(
-		chassis_art.get_meta("legacy_skill_art_mask") == HUDAssetSanitizer.CHASSIS_LEGACY_SKILL_MASK_ID,
-		"底盘没有使用精确旧技能框 alpha mask",
-	)
-	var cleaned_image := chassis_art.texture.get_image()
-	assert(cleaned_image.get_pixel(1008, 260).a <= 0.01, "底框右侧污染连通碎片没有从源像素层清除")
-	var legacy_points: Array[Vector2i] = [
-		Vector2i(309, 10),
-		Vector2i(254, 60),
-		Vector2i(441, 20),
-		Vector2i(574, 20),
-		Vector2i(707, 20),
-		Vector2i(204, 135),
-		Vector2i(806, 138),
-		Vector2i(380, 138),
-		Vector2i(630, 138),
-		Vector2i(309, 137),
-		Vector2i(309, 150),
-		Vector2i(707, 150),
-	]
-	for point in legacy_points:
-		assert(image.get_pixelv(point).a > 0.01, "旧技能框样本点在原图中不存在：%s" % point)
-		assert(HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point), "旧技能框样本点未进入精确 mask：%s" % point)
-		assert(cleaned_image.get_pixelv(point).a <= 0.01, "旧圆框、红菱形或连接条没有清除：%s" % point)
-	var protected_crest_points: Array[Vector2i] = [
-		Vector2i(505, 115),
-		Vector2i(505, 122),
-		Vector2i(505, 130),
-		Vector2i(492, 135),
-		Vector2i(520, 145),
-		Vector2i(505, 155),
-	]
-	for point in protected_crest_points:
-		assert(image.get_pixelv(point).a > 0.01, "中央徽章保护样本点在原图中不存在：%s" % point)
-		assert(HUDAssetSanitizer.is_chassis_center_crest_protected(point), "中央徽章样本点未进入硬保护区：%s" % point)
-		assert(cleaned_image.get_pixelv(point) == image.get_pixelv(point), "中央尖头或徽章原像素被修改：%s" % point)
-	for unchanged_point: Vector2i in [Vector2i(245, 145), Vector2i(400, 158), Vector2i(505, 165), Vector2i(715, 160)]:
-		assert(cleaned_image.get_pixelv(unchanged_point) == image.get_pixelv(unchanged_point), "正式底盘或恶魔装饰像素被修改：%s" % unchanged_point)
-	var isolated_component_cleaned := HUDAssetSanitizer.without_alpha_component(
-		load(CHASSIS_PATH) as Texture2D,
-		Vector2i(1008, 260),
-	).get_image()
-	for y in range(0, 160):
-		for x in range(204, 808):
-			var point := Vector2i(x, y)
-			if HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point):
-				assert(cleaned_image.get_pixelv(point).a <= 0.01, "alpha mask 内仍有旧技能框像素：%s" % point)
-			else:
-				assert(cleaned_image.get_pixelv(point) == isolated_component_cleaned.get_pixelv(point), "alpha mask 外的底盘原像素被改动：%s" % point)
-	assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
+	assert(chassis_art.get_meta("stable_id") == design["chassis_stable_id"])
+	var chassis_texture := chassis_art.texture as Texture2D
+	assert(chassis_texture != null and not chassis_texture.resource_path.is_empty())
+	assert(chassis_texture.resource_path == String(design["texture_path"]), "底盘贴图没有使用当前设计注册的源图")
+	if design["sanitize_policy"] == "v2_legacy_skill_mask.v1":
+		assert(
+			chassis_art.get_meta("legacy_skill_art_mask") == HUDAssetSanitizer.CHASSIS_LEGACY_SKILL_MASK_ID,
+			"底盘没有使用精确旧技能框 alpha mask",
+		)
+		var cleaned_image := chassis_texture.get_image()
+		assert(cleaned_image.get_pixel(1008, 260).a <= 0.01, "底框右侧污染连通碎片没有从源像素层清除")
+		var legacy_points: Array[Vector2i] = [
+			Vector2i(309, 10),
+			Vector2i(254, 60),
+			Vector2i(441, 20),
+			Vector2i(574, 20),
+			Vector2i(707, 20),
+			Vector2i(204, 135),
+			Vector2i(806, 138),
+			Vector2i(380, 138),
+			Vector2i(630, 138),
+			Vector2i(309, 137),
+			Vector2i(309, 150),
+			Vector2i(707, 150),
+		]
+		for point in legacy_points:
+			assert(image.get_pixelv(point).a > 0.01, "旧技能框样本点在原图中不存在：%s" % point)
+			assert(HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point), "旧技能框样本点未进入精确 mask：%s" % point)
+			assert(cleaned_image.get_pixelv(point).a <= 0.01, "旧圆框、红菱形或连接条没有清除：%s" % point)
+		var protected_crest_points: Array[Vector2i] = [
+			Vector2i(505, 115),
+			Vector2i(505, 122),
+			Vector2i(505, 130),
+			Vector2i(492, 135),
+			Vector2i(520, 145),
+			Vector2i(505, 155),
+		]
+		for point in protected_crest_points:
+			assert(image.get_pixelv(point).a > 0.01, "中央徽章保护样本点在原图中不存在：%s" % point)
+			assert(HUDAssetSanitizer.is_chassis_center_crest_protected(point), "中央徽章样本点未进入硬保护区：%s" % point)
+			assert(cleaned_image.get_pixelv(point) == image.get_pixelv(point), "中央尖头或徽章原像素被修改：%s" % point)
+		for unchanged_point: Vector2i in [Vector2i(245, 145), Vector2i(400, 158), Vector2i(505, 165), Vector2i(715, 160)]:
+			assert(cleaned_image.get_pixelv(unchanged_point) == image.get_pixelv(unchanged_point), "正式底盘或恶魔装饰像素被修改：%s" % unchanged_point)
+		var isolated_component_cleaned := HUDAssetSanitizer.without_alpha_component(
+			load(CHASSIS_PATH) as Texture2D,
+			Vector2i(1008, 260),
+		).get_image()
+		for y in range(0, 160):
+			for x in range(204, 808):
+				var point := Vector2i(x, y)
+				if HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point):
+					assert(cleaned_image.get_pixelv(point).a <= 0.01, "alpha mask 内仍有旧技能框像素：%s" % point)
+				else:
+					assert(cleaned_image.get_pixelv(point) == isolated_component_cleaned.get_pixelv(point), "alpha mask 外的底盘原像素被改动：%s" % point)
+		assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
+	else:
+		# v3 用户候选图自带镂空槽：运行时必须原样使用，不得再次清洗。
+		assert(
+			chassis_art.get_meta("legacy_skill_art_mask", "") == "",
+			"v3 设计不应携带 v2 旧技能框 mask",
+		)
+		assert(chassis_art.get_meta("source_artifact_removed", "") == "", "v3 设计不应声明 v2 污染清理")
+		var active_image := chassis_texture.get_image()
+		var health_hole_center: Vector2 = design["health_orb_center_source"]
+		var mana_hole_center: Vector2 = design["mana_orb_center_source"]
+		assert(active_image.get_pixelv(Vector2i(health_hole_center)).a < 0.05, "生命球镂空孔必须保持透明")
+		assert(active_image.get_pixelv(Vector2i(mana_hole_center)).a < 0.05, "魔法球镂空孔必须保持透明")
+		for slot_center: Variant in design["item_slot_centers_source"]:
+			assert(active_image.get_pixelv(Vector2i(slot_center)).a < 0.05, "物品槽镂空孔必须保持透明")
+		var xp_hole: Rect2 = design["experience_slot_source_rect"]
+		assert(active_image.get_pixelv(Vector2i(xp_hole.get_center())).a < 0.05, "经验槽镂空必须保持透明")
+		assert(
+			FileAccess.file_exists("res://assets/ui/gothic_hud/v3/gothic_hud_frame_geometry_v3.json"),
+			"v3 几何证据文件缺失",
+		)
 	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
 	assert("gothic_hud/v1" not in hud_source and "gothic_preview" not in hud_source, "正式HUD不得继续引用旧素材")
 	# --- Item quick slots: mirror, signals, candidates and interactions ---
@@ -353,7 +420,7 @@ func _run() -> void:
 	assert(hud.item_quick_slot_icons.size() == 4 and hud.item_quick_slot_count_labels.size() == 4, "四槽图标与数量层应存在")
 	for slot_index in range(4):
 		var item_slot_button := hud.hud_item_buttons[slot_index] as Button
-		assert(item_slot_button.size == Vector2(72, 72), "快捷物品槽几何被改动")
+		assert(item_slot_button.size == expected_fill_size, "快捷物品槽几何被改动")
 		assert(item_slot_button.get_node_or_null("ItemQuickSlotIcon") != null, "快捷物品槽缺少图标层")
 		assert(item_slot_button.get_node_or_null("ItemQuickSlotCount") != null, "快捷物品槽缺少数量层")
 		assert(item_slot_button.get_meta("stable_id") == "hud.item_slot.%d" % (slot_index + 1), "快捷物品槽 stable id 被改动")
@@ -397,8 +464,24 @@ func _run() -> void:
 	assert(bound_button.text.is_empty(), "绑定快捷物品后槽号文字应清空")
 	assert(bound_icon.texture != null and bound_icon.size == bound_icon.texture.get_size(), "主槽图标应保持 inventoryIcon 原生尺寸")
 	assert(bound_icon.size == Vector2(20, 27), "太阳水主槽图标应保持 20x27 原生像素")
-	assert(bound_icon.position + bound_icon.size * 0.5 == bound_button.size * 0.5, "主槽图标未在 72x72 框内居中")
-	assert(not Rect2(bound_icon.position, bound_icon.size).intersects(Rect2(bound_count.position, bound_count.size)), "主槽数量角标与太阳水图标相交")
+	assert(bound_icon.position + bound_icon.size * 0.5 == bound_button.size * 0.5, "主槽图标未在槽框内居中")
+	if (design["item_slot_fill_display_size"] as Vector2).x >= 64.0:
+		assert(not Rect2(bound_icon.position, bound_icon.size).intersects(Rect2(bound_count.position, bound_count.size)), "主槽数量角标与太阳水图标相交")
+	else:
+		# 小槽设计：角标锚定右下角，右/下边缘与槽框的间距是确定性的；行盒按
+		# 字体最小高度向下对齐（grow=BEGIN），允许叠在图标右下空白角上。
+		assert(
+			is_equal_approx(bound_count.position.x + bound_count.size.x, bound_button.size.x - 2.0),
+			"小槽数量角标必须右对齐（距右缘2px）",
+		)
+		assert(
+			is_equal_approx(bound_count.position.y + bound_count.size.y, bound_button.size.y),
+			"小槽数量角标必须贴齐槽底",
+		)
+		assert(
+			Rect2(Vector2.ZERO, bound_button.size).encloses(Rect2(bound_count.position, bound_count.size)),
+			"小槽设计的数量角标必须完整位于槽内",
+		)
 	hud.set_item_quick_slots(["", "", "", ""])
 	assert(bound_button.text == "1", "清空绑定后应恢复空槽号")
 	hud.set_item_quick_slots(["太阳水", "", "", ""])
@@ -636,7 +719,10 @@ func _run() -> void:
 	assert(int(hud.get("_item_slot_press_touch_index")) == -1, "释放后应清除 touch index")
 
 	await _assert_2664x1200_landscape_layout(root, chassis, health_orb, mana_orb)
-	print("HUD_GOTHIC_RUNTIME_PASS：统一V2透明框体、动态血蓝球、4物品槽、攻击主键、6环绕技能与触控尺寸均通过")
+	print(
+		"HUD_GOTHIC_RUNTIME_PASS：active_design=%s 统一框体、动态血蓝球、4物品槽、攻击主键、6环绕技能与触控尺寸均通过"
+			% ChassisDesigns.ACTIVE_DESIGN_ID
+	)
 	get_tree().quit(0)
 
 
@@ -749,4 +835,7 @@ func _assert_2664x1200_landscape_layout(root: Control, chassis: Control, health_
 	var mana_center_x := mana_orb.get_global_rect().get_center().x
 	var orb_symmetry_error := absf((chassis_center_x - health_center_x) - (mana_center_x - chassis_center_x))
 	assert(orb_symmetry_error <= 0.01, "2664x1200 血蓝球没有围绕底部框体左右对称：%.2f / %.2f / %.2f，误差 %.2f" % [health_center_x, chassis_center_x, mana_center_x, orb_symmetry_error])
-	assert(health_orb.size == Vector2(110, 110) and mana_orb.size == Vector2(110, 110), "2664x1200 布局错误缩小了血蓝球")
+	var expected_landscape_orb_size: Vector2 = (
+		ChassisDesigns.active_design()["orb_display_size"] * Vector2.ONE
+	)
+	assert(health_orb.size == expected_landscape_orb_size and mana_orb.size == expected_landscape_orb_size, "2664x1200 布局错误缩小了血蓝球")
