@@ -1905,6 +1905,24 @@ func _prewarm_learned_skill_visuals() -> void:
 		PresentationAssets.audio(audio_id)
 	for action_key: String in ["attack", "hit", "cast", "death"]:
 		PresentationAssets.player_texture(action_key)
+	# FW-COLD2 Phase A (remote review 2026-09-16): the 32 MB frame cache is
+	# LRU-ordered, so a wizard with many learned skills can evict the earliest
+	# prewarmed frames during the sweep above. Re-touch the known first-cast
+	# skill LAST so its frames are the hottest entries, then prove residency
+	# before Loading ends - if this is not 6/6, FW-COLD is not complete.
+	CasterSkillVisualRegistry.prewarm_animation("wizard.fire_wall")
+	var fw_residency := CasterSkillVisualRegistry.animation_residency(
+		"wizard.fire_wall"
+	)
+	var fw_missing: Array = fw_residency.get("missing_paths", [])
+	print(
+		"[FW-WARM] cpu_resident=%d/%d%s"
+		% [
+			int(fw_residency.get("resident_frames", 0)),
+			int(fw_residency.get("expected_frames", 0)),
+			"" if fw_missing.is_empty() else " missing=%s" % [fw_missing],
+		]
+	)
 	# FRAME-STALL baseline: one print at the end of the loading window. The
 	# one-time long-frame probe (see _process) prints the same counters when
 	# the first >250ms frame occurs; the delta localizes the stall source.

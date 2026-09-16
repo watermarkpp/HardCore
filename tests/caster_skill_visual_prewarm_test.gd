@@ -86,6 +86,55 @@ func _run() -> void:
 		"an unknown skill must report a non-ready prewarm"
 	)
 
+	# 4b) FW-COLD2 Phase A (remote review 2026-09-16): worst-case residency.
+	# A real wizard can learn every covered skill; prewarming all of them may
+	# evict earlier frames from the 32 MB LRU cache. The loading gate must
+	# re-touch the first-cast skill LAST and then prove 6/6 residency. Also
+	# permanently locks the Chinese display-name resolution gate.
+	var manifest: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string("res://assets/data/caster_skill_visuals.json")
+	)
+	assert(manifest is Dictionary, "the caster skill manifest must parse")
+	var coverage: Dictionary = (manifest as Dictionary).get("skillCoverage", {})
+	var covered_skills := 0
+	for manifest_skill_id: String in coverage.keys():
+		var sweep: Dictionary = Registry.prewarm_animation(manifest_skill_id)
+		if bool(sweep.get("ready", false)):
+			covered_skills += 1
+	assert(
+		covered_skills >= 10,
+		"the manifest must cover a realistic wizard skill set: %d" % covered_skills
+	)
+	assert(
+		ProfessionRules.skill_id("火墙") == "wizard.fire_wall",
+		"the Chinese display name 火墙 must resolve to wizard.fire_wall"
+	)
+	var by_display_name: Dictionary = Registry.prewarm_animation("火墙")
+	assert(
+		bool(by_display_name.get("ready", false)),
+		"prewarm must accept the Chinese display name"
+	)
+	# The loading gate re-touches fire wall AFTER the full sweep.
+	var retouch: Dictionary = Registry.prewarm_animation("wizard.fire_wall")
+	assert(
+		bool(retouch.get("ready", false)),
+		"the fire wall re-touch must stay ready after the full sweep"
+	)
+	var residency: Dictionary = Registry.animation_residency("wizard.fire_wall")
+	assert(
+		int(residency.get("expected_frames", 0)) == 6,
+		"fire wall declares 6 frames: %s" % [residency]
+	)
+	assert(
+		int(residency.get("resident_frames", 0)) == 6,
+		"the LRU re-touch must guarantee full fire wall residency after a full-coverage sweep: %s"
+		% [residency]
+	)
+	assert(
+		(residency.get("missing_paths", []) as Array).is_empty(),
+		"no fire wall frame may be missing after the re-touch: %s" % [residency]
+	)
+
 	# 5) Source discipline: GameRoot prewarms learned skills inside the
 	# loading window (after FINALIZE, before the loading cover lifts). The
 	# call site is matched with its two-tab indentation so the function
