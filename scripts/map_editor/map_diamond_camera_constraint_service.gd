@@ -23,10 +23,15 @@ const EPSILON := 0.01
 ## delegated, comfort first): margin = SIX user cells = 192 world px - the
 ## body top keeps a visible ~40 world px gap below the bar while the
 ## head-to-bar-top visual gap halves from ~6 to ~3.4 cells.
-## In this file's constants the unit is the 64-px tile width, so six user
-## cells = 3.0 here. PARAMETER-ONLY by standing user directive.
+## Constant naming (remote review 2026-09-16, non-blocking cleanup): the
+## margin is expressed in the user's VERTICAL grid cells (32 world px each)
+## so the previous two-fold unit confusion (tile-width vs vertical cell)
+## cannot recur. The user-accepted values are frozen: 0.15 fraction and
+## six vertical cells = 192 world px. Do not retune without a new user
+## device ruling.
 const PLAYER_VISIBLE_SCREEN_MARGIN := 0.15
-const PLAYER_MIN_VISIBLE_GROUND_CELLS := 3.0
+const PLAYER_MIN_VISIBLE_VERTICAL_CELL_COUNT := 6.0
+const VERTICAL_CELL_WORLD_PX := 32.0
 
 
 ## C1/C1.1 CAMERA-EDGE (user ruling 2026-09-16, GPT audit): two-step edge
@@ -126,8 +131,8 @@ static func visibility_max_offset_px(
 		* maxf(viewport_size.y, 1.0)
 	)
 	var ground_cell_floor_px := (
-		PLAYER_MIN_VISIBLE_GROUND_CELLS
-		* MapEditorCoordinate.GROUND_TILE_SIZE_PX.x
+		PLAYER_MIN_VISIBLE_VERTICAL_CELL_COUNT
+		* VERTICAL_CELL_WORLD_PX
 	)
 	var floor_offset_px := Vector2(
 		maxf(
