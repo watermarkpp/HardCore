@@ -4,6 +4,7 @@ extends Node2D
 const EnvironmentCatalogScript := preload("res://scripts/environment_catalog.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
+const EditorChunkGroundCanvasScript := preload("res://scripts/layers/presentation/editor_chunk_ground_canvas.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
 const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
@@ -120,6 +121,12 @@ var _editor_runtime_size := Vector2i.ZERO
 var _editor_runtime_collision_snapshot: Dictionary = {}
 var _editor_runtime_collision_invalid := false
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
+## FW-STRIPES: dedicated single-item canvas for authored ground chunks with
+## LINEAR sampling (see editor_chunk_ground_canvas.gd). Data authority stays
+## _editor_runtime_chunk_draws; this node only owns the presentation filter.
+## Untyped on purpose: the canvas is accessed through the preloaded script
+## const (this file's dependency convention), not a global class reference.
+var _editor_chunk_ground_canvas = null
 var _editor_runtime_fallback_ground := false
 var _editor_runtime_actor_sort_roots: Dictionary = {}
 var _editor_runtime_bridge_commands: Array[Dictionary] = []
@@ -617,14 +624,10 @@ func _draw() -> void:
 		var raw_size:Array=_editor_runtime_visual.get("design_size",[64,64]);var size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
 		var corners := editor_runtime_ground_boundary_world(size)
 		draw_colored_polygon(corners, Color(str(_editor_runtime_visual.get("base_color", "#465827"))))
-		# Keep all authored chunk textures on one CanvasItem. Godot otherwise
-		# culls distant Sprite2D chunks and can defer their GPU upload until the
-		# player approaches an edge, producing a visible hitch on mobile.
-		for chunk_draw: Dictionary in _editor_runtime_chunk_draws:
-			var texture: Texture2D = chunk_draw.get("texture")
-			var rect: Rect2 = chunk_draw.get("rect", Rect2())
-			if texture != null and rect.size.x > 0.0 and rect.size.y > 0.0:
-				draw_texture_rect(texture, rect, false)
+		# Ground chunks render on the dedicated EditorChunkGroundCanvas child
+		# (single canvas item, LINEAR sampling - FW-STRIPES fix). The base
+		# fill above still draws on this item first, so the layering below
+		# props and above the guard band is unchanged.
 		return
 	if _full_ground_ready:
 		return
@@ -752,6 +755,7 @@ func clear_environment() -> void:
 	_editor_runtime_collision_snapshot.clear()
 	_editor_runtime_collision_invalid = false
 	_editor_runtime_chunk_draws.clear()
+	_editor_chunk_ground_canvas = null
 	_editor_runtime_fallback_ground = false
 	_editor_runtime_actor_sort_roots.clear()
 	_editor_runtime_bridge_commands.clear()
@@ -1094,6 +1098,19 @@ func _append_chunk_descriptors(
 		))
 
 
+## FW-STRIPES: lazily create the dedicated ground chunk canvas and keep it
+## in sync with the chunk draw list. Created through _append_environment_node
+## so clear_environment frees it with the rest of the map content; added as
+## the first ground child so props appended later keep rendering above it.
+func _sync_editor_chunk_ground_canvas() -> void:
+	if not is_instance_valid(_editor_chunk_ground_canvas):
+		var canvas := EditorChunkGroundCanvasScript.new()
+		_editor_chunk_ground_canvas = _append_environment_node(canvas)
+		if _editor_chunk_ground_canvas == null:
+			return
+	_editor_chunk_ground_canvas.set_chunk_draws(_editor_runtime_chunk_draws)
+
+
 func _append_instance_descriptors(
 	descriptors: Array,
 	runtime: Dictionary,
@@ -1426,6 +1443,7 @@ func build_one_map_item(descriptor: Dictionary) -> Node:
 				"texture": texture,
 				"rect": payload.get("rect", Rect2()),
 			})
+			_sync_editor_chunk_ground_canvas()
 			var marker := Node2D.new()
 			marker.name = "WorldChunk_%s" % str(payload.get("chunk_id", "x"))
 			marker.set_meta("editor_runtime_chunk_marker", true)
