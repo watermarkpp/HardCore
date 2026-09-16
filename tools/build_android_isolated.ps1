@@ -216,21 +216,6 @@ try {
         throw "Fresh isolated stage unexpectedly contains an existing Godot cache."
     }
 
-    if ($VersionCode -gt 0) {
-        $StagePresetPath = Join-Path $StageProjectPath "export_presets.cfg"
-        $StagePresetText = [System.IO.File]::ReadAllText($StagePresetPath)
-        if (-not $StagePresetText -match '(?m)^version/code=\d+\r?$') {
-            throw "Staged export preset has no readable version/code to override."
-        }
-        $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-        [System.IO.File]::WriteAllText(
-            $StagePresetPath,
-            [regex]::Replace($StagePresetText, '(?m)^version/code=\d+', "version/code=$VersionCode"),
-            $Utf8NoBom
-        )
-        Write-Output "VERSION_CODE_OVERRIDE=$VersionCode"
-    }
-
     # Bootstrap the host-managed Gradle template into the disposable stage
     # without network access or mutation of the integration worktree.
     if ($ExportPresetText -match '(?m)^gradle_build/use_gradle_build=true\r?$') {
@@ -313,6 +298,25 @@ try {
             throw "Build-info generation failed with exit code $BuildInfoExitCode."
         }
         Write-Output "build_info.json generated in staged project"
+
+        # QA versionCode override (remote review 2026-09-16): inject AFTER
+        # build-info generation so the generator's dirty-worktree guard only
+        # ever sees the commit content, and BEFORE the export so the produced
+        # APK carries the monotonic QA code. The tracked preset is untouched.
+        if ($VersionCode -gt 0) {
+            $StagePresetPath = Join-Path $StageProjectPath "export_presets.cfg"
+            $StagePresetText = [System.IO.File]::ReadAllText($StagePresetPath)
+            if (-not $StagePresetText -match '(?m)^version/code=\d+\r?$') {
+                throw "Staged export preset has no readable version/code to override."
+            }
+            $Utf8NoBomPreset = New-Object System.Text.UTF8Encoding($false)
+            [System.IO.File]::WriteAllText(
+                $StagePresetPath,
+                [regex]::Replace($StagePresetText, '(?m)^version/code=\d+', "version/code=$VersionCode"),
+                $Utf8NoBomPreset
+            )
+            Write-Output "VERSION_CODE_OVERRIDE=$VersionCode"
+        }
 
         & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
         $ImportExitCode = $LASTEXITCODE
