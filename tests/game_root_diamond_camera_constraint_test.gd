@@ -1,13 +1,15 @@
 extends Node
 
-## C1.1 CAMERA-EDGE-V2 production contract (user ruling 2026-09-16, GPT
+## C1.2 CAMERA-EDGE-V2 production contract (user ruling 2026-09-16, GPT
 ## audit): GameRoot composes the zero-black ideal center (strict constrained
 ## solve) with the player visibility guard. The hard constraint is that the
-## player stays inside the 10%..90% window of every screen axis; minimizing
-## the black area outside the map is the optimization goal, NOT a hard
-## zero-black contract. The view height stays exactly ArtSpec.CAMERA_ZOOM
-## everywhere. The former "viewport corners always inside the map" contract
-## from C1 is REJECTED by device ruling and must not be asserted here.
+## player stays inside the visibility window of every screen axis - at
+## least 15% from every edge (central 70%) and never closer than two ground
+## cells; minimizing the black area outside the map is the optimization
+## goal, NOT a hard zero-black contract. The view height stays exactly
+## ArtSpec.CAMERA_ZOOM everywhere. The former "viewport corners always
+## inside the map" contract from C1 is REJECTED by device ruling and must
+## not be asserted here.
 
 const CameraConstraint := preload(
 	"res://scripts/map_editor/map_diamond_camera_constraint_service.gd"
@@ -54,9 +56,8 @@ func _run() -> void:
 		var next_index := (edge_index + 1) % boundary.size()
 		probes.append((boundary[edge_index] + boundary[next_index]) * 0.5)
 	var viewport_size := game.get_viewport().get_visible_rect().size
-	var max_offset_px := Vector2(
-		viewport_size.x * (0.5 - CameraConstraint.PLAYER_VISIBLE_SCREEN_MARGIN),
-		viewport_size.y * (0.5 - CameraConstraint.PLAYER_VISIBLE_SCREEN_MARGIN)
+	var max_offset_px := CameraConstraint.visibility_max_offset_px(
+		viewport_size, camera.zoom
 	)
 	var zero_black_probe_count := 0
 	for probe: Vector2 in probes:
@@ -84,7 +85,7 @@ func _run() -> void:
 				probe, camera.global_position, expected_center,
 			]
 		)
-		# HARD CONSTRAINT: the player is always inside the 10%..90% window.
+		# HARD CONSTRAINT: the player is always inside the visibility window.
 		var player_offset_px := Vector2(
 			absf(probe.x - camera.global_position.x) * camera.zoom.x,
 			absf(probe.y - camera.global_position.y) * camera.zoom.y
@@ -92,7 +93,7 @@ func _run() -> void:
 		assert(
 			player_offset_px.x <= max_offset_px.x + 0.01
 			and player_offset_px.y <= max_offset_px.y + 0.01,
-			"the player left the 10%%..90%% visibility window at %s: %s" % [
+			"the player left the visibility window at %s: %s" % [
 				probe, player_offset_px,
 			]
 		)

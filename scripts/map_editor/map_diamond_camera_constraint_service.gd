@@ -9,11 +9,17 @@ const STRICT_FOLLOW_CONTRACT_ID := "map_diamond_camera_strict_edge_follow_v1"
 const EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
 const PROJECTION_ITERATIONS := 32
 const EPSILON := 0.01
-## C1.1 visibility guard (GPT audit ruling 2026-09-16): the player must stay
-## inside the 10%..90% window of each screen axis. 10% is a tuning knob —
-## 8% keeps the player nearer the edge, 12% safer — but must never become a
-## central band again (the removed C1 14% tanh band stays removed).
-const PLAYER_VISIBLE_SCREEN_MARGIN := 0.10
+## C1.2 visibility guard tuning (user device ruling 2026-09-16): the C1.1
+## 10% margin left the pinned player too close to the phone bezel. The
+## margin is raised to 15% - the player stays inside the central 70% window
+## of every screen axis - matching the soft-leash comfort range used by
+## comparable top-down action RPGs (12%..20%), with a hard floor of TWO
+## ground cells measured in world pixels so small viewports never crowd the
+## player against the edge either. 15% is a feel knob: 12% keeps the player
+## nearer the world, 18% is safer; it must never collapse back into a
+## central BAND (the removed C1 14% tanh band stays removed).
+const PLAYER_VISIBLE_SCREEN_MARGIN := 0.15
+const PLAYER_MIN_VISIBLE_GROUND_CELLS := 2.0
 
 
 ## C1/C1.1 CAMERA-EDGE (user ruling 2026-09-16, GPT audit): two-step edge
@@ -91,6 +97,34 @@ static func resolve_strict_follow_cached(
 	return result_center
 
 
+static func visibility_max_offset_px(
+	viewport_size: Vector2,
+	zoom: Vector2
+) -> Vector2:
+	## Single source of truth for the visibility window: the larger of the
+	## comfort fraction (15% from every screen edge) and the two-ground-cell
+	## world floor (2 x 64 world px, scaled by the fixed zoom), per axis.
+	## Tests and the guard both read this so the contract cannot drift.
+	var safe_zoom := Vector2(
+		maxf(absf(zoom.x), 0.0001),
+		maxf(absf(zoom.y), 0.0001)
+	)
+	var fraction_px := Vector2(
+		maxf(0.0, 0.5 - PLAYER_VISIBLE_SCREEN_MARGIN)
+		* maxf(viewport_size.x, 1.0),
+		maxf(0.0, 0.5 - PLAYER_VISIBLE_SCREEN_MARGIN)
+		* maxf(viewport_size.y, 1.0)
+	)
+	var ground_cell_floor_px := (
+		PLAYER_MIN_VISIBLE_GROUND_CELLS
+		* MapEditorCoordinate.GROUND_TILE_SIZE_PX.x
+	)
+	return Vector2(
+		maxf(fraction_px.x, ground_cell_floor_px * safe_zoom.x),
+		maxf(fraction_px.y, ground_cell_floor_px * safe_zoom.y)
+	)
+
+
 static func apply_player_visibility_guard(
 	strict_center: Vector2,
 	player_center: Vector2,
@@ -99,19 +133,14 @@ static func apply_player_visibility_guard(
 ) -> Vector2:
 	## STEP 2: player visibility guard over the zero-black ideal center.
 	## The player's screen offset from the ideal center is clamped to the
-	## 10%..90% window; the camera re-follows by exactly the excess. When
+	## visibility window; the camera re-follows by exactly the excess. When
 	## the player is inside the window the camera stays on the ideal center
 	## (zero black). Pure value math: no allocation on the per-frame path.
 	var safe_zoom := Vector2(
 		maxf(absf(zoom.x), 0.0001),
 		maxf(absf(zoom.y), 0.0001)
 	)
-	var max_offset_px := Vector2(
-		maxf(0.0, 0.5 - PLAYER_VISIBLE_SCREEN_MARGIN)
-		* maxf(viewport_size.x, 1.0),
-		maxf(0.0, 0.5 - PLAYER_VISIBLE_SCREEN_MARGIN)
-		* maxf(viewport_size.y, 1.0)
-	)
+	var max_offset_px := visibility_max_offset_px(viewport_size, safe_zoom)
 	var player_delta_px := (player_center - strict_center) * safe_zoom
 	var visible_delta_px := Vector2(
 		clampf(player_delta_px.x, -max_offset_px.x, max_offset_px.x),

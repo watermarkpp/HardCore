@@ -1,13 +1,15 @@
 extends Node
 
-## C1.1 CAMERA-EDGE-V2 service contract (user ruling 2026-09-16, GPT audit):
+## C1.2 CAMERA-EDGE-V2 service contract (user ruling 2026-09-16, GPT audit):
 ## the camera has ONE hard constraint and ONE optimization goal.
-##   Hard: the player stays inside the 10%..90% window of each screen axis.
+##   Hard: the player stays inside the visibility window of every screen
+##         axis - at least 15% from every edge (central 70%) and never
+##         closer than two ground cells.
 ##   Goal: the black area outside the map is minimized, NOT forbidden.
 ## STEP 1 = zero-black ideal position (strict constrained solve, unchanged
 ## math). STEP 2 = player visibility guard re-following the player by
 ## exactly the excess over the visibility window, so any black area is the
-## minimum required to keep the player visible. No dynamic zoom exists.
+## minimum required to keep the player comfortable. No dynamic zoom exists.
 
 const CameraConstraint := preload(
 	"res://scripts/map_editor/map_diamond_camera_constraint_service.gd"
@@ -21,10 +23,10 @@ const VIEWPORT_SIZE := VIEWPORT_HALF * 2.0
 const FIXED_ZOOM := Vector2.ONE * 1.06
 const FEASIBLE_SIZE := Vector2i(200, 200)
 const PARITY_ITERATIONS := 10000
-const MAX_OFFSET_PX := Vector2(
-	VIEWPORT_SIZE.x * (0.5 - CameraConstraint.PLAYER_VISIBLE_SCREEN_MARGIN),
-	VIEWPORT_SIZE.y * (0.5 - CameraConstraint.PLAYER_VISIBLE_SCREEN_MARGIN)
-)
+
+
+func _max_offset_px() -> Vector2:
+	return CameraConstraint.visibility_max_offset_px(VIEWPORT_SIZE, FIXED_ZOOM)
 
 
 func _ready() -> void:
@@ -117,14 +119,14 @@ func _run() -> void:
 			var delta_px := (desired - ideal_center) * FIXED_ZOOM
 			if zero_black_probe.is_equal_approx(Vector2.INF):
 				if ideal_center.distance_to(desired) > 0.01 and (
-					absf(delta_px.x) < MAX_OFFSET_PX.x * 0.6
-					and absf(delta_px.y) < MAX_OFFSET_PX.y * 0.6
+					absf(delta_px.x) < _max_offset_px().x * 0.6
+					and absf(delta_px.y) < _max_offset_px().y * 0.6
 				):
 					zero_black_probe = desired
 			if saturated_probe.is_equal_approx(Vector2.INF):
 				if (
-					absf(delta_px.x) > MAX_OFFSET_PX.x * 1.5
-					or absf(delta_px.y) > MAX_OFFSET_PX.y * 1.5
+					absf(delta_px.x) > _max_offset_px().x * 1.5
+					or absf(delta_px.y) > _max_offset_px().y * 1.5
 				):
 					saturated_probe = desired
 	assert(
@@ -161,20 +163,20 @@ func _run() -> void:
 		* FIXED_ZOOM
 	)
 	assert(
-		player_offset_px.x <= MAX_OFFSET_PX.x + 0.01
-		and player_offset_px.y <= MAX_OFFSET_PX.y + 0.01,
-		"the player must stay inside the 10%%..90%% window: %s" % player_offset_px
+		player_offset_px.x <= _max_offset_px().x + 0.01
+		and player_offset_px.y <= _max_offset_px().y + 0.01,
+		"the player must stay inside the visibility window: %s" % player_offset_px
 	)
 	var expected_excess_px := Vector2(
 		maxf(
 			0.0,
 			absf((saturated_probe.x - saturated_ideal.x) * FIXED_ZOOM.x)
-			- MAX_OFFSET_PX.x
+			- _max_offset_px().x
 		),
 		maxf(
 			0.0,
 			absf((saturated_probe.y - saturated_ideal.y) * FIXED_ZOOM.y)
-			- MAX_OFFSET_PX.y
+			- _max_offset_px().y
 		)
 	)
 	# The camera re-follow, measured from the ideal, must equal the excess
