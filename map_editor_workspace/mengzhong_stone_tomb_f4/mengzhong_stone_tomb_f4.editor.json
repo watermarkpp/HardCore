@@ -40,8 +40,10 @@
     "exit_link_status": "intentionally_unlinked",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2,
+    "revision": 2.0,
+    "source_editor_schema_version": 4.0,
     "template_kind": "existing_map_or_empty_template",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/mengzhong_stone_tomb_f4",
     "workspace_status": "ready"
   },
@@ -55,14 +57,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1600.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/mengzhong_stone_tomb_f4.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/mengzhong_stone_tomb_f4.ground_paint_state.json",
@@ -114,8 +116,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          23,
-          21
+          23.0,
+          21.0
         ]
       },
       {
@@ -157,8 +159,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000002",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          18,
-          42
+          18.0,
+          42.0
         ]
       },
       {
@@ -200,8 +202,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          44,
-          43
+          44.0,
+          43.0
         ]
       },
       {
@@ -238,15 +240,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000004",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000004",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          29,
-          43
+          29.0,
+          43.0
         ]
       },
       {
@@ -283,15 +284,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000005",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000005",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          43,
-          22
+          43.0,
+          22.0
         ]
       },
       {
@@ -328,15 +328,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000006",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000006",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          42,
-          4
+          42.0,
+          4.0
         ]
       },
       {
@@ -373,15 +372,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000007",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000007",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          17,
-          3
+          17.0,
+          3.0
         ]
       },
       {
@@ -418,15 +416,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000008",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000008",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          3,
-          18
+          3.0,
+          18.0
         ]
       },
       {
@@ -463,15 +460,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000009",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000009",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          16,
-          36
+          16.0,
+          36.0
         ]
       },
       {
@@ -508,15 +504,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000010",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000010",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          18,
-          12
+          18.0,
+          12.0
         ]
       },
       {
@@ -553,15 +548,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000011",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000011",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          11,
-          19
+          11.0,
+          19.0
         ]
       },
       {
@@ -598,15 +592,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000012",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000012",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          5,
-          32
+          5.0,
+          32.0
         ]
       },
       {
@@ -643,15 +636,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000013",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000013",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          8,
-          4
+          8.0,
+          4.0
         ]
       },
       {
@@ -688,15 +680,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000014",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000014",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          43,
-          13
+          43.0,
+          13.0
         ]
       },
       {
@@ -733,15 +724,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000015",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000015",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          33,
-          16
+          33.0,
+          16.0
         ]
       },
       {
@@ -778,15 +768,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000016",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000016",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          34,
-          35
+          34.0,
+          35.0
         ]
       },
       {
@@ -823,15 +812,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000017",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000017",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          44,
-          31
+          44.0,
+          31.0
         ]
       },
       {
@@ -868,15 +856,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000018",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          26,
-          4
+          26.0,
+          4.0
         ]
       },
       {
@@ -913,15 +900,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000019",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000019",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          17,
-          25
+          17.0,
+          25.0
         ]
       },
       {
@@ -958,15 +944,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.boss_spawn.000020",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.boss_spawn.000020",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          23,
-          33
+          23.0,
+          33.0
         ]
       }
     ],
@@ -1580,7 +1565,128 @@
         "source": "manual"
       }
     ],
-    "collision_erase": [],
+    "collision_erase": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          35.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          35.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          37.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          22.0
+        ]
+      }
+    ],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -1601,6 +1707,7 @@
         "display_name": "石墓三层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000126",
         "official_connection_id": "portal.mengzhong_stone_tomb_f4.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -1610,14 +1717,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "mengzhong_stone_tomb_f4",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 913003,
+        "target_map_id": 913003.0,
         "target_map_key": "mengzhong_stone_tomb_f3",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
@@ -1642,6 +1749,7 @@
         "exit_id": "map_exit_000002",
         "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000127",
         "official_connection_id": "portal.mengzhong_stone_tomb_f4.map_exit_000002",
         "one_way": true,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -1649,14 +1757,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "mengzhong_stone_tomb_f4",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 918001,
+        "target_map_id": 918001.0,
         "target_map_key": "hidden_confusion_hall",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -1712,8 +1820,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          5,
-          4
+          5.0,
+          4.0
         ]
       },
       {
@@ -1756,8 +1864,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000002",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          24,
-          25
+          24.0,
+          25.0
         ]
       },
       {
@@ -1800,8 +1908,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          23,
-          43
+          23.0,
+          43.0
         ]
       },
       {
@@ -1844,8 +1952,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000004",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          42,
-          24
+          42.0,
+          24.0
         ]
       },
       {
@@ -1932,8 +2040,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000006",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          3,
-          23
+          3.0,
+          23.0
         ]
       },
       {
@@ -1970,16 +2078,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000007",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000007",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          2,
-          6
+          2.0,
+          6.0
         ]
       },
       {
@@ -2016,16 +2123,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000008",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000008",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          40,
-          6
+          40.0,
+          6.0
         ]
       },
       {
@@ -2062,16 +2168,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000009",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000009",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          25,
-          36
+          25.0,
+          36.0
         ]
       },
       {
@@ -2108,16 +2213,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000010",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000010",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          14,
-          33
+          14.0,
+          33.0
         ]
       },
       {
@@ -2154,16 +2258,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000011",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000011",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          16,
-          12
+          16.0,
+          12.0
         ]
       },
       {
@@ -2200,16 +2303,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000012",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000012",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          44,
-          34
+          44.0,
+          34.0
         ]
       },
       {
@@ -2246,16 +2348,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000013",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000013",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          42,
-          44
+          42.0,
+          44.0
         ]
       },
       {
@@ -2292,16 +2393,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000014",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000014",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          21,
-          47
+          21.0,
+          47.0
         ]
       },
       {
@@ -2338,16 +2438,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000015",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000015",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          30,
-          5
+          30.0,
+          5.0
         ]
       },
       {
@@ -2384,16 +2483,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000016",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000016",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          32,
-          25
+          32.0,
+          25.0
         ]
       },
       {
@@ -2430,16 +2528,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000017",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000017",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          30,
-          13
+          30.0,
+          13.0
         ]
       },
       {
@@ -2476,16 +2573,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000018",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          29,
-          46
+          29.0,
+          46.0
         ]
       },
       {
@@ -2522,16 +2618,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.mengzhong_stone_tomb_f4.monster_spawn.000019",
         "spawn_group_id": "mse.group.v1.mengzhong_stone_tomb_f4.monster_spawn.000019",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          42,
-          20
+          42.0,
+          20.0
         ]
       }
     ],
@@ -2612,7 +2707,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           172.0,
-          124.5
+          110.55555725097656
         ],
         "asset_id": "user.50579dc474c3f840",
         "collision_authority": "asset",
@@ -2628,8 +2723,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2637,7 +2732,9 @@
           3.0
         ],
         "instance_base_scale": 0.38247011952191234,
+        "instance_custom_scale": true,
         "instance_id": "inst_000108",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -2647,8 +2744,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -2657,33 +2754,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           172.0,
-          124.5
+          110.55555725097656
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.38247011952191234,
-          0.38247011952191234
+          0.2294820717131473,
+          0.2294820717131473
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          41.0
+          8.0,
+          42.0
         ],
         "tile_anchor": [
-          7.0,
-          41.0
+          8.0,
+          42.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           170.0,
-          124.0
+          129.95237731933594
         ],
         "asset_id": "user.33ff89346abf48a1",
         "collision_authority": "asset",
@@ -2699,8 +2800,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2708,7 +2809,9 @@
           3.0
         ],
         "instance_base_scale": 0.384,
+        "instance_custom_scale": true,
         "instance_id": "inst_000109",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -2718,8 +2821,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -2728,15 +2831,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           170.0,
-          124.0
+          129.95237731933594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.384,
-          0.384
+          0.26880000000000004,
+          0.26880000000000004
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -2748,13 +2851,17 @@
         "tile_anchor": [
           18.0,
           18.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           154.0,
-          107.5
+          95.44444274902344
         ],
         "asset_id": "user.b0718ccd448ca4a7",
         "collision_authority": "asset",
@@ -2770,8 +2877,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2779,7 +2886,9 @@
           3.0
         ],
         "instance_base_scale": 0.4423963133640553,
+        "instance_custom_scale": true,
         "instance_id": "inst_000110",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -2789,8 +2898,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -2799,33 +2908,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           154.0,
-          107.5
+          95.44444274902344
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.4423963133640553,
-          0.4423963133640553
+          0.26543778801843326,
+          0.26543778801843326
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          40.0,
-          38.0
+          41.0,
+          39.0
         ],
         "tile_anchor": [
-          40.0,
-          38.0
+          41.0,
+          39.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           178.0,
-          116.0
+          155.0
         ],
         "asset_id": "user.80c9e5d572d16893",
         "collision_authority": "asset",
@@ -2841,8 +2954,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2850,7 +2963,9 @@
           3.0
         ],
         "instance_base_scale": 0.41025641025641024,
+        "instance_custom_scale": true,
         "instance_id": "inst_000111",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -2860,8 +2975,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -2870,33 +2985,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           178.0,
-          116.0
+          155.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.41025641025641024,
-          0.41025641025641024
+          0.2051282051282051,
+          0.2051282051282051
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          2.0
+          3.0,
+          4.0
         ],
         "tile_anchor": [
+          3.0,
+          4.0
+        ],
+        "visual_footprint_tiles": [
           1.0,
-          2.0
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           177.0,
-          110.5
+          98.1111068725586
         ],
         "asset_id": "user.916b24806f8dfdb6",
         "collision_authority": "asset",
@@ -2912,8 +3031,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2921,7 +3040,9 @@
           3.0
         ],
         "instance_base_scale": 0.4304932735426009,
+        "instance_custom_scale": true,
         "instance_id": "inst_000112",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -2931,8 +3052,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -2941,33 +3062,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           177.0,
-          110.5
+          98.1111068725586
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.4304932735426009,
-          0.4304932735426009
+          0.25829596412556055,
+          0.25829596412556055
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
-          10.0
+          35.0,
+          11.0
         ],
         "tile_anchor": [
-          34.0,
-          10.0
+          35.0,
+          11.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           165.0,
-          124.0
+          110.1111068725586
         ],
         "asset_id": "user.c8910d198a7cfd2a",
         "collision_authority": "asset",
@@ -2983,8 +3108,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2992,7 +3117,9 @@
           3.0
         ],
         "instance_base_scale": 0.384,
+        "instance_custom_scale": true,
         "instance_id": "inst_000113",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3002,8 +3129,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -3012,33 +3139,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           165.0,
-          124.0
+          110.1111068725586
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.384,
-          0.384
+          0.23040000000000005,
+          0.23040000000000005
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28.0,
-          31.0
+          29.0,
+          32.0
         ],
         "tile_anchor": [
-          28.0,
-          31.0
+          29.0,
+          32.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           177.0,
-          126.5
+          132.57142639160156
         ],
         "asset_id": "user.dbcf36c91f48fe8e",
         "collision_authority": "asset",
@@ -3054,8 +3185,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -3063,7 +3194,9 @@
           3.0
         ],
         "instance_base_scale": 0.3764705882352941,
+        "instance_custom_scale": true,
         "instance_id": "inst_000114",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3073,8 +3206,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -3083,33 +3216,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           177.0,
-          126.5
+          132.57142639160156
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3764705882352941,
-          0.3764705882352941
+          0.26352941176470585,
+          0.26352941176470585
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
           10.0,
-          9.0
+          10.0
         ],
         "tile_anchor": [
           10.0,
-          9.0
+          10.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           112.0,
-          84.75001525878906
+          89.8636474609375
         ],
         "asset_id": "cave_dungeon.barrel_crates_01",
         "collision_authority": "asset",
@@ -3125,8 +3262,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3136,7 +3273,7 @@
         "instance_base_scale": 0.568889,
         "instance_custom_scale": true,
         "instance_id": "inst_000115",
-        "instance_scale_level": 1.0,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3146,8 +3283,8 @@
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -3156,37 +3293,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           112.0,
-          84.75001525878906
+          89.8636474609375
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.8533335328102112,
-          0.8533335328102112
+          0.6257779328102111,
+          0.6257779328102111
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
+          7.0,
           1.0
         ],
         "tile_anchor": [
-          6.0,
+          7.0,
           1.0
         ],
         "visual_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           62.0,
-          105.49998474121094
+          111.4166488647461
         ],
         "asset_id": "cave_dungeon.wood_crate_01",
         "collision_authority": "asset",
@@ -3202,8 +3339,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3211,7 +3348,9 @@
           2.0
         ],
         "instance_base_scale": 0.901408,
+        "instance_custom_scale": true,
         "instance_id": "inst_000116",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3221,8 +3360,8 @@
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3231,15 +3370,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           62.0,
-          105.49998474121094
+          111.4166488647461
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.901408,
-          0.901408
+          0.5408447999999999,
+          0.5408447999999999
         ],
         "scene_intent": "block_path",
         "selectable": true,
@@ -3251,6 +3390,10 @@
         "tile_anchor": [
           2.0,
           35.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
@@ -3273,8 +3416,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3282,7 +3425,9 @@
           2.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000117",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3292,8 +3437,8 @@
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3309,43 +3454,47 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          0.5000000000000001,
+          0.5000000000000001
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
+          10.0,
           23.0
         ],
         "tile_anchor": [
-          11.0,
+          10.0,
           23.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           57.0,
-          53.0
+          58.33333587646485
         ],
         "asset_id": "cave_dungeon.broken_crate_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3353,18 +3502,20 @@
           2.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000118",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3373,33 +3524,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           57.0,
-          53.0
+          58.33333587646485
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
           30.0,
-          28.0
+          29.0
         ],
         "tile_anchor": [
           30.0,
-          28.0
+          29.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          111.0,
-          77.4000244140625
+          79.28572845458984,
+          96.4285888671875
         ],
         "asset_id": "cave_dungeon.pottery_cluster_02",
         "collision_authority": "asset",
@@ -3415,8 +3570,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          1.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3424,7 +3579,9 @@
           2.0
         ],
         "instance_base_scale": 0.720721,
+        "instance_custom_scale": true,
         "instance_id": "inst_000119",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3434,8 +3591,8 @@
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3443,34 +3600,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          111.0,
-          77.4000244140625
+          79.28572845458984,
+          96.4285888671875
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.720721,
-          0.720721
+          0.5045047,
+          0.5045047
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
           40.0,
-          30.0
+          32.0
         ],
         "tile_anchor": [
           40.0,
-          30.0
+          32.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           62.0,
-          105.49998474121094
+          111.4166488647461
         ],
         "asset_id": "cave_dungeon.wood_crate_01",
         "collision_authority": "asset",
@@ -3486,8 +3647,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3495,7 +3656,9 @@
           2.0
         ],
         "instance_base_scale": 0.901408,
+        "instance_custom_scale": true,
         "instance_id": "inst_000120",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3505,8 +3668,8 @@
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3515,33 +3678,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           62.0,
-          105.49998474121094
+          111.4166488647461
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.901408,
-          0.901408
+          0.5408447999999999,
+          0.5408447999999999
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          37.0,
+          38.0,
           2.0
         ],
         "tile_anchor": [
-          37.0,
+          38.0,
           2.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           83.0,
-          361.6666564941406
+          335.0
         ],
         "asset_id": "user.ad858c6e7cd94cf1",
         "collision_authority": "asset",
@@ -3568,7 +3735,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000122",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3588,15 +3755,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           83.0,
-          361.6666564941406
+          335.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3695,7 +3862,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           83.0,
-          361.6666564941406
+          335.0
         ],
         "asset_id": "user.ad858c6e7cd94cf1",
         "collision_authority": "asset",
@@ -3722,7 +3889,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000124",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3742,15 +3909,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           83.0,
-          361.6666564941406
+          335.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3847,6 +4014,164 @@
         "visual_footprint_tiles": [
           3.0,
           3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000126",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          4,
+          47
+        ],
+        "tile_anchor": [
+          4,
+          47
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s02_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000127",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          22,
+          22
+        ],
+        "tile_anchor": [
+          22,
+          22
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       }
     ],
@@ -10961,10 +11286,10 @@
     "terrain_front": []
   },
   "legacy_map_id": "stone_tomb_4",
-  "legacy_runtime_map_id": 1201,
+  "legacy_runtime_map_id": 1201.0,
   "map_id": "mengzhong_stone_tomb_f4",
-  "runtime_map_id": 913004,
-  "schema_version": 4.0,
+  "runtime_map_id": 913004.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "derived_editor_clone",

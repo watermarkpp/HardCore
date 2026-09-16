@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "scope": "isolated import classification",
+  "source_commit": "b50eec3be0ca51aeeb488e86c86e8e57bea58170",
+  "log_path": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\b50eec3be0ca-20260914-155715-6c8fde4a\\outputs\\android_isolated_import.log",
+  "log_sha256": "75dc941ff996aed60350b26c7dc7bdee0a58fbeba8410fc07ea3bbcd420a573b",
+  "known_fixture_parse_errors": 16,
+  "unchanged_fixture_paths": [
+    "tests/runner_fixtures/case1_pass.tscn",
+    "tests/runner_fixtures/case2_pass_then_assert.tscn",
+    "tests/runner_fixtures/case3_pass_then_nonzero_exit.tscn",
+    "tests/runner_fixtures/case4_pass_then_hang.tscn",
+    "tests/runner_fixtures/case5_no_pass_exit_zero.tscn",
+    "tests/runner_fixtures/case6_engine_log_fatal.tscn",
+    "tests/runner_fixtures/case7_parse_error.tscn",
+    "tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn"
+  ],
+  "production_errors": 0,
+  "error_lines": [
+    "ERROR: res://tests/runner_fixtures/case1_pass.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case2_pass_then_assert.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case3_pass_then_nonzero_exit.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case4_pass_then_hang.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case5_no_pass_exit_zero.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case6_engine_log_fatal.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case7_parse_error.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case1_pass.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case2_pass_then_assert.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case3_pass_then_nonzero_exit.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case4_pass_then_hang.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case5_no_pass_exit_zero.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case6_engine_log_fatal.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/case7_parse_error.tscn:1 - Parse Error: Expected '['.",
+    "ERROR: res://tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn:1 - Parse Error: Expected '['."
+  ]
+}

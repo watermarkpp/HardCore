@@ -8,6 +8,9 @@ const MonsterRespawnPolicyScript := preload(
 const MapUIPresentationProjectionScript := preload(
 	"res://scripts/map_editor/map_ui_presentation_projection.gd"
 )
+const MapAssetCatalogServiceScript := preload(
+	"res://scripts/map_assets/map_asset_catalog_service.gd"
+)
 const BICH_MAP_ID := 910001
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
@@ -776,7 +779,7 @@ static func _portal_record(
 	runtime: Dictionary,
 	entry: Dictionary
 ) -> Dictionary:
-	return {
+	var record := {
 		"screen_position_px": grid_cell_to_screen_position_px(
 			runtime, entry.get("tile", [0, 0])
 		),
@@ -799,6 +802,44 @@ static func _portal_record(
 		)),
 		"travel_request_single_flight": bool(entry.get("travel_request_single_flight", false)),
 	}
+	# Visual-only augmentation: when the authored portal endpoint carries a
+	# linked portal-gate instance, expose the linked asset id and the pixel
+	# height of that artwork above the portal foot so the runtime can suppress
+	# the generated placeholder circles and ride the label above the artwork.
+	# Portal function fields above are never derived from these values.
+	var linked_visual := _linked_portal_visual_info(runtime, entry)
+	record["linked_visual_asset_id"] = str(linked_visual.get("asset_id", ""))
+	record["visual_top_offset_px"] = float(linked_visual.get("top_offset_px", 0.0))
+	return record
+
+
+## Resolve the linked portal-gate instance of a semantic endpoint against the
+## compiled runtime instance list. Read-only lookup; missing links resolve to
+## empty info and the runtime keeps the placeholder rendering.
+static func _linked_portal_visual_info(
+	runtime: Dictionary,
+	entry: Dictionary
+) -> Dictionary:
+	var linked_id := str(entry.get("linked_visual_instance_id", ""))
+	if linked_id.is_empty():
+		return {}
+	for instance: Dictionary in runtime.get("instances", []):
+		if str(instance.get("instance_id", "")) != linked_id:
+			continue
+		var asset_id := str(instance.get("asset_id", ""))
+		var asset: Dictionary = MapAssetCatalogServiceScript.find_asset(asset_id)
+		if asset.is_empty():
+			return {"asset_id": asset_id}
+		var anchor: Array = asset.get("anchor_px", [])
+		var bounds: Array = asset.get("visible_bounds_px", [])
+		var top_offset := 0.0
+		if anchor.size() == 2 and bounds.size() == 4:
+			top_offset = float(anchor[1]) - float(bounds[1])
+		return {
+			"asset_id": asset_id,
+			"top_offset_px": maxf(0.0, top_offset),
+		}
+	return {}
 
 
 static func _array_to_vector2(raw: Array) -> Vector2:

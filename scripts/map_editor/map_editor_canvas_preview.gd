@@ -814,6 +814,26 @@ func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: f
 		draw_colored_polygon(polygon, Color(0.85, 0.15, 0.12, 0.42))
 
 
+## Canvas ground-px polygon (33 samples, closed) of a GU-space ground circle.
+## The tile lattice and the GU lattice share the isometric projection, so the
+## ring must be projected with tile_to_ground_px like every other canvas
+## overlay.  Projecting center-relative GU deltas here would detach the ring
+## from its marker diamond and draw it toward the canvas top-left.
+static func semantic_area_circle_ground_px(
+	center_ground_gu: Vector2,
+	radius_gu: float,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for direction_index in range(33):
+		var angle := TAU * float(direction_index) / 32.0
+		var point_ground_gu := center_ground_gu + Vector2(
+			cos(angle), sin(angle)
+		) * radius_gu
+		points.append(MapEditorCoordinate.tile_to_ground_px(point_ground_gu, design_size))
+	return points
+
+
 func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
 	for entry: Dictionary in MapEditorGameplaySemanticService.all_entries(document):
 		var raw_tile: Array = entry.get("tile", [0, 0])
@@ -842,16 +862,10 @@ func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float
 						float(raw_tile[1]) + 0.5
 					)
 					var projected_circle := PackedVector2Array()
-					for direction_index in range(33):
-						var angle := TAU * float(direction_index) / 32.0
-						var point_ground_gu := center_ground_gu + Vector2(
-							cos(angle), sin(angle)
-						) * area_radius_gu
-						projected_circle.append(
-							offset + MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-								point_ground_gu, design_size
-							) * scale_factor
-						)
+					for ground_point: Vector2 in semantic_area_circle_ground_px(
+						center_ground_gu, area_radius_gu, design_size
+					):
+						projected_circle.append(offset + ground_point * scale_factor)
 					draw_polyline(projected_circle, Color(color, 0.9), 2.0)
 		if kind == "npc":
 			draw_circle(center + Vector2(0,-radius*.45), radius*.38, Color(color,0.95))

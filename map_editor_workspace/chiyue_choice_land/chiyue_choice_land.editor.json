@@ -30,8 +30,12 @@
     ],
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
-    "revision": 1.0,
+    "revision": 7.0,
+    "runtime_approved": true,
+    "runtime_approved_revision": 3.0,
+    "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/chiyue_choice_land"
   },
   "ground": {
@@ -44,14 +48,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       3072.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/chiyue_choice_land.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/chiyue_choice_land.ground_paint_state.json",
@@ -62,7 +66,44 @@
     "workspace_state": "res://map_editor_workspace/chiyue_choice_land/ground/ground_state.json"
   },
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "双头金刚",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 163.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.boss_spawn.000001",
+        "spawn_rule": "boss",
+        "tile": [
+          66.0,
+          38.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "双头血魔",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 162.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.boss_spawn.000002",
+        "spawn_rule": "boss",
+        "tile": [
+          41.0,
+          18.0
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -743,9 +784,1770 @@
         },
         "shape": "polygon",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000009",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            64.0,
+            36.0,
+            32.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000010",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            93.0,
+            60.0,
+            3.0,
+            36.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000011",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            79.0,
+            51.0,
+            17.0,
+            2.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000012",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            78.0,
+            53.0,
+            18.0,
+            18.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000013",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            68.0,
+            54.0,
+            20.0,
+            12.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000014",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            73.0,
+            52.0,
+            8.0,
+            4.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000015",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            60.0,
+            62.0,
+            13.0,
+            3.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000016",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            61.0,
+            6.0,
+            2.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000017",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            57.0,
+            81.0,
+            2.0,
+            9.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000018",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            60.0,
+            0.0,
+            36.0,
+            20.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000019",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            8.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000020",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            9.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000021",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            10.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000022",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              60.0,
+              20.0
+            ],
+            [
+              70.0,
+              30.0
+            ],
+            [
+              81.0,
+              30.0
+            ],
+            [
+              96.0,
+              33.0
+            ],
+            [
+              96.0,
+              19.0
+            ],
+            [
+              60.0,
+              20.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000023",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              32.0,
+              13.0
+            ],
+            [
+              35.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              33.0
+            ],
+            [
+              17.0,
+              30.0
+            ],
+            [
+              25.0,
+              24.0
+            ],
+            [
+              32.0,
+              13.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000024",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              0.0,
+              56.0
+            ],
+            [
+              0.0,
+              96.0
+            ],
+            [
+              41.0,
+              96.0
+            ],
+            [
+              42.0,
+              75.0
+            ],
+            [
+              42.0,
+              69.0
+            ],
+            [
+              33.0,
+              59.0
+            ],
+            [
+              27.0,
+              56.0
+            ],
+            [
+              16.0,
+              56.0
+            ],
+            [
+              9.0,
+              58.0
+            ],
+            [
+              0.0,
+              56.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000025",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            27.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000026",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            74.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000027",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            73.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000028",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            72.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000029",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            69.0,
+            33.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000030",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            93.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000031",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            89.0,
+            33.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000032",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            92.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000033",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            58.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000034",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            59.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000035",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            59.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000036",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            56.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000037",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            64.0,
+            55.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000038",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            55.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000039",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            43.0,
+            78.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000040",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            36.0,
+            59.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000041",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            35.0,
+            54.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000042",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            34.0,
+            53.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
-    "collision_erase": [],
+    "collision_erase": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          68.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          69.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          70.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          71.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          72.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          46.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          47.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          47.0,
+          16.0
+        ]
+      }
+    ],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -759,27 +2561,33 @@
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000001.chiyue_valley_square.map_exit_000002",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "赤月峡谷广场",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000210",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "chiyue_valley_square",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "target_entrance_id": "map_exit_000002",
+        "target_map_id": 916002.0,
+        "target_map_key": "chiyue_valley_square",
+        "target_portal_id": "map_exit_000002",
+        "target_tile": [
+          45.0,
+          5.0
+        ],
         "tile": [
           48.0,
           90.0
@@ -792,27 +2600,33 @@
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000002.chiyue_valley_secret_passage_a.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "山谷密道A",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000211",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "chiyue_valley_secret_passage_a",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 916004.0,
+        "target_map_key": "chiyue_valley_secret_passage_a",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          22.0,
+          118.0
+        ],
         "tile": [
           45.0,
           5.0
@@ -825,27 +2639,33 @@
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
         "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000003.chiyue_valley_secret_passage_b.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "山谷密道B",
         "exit_id": "map_exit_000003",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000212",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "reciprocal_exit_id": "map_exit_000001",
+        "reciprocal_map_key": "chiyue_valley_secret_passage_b",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 916005.0,
+        "target_map_key": "chiyue_valley_secret_passage_b",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          22.0,
+          118.0
+        ],
         "tile": [
           87.0,
           40.0
@@ -895,8 +2715,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          21,
-          47
+          21.0,
+          47.0
         ]
       },
       {
@@ -939,8 +2759,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000002",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          94.0,
-          1.0
+          49.0,
+          16.0
         ]
       },
       {
@@ -983,8 +2803,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          46,
-          66
+          46.0,
+          66.0
         ]
       },
       {
@@ -1027,8 +2847,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000004",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          58,
-          38
+          58.0,
+          38.0
         ]
       },
       {
@@ -1071,8 +2891,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000005",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          26,
-          33
+          26.0,
+          33.0
         ]
       },
       {
@@ -1115,8 +2935,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000006",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          38,
-          53
+          38.0,
+          53.0
         ]
       },
       {
@@ -1159,8 +2979,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000007",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          69,
-          37
+          69.0,
+          37.0
         ]
       },
       {
@@ -1203,8 +3023,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000008",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          57,
-          49
+          57.0,
+          49.0
         ]
       },
       {
@@ -1247,8 +3067,8 @@
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000009",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          51,
-          21
+          51.0,
+          21.0
         ]
       },
       {
@@ -1285,16 +3105,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000010",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000010",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          43,
-          58
+          43.0,
+          58.0
         ]
       },
       {
@@ -1331,16 +3150,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000011",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000011",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          39,
-          20
+          39.0,
+          20.0
         ]
       },
       {
@@ -1377,16 +3195,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000012",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000012",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          23,
-          39
+          23.0,
+          39.0
         ]
       },
       {
@@ -1423,16 +3240,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000013",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000013",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          68,
-          42
+          68.0,
+          42.0
         ]
       },
       {
@@ -1469,16 +3285,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000014",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000014",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          47,
-          23
+          47.0,
+          23.0
         ]
       },
       {
@@ -1515,16 +3330,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000015",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000015",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          28,
-          48
+          28.0,
+          48.0
         ]
       },
       {
@@ -1561,16 +3375,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000016",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000016",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          40,
-          60
+          40.0,
+          60.0
         ]
       },
       {
@@ -1607,16 +3420,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000017",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000017",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          35,
-          23
+          35.0,
+          23.0
         ]
       },
       {
@@ -1653,16 +3465,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000018",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          60,
-          33
+          60.0,
+          33.0
         ]
       },
       {
@@ -1699,16 +3510,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000019",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000019",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          33,
-          46
+          33.0,
+          46.0
         ]
       },
       {
@@ -1745,16 +3555,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000020",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000020",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          58,
-          45
+          58.0,
+          45.0
         ]
       },
       {
@@ -1791,16 +3600,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000021",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000021",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          29,
-          41
+          29.0,
+          41.0
         ]
       },
       {
@@ -1837,16 +3645,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000022",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000022",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          43,
-          26
+          43.0,
+          26.0
         ]
       },
       {
@@ -1883,16 +3690,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000023",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000023",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          62,
-          43
+          62.0,
+          43.0
         ]
       },
       {
@@ -1929,16 +3735,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000024",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000024",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          42,
-          52
+          42.0,
+          52.0
         ]
       },
       {
@@ -1975,16 +3780,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000025",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000025",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          63,
-          38
+          63.0,
+          38.0
         ]
       },
       {
@@ -2021,16 +3825,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000026",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000026",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          37,
-          15
+          37.0,
+          15.0
         ]
       },
       {
@@ -2067,16 +3870,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000027",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000027",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          26,
-          43
+          26.0,
+          43.0
         ]
       },
       {
@@ -2113,16 +3915,1095 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "normal_cave",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000028",
         "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000028",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          48,
-          59
+          48.0,
+          59.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血巨人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 164.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 1.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            65.0,
+            1.0,
+            1.0,
+            1415.0,
+            -71.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血巨人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 164.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 1.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            65.0,
+            1.0,
+            1.0,
+            1415.0,
+            -71.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000030",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          65.0,
+          34.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血巨人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 164.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 1.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            65.0,
+            1.0,
+            1.0,
+            1415.0,
+            -71.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000031",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血僵尸",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 166.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 3.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            163.0,
+            46.0,
+            1.0,
+            903.0,
+            -1.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000032",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血僵尸",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 166.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 3.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            163.0,
+            46.0,
+            1.0,
+            903.0,
+            -1.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000033",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血僵尸",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 166.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 3.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            163.0,
+            46.0,
+            1.0,
+            903.0,
+            -1.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000034",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000034",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          44.0,
+          62.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血僵尸",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 166.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 3.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            163.0,
+            46.0,
+            1.0,
+            903.0,
+            -1.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000035",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000035",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          67.0,
+          45.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "血僵尸",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 166.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 3.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            163.0,
+            46.0,
+            1.0,
+            903.0,
+            -1.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000036",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000036",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          62.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            81.0,
+            38.0,
+            39.0,
+            3080.0,
+            -39.0,
+            -50.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000037",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000037",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          55.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            81.0,
+            38.0,
+            39.0,
+            3080.0,
+            -39.0,
+            -50.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000038",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000038",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41.0,
+          55.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            81.0,
+            38.0,
+            39.0,
+            3080.0,
+            -39.0,
+            -50.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000039",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000039",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24.0,
+          44.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            81.0,
+            38.0,
+            39.0,
+            3080.0,
+            -39.0,
+            -50.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000040",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000040",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19.0,
+          37.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            81.0,
+            38.0,
+            39.0,
+            3080.0,
+            -39.0,
+            -50.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000041",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000041",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          40.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            81.0,
+            38.0,
+            39.0,
+            3080.0,
+            -39.0,
+            -50.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000042",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000042",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          51.0,
+          24.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            81.0,
+            38.0,
+            39.0,
+            3080.0,
+            -39.0,
+            -50.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000043",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000043",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          73.0,
+          45.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑锷蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 170.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            81.0,
+            38.0,
+            39.0,
+            3080.0,
+            -39.0,
+            -50.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000044",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000044",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          74.0,
+          36.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 2.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            20.0,
+            1.0,
+            1398.0,
+            -53.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000045",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000045",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          65.0,
+          41.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 2.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            20.0,
+            1.0,
+            1398.0,
+            -53.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000046",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000046",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          60.0,
+          40.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 2.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            20.0,
+            1.0,
+            1398.0,
+            -53.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000047",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000047",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          38.0,
+          56.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 2.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            20.0,
+            1.0,
+            1398.0,
+            -53.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000048",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000048",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          38.0,
+          59.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 2.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            20.0,
+            1.0,
+            1398.0,
+            -53.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000049",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000049",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          20.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 2.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            20.0,
+            1.0,
+            1398.0,
+            -53.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000050",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000050",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48.0,
+          18.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 2.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            20.0,
+            1.0,
+            1398.0,
+            -53.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000051",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000051",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          28.0,
+          37.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "chiyue_choice_land",
+          "source_category_role": "ordinary",
+          "source_line": 241.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "天狼蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 176.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 2.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            20.0,
+            1.0,
+            1398.0,
+            -53.0,
+            -94.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.chiyue_choice_land.monster_spawn.000052",
+        "spawn_group_id": "mse.group.v1.chiyue_choice_land.monster_spawn.000052",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17.0,
+          35.0
         ]
       }
     ],
@@ -2142,35 +5023,35 @@
         "npc_occupancy_profile_id": "npc_humanoid_1x1",
         "object_role": "npc_placeholder",
         "occupancy_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placeholder_instance_id": "npc_placeholder_npc_000001",
         "placement_anchor_px": [
-          32,
-          48
+          32.0,
+          48.0
         ],
         "runtime_export": true,
         "safe": true,
         "selectable": true,
         "selection_shape": {
-          "padding_px": 4,
+          "padding_px": 4.0,
           "type": "bounds"
         },
         "semantic_id": "npc_000001",
         "service_identity_id": "npc.service.pharmacist.v1",
         "service_role": "shop",
         "tile": [
-          23,
-          28
+          23.0,
+          28.0
         ],
         "tile_anchor": [
-          23,
-          28
+          23.0,
+          28.0
         ]
       },
       {
@@ -2188,35 +5069,35 @@
         "npc_occupancy_profile_id": "npc_humanoid_1x1",
         "object_role": "npc_placeholder",
         "occupancy_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placeholder_instance_id": "npc_placeholder_npc_000002",
         "placement_anchor_px": [
-          32,
-          48
+          32.0,
+          48.0
         ],
         "runtime_export": true,
         "safe": true,
         "selectable": true,
         "selection_shape": {
-          "padding_px": 4,
+          "padding_px": 4.0,
           "type": "bounds"
         },
         "semantic_id": "npc_000002",
         "service_identity_id": "npc.service.general_vendor.v1",
         "service_role": "shop",
         "tile": [
-          28,
-          23
+          28.0,
+          23.0
         ],
         "tile_anchor": [
-          28,
-          23
+          28.0,
+          23.0
         ]
       }
     ],
@@ -2873,7 +5754,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           74.0,
-          102.76922607421875
+          102.76922607421876
         ],
         "asset_id": "chiyue_valley_ground_rock_block_04",
         "base_footprint_tiles": [
@@ -2924,7 +5805,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           74.0,
-          102.76922607421875
+          102.76922607421876
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -4400,6 +7281,243 @@
         "visual_footprint_tiles": [
           3.0,
           3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000210",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          48,
+          90
+        ],
+        "tile_anchor": [
+          48,
+          90
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000211",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          45,
+          5
+        ],
+        "tile_anchor": [
+          45,
+          5
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000212",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          87,
+          40
+        ],
+        "tile_anchor": [
+          87,
+          40
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       }
     ],
@@ -18713,7 +21831,7 @@
     "terrain_front": []
   },
   "map_id": "chiyue_choice_land",
-  "runtime_map_id": 990280.0,
-  "schema_version": 4.0,
+  "runtime_map_id": 916003.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable"
 }

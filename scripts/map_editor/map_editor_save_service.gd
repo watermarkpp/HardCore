@@ -145,6 +145,12 @@ static func _superseded_legacy_map_ids() -> Dictionary:
 		var formal_map_id := str(identity.get("map_id", ""))
 		if legacy_map_id.is_empty() or formal_map_id.is_empty():
 			continue
+		## When the legacy id names the formal document itself (maps created
+		## directly under their formal id, for example the chiyue-era trio),
+		## there is no separate legacy copy to hide: suppressing the id would
+		## hide the formal document from the workspace list entirely.
+		if legacy_map_id == formal_map_id:
+			continue
 		if FileAccess.file_exists(default_path(formal_map_id)):
 			result[legacy_map_id] = true
 	return result
@@ -780,6 +786,258 @@ static func _formal_identity_status() -> Dictionary:
 		release_ids[map_key] = true
 		ids[map_key] = true
 	return {"ok": true, "ids": ids, "formal_ids": ids.duplicate(true)}
+
+
+## Authoritative guard for release-grade operations: a document may only enter
+## the formal publish path when its map_id owns a formal identity row AND its
+## embedded runtime_map_id equals the registered one. This blocks legacy-id
+## documents (for example the five legacy docs sharing runtime id 990100) and
+## drifted formal documents from poisoning the release registry.
+static func validate_document_runtime_identity(document: Dictionary) -> Dictionary:
+	var authority := _formal_identity_status()
+	if not bool(authority.get("ok", false)):
+		return {
+			"ok": false,
+			"reason": str(authority.get("error", "formal_identity_registry_unavailable")),
+		}
+	var map_id := str(document.get("map_id", "")).strip_edges()
+	var ids: Dictionary = authority.get("ids", {})
+	if not bool(ids.get(map_id, false)):
+		return {"ok": false, "reason": "document_map_id_not_in_formal_identity_registry"}
+	var identity_file := FileAccess.open(_formal_identity_path(), FileAccess.READ)
+	if identity_file == null:
+		return {"ok": false, "reason": "formal_identity_registry_unavailable"}
+	var identity_parsed: Variant = JSON.parse_string(identity_file.get_as_text())
+	identity_file.close()
+	if not identity_parsed is Dictionary:
+		return {"ok": false, "reason": "formal_identity_registry_invalid"}
+	var registered_runtime_map_id := -1
+	for row_variant: Variant in (identity_parsed as Dictionary).get("maps", []):
+		if not row_variant is Dictionary:
+			continue
+		var row: Dictionary = row_variant
+		if str(row.get("map_id", "")).strip_edges() == map_id:
+			registered_runtime_map_id = int(row.get("runtime_map_id", -1))
+			break
+	if registered_runtime_map_id <= 0:
+		return {"ok": false, "reason": "formal_identity_row_missing_runtime_map_id"}
+	var document_runtime_map_id := int(document.get("runtime_map_id", -1))
+	if document_runtime_map_id != registered_runtime_map_id:
+		return {
+			"ok": false,
+			"reason": "document_runtime_map_id_mismatch",
+			"document_runtime_map_id": document_runtime_map_id,
+			"registered_runtime_map_id": registered_runtime_map_id,
+		}
+	return {"ok": true, "registered_runtime_map_id": registered_runtime_map_id}
+
+
+## ---- Birth identity allocation for newly created maps ------------------
+## A newly created map must be born with a collision-free formal identity so
+## it passes validate_document_runtime_identity() and is picked up by
+## game_data's formal map database without any manual registry editing. The
+## canonical range top (918006) is already in use, so allocation returns the
+## smallest unused id inside the canonical range instead of max + 1.
+
+const FORMAL_RUNTIME_ID_MIN := 910001
+const FORMAL_RUNTIME_ID_MAX := 918006
+
+
+static func _identity_registry_document() -> Dictionary:
+	var identity_path := _formal_identity_path()
+	if not FileAccess.file_exists(identity_path):
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(identity_path))
+	return parsed if parsed is Dictionary else {}
+
+
+static func collect_used_runtime_map_ids() -> Dictionary:
+	var used := {}
+	var known_ids := {}
+	var registry := _identity_registry_document()
+	var maps_variant: Variant = registry.get("maps", [])
+	if maps_variant is Array:
+		for row_variant: Variant in maps_variant:
+			if not row_variant is Dictionary:
+				continue
+			var row: Dictionary = row_variant
+			used[int(row.get("runtime_map_id", 0))] = true
+			var legacy_runtime := int(row.get("legacy_runtime_map_id", -1))
+			if legacy_runtime > 0:
+				used[legacy_runtime] = true
+			for key: String in ["map_id", "legacy_map_id"]:
+				var candidate := str(row.get(key, "")).strip_edges()
+				if not candidate.is_empty():
+					known_ids[candidate] = true
+	var release_path := _runtime_release_registry_path()
+	if FileAccess.file_exists(release_path):
+		var release_parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(release_path))
+		if release_parsed is Dictionary:
+			var release_rows: Variant = (release_parsed as Dictionary).get("maps", [])
+			if release_rows is Array:
+				for row_variant: Variant in release_rows:
+					if row_variant is Dictionary:
+						used[int((row_variant as Dictionary).get("runtime_map_id", 0))] = true
+	## Documents outside the identity registry (user customs, out-of-registry
+	## artifacts) may already occupy formal-range ids; only those directories
+	## are parsed so the scan stays cheap.
+	var dir := DirAccess.open(EDITOR_ROOT)
+	if dir != null:
+		dir.list_dir_begin()
+		var entry := dir.get_next()
+		while entry != "":
+			if dir.current_is_dir() and not known_ids.has(entry) and entry != "." and entry != "..":
+				var editor_path := EDITOR_ROOT + entry + "/" + entry + ".editor.json"
+				if FileAccess.file_exists(editor_path):
+					var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(editor_path))
+					if parsed is Dictionary:
+						used[int((parsed as Dictionary).get("runtime_map_id", 0))] = true
+			entry = dir.get_next()
+		dir.list_dir_end()
+	return used
+
+
+static func allocate_next_runtime_map_id() -> Dictionary:
+	var used := collect_used_runtime_map_ids()
+	for candidate: int in range(FORMAL_RUNTIME_ID_MIN, FORMAL_RUNTIME_ID_MAX + 1):
+		if not used.has(candidate):
+			return {"ok": true, "runtime_map_id": candidate}
+	return {"ok": false, "errors": ["formal_runtime_id_range_exhausted"]}
+
+
+static func validate_runtime_map_id_available(runtime_map_id: int) -> Dictionary:
+	var errors: Array[String] = []
+	if runtime_map_id < FORMAL_RUNTIME_ID_MIN or runtime_map_id > FORMAL_RUNTIME_ID_MAX:
+		errors.append("runtime_map_id_outside_canonical_range")
+	elif collect_used_runtime_map_ids().has(runtime_map_id):
+		errors.append("runtime_map_id_already_in_use")
+	return {"ok": errors.is_empty(), "runtime_map_id": runtime_map_id, "errors": errors}
+
+
+static func validate_new_map_identity(map_id: String) -> Dictionary:
+	var candidate := map_id.strip_edges()
+	var errors: Array[String] = []
+	if candidate.is_empty():
+		errors.append("map_id_empty")
+	else:
+		var pattern := RegEx.new()
+		pattern.compile("^[A-Za-z0-9][A-Za-z0-9_-]*$")
+		if pattern.search(candidate) == null:
+			errors.append("map_id_pattern_invalid")
+	var collides := false
+	var registry := _identity_registry_document()
+	if registry.is_empty():
+		errors.append("formal_identity_registry_unavailable")
+	else:
+		var maps_variant: Variant = registry.get("maps", [])
+		if not maps_variant is Array:
+			errors.append("formal_identity_registry_invalid")
+		else:
+			for row_variant: Variant in maps_variant:
+				if not row_variant is Dictionary or collides:
+					continue
+				var row: Dictionary = row_variant
+				for key: String in ["map_id", "legacy_map_id"]:
+					if str(row.get(key, "")).strip_edges() == candidate:
+						collides = true
+			if collides:
+				errors.append("map_id_already_formal_or_legacy")
+	var release_path := _runtime_release_registry_path()
+	if FileAccess.file_exists(release_path):
+		var release_parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(release_path))
+		if release_parsed is Dictionary:
+			var release_rows: Variant = (release_parsed as Dictionary).get("maps", [])
+			if release_rows is Array:
+				for row_variant: Variant in release_rows:
+					if not row_variant is Dictionary:
+						continue
+					if str((row_variant as Dictionary).get("map_key", "")).strip_edges() == candidate:
+						if not errors.has("map_id_already_released"):
+							errors.append("map_id_already_released")
+						break
+	if FileAccess.file_exists(default_path(candidate)) or FileAccess.file_exists(
+		"res://map_editor_workspace/%s/ground/ground_manifest.json" % candidate
+	):
+		errors.append("workspace_map_id_already_exists")
+	return {"ok": errors.is_empty(), "map_id": candidate, "errors": errors}
+
+
+static func register_formal_map_identity(map_id: String, runtime_map_id: int, display_name: String) -> Dictionary:
+	var candidate := map_id.strip_edges()
+	var identity_check := validate_new_map_identity(candidate)
+	if not bool(identity_check.get("ok", false)):
+		return {"ok": false, "errors": identity_check.get("errors", [])}
+	var runtime_check := validate_runtime_map_id_available(runtime_map_id)
+	if not bool(runtime_check.get("ok", false)):
+		return {"ok": false, "errors": runtime_check.get("errors", [])}
+	if str(display_name).strip_edges().is_empty():
+		return {"ok": false, "errors": ["display_name_empty"]}
+	var registry := _identity_registry_document()
+	if registry.is_empty() or str(registry.get("contract_id", "")) != "hardcore.formal_map_identity.v1":
+		return {"ok": false, "errors": ["formal_identity_registry_invalid"]}
+	var maps_variant: Variant = registry.get("maps", [])
+	if not maps_variant is Array or (maps_variant as Array).is_empty():
+		return {"ok": false, "errors": ["formal_identity_registry_invalid"]}
+	var rows: Array = maps_variant
+	## Re-check row collisions directly against the file being written: the
+	## registry may have changed between validation and this mutation.
+	for row_variant: Variant in rows:
+		if not row_variant is Dictionary:
+			continue
+		var row: Dictionary = row_variant
+		if (
+			str(row.get("map_id", "")).strip_edges() == candidate
+			or str(row.get("legacy_map_id", "")).strip_edges() == candidate
+		):
+			return {"ok": false, "errors": ["map_id_already_registered"]}
+		if int(row.get("runtime_map_id", 0)) == runtime_map_id:
+			return {"ok": false, "errors": ["runtime_map_id_already_registered"]}
+	rows.append({
+		"display_name": str(display_name).strip_edges(),
+		"legacy_map_id": "",
+		"legacy_runtime_map_id": -1,
+		"map_id": candidate,
+		"runtime_map_id": runtime_map_id,
+		"series": "custom",
+	})
+	registry["maps"] = rows
+	registry["formal_map_count"] = rows.size()
+	var identity_path := _formal_identity_path()
+	var raw := FileAccess.get_file_as_string(identity_path)
+	var encoded := JSON.stringify(registry, "  ")
+	if raw.ends_with("\n"):
+		encoded += "\n"
+	var absolute := ProjectSettings.globalize_path(identity_path)
+	var temporary := absolute + ".tmp"
+	var backup := absolute + ".bak"
+	var file := FileAccess.open(temporary, FileAccess.WRITE)
+	if file == null:
+		return {"ok": false, "errors": ["open_temp_failed"]}
+	file.store_string(encoded)
+	file.flush()
+	file.close()
+	var verification: Variant = JSON.parse_string(FileAccess.get_file_as_string(temporary))
+	if not verification is Dictionary or int((verification as Dictionary).get("formal_map_count", -1)) != rows.size():
+		DirAccess.remove_absolute(temporary)
+		return {"ok": false, "errors": ["temp_verification_failed"]}
+	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(backup)
+	if FileAccess.file_exists(absolute):
+		var backup_error := DirAccess.rename_absolute(absolute, backup)
+		if backup_error != OK:
+			DirAccess.remove_absolute(temporary)
+			return {"ok": false, "errors": ["backup_failed:%d" % backup_error]}
+	var promote_error := DirAccess.rename_absolute(temporary, absolute)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute)
+		return {"ok": false, "errors": ["promote_failed:%d" % promote_error]}
+	return {
+		"ok": true,
+		"map_id": candidate,
+		"runtime_map_id": runtime_map_id,
+		"backup": backup if FileAccess.file_exists(backup) else "",
+	}
 
 
 static func _metadata_protection_reason(

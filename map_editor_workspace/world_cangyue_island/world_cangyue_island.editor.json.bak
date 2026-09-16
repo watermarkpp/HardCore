@@ -34,8 +34,10 @@
     "default_connection_mode": "bidirectional",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2,
+    "revision": 27,
+    "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/world_cangyue_island"
   },
   "ground": {
@@ -48,14 +50,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1536.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/world_cangyue_island.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/world_cangyue_island.ground_paint_state.json",
@@ -772,6 +774,1486 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000045",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              17,
+              32
+            ],
+            [
+              25,
+              32
+            ],
+            [
+              25,
+              31
+            ],
+            [
+              17,
+              31
+            ],
+            [
+              17,
+              32
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000046",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24,
+            32,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000047",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23,
+            32,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000048",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22,
+            32,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000049",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21,
+            32,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000050",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            19,
+            32,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000051",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20,
+            32,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000052",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            18,
+            32,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000053",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            17,
+            32,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000054",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            26,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000055",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            25,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000056",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000057",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000058",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            26,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000059",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            25,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000060",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000061",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000062",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            25,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000063",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000064",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000065",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000066",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000067",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            22,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000068",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            16,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000069",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            16,
+            25,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000070",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000071",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            20,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000072",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            19,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000073",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            18,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000074",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            18,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000075",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            18,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000076",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            15,
+            17,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000077",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            17,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000078",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            17,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000079",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            19,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000080",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            20,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000081",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000082",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000083",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            19,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000084",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            14,
+            20,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000085",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            18,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000086",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            18,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000087",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            19,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000088",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000089",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            17,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000090",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            17,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000091",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            19,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000092",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            20,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000093",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000094",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            20,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000095",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            22,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000096",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000097",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000098",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            12,
+            25,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000099",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            13,
+            26,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000100",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24,
+            13,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000101",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24,
+            12,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000102",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24,
+            11,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000103",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23,
+            11,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000104",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22,
+            11,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000105",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21,
+            11,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000106",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20,
+            11,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000107",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20,
+            12,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000108",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20,
+            13,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000109",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21,
+            13,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000110",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22,
+            13,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000111",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23,
+            13,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000112",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23,
+            12,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000113",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22,
+            12,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000114",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21,
+            12,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000115",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            34,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000116",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            34,
+            22,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000117",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            33,
+            22,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000118",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            33,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000119",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            32,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000120",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000121",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31,
+            22,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000122",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000123",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            32,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000124",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            33,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000125",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            33,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000126",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            32,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000127",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            32,
+            22,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000128",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            34,
+            21,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000129",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            34,
+            24,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000130",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              2,
+              6
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              2,
+              6
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000131",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              48,
+              5
+            ],
+            [
+              42,
+              3
+            ],
+            [
+              42,
+              0
+            ],
+            [
+              48,
+              0
+            ],
+            [
+              48,
+              5
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000132",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              41,
+              46
+            ],
+            [
+              44,
+              48
+            ],
+            [
+              48,
+              48
+            ],
+            [
+              48,
+              43
+            ],
+            [
+              46,
+              41
+            ],
+            [
+              41,
+              46
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -1003,32 +2485,344 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          22.0,
-          22.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          22.0,
-          21.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          23.0,
-          21.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
           24.0,
           22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          21
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          19
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          18
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          17
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          17
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          18
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          19
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          21
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          25
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          24
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          23
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13,
+          17
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20,
+          13
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          21
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          34
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31,
+          34
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35,
+          30
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35,
+          14
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30,
+          10
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          10
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10,
+          13
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10,
+          29
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          46,
+          41
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          47,
+          42
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41,
+          45
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          45,
+          41
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44,
+          42
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42,
+          44
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43,
+          43
         ]
       }
     ],
@@ -1061,14 +2855,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_cangyue_island",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 917101,
+        "target_map_id": 917101.0,
         "target_map_key": "cangyue_bull_temple_f1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -1103,14 +2897,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_cangyue_island",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 917001,
+        "target_map_id": 917001.0,
         "target_map_key": "cangyue_bone_cave_f1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -1145,14 +2939,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_cangyue_island",
         "target_configured": true,
         "target_entrance_id": "map_exit_000004",
-        "target_map_id": 910003,
+        "target_map_id": 910003.0,
         "target_map_key": "world_mengzhong_province",
         "target_portal_id": "map_exit_000004",
         "target_tile": [
@@ -1208,52 +3002,8 @@
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          3,
-          37
-        ]
-      },
-      {
-        "authority_ref": {
-          "map_id": "world_cangyue_island",
-          "source_category_role": "ordinary",
-          "source_line": 265.0,
-          "source_token_index": 5.0
-        },
-        "auto_placement_status": "AUTO_POSITIONED",
-        "classification": "ordinary",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "稻草人",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": 21.0,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "placement_evidence": {
-          "component_id": 0.0,
-          "current_monster_library_only": true,
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
-          "selection_score": [
-            0.0,
-            90.0,
-            6.0,
-            1.0,
-            1683.0,
-            -1.0,
-            -46.0
-          ]
-        },
-        "radius_gu": 0.0,
-        "respawn_policy_id": "beginner_outdoor",
-        "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000002",
-        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000002",
-        "spawn_rule": "single_anchor_user_copy_template",
-        "tile": [
-          46.0,
-          1.0
+          3.0,
+          37.0
         ]
       },
       {
@@ -1296,8 +3046,8 @@
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          26,
-          41
+          26.0,
+          41.0
         ]
       },
       {
@@ -1340,52 +3090,8 @@
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000004",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          19,
-          4
-        ]
-      },
-      {
-        "authority_ref": {
-          "map_id": "world_cangyue_island",
-          "source_category_role": "ordinary",
-          "source_line": 265.0,
-          "source_token_index": 6.0
-        },
-        "auto_placement_status": "AUTO_POSITIONED",
-        "classification": "ordinary",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "食人花",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": 30.0,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "placement_evidence": {
-          "component_id": 0.0,
-          "current_monster_library_only": true,
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
-          "selection_score": [
-            0.0,
-            24.0,
-            10.0,
-            1.0,
-            1683.0,
-            -46.0,
-            -46.0
-          ]
-        },
-        "radius_gu": 0.0,
-        "respawn_policy_id": "beginner_outdoor",
-        "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000005",
-        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000005",
-        "spawn_rule": "single_anchor_user_copy_template",
-        "tile": [
-          46.0,
-          46.0
+          19.0,
+          4.0
         ]
       },
       {
@@ -1428,8 +3134,8 @@
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000006",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          3,
-          23
+          3.0,
+          23.0
         ]
       },
       {
@@ -1466,16 +3172,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000007",
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000007",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          43,
-          22
+          43.0,
+          22.0
         ]
       },
       {
@@ -1512,16 +3217,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000008",
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000008",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          15,
-          42
+          15.0,
+          42.0
         ]
       },
       {
@@ -1558,16 +3262,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000009",
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000009",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          43,
-          12
+          43.0,
+          12.0
         ]
       },
       {
@@ -1604,16 +3307,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000010",
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000010",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          4,
-          14
+          4.0,
+          14.0
         ]
       },
       {
@@ -1650,16 +3352,15 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000011",
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000011",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          45,
-          33
+          45.0,
+          33.0
         ]
       },
       {
@@ -1696,16 +3397,1140 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_seconds": 60,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000012",
         "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000012",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          31,
-          4
+          31.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4.0,
+          18.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          45.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21.0,
+          39.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          30.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          27.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          42.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            13.0,
+            12.0,
+            1683.0,
+            -33.0,
+            -12.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33.0,
+          44.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          40.0,
+          27.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          39.0,
+          18.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          28.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15.0,
+          1.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            12.0,
+            13.0,
+            1683.0,
+            -34.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          1.0,
+          26.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17.0,
+          39.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000030",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          38.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000031",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          39.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000032",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000033",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000034",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000034",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000035",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000035",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000036",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000036",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          27.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_cangyue_island",
+          "source_category_role": "ordinary",
+          "source_line": 265.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            45.0,
+            10.0,
+            11.0,
+            1683.0,
+            -11.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_cangyue_island.monster_spawn.000037",
+        "spawn_group_id": "mse.group.v1.world_cangyue_island.monster_spawn.000037",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41.0,
+          31.0
         ]
       }
     ],
@@ -1748,8 +4573,8 @@
         "service_identity_id": "npc.service.general_vendor.v1",
         "service_role": "shop",
         "tile": [
-          17.0,
-          19.0
+          15,
+          19
         ],
         "tile_anchor": [
           17.0,
@@ -1794,8 +4619,8 @@
         "service_identity_id": "npc.service.blacksmith.v1",
         "service_role": "shop",
         "tile": [
-          22.0,
-          16.0
+          21,
+          15
         ],
         "tile_anchor": [
           22.0,
@@ -1886,8 +4711,8 @@
         "service_identity_id": "npc.service.pharmacist.v1",
         "service_role": "shop",
         "tile": [
-          17.0,
-          25.0
+          17,
+          25
         ],
         "tile_anchor": [
           18.0,
@@ -1932,8 +4757,8 @@
         "service_identity_id": "npc.service.enhancement_vendor.v1",
         "service_role": "trainer",
         "tile": [
-          26.0,
-          30.0
+          25,
+          30
         ],
         "tile_anchor": [
           26.0,
@@ -1978,8 +4803,8 @@
         "service_identity_id": "npc.service.book_vendor.v1",
         "service_role": "shop",
         "tile": [
-          30.0,
-          25.0
+          31,
+          25
         ],
         "tile_anchor": [
           30.0,
@@ -1991,25 +4816,25 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          210.85714721679688,
-          279.1428527832031
+          188.0,
+          275.3333435058594
         ],
         "asset_id": "user.b04497d68cdcdb8c",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          4.0,
-          5.0
+          0,
+          0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          5.0
+          4,
+          4
         ],
         "gameplay_role": "service_or_landmark",
         "instance_base_footprint_tiles": [
@@ -2019,18 +4844,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000001",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          5.0
+          4,
+          4
         ],
         "offset_px": [
           0.0,
@@ -2038,55 +4863,55 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          210.85714721679688,
-          279.1428527832031
+          188.0,
+          275.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.7000000000000001,
-          0.7000000000000001
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "landmark",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          17.0
+          11,
+          18
         ],
         "tile_anchor": [
-          13.0,
-          17.0
+          11,
+          18
         ],
         "visual_footprint_tiles": [
-          4.0,
-          5.0
+          4,
+          4
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          167.14285278320312,
-          309.1428527832031
+          190.0,
+          305.3333435058594
         ],
         "asset_id": "user.0d19aae6e127fe6d",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          5.0,
-          4.0
+          0,
+          0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          5.0,
-          4.0
+          4,
+          4
         ],
         "gameplay_role": "service_or_landmark",
         "instance_base_footprint_tiles": [
@@ -2096,18 +4921,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000002",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          5.0,
-          4.0
+          4,
+          4
         ],
         "offset_px": [
           0.0,
@@ -2115,55 +4940,55 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          167.14285278320312,
-          309.1428527832031
+          190.0,
+          305.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.7000000000000001,
-          0.7000000000000001
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "landmark",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          21.0,
-          12.0
+          21,
+          11
         ],
         "tile_anchor": [
-          21.0,
-          12.0
+          21,
+          11
         ],
         "visual_footprint_tiles": [
-          5.0,
-          4.0
+          4,
+          4
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           178.0,
-          318.5714416503906
+          303.3333435058594
         ],
         "asset_id": "user.9e34df682fcbf16e",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          4.0,
-          4.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          4,
+          4
         ],
         "gameplay_role": "service_or_landmark",
         "instance_base_footprint_tiles": [
@@ -2173,18 +4998,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000003",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          4,
+          4
         ],
         "offset_px": [
           0.0,
@@ -2193,54 +5018,54 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           178.0,
-          318.5714416503906
+          303.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.7000000000000001,
-          0.7000000000000001
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "landmark",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          23.0
+          12,
+          23
         ],
         "tile_anchor": [
-          13.0,
-          23.0
+          12,
+          23
         ],
         "visual_footprint_tiles": [
-          4.0,
-          4.0
+          4,
+          4
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           187.0,
-          324.5714416503906
+          309.3333435058594
         ],
         "asset_id": "user.d420f965cdc36cac",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          4.0,
-          4.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          4,
+          4
         ],
         "gameplay_role": "service_or_landmark",
         "instance_base_footprint_tiles": [
@@ -2250,18 +5075,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000004",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          4,
+          4
         ],
         "offset_px": [
           0.0,
@@ -2270,54 +5095,54 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           187.0,
-          324.5714416503906
+          309.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.7000000000000001,
-          0.7000000000000001
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "landmark",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          21.0
+          31,
+          21
         ],
         "tile_anchor": [
-          31.0,
-          21.0
+          31,
+          21
         ],
         "visual_footprint_tiles": [
-          4.0,
-          4.0
+          4,
+          4
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          172.14285278320312,
+          141.6666717529297,
           218.0
         ],
         "asset_id": "user.1afde605bfd14459",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          4.0,
-          3.0
+          0,
+          0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          3.0
+          4,
+          2
         ],
         "gameplay_role": "service_or_landmark",
         "instance_base_footprint_tiles": [
@@ -2327,18 +5152,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000005",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          3.0
+          4,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2346,7 +5171,7 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          172.14285278320312,
+          141.6666717529297,
           218.0
         ],
         "placement_rule": "non_overlapping",
@@ -2354,47 +5179,47 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.7000000000000001,
-          0.7000000000000001
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "landmark",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          30.0
+          17,
+          32
         ],
         "tile_anchor": [
-          17.0,
-          30.0
+          17,
+          32
         ],
         "visual_footprint_tiles": [
-          4.0,
-          3.0
+          4,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          183.14285278320312,
+          152.6666717529297,
           217.0
         ],
         "asset_id": "user.3bb8d1b4041c2143",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          4.0,
-          3.0
+          0,
+          0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          3.0
+          4,
+          2
         ],
         "gameplay_role": "service_or_landmark",
         "instance_base_footprint_tiles": [
@@ -2404,18 +5229,18 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000006",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          3.0
+          4,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2423,7 +5248,7 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          183.14285278320312,
+          152.6666717529297,
           217.0
         ],
         "placement_rule": "non_overlapping",
@@ -2431,30 +5256,30 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.7000000000000001,
-          0.7000000000000001
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "landmark",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          21.0,
-          30.0
+          21,
+          32
         ],
         "tile_anchor": [
-          21.0,
-          30.0
+          21,
+          32
         ],
         "visual_footprint_tiles": [
-          4.0,
-          3.0
+          4,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.06",
         "base_footprint_tiles": [
@@ -2464,8 +5289,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2474,8 +5299,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2485,7 +5310,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000007",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2495,8 +5320,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2504,38 +5329,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          33.0
+          17,
+          34
         ],
         "tile_anchor": [
-          17.0,
-          33.0
+          17,
+          34
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.06",
         "base_footprint_tiles": [
@@ -2545,8 +5370,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2555,8 +5380,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2566,7 +5391,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000008",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2576,8 +5401,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2585,38 +5410,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          23.0,
-          33.0
+          23,
+          34
         ],
         "tile_anchor": [
-          23.0,
-          33.0
+          23,
+          34
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.06",
         "base_footprint_tiles": [
@@ -2626,8 +5451,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2636,8 +5461,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2647,7 +5472,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000009",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2657,8 +5482,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2666,38 +5491,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29.0,
-          33.0
+          29,
+          34
         ],
         "tile_anchor": [
-          29.0,
-          33.0
+          29,
+          34
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.08",
         "base_footprint_tiles": [
@@ -2707,8 +5532,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2717,8 +5542,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2728,7 +5553,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000010",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2738,8 +5563,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2747,38 +5572,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          35.0,
-          27.0
+          35,
+          28
         ],
         "tile_anchor": [
-          35.0,
-          27.0
+          35,
+          28
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.08",
         "base_footprint_tiles": [
@@ -2788,8 +5613,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2798,8 +5623,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2809,7 +5634,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000011",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2819,8 +5644,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2828,38 +5653,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          35.0,
-          21.0
+          35,
+          22
         ],
         "tile_anchor": [
-          35.0,
-          21.0
+          35,
+          22
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.08",
         "base_footprint_tiles": [
@@ -2869,8 +5694,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2879,8 +5704,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2890,7 +5715,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000012",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2900,8 +5725,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2909,38 +5734,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          35.0,
-          15.0
+          35,
+          16
         ],
         "tile_anchor": [
-          35.0,
-          15.0
+          35,
+          16
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.06",
         "base_footprint_tiles": [
@@ -2950,8 +5775,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2960,8 +5785,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2971,7 +5796,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000013",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2981,8 +5806,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -2990,38 +5815,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28.0,
-          9.0
+          28,
+          10
         ],
         "tile_anchor": [
-          28.0,
-          9.0
+          28,
+          10
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.06",
         "base_footprint_tiles": [
@@ -3031,8 +5856,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3041,8 +5866,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3052,7 +5877,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000014",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -3062,8 +5887,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -3071,38 +5896,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          9.0
+          22,
+          10
         ],
         "tile_anchor": [
-          22.0,
-          9.0
+          22,
+          10
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.06",
         "base_footprint_tiles": [
@@ -3112,8 +5937,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3122,8 +5947,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3133,7 +5958,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000015",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -3143,8 +5968,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -3152,38 +5977,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          207.0,
-          329.0
+          167.0,
+          322.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          9.0
+          16,
+          10
         ],
         "tile_anchor": [
-          16.0,
-          9.0
+          16,
+          10
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.08",
         "base_footprint_tiles": [
@@ -3193,8 +6018,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3203,8 +6028,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3214,7 +6039,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000016",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -3224,8 +6049,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -3233,38 +6058,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          26.0
+          10,
+          27
         ],
         "tile_anchor": [
-          10.0,
-          26.0
+          10,
+          27
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.08",
         "base_footprint_tiles": [
@@ -3274,8 +6099,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3284,8 +6109,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3295,7 +6120,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000017",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -3305,8 +6130,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -3314,38 +6139,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          20.0
+          10,
+          21
         ],
         "tile_anchor": [
-          10.0,
-          20.0
+          10,
+          21
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "asset_id": "mse.roadblock.chain_fence.08",
         "base_footprint_tiles": [
@@ -3355,8 +6180,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3365,8 +6190,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3376,7 +6201,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000018",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -3386,8 +6211,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -3395,38 +6220,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          197.0,
-          334.0
+          157.0,
+          327.3333435058594
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          14.0
+          10,
+          15
         ],
         "tile_anchor": [
-          10.0,
-          14.0
+          10,
+          15
         ],
         "visual_footprint_tiles": [
-          2.0,
-          3.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           145.0,
-          228.33334350585938
+          255.0
         ],
         "asset_id": "mse.small_decor.012",
         "base_footprint_tiles": [
@@ -3436,8 +6261,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3446,8 +6271,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1,
+          1
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -3457,7 +6282,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000019",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -3467,8 +6292,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -3477,30 +6302,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           145.0,
-          228.33334350585938
+          255.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          21.0
+          23,
+          22
         ],
         "tile_anchor": [
-          22.0,
-          21.0
+          23,
+          22
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1,
+          1
         ]
       },
       {
@@ -3572,12 +6397,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          41.0,
-          41.0
+          41,
+          41
         ],
         "tile_anchor": [
-          41.0,
-          41.0
+          41,
+          41
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -3653,12 +6478,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          0.0
+          43,
+          0
         ],
         "tile_anchor": [
-          43.0,
-          0.0
+          43,
+          0
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -3734,12 +6559,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -3762,8 +6587,8 @@
         "semantic_id": "respawn_point_000001",
         "semantic_role": "birth_and_respawn",
         "tile": [
-          25,
-          24
+          25.0,
+          24.0
         ]
       }
     ],
@@ -3776,15 +6601,42 @@
         "display_name": "安全区",
         "kind": "safe_area",
         "polygon_ground_gu": [
-          [15, 33],
-          [31, 35],
-          [36, 30],
-          [36, 15],
-          [30, 10],
-          [14, 9],
-          [10, 13],
-          [10, 29],
-          [15, 33]
+          [
+            15.0,
+            33.0
+          ],
+          [
+            31.0,
+            35.0
+          ],
+          [
+            36.0,
+            30.0
+          ],
+          [
+            36.0,
+            15.0
+          ],
+          [
+            30.0,
+            10.0
+          ],
+          [
+            14.0,
+            9.0
+          ],
+          [
+            10.0,
+            13.0
+          ],
+          [
+            10.0,
+            29.0
+          ],
+          [
+            15.0,
+            33.0
+          ]
         ],
         "radius_gu": 0.0,
         "return_anchor": false,
@@ -3792,8 +6644,8 @@
         "semantic_id": "safe_area_000001",
         "shape": "polygon",
         "tile": [
-          22,
-          23
+          22.0,
+          23.0
         ]
       }
     ],
@@ -3802,9 +6654,9 @@
     "terrain_front": []
   },
   "legacy_map_id": "cyd_1",
-  "legacy_runtime_map_id": 2000,
+  "legacy_runtime_map_id": 2000.0,
   "map_id": "world_cangyue_island",
-  "runtime_map_id": 910007,
-  "schema_version": 4.0,
+  "runtime_map_id": 910007.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable"
 }

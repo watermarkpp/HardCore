@@ -34,8 +34,10 @@
     "default_connection_mode": "bidirectional",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2,
+    "revision": 23.0,
+    "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/world_white_day_gate"
   },
   "ground": {
@@ -48,14 +50,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1536.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/world_white_day_gate.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/world_white_day_gate.ground_paint_state.json",
@@ -107,8 +109,8 @@
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          29,
-          16
+          29.0,
+          16.0
         ]
       },
       {
@@ -150,8 +152,8 @@
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000002",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          42,
-          33
+          42.0,
+          33.0
         ]
       },
       {
@@ -193,8 +195,8 @@
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          16,
-          4
+          16.0,
+          4.0
         ]
       },
       {
@@ -231,15 +233,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000004",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000004",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          9,
-          20
+          9.0,
+          20.0
         ]
       },
       {
@@ -276,15 +277,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000005",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000005",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          31,
-          42
+          31.0,
+          42.0
         ]
       },
       {
@@ -321,15 +321,14 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 0,
-        "respawn_seconds": 1800,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000006",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000006",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          37,
-          11
+          37.0,
+          11.0
         ]
       }
     ],
@@ -589,9 +588,434 @@
         },
         "shape": "polygon",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000008",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            4.0,
+            31.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000009",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            5.0,
+            32.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000010",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            5.0,
+            47.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000011",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            4.0,
+            47.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000012",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            3.0,
+            47.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
-    "collision_erase": [],
+    "collision_erase": [
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          0.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          38.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          37.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          37.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          38.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          37.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          46.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          45.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          44.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          43.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          43.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          43.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          43.0
+        ]
+      }
+    ],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -612,6 +1036,7 @@
         "display_name": "沃玛森林",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000018",
         "official_connection_id": "portal.world_white_day_gate.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -621,14 +1046,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_white_day_gate",
         "target_configured": true,
         "target_entrance_id": "map_exit_000003",
-        "target_map_id": 910004,
+        "target_map_id": 910004.0,
         "target_map_key": "world_wooma_forest",
         "target_portal_id": "map_exit_000003",
         "target_tile": [
@@ -654,6 +1079,7 @@
         "display_name": "赤月峡谷",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000019",
         "official_connection_id": "portal.world_white_day_gate.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -663,14 +1089,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_white_day_gate",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 916001,
+        "target_map_id": 916001.0,
         "target_map_key": "chiyue_valley",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -695,6 +1121,7 @@
         "exit_id": "map_exit_000003",
         "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000020",
         "official_connection_id": "portal.world_white_day_gate.map_exit_000003",
         "one_way": true,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -702,14 +1129,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_white_day_gate",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 918006,
+        "target_map_id": 918006.0,
         "target_map_key": "hidden_pincer_nest",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -765,8 +1192,8 @@
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000001",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          28,
-          3
+          28.0,
+          3.0
         ]
       },
       {
@@ -809,8 +1236,8 @@
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000002",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          24,
-          38
+          24.0,
+          38.0
         ]
       },
       {
@@ -853,8 +1280,8 @@
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000003",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          4,
-          18
+          4.0,
+          18.0
         ]
       },
       {
@@ -897,8 +1324,8 @@
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000004",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          18,
-          27
+          18.0,
+          27.0
         ]
       },
       {
@@ -941,8 +1368,8 @@
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000005",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          40,
-          22
+          40.0,
+          22.0
         ]
       }
     ],
@@ -985,8 +1412,8 @@
         "service_identity_id": "npc.service.general_vendor.v1",
         "service_role": "shop",
         "tile": [
-          17.0,
-          41.0
+          16.0,
+          42.0
         ],
         "tile_anchor": [
           17.0,
@@ -1123,7 +1550,7 @@
         "service_identity_id": "npc.service.pharmacist.v1",
         "service_role": "shop",
         "tile": [
-          12.0,
+          11.0,
           40.0
         ],
         "tile_anchor": [
@@ -1169,8 +1596,8 @@
         "service_identity_id": "npc.service.enhancement_vendor.v1",
         "service_role": "trainer",
         "tile": [
-          4.0,
-          39.0
+          5.0,
+          40.0
         ],
         "tile_anchor": [
           14.0,
@@ -1182,8 +1609,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          167.14285278320312,
-          309.1428527832031
+          190.0,
+          305.3333435058594
         ],
         "asset_id": "user.0d19aae6e127fe6d",
         "base_footprint_tiles": [
@@ -1203,7 +1630,7 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          5.0,
+          4.0,
           4.0
         ],
         "gameplay_role": "service_or_landmark",
@@ -1214,7 +1641,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000001",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -1224,7 +1651,7 @@
         "object_role": "building",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          5.0,
+          4.0,
           4.0
         ],
         "offset_px": [
@@ -1233,30 +1660,30 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          167.14285278320312,
-          309.1428527832031
+          190.0,
+          305.3333435058594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.7000000000000001,
-          0.7000000000000001
+          0.6000000000000001,
+          0.6000000000000001
         ],
         "scene_intent": "landmark",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
+          11.0,
           44.0
         ],
         "tile_anchor": [
-          10.0,
+          11.0,
           44.0
         ],
         "visual_footprint_tiles": [
-          5.0,
+          4.0,
           4.0
         ]
       },
@@ -1264,7 +1691,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           184.0,
-          314.0
+          321.1111145019531
         ],
         "asset_id": "user.d3c477bcd0d11efc",
         "base_footprint_tiles": [
@@ -1284,85 +1711,6 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          6.0,
-          6.0
-        ],
-        "gameplay_role": "service_or_landmark",
-        "instance_base_footprint_tiles": [
-          6.0,
-          6.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_id": "inst_000003",
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "disabled",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "building",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          6.0,
-          6.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          184.0,
-          314.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "landmark",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          1.0,
-          32.0
-        ],
-        "tile_anchor": [
-          1.0,
-          32.0
-        ],
-        "visual_footprint_tiles": [
-          6.0,
-          6.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          179.0,
-          305.1111145019531
-        ],
-        "asset_id": "user.9ccd75cbbbf3147c",
-        "base_footprint_tiles": [
-          6.0,
-          6.0
-        ],
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
           5.0,
           5.0
         ],
@@ -1373,7 +1721,7 @@
         ],
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
-        "instance_id": "inst_000004",
+        "instance_id": "inst_000003",
         "instance_scale_level": -1.0,
         "layer": "object_base",
         "manual_collision_expected": true,
@@ -1393,8 +1741,8 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          179.0,
-          305.1111145019531
+          184.0,
+          321.1111145019531
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -1409,11 +1757,11 @@
         "selection_locked": false,
         "tile": [
           2.0,
-          43.0
+          33.0
         ],
         "tile_anchor": [
           2.0,
-          43.0
+          33.0
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -1423,7 +1771,88 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          173.0,
+          179.0,
+          302.5714416503906
+        ],
+        "asset_id": "user.9ccd75cbbbf3147c",
+        "base_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "service_or_landmark",
+        "instance_base_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000004",
+        "instance_scale_level": -3.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "building",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          179.0,
+          302.5714416503906
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.7000000000000001,
+          0.7000000000000001
+        ],
+        "scene_intent": "landmark",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          3.0,
+          44.0
+        ],
+        "tile_anchor": [
+          3.0,
+          44.0
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          253.0,
           238.0
         ],
         "asset_id": "mse.small_decor.004",
@@ -1444,8 +1873,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1455,7 +1884,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000007",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -1465,8 +1894,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -1474,7 +1903,7 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          173.0,
+          253.0,
           238.0
         ],
         "placement_rule": "inside_map",
@@ -1482,30 +1911,30 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
+          3.0,
           27.0
         ],
         "tile_anchor": [
-          1.0,
+          3.0,
           27.0
         ],
         "visual_footprint_tiles": [
-          3.0,
-          3.0
+          1.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           139.0,
-          211.33334350585938
+          238.0
         ],
         "asset_id": "mse.small_decor.011",
         "base_footprint_tiles": [
@@ -1525,8 +1954,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1536,7 +1965,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000008",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -1546,8 +1975,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -1556,37 +1985,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           139.0,
-          211.33334350585938
+          238.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          37.0
+          2.0,
+          38.0
         ],
         "tile_anchor": [
-          1.0,
-          37.0
+          2.0,
+          38.0
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           149.0,
-          218.0
+          138.0
         ],
         "asset_id": "mse.small_decor.017",
         "base_footprint_tiles": [
@@ -1617,7 +2046,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000009",
-        "instance_scale_level": -8.0,
+        "instance_scale_level": -9.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -1637,15 +2066,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           149.0,
-          218.0
+          138.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20000000000000015,
-          0.20000000000000015
+          0.10000000000000014,
+          0.10000000000000014
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -1667,7 +2096,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           162.0,
-          282.0
+          202.0
         ],
         "asset_id": "mse.small_decor.018",
         "base_footprint_tiles": [
@@ -1698,7 +2127,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000010",
-        "instance_scale_level": -8.0,
+        "instance_scale_level": -9.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -1718,15 +2147,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           162.0,
-          282.0
+          202.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20000000000000015,
-          0.20000000000000015
+          0.10000000000000014,
+          0.10000000000000014
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -1829,7 +2258,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           176.0,
-          165.33334350585938
+          192.0
         ],
         "asset_id": "mse.small_decor.027",
         "base_footprint_tiles": [
@@ -1849,8 +2278,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -1860,7 +2289,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000012",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -1870,8 +2299,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -1880,30 +2309,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           176.0,
-          165.33334350585938
+          192.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          33.0
+          7.0,
+          34.0
         ],
         "tile_anchor": [
-          6.0,
-          33.0
+          7.0,
+          34.0
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ]
       },
       {
@@ -2229,6 +2658,243 @@
           4.0,
           4.0
         ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000018",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          40,
+          41
+        ],
+        "tile_anchor": [
+          40,
+          41
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000019",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          6,
+          6
+        ],
+        "tile_anchor": [
+          6,
+          6
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s02_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000020",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          41,
+          5
+        ],
+        "tile_anchor": [
+          41,
+          5
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
       }
     ],
     "object_front": [],
@@ -2260,13 +2926,34 @@
         "display_name": "安全区",
         "kind": "safe_area",
         "polygon_ground_gu": [
-          [21.0, 47.0],
-          [16.0, 38.0],
-          [9.0, 30.0],
-          [3.0, 25.0],
-          [0.0, 25.0],
-          [0.0, 47.0],
-          [21.0, 47.0]
+          [
+            21.0,
+            47.0
+          ],
+          [
+            16.0,
+            38.0
+          ],
+          [
+            9.0,
+            30.0
+          ],
+          [
+            3.0,
+            25.0
+          ],
+          [
+            0.0,
+            25.0
+          ],
+          [
+            0.0,
+            47.0
+          ],
+          [
+            21.0,
+            47.0
+          ]
         ],
         "radius_gu": 0.0,
         "return_anchor": false,
@@ -2284,9 +2971,9 @@
     "terrain_front": []
   },
   "legacy_map_id": "brm_2",
-  "legacy_runtime_map_id": 97789,
+  "legacy_runtime_map_id": 97789.0,
   "map_id": "world_white_day_gate",
-  "runtime_map_id": 910006,
-  "schema_version": 4.0,
+  "runtime_map_id": 910006.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable"
 }

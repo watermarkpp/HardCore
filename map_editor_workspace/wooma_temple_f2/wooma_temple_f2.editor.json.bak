@@ -34,16 +34,19 @@
     "content_policy": "full_copy_from_wooma_temple_1",
     "created_by": "human_codex_shared_tool",
     "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
     "milestone": "WOOMA-TEMPLE-2-TO-LEADER-HALL-V1",
     "official_source_authority": "user_saved_editor_document",
     "phase1_map_production_complete": true,
     "phase1_network_version_id": "phase1_finished_map_network_v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 5.0,
+    "revision": 6.0,
     "route_version_id": "wooma_temple_user_route_v3_unified_portals",
     "runtime_approved": true,
     "runtime_approved_revision": 5.0,
+    "source_editor_schema_version": 4.0,
     "template_kind": "cloned_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "wooma_wall_corner_contract": "native_2to1_straight_overlap_v1",
     "wooma_wall_corner_migration": "WOOMA-TEMPLE-1-NO-PILLAR-V1",
     "workspace": "res://map_editor_workspace/wooma_temple_f2"
@@ -58,14 +61,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1408.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/wooma_temple_f2.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/wooma_temple_f2.ground_paint_state.json",
@@ -75,8 +78,464 @@
     "workspace_manifest": "res://map_editor_workspace/wooma_temple_f2/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/wooma_temple_f2/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "elite",
+          "source_line": 167.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            41.0,
+            1.0,
+            1.0,
+            1582.0,
+            -22.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "elite",
+          "source_line": 167.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            41.0,
+            1.0,
+            1.0,
+            1582.0,
+            -22.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000003",
+        "spawn_rule": "boss",
+        "tile": [
+          25.0,
+          20.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000004",
+        "spawn_rule": "boss",
+        "tile": [
+          5.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000005",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000005",
+        "spawn_rule": "boss",
+        "tile": [
+          19.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000006",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000006",
+        "spawn_rule": "boss",
+        "tile": [
+          7.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000007",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000007",
+        "spawn_rule": "boss",
+        "tile": [
+          31.0,
+          7.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000008",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000008",
+        "spawn_rule": "boss",
+        "tile": [
+          3.0,
+          34.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 900.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000009",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000009",
+        "spawn_rule": "boss",
+        "tile": [
+          7.0,
+          28.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "elite",
+          "source_line": 167.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            41.0,
+            1.0,
+            1.0,
+            1582.0,
+            -22.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000010",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          32.0,
+          31.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "elite",
+          "source_line": 167.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            41.0,
+            1.0,
+            1.0,
+            1582.0,
+            -22.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000011",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          29.0,
+          37.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "elite",
+          "source_line": 167.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            41.0,
+            1.0,
+            1.0,
+            1582.0,
+            -22.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000012",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "elite",
+          "source_line": 167.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            41.0,
+            1.0,
+            1.0,
+            1582.0,
+            -22.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000013",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "elite",
+          "source_line": 167.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛卫士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 73.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            41.0,
+            1.0,
+            1.0,
+            1582.0,
+            -22.0,
+            -42.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.boss_spawn.000014",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.boss_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36.0,
+          30.0
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -613,10 +1072,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            12,
-            34,
-            1,
-            1
+            12.0,
+            34.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -629,10 +1088,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            12,
-            33,
-            1,
-            1
+            12.0,
+            33.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -645,10 +1104,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            11,
-            34,
-            1,
-            1
+            11.0,
+            34.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -661,10 +1120,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            10,
-            34,
-            1,
-            1
+            10.0,
+            34.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -677,10 +1136,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            9,
-            34,
-            1,
-            1
+            9.0,
+            34.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -693,10 +1152,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            9,
-            33,
-            1,
-            1
+            9.0,
+            33.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -709,10 +1168,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            10,
-            33,
-            1,
-            1
+            10.0,
+            33.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -725,10 +1184,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            11,
-            33,
-            1,
-            1
+            11.0,
+            33.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -741,10 +1200,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            11,
-            29,
-            1,
-            1
+            11.0,
+            29.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -757,10 +1216,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            12,
-            29,
-            1,
-            1
+            12.0,
+            29.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -773,10 +1232,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            13,
-            29,
-            1,
-            1
+            13.0,
+            29.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -789,10 +1248,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            13,
-            28,
-            1,
-            1
+            13.0,
+            28.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -805,10 +1264,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            13,
-            27,
-            1,
-            1
+            13.0,
+            27.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -821,10 +1280,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            12,
-            27,
-            1,
-            1
+            12.0,
+            27.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -837,10 +1296,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            11,
-            27,
-            1,
-            1
+            11.0,
+            27.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -853,10 +1312,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            12,
-            28,
-            1,
-            1
+            12.0,
+            28.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -869,10 +1328,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            34,
-            1,
-            1
+            28.0,
+            34.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -885,10 +1344,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            33,
-            1,
-            1
+            28.0,
+            33.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -901,10 +1360,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            34,
-            1,
-            1
+            29.0,
+            34.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -917,10 +1376,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            33,
-            1,
-            1
+            29.0,
+            33.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -933,10 +1392,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            30,
-            33,
-            1,
-            1
+            30.0,
+            33.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -949,10 +1408,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            31,
-            33,
-            1,
-            1
+            31.0,
+            33.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -965,10 +1424,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            31,
-            32,
-            1,
-            1
+            31.0,
+            32.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -981,10 +1440,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            30,
-            32,
-            1,
-            1
+            30.0,
+            32.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -997,10 +1456,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            32,
-            1,
-            1
+            29.0,
+            32.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1013,10 +1472,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            31,
-            29,
-            1,
-            1
+            31.0,
+            29.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1029,10 +1488,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            32,
-            29,
-            1,
-            1
+            32.0,
+            29.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1045,10 +1504,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            32,
-            28,
-            1,
-            1
+            32.0,
+            28.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1061,10 +1520,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            31,
-            28,
-            1,
-            1
+            31.0,
+            28.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1077,10 +1536,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            32,
-            27,
-            1,
-            1
+            32.0,
+            27.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1093,10 +1552,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            33,
-            27,
-            1,
-            1
+            33.0,
+            27.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1109,10 +1568,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            33,
-            28,
-            1,
-            1
+            33.0,
+            28.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1125,10 +1584,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7,
-            13,
-            1,
-            1
+            7.0,
+            13.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1141,10 +1600,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7,
-            12,
-            1,
-            1
+            7.0,
+            12.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1157,10 +1616,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            8,
-            12,
-            1,
-            1
+            8.0,
+            12.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1173,10 +1632,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7,
-            11,
-            1,
-            1
+            7.0,
+            11.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1189,10 +1648,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            8,
-            11,
-            1,
-            1
+            8.0,
+            11.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1205,10 +1664,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            6,
-            9,
-            1,
-            1
+            6.0,
+            9.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1221,10 +1680,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            6,
-            10,
-            1,
-            1
+            6.0,
+            10.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1237,10 +1696,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7,
-            10,
-            1,
-            1
+            7.0,
+            10.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1253,10 +1712,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            7,
-            9,
-            1,
-            1
+            7.0,
+            9.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1269,10 +1728,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            11,
-            13,
-            1,
-            1
+            11.0,
+            13.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1285,10 +1744,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            12,
-            13,
-            1,
-            1
+            12.0,
+            13.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1301,10 +1760,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            13,
-            13,
-            1,
-            1
+            13.0,
+            13.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1317,10 +1776,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            13,
-            12,
-            1,
-            1
+            13.0,
+            12.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1333,10 +1792,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            13,
-            11,
-            1,
-            1
+            13.0,
+            11.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1349,10 +1808,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            11,
-            11,
-            1,
-            1
+            11.0,
+            11.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1365,10 +1824,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            11,
-            12,
-            1,
-            1
+            11.0,
+            12.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1381,10 +1840,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            27,
-            13,
-            1,
-            1
+            27.0,
+            13.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1397,10 +1856,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            13,
-            1,
-            1
+            28.0,
+            13.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1413,10 +1872,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            13,
-            1,
-            1
+            29.0,
+            13.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1429,10 +1888,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            12,
-            1,
-            1
+            29.0,
+            12.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1445,10 +1904,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            11,
-            1,
-            1
+            29.0,
+            11.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1461,10 +1920,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            11,
-            1,
-            1
+            28.0,
+            11.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1477,10 +1936,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            27,
-            11,
-            1,
-            1
+            27.0,
+            11.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1493,10 +1952,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            27,
-            12,
-            1,
-            1
+            27.0,
+            12.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1509,10 +1968,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            12,
-            1,
-            1
+            28.0,
+            12.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1525,10 +1984,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            27,
-            29,
-            1,
-            1
+            27.0,
+            29.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1541,10 +2000,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            27,
-            28,
-            1,
-            1
+            27.0,
+            28.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1557,10 +2016,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            28,
-            1,
-            1
+            28.0,
+            28.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1573,10 +2032,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            29,
-            1,
-            1
+            28.0,
+            29.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1589,10 +2048,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            29,
-            1,
-            1
+            29.0,
+            29.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1605,10 +2064,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            28,
-            1,
-            1
+            29.0,
+            28.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1621,10 +2080,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            27,
-            1,
-            1
+            28.0,
+            27.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1637,10 +2096,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            29,
-            27,
-            1,
-            1
+            29.0,
+            27.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1653,10 +2112,378 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            27,
-            27,
-            1,
-            1
+            27.0,
+            27.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000193",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            33.0,
+            29.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000194",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            19.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000195",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            30.0,
+            19.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000196",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            30.0,
+            18.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000197",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            18.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000198",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000199",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            30.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000200",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            10.0,
+            22.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000201",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            9.0,
+            22.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000202",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            9.0,
+            21.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000203",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            10.0,
+            21.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000204",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            10.0,
+            20.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000205",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            9.0,
+            20.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000206",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            30.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000207",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            31.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000208",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            6.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000209",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            5.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000210",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            5.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000211",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            6.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000212",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            6.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000213",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            5.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000214",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            18.0,
+            43.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000215",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            16.0,
+            0.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -1871,6 +2698,318 @@
           14.0,
           27.0
         ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          12.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          28.0
+        ]
       }
     ],
     "door_points": [],
@@ -1887,38 +3026,38 @@
         "blocks_movement": false,
         "connection_direction": "forward",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "wooma_temple_f2_leader_hall_pair_v1",
+        "connection_pair_id": "portal_pair.wooma_temple_f2.map_exit_000001.wooma_temple_boss_hall.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "进入沃玛教主大厅",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
-        "official_connection_id": "wooma_temple_f2_to_leader_hall_v2",
+        "official_connection_id": "portal.wooma_temple_f2.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
         "reciprocal_exit_id": "map_exit_000001",
-        "reciprocal_map_key": "wooma_temple_3",
+        "reciprocal_map_key": "wooma_temple_boss_hall",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "wooma_temple_f2",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 315.0,
-        "target_map_key": "wooma_temple_3",
+        "target_map_id": 915003.0,
+        "target_map_key": "wooma_temple_boss_hall",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
           20.0,
           41.0
         ],
         "tile": [
-          18.0,
-          2.0
+          19.0,
+          1.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -1929,34 +3068,34 @@
         "blocks_movement": false,
         "connection_direction": "reverse",
         "connection_mode": "bidirectional",
-        "connection_pair_id": "wooma_temple_1_2_pair_v1",
+        "connection_pair_id": "portal_pair.wooma_temple_f1.map_exit_000001.wooma_temple_f2.map_exit_000002",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
         "display_name": "返回沃玛寺庙一层",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
-        "official_connection_id": "wooma_temple_f2_to_1_v1",
+        "official_connection_id": "portal.wooma_temple_f2.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
         "reciprocal_exit_id": "map_exit_000001",
-        "reciprocal_map_key": "wooma_temple_1",
+        "reciprocal_map_key": "wooma_temple_f1",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "wooma_temple_f2",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 313.0,
-        "target_map_key": "wooma_temple_1",
+        "target_map_id": 915001.0,
+        "target_map_key": "wooma_temple_f1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
-          18.0,
-          2.0
+          19.0,
+          1.0
         ],
         "tile": [
           20.0,
@@ -1966,7 +3105,1369 @@
         "trigger_on_enter": true
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "山洞蝙蝠",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 43.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            18.0,
+            1.0,
+            1582.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "粪虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 60.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            10.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -11.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          40.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暗黑战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 62.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            31.0,
+            17.0,
+            16.0,
+            1582.0,
+            -16.0,
+            -17.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          28.0,
+          7.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 64.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            30.0,
+            14.0,
+            1.0,
+            1582.0,
+            -1.0,
+            -33.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37.0,
+          40.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛战将",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 68.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            24.0,
+            5.0,
+            1.0,
+            1582.0,
+            -28.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          31.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31.0,
+          36.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          38.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          34.0,
+          9.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          36.0,
+          34.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          30.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          32.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35.0,
+          36.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "火焰沃玛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 70.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            17.0,
+            13.0,
+            1582.0,
+            -30.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35.0,
+          27.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          28.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          30.0,
+          26.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12.0,
+          31.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33.0,
+          24.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          32.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "wooma_temple_f2",
+          "source_category_role": "ordinary",
+          "source_line": 166.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛勇士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 66.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            25.0,
+            18.0,
+            1.0,
+            1582.0,
+            -42.0,
+            -37.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 64.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000029",
+        "spawn_rule": "ambient",
+        "tile": [
+          17.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 64.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000030",
+        "spawn_rule": "ambient",
+        "tile": [
+          23.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 64.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000031",
+        "spawn_rule": "ambient",
+        "tile": [
+          15.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 64.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000032",
+        "spawn_rule": "ambient",
+        "tile": [
+          12.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 64.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000033",
+        "spawn_rule": "ambient",
+        "tile": [
+          15.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "沃玛战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 64.0,
+        "radius_gu": 0.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.wooma_temple_f2.monster_spawn.000034",
+        "spawn_group_id": "mse.group.v1.wooma_temple_f2.monster_spawn.000034",
+        "spawn_rule": "ambient",
+        "tile": [
+          23.0,
+          9.0
+        ]
+      }
+    ],
     "npc_points": [
       {
         "collision_policy": "profile",
@@ -2006,8 +4507,8 @@
         "service_identity_id": "npc.service.pharmacist.v1",
         "service_role": "shop",
         "tile": [
-          3.0,
-          25.0
+          2,
+          23
         ],
         "tile_anchor": [
           3.0,
@@ -2052,8 +4553,8 @@
         "service_identity_id": "npc.service.general_vendor.v1",
         "service_role": "shop",
         "tile": [
-          3,
-          20
+          2,
+          19
         ],
         "tile_anchor": [
           3.0,
@@ -2066,7 +4567,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           133.0,
-          413.5294189453125
+          426.3636474609375
         ],
         "asset_id": "mse.new_pillar.15",
         "collision_authority": "manual_by_user",
@@ -2082,8 +4583,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2093,7 +4594,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000108",
-        "instance_scale_level": -2.0,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
@@ -2102,8 +4603,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -2112,37 +4613,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           133.0,
-          413.5294189453125
+          426.3636474609375
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5666666865348816,
-          0.5666666865348816
+          0.36666668653488166,
+          0.36666668653488166
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29,
-          29
+          30,
+          30
         ],
         "tile_anchor": [
-          29,
-          29
+          30,
+          30
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           132.0,
-          396.5294189453125
+          409.3636474609375
         ],
         "asset_id": "mse.new_pillar.16",
         "collision_authority": "manual_by_user",
@@ -2158,8 +4659,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2169,7 +4670,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000109",
-        "instance_scale_level": -2.0,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
@@ -2178,8 +4679,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -2188,37 +4689,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           132.0,
-          396.5294189453125
+          409.3636474609375
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5666666865348816,
-          0.5666666865348816
+          0.36666668653488166,
+          0.36666668653488166
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28,
-          12
+          29,
+          13
         ],
         "tile_anchor": [
-          28,
-          12
+          29,
+          13
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           130.0,
-          412.5294189453125
+          425.3636474609375
         ],
         "asset_id": "mse.new_pillar.14",
         "collision_authority": "manual_by_user",
@@ -2234,8 +4735,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2245,7 +4746,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000111",
-        "instance_scale_level": -2.0,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
@@ -2254,8 +4755,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -2264,37 +4765,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           130.0,
-          412.5294189453125
+          425.3636474609375
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5666666865348816,
-          0.5666666865348816
+          0.36666668653488166,
+          0.36666668653488166
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          12.0,
-          12.0
+          13,
+          13
         ],
         "tile_anchor": [
-          12.0,
-          12.0
+          13,
+          13
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           130.0,
-          413.5294189453125
+          426.3636474609375
         ],
         "asset_id": "mse.new_pillar.13",
         "collision_authority": "manual_by_user",
@@ -2310,8 +4811,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2321,7 +4822,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000112",
-        "instance_scale_level": -2.0,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
@@ -2330,8 +4831,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -2340,30 +4841,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           130.0,
-          413.5294189453125
+          426.3636474609375
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5666666865348816,
-          0.5666666865348816
+          0.36666668653488166,
+          0.36666668653488166
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          12,
-          28
+          13,
+          29
         ],
         "tile_anchor": [
-          12,
-          28
+          13,
+          29
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ]
       },
       {
@@ -2432,22 +4933,22 @@
           15.0
         ],
         "tile_anchor": [
-          15.0,
-          15.0
+          15,
+          15
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           172.0,
-          199.0
+          183.0
         ],
         "asset_id": "user.a72ab58f355bd771",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -2456,8 +4957,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4,
-          4
+          3.0,
+          3.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2467,7 +4968,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000114",
-        "instance_scale_level": -2,
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -2476,8 +4977,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4,
-          4
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -2486,44 +4987,44 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           172.0,
-          199.0
+          183.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.8,
-          0.8
+          0.5000000000000001,
+          0.5000000000000001
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          9,
-          31
+          10,
+          32
         ],
         "tile_anchor": [
-          9,
-          31
+          10,
+          32
         ],
         "visual_footprint_tiles": [
-          4,
-          4
+          3.0,
+          3.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           172.0,
-          199.0
+          183.0
         ],
         "asset_id": "user.a72ab58f355bd771",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -2532,8 +5033,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4,
-          4
+          3.0,
+          3.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2543,7 +5044,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000115",
-        "instance_scale_level": -2,
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -2552,8 +5053,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4,
-          4
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -2562,44 +5063,44 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           172.0,
-          199.0
+          183.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.8,
-          0.8
+          0.5000000000000001,
+          0.5000000000000001
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          19,
-          3
+          20,
+          4
         ],
         "tile_anchor": [
-          19,
-          3
+          20,
+          4
         ],
         "visual_footprint_tiles": [
-          4,
-          4
+          3.0,
+          3.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          163.0,
-          180.0
+          183.0,
+          174.0
         ],
         "asset_id": "user.cd60c638089c7c98",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -2608,8 +5109,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          5,
-          4
+          3.0,
+          3.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -2619,7 +5120,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000118",
-        "instance_scale_level": -2,
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -2628,8 +5129,8 @@
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          5,
-          4
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -2637,49 +5138,49 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          163.0,
-          180.0
+          183.0,
+          174.0
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.8,
-          0.8
+          0.5000000000000001,
+          0.5000000000000001
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          27,
-          31
+          29,
+          32
         ],
         "tile_anchor": [
-          27,
-          31
+          29,
+          32
         ],
         "visual_footprint_tiles": [
-          5,
-          4
+          3.0,
+          3.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -2693,12 +5194,14 @@
           1.0
         ],
         "instance_base_scale": 0.505263,
+        "instance_custom_scale": true,
         "instance_id": "inst_000119",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
@@ -2712,44 +5215,48 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.505263,
-          0.505263
+          0.35368409999999995,
+          0.35368409999999995
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          43.0
+          18,
+          43
         ],
         "tile_anchor": [
-          18.0,
-          43.0
+          18,
+          43
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -2763,12 +5270,14 @@
           1.0
         ],
         "instance_base_scale": 0.505263,
+        "instance_custom_scale": true,
         "instance_id": "inst_000120",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
@@ -2782,44 +5291,48 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.505263,
-          0.505263
+          0.35368409999999995,
+          0.35368409999999995
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          43.0
+          24,
+          43
         ],
         "tile_anchor": [
-          24.0,
-          43.0
+          24,
+          43
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -2833,12 +5346,14 @@
           1.0
         ],
         "instance_base_scale": 0.505263,
+        "instance_custom_scale": true,
         "instance_id": "inst_000121",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
@@ -2852,44 +5367,48 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.505263,
-          0.505263
+          0.35368409999999995,
+          0.35368409999999995
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          0.0
+          16,
+          0
         ],
         "tile_anchor": [
-          16.0,
-          0.0
+          16,
+          0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "asset_id": "cave_dungeon.brazier_01",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          1.0,
-          1.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "preset",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "project_prop_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -2903,12 +5422,14 @@
           1.0
         ],
         "instance_base_scale": 0.505263,
+        "instance_custom_scale": true,
         "instance_id": "inst_000122",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
@@ -2922,26 +5443,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           50.0,
-          157.3333282470703
+          143.7618865966797
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.505263,
-          0.505263
+          0.35368409999999995,
+          0.35368409999999995
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          22.0,
-          0.0
+          22,
+          0
         ],
         "tile_anchor": [
-          22.0,
-          0.0
+          22,
+          0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
@@ -2954,8 +5479,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -2964,8 +5489,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4,
-          4
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -2975,7 +5500,7 @@
         "instance_base_scale": 0.4549763033175355,
         "instance_custom_scale": true,
         "instance_id": "inst_000123",
-        "instance_scale_level": 2,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -2984,8 +5509,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          4,
-          4
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -3001,30 +5526,30 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5459715639810426,
-          0.5459715639810426
+          0.27298578199052115,
+          0.27298578199052115
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          30,
-          25
+          32,
+          27
         ],
         "tile_anchor": [
-          30,
-          25
+          32,
+          27
         ],
         "visual_footprint_tiles": [
-          4,
-          4
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           114.0,
-          110.0
+          120.09091186523438
         ],
         "asset_id": "user.2ae19a1ebcbb7383",
         "collision_authority": "asset",
@@ -3040,8 +5565,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -3051,7 +5576,7 @@
         "instance_base_scale": 0.43243243243243246,
         "instance_custom_scale": true,
         "instance_id": "inst_000124",
-        "instance_scale_level": -1.0,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3060,8 +5585,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3070,30 +5595,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           114.0,
-          110.0
+          120.09091186523438
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.28828829526901245,
-          0.28828829526901245
+          0.15855856553928271,
+          0.15855856553928271
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
-          31.0
+          34,
+          28
         ],
         "tile_anchor": [
-          33.0,
-          31.0
+          34,
+          28
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ]
       },
       {
@@ -3116,8 +5641,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -3125,7 +5650,9 @@
           3.0
         ],
         "instance_base_scale": 0.45933014354066987,
+        "instance_custom_scale": true,
         "instance_id": "inst_000125",
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3134,8 +5661,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3151,19 +5678,23 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.45933014354066987,
-          0.45933014354066987
+          0.2296650717703349,
+          0.2296650717703349
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          28.0
+          33,
+          29
         ],
         "tile_anchor": [
-          31.0,
-          28.0
+          33,
+          29
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       },
       {
@@ -3176,8 +5707,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3186,8 +5717,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2,
-          2
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -3197,7 +5728,7 @@
         "instance_base_scale": 0.45933014354066987,
         "instance_custom_scale": true,
         "instance_id": "inst_000126",
-        "instance_scale_level": -2,
+        "instance_scale_level": -6.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3206,8 +5737,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2,
-          2
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3223,37 +5754,37 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3674641148325359,
-          0.3674641148325359
+          0.1837320574162679,
+          0.1837320574162679
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6,
-          9
+          7,
+          11
         ],
         "tile_anchor": [
-          6,
-          9
+          7,
+          11
         ],
         "visual_footprint_tiles": [
-          2,
-          2
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           92.0,
-          122.08333587646484
+          139.6666717529297
         ],
         "asset_id": "user.fb5fcf8cc43c684e",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3262,8 +5793,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2,
-          2
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -3273,7 +5804,7 @@
         "instance_base_scale": 0.4549763033175355,
         "instance_custom_scale": true,
         "instance_id": "inst_000127",
-        "instance_scale_level": -2,
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3282,8 +5813,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2,
-          2
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3292,37 +5823,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           92.0,
-          122.08333587646484
+          139.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3639810426540284,
-          0.3639810426540284
+          0.2274881516587677,
+          0.2274881516587677
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6,
+          7,
           12
         ],
         "tile_anchor": [
-          6,
+          7,
           12
         ],
         "visual_footprint_tiles": [
-          2,
-          2
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           105.0,
-          141.6666717529297
+          94.1111068725586
         ],
         "asset_id": "user.22a599149664a7e9",
         "collision_authority": "asset",
@@ -3347,7 +5878,9 @@
           3.0
         ],
         "instance_base_scale": 0.4485981308411215,
+        "instance_custom_scale": true,
         "instance_id": "inst_000128",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3366,26 +5899,192 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           105.0,
-          141.6666717529297
+          94.1111068725586
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.4485981308411215,
-          0.4485981308411215
+          0.26915887850467296,
+          0.26915887850467296
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          11.0
+          7,
+          11
         ],
         "tile_anchor": [
-          7.0,
-          11.0
+          7,
+          11
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          155.0,
+          197.0
+        ],
+        "asset_id": "user.148c0d49946bdb4c",
+        "base_footprint_tiles": [
+          3.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          3.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          3.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000129",
+        "instance_scale_level": -5.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          155.0,
+          197.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.5000000000000001,
+          0.5000000000000001
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          30,
+          17
+        ],
+        "tile_anchor": [
+          30,
+          17
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          158.0,
+          196.0
+        ],
+        "asset_id": "user.af3f8e9cd10de904",
+        "base_footprint_tiles": [
+          3.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          3.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          3.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000130",
+        "instance_scale_level": -5.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          158.0,
+          196.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.5000000000000001,
+          0.5000000000000001
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          9,
+          20
+        ],
+        "tile_anchor": [
+          9,
+          20
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          3.0
         ]
       }
     ],
@@ -3462,8 +6161,8 @@
           43.0
         ],
         "tile_anchor": [
-          0.0,
-          43.0
+          0,
+          43
         ]
       },
       {
@@ -3532,8 +6231,8 @@
           43.0
         ],
         "tile_anchor": [
-          11.0,
-          43.0
+          11,
+          43
         ]
       },
       {
@@ -3602,8 +6301,8 @@
           43.0
         ],
         "tile_anchor": [
-          6.0,
-          43.0
+          6,
+          43
         ]
       },
       {
@@ -3672,8 +6371,8 @@
           39.0
         ],
         "tile_anchor": [
-          0.0,
-          39.0
+          0,
+          39
         ]
       },
       {
@@ -3742,8 +6441,8 @@
           1.0
         ],
         "tile_anchor": [
-          0.0,
-          1.0
+          0,
+          1
         ]
       },
       {
@@ -3812,8 +6511,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ]
       },
       {
@@ -3882,8 +6581,8 @@
           0.0
         ],
         "tile_anchor": [
-          39.0,
-          0.0
+          39,
+          0
         ]
       },
       {
@@ -3952,8 +6651,8 @@
           0.0
         ],
         "tile_anchor": [
-          43.0,
-          0.0
+          43,
+          0
         ]
       },
       {
@@ -4022,8 +6721,8 @@
           40.0
         ],
         "tile_anchor": [
-          43.0,
-          40.0
+          43,
+          40
         ]
       },
       {
@@ -4092,8 +6791,8 @@
           43.0
         ],
         "tile_anchor": [
-          40.0,
-          43.0
+          40,
+          43
         ]
       },
       {
@@ -4162,8 +6861,8 @@
           43.0
         ],
         "tile_anchor": [
-          36.0,
-          43.0
+          36,
+          43
         ]
       },
       {
@@ -4232,8 +6931,8 @@
           43.0
         ],
         "tile_anchor": [
-          32.0,
-          43.0
+          32,
+          43
         ]
       },
       {
@@ -4302,8 +7001,8 @@
           43.0
         ],
         "tile_anchor": [
-          28.0,
-          43.0
+          28,
+          43
         ]
       },
       {
@@ -4372,8 +7071,8 @@
           43.0
         ],
         "tile_anchor": [
-          14.0,
-          43.0
+          14,
+          43
         ]
       },
       {
@@ -4442,8 +7141,8 @@
           43.0
         ],
         "tile_anchor": [
-          13.0,
-          43.0
+          13,
+          43
         ]
       },
       {
@@ -4512,8 +7211,8 @@
           43.0
         ],
         "tile_anchor": [
-          8.0,
-          43.0
+          8,
+          43
         ]
       },
       {
@@ -4582,8 +7281,8 @@
           43.0
         ],
         "tile_anchor": [
-          2.0,
-          43.0
+          2,
+          43
         ]
       },
       {
@@ -4652,8 +7351,8 @@
           35.0
         ],
         "tile_anchor": [
-          0.0,
-          35.0
+          0,
+          35
         ]
       },
       {
@@ -4722,8 +7421,8 @@
           31.0
         ],
         "tile_anchor": [
-          0.0,
-          31.0
+          0,
+          31
         ]
       },
       {
@@ -4792,8 +7491,8 @@
           27.0
         ],
         "tile_anchor": [
-          0.0,
-          27.0
+          0,
+          27
         ]
       },
       {
@@ -4862,8 +7561,8 @@
           23.0
         ],
         "tile_anchor": [
-          0.0,
-          23.0
+          0,
+          23
         ]
       },
       {
@@ -4932,8 +7631,8 @@
           19.0
         ],
         "tile_anchor": [
-          0.0,
-          19.0
+          0,
+          19
         ]
       },
       {
@@ -5002,8 +7701,8 @@
           15.0
         ],
         "tile_anchor": [
-          0.0,
-          15.0
+          0,
+          15
         ]
       },
       {
@@ -5072,8 +7771,8 @@
           11.0
         ],
         "tile_anchor": [
-          0.0,
-          11.0
+          0,
+          11
         ]
       },
       {
@@ -5142,8 +7841,8 @@
           7.0
         ],
         "tile_anchor": [
-          0.0,
-          7.0
+          0,
+          7
         ]
       },
       {
@@ -5212,8 +7911,8 @@
           4.0
         ],
         "tile_anchor": [
-          0.0,
-          4.0
+          0,
+          4
         ]
       },
       {
@@ -5282,8 +7981,8 @@
           0.0
         ],
         "tile_anchor": [
-          4.0,
-          0.0
+          4,
+          0
         ]
       },
       {
@@ -5352,8 +8051,8 @@
           0.0
         ],
         "tile_anchor": [
-          8.0,
-          0.0
+          8,
+          0
         ]
       },
       {
@@ -5422,8 +8121,8 @@
           0.0
         ],
         "tile_anchor": [
-          12.0,
-          0.0
+          12,
+          0
         ]
       },
       {
@@ -5492,8 +8191,8 @@
           0.0
         ],
         "tile_anchor": [
-          23.0,
-          0.0
+          23,
+          0
         ]
       },
       {
@@ -5562,8 +8261,8 @@
           0.0
         ],
         "tile_anchor": [
-          24.0,
-          0.0
+          24,
+          0
         ]
       },
       {
@@ -5632,8 +8331,8 @@
           0.0
         ],
         "tile_anchor": [
-          28.0,
-          0.0
+          28,
+          0
         ]
       },
       {
@@ -5702,8 +8401,8 @@
           0.0
         ],
         "tile_anchor": [
-          32.0,
-          0.0
+          32,
+          0
         ]
       },
       {
@@ -5772,8 +8471,8 @@
           0.0
         ],
         "tile_anchor": [
-          36.0,
-          0.0
+          36,
+          0
         ]
       },
       {
@@ -5842,8 +8541,8 @@
           36.0
         ],
         "tile_anchor": [
-          43.0,
-          36.0
+          43,
+          36
         ]
       },
       {
@@ -5912,8 +8611,8 @@
           32.0
         ],
         "tile_anchor": [
-          43.0,
-          32.0
+          43,
+          32
         ]
       },
       {
@@ -5982,8 +8681,8 @@
           28.0
         ],
         "tile_anchor": [
-          43.0,
-          28.0
+          43,
+          28
         ]
       },
       {
@@ -6052,8 +8751,8 @@
           24.0
         ],
         "tile_anchor": [
-          43.0,
-          24.0
+          43,
+          24
         ]
       },
       {
@@ -6122,8 +8821,8 @@
           20.0
         ],
         "tile_anchor": [
-          43.0,
-          20.0
+          43,
+          20
         ]
       },
       {
@@ -6192,8 +8891,8 @@
           16.0
         ],
         "tile_anchor": [
-          43.0,
-          16.0
+          43,
+          16
         ]
       },
       {
@@ -6262,8 +8961,8 @@
           12.0
         ],
         "tile_anchor": [
-          43.0,
-          12.0
+          43,
+          12
         ]
       },
       {
@@ -6332,8 +9031,8 @@
           8.0
         ],
         "tile_anchor": [
-          43.0,
-          8.0
+          43,
+          8
         ]
       },
       {
@@ -6402,8 +9101,8 @@
           4.0
         ],
         "tile_anchor": [
-          43.0,
-          4.0
+          43,
+          4
         ]
       },
       {
@@ -6472,8 +9171,8 @@
           43.0
         ],
         "tile_anchor": [
-          17.0,
-          43.0
+          17,
+          43
         ]
       },
       {
@@ -6542,8 +9241,8 @@
           43.0
         ],
         "tile_anchor": [
-          25.0,
-          43.0
+          25,
+          43
         ]
       },
       {
@@ -6612,16 +9311,18 @@
           0.0
         ],
         "tile_anchor": [
-          15.0,
-          0.0
+          15,
+          0
         ]
       }
     ],
     "terrain_front": []
   },
+  "legacy_map_id": "wooma_temple_2",
+  "legacy_runtime_map_id": 314.0,
   "map_id": "wooma_temple_f2",
-  "runtime_map_id": 314.0,
-  "schema_version": 4.0,
+  "runtime_map_id": 915002.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "derived_editor_clone",

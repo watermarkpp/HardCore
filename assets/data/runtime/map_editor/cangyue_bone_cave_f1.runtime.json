@@ -1,7 +1,7 @@
 {
-  "build_sha256": "ad432fe864b0ac1293a69f497921ea38654b3a9ff147494497b78fa3548bf512",
+  "build_sha256": "916fe2a326da84f88dd005b4bcdf1ad43b3529cda89770dbec39f7536b2595e0",
   "collision": {
-    "blocked_count": 357.0,
+    "blocked_count": 348.0,
     "blocked_tiles": [
       "0,0",
       "0,1",
@@ -166,12 +166,9 @@
       "36,10",
       "36,11",
       "36,12",
-      "36,19",
-      "36,20",
       "36,21",
       "36,22",
       "36,23",
-      "36,24",
       "36,31",
       "37,0",
       "37,10",
@@ -262,22 +259,16 @@
       "58,0",
       "58,1",
       "58,15",
-      "58,16",
       "58,2",
       "58,21",
-      "58,3",
       "58,31",
       "59,0",
       "59,1",
-      "59,15",
-      "59,16",
-      "59,2",
       "59,21",
       "59,31",
       "6,0",
       "6,31",
       "60,0",
-      "60,1",
       "60,21",
       "60,31",
       "61,0",
@@ -560,6 +551,78 @@
         "source": "single_cell_erase",
         "tile": [
           79.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
           19.0
         ]
       }
@@ -3861,7 +3924,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "asset_id": "user.7b14e427d29f4b9f",
       "base_footprint_tiles": [
@@ -3892,7 +3955,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000063",
-      "instance_scale_level": -6.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -3912,15 +3975,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.40000000000000013,
-        0.40000000000000013
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -3942,7 +4005,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "asset_id": "user.7b14e427d29f4b9f",
       "base_footprint_tiles": [
@@ -3973,7 +4036,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000064",
-      "instance_scale_level": -6.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -3993,15 +4056,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.40000000000000013,
-        0.40000000000000013
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4181,7 +4244,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "asset_id": "user.7b14e427d29f4b9f",
       "base_footprint_tiles": [
@@ -4212,7 +4275,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000137",
-      "instance_scale_level": -6.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4232,15 +4295,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.40000000000000013,
-        0.40000000000000013
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4262,7 +4325,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "asset_id": "user.7b14e427d29f4b9f",
       "base_footprint_tiles": [
@@ -4293,7 +4356,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000138",
-      "instance_scale_level": -6.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4313,15 +4376,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.40000000000000013,
-        0.40000000000000013
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4343,7 +4406,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "asset_id": "user.7b14e427d29f4b9f",
       "base_footprint_tiles": [
@@ -4374,7 +4437,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000139",
-      "instance_scale_level": -6.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4394,15 +4457,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         88.0,
-        364.0
+        324.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.40000000000000013,
-        0.40000000000000013
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4424,7 +4487,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         124.0,
-        381.6666564941406
+        355.0
       ],
       "asset_id": "mse.small_decor.009",
       "base_footprint_tiles": [
@@ -4455,7 +4518,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000140",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4475,15 +4538,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         124.0,
-        381.6666564941406
+        355.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4505,7 +4568,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         124.0,
-        381.6666564941406
+        355.0
       ],
       "asset_id": "mse.small_decor.009",
       "base_footprint_tiles": [
@@ -4536,7 +4599,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000141",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4556,15 +4619,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         124.0,
-        381.6666564941406
+        355.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4586,7 +4649,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         124.0,
-        381.6666564941406
+        355.0
       ],
       "asset_id": "mse.small_decor.009",
       "base_footprint_tiles": [
@@ -4617,7 +4680,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000142",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4637,15 +4700,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         124.0,
-        381.6666564941406
+        355.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4666,7 +4729,7 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        131.6666717529297,
+        185.0,
         345.0
       ],
       "asset_id": "mse.small_decor.022",
@@ -4687,7 +4750,7 @@
       "flip_x": false,
       "flip_y": false,
       "footprint_tiles": [
-        2.0,
+        1.0,
         1.0
       ],
       "gameplay_role": "none",
@@ -4698,7 +4761,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000143",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4708,7 +4771,7 @@
       "object_role": "decoration",
       "occlusion": true,
       "occupancy_footprint_tiles": [
-        2.0,
+        1.0,
         1.0
       ],
       "offset_px": [
@@ -4717,7 +4780,7 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        131.6666717529297,
+        185.0,
         345.0
       ],
       "placement_rule": "inside_map",
@@ -4725,22 +4788,22 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        17.0,
+        18.0,
         1.0
       ],
       "tile_anchor": [
-        17.0,
+        18.0,
         1.0
       ],
       "visual_footprint_tiles": [
-        2.0,
+        1.0,
         1.0
       ]
     },
@@ -4748,7 +4811,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         138.0,
-        267.3333435058594
+        294.0
       ],
       "asset_id": "mse.small_decor.023",
       "base_footprint_tiles": [
@@ -4768,8 +4831,8 @@
       "flip_x": false,
       "flip_y": false,
       "footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ],
       "gameplay_role": "none",
       "instance_base_footprint_tiles": [
@@ -4779,7 +4842,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000144",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4789,8 +4852,8 @@
       "object_role": "decoration",
       "occlusion": true,
       "occupancy_footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ],
       "offset_px": [
         0.0,
@@ -4799,37 +4862,37 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         138.0,
-        267.3333435058594
+        294.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        35.0,
-        21.0
+        36.0,
+        22.0
       ],
       "tile_anchor": [
-        35.0,
-        21.0
+        36.0,
+        22.0
       ],
       "visual_footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ]
     },
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
         171.0,
-        165.33334350585938
+        192.0
       ],
       "asset_id": "mse.small_decor.024",
       "base_footprint_tiles": [
@@ -4849,8 +4912,8 @@
       "flip_x": false,
       "flip_y": false,
       "footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ],
       "gameplay_role": "none",
       "instance_base_footprint_tiles": [
@@ -4860,7 +4923,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000145",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4870,8 +4933,8 @@
       "object_role": "decoration",
       "occlusion": true,
       "occupancy_footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ],
       "offset_px": [
         0.0,
@@ -4880,15 +4943,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         171.0,
-        165.33334350585938
+        192.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4902,15 +4965,15 @@
         1.0
       ],
       "visual_footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ]
     },
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
         185.0,
-        345.0
+        265.0
       ],
       "asset_id": "mse.small_decor.022",
       "base_footprint_tiles": [
@@ -4941,7 +5004,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000146",
-      "instance_scale_level": -8.0,
+      "instance_scale_level": -9.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4961,26 +5024,26 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         185.0,
-        345.0
+        265.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.10000000000000014,
+        0.10000000000000014
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
         36.0,
-        19.0
+        21.0
       ],
       "tile_anchor": [
         36.0,
-        19.0
+        21.0
       ],
       "visual_footprint_tiles": [
         1.0,
@@ -4991,7 +5054,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         185.0,
-        345.0
+        265.0
       ],
       "asset_id": "mse.small_decor.022",
       "base_footprint_tiles": [
@@ -5022,7 +5085,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000147",
-      "instance_scale_level": -8.0,
+      "instance_scale_level": -9.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -5042,25 +5105,25 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         185.0,
-        345.0
+        265.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.10000000000000014,
+        0.10000000000000014
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        60.0,
+        59.0,
         1.0
       ],
       "tile_anchor": [
-        60.0,
+        59.0,
         1.0
       ],
       "visual_footprint_tiles": [
@@ -5072,7 +5135,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         106.0,
-        331.6666564941406
+        305.0
       ],
       "asset_id": "mse.small_decor.021",
       "base_footprint_tiles": [
@@ -5103,7 +5166,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000148",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -5123,15 +5186,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         106.0,
-        331.6666564941406
+        305.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5153,7 +5216,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         106.0,
-        305.0
+        225.0
       ],
       "asset_id": "mse.small_decor.021",
       "base_footprint_tiles": [
@@ -5184,7 +5247,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000149",
-      "instance_scale_level": -8.0,
+      "instance_scale_level": -9.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -5204,15 +5267,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         106.0,
-        305.0
+        225.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.10000000000000014,
+        0.10000000000000014
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5234,7 +5297,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         106.0,
-        305.0
+        225.0
       ],
       "asset_id": "mse.small_decor.021",
       "base_footprint_tiles": [
@@ -5265,7 +5328,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000150",
-      "instance_scale_level": -8.0,
+      "instance_scale_level": -9.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -5285,26 +5348,26 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         106.0,
-        305.0
+        225.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.10000000000000014,
+        0.10000000000000014
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
         58.0,
-        3.0
+        2.0
       ],
       "tile_anchor": [
         58.0,
-        3.0
+        2.0
       ],
       "visual_footprint_tiles": [
         1.0,
@@ -5315,7 +5378,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         106.0,
-        305.0
+        225.0
       ],
       "asset_id": "mse.small_decor.021",
       "base_footprint_tiles": [
@@ -5346,7 +5409,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000151",
-      "instance_scale_level": -8.0,
+      "instance_scale_level": -9.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -5366,26 +5429,26 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         106.0,
-        305.0
+        225.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.10000000000000014,
+        0.10000000000000014
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
         36.0,
-        24.0
+        23.0
       ],
       "tile_anchor": [
         36.0,
-        24.0
+        23.0
       ],
       "visual_footprint_tiles": [
         1.0,
@@ -5396,7 +5459,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         170.0,
-        131.0
+        104.33333587646484
       ],
       "asset_id": "mse.small_decor.036",
       "base_footprint_tiles": [
@@ -5427,7 +5490,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000152",
-      "instance_scale_level": -6.0,
+      "instance_scale_level": -7.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -5447,15 +5510,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         170.0,
-        131.0
+        104.33333587646484
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.40000000000000013,
-        0.40000000000000013
+        0.30000000000000016,
+        0.30000000000000016
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5477,7 +5540,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         167.0,
-        141.33334350585938
+        168.0
       ],
       "asset_id": "mse.small_decor.038",
       "base_footprint_tiles": [
@@ -5497,8 +5560,8 @@
       "flip_x": false,
       "flip_y": false,
       "footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ],
       "gameplay_role": "none",
       "instance_base_footprint_tiles": [
@@ -5508,7 +5571,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000153",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -5518,8 +5581,8 @@
       "object_role": "decoration",
       "occlusion": true,
       "occupancy_footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ],
       "offset_px": [
         0.0,
@@ -5528,15 +5591,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         167.0,
-        141.33334350585938
+        168.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5550,8 +5613,8 @@
         15.0
       ],
       "visual_footprint_tiles": [
-        2.0,
-        2.0
+        1.0,
+        1.0
       ]
     },
     {
@@ -5633,6 +5696,164 @@
       "visual_footprint_tiles": [
         2.0,
         2.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        26.0,
+        67.0
+      ],
+      "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+      "base_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000155",
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        26.0,
+        67.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        77.0,
+        15.0
+      ],
+      "tile_anchor": [
+        77.0,
+        15.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "anchor_mode": "foot_tile",
+      "anchor_px": [
+        26.0,
+        67.0
+      ],
+      "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+      "base_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "collision_authority": "manual_by_user",
+      "collision_cells": [],
+      "collision_footprint_tiles": [
+        0.0,
+        0.0
+      ],
+      "collision_policy": "none",
+      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+      "collision_profile_id": "none_visual",
+      "content_layer": "personal_expansion",
+      "flip_x": false,
+      "flip_y": false,
+      "footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "gameplay_role": "none",
+      "instance_base_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "instance_base_scale": 1.0,
+      "instance_id": "inst_000156",
+      "layer": "object_base",
+      "manual_collision_expected": true,
+      "map_collision_override": "disabled",
+      "material_layer_order": 0.0,
+      "movable": true,
+      "navigation_policy": "ignore",
+      "object_role": "decoration",
+      "occlusion": true,
+      "occupancy_footprint_tiles": [
+        1.0,
+        1.0
+      ],
+      "offset_px": [
+        0.0,
+        0.0
+      ],
+      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+      "placement_anchor_px": [
+        26.0,
+        67.0
+      ],
+      "placement_rule": "inside_map",
+      "position_mode": "tile_anchor",
+      "rotation_deg": 0.0,
+      "runtime_export": true,
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "scene_intent": "visual_detail",
+      "selectable": true,
+      "selection_locked": false,
+      "tile": [
+        5.0,
+        5.0
+      ],
+      "tile_anchor": [
+        5.0,
+        5.0
+      ],
+      "visual_footprint_tiles": [
+        1.0,
+        1.0
       ]
     },
     {
@@ -13082,6 +13303,7 @@
         "display_name": "苍月岛",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000155",
         "official_connection_id": "portal.cangyue_bone_cave_f1.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -13124,6 +13346,7 @@
         "display_name": "骨魔洞2层",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000156",
         "official_connection_id": "portal.cangyue_bone_cave_f1.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -13191,8 +13414,6 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000001",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000001",
@@ -13237,8 +13458,6 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000002",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000002",
@@ -13283,8 +13502,6 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000003",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000003",
@@ -13305,9 +13522,7 @@
         "max_alive": 1.0,
         "monster_id": 234.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000004",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000004",
@@ -13328,9 +13543,7 @@
         "max_alive": 1.0,
         "monster_id": 233.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000005",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000005",
@@ -13351,9 +13564,7 @@
         "max_alive": 1.0,
         "monster_id": 232.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000006",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000006",
@@ -13374,9 +13585,7 @@
         "max_alive": 1.0,
         "monster_id": 231.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000007",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000007",
@@ -13397,9 +13606,7 @@
         "max_alive": 1.0,
         "monster_id": 230.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000008",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000008",
@@ -13420,9 +13627,7 @@
         "max_alive": 1.0,
         "monster_id": 229.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000009",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000009",
@@ -13443,9 +13648,7 @@
         "max_alive": 1.0,
         "monster_id": 228.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000010",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000010",
@@ -13466,9 +13669,7 @@
         "max_alive": 1.0,
         "monster_id": 200.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000011",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000011",
@@ -13513,8 +13714,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000012",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000012",
@@ -13559,8 +13759,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000013",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000013",
@@ -13605,8 +13804,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000014",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000014",
@@ -13627,9 +13825,7 @@
         "max_alive": 1.0,
         "monster_id": 200.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000015",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000015",
@@ -13650,9 +13846,7 @@
         "max_alive": 1.0,
         "monster_id": 200.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000016",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000016",
@@ -13673,9 +13867,7 @@
         "max_alive": 1.0,
         "monster_id": 200.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000017",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000017",
@@ -13720,8 +13912,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000018",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000018",
@@ -13766,8 +13957,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000019",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000019",
@@ -13812,8 +14002,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000020",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000020",
@@ -13858,8 +14047,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000021",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000021",
@@ -13904,8 +14092,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000022",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000022",
@@ -13950,8 +14137,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000023",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000023",
@@ -13996,8 +14182,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000024",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000024",
@@ -14042,8 +14227,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000025",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000025",
@@ -14088,8 +14272,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000026",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000026",
@@ -14134,8 +14317,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000027",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000027",
@@ -14180,8 +14362,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000028",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000028",
@@ -14226,8 +14407,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000029",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000029",
@@ -14248,9 +14428,7 @@
         "max_alive": 1.0,
         "monster_id": 200.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000030",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000030",
@@ -14271,9 +14449,7 @@
         "max_alive": 1.0,
         "monster_id": 200.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000031",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000031",
@@ -14294,9 +14470,7 @@
         "max_alive": 1.0,
         "monster_id": 200.0,
         "radius_gu": 3.0,
-        "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000032",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000032",
@@ -14341,8 +14515,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000033",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000033",
@@ -14387,8 +14560,7 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "normal_cave",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 480.0,
+        "respawn_seconds": 60.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000034",
         "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000034",
@@ -14396,6 +14568,1209 @@
         "tile": [
           38.0,
           19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000035",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000035",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          7.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000036",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000036",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_gu": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000037",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000037",
+        "spawn_rule": "ambient",
+        "tile": [
+          19.0,
+          7.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_gu": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000038",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000038",
+        "spawn_rule": "ambient",
+        "tile": [
+          19.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000039",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000039",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_gu": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000040",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000040",
+        "spawn_rule": "ambient",
+        "tile": [
+          63.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_gu": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000041",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000041",
+        "spawn_rule": "ambient",
+        "tile": [
+          62.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000042",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000042",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          68.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000043",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000043",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          67.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000044",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000044",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          64.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000045",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000045",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          65.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000046",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000046",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          63.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000047",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000047",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000048",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000048",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000049",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000049",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          47.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000050",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000050",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          48.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000051",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000051",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          43.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 206.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            6.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -3.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000052",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000052",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          39.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000053",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000053",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000054",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000054",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000055",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000055",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          46.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000056",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000056",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅长枪兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 202.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            56.0,
+            1.0,
+            1.0,
+            2112.0,
+            -30.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000057",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000057",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          18.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅弓箭手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 206.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            62.0,
+            6.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -3.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000058",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000058",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          26.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000059",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000059",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          25.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000060",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000060",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          21.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1",
+          "source_category_role": "ordinary",
+          "source_line": 268.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅刀斧手",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 204.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            71.0,
+            15.0,
+            1.0,
+            2112.0,
+            -1.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000061",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000061",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_gu": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000062",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000062",
+        "spawn_rule": "ambient",
+        "tile": [
+          2.0,
+          22.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_gu": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000063",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000063",
+        "spawn_rule": "ambient",
+        "tile": [
+          4.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_gu": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000064",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000064",
+        "spawn_rule": "ambient",
+        "tile": [
+          7.0,
+          18.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "cangyue_bone_cave_f1"
+        },
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅锤兵",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 200.0,
+        "radius_gu": 3.0,
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f1.monster_spawn.000065",
+        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f1.monster_spawn.000065",
+        "spawn_rule": "ambient",
+        "tile": [
+          3.0,
+          14.0
         ]
       }
     ],
@@ -14406,12 +15781,12 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "e94f6e9baddbd8f07fb7915f6b6c6663b3cce8aaf7372ac3ba0f3da036661f7e",
+      "authoring_sha256": "fc50032e0f541cbee25c781caef6ad1a187054ee686c6a4c4e3aa37db93840bc",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 2.0,
-      "document_sha256": "3336ff483b7de9bcba3e956e938a236f0331f5b78dbc0aa2cdfd1c81f3b4b19e",
-      "ground_manifest_sha256": "8ce68f6f1b75f3d8a57156d453094195958e2a334f86952c599a47948185aad9",
-      "ground_state_sha256": "6def29790d5a69eec16566e9f15c81855e335fa4c6002dec796e591d29ab8d22",
+      "document_revision": 39.0,
+      "document_sha256": "1fc7f5b03d7a84e7952b6208951beba94628528fa43b2ae7a17ad27bcff3f279",
+      "ground_manifest_sha256": "c222b95c821bb7d164508b8be5ab2101322947cd84304aaa159c821f933bf429",
+      "ground_state_sha256": "a26ef65367a818f6488b759ede144bb4aee8d652affcd15695b47ab84ebc0e4f",
       "map_key": "cangyue_bone_cave_f1",
       "runtime_map_id": 917001.0
     },
@@ -14419,7 +15794,7 @@
     "display_name": "骨魔洞一层",
     "editor_schema_version": 5.0,
     "map_id": "cangyue_bone_cave_f1",
-    "revision": 2.0,
+    "revision": 39.0,
     "runtime_map_id": 917001.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1"

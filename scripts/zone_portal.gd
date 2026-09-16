@@ -33,7 +33,7 @@ func _ready() -> void:
 	add_to_group("zone_content")
 	var label := Label.new()
 	label.text = display_name
-	label.position = Vector2(-90, -78)
+	label.position = Vector2(-90, _label_offset_y())
 	label.size = Vector2(180, 28)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 18)
@@ -43,6 +43,20 @@ func _ready() -> void:
 	label.add_theme_constant_override("shadow_offset_y", 2)
 	add_child(label)
 	queue_redraw()
+
+
+func _has_linked_portal_visual() -> bool:
+	return not str(portal_data.get("linked_visual_asset_id", "")).is_empty()
+
+
+## The authored portal label rides above the placeholder circle by default.
+## When a linked portal-gate visual exists, the label moves above that
+## visual's top vertex so the artwork and the caption never overlap.
+func _label_offset_y() -> float:
+	var top_offset := float(portal_data.get("visual_top_offset_px", 0.0))
+	if _has_linked_portal_visual() and top_offset > 0.0:
+		return -(top_offset + 32.0)
+	return -78.0
 
 
 func interact(game: Node) -> void:
@@ -60,6 +74,11 @@ func interaction_text() -> String:
 
 
 func _draw() -> void:
+	# A linked portal-gate instance is the portal's authored visual; the
+	# generated placeholder circles would double-paint over it. The node
+	# itself remains the interaction anchor (position/interact untouched).
+	if _has_linked_portal_visual():
+		return
 	var color := _role_color()
 	draw_circle(Vector2.ZERO, 46.0, Color(color.r * 0.32, color.g * 0.32, color.b * 0.32, 0.54))
 	draw_circle(Vector2.ZERO, 38.0, Color(color.r, color.g, color.b, 0.22))

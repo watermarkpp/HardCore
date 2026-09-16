@@ -1,5 +1,5 @@
 {
-  "build_sha256": "776af12683de5c80fe2beac03f6ec91370286543a8af91e6863f08860f67f1e0",
+  "build_sha256": "d94ce18f45c64b7d2e877b108a6cd5453a3731ede294df7b1c2f411eca3d3b88",
   "collision": {
     "blocked_count": 132.0,
     "blocked_tiles": [
@@ -1843,7 +1843,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         81.0,
-        333.6666564941406
+        307.0
       ],
       "asset_id": "user.8c02110c6c156d86",
       "base_footprint_tiles": [
@@ -1874,7 +1874,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000037",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -1894,15 +1894,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         81.0,
-        333.6666564941406
+        307.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -1924,88 +1924,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         81.0,
-        333.6666564941406
-      ],
-      "asset_id": "user.8c02110c6c156d86",
-      "base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "collision_authority": "manual_by_user",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "gameplay_role": "none",
-      "instance_base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "instance_base_scale": 1.0,
-      "instance_custom_scale": true,
-      "instance_id": "inst_000038",
-      "instance_scale_level": -7.0,
-      "layer": "object_base",
-      "manual_collision_expected": true,
-      "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": true,
-      "occupancy_footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.30000000000000016,
-        0.30000000000000016
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        30.0,
-        1.0
-      ],
-      "tile_anchor": [
-        30.0,
-        1.0
-      ],
-      "visual_footprint_tiles": [
-        1.0,
-        1.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        81.0,
-        333.6666564941406
+        307.0
       ],
       "asset_id": "user.8c02110c6c156d86",
       "base_footprint_tiles": [
@@ -2036,7 +1955,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000039",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -2056,15 +1975,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         81.0,
-        333.6666564941406
+        307.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -2086,7 +2005,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         81.0,
-        333.6666564941406
+        307.0
       ],
       "asset_id": "user.8c02110c6c156d86",
       "base_footprint_tiles": [
@@ -2117,7 +2036,7 @@
       "instance_base_scale": 1.0,
       "instance_custom_scale": true,
       "instance_id": "inst_000040",
-      "instance_scale_level": -7.0,
+      "instance_scale_level": -8.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -2137,15 +2056,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         81.0,
-        333.6666564941406
+        307.0
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.20000000000000015,
+        0.20000000000000015
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -2156,330 +2075,6 @@
       ],
       "tile_anchor": [
         1.0,
-        15.0
-      ],
-      "visual_footprint_tiles": [
-        1.0,
-        1.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "asset_id": "user.8c02110c6c156d86",
-      "base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "collision_authority": "manual_by_user",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "gameplay_role": "none",
-      "instance_base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "instance_base_scale": 1.0,
-      "instance_custom_scale": true,
-      "instance_id": "inst_000041",
-      "instance_scale_level": -7.0,
-      "layer": "object_base",
-      "manual_collision_expected": true,
-      "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": true,
-      "occupancy_footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.30000000000000016,
-        0.30000000000000016
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        1.0,
-        30.0
-      ],
-      "tile_anchor": [
-        1.0,
-        30.0
-      ],
-      "visual_footprint_tiles": [
-        1.0,
-        1.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "asset_id": "user.8c02110c6c156d86",
-      "base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "collision_authority": "manual_by_user",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "gameplay_role": "none",
-      "instance_base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "instance_base_scale": 1.0,
-      "instance_custom_scale": true,
-      "instance_id": "inst_000042",
-      "instance_scale_level": -7.0,
-      "layer": "object_base",
-      "manual_collision_expected": true,
-      "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": true,
-      "occupancy_footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.30000000000000016,
-        0.30000000000000016
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        15.0,
-        30.0
-      ],
-      "tile_anchor": [
-        15.0,
-        30.0
-      ],
-      "visual_footprint_tiles": [
-        1.0,
-        1.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "asset_id": "user.8c02110c6c156d86",
-      "base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "collision_authority": "manual_by_user",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "gameplay_role": "none",
-      "instance_base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "instance_base_scale": 1.0,
-      "instance_custom_scale": true,
-      "instance_id": "inst_000043",
-      "instance_scale_level": -7.0,
-      "layer": "object_base",
-      "manual_collision_expected": true,
-      "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": true,
-      "occupancy_footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.30000000000000016,
-        0.30000000000000016
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        30.0,
-        30.0
-      ],
-      "tile_anchor": [
-        30.0,
-        30.0
-      ],
-      "visual_footprint_tiles": [
-        1.0,
-        1.0
-      ]
-    },
-    {
-      "anchor_mode": "foot_tile",
-      "anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "asset_id": "user.8c02110c6c156d86",
-      "base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "collision_authority": "manual_by_user",
-      "collision_cells": [],
-      "collision_footprint_tiles": [
-        0.0,
-        0.0
-      ],
-      "collision_policy": "none",
-      "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-      "collision_profile_id": "none_visual",
-      "content_layer": "personal_expansion",
-      "flip_x": false,
-      "flip_y": false,
-      "footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "gameplay_role": "none",
-      "instance_base_footprint_tiles": [
-        3.0,
-        3.0
-      ],
-      "instance_base_scale": 1.0,
-      "instance_custom_scale": true,
-      "instance_id": "inst_000044",
-      "instance_scale_level": -7.0,
-      "layer": "object_base",
-      "manual_collision_expected": true,
-      "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
-      "movable": true,
-      "navigation_policy": "ignore",
-      "object_role": "decoration",
-      "occlusion": true,
-      "occupancy_footprint_tiles": [
-        1.0,
-        1.0
-      ],
-      "offset_px": [
-        0.0,
-        0.0
-      ],
-      "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-      "placement_anchor_px": [
-        81.0,
-        333.6666564941406
-      ],
-      "placement_rule": "inside_map",
-      "position_mode": "tile_anchor",
-      "rotation_deg": 0.0,
-      "runtime_export": true,
-      "scale": [
-        0.30000000000000016,
-        0.30000000000000016
-      ],
-      "scene_intent": "visual_detail",
-      "selectable": true,
-      "selection_locked": false,
-      "tile": [
-        30.0,
-        15.0
-      ],
-      "tile_anchor": [
-        30.0,
         15.0
       ],
       "visual_footprint_tiles": [
@@ -5557,9 +5152,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "boss",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 3600.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.hidden_fallen_graveyard.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.hidden_fallen_graveyard.boss_spawn.000001",
@@ -5615,12 +5207,12 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "bcf26b0ab6784fb8e475e33239e33956ab4b00156b6486000fbf85475423749d",
+      "authoring_sha256": "4bc7ee77fda91b15d458a17e1a462f7b5e8fa778e6ecbf0299121f73548bc265",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 2.0,
-      "document_sha256": "3e28f5cc024e66a4a5355c7a8754ba527c74486159fc70dabf5c11f259487850",
-      "ground_manifest_sha256": "b5cc13fa82420dd9528239b2a8bcfd1c6f954d8ec74c17cfa6b2da09066a908d",
-      "ground_state_sha256": "868962e1692040543e2a21730971e1c0e3864bf5d9c882c00b5ad6c3fc6516ac",
+      "document_revision": 12.0,
+      "document_sha256": "c7b0c8d15c1401a3a66c8920ded146b9307e35f91d53ed5dc16a8c18f254e55f",
+      "ground_manifest_sha256": "162b330a2719a95559fbb79e61291543d83bd51bd461bb072dea160bb04dd45b",
+      "ground_state_sha256": "28a8d7e279f1aa5cb70c54521373dff33e1008478b50e1fd03fa97b0869e07af",
       "map_key": "hidden_fallen_graveyard",
       "runtime_map_id": 918003.0
     },
@@ -5628,7 +5220,7 @@
     "display_name": "堕落坟场",
     "editor_schema_version": 5.0,
     "map_id": "hidden_fallen_graveyard",
-    "revision": 2.0,
+    "revision": 12.0,
     "runtime_map_id": 918003.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1"

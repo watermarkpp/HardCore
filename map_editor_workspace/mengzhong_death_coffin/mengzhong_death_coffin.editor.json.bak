@@ -46,11 +46,17 @@
     ],
     "clone_policy": "full_workspace_clone_without_exit_links_v1",
     "clone_source_map_id": "hadd_2",
+    "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
+    "default_connection_mode": "bidirectional",
     "exit_link_status": "intentionally_unlinked",
-    "revision": 1.0,
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
+    "portal_contract_id": "unified_map_portal_endpoint_v1",
+    "revision": 13,
+    "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/mengzhong_death_coffin"
   },
   "ground": {
@@ -63,14 +69,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       2048.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/mengzhong_death_coffin.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/mengzhong_death_coffin.ground_paint_state.json",
@@ -80,8 +86,184 @@
     "workspace_manifest": "res://map_editor_workspace/mengzhong_death_coffin/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/mengzhong_death_coffin/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "boss",
+          "source_line": 151.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "触龙神",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 124.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            80.0,
+            1.0,
+            1.0,
+            1075.0,
+            -1.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4.0,
+          7.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "elite",
+          "source_line": 134.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶钳虫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 120.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            42.0,
+            5.0,
+            5.0,
+            1026.0,
+            -35.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          39.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "elite",
+          "source_line": 134.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶钳虫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 120.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            42.0,
+            5.0,
+            5.0,
+            1026.0,
+            -35.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          29.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "elite",
+          "source_line": 134.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "邪恶钳虫",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 120.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            42.0,
+            5.0,
+            5.0,
+            1026.0,
+            -35.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.boss_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          11.0
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -5042,6 +5224,38 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000311",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            25,
+            31,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000312",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            25,
+            30,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -5060,6 +5274,990 @@
           30.0,
           34.0
         ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          56
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13,
+          56
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13,
+          57
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          58
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          57
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          58
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          59
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          60
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17,
+          59
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17,
+          61
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17,
+          62
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          62
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16,
+          61
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          60
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          59
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13,
+          58
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13,
+          59
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          60
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          61
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          61
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13,
+          60
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15,
+          62
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13,
+          61
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7,
+          47
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8,
+          46
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6,
+          45
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          45
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          46
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          42
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6,
+          41
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4,
+          40
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          40
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          41
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26,
+          33
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27,
+          32
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27,
+          33
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          32
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          33
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29,
+          32
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29,
+          33
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30,
+          33
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30,
+          32
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          6
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          5
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20,
+          5
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          4
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          4
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          2
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18,
+          2
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18,
+          1
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          1
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18,
+          4
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17,
+          4
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          5
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18,
+          5
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6,
+          6
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7,
+          5
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          4
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4,
+          4
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4,
+          5
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4,
+          18
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          17
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          16
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          15
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4,
+          15
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          17
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          21
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          19
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          19
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          18
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          19
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24,
+          18
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6,
+          21
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7,
+          21
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          23
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4,
+          23
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          23
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1,
+          21
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          47
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4,
+          47
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2,
+          47
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          47
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1,
+          47
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          45
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          44
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19,
+          43
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20,
+          43
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          43
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          42
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          42
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          41
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          41
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          40
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          39
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24,
+          39
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25,
+          38
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25,
+          39
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26,
+          38
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26,
+          37
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27,
+          37
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          37
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29,
+          37
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30,
+          37
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20,
+          46
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20,
+          45
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20,
+          44
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          49
+        ]
       }
     ],
     "door_points": [],
@@ -5072,77 +6270,3060 @@
     "map_exit_points": [
       {
         "arrival_locks_current_portal": true,
+        "arrival_only": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "arrival_only",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "由一线天进入，单向只可进入",
         "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "arrival_only_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
-        "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1.0,
         "tile": [
-          25,
-          57
+          25.0,
+          57.0
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
-      },
-      {
-        "arrival_locks_current_portal": true,
-        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
-        "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
-        "connection_policy_id": "map_connection_unified_bidirectional_v2",
-        "content_layer": "personal_expansion",
-        "exit_id": "map_exit_000002",
-        "kind": "map_exit",
-        "one_way": false,
-        "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
-        "requires_leave_before_retrigger": true,
-        "return_minimum_seconds": 3.0,
-        "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
-        "runtime_export": true,
-        "semantic_id": "map_exit_000002",
-        "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
-        "tile": [
-          26,
-          5
-        ],
-        "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": false
       }
     ],
-    "monster_spawn": [],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16.0,
+          47.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000002",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          38.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          42.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          44.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19.0,
+          30.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000006",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000006",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          12.0,
+          45.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15.0,
+          42.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          32.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19.0,
+          26.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7.0,
+          40.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          25.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000012",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000012",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25,
+          28
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000013",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000013",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          35.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000014",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000014",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          25,
+          34
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000015",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000015",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21.0,
+          33.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000016",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000016",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            33.0,
+            26.0,
+            1.0,
+            1026.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000017",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000017",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          47.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            33.0,
+            26.0,
+            1.0,
+            1026.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000018",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000018",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17.0,
+          27.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "跳跳蜂",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 114.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            33.0,
+            26.0,
+            1.0,
+            1026.0,
+            -6.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000019",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000019",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16.0,
+          23.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000020",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000020",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000021",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000021",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000022",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000022",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000023",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000023",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000024",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000024",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000025",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000025",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000026",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000026",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21,
+          27
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000027",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000027",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21,
+          25
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000028",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000028",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          36
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000029",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000029",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          40
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蜈蚣",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 110,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            8.0,
+            1.0,
+            1026.0,
+            -1.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000030",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000030",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14,
+          44
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000031",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000031",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          43
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000032",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000032",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          9,
+          40
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000033",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000033",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15,
+          39
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000034",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000034",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000035",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000035",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20,
+          28
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000036",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000036",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21,
+          31
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000037",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000037",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          17,
+          25
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000038",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000038",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000039",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000039",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24,
+          12
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000040",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000040",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000041",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000041",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22,
+          14
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钳虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 118,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            26.0,
+            25.0,
+            15.0,
+            1026.0,
+            -19.0,
+            -15.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000042",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000042",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20,
+          11
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000043",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000043",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          20,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000044",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000044",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          24,
+          16
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000045",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000045",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26,
+          15
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000046",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000046",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11,
+          12
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000047",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000047",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10,
+          15
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000048",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000048",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          15
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000049",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000049",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          47
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000050",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000050",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13,
+          43
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "黑色恶蛆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 112,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            52.0,
+            10.0,
+            1.0,
+            1026.0,
+            -62.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000051",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000051",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15,
+          40
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000052",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000052",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8,
+          42
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000053",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000053",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11,
+          37
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000054",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000054",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16,
+          44
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000055",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000055",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19,
+          28
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000056",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000056",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19,
+          32
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000057",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000057",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23,
+          27
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000058",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000058",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18,
+          24
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000059",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000059",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          7,
+          12
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000060",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000060",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6,
+          10
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000061",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000061",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          6,
+          8
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000062",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000062",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          4,
+          9
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000063",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000063",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          18,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000064",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000064",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          21,
+          15
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000065",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000065",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23,
+          17
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000066",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000066",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          26,
+          13
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "mengzhong_death_coffin",
+          "source_category_role": "ordinary",
+          "source_line": 133.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "巨型蠕虫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 116,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            29.0,
+            1.0,
+            1026.0,
+            -30.0,
+            -30.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "normal_cave",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.mengzhong_death_coffin.monster_spawn.000067",
+        "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000067",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          19,
+          15
+        ]
+      }
+    ],
     "npc_points": [],
     "object_base": [
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          174.0,
-          270.0
+          200.6666717529297,
+          256.66668701171875
         ],
         "asset_id": "user.f0d72af3638e0c81",
         "collision_authority": "asset",
@@ -5158,7 +9339,7 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
+          3.0,
           2.0
         ],
         "gameplay_role": "none",
@@ -5169,7 +9350,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000213",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -5179,7 +9360,7 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
+          3.0,
           2.0
         ],
         "offset_px": [
@@ -5188,30 +9369,30 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          174.0,
-          270.0
+          200.6666717529297,
+          256.66668701171875
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          4.0,
-          5.0
+          5,
+          5
         ],
         "tile_anchor": [
-          4.0,
-          5.0
+          5,
+          5
         ],
         "visual_footprint_tiles": [
-          4.0,
+          3.0,
           2.0
         ]
       },
@@ -5235,8 +9416,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5246,7 +9427,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000214",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -5256,8 +9437,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -5273,30 +9454,30 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          15.0
+          3,
+          16
         ],
         "tile_anchor": [
-          2.0,
-          15.0
+          3,
+          16
         ],
         "visual_footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          184.0,
-          247.0
+          170.6666717529297,
+          253.6666717529297
         ],
         "asset_id": "user.13c20d8e4aa45974",
         "collision_authority": "asset",
@@ -5312,8 +9493,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          3.0
+          3.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5323,7 +9504,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000215",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -5333,8 +9514,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          3.0
+          3.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -5342,38 +9523,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          184.0,
-          247.0
+          170.6666717529297,
+          253.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          45.0
+          6,
+          46
         ],
         "tile_anchor": [
-          5.0,
-          45.0
+          6,
+          46
         ],
         "visual_footprint_tiles": [
-          4.0,
-          3.0
+          3.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          174.0,
-          270.0
+          200.6666717529297,
+          256.66668701171875
         ],
         "asset_id": "user.f0d72af3638e0c81",
         "collision_authority": "asset",
@@ -5389,7 +9570,7 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
+          3.0,
           2.0
         ],
         "gameplay_role": "none",
@@ -5400,7 +9581,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000216",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -5410,7 +9591,7 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
+          3.0,
           2.0
         ],
         "offset_px": [
@@ -5419,38 +9600,38 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          174.0,
-          270.0
+          200.6666717529297,
+          256.66668701171875
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3.0,
-          41.0
+          4,
+          41
         ],
         "tile_anchor": [
-          3.0,
-          41.0
+          4,
+          41
         ],
         "visual_footprint_tiles": [
-          4.0,
+          3.0,
           2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          198.0,
-          252.0
+          211.3333282470703,
+          245.33334350585938
         ],
         "asset_id": "user.0126c24686128af2",
         "collision_authority": "asset",
@@ -5466,8 +9647,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          5.0
+          3.0,
+          4.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5477,7 +9658,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000217",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -5487,8 +9668,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          5.0
+          3.0,
+          4.0
         ],
         "offset_px": [
           0.0,
@@ -5496,31 +9677,31 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          198.0,
-          252.0
+          211.3333282470703,
+          245.33334350585938
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          31.0
+          24,
+          29
         ],
         "tile_anchor": [
-          26.0,
-          31.0
+          24,
+          29
         ],
         "visual_footprint_tiles": [
-          4.0,
-          5.0
+          3.0,
+          4.0
         ]
       },
       {
@@ -5543,8 +9724,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5554,7 +9735,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000218",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -5564,8 +9745,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -5581,23 +9762,23 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          19.0,
-          3.0
+          20,
+          4
         ],
         "tile_anchor": [
-          19.0,
-          3.0
+          20,
+          4
         ],
         "visual_footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ]
       },
       {
@@ -5620,8 +9801,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5631,7 +9812,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000219",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -5641,8 +9822,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ],
         "offset_px": [
           0.0,
@@ -5658,23 +9839,23 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          14.0,
-          57.0
+          15,
+          58
         ],
         "tile_anchor": [
-          14.0,
-          57.0
+          15,
+          58
         ],
         "visual_footprint_tiles": [
-          4.0,
-          4.0
+          3.0,
+          3.0
         ]
       },
       {
@@ -5744,79 +9925,8 @@
           56.0
         ],
         "tile_anchor": [
-          24.0,
-          56.0
-        ]
-      },
-      {
-        "anchor_mode": "tile_center",
-        "anchor_px": [
-          96.0,
-          48.0
-        ],
-        "asset_id": "mse.ground_graffiti.3x3.06",
-        "collision_authority": "visual_only",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "gameplay_role": "none",
-        "instance_base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_id": "inst_000222",
-        "layer": "object_base",
-        "manual_collision_expected": false,
-        "map_collision_override": "default",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": false,
-        "occupancy_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "",
-        "placement_anchor_px": [
-          96.0,
-          48.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          25.0,
-          4.0
-        ],
-        "tile_anchor": [
-          25.0,
-          4.0
+          24,
+          56
         ]
       },
       {
@@ -5884,12 +9994,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          36.0
+          6,
+          36
         ],
         "tile_anchor": [
-          6.0,
-          36.0
+          6,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5961,12 +10071,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          8.0
+          18,
+          8
         ],
         "tile_anchor": [
-          18.0,
-          8.0
+          18,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6038,12 +10148,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          53.0
+          11,
+          53
         ],
         "tile_anchor": [
-          11.0,
-          53.0
+          11,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6115,12 +10225,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          36.0
+          5,
+          36
         ],
         "tile_anchor": [
-          5.0,
-          36.0
+          5,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6192,12 +10302,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          18.0
+          6,
+          18
         ],
         "tile_anchor": [
-          6.0,
-          18.0
+          6,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6269,12 +10379,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          36.0
+          7,
+          36
         ],
         "tile_anchor": [
-          7.0,
-          36.0
+          7,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6346,12 +10456,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          35.0
+          7,
+          35
         ],
         "tile_anchor": [
-          7.0,
-          35.0
+          7,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6423,12 +10533,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          51.0
+          10,
+          51
         ],
         "tile_anchor": [
-          10.0,
-          51.0
+          10,
+          51
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6500,12 +10610,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          19.0
+          6,
+          19
         ],
         "tile_anchor": [
-          6.0,
-          19.0
+          6,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6577,12 +10687,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          17.0
+          6,
+          17
         ],
         "tile_anchor": [
-          6.0,
-          17.0
+          6,
+          17
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6654,12 +10764,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          19.0,
-          8.0
+          19,
+          8
         ],
         "tile_anchor": [
-          19.0,
-          8.0
+          19,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6731,12 +10841,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          19.0,
-          7.0
+          19,
+          7
         ],
         "tile_anchor": [
-          19.0,
-          7.0
+          19,
+          7
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6808,12 +10918,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          20.0,
-          7.0
+          20,
+          7
         ],
         "tile_anchor": [
-          20.0,
-          7.0
+          20,
+          7
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6885,12 +10995,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          9.0
+          18,
+          9
         ],
         "tile_anchor": [
-          18.0,
-          9.0
+          18,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6962,12 +11072,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          10.0
+          18,
+          10
         ],
         "tile_anchor": [
-          18.0,
-          10.0
+          18,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7039,12 +11149,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          8.0,
-          35.0
+          8,
+          35
         ],
         "tile_anchor": [
-          8.0,
-          35.0
+          8,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7129,8 +11239,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ]
       },
       {
@@ -7203,8 +11313,8 @@
           1.0
         ],
         "tile_anchor": [
-          0.0,
-          1.0
+          0,
+          1
         ]
       },
       {
@@ -7277,8 +11387,8 @@
           0.0
         ],
         "tile_anchor": [
-          1.0,
-          0.0
+          1,
+          0
         ]
       },
       {
@@ -7351,8 +11461,8 @@
           5.0
         ],
         "tile_anchor": [
-          0.0,
-          5.0
+          0,
+          5
         ]
       },
       {
@@ -7425,8 +11535,8 @@
           0.0
         ],
         "tile_anchor": [
-          5.0,
-          0.0
+          5,
+          0
         ]
       },
       {
@@ -7499,8 +11609,8 @@
           9.0
         ],
         "tile_anchor": [
-          0.0,
-          9.0
+          0,
+          9
         ]
       },
       {
@@ -7573,8 +11683,8 @@
           0.0
         ],
         "tile_anchor": [
-          9.0,
-          0.0
+          9,
+          0
         ]
       },
       {
@@ -7647,8 +11757,8 @@
           13.0
         ],
         "tile_anchor": [
-          0.0,
-          13.0
+          0,
+          13
         ]
       },
       {
@@ -7721,8 +11831,8 @@
           0.0
         ],
         "tile_anchor": [
-          13.0,
-          0.0
+          13,
+          0
         ]
       },
       {
@@ -7795,8 +11905,8 @@
           17.0
         ],
         "tile_anchor": [
-          0.0,
-          17.0
+          0,
+          17
         ]
       },
       {
@@ -7869,8 +11979,8 @@
           0.0
         ],
         "tile_anchor": [
-          17.0,
-          0.0
+          17,
+          0
         ]
       },
       {
@@ -7939,12 +12049,12 @@
         "structure_id": "mengzhong_death_coffin.closed_loop.0_0_32_64",
         "structure_role": "edge_min_x_05",
         "tile": [
-          0.0,
-          21.0
+          0,
+          21
         ],
         "tile_anchor": [
-          0.0,
-          21.0
+          0,
+          21
         ]
       },
       {
@@ -8017,8 +12127,8 @@
           0.0
         ],
         "tile_anchor": [
-          21.0,
-          0.0
+          21,
+          0
         ]
       },
       {
@@ -8091,8 +12201,8 @@
           25.0
         ],
         "tile_anchor": [
-          0.0,
-          25.0
+          0,
+          25
         ]
       },
       {
@@ -8165,8 +12275,8 @@
           0.0
         ],
         "tile_anchor": [
-          25.0,
-          0.0
+          25,
+          0
         ]
       },
       {
@@ -8239,8 +12349,8 @@
           29.0
         ],
         "tile_anchor": [
-          0.0,
-          29.0
+          0,
+          29
         ]
       },
       {
@@ -8313,8 +12423,8 @@
           0.0
         ],
         "tile_anchor": [
-          29.0,
-          0.0
+          29,
+          0
         ]
       },
       {
@@ -8387,8 +12497,8 @@
           0.0
         ],
         "tile_anchor": [
-          31.0,
-          0.0
+          31,
+          0
         ]
       },
       {
@@ -8461,8 +12571,8 @@
           1.0
         ],
         "tile_anchor": [
-          31.0,
-          1.0
+          31,
+          1
         ]
       },
       {
@@ -8535,8 +12645,8 @@
           33.0
         ],
         "tile_anchor": [
-          0.0,
-          33.0
+          0,
+          33
         ]
       },
       {
@@ -8609,8 +12719,8 @@
           5.0
         ],
         "tile_anchor": [
-          31.0,
-          5.0
+          31,
+          5
         ]
       },
       {
@@ -8683,8 +12793,8 @@
           37.0
         ],
         "tile_anchor": [
-          0.0,
-          37.0
+          0,
+          37
         ]
       },
       {
@@ -8757,8 +12867,8 @@
           9.0
         ],
         "tile_anchor": [
-          31.0,
-          9.0
+          31,
+          9
         ]
       },
       {
@@ -8831,8 +12941,8 @@
           41.0
         ],
         "tile_anchor": [
-          0.0,
-          41.0
+          0,
+          41
         ]
       },
       {
@@ -8905,8 +13015,8 @@
           13.0
         ],
         "tile_anchor": [
-          31.0,
-          13.0
+          31,
+          13
         ]
       },
       {
@@ -8979,8 +13089,8 @@
           45.0
         ],
         "tile_anchor": [
-          0.0,
-          45.0
+          0,
+          45
         ]
       },
       {
@@ -9053,8 +13163,8 @@
           17.0
         ],
         "tile_anchor": [
-          31.0,
-          17.0
+          31,
+          17
         ]
       },
       {
@@ -9127,8 +13237,8 @@
           49.0
         ],
         "tile_anchor": [
-          0.0,
-          49.0
+          0,
+          49
         ]
       },
       {
@@ -9201,8 +13311,8 @@
           21.0
         ],
         "tile_anchor": [
-          31.0,
-          21.0
+          31,
+          21
         ]
       },
       {
@@ -9275,8 +13385,8 @@
           53.0
         ],
         "tile_anchor": [
-          0.0,
-          53.0
+          0,
+          53
         ]
       },
       {
@@ -9349,8 +13459,8 @@
           25.0
         ],
         "tile_anchor": [
-          31.0,
-          25.0
+          31,
+          25
         ]
       },
       {
@@ -9423,8 +13533,8 @@
           57.0
         ],
         "tile_anchor": [
-          0.0,
-          57.0
+          0,
+          57
         ]
       },
       {
@@ -9497,8 +13607,8 @@
           29.0
         ],
         "tile_anchor": [
-          31.0,
-          29.0
+          31,
+          29
         ]
       },
       {
@@ -9571,8 +13681,8 @@
           61.0
         ],
         "tile_anchor": [
-          0.0,
-          61.0
+          0,
+          61
         ]
       },
       {
@@ -9645,8 +13755,8 @@
           63.0
         ],
         "tile_anchor": [
-          0.0,
-          63.0
+          0,
+          63
         ]
       },
       {
@@ -9719,8 +13829,8 @@
           63.0
         ],
         "tile_anchor": [
-          1.0,
-          63.0
+          1,
+          63
         ]
       },
       {
@@ -9793,8 +13903,8 @@
           33.0
         ],
         "tile_anchor": [
-          31.0,
-          33.0
+          31,
+          33
         ]
       },
       {
@@ -9867,8 +13977,8 @@
           63.0
         ],
         "tile_anchor": [
-          5.0,
-          63.0
+          5,
+          63
         ]
       },
       {
@@ -9941,8 +14051,8 @@
           37.0
         ],
         "tile_anchor": [
-          31.0,
-          37.0
+          31,
+          37
         ]
       },
       {
@@ -10015,8 +14125,8 @@
           63.0
         ],
         "tile_anchor": [
-          9.0,
-          63.0
+          9,
+          63
         ]
       },
       {
@@ -10089,8 +14199,8 @@
           41.0
         ],
         "tile_anchor": [
-          31.0,
-          41.0
+          31,
+          41
         ]
       },
       {
@@ -10163,8 +14273,8 @@
           63.0
         ],
         "tile_anchor": [
-          13.0,
-          63.0
+          13,
+          63
         ]
       },
       {
@@ -10237,8 +14347,8 @@
           45.0
         ],
         "tile_anchor": [
-          31.0,
-          45.0
+          31,
+          45
         ]
       },
       {
@@ -10311,8 +14421,8 @@
           63.0
         ],
         "tile_anchor": [
-          17.0,
-          63.0
+          17,
+          63
         ]
       },
       {
@@ -10385,8 +14495,8 @@
           49.0
         ],
         "tile_anchor": [
-          31.0,
-          49.0
+          31,
+          49
         ]
       },
       {
@@ -10459,8 +14569,8 @@
           63.0
         ],
         "tile_anchor": [
-          21.0,
-          63.0
+          21,
+          63
         ]
       },
       {
@@ -10533,8 +14643,8 @@
           53.0
         ],
         "tile_anchor": [
-          31.0,
-          53.0
+          31,
+          53
         ]
       },
       {
@@ -10607,8 +14717,8 @@
           63.0
         ],
         "tile_anchor": [
-          25.0,
-          63.0
+          25,
+          63
         ]
       },
       {
@@ -10681,8 +14791,8 @@
           57.0
         ],
         "tile_anchor": [
-          31.0,
-          57.0
+          31,
+          57
         ]
       },
       {
@@ -10755,8 +14865,8 @@
           63.0
         ],
         "tile_anchor": [
-          29.0,
-          63.0
+          29,
+          63
         ]
       },
       {
@@ -10829,8 +14939,8 @@
           61.0
         ],
         "tile_anchor": [
-          31.0,
-          61.0
+          31,
+          61
         ]
       },
       {
@@ -10903,8 +15013,8 @@
           63.0
         ],
         "tile_anchor": [
-          31.0,
-          63.0
+          31,
+          63
         ]
       },
       {
@@ -10974,8 +15084,8 @@
           53.0
         ],
         "tile_anchor": [
-          30.0,
-          53.0
+          30,
+          53
         ]
       },
       {
@@ -11045,8 +15155,8 @@
           52.0
         ],
         "tile_anchor": [
-          29.0,
-          52.0
+          29,
+          52
         ]
       },
       {
@@ -11116,8 +15226,8 @@
           49.0
         ],
         "tile_anchor": [
-          30.0,
-          49.0
+          30,
+          49
         ]
       },
       {
@@ -11187,8 +15297,8 @@
           50.0
         ],
         "tile_anchor": [
-          29.0,
-          50.0
+          29,
+          50
         ]
       },
       {
@@ -11258,8 +15368,8 @@
           51.0
         ],
         "tile_anchor": [
-          28.0,
-          51.0
+          28,
+          51
         ]
       },
       {
@@ -11329,8 +15439,8 @@
           45.0
         ],
         "tile_anchor": [
-          30.0,
-          45.0
+          30,
+          45
         ]
       },
       {
@@ -11400,8 +15510,8 @@
           46.0
         ],
         "tile_anchor": [
-          29.0,
-          46.0
+          29,
+          46
         ]
       },
       {
@@ -11471,8 +15581,8 @@
           47.0
         ],
         "tile_anchor": [
-          28.0,
-          47.0
+          28,
+          47
         ]
       },
       {
@@ -11542,8 +15652,8 @@
           50.0
         ],
         "tile_anchor": [
-          27.0,
-          50.0
+          27,
+          50
         ]
       },
       {
@@ -11613,8 +15723,8 @@
           46.0
         ],
         "tile_anchor": [
-          27.0,
-          46.0
+          27,
+          46
         ]
       },
       {
@@ -11684,8 +15794,8 @@
           43.0
         ],
         "tile_anchor": [
-          28.0,
-          43.0
+          28,
+          43
         ]
       },
       {
@@ -11755,8 +15865,8 @@
           42.0
         ],
         "tile_anchor": [
-          29.0,
-          42.0
+          29,
+          42
         ]
       },
       {
@@ -11826,8 +15936,8 @@
           41.0
         ],
         "tile_anchor": [
-          30.0,
-          41.0
+          30,
+          41
         ]
       },
       {
@@ -11897,8 +16007,8 @@
           43.0
         ],
         "tile_anchor": [
-          27.0,
-          43.0
+          27,
+          43
         ]
       },
       {
@@ -11968,8 +16078,8 @@
           49.0
         ],
         "tile_anchor": [
-          26.0,
-          49.0
+          26,
+          49
         ]
       },
       {
@@ -12039,8 +16149,8 @@
           45.0
         ],
         "tile_anchor": [
-          26.0,
-          45.0
+          26,
+          45
         ]
       },
       {
@@ -12110,8 +16220,8 @@
           47.0
         ],
         "tile_anchor": [
-          25.0,
-          47.0
+          25,
+          47
         ]
       },
       {
@@ -12181,8 +16291,8 @@
           47.0
         ],
         "tile_anchor": [
-          24.0,
-          47.0
+          24,
+          47
         ]
       },
       {
@@ -12252,8 +16362,8 @@
           47.0
         ],
         "tile_anchor": [
-          23.0,
-          47.0
+          23,
+          47
         ]
       },
       {
@@ -12323,8 +16433,8 @@
           57.0
         ],
         "tile_anchor": [
-          30.0,
-          57.0
+          30,
+          57
         ]
       },
       {
@@ -12394,8 +16504,8 @@
           56.0
         ],
         "tile_anchor": [
-          29.0,
-          56.0
+          29,
+          56
         ]
       },
       {
@@ -12465,8 +16575,8 @@
           55.0
         ],
         "tile_anchor": [
-          28.0,
-          55.0
+          28,
+          55
         ]
       },
       {
@@ -12536,8 +16646,8 @@
           54.0
         ],
         "tile_anchor": [
-          27.0,
-          54.0
+          27,
+          54
         ]
       },
       {
@@ -12607,8 +16717,8 @@
           52.0
         ],
         "tile_anchor": [
-          26.0,
-          52.0
+          26,
+          52
         ]
       },
       {
@@ -12678,8 +16788,8 @@
           50.0
         ],
         "tile_anchor": [
-          25.0,
-          50.0
+          25,
+          50
         ]
       },
       {
@@ -12749,8 +16859,8 @@
           50.0
         ],
         "tile_anchor": [
-          24.0,
-          50.0
+          24,
+          50
         ]
       },
       {
@@ -12820,8 +16930,8 @@
           49.0
         ],
         "tile_anchor": [
-          23.0,
-          49.0
+          23,
+          49
         ]
       },
       {
@@ -12891,8 +17001,8 @@
           46.0
         ],
         "tile_anchor": [
-          25.0,
-          46.0
+          25,
+          46
         ]
       },
       {
@@ -12962,8 +17072,8 @@
           35.0
         ],
         "tile_anchor": [
-          1.0,
-          35.0
+          1,
+          35
         ]
       },
       {
@@ -13033,8 +17143,8 @@
           34.0
         ],
         "tile_anchor": [
-          2.0,
-          34.0
+          2,
+          34
         ]
       },
       {
@@ -13104,8 +17214,8 @@
           33.0
         ],
         "tile_anchor": [
-          3.0,
-          33.0
+          3,
+          33
         ]
       },
       {
@@ -13175,8 +17285,8 @@
           32.0
         ],
         "tile_anchor": [
-          4.0,
-          32.0
+          4,
+          32
         ]
       },
       {
@@ -13246,8 +17356,8 @@
           31.0
         ],
         "tile_anchor": [
-          5.0,
-          31.0
+          5,
+          31
         ]
       },
       {
@@ -13317,8 +17427,8 @@
           31.0
         ],
         "tile_anchor": [
-          1.0,
-          31.0
+          1,
+          31
         ]
       },
       {
@@ -13388,8 +17498,8 @@
           31.0
         ],
         "tile_anchor": [
-          6.0,
-          31.0
+          6,
+          31
         ]
       },
       {
@@ -13459,8 +17569,8 @@
           31.0
         ],
         "tile_anchor": [
-          7.0,
-          31.0
+          7,
+          31
         ]
       },
       {
@@ -13530,8 +17640,8 @@
           31.0
         ],
         "tile_anchor": [
-          8.0,
-          31.0
+          8,
+          31
         ]
       },
       {
@@ -13601,8 +17711,8 @@
           30.0
         ],
         "tile_anchor": [
-          9.0,
-          30.0
+          9,
+          30
         ]
       },
       {
@@ -13672,8 +17782,8 @@
           29.0
         ],
         "tile_anchor": [
-          10.0,
-          29.0
+          10,
+          29
         ]
       },
       {
@@ -13743,8 +17853,8 @@
           28.0
         ],
         "tile_anchor": [
-          11.0,
-          28.0
+          11,
+          28
         ]
       },
       {
@@ -13814,8 +17924,8 @@
           30.0
         ],
         "tile_anchor": [
-          2.0,
-          30.0
+          2,
+          30
         ]
       },
       {
@@ -13885,8 +17995,8 @@
           29.0
         ],
         "tile_anchor": [
-          3.0,
-          29.0
+          3,
+          29
         ]
       },
       {
@@ -13956,8 +18066,8 @@
           28.0
         ],
         "tile_anchor": [
-          4.0,
-          28.0
+          4,
+          28
         ]
       },
       {
@@ -14027,8 +18137,8 @@
           27.0
         ],
         "tile_anchor": [
-          5.0,
-          27.0
+          5,
+          27
         ]
       },
       {
@@ -14098,8 +18208,8 @@
           28.0
         ],
         "tile_anchor": [
-          12.0,
-          28.0
+          12,
+          28
         ]
       },
       {
@@ -14169,8 +18279,8 @@
           28.0
         ],
         "tile_anchor": [
-          13.0,
-          28.0
+          13,
+          28
         ]
       },
       {
@@ -14240,8 +18350,8 @@
           27.0
         ],
         "tile_anchor": [
-          6.0,
-          27.0
+          6,
+          27
         ]
       },
       {
@@ -14311,8 +18421,8 @@
           27.0
         ],
         "tile_anchor": [
-          7.0,
-          27.0
+          7,
+          27
         ]
       },
       {
@@ -14382,8 +18492,8 @@
           27.0
         ],
         "tile_anchor": [
-          8.0,
-          27.0
+          8,
+          27
         ]
       },
       {
@@ -14453,8 +18563,8 @@
           26.0
         ],
         "tile_anchor": [
-          9.0,
-          26.0
+          9,
+          26
         ]
       },
       {
@@ -14524,8 +18634,8 @@
           27.0
         ],
         "tile_anchor": [
-          14.0,
-          27.0
+          14,
+          27
         ]
       },
       {
@@ -14595,8 +18705,8 @@
           25.0
         ],
         "tile_anchor": [
-          10.0,
-          25.0
+          10,
+          25
         ]
       },
       {
@@ -14666,8 +18776,8 @@
           24.0
         ],
         "tile_anchor": [
-          11.0,
-          24.0
+          11,
+          24
         ]
       },
       {
@@ -14737,8 +18847,8 @@
           24.0
         ],
         "tile_anchor": [
-          12.0,
-          24.0
+          12,
+          24
         ]
       },
       {
@@ -14808,8 +18918,8 @@
           24.0
         ],
         "tile_anchor": [
-          13.0,
-          24.0
+          13,
+          24
         ]
       },
       {
@@ -14879,8 +18989,8 @@
           27.0
         ],
         "tile_anchor": [
-          1.0,
-          27.0
+          1,
+          27
         ]
       },
       {
@@ -14946,12 +19056,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          26.0
+          2,
+          26
         ],
         "tile_anchor": [
-          2.0,
-          26.0
+          2,
+          26
         ]
       },
       {
@@ -15021,8 +19131,8 @@
           25.0
         ],
         "tile_anchor": [
-          3.0,
-          25.0
+          3,
+          25
         ]
       },
       {
@@ -15092,8 +19202,8 @@
           24.0
         ],
         "tile_anchor": [
-          4.0,
-          24.0
+          4,
+          24
         ]
       },
       {
@@ -15163,8 +19273,8 @@
           1.0
         ],
         "tile_anchor": [
-          5.0,
-          1.0
+          5,
+          1
         ]
       },
       {
@@ -15234,8 +19344,8 @@
           2.0
         ],
         "tile_anchor": [
-          6.0,
-          2.0
+          6,
+          2
         ]
       },
       {
@@ -15305,8 +19415,8 @@
           3.0
         ],
         "tile_anchor": [
-          9.0,
-          3.0
+          9,
+          3
         ]
       },
       {
@@ -15376,8 +19486,8 @@
           1.0
         ],
         "tile_anchor": [
-          9.0,
-          1.0
+          9,
+          1
         ]
       },
       {
@@ -15447,8 +19557,8 @@
           1.0
         ],
         "tile_anchor": [
-          10.0,
-          1.0
+          10,
+          1
         ]
       },
       {
@@ -15518,8 +19628,8 @@
           2.0
         ],
         "tile_anchor": [
-          10.0,
-          2.0
+          10,
+          2
         ]
       },
       {
@@ -15589,8 +19699,8 @@
           4.0
         ],
         "tile_anchor": [
-          9.0,
-          4.0
+          9,
+          4
         ]
       },
       {
@@ -15660,8 +19770,8 @@
           5.0
         ],
         "tile_anchor": [
-          10.0,
-          5.0
+          10,
+          5
         ]
       },
       {
@@ -15731,8 +19841,8 @@
           6.0
         ],
         "tile_anchor": [
-          11.0,
-          6.0
+          11,
+          6
         ]
       },
       {
@@ -15802,8 +19912,8 @@
           7.0
         ],
         "tile_anchor": [
-          12.0,
-          7.0
+          12,
+          7
         ]
       },
       {
@@ -15873,8 +19983,8 @@
           4.0
         ],
         "tile_anchor": [
-          13.0,
-          4.0
+          13,
+          4
         ]
       },
       {
@@ -15944,8 +20054,8 @@
           3.0
         ],
         "tile_anchor": [
-          13.0,
-          3.0
+          13,
+          3
         ]
       },
       {
@@ -16015,8 +20125,8 @@
           2.0
         ],
         "tile_anchor": [
-          14.0,
-          2.0
+          14,
+          2
         ]
       },
       {
@@ -16086,8 +20196,8 @@
           1.0
         ],
         "tile_anchor": [
-          14.0,
-          1.0
+          14,
+          1
         ]
       },
       {
@@ -16157,8 +20267,8 @@
           5.0
         ],
         "tile_anchor": [
-          14.0,
-          5.0
+          14,
+          5
         ]
       },
       {
@@ -16228,8 +20338,8 @@
           6.0
         ],
         "tile_anchor": [
-          15.0,
-          6.0
+          15,
+          6
         ]
       },
       {
@@ -16299,8 +20409,8 @@
           7.0
         ],
         "tile_anchor": [
-          15.0,
-          7.0
+          15,
+          7
         ]
       },
       {
@@ -16370,8 +20480,8 @@
           38.0
         ],
         "tile_anchor": [
-          1.0,
-          38.0
+          1,
+          38
         ]
       },
       {
@@ -16441,8 +20551,8 @@
           37.0
         ],
         "tile_anchor": [
-          2.0,
-          37.0
+          2,
+          37
         ]
       },
       {
@@ -16512,8 +20622,8 @@
           36.0
         ],
         "tile_anchor": [
-          3.0,
-          36.0
+          3,
+          36
         ]
       },
       {
@@ -16583,8 +20693,8 @@
           35.0
         ],
         "tile_anchor": [
-          4.0,
-          35.0
+          4,
+          35
         ]
       },
       {
@@ -16654,8 +20764,8 @@
           34.0
         ],
         "tile_anchor": [
-          5.0,
-          34.0
+          5,
+          34
         ]
       },
       {
@@ -16725,8 +20835,8 @@
           34.0
         ],
         "tile_anchor": [
-          6.0,
-          34.0
+          6,
+          34
         ]
       },
       {
@@ -16796,8 +20906,8 @@
           34.0
         ],
         "tile_anchor": [
-          7.0,
-          34.0
+          7,
+          34
         ]
       },
       {
@@ -16867,8 +20977,8 @@
           34.0
         ],
         "tile_anchor": [
-          8.0,
-          34.0
+          8,
+          34
         ]
       },
       {
@@ -16938,8 +21048,8 @@
           33.0
         ],
         "tile_anchor": [
-          9.0,
-          33.0
+          9,
+          33
         ]
       },
       {
@@ -17009,8 +21119,8 @@
           32.0
         ],
         "tile_anchor": [
-          10.0,
-          32.0
+          10,
+          32
         ]
       },
       {
@@ -17080,8 +21190,8 @@
           31.0
         ],
         "tile_anchor": [
-          11.0,
-          31.0
+          11,
+          31
         ]
       },
       {
@@ -17151,8 +21261,8 @@
           31.0
         ],
         "tile_anchor": [
-          12.0,
-          31.0
+          12,
+          31
         ]
       },
       {
@@ -17222,8 +21332,8 @@
           31.0
         ],
         "tile_anchor": [
-          13.0,
-          31.0
+          13,
+          31
         ]
       },
       {
@@ -17293,8 +21403,8 @@
           30.0
         ],
         "tile_anchor": [
-          14.0,
-          30.0
+          14,
+          30
         ]
       },
       {
@@ -17364,8 +21474,8 @@
           8.0
         ],
         "tile_anchor": [
-          13.0,
-          8.0
+          13,
+          8
         ]
       },
       {
@@ -17435,8 +21545,8 @@
           9.0
         ],
         "tile_anchor": [
-          13.0,
-          9.0
+          13,
+          9
         ]
       },
       {
@@ -17506,8 +21616,8 @@
           10.0
         ],
         "tile_anchor": [
-          14.0,
-          10.0
+          14,
+          10
         ]
       },
       {
@@ -17577,8 +21687,8 @@
           11.0
         ],
         "tile_anchor": [
-          14.0,
-          11.0
+          14,
+          11
         ]
       },
       {
@@ -17648,8 +21758,8 @@
           62.0
         ],
         "tile_anchor": [
-          1.0,
-          62.0
+          1,
+          62
         ]
       },
       {
@@ -17719,8 +21829,8 @@
           61.0
         ],
         "tile_anchor": [
-          1.0,
-          61.0
+          1,
+          61
         ]
       },
       {
@@ -17790,8 +21900,8 @@
           60.0
         ],
         "tile_anchor": [
-          1.0,
-          60.0
+          1,
+          60
         ]
       },
       {
@@ -17861,8 +21971,8 @@
           59.0
         ],
         "tile_anchor": [
-          1.0,
-          59.0
+          1,
+          59
         ]
       },
       {
@@ -17932,8 +22042,8 @@
           58.0
         ],
         "tile_anchor": [
-          1.0,
-          58.0
+          1,
+          58
         ]
       },
       {
@@ -18003,8 +22113,8 @@
           57.0
         ],
         "tile_anchor": [
-          1.0,
-          57.0
+          1,
+          57
         ]
       },
       {
@@ -18074,8 +22184,8 @@
           56.0
         ],
         "tile_anchor": [
-          1.0,
-          56.0
+          1,
+          56
         ]
       },
       {
@@ -18145,8 +22255,8 @@
           62.0
         ],
         "tile_anchor": [
-          5.0,
-          62.0
+          5,
+          62
         ]
       },
       {
@@ -18216,8 +22326,8 @@
           61.0
         ],
         "tile_anchor": [
-          5.0,
-          61.0
+          5,
+          61
         ]
       },
       {
@@ -18287,8 +22397,8 @@
           60.0
         ],
         "tile_anchor": [
-          5.0,
-          60.0
+          5,
+          60
         ]
       },
       {
@@ -18358,8 +22468,8 @@
           59.0
         ],
         "tile_anchor": [
-          5.0,
-          59.0
+          5,
+          59
         ]
       },
       {
@@ -18429,8 +22539,8 @@
           58.0
         ],
         "tile_anchor": [
-          5.0,
-          58.0
+          5,
+          58
         ]
       },
       {
@@ -18500,8 +22610,8 @@
           57.0
         ],
         "tile_anchor": [
-          5.0,
-          57.0
+          5,
+          57
         ]
       },
       {
@@ -18571,8 +22681,8 @@
           56.0
         ],
         "tile_anchor": [
-          5.0,
-          56.0
+          5,
+          56
         ]
       },
       {
@@ -18642,8 +22752,8 @@
           62.0
         ],
         "tile_anchor": [
-          9.0,
-          62.0
+          9,
+          62
         ]
       },
       {
@@ -18713,8 +22823,8 @@
           61.0
         ],
         "tile_anchor": [
-          9.0,
-          61.0
+          9,
+          61
         ]
       },
       {
@@ -18784,8 +22894,8 @@
           60.0
         ],
         "tile_anchor": [
-          9.0,
-          60.0
+          9,
+          60
         ]
       },
       {
@@ -18855,8 +22965,8 @@
           59.0
         ],
         "tile_anchor": [
-          9.0,
-          59.0
+          9,
+          59
         ]
       },
       {
@@ -18926,8 +23036,8 @@
           58.0
         ],
         "tile_anchor": [
-          9.0,
-          58.0
+          9,
+          58
         ]
       },
       {
@@ -18997,8 +23107,8 @@
           57.0
         ],
         "tile_anchor": [
-          9.0,
-          57.0
+          9,
+          57
         ]
       },
       {
@@ -19068,8 +23178,8 @@
           56.0
         ],
         "tile_anchor": [
-          9.0,
-          56.0
+          9,
+          56
         ]
       },
       {
@@ -19139,8 +23249,8 @@
           55.0
         ],
         "tile_anchor": [
-          5.0,
-          55.0
+          5,
+          55
         ]
       },
       {
@@ -19210,8 +23320,8 @@
           54.0
         ],
         "tile_anchor": [
-          5.0,
-          54.0
+          5,
+          54
         ]
       },
       {
@@ -19281,8 +23391,8 @@
           55.0
         ],
         "tile_anchor": [
-          7.0,
-          55.0
+          7,
+          55
         ]
       },
       {
@@ -19352,8 +23462,8 @@
           54.0
         ],
         "tile_anchor": [
-          7.0,
-          54.0
+          7,
+          54
         ]
       },
       {
@@ -19423,8 +23533,8 @@
           55.0
         ],
         "tile_anchor": [
-          8.0,
-          55.0
+          8,
+          55
         ]
       },
       {
@@ -19494,8 +23604,8 @@
           53.0
         ],
         "tile_anchor": [
-          5.0,
-          53.0
+          5,
+          53
         ]
       },
       {
@@ -19565,8 +23675,8 @@
           53.0
         ],
         "tile_anchor": [
-          6.0,
-          53.0
+          6,
+          53
         ]
       },
       {
@@ -19636,8 +23746,8 @@
           52.0
         ],
         "tile_anchor": [
-          6.0,
-          52.0
+          6,
+          52
         ]
       },
       {
@@ -19707,8 +23817,8 @@
           51.0
         ],
         "tile_anchor": [
-          6.0,
-          51.0
+          6,
+          51
         ]
       },
       {
@@ -19778,8 +23888,8 @@
           28.0
         ],
         "tile_anchor": [
-          30.0,
-          28.0
+          30,
+          28
         ]
       },
       {
@@ -19849,8 +23959,8 @@
           27.0
         ],
         "tile_anchor": [
-          29.0,
-          27.0
+          29,
+          27
         ]
       },
       {
@@ -19920,8 +24030,8 @@
           26.0
         ],
         "tile_anchor": [
-          28.0,
-          26.0
+          28,
+          26
         ]
       },
       {
@@ -19991,8 +24101,8 @@
           25.0
         ],
         "tile_anchor": [
-          27.0,
-          25.0
+          27,
+          25
         ]
       },
       {
@@ -20062,8 +24172,8 @@
           23.0
         ],
         "tile_anchor": [
-          26.0,
-          23.0
+          26,
+          23
         ]
       },
       {
@@ -20133,8 +24243,8 @@
           23.0
         ],
         "tile_anchor": [
-          25.0,
-          23.0
+          25,
+          23
         ]
       },
       {
@@ -20204,8 +24314,8 @@
           22.0
         ],
         "tile_anchor": [
-          27.0,
-          22.0
+          27,
+          22
         ]
       },
       {
@@ -20275,8 +24385,8 @@
           24.0
         ],
         "tile_anchor": [
-          30.0,
-          24.0
+          30,
+          24
         ]
       },
       {
@@ -20346,8 +24456,8 @@
           23.0
         ],
         "tile_anchor": [
-          29.0,
-          23.0
+          29,
+          23
         ]
       },
       {
@@ -20417,8 +24527,8 @@
           22.0
         ],
         "tile_anchor": [
-          28.0,
-          22.0
+          28,
+          22
         ]
       },
       {
@@ -20488,8 +24598,8 @@
           26.0
         ],
         "tile_anchor": [
-          25.0,
-          26.0
+          25,
+          26
         ]
       },
       {
@@ -20559,8 +24669,8 @@
           28.0
         ],
         "tile_anchor": [
-          27.0,
-          28.0
+          27,
+          28
         ]
       },
       {
@@ -20630,8 +24740,8 @@
           29.0
         ],
         "tile_anchor": [
-          28.0,
-          29.0
+          28,
+          29
         ]
       },
       {
@@ -20701,8 +24811,8 @@
           30.0
         ],
         "tile_anchor": [
-          29.0,
-          30.0
+          29,
+          30
         ]
       },
       {
@@ -20772,8 +24882,8 @@
           31.0
         ],
         "tile_anchor": [
-          30.0,
-          31.0
+          30,
+          31
         ]
       },
       {
@@ -20843,8 +24953,8 @@
           63.0
         ],
         "tile_anchor": [
-          12.0,
-          63.0
+          12,
+          63
         ]
       },
       {
@@ -20914,8 +25024,8 @@
           62.0
         ],
         "tile_anchor": [
-          13.0,
-          62.0
+          13,
+          62
         ]
       },
       {
@@ -20985,8 +25095,8 @@
           61.0
         ],
         "tile_anchor": [
-          12.0,
-          61.0
+          12,
+          61
         ]
       },
       {
@@ -21056,8 +25166,8 @@
           59.0
         ],
         "tile_anchor": [
-          12.0,
-          59.0
+          12,
+          59
         ]
       },
       {
@@ -21127,8 +25237,8 @@
           58.0
         ],
         "tile_anchor": [
-          12.0,
-          58.0
+          12,
+          58
         ]
       },
       {
@@ -21198,8 +25308,8 @@
           57.0
         ],
         "tile_anchor": [
-          12.0,
-          57.0
+          12,
+          57
         ]
       },
       {
@@ -21269,8 +25379,8 @@
           55.0
         ],
         "tile_anchor": [
-          11.0,
-          55.0
+          11,
+          55
         ]
       },
       {
@@ -21340,8 +25450,8 @@
           52.0
         ],
         "tile_anchor": [
-          9.0,
-          52.0
+          9,
+          52
         ]
       },
       {
@@ -21411,8 +25521,8 @@
           51.0
         ],
         "tile_anchor": [
-          9.0,
-          51.0
+          9,
+          51
         ]
       },
       {
@@ -21482,8 +25592,8 @@
           60.0
         ],
         "tile_anchor": [
-          12.0,
-          60.0
+          12,
+          60
         ]
       },
       {
@@ -21553,8 +25663,8 @@
           11.0
         ],
         "tile_anchor": [
-          17.0,
-          11.0
+          17,
+          11
         ]
       },
       {
@@ -21624,8 +25734,8 @@
           10.0
         ],
         "tile_anchor": [
-          17.0,
-          10.0
+          17,
+          10
         ]
       },
       {
@@ -21695,8 +25805,8 @@
           8.0
         ],
         "tile_anchor": [
-          16.0,
-          8.0
+          16,
+          8
         ]
       },
       {
@@ -21766,8 +25876,8 @@
           9.0
         ],
         "tile_anchor": [
-          16.0,
-          9.0
+          16,
+          9
         ]
       },
       {
@@ -21837,8 +25947,8 @@
           7.0
         ],
         "tile_anchor": [
-          18.0,
-          7.0
+          18,
+          7
         ]
       },
       {
@@ -21908,8 +26018,8 @@
           6.0
         ],
         "tile_anchor": [
-          18.0,
-          6.0
+          18,
+          6
         ]
       },
       {
@@ -21979,8 +26089,8 @@
           3.0
         ],
         "tile_anchor": [
-          16.0,
-          3.0
+          16,
+          3
         ]
       },
       {
@@ -22050,8 +26160,8 @@
           2.0
         ],
         "tile_anchor": [
-          17.0,
-          2.0
+          17,
+          2
         ]
       },
       {
@@ -22121,8 +26231,8 @@
           1.0
         ],
         "tile_anchor": [
-          17.0,
-          1.0
+          17,
+          1
         ]
       },
       {
@@ -22192,15 +26302,230 @@
           54.0
         ],
         "tile_anchor": [
-          10.0,
-          54.0
+          10,
+          54
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000239",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          1,
+          23
+        ],
+        "tile_anchor": [
+          1,
+          23
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000240",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          2,
+          23
+        ],
+        "tile_anchor": [
+          2,
+          23
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          160.0,
+          144.0
+        ],
+        "asset_id": "cave_granite_straight_y_l4_v01",
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000241",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          160.0,
+          144.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "dungeon_wall_visual_structure",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          3,
+          23
+        ],
+        "tile_anchor": [
+          3,
+          23
         ]
       }
     ],
     "terrain_front": []
   },
+  "legacy_map_id": "death_coffin",
+  "legacy_runtime_map_id": 1383.0,
   "map_id": "mengzhong_death_coffin",
-  "runtime_map_id": 1383.0,
-  "schema_version": 4.0,
+  "runtime_map_id": 913207.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable"
 }

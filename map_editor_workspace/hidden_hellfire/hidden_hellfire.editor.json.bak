@@ -2,8 +2,8 @@
   "content_layer": "personal_expansion",
   "design": {
     "design_size": [
-      32,
-      32
+      32.0,
+      32.0
     ],
     "map_type": "boss_room",
     "source_size": [
@@ -13,17 +13,17 @@
     "source_size_is_design_size": false,
     "strategy": "custom_blank_layout",
     "tile_size": [
-      64,
-      32
+      64.0,
+      32.0
     ],
     "view_type": "isometric_2_to_1",
     "wall_loops": [
       {
         "bounds": [
-          0,
-          0,
-          32,
-          32
+          0.0,
+          0.0,
+          32.0,
+          32.0
         ],
         "collision_authority": "manual_by_user",
         "corner_join_mode": "dedicated_corner",
@@ -37,17 +37,23 @@
   "display_name": "地狱烈焰",
   "editor_meta": {
     "authoring_chunk_grid": [
-      2,
-      2
+      2.0,
+      2.0
     ],
     "authoring_chunk_size_tiles": [
-      16,
-      16
+      16.0,
+      16.0
     ],
+    "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
-    "revision": 1,
+    "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
+    "portal_contract_id": "unified_map_portal_endpoint_v1",
+    "revision": 8,
+    "source_editor_schema_version": 4,
     "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/hidden_hellfire"
   },
   "ground": {
@@ -56,18 +62,18 @@
     "blank_generated": false,
     "chunk_manifest": "res://assets/data/maps/ground/hidden_hellfire.ground_chunks.json",
     "chunk_size": [
-      1024,
-      1024
+      1024.0,
+      1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       1024.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/hidden_hellfire.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/hidden_hellfire.ground_paint_state.json",
@@ -77,8 +83,53 @@
     "workspace_manifest": "res://map_editor_workspace/hidden_hellfire/ground/ground_manifest.json",
     "workspace_state": "res://map_editor_workspace/hidden_hellfire/ground/ground_state.json"
   },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
   "layers": {
-    "boss_spawn": [],
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "hidden_hellfire",
+          "source_category_role": "boss",
+          "source_line": 60.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "暗之骷髅精灵",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 238.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            38.0,
+            1.0,
+            1.0,
+            815.0,
+            -1.0,
+            -27.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.hidden_hellfire.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.hidden_hellfire.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          13.0
+        ]
+      }
+    ],
     "collision": [
       {
         "blocks_monster": true,
@@ -87,10 +138,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            0,
-            31,
-            32,
-            1
+            0.0,
+            31.0,
+            32.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -103,10 +154,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            31,
-            0,
-            1,
-            32
+            31.0,
+            0.0,
+            1.0,
+            32.0
           ]
         },
         "shape": "rect",
@@ -119,10 +170,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            0,
-            0,
-            32,
-            1
+            0.0,
+            0.0,
+            32.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -135,10 +186,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            0,
-            0,
-            1,
-            32
+            0.0,
+            0.0,
+            1.0,
+            32.0
           ]
         },
         "shape": "rect",
@@ -151,10 +202,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            28,
-            4,
-            4
+            28.0,
+            28.0,
+            4.0,
+            4.0
           ]
         },
         "shape": "rect",
@@ -167,10 +218,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            28,
-            0,
-            4,
-            4
+            28.0,
+            0.0,
+            4.0,
+            4.0
           ]
         },
         "shape": "rect",
@@ -183,10 +234,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            0,
-            0,
-            4,
-            4
+            0.0,
+            0.0,
+            4.0,
+            4.0
           ]
         },
         "shape": "rect",
@@ -199,10 +250,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            0,
-            27,
-            5,
-            5
+            0.0,
+            27.0,
+            5.0,
+            5.0
           ]
         },
         "shape": "rect",
@@ -214,23 +265,63 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          4,
-          30
+          4.0,
+          30.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          4,
-          29
+          4.0,
+          29.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          4,
+          4.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30,
           28
         ]
       },
@@ -238,8 +329,32 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          4,
-          27
+          29,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          29
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          30
         ]
       },
       {
@@ -247,7 +362,23 @@
         "source": "single_cell_erase",
         "tile": [
           3,
-          27
+          30
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          29
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          28
         ]
       },
       {
@@ -255,7 +386,7 @@
         "source": "single_cell_erase",
         "tile": [
           2,
-          27
+          28
         ]
       },
       {
@@ -263,7 +394,87 @@
         "source": "single_cell_erase",
         "tile": [
           1,
-          27
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          2
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          1
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          2
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          1
         ]
       }
     ],
@@ -277,35 +488,35 @@
     "map_exit_points": [
       {
         "arrival_locks_current_portal": true,
+        "arrival_only": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
-        "connection_mode": "bidirectional",
-        "connection_pair_id": "",
+        "connection_mode": "arrival_only",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
         "content_layer": "personal_expansion",
+        "display_name": "由比奇进入，单向只可进入",
         "exit_id": "map_exit_000001",
+        "exit_policy": "town_scroll_or_death_only",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
-        "portal_role": "bidirectional_endpoint",
-        "reciprocal_exit_id": "",
-        "reciprocal_map_key": "",
+        "portal_role": "arrival_only_endpoint",
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
-        "semantic_role": "map_portal_endpoint",
-        "target_entrance_id": "",
-        "target_map_id": "",
-        "target_portal_id": "",
+        "semantic_role": "map_portal_arrival_anchor",
+        "target_configured": false,
+        "target_map_id": -1.0,
         "tile": [
-          14,
-          26
+          14.0,
+          26.0
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": false
       }
     ],
     "monster_spawn": [],
@@ -315,7 +526,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           114.0,
-          465.0
+          438.3333435058594
         ],
         "asset_id": "user.f58c083228380482",
         "base_footprint_tiles": [
@@ -325,8 +536,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -346,11 +557,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000037",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -366,26 +577,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           114.0,
-          465.0
+          438.3333435058594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2,
-          2
+          1,
+          1
         ],
         "tile_anchor": [
-          2,
-          2
+          1,
+          1
         ],
         "visual_footprint_tiles": [
           2,
@@ -396,7 +607,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           92.0,
-          477.0
+          450.3333435058594
         ],
         "asset_id": "user.401d313fe81426a1",
         "base_footprint_tiles": [
@@ -406,8 +617,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -427,11 +638,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000038",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -447,26 +658,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           92.0,
-          477.0
+          450.3333435058594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2,
-          28
+          1,
+          29
         ],
         "tile_anchor": [
-          2,
-          28
+          1,
+          29
         ],
         "visual_footprint_tiles": [
           2,
@@ -477,7 +688,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           110.0,
-          478.0
+          451.3333435058594
         ],
         "asset_id": "user.ed21d95556020f5d",
         "base_footprint_tiles": [
@@ -487,8 +698,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -508,11 +719,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000039",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -528,26 +739,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           110.0,
-          478.0
+          451.3333435058594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28,
-          28
+          29,
+          29
         ],
         "tile_anchor": [
-          28,
-          28
+          29,
+          29
         ],
         "visual_footprint_tiles": [
           2,
@@ -558,7 +769,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           124.0,
-          457.0
+          430.3333435058594
         ],
         "asset_id": "user.1681cdcf435c1b88",
         "base_footprint_tiles": [
@@ -568,8 +779,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -589,11 +800,11 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000040",
-        "instance_scale_level": -6,
+        "instance_scale_level": -7,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -609,26 +820,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           124.0,
-          457.0
+          430.3333435058594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          28,
-          2
+          29,
+          1
         ],
         "tile_anchor": [
-          28,
-          2
+          29,
+          1
         ],
         "visual_footprint_tiles": [
           2,
@@ -649,8 +860,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -672,7 +883,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -682,8 +893,8 @@
           3.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -702,8 +913,8 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13,
-          25
+          13.0,
+          25.0
         ],
         "tile_anchor": [
           13,
@@ -736,8 +947,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -760,7 +971,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -770,8 +981,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -792,8 +1003,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "corner_min_min",
         "tile": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "tile_anchor": [
           0,
@@ -818,8 +1029,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -842,7 +1053,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -852,8 +1063,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -874,8 +1085,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_x_00",
         "tile": [
-          0,
-          1
+          0.0,
+          1.0
         ],
         "tile_anchor": [
           0,
@@ -900,8 +1111,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -924,7 +1135,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -934,8 +1145,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -956,8 +1167,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_y_00",
         "tile": [
-          1,
-          0
+          1.0,
+          0.0
         ],
         "tile_anchor": [
           1,
@@ -982,8 +1193,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1006,7 +1217,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1016,8 +1227,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1038,8 +1249,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_x_01",
         "tile": [
-          0,
-          5
+          0.0,
+          5.0
         ],
         "tile_anchor": [
           0,
@@ -1064,8 +1275,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1088,7 +1299,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1098,8 +1309,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1120,8 +1331,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_y_01",
         "tile": [
-          5,
-          0
+          5.0,
+          0.0
         ],
         "tile_anchor": [
           5,
@@ -1146,8 +1357,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1170,7 +1381,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1180,8 +1391,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1202,8 +1413,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_x_02",
         "tile": [
-          0,
-          9
+          0.0,
+          9.0
         ],
         "tile_anchor": [
           0,
@@ -1228,8 +1439,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1252,7 +1463,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1262,8 +1473,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1284,8 +1495,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_y_02",
         "tile": [
-          9,
-          0
+          9.0,
+          0.0
         ],
         "tile_anchor": [
           9,
@@ -1310,8 +1521,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1334,7 +1545,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1344,8 +1555,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1366,8 +1577,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_x_03",
         "tile": [
-          0,
-          13
+          0.0,
+          13.0
         ],
         "tile_anchor": [
           0,
@@ -1392,8 +1603,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1416,7 +1627,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1426,8 +1637,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1448,8 +1659,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_y_03",
         "tile": [
-          13,
-          0
+          13.0,
+          0.0
         ],
         "tile_anchor": [
           13,
@@ -1474,8 +1685,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1498,7 +1709,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1508,8 +1719,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1530,8 +1741,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_x_04",
         "tile": [
-          0,
-          17
+          0.0,
+          17.0
         ],
         "tile_anchor": [
           0,
@@ -1556,8 +1767,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1580,7 +1791,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1590,8 +1801,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1612,8 +1823,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_y_04",
         "tile": [
-          17,
-          0
+          17.0,
+          0.0
         ],
         "tile_anchor": [
           17,
@@ -1638,8 +1849,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1662,7 +1873,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1672,8 +1883,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1694,8 +1905,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_x_05",
         "tile": [
-          0,
-          21
+          0.0,
+          21.0
         ],
         "tile_anchor": [
           0,
@@ -1720,8 +1931,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1744,7 +1955,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1754,8 +1965,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1776,8 +1987,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_y_05",
         "tile": [
-          21,
-          0
+          21.0,
+          0.0
         ],
         "tile_anchor": [
           21,
@@ -1802,8 +2013,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1826,7 +2037,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -1836,8 +2047,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1858,8 +2069,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_x_06",
         "tile": [
-          0,
-          25
+          0.0,
+          25.0
         ],
         "tile_anchor": [
           0,
@@ -1884,8 +2095,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1894,8 +2105,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          4,
-          1
+          4.0,
+          1.0
         ],
         "gameplay_role": "navigation_blocker",
         "generated_by": "MapEditorWallLoopService",
@@ -1906,22 +2117,22 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000011",
-        "instance_scale_level": 0,
+        "instance_scale_level": 0.0,
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          4,
-          1
+          4.0,
+          1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -1942,16 +2153,16 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_y_06",
         "tile": [
-          25,
-          0
+          25.0,
+          0.0
         ],
         "tile_anchor": [
           25,
           0
         ],
         "visual_footprint_tiles": [
-          4,
-          1
+          4.0,
+          1.0
         ]
       },
       {
@@ -1968,8 +2179,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -1992,7 +2203,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2002,8 +2213,8 @@
           2.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2024,8 +2235,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_x_07",
         "tile": [
-          0,
-          29
+          0.0,
+          29.0
         ],
         "tile_anchor": [
           0,
@@ -2050,8 +2261,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2074,7 +2285,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2084,8 +2295,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2106,8 +2317,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_min_y_07",
         "tile": [
-          29,
-          0
+          29.0,
+          0.0
         ],
         "tile_anchor": [
           29,
@@ -2132,8 +2343,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2156,7 +2367,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2166,8 +2377,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2188,8 +2399,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "corner_min_max",
         "tile": [
-          0,
-          31
+          0.0,
+          31.0
         ],
         "tile_anchor": [
           0,
@@ -2214,8 +2425,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2238,7 +2449,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2248,8 +2459,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2270,8 +2481,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "corner_max_min",
         "tile": [
-          31,
-          0
+          31.0,
+          0.0
         ],
         "tile_anchor": [
           31,
@@ -2296,8 +2507,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2320,7 +2531,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2330,8 +2541,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2352,8 +2563,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_y_00",
         "tile": [
-          1,
-          31
+          1.0,
+          31.0
         ],
         "tile_anchor": [
           1,
@@ -2378,8 +2589,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2402,7 +2613,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2412,8 +2623,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2434,8 +2645,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_x_00",
         "tile": [
-          31,
-          1
+          31.0,
+          1.0
         ],
         "tile_anchor": [
           31,
@@ -2460,8 +2671,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2484,7 +2695,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2494,8 +2705,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2516,8 +2727,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_y_01",
         "tile": [
-          5,
-          31
+          5.0,
+          31.0
         ],
         "tile_anchor": [
           5,
@@ -2542,8 +2753,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2566,7 +2777,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2576,8 +2787,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2598,8 +2809,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_x_01",
         "tile": [
-          31,
-          5
+          31.0,
+          5.0
         ],
         "tile_anchor": [
           31,
@@ -2624,8 +2835,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2648,7 +2859,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2658,8 +2869,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2680,8 +2891,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_y_02",
         "tile": [
-          9,
-          31
+          9.0,
+          31.0
         ],
         "tile_anchor": [
           9,
@@ -2706,8 +2917,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2730,7 +2941,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2740,8 +2951,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2762,8 +2973,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_x_02",
         "tile": [
-          31,
-          9
+          31.0,
+          9.0
         ],
         "tile_anchor": [
           31,
@@ -2788,8 +2999,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2812,7 +3023,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2822,8 +3033,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2844,8 +3055,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_y_03",
         "tile": [
-          13,
-          31
+          13.0,
+          31.0
         ],
         "tile_anchor": [
           13,
@@ -2870,8 +3081,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2894,7 +3105,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2904,8 +3115,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -2926,8 +3137,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_x_03",
         "tile": [
-          31,
-          13
+          31.0,
+          13.0
         ],
         "tile_anchor": [
           31,
@@ -2952,8 +3163,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -2976,7 +3187,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -2986,8 +3197,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3008,8 +3219,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_y_04",
         "tile": [
-          17,
-          31
+          17.0,
+          31.0
         ],
         "tile_anchor": [
           17,
@@ -3034,8 +3245,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3058,7 +3269,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -3068,8 +3279,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3090,8 +3301,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_x_04",
         "tile": [
-          31,
-          17
+          31.0,
+          17.0
         ],
         "tile_anchor": [
           31,
@@ -3116,8 +3327,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3140,7 +3351,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -3150,8 +3361,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3172,8 +3383,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_y_05",
         "tile": [
-          21,
-          31
+          21.0,
+          31.0
         ],
         "tile_anchor": [
           21,
@@ -3198,8 +3409,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3222,7 +3433,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -3232,8 +3443,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3254,8 +3465,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_x_05",
         "tile": [
-          31,
-          21
+          31.0,
+          21.0
         ],
         "tile_anchor": [
           31,
@@ -3280,8 +3491,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3304,7 +3515,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -3314,8 +3525,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3336,8 +3547,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_y_06",
         "tile": [
-          25,
-          31
+          25.0,
+          31.0
         ],
         "tile_anchor": [
           25,
@@ -3362,8 +3573,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3386,7 +3597,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -3396,8 +3607,8 @@
           4.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3418,8 +3629,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_x_06",
         "tile": [
-          31,
-          25
+          31.0,
+          25.0
         ],
         "tile_anchor": [
           31,
@@ -3444,8 +3655,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3468,7 +3679,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -3478,8 +3689,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3500,8 +3711,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_y_07",
         "tile": [
-          29,
-          31
+          29.0,
+          31.0
         ],
         "tile_anchor": [
           29,
@@ -3526,8 +3737,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3550,7 +3761,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -3560,8 +3771,8 @@
           2.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3582,8 +3793,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "edge_max_x_07",
         "tile": [
-          31,
-          29
+          31.0,
+          29.0
         ],
         "tile_anchor": [
           31,
@@ -3608,8 +3819,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -3632,7 +3843,7 @@
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "terrain",
@@ -3642,8 +3853,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -3664,8 +3875,8 @@
         "structure_id": "hidden_hellfire.closed_loop.0_0_32_32",
         "structure_role": "corner_max_max",
         "tile": [
-          31,
-          31
+          31.0,
+          31.0
         ],
         "tile_anchor": [
           31,
@@ -3679,8 +3890,10 @@
     ],
     "terrain_front": []
   },
+  "legacy_map_id": "dyly_2",
+  "legacy_runtime_map_id": 995566.0,
   "map_id": "hidden_hellfire",
-  "runtime_map_id": 995566,
-  "schema_version": 4,
+  "runtime_map_id": 918002.0,
+  "schema_version": 5,
   "source_policy": "expansion_editable"
 }

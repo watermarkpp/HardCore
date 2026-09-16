@@ -47,10 +47,12 @@
     "phase1_map_production_complete": true,
     "phase1_network_version_id": "phase1_finished_map_network_v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 6,
+    "revision": 8.0,
     "runtime_approved": true,
     "runtime_approved_revision": 5.0,
     "size_migration": "bich_64_to_80_centered",
+    "source_editor_schema_version": 4.0,
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/world_bich_province"
   },
   "ground": {
@@ -63,14 +65,14 @@
       1024.0
     ],
     "collision_from_ground": false,
-    "coordinate_contract_id": "isometric_cell_center_64x32_v1",
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "editable_source_required": true,
     "ground_mode": "generated_painted_chunks",
     "mask_storage": "chunked_l8",
     "master_image": null,
     "origin_px": [
       2560.0,
-      16.0
+      0.0
     ],
     "paint_manifest": "res://assets/data/maps/ground_paint/sandbox_64.ground_paint_ops.json",
     "paint_state": "res://assets/data/maps/ground_paint/sandbox_64.ground_paint_state.json",
@@ -4343,6 +4345,870 @@
         },
         "shape": "polygon",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000322",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            39.0,
+            55.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000323",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            40.0,
+            55.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000324",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            38.0,
+            55.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000325",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            59.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000326",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            59.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000327",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            58.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000328",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            58.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000329",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            57.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000330",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            57.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000331",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            57.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000332",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            58.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000333",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            20.0,
+            59.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000334",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            18.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000335",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            19.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000336",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            19.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000337",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            18.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000338",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000339",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000340",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000341",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000342",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000343",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000344",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            24.0,
+            12.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000345",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23.0,
+            12.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000346",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            12.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000347",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            12.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000348",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000349",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            21.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000350",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000351",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000352",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            23.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000353",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            22.0,
+            13.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000354",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            52.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000355",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000356",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            54.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000357",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            55.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000358",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            55.0,
+            16.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000359",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            55.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000360",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            54.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000361",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000362",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            54.0,
+            16.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000363",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            16.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000364",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            52.0,
+            16.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000365",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            52.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000366",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            52.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000367",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000368",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            54.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000369",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            55.0,
+            14.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000370",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            56.0,
+            15.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000371",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            56.0,
+            16.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000372",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            56.0,
+            17.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000373",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            55.0,
+            18.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000374",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            54.0,
+            18.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000375",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            53.0,
+            18.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -6001,6 +6867,238 @@
           36.0,
           52.0
         ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          37.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          37.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          52.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          78.0,
+          70.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          79.0,
+          71.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          79.0,
+          70.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          78.0,
+          71.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          79.0,
+          72.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          72.0,
+          79.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          71.0,
+          78.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          71.0,
+          79.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          70.0,
+          79.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          72.0,
+          78.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          73.0,
+          79.0
+        ]
       }
     ],
     "door_points": [],
@@ -6023,6 +7121,7 @@
         "display_name": "前往沃玛森林",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000103",
         "official_connection_id": "portal.world_bich_province.map_exit_000001",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -6032,14 +7131,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000004",
-        "target_map_id": 910004,
+        "target_map_id": 910004.0,
         "target_map_key": "world_wooma_forest",
         "target_portal_id": "map_exit_000004",
         "target_tile": [
@@ -6065,6 +7164,7 @@
         "display_name": "兽人古墓",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000104",
         "official_connection_id": "portal.world_bich_province.map_exit_000002",
         "one_way": false,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -6074,14 +7174,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000002",
-        "target_map_id": 911001,
+        "target_map_id": 911001.0,
         "target_map_key": "bich_orc_tomb_f1",
         "target_portal_id": "map_exit_000002",
         "target_tile": [
@@ -6128,14 +7228,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 911101,
+        "target_map_id": 911101.0,
         "target_map_key": "bich_mine_f1",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -6160,6 +7260,7 @@
         "exit_id": "map_exit_000004",
         "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000105",
         "official_connection_id": "portal.world_bich_province.map_exit_000004",
         "one_way": true,
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -6167,14 +7268,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000004",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 918002,
+        "target_map_id": 918002.0,
         "target_map_key": "hidden_hellfire",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -6223,14 +7324,14 @@
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
-        "return_unlock_distance_tiles": 1.5,
+        "return_unlock_distance_gu": 1.5,
         "runtime_export": true,
         "semantic_id": "map_exit_000005",
         "semantic_role": "map_portal_endpoint",
         "source_map_key": "world_bich_province",
         "target_configured": true,
         "target_entrance_id": "map_exit_000001",
-        "target_map_id": 910002,
+        "target_map_id": 910002.0,
         "target_map_key": "world_snake_valley",
         "target_portal_id": "map_exit_000001",
         "target_tile": [
@@ -6238,8 +7339,8 @@
           43.0
         ],
         "tile": [
-          69.0,
-          72.0
+          71.0,
+          71.0
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -6588,7 +7689,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6634,7 +7734,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6680,7 +7779,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6726,7 +7824,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6772,7 +7869,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6818,7 +7914,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6864,7 +7959,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6910,7 +8004,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -6956,7 +8049,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7002,7 +8094,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7048,7 +8139,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7094,7 +8184,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7140,7 +8229,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7186,7 +8274,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7232,7 +8319,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7278,7 +8364,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7324,7 +8409,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7370,7 +8454,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7416,7 +8499,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7462,7 +8544,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7508,7 +8589,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7554,7 +8634,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7600,7 +8679,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7646,7 +8724,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7692,7 +8769,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7738,7 +8814,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7784,7 +8859,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7830,7 +8904,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7876,7 +8949,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7922,7 +8994,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -7968,7 +9039,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8014,7 +9084,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8060,7 +9129,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "radius_tiles": 2.0,
         "respawn_policy_id": "beginner_outdoor",
         "respawn_seconds": 60.0,
         "runtime_export": true,
@@ -8070,6 +9138,1896 @@
         "tile": [
           61.0,
           48.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000041",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000041",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          42.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000042",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000042",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          32.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000043",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000043",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15.0,
+          40.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "钉耙猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 26.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            51.0,
+            21.0,
+            1.0,
+            4510.0,
+            -45.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000044",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000044",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16.0,
+          49.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            88.0,
+            17.0,
+            1.0,
+            4510.0,
+            -78.0,
+            -19.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000045",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000045",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          28.0,
+          66.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            88.0,
+            17.0,
+            1.0,
+            4510.0,
+            -78.0,
+            -19.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000046",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000046",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31.0,
+          62.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "稻草人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 21.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            88.0,
+            17.0,
+            1.0,
+            4510.0,
+            -78.0,
+            -19.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000047",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000047",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          63.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000048",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000048",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41.0,
+          68.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000049",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000049",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41.0,
+          61.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000050",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000050",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          53.0,
+          70.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000051",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000051",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          58.0,
+          64.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 9.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "森林雪人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 28.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            44.0,
+            17.0,
+            13.0,
+            4510.0,
+            -66.0,
+            -51.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000052",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000052",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          47.0,
+          76.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000053",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000053",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          62.0,
+          53.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000054",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000054",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          61.0,
+          41.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000055",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000055",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          76.0,
+          49.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "食人花",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 30.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            36.0,
+            3.0,
+            20.0,
+            4510.0,
+            -20.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000056",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000056",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          68.0,
+          61.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000057",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000057",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          70.0,
+          39.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000058",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000058",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          62.0,
+          33.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000059",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000059",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          58.0,
+          24.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000060",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000060",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          69.0,
+          26.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 8.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "毒蜘蛛",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 18.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            31.0,
+            1.0,
+            1.0,
+            4510.0,
+            -49.0,
+            -78.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000061",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000061",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          69.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000062",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000062",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          56.0,
+          6.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000063",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000063",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          47.0,
+          14.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000064",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000064",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          42.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000065",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000065",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          49.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "多钩猫",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 24.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            59.0,
+            21.0,
+            13.0,
+            4510.0,
+            -13.0,
+            -55.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000066",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000066",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          64.0,
+          7.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000067",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000067",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          23.0,
+          7.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000068",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000068",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27.0,
+          13.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000069",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000069",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          33.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000070",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000070",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          31.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000071",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000071",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37.0,
+          4.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 10.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "蛤蟆",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 19.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            118.0,
+            8.0,
+            1.0,
+            4510.0,
+            -1.0,
+            -8.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000072",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000072",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          40.0,
+          13.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000073",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000073",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          8.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000074",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000074",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          3.0,
+          26.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000075",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000075",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          28.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000076",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000076",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          33.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000077",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000077",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          10.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000078",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000078",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000079",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000079",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          16.0,
+          3.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000080",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000080",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000081",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000081",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          11.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_bich_province",
+          "source_category_role": "ordinary",
+          "source_line": 35.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽人",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 34.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            32.0,
+            3.0,
+            26.0,
+            4510.0,
+            -53.0,
+            -26.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "respawn_seconds": 60.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_bich_province.monster_spawn.000082",
+        "spawn_group_id": "mse.group.v1.world_bich_province.monster_spawn.000082",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          14.0,
+          14.0
         ]
       }
     ],
@@ -8401,52 +11359,6 @@
         "tile_anchor": [
           33.0,
           29.0
-        ]
-      },
-      {
-        "collision_policy": "profile",
-        "collision_profile_id": "small_prop_1x1",
-        "content_id": "npc.4.005",
-        "content_layer": "personal_expansion",
-        "display_name": "老兵",
-        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
-        "editor_visual_only": true,
-        "facing": "south_east",
-        "kind": "npc",
-        "movable": true,
-        "npc_id": "npc.4.005",
-        "npc_occupancy_profile_id": "npc_humanoid_1x1",
-        "object_role": "npc_placeholder",
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placeholder_instance_id": "npc_placeholder_npc_000008",
-        "placement_anchor_px": [
-          32.0,
-          48.0
-        ],
-        "runtime_export": true,
-        "safe": true,
-        "selectable": true,
-        "selection_shape": {
-          "padding_px": 4.0,
-          "type": "bounds"
-        },
-        "semantic_id": "npc_000008",
-        "service_identity_id": "npc.service.veteran.v1",
-        "service_role": "quest",
-        "tile": [
-          24.0,
-          39.0
-        ],
-        "tile_anchor": [
-          24.0,
-          39.0
         ]
       }
     ],
@@ -8889,7 +11801,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           170.0,
-          110.11111450195312
+          129.95237731933594
         ],
         "asset_id": "user.33ff89346abf48a1",
         "collision_footprint_tiles": [
@@ -8902,8 +11814,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -8913,7 +11825,7 @@
         "instance_base_scale": 0.384,
         "instance_custom_scale": true,
         "instance_id": "inst_000022",
-        "instance_scale_level": -1.0,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "map_collision_override": "default",
         "movable": true,
@@ -8921,8 +11833,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -8931,37 +11843,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           170.0,
-          110.11111450195312
+          129.95237731933594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.3456,
-          0.3456
+          0.26880000000000004,
+          0.26880000000000004
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          29.0,
-          64.0
+          30.0,
+          65.0
         ],
         "tile_anchor": [
-          29.0,
-          64.0
+          30.0,
+          65.0
         ],
         "visual_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           163.0,
-          149.42855834960938
+          188.0
         ],
         "asset_id": "user.2ac356ebea0bc411",
         "collision_footprint_tiles": [
@@ -8974,8 +11886,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -8985,7 +11897,7 @@
         "instance_base_scale": 0.3950617283950617,
         "instance_custom_scale": true,
         "instance_id": "inst_000023",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "map_collision_override": "default",
         "movable": true,
@@ -8993,8 +11905,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -9003,37 +11915,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           163.0,
-          149.42855834960938
+          188.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.27654320987654313,
-          0.27654320987654313
+          0.23703703703703696,
+          0.23703703703703696
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          42.0
+          14.0,
+          43.0
         ],
         "tile_anchor": [
-          13.0,
-          42.0
+          14.0,
+          43.0
         ],
         "visual_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           172.0,
-          150.3571319580078
+          189.1666717529297
         ],
         "asset_id": "user.46cdf7b3717a3ea5",
         "collision_footprint_tiles": [
@@ -9046,8 +11958,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -9057,7 +11969,7 @@
         "instance_base_scale": 0.392638036809816,
         "instance_custom_scale": true,
         "instance_id": "inst_000024",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "map_collision_override": "default",
         "movable": true,
@@ -9065,8 +11977,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -9075,30 +11987,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           172.0,
-          150.3571319580078
+          189.1666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.27484662576687124,
-          0.27484662576687124
+          0.23558282208588965,
+          0.23558282208588965
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
-          28.0
+          14.0,
+          29.0
         ],
         "tile_anchor": [
-          13.0,
-          28.0
+          14.0,
+          29.0
         ],
         "visual_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ]
       },
       {
@@ -9342,6 +12254,7 @@
         "instance_id": "inst_000029",
         "instance_scale_level": -3.0,
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -9532,7 +12445,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           106.0,
-          137.0
+          119.75
         ],
         "asset_id": "user.cb5ec321760a2f62",
         "collision_footprint_tiles": [
@@ -9549,9 +12462,17 @@
           2.0
         ],
         "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "instance_base_scale": 0.463768115942029,
+        "instance_custom_scale": true,
         "instance_id": "inst_000052",
+        "instance_scale_level": -2.0,
         "layer": "object_base",
         "map_collision_override": "default",
+        "material_layer_order": 1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -9567,26 +12488,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           106.0,
-          137.0
+          119.75
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.463768115942029,
-          0.463768115942029
+          0.3710144927536232,
+          0.3710144927536232
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
+          31.0,
           24.0
         ],
         "tile_anchor": [
-          33.0,
+          31.0,
           24.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
@@ -9646,8 +12571,8 @@
           41.0
         ],
         "tile_anchor": [
-          33.0,
-          44.0
+          22.0,
+          41.0
         ]
       },
       {
@@ -9707,8 +12632,8 @@
           32.0
         ],
         "tile_anchor": [
-          22.0,
-          35.0
+          21.0,
+          32.0
         ]
       },
       {
@@ -9768,8 +12693,8 @@
           25.0
         ],
         "tile_anchor": [
-          43.0,
-          30.0
+          44.0,
+          25.0
         ]
       },
       {
@@ -10053,7 +12978,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           171.0,
-          127.0
+          112.77777099609376
         ],
         "asset_id": "user.e4d917467d61c4e7",
         "collision_footprint_tiles": [
@@ -10066,11 +12991,18 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
           3.0,
           3.0
         ],
-        "gameplay_role": "none",
+        "instance_base_scale": 0.375,
+        "instance_custom_scale": true,
         "instance_id": "inst_000066",
+        "instance_scale_level": -4.0,
         "layer": "object_base",
         "map_collision_override": "default",
         "movable": true,
@@ -10078,8 +13010,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
@@ -10088,26 +13020,30 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           171.0,
-          127.0
+          112.77777099609376
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.375,
-          0.375
+          0.2250000000000001,
+          0.2250000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          51.0
+          18.0,
+          52.0
         ],
         "tile_anchor": [
-          17.0,
-          51.0
+          18.0,
+          52.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
@@ -10207,6 +13143,7 @@
         "instance_id": "inst_000069",
         "instance_scale_level": -2.0,
         "layer": "object_base",
+        "map_collision_override": "default",
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -10240,8 +13177,8 @@
           37.0
         ],
         "tile_anchor": [
-          68.0,
-          35.0
+          69.0,
+          37.0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10255,15 +13192,15 @@
           420.3636474609375
         ],
         "asset_id": "user.e4bf1bdf2f05c95e",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          3.0,
-          3.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -10281,11 +13218,11 @@
         "instance_id": "inst_000074",
         "instance_scale_level": 1.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -10332,15 +13269,15 @@
           412.6666564941406
         ],
         "asset_id": "user.49809458a2d2fb8c",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          4.0,
-          4.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -10358,11 +13295,11 @@
         "instance_id": "inst_000075",
         "instance_scale_level": 2.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -10409,15 +13346,15 @@
           439.28570556640625
         ],
         "asset_id": "user.02771cc43bb98978",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          2.0,
-          2.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -10435,11 +13372,11 @@
         "instance_id": "inst_000076",
         "instance_scale_level": -3.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -10486,15 +13423,15 @@
           351.4615478515625
         ],
         "asset_id": "user.f687da407f332842",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          5.0,
-          5.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -10512,11 +13449,11 @@
         "instance_id": "inst_000077",
         "instance_scale_level": 3.0,
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -10563,15 +13500,15 @@
           457.0
         ],
         "asset_id": "user.dcd292fac40abf83",
-        "collision_authority": "asset",
+        "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          4.0,
-          4.0
+          0.0,
+          0.0
         ],
-        "collision_policy": "solid_footprint",
-        "collision_policy_id": "",
-        "collision_profile_id": "solid_logical_footprint",
+        "collision_policy": "none",
+        "collision_policy_id": "user_palette_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
         "content_layer": "personal_expansion",
         "flip_x": false,
         "flip_y": false,
@@ -10587,11 +13524,11 @@
         "instance_base_scale": 1.0,
         "instance_id": "inst_000078",
         "layer": "object_base",
-        "manual_collision_expected": false,
+        "manual_collision_expected": true,
         "map_collision_override": "default",
         "material_layer_order": 0.0,
         "movable": true,
-        "navigation_policy": "block_player_and_monster",
+        "navigation_policy": "ignore",
         "object_role": "obstacle",
         "occlusion": true,
         "occupancy_footprint_tiles": [
@@ -11235,7 +14172,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           171.0,
-          422.0
+          395.3333435058594
         ],
         "asset_id": "mse.small_decor.002",
         "base_footprint_tiles": [
@@ -11266,7 +14203,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000087",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11286,15 +14223,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           171.0,
-          422.0
+          395.3333435058594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -11315,170 +14252,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          184.0,
-          189.0
-        ],
-        "asset_id": "mse.small_decor.003",
-        "base_footprint_tiles": [
-          10.0,
-          7.0
-        ],
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          5.0,
-          4.0
-        ],
-        "gameplay_role": "none",
-        "instance_base_footprint_tiles": [
-          10.0,
-          7.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_custom_scale": true,
-        "instance_id": "inst_000088",
-        "instance_scale_level": -5.0,
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "disabled",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          5.0,
-          4.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          184.0,
-          189.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.5000000000000001,
-          0.5000000000000001
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          38.0,
-          52.0
-        ],
-        "tile_anchor": [
-          38.0,
-          52.0
-        ],
-        "visual_footprint_tiles": [
-          5.0,
-          4.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          85.0,
-          297.0
-        ],
-        "asset_id": "mse.small_decor.007",
-        "base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "none",
-        "instance_base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_custom_scale": true,
-        "instance_id": "inst_000089",
-        "instance_scale_level": -6.0,
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "disabled",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          85.0,
-          297.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.40000000000000013,
-          0.40000000000000013
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          44.0,
-          54.0
-        ],
-        "tile_anchor": [
-          44.0,
-          54.0
-        ],
-        "visual_footprint_tiles": [
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
           163.0,
-          198.0
+          171.33334350585938
         ],
         "asset_id": "mse.small_decor.035",
         "base_footprint_tiles": [
@@ -11509,7 +14284,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000090",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -7.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11529,15 +14304,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           163.0,
-          198.0
+          171.33334350585938
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.40000000000000013,
-          0.40000000000000013
+          0.30000000000000016,
+          0.30000000000000016
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -11558,8 +14333,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          154.6666717529297,
-          177.6666717529297
+          128.0,
+          191.0
         ],
         "asset_id": "mse.small_decor.026",
         "base_footprint_tiles": [
@@ -11579,8 +14354,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          2.0
+          2.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -11590,7 +14365,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000091",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11600,8 +14375,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          3.0,
-          2.0
+          2.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -11609,31 +14384,31 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          154.6666717529297,
-          177.6666717529297
+          128.0,
+          191.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.20000000000000015,
+          0.20000000000000015
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
           30.0,
-          24.0
+          25.0
         ],
         "tile_anchor": [
           30.0,
-          24.0
+          25.0
         ],
         "visual_footprint_tiles": [
-          3.0,
-          2.0
+          2.0,
+          1.0
         ]
       },
       {
@@ -11711,87 +14486,6 @@
         "tile_anchor": [
           24.0,
           27.0
-        ],
-        "visual_footprint_tiles": [
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          85.0,
-          297.0
-        ],
-        "asset_id": "mse.small_decor.007",
-        "base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "none",
-        "instance_base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_custom_scale": true,
-        "instance_id": "inst_000093",
-        "instance_scale_level": -6.0,
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "disabled",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          85.0,
-          297.0
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.40000000000000013,
-          0.40000000000000013
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          38.0,
-          54.0
-        ],
-        "tile_anchor": [
-          38.0,
-          54.0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12117,6 +14811,405 @@
           4.0,
           5.0
         ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          182.33334350585935,
+          290.3333435058594
+        ],
+        "asset_id": "mse.small_decor.008",
+        "base_footprint_tiles": [
+          9.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          9.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000101",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          3.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          182.33334350585935,
+          290.3333435058594
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.30000000000000016,
+          0.30000000000000016
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          38.0,
+          53.0
+        ],
+        "tile_anchor": [
+          38.0,
+          53.0
+        ],
+        "visual_footprint_tiles": [
+          3.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          188.0,
+          140.33334350585938
+        ],
+        "asset_id": "mse.small_decor.006",
+        "base_footprint_tiles": [
+          7.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          7.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000102",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          188.0,
+          140.33334350585938
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.30000000000000016,
+          0.30000000000000016
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          39.0,
+          54.0
+        ],
+        "tile_anchor": [
+          39.0,
+          54.0
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000103",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          5,
+          6
+        ],
+        "tile_anchor": [
+          5,
+          6
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000104",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          72,
+          9
+        ],
+        "tile_anchor": [
+          72,
+          9
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          67.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s02_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000105",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          67.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          40,
+          72
+        ],
+        "tile_anchor": [
+          40,
+          72
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
       }
     ],
     "object_front": [],
@@ -12147,7 +15240,7 @@
         "content_layer": "personal_expansion",
         "display_name": "安全区",
         "kind": "safe_area",
-        "polygon_tiles": [
+        "polygon_ground_gu": [
           [
             18.0,
             31.0
@@ -12193,7 +15286,7 @@
             31.0
           ]
         ],
-        "radius_tiles": 0.0,
+        "radius_gu": 0.0,
         "return_anchor": false,
         "runtime_export": true,
         "semantic_id": "safe_area_000001",
@@ -12209,10 +15302,10 @@
     "terrain_front": []
   },
   "legacy_map_id": "bich_province",
-  "legacy_runtime_map_id": 4,
+  "legacy_runtime_map_id": 4.0,
   "map_id": "world_bich_province",
-  "runtime_map_id": 910001,
-  "schema_version": 4.0,
+  "runtime_map_id": 910001.0,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "not_audited",
