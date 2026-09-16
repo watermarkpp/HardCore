@@ -9,17 +9,24 @@ const STRICT_FOLLOW_CONTRACT_ID := "map_diamond_camera_strict_edge_follow_v1"
 const EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
 const PROJECTION_ITERATIONS := 32
 const EPSILON := 0.01
-## C1.2 visibility guard tuning (user device ruling 2026-09-16): the C1.1
-## 10% margin left the pinned player too close to the phone bezel. The
-## margin is raised to 15% - the player stays inside the central 70% window
-## of every screen axis - matching the soft-leash comfort range used by
-## comparable top-down action RPGs (12%..20%), with a hard floor of TWO
-## ground cells measured in world pixels so small viewports never crowd the
-## player against the edge either. 15% is a feel knob: 12% keeps the player
-## nearer the world, 18% is safer; it must never collapse back into a
-## central BAND (the removed C1 14% tanh band stays removed).
+## C1.3 visibility guard tuning (user device rulings 2026-09-16): the C1.2
+## build left the player's body sliding under the top monster HP bar. User
+## facts and rulings:
+##   - the character is TWO ground cells tall,
+##   - clearing the bar needs bar_bottom (93/720 of the content height,
+##     12.9%) + the two-cell body ~= 3.4 cells: the user's 3.5-cell figure
+##     is the zero-headroom mathematical minimum,
+##   - the uniform floor is therefore FOUR ground cells (user offered 3.5
+##     or 4; controller judged 4 - comfort wins, ~1.3 diamond heights of
+##     visible gap between the head and the bar),
+##   - PARAMETER-ONLY change by user directive: no HUD-rect coupling.
+## Both rules must hold, so the offset limit per axis is
+## min(15%-fraction limit, half-viewport - four-cell floor). The previous
+## build combined them with max(), which made the cell floor inert - the
+## real shipped margin was just the 15% fraction. The window never
+## collapses back into a central band (the C1 tanh band stays removed).
 const PLAYER_VISIBLE_SCREEN_MARGIN := 0.15
-const PLAYER_MIN_VISIBLE_GROUND_CELLS := 2.0
+const PLAYER_MIN_VISIBLE_GROUND_CELLS := 4.0
 
 
 ## C1/C1.1 CAMERA-EDGE (user ruling 2026-09-16, GPT audit): two-step edge
@@ -101,10 +108,13 @@ static func visibility_max_offset_px(
 	viewport_size: Vector2,
 	zoom: Vector2
 ) -> Vector2:
-	## Single source of truth for the visibility window: the larger of the
-	## comfort fraction (15% from every screen edge) and the two-ground-cell
-	## world floor (2 x 64 world px, scaled by the fixed zoom), per axis.
-	## Tests and the guard both read this so the contract cannot drift.
+	## Single source of truth for the visibility window, per axis. BOTH
+	## rules must hold, so the offset limit is the MIN of:
+	##   comfort fraction: offset <= (0.5 - 15%) x viewport axis
+	##   cell floor:       viewport/2 - offset >= 4 cells (screen px)
+	## i.e. the player stays >= 15% AND >= 4 ground cells from every edge.
+	## The previous build combined them with max(), which silently disabled
+	## the cell floor (max() relaxes; only min() enforces both).
 	var safe_zoom := Vector2(
 		maxf(absf(zoom.x), 0.0001),
 		maxf(absf(zoom.y), 0.0001)
@@ -119,9 +129,21 @@ static func visibility_max_offset_px(
 		PLAYER_MIN_VISIBLE_GROUND_CELLS
 		* MapEditorCoordinate.GROUND_TILE_SIZE_PX.x
 	)
+	var floor_offset_px := Vector2(
+		maxf(
+			0.0,
+			maxf(viewport_size.x, 1.0) * 0.5
+			- ground_cell_floor_px * safe_zoom.x
+		),
+		maxf(
+			0.0,
+			maxf(viewport_size.y, 1.0) * 0.5
+			- ground_cell_floor_px * safe_zoom.y
+		)
+	)
 	return Vector2(
-		maxf(fraction_px.x, ground_cell_floor_px * safe_zoom.x),
-		maxf(fraction_px.y, ground_cell_floor_px * safe_zoom.y)
+		minf(fraction_px.x, floor_offset_px.x),
+		minf(fraction_px.y, floor_offset_px.y)
 	)
 
 
