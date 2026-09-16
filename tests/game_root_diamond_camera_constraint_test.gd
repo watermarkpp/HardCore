@@ -1,12 +1,16 @@
 extends Node
 
-## C1.2 CAMERA-EDGE-V2 production contract (user ruling 2026-09-16, GPT
-## audit): GameRoot composes the zero-black ideal center (strict constrained
-## solve) with the player visibility guard. The hard constraint is that the
-## player stays inside the visibility window of every screen axis - at
-## least 15% from every edge (central 70%) and never closer than two ground
-## cells; minimizing the black area outside the map is the optimization
-## goal, NOT a hard zero-black contract. The view height stays exactly
+## C1.5 CAMERA-EDGE progressive-follow production contract (user device
+## rulings 2026-09-16, GPT audit): GameRoot composes the zero-black ideal
+## center (strict constrained solve) with the progressive player visibility
+## guard. The hard constraint is that the player stays inside the visibility
+## window of every screen axis - at least 15% from every edge (central 70%)
+## and never closer than two ground cells; minimizing the black area outside
+## the map is the optimization goal, NOT a hard zero-black contract. The
+## camera glides with the player as soon as they leave the anchor and tracks
+## 1:1 beyond the window, holding the player at PROGRESSIVE_TRACK_FRACTION
+## of the window (the old hold / drift / catch-up excess-only follow is
+## rejected by device ruling). The view height stays exactly
 ## ArtSpec.CAMERA_ZOOM everywhere. The former "viewport corners always
 ## inside the map" contract from C1 is REJECTED by device ruling and must
 ## not be asserted here.
@@ -97,7 +101,8 @@ func _run() -> void:
 				probe, player_offset_px,
 			]
 		)
-		# GOAL: zero black whenever possible, minimum black otherwise.
+		# GOAL: progressive follow - the camera glides with the player inside
+		# the window and tracks 1:1 beyond it (C1.5 user device ruling).
 		var player_delta_px := (probe - ideal_center) * camera.zoom
 		if (
 			absf(player_delta_px.x) <= max_offset_px.x + 0.01
@@ -105,27 +110,28 @@ func _run() -> void:
 		):
 			zero_black_probe_count += 1
 			assert(
-				camera.global_position.is_equal_approx(ideal_center),
-				"inside the visibility window the camera must stay on the zero-black ideal at %s"
+				absf(player_offset_px.x) <= absf(player_delta_px.x) + 0.01
+				and absf(player_offset_px.y) <= absf(player_delta_px.y) + 0.01,
+				"the progressive follow must not overshoot the player at %s"
 				% probe
 			)
 		else:
-			var excess_px := Vector2(
-				maxf(0.0, absf(player_delta_px.x) - max_offset_px.x),
-				maxf(0.0, absf(player_delta_px.y) - max_offset_px.y)
+			var expected_ride_px := Vector2(
+				max_offset_px.x * CameraConstraint.PROGRESSIVE_TRACK_FRACTION,
+				max_offset_px.y * CameraConstraint.PROGRESSIVE_TRACK_FRACTION
 			)
-			var camera_refollow_px := Vector2(
-				absf(camera.global_position.x - ideal_center.x) * camera.zoom.x,
-				absf(camera.global_position.y - ideal_center.y) * camera.zoom.y
-			)
-			assert(
-				Vector2(
-					absf(camera_refollow_px.x - excess_px.x),
-					absf(camera_refollow_px.y - excess_px.y)
-				).length() <= 0.02,
-				"the camera must re-follow by exactly the excess (minimum black) at %s"
-				% probe
-			)
+			if absf(player_delta_px.x) > max_offset_px.x + 0.01:
+				assert(
+					absf(player_offset_px.x - expected_ride_px.x) <= 0.01,
+					"a saturated X axis must hold the ride fraction at %s: %s"
+					% [probe, player_offset_px.x]
+				)
+			if absf(player_delta_px.y) > max_offset_px.y + 0.01:
+				assert(
+					absf(player_offset_px.y - expected_ride_px.y) <= 0.01,
+					"a saturated Y axis must hold the ride fraction at %s: %s"
+					% [probe, player_offset_px.y]
+				)
 	assert(
 		zero_black_probe_count >= 1,
 		"the probe set must contain zero-black positions"
@@ -137,8 +143,8 @@ func _run() -> void:
 		camera.global_position.is_equal_approx(centroid),
 		"map-center follow must keep the camera on the player"
 	)
-	# Walking far past the boundary: the player stays pinned inside the
-	# visibility window and the saturated camera follows 1:1 with the player.
+	# Walking far past the boundary: the player rests at the ride fraction
+	# inside the window and the saturated camera follows 1:1 with the player.
 	var corner: Vector2 = boundary[0]
 	var outward := (corner - centroid).normalized()
 	var previous_camera := Vector2.INF
@@ -160,8 +166,12 @@ func _run() -> void:
 			and player_offset_px.y <= max_offset_px.y + 0.01,
 			"the player must never leave the visibility window (step %d)" % step
 		)
-		var saturated_x := player_offset_px.x >= max_offset_px.x - 0.01
-		var saturated_y := player_offset_px.y >= max_offset_px.y - 0.01
+		var saturated_x := player_offset_px.x >= (
+			max_offset_px.x * CameraConstraint.PROGRESSIVE_TRACK_FRACTION - 0.01
+		)
+		var saturated_y := player_offset_px.y >= (
+			max_offset_px.y * CameraConstraint.PROGRESSIVE_TRACK_FRACTION - 0.01
+		)
 		if saturated_x or saturated_y:
 			saturated = true
 			if not previous_camera.is_equal_approx(Vector2.INF):
