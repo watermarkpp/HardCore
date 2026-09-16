@@ -1,5 +1,5 @@
 {
-  "build_sha256": "1027de83ec0f974f72006c35fd1eec76bbb612dbbfbaed53200988af7fc401ac",
+  "build_sha256": "aaa7d826158219486b9933921881f3a4f1e36fa868682b1e760d6e3bf17862a8",
   "collision": {
     "blocked_count": 137.0,
     "blocked_tiles": [
@@ -4900,6 +4900,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "boss",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 3600.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.hidden_abyss_domain.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.hidden_abyss_domain.boss_spawn.000001",
@@ -4955,10 +4958,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "d09ba10c4ad0df7b114a1527bcbfecc71d982c16266c80d17ded9e2c8d7a577b",
+      "authoring_sha256": "d42d215baf35db4c1a8dc46e70515676a8be66bf1a3a7204e54966d2b6a99a6d",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 3.0,
-      "document_sha256": "e9865f9fc880c2eb19391843e6f2231ad02089b120526bf08d8b2c9611ebd446",
+      "document_sha256": "fb6d2b540d113bfe3579b544119a27a9d3c6a9004cdf8e931d2684f279bb1783",
       "ground_manifest_sha256": "e3516baf51ee924d617cf6b253dfc64c4390ee83f74c231d7a68775632ae625e",
       "ground_state_sha256": "6581e6047ea9045d15171a9a82b23f7d71c457a894e2cd4ce6fdb37185bfea0f",
       "map_key": "hidden_abyss_domain",

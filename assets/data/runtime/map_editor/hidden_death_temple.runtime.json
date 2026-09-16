@@ -1,5 +1,5 @@
 {
-  "build_sha256": "96dac0a527e8d3de4b8334c5088d9b9d92c9fc190f7b05c133abdcaabfa8dbd4",
+  "build_sha256": "c59df76afed7c847c2521367e70220a88a3b9cbe837e9d821ace7aedaa81df9b",
   "collision": {
     "blocked_count": 130.0,
     "blocked_tiles": [
@@ -4518,6 +4518,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "boss",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 3600.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.hidden_death_temple.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.hidden_death_temple.boss_spawn.000001",
@@ -4573,10 +4576,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "df777abef5185bedf289a4e71e6ab93d649c83d3b9b456393b1357469e0be3e9",
+      "authoring_sha256": "fe0f83aac6cfd62591f018b7075786cfdfdbad10d69b7f0de8f8e0fb5bb93d08",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 9.0,
-      "document_sha256": "ae062e10e6dee0e93d8afc867c5d2bd5d428f986398f11e18a923d6c4bb6a019",
+      "document_sha256": "be6df55b61847f1a938b1a50b1e629560d800ca42ec9c10edc005aeff11e77e7",
       "ground_manifest_sha256": "edbf86d838cc81c677163a3addde0ca2faf8cc84308cfb8cd9470dcbb75a8ef7",
       "ground_state_sha256": "9809047a910b61786c3ad0088ee7b2f82caa661685b0e0951826e1b61f3e22f1",
       "map_key": "hidden_death_temple",

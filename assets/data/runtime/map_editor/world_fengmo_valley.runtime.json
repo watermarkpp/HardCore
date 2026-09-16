@@ -1,5 +1,5 @@
 {
-  "build_sha256": "38cb2f1bb641fbb85afa7f4226cdb9ca30a92a6bd2c20d8dfd9c91e001c0b95d",
+  "build_sha256": "76dece74a380bce75ee5c222d4851f9834583e8c65bc3c2c0c7c401c0ce5ceba",
   "collision": {
     "blocked_count": 198.0,
     "blocked_tiles": [
@@ -3554,7 +3554,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         216.0,
-        289.71429443359375
+        289.714294433594
       ],
       "asset_id": "user.map_exit.20260822.s05_r1_c1",
       "base_footprint_tiles": [
@@ -3605,15 +3605,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         216.0,
-        289.71429443359375
+        289.714294433594
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.7000000000000001,
-        0.7000000000000001
+        0.7,
+        0.7
       ],
       "scene_intent": "terrain_boundary",
       "selectable": true,
@@ -3932,8 +3932,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.10000000000000014,
-        0.10000000000000014
+        0.1,
+        0.1
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -3955,7 +3955,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         225.0,
-        205.33334350585935
+        205.333343505859
       ],
       "asset_id": "user.20ff8a4bbda2be8f",
       "base_footprint_tiles": [
@@ -4006,15 +4006,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         225.0,
-        205.33334350585935
+        205.333343505859
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4035,7 +4035,7 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        236.3333282470703,
+        236.33332824707,
         128.0
       ],
       "asset_id": "user.f4774b51043b5125",
@@ -4086,7 +4086,7 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        236.3333282470703,
+        236.33332824707,
         128.0
       ],
       "placement_rule": "inside_map",
@@ -4094,8 +4094,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.6000000000000001,
-        0.6000000000000001
+        0.6,
+        0.6
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4117,7 +4117,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         211.0,
-        157.6666717529297
+        157.66667175293
       ],
       "asset_id": "user.cef59003e49deab3",
       "base_footprint_tiles": [
@@ -4168,15 +4168,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         211.0,
-        157.6666717529297
+        157.66667175293
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.6000000000000001,
-        0.6000000000000001
+        0.6,
+        0.6
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4256,8 +4256,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.6000000000000001,
-        0.6000000000000001
+        0.6,
+        0.6
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4337,8 +4337,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.5000000000000001,
-        0.5000000000000001
+        0.5,
+        0.5
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4359,7 +4359,7 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        223.6666717529297,
+        223.66667175293,
         151.0
       ],
       "asset_id": "user.5357fd733b6a0198",
@@ -4410,7 +4410,7 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        223.6666717529297,
+        223.66667175293,
         151.0
       ],
       "placement_rule": "inside_map",
@@ -4418,8 +4418,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.6000000000000001,
-        0.6000000000000001
+        0.6,
+        0.6
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4499,8 +4499,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.5000000000000001,
-        0.5000000000000001
+        0.5,
+        0.5
       ],
       "scene_intent": "block_path",
       "selectable": true,
@@ -4522,7 +4522,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         167.0,
-        315.3333435058594
+        315.333343505859
       ],
       "asset_id": "mse.small_decor.001",
       "base_footprint_tiles": [
@@ -4573,15 +4573,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         167.0,
-        315.3333435058594
+        315.333343505859
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4661,8 +4661,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4683,8 +4683,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        182.33334350585935,
-        290.3333435058594
+        182.333343505859,
+        290.333343505859
       ],
       "asset_id": "mse.small_decor.008",
       "base_footprint_tiles": [
@@ -4734,16 +4734,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        182.33334350585935,
-        290.3333435058594
+        182.333343505859,
+        290.333343505859
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4823,8 +4823,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4845,8 +4845,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        164.6666717529297,
-        135.6666717529297
+        164.66667175293,
+        135.66667175293
       ],
       "asset_id": "mse.small_decor.031",
       "base_footprint_tiles": [
@@ -4896,16 +4896,16 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        164.6666717529297,
-        135.6666717529297
+        164.66667175293,
+        135.66667175293
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.30000000000000016,
-        0.30000000000000016
+        0.3,
+        0.3
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4985,8 +4985,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5066,8 +5066,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.20000000000000015,
-        0.20000000000000015
+        0.2,
+        0.2
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -5463,8 +5463,8 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        0.5000000000000001,
-        0.5000000000000001
+        0.5,
+        0.5
       ],
       "scene_intent": "terrain_boundary",
       "selectable": true,
@@ -5758,6 +5758,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "boss",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 3600.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000001",
@@ -5801,6 +5804,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000002",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000002",
@@ -5844,6 +5850,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000003",
@@ -5852,6 +5860,98 @@
         "tile": [
           2.0,
           11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 38.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            1496.0,
+            -30.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45.0,
+          34.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅战将",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 54.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            20.0,
+            20.0,
+            1.0,
+            1496.0,
+            -9.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45.0,
+          10.0
         ]
       }
     ],
@@ -6022,6 +6122,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000001",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000001",
@@ -6029,50 +6131,6 @@
         "tile": [
           10.0,
           17.0
-        ]
-      },
-      {
-        "authority_ref": {
-          "map_id": "world_fengmo_valley",
-          "source_category_role": "ordinary",
-          "source_line": 185.0,
-          "source_token_index": 7.0
-        },
-        "auto_placement_status": "AUTO_POSITIONED",
-        "classification": "elite",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "半兽勇士",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": 38.0,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "placement_evidence": {
-          "component_id": 0.0,
-          "current_monster_library_only": true,
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
-          "selection_score": [
-            0.0,
-            41.0,
-            7.0,
-            1.0,
-            1496.0,
-            -30.0,
-            -46.0
-          ]
-        },
-        "radius_gu": 0.0,
-        "respawn_policy_id": "beginner_outdoor",
-        "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000002",
-        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000002",
-        "spawn_rule": "single_anchor_user_copy_template",
-        "tile": [
-          45.0,
-          34.0
         ]
       },
       {
@@ -6110,6 +6168,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000003",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000003",
@@ -6154,6 +6214,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000004",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000004",
@@ -6198,6 +6260,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000005",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000005",
@@ -6205,50 +6269,6 @@
         "tile": [
           22.0,
           19.0
-        ]
-      },
-      {
-        "authority_ref": {
-          "map_id": "world_fengmo_valley",
-          "source_category_role": "ordinary",
-          "source_line": 185.0,
-          "source_token_index": 4.0
-        },
-        "auto_placement_status": "AUTO_POSITIONED",
-        "classification": "elite",
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "骷髅战将",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": 54.0,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "placement_evidence": {
-          "component_id": 0.0,
-          "current_monster_library_only": true,
-          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
-          "selection_score": [
-            0.0,
-            20.0,
-            20.0,
-            1.0,
-            1496.0,
-            -9.0,
-            -46.0
-          ]
-        },
-        "radius_gu": 0.0,
-        "respawn_policy_id": "beginner_outdoor",
-        "runtime_export": true,
-        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000006",
-        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000006",
-        "spawn_rule": "single_anchor_user_copy_template",
-        "tile": [
-          45.0,
-          10.0
         ]
       },
       {
@@ -6286,6 +6306,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000007",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000007",
@@ -6330,6 +6352,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000008",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000008",
@@ -6374,6 +6398,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000009",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000009",
@@ -6418,6 +6444,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000010",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000010",
@@ -6462,6 +6490,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000011",
         "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000011",
@@ -6692,10 +6722,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "2ab80fcb8059696bc4d80f5192dc55591cd6ae069c0fde0005a8c9342e5a2431",
+      "authoring_sha256": "7e2151c34b0dc7de05284c7b06719051e91492a9ce9d63fe731c8a2997584a2d",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 17.0,
-      "document_sha256": "070ffd623ac7bc87fe9aeacde9895040098f1c18bac5ca8e636aea2377a2b838",
+      "document_sha256": "1d5a596d6e0d0727195871c57fd42dbae2f1ecdab37a9ccbc13abfd0d7ff6312",
       "ground_manifest_sha256": "238301f21e160ec5bfe213fdf7816f1cc71ceac979f11ad710c4cd8c894735c9",
       "ground_state_sha256": "22c99c976d9168e5a7e049f19eff419adc74d41f7ab00130bfb6bc75e109ffea",
       "map_key": "world_fengmo_valley",

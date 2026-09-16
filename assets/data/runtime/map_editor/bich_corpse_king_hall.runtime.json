@@ -1,5 +1,5 @@
 {
-  "build_sha256": "1c8c303412a65e2c7d5aeddd876e670ccb2eb8c63c3a714f2289f0c716de65bc",
+  "build_sha256": "44759549a6109739f43f47833c4b0dbaa65f43b19fbe0353af82e788dee77672",
   "collision": {
     "blocked_count": 152.0,
     "blocked_tiles": [
@@ -4441,6 +4441,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.bich_corpse_king_hall.boss_spawn.000001",
@@ -4484,6 +4487,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000002",
@@ -4528,6 +4533,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000003",
@@ -4572,6 +4579,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000004",
@@ -4616,6 +4625,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000005",
@@ -4660,6 +4671,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000006",
@@ -4704,6 +4717,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000007",
@@ -4748,6 +4763,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000008",
@@ -4792,6 +4809,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.bich_corpse_king_hall.boss_spawn.000009",
@@ -4848,10 +4867,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "5e340a3819abf0050e7eb2adba38a44eee29bfa0840cb4392423b87fd584e40a",
+      "authoring_sha256": "a562c7da88149cd394218cb57dacc2fa0c15ba333b1d2e88891886bf30b9e7a0",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 3.0,
-      "document_sha256": "856fdc6375abf686e6bcf9aa41eebaf5e4d62e9e8ee5f74324b14106bc9dcc65",
+      "document_sha256": "8555d3e45db59ccebfb9dc13f66640655349efa51cff9ff77d094f1237aaee1f",
       "ground_manifest_sha256": "f80d83e3dd3a451e390e28ab160f334edc59acbda9625efa86cafb3982d0b4a5",
       "ground_state_sha256": "bb88f9fff5af9fd122aa2f471fbb0b69e44e084e8a093fcf65a59d819fdb7019",
       "map_key": "bich_corpse_king_hall",

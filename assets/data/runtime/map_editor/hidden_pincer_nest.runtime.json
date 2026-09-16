@@ -1,5 +1,5 @@
 {
-  "build_sha256": "1c7f8cef9e5c9753158109b8425edf77a8406d8191c24c72261679fa6309c32e",
+  "build_sha256": "d3f3cd060e048ad0b9ae51ca70345838e09ddc23267943dbc76de64485a73a80",
   "collision": {
     "blocked_count": 144.0,
     "blocked_tiles": [
@@ -5982,6 +5982,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "boss",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 3600.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.hidden_pincer_nest.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.hidden_pincer_nest.boss_spawn.000001",
@@ -6037,10 +6040,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "b1326b49b7fea3cedf2c03e9945e6e1fe89a2b630bf9f42abf5b678470f7e5f6",
+      "authoring_sha256": "f1a266cc9008b9db3819ade5763f7c9847ba97a521642b1b35af9805cb135d96",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 6.0,
-      "document_sha256": "ebafae1dffe5a7d5186fd8374367e218e3c89b1d87314895e144db188e07ff41",
+      "document_sha256": "d75284bb956ea7bea9df84e0de475596ad3b3f98bd5c2e9b45da9568121de568",
       "ground_manifest_sha256": "3d74ba08853fb767b5fcf890d463cad83e8b1f4ccac60a416301a4a9a0d3794a",
       "ground_state_sha256": "cf56d33da0585055739341a0004bb469c10543b3dda72867657145722c0667be",
       "map_key": "hidden_pincer_nest",

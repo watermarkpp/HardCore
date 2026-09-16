@@ -1,9 +1,9 @@
 {
   "maps": [
     {
-      "approval_revision": 10,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "f6b2a8ee127f9c32f2c0396f5c6cf9dfb226a3b9be40e1404b905196ecd17785",
+      "approved_build_sha256": "ff8c0e8ac7478ab1ad6d65bca5465e85096d5f815c6b75efef9555b88818c360",
       "display_name": "比奇省（单机重制）",
       "map_key": "world_bich_province",
       "release_state": "implemented_playable",
@@ -56,13 +56,13 @@
             "target_map_key": "world_snake_valley"
           }
         ],
-        "runtime_build_sha256": "f6b2a8ee127f9c32f2c0396f5c6cf9dfb226a3b9be40e1404b905196ecd17785"
+        "runtime_build_sha256": "ff8c0e8ac7478ab1ad6d65bca5465e85096d5f815c6b75efef9555b88818c360"
       }
     },
     {
-      "approval_revision": 5,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "4bc3a9ce22bdd8136645ec95a044f56e374958b413e1e38d8bf2c9f6dbd93810",
+      "approved_build_sha256": "32a271d1acede53aa4d59c192b3490a479d3ce9829711ff4d81c4c19592492b4",
       "display_name": "毒蛇山谷",
       "map_key": "world_snake_valley",
       "release_state": "implemented_playable",
@@ -99,13 +99,13 @@
             "target_map_key": "snake_mine_passage_1"
           }
         ],
-        "runtime_build_sha256": "4bc3a9ce22bdd8136645ec95a044f56e374958b413e1e38d8bf2c9f6dbd93810"
+        "runtime_build_sha256": "32a271d1acede53aa4d59c192b3490a479d3ce9829711ff4d81c4c19592492b4"
       }
     },
     {
-      "approval_revision": 5,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "f33571ad16b4cd6b7cacfe3409740dcb64a4d2351524a9dacc15868b32de694a",
+      "approved_build_sha256": "2286254321b440edf6b2d983324bdddd91212c29838c4cfe980dc62033d648f1",
       "display_name": "盟重省",
       "map_key": "world_mengzhong_province",
       "release_state": "implemented_playable",
@@ -158,13 +158,13 @@
             "target_map_key": "mengzhong_death_valley_dungeon"
           }
         ],
-        "runtime_build_sha256": "f33571ad16b4cd6b7cacfe3409740dcb64a4d2351524a9dacc15868b32de694a"
+        "runtime_build_sha256": "2286254321b440edf6b2d983324bdddd91212c29838c4cfe980dc62033d648f1"
       }
     },
     {
-      "approval_revision": 7,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "e109657ad085347976d8d6c78a28cf99ad5d57e9c8b27e9ff6beb1efe6db2cab",
+      "approved_build_sha256": "a0778da15a47dbf7614e70dd638dd7e2c715caab1cc4c052f88ce89060b8f221",
       "display_name": "沃玛森林",
       "map_key": "world_wooma_forest",
       "release_state": "implemented_playable",
@@ -216,13 +216,13 @@
             "target_map_key": "hidden_abyss_domain"
           }
         ],
-        "runtime_build_sha256": "e109657ad085347976d8d6c78a28cf99ad5d57e9c8b27e9ff6beb1efe6db2cab"
+        "runtime_build_sha256": "a0778da15a47dbf7614e70dd638dd7e2c715caab1cc4c052f88ce89060b8f221"
       }
     },
     {
-      "approval_revision": 6,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "38cb2f1bb641fbb85afa7f4226cdb9ca30a92a6bd2c20d8dfd9c91e001c0b95d",
+      "approved_build_sha256": "76dece74a380bce75ee5c222d4851f9834583e8c65bc3c2c0c7c401c0ce5ceba",
       "display_name": "封魔谷",
       "map_key": "world_fengmo_valley",
       "release_state": "implemented_playable",
@@ -230,10 +230,10 @@
       "runtime_path": "res://assets/data/runtime/map_editor/world_fengmo_valley.runtime.json",
       "ui_presentation": {
         "boss_names": [
-          "半兽勇士",
-          "骷髅战将",
           "千年树妖",
-          "骷髅精灵"
+          "骷髅精灵",
+          "半兽勇士",
+          "骷髅战将"
         ],
         "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": true,
@@ -269,24 +269,24 @@
             "target_map_key": "hidden_death_temple"
           }
         ],
-        "runtime_build_sha256": "38cb2f1bb641fbb85afa7f4226cdb9ca30a92a6bd2c20d8dfd9c91e001c0b95d"
+        "runtime_build_sha256": "76dece74a380bce75ee5c222d4851f9834583e8c65bc3c2c0c7c401c0ce5ceba"
       }
     },
     {
-      "approval_revision": 6,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "ec40addd373480e5572da3ef8e4fd1521b7fccca8c5e8ade58bbd761c337f471",
+      "approved_build_sha256": "f35029be4c89562719a46d15cb6293e3465f575d1512efaa37e65ae937c6dfee",
       "display_name": "白日门",
       "map_key": "world_white_day_gate",
       "release_state": "implemented_playable",
-      "runtime_map_id": 910006,
+      "runtime_map_id": 910006.0,
       "runtime_path": "res://assets/data/runtime/map_editor/world_white_day_gate.runtime.json",
       "ui_presentation": {
         "boss_names": [
-          "半兽勇士",
           "多钩猫王",
           "钉耙猫王",
-          "半兽统领"
+          "半兽统领",
+          "半兽勇士"
         ],
         "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": true,
@@ -304,27 +304,27 @@
         "portals": [
           {
             "label": "沃玛森林",
-            "target_map_id": 910004,
+            "target_map_id": 910004.0,
             "target_map_key": "world_wooma_forest"
           },
           {
             "label": "赤月峡谷",
-            "target_map_id": 916001,
+            "target_map_id": 916001.0,
             "target_map_key": "chiyue_valley"
           },
           {
             "label": "钳虫巢穴",
-            "target_map_id": 918006,
+            "target_map_id": 918006.0,
             "target_map_key": "hidden_pincer_nest"
           }
         ],
-        "runtime_build_sha256": "ec40addd373480e5572da3ef8e4fd1521b7fccca8c5e8ade58bbd761c337f471"
+        "runtime_build_sha256": "f35029be4c89562719a46d15cb6293e3465f575d1512efaa37e65ae937c6dfee"
       }
     },
     {
-      "approval_revision": 7,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "2017bf1259d02aae287199c2e62bdb8c94db848b2b79bd2f91aa6837db6b673c",
+      "approved_build_sha256": "0d5c16571c90cd0cb54c5bf694dc0865f123599221b05967305d79ae0523b3c6",
       "display_name": "苍月岛",
       "map_key": "world_cangyue_island",
       "release_state": "implemented_playable",
@@ -336,10 +336,8 @@
         "has_safe_area": true,
         "monster_names": [
           "毒蜘蛛",
-          "稻草人",
           "钉耙猫",
           "森林雪人",
-          "食人花",
           "半兽人"
         ],
         "npc_kinds": [
@@ -364,13 +362,13 @@
             "target_map_key": "world_mengzhong_province"
           }
         ],
-        "runtime_build_sha256": "2017bf1259d02aae287199c2e62bdb8c94db848b2b79bd2f91aa6837db6b673c"
+        "runtime_build_sha256": "0d5c16571c90cd0cb54c5bf694dc0865f123599221b05967305d79ae0523b3c6"
       }
     },
     {
-      "approval_revision": 7,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "7c85b90b4df297e21e977615537bca306fa5087d913b7b5377dab759a6853e6e",
+      "approved_build_sha256": "b54dc4f224d69b339205d5ca729ab42054c4e30a8b5cfd94a53a0f5a039025bc",
       "display_name": "兽人古墓一层",
       "map_key": "bich_orc_tomb_f1",
       "release_state": "implemented_playable",
@@ -401,13 +399,13 @@
             "target_map_key": "world_bich_province"
           }
         ],
-        "runtime_build_sha256": "7c85b90b4df297e21e977615537bca306fa5087d913b7b5377dab759a6853e6e"
+        "runtime_build_sha256": "b54dc4f224d69b339205d5ca729ab42054c4e30a8b5cfd94a53a0f5a039025bc"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "16f235d2f467bce582b352110df476e945af354c984b7dc95cb92cd7f56c4af4",
+      "approved_build_sha256": "3f713b6a0640bb6c35ff1f0645d8543cd1bd5052e8128331a309584ac0b75e59",
       "display_name": "兽人古墓二层",
       "map_key": "bich_orc_tomb_f2",
       "release_state": "implemented_playable",
@@ -442,13 +440,13 @@
             "target_map_key": "bich_orc_tomb_f1"
           }
         ],
-        "runtime_build_sha256": "16f235d2f467bce582b352110df476e945af354c984b7dc95cb92cd7f56c4af4"
+        "runtime_build_sha256": "3f713b6a0640bb6c35ff1f0645d8543cd1bd5052e8128331a309584ac0b75e59"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "671aaf95431d3a9e39ad784224d3965643b7feb2306e17d8845f7ec115bce896",
+      "approved_build_sha256": "876397cb37dd992c771c7a227244d151ec0b0587309823a49c526d5afc677d88",
       "display_name": "兽人古墓三层",
       "map_key": "bich_orc_tomb_f3",
       "release_state": "implemented_playable",
@@ -477,13 +475,13 @@
             "target_map_key": "bich_orc_tomb_f2"
           }
         ],
-        "runtime_build_sha256": "671aaf95431d3a9e39ad784224d3965643b7feb2306e17d8845f7ec115bce896"
+        "runtime_build_sha256": "876397cb37dd992c771c7a227244d151ec0b0587309823a49c526d5afc677d88"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "96729184f77662659cb690394803b4be5b93d7e63a13476d00a7e4a8eff24878",
+      "approved_build_sha256": "a018b1332ba1685d5bedd108b5ec9daa9d2fd6aecf80b601f7e050a5b8eedd7d",
       "display_name": "矿区一层",
       "map_key": "bich_mine_f1",
       "release_state": "implemented_playable",
@@ -516,13 +514,13 @@
             "target_map_key": "bich_mine_f2"
           }
         ],
-        "runtime_build_sha256": "96729184f77662659cb690394803b4be5b93d7e63a13476d00a7e4a8eff24878"
+        "runtime_build_sha256": "a018b1332ba1685d5bedd108b5ec9daa9d2fd6aecf80b601f7e050a5b8eedd7d"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "255e2a0b92c29019d48871a04ee9768802a7f0b0189306ab9b34e0a06e9c3523",
+      "approved_build_sha256": "dac4897435892623e7ad84eb28491d0577a5ec8cc5a5530b5fa829e01bfc36fe",
       "display_name": "矿区二层",
       "map_key": "bich_mine_f2",
       "release_state": "implemented_playable",
@@ -555,13 +553,13 @@
             "target_map_key": "bich_corpse_king_hall"
           }
         ],
-        "runtime_build_sha256": "255e2a0b92c29019d48871a04ee9768802a7f0b0189306ab9b34e0a06e9c3523"
+        "runtime_build_sha256": "dac4897435892623e7ad84eb28491d0577a5ec8cc5a5530b5fa829e01bfc36fe"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "1c8c303412a65e2c7d5aeddd876e670ccb2eb8c63c3a714f2289f0c716de65bc",
+      "approved_build_sha256": "44759549a6109739f43f47833c4b0dbaa65f43b19fbe0353af82e788dee77672",
       "display_name": "尸王殿",
       "map_key": "bich_corpse_king_hall",
       "release_state": "implemented_playable",
@@ -576,13 +574,13 @@
         "monster_names": [],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "1c8c303412a65e2c7d5aeddd876e670ccb2eb8c63c3a714f2289f0c716de65bc"
+        "runtime_build_sha256": "44759549a6109739f43f47833c4b0dbaa65f43b19fbe0353af82e788dee77672"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "b98fd6acc8d193149311d1e1c4da7dbba4b0a748b4553bdfff7a48f4de32f2da",
+      "approved_build_sha256": "7e27afee3ef59e1eceb7d1459f11993e585f24e539c34ec0b3ba7c88f61ab027",
       "display_name": "连接通道1",
       "map_key": "snake_mine_passage_1",
       "release_state": "implemented_playable",
@@ -615,13 +613,13 @@
             "target_map_key": "snake_mine_passage_2"
           }
         ],
-        "runtime_build_sha256": "b98fd6acc8d193149311d1e1c4da7dbba4b0a748b4553bdfff7a48f4de32f2da"
+        "runtime_build_sha256": "7e27afee3ef59e1eceb7d1459f11993e585f24e539c34ec0b3ba7c88f61ab027"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "b1d368ee8d87cf1bd16588454ec244657328bc9c147799e995c391f5a36801aa",
+      "approved_build_sha256": "8e2ba418e911b0a11aa8da9339eb531580840a6d67212e2b8a8e55bdac870805",
       "display_name": "连接通道2",
       "map_key": "snake_mine_passage_2",
       "release_state": "implemented_playable",
@@ -654,13 +652,13 @@
             "target_map_key": "snake_mine_passage_1"
           }
         ],
-        "runtime_build_sha256": "b1d368ee8d87cf1bd16588454ec244657328bc9c147799e995c391f5a36801aa"
+        "runtime_build_sha256": "8e2ba418e911b0a11aa8da9339eb531580840a6d67212e2b8a8e55bdac870805"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "55116cabc7365bbe807fc0d60d34611e9b886b1b75982185dc5837078054310c",
+      "approved_build_sha256": "98df634f2c91bf37c45efb5db10e978789752836a092aa204e25fdf20c23af87",
       "display_name": "未知暗殿",
       "map_key": "snake_unknown_dark_palace",
       "release_state": "implemented_playable",
@@ -682,13 +680,13 @@
         ],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "55116cabc7365bbe807fc0d60d34611e9b886b1b75982185dc5837078054310c"
+        "runtime_build_sha256": "98df634f2c91bf37c45efb5db10e978789752836a092aa204e25fdf20c23af87"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "f13d827f5fb582e4b0c0617cafc72d613e7d839b11f19d86417dc52d358eb341",
+      "approved_build_sha256": "d0e6eecee2b9959775649f8690f191d66e20795f1414db0f60fbb6e1cd823b82",
       "display_name": "石墓一层",
       "map_key": "mengzhong_stone_tomb_f1",
       "release_state": "implemented_playable",
@@ -717,13 +715,13 @@
             "target_map_key": "mengzhong_stone_tomb_f2"
           }
         ],
-        "runtime_build_sha256": "f13d827f5fb582e4b0c0617cafc72d613e7d839b11f19d86417dc52d358eb341"
+        "runtime_build_sha256": "d0e6eecee2b9959775649f8690f191d66e20795f1414db0f60fbb6e1cd823b82"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "e0cf0f1d2d14acfe0bb0734e8ea3b1ed79496bf465e6d0ee15742a5cdd49d03d",
+      "approved_build_sha256": "c8778e37f11800cd623b2cb4ba21e9b7daeccb803f321e1f40ead3e3a522b475",
       "display_name": "石墓二层",
       "map_key": "mengzhong_stone_tomb_f2",
       "release_state": "implemented_playable",
@@ -754,13 +752,13 @@
             "target_map_key": "mengzhong_stone_tomb_f3"
           }
         ],
-        "runtime_build_sha256": "e0cf0f1d2d14acfe0bb0734e8ea3b1ed79496bf465e6d0ee15742a5cdd49d03d"
+        "runtime_build_sha256": "c8778e37f11800cd623b2cb4ba21e9b7daeccb803f321e1f40ead3e3a522b475"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "4ea261042df7279a749ea96ae06d1438f026546b81c79098da97b518ac5dd29c",
+      "approved_build_sha256": "f344e9902f8fc92abadc7d3cf7b018ec415b1cd229deffae7c4637061941aaf0",
       "display_name": "石墓三层",
       "map_key": "mengzhong_stone_tomb_f3",
       "release_state": "implemented_playable",
@@ -780,7 +778,9 @@
           "楔蛾",
           "黑野猪"
         ],
-        "npc_kinds": [],
+        "npc_kinds": [
+          "shop"
+        ],
         "portals": [
           {
             "label": "石墓二层",
@@ -793,13 +793,13 @@
             "target_map_key": "mengzhong_stone_tomb_f4"
           }
         ],
-        "runtime_build_sha256": "4ea261042df7279a749ea96ae06d1438f026546b81c79098da97b518ac5dd29c"
+        "runtime_build_sha256": "f344e9902f8fc92abadc7d3cf7b018ec415b1cd229deffae7c4637061941aaf0"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "3a43aa5360bc5865e2a3392d1fff5f74a4721d9ee366fac2be58b14cbdc06cc6",
+      "approved_build_sha256": "8f54843a919265a90e751233755c43d2f5779d4215411254d1be5b4686400257",
       "display_name": "石墓四层",
       "map_key": "mengzhong_stone_tomb_f4",
       "release_state": "implemented_playable",
@@ -834,13 +834,13 @@
             "target_map_key": "hidden_confusion_hall"
           }
         ],
-        "runtime_build_sha256": "3a43aa5360bc5865e2a3392d1fff5f74a4721d9ee366fac2be58b14cbdc06cc6"
+        "runtime_build_sha256": "8f54843a919265a90e751233755c43d2f5779d4215411254d1be5b4686400257"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "ce489a75d979f9f10171a04c677de55b8bd238d512f0c306cb376b8e5941ca88",
+      "approved_build_sha256": "46ae7742144d91317d3173870680e59d1b8f1f0862646fdb1e48345475fb9ffb",
       "display_name": "祖玛寺庙一层",
       "map_key": "mengzhong_zuma_temple_f1",
       "release_state": "implemented_playable",
@@ -871,13 +871,13 @@
             "target_map_key": "mengzhong_zuma_temple_f2"
           }
         ],
-        "runtime_build_sha256": "ce489a75d979f9f10171a04c677de55b8bd238d512f0c306cb376b8e5941ca88"
+        "runtime_build_sha256": "46ae7742144d91317d3173870680e59d1b8f1f0862646fdb1e48345475fb9ffb"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "d1d39579f7a44ec6fbfb05beb468a4746ccac05f960e073347bcbc0249b815be",
+      "approved_build_sha256": "a2b7a33bed5e7411e6c82e66ce77fb02f6e7bed6b695940b7a4498918921cdae",
       "display_name": "祖玛寺庙二层",
       "map_key": "mengzhong_zuma_temple_f2",
       "release_state": "implemented_playable",
@@ -912,13 +912,13 @@
             "target_map_key": "mengzhong_zuma_temple_f3"
           }
         ],
-        "runtime_build_sha256": "d1d39579f7a44ec6fbfb05beb468a4746ccac05f960e073347bcbc0249b815be"
+        "runtime_build_sha256": "a2b7a33bed5e7411e6c82e66ce77fb02f6e7bed6b695940b7a4498918921cdae"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "0867a16d92b8135c31722eaa93c5508c8c6bc407556201a41e7ed1cbc7afb1cf",
+      "approved_build_sha256": "eaaeac7b55c235d5ae79d086871fb55880d7d68b8cc2f65235c07c8559816cd5",
       "display_name": "祖玛寺庙三层",
       "map_key": "mengzhong_zuma_temple_f3",
       "release_state": "implemented_playable",
@@ -953,13 +953,13 @@
             "target_map_key": "mengzhong_zuma_temple_f4"
           }
         ],
-        "runtime_build_sha256": "0867a16d92b8135c31722eaa93c5508c8c6bc407556201a41e7ed1cbc7afb1cf"
+        "runtime_build_sha256": "eaaeac7b55c235d5ae79d086871fb55880d7d68b8cc2f65235c07c8559816cd5"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "a41887b277c552f48808da4d30cde15edb7e07b6ded5daea300cbb8df0d058c1",
+      "approved_build_sha256": "82a4126bb72c867d835ad0ea756e3652f7a6d8c92384a5fa2f3d6970b171b2aa",
       "display_name": "祖玛寺庙四层",
       "map_key": "mengzhong_zuma_temple_f4",
       "release_state": "implemented_playable",
@@ -981,7 +981,9 @@
           "祖玛雕像",
           "祖玛弓箭手"
         ],
-        "npc_kinds": [],
+        "npc_kinds": [
+          "shop"
+        ],
         "portals": [
           {
             "label": "祖玛3层",
@@ -994,13 +996,13 @@
             "target_map_key": "mengzhong_zuma_pavilion"
           }
         ],
-        "runtime_build_sha256": "a41887b277c552f48808da4d30cde15edb7e07b6ded5daea300cbb8df0d058c1"
+        "runtime_build_sha256": "82a4126bb72c867d835ad0ea756e3652f7a6d8c92384a5fa2f3d6970b171b2aa"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "ec985a7be6819f7f214e4ad0de1d976b89d6a694e61feab1ea88c5e4603d4543",
+      "approved_build_sha256": "4ae7fadd072d0ab3f95c347726413856582c80c1e53979f74f96682bdb22c6cf",
       "display_name": "祖玛阁",
       "map_key": "mengzhong_zuma_pavilion",
       "release_state": "implemented_playable",
@@ -1035,13 +1037,13 @@
             "target_map_key": "mengzhong_zuma_leader_home"
           }
         ],
-        "runtime_build_sha256": "ec985a7be6819f7f214e4ad0de1d976b89d6a694e61feab1ea88c5e4603d4543"
+        "runtime_build_sha256": "4ae7fadd072d0ab3f95c347726413856582c80c1e53979f74f96682bdb22c6cf"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "d5fd8e0312d85921028b46e2abe22fc82fdae1194e359d9c1654fcedaec8343e",
+      "approved_build_sha256": "ca2d8ccf14f442df2d6432bdc9f66163e7f2b0d78691c56ae32219aef10703c4",
       "display_name": "祖玛教主之家",
       "map_key": "mengzhong_zuma_leader_home",
       "release_state": "implemented_playable",
@@ -1049,7 +1051,10 @@
       "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_leader_home.runtime.json",
       "ui_presentation": {
         "boss_names": [
-          "祖玛教主"
+          "祖玛教主",
+          "祖玛卫士00",
+          "祖玛雕像3",
+          "祖玛弓箭手3"
         ],
         "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
@@ -1059,13 +1064,13 @@
         ],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "d5fd8e0312d85921028b46e2abe22fc82fdae1194e359d9c1654fcedaec8343e"
+        "runtime_build_sha256": "ca2d8ccf14f442df2d6432bdc9f66163e7f2b0d78691c56ae32219aef10703c4"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "a1f2afbcf4cefaef8cd9e54d324ede1145d8e796f04a180d4484ebd2bf09b186",
+      "approved_build_sha256": "a84eb13c6f5a07989f5569f9fb06798b595e3e7a808d245958544962a09a3413",
       "display_name": "死亡山谷地牢",
       "map_key": "mengzhong_death_valley_dungeon",
       "release_state": "implemented_playable",
@@ -1094,13 +1099,13 @@
             "target_map_key": "mengzhong_stone_coffin_room"
           }
         ],
-        "runtime_build_sha256": "a1f2afbcf4cefaef8cd9e54d324ede1145d8e796f04a180d4484ebd2bf09b186"
+        "runtime_build_sha256": "a84eb13c6f5a07989f5569f9fb06798b595e3e7a808d245958544962a09a3413"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "e2fbfc543e32b8e621080653e685af444072b432ec27ed1aecee0c708b939d34",
+      "approved_build_sha256": "19c93f730d4be5e7b63f32ce3feac60a428b419f64bb4d13f5322733441d6520",
       "display_name": "石棺材屋",
       "map_key": "mengzhong_stone_coffin_room",
       "release_state": "implemented_playable",
@@ -1130,13 +1135,13 @@
             "target_map_key": "mengzhong_death_valley_dungeon"
           }
         ],
-        "runtime_build_sha256": "e2fbfc543e32b8e621080653e685af444072b432ec27ed1aecee0c708b939d34"
+        "runtime_build_sha256": "19c93f730d4be5e7b63f32ce3feac60a428b419f64bb4d13f5322733441d6520"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "3cf5ce1f32cd5399f742a11daba7b3368c73890b250bf1eb329286291bed3962",
+      "approved_build_sha256": "1d94e052632fd7d02ce736cfd5803c6b449242ab68248d73dcf58b99be6584ff",
       "display_name": "黑暗地带",
       "map_key": "mengzhong_dark_area",
       "release_state": "implemented_playable",
@@ -1168,13 +1173,13 @@
             "target_map_key": "mengzhong_between_life_and_death"
           }
         ],
-        "runtime_build_sha256": "3cf5ce1f32cd5399f742a11daba7b3368c73890b250bf1eb329286291bed3962"
+        "runtime_build_sha256": "1d94e052632fd7d02ce736cfd5803c6b449242ab68248d73dcf58b99be6584ff"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "4af332200fddc75e99a8da2b30bebb08bfc8b5bef4cf21306c2d1287b06ed5e0",
+      "approved_build_sha256": "2baf0a0490974caee3dfb6ca3902fc42a6d0235310456dacba23d332b1af728a",
       "display_name": "生死之间",
       "map_key": "mengzhong_between_life_and_death",
       "release_state": "implemented_playable",
@@ -1206,13 +1211,13 @@
             "target_map_key": "mengzhong_terror_space"
           }
         ],
-        "runtime_build_sha256": "4af332200fddc75e99a8da2b30bebb08bfc8b5bef4cf21306c2d1287b06ed5e0"
+        "runtime_build_sha256": "2baf0a0490974caee3dfb6ca3902fc42a6d0235310456dacba23d332b1af728a"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "70ab5404ca52f57205c850b773628f4cdd09542c25198282371ff99cdb64d36a",
+      "approved_build_sha256": "16afe68d3e3d02e40102a8fd5f6862d40f4549914e974f41f2e1495ce39056d3",
       "display_name": "恐怖空间",
       "map_key": "mengzhong_terror_space",
       "release_state": "implemented_playable",
@@ -1231,7 +1236,9 @@
           "巨型蠕虫",
           "钳虫"
         ],
-        "npc_kinds": [],
+        "npc_kinds": [
+          "shop"
+        ],
         "portals": [
           {
             "label": "生死之间",
@@ -1244,13 +1251,13 @@
             "target_map_key": "mengzhong_thin_sky_passage"
           }
         ],
-        "runtime_build_sha256": "70ab5404ca52f57205c850b773628f4cdd09542c25198282371ff99cdb64d36a"
+        "runtime_build_sha256": "16afe68d3e3d02e40102a8fd5f6862d40f4549914e974f41f2e1495ce39056d3"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "abb5c74af58e8c5c59eb16fd91c514ae1d3cb971283a4b8df648b82fe0ce6cd8",
+      "approved_build_sha256": "3ac61bec8e4c708bbacd3fa296fef96abcd6cdaf5d508e0eb8cfa32252246e79",
       "display_name": "一线天",
       "map_key": "mengzhong_thin_sky_passage",
       "release_state": "implemented_playable",
@@ -1282,13 +1289,13 @@
             "target_map_key": "mengzhong_death_coffin"
           }
         ],
-        "runtime_build_sha256": "abb5c74af58e8c5c59eb16fd91c514ae1d3cb971283a4b8df648b82fe0ce6cd8"
+        "runtime_build_sha256": "3ac61bec8e4c708bbacd3fa296fef96abcd6cdaf5d508e0eb8cfa32252246e79"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "1e73620913814d18c5e60468b1f9c436a6b59d21983c6b9edee695b79b86de2a",
+      "approved_build_sha256": "242dd11a1ad50f9327661d7453922057942e0be9ff57bf0c6191582e1761c1aa",
       "display_name": "死亡棺材",
       "map_key": "mengzhong_death_coffin",
       "release_state": "implemented_playable",
@@ -1310,13 +1317,13 @@
         ],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "1e73620913814d18c5e60468b1f9c436a6b59d21983c6b9edee695b79b86de2a"
+        "runtime_build_sha256": "242dd11a1ad50f9327661d7453922057942e0be9ff57bf0c6191582e1761c1aa"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "6c2ecabeef2fa269619f7dc273a3d0052e3457a6e90a0d10b13d39f80ea13626",
+      "approved_build_sha256": "8eec05eb5ff5626eb4e754aff1c86122bcf09135b0beb80d13e2d06625f2a432",
       "display_name": "崎路",
       "map_key": "fengmo_forked_path",
       "release_state": "implemented_playable",
@@ -1349,13 +1356,13 @@
             "target_map_key": "world_fengmo_valley"
           }
         ],
-        "runtime_build_sha256": "6c2ecabeef2fa269619f7dc273a3d0052e3457a6e90a0d10b13d39f80ea13626"
+        "runtime_build_sha256": "8eec05eb5ff5626eb4e754aff1c86122bcf09135b0beb80d13e2d06625f2a432"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "77c128a3af04e9cf7d7a4906fe2deea38de165080a25da34f454c3394969869f",
+      "approved_build_sha256": "d56342a8c6002adb752faba389e871eb04ef09e469436ea9ec1dd4eb3d87f316",
       "display_name": "光芒回廊",
       "map_key": "fengmo_light_corridor",
       "release_state": "implemented_playable",
@@ -1384,13 +1391,13 @@
             "target_map_key": "fengmo_forked_path"
           }
         ],
-        "runtime_build_sha256": "77c128a3af04e9cf7d7a4906fe2deea38de165080a25da34f454c3394969869f"
+        "runtime_build_sha256": "d56342a8c6002adb752faba389e871eb04ef09e469436ea9ec1dd4eb3d87f316"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "8393d2397de8a977d470461545a72075aceb673c3eb53447f068b901c1134f7a",
+      "approved_build_sha256": "36ee3a5b54e4a0910abb48d3e5233e44d38b683847a31a114822765cac889305",
       "display_name": "雷霆之路",
       "map_key": "fengmo_thunder_road",
       "release_state": "implemented_playable",
@@ -1421,13 +1428,13 @@
             "target_map_key": "fengmo_light_corridor"
           }
         ],
-        "runtime_build_sha256": "8393d2397de8a977d470461545a72075aceb673c3eb53447f068b901c1134f7a"
+        "runtime_build_sha256": "36ee3a5b54e4a0910abb48d3e5233e44d38b683847a31a114822765cac889305"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "6939313ed05f8931883b5bbeb5330a2596befd779c055f916a51cdf61c138472",
+      "approved_build_sha256": "812c6487a2efd26a87164dd77bcfefbf6881a50f806b75448695d02859be82f5",
       "display_name": "霸者大厅",
       "map_key": "fengmo_bazhe_hall",
       "release_state": "implemented_playable",
@@ -1461,13 +1468,13 @@
             "target_map_key": "fengmo_thunder_road"
           }
         ],
-        "runtime_build_sha256": "6939313ed05f8931883b5bbeb5330a2596befd779c055f916a51cdf61c138472"
+        "runtime_build_sha256": "812c6487a2efd26a87164dd77bcfefbf6881a50f806b75448695d02859be82f5"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "5b3bbe9710beda1c46432f2f467ba6df107f782626d8b8a52a154815a51937ed",
+      "approved_build_sha256": "993184d8770d4a7b8ed7b833db9263d689762eb1788a105802ca9d1828fe8c97",
       "display_name": "纵横道",
       "map_key": "fengmo_zonghengdao",
       "release_state": "implemented_playable",
@@ -1501,13 +1508,13 @@
             "target_map_key": "fengmo_bazhe_hall"
           }
         ],
-        "runtime_build_sha256": "5b3bbe9710beda1c46432f2f467ba6df107f782626d8b8a52a154815a51937ed"
+        "runtime_build_sha256": "993184d8770d4a7b8ed7b833db9263d689762eb1788a105802ca9d1828fe8c97"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "223a0cbe296ef3b265b0d013d7ade867a06446ec1cc58964b7b4ae9468ef4149",
+      "approved_build_sha256": "65520c82b2ea06ddbf34d50efd0c017a008e00ee074c0bccafb73cabc53d9ef0",
       "display_name": "魔魂殿",
       "map_key": "fengmo_mohun_hall",
       "release_state": "implemented_playable",
@@ -1524,7 +1531,9 @@
         "monster_names": [
           "蝎蛇"
         ],
-        "npc_kinds": [],
+        "npc_kinds": [
+          "shop"
+        ],
         "portals": [
           {
             "label": "纵横道",
@@ -1537,13 +1546,13 @@
             "target_map_key": "fengmo_purgatory_corridor"
           }
         ],
-        "runtime_build_sha256": "223a0cbe296ef3b265b0d013d7ade867a06446ec1cc58964b7b4ae9468ef4149"
+        "runtime_build_sha256": "65520c82b2ea06ddbf34d50efd0c017a008e00ee074c0bccafb73cabc53d9ef0"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "c61dc57e8a365ea55663eb2b964160842db0ca67f1f5615c30eb434a3071b63b",
+      "approved_build_sha256": "94d04d88db6a38151c0ba9d3899bd3681978b95cc7877cdbcb90bb0c27daf1da",
       "display_name": "炼狱回廊",
       "map_key": "fengmo_purgatory_corridor",
       "release_state": "implemented_playable",
@@ -1577,13 +1586,13 @@
             "target_map_key": "fengmo_final_hall"
           }
         ],
-        "runtime_build_sha256": "c61dc57e8a365ea55663eb2b964160842db0ca67f1f5615c30eb434a3071b63b"
+        "runtime_build_sha256": "94d04d88db6a38151c0ba9d3899bd3681978b95cc7877cdbcb90bb0c27daf1da"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "cef0b71d3fe85e5b9c590c65928ee43a244caf0b6688d9d6b08dbff49940c699",
+      "approved_build_sha256": "10c65d7f67fce4669d144425241446e2e726c6494bf434538f2bc4d0f1973027",
       "display_name": "封魔殿",
       "map_key": "fengmo_final_hall",
       "release_state": "implemented_playable",
@@ -1609,13 +1618,13 @@
         ],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "cef0b71d3fe85e5b9c590c65928ee43a244caf0b6688d9d6b08dbff49940c699"
+        "runtime_build_sha256": "10c65d7f67fce4669d144425241446e2e726c6494bf434538f2bc4d0f1973027"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "4259f83960bcbd4c40131bcddfc66312fe1b59b4b4cee6c9741235cf5d92959a",
+      "approved_build_sha256": "2be4bc8cb1ae1ab962a5586d7f941d8e007d9a7e0584a6dbbcd47206260ceb71",
       "display_name": "沃玛寺庙一层",
       "map_key": "wooma_temple_f1",
       "release_state": "implemented_playable",
@@ -1646,13 +1655,13 @@
             "target_map_key": "world_wooma_forest"
           }
         ],
-        "runtime_build_sha256": "4259f83960bcbd4c40131bcddfc66312fe1b59b4b4cee6c9741235cf5d92959a"
+        "runtime_build_sha256": "2be4bc8cb1ae1ab962a5586d7f941d8e007d9a7e0584a6dbbcd47206260ceb71"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "0f04f4ebe902154e93b51cfcc7cf08c131f7306260779c1f5a5ececb1e868e5c",
+      "approved_build_sha256": "7685cff8830ada7707331a18a6a5a8391593a73e5c353a11d44ae82e3b317e23",
       "display_name": "沃玛寺庙二层",
       "map_key": "wooma_temple_f2",
       "release_state": "implemented_playable",
@@ -1688,13 +1697,13 @@
             "target_map_key": "wooma_temple_f1"
           }
         ],
-        "runtime_build_sha256": "0f04f4ebe902154e93b51cfcc7cf08c131f7306260779c1f5a5ececb1e868e5c"
+        "runtime_build_sha256": "7685cff8830ada7707331a18a6a5a8391593a73e5c353a11d44ae82e3b317e23"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "ef2ea6d18c9c97438fef0d41c32e0c73949dd676b67f9da69c5eb07eb236f8a5",
+      "approved_build_sha256": "defd7fcf949b5f7b5dc871ee8bbb77f692bd61f71e9755ae468ef3da3945ae0e",
       "display_name": "沃玛教主大厅",
       "map_key": "wooma_temple_boss_hall",
       "release_state": "implemented_playable",
@@ -1722,13 +1731,13 @@
             "target_map_key": "wooma_temple_f2"
           }
         ],
-        "runtime_build_sha256": "ef2ea6d18c9c97438fef0d41c32e0c73949dd676b67f9da69c5eb07eb236f8a5"
+        "runtime_build_sha256": "defd7fcf949b5f7b5dc871ee8bbb77f692bd61f71e9755ae468ef3da3945ae0e"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "6f86c16c3450b69b98eb4c80f52d2e5a524839c11ab7129c3c6fa9e25e281a69",
+      "approved_build_sha256": "04fe6e8daeaba4e2386d308c85d28c031065e7b3aca16a4a70698fb05ddbd80e",
       "display_name": "赤月峡谷",
       "map_key": "chiyue_valley",
       "release_state": "implemented_playable",
@@ -1759,13 +1768,13 @@
             "target_map_key": "chiyue_valley_square"
           }
         ],
-        "runtime_build_sha256": "6f86c16c3450b69b98eb4c80f52d2e5a524839c11ab7129c3c6fa9e25e281a69"
+        "runtime_build_sha256": "04fe6e8daeaba4e2386d308c85d28c031065e7b3aca16a4a70698fb05ddbd80e"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "f5e943b0e25e2a285975bba4b53c423a6df7a3fbc525de8b2f711b37ddd5a397",
+      "approved_build_sha256": "42aa70b841b0893ca29725f1c181583201f5d2c72d8bbe0c6ccd975c6b9b8b8e",
       "display_name": "赤月峡谷广场",
       "map_key": "chiyue_valley_square",
       "release_state": "implemented_playable",
@@ -1797,20 +1806,23 @@
             "target_map_key": "chiyue_choice_land"
           }
         ],
-        "runtime_build_sha256": "f5e943b0e25e2a285975bba4b53c423a6df7a3fbc525de8b2f711b37ddd5a397"
+        "runtime_build_sha256": "42aa70b841b0893ca29725f1c181583201f5d2c72d8bbe0c6ccd975c6b9b8b8e"
       }
     },
     {
-      "approval_revision": 6,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "c8cb63063c2cf3e27105d2549fcbe1f8bae6e871eba38999169617b4001d02b7",
+      "approved_build_sha256": "fec9ea06e7bcbb1ec6015300db741add9d39cc0e8747057672751cb4775f90ba",
       "display_name": "抉择之地",
       "map_key": "chiyue_choice_land",
       "release_state": "implemented_playable",
       "runtime_map_id": 916003.0,
       "runtime_path": "res://assets/data/runtime/map_editor/chiyue_choice_land.runtime.json",
       "ui_presentation": {
-        "boss_names": [],
+        "boss_names": [
+          "双头金刚",
+          "双头血魔"
+        ],
         "contract_id": "ui.map.presentation_projection.v1",
         "has_safe_area": false,
         "monster_names": [
@@ -1844,13 +1856,13 @@
             "target_map_key": "chiyue_valley_secret_passage_b"
           }
         ],
-        "runtime_build_sha256": "c8cb63063c2cf3e27105d2549fcbe1f8bae6e871eba38999169617b4001d02b7"
+        "runtime_build_sha256": "fec9ea06e7bcbb1ec6015300db741add9d39cc0e8747057672751cb4775f90ba"
       }
     },
     {
-      "approval_revision": 5,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "36351420a4227f489f3a629ca733003a3ece7e0cf6e8b378f7b2cb9eb6b1dc0c",
+      "approved_build_sha256": "ccc98019747b58d45f0dc9988fce1062f921291a7d2ac04b4d8d1753880d50ca",
       "display_name": "山谷密道A",
       "map_key": "chiyue_valley_secret_passage_a",
       "release_state": "implemented_playable",
@@ -1884,13 +1896,13 @@
             "target_map_key": "chiyue_demon_altar"
           }
         ],
-        "runtime_build_sha256": "36351420a4227f489f3a629ca733003a3ece7e0cf6e8b378f7b2cb9eb6b1dc0c"
+        "runtime_build_sha256": "ccc98019747b58d45f0dc9988fce1062f921291a7d2ac04b4d8d1753880d50ca"
       }
     },
     {
-      "approval_revision": 5,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "95686d1854d84d6b9b6ece67764388a92e2fe8df8da5184b0a6143e42231b090",
+      "approved_build_sha256": "f77d5c5676d04988a0d2ceba30ec1a35ea8e230d687ee2fddb324a641d3e421f",
       "display_name": "山谷密道B",
       "map_key": "chiyue_valley_secret_passage_b",
       "release_state": "implemented_playable",
@@ -1924,13 +1936,13 @@
             "target_map_key": "chiyue_red_moon_lair"
           }
         ],
-        "runtime_build_sha256": "95686d1854d84d6b9b6ece67764388a92e2fe8df8da5184b0a6143e42231b090"
+        "runtime_build_sha256": "f77d5c5676d04988a0d2ceba30ec1a35ea8e230d687ee2fddb324a641d3e421f"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "7804a0027241fb4361ed62e191a7dec7f37665f3c0e6dfdb9e82636adfd9d827",
+      "approved_build_sha256": "46bed0d81d1eb29f4d590c1dd2390366d37ccffc629f6c9b5dc85f44da3b8583",
       "display_name": "恶魔祭坛",
       "map_key": "chiyue_demon_altar",
       "release_state": "implemented_playable",
@@ -1954,13 +1966,13 @@
         ],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "7804a0027241fb4361ed62e191a7dec7f37665f3c0e6dfdb9e82636adfd9d827"
+        "runtime_build_sha256": "46bed0d81d1eb29f4d590c1dd2390366d37ccffc629f6c9b5dc85f44da3b8583"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "6a0db6376a83156f388ae3f0e193a5cd3966041d9f7746ba363847c9f85636c4",
+      "approved_build_sha256": "1a68fdd7bae965feb69bd68c7617dd16b96f07b498e5997b07a0198952298a2b",
       "display_name": "赤月魔穴",
       "map_key": "chiyue_red_moon_lair",
       "release_state": "implemented_playable",
@@ -1983,13 +1995,13 @@
         ],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "6a0db6376a83156f388ae3f0e193a5cd3966041d9f7746ba363847c9f85636c4"
+        "runtime_build_sha256": "1a68fdd7bae965feb69bd68c7617dd16b96f07b498e5997b07a0198952298a2b"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "916fe2a326da84f88dd005b4bcdf1ad43b3529cda89770dbec39f7536b2595e0",
+      "approved_build_sha256": "01c20b483690d8e7892ec76141602704a98edaae36b5623b745c24603e256eb8",
       "display_name": "骨魔洞一层",
       "map_key": "cangyue_bone_cave_f1",
       "release_state": "implemented_playable",
@@ -2025,13 +2037,13 @@
             "target_map_key": "cangyue_bone_cave_f2"
           }
         ],
-        "runtime_build_sha256": "916fe2a326da84f88dd005b4bcdf1ad43b3529cda89770dbec39f7536b2595e0"
+        "runtime_build_sha256": "01c20b483690d8e7892ec76141602704a98edaae36b5623b745c24603e256eb8"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "bbd741dafd820627f550c83e428c6730653e7854fe439a129e0d70eed32f729e",
+      "approved_build_sha256": "49336c5db47863d5e8966b763187b6e4a0352fc3b15b33ed0c8e46e7112019ab",
       "display_name": "骨魔洞二层",
       "map_key": "cangyue_bone_cave_f2",
       "release_state": "implemented_playable",
@@ -2067,13 +2079,13 @@
             "target_map_key": "cangyue_bone_cave_f3"
           }
         ],
-        "runtime_build_sha256": "bbd741dafd820627f550c83e428c6730653e7854fe439a129e0d70eed32f729e"
+        "runtime_build_sha256": "49336c5db47863d5e8966b763187b6e4a0352fc3b15b33ed0c8e46e7112019ab"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "ca86a7d1a455179d312f5373e1e2c4a6cf3cf2958cd1d6ef31cee6342829343c",
+      "approved_build_sha256": "fbcef867d8c8d35845450c3c5ca9d18d375be5273c69981ca47240287235b383",
       "display_name": "骨魔洞三层",
       "map_key": "cangyue_bone_cave_f3",
       "release_state": "implemented_playable",
@@ -2096,7 +2108,9 @@
           "宝箱2",
           "骷髅锤兵"
         ],
-        "npc_kinds": [],
+        "npc_kinds": [
+          "shop"
+        ],
         "portals": [
           {
             "label": "骨魔洞2层",
@@ -2109,13 +2123,13 @@
             "target_map_key": "cangyue_bone_cave_f4"
           }
         ],
-        "runtime_build_sha256": "ca86a7d1a455179d312f5373e1e2c4a6cf3cf2958cd1d6ef31cee6342829343c"
+        "runtime_build_sha256": "fbcef867d8c8d35845450c3c5ca9d18d375be5273c69981ca47240287235b383"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "7a656740466946d6e7e1c31523f5997ee4945f54b1f063c0837cd8cbf90c4488",
+      "approved_build_sha256": "7c4f68e8831e348f08eafba2a1baaa5f42a539e4bfe13ebabd152dccf23c76f9",
       "display_name": "骨魔洞四层",
       "map_key": "cangyue_bone_cave_f4",
       "release_state": "implemented_playable",
@@ -2151,13 +2165,13 @@
             "target_map_key": "cangyue_bone_cave_f5"
           }
         ],
-        "runtime_build_sha256": "7a656740466946d6e7e1c31523f5997ee4945f54b1f063c0837cd8cbf90c4488"
+        "runtime_build_sha256": "7c4f68e8831e348f08eafba2a1baaa5f42a539e4bfe13ebabd152dccf23c76f9"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "4704e515794b225bce67bbe33043d22366a6f701e64fcad278b0cf3a2dbfc44b",
+      "approved_build_sha256": "cac56a478a6988abddbb72bb560a92b51c2a8bc5089dddc9acfda37f5c0bd76d",
       "display_name": "骨魔洞五层",
       "map_key": "cangyue_bone_cave_f5",
       "release_state": "implemented_playable",
@@ -2180,13 +2194,13 @@
         ],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "4704e515794b225bce67bbe33043d22366a6f701e64fcad278b0cf3a2dbfc44b"
+        "runtime_build_sha256": "cac56a478a6988abddbb72bb560a92b51c2a8bc5089dddc9acfda37f5c0bd76d"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "b95501bbea85648cfb0d949cb13cbc7224a64d98935d26e8910d387c5b64c772",
+      "approved_build_sha256": "0af1a25afd9b995a55a66bd6336c5b178ae9814be428f84dc85e1093d560d483",
       "display_name": "牛魔寺庙一层",
       "map_key": "cangyue_bull_temple_f1",
       "release_state": "implemented_playable",
@@ -2219,13 +2233,13 @@
             "target_map_key": "cangyue_bull_temple_f2"
           }
         ],
-        "runtime_build_sha256": "b95501bbea85648cfb0d949cb13cbc7224a64d98935d26e8910d387c5b64c772"
+        "runtime_build_sha256": "0af1a25afd9b995a55a66bd6336c5b178ae9814be428f84dc85e1093d560d483"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "6155fc563792fd2ff117d91771c0f7edbf43755486b184b782fb10d61dac2eb6",
+      "approved_build_sha256": "1fe6b1f1509f125463db8fef234e2f0381b8e32f382863c105721205d09f005c",
       "display_name": "牛魔寺庙二层",
       "map_key": "cangyue_bull_temple_f2",
       "release_state": "implemented_playable",
@@ -2258,13 +2272,13 @@
             "target_map_key": "cangyue_bull_temple_f3"
           }
         ],
-        "runtime_build_sha256": "6155fc563792fd2ff117d91771c0f7edbf43755486b184b782fb10d61dac2eb6"
+        "runtime_build_sha256": "1fe6b1f1509f125463db8fef234e2f0381b8e32f382863c105721205d09f005c"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "b1b0017bec9fb0490ef893d2f70ceb33c35075fc1f0dd757373fd122a6d679d1",
+      "approved_build_sha256": "43c842bb06266aa607243ff6786a8a61c4aa0e758924af95bca6134f19a0ed9e",
       "display_name": "牛魔寺庙三层",
       "map_key": "cangyue_bull_temple_f3",
       "release_state": "implemented_playable",
@@ -2285,7 +2299,9 @@
           "宝箱5",
           "牛魔法师"
         ],
-        "npc_kinds": [],
+        "npc_kinds": [
+          "shop"
+        ],
         "portals": [
           {
             "label": "牛魔寺庙2层",
@@ -2298,13 +2314,13 @@
             "target_map_key": "cangyue_bull_temple_f4"
           }
         ],
-        "runtime_build_sha256": "b1b0017bec9fb0490ef893d2f70ceb33c35075fc1f0dd757373fd122a6d679d1"
+        "runtime_build_sha256": "43c842bb06266aa607243ff6786a8a61c4aa0e758924af95bca6134f19a0ed9e"
       }
     },
     {
-      "approval_revision": 4,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "668bdc42b92e4c13ab8cb15f18be629efea40bd279ace76593c2d85798ccf58e",
+      "approved_build_sha256": "e3ac2a00e54195a564a31e59a704bd13a8d60686f491da8fbf1cb55e24ca0f5a",
       "display_name": "牛魔寺庙四层",
       "map_key": "cangyue_bull_temple_f4",
       "release_state": "implemented_playable",
@@ -2339,13 +2355,13 @@
             "target_map_key": "cangyue_bull_temple_hall"
           }
         ],
-        "runtime_build_sha256": "668bdc42b92e4c13ab8cb15f18be629efea40bd279ace76593c2d85798ccf58e"
+        "runtime_build_sha256": "e3ac2a00e54195a564a31e59a704bd13a8d60686f491da8fbf1cb55e24ca0f5a"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "0a8dc670971071fd894a0dd9fab57cbb456ffccc830fab8307a96ff41b159479",
+      "approved_build_sha256": "a47d721982855ace5d59740a26f4b636bf5594abde81e3bf54095c4d4de0c228",
       "display_name": "牛魔寺庙大厅",
       "map_key": "cangyue_bull_temple_hall",
       "release_state": "implemented_playable",
@@ -2368,13 +2384,13 @@
         ],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "0a8dc670971071fd894a0dd9fab57cbb456ffccc830fab8307a96ff41b159479"
+        "runtime_build_sha256": "a47d721982855ace5d59740a26f4b636bf5594abde81e3bf54095c4d4de0c228"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "fc0f420927ff8edb2d1644f5db69cbeb6e274a0ce329aafb617321df1f7d27b7",
+      "approved_build_sha256": "d233d9675e1eed731dc0763736974a45e3c36b6bd413065e2339820312d1038b",
       "display_name": "困惑殿堂",
       "map_key": "hidden_confusion_hall",
       "release_state": "implemented_playable",
@@ -2389,13 +2405,13 @@
         "monster_names": [],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "fc0f420927ff8edb2d1644f5db69cbeb6e274a0ce329aafb617321df1f7d27b7"
+        "runtime_build_sha256": "d233d9675e1eed731dc0763736974a45e3c36b6bd413065e2339820312d1038b"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "9583ea66a3df21d6c30f6703a64c012cd519032aade6ebf3d8b927b035c202e0",
+      "approved_build_sha256": "12683d47aa9cc145fc7286e7dee26c5d3fe1c4fa3558bbaa4616238baa868d19",
       "display_name": "地狱烈焰",
       "map_key": "hidden_hellfire",
       "release_state": "implemented_playable",
@@ -2410,13 +2426,13 @@
         "monster_names": [],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "9583ea66a3df21d6c30f6703a64c012cd519032aade6ebf3d8b927b035c202e0"
+        "runtime_build_sha256": "12683d47aa9cc145fc7286e7dee26c5d3fe1c4fa3558bbaa4616238baa868d19"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "d94ce18f45c64b7d2e877b108a6cd5453a3731ede294df7b1c2f411eca3d3b88",
+      "approved_build_sha256": "d65302ec9137aa8e23c412428e68a5cf9d87a0d5873ffda998c945e2f8079454",
       "display_name": "堕落坟场",
       "map_key": "hidden_fallen_graveyard",
       "release_state": "implemented_playable",
@@ -2431,13 +2447,13 @@
         "monster_names": [],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "d94ce18f45c64b7d2e877b108a6cd5453a3731ede294df7b1c2f411eca3d3b88"
+        "runtime_build_sha256": "d65302ec9137aa8e23c412428e68a5cf9d87a0d5873ffda998c945e2f8079454"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "96dac0a527e8d3de4b8334c5088d9b9d92c9fc190f7b05c133abdcaabfa8dbd4",
+      "approved_build_sha256": "c59df76afed7c847c2521367e70220a88a3b9cbe837e9d821ace7aedaa81df9b",
       "display_name": "死亡神殿",
       "map_key": "hidden_death_temple",
       "release_state": "implemented_playable",
@@ -2452,13 +2468,13 @@
         "monster_names": [],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "96dac0a527e8d3de4b8334c5088d9b9d92c9fc190f7b05c133abdcaabfa8dbd4"
+        "runtime_build_sha256": "c59df76afed7c847c2521367e70220a88a3b9cbe837e9d821ace7aedaa81df9b"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1.0,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "1027de83ec0f974f72006c35fd1eec76bbb612dbbfbaed53200988af7fc401ac",
+      "approved_build_sha256": "aaa7d826158219486b9933921881f3a4f1e36fa868682b1e760d6e3bf17862a8",
       "display_name": "深渊魔域",
       "map_key": "hidden_abyss_domain",
       "release_state": "implemented_playable",
@@ -2473,17 +2489,17 @@
         "monster_names": [],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "1027de83ec0f974f72006c35fd1eec76bbb612dbbfbaed53200988af7fc401ac"
+        "runtime_build_sha256": "aaa7d826158219486b9933921881f3a4f1e36fa868682b1e760d6e3bf17862a8"
       }
     },
     {
-      "approval_revision": 3,
+      "approval_revision": 1,
       "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "1c7f8cef9e5c9753158109b8425edf77a8406d8191c24c72261679fa6309c32e",
+      "approved_build_sha256": "d3f3cd060e048ad0b9ae51ca70345838e09ddc23267943dbc76de64485a73a80",
       "display_name": "钳虫巢穴",
       "map_key": "hidden_pincer_nest",
       "release_state": "implemented_playable",
-      "runtime_map_id": 918006.0,
+      "runtime_map_id": 918006,
       "runtime_path": "res://assets/data/runtime/map_editor/hidden_pincer_nest.runtime.json",
       "ui_presentation": {
         "boss_names": [
@@ -2494,7 +2510,7 @@
         "monster_names": [],
         "npc_kinds": [],
         "portals": [],
-        "runtime_build_sha256": "1c7f8cef9e5c9753158109b8425edf77a8406d8191c24c72261679fa6309c32e"
+        "runtime_build_sha256": "d3f3cd060e048ad0b9ae51ca70345838e09ddc23267943dbc76de64485a73a80"
       }
     }
   ],
