@@ -140,7 +140,7 @@ try {
         'ui/gothic_hud/v2/runtime/target_bar_v2.png',
         'ui/gothic_hud/v2/runtime/utility_stack_v2.png',
         'ui/gothic_hud/v2/runtime/joystick_v2.png',
-        'ui/gothic_hud/v2/runtime/bottom_chassis_v2.png',
+        'ui/gothic_hud/v3/runtime/bottom_chassis_v3_dragon.png',
         'ui/gothic_hud/v2/runtime/round_action_frame_v3.png',
         'art/characters/taoist/skill_icons/defense.png',
         'art/characters/taoist/skill_icons/magic_defense.png',

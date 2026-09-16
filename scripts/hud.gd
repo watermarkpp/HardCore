@@ -6,7 +6,6 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
-const HUDAssetSanitizerScript := preload("res://scripts/hud_asset_sanitizer.gd")
 const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
@@ -25,20 +24,16 @@ const WAREHOUSE_PANEL_SCRIPT_PATH := "res://scripts/warehouse_panel.gd"
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
-const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
 const HUDRoundActionFrameTexture := preload("res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png")
 const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader")
 const TaoistDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/defense.png")
 const TaoistMagicDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/magic_defense.png")
 const HUD_CHASSIS_SIZE := Vector2(820, 273)
-const HUD_CHASSIS_CENTER_PEAK_SOURCE := Vector2(505, 115)
 const HUD_CHASSIS_STATE_LABEL_GAP := 8.0
-const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
 const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
 const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
 const TAOIST_BUFF_STRIP_ITEM_BAR_GAP := 6.0
 const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
-const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
 const HUD_EXPERIENCE_SEGMENT_COUNT := 10
 const HUD_EXPERIENCE_BAR_STABLE_ID := "ui.hud.experience_bar.10_segments.v1"
 ## The width is retained as a calibration reference for the current formal
@@ -64,14 +59,6 @@ const ITEM_QUICK_SLOT_PICKER_PADDING := 8.0
 const ITEM_QUICK_SLOT_PICKER_MAX_HEIGHT := 320.0
 const ITEM_QUICK_SLOT_ASSIGNMENT_CONTRACT_ID := "ui.item.quick_slot.assignment.v1"
 const ITEM_QUICK_SLOT_USE_CONTRACT_ID := "ui.item.quick_slot.use.v1"
-const HUD_HEALTH_ORB_SOURCE_CENTER := Vector2(223.5, 230.5)
-const HUD_MANA_ORB_SOURCE_CENTER := Vector2(785.5, 230.5)
-const HUD_ITEM_SLOT_SOURCE_CENTERS: Array[Vector2] = [
-	Vector2(349.5, 235.0),
-	Vector2(452.0, 234.5),
-	Vector2(558.5, 234.5),
-	Vector2(662.0, 234.5),
-]
 const HUD_ATTACK_CENTER := Vector2(-185, -110)
 const HUD_ATTACK_RING_COUNT := 6
 const HUD_ATTACK_RING_RADIUS := 125.0
@@ -655,19 +642,9 @@ func _build_bottom_chassis(root: Control) -> void:
 	var chassis := TextureRect.new()
 	chassis.name = "DemonChassisArt"
 	chassis.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	if chassis_design["sanitize_policy"] == "v2_legacy_skill_mask.v1":
-		var cleaned_chassis := HUDAssetSanitizerScript.without_alpha_component(
-			HUDChassisTexture,
-			Vector2i(1008, 260),
-		)
-		cleaned_chassis = HUDAssetSanitizerScript.without_chassis_legacy_skill_art(cleaned_chassis)
-		chassis.texture = cleaned_chassis
-		chassis.set_meta("source_artifact_removed", "right_edge_alpha_component_1008_260")
-		chassis.set_meta("legacy_skill_art_mask", HUDAssetSanitizerScript.CHASSIS_LEGACY_SKILL_MASK_ID)
-	else:
-		# v3 candidate art ships clean with pre-cut alpha slot wells; no legacy
-		# mask applies and the measured hole geometry lives in the registry.
-		chassis.texture = ChassisDesignsScript.load_texture(chassis_design)
+	# The adopted chassis art ships clean with pre-cut alpha slot wells; no
+	# legacy mask applies and the measured hole geometry lives in the registry.
+	chassis.texture = ChassisDesignsScript.load_texture(chassis_design)
 	chassis.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	chassis.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	chassis.mouse_filter = Control.MOUSE_FILTER_IGNORE

@@ -1,6 +1,5 @@
 extends Node
 
-const CHASSIS_PATH := "res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png"
 const ACTION_FRAME_PATH := "res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png"
 const MobileLayout := preload("res://scripts/mobile_layout.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
@@ -326,10 +325,6 @@ func _run() -> void:
 	assert(interact.size == Vector2(110, 76) and interact.position + interact.size * 0.5 == interact_fill.position + interact_fill.size * 0.5, "交互按钮未对准美术圆心")
 	assert(switch_target.size == Vector2(110, 76) and switch_target.position + switch_target.size * 0.5 == switch_target_fill.position + switch_target_fill.size * 0.5, "换敌按钮未对准美术圆心")
 
-	var image := Image.load_from_file(ProjectSettings.globalize_path(CHASSIS_PATH))
-	assert(not image.is_empty() and image.get_format() in [Image.FORMAT_RGBA8, Image.FORMAT_RGBAF, Image.FORMAT_RGBAH])
-	assert(image.get_pixel(0, 0).a < 0.01 and image.get_pixel(image.get_width() - 1, image.get_height() - 1).a < 0.01)
-	assert(image.get_pixel(223, 231).a < 0.05 and image.get_pixel(785, 231).a < 0.05, "血蓝球开口必须保持透明")
 	assert(root.get_node("TargetPanel/TargetFrameArt").get_meta("stable_id") == "ui.hud.gothic.v2.target_bar")
 	assert(root.get_node("UtilityStackArt").get_meta("stable_id") == "ui.hud.gothic.v2.utility_stack")
 	assert(root.get_node("JoystickArt").get_meta("stable_id") == "ui.hud.gothic.v2.joystick")
@@ -339,77 +334,25 @@ func _run() -> void:
 	var chassis_texture := chassis_art.texture as Texture2D
 	assert(chassis_texture != null and not chassis_texture.resource_path.is_empty())
 	assert(chassis_texture.resource_path == String(design["texture_path"]), "底盘贴图没有使用当前设计注册的源图")
-	if design["sanitize_policy"] == "v2_legacy_skill_mask.v1":
-		assert(
-			chassis_art.get_meta("legacy_skill_art_mask") == HUDAssetSanitizer.CHASSIS_LEGACY_SKILL_MASK_ID,
-			"底盘没有使用精确旧技能框 alpha mask",
-		)
-		var cleaned_image := chassis_texture.get_image()
-		assert(cleaned_image.get_pixel(1008, 260).a <= 0.01, "底框右侧污染连通碎片没有从源像素层清除")
-		var legacy_points: Array[Vector2i] = [
-			Vector2i(309, 10),
-			Vector2i(254, 60),
-			Vector2i(441, 20),
-			Vector2i(574, 20),
-			Vector2i(707, 20),
-			Vector2i(204, 135),
-			Vector2i(806, 138),
-			Vector2i(380, 138),
-			Vector2i(630, 138),
-			Vector2i(309, 137),
-			Vector2i(309, 150),
-			Vector2i(707, 150),
-		]
-		for point in legacy_points:
-			assert(image.get_pixelv(point).a > 0.01, "旧技能框样本点在原图中不存在：%s" % point)
-			assert(HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point), "旧技能框样本点未进入精确 mask：%s" % point)
-			assert(cleaned_image.get_pixelv(point).a <= 0.01, "旧圆框、红菱形或连接条没有清除：%s" % point)
-		var protected_crest_points: Array[Vector2i] = [
-			Vector2i(505, 115),
-			Vector2i(505, 122),
-			Vector2i(505, 130),
-			Vector2i(492, 135),
-			Vector2i(520, 145),
-			Vector2i(505, 155),
-		]
-		for point in protected_crest_points:
-			assert(image.get_pixelv(point).a > 0.01, "中央徽章保护样本点在原图中不存在：%s" % point)
-			assert(HUDAssetSanitizer.is_chassis_center_crest_protected(point), "中央徽章样本点未进入硬保护区：%s" % point)
-			assert(cleaned_image.get_pixelv(point) == image.get_pixelv(point), "中央尖头或徽章原像素被修改：%s" % point)
-		for unchanged_point: Vector2i in [Vector2i(245, 145), Vector2i(400, 158), Vector2i(505, 165), Vector2i(715, 160)]:
-			assert(cleaned_image.get_pixelv(unchanged_point) == image.get_pixelv(unchanged_point), "正式底盘或恶魔装饰像素被修改：%s" % unchanged_point)
-		var isolated_component_cleaned := HUDAssetSanitizer.without_alpha_component(
-			load(CHASSIS_PATH) as Texture2D,
-			Vector2i(1008, 260),
-		).get_image()
-		for y in range(0, 160):
-			for x in range(204, 808):
-				var point := Vector2i(x, y)
-				if HUDAssetSanitizer.is_chassis_legacy_skill_pixel(point):
-					assert(cleaned_image.get_pixelv(point).a <= 0.01, "alpha mask 内仍有旧技能框像素：%s" % point)
-				else:
-					assert(cleaned_image.get_pixelv(point) == isolated_component_cleaned.get_pixelv(point), "alpha mask 外的底盘原像素被改动：%s" % point)
-		assert(FileAccess.file_exists("res://assets/ui/gothic_hud/v2/hud_asset_manifest.json"))
-	else:
-		# v3 用户候选图自带镂空槽：运行时必须原样使用，不得再次清洗。
-		assert(
-			chassis_art.get_meta("legacy_skill_art_mask", "") == "",
-			"v3 设计不应携带 v2 旧技能框 mask",
-		)
-		assert(chassis_art.get_meta("source_artifact_removed", "") == "", "v3 设计不应声明 v2 污染清理")
-		var active_image := chassis_texture.get_image()
-		var health_hole_center: Vector2 = design["health_orb_center_source"]
-		var mana_hole_center: Vector2 = design["mana_orb_center_source"]
-		assert(active_image.get_pixelv(Vector2i(health_hole_center)).a < 0.05, "生命球镂空孔必须保持透明")
-		assert(active_image.get_pixelv(Vector2i(mana_hole_center)).a < 0.05, "魔法球镂空孔必须保持透明")
-		for slot_center: Variant in design["item_slot_centers_source"]:
-			assert(active_image.get_pixelv(Vector2i(slot_center)).a < 0.05, "物品槽镂空孔必须保持透明")
-		var xp_hole: Rect2 = design["experience_slot_source_rect"]
-		assert(active_image.get_pixelv(Vector2i(xp_hole.get_center())).a < 0.05, "经验槽镂空必须保持透明")
-		assert(
-			FileAccess.file_exists("res://assets/ui/gothic_hud/v3/gothic_hud_frame_geometry_v3.json"),
-			"v3 几何证据文件缺失",
-		)
+	# 魔龙候选图自带镂空槽：运行时必须原样使用，不得再次清洗。
+	assert(
+		chassis_art.get_meta("legacy_skill_art_mask", "") == "",
+		"正式设计不应携带 v2 旧技能框 mask",
+	)
+	assert(chassis_art.get_meta("source_artifact_removed", "") == "", "正式设计不应声明 v2 污染清理")
+	var active_image := chassis_texture.get_image()
+	var health_hole_center: Vector2 = design["health_orb_center_source"]
+	var mana_hole_center: Vector2 = design["mana_orb_center_source"]
+	assert(active_image.get_pixelv(Vector2i(health_hole_center)).a < 0.05, "生命球镂空孔必须保持透明")
+	assert(active_image.get_pixelv(Vector2i(mana_hole_center)).a < 0.05, "魔法球镂空孔必须保持透明")
+	for slot_center: Variant in design["item_slot_centers_source"]:
+		assert(active_image.get_pixelv(Vector2i(slot_center)).a < 0.05, "物品槽镂空孔必须保持透明")
+	var xp_hole: Rect2 = design["experience_slot_source_rect"]
+	assert(active_image.get_pixelv(Vector2i(xp_hole.get_center())).a < 0.05, "经验槽镂空必须保持透明")
+	assert(
+		FileAccess.file_exists("res://assets/ui/gothic_hud/v3/gothic_hud_frame_geometry_v3.json"),
+		"v3 几何证据文件缺失",
+	)
 	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
 	assert("gothic_hud/v1" not in hud_source and "gothic_preview" not in hud_source, "正式HUD不得继续引用旧素材")
 	# --- Item quick slots: mirror, signals, candidates and interactions ---
