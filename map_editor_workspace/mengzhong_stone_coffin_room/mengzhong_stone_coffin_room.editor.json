@@ -5243,11 +5243,13 @@
           3.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000037",
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
-        "material_layer_order": 0.0,
+        "material_layer_order": -1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -5359,8 +5361,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          170.6666717529297,
-          253.6666717529297
+          170.66667175293,
+          253.66667175293
         ],
         "asset_id": "user.13c20d8e4aa45974",
         "collision_authority": "asset",
@@ -5406,16 +5408,16 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          170.6666717529297,
-          253.6666717529297
+          170.66667175293,
+          253.66667175293
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.3,
+          0.3
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5436,8 +5438,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          186.3333282470703,
-          245.6666717529297
+          186.33332824707,
+          245.66667175293
         ],
         "asset_id": "user.5de3c0e77db5809a",
         "collision_authority": "asset",
@@ -5483,16 +5485,16 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          186.3333282470703,
-          245.6666717529297
+          186.33332824707,
+          245.66667175293
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.3,
+          0.3
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5513,8 +5515,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          137.6666717529297,
-          244.6666717529297
+          137.66667175293,
+          244.66667175293
         ],
         "asset_id": "user.ae0b9cfe03d96abc",
         "collision_authority": "asset",
@@ -5560,16 +5562,16 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          137.6666717529297,
-          244.6666717529297
+          137.66667175293,
+          244.66667175293
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.3,
+          0.3
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5590,8 +5592,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          200.6666717529297,
-          256.66668701171875
+          200.66667175293,
+          256.666687011719
         ],
         "asset_id": "user.f0d72af3638e0c81",
         "collision_authority": "asset",
@@ -5637,16 +5639,16 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          200.6666717529297,
-          256.66668701171875
+          200.66667175293,
+          256.666687011719
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.3,
+          0.3
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5722,8 +5724,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.3,
+          0.3
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5799,8 +5801,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.3,
+          0.3
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5876,8 +5878,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.3,
+          0.3
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5898,8 +5900,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          210.6666717529297,
-          284.66668701171875
+          210.66667175293,
+          284.666687011719
         ],
         "asset_id": "user.5aa387b408c8bec2",
         "collision_authority": "asset",
@@ -5945,16 +5947,16 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          210.6666717529297,
-          284.66668701171875
+          210.66667175293,
+          284.666687011719
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.30000000000000016,
-          0.30000000000000016
+          0.3,
+          0.3
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -5986,8 +5988,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -6009,7 +6011,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -6019,8 +6021,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
@@ -6039,12 +6041,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          4,
-          4
+          4.0,
+          4.0
         ],
         "tile_anchor": [
-          4,
-          4
+          4.0,
+          4.0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6065,8 +6067,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -6088,7 +6090,7 @@
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
-        "material_layer_order": 0,
+        "material_layer_order": 0.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -6098,8 +6100,8 @@
           1.0
         ],
         "offset_px": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
@@ -6118,12 +6120,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26,
-          26
+          26.0,
+          26.0
         ],
         "tile_anchor": [
-          26,
-          26
+          26.0,
+          26.0
         ],
         "visual_footprint_tiles": [
           1.0,

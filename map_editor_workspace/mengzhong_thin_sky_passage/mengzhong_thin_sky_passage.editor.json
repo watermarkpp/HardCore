@@ -53,7 +53,7 @@
     "exit_link_status": "intentionally_unlinked",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 14.0,
+    "revision": 24,
     "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
     "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
@@ -9972,8 +9972,17 @@
         "linked_visual_instance_id": "inst_000242",
         "official_connection_id": "portal.mengzhong_thin_sky_passage.map_exit_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          25,
+          57
+        ],
         "reciprocal_exit_id": "map_exit_000002",
         "reciprocal_map_key": "mengzhong_terror_space",
         "requires_leave_before_retrigger": true,
@@ -9994,8 +10003,8 @@
           5.0
         ],
         "tile": [
-          25.0,
-          57.0
+          25,
+          57
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -10014,8 +10023,17 @@
         "linked_visual_instance_id": "inst_000243",
         "official_connection_id": "portal.mengzhong_thin_sky_passage.map_exit_000002",
         "one_way": true,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "one_way_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          26,
+          5
+        ],
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -10034,8 +10052,8 @@
           57.0
         ],
         "tile": [
-          26.0,
-          5.0
+          26,
+          5
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -10843,8 +10861,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_thin_sky_passage.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          25.0,
-          29.0
+          23.0,
+          28.0
         ]
       },
       {
@@ -12913,7 +12931,7 @@
         "spawn_group_id": "mse.group.v1.mengzhong_thin_sky_passage.monster_spawn.000064",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          12.0,
+          11.0,
           12.0
         ]
       },
@@ -13013,8 +13031,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          200.66667175293,
-          256.666687011719
+          200.6666717529297,
+          256.66668701171875
         ],
         "asset_id": "user.f0d72af3638e0c81",
         "collision_authority": "asset",
@@ -13060,8 +13078,8 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          200.66667175293,
-          256.666687011719
+          200.6666717529297,
+          256.66668701171875
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -13075,12 +13093,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          5.0
+          5,
+          5
         ],
         "tile_anchor": [
-          5.0,
-          5.0
+          5,
+          5
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13152,12 +13170,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3.0,
-          16.0
+          3,
+          16
         ],
         "tile_anchor": [
-          3.0,
-          16.0
+          3,
+          16
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13167,8 +13185,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          170.66667175293,
-          253.66667175293
+          170.6666717529297,
+          253.6666717529297
         ],
         "asset_id": "user.13c20d8e4aa45974",
         "collision_authority": "asset",
@@ -13214,8 +13232,8 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          170.66667175293,
-          253.66667175293
+          170.6666717529297,
+          253.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -13229,12 +13247,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          46.0
+          6,
+          46
         ],
         "tile_anchor": [
-          6.0,
-          46.0
+          6,
+          46
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13244,8 +13262,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          200.66667175293,
-          256.666687011719
+          200.6666717529297,
+          256.66668701171875
         ],
         "asset_id": "user.f0d72af3638e0c81",
         "collision_authority": "asset",
@@ -13291,8 +13309,8 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          200.66667175293,
-          256.666687011719
+          200.6666717529297,
+          256.66668701171875
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -13306,12 +13324,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          4.0,
-          41.0
+          4,
+          41
         ],
         "tile_anchor": [
-          4.0,
-          41.0
+          4,
+          41
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13321,8 +13339,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          211.33332824707,
-          245.333343505859
+          211.3333282470703,
+          245.33334350585938
         ],
         "asset_id": "user.0126c24686128af2",
         "collision_authority": "asset",
@@ -13368,8 +13386,8 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          211.33332824707,
-          245.333343505859
+          211.3333282470703,
+          245.33334350585938
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -13383,12 +13401,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          29.0
+          24,
+          29
         ],
         "tile_anchor": [
-          24.0,
-          29.0
+          24,
+          29
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13460,12 +13478,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          20.0,
-          4.0
+          20,
+          4
         ],
         "tile_anchor": [
-          20.0,
-          4.0
+          20,
+          4
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13537,12 +13555,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          15.0,
-          58.0
+          15,
+          58
         ],
         "tile_anchor": [
-          15.0,
-          58.0
+          15,
+          58
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13569,8 +13587,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -13578,22 +13596,24 @@
           3.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000221",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
-        "material_layer_order": 0.0,
+        "material_layer_order": -1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
-          0.0
+          -16.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -13605,19 +13625,23 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          0.7000000000000001,
+          0.7000000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          24.0,
-          56.0
+          25.0,
+          57.0
         ],
         "tile_anchor": [
-          24.0,
-          56.0
+          25,
+          57
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
@@ -13640,8 +13664,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -13649,22 +13673,24 @@
           3.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000222",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
-        "material_layer_order": 0.0,
+        "material_layer_order": -1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          3.0,
-          3.0
+          2.0,
+          2.0
         ],
         "offset_px": [
           0.0,
-          0.0
+          -16.0
         ],
         "placement_anchor_policy_id": "",
         "placement_anchor_px": [
@@ -13676,26 +13702,30 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          0.7000000000000001,
+          0.7000000000000001
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          4.0
+          26.0,
+          5.0
         ],
         "tile_anchor": [
-          25.0,
-          4.0
+          26,
+          5
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           127.0,
-          207.66667175293
+          207.6666717529297
         ],
         "asset_id": "user.e46ac879aee805eb",
         "collision_authority": "asset",
@@ -13742,7 +13772,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           127.0,
-          207.66667175293
+          207.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -13756,12 +13786,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          36.0
+          6,
+          36
         ],
         "tile_anchor": [
-          6.0,
-          36.0
+          6,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13833,12 +13863,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          8.0
+          18,
+          8
         ],
         "tile_anchor": [
-          18.0,
-          8.0
+          18,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13849,7 +13879,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           141.0,
-          174.66667175293
+          174.6666717529297
         ],
         "asset_id": "user.2cebc1463b240891",
         "collision_authority": "asset",
@@ -13896,7 +13926,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           141.0,
-          174.66667175293
+          174.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -13910,12 +13940,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          53.0
+          11,
+          53
         ],
         "tile_anchor": [
-          11.0,
-          53.0
+          11,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13987,12 +14017,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          36.0
+          5,
+          36
         ],
         "tile_anchor": [
-          5.0,
-          36.0
+          5,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14003,7 +14033,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           112.0,
-          165.66667175293
+          165.6666717529297
         ],
         "asset_id": "user.d1d2103ad1ebc2dc",
         "collision_authority": "asset",
@@ -14050,7 +14080,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           112.0,
-          165.66667175293
+          165.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -14064,12 +14094,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          18.0
+          6,
+          18
         ],
         "tile_anchor": [
-          6.0,
-          18.0
+          6,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14080,7 +14110,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           127.0,
-          207.66667175293
+          207.6666717529297
         ],
         "asset_id": "user.e46ac879aee805eb",
         "collision_authority": "asset",
@@ -14127,7 +14157,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           127.0,
-          207.66667175293
+          207.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -14141,12 +14171,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          36.0
+          7,
+          36
         ],
         "tile_anchor": [
-          7.0,
-          36.0
+          7,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14218,12 +14248,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7.0,
-          35.0
+          7,
+          35
         ],
         "tile_anchor": [
-          7.0,
-          35.0
+          7,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14295,12 +14325,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          10.0,
-          51.0
+          10,
+          51
         ],
         "tile_anchor": [
-          10.0,
-          51.0
+          10,
+          51
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14372,12 +14402,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          19.0
+          6,
+          19
         ],
         "tile_anchor": [
-          6.0,
-          19.0
+          6,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14449,12 +14479,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          6.0,
-          17.0
+          6,
+          17
         ],
         "tile_anchor": [
-          6.0,
-          17.0
+          6,
+          17
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14465,7 +14495,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           111.0,
-          209.66667175293
+          209.6666717529297
         ],
         "asset_id": "user.2865e0a711845c17",
         "collision_authority": "asset",
@@ -14512,7 +14542,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           111.0,
-          209.66667175293
+          209.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -14526,12 +14556,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          19.0,
-          8.0
+          19,
+          8
         ],
         "tile_anchor": [
-          19.0,
-          8.0
+          19,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14542,7 +14572,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           111.0,
-          209.66667175293
+          209.6666717529297
         ],
         "asset_id": "user.2865e0a711845c17",
         "collision_authority": "asset",
@@ -14589,7 +14619,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           111.0,
-          209.66667175293
+          209.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -14603,12 +14633,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          19.0,
-          7.0
+          19,
+          7
         ],
         "tile_anchor": [
-          19.0,
-          7.0
+          19,
+          7
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14680,12 +14710,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          20.0,
-          7.0
+          20,
+          7
         ],
         "tile_anchor": [
-          20.0,
-          7.0
+          20,
+          7
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14696,7 +14726,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           134.0,
-          172.66667175293
+          172.6666717529297
         ],
         "asset_id": "user.012d42c4d8832618",
         "collision_authority": "asset",
@@ -14743,7 +14773,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           134.0,
-          172.66667175293
+          172.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -14757,12 +14787,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          9.0
+          18,
+          9
         ],
         "tile_anchor": [
-          18.0,
-          9.0
+          18,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14834,12 +14864,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          18.0,
-          10.0
+          18,
+          10
         ],
         "tile_anchor": [
-          18.0,
-          10.0
+          18,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14911,12 +14941,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          8.0,
-          35.0
+          8,
+          35
         ],
         "tile_anchor": [
-          8.0,
-          35.0
+          8,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14990,12 +15020,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          57.0
+          25,
+          57
         ],
         "tile_anchor": [
-          25.0,
-          57.0
+          25,
+          57
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15069,12 +15099,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          26.0,
-          5.0
+          26,
+          5
         ],
         "tile_anchor": [
-          26.0,
-          5.0
+          26,
+          5
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15159,8 +15189,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ]
       },
       {
@@ -15233,8 +15263,8 @@
           1.0
         ],
         "tile_anchor": [
-          0.0,
-          1.0
+          0,
+          1
         ]
       },
       {
@@ -15307,8 +15337,8 @@
           0.0
         ],
         "tile_anchor": [
-          1.0,
-          0.0
+          1,
+          0
         ]
       },
       {
@@ -15381,8 +15411,8 @@
           5.0
         ],
         "tile_anchor": [
-          0.0,
-          5.0
+          0,
+          5
         ]
       },
       {
@@ -15455,8 +15485,8 @@
           9.0
         ],
         "tile_anchor": [
-          0.0,
-          9.0
+          0,
+          9
         ]
       },
       {
@@ -15529,8 +15559,8 @@
           13.0
         ],
         "tile_anchor": [
-          0.0,
-          13.0
+          0,
+          13
         ]
       },
       {
@@ -15603,8 +15633,8 @@
           17.0
         ],
         "tile_anchor": [
-          0.0,
-          17.0
+          0,
+          17
         ]
       },
       {
@@ -15677,8 +15707,8 @@
           0.0
         ],
         "tile_anchor": [
-          21.0,
-          0.0
+          21,
+          0
         ]
       },
       {
@@ -15751,8 +15781,8 @@
           0.0
         ],
         "tile_anchor": [
-          25.0,
-          0.0
+          25,
+          0
         ]
       },
       {
@@ -15825,8 +15855,8 @@
           0.0
         ],
         "tile_anchor": [
-          29.0,
-          0.0
+          29,
+          0
         ]
       },
       {
@@ -15899,8 +15929,8 @@
           0.0
         ],
         "tile_anchor": [
-          31.0,
-          0.0
+          31,
+          0
         ]
       },
       {
@@ -15973,8 +16003,8 @@
           1.0
         ],
         "tile_anchor": [
-          31.0,
-          1.0
+          31,
+          1
         ]
       },
       {
@@ -16047,8 +16077,8 @@
           5.0
         ],
         "tile_anchor": [
-          31.0,
-          5.0
+          31,
+          5
         ]
       },
       {
@@ -16121,8 +16151,8 @@
           38.0
         ],
         "tile_anchor": [
-          0.0,
-          38.0
+          0,
+          38
         ]
       },
       {
@@ -16195,8 +16225,8 @@
           9.0
         ],
         "tile_anchor": [
-          31.0,
-          9.0
+          31,
+          9
         ]
       },
       {
@@ -16269,8 +16299,8 @@
           41.0
         ],
         "tile_anchor": [
-          0.0,
-          41.0
+          0,
+          41
         ]
       },
       {
@@ -16343,8 +16373,8 @@
           13.0
         ],
         "tile_anchor": [
-          31.0,
-          13.0
+          31,
+          13
         ]
       },
       {
@@ -16417,8 +16447,8 @@
           45.0
         ],
         "tile_anchor": [
-          0.0,
-          45.0
+          0,
+          45
         ]
       },
       {
@@ -16491,8 +16521,8 @@
           33.0
         ],
         "tile_anchor": [
-          31.0,
-          33.0
+          31,
+          33
         ]
       },
       {
@@ -16565,8 +16595,8 @@
           37.0
         ],
         "tile_anchor": [
-          31.0,
-          37.0
+          31,
+          37
         ]
       },
       {
@@ -16639,8 +16669,8 @@
           63.0
         ],
         "tile_anchor": [
-          13.0,
-          63.0
+          13,
+          63
         ]
       },
       {
@@ -16713,8 +16743,8 @@
           63.0
         ],
         "tile_anchor": [
-          17.0,
-          63.0
+          17,
+          63
         ]
       },
       {
@@ -16787,8 +16817,8 @@
           63.0
         ],
         "tile_anchor": [
-          21.0,
-          63.0
+          21,
+          63
         ]
       },
       {
@@ -16861,8 +16891,8 @@
           63.0
         ],
         "tile_anchor": [
-          25.0,
-          63.0
+          25,
+          63
         ]
       },
       {
@@ -16935,8 +16965,8 @@
           63.0
         ],
         "tile_anchor": [
-          29.0,
-          63.0
+          29,
+          63
         ]
       },
       {
@@ -17009,8 +17039,8 @@
           61.0
         ],
         "tile_anchor": [
-          31.0,
-          61.0
+          31,
+          61
         ]
       },
       {
@@ -17083,8 +17113,8 @@
           63.0
         ],
         "tile_anchor": [
-          31.0,
-          63.0
+          31,
+          63
         ]
       },
       {
@@ -17154,8 +17184,8 @@
           43.0
         ],
         "tile_anchor": [
-          21.0,
-          43.0
+          21,
+          43
         ]
       },
       {
@@ -17225,8 +17255,8 @@
           56.0
         ],
         "tile_anchor": [
-          30.0,
-          56.0
+          30,
+          56
         ]
       },
       {
@@ -17296,8 +17326,8 @@
           56.0
         ],
         "tile_anchor": [
-          29.0,
-          56.0
+          29,
+          56
         ]
       },
       {
@@ -17367,8 +17397,8 @@
           55.0
         ],
         "tile_anchor": [
-          28.0,
-          55.0
+          28,
+          55
         ]
       },
       {
@@ -17438,8 +17468,8 @@
           54.0
         ],
         "tile_anchor": [
-          27.0,
-          54.0
+          27,
+          54
         ]
       },
       {
@@ -17509,8 +17539,8 @@
           49.0
         ],
         "tile_anchor": [
-          21.0,
-          49.0
+          21,
+          49
         ]
       },
       {
@@ -17580,8 +17610,8 @@
           51.0
         ],
         "tile_anchor": [
-          22.0,
-          51.0
+          22,
+          51
         ]
       },
       {
@@ -17651,8 +17681,8 @@
           50.0
         ],
         "tile_anchor": [
-          21.0,
-          50.0
+          21,
+          50
         ]
       },
       {
@@ -17722,8 +17752,8 @@
           27.0
         ],
         "tile_anchor": [
-          13.0,
-          27.0
+          13,
+          27
         ]
       },
       {
@@ -17793,8 +17823,8 @@
           38.0
         ],
         "tile_anchor": [
-          1.0,
-          38.0
+          1,
+          38
         ]
       },
       {
@@ -17864,8 +17894,8 @@
           37.0
         ],
         "tile_anchor": [
-          2.0,
-          37.0
+          2,
+          37
         ]
       },
       {
@@ -17935,8 +17965,8 @@
           36.0
         ],
         "tile_anchor": [
-          3.0,
-          36.0
+          3,
+          36
         ]
       },
       {
@@ -18006,8 +18036,8 @@
           35.0
         ],
         "tile_anchor": [
-          4.0,
-          35.0
+          4,
+          35
         ]
       },
       {
@@ -18077,8 +18107,8 @@
           34.0
         ],
         "tile_anchor": [
-          5.0,
-          34.0
+          5,
+          34
         ]
       },
       {
@@ -18148,8 +18178,8 @@
           25.0
         ],
         "tile_anchor": [
-          6.0,
-          25.0
+          6,
+          25
         ]
       },
       {
@@ -18219,8 +18249,8 @@
           33.0
         ],
         "tile_anchor": [
-          10.0,
-          33.0
+          10,
+          33
         ]
       },
       {
@@ -18290,8 +18320,8 @@
           32.0
         ],
         "tile_anchor": [
-          11.0,
-          32.0
+          11,
+          32
         ]
       },
       {
@@ -18361,8 +18391,8 @@
           31.0
         ],
         "tile_anchor": [
-          12.0,
-          31.0
+          12,
+          31
         ]
       },
       {
@@ -18432,8 +18462,8 @@
           31.0
         ],
         "tile_anchor": [
-          13.0,
-          31.0
+          13,
+          31
         ]
       },
       {
@@ -18503,8 +18533,8 @@
           31.0
         ],
         "tile_anchor": [
-          11.0,
-          31.0
+          11,
+          31
         ]
       },
       {
@@ -18574,8 +18604,8 @@
           12.0
         ],
         "tile_anchor": [
-          14.0,
-          12.0
+          14,
+          12
         ]
       },
       {
@@ -18645,8 +18675,8 @@
           28.0
         ],
         "tile_anchor": [
-          26.0,
-          28.0
+          26,
+          28
         ]
       },
       {
@@ -18716,8 +18746,8 @@
           28.0
         ],
         "tile_anchor": [
-          27.0,
-          28.0
+          27,
+          28
         ]
       },
       {
@@ -18787,8 +18817,8 @@
           29.0
         ],
         "tile_anchor": [
-          28.0,
-          29.0
+          28,
+          29
         ]
       },
       {
@@ -18858,8 +18888,8 @@
           31.0
         ],
         "tile_anchor": [
-          28.0,
-          31.0
+          28,
+          31
         ]
       },
       {
@@ -18929,8 +18959,8 @@
           63.0
         ],
         "tile_anchor": [
-          12.0,
-          63.0
+          12,
+          63
         ]
       },
       {
@@ -19000,8 +19030,8 @@
           55.0
         ],
         "tile_anchor": [
-          10.0,
-          55.0
+          10,
+          55
         ]
       },
       {
@@ -19071,8 +19101,8 @@
           56.0
         ],
         "tile_anchor": [
-          11.0,
-          56.0
+          11,
+          56
         ]
       },
       {
@@ -19142,8 +19172,8 @@
           54.0
         ],
         "tile_anchor": [
-          10.0,
-          54.0
+          10,
+          54
         ]
       },
       {
@@ -19213,8 +19243,8 @@
           52.0
         ],
         "tile_anchor": [
-          9.0,
-          52.0
+          9,
+          52
         ]
       },
       {
@@ -19284,8 +19314,8 @@
           51.0
         ],
         "tile_anchor": [
-          9.0,
-          51.0
+          9,
+          51
         ]
       },
       {
@@ -19355,8 +19385,8 @@
           11.0
         ],
         "tile_anchor": [
-          17.0,
-          11.0
+          17,
+          11
         ]
       },
       {
@@ -19426,8 +19456,8 @@
           10.0
         ],
         "tile_anchor": [
-          17.0,
-          10.0
+          17,
+          10
         ]
       },
       {
@@ -19497,8 +19527,8 @@
           9.0
         ],
         "tile_anchor": [
-          17.0,
-          9.0
+          17,
+          9
         ]
       },
       {
@@ -19568,8 +19598,8 @@
           7.0
         ],
         "tile_anchor": [
-          18.0,
-          7.0
+          18,
+          7
         ]
       },
       {
@@ -19639,8 +19669,8 @@
           8.0
         ],
         "tile_anchor": [
-          17.0,
-          8.0
+          17,
+          8
         ]
       },
       {
@@ -19710,8 +19740,8 @@
           0.0
         ],
         "tile_anchor": [
-          4.0,
-          0.0
+          4,
+          0
         ]
       },
       {
@@ -19781,8 +19811,8 @@
           4.0
         ],
         "tile_anchor": [
-          11.0,
-          4.0
+          11,
+          4
         ]
       },
       {
@@ -19852,8 +19882,8 @@
           53.0
         ],
         "tile_anchor": [
-          10.0,
-          53.0
+          10,
+          53
         ]
       },
       {
@@ -19927,8 +19957,8 @@
           63.0
         ],
         "tile_anchor": [
-          12.0,
-          63.0
+          12,
+          63
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20006,8 +20036,8 @@
           51.0
         ],
         "tile_anchor": [
-          7.0,
-          51.0
+          7,
+          51
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -20085,8 +20115,8 @@
           45.0
         ],
         "tile_anchor": [
-          20.0,
-          45.0
+          20,
+          45
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20164,8 +20194,8 @@
           57.0
         ],
         "tile_anchor": [
-          12.0,
-          57.0
+          12,
+          57
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20243,8 +20273,8 @@
           60.0
         ],
         "tile_anchor": [
-          12.0,
-          60.0
+          12,
+          60
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20322,8 +20352,8 @@
           62.0
         ],
         "tile_anchor": [
-          12.0,
-          62.0
+          12,
+          62
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20401,8 +20431,8 @@
           50.0
         ],
         "tile_anchor": [
-          4.0,
-          50.0
+          4,
+          50
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -20480,8 +20510,8 @@
           49.0
         ],
         "tile_anchor": [
-          1.0,
-          49.0
+          1,
+          49
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -20559,8 +20589,8 @@
           56.0
         ],
         "tile_anchor": [
-          11.0,
-          56.0
+          11,
+          56
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20638,8 +20668,8 @@
           55.0
         ],
         "tile_anchor": [
-          10.0,
-          55.0
+          10,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20717,8 +20747,8 @@
           49.0
         ],
         "tile_anchor": [
-          0.0,
-          49.0
+          0,
+          49
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20792,8 +20822,8 @@
           50.0
         ],
         "tile_anchor": [
-          6.0,
-          50.0
+          6,
+          50
         ]
       },
       {
@@ -20863,8 +20893,8 @@
           49.0
         ],
         "tile_anchor": [
-          3.0,
-          49.0
+          3,
+          49
         ]
       },
       {
@@ -20934,8 +20964,8 @@
           40.0
         ],
         "tile_anchor": [
-          30.0,
-          40.0
+          30,
+          40
         ]
       },
       {
@@ -21005,8 +21035,8 @@
           40.0
         ],
         "tile_anchor": [
-          31.0,
-          40.0
+          31,
+          40
         ]
       },
       {
@@ -21080,8 +21110,8 @@
           41.0
         ],
         "tile_anchor": [
-          28.0,
-          41.0
+          28,
+          41
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -21155,8 +21185,8 @@
           41.0
         ],
         "tile_anchor": [
-          29.0,
-          41.0
+          29,
+          41
         ]
       },
       {
@@ -21230,8 +21260,8 @@
           41.0
         ],
         "tile_anchor": [
-          26.0,
-          41.0
+          26,
+          41
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -21309,8 +21339,8 @@
           42.0
         ],
         "tile_anchor": [
-          24.0,
-          42.0
+          24,
+          42
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -21388,8 +21418,8 @@
           43.0
         ],
         "tile_anchor": [
-          22.0,
-          43.0
+          22,
+          43
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -21463,8 +21493,8 @@
           41.0
         ],
         "tile_anchor": [
-          25.0,
-          41.0
+          25,
+          41
         ]
       },
       {
@@ -21534,8 +21564,8 @@
           42.0
         ],
         "tile_anchor": [
-          25.0,
-          42.0
+          25,
+          42
         ]
       },
       {
@@ -21605,8 +21635,8 @@
           43.0
         ],
         "tile_anchor": [
-          23.0,
-          43.0
+          23,
+          43
         ]
       },
       {
@@ -21676,8 +21706,8 @@
           42.0
         ],
         "tile_anchor": [
-          23.0,
-          42.0
+          23,
+          42
         ]
       },
       {
@@ -21747,8 +21777,8 @@
           53.0
         ],
         "tile_anchor": [
-          9.0,
-          53.0
+          9,
+          53
         ]
       },
       {
@@ -21818,8 +21848,8 @@
           52.0
         ],
         "tile_anchor": [
-          10.0,
-          52.0
+          10,
+          52
         ]
       },
       {
@@ -21889,8 +21919,8 @@
           57.0
         ],
         "tile_anchor": [
-          11.0,
-          57.0
+          11,
+          57
         ]
       },
       {
@@ -21960,8 +21990,8 @@
           55.0
         ],
         "tile_anchor": [
-          11.0,
-          55.0
+          11,
+          55
         ]
       },
       {
@@ -22031,8 +22061,8 @@
           51.0
         ],
         "tile_anchor": [
-          6.0,
-          51.0
+          6,
+          51
         ]
       },
       {
@@ -22102,8 +22132,8 @@
           50.0
         ],
         "tile_anchor": [
-          3.0,
-          50.0
+          3,
+          50
         ]
       },
       {
@@ -22173,8 +22203,8 @@
           45.0
         ],
         "tile_anchor": [
-          21.0,
-          45.0
+          21,
+          45
         ]
       },
       {
@@ -22244,8 +22274,8 @@
           45.0
         ],
         "tile_anchor": [
-          21.0,
-          45.0
+          21,
+          45
         ]
       },
       {
@@ -22319,8 +22349,8 @@
           47.0
         ],
         "tile_anchor": [
-          20.0,
-          47.0
+          20,
+          47
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -22394,8 +22424,8 @@
           49.0
         ],
         "tile_anchor": [
-          20.0,
-          49.0
+          20,
+          49
         ]
       },
       {
@@ -22465,8 +22495,8 @@
           50.0
         ],
         "tile_anchor": [
-          22.0,
-          50.0
+          22,
+          50
         ]
       },
       {
@@ -22536,8 +22566,8 @@
           51.0
         ],
         "tile_anchor": [
-          23.0,
-          51.0
+          23,
+          51
         ]
       },
       {
@@ -22607,8 +22637,8 @@
           52.0
         ],
         "tile_anchor": [
-          24.0,
-          52.0
+          24,
+          52
         ]
       },
       {
@@ -22678,8 +22708,8 @@
           53.0
         ],
         "tile_anchor": [
-          25.0,
-          53.0
+          25,
+          53
         ]
       },
       {
@@ -22749,8 +22779,8 @@
           54.0
         ],
         "tile_anchor": [
-          26.0,
-          54.0
+          26,
+          54
         ]
       },
       {
@@ -22820,8 +22850,8 @@
           57.0
         ],
         "tile_anchor": [
-          31.0,
-          57.0
+          31,
+          57
         ]
       },
       {
@@ -22891,8 +22921,8 @@
           56.0
         ],
         "tile_anchor": [
-          29.0,
-          56.0
+          29,
+          56
         ]
       },
       {
@@ -22962,8 +22992,8 @@
           55.0
         ],
         "tile_anchor": [
-          28.0,
-          55.0
+          28,
+          55
         ]
       },
       {
@@ -23033,8 +23063,8 @@
           54.0
         ],
         "tile_anchor": [
-          27.0,
-          54.0
+          27,
+          54
         ]
       },
       {
@@ -23104,8 +23134,8 @@
           53.0
         ],
         "tile_anchor": [
-          25.0,
-          53.0
+          25,
+          53
         ]
       },
       {
@@ -23175,8 +23205,8 @@
           52.0
         ],
         "tile_anchor": [
-          24.0,
-          52.0
+          24,
+          52
         ]
       },
       {
@@ -23246,8 +23276,8 @@
           51.0
         ],
         "tile_anchor": [
-          23.0,
-          51.0
+          23,
+          51
         ]
       },
       {
@@ -23317,8 +23347,8 @@
           50.0
         ],
         "tile_anchor": [
-          22.0,
-          50.0
+          22,
+          50
         ]
       },
       {
@@ -23388,8 +23418,8 @@
           40.0
         ],
         "tile_anchor": [
-          29.0,
-          40.0
+          29,
+          40
         ]
       },
       {
@@ -23459,8 +23489,8 @@
           56.0
         ],
         "tile_anchor": [
-          30.0,
-          56.0
+          30,
+          56
         ]
       },
       {
@@ -23530,8 +23560,8 @@
           55.0
         ],
         "tile_anchor": [
-          27.0,
-          55.0
+          27,
+          55
         ]
       },
       {
@@ -23601,8 +23631,8 @@
           54.0
         ],
         "tile_anchor": [
-          25.0,
-          54.0
+          25,
+          54
         ]
       },
       {
@@ -23672,8 +23702,8 @@
           52.0
         ],
         "tile_anchor": [
-          23.0,
-          52.0
+          23,
+          52
         ]
       },
       {
@@ -23743,8 +23773,8 @@
           52.0
         ],
         "tile_anchor": [
-          25.0,
-          52.0
+          25,
+          52
         ]
       },
       {
@@ -23814,8 +23844,8 @@
           56.0
         ],
         "tile_anchor": [
-          28.0,
-          56.0
+          28,
+          56
         ]
       },
       {
@@ -23885,8 +23915,8 @@
           56.0
         ],
         "tile_anchor": [
-          31.0,
-          56.0
+          31,
+          56
         ]
       },
       {
@@ -23956,8 +23986,8 @@
           34.0
         ],
         "tile_anchor": [
-          6.0,
-          34.0
+          6,
+          34
         ]
       },
       {
@@ -24027,8 +24057,8 @@
           34.0
         ],
         "tile_anchor": [
-          9.0,
-          34.0
+          9,
+          34
         ]
       },
       {
@@ -24098,8 +24128,8 @@
           35.0
         ],
         "tile_anchor": [
-          4.0,
-          35.0
+          4,
+          35
         ]
       },
       {
@@ -24169,8 +24199,8 @@
           36.0
         ],
         "tile_anchor": [
-          3.0,
-          36.0
+          3,
+          36
         ]
       },
       {
@@ -24240,8 +24270,8 @@
           37.0
         ],
         "tile_anchor": [
-          2.0,
-          37.0
+          2,
+          37
         ]
       },
       {
@@ -24311,8 +24341,8 @@
           38.0
         ],
         "tile_anchor": [
-          1.0,
-          38.0
+          1,
+          38
         ]
       },
       {
@@ -24382,8 +24412,8 @@
           26.0
         ],
         "tile_anchor": [
-          9.0,
-          26.0
+          9,
+          26
         ]
       },
       {
@@ -24457,8 +24487,8 @@
           25.0
         ],
         "tile_anchor": [
-          7.0,
-          25.0
+          7,
+          25
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -24536,8 +24566,8 @@
           24.0
         ],
         "tile_anchor": [
-          3.0,
-          24.0
+          3,
+          24
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -24615,8 +24645,8 @@
           23.0
         ],
         "tile_anchor": [
-          0.0,
-          23.0
+          0,
+          23
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -24694,8 +24724,8 @@
           21.0
         ],
         "tile_anchor": [
-          0.0,
-          21.0
+          0,
+          21
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -24769,8 +24799,8 @@
           33.0
         ],
         "tile_anchor": [
-          10.0,
-          33.0
+          10,
+          33
         ]
       },
       {
@@ -24840,8 +24870,8 @@
           32.0
         ],
         "tile_anchor": [
-          11.0,
-          32.0
+          11,
+          32
         ]
       },
       {
@@ -24911,8 +24941,8 @@
           31.0
         ],
         "tile_anchor": [
-          13.0,
-          31.0
+          13,
+          31
         ]
       },
       {
@@ -24982,8 +25012,8 @@
           26.0
         ],
         "tile_anchor": [
-          12.0,
-          26.0
+          12,
+          26
         ]
       },
       {
@@ -25053,8 +25083,8 @@
           25.0
         ],
         "tile_anchor": [
-          9.0,
-          25.0
+          9,
+          25
         ]
       },
       {
@@ -25124,8 +25154,8 @@
           24.0
         ],
         "tile_anchor": [
-          6.0,
-          24.0
+          6,
+          24
         ]
       },
       {
@@ -25195,8 +25225,8 @@
           23.0
         ],
         "tile_anchor": [
-          2.0,
-          23.0
+          2,
+          23
         ]
       },
       {
@@ -25266,8 +25296,8 @@
           32.0
         ],
         "tile_anchor": [
-          10.0,
-          32.0
+          10,
+          32
         ]
       },
       {
@@ -25337,8 +25367,8 @@
           33.0
         ],
         "tile_anchor": [
-          9.0,
-          33.0
+          9,
+          33
         ]
       },
       {
@@ -25408,8 +25438,8 @@
           34.0
         ],
         "tile_anchor": [
-          4.0,
-          34.0
+          4,
+          34
         ]
       },
       {
@@ -25479,8 +25509,8 @@
           35.0
         ],
         "tile_anchor": [
-          3.0,
-          35.0
+          3,
+          35
         ]
       },
       {
@@ -25550,8 +25580,8 @@
           36.0
         ],
         "tile_anchor": [
-          2.0,
-          36.0
+          2,
+          36
         ]
       },
       {
@@ -25621,8 +25651,8 @@
           37.0
         ],
         "tile_anchor": [
-          1.0,
-          37.0
+          1,
+          37
         ]
       },
       {
@@ -25692,8 +25722,8 @@
           26.0
         ],
         "tile_anchor": [
-          13.0,
-          26.0
+          13,
+          26
         ]
       },
       {
@@ -25767,8 +25797,8 @@
           26.0
         ],
         "tile_anchor": [
-          24.0,
-          26.0
+          24,
+          26
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -25842,8 +25872,8 @@
           22.0
         ],
         "tile_anchor": [
-          24.0,
-          22.0
+          24,
+          22
         ]
       },
       {
@@ -25913,8 +25943,8 @@
           27.0
         ],
         "tile_anchor": [
-          25.0,
-          27.0
+          25,
+          27
         ]
       },
       {
@@ -25984,8 +26014,8 @@
           28.0
         ],
         "tile_anchor": [
-          25.0,
-          28.0
+          25,
+          28
         ]
       },
       {
@@ -26055,8 +26085,8 @@
           29.0
         ],
         "tile_anchor": [
-          27.0,
-          29.0
+          27,
+          29
         ]
       },
       {
@@ -26126,8 +26156,8 @@
           31.0
         ],
         "tile_anchor": [
-          29.0,
-          31.0
+          29,
+          31
         ]
       },
       {
@@ -26197,8 +26227,8 @@
           28.0
         ],
         "tile_anchor": [
-          27.0,
-          28.0
+          27,
+          28
         ]
       },
       {
@@ -26268,8 +26298,8 @@
           29.0
         ],
         "tile_anchor": [
-          28.0,
-          29.0
+          28,
+          29
         ]
       },
       {
@@ -26339,8 +26369,8 @@
           30.0
         ],
         "tile_anchor": [
-          28.0,
-          30.0
+          28,
+          30
         ]
       },
       {
@@ -26414,8 +26444,8 @@
           31.0
         ],
         "tile_anchor": [
-          31.0,
-          31.0
+          31,
+          31
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -26493,8 +26523,8 @@
           31.0
         ],
         "tile_anchor": [
-          30.0,
-          31.0
+          30,
+          31
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -26572,8 +26602,8 @@
           21.0
         ],
         "tile_anchor": [
-          24.0,
-          21.0
+          24,
+          21
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -26651,8 +26681,8 @@
           20.0
         ],
         "tile_anchor": [
-          27.0,
-          20.0
+          27,
+          20
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -26730,8 +26760,8 @@
           20.0
         ],
         "tile_anchor": [
-          30.0,
-          20.0
+          30,
+          20
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -26805,8 +26835,8 @@
           17.0
         ],
         "tile_anchor": [
-          31.0,
-          17.0
+          31,
+          17
         ]
       },
       {
@@ -26876,8 +26906,8 @@
           21.0
         ],
         "tile_anchor": [
-          26.0,
-          21.0
+          26,
+          21
         ]
       },
       {
@@ -26947,8 +26977,8 @@
           20.0
         ],
         "tile_anchor": [
-          26.0,
-          20.0
+          26,
+          20
         ]
       },
       {
@@ -27018,8 +27048,8 @@
           7.0
         ],
         "tile_anchor": [
-          18.0,
-          7.0
+          18,
+          7
         ]
       },
       {
@@ -27093,8 +27123,8 @@
           4.0
         ],
         "tile_anchor": [
-          19.0,
-          4.0
+          19,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27172,8 +27202,8 @@
           6.0
         ],
         "tile_anchor": [
-          19.0,
-          6.0
+          19,
+          6
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27251,8 +27281,8 @@
           1.0
         ],
         "tile_anchor": [
-          19.0,
-          1.0
+          19,
+          1
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27330,8 +27360,8 @@
           0.0
         ],
         "tile_anchor": [
-          19.0,
-          0.0
+          19,
+          0
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -27409,8 +27439,8 @@
           6.0
         ],
         "tile_anchor": [
-          11.0,
-          6.0
+          11,
+          6
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27488,8 +27518,8 @@
           0.0
         ],
         "tile_anchor": [
-          5.0,
-          0.0
+          5,
+          0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27567,8 +27597,8 @@
           4.0
         ],
         "tile_anchor": [
-          9.0,
-          4.0
+          9,
+          4
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -27642,8 +27672,8 @@
           5.0
         ],
         "tile_anchor": [
-          11.0,
-          5.0
+          11,
+          5
         ]
       },
       {
@@ -27717,8 +27747,8 @@
           11.0
         ],
         "tile_anchor": [
-          13.0,
-          11.0
+          13,
+          11
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27792,8 +27822,8 @@
           11.0
         ],
         "tile_anchor": [
-          12.0,
-          11.0
+          12,
+          11
         ]
       },
       {
@@ -27867,8 +27897,8 @@
           11.0
         ],
         "tile_anchor": [
-          12.0,
-          11.0
+          12,
+          11
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -27946,8 +27976,8 @@
           12.0
         ],
         "tile_anchor": [
-          17.0,
-          12.0
+          17,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28025,8 +28055,8 @@
           11.0
         ],
         "tile_anchor": [
-          13.0,
-          11.0
+          13,
+          11
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28104,8 +28134,8 @@
           11.0
         ],
         "tile_anchor": [
-          14.0,
-          11.0
+          14,
+          11
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28183,8 +28213,8 @@
           9.0
         ],
         "tile_anchor": [
-          11.0,
-          9.0
+          11,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28262,8 +28292,8 @@
           9.0
         ],
         "tile_anchor": [
-          12.0,
-          9.0
+          12,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28341,8 +28371,8 @@
           4.0
         ],
         "tile_anchor": [
-          8.0,
-          4.0
+          8,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28420,8 +28450,8 @@
           3.0
         ],
         "tile_anchor": [
-          9.0,
-          3.0
+          9,
+          3
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28499,8 +28529,8 @@
           3.0
         ],
         "tile_anchor": [
-          5.0,
-          3.0
+          5,
+          3
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -28578,8 +28608,8 @@
           3.0
         ],
         "tile_anchor": [
-          7.0,
-          3.0
+          7,
+          3
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -28657,8 +28687,8 @@
           7.0
         ],
         "tile_anchor": [
-          17.0,
-          7.0
+          17,
+          7
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28736,8 +28766,8 @@
           6.0
         ],
         "tile_anchor": [
-          18.0,
-          6.0
+          18,
+          6
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -28811,8 +28841,8 @@
           58.0
         ],
         "tile_anchor": [
-          11.0,
-          58.0
+          11,
+          58
         ]
       },
       {
@@ -28882,8 +28912,8 @@
           53.0
         ],
         "tile_anchor": [
-          9.0,
-          53.0
+          9,
+          53
         ]
       },
       {
@@ -28957,8 +28987,8 @@
           23.0
         ],
         "tile_anchor": [
-          3.0,
-          23.0
+          3,
+          23
         ],
         "visual_footprint_tiles": [
           1.0,

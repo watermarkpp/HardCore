@@ -1,5 +1,5 @@
 {
-  "build_sha256": "1588d800566161141f015cba370b7b1c6822ff3ea5bb4ed496828fa00780ce22",
+  "build_sha256": "27dbfe354d57f9c140f9bb04a1beb81a9be2d1f8a697d51fca95ff5d37649556",
   "collision": {
     "blocked_count": 807.0,
     "blocked_tiles": [
@@ -12235,8 +12235,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        200.66667175293,
-        256.666687011719
+        200.6666717529297,
+        256.66668701171875
       ],
       "asset_id": "user.f0d72af3638e0c81",
       "collision_authority": "asset",
@@ -12282,8 +12282,8 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        200.66667175293,
-        256.666687011719
+        200.6666717529297,
+        256.66668701171875
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -12389,8 +12389,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        170.66667175293,
-        253.66667175293
+        170.6666717529297,
+        253.6666717529297
       ],
       "asset_id": "user.13c20d8e4aa45974",
       "collision_authority": "asset",
@@ -12436,8 +12436,8 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        170.66667175293,
-        253.66667175293
+        170.6666717529297,
+        253.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -12466,8 +12466,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        200.66667175293,
-        256.666687011719
+        200.6666717529297,
+        256.66668701171875
       ],
       "asset_id": "user.f0d72af3638e0c81",
       "collision_authority": "asset",
@@ -12513,8 +12513,8 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        200.66667175293,
-        256.666687011719
+        200.6666717529297,
+        256.66668701171875
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -12543,8 +12543,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        211.33332824707,
-        245.333343505859
+        211.3333282470703,
+        245.33334350585935
       ],
       "asset_id": "user.0126c24686128af2",
       "collision_authority": "asset",
@@ -12590,8 +12590,8 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        211.33332824707,
-        245.333343505859
+        211.3333282470703,
+        245.33334350585935
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -12791,8 +12791,8 @@
       "flip_x": false,
       "flip_y": false,
       "footprint_tiles": [
-        3.0,
-        3.0
+        2.0,
+        2.0
       ],
       "gameplay_role": "none",
       "instance_base_footprint_tiles": [
@@ -12800,22 +12800,24 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000221",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": false,
       "map_collision_override": "default",
-      "material_layer_order": 0.0,
+      "material_layer_order": -2.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
       "occlusion": false,
       "occupancy_footprint_tiles": [
-        3.0,
-        3.0
+        2.0,
+        2.0
       ],
       "offset_px": [
         0.0,
-        0.0
+        -16.0
       ],
       "placement_anchor_policy_id": "",
       "placement_anchor_px": [
@@ -12827,19 +12829,23 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        1.0,
-        1.0
+        0.7000000000000001,
+        0.7000000000000001
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        24.0,
-        56.0
+        25.0,
+        57.0
       ],
       "tile_anchor": [
-        24.0,
-        56.0
+        25.0,
+        57.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
       ]
     },
     {
@@ -12862,8 +12868,8 @@
       "flip_x": false,
       "flip_y": false,
       "footprint_tiles": [
-        3.0,
-        3.0
+        2.0,
+        2.0
       ],
       "gameplay_role": "none",
       "instance_base_footprint_tiles": [
@@ -12871,22 +12877,24 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000222",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": false,
       "map_collision_override": "default",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
       "occlusion": false,
       "occupancy_footprint_tiles": [
-        3.0,
-        3.0
+        2.0,
+        2.0
       ],
       "offset_px": [
         0.0,
-        0.0
+        -16.0
       ],
       "placement_anchor_policy_id": "",
       "placement_anchor_px": [
@@ -12898,26 +12906,30 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        1.0,
-        1.0
+        0.7000000000000001,
+        0.7000000000000001
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        25.0,
-        4.0
+        26.0,
+        5.0
       ],
       "tile_anchor": [
-        25.0,
-        4.0
+        26.0,
+        5.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
       ]
     },
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
         127.0,
-        207.66667175293
+        207.6666717529297
       ],
       "asset_id": "user.e46ac879aee805eb",
       "collision_authority": "asset",
@@ -12964,7 +12976,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         127.0,
-        207.66667175293
+        207.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13071,7 +13083,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         141.0,
-        174.66667175293
+        174.6666717529297
       ],
       "asset_id": "user.2cebc1463b240891",
       "collision_authority": "asset",
@@ -13118,7 +13130,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         141.0,
-        174.66667175293
+        174.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13225,7 +13237,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         112.0,
-        165.66667175293
+        165.6666717529297
       ],
       "asset_id": "user.d1d2103ad1ebc2dc",
       "collision_authority": "asset",
@@ -13272,7 +13284,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         112.0,
-        165.66667175293
+        165.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13302,7 +13314,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         127.0,
-        207.66667175293
+        207.6666717529297
       ],
       "asset_id": "user.e46ac879aee805eb",
       "collision_authority": "asset",
@@ -13349,7 +13361,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         127.0,
-        207.66667175293
+        207.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13687,7 +13699,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         111.0,
-        209.66667175293
+        209.6666717529297
       ],
       "asset_id": "user.2865e0a711845c17",
       "collision_authority": "asset",
@@ -13734,7 +13746,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         111.0,
-        209.66667175293
+        209.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13764,7 +13776,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         111.0,
-        209.66667175293
+        209.6666717529297
       ],
       "asset_id": "user.2865e0a711845c17",
       "collision_authority": "asset",
@@ -13811,7 +13823,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         111.0,
-        209.66667175293
+        209.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13918,7 +13930,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         134.0,
-        172.66667175293
+        172.6666717529297
       ],
       "asset_id": "user.012d42c4d8832618",
       "collision_authority": "asset",
@@ -13965,7 +13977,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         134.0,
-        172.66667175293
+        172.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -28388,8 +28400,17 @@
         "linked_visual_instance_id": "inst_000242",
         "official_connection_id": "portal.mengzhong_terror_space.map_exit_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          25.0,
+          57.0
+        ],
         "reciprocal_exit_id": "map_exit_000002",
         "reciprocal_map_key": "mengzhong_between_life_and_death",
         "requires_leave_before_retrigger": true,
@@ -28431,8 +28452,17 @@
         "linked_visual_instance_id": "inst_000243",
         "official_connection_id": "portal.mengzhong_terror_space.map_exit_000002",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          26.0,
+          5.0
+        ],
         "reciprocal_exit_id": "map_exit_000001",
         "reciprocal_map_key": "mengzhong_thin_sky_passage",
         "requires_leave_before_retrigger": true,
@@ -29285,7 +29315,7 @@
         "spawn_group_id": "mse.group.v1.mengzhong_terror_space.monster_spawn.000018",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          24.0,
+          23.0,
           28.0
         ]
       },
@@ -29469,7 +29499,7 @@
         "spawn_group_id": "mse.group.v1.mengzhong_terror_space.monster_spawn.000022",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          10.0,
+          9.0,
           10.0
         ]
       },
@@ -31442,10 +31472,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "8e0f7c94bb1e32fdc1b6aee3e2050b81018b59dd15eb79b25994bcff194217a8",
+      "authoring_sha256": "7a52f101912003c87ad72edd60c829f4adb3325f3616b7db926d95f13022728e",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 15.0,
-      "document_sha256": "916127ea4961d9527d890c6f11977ae18c435398f9b2ae9cf7a1d71c14ebad14",
+      "document_revision": 25.0,
+      "document_sha256": "c0cc8766f4d371843a6138e20060e18c8209503d5b799ed3a9b50209164ac38a",
       "ground_manifest_sha256": "5a74e45ecffa564f2b35928c844ba8881aee49e36bb11ecd0e67a2fbf8d62148",
       "ground_state_sha256": "492334757b14c2d5e73563322beac6ab8b16f797e7bc9310487eb99093f4be74",
       "map_key": "mengzhong_terror_space",
@@ -31455,7 +31485,7 @@
     "display_name": "恐怖空间",
     "editor_schema_version": 5.0,
     "map_id": "mengzhong_terror_space",
-    "revision": 15.0,
+    "revision": 25.0,
     "runtime_map_id": 913205.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1"

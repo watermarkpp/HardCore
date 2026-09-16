@@ -1,5 +1,5 @@
 {
-  "build_sha256": "af72d78869dac0a70cb46f12f31ca9aa270045de1ed2dc844dc4b7370459b80b",
+  "build_sha256": "7f55ee76f809154f9765e3b23270cff9b542fae005d49a9891d36335aebf124f",
   "collision": {
     "blocked_count": 807.0,
     "blocked_tiles": [
@@ -12235,8 +12235,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        200.66667175293,
-        256.666687011719
+        200.6666717529297,
+        256.66668701171875
       ],
       "asset_id": "user.f0d72af3638e0c81",
       "collision_authority": "asset",
@@ -12282,8 +12282,8 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        200.66667175293,
-        256.666687011719
+        200.6666717529297,
+        256.66668701171875
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -12389,8 +12389,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        170.66667175293,
-        253.66667175293
+        170.6666717529297,
+        253.6666717529297
       ],
       "asset_id": "user.13c20d8e4aa45974",
       "collision_authority": "asset",
@@ -12436,8 +12436,8 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        170.66667175293,
-        253.66667175293
+        170.6666717529297,
+        253.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -12466,8 +12466,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        200.66667175293,
-        256.666687011719
+        200.6666717529297,
+        256.66668701171875
       ],
       "asset_id": "user.f0d72af3638e0c81",
       "collision_authority": "asset",
@@ -12513,8 +12513,8 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        200.66667175293,
-        256.666687011719
+        200.6666717529297,
+        256.66668701171875
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -12543,8 +12543,8 @@
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
-        211.33332824707,
-        245.333343505859
+        211.3333282470703,
+        245.33334350585935
       ],
       "asset_id": "user.0126c24686128af2",
       "collision_authority": "asset",
@@ -12590,8 +12590,8 @@
       ],
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
-        211.33332824707,
-        245.333343505859
+        211.3333282470703,
+        245.33334350585935
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -12791,8 +12791,8 @@
       "flip_x": false,
       "flip_y": false,
       "footprint_tiles": [
-        3.0,
-        3.0
+        2.0,
+        2.0
       ],
       "gameplay_role": "none",
       "instance_base_footprint_tiles": [
@@ -12800,22 +12800,24 @@
         3.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000221",
+      "instance_scale_level": -3.0,
       "layer": "object_base",
       "manual_collision_expected": false,
       "map_collision_override": "default",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "decoration",
       "occlusion": false,
       "occupancy_footprint_tiles": [
-        3.0,
-        3.0
+        2.0,
+        2.0
       ],
       "offset_px": [
         0.0,
-        0.0
+        -16.0
       ],
       "placement_anchor_policy_id": "",
       "placement_anchor_px": [
@@ -12827,26 +12829,30 @@
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        1.0,
-        1.0
+        0.7000000000000001,
+        0.7000000000000001
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
       "selection_locked": false,
       "tile": [
-        24.0,
-        56.0
+        25.0,
+        57.0
       ],
       "tile_anchor": [
-        24.0,
-        56.0
+        25.0,
+        57.0
+      ],
+      "visual_footprint_tiles": [
+        2.0,
+        2.0
       ]
     },
     {
       "anchor_mode": "foot_tile",
       "anchor_px": [
         127.0,
-        207.66667175293
+        207.6666717529297
       ],
       "asset_id": "user.e46ac879aee805eb",
       "collision_authority": "asset",
@@ -12893,7 +12899,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         127.0,
-        207.66667175293
+        207.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13000,7 +13006,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         141.0,
-        174.66667175293
+        174.6666717529297
       ],
       "asset_id": "user.2cebc1463b240891",
       "collision_authority": "asset",
@@ -13047,7 +13053,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         141.0,
-        174.66667175293
+        174.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13154,7 +13160,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         112.0,
-        165.66667175293
+        165.6666717529297
       ],
       "asset_id": "user.d1d2103ad1ebc2dc",
       "collision_authority": "asset",
@@ -13201,7 +13207,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         112.0,
-        165.66667175293
+        165.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13231,7 +13237,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         127.0,
-        207.66667175293
+        207.6666717529297
       ],
       "asset_id": "user.e46ac879aee805eb",
       "collision_authority": "asset",
@@ -13278,7 +13284,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         127.0,
-        207.66667175293
+        207.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13616,7 +13622,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         111.0,
-        209.66667175293
+        209.6666717529297
       ],
       "asset_id": "user.2865e0a711845c17",
       "collision_authority": "asset",
@@ -13663,7 +13669,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         111.0,
-        209.66667175293
+        209.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13693,7 +13699,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         111.0,
-        209.66667175293
+        209.6666717529297
       ],
       "asset_id": "user.2865e0a711845c17",
       "collision_authority": "asset",
@@ -13740,7 +13746,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         111.0,
-        209.66667175293
+        209.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -13847,7 +13853,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         134.0,
-        172.66667175293
+        172.6666717529297
       ],
       "asset_id": "user.012d42c4d8832618",
       "collision_authority": "asset",
@@ -13894,7 +13900,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         134.0,
-        172.66667175293
+        172.6666717529297
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -28726,8 +28732,8 @@
         "spawn_group_id": "mse.group.v1.mengzhong_death_coffin.monster_spawn.000012",
         "spawn_rule": "single_anchor_user_copy_template",
         "tile": [
-          25.0,
-          28.0
+          20.0,
+          25.0
         ]
       },
       {
@@ -31268,10 +31274,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "8da9719cd0500e3726de769d55dd740f2d140a2de42df1f519ae93f01c5ea359",
+      "authoring_sha256": "ebd3a91dd9bbad08659a022d7b849bd7209471271d3cee5fd444e91f37b1958b",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 16.0,
-      "document_sha256": "881add1a192b90ac59679d854e2f7f5136a4d7d64ff11d387ee1a268672a5062",
+      "document_revision": 24.0,
+      "document_sha256": "033813eca10ef3449370564d81ecba63d69eccf03ba8ddee6934b0f76bcc31a6",
       "ground_manifest_sha256": "90adddd89cb04010d716874ff3b540847533a802ab9b340a96bdcef77e684501",
       "ground_state_sha256": "d4e611c4afdd00cf3bf25fbe960cf7828fe3b38e6250b65c8015265792840398",
       "map_key": "mengzhong_death_coffin",
@@ -31281,7 +31287,7 @@
     "display_name": "死亡棺材",
     "editor_schema_version": 5.0,
     "map_id": "mengzhong_death_coffin",
-    "revision": 16.0,
+    "revision": 24.0,
     "runtime_map_id": 913207.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1"
