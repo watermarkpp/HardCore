@@ -376,6 +376,8 @@ var _drop_nodes_max_per_frame_override := -1
 var _test_force_loot_materialization_failure_count := 0
 var _pending_loot_collections: Array = []
 var _prepared_loot_collection: Dictionary = {}
+## FRAME-STALL probe: fires once per session on the first >250ms frame.
+var _first_long_frame_diagnosed := false
 var _loot_collection_flush_queued := false
 ## Legacy loot candidates are rejected unless a focused test explicitly opts
 ## into the old fixture shape. Formal pickups always carry map/generation
@@ -1713,6 +1715,25 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	# FRAME-STALL probe (user device report 2026-09-16): the incoming delta
+	# IS the total duration of the previous frame. Report the first frame
+	# over 250ms once per session with the resource-cache counters; the
+	# delta against the loading-window baseline localizes a first-combat
+	# stall (textures vs audio vs none-of-them = engine/shader compile).
+	if not _first_long_frame_diagnosed and delta > 0.25:
+		_first_long_frame_diagnosed = true
+		print(
+			"[FRAME-STALL] long frame %.3fs at process frame %d: caster=%s presentation=%d monster_frames=%d"
+			% [
+				delta,
+				Engine.get_process_frames(),
+				CasterSkillVisualRegistry.frame_texture_cache_diagnostics(),
+				PresentationAssets.cached_resource_count(),
+				preload(
+					"res://scripts/monster_source_frames.gd"
+				).resident_texture_count()
+			]
+		)
 	preload("res://scripts/monster_source_frames.gd").poll()
 	if not _prepared_loot_collection.is_empty(): _poll_prepared_loot_collection()
 	var process_started_usec := RuntimeDiagnostics.timing_start()
@@ -1863,11 +1884,40 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 ## are the superset of the hotbar contents, so this covers every skill the
 ## player can actually cast first. Fire wall's six frames land here, killing
 ## the first-cast main-thread texture load spike.
+##
+## FIRST-COMBAT extension (user device report 2026-09-16): a one-time ~1s
+## hitch a few seconds after the first aggro. Static tracing determined the
+## only remaining first-combat synchronous loads on the main thread: the
+## weapon swing audio streams (PresentationAssets.audio resolves through a
+## sync load() on cache miss, first played on the first attack) and the
+## fallback presentation action textures. Everything else in the first
+## combat presentation path is already warm: paper doll and weapon action
+## atlases load at equipment refresh, monster action frames thread-load
+## off the main thread, and caster skill frames prewarm above. The audio
+## warming is idempotent (all three swing ids, whatever the equipped
+## weapon resolves to).
 func _prewarm_learned_skill_visuals() -> void:
 	if PlayerState.test_mode and PlayerState.learned_skills.is_empty():
 		return
 	for skill_name: String in PlayerState.learned_skills.keys():
 		CasterSkillVisualRegistry.prewarm_animation(skill_name)
+	for audio_id: String in ["sword", "wood", "fist"]:
+		PresentationAssets.audio(audio_id)
+	for action_key: String in ["attack", "hit", "cast", "death"]:
+		PresentationAssets.player_texture(action_key)
+	# FRAME-STALL baseline: one print at the end of the loading window. The
+	# one-time long-frame probe (see _process) prints the same counters when
+	# the first >250ms frame occurs; the delta localizes the stall source.
+	print(
+		"[FRAME-STALL] baseline: caster=%s presentation=%d monster_frames=%d"
+		% [
+			CasterSkillVisualRegistry.frame_texture_cache_diagnostics(),
+			PresentationAssets.cached_resource_count(),
+			preload(
+				"res://scripts/monster_source_frames.gd"
+			).resident_texture_count()
+		]
+	)
 
 
 func _register_input_actions() -> void:

@@ -89,7 +89,10 @@ func _run() -> void:
 	# 5) Source discipline: GameRoot prewarms learned skills inside the
 	# loading window (after FINALIZE, before the loading cover lifts). The
 	# call site is matched with its two-tab indentation so the function
-	# definition earlier in the file cannot satisfy this gate.
+	# definition earlier in the file cannot satisfy this gate. The first-
+	# combat extension (weapon swing audio + fallback action textures) must
+	# warm inside the same window; the presentation cache must therefore be
+	# populated by the hook call, not by the first real attack.
 	var source := FileAccess.get_file_as_string("res://scripts/game_root.gd")
 	assert(
 		source.contains("func _prewarm_learned_skill_visuals()"),
@@ -102,11 +105,26 @@ func _run() -> void:
 		"\t\t_prewarm_learned_skill_visuals()"
 	)
 	var finish_index := source.find("hud.finish_loading_transition()")
+	var prewarm_def_index := source.find(
+		"func _prewarm_learned_skill_visuals()"
+	)
 	assert(
 		finalize_index >= 0 and prewarm_index > finalize_index
 		and finish_index > prewarm_index,
 		"the prewarm must run inside the loading window, before the cover lifts"
 	)
+	# The first-combat warming calls must live inside the prewarm function
+	# body, so they execute wherever the (window-gated) call site runs.
+	for warming_call: String in [
+		'PresentationAssets.audio(audio_id)',
+		'PresentationAssets.player_texture(action_key)',
+	]:
+		var body_index := source.find(warming_call, prewarm_def_index)
+		assert(
+			prewarm_def_index >= 0 and body_index >= 0,
+			"first-combat presentation warming must sit in the prewarm body: %s"
+			% warming_call
+		)
 	print(
 		"CASTER_SKILL_VISUAL_PREWARM_PASS frames=%d loads=%d hits=%d"
 		% [
