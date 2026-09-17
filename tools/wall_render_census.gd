@@ -1,0 +1,162 @@
+extends Node
+
+## WALL-P1R R0 rollout census (headless scene run, dry-run, zero writes).
+## Enumerates every formal runtime map from the release registry and runs
+## the real compiler pipeline IN MEMORY (compile_plan + materialize, no
+## store writes, no plan writes) to classify:
+##   A OPTIMIZABLE     - atlas commands exist and the contract completes.
+##   B LEGACY_NO_GAIN   - no atlas commands (R1: never publish an empty plan).
+##   C BLOCKED          - contract violation / materialize error / bad design.
+## Usage:
+##   godot --headless --path . -s res://tools/wall_render_census.gd
+
+const BRIDGE := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
+const GEOMETRY_SERVICE := preload(
+	"res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd"
+)
+const COMPILER := preload(
+	"res://scripts/map_editor/map_editor_wall_render_compiler.gd"
+)
+
+
+static func _sha256_bytes(bytes: PackedByteArray) -> String:
+	var context := HashingContext.new()
+	context.start(HashingContext.HASH_SHA256)
+	context.update(bytes)
+	return context.finish().hex_encode()
+
+
+func _image_size(path: String) -> Vector2i:
+	var image := _load_image(path)
+	if image == null:
+		return Vector2i.ZERO
+	return Vector2i(image.get_width(), image.get_height())
+
+
+func _load_image(path: String) -> Image:
+	return Image.load_from_file(ProjectSettings.globalize_path(path))
+
+
+func _ready() -> void:
+	var rows: Array = []
+	var failures := 0
+	var map_ids := BRIDGE.released_map_ids()
+	map_ids.sort()
+	for map_id: int in map_ids:
+		var runtime_path := str(BRIDGE.runtime_path(map_id))
+		if runtime_path.is_empty() or not BRIDGE.has_runtime_map(map_id):
+			rows.append({"map_id": map_id, "class": "C", "error": "no runtime path"})
+			failures += 1
+			continue
+		var map_key := runtime_path.get_file().replace(".runtime.json", "")
+		var runtime_bytes := FileAccess.get_file_as_bytes(runtime_path)
+		if runtime_bytes.is_empty():
+			rows.append({"map_id": map_id, "map_key": map_key, "class": "C", "error": "runtime json missing"})
+			failures += 1
+			continue
+		var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(runtime_path))
+		if raw is not Dictionary:
+			rows.append({"map_id": map_id, "map_key": map_key, "class": "C", "error": "runtime json unparsable"})
+			failures += 1
+			continue
+		var design_container: Dictionary = raw.get("design", {})
+		var design_raw: Array = design_container.get("design_size", [])
+		if design_raw.size() != 2 or int(design_raw[0]) <= 0 or int(design_raw[1]) <= 0:
+			rows.append({"map_id": map_id, "map_key": map_key, "class": "C", "error": "design_size missing/malformed"})
+			failures += 1
+			continue
+		var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
+		var instances: Array = raw.get("instances", [])
+		var commands: Array = GEOMETRY_SERVICE.sorted_draw_commands(instances)
+		var plan: Dictionary = COMPILER.compile_plan(commands, design_size, _image_size)
+		if bool(plan.get("contract_violation", false)) or plan.has("error"):
+			rows.append({
+				"map_id": map_id, "map_key": map_key, "class": "C",
+				"error": str(plan.get("error", "compiler contract violation")),
+				"total_commands": commands.size(),
+			})
+			failures += 1
+			continue
+		var atlas_commands: int = plan.get("atlas_command_indices", []).size()
+		if atlas_commands == 0:
+			# R1: zero-atlas maps stay plan-missing LEGACY; no empty plans.
+			rows.append({
+				"map_id": map_id, "map_key": map_key, "class": "B",
+				"design_size": [design_size.x, design_size.y],
+				"total_commands": commands.size(),
+				"atlas_commands": 0,
+				"static_chunk_commands": plan.get("shadow_chunk_command_indices", []).size(),
+				"legacy_commands": plan.get("legacy_command_indices", []).size(),
+			})
+			continue
+		var materialized: Dictionary = COMPILER.materialize(plan, commands, _load_image)
+		if materialized.has("error"):
+			rows.append({
+				"map_id": map_id, "map_key": map_key, "class": "C",
+				"error": str(materialized["error"]),
+				"total_commands": commands.size(),
+				"atlas_commands": atlas_commands,
+			})
+			failures += 1
+			continue
+		var atlas_pixel_estimate := 0
+		var atlas_page_estimate: Array = []
+		for page: Dictionary in plan.get("atlas_pages", []):
+			var size: Vector2i = page.get("composite_size", Vector2i.ZERO)
+			atlas_page_estimate.append([size.x, size.y])
+			atlas_pixel_estimate += size.x * size.y
+		var chunk_pixels_before := 0
+		var chunk_pixels_after := 0
+		for chunk: Dictionary in materialized.get("shadow_chunks", []):
+			var image: Image = chunk["image"]
+			chunk_pixels_before += image.get_width() * image.get_height()
+			var used := image.get_used_rect()
+			if used.size.x > 0 and used.size.y > 0:
+				chunk_pixels_after += used.size.x * used.size.y
+		var unique_sources := {}
+		for placement: Dictionary in plan.get("placements", []):
+			unique_sources[str(placement.get("image_path", ""))] = true
+		rows.append({
+			"map_id": map_id, "map_key": map_key, "class": "A",
+			"design_size": [design_size.x, design_size.y],
+			"total_commands": commands.size(),
+			"atlas_commands": atlas_commands,
+			"dynamic_group_count": plan.get("atlas_entries", []).size(),
+			"unique_atlas_entries": unique_sources.size(),
+			"static_chunk_commands": plan.get("shadow_chunk_command_indices", []).size(),
+			"shadow_segments": plan.get("shadow_segments", []).size(),
+			"legacy_commands": plan.get("legacy_command_indices", []).size(),
+			"atlas_pages": plan.get("atlas_pages", []).size(),
+			"atlas_page_estimate": atlas_page_estimate,
+			"atlas_pixel_estimate": atlas_pixel_estimate,
+			"static_pixels_before_trim": chunk_pixels_before,
+			"static_pixels_after_trim": chunk_pixels_after,
+			"source_texture_count": unique_sources.size(),
+		})
+	var report := {
+		"contract_id": "hardcore.wall_render_c10_rollout_census.v1",
+		"released_map_count": map_ids.size(),
+		"rows": rows,
+	}
+	DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path("res://outputs/wall_perf")
+	)
+	var report_file := FileAccess.open(
+		"res://outputs/wall_perf/wall_render_rollout_census.json", FileAccess.WRITE
+	)
+	report_file.store_string(JSON.stringify(report, "\t"))
+	report_file.close()
+	var counts := {"A": 0, "B": 0, "C": 0}
+	for row: Dictionary in rows:
+		counts[str(row["class"])] = int(counts[str(row["class"])]) + 1
+		if str(row["class"]) == "C":
+			print("CENSUS_C %s %s %s" % [
+				str(row.get("map_key", row.get("map_id"))),
+				str(row.get("error", "")), str(row.get("total_commands", "")),
+			])
+	print("CENSUS_TOTAL released=%d A=%d B=%d C=%d" % [
+		map_ids.size(), counts["A"], counts["B"], counts["C"],
+	])
+	get_tree().quit(0 if counts["C"] == 0 else 1)
