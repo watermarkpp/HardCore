@@ -101,36 +101,84 @@ func _ready() -> void:
 			})
 			failures += 1
 			continue
-		var atlas_pixel_estimate := 0
-		var atlas_page_estimate: Array = []
-		for page: Dictionary in plan.get("atlas_pages", []):
-			var size: Vector2i = page.get("composite_size", Vector2i.ZERO)
-			atlas_page_estimate.append([size.x, size.y])
-			atlas_pixel_estimate += size.x * size.y
+		# Detail fields follow the MATERIALIZED contract: atlas_pages are
+		# Images, chunk trim is measured on chunk Images, groups come from
+		# per-entry group_mappings, source textures from bake inputs.
+		var page_images: Array = materialized["atlas_pages"]
+		var chunk_images: Array = materialized["shadow_chunks"]
+		var atlas_pages := page_images.size()
+		var atlas_pixels := 0
+		for page_image: Image in page_images:
+			atlas_pixels += page_image.get_width() * page_image.get_height()
+		var dynamic_group_count := 0
+		var unique_sources := {}
+		for entry: Dictionary in plan.get("atlas_entries", []):
+			dynamic_group_count += entry.get("group_mappings", []).size()
+			for layer: Dictionary in entry.get("layers", []):
+				unique_sources[str(layer.get("image_path", ""))] = true
 		var chunk_pixels_before := 0
 		var chunk_pixels_after := 0
-		for chunk: Dictionary in materialized.get("shadow_chunks", []):
+		for chunk: Dictionary in chunk_images:
 			var image: Image = chunk["image"]
 			chunk_pixels_before += image.get_width() * image.get_height()
 			var used := image.get_used_rect()
 			if used.size.x > 0 and used.size.y > 0:
 				chunk_pixels_after += used.size.x * used.size.y
-		var unique_sources := {}
-		for placement: Dictionary in plan.get("placements", []):
-			unique_sources[str(placement.get("image_path", ""))] = true
+		for segment: Dictionary in plan.get("shadow_segments", []):
+			for index: int in segment.get("command_indices", []):
+				unique_sources[str(commands[index].get("image_path", ""))] = true
+		# Bridge candidates: the formal geometry-service authority.
+		var bridge_candidates := 0
+		var static_span_legacy := 0
+		for index: int in commands.size():
+			var command: Dictionary = commands[index]
+			if not GEOMETRY_SERVICE.is_static_authored_wall_bridge_candidate(command):
+				continue
+			bridge_candidates += 1
+			if plan.get("legacy_command_indices", []).has(index):
+				static_span_legacy += 1
+		var legacy_commands: int = plan.get("legacy_command_indices", []).size()
+		var shadow_chunk_commands: int = plan.get(
+			"shadow_chunk_command_indices", []
+		).size()
+		# Hard self-checks: report mapping errors fail the census.
+		var page_heights: Array = plan.get("atlas_page_heights", [])
+		var height_pixels := 0
+		for h: int in page_heights:
+			height_pixels += COMPILER.PAGE_WIDTH * int(h)
+		var accounting: Dictionary = plan.get("accounting", {})
+		var checks := {
+			"atlas_pages_eq_heights": atlas_pages == page_heights.size(),
+			"atlas_pixels_eq_heights": atlas_pixels == height_pixels,
+			"groups_ge_entries": dynamic_group_count
+				>= plan.get("atlas_entries", []).size(),
+			"command_closure": atlas_commands + shadow_chunk_commands
+				+ legacy_commands == commands.size(),
+			"accounting_closure": int(accounting.get("total_commands", -1))
+				== commands.size(),
+		}
+		for check_name: String in checks:
+			if not bool(checks[check_name]):
+				rows.append({
+					"map_id": map_id, "map_key": map_key, "class": "C",
+					"error": "census self-check failed: %s" % check_name,
+				})
+				failures += 1
 		rows.append({
 			"map_id": map_id, "map_key": map_key, "class": "A",
 			"design_size": [design_size.x, design_size.y],
 			"total_commands": commands.size(),
 			"atlas_commands": atlas_commands,
-			"dynamic_group_count": plan.get("atlas_entries", []).size(),
-			"unique_atlas_entries": unique_sources.size(),
-			"static_chunk_commands": plan.get("shadow_chunk_command_indices", []).size(),
+			"dynamic_group_count": dynamic_group_count,
+			"unique_atlas_entries": plan.get("atlas_entries", []).size(),
+			"static_chunk_commands": shadow_chunk_commands,
+			"static_chunk_count_before_trim": chunk_images.size(),
 			"shadow_segments": plan.get("shadow_segments", []).size(),
-			"legacy_commands": plan.get("legacy_command_indices", []).size(),
-			"atlas_pages": plan.get("atlas_pages", []).size(),
-			"atlas_page_estimate": atlas_page_estimate,
-			"atlas_pixel_estimate": atlas_pixel_estimate,
+			"legacy_commands": legacy_commands,
+			"transformed_static_breakers": static_span_legacy,
+			"bridge_candidate_count": bridge_candidates,
+			"atlas_pages": atlas_pages,
+			"atlas_pixel_estimate": atlas_pixels,
 			"static_pixels_before_trim": chunk_pixels_before,
 			"static_pixels_after_trim": chunk_pixels_after,
 			"source_texture_count": unique_sources.size(),
