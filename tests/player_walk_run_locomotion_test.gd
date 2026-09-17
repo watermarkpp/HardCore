@@ -72,7 +72,7 @@ func _run() -> void:
 	player.locomotion_state = "run"
 	player.locomotion_distance_gu = 1.2
 	player._start_struck_reaction()
-	assert(player.locomotion_state == "walk" and is_zero_approx(player.locomotion_distance_gu), "struck reaction must reset locomotion")
+	assert(player.locomotion_state == "run" and is_equal_approx(player.locomotion_distance_gu, 1.2), "struck reaction must preserve locomotion state and run progress")
 	player.locomotion_state = "run"
 	player.locomotion_distance_gu = 1.2
 	player._dead = true

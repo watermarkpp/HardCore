@@ -44,7 +44,18 @@ func _run() -> void:
 	assert(PlayerState.inventory.size() == 1, "拾取入包失败")
 	var equip_result := PlayerState.equip_inventory_index(0)
 	assert(equip_result.begins_with("已装备"), "装备穿戴失败")
-	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == 10, "装备属性没有计入角色")
+	# The base growth chain (character_base_growth_v1) is the stat authority
+	# since fa4a1ffa: a level-1 warrior has attack_max 1.  The canonical 木剑
+	# carries dc 2-5, so equipping it must land attack_max at 1 + 5 = 6.
+	var growth_base_attack_max := int(
+		preload("res://scripts/generated/character_base_growth_v1.gd")
+			.stats_for_level("战士", 1)["attack_max"]
+	)
+	assert(growth_base_attack_max == 1, "1级战士成长攻击上限必须为1")
+	assert(
+		int(PlayerState.computed_stats.get("attack_max", 0)) == growth_base_attack_max + 5,
+		"装备属性没有按成长基础+木剑上限(2-5)计入角色"
+	)
 	assert(game.player != null, "玩家未创建")
 
 	# 综合烟测直接使用正式比奇运行图；旧郊外演示区不再是生产入口。

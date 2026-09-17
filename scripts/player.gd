@@ -1141,7 +1141,12 @@ func _finish_combat_action(action_id: int) -> void:
 func _start_struck_reaction() -> void:
 	var duration := ProfessionRules.player_struck_reaction_seconds(PlayerState.level)
 	_struck_reaction_lock_remaining = maxf(_struck_reaction_lock_remaining, duration)
-	reset_locomotion()
+
+	# Ordinary struck pauses displacement but preserves locomotion state
+	# and walk-to-run progress: RUN stays RUN, a partial 1GU run-up keeps its
+	# accumulated distance. Releasing direction input still resets locomotion
+	# through the normal physics path, and a committed combat action still
+	# finishes before the queued reaction plays.
 	visual.play_hit(duration)
 
 
