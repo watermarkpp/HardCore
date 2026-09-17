@@ -9,6 +9,7 @@ extends Node
 const PLAN_DIR := "res://assets/data/runtime/map_editor/wall_render_plans"
 const STORE_DIR_PREFIX := "assets/data/runtime/map_editor/wall_render_store/"
 const STORE_DIR := "res://" + STORE_DIR_PREFIX
+const ROLLOUT_AUTHORITY := preload("res://tools/wall_rollout_authority.gd")
 const HEX := "0123456789abcdef"
 
 
@@ -43,14 +44,15 @@ func _ready() -> void:
 			mode = pair[1]
 	var errors: PackedStringArray = []
 
-	# R3-1 plan set seal
-	var a60 := {}
-	var maplist := FileAccess.open("res://outputs/wall_perf/a60_maplist.txt", FileAccess.READ)
-	if maplist == null:
-		printerr("STORE_GC_FAIL missing a60_maplist.txt")
+	# R3-1 plan set seal (classification rebuilt in-process, R4-0: no
+	# outputs/ or hand-maintained list dependency)
+	var authority := ROLLOUT_AUTHORITY.classify()
+	if authority["error"] != "":
+		printerr("STORE_GC_FAIL %s" % str(authority["error"]))
 		get_tree().quit(1)
 		return
-	for key: String in maplist.get_line().strip_edges().split(",", false):
+	var a60 := {}
+	for key: String in authority["a_keys"]:
 		a60[key] = true
 	var plan_files: PackedStringArray = []
 	var dir := DirAccess.open(PLAN_DIR)
@@ -78,6 +80,7 @@ func _ready() -> void:
 	# R3-2 referenced set + per-reference validation
 	var referenced := {}
 	var ref_by_map := {}
+	var expected_sizes := {}
 	var total_refs := 0
 	for file: String in plan_files:
 		var key := file.replace(".wall_render_plan.json", "")
@@ -129,6 +132,7 @@ func _ready() -> void:
 					key, rel, str(actual), str(expected),
 				])
 				continue
+			expected_sizes[rel] = expected
 			referenced[rel] = true
 			if not ref_by_map.has(rel):
 				ref_by_map[rel] = {}
@@ -221,6 +225,30 @@ func _ready() -> void:
 	if not errors.is_empty():
 		printerr("STORE_GC_FAIL errors present; zero deletions")
 		get_tree().quit(1)
+		return
+	if mode == "resources":
+		# R4-5: full Godot resource gate over every referenced PNG.
+		var exists_fail := 0
+		var type_fail := 0
+		var size_fail := 0
+		for rel: String in referenced.keys():
+			if not ResourceLoader.exists(rel):
+				exists_fail += 1
+				continue
+			var texture: Texture2D = ResourceLoader.load(rel)
+			if texture == null or not (texture is Texture2D):
+				type_fail += 1
+				continue
+			if Vector2i(texture.get_size()) != (
+				expected_sizes[rel] as Vector2i
+			):
+				size_fail += 1
+		print("STORE_GC_RESOURCES referenced=%d exists_fail=%d type_fail=%d size_fail=%d" % [
+			referenced.size(), exists_fail, type_fail, size_fail,
+		])
+		get_tree().quit(
+			0 if (exists_fail == 0 and type_fail == 0 and size_fail == 0) else 1
+		)
 		return
 	if mode != "gc":
 		print("STORE_GC_AUDIT_PASS deletions=0")
