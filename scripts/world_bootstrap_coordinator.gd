@@ -356,6 +356,23 @@ func register_resource(
 	_register_resource(path, kind, required, owner_id, scope, region)
 
 
+## WALL-P1R C3 narrow interface: best-effort threaded prefetch for derived
+## resources. Optional entries ARE prefetched (threaded request like any
+## other) but their failure never counts as a required-resource failure, so
+## a missing wall atlas/chunk degrades that map to legacy rendering instead
+## of blocking the map load. Required-resource semantics are untouched.
+func register_optional_prefetch_resource(
+	path: String,
+	kind: String,
+	owner_id: String,
+	scope := "target",
+	region := ""
+) -> void:
+	_register_resource(path, kind, false, owner_id, scope, region)
+	if resource_manifest.has(path):
+		resource_manifest[path]["optional_prefetch"] = true
+
+
 func _finalize_resource_scope() -> void:
 	cross_region_resource_count = 0
 	for _path: Variant in resource_manifest:
@@ -628,7 +645,9 @@ func request_threaded_prefetch() -> int:
 	diagnostic["headless_serial_prefetch"] = serial_test_load
 	for _path: Variant in resource_manifest:
 		var _entry: Dictionary = resource_manifest[_path]
-		if not (_entry.get("required", true) as bool):
+		var _required := (_entry.get("required", true) as bool)
+		var _optional := (_entry.get("optional_prefetch", false) as bool)
+		if not (_required or _optional):
 			continue
 		if serial_test_load:
 			var resource_path := str(_path)
@@ -639,7 +658,8 @@ func request_threaded_prefetch() -> int:
 				_requested += 1
 			else:
 				_entry["status"] = "load_failed"
-				diagnostic["prefetch_failure_count"] += 1
+				if _required:
+					diagnostic["prefetch_failure_count"] += 1
 			continue
 		var _status := ResourceLoader.load_threaded_request(str(_path))
 		if _status == OK or _status == ERR_ALREADY_IN_USE:

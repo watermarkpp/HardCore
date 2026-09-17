@@ -9,6 +9,8 @@ const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
 const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
 const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
+const WallRenderPlanRuntimeServiceScript := preload("res://scripts/map_editor/map_editor_wall_render_plan_runtime_service.gd")
+const MapEditorInstanceServiceScript := preload("res://scripts/map_editor/map_editor_instance_service.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 # P1-004: texture atlases are now lazy-loaded.  Only the target map's
 # atlases are loaded when a map is built.  Old const names remain as
@@ -134,6 +136,15 @@ var _editor_runtime_bridge_size := Vector2i.ZERO
 var _static_wall_bridge_image_cache: Dictionary = {}
 var _static_wall_bridge_used_rect_cache: Dictionary = {}
 var _static_wall_bridge_built_generation := -999999
+# ── WALL-P1R Consumer R1 state (advisor contracts C3-C8) ──
+## Validated plan candidate from the runtime service; {} before registration.
+var _wall_render_candidate: Dictionary = {}
+## LEGACY until submit-time selection proves every derived texture; the
+## switch happens on pure descriptor data before any node is created.
+var _wall_render_mode := "LEGACY"
+var _wall_render_plan_found := false
+var _wall_render_fallback_reason := ""
+var _wall_render_derived_prefetch_failures := 0
 var _static_wall_bridge_stats := {
 	"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
 	"generation": -1,
@@ -862,6 +873,9 @@ func set_pending_arrival_position(position_px: Vector2) -> void:
 func submit_staged_build() -> void:
 	if bootstrap_coordinator == null:
 		return
+	# WALL-P1R C4: select optimized vs legacy BEFORE any descriptor reaches
+	# BUILD_MAP; only the selected descriptor set is ever submitted.
+	_select_wall_render_mode()
 	bootstrap_coordinator.submit_map_descriptors(_pending_map_descriptors)
 	bootstrap_coordinator.submit_collision_descriptors(_pending_collision_descriptors)
 
@@ -1283,6 +1297,7 @@ func _collect_target_map_resources(map_id: int) -> void:
 						image_path, "texture", true, "editor_chunk", "target", region
 					)
 		_register_command_resources(runtime, region)
+		_register_wall_render_plan_resources(map_id, runtime, region)
 		_register_profile_ground_resources(map_id, profile, region)
 		# Editor runtime maps still resolve prop/light atlases through the
 		# profile (legacy draw fallbacks and diagnostics), so they must be
@@ -1318,6 +1333,374 @@ func _register_command_resources(runtime: Dictionary, region: String) -> void:
 			coord.register_resource(
 				image_path, "texture", true, "editor_instance", "target", region
 			)
+
+
+## WALL-P1R C3: validate the map's wall render plan at registration time and
+## register its derived textures (atlas pages + shadow chunks) as optional
+## best-effort prefetch. Legacy command textures stay fully registered above,
+## so a complete legacy fallback never needs a resource it does not have.
+func _register_wall_render_plan_resources(
+	map_id: int,
+	runtime: Dictionary,
+	region: String
+) -> void:
+	_wall_render_candidate = {}
+	_wall_render_plan_found = false
+	_wall_render_mode = "LEGACY"
+	_wall_render_fallback_reason = ""
+	_wall_render_derived_prefetch_failures = 0
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return
+	var runtime_path := str(MapEditorRuntimeBridgeScript.runtime_path(map_id))
+	if runtime_path.is_empty() or runtime.is_empty():
+		return
+	var map_key := runtime_path.get_file().replace(".runtime.json", "")
+	var plan_path := (
+		"res://assets/data/runtime/map_editor/wall_render_plans/%s.wall_render_plan.json"
+		% map_key
+	)
+	_wall_render_plan_found = FileAccess.file_exists(plan_path)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [64, 64])
+	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
+		runtime.get("instances", [])
+	)
+	var candidate := WallRenderPlanRuntimeServiceScript.load_candidate(
+		plan_path, _res_path(runtime_path), map_key, design_size, commands
+	)
+	_wall_render_candidate = candidate
+	if not bool(candidate.get("ok", false)):
+		_wall_render_fallback_reason = str(candidate.get("reason", "unknown"))
+		return
+	var plan: Dictionary = candidate["plan"]
+	for record: Dictionary in plan.get("atlas_pages", []):
+		_register_optional_derived_texture(str(record.get("path", "")), region)
+	for record: Dictionary in plan.get("shadow_chunks", []):
+		_register_optional_derived_texture(str(record.get("path", "")), region)
+
+
+func _register_optional_derived_texture(store_path: String, region: String) -> void:
+	var coord := bootstrap_coordinator
+	if coord == null or store_path.is_empty():
+		return
+	var resource_path := _res_path(store_path)
+	if not ResourceLoader.exists(resource_path):
+		return
+	coord.register_optional_prefetch_resource(
+		resource_path, "texture", "wall_render_derived", "target", region
+	)
+
+
+## WALL-P1R C4 selection point: runs at submit time, after WAIT_RESOURCES
+## completed, before any descriptor reaches BUILD_MAP. Optimized mode is
+## chosen only when every derived texture was prefetched and its size
+## matches the plan exactly; otherwise the already-built legacy descriptors
+## are submitted untouched. No node is ever created before this decision.
+func _select_wall_render_mode() -> void:
+	_wall_render_mode = "LEGACY"
+	var coord := bootstrap_coordinator
+	if coord == null or not bool(_wall_render_candidate.get("ok", false)):
+		return
+	var plan: Dictionary = _wall_render_candidate["plan"]
+	var derived_failures := 0
+	for record: Dictionary in plan.get("atlas_pages", []):
+		var error := _verify_derived_texture(record, "width", "height")
+		if error != "":
+			derived_failures += 1
+			_wall_render_fallback_reason = error
+	for record: Dictionary in plan.get("shadow_chunks", []):
+		var error := _verify_derived_texture(record, "size_px.x", "size_px.y")
+		if error != "":
+			derived_failures += 1
+			_wall_render_fallback_reason = error
+	_wall_render_derived_prefetch_failures = derived_failures
+	if derived_failures > 0:
+		return
+	_wall_render_mode = "OPTIMIZED"
+	_wall_render_fallback_reason = ""
+	_apply_wall_render_optimized_descriptors()
+
+
+func _verify_derived_texture(record: Dictionary, width_key: String, height_key: String) -> String:
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return "no coordinator"
+	var resource_path := _res_path(str(record.get("path", "")))
+	var texture := coord.get_prefetched_resource(resource_path) as Texture2D
+	if texture == null:
+		return "derived texture not prefetched: %s" % resource_path
+	var expected_size := Vector2(
+		float(_record_dimension(record, width_key)),
+		float(_record_dimension(record, height_key)),
+	)
+	if texture.get_size() != expected_size:
+		return "derived texture size mismatch: %s" % resource_path
+	return ""
+
+
+## Atlas pages record width/height; chunk records record size_px[2].
+func _record_dimension(record: Dictionary, key: String) -> int:
+	if key == "size_px.x":
+		return int(record.get("size_px", [0, 0])[0])
+	if key == "size_px.y":
+		return int(record.get("size_px", [0, 0])[1])
+	return int(record.get(key, -1))
+
+
+## Replaces the wall-command legacy descriptors with optimized ones on pure
+## descriptor data: one atlas sprite per group mapping (anchored at the
+## representative command), chunk sprites inserted at each segment's insert
+## position, everything else (bridge sources, transformed breakers,
+## outside-span statics, non-wall instances) untouched.
+func _apply_wall_render_optimized_descriptors() -> void:
+	var plan: Dictionary = _wall_render_candidate["plan"]
+	var generation := _generation_token()
+	var commands := _editor_runtime_bridge_commands
+	var atlas_set := {}
+	for value: Variant in plan["atlas_command_indices"]:
+		atlas_set[int(value)] = true
+	var chunk_set := {}
+	for value: Variant in plan["shadow_chunk_command_indices"]:
+		chunk_set[int(value)] = true
+	var pages: Array = plan["atlas_pages"]
+	# Representative command -> {mapping, entry, page_path}; entries whose
+	# representative descriptor is missing keep their whole group legacy.
+	var mapping_by_representative: Dictionary = {}
+	for entry: Dictionary in plan["atlas_entries"]:
+		for mapping: Dictionary in entry["group_mappings"]:
+			var representative := int(mapping["representative_command_index"])
+			var page_path := ""
+			var page_index := int(entry["page"])
+			if page_index >= 0 and page_index < pages.size():
+				page_path = _res_path(str(pages[page_index]["path"]))
+			mapping_by_representative[representative] = {
+				"mapping": mapping,
+				"entry": entry,
+				"page_path": page_path,
+			}
+	var representative_descriptors: Dictionary = {}
+	for descriptor: Dictionary in _pending_map_descriptors:
+		if str(descriptor.get("kind", "")) != "instance_sprite":
+			continue
+		var command_index := int(descriptor.get("source_index", -1))
+		if mapping_by_representative.has(command_index):
+			representative_descriptors[command_index] = descriptor
+	# Chunk records grouped per segment, emitted at the segment insert anchor.
+	var chunks_by_anchor: Dictionary = {}
+	for record: Dictionary in plan["shadow_chunks"]:
+		var anchor := int(record.get("insert_command_index", -1))
+		if not chunks_by_anchor.has(anchor):
+			chunks_by_anchor[anchor] = []
+		chunks_by_anchor[anchor].append(record)
+	var new_descriptors: Array = []
+	for descriptor: Dictionary in _pending_map_descriptors:
+		if str(descriptor.get("kind", "")) != "instance_sprite":
+			new_descriptors.append(descriptor)
+			continue
+		var command_index := int(descriptor.get("source_index", -1))
+		# Flush chunk sprites anchored at or before this command position.
+		var pending_anchors: Array = chunks_by_anchor.keys()
+		pending_anchors.sort()
+		for anchor: int in pending_anchors:
+			if anchor > command_index:
+				continue
+			for record: Dictionary in chunks_by_anchor[anchor]:
+				new_descriptors.append(_wall_chunk_descriptor(
+					record, commands, generation
+				))
+			chunks_by_anchor.erase(anchor)
+		if atlas_set.has(command_index):
+			if (
+				mapping_by_representative.has(command_index)
+				and representative_descriptors.has(command_index)
+			):
+				var packed: Dictionary = mapping_by_representative[
+					command_index
+				]
+				var source_descriptor: Dictionary = (
+					representative_descriptors[command_index]
+				)
+				new_descriptors.append(_descriptor(
+					"wall_atlas_sprite", command_index, "object",
+					str(packed["page_path"]), Vector2.ZERO, -5,
+					{
+						"command": source_descriptor["payload"]["command"],
+						"entry": packed["entry"],
+						"mapping": packed["mapping"],
+						"design_size": source_descriptor["payload"]["design_size"],
+					},
+					generation
+				))
+			else:
+				# Representative descriptor missing (source image absent):
+				# keep this legacy sprite so the group stays renderable.
+				new_descriptors.append(descriptor)
+			continue
+		if chunk_set.has(command_index):
+			# Baked into a shadow chunk sprite; no legacy sprite.
+			continue
+		new_descriptors.append(descriptor)
+	# Chunks anchored beyond the last descriptor still must be emitted.
+	var remaining_anchors: Array = chunks_by_anchor.keys()
+	remaining_anchors.sort()
+	for anchor: int in remaining_anchors:
+		for record: Dictionary in chunks_by_anchor[anchor]:
+			new_descriptors.append(_wall_chunk_descriptor(
+				record, commands, generation
+			))
+	_pending_map_descriptors = new_descriptors
+
+
+func _wall_chunk_descriptor(
+	record: Dictionary,
+	commands: Array,
+	generation: int
+) -> Dictionary:
+	var insert_index := int(record.get("insert_command_index", 0))
+	var command: Dictionary = {}
+	if insert_index >= 0 and insert_index < commands.size():
+		command = commands[insert_index]
+	return _descriptor(
+		"wall_chunk_sprite", insert_index, "object",
+		_res_path(str(record.get("path", ""))), Vector2.ZERO, -5,
+		{"chunk": record, "command": command},
+		generation
+	)
+
+
+## WALL-P1R C5: one atlas-backed sprite per wall group mapping. Geometry
+## authority is the representative command exactly as in the legacy path;
+## only the drawn rectangle changes to the shared composite region anchored
+## at the entry's min sprite offset (the Lab Mode E proven formula).
+func _build_wall_atlas_sprite_node(payload: Dictionary, texture: Texture2D) -> Node:
+	if not _generation_is_current():
+		return null
+	var command: Dictionary = payload.get("command", {})
+	var entry: Dictionary = payload.get("entry", {})
+	var mapping: Dictionary = payload.get("mapping", {})
+	var size: Vector2i = payload.get("design_size", Vector2i.ZERO)
+	var group_key := str(mapping.get("group_key", ""))
+	var source_texture := _prefetched_texture(
+		_res_path(str(command.get("image_path", ""))), "BUILD_MAP"
+	)
+	if source_texture == null or group_key.is_empty():
+		return null
+	var geometry := RuntimeVisualGeometryScript.runtime_command_geometry(
+		command, size, source_texture.get_size()
+	)
+	var sprite := Sprite2D.new()
+	sprite.name = "WallAtlasSprite_%s" % group_key
+	sprite.texture = texture
+	sprite.region_enabled = true
+	var region: Array = entry["region"]
+	sprite.region_rect = Rect2(
+		int(region[0]), int(region[1]), int(region[2]), int(region[3])
+	)
+	sprite.centered = false
+	var render_domain := str(command.get(
+		"render_domain",
+		RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
+	))
+	var actor_sort_root: Node2D = null
+	var parent_world_origin := Vector2.ZERO
+	if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
+		actor_sort_root = _editor_runtime_actor_sort_roots.get(group_key) as Node2D
+		if actor_sort_root == null:
+			actor_sort_root = Node2D.new()
+			actor_sort_root.name = "WallAtlasOccluder_%s" % group_key
+			actor_sort_root.position = (
+				RuntimeVisualGeometryScript.command_actor_sort_world(
+					command, size
+				)
+			)
+			actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
+			actor_sort_root.set_meta("editor_runtime_actor_sort_group", group_key)
+			actor_sort_root.set_meta(
+				"editor_runtime_sort_tile", command.sort_tile
+			)
+			actor_sort_root.set_meta("editor_runtime_instance_id", str(
+				command.get("instance", {}).get("instance_id", "")
+			))
+			_editor_runtime_actor_sort_roots[group_key] = actor_sort_root
+		parent_world_origin = actor_sort_root.position
+	RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
+		sprite, command, geometry, parent_world_origin
+	)
+	# Composite placement override: shared min offset in texture space.
+	var min_offset: Array = entry["min_offset"]
+	sprite.offset = Vector2(float(min_offset[0]), float(min_offset[1]))
+	sprite.set_meta("editor_runtime_render_domain", render_domain)
+	sprite.set_meta("editor_runtime_image_pass", int(command.get("image_pass", -1)))
+	sprite.set_meta("editor_runtime_wall_asset", true)
+	sprite.set_meta("editor_runtime_wall_composite", true)
+	sprite.set_meta("editor_runtime_actor_sort_group", group_key)
+	if actor_sort_root != null:
+		sprite.z_index = 0
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if actor_sort_root != null and get_parent() != null:
+		return _append_actor_sort_node(actor_sort_root, sprite)
+	return _append_environment_node(sprite)
+
+
+## WALL-P1R C6: one sprite per baked shadow chunk at its recorded static
+## position. Material/z contract mirrors ordinary static instances using the
+## segment's first command as the material authority.
+func _build_wall_chunk_sprite_node(payload: Dictionary, texture: Texture2D) -> Node:
+	if not _generation_is_current():
+		return null
+	var record: Dictionary = payload.get("chunk", {})
+	var position: Array = record.get("position_px", [0, 0])
+	var command: Dictionary = payload.get("command", {})
+	var sprite := Sprite2D.new()
+	sprite.name = "WallChunkSprite_%d_%d" % [
+		int(record.get("segment_index", 0)), int(record.get("insert_command_index", 0)),
+	]
+	sprite.texture = texture
+	sprite.centered = false
+	sprite.position = Vector2(float(position[0]), float(position[1]))
+	MapEditorInstanceServiceScript.configure_runtime_material_canvas_item(
+		sprite, command.get("instance", {})
+	)
+	sprite.set_meta("editor_runtime_wall_asset", true)
+	sprite.set_meta("wall_static_chunk", true)
+	sprite.set_meta(
+		"editor_runtime_chunk_segment", int(record.get("segment_index", -1))
+	)
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	return _append_environment_node(sprite)
+
+
+## WALL-P1R C8 runtime diagnostics accessor.
+func wall_render_stats() -> Dictionary:
+	var valid := bool(_wall_render_candidate.get("ok", false))
+	var plan: Dictionary = (
+		_wall_render_candidate.get("plan", {}) if valid else {}
+	)
+	var derived_pixel_count := 0
+	for record: Dictionary in plan.get("atlas_pages", []):
+		derived_pixel_count += int(record.get("width", 0)) * int(
+			record.get("height", 0)
+		)
+	for record: Dictionary in plan.get("shadow_chunks", []):
+		derived_pixel_count += int(record.get("size_px", [0, 0])[0]) * int(
+			record.get("size_px", [0, 0])[1]
+		)
+	var dynamic_group_count := 0
+	for entry: Dictionary in plan.get("atlas_entries", []):
+		dynamic_group_count += entry.get("group_mappings", []).size()
+	return {
+		"wall_render_plan_found": _wall_render_plan_found,
+		"wall_render_plan_valid": valid,
+		"wall_render_mode": _wall_render_mode,
+		"wall_render_fallback_reason": _wall_render_fallback_reason,
+		"atlas_page_count": plan.get("atlas_pages", []).size(),
+		"dynamic_group_count": dynamic_group_count,
+		"static_chunk_count": plan.get("shadow_chunks", []).size(),
+		"legacy_command_count": plan.get("legacy_command_indices", []).size(),
+		"derived_prefetch_failure_count": _wall_render_derived_prefetch_failures,
+		"derived_texture_pixel_count": derived_pixel_count,
+	}
 
 
 func _register_profile_ground_resources(
@@ -1475,6 +1858,16 @@ func build_one_map_item(descriptor: Dictionary) -> Node:
 				payload.get("design_size", Vector2i.ZERO),
 				instance_texture
 			)
+		"wall_atlas_sprite":
+			var atlas_texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if atlas_texture == null:
+				return null
+			return _build_wall_atlas_sprite_node(payload, atlas_texture)
+		"wall_chunk_sprite":
+			var chunk_texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if chunk_texture == null:
+				return null
+			return _build_wall_chunk_sprite_node(payload, chunk_texture)
 		"prop_sprite":
 			var prop_texture := _prefetched_texture(resource_path, "BUILD_MAP")
 			if prop_texture == null:
