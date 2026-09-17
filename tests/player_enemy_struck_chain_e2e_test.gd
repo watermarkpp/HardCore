@@ -2,6 +2,7 @@ extends Node
 
 
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const RuntimeCombatSpatialIndexScript := preload("res://scripts/runtime_combat_spatial_index.gd")
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -17,6 +18,9 @@ func _run() -> void:
 	PlayerState.active_profile_id = ""
 	PlayerState.reset_progress(false)
 	PlayerState.select_profession("战士")
+	# Level 40 keeps the fixture on the V4 unified 240ms reaction window the
+	# lock-separation steps below (0.10s + 0.14s + 0.01s) were written against.
+	PlayerState.level = 40
 	var player := PlayerCharacter.new()
 	add_child(player)
 	player.set_physics_process(false)
@@ -30,27 +34,45 @@ func _run() -> void:
 	player.global_position = Vector2(58, 0)
 	player.set_touch_vector(Vector2.RIGHT)
 	var threshold := ProfessionRules.player_struck_damage_threshold(player.max_hp)
-	assert(threshold == 10, "500 最大生命的 2% 硬直阈值必须保持 10")
-	assert(ProfessionRules.player_struck_damage_threshold(120) == 3, "最低 3 点硬直阈值被改写")
+	assert(threshold == 15, "500 最大生命的 3% 硬直阈值必须保持 15")
+	assert(ProfessionRules.player_struck_damage_threshold(120) == 4, "120 最大生命按 3% 缩放应为 4 点阈值")
 
 	var enemy := EnemyActor.new()
-	enemy.setup(GameData.get_monster("骷髅精灵"), player, true)
+	# Name-only GameData.get_monster() is retired fail-closed; the canonical
+	# runtime entry must be fetched by monster id.  Monster 76 (沃玛教主) is a
+	# canonical boss whose sourced boss_rule carries the 300ms hit delay this
+	# end-to-end chain consumes (骷髅精灵 is canonical elite, not promotable).
+	enemy.setup(GameData.get_monster_by_id(76), player, true)
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpace.screen_delta_px_to_ground_delta_gu)
 	add_child(enemy)
+	# HC standard-melee access requires the world-owned combat spatial index.
+	# A bare fixture injects its own empty index so the real attack-start gate
+	# (and only the AI acquisition cadence, which monster-AI suites own) can run.
+	var combat_index := RuntimeCombatSpatialIndexScript.new()
+	enemy.configure_spatial_index(combat_index, 1)
+	combat_index.register(
+		1,
+		1,
+		enemy.spatial_index_position(),
+		enemy.combat_radius_gu,
+		1,
+		enemy,
+		Callable(enemy, "spatial_index_position")
+	)
 	enemy.set_physics_process(false)
 	enemy.attack_min = threshold
 	enemy.attack_max = threshold
 	enemy._attack_timer = 0.0
 	assert(
 		is_equal_approx(enemy._attack_hit_delay, 0.3),
-		"端到端测试必须使用真实骷髅精灵命中帧时序"
+		"端到端测试必须使用真实沃玛教主命中帧时序"
 	)
 
 	var hp_before := player.current_hp
-	enemy._physics_process(0.01)
+	assert(enemy._hc_try_start(player), "真实标准近战攻击必须能够启动")
 	assert(
 		enemy._pending_attack_time > 0.0 and player.current_hp == hp_before,
 		"Enemy 真实攻击没有先进入客户端命中帧等待"
@@ -66,12 +88,16 @@ func _run() -> void:
 		player._struck_lock_remaining > 0.0
 		and player._struck_reaction_lock_remaining > 0.0
 		and not player.can_start_attack(),
-		"达到 2% 阈值后没有建立服务器动作锁和受击表现锁"
+		"达到 3% 阈值后没有建立服务器动作锁和受击表现锁"
 	)
 
+	var reaction_seconds := ProfessionRules.player_struck_reaction_seconds(PlayerState.level)
 	var observed_frames: Array[int] = []
-	for delta: float in [0.001, 0.08, 0.08]:
-		player.visual._process(delta)
+	# The hit action advances its three frames proportionally to the reaction
+	# duration (progress = elapsed / duration). Sample once per frame band while
+	# staying inside the action window.
+	for fraction: float in [0.05, 0.4, 0.4]:
+		player.visual._process(reaction_seconds * fraction)
 		observed_frames.append(player.visual.current_frame)
 	assert(player.visual.current_animation_name() == "hit", "Enemy 命中没有触发 Player hit 动作")
 	assert(player.visual._frame_count_for_action("hit") == 3, "Player hit 动作必须恰好三帧")

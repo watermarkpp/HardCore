@@ -141,10 +141,13 @@ const SKILL_TIMING_OVERRIDES := {
 # 服务端对任意 nPower>0 发 SM_STRUCK，并以 StruckTime=100 拒绝新动作；
 # 客户端则将 SM_STRUCK 排在当前动作之后，并以三帧表现受击。用户明确要求
 # 小额擦伤不能触发硬反应，因此下列阈值是 HardCore 的数据化平衡策略。
+# V4（HardCore 单机平衡，非原版规则）：普通硬直阈值升级为
+# max(3, ceil(当前MaxHP×3%))；24 级起受击表现统一 80ms×3 帧=240ms，
+# 1-23 级完整保留原三帧曲线；边界值本身（final_damage == 阈值）触发硬直。
 const COMBAT_REACTION_POLICY := {
-	"policy_id": "hardcore_player_hit_reaction_v3",
+	"policy_id": "hardcore_player_hit_reaction_v4",
 	"origin": "hardcore_custom_balance_not_original_176",
-	"max_hp_ratio": 0.02,
+	"max_hp_ratio": 0.03,
 	"minimum_actual_damage": 3,
 	"comparison": "actual_damage_gte_threshold",
 	"server_action_lock_seconds": 0.10,
@@ -152,9 +155,11 @@ const COMBAT_REACTION_POLICY := {
 	"reaction_frame_base_ms": 140,
 	"reaction_frame_level_step_ms": 2,
 	"reaction_frame_floor_ms": 100,
+	"reaction_high_level_start": 24,
+	"reaction_high_level_frame_ms": 80,
 	"reaction_queue_policy": "after_current_action",
 	"balance_basis": "Bich baseline: scarecrow 1-2; rake/hook cats 2-4; level-1 warrior HP 120",
-	"reaction_basis": "HardCore tuned 3-frame curve: frame_ms=max(100,140-level*2), preserving level scaling within a 300-414ms total range",
+	"reaction_basis": "HardCore tuned 3-frame curve: levels 1-23 keep frame_ms=max(100,140-level*2) (300-414ms total), level 24+ unified 80ms frames (240ms total)",
 	"evidence": [
 		{"confidence": "B", "scope": "modified_1.5_2002_not_verified_1.76", "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas:5468-5521,25225-25243", "finding": "nPower>0 sends SM_STRUCK; CheckActionStatus uses configured StruckTime"},
 		{"confidence": "B", "scope": "modified_1.5_2002_not_verified_1.76", "path": "dev_art_sources/reference/original_gameofmir/Client/Actor.pas:75-90,1407-1414,1536-1546,1617-1634", "finding": "three struck frames; frame_ms=max(80,200-level*5); SM_STRUCK waits for current action to finish"},
@@ -392,6 +397,17 @@ static func player_struck_action_lock_seconds() -> float:
 
 static func player_struck_reaction_frame_milliseconds(character_level: int) -> int:
 	var policy: Dictionary = _data().get("combatReactionPolicy", COMBAT_REACTION_POLICY)
+	var safe_level := maxi(1, character_level)
+	var high_level_start := maxi(1, int(policy.get(
+		"reaction_high_level_start",
+		COMBAT_REACTION_POLICY.reaction_high_level_start
+	)))
+	var high_level_frame_ms := maxi(1, int(policy.get(
+		"reaction_high_level_frame_ms",
+		COMBAT_REACTION_POLICY.reaction_high_level_frame_ms
+	)))
+	if safe_level >= high_level_start:
+		return high_level_frame_ms
 	var frame_base_ms := maxi(1, int(policy.get(
 		"reaction_frame_base_ms",
 		COMBAT_REACTION_POLICY.reaction_frame_base_ms
@@ -404,7 +420,7 @@ static func player_struck_reaction_frame_milliseconds(character_level: int) -> i
 		"reaction_frame_floor_ms",
 		COMBAT_REACTION_POLICY.reaction_frame_floor_ms
 	)))
-	return maxi(frame_floor_ms, frame_base_ms - maxi(1, character_level) * level_step_ms)
+	return maxi(frame_floor_ms, frame_base_ms - safe_level * level_step_ms)
 
 
 static func player_struck_reaction_seconds(character_level: int) -> float:
