@@ -30,7 +30,7 @@
     ],
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
-    "revision": 7.0,
+    "revision": 8.0,
     "runtime_approved": true,
     "runtime_approved_revision": 3.0,
     "source_editor_schema_version": 4.0,
@@ -791,14 +791,74 @@
         "collision_id": "manual_000009",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            59.0,
-            64.0,
-            36.0,
-            32.0
+          "points": [
+            [
+              59.0,
+              95.0
+            ],
+            [
+              60.0,
+              96.0
+            ],
+            [
+              96.0,
+              96.0
+            ],
+            [
+              96.0,
+              51.0
+            ],
+            [
+              93.0,
+              51.0
+            ],
+            [
+              84.0,
+              52.0
+            ],
+            [
+              70.0,
+              53.0
+            ],
+            [
+              68.0,
+              56.0
+            ],
+            [
+              67.0,
+              60.0
+            ],
+            [
+              63.0,
+              63.0
+            ],
+            [
+              60.0,
+              65.0
+            ],
+            [
+              59.0,
+              71.0
+            ],
+            [
+              59.0,
+              80.0
+            ],
+            [
+              57.0,
+              86.0
+            ],
+            [
+              58.0,
+              89.0
+            ],
+            [
+              59.0,
+              95.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
@@ -808,10 +868,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            93.0,
-            60.0,
-            3.0,
-            36.0
+            59.0,
+            67.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -824,10 +884,10 @@
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
-            79.0,
-            51.0,
-            17.0,
-            2.0
+            60.0,
+            64.0,
+            1.0,
+            1.0
           ]
         },
         "shape": "rect",
@@ -839,190 +899,62 @@
         "collision_id": "manual_000012",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            78.0,
-            53.0,
-            18.0,
-            18.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000013",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            68.0,
-            54.0,
-            20.0,
-            12.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000014",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            73.0,
-            52.0,
-            8.0,
-            4.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000015",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            60.0,
-            62.0,
-            13.0,
-            3.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000016",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            65.0,
-            61.0,
-            6.0,
-            2.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000017",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            57.0,
-            81.0,
-            2.0,
-            9.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000018",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            60.0,
-            0.0,
-            36.0,
-            20.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000019",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            59.0,
-            8.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000020",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            59.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000021",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            59.0,
-            10.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000022",
-        "content_layer": "personal_expansion",
-        "data": {
           "points": [
             [
-              60.0,
-              20.0
+              41.0,
+              96.0
             ],
             [
-              70.0,
-              30.0
+              41.0,
+              81.0
             ],
             [
-              81.0,
-              30.0
+              42.0,
+              71.0
             ],
             [
-              96.0,
-              33.0
+              38.0,
+              64.0
             ],
             [
-              96.0,
-              19.0
+              32.0,
+              58.0
             ],
             [
-              60.0,
-              20.0
+              26.0,
+              56.0
+            ],
+            [
+              18.0,
+              55.0
+            ],
+            [
+              12.0,
+              57.0
+            ],
+            [
+              7.0,
+              59.0
+            ],
+            [
+              2.0,
+              56.0
+            ],
+            [
+              1.0,
+              56.0
+            ],
+            [
+              0.0,
+              57.0
+            ],
+            [
+              0.0,
+              96.0
+            ],
+            [
+              41.0,
+              96.0
             ]
           ]
         },
@@ -1032,13 +964,33 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000023",
+        "collision_id": "manual_000013",
         "content_layer": "personal_expansion",
         "data": {
           "points": [
             [
-              32.0,
-              13.0
+              0.0,
+              34.0
+            ],
+            [
+              12.0,
+              32.0
+            ],
+            [
+              21.0,
+              29.0
+            ],
+            [
+              26.0,
+              24.0
+            ],
+            [
+              30.0,
+              17.0
+            ],
+            [
+              33.0,
+              9.0
             ],
             [
               35.0,
@@ -1050,19 +1002,7 @@
             ],
             [
               0.0,
-              33.0
-            ],
-            [
-              17.0,
-              30.0
-            ],
-            [
-              25.0,
-              24.0
-            ],
-            [
-              32.0,
-              13.0
+              34.0
             ]
           ]
         },
@@ -1072,49 +1012,53 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000024",
+        "collision_id": "manual_000014",
         "content_layer": "personal_expansion",
         "data": {
           "points": [
             [
-              0.0,
-              56.0
+              95.0,
+              34.0
             ],
             [
-              0.0,
-              96.0
+              84.0,
+              31.0
             ],
             [
-              41.0,
-              96.0
+              78.0,
+              33.0
             ],
             [
-              42.0,
-              75.0
+              67.0,
+              29.0
             ],
             [
-              42.0,
-              69.0
+              59.0,
+              21.0
             ],
             [
-              33.0,
-              59.0
+              56.0,
+              11.0
             ],
             [
-              27.0,
-              56.0
+              58.0,
+              3.0
             ],
             [
-              16.0,
-              56.0
+              60.0,
+              0.0
             ],
             [
-              9.0,
-              58.0
+              96.0,
+              0.0
             ],
             [
-              0.0,
-              56.0
+              96.0,
+              34.0
+            ],
+            [
+              95.0,
+              34.0
             ]
           ]
         },
@@ -1124,7 +1068,7 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000025",
+        "collision_id": "manual_000015",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
@@ -1140,135 +1084,7 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000026",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            74.0,
-            34.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000027",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            73.0,
-            34.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000028",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            72.0,
-            34.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000029",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            69.0,
-            33.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000030",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            93.0,
-            34.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000031",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            89.0,
-            33.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000032",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            92.0,
-            34.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000033",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            61.0,
-            58.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000034",
+        "collision_id": "manual_000016",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
@@ -1284,12 +1100,12 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000035",
+        "collision_id": "manual_000017",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
             61.0,
-            59.0,
+            58.0,
             1.0,
             1.0
           ]
@@ -1300,23 +1116,7 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000036",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            65.0,
-            56.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000037",
+        "collision_id": "manual_000018",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
@@ -1332,7 +1132,23 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000038",
+        "collision_id": "manual_000019",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            65.0,
+            56.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000020",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
@@ -1348,7 +1164,71 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000039",
+        "collision_id": "manual_000021",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            62.0,
+            54.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000022",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            59.0,
+            53.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000023",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            60.0,
+            53.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000024",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            61.0,
+            59.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000025",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
@@ -1364,7 +1244,7 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000040",
+        "collision_id": "manual_000026",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
@@ -1380,7 +1260,7 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000041",
+        "collision_id": "manual_000027",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
@@ -1396,12 +1276,140 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000042",
+        "collision_id": "manual_000028",
         "content_layer": "personal_expansion",
         "data": {
           "rect": [
             34.0,
-            53.0,
+            9.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000029",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            34.0,
+            10.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000030",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27.0,
+            26.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000031",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000032",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            93.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000033",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            83.0,
+            33.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000034",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            82.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000035",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            74.0,
+            34.0,
+            1.0,
+            1.0
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000036",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            73.0,
+            34.0,
             1.0,
             1.0
           ]
@@ -1415,8 +1423,1104 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
+          55.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          53.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          54.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          18.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
           30.0,
           55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          20.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          19.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          18.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          17.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          86.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          85.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          84.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          82.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          81.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          55.0,
+          83.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          93.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          92.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          91.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          76.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          73.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          72.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          70.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          71.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          69.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          68.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          67.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          66.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          64.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          44.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          47.0,
+          16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          47.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          46.0,
+          14.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          17.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          21.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          65.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          33.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          56.0
         ]
       },
       {
@@ -1464,22 +2568,6 @@
         "source": "single_cell_erase",
         "tile": [
           24.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          25.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          24.0,
           55.0
         ]
       },
@@ -1487,400 +2575,8 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          23.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          22.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          21.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          20.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          17.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          19.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          18.0,
-          54.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          9.0,
-          56.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          10.0,
-          56.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          55.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          4.0,
-          56.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          0.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          4.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          5.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          6.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          7.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          8.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          9.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          12.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          9.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          10.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          10.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          8.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          7.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          6.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          0.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          4.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          5.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          53.0,
-          6.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          7.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          5.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          4.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          4.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          6.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          5.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
-          0.0
+          58.0,
+          95.0
         ]
       },
       {
@@ -1888,7 +2584,7 @@
         "source": "single_cell_erase",
         "tile": [
           58.0,
-          0.0
+          94.0
         ]
       },
       {
@@ -1896,7 +2592,7 @@
         "source": "single_cell_erase",
         "tile": [
           56.0,
-          0.0
+          85.0
         ]
       },
       {
@@ -1904,7 +2600,7 @@
         "source": "single_cell_erase",
         "tile": [
           56.0,
-          1.0
+          84.0
         ]
       },
       {
@@ -1912,7 +2608,7 @@
         "source": "single_cell_erase",
         "tile": [
           56.0,
-          2.0
+          83.0
         ]
       },
       {
@@ -1920,31 +2616,31 @@
         "source": "single_cell_erase",
         "tile": [
           56.0,
-          3.0
+          82.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          58.0,
-          1.0
+          56.0,
+          81.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          58.0,
-          2.0
+          56.0,
+          80.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          58.0,
-          3.0
+          56.0,
+          79.0
         ]
       },
       {
@@ -1952,7 +2648,7 @@
         "source": "single_cell_erase",
         "tile": [
           57.0,
-          4.0
+          80.0
         ]
       },
       {
@@ -1960,103 +2656,7 @@
         "source": "single_cell_erase",
         "tile": [
           57.0,
-          5.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          8.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          9.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          10.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          12.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          13.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          14.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          14.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          16.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
-          18.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          18.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
-          20.0
+          81.0
         ]
       },
       {
@@ -2064,7 +2664,7 @@
         "source": "single_cell_erase",
         "tile": [
           58.0,
-          20.0
+          80.0
         ]
       },
       {
@@ -2072,7 +2672,23 @@
         "source": "single_cell_erase",
         "tile": [
           58.0,
-          21.0
+          79.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          78.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          77.0
         ]
       },
       {
@@ -2080,7 +2696,23 @@
         "source": "single_cell_erase",
         "tile": [
           57.0,
-          21.0
+          77.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          78.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          79.0
         ]
       },
       {
@@ -2088,7 +2720,23 @@
         "source": "single_cell_erase",
         "tile": [
           59.0,
-          20.0
+          77.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          76.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          75.0
         ]
       },
       {
@@ -2096,7 +2744,39 @@
         "source": "single_cell_erase",
         "tile": [
           58.0,
-          19.0
+          74.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          75.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          76.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          73.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          72.0
         ]
       },
       {
@@ -2104,55 +2784,7 @@
         "source": "single_cell_erase",
         "tile": [
           57.0,
-          19.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          16.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          55.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          54.0,
-          13.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          17.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          58.0,
-          18.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          58.0,
-          17.0
+          63.0
         ]
       },
       {
@@ -2160,95 +2792,7 @@
         "source": "single_cell_erase",
         "tile": [
           57.0,
-          17.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
-          16.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          13.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          12.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          10.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          9.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          8.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          7.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          59.0,
-          19.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          59.0,
-          18.0
+          62.0
         ]
       },
       {
@@ -2256,7 +2800,7 @@
         "source": "single_cell_erase",
         "tile": [
           58.0,
-          22.0
+          62.0
         ]
       },
       {
@@ -2264,15 +2808,7 @@
         "source": "single_cell_erase",
         "tile": [
           58.0,
-          23.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          58.0,
-          24.0
+          63.0
         ]
       },
       {
@@ -2280,79 +2816,7 @@
         "source": "single_cell_erase",
         "tile": [
           59.0,
-          23.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          59.0,
-          22.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          59.0,
-          21.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          61.0,
-          28.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          65.0,
-          31.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          64.0,
-          30.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          64.0,
-          29.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          65.0,
-          30.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          66.0,
-          31.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          67.0,
-          32.0
+          62.0
         ]
       },
       {
@@ -2360,7 +2824,7 @@
         "source": "single_cell_erase",
         "tile": [
           60.0,
-          56.0
+          62.0
         ]
       },
       {
@@ -2368,15 +2832,7 @@
         "source": "single_cell_erase",
         "tile": [
           60.0,
-          55.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          61.0,
-          54.0
+          61.0
         ]
       },
       {
@@ -2385,6 +2841,382 @@
         "tile": [
           58.0,
           61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          68.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          54.0
         ]
       },
       {
@@ -2407,6 +3239,30 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
+          69.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          70.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          71.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
           70.0,
           52.0
         ]
@@ -2415,8 +3271,16 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          71.0,
-          51.0
+          73.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          72.0,
+          52.0
         ]
       },
       {
@@ -2431,16 +3295,408 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          34.0,
-          53.0
+          71.0,
+          51.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          33.0,
-          53.0
+          73.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          74.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          75.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          83.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          82.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          77.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          76.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          79.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          80.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          81.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          84.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          84.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          78.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          83.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          95.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          94.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          92.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          93.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          88.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          87.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          86.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          85.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          82.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          86.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          87.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          88.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          89.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          90.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          91.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          64.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          95.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          93.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          92.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          89.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          88.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          70.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          69.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          66.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          81.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          82.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          83.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          84.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          65.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          65.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          64.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          37.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          60.0
         ]
       },
       {
@@ -2448,6 +3704,22 @@
         "source": "single_cell_erase",
         "tile": [
           32.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
           56.0
         ]
       },
@@ -2455,7 +3727,31 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          34.0,
+          29.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
           57.0
         ]
       },
@@ -2463,7 +3759,79 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          33.0,
+          26.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
           57.0
         ]
       },
@@ -2471,15 +3839,319 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
+          11.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          0.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          0.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          94.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          35.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5.0,
+          34.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          25.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          24.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          23.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
           34.0,
-          58.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          44.0,
           13.0
         ]
       },
@@ -2487,31 +4159,7 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          43.0,
-          13.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          42.0,
-          16.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          42.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          42.0,
+          34.0,
           14.0
         ]
       },
@@ -2519,7 +4167,15 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          43.0,
+          34.0,
+          15.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
           17.0
         ]
       },
@@ -2527,24 +4183,352 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          46.0,
-          14.0
+          35.0,
+          4.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          47.0,
-          15.0
+          79.0,
+          34.0
         ]
       },
       {
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          47.0,
+          70.0,
+          33.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          31.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          29.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          32.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          30.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          28.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          26.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          22.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          20.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
           16.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          4.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          2.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          1.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          0.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          6.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          5.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          8.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          9.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          10.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          11.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          13.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          12.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          7.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          27.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          27.0
         ]
       }
     ],
@@ -6109,7 +8093,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000195",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6190,7 +8174,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000196",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7243,7 +9227,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000209",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7567,7 +9551,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000001",
+        "instance_id": "inst_000213",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7646,7 +9630,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000002",
+        "instance_id": "inst_000214",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7725,7 +9709,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000003",
+        "instance_id": "inst_000215",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7804,7 +9788,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000004",
+        "instance_id": "inst_000216",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7883,7 +9867,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000005",
+        "instance_id": "inst_000217",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7962,7 +9946,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000006",
+        "instance_id": "inst_000218",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8041,7 +10025,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000007",
+        "instance_id": "inst_000219",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8120,7 +10104,7 @@
           2.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000008",
+        "instance_id": "inst_000220",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8199,7 +10183,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000009",
+        "instance_id": "inst_000221",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8278,7 +10262,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000010",
+        "instance_id": "inst_000222",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8357,7 +10341,7 @@
           2.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000011",
+        "instance_id": "inst_000223",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8436,7 +10420,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000012",
+        "instance_id": "inst_000224",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8515,7 +10499,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000013",
+        "instance_id": "inst_000225",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8594,7 +10578,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000014",
+        "instance_id": "inst_000226",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8673,7 +10657,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000015",
+        "instance_id": "inst_000227",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8752,7 +10736,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000016",
+        "instance_id": "inst_000228",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8831,7 +10815,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000017",
+        "instance_id": "inst_000229",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8910,7 +10894,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000018",
+        "instance_id": "inst_000230",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -8989,7 +10973,7 @@
           2.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000019",
+        "instance_id": "inst_000231",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9068,7 +11052,7 @@
           2.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000020",
+        "instance_id": "inst_000232",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9147,7 +11131,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000021",
+        "instance_id": "inst_000233",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9226,7 +11210,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000022",
+        "instance_id": "inst_000234",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9305,7 +11289,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000023",
+        "instance_id": "inst_000235",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9384,7 +11368,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000024",
+        "instance_id": "inst_000236",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9463,7 +11447,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000025",
+        "instance_id": "inst_000237",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9542,7 +11526,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000026",
+        "instance_id": "inst_000238",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9621,7 +11605,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000027",
+        "instance_id": "inst_000239",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9700,7 +11684,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000028",
+        "instance_id": "inst_000240",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9779,7 +11763,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000029",
+        "instance_id": "inst_000241",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9858,7 +11842,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000030",
+        "instance_id": "inst_000242",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -9937,7 +11921,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000031",
+        "instance_id": "inst_000243",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10016,7 +12000,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000032",
+        "instance_id": "inst_000244",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10095,7 +12079,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000033",
+        "instance_id": "inst_000245",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10174,7 +12158,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000034",
+        "instance_id": "inst_000246",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10253,7 +12237,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000035",
+        "instance_id": "inst_000247",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10332,7 +12316,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000036",
+        "instance_id": "inst_000248",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10411,7 +12395,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000037",
+        "instance_id": "inst_000249",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10490,7 +12474,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000038",
+        "instance_id": "inst_000250",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10569,7 +12553,7 @@
           2.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000039",
+        "instance_id": "inst_000251",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10648,7 +12632,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000040",
+        "instance_id": "inst_000252",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10727,7 +12711,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000041",
+        "instance_id": "inst_000253",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10806,7 +12790,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000042",
+        "instance_id": "inst_000254",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10885,7 +12869,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000043",
+        "instance_id": "inst_000255",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -10964,7 +12948,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000044",
+        "instance_id": "inst_000256",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11043,7 +13027,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000045",
+        "instance_id": "inst_000257",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11122,7 +13106,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000046",
+        "instance_id": "inst_000258",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11201,7 +13185,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000047",
+        "instance_id": "inst_000259",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11280,7 +13264,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000048",
+        "instance_id": "inst_000260",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11359,7 +13343,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000049",
+        "instance_id": "inst_000261",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11438,7 +13422,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000050",
+        "instance_id": "inst_000262",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11517,7 +13501,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000051",
+        "instance_id": "inst_000263",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11596,7 +13580,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000052",
+        "instance_id": "inst_000264",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11675,7 +13659,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000053",
+        "instance_id": "inst_000265",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11754,7 +13738,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000054",
+        "instance_id": "inst_000266",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11833,7 +13817,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000055",
+        "instance_id": "inst_000267",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11912,7 +13896,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000056",
+        "instance_id": "inst_000268",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -11991,7 +13975,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000057",
+        "instance_id": "inst_000269",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12070,7 +14054,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000059",
+        "instance_id": "inst_000270",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12149,7 +14133,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000060",
+        "instance_id": "inst_000271",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12228,7 +14212,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000061",
+        "instance_id": "inst_000272",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12307,7 +14291,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000062",
+        "instance_id": "inst_000273",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12386,7 +14370,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000063",
+        "instance_id": "inst_000274",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12465,7 +14449,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000064",
+        "instance_id": "inst_000275",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12544,7 +14528,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000065",
+        "instance_id": "inst_000276",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12623,7 +14607,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000066",
+        "instance_id": "inst_000277",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12702,7 +14686,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000067",
+        "instance_id": "inst_000278",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12781,7 +14765,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000068",
+        "instance_id": "inst_000279",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12860,7 +14844,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000069",
+        "instance_id": "inst_000280",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -12939,7 +14923,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000070",
+        "instance_id": "inst_000281",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13018,7 +15002,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000071",
+        "instance_id": "inst_000282",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13097,7 +15081,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000072",
+        "instance_id": "inst_000283",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13176,7 +15160,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000073",
+        "instance_id": "inst_000284",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13255,7 +15239,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000074",
+        "instance_id": "inst_000285",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13334,7 +15318,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000075",
+        "instance_id": "inst_000286",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13413,7 +15397,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000076",
+        "instance_id": "inst_000287",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13492,7 +15476,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000077",
+        "instance_id": "inst_000288",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13571,7 +15555,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000078",
+        "instance_id": "inst_000289",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13650,7 +15634,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000079",
+        "instance_id": "inst_000290",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13729,7 +15713,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000080",
+        "instance_id": "inst_000291",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13808,7 +15792,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000081",
+        "instance_id": "inst_000292",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13887,7 +15871,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000082",
+        "instance_id": "inst_000293",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -13966,7 +15950,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000083",
+        "instance_id": "inst_000294",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14045,7 +16029,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000084",
+        "instance_id": "inst_000295",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14124,7 +16108,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000085",
+        "instance_id": "inst_000296",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14203,7 +16187,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000086",
+        "instance_id": "inst_000297",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14282,7 +16266,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000087",
+        "instance_id": "inst_000298",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14361,7 +16345,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000088",
+        "instance_id": "inst_000299",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14440,7 +16424,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000089",
+        "instance_id": "inst_000300",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14519,7 +16503,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000090",
+        "instance_id": "inst_000301",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14598,7 +16582,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000091",
+        "instance_id": "inst_000302",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14677,7 +16661,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000092",
+        "instance_id": "inst_000303",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14756,7 +16740,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000093",
+        "instance_id": "inst_000304",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14835,7 +16819,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000094",
+        "instance_id": "inst_000305",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14914,7 +16898,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000095",
+        "instance_id": "inst_000306",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -14993,7 +16977,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000096",
+        "instance_id": "inst_000307",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15072,7 +17056,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000097",
+        "instance_id": "inst_000308",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15151,7 +17135,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000098",
+        "instance_id": "inst_000309",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15230,7 +17214,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000099",
+        "instance_id": "inst_000310",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15309,7 +17293,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000100",
+        "instance_id": "inst_000311",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15388,7 +17372,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000101",
+        "instance_id": "inst_000312",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15467,7 +17451,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000102",
+        "instance_id": "inst_000313",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15546,7 +17530,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000103",
+        "instance_id": "inst_000314",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15625,7 +17609,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000104",
+        "instance_id": "inst_000315",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15704,7 +17688,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000105",
+        "instance_id": "inst_000316",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15783,7 +17767,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000106",
+        "instance_id": "inst_000317",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15862,7 +17846,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000107",
+        "instance_id": "inst_000318",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -15941,7 +17925,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000108",
+        "instance_id": "inst_000319",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16020,7 +18004,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000109",
+        "instance_id": "inst_000320",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16099,7 +18083,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000110",
+        "instance_id": "inst_000321",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16178,7 +18162,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000111",
+        "instance_id": "inst_000322",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16257,7 +18241,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000112",
+        "instance_id": "inst_000323",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16336,7 +18320,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000113",
+        "instance_id": "inst_000324",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16415,7 +18399,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000114",
+        "instance_id": "inst_000325",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16494,7 +18478,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000115",
+        "instance_id": "inst_000326",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16573,7 +18557,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000116",
+        "instance_id": "inst_000327",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16652,7 +18636,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000117",
+        "instance_id": "inst_000328",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16731,7 +18715,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000118",
+        "instance_id": "inst_000329",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16810,7 +18794,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000119",
+        "instance_id": "inst_000330",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16889,7 +18873,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000120",
+        "instance_id": "inst_000331",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -16968,7 +18952,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000121",
+        "instance_id": "inst_000332",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17047,7 +19031,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000122",
+        "instance_id": "inst_000333",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17126,7 +19110,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000123",
+        "instance_id": "inst_000334",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17205,7 +19189,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000124",
+        "instance_id": "inst_000335",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17284,7 +19268,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000125",
+        "instance_id": "inst_000336",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17363,7 +19347,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000126",
+        "instance_id": "inst_000337",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17442,7 +19426,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000127",
+        "instance_id": "inst_000338",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17521,7 +19505,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000128",
+        "instance_id": "inst_000339",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17600,7 +19584,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000129",
+        "instance_id": "inst_000340",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17679,7 +19663,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000130",
+        "instance_id": "inst_000341",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17758,7 +19742,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000131",
+        "instance_id": "inst_000342",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17837,7 +19821,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000132",
+        "instance_id": "inst_000343",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17916,7 +19900,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000133",
+        "instance_id": "inst_000344",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -17995,7 +19979,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000134",
+        "instance_id": "inst_000345",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18074,7 +20058,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000135",
+        "instance_id": "inst_000346",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18153,7 +20137,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000136",
+        "instance_id": "inst_000347",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18232,7 +20216,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000137",
+        "instance_id": "inst_000348",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18311,7 +20295,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000138",
+        "instance_id": "inst_000349",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18390,7 +20374,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000139",
+        "instance_id": "inst_000350",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18469,7 +20453,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000140",
+        "instance_id": "inst_000351",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18548,7 +20532,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000141",
+        "instance_id": "inst_000352",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18627,7 +20611,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000142",
+        "instance_id": "inst_000353",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18706,7 +20690,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000143",
+        "instance_id": "inst_000354",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18785,7 +20769,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000144",
+        "instance_id": "inst_000355",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18864,7 +20848,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000145",
+        "instance_id": "inst_000356",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -18943,7 +20927,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000146",
+        "instance_id": "inst_000357",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19022,7 +21006,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000147",
+        "instance_id": "inst_000358",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19101,7 +21085,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000148",
+        "instance_id": "inst_000359",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19180,7 +21164,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000149",
+        "instance_id": "inst_000360",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19259,7 +21243,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000150",
+        "instance_id": "inst_000361",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19338,7 +21322,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000151",
+        "instance_id": "inst_000362",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19417,7 +21401,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000152",
+        "instance_id": "inst_000363",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19496,7 +21480,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000153",
+        "instance_id": "inst_000364",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19575,7 +21559,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000154",
+        "instance_id": "inst_000365",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19654,7 +21638,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000155",
+        "instance_id": "inst_000366",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19733,7 +21717,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000156",
+        "instance_id": "inst_000367",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19812,7 +21796,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000157",
+        "instance_id": "inst_000368",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19891,7 +21875,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000158",
+        "instance_id": "inst_000369",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -19970,7 +21954,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000159",
+        "instance_id": "inst_000370",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20049,7 +22033,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000160",
+        "instance_id": "inst_000371",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20128,7 +22112,7 @@
           3.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000161",
+        "instance_id": "inst_000372",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20207,7 +22191,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000162",
+        "instance_id": "inst_000373",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20286,7 +22270,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000163",
+        "instance_id": "inst_000374",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20365,7 +22349,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000164",
+        "instance_id": "inst_000375",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20444,7 +22428,7 @@
           4.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000165",
+        "instance_id": "inst_000376",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20523,7 +22507,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000166",
+        "instance_id": "inst_000377",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20602,7 +22586,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000167",
+        "instance_id": "inst_000378",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20681,7 +22665,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000168",
+        "instance_id": "inst_000379",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20760,7 +22744,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000169",
+        "instance_id": "inst_000380",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20839,7 +22823,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000170",
+        "instance_id": "inst_000381",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20918,7 +22902,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000171",
+        "instance_id": "inst_000382",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -20997,7 +22981,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000172",
+        "instance_id": "inst_000383",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21076,7 +23060,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000173",
+        "instance_id": "inst_000384",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21155,7 +23139,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000174",
+        "instance_id": "inst_000385",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21234,7 +23218,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000175",
+        "instance_id": "inst_000386",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21313,7 +23297,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000176",
+        "instance_id": "inst_000387",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21392,7 +23376,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000177",
+        "instance_id": "inst_000388",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21471,7 +23455,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000178",
+        "instance_id": "inst_000389",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21550,7 +23534,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000179",
+        "instance_id": "inst_000390",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21629,7 +23613,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000180",
+        "instance_id": "inst_000391",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21708,7 +23692,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000181",
+        "instance_id": "inst_000392",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21787,7 +23771,7 @@
           1.0
         ],
         "instance_base_scale": 1.0,
-        "instance_id": "inst_000182",
+        "instance_id": "inst_000393",
         "layer": "terrain_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -21827,6 +23811,1507 @@
         "tile_anchor": [
           1.0,
           34.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000394",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          6.0,
+          58.0
+        ],
+        "tile_anchor": [
+          6.0,
+          58.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000395",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          21.0,
+          56.0
+        ],
+        "tile_anchor": [
+          21.0,
+          56.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000396",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          25.0,
+          57.0
+        ],
+        "tile_anchor": [
+          25.0,
+          57.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000397",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          29.0,
+          58.0
+        ],
+        "tile_anchor": [
+          29.0,
+          58.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000398",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          33.0,
+          59.0
+        ],
+        "tile_anchor": [
+          33.0,
+          59.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000399",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          37.0,
+          64.0
+        ],
+        "tile_anchor": [
+          37.0,
+          64.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000400",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          40.0,
+          67.0
+        ],
+        "tile_anchor": [
+          40.0,
+          67.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000401",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          42.0,
+          71.0
+        ],
+        "tile_anchor": [
+          42.0,
+          71.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000402",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          42.0,
+          77.0
+        ],
+        "tile_anchor": [
+          42.0,
+          77.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000403",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          41.0,
+          80.0
+        ],
+        "tile_anchor": [
+          41.0,
+          80.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000404",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          41.0,
+          85.0
+        ],
+        "tile_anchor": [
+          41.0,
+          85.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000405",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          40.0,
+          91.0
+        ],
+        "tile_anchor": [
+          40.0,
+          91.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000406",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          17.0,
+          56.0
+        ],
+        "tile_anchor": [
+          17.0,
+          56.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000407",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          59.0,
+          15.0
+        ],
+        "tile_anchor": [
+          59.0,
+          15.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000408",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          60.0,
+          18.0
+        ],
+        "tile_anchor": [
+          60.0,
+          18.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000409",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          61.0,
+          21.0
+        ],
+        "tile_anchor": [
+          61.0,
+          21.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000410",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          62.0,
+          24.0
+        ],
+        "tile_anchor": [
+          62.0,
+          24.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000411",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          64.0,
+          25.0
+        ],
+        "tile_anchor": [
+          64.0,
+          25.0
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000412",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          74.0,
+          33.0
+        ],
+        "tile_anchor": [
+          74.0,
+          33.0
         ],
         "visual_footprint_tiles": [
           1.0,

@@ -34,7 +34,7 @@
     "default_connection_mode": "bidirectional",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 13.0,
+    "revision": 24,
     "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
     "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
@@ -1238,6 +1238,150 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000028",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            34,
+            9,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000029",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            34,
+            10,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000030",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            27,
+            26,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000031",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            11,
+            34,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000032",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            93,
+            34,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000033",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            83,
+            33,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000034",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            82,
+            34,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000035",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            74,
+            34,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000036",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            73,
+            34,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -2078,14 +2222,6 @@
         "source": "single_cell_erase",
         "tile": [
           57.0,
-          90.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          57.0,
           93.0
         ]
       },
@@ -2103,14 +2239,6 @@
         "tile": [
           57.0,
           91.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          56.0,
-          89.0
         ]
       },
       {
@@ -2357,14 +2485,6 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          34.0,
-          58.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
           31.0,
           56.0
         ]
@@ -2416,6 +2536,1966 @@
           24.0,
           55.0
         ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          95.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          94.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          85.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          84.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          83.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          82.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          81.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          80.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          56.0,
+          79.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          80.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          81.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          80.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          79.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          78.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          77.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          77.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          78.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          79.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          77.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          76.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          75.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          74.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          75.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          76.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          73.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          72.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          63.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          63.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          61.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          59.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          58.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          68.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67.0,
+          54.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          68.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          69.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          69.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          70.0,
+          53.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          71.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          70.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          73.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          72.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          72.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          71.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          73.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          74.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          75.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          83.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          82.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          77.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          76.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          79.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          80.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          81.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          84.0,
+          52.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          84.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          78.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          83.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          95.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          94.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          92.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          93.0,
+          49.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          88.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          87.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          86.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          85.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          82.0,
+          51.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          86.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          87.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          88.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          89.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          90.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          91.0,
+          50.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57.0,
+          64.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          95.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          93.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          92.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          89.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          88.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          70.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          43.0,
+          69.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          66.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          81.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          82.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          83.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          42.0,
+          84.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          40.0,
+          65.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          65.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          39.0,
+          64.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          37.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          36.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          61.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          60.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          32.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          29.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35.0,
+          62.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          16.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          15.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          10.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          11.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          0.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          0.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          55.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          1.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          9.0,
+          57.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3.0,
+          56.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          41.0,
+          94.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          6,
+          34
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          7,
+          34
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          8,
+          34
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2,
+          35
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          5,
+          34
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          13,
+          33
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          14,
+          33
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          21,
+          30
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          29
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          27
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          22,
+          30
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          27
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          29
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          23,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24,
+          27
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25,
+          26
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25,
+          25
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          26,
+          25
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          25,
+          27
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27,
+          24
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          28,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          27,
+          23
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          30,
+          19
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34,
+          13
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34,
+          14
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          34,
+          15
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          31,
+          17
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          35,
+          4
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          79,
+          34
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          70,
+          33
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66,
+          31
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65,
+          30
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64,
+          29
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62,
+          27
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63,
+          26
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          63,
+          27
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65,
+          29
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          66,
+          30
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67,
+          32
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          67,
+          30
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64,
+          28
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          62,
+          26
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          60,
+          22
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59,
+          20
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59,
+          19
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58,
+          16
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58,
+          6
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59,
+          2
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59,
+          1
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          59,
+          0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58,
+          5
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58,
+          4
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58,
+          2
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58,
+          1
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          58,
+          0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          6
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          5
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          8
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          9
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          10
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          11
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          13
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          12
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          57,
+          7
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          64,
+          27
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          65,
+          27
+        ]
       }
     ],
     "door_points": [],
@@ -2441,8 +4521,17 @@
         "linked_visual_instance_id": "inst_000209",
         "official_connection_id": "portal.chiyue_valley_square.map_exit_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          48,
+          90
+        ],
         "reciprocal_exit_id": "map_exit_000002",
         "reciprocal_map_key": "chiyue_valley",
         "requires_leave_before_retrigger": true,
@@ -2463,8 +4552,8 @@
           4.0
         ],
         "tile": [
-          48.0,
-          90.0
+          48,
+          90
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -2484,8 +4573,17 @@
         "linked_visual_instance_id": "inst_000210",
         "official_connection_id": "portal.chiyue_valley_square.map_exit_000002",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          45,
+          5
+        ],
         "reciprocal_exit_id": "map_exit_000001",
         "reciprocal_map_key": "chiyue_choice_land",
         "requires_leave_before_retrigger": true,
@@ -2506,8 +4604,8 @@
           90.0
         ],
         "tile": [
-          45.0,
-          5.0
+          45,
+          5
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -4829,12 +6927,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          46.0,
-          41.0
+          46,
+          41
         ],
         "tile_anchor": [
-          46.0,
-          41.0
+          46,
+          41
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -4910,12 +7008,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          60.0,
-          54.0
+          60,
+          54
         ],
         "tile_anchor": [
-          60.0,
-          54.0
+          60,
+          54
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -4926,7 +7024,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           96.0,
-          60.769229888916
+          60.769229888916016
         ],
         "asset_id": "chiyue_valley_ground_rock_pile_03",
         "base_footprint_tiles": [
@@ -4977,7 +7075,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           96.0,
-          60.769229888916
+          60.769229888916016
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -4991,12 +7089,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          30.0,
-          13.0
+          30,
+          13
         ],
         "tile_anchor": [
-          30.0,
-          13.0
+          30,
+          13
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -5072,12 +7170,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          41.0,
-          36.0
+          41,
+          36
         ],
         "tile_anchor": [
-          41.0,
-          36.0
+          41,
+          36
         ],
         "visual_footprint_tiles": [
           6.0,
@@ -5153,12 +7251,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          59.0,
-          25.0
+          59,
+          25
         ],
         "tile_anchor": [
-          59.0,
-          25.0
+          59,
+          25
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -5169,7 +7267,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           92.0,
-          79.2857131958008
+          79.28571319580078
         ],
         "asset_id": "chiyue_valley_ground_rock_pile_02",
         "base_footprint_tiles": [
@@ -5220,7 +7318,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           92.0,
-          79.2857131958008
+          79.28571319580078
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -5234,12 +7332,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          41.0
+          16,
+          41
         ],
         "tile_anchor": [
-          16.0,
-          41.0
+          16,
+          41
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -5315,12 +7413,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
-          54.0
+          33,
+          54
         ],
         "tile_anchor": [
-          33.0,
-          54.0
+          33,
+          54
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -5331,7 +7429,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           88.0,
-          62.6666679382324
+          62.66666793823242
         ],
         "asset_id": "chiyue_valley_ground_rock_block_06",
         "base_footprint_tiles": [
@@ -5382,7 +7480,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           88.0,
-          62.6666679382324
+          62.66666793823242
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -5396,12 +7494,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          16.0,
-          28.0
+          16,
+          28
         ],
         "tile_anchor": [
-          16.0,
-          28.0
+          16,
+          28
         ],
         "visual_footprint_tiles": [
           5.0,
@@ -5412,7 +7510,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           74.0,
-          102.769226074219
+          102.76922607421875
         ],
         "asset_id": "chiyue_valley_ground_rock_block_04",
         "base_footprint_tiles": [
@@ -5463,7 +7561,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           74.0,
-          102.769226074219
+          102.76922607421875
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -5477,12 +7575,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          40.0,
-          66.0
+          40,
+          66
         ],
         "tile_anchor": [
-          40.0,
-          66.0
+          40,
+          66
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -5493,7 +7591,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           92.0,
-          71.6666717529297
+          71.66667175292969
         ],
         "asset_id": "chiyue_valley_ground_rock_pile_02",
         "base_footprint_tiles": [
@@ -5544,7 +7642,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           92.0,
-          71.6666717529297
+          71.66667175292969
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -5558,12 +7656,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          14.0
+          43,
+          14
         ],
         "tile_anchor": [
-          43.0,
-          14.0
+          43,
+          14
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -5639,12 +7737,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          19.0,
-          41.0
+          19,
+          41
         ],
         "tile_anchor": [
-          19.0,
-          41.0
+          19,
+          41
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -5720,12 +7818,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          74.0,
-          40.0
+          74,
+          40
         ],
         "tile_anchor": [
-          74.0,
-          40.0
+          74,
+          40
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -5767,7 +7865,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000195",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -5805,8 +7903,8 @@
           89.0
         ],
         "tile_anchor": [
-          47.0,
-          89.0
+          47,
+          89
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -5848,7 +7946,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000196",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -5886,8 +7984,8 @@
           4.0
         ],
         "tile_anchor": [
-          44.0,
-          4.0
+          44,
+          4
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -5963,12 +8061,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          78.0
+          43,
+          78
         ],
         "tile_anchor": [
-          43.0,
-          78.0
+          43,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6044,12 +8142,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          54.0,
-          79.0
+          54,
+          79
         ],
         "tile_anchor": [
-          54.0,
-          79.0
+          54,
+          79
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6125,12 +8223,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          36.0,
-          59.0
+          36,
+          59
         ],
         "tile_anchor": [
-          36.0,
-          59.0
+          36,
+          59
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6206,12 +8304,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          60.0,
-          54.0
+          60,
+          54
         ],
         "tile_anchor": [
-          60.0,
-          54.0
+          60,
+          54
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6287,12 +8385,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          63.0,
-          29.0
+          63,
+          29
         ],
         "tile_anchor": [
-          63.0,
-          29.0
+          63,
+          29
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6368,12 +8466,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          27.0,
-          26.0
+          27,
+          26
         ],
         "tile_anchor": [
-          27.0,
-          26.0
+          27,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6449,12 +8547,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          54.0,
-          10.0
+          54,
+          10
         ],
         "tile_anchor": [
-          54.0,
-          10.0
+          54,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6530,12 +8628,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
-          10.0
+          34,
+          10
         ],
         "tile_anchor": [
-          34.0,
-          10.0
+          34,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6611,12 +8709,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          34.0
+          11,
+          34
         ],
         "tile_anchor": [
-          11.0,
-          34.0
+          11,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6692,12 +8790,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          52.0
+          11,
+          52
         ],
         "tile_anchor": [
-          11.0,
-          52.0
+          11,
+          52
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6773,12 +8871,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          82.0,
-          34.0
+          82,
+          34
         ],
         "tile_anchor": [
-          82.0,
-          34.0
+          82,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6854,12 +8952,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          83.0,
-          48.0
+          83,
+          48
         ],
         "tile_anchor": [
-          83.0,
-          48.0
+          83,
+          48
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6933,12 +9031,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          48.0,
-          90.0
+          48,
+          90
         ],
         "tile_anchor": [
-          48.0,
-          90.0
+          48,
+          90
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7012,12 +9110,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          45.0,
-          5.0
+          45,
+          5
         ],
         "tile_anchor": [
-          45.0,
-          5.0
+          45,
+          5
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7103,8 +9201,8 @@
           90.0
         ],
         "tile_anchor": [
-          58.0,
-          90.0
+          58,
+          90
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7182,8 +9280,8 @@
           86.0
         ],
         "tile_anchor": [
-          56.0,
-          86.0
+          56,
+          86
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7261,8 +9359,8 @@
           82.0
         ],
         "tile_anchor": [
-          57.0,
-          82.0
+          57,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7340,8 +9438,8 @@
           79.0
         ],
         "tile_anchor": [
-          59.0,
-          79.0
+          59,
+          79
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7419,8 +9517,8 @@
           75.0
         ],
         "tile_anchor": [
-          60.0,
-          75.0
+          60,
+          75
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7498,8 +9596,8 @@
           71.0
         ],
         "tile_anchor": [
-          59.0,
-          71.0
+          59,
+          71
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7577,8 +9675,8 @@
           68.0
         ],
         "tile_anchor": [
-          58.0,
-          68.0
+          58,
+          68
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7656,8 +9754,8 @@
           66.0
         ],
         "tile_anchor": [
-          57.0,
-          66.0
+          57,
+          66
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7735,8 +9833,8 @@
           93.0
         ],
         "tile_anchor": [
-          59.0,
-          93.0
+          59,
+          93
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7814,8 +9912,8 @@
           81.0
         ],
         "tile_anchor": [
-          58.0,
-          81.0
+          58,
+          81
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7893,8 +9991,8 @@
           94.0
         ],
         "tile_anchor": [
-          59.0,
-          94.0
+          59,
+          94
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7972,8 +10070,8 @@
           92.0
         ],
         "tile_anchor": [
-          40.0,
-          92.0
+          40,
+          92
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8051,8 +10149,8 @@
           88.0
         ],
         "tile_anchor": [
-          41.0,
-          88.0
+          41,
+          88
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8130,8 +10228,8 @@
           85.0
         ],
         "tile_anchor": [
-          42.0,
-          85.0
+          42,
+          85
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8209,8 +10307,8 @@
           81.0
         ],
         "tile_anchor": [
-          41.0,
-          81.0
+          41,
+          81
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8288,8 +10386,8 @@
           78.0
         ],
         "tile_anchor": [
-          42.0,
-          78.0
+          42,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8367,8 +10465,8 @@
           74.0
         ],
         "tile_anchor": [
-          43.0,
-          74.0
+          43,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8446,8 +10544,8 @@
           71.0
         ],
         "tile_anchor": [
-          43.0,
-          71.0
+          43,
+          71
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8525,8 +10623,8 @@
           69.0
         ],
         "tile_anchor": [
-          42.0,
-          69.0
+          42,
+          69
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8604,8 +10702,8 @@
           67.0
         ],
         "tile_anchor": [
-          41.0,
-          67.0
+          41,
+          67
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8683,8 +10781,8 @@
           78.0
         ],
         "tile_anchor": [
-          60.0,
-          78.0
+          60,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8762,8 +10860,8 @@
           81.0
         ],
         "tile_anchor": [
-          58.0,
-          81.0
+          58,
+          81
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8841,8 +10939,8 @@
           85.0
         ],
         "tile_anchor": [
-          57.0,
-          85.0
+          57,
+          85
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8920,8 +11018,8 @@
           89.0
         ],
         "tile_anchor": [
-          56.0,
-          89.0
+          56,
+          89
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8999,8 +11097,8 @@
           92.0
         ],
         "tile_anchor": [
-          58.0,
-          92.0
+          58,
+          92
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9078,8 +11176,8 @@
           95.0
         ],
         "tile_anchor": [
-          59.0,
-          95.0
+          59,
+          95
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9157,8 +11255,8 @@
           74.0
         ],
         "tile_anchor": [
-          59.0,
-          74.0
+          59,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9236,8 +11334,8 @@
           70.0
         ],
         "tile_anchor": [
-          58.0,
-          70.0
+          58,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9315,8 +11413,8 @@
           67.0
         ],
         "tile_anchor": [
-          57.0,
-          67.0
+          57,
+          67
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9394,8 +11492,8 @@
           95.0
         ],
         "tile_anchor": [
-          40.0,
-          95.0
+          40,
+          95
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9473,8 +11571,8 @@
           91.0
         ],
         "tile_anchor": [
-          41.0,
-          91.0
+          41,
+          91
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9552,8 +11650,8 @@
           87.0
         ],
         "tile_anchor": [
-          42.0,
-          87.0
+          42,
+          87
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9631,8 +11729,8 @@
           80.0
         ],
         "tile_anchor": [
-          42.0,
-          80.0
+          42,
+          80
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9710,8 +11808,8 @@
           77.0
         ],
         "tile_anchor": [
-          43.0,
-          77.0
+          43,
+          77
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9789,8 +11887,8 @@
           69.0
         ],
         "tile_anchor": [
-          42.0,
-          69.0
+          42,
+          69
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9868,8 +11966,8 @@
           70.0
         ],
         "tile_anchor": [
-          42.0,
-          70.0
+          42,
+          70
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9947,8 +12045,8 @@
           68.0
         ],
         "tile_anchor": [
-          41.0,
-          68.0
+          41,
+          68
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10026,8 +12124,8 @@
           84.0
         ],
         "tile_anchor": [
-          41.0,
-          84.0
+          41,
+          84
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10105,8 +12203,8 @@
           64.0
         ],
         "tile_anchor": [
-          58.0,
-          64.0
+          58,
+          64
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10184,8 +12282,8 @@
           63.0
         ],
         "tile_anchor": [
-          59.0,
-          63.0
+          59,
+          63
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -10263,8 +12361,8 @@
           61.0
         ],
         "tile_anchor": [
-          65.0,
-          61.0
+          65,
+          61
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -10342,8 +12440,8 @@
           62.0
         ],
         "tile_anchor": [
-          62.0,
-          62.0
+          62,
+          62
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -10421,8 +12519,8 @@
           66.0
         ],
         "tile_anchor": [
-          38.0,
-          66.0
+          38,
+          66
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10500,8 +12598,8 @@
           63.0
         ],
         "tile_anchor": [
-          35.0,
-          63.0
+          35,
+          63
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10579,8 +12677,8 @@
           58.0
         ],
         "tile_anchor": [
-          30.0,
-          58.0
+          30,
+          58
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10658,8 +12756,8 @@
           54.0
         ],
         "tile_anchor": [
-          68.0,
-          54.0
+          68,
+          54
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10737,8 +12835,8 @@
           57.0
         ],
         "tile_anchor": [
-          26.0,
-          57.0
+          26,
+          57
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10816,8 +12914,8 @@
           56.0
         ],
         "tile_anchor": [
-          22.0,
-          56.0
+          22,
+          56
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10895,8 +12993,8 @@
           33.0
         ],
         "tile_anchor": [
-          90.0,
-          33.0
+          90,
+          33
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10974,8 +13072,8 @@
           13.0
         ],
         "tile_anchor": [
-          31.0,
-          13.0
+          31,
+          13
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11053,8 +13151,8 @@
           30.0
         ],
         "tile_anchor": [
-          16.0,
-          30.0
+          16,
+          30
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11132,8 +13230,8 @@
           34.0
         ],
         "tile_anchor": [
-          2.0,
-          34.0
+          2,
+          34
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11211,8 +13309,8 @@
           21.0
         ],
         "tile_anchor": [
-          27.0,
-          21.0
+          27,
+          21
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11290,8 +13388,8 @@
           34.0
         ],
         "tile_anchor": [
-          93.0,
-          34.0
+          93,
+          34
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11369,8 +13467,8 @@
           53.0
         ],
         "tile_anchor": [
-          72.0,
-          53.0
+          72,
+          53
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11448,8 +13546,8 @@
           55.0
         ],
         "tile_anchor": [
-          20.0,
-          55.0
+          20,
+          55
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11527,8 +13625,8 @@
           35.0
         ],
         "tile_anchor": [
-          0.0,
-          35.0
+          0,
+          35
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -11606,8 +13704,8 @@
           63.0
         ],
         "tile_anchor": [
-          38.0,
-          63.0
+          38,
+          63
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11685,8 +13783,8 @@
           61.0
         ],
         "tile_anchor": [
-          34.0,
-          61.0
+          34,
+          61
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11764,8 +13862,8 @@
           58.0
         ],
         "tile_anchor": [
-          34.0,
-          58.0
+          34,
+          58
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11843,8 +13941,8 @@
           55.0
         ],
         "tile_anchor": [
-          17.0,
-          55.0
+          17,
+          55
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -11922,8 +14020,8 @@
           56.0
         ],
         "tile_anchor": [
-          15.0,
-          56.0
+          15,
+          56
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -12001,8 +14099,8 @@
           56.0
         ],
         "tile_anchor": [
-          12.0,
-          56.0
+          12,
+          56
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -12080,8 +14178,8 @@
           58.0
         ],
         "tile_anchor": [
-          10.0,
-          58.0
+          10,
+          58
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -12159,8 +14257,8 @@
           58.0
         ],
         "tile_anchor": [
-          7.0,
-          58.0
+          7,
+          58
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -12238,8 +14336,8 @@
           57.0
         ],
         "tile_anchor": [
-          4.0,
-          57.0
+          4,
+          57
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -12317,8 +14415,8 @@
           57.0
         ],
         "tile_anchor": [
-          2.0,
-          57.0
+          2,
+          57
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -12396,8 +14494,8 @@
           56.0
         ],
         "tile_anchor": [
-          0.0,
-          56.0
+          0,
+          56
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -12475,8 +14573,8 @@
           58.0
         ],
         "tile_anchor": [
-          12.0,
-          58.0
+          12,
+          58
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12554,8 +14652,8 @@
           57.0
         ],
         "tile_anchor": [
-          12.0,
-          57.0
+          12,
+          57
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12633,8 +14731,8 @@
           57.0
         ],
         "tile_anchor": [
-          6.0,
-          57.0
+          6,
+          57
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12712,8 +14810,8 @@
           56.0
         ],
         "tile_anchor": [
-          2.0,
-          56.0
+          2,
+          56
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12791,8 +14889,8 @@
           55.0
         ],
         "tile_anchor": [
-          21.0,
-          55.0
+          21,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12870,8 +14968,8 @@
           56.0
         ],
         "tile_anchor": [
-          25.0,
-          56.0
+          25,
+          56
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12949,8 +15047,8 @@
           57.0
         ],
         "tile_anchor": [
-          29.0,
-          57.0
+          29,
+          57
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13028,8 +15126,8 @@
           63.0
         ],
         "tile_anchor": [
-          34.0,
-          63.0
+          34,
+          63
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13107,8 +15205,8 @@
           58.0
         ],
         "tile_anchor": [
-          67.0,
-          58.0
+          67,
+          58
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13186,8 +15284,8 @@
           55.0
         ],
         "tile_anchor": [
-          68.0,
-          55.0
+          68,
+          55
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13265,8 +15363,8 @@
           52.0
         ],
         "tile_anchor": [
-          75.0,
-          52.0
+          75,
+          52
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -13344,8 +15442,8 @@
           52.0
         ],
         "tile_anchor": [
-          79.0,
-          52.0
+          79,
+          52
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13423,8 +15521,8 @@
           53.0
         ],
         "tile_anchor": [
-          82.0,
-          53.0
+          82,
+          53
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -13502,8 +15600,8 @@
           52.0
         ],
         "tile_anchor": [
-          85.0,
-          52.0
+          85,
+          52
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -13581,8 +15679,8 @@
           51.0
         ],
         "tile_anchor": [
-          89.0,
-          51.0
+          89,
+          51
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -13660,8 +15758,8 @@
           50.0
         ],
         "tile_anchor": [
-          92.0,
-          50.0
+          92,
+          50
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -13739,8 +15837,8 @@
           50.0
         ],
         "tile_anchor": [
-          95.0,
-          50.0
+          95,
+          50
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13818,8 +15916,8 @@
           52.0
         ],
         "tile_anchor": [
-          88.0,
-          52.0
+          88,
+          52
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13897,8 +15995,8 @@
           53.0
         ],
         "tile_anchor": [
-          84.0,
-          53.0
+          84,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13976,8 +16074,8 @@
           52.0
         ],
         "tile_anchor": [
-          81.0,
-          52.0
+          81,
+          52
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14055,8 +16153,8 @@
           53.0
         ],
         "tile_anchor": [
-          74.0,
-          53.0
+          74,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14134,8 +16232,8 @@
           54.0
         ],
         "tile_anchor": [
-          71.0,
-          54.0
+          71,
+          54
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14213,8 +16311,8 @@
           62.0
         ],
         "tile_anchor": [
-          64.0,
-          62.0
+          64,
+          62
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14292,8 +16390,8 @@
           61.0
         ],
         "tile_anchor": [
-          64.0,
-          61.0
+          64,
+          61
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14371,8 +16469,8 @@
           63.0
         ],
         "tile_anchor": [
-          61.0,
-          63.0
+          61,
+          63
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14450,8 +16548,8 @@
           62.0
         ],
         "tile_anchor": [
-          61.0,
-          62.0
+          61,
+          62
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14529,8 +16627,8 @@
           65.0
         ],
         "tile_anchor": [
-          58.0,
-          65.0
+          58,
+          65
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14608,8 +16706,8 @@
           65.0
         ],
         "tile_anchor": [
-          57.0,
-          65.0
+          57,
+          65
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14687,8 +16785,8 @@
           68.0
         ],
         "tile_anchor": [
-          57.0,
-          68.0
+          57,
+          68
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14766,8 +16864,8 @@
           71.0
         ],
         "tile_anchor": [
-          58.0,
-          71.0
+          58,
+          71
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14845,8 +16943,8 @@
           74.0
         ],
         "tile_anchor": [
-          60.0,
-          74.0
+          60,
+          74
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14924,8 +17022,8 @@
           78.0
         ],
         "tile_anchor": [
-          59.0,
-          78.0
+          59,
+          78
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15003,8 +17101,8 @@
           82.0
         ],
         "tile_anchor": [
-          58.0,
-          82.0
+          58,
+          82
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15082,8 +17180,8 @@
           86.0
         ],
         "tile_anchor": [
-          57.0,
-          86.0
+          57,
+          86
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15161,8 +17259,8 @@
           90.0
         ],
         "tile_anchor": [
-          57.0,
-          90.0
+          57,
+          90
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15240,8 +17338,8 @@
           89.0
         ],
         "tile_anchor": [
-          57.0,
-          89.0
+          57,
+          89
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15319,8 +17417,8 @@
           64.0
         ],
         "tile_anchor": [
-          59.0,
-          64.0
+          59,
+          64
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15398,8 +17496,8 @@
           58.0
         ],
         "tile_anchor": [
-          68.0,
-          58.0
+          68,
+          58
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15477,8 +17575,8 @@
           58.0
         ],
         "tile_anchor": [
-          67.0,
-          58.0
+          67,
+          58
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15556,8 +17654,8 @@
           53.0
         ],
         "tile_anchor": [
-          81.0,
-          53.0
+          81,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15635,8 +17733,8 @@
           53.0
         ],
         "tile_anchor": [
-          85.0,
-          53.0
+          85,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15714,8 +17812,8 @@
           52.0
         ],
         "tile_anchor": [
-          89.0,
-          52.0
+          89,
+          52
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15793,8 +17891,8 @@
           51.0
         ],
         "tile_anchor": [
-          93.0,
-          51.0
+          93,
+          51
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15872,8 +17970,8 @@
           52.0
         ],
         "tile_anchor": [
-          74.0,
-          52.0
+          74,
+          52
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15951,8 +18049,8 @@
           53.0
         ],
         "tile_anchor": [
-          71.0,
-          53.0
+          71,
+          53
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16030,8 +18128,8 @@
           32.0
         ],
         "tile_anchor": [
-          87.0,
-          32.0
+          87,
+          32
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -16109,8 +18207,8 @@
           32.0
         ],
         "tile_anchor": [
-          83.0,
-          32.0
+          83,
+          32
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -16188,8 +18286,8 @@
           33.0
         ],
         "tile_anchor": [
-          81.0,
-          33.0
+          81,
+          33
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -16267,8 +18365,8 @@
           33.0
         ],
         "tile_anchor": [
-          78.0,
-          33.0
+          78,
+          33
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -16346,8 +18444,8 @@
           34.0
         ],
         "tile_anchor": [
-          76.0,
-          34.0
+          76,
+          34
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -16425,8 +18523,8 @@
           34.0
         ],
         "tile_anchor": [
-          73.0,
-          34.0
+          73,
+          34
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -16504,8 +18602,8 @@
           33.0
         ],
         "tile_anchor": [
-          71.0,
-          33.0
+          71,
+          33
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -16583,8 +18681,8 @@
           32.0
         ],
         "tile_anchor": [
-          68.0,
-          32.0
+          68,
+          32
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -16662,8 +18760,8 @@
           29.0
         ],
         "tile_anchor": [
-          68.0,
-          29.0
+          68,
+          29
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16741,8 +18839,8 @@
           29.0
         ],
         "tile_anchor": [
-          66.0,
-          29.0
+          66,
+          29
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -16820,8 +18918,8 @@
           26.0
         ],
         "tile_anchor": [
-          66.0,
-          26.0
+          66,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -16899,8 +18997,8 @@
           26.0
         ],
         "tile_anchor": [
-          64.0,
-          26.0
+          64,
+          26
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -16978,8 +19076,8 @@
           25.0
         ],
         "tile_anchor": [
-          61.0,
-          25.0
+          61,
+          25
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -17057,8 +19155,8 @@
           22.0
         ],
         "tile_anchor": [
-          61.0,
-          22.0
+          61,
+          22
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17136,8 +19234,8 @@
           19.0
         ],
         "tile_anchor": [
-          60.0,
-          19.0
+          60,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17215,8 +19313,8 @@
           16.0
         ],
         "tile_anchor": [
-          59.0,
-          16.0
+          59,
+          16
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17294,8 +19392,8 @@
           12.0
         ],
         "tile_anchor": [
-          58.0,
-          12.0
+          58,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17373,8 +19471,8 @@
           8.0
         ],
         "tile_anchor": [
-          58.0,
-          8.0
+          58,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17452,8 +19550,8 @@
           4.0
         ],
         "tile_anchor": [
-          59.0,
-          4.0
+          59,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17531,8 +19629,8 @@
           0.0
         ],
         "tile_anchor": [
-          60.0,
-          0.0
+          60,
+          0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17610,8 +19708,8 @@
           34.0
         ],
         "tile_anchor": [
-          95.0,
-          34.0
+          95,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17689,8 +19787,8 @@
           33.0
         ],
         "tile_anchor": [
-          93.0,
-          33.0
+          93,
+          33
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17768,8 +19866,8 @@
           32.0
         ],
         "tile_anchor": [
-          90.0,
-          32.0
+          90,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17847,8 +19945,8 @@
           33.0
         ],
         "tile_anchor": [
-          73.0,
-          33.0
+          73,
+          33
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -17926,8 +20024,8 @@
           32.0
         ],
         "tile_anchor": [
-          70.0,
-          32.0
+          70,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18005,8 +20103,8 @@
           21.0
         ],
         "tile_anchor": [
-          60.0,
-          21.0
+          60,
+          21
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18084,8 +20182,8 @@
           18.0
         ],
         "tile_anchor": [
-          59.0,
-          18.0
+          59,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18163,8 +20261,8 @@
           15.0
         ],
         "tile_anchor": [
-          58.0,
-          15.0
+          58,
+          15
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18242,8 +20340,8 @@
           7.0
         ],
         "tile_anchor": [
-          59.0,
-          7.0
+          59,
+          7
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18321,8 +20419,8 @@
           7.0
         ],
         "tile_anchor": [
-          58.0,
-          7.0
+          58,
+          7
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18400,8 +20498,8 @@
           3.0
         ],
         "tile_anchor": [
-          60.0,
-          3.0
+          60,
+          3
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18479,8 +20577,8 @@
           3.0
         ],
         "tile_anchor": [
-          59.0,
-          3.0
+          59,
+          3
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18558,8 +20656,8 @@
           34.0
         ],
         "tile_anchor": [
-          78.0,
-          34.0
+          78,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18637,8 +20735,8 @@
           33.0
         ],
         "tile_anchor": [
-          83.0,
-          33.0
+          83,
+          33
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18716,8 +20814,8 @@
           21.0
         ],
         "tile_anchor": [
-          26.0,
-          21.0
+          26,
+          21
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -18795,8 +20893,8 @@
           33.0
         ],
         "tile_anchor": [
-          5.0,
-          33.0
+          5,
+          33
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -18874,8 +20972,8 @@
           33.0
         ],
         "tile_anchor": [
-          9.0,
-          33.0
+          9,
+          33
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -18953,8 +21051,8 @@
           32.0
         ],
         "tile_anchor": [
-          13.0,
-          32.0
+          13,
+          32
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -19032,8 +21130,8 @@
           30.0
         ],
         "tile_anchor": [
-          16.0,
-          30.0
+          16,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19111,8 +21209,8 @@
           29.0
         ],
         "tile_anchor": [
-          19.0,
-          29.0
+          19,
+          29
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -19190,8 +21288,8 @@
           27.0
         ],
         "tile_anchor": [
-          21.0,
-          27.0
+          21,
+          27
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19269,8 +21367,8 @@
           26.0
         ],
         "tile_anchor": [
-          21.0,
-          26.0
+          21,
+          26
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -19348,8 +21446,8 @@
           24.0
         ],
         "tile_anchor": [
-          24.0,
-          24.0
+          24,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19427,8 +21525,8 @@
           24.0
         ],
         "tile_anchor": [
-          24.0,
-          24.0
+          24,
+          24
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -19506,8 +21604,8 @@
           19.0
         ],
         "tile_anchor": [
-          29.0,
-          19.0
+          29,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19585,8 +21683,8 @@
           16.0
         ],
         "tile_anchor": [
-          30.0,
-          16.0
+          30,
+          16
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19664,8 +21762,8 @@
           13.0
         ],
         "tile_anchor": [
-          30.0,
-          13.0
+          30,
+          13
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19743,8 +21841,8 @@
           10.0
         ],
         "tile_anchor": [
-          33.0,
-          10.0
+          33,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19822,8 +21920,8 @@
           6.0
         ],
         "tile_anchor": [
-          34.0,
-          6.0
+          34,
+          6
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19901,8 +21999,8 @@
           2.0
         ],
         "tile_anchor": [
-          34.0,
-          2.0
+          34,
+          2
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -19980,8 +22078,8 @@
           0.0
         ],
         "tile_anchor": [
-          35.0,
-          0.0
+          35,
+          0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20059,8 +22157,8 @@
           3.0
         ],
         "tile_anchor": [
-          35.0,
-          3.0
+          35,
+          3
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20138,8 +22236,8 @@
           9.0
         ],
         "tile_anchor": [
-          34.0,
-          9.0
+          34,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20217,8 +22315,8 @@
           9.0
         ],
         "tile_anchor": [
-          33.0,
-          9.0
+          33,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20296,8 +22394,8 @@
           12.0
         ],
         "tile_anchor": [
-          32.0,
-          12.0
+          32,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20375,8 +22473,8 @@
           18.0
         ],
         "tile_anchor": [
-          29.0,
-          18.0
+          29,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20454,8 +22552,8 @@
           18.0
         ],
         "tile_anchor": [
-          30.0,
-          18.0
+          30,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20533,8 +22631,8 @@
           24.0
         ],
         "tile_anchor": [
-          26.0,
-          24.0
+          26,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20612,8 +22710,8 @@
           23.0
         ],
         "tile_anchor": [
-          25.0,
-          23.0
+          25,
+          23
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20691,8 +22789,8 @@
           30.0
         ],
         "tile_anchor": [
-          18.0,
-          30.0
+          18,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20770,8 +22868,8 @@
           29.0
         ],
         "tile_anchor": [
-          18.0,
-          29.0
+          18,
+          29
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20849,8 +22947,8 @@
           28.0
         ],
         "tile_anchor": [
-          20.0,
-          28.0
+          20,
+          28
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -20928,8 +23026,8 @@
           33.0
         ],
         "tile_anchor": [
-          12.0,
-          33.0
+          12,
+          33
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21007,8 +23105,8 @@
           32.0
         ],
         "tile_anchor": [
-          12.0,
-          32.0
+          12,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21086,8 +23184,8 @@
           34.0
         ],
         "tile_anchor": [
-          4.0,
-          34.0
+          4,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21165,8 +23263,8 @@
           33.0
         ],
         "tile_anchor": [
-          4.0,
-          33.0
+          4,
+          33
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21244,8 +23342,8 @@
           35.0
         ],
         "tile_anchor": [
-          1.0,
-          35.0
+          1,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -21323,8 +23421,1509 @@
           34.0
         ],
         "tile_anchor": [
+          1,
+          34
+        ],
+        "visual_footprint_tiles": [
           1.0,
-          34.0
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000211",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          6,
+          58
+        ],
+        "tile_anchor": [
+          6,
+          58
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000212",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          21,
+          56
+        ],
+        "tile_anchor": [
+          21,
+          56
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000213",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          25,
+          57
+        ],
+        "tile_anchor": [
+          25,
+          57
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000214",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          29,
+          58
+        ],
+        "tile_anchor": [
+          29,
+          58
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000215",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          33,
+          59
+        ],
+        "tile_anchor": [
+          33,
+          59
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000216",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          37,
+          64
+        ],
+        "tile_anchor": [
+          37,
+          64
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000217",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          40,
+          67
+        ],
+        "tile_anchor": [
+          40,
+          67
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000218",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          42,
+          71
+        ],
+        "tile_anchor": [
+          42,
+          71
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000219",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          42,
+          77
+        ],
+        "tile_anchor": [
+          42,
+          77
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000220",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          41,
+          80
+        ],
+        "tile_anchor": [
+          41,
+          80
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000221",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          41,
+          85
+        ],
+        "tile_anchor": [
+          41,
+          85
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000222",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          64.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          40,
+          91
+        ],
+        "tile_anchor": [
+          40,
+          91
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000223",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          17,
+          56
+        ],
+        "tile_anchor": [
+          17,
+          56
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000224",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          59,
+          15
+        ],
+        "tile_anchor": [
+          59,
+          15
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000225",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          60,
+          18
+        ],
+        "tile_anchor": [
+          60,
+          18
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000226",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          61,
+          21
+        ],
+        "tile_anchor": [
+          61,
+          21
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000227",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          62,
+          24
+        ],
+        "tile_anchor": [
+          62,
+          24
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000228",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          64,
+          25
+        ],
+        "tile_anchor": [
+          64,
+          25
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          32.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l1_v01",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0,
+          0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000229",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0,
+          0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          32.0,
+          184.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          74,
+          33
+        ],
+        "tile_anchor": [
+          74,
+          33
         ],
         "visual_footprint_tiles": [
           1.0,

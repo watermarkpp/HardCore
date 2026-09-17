@@ -38,15 +38,22 @@ func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	var source := SOURCE_MAP
 	var targets: Array = TARGETS
-	if args.size() >= 1:
-		source = args[0]
-	if args.size() >= 2:
-		targets = args.slice(1)
+	var transfer_ground := true
+	var filtered: Array = []
+	for arg: String in args:
+		if arg == "no-ground":
+			transfer_ground = false
+		else:
+			filtered.append(arg)
+	if filtered.size() >= 1:
+		source = filtered[0]
+	if filtered.size() >= 2:
+		targets = filtered.slice(1)
 	var source_doc: Dictionary = _load_doc(source)
 	# layers maps collection names (terrain_base, collision, ...) to arrays.
 	var source_layer: Dictionary = source_doc["layers"]
 	for target: String in targets:
-		_apply_to_target(target, source_layer, source)
+		_apply_to_target(target, source_layer, source, transfer_ground)
 	print("CLONE_TRANSFER_DONE")
 	quit(0)
 
@@ -71,7 +78,12 @@ func _save_doc(map_key: String, doc: Dictionary) -> void:
 	file.close()
 
 
-func _apply_to_target(target: String, source_layer: Dictionary, source: String) -> void:
+func _apply_to_target(
+	target: String,
+	source_layer: Dictionary,
+	source: String,
+	transfer_ground: bool
+) -> void:
 	var doc: Dictionary = _load_doc(target)
 	var layer: Dictionary = doc["layers"]
 	var max_id := _max_instance_number(layer)
@@ -93,16 +105,19 @@ func _apply_to_target(target: String, source_layer: Dictionary, source: String) 
 		var meta: Dictionary = doc["editor_meta"]
 		meta["revision"] = float(int(meta.get("revision", 0.0))) + 1.0
 	_save_doc(target, doc)
-	_transfer_ground(target, source)
+	if transfer_ground:
+		_transfer_ground(target, source)
 	print(
-		"CLONE_TRANSFER map=%s walls %d->%d collision %d->%d erase->%d ground_stream=source_current ids=%d..%d" % [
+		"CLONE_TRANSFER map=%s walls %d->%d collision %d->%d erase->%d ground_stream=%s ids=%d..%d" % [
 			target, walls_before, walls.size(), collision_before,
 			(source_layer["collision"] as Array).size(),
 			(source_layer["collision_erase"] as Array).size(),
+			"source_current" if transfer_ground else "untouched(no-ground)",
 			max_id + 1, next_id - 1,
 		]
 	)
-	_rebake_ground(target, doc)
+	if transfer_ground:
+		_rebake_ground(target, doc)
 
 
 func _max_instance_number(layer: Dictionary) -> int:
