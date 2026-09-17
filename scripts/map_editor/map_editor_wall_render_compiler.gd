@@ -34,7 +34,6 @@ static func compile_plan(
 	design_size: Vector2i,
 	image_size_resolver: Callable
 ) -> Dictionary:
-	var shadow_indices: Array[int] = []
 	var groups: Dictionary = {}
 	var group_order: Array[String] = []
 	var legacy_indices: Array[int] = []
@@ -69,20 +68,34 @@ static func compile_plan(
 	# statics inside the span blend into the chunks in their authored order,
 	# so the single chunk layer is painter-exact; statics outside the span
 	# stay legacy sprites. Dynamics are plane-separated and unaffected.
-	var shadow_chunk_bucket := []
-	if seen_shadow:
-		for index: int in commands.size():
-			var command: Dictionary = commands[index]
-			if str(command.get("render_domain", "")) != (
-				GEOMETRY_SERVICE.RENDER_DOMAIN_STATIC_BACKGROUND
-			):
-				continue
-			if index < first_shadow or index > last_shadow:
-				legacy_indices.append(index)
-			else:
-				shadow_chunk_bucket.append(index)
+	# Static-span bake with transform-aware segmentation: bakeable statics
+	# (identity transform) between the first and last wall shadow form
+	# consecutive segments; any non-identity-transform static breaks the
+	# segment and stays a legacy sprite at its exact painter position.
+	var span_statics: Array[int] = []
+	for index: int in commands.size():
+		var command: Dictionary = commands[index]
+		if str(command.get("render_domain", "")) != (
+			GEOMETRY_SERVICE.RENDER_DOMAIN_STATIC_BACKGROUND
+		):
+			continue
+		if seen_shadow and index >= first_shadow and index <= last_shadow:
+			span_statics.append(index)
+		else:
+			legacy_indices.append(index)
+	var shadow_segments: Array = []
+	var current_segment: Array = []
+	for static_index: int in span_statics:
+		if _static_is_bakeable(commands[static_index]):
+			current_segment.append(static_index)
+			continue
+		legacy_indices.append(static_index)
+		if not current_segment.is_empty():
+			shadow_segments.append(current_segment)
+			current_segment = []
+	if not current_segment.is_empty():
+		shadow_segments.append(current_segment)
 	var entries: Array = []
-	var atlas_command_indices: Array[int] = []
 	for group_key: String in group_order:
 		var indices: Array = groups[group_key]
 		indices.sort()
@@ -117,13 +130,13 @@ static func compile_plan(
 		if failed:
 			legacy_indices.append_array(indices)
 			continue
-		atlas_command_indices.append_array(indices)
 		entries.append({
 			"key": "|".join(entry_key_parts),
 			"layers": layers,
 			"group_keys": [str(commands[indices[0]].get(
 				"actor_sort_group", ""
 			))],
+			"command_indices": indices.duplicate(),
 		})
 	# Merge entries with identical keys (shared composite across instances).
 	var unique: Dictionary = {}
@@ -132,40 +145,74 @@ static func compile_plan(
 		var key := str(entry["key"])
 		if unique.has(key):
 			unique[key]["group_keys"].append_array(entry["group_keys"])
+			unique[key]["command_indices"].append_array(
+				entry["command_indices"]
+			)
 		else:
 			unique[key] = entry
 			unique_order.append(key)
-	var packed := _pack_pages(unique_order, unique, image_size_resolver)
+	var packed := _pack_pages(unique_order, unique)
+	# Oversized / unplaced entries demote their commands to legacy BEFORE
+	# accounting (advisor P0-3: no covered-but-absent commands).
+	var final_atlas_indices: Array[int] = []
+	var final_legacy_indices: Array[int] = []
+	final_legacy_indices.append_array(legacy_indices)
+	for key: String in unique_order:
+		var entry: Dictionary = unique[key]
+		if packed["placements"][key] == null:
+			final_legacy_indices.append_array(entry["command_indices"])
+			continue
+		final_atlas_indices.append_array(entry["command_indices"])
+	var chunk_command_indices: Array[int] = []
+	for segment: Array in shadow_segments:
+		chunk_command_indices.append_array(segment)
+	# Contract verification: the three sets must be pairwise disjoint and
+	# cover every command exactly once; violation fails the whole plan.
 	var covered := {}
-	for index: int in atlas_command_indices:
+	var contract_ok := true
+	for index: int in final_atlas_indices:
+		if covered.has(index):
+			contract_ok = false
 		covered[index] = true
-	for index: int in shadow_chunk_bucket:
+	for index: int in chunk_command_indices:
+		if covered.has(index):
+			contract_ok = false
 		covered[index] = true
+	for index: int in final_legacy_indices:
+		if covered.has(index):
+			contract_ok = false
+		covered[index] = true
+	if covered.size() != commands.size():
+		contract_ok = false
+	if not contract_ok:
+		return {"contract_violation": true}
+	final_legacy_indices.sort()
 	var accounting := {
 		"total_commands": commands.size(),
-		"atlas_commands": atlas_command_indices.size(),
-		"shadow_chunk_commands": shadow_chunk_bucket.size(),
-		"legacy_commands": 0,
+		"atlas_commands": final_atlas_indices.size(),
+		"shadow_chunk_commands": chunk_command_indices.size(),
+		"legacy_commands": final_legacy_indices.size(),
 	}
-	for index: int in commands.size():
-		if not covered.has(index):
-			accounting["legacy_commands"] += 1
 	return {
 		"contract_id": PLAN_CONTRACT_ID,
 		"source_commands_sha256": commands_digest(commands),
 		"design_size": [design_size.x, design_size.y],
-		"atlas_entries": _serialized_entries(packed),
-		"atlas_pages": packed["pages"],
-		"shadow_chunk_bucket": shadow_chunk_bucket,
+		"atlas_entries": _serialized_entries(packed, unique),
+		"atlas_page_heights": packed["page_heights"],
+		"shadow_segments": _serialized_segments(shadow_segments),
+		"atlas_command_indices": final_atlas_indices,
+		"shadow_chunk_command_indices": chunk_command_indices,
+		"legacy_command_indices": final_legacy_indices,
 		"accounting": accounting,
 	}
 
 
-## Deterministic shelf packing across bounded pages.
+## Deterministic shelf packing across bounded pages. Unplaceable entries get
+## a null placement so the caller can demote their commands to legacy before
+## accounting.
 static func _pack_pages(
 	order: Array[String],
-	unique: Dictionary,
-	image_size_resolver: Callable
+	unique: Dictionary
 ) -> Dictionary:
 	var sized: Array = []
 	for key: String in order:
@@ -198,7 +245,7 @@ static func _pack_pages(
 				return sa[0] > sb[0]
 			return str(a["key"]) < str(b["key"])
 	)
-	var pages: Array = []
+	var page_heights: Array[int] = []
 	var placements: Dictionary = {}
 	var cursor_y := 0
 	var row_x := 0
@@ -207,19 +254,21 @@ static func _pack_pages(
 		var size: Array = entry["composite_size"]
 		if size[0] > PAGE_WIDTH or size[1] > PAGE_MAX_HEIGHT:
 			entry["page"] = -1
+			entry["region"] = []
 			placements[str(entry["key"])] = null
 			continue
-		if row_x + size[0] > PAGE_WIDTH:
+		if row_x + int(size[0]) > PAGE_WIDTH:
 			cursor_y += row_height
 			row_x = 0
 			row_height = 0
-		if cursor_y + size[1] > PAGE_MAX_HEIGHT:
-			pages.append({"height": cursor_y})
+		if cursor_y + int(size[1]) > PAGE_MAX_HEIGHT:
+			# Close the open page; its full height includes the last row.
+			page_heights.append(cursor_y + row_height)
 			cursor_y = 0
 			row_x = 0
 			row_height = 0
-		var page_index: int = pages.size()
-		var region := [row_x, cursor_y, size[0], size[1]]
+		var page_index: int = page_heights.size()
+		var region := [row_x, cursor_y, int(size[0]), int(size[1])]
 		entry["page"] = page_index
 		entry["region"] = region
 		placements[str(entry["key"])] = {
@@ -227,23 +276,32 @@ static func _pack_pages(
 			"region": region,
 			"min_offset": entry["min_offset"],
 		}
-		row_x += size[0]
-		row_height = maxi(row_height, size[1])
-	pages.append({"height": cursor_y})
-	return {"pages": pages, "placements": placements}
+		row_x += int(size[0])
+		row_height = maxi(row_height, int(size[1]))
+	if row_x > 0 or row_height > 0 or cursor_y > 0:
+		page_heights.append(cursor_y + row_height)
+	return {"page_heights": page_heights, "placements": placements}
 
 
-static func _serialized_entries(packed: Dictionary) -> Array:
+static func _serialized_entries(
+	packed: Dictionary,
+	unique: Dictionary
+) -> Array:
 	var out: Array = []
 	for key: String in packed["placements"]:
-		var placement: Dictionary = packed["placements"][key]
+		var placement: Variant = packed["placements"][key]
 		if placement == null:
 			continue
+		var entry: Dictionary = unique[key]
 		out.append({
 			"key": key,
+			"layers": entry["layers"],
+			"composite_size": entry["composite_size"],
+			"min_offset": entry["min_offset"],
 			"page": placement["page"],
 			"region": placement["region"],
-			"min_offset": placement["min_offset"],
+			"group_keys": entry["group_keys"],
+			"command_indices": entry["command_indices"],
 		})
 	out.sort_custom(
 		func(a: Dictionary, b: Dictionary) -> bool:
@@ -252,24 +310,66 @@ static func _serialized_entries(packed: Dictionary) -> Array:
 	return out
 
 
-## Stable digest over geometry-relevant command fields. Build side and
-## runtime side MUST call this same function on their respective command
-## arrays; a mismatch fail-closes the runtime consumer to legacy rendering.
+static func _serialized_segments(segments: Array) -> Array:
+	var out: Array = []
+	for segment_index: int in segments.size():
+		var indices: Array = segments[segment_index]
+		if indices.is_empty():
+			continue
+		out.append({
+			"segment_index": segment_index,
+			"insert_command_index": int(indices[0]),
+			"command_indices": indices,
+		})
+	return out
+
+
+## A static command is bakeable only with an identity transform: CPU Image
+## ops cannot reproduce GPU sampling for scaled or rotated sprites, so any
+## non-identity transform stays a legacy sprite (advisor P0-4).
+static func _static_is_bakeable(command: Dictionary) -> bool:
+	var instance: Dictionary = command.get("instance", {})
+	var scale: Array = instance.get("scale", [1.0, 1.0])
+	if scale.size() != 2:
+		return false
+	if absf(float(scale[0]) - 1.0) > 0.001 or absf(float(scale[1]) - 1.0) > 0.001:
+		return false
+	if absf(float(instance.get("rotation_deg", 0.0))) > 0.001:
+		return false
+	if bool(instance.get("flip_x", false)) or bool(instance.get("flip_y", false)):
+		return false
+	return true
+
+
+## Stable digest over every field that can change rendering or sort
+## behavior. Build side and runtime side MUST call this same function on
+## their respective command arrays; a mismatch fail-closes the runtime
+## consumer to legacy rendering. Image CONTENT drift is covered by the
+## sha-named content-addressed PNG store written at publish time.
 static func commands_digest(commands: Array) -> String:
 	var parts: PackedStringArray = []
 	for command: Dictionary in commands:
 		var instance: Dictionary = command.get("instance", {})
-		parts.append("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+		var asset: Dictionary = command.get("asset", {})
+		parts.append("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+			str(instance.get("instance_id", "")),
+			str(asset.get("asset_id", "")),
 			str(command.get("image_path", "")),
 			str(command.get("anchor", [])),
+			str(instance.get("offset_px", [])),
+			str(instance.get("scale", [])),
+			str(instance.get("rotation_deg", 0.0)),
+			str(instance.get("flip_x", false)),
+			str(instance.get("flip_y", false)),
+			str(instance.get("material_layer_order", [])),
 			str(command.get("sort_tile", [])),
 			str(command.get("sort_baseline_tile", [])),
-			str(command.get("layer_index", -1)),
-			str(command.get("image_pass", -1)),
 			str(command.get("render_domain", "")),
 			str(command.get("actor_sort_group", "")),
+			str(command.get("image_pass", -1)),
 			str(command.get("part_order", -1)),
-			str(instance.get("instance_id", "")),
+			str(command.get("layer_index", -1)),
+			str(command.get("sequence", -1)),
 		])
 	return "|".join(parts).sha256_text()
 
@@ -286,84 +386,115 @@ static func materialize(
 ) -> Dictionary:
 	var design_raw: Array = plan["design_size"]
 	var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
-	var placed: Array = []
-	for index: int in plan["shadow_chunk_bucket"]:
-		var command: Dictionary = commands[index]
-		var image: Image = image_loader.call(
-			str(command.get("image_path", ""))
-		)
-		if image == null:
-			continue
-		var geometry: Dictionary = GEOMETRY_SERVICE.runtime_command_geometry(
-			command, design_size, Vector2(image.get_size())
-		)
-		var center: Vector2 = geometry.get("center", Vector2.ZERO)
-		var resolved_anchor: Vector2 = geometry.get("anchor", Vector2.ZERO)
-		placed.append({
-			"image": image,
-			"origin": center - resolved_anchor,
-		})
-	var bounds := Rect2i()
-	var bounds_first := true
-	for entry: Dictionary in placed:
-		var rect := Rect2i(
-			Vector2i(entry["origin"].floor()), entry["image"].get_size()
-		)
-		bounds = rect if bounds_first else bounds.merge(rect)
-		bounds_first = false
-	var chunk_cells := {}
-	for entry: Dictionary in placed:
-		var rect := Rect2i(
-			Vector2i(entry["origin"].floor()), entry["image"].get_size()
-		)
-		for cx in range(
-			floori(float(rect.position.x) / SHADOW_CHUNK_SIZE),
-			floori(float(rect.end.x - 1) / SHADOW_CHUNK_SIZE) + 1
-		):
-			for cy in range(
-				floori(float(rect.position.y) / SHADOW_CHUNK_SIZE),
-				floori(float(rect.end.y - 1) / SHADOW_CHUNK_SIZE) + 1
-			):
-				var key := Vector2i(cx, cy)
-				if not chunk_cells.has(key):
-					chunk_cells[key] = []
-				chunk_cells[key].append({
-					"image": entry["image"], "at": rect.position,
-				})
 	var chunks: Array = []
-	var chunk_keys: Array = chunk_cells.keys()
-	chunk_keys.sort_custom(
-		func(a: Vector2i, b: Vector2i) -> bool:
-			return a.y < b.y if a.y == b.y else a.x < b.x
-	)
-	for key: Vector2i in chunk_keys:
-		var chunk := Image.create(
-			SHADOW_CHUNK_SIZE, SHADOW_CHUNK_SIZE, false, Image.FORMAT_RGBA8
+	for segment: Dictionary in plan["shadow_segments"]:
+		var placed: Array = []
+		for index: int in segment["command_indices"]:
+			var command: Dictionary = commands[index]
+			var image: Image = image_loader.call(
+				str(command.get("image_path", ""))
+			)
+			if image == null:
+				return {"error": "shadow image unresolvable: %d" % index}
+			var geometry: Dictionary = (
+				GEOMETRY_SERVICE.runtime_command_geometry(
+					command, design_size, Vector2(image.get_size())
+				)
+			)
+			var center: Vector2 = geometry.get("center", Vector2.ZERO)
+			var resolved_anchor: Vector2 = geometry.get(
+				"anchor", Vector2.ZERO
+			)
+			placed.append({
+				"image": image,
+				"origin": center - resolved_anchor,
+			})
+		var bounds := Rect2i()
+		var bounds_first := true
+		for entry: Dictionary in placed:
+			var rect := Rect2i(
+				Vector2i(entry["origin"].floor()), entry["image"].get_size()
+			)
+			bounds = rect if bounds_first else bounds.merge(rect)
+			bounds_first = false
+		var chunk_cells := {}
+		for entry: Dictionary in placed:
+			var rect := Rect2i(
+				Vector2i(entry["origin"].floor()), entry["image"].get_size()
+			)
+			for cx in range(
+				floori(float(rect.position.x) / SHADOW_CHUNK_SIZE),
+				floori(float(rect.end.x - 1) / SHADOW_CHUNK_SIZE) + 1
+			):
+				for cy in range(
+					floori(float(rect.position.y) / SHADOW_CHUNK_SIZE),
+					floori(float(rect.end.y - 1) / SHADOW_CHUNK_SIZE) + 1
+				):
+					var key := Vector2i(cx, cy)
+					if not chunk_cells.has(key):
+						chunk_cells[key] = []
+					chunk_cells[key].append({
+						"image": entry["image"], "at": rect.position,
+					})
+		var chunk_keys: Array = chunk_cells.keys()
+		chunk_keys.sort_custom(
+			func(a: Vector2i, b: Vector2i) -> bool:
+				return a.y < b.y if a.y == b.y else a.x < b.x
 		)
-		chunk.fill(Color(0, 0, 0, 0))
-		var origin := Vector2(key) * float(SHADOW_CHUNK_SIZE)
-		for entry: Dictionary in chunk_cells[key]:
-			_blit_clipped(chunk, entry["image"], Vector2(entry["at"]) - origin)
-		chunks.append({
-			"grid_cell": [key.x, key.y],
-			"position_px": [origin.x, origin.y],
-			"size_px": [SHADOW_CHUNK_SIZE, SHADOW_CHUNK_SIZE],
-			"image": chunk,
-		})
+		for key: Vector2i in chunk_keys:
+			var chunk := Image.create(
+				SHADOW_CHUNK_SIZE, SHADOW_CHUNK_SIZE, false,
+				Image.FORMAT_RGBA8
+			)
+			chunk.fill(Color(0, 0, 0, 0))
+			var origin := Vector2(key) * float(SHADOW_CHUNK_SIZE)
+			for cell_entry: Dictionary in chunk_cells[key]:
+				_blit_clipped(
+					chunk, cell_entry["image"],
+					Vector2(cell_entry["at"]) - origin
+				)
+			chunks.append({
+				"segment_index": int(segment["segment_index"]),
+				"insert_command_index": int(segment["insert_command_index"]),
+				"grid_cell": [key.x, key.y],
+				"position_px": [origin.x, origin.y],
+				"size_px": [SHADOW_CHUNK_SIZE, SHADOW_CHUNK_SIZE],
+				"image": chunk,
+			})
+	var page_heights: Array = plan["atlas_page_heights"]
 	var page_images: Array = []
-	for page: Dictionary in plan["atlas_pages"]:
+	for page_height: int in page_heights:
 		var image := Image.create(
-			PAGE_WIDTH, maxi(int(page["height"]), 1), false,
-			Image.FORMAT_RGBA8
+			PAGE_WIDTH, maxi(page_height, 1), false, Image.FORMAT_RGBA8
 		)
 		image.fill(Color(0, 0, 0, 0))
 		page_images.append(image)
 	for entry: Dictionary in plan["atlas_entries"]:
 		var page_index := int(entry["page"])
 		var region: Array = entry["region"]
+		if (
+			page_index < 0 or page_index >= page_images.size()
+			or region.size() != 4
+			or int(region[0]) < 0 or int(region[1]) < 0
+			or int(region[0]) + int(region[2]) > PAGE_WIDTH
+			or int(region[1]) + int(region[3]) > int(page_heights[page_index])
+		):
+			return {
+				"error": "atlas region out of bounds: %s" % str(entry["key"]),
+			}
 		var composite := _composite_for_entry(entry, image_loader)
 		if composite == null:
-			continue
+			return {
+				"error": "atlas composite unresolvable: %s" % str(entry["key"]),
+			}
+		if (
+			composite.get_width() != int(region[2])
+			or composite.get_height() != int(region[3])
+		):
+			return {
+				"error": "atlas composite size mismatch: %s"
+					% str(entry["key"]),
+			}
 		page_images[page_index].blit_rect(
 			composite,
 			Rect2i(Vector2i.ZERO, composite.get_size()),
