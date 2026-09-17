@@ -186,12 +186,25 @@ func _publish_map(map_key: String) -> Dictionary:
 		"legacy_command_indices": plan["legacy_command_indices"],
 		"accounting": plan["accounting"],
 	}
-	var write_error := _write_plan_atomically(map_key, plan_document)
-	if write_error != "":
-		return {"error": write_error}
-	var verify_error := _verify_written_plan(map_key, plan_document, commands)
+	var stage_error := _stage_plan_document(map_key, plan_document)
+	if stage_error != "":
+		return {"error": stage_error}
+	# Advisor R1.1: the candidate plan is verified BEFORE it becomes the
+	# official plan. The final rename is the only commit point; a failed
+	# verification removes the candidate and leaves any previous official
+	# plan untouched.
+	var candidate_path := ProjectSettings.globalize_path(PLAN_DIR).path_join(
+		"%s.wall_render_plan.json.tmp" % map_key
+	)
+	var verify_error := _verify_candidate_plan(
+		candidate_path, plan_document, commands, runtime_sha
+	)
 	if verify_error != "":
+		DirAccess.remove_absolute(candidate_path)
 		return {"error": verify_error}
+	var commit_error := _commit_plan_document(map_key)
+	if commit_error != "":
+		return {"error": commit_error}
 	return {
 		"map": map_key,
 		"atlas_pages": atlas_page_records.size(),
@@ -238,12 +251,9 @@ func _store_png(image: Image, store_names: Dictionary) -> Dictionary:
 	}
 
 
-func _write_plan_atomically(map_key: String, plan_document: Dictionary) -> String:
+func _stage_plan_document(map_key: String, plan_document: Dictionary) -> String:
 	var plan_dir := ProjectSettings.globalize_path(PLAN_DIR)
 	DirAccess.make_dir_recursive_absolute(plan_dir)
-	var final_path := plan_dir.path_join(
-		"%s.wall_render_plan.json" % map_key
-	)
 	var tmp_path := plan_dir.path_join(
 		"%s.wall_render_plan.json.tmp" % map_key
 	)
@@ -252,59 +262,177 @@ func _write_plan_atomically(map_key: String, plan_document: Dictionary) -> Strin
 		return "plan tmp open failed"
 	file.store_string(JSON.stringify(plan_document, "\t"))
 	file.close()
+	return ""
+
+
+## The commit point: only called after full candidate verification.
+func _commit_plan_document(map_key: String) -> String:
+	var plan_dir := ProjectSettings.globalize_path(PLAN_DIR)
+	var tmp_path := plan_dir.path_join(
+		"%s.wall_render_plan.json.tmp" % map_key
+	)
+	var final_path := plan_dir.path_join(
+		"%s.wall_render_plan.json" % map_key
+	)
 	var rename_error := DirAccess.rename_absolute(tmp_path, final_path)
 	if rename_error != OK:
 		return "plan rename failed: %d" % rename_error
 	return ""
 
 
-## Full post-write verification (advisor contract 7, consumer-side preview):
-## reload the JSON from disk, recompute the command digest, and check every
-## recorded store file exists with the recorded sha.
-func _verify_written_plan(
-	map_key: String,
+## Complete candidate verification (advisor R1.1): the plan contract is
+## checked in full against independently recomputed authority - contracts,
+## both design axes, runtime sha, command digest, source image hashes,
+## strict index range/union, derived PNG shas, and entry region bounds.
+## Runs on the CANDIDATE file; the official plan is only produced by the
+## subsequent rename.
+func _verify_candidate_plan(
+	candidate_path: String,
 	plan_document: Dictionary,
-	commands: Array
+	commands: Array,
+	runtime_sha: String
 ) -> String:
-	var plan_path := ProjectSettings.globalize_path(PLAN_DIR).path_join(
-		"%s.wall_render_plan.json" % map_key
-	)
 	var reloaded: Variant = JSON.parse_string(
-		FileAccess.get_file_as_string(plan_path)
+		FileAccess.get_file_as_string(candidate_path)
 	)
 	if reloaded is not Dictionary:
 		return "verification: plan unparsable"
-	if str(reloaded["source_commands_sha256"]) != (
+	var plan: Dictionary = reloaded
+	if str(plan.get("contract_id", "")) != COMPILER.PLAN_CONTRACT_ID:
+		return "verification: contract id mismatch"
+	if int(plan.get("compiler_version", -1)) != 2:
+		return "verification: compiler version mismatch"
+	if str(plan.get("map_key", "")) != str(plan_document["map_key"]):
+		return "verification: map key mismatch"
+	var design: Array = plan.get("design_size", [])
+	if (
+		design.size() != 2
+		or int(design[0]) != int(plan_document["design_size"][0])
+		or int(design[1]) != int(plan_document["design_size"][1])
+	):
+		return "verification: design size mismatch"
+	if str(plan.get("visual_geometry_contract_id", "")) != (
+		GEOMETRY_SERVICE.VISUAL_GEOMETRY_CONTRACT_ID
+	):
+		return "verification: geometry contract mismatch"
+	if str(plan.get("ground_coordinate_contract_id", "")) != (
+		COORDINATE.GROUND_COORDINATE_CONTRACT_ID
+	):
+		return "verification: coordinate contract mismatch"
+	if str(plan.get("source_runtime_json_sha256", "")) != runtime_sha:
+		return "verification: runtime json sha mismatch"
+	if str(plan.get("source_commands_sha256", "")) != (
 		COMPILER.commands_digest(commands)
 	):
-		return "verification: digest mismatch"
-	if int(reloaded["design_size"][0]) != int(plan_document["design_size"][0]):
-		return "verification: design size mismatch"
-	for record: Dictionary in reloaded["atlas_pages"]:
-		var store_path := ProjectSettings.globalize_path(
-			"res://%s" % str(record["path"])
-		)
-		var bytes := FileAccess.get_file_as_bytes(store_path)
-		if bytes.is_empty() or _sha256_bytes(bytes) != str(record["sha256"]):
-			return "verification: atlas page sha mismatch"
-	for record: Dictionary in reloaded["shadow_chunks"]:
-		var store_path := ProjectSettings.globalize_path(
-			"res://%s" % str(record["path"])
-		)
-		var bytes := FileAccess.get_file_as_bytes(store_path)
-		if bytes.is_empty() or _sha256_bytes(bytes) != str(record["sha256"]):
-			return "verification: chunk sha mismatch"
+		return "verification: command digest mismatch"
+	var total := int(plan["accounting"]["total_commands"])
+	if total != commands.size():
+		return "verification: total command count mismatch"
+	# Index sets: in-range, pairwise disjoint, exact full union.
 	var seen := {}
 	for bucket: String in [
 		"atlas_command_indices", "shadow_chunk_command_indices",
 		"legacy_command_indices",
 	]:
-		for index: int in reloaded[bucket]:
+		for value: Variant in plan[bucket]:
+			var index := int(value)
+			if index < 0 or index >= total:
+				return "verification: index out of range %d" % index
 			if seen.has(index):
 				return "verification: duplicate classification %d" % index
 			seen[index] = true
-	if seen.size() != int(reloaded["accounting"]["total_commands"]):
-		return "verification: closure mismatch"
+	if seen.size() != total:
+		return "verification: closure mismatch %d != %d" % [
+			seen.size(), total,
+		]
+	# Atlas pages: count, recorded sha and recorded dimensions.
+	var page_heights: Array = plan["atlas_page_heights"]
+	var pages: Array = plan["atlas_pages"]
+	if pages.size() != page_heights.size():
+		return "verification: page count mismatch"
+	for record: Dictionary in pages:
+		var page_error := _verify_store_record(record)
+		if page_error != "":
+			return page_error
+		if int(record["width"]) != COMPILER.PAGE_WIDTH:
+			return "verification: page width mismatch"
+		if int(record["height"]) != int(
+			page_heights[int(record["page_index"])]
+		):
+			return "verification: page height mismatch"
+	# Atlas entries: authority fields, key uniqueness, region bounds.
+	var seen_keys := {}
+	for entry: Dictionary in plan["atlas_entries"]:
+		var key := str(entry.get("key", ""))
+		if key.is_empty() or seen_keys.has(key):
+			return "verification: entry key empty or duplicated"
+		seen_keys[key] = true
+		var page_index := int(entry.get("page", -1))
+		var region: Array = entry.get("region", [])
+		if (
+			entry.get("layers", []).is_empty()
+			or entry.get("group_keys", []).is_empty()
+			or entry.get("command_indices", []).is_empty()
+			or page_index < 0 or page_index >= pages.size()
+			or region.size() != 4
+		):
+			return "verification: incomplete entry %s" % key
+		for value: Variant in entry["command_indices"]:
+			if int(value) < 0 or int(value) >= total:
+				return "verification: entry index out of range %s" % key
+		if (
+			int(region[0]) < 0 or int(region[1]) < 0
+			or int(region[0]) + int(region[2]) > COMPILER.PAGE_WIDTH
+			or int(region[1]) + int(region[3]) > int(
+				page_heights[page_index]
+			)
+		):
+			return "verification: entry region out of bounds %s" % key
+	# Shadow chunks: store sha, positive size, valid segment references.
+	var segment_count: int = plan["shadow_segments"].size()
+	var chunk_records: Array = plan["shadow_chunks"]
+	for record: Dictionary in chunk_records:
+		var chunk_error := _verify_store_record(record)
+		if chunk_error != "":
+			return chunk_error
+		if int(record["segment_index"]) < 0 or int(
+			record["segment_index"]
+		) >= segment_count:
+			return "verification: chunk segment index invalid"
+		if int(record["size_px"][0]) <= 0 or int(record["size_px"][1]) <= 0:
+			return "verification: chunk size invalid"
+	# Source image hashes: recomputed from the source files, complete over
+	# every baked source (atlas layers + shadow segment commands).
+	var source_hashes: Dictionary = plan["source_image_sha256"]
+	var expected_paths := {}
+	for entry: Dictionary in plan["atlas_entries"]:
+		for layer: Dictionary in entry["layers"]:
+			expected_paths[str(layer["image_path"])] = true
+	for segment: Dictionary in plan["shadow_segments"]:
+		for index: int in segment["command_indices"]:
+			expected_paths[str(
+				commands[int(index)].get("image_path", "")
+			)] = true
+	if source_hashes.size() != expected_paths.size():
+		return "verification: source hash coverage mismatch"
+	for path: String in expected_paths:
+		if not source_hashes.has(path):
+			return "verification: source hash missing %s" % path
+		var bytes := FileAccess.get_file_as_bytes(_res_source_path(path))
+		if bytes.is_empty() or _sha256_bytes(bytes) != str(
+			source_hashes[path]
+		):
+			return "verification: source sha mismatch %s" % path
+	return ""
+
+
+func _verify_store_record(record: Dictionary) -> String:
+	var store_path := ProjectSettings.globalize_path(
+		"res://%s" % str(record["path"])
+	)
+	var bytes := FileAccess.get_file_as_bytes(store_path)
+	if bytes.is_empty() or _sha256_bytes(bytes) != str(record["sha256"]):
+		return "verification: store sha mismatch %s" % str(record["path"])
 	return ""
 
 
