@@ -203,6 +203,9 @@ func _ready() -> void:
 			"referencing_maps": ref_by_map.get(rel, {}).keys(),
 		})
 	var manifest_path := "res://outputs/wall_perf/wall_store_gc_manifest.json"
+	DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path("res://outputs/wall_perf")
+	)
 	var mf := FileAccess.open(manifest_path, FileAccess.WRITE)
 	mf.store_string(JSON.stringify(manifest, "\t"))
 	mf.close()
