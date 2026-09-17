@@ -1,0 +1,2592 @@
+{
+	"accounting": {
+		"atlas_commands": 160,
+		"legacy_commands": 13,
+		"shadow_chunk_commands": 0,
+		"total_commands": 173
+	},
+	"atlas_command_indices": [
+		5,
+		31,
+		58,
+		105,
+		132,
+		156,
+		6,
+		30,
+		57,
+		73,
+		83,
+		98,
+		124,
+		149,
+		7,
+		33,
+		60,
+		109,
+		134,
+		158,
+		8,
+		32,
+		59,
+		76,
+		85,
+		100,
+		126,
+		151,
+		9,
+		35,
+		62,
+		111,
+		136,
+		160,
+		10,
+		34,
+		61,
+		78,
+		87,
+		102,
+		128,
+		153,
+		11,
+		38,
+		64,
+		113,
+		138,
+		162,
+		12,
+		39,
+		65,
+		82,
+		91,
+		108,
+		133,
+		157,
+		13,
+		36,
+		63,
+		80,
+		89,
+		104,
+		131,
+		155,
+		15,
+		40,
+		66,
+		115,
+		140,
+		165,
+		16,
+		41,
+		67,
+		84,
+		93,
+		110,
+		135,
+		159,
+		17,
+		42,
+		68,
+		117,
+		142,
+		167,
+		18,
+		43,
+		69,
+		86,
+		95,
+		112,
+		137,
+		161,
+		19,
+		44,
+		70,
+		119,
+		144,
+		169,
+		20,
+		45,
+		71,
+		88,
+		97,
+		114,
+		139,
+		164,
+		21,
+		47,
+		74,
+		121,
+		146,
+		171,
+		22,
+		48,
+		75,
+		90,
+		99,
+		116,
+		141,
+		166,
+		23,
+		49,
+		123,
+		148,
+		24,
+		50,
+		77,
+		92,
+		101,
+		118,
+		143,
+		168,
+		25,
+		51,
+		125,
+		150,
+		26,
+		52,
+		79,
+		94,
+		103,
+		120,
+		145,
+		170,
+		27,
+		53,
+		127,
+		152,
+		28,
+		54,
+		81,
+		96,
+		106,
+		122,
+		147,
+		172,
+		29,
+		56,
+		129,
+		154
+	],
+	"atlas_entries": [
+		{
+			"command_indices": [
+				5,
+				31,
+				58,
+				105,
+				132,
+				156
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000001:13:0",
+				"wall_part:inst_000004:20:0",
+				"wall_part:inst_000007:26:0",
+				"wall_part:inst_000009:37:0",
+				"wall_part:inst_000012:43:0",
+				"wall_part:inst_000015:49:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						5
+					],
+					"group_key": "wall_part:inst_000001:13:0",
+					"representative_command_index": 5
+				},
+				{
+					"command_indices": [
+						31
+					],
+					"group_key": "wall_part:inst_000004:20:0",
+					"representative_command_index": 31
+				},
+				{
+					"command_indices": [
+						58
+					],
+					"group_key": "wall_part:inst_000007:26:0",
+					"representative_command_index": 58
+				},
+				{
+					"command_indices": [
+						105
+					],
+					"group_key": "wall_part:inst_000009:37:0",
+					"representative_command_index": 105
+				},
+				{
+					"command_indices": [
+						132
+					],
+					"group_key": "wall_part:inst_000012:43:0",
+					"representative_command_index": 132
+				},
+				{
+					"command_indices": [
+						156
+					],
+					"group_key": "wall_part:inst_000015:49:0",
+					"representative_command_index": 156
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 5,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				7,
+				33,
+				60,
+				109,
+				134,
+				158
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000001:13:1",
+				"wall_part:inst_000004:20:1",
+				"wall_part:inst_000007:26:1",
+				"wall_part:inst_000009:37:1",
+				"wall_part:inst_000012:43:1",
+				"wall_part:inst_000015:49:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						7
+					],
+					"group_key": "wall_part:inst_000001:13:1",
+					"representative_command_index": 7
+				},
+				{
+					"command_indices": [
+						33
+					],
+					"group_key": "wall_part:inst_000004:20:1",
+					"representative_command_index": 33
+				},
+				{
+					"command_indices": [
+						60
+					],
+					"group_key": "wall_part:inst_000007:26:1",
+					"representative_command_index": 60
+				},
+				{
+					"command_indices": [
+						109
+					],
+					"group_key": "wall_part:inst_000009:37:1",
+					"representative_command_index": 109
+				},
+				{
+					"command_indices": [
+						134
+					],
+					"group_key": "wall_part:inst_000012:43:1",
+					"representative_command_index": 134
+				},
+				{
+					"command_indices": [
+						158
+					],
+					"group_key": "wall_part:inst_000015:49:1",
+					"representative_command_index": 158
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 7,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				9,
+				35,
+				62,
+				111,
+				136,
+				160
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000001:13:2",
+				"wall_part:inst_000004:20:2",
+				"wall_part:inst_000007:26:2",
+				"wall_part:inst_000009:37:2",
+				"wall_part:inst_000012:43:2",
+				"wall_part:inst_000015:49:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						9
+					],
+					"group_key": "wall_part:inst_000001:13:2",
+					"representative_command_index": 9
+				},
+				{
+					"command_indices": [
+						35
+					],
+					"group_key": "wall_part:inst_000004:20:2",
+					"representative_command_index": 35
+				},
+				{
+					"command_indices": [
+						62
+					],
+					"group_key": "wall_part:inst_000007:26:2",
+					"representative_command_index": 62
+				},
+				{
+					"command_indices": [
+						111
+					],
+					"group_key": "wall_part:inst_000009:37:2",
+					"representative_command_index": 111
+				},
+				{
+					"command_indices": [
+						136
+					],
+					"group_key": "wall_part:inst_000012:43:2",
+					"representative_command_index": 136
+				},
+				{
+					"command_indices": [
+						160
+					],
+					"group_key": "wall_part:inst_000015:49:2",
+					"representative_command_index": 160
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 9,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				11,
+				38,
+				64,
+				113,
+				138,
+				162
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000001:13:3",
+				"wall_part:inst_000004:20:3",
+				"wall_part:inst_000007:26:3",
+				"wall_part:inst_000009:37:3",
+				"wall_part:inst_000012:43:3",
+				"wall_part:inst_000015:49:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						11
+					],
+					"group_key": "wall_part:inst_000001:13:3",
+					"representative_command_index": 11
+				},
+				{
+					"command_indices": [
+						38
+					],
+					"group_key": "wall_part:inst_000004:20:3",
+					"representative_command_index": 38
+				},
+				{
+					"command_indices": [
+						64
+					],
+					"group_key": "wall_part:inst_000007:26:3",
+					"representative_command_index": 64
+				},
+				{
+					"command_indices": [
+						113
+					],
+					"group_key": "wall_part:inst_000009:37:3",
+					"representative_command_index": 113
+				},
+				{
+					"command_indices": [
+						138
+					],
+					"group_key": "wall_part:inst_000012:43:3",
+					"representative_command_index": 138
+				},
+				{
+					"command_indices": [
+						162
+					],
+					"group_key": "wall_part:inst_000015:49:3",
+					"representative_command_index": 162
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 11,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				15,
+				40,
+				66,
+				115,
+				140,
+				165
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000002:16:0",
+				"wall_part:inst_000005:22:0",
+				"wall_part:inst_000008:28:0",
+				"wall_part:inst_000010:39:0",
+				"wall_part:inst_000013:45:0",
+				"wall_part:inst_000016:51:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						15
+					],
+					"group_key": "wall_part:inst_000002:16:0",
+					"representative_command_index": 15
+				},
+				{
+					"command_indices": [
+						40
+					],
+					"group_key": "wall_part:inst_000005:22:0",
+					"representative_command_index": 40
+				},
+				{
+					"command_indices": [
+						66
+					],
+					"group_key": "wall_part:inst_000008:28:0",
+					"representative_command_index": 66
+				},
+				{
+					"command_indices": [
+						115
+					],
+					"group_key": "wall_part:inst_000010:39:0",
+					"representative_command_index": 115
+				},
+				{
+					"command_indices": [
+						140
+					],
+					"group_key": "wall_part:inst_000013:45:0",
+					"representative_command_index": 140
+				},
+				{
+					"command_indices": [
+						165
+					],
+					"group_key": "wall_part:inst_000016:51:0",
+					"representative_command_index": 165
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 15,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				17,
+				42,
+				68,
+				117,
+				142,
+				167
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000002:16:1",
+				"wall_part:inst_000005:22:1",
+				"wall_part:inst_000008:28:1",
+				"wall_part:inst_000010:39:1",
+				"wall_part:inst_000013:45:1",
+				"wall_part:inst_000016:51:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						17
+					],
+					"group_key": "wall_part:inst_000002:16:1",
+					"representative_command_index": 17
+				},
+				{
+					"command_indices": [
+						42
+					],
+					"group_key": "wall_part:inst_000005:22:1",
+					"representative_command_index": 42
+				},
+				{
+					"command_indices": [
+						68
+					],
+					"group_key": "wall_part:inst_000008:28:1",
+					"representative_command_index": 68
+				},
+				{
+					"command_indices": [
+						117
+					],
+					"group_key": "wall_part:inst_000010:39:1",
+					"representative_command_index": 117
+				},
+				{
+					"command_indices": [
+						142
+					],
+					"group_key": "wall_part:inst_000013:45:1",
+					"representative_command_index": 142
+				},
+				{
+					"command_indices": [
+						167
+					],
+					"group_key": "wall_part:inst_000016:51:1",
+					"representative_command_index": 167
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 17,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				19,
+				44,
+				70,
+				119,
+				144,
+				169
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000002:16:2",
+				"wall_part:inst_000005:22:2",
+				"wall_part:inst_000008:28:2",
+				"wall_part:inst_000010:39:2",
+				"wall_part:inst_000013:45:2",
+				"wall_part:inst_000016:51:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						19
+					],
+					"group_key": "wall_part:inst_000002:16:2",
+					"representative_command_index": 19
+				},
+				{
+					"command_indices": [
+						44
+					],
+					"group_key": "wall_part:inst_000005:22:2",
+					"representative_command_index": 44
+				},
+				{
+					"command_indices": [
+						70
+					],
+					"group_key": "wall_part:inst_000008:28:2",
+					"representative_command_index": 70
+				},
+				{
+					"command_indices": [
+						119
+					],
+					"group_key": "wall_part:inst_000010:39:2",
+					"representative_command_index": 119
+				},
+				{
+					"command_indices": [
+						144
+					],
+					"group_key": "wall_part:inst_000013:45:2",
+					"representative_command_index": 144
+				},
+				{
+					"command_indices": [
+						169
+					],
+					"group_key": "wall_part:inst_000016:51:2",
+					"representative_command_index": 169
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 19,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				21,
+				47,
+				74,
+				121,
+				146,
+				171
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000002:16:3",
+				"wall_part:inst_000005:22:3",
+				"wall_part:inst_000008:28:3",
+				"wall_part:inst_000010:39:3",
+				"wall_part:inst_000013:45:3",
+				"wall_part:inst_000016:51:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						21
+					],
+					"group_key": "wall_part:inst_000002:16:3",
+					"representative_command_index": 21
+				},
+				{
+					"command_indices": [
+						47
+					],
+					"group_key": "wall_part:inst_000005:22:3",
+					"representative_command_index": 47
+				},
+				{
+					"command_indices": [
+						74
+					],
+					"group_key": "wall_part:inst_000008:28:3",
+					"representative_command_index": 74
+				},
+				{
+					"command_indices": [
+						121
+					],
+					"group_key": "wall_part:inst_000010:39:3",
+					"representative_command_index": 121
+				},
+				{
+					"command_indices": [
+						146
+					],
+					"group_key": "wall_part:inst_000013:45:3",
+					"representative_command_index": 146
+				},
+				{
+					"command_indices": [
+						171
+					],
+					"group_key": "wall_part:inst_000016:51:3",
+					"representative_command_index": 171
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 21,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1344,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				23,
+				49,
+				123,
+				148
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000003:18:0",
+				"wall_part:inst_000006:24:0",
+				"wall_part:inst_000011:41:0",
+				"wall_part:inst_000014:47:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						23
+					],
+					"group_key": "wall_part:inst_000003:18:0",
+					"representative_command_index": 23
+				},
+				{
+					"command_indices": [
+						49
+					],
+					"group_key": "wall_part:inst_000006:24:0",
+					"representative_command_index": 49
+				},
+				{
+					"command_indices": [
+						123
+					],
+					"group_key": "wall_part:inst_000011:41:0",
+					"representative_command_index": 123
+				},
+				{
+					"command_indices": [
+						148
+					],
+					"group_key": "wall_part:inst_000014:47:0",
+					"representative_command_index": 148
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 23,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				25,
+				51,
+				125,
+				150
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000003:18:1",
+				"wall_part:inst_000006:24:1",
+				"wall_part:inst_000011:41:1",
+				"wall_part:inst_000014:47:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						25
+					],
+					"group_key": "wall_part:inst_000003:18:1",
+					"representative_command_index": 25
+				},
+				{
+					"command_indices": [
+						51
+					],
+					"group_key": "wall_part:inst_000006:24:1",
+					"representative_command_index": 51
+				},
+				{
+					"command_indices": [
+						125
+					],
+					"group_key": "wall_part:inst_000011:41:1",
+					"representative_command_index": 125
+				},
+				{
+					"command_indices": [
+						150
+					],
+					"group_key": "wall_part:inst_000014:47:1",
+					"representative_command_index": 150
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 25,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1728,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				27,
+				53,
+				127,
+				152
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000003:18:2",
+				"wall_part:inst_000006:24:2",
+				"wall_part:inst_000011:41:2",
+				"wall_part:inst_000014:47:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						27
+					],
+					"group_key": "wall_part:inst_000003:18:2",
+					"representative_command_index": 27
+				},
+				{
+					"command_indices": [
+						53
+					],
+					"group_key": "wall_part:inst_000006:24:2",
+					"representative_command_index": 53
+				},
+				{
+					"command_indices": [
+						127
+					],
+					"group_key": "wall_part:inst_000011:41:2",
+					"representative_command_index": 127
+				},
+				{
+					"command_indices": [
+						152
+					],
+					"group_key": "wall_part:inst_000014:47:2",
+					"representative_command_index": 152
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 27,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				29,
+				56,
+				129,
+				154
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000003:18:3",
+				"wall_part:inst_000006:24:3",
+				"wall_part:inst_000011:41:3",
+				"wall_part:inst_000014:47:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						29
+					],
+					"group_key": "wall_part:inst_000003:18:3",
+					"representative_command_index": 29
+				},
+				{
+					"command_indices": [
+						56
+					],
+					"group_key": "wall_part:inst_000006:24:3",
+					"representative_command_index": 56
+				},
+				{
+					"command_indices": [
+						129
+					],
+					"group_key": "wall_part:inst_000011:41:3",
+					"representative_command_index": 129
+				},
+				{
+					"command_indices": [
+						154
+					],
+					"group_key": "wall_part:inst_000014:47:3",
+					"representative_command_index": 154
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_wooma_temple_native_2to1_wall_v3_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 29,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				6,
+				30,
+				57,
+				73,
+				83,
+				98,
+				124,
+				149
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000017:14:0",
+				"wall_part:inst_000020:19:0",
+				"wall_part:inst_000023:25:0",
+				"wall_part:inst_000029:29:0",
+				"wall_part:inst_000026:32:0",
+				"wall_part:inst_000032:35:0",
+				"wall_part:inst_000035:42:0",
+				"wall_part:inst_000038:48:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						6
+					],
+					"group_key": "wall_part:inst_000017:14:0",
+					"representative_command_index": 6
+				},
+				{
+					"command_indices": [
+						30
+					],
+					"group_key": "wall_part:inst_000020:19:0",
+					"representative_command_index": 30
+				},
+				{
+					"command_indices": [
+						57
+					],
+					"group_key": "wall_part:inst_000023:25:0",
+					"representative_command_index": 57
+				},
+				{
+					"command_indices": [
+						73
+					],
+					"group_key": "wall_part:inst_000029:29:0",
+					"representative_command_index": 73
+				},
+				{
+					"command_indices": [
+						83
+					],
+					"group_key": "wall_part:inst_000026:32:0",
+					"representative_command_index": 83
+				},
+				{
+					"command_indices": [
+						98
+					],
+					"group_key": "wall_part:inst_000032:35:0",
+					"representative_command_index": 98
+				},
+				{
+					"command_indices": [
+						124
+					],
+					"group_key": "wall_part:inst_000035:42:0",
+					"representative_command_index": 124
+				},
+				{
+					"command_indices": [
+						149
+					],
+					"group_key": "wall_part:inst_000038:48:0",
+					"representative_command_index": 149
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 6,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				8,
+				32,
+				59,
+				76,
+				85,
+				100,
+				126,
+				151
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000017:14:1",
+				"wall_part:inst_000020:19:1",
+				"wall_part:inst_000023:25:1",
+				"wall_part:inst_000029:29:1",
+				"wall_part:inst_000026:32:1",
+				"wall_part:inst_000032:35:1",
+				"wall_part:inst_000035:42:1",
+				"wall_part:inst_000038:48:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						8
+					],
+					"group_key": "wall_part:inst_000017:14:1",
+					"representative_command_index": 8
+				},
+				{
+					"command_indices": [
+						32
+					],
+					"group_key": "wall_part:inst_000020:19:1",
+					"representative_command_index": 32
+				},
+				{
+					"command_indices": [
+						59
+					],
+					"group_key": "wall_part:inst_000023:25:1",
+					"representative_command_index": 59
+				},
+				{
+					"command_indices": [
+						76
+					],
+					"group_key": "wall_part:inst_000029:29:1",
+					"representative_command_index": 76
+				},
+				{
+					"command_indices": [
+						85
+					],
+					"group_key": "wall_part:inst_000026:32:1",
+					"representative_command_index": 85
+				},
+				{
+					"command_indices": [
+						100
+					],
+					"group_key": "wall_part:inst_000032:35:1",
+					"representative_command_index": 100
+				},
+				{
+					"command_indices": [
+						126
+					],
+					"group_key": "wall_part:inst_000035:42:1",
+					"representative_command_index": 126
+				},
+				{
+					"command_indices": [
+						151
+					],
+					"group_key": "wall_part:inst_000038:48:1",
+					"representative_command_index": 151
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 8,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				10,
+				34,
+				61,
+				78,
+				87,
+				102,
+				128,
+				153
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000017:14:2",
+				"wall_part:inst_000020:19:2",
+				"wall_part:inst_000023:25:2",
+				"wall_part:inst_000029:29:2",
+				"wall_part:inst_000026:32:2",
+				"wall_part:inst_000032:35:2",
+				"wall_part:inst_000035:42:2",
+				"wall_part:inst_000038:48:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						10
+					],
+					"group_key": "wall_part:inst_000017:14:2",
+					"representative_command_index": 10
+				},
+				{
+					"command_indices": [
+						34
+					],
+					"group_key": "wall_part:inst_000020:19:2",
+					"representative_command_index": 34
+				},
+				{
+					"command_indices": [
+						61
+					],
+					"group_key": "wall_part:inst_000023:25:2",
+					"representative_command_index": 61
+				},
+				{
+					"command_indices": [
+						78
+					],
+					"group_key": "wall_part:inst_000029:29:2",
+					"representative_command_index": 78
+				},
+				{
+					"command_indices": [
+						87
+					],
+					"group_key": "wall_part:inst_000026:32:2",
+					"representative_command_index": 87
+				},
+				{
+					"command_indices": [
+						102
+					],
+					"group_key": "wall_part:inst_000032:35:2",
+					"representative_command_index": 102
+				},
+				{
+					"command_indices": [
+						128
+					],
+					"group_key": "wall_part:inst_000035:42:2",
+					"representative_command_index": 128
+				},
+				{
+					"command_indices": [
+						153
+					],
+					"group_key": "wall_part:inst_000038:48:2",
+					"representative_command_index": 153
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 10,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				13,
+				36,
+				63,
+				80,
+				89,
+				104,
+				131,
+				155
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000017:14:3",
+				"wall_part:inst_000020:19:3",
+				"wall_part:inst_000023:25:3",
+				"wall_part:inst_000029:29:3",
+				"wall_part:inst_000026:32:3",
+				"wall_part:inst_000032:35:3",
+				"wall_part:inst_000035:42:3",
+				"wall_part:inst_000038:48:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						13
+					],
+					"group_key": "wall_part:inst_000017:14:3",
+					"representative_command_index": 13
+				},
+				{
+					"command_indices": [
+						36
+					],
+					"group_key": "wall_part:inst_000020:19:3",
+					"representative_command_index": 36
+				},
+				{
+					"command_indices": [
+						63
+					],
+					"group_key": "wall_part:inst_000023:25:3",
+					"representative_command_index": 63
+				},
+				{
+					"command_indices": [
+						80
+					],
+					"group_key": "wall_part:inst_000029:29:3",
+					"representative_command_index": 80
+				},
+				{
+					"command_indices": [
+						89
+					],
+					"group_key": "wall_part:inst_000026:32:3",
+					"representative_command_index": 89
+				},
+				{
+					"command_indices": [
+						104
+					],
+					"group_key": "wall_part:inst_000032:35:3",
+					"representative_command_index": 104
+				},
+				{
+					"command_indices": [
+						131
+					],
+					"group_key": "wall_part:inst_000035:42:3",
+					"representative_command_index": 131
+				},
+				{
+					"command_indices": [
+						155
+					],
+					"group_key": "wall_part:inst_000038:48:3",
+					"representative_command_index": 155
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 13,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				12,
+				39,
+				65,
+				82,
+				91,
+				108,
+				133,
+				157
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000018:15:0",
+				"wall_part:inst_000021:21:0",
+				"wall_part:inst_000024:27:0",
+				"wall_part:inst_000030:31:0",
+				"wall_part:inst_000027:34:0",
+				"wall_part:inst_000033:38:0",
+				"wall_part:inst_000036:44:0",
+				"wall_part:inst_000039:50:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						12
+					],
+					"group_key": "wall_part:inst_000018:15:0",
+					"representative_command_index": 12
+				},
+				{
+					"command_indices": [
+						39
+					],
+					"group_key": "wall_part:inst_000021:21:0",
+					"representative_command_index": 39
+				},
+				{
+					"command_indices": [
+						65
+					],
+					"group_key": "wall_part:inst_000024:27:0",
+					"representative_command_index": 65
+				},
+				{
+					"command_indices": [
+						82
+					],
+					"group_key": "wall_part:inst_000030:31:0",
+					"representative_command_index": 82
+				},
+				{
+					"command_indices": [
+						91
+					],
+					"group_key": "wall_part:inst_000027:34:0",
+					"representative_command_index": 91
+				},
+				{
+					"command_indices": [
+						108
+					],
+					"group_key": "wall_part:inst_000033:38:0",
+					"representative_command_index": 108
+				},
+				{
+					"command_indices": [
+						133
+					],
+					"group_key": "wall_part:inst_000036:44:0",
+					"representative_command_index": 133
+				},
+				{
+					"command_indices": [
+						157
+					],
+					"group_key": "wall_part:inst_000039:50:0",
+					"representative_command_index": 157
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 12,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				16,
+				41,
+				67,
+				84,
+				93,
+				110,
+				135,
+				159
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000018:15:1",
+				"wall_part:inst_000021:21:1",
+				"wall_part:inst_000024:27:1",
+				"wall_part:inst_000030:31:1",
+				"wall_part:inst_000027:34:1",
+				"wall_part:inst_000033:38:1",
+				"wall_part:inst_000036:44:1",
+				"wall_part:inst_000039:50:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						16
+					],
+					"group_key": "wall_part:inst_000018:15:1",
+					"representative_command_index": 16
+				},
+				{
+					"command_indices": [
+						41
+					],
+					"group_key": "wall_part:inst_000021:21:1",
+					"representative_command_index": 41
+				},
+				{
+					"command_indices": [
+						67
+					],
+					"group_key": "wall_part:inst_000024:27:1",
+					"representative_command_index": 67
+				},
+				{
+					"command_indices": [
+						84
+					],
+					"group_key": "wall_part:inst_000030:31:1",
+					"representative_command_index": 84
+				},
+				{
+					"command_indices": [
+						93
+					],
+					"group_key": "wall_part:inst_000027:34:1",
+					"representative_command_index": 93
+				},
+				{
+					"command_indices": [
+						110
+					],
+					"group_key": "wall_part:inst_000033:38:1",
+					"representative_command_index": 110
+				},
+				{
+					"command_indices": [
+						135
+					],
+					"group_key": "wall_part:inst_000036:44:1",
+					"representative_command_index": 135
+				},
+				{
+					"command_indices": [
+						159
+					],
+					"group_key": "wall_part:inst_000039:50:1",
+					"representative_command_index": 159
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 16,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1344,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				18,
+				43,
+				69,
+				86,
+				95,
+				112,
+				137,
+				161
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000018:15:2",
+				"wall_part:inst_000021:21:2",
+				"wall_part:inst_000024:27:2",
+				"wall_part:inst_000030:31:2",
+				"wall_part:inst_000027:34:2",
+				"wall_part:inst_000033:38:2",
+				"wall_part:inst_000036:44:2",
+				"wall_part:inst_000039:50:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						18
+					],
+					"group_key": "wall_part:inst_000018:15:2",
+					"representative_command_index": 18
+				},
+				{
+					"command_indices": [
+						43
+					],
+					"group_key": "wall_part:inst_000021:21:2",
+					"representative_command_index": 43
+				},
+				{
+					"command_indices": [
+						69
+					],
+					"group_key": "wall_part:inst_000024:27:2",
+					"representative_command_index": 69
+				},
+				{
+					"command_indices": [
+						86
+					],
+					"group_key": "wall_part:inst_000030:31:2",
+					"representative_command_index": 86
+				},
+				{
+					"command_indices": [
+						95
+					],
+					"group_key": "wall_part:inst_000027:34:2",
+					"representative_command_index": 95
+				},
+				{
+					"command_indices": [
+						112
+					],
+					"group_key": "wall_part:inst_000033:38:2",
+					"representative_command_index": 112
+				},
+				{
+					"command_indices": [
+						137
+					],
+					"group_key": "wall_part:inst_000036:44:2",
+					"representative_command_index": 137
+				},
+				{
+					"command_indices": [
+						161
+					],
+					"group_key": "wall_part:inst_000039:50:2",
+					"representative_command_index": 161
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 18,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				20,
+				45,
+				71,
+				88,
+				97,
+				114,
+				139,
+				164
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000018:15:3",
+				"wall_part:inst_000021:21:3",
+				"wall_part:inst_000024:27:3",
+				"wall_part:inst_000030:31:3",
+				"wall_part:inst_000027:34:3",
+				"wall_part:inst_000033:38:3",
+				"wall_part:inst_000036:44:3",
+				"wall_part:inst_000039:50:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						20
+					],
+					"group_key": "wall_part:inst_000018:15:3",
+					"representative_command_index": 20
+				},
+				{
+					"command_indices": [
+						45
+					],
+					"group_key": "wall_part:inst_000021:21:3",
+					"representative_command_index": 45
+				},
+				{
+					"command_indices": [
+						71
+					],
+					"group_key": "wall_part:inst_000024:27:3",
+					"representative_command_index": 71
+				},
+				{
+					"command_indices": [
+						88
+					],
+					"group_key": "wall_part:inst_000030:31:3",
+					"representative_command_index": 88
+				},
+				{
+					"command_indices": [
+						97
+					],
+					"group_key": "wall_part:inst_000027:34:3",
+					"representative_command_index": 97
+				},
+				{
+					"command_indices": [
+						114
+					],
+					"group_key": "wall_part:inst_000033:38:3",
+					"representative_command_index": 114
+				},
+				{
+					"command_indices": [
+						139
+					],
+					"group_key": "wall_part:inst_000036:44:3",
+					"representative_command_index": 139
+				},
+				{
+					"command_indices": [
+						164
+					],
+					"group_key": "wall_part:inst_000039:50:3",
+					"representative_command_index": 164
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 20,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1728,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				22,
+				48,
+				75,
+				90,
+				99,
+				116,
+				141,
+				166
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000019:17:0",
+				"wall_part:inst_000022:23:0",
+				"wall_part:inst_000025:30:0",
+				"wall_part:inst_000031:33:0",
+				"wall_part:inst_000028:36:0",
+				"wall_part:inst_000034:40:0",
+				"wall_part:inst_000037:46:0",
+				"wall_part:inst_000040:52:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						22
+					],
+					"group_key": "wall_part:inst_000019:17:0",
+					"representative_command_index": 22
+				},
+				{
+					"command_indices": [
+						48
+					],
+					"group_key": "wall_part:inst_000022:23:0",
+					"representative_command_index": 48
+				},
+				{
+					"command_indices": [
+						75
+					],
+					"group_key": "wall_part:inst_000025:30:0",
+					"representative_command_index": 75
+				},
+				{
+					"command_indices": [
+						90
+					],
+					"group_key": "wall_part:inst_000031:33:0",
+					"representative_command_index": 90
+				},
+				{
+					"command_indices": [
+						99
+					],
+					"group_key": "wall_part:inst_000028:36:0",
+					"representative_command_index": 99
+				},
+				{
+					"command_indices": [
+						116
+					],
+					"group_key": "wall_part:inst_000034:40:0",
+					"representative_command_index": 116
+				},
+				{
+					"command_indices": [
+						141
+					],
+					"group_key": "wall_part:inst_000037:46:0",
+					"representative_command_index": 141
+				},
+				{
+					"command_indices": [
+						166
+					],
+					"group_key": "wall_part:inst_000040:52:0",
+					"representative_command_index": 166
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 22,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				544,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				24,
+				50,
+				77,
+				92,
+				101,
+				118,
+				143,
+				168
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000019:17:1",
+				"wall_part:inst_000022:23:1",
+				"wall_part:inst_000025:30:1",
+				"wall_part:inst_000031:33:1",
+				"wall_part:inst_000028:36:1",
+				"wall_part:inst_000034:40:1",
+				"wall_part:inst_000037:46:1",
+				"wall_part:inst_000040:52:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						24
+					],
+					"group_key": "wall_part:inst_000019:17:1",
+					"representative_command_index": 24
+				},
+				{
+					"command_indices": [
+						50
+					],
+					"group_key": "wall_part:inst_000022:23:1",
+					"representative_command_index": 50
+				},
+				{
+					"command_indices": [
+						77
+					],
+					"group_key": "wall_part:inst_000025:30:1",
+					"representative_command_index": 77
+				},
+				{
+					"command_indices": [
+						92
+					],
+					"group_key": "wall_part:inst_000031:33:1",
+					"representative_command_index": 92
+				},
+				{
+					"command_indices": [
+						101
+					],
+					"group_key": "wall_part:inst_000028:36:1",
+					"representative_command_index": 101
+				},
+				{
+					"command_indices": [
+						118
+					],
+					"group_key": "wall_part:inst_000034:40:1",
+					"representative_command_index": 118
+				},
+				{
+					"command_indices": [
+						143
+					],
+					"group_key": "wall_part:inst_000037:46:1",
+					"representative_command_index": 143
+				},
+				{
+					"command_indices": [
+						168
+					],
+					"group_key": "wall_part:inst_000040:52:1",
+					"representative_command_index": 168
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 24,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				544,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				26,
+				52,
+				79,
+				94,
+				103,
+				120,
+				145,
+				170
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000019:17:2",
+				"wall_part:inst_000022:23:2",
+				"wall_part:inst_000025:30:2",
+				"wall_part:inst_000031:33:2",
+				"wall_part:inst_000028:36:2",
+				"wall_part:inst_000034:40:2",
+				"wall_part:inst_000037:46:2",
+				"wall_part:inst_000040:52:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						26
+					],
+					"group_key": "wall_part:inst_000019:17:2",
+					"representative_command_index": 26
+				},
+				{
+					"command_indices": [
+						52
+					],
+					"group_key": "wall_part:inst_000022:23:2",
+					"representative_command_index": 52
+				},
+				{
+					"command_indices": [
+						79
+					],
+					"group_key": "wall_part:inst_000025:30:2",
+					"representative_command_index": 79
+				},
+				{
+					"command_indices": [
+						94
+					],
+					"group_key": "wall_part:inst_000031:33:2",
+					"representative_command_index": 94
+				},
+				{
+					"command_indices": [
+						103
+					],
+					"group_key": "wall_part:inst_000028:36:2",
+					"representative_command_index": 103
+				},
+				{
+					"command_indices": [
+						120
+					],
+					"group_key": "wall_part:inst_000034:40:2",
+					"representative_command_index": 120
+				},
+				{
+					"command_indices": [
+						145
+					],
+					"group_key": "wall_part:inst_000037:46:2",
+					"representative_command_index": 145
+				},
+				{
+					"command_indices": [
+						170
+					],
+					"group_key": "wall_part:inst_000040:52:2",
+					"representative_command_index": 170
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 26,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				544,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				28,
+				54,
+				81,
+				96,
+				106,
+				122,
+				147,
+				172
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000019:17:3",
+				"wall_part:inst_000022:23:3",
+				"wall_part:inst_000025:30:3",
+				"wall_part:inst_000031:33:3",
+				"wall_part:inst_000028:36:3",
+				"wall_part:inst_000034:40:3",
+				"wall_part:inst_000037:46:3",
+				"wall_part:inst_000040:52:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						28
+					],
+					"group_key": "wall_part:inst_000019:17:3",
+					"representative_command_index": 28
+				},
+				{
+					"command_indices": [
+						54
+					],
+					"group_key": "wall_part:inst_000022:23:3",
+					"representative_command_index": 54
+				},
+				{
+					"command_indices": [
+						81
+					],
+					"group_key": "wall_part:inst_000025:30:3",
+					"representative_command_index": 81
+				},
+				{
+					"command_indices": [
+						96
+					],
+					"group_key": "wall_part:inst_000031:33:3",
+					"representative_command_index": 96
+				},
+				{
+					"command_indices": [
+						106
+					],
+					"group_key": "wall_part:inst_000028:36:3",
+					"representative_command_index": 106
+				},
+				{
+					"command_indices": [
+						122
+					],
+					"group_key": "wall_part:inst_000034:40:3",
+					"representative_command_index": 122
+				},
+				{
+					"command_indices": [
+						147
+					],
+					"group_key": "wall_part:inst_000037:46:3",
+					"representative_command_index": 147
+				},
+				{
+					"command_indices": [
+						172
+					],
+					"group_key": "wall_part:inst_000040:52:3",
+					"representative_command_index": 172
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_wooma_temple_native_2to1_wall_v3_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 28,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_wooma_temple_native_2to1_wall_v3_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				544,
+				192,
+				272
+			]
+		}
+	],
+	"atlas_page_heights": [
+		816
+	],
+	"atlas_pages": [
+		{
+			"height": 816,
+			"page_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/f42fcbbc223fa7a48a271a09b20bbf91507ffc53ae3b8ccd3860502f268a5097.png",
+			"png_bytes": 406471,
+			"sha256": "f42fcbbc223fa7a48a271a09b20bbf91507ffc53ae3b8ccd3860502f268a5097",
+			"width": 2048
+		}
+	],
+	"compiler_version": 2,
+	"contract_id": "hardcore.wall_render_plan.v1",
+	"design_size": [
+		32,
+		48
+	],
+	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+	"legacy_command_indices": [
+		0,
+		1,
+		2,
+		3,
+		4,
+		14,
+		37,
+		46,
+		55,
+		72,
+		107,
+		130,
+		163
+	],
+	"map_key": "mengzhong_zuma_leader_home",
+	"shadow_chunk_command_indices": [],
+	"shadow_chunks": [],
+	"shadow_segments": [],
+	"source_commands_sha256": "45813dd69ec9d7200b5f3b69c3ea6daebfec40f7770b71b43b1a96ecf5706d93",
+	"source_image_sha256": {
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png": "7f5d8b5db84e8f89330a30b0e4fdeee8fc64d6281a7ef2a14db3316517e90dac",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png": "5393376470d86c680831b942804637e09317527a8f62373bd4b904546a79cbb9",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png": "ca20a2abd4c3af3a15d9c742338af0283cb051254504bc960dd7719053a54be5",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v01/part_03_wooma_temple_native_2to1_wall_v3_base.png": "9ad59ecaa1231471d6de423f3d113b0e72c595bc612b9bc773d6bbf8dbbb84ac",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png": "8a36d9c03e31fad6255fb26b30ebb83a165d47d282feb7f300ef1e107339588e",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png": "715106685634e5da411c79157421c35549100b1b088450956c711dadf22cc950",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png": "9bf832f5b1674d5bcec79396ec98338df770e9ae72ff15da4d11afbb0f8b9751",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v02/part_03_wooma_temple_native_2to1_wall_v3_base.png": "c13aba54f14937779359bddb72e253dfdeea194605347d565c85a02d95e57223",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png": "923efd75ae20382b1b5c74f7f8ff3a8077ab28abf55e09ac587e1c53db27bb03",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png": "355eb89edabcdbbe6744f5f3f376767e3b27c32f88986cc2533a8f3a233b4ba8",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png": "57a2c13b98ee344e27e6bb2d06b74d7ae609c8914b3bde9be71cf42f8cd9bd04",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_x_l4_v03/part_03_wooma_temple_native_2to1_wall_v3_base.png": "2b52badf580e2ce959e24d3295b2099a7059f5366b6057902e34774f77128680",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_00_wooma_temple_native_2to1_wall_v3_base.png": "640d1458ebefa180af4fb61d3a3730fac9bd001c8a3017e72be8241bc79d89a5",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_01_wooma_temple_native_2to1_wall_v3_base.png": "1134f6b8224a1d34d7e31310b35afb1208be9f33cd1012017487db6a0799b8d3",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_02_wooma_temple_native_2to1_wall_v3_base.png": "ad80153ed58df558283e2a589e889f6a89d98ec889ce2be64a6046cbd3c3d378",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v01/part_03_wooma_temple_native_2to1_wall_v3_base.png": "9d60cd882fbe8114e6df79dc66af55622e919b5b02ee820bcb110b976887c639",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_00_wooma_temple_native_2to1_wall_v3_base.png": "0de5116373797294f3549f155984587cc32f1ffb9506dae36a1e472e3a8c6732",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_01_wooma_temple_native_2to1_wall_v3_base.png": "9005b5212652943ff5f6c080ddfcb2043aa4fb3f5f55af002ff7d146a9e2b56f",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_02_wooma_temple_native_2to1_wall_v3_base.png": "a3c87b23884f5b7ddc1690184c3590f0c720ec57592a0eacdc85980d59fdff5e",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v02/part_03_wooma_temple_native_2to1_wall_v3_base.png": "aea21c1d7e82f71caf16dcad5e34e2b16767b8800b14f4e243fec8f823fa075d",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_00_wooma_temple_native_2to1_wall_v3_base.png": "2a151ec84b7dfb2328e6b63f217ef06e6046b4ebf230dd2c22c009db1014a979",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_01_wooma_temple_native_2to1_wall_v3_base.png": "74a420873cf2a4cfe2c4cfe7358e60dd7cc1c768108c24fff931e1ffd62e023d",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_02_wooma_temple_native_2to1_wall_v3_base.png": "aa132816a8b63971415863fdb04fc66241ce8b94020ac39ad3d75ed75820a2ab",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_gothic_stone_u0/wooma_temple_wall_straight_y_l4_v03/part_03_wooma_temple_native_2to1_wall_v3_base.png": "4a20b4dc2e655b08bda3fa6405fe28ee28cf81170f6c6586d46a3fe310267af0"
+	},
+	"source_runtime_json_sha256": "683ce3dc57530a8e7e7537be10f1617fadd1f0a17d1338cd69bcf9707569a0b2",
+	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
+}
