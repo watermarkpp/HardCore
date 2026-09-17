@@ -22,6 +22,7 @@ func _init() -> void:
 	)
 	for map_key: String in ["mengzhong_dark_area", "chiyue_valley"]:
 		_run_map(map_key, service)
+	_run_store_discipline()
 	_run_fixture_oversized()
 	_run_fixture_missing_image()
 	_run_fixture_transformed_static()
@@ -39,6 +40,51 @@ func _init() -> void:
 		quit(1)
 
 
+## R1.1a store-discipline gate: every derived texture a committed plan
+## references must be importable RIGHT NOW - the PNG exists as a resource,
+## loads as a Texture2D, and its size matches the plan record exactly.
+## This is the Godot-side half of the reproducibility gate (the tracked
+## sidecar half is enforced by git via the .gitignore exception).
+func _run_store_discipline() -> void:
+	for map_key: String in ["mengzhong_dark_area", "chiyue_valley"]:
+		var plan := _read_json(
+			"res://assets/data/runtime/map_editor/wall_render_plans/%s.wall_render_plan.json"
+			% map_key
+		)
+		if plan.is_empty():
+			_failures.append("%s store discipline: plan unreadable" % map_key)
+			continue
+		for record: Dictionary in plan.get("atlas_pages", []):
+			_check_store_record(map_key, record, "page", Vector2i(
+				int(record.get("width", -1)), int(record.get("height", -1))
+			))
+		for record: Dictionary in plan.get("shadow_chunks", []):
+			_check_store_record(map_key, record, "chunk", Vector2i(
+				int(record.get("size_px", [-1, -1])[0]),
+				int(record.get("size_px", [-1, -1])[1])
+			))
+
+
+func _check_store_record(
+	map_key: String,
+	record: Dictionary,
+	label: String,
+	expected_size: Vector2i
+) -> void:
+	var path := "res://" + str(record.get("path", "")).lstrip("/")
+	if path == "res://" or not ResourceLoader.exists(path):
+		_failures.append("%s %s resource missing: %s" % [map_key, label, path])
+		return
+	var texture := ResourceLoader.load(path) as Texture2D
+	if texture == null:
+		_failures.append("%s %s not a Texture2D: %s" % [map_key, label, path])
+		return
+	if texture.get_size() != Vector2(expected_size):
+		_failures.append("%s %s size mismatch %s: %s != %s" % [
+			map_key, label, path, texture.get_size(), expected_size,
+		])
+
+
 func _run_map(map_key: String, service: Script) -> void:
 	var runtime_path := (
 		"res://assets/data/runtime/map_editor/%s.runtime.json" % map_key
@@ -48,13 +94,26 @@ func _run_map(map_key: String, service: Script) -> void:
 		_failures.append("%s runtime missing" % map_key)
 		return
 	var instances: Array = raw.get("instances", [])
+	# design_size authority is the runtime's nested design.design_size - the
+	# same field the publisher and the production consumer use. A missing,
+	# malformed or non-positive design fails the test instead of falling
+	# back to a silent default that would bake wrong geometry (R1.1a).
+	var design_container: Dictionary = raw.get("design", {})
+	var design_raw: Array = design_container.get("design_size", [])
+	if (
+		design_container.is_empty()
+		or design_raw.size() != 2
+		or int(design_raw[0]) <= 0
+		or int(design_raw[1]) <= 0
+	):
+		_failures.append("%s runtime design.design_size missing/malformed" % map_key)
+		return
+	var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
+	print("WCOMPILER_DESIGN %s = %dx%d" % [map_key, design_size.x, design_size.y])
 	var commands: Array = service.sorted_draw_commands(instances)
 	var plan: Dictionary = COMPILER.compile_plan(
 		commands,
-		Vector2i(
-			int(raw.get("design_size", [64, 64])[0]),
-			int(raw.get("design_size", [64, 64])[1])
-		),
+		design_size,
 		func(path: String) -> Vector2i:
 			var image: Image = _load_image(path)
 			return Vector2i.ZERO if image == null else image.get_size()

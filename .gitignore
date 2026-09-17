@@ -3,6 +3,9 @@
 *.import
 !assets/art/maps/bich/editor_runtime_chunks/*.png.import
 !assets/art/maps/wooma_region/editor_runtime_chunks/wooma_forest/*.png.import
+# Wall render derived store: committed sidecars make a fresh checkout of
+# this SHA importable without a prior local --import pass (R1.1a).
+!assets/data/runtime/map_editor/wall_render_store/*.png.import
 
 # Build/export output
 outputs/

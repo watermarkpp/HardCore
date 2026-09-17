@@ -153,6 +153,11 @@ func _publish_map(map_key: String) -> Dictionary:
 		chunk_records[record_index]["path"] = record["path"]
 		chunk_records[record_index]["sha256"] = record["sha256"]
 		chunk_records[record_index]["png_bytes"] = record["png_bytes"]
+		# The plan is a pure-JSON authority: build-time Image objects must
+		# never reach JSON.stringify (they serialize as "<Image#id>" with a
+		# runtime object id and break determinism). The staged PNG in the
+		# sha-addressed store is the only pixel authority from here on.
+		chunk_records[record_index].erase("image")
 	# Source image content hashes for every baked source (contract 1).
 	var source_paths := {}
 	for entry: Dictionary in plan["atlas_entries"]:
@@ -447,6 +452,10 @@ func _verify_candidate_plan(
 		var chunk_error := _verify_store_record(record)
 		if chunk_error != "":
 			return chunk_error
+		# Pure-JSON authority hard gate (R1.1a): no build-time Image object
+		# may leak into the committed plan document.
+		if record.has("image"):
+			return "verification: chunk record carries non-JSON image field"
 		if int(record["segment_index"]) < 0 or int(
 			record["segment_index"]
 		) >= segment_count:
