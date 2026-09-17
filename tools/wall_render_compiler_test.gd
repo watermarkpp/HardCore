@@ -110,6 +110,30 @@ func _run_map(map_key: String, service: Script) -> void:
 		_failures.append("%s atlas groups %d != expected %d" % [
 			map_key, atlas_groups.size(), groups_expected.size(),
 		])
+	# Check 2c: group_mappings exact closure (advisor C0) - every mapping
+	# command agrees with its group key, union == atlas command set.
+	var mapped := {}
+	var atlas_set := {}
+	for index: int in plan["atlas_command_indices"]:
+		atlas_set[index] = true
+	for entry: Dictionary in plan["atlas_entries"]:
+		for mapping: Dictionary in entry["group_mappings"]:
+			for index: int in mapping["command_indices"]:
+				if mapped.has(index):
+					_failures.append("%s mapping duplicate %d" % [
+						map_key, index,
+					])
+				mapped[index] = true
+				if str(commands[index].get("actor_sort_group", "")) != str(
+					mapping["group_key"]
+				):
+					_failures.append("%s mapping group mismatch %d" % [
+						map_key, index,
+					])
+	if mapped.size() != atlas_set.size():
+		_failures.append("%s mappings %d != atlas %d" % [
+			map_key, mapped.size(), atlas_set.size(),
+		])
 	# Check 3: regions within page bounds.
 	var heights: Array = plan["atlas_page_heights"]
 	for page_height: int in heights:

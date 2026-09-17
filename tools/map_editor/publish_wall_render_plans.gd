@@ -388,6 +388,49 @@ func _verify_candidate_plan(
 			)
 		):
 			return "verification: entry region out of bounds %s" % key
+	# Group mappings (advisor C0): global uniqueness, representative
+	# membership, per-command group agreement, exact union == atlas set.
+	var mapping_groups := {}
+	var mapped_commands := {}
+	for entry: Dictionary in plan["atlas_entries"]:
+		for mapping: Dictionary in entry.get("group_mappings", []):
+			var group_key := str(mapping.get("group_key", ""))
+			if group_key.is_empty() or mapping_groups.has(group_key):
+				return "verification: group mapping empty or duplicated %s" % (
+					group_key
+				)
+			mapping_groups[group_key] = true
+			var representative := int(
+				mapping.get("representative_command_index", -1)
+			)
+			# JSON round-trip yields floats: normalize through int() before
+			# any membership test (Array.has() does not cross int/float).
+			var mapping_ints := {}
+			for value: Variant in mapping.get("command_indices", []):
+				mapping_ints[int(value)] = true
+			if representative < 0 or not mapping_ints.has(representative):
+				return "verification: representative not in mapping %s" % (
+					group_key
+				)
+			for value: Variant in mapping.get("command_indices", []):
+				var index := int(value)
+				if mapped_commands.has(index):
+					return "verification: command in two mappings %d" % index
+				mapped_commands[index] = true
+				if str(commands[index].get("actor_sort_group", "")) != (
+					group_key
+				):
+					return "verification: mapping group key mismatch %d" % (
+						index
+					)
+	var atlas_command_set := {}
+	for value: Variant in plan["atlas_command_indices"]:
+		atlas_command_set[int(value)] = true
+	if mapped_commands.size() != atlas_command_set.size():
+		return "verification: mapping union size != atlas set"
+	for index: int in atlas_command_set:
+		if not mapped_commands.has(index):
+			return "verification: mapping missing command %d" % index
 	# Shadow chunks: store sha, positive size, valid segment references.
 	var segment_count: int = plan["shadow_segments"].size()
 	var chunk_records: Array = plan["shadow_chunks"]

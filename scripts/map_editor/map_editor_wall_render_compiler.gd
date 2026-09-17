@@ -133,10 +133,17 @@ static func compile_plan(
 		entries.append({
 			"key": "|".join(entry_key_parts),
 			"layers": layers,
-			"group_keys": [str(commands[indices[0]].get(
-				"actor_sort_group", ""
-			))],
+			"group_keys": [group_key],
 			"command_indices": indices.duplicate(),
+			# Explicit zero-inference mapping (advisor C0): which wall group
+			# owns which commands, and which command anchors the sprite
+			# geometry. The lowest sorted command index is the pass-1 base
+			# layer command.
+			"group_mappings": [{
+				"group_key": group_key,
+				"representative_command_index": int(indices[0]),
+				"command_indices": indices.duplicate(),
+			}],
 		})
 	# Merge entries with identical keys (shared composite across instances).
 	var unique: Dictionary = {}
@@ -147,6 +154,9 @@ static func compile_plan(
 			unique[key]["group_keys"].append_array(entry["group_keys"])
 			unique[key]["command_indices"].append_array(
 				entry["command_indices"]
+			)
+			unique[key]["group_mappings"].append_array(
+				entry["group_mappings"]
 			)
 		else:
 			unique[key] = entry
@@ -302,6 +312,7 @@ static func _serialized_entries(
 			"region": placement["region"],
 			"group_keys": entry["group_keys"],
 			"command_indices": entry["command_indices"],
+			"group_mappings": entry["group_mappings"],
 		})
 	out.sort_custom(
 		func(a: Dictionary, b: Dictionary) -> bool:
