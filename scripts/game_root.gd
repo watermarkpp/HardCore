@@ -9615,8 +9615,8 @@ func _debug_validate_fire_wall_registry(context := "") -> void:
 		assert(
 			entry is FireWallFieldController
 			and is_instance_valid(entry),
-			"fire wall registry entry %s must reference a structurally valid "
-			+ "controller (%s)" % [str(key), context]
+			"fire wall registry entry %s must reference a structurally valid controller (%s)"
+			% [str(key), context]
 		)
 		assert(
 			order_keys.has(key),
