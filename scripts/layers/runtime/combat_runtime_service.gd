@@ -165,6 +165,16 @@ func _target_rejects_damage(target: Node) -> bool:
 ## spell-resolution stream - that stream's continuation is a validated
 ## contract). Fail-closed on targets without an integer level (summons keep
 ## their own delivery rules and are not R1 scope).
+##
+## Evidence Note (R1.1, reviewer adjudication): the vanilla source-exemption
+## flag is the server-side `bo2BF` member, whose only known setter is
+## `TCowKingMonster.Create -> bo2BF := True` (牛魔王). Every known exempt
+## monster in the 1.76 data set is Level >= 50, so the `level < 50` gate in
+## MonsterStruckPolicy already yields the identical result and the runtime
+## passes `false` deliberately - there is no monster-data field carrying this
+## flag yet, and R1 must not invent one. When a future data revision adds a
+## real exemption source, replace the literal `false` with that field here;
+## the policy API stays unchanged.
 func _apply_direct_magic_walk_delay(target: Node) -> void:
 	if not target.has_method("apply_source_direct_magic_walk_delay"):
 		return

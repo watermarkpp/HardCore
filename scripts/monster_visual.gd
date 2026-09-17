@@ -92,6 +92,13 @@ var _hit_remaining := 0.0
 # O(1) state, no per-hit Timer/Node/Array allocations.
 var _pending_struck_count := 0
 var _pending_struck_level := -1
+# R1.1 attack presentation request (vanilla action queue): when a STRUCK is
+# the current action, the next attack presentation parks here (O(1), two
+# fields, no allocation) and starts when the struck and its earlier backlog
+# drain. Gameplay attack authority (_attack_timer, pending release records)
+# is untouched by this waiting.
+var _pending_attack_presentation := false
+var _pending_attack_presentation_duration := 0.0
 var _death_remaining := 0.0
 var _death_pose_held := false
 var _action_duration := 0.0
@@ -325,6 +332,7 @@ func _advance_action_timers(delta: float) -> void:
 	)
 	_death_remaining = maxf(0.0, _death_remaining - delta)
 	_try_start_pending_struck()
+	_try_start_pending_attack_presentation()
 	if death_was_playing and _death_remaining <= 0.0 and actor._dying:
 		# Keep the final frame continuously. The owner timer later extends this as
 		# the corpse hold; there must never be a one-frame idle flash in between.
@@ -938,10 +946,26 @@ func _load_client_texture(path: String, expected_size: Vector2i) -> Texture2D:
 	return ImageTexture.create_from_image(image) if image != null and not image.is_empty() else null
 
 
+## R1.1 attack presentation request entry. The vanilla client consumes the
+## next action message only after the current action finishes
+## (`while m_nCurrentAction = 0 and GetMessage(@Msg)`), so a new attack
+## presentation must NOT overwrite a STRUCK that is already playing: while
+## `_hit_remaining > 0` the request parks in the O(1) pending slot and starts
+## from `_try_start_pending_attack_presentation()` when the struck (and any
+## earlier queued struck backlog) drains. This is presentation-only waiting:
+## the monster's attack gameplay clock and release records keep running.
 func play_attack(duration := 0.46) -> void:
-	_hc_m30_walk.interrupt_pose()
-	if _death_remaining > 0.0:
+	if _death_remaining > 0.0 or _death_pose_held:
 		return
+	if _hit_remaining > 0.0:
+		_pending_attack_presentation = true
+		_pending_attack_presentation_duration = duration
+		return
+	_start_attack_visual(duration)
+
+
+func _start_attack_visual(duration: float) -> void:
+	_hc_m30_walk.interrupt_pose()
 	if visible and not SourceFrames.profile_for_id(actor.monster_id).is_empty() and actor.monster_id != 224:
 		var overlay := AttackOverlay.new()
 		var direction8 := _direction_row(actor.facing)
@@ -955,6 +979,18 @@ func play_attack(duration := 0.46) -> void:
 	_hc_m30_attack_duration = float(duration)
 	_action_duration = duration
 	_elapsed = 0.0
+
+
+## Starts the parked attack presentation once no struck is playing or queued
+## (vanilla FIFO: a struck backlog that arrived before the attack request
+## finishes first). Runs every action tick right after the struck queue.
+func _try_start_pending_attack_presentation() -> void:
+	if not _pending_attack_presentation:
+		return
+	if _hit_remaining > 0.0 or _attack_remaining > 0.0 or _pending_struck_count > 0:
+		return
+	_pending_attack_presentation = false
+	_start_attack_visual(_pending_attack_presentation_duration)
 
 
 ## Vanilla R1 entry for monster struck visuals: queue one struck event.
@@ -1065,6 +1101,8 @@ func play_death(duration := -1.0) -> float:
 	# Death is the highest priority action: a pending struck backlog must not
 	# outlive the monster or play on the corpse.
 	_pending_struck_count = 0
+	# A parked attack request is equally void once the monster dies.
+	_pending_attack_presentation = false
 	_action_duration = resolved_duration
 	_elapsed = 0.0
 	return resolved_duration

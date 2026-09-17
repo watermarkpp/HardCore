@@ -69,6 +69,9 @@ func _run() -> void:
 	await _test_struck_during_committed_step_waits()
 	await _test_struck_during_visible_movement_waits()
 	await _test_backlog_acceleration_and_drain()
+	await _test_attack_presentation_waits_for_started_struck()
+	await _test_backlog_drains_before_pending_attack_starts()
+	await _test_walk_grant_does_not_flip_playing_struck()
 	await _test_death_clears_pending()
 	await _test_queue_is_counter_only_and_capped()
 	print("MONSTER_STRUCK_VISUAL_QUEUE_PASS checks=%d" % _checks)
@@ -179,6 +182,72 @@ func _test_death_clears_pending() -> void:
 	_visual._update_animation_frame(0.0)
 	_check(_visual.current_state == "death", "death keeps the highest priority")
 	_check(_visual.pending_struck_count() == 0, "no struck starts after death")
+	await _dispose_fixture()
+
+
+## R1.1 review P1 closure (reverse direction): a started STRUCK is the current
+## vanilla action; the next attack presentation must wait in its O(1) slot
+## instead of covering the struck and letting `_hit_remaining` burn away in
+## the background. Gameplay authority is untouched by the waiting.
+func _test_attack_presentation_waits_for_started_struck() -> void:
+	await _make_fixture(43)
+	_visual.queue_struck(43)
+	_visual._advance_action_timers(0.016)
+	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck is the current action")
+	_visual.play_attack(0.5)
+	_check(_visual._attack_remaining == 0.0, "attack presentation must not preempt a playing struck")
+	_visual._advance_action_timers(0.1)
+	_check(is_equal_approx(_visual._hit_remaining, 0.14), "struck keeps burning while the attack waits")
+	_check(_visual._attack_remaining == 0.0, "attack presentation stays parked during the struck")
+	# The struck drains; the parked attack presentation starts on that tick
+	# with its FULL duration (same start-tick rule as a struck start).
+	_visual._advance_action_timers(0.2)
+	_check(_visual._hit_remaining == 0.0, "struck finished completely (no background loss)")
+	_check(is_equal_approx(_visual._attack_remaining, 0.5), "attack presentation starts after the struck with full duration")
+	_visual._update_animation_frame(0.0)
+	_check(_visual.current_state == "attack", "attack becomes the visible action after the struck")
+	await _dispose_fixture()
+
+
+## Vanilla FIFO: a struck backlog that arrived BEFORE the attack request
+## finishes before the parked attack presentation starts.
+func _test_backlog_drains_before_pending_attack_starts() -> void:
+	await _make_fixture(43)
+	_visual.queue_struck(43)
+	_visual._advance_action_timers(0.016)
+	_visual.queue_struck(43)
+	_visual.queue_struck(43)
+	_check(_visual.pending_struck_count() == 2, "two struck queued behind the playing one")
+	_visual.play_attack(0.5)
+	_visual._advance_action_timers(0.3)
+	_check(_visual.pending_struck_count() == 1, "backlog struck started instead of the parked attack")
+	_check(_visual._attack_remaining == 0.0, "attack presentation still waits behind the backlog")
+	_visual._advance_action_timers(0.5)
+	_check(_visual.pending_struck_count() == 0, "backlog drained")
+	# The last queued struck only started on the previous tick; give it its
+	# full duration before the parked attack presentation may start.
+	_visual._advance_action_timers(0.3)
+	_check(_visual._hit_remaining == 0.0, "last struck finished")
+	_check(_visual._attack_remaining > 0.0, "parked attack presentation starts after the backlog drains")
+	await _dispose_fixture()
+
+
+## P1 verification item (presentation layer ONLY): the walk cadence granting
+## the next step while a struck plays must not flip the presentation away
+## from the struck, and the struck clock must keep its own duration. The
+## gameplay position move stays authoritative and untouched - no WalkTick
+## penalty, no movement hard-stun.
+func _test_walk_grant_does_not_flip_playing_struck() -> void:
+	await _make_fixture(43)
+	_visual.queue_struck(43)
+	_visual._advance_action_timers(0.016)
+	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck started before the walk grant")
+	_enemy.velocity = Vector2(120.0, 0.0)
+	_visual._advance_action_timers(0.05)
+	_visual._update_animation_frame(0.0)
+	_check(_visual.current_state == "hit", "walk grant does not flip the presentation away from the struck")
+	_check(is_equal_approx(_visual._hit_remaining, 0.19), "walk grant neither cancels nor accelerates the struck clock")
+	_enemy.velocity = Vector2.ZERO
 	await _dispose_fixture()
 
 

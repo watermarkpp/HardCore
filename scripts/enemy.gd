@@ -6099,7 +6099,9 @@ func _apply_damage_core(
 		_boss_skill_cooldown = minf(_boss_skill_cooldown, float(phase.get("skillCooldownSeconds", _boss_skill_cooldown)))
 	if current_hp == 0:
 		_record_performance_counter(&"lethal_damage_count")
-	if visual != null and current_hp > 0:
+	# R1.1 review fix: a DOT/poison tick deals HP damage but never requests a
+	# hit animation, so the legacy counter must not count it.
+	if causes_struck and visual != null and current_hp > 0:
 		_record_performance_counter(&"hit_animation_requests")
 	_record_performance_counter(&"actor_redraw_requests")
 	_record_performance_counter(&"actor_redraw_requests_from_damage")
