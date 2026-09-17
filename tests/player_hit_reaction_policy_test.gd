@@ -8,7 +8,7 @@ extends Node
 ## D: RUN + struck keeps RUN state, zero displacement, direct RUN resume
 ## E: 0.6GU walk run-up + struck keeps 0.6GU and finishes the remaining run-up
 ## F: releasing direction input during the reaction still resets the run-up
-## G: a committed attack is never cancelled by an ordinary hit; it settles once
+## G: an active pre-commit attack survives an ordinary struck hit; it settles once
 ##    and the queued reaction plays after the action completes
 ## H: five threshold hits during one action stay a single pending bool, one 240ms
 ##    reaction, no strike-debt accumulation
@@ -180,7 +180,7 @@ func _run() -> void:
 		"松手清空后必须重新完成完整1GU助跑"
 	)
 
-	# ---- G: committed attack is never cancelled by an ordinary hit ----
+	# ---- G: active pre-commit attack survives an ordinary struck hit ----
 	var emitted := [0]
 	player.attack_requested.connect(func(_origin: Vector2, _direction: Vector2, _damage: int) -> void:
 		emitted[0] += 1
