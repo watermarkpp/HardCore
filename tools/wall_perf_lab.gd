@@ -54,6 +54,7 @@ var _actors: Array[Sprite2D] = []
 var _actor_base: Array[Vector2] = []
 var _actor_phase: Array[float] = []
 var _elapsed := 0.0
+var _camera_anchor := Vector2.ZERO
 var _expected := {}
 
 
@@ -87,7 +88,7 @@ func _parse_args() -> void:
 				window_seconds = float(pair[1])
 			"screenshot":
 				screenshot = pair[1] == "1"
-	assert(mode in ["A", "B", "C", "D"], "mode must be A|B|C|D")
+	assert(mode in ["A", "B", "C", "D", "E"], "mode must be A|B|C|D|E")
 	assert(walls_per_tier > 0, "walls must be positive")
 
 
@@ -131,12 +132,356 @@ func _build_field() -> void:
 		"instances": instances,
 	}
 	background._build_editor_runtime_instances(runtime)
+	# Production maps carry an editor runtime visual, so WorldBackground._draw
+	# renders one ground polygon + chunk canvases. Without it the lab falls
+	# into the legacy per-cell ground fill (~6.5k polygon draws of pure noise
+	# that buries the wall-content signal). Mirror the production shape.
+	if background.get("_editor_runtime_visual").is_empty():
+		background.set("_editor_runtime_visual", {
+			"design_size": [DESIGN_TILES, DESIGN_TILES],
+			"base_color": "#465827",
+		})
+	# Snapshot the centroid BEFORE mode transforms: E removes shadow sprites,
+	# which would drift the camera and break A-vs-E screenshot comparability.
+	_camera_anchor = _field_centroid()
+	if OS.has_environment("HC_LAB_DEBUG"):
+		var sample: Node = null
+		var stack: Array[Node] = [background]
+		while not stack.is_empty():
+			var node: Node = stack.pop_back()
+			if node is Sprite2D and node.has_meta("editor_runtime_instance"):
+				sample = node
+				break
+			for child: Node in node.get_children():
+				stack.append(child)
+		if sample is Sprite2D:
+			print(
+				"LAB_DEBUG first static tex=%s size=%s filter=%d" % [
+					(sample as Sprite2D).texture.resource_path.get_file(),
+					str((sample as Sprite2D).texture.get_size()),
+					(sample as Sprite2D).texture_filter,
+				]
+			)
+		var wrap_sample := _find_wrappers()
+		if not wrap_sample.is_empty():
+			for child: Node in wrap_sample[0].get_children():
+				if child is Sprite2D:
+					print(
+						"LAB_DEBUG first dynamic tex=%s size=%s" % [
+							(child as Sprite2D).texture.resource_path.get_file(),
+							str((child as Sprite2D).texture.get_size()),
+						]
+					)
+					break
+		print(
+			"LAB_DEBUG anchor=%s statics=%d wrappers=%d" % [
+				str(_camera_anchor),
+				background.get_child_count(),
+				_find_wrappers().size(),
+			]
+		)
 	if mode == "B":
 		_collapse_to_canvas()
 	elif mode == "C":
 		_collapse_to_composite()
 	elif mode == "D":
 		_rebuild_as_static(instances)
+	elif mode == "E":
+		_compile_wall_e()
+
+
+const ATLAS_WIDTH := 2048
+const CHUNK_SIZE := 1024
+
+
+## MODE E: production-target structure preview (WALL-P1R Phase 2+4 shape).
+## 1. Wall shadows bake into painter-run static chunk canvases (order-true).
+## 2. Per (asset, part) base+front composites are built in TEXTURE space and
+##    packed into ONE shared atlas; every wrapper keeps exactly one sprite
+##    with an atlas region plus the instance rotation/scale. No per-instance
+##    ImageTexture, no runtime baking. Y-sort wrappers are preserved.
+func _compile_wall_e() -> void:
+	_bake_shadow_runs()
+	_compile_dynamic_atlas()
+
+
+func _is_wall_shadow(node: Node) -> bool:
+	return (
+		node is Sprite2D
+		and node.has_meta("editor_runtime_instance")
+		and bool(node.get_meta("editor_runtime_wall_asset", false))
+		and int(node.get_meta("editor_runtime_image_pass", -1)) == 0
+	)
+
+
+func _bake_shadow_runs() -> void:
+	# Runs are CONSECUTIVE bakeable shadow children only; a fallback shadow
+	# (rotated/scaled) breaks the run so painter order and alpha-over order
+	# stay exactly as authored.
+	var children := background.get_children()
+	var runs: Array = []
+	var current: Array = []
+	var current_start := -1
+	for index: int in children.size():
+		var child: Node = children[index]
+		var plan := {}
+		if _is_wall_shadow(child):
+			plan = _shadow_bake_plan(child)
+		if not plan.is_empty():
+			if current.is_empty():
+				current_start = index
+			current.append({"sprite": child, "plan": plan})
+		elif not current.is_empty():
+			runs.append({"items": current, "start": current_start})
+			current = []
+	if not current.is_empty():
+		runs.append({"items": current, "start": current_start})
+	var baked := 0
+	var fallback := 0
+	var total_chunks := 0
+	# Reverse order keeps earlier insertion indices valid.
+	for run_index: int in range(runs.size() - 1, -1, -1):
+		var run: Dictionary = runs[run_index]
+		var items: Array = run["items"]
+		var start_index := int(run["start"])
+		var cells := {}
+		for entry: Dictionary in items:
+			var work: Image = entry["plan"]["image"]
+			var world_at: Vector2 = entry["plan"]["world_origin"]
+			baked += 1
+			var rect := Rect2i(
+				Vector2i(world_at.floor()), Vector2i(work.get_size())
+			)
+			for cx: int in range(
+				floori(float(rect.position.x) / CHUNK_SIZE),
+				floori(float(rect.end.x - 1) / CHUNK_SIZE) + 1
+			):
+				for cy: int in range(
+					floori(float(rect.position.y) / CHUNK_SIZE),
+					floori(float(rect.end.y - 1) / CHUNK_SIZE) + 1
+				):
+					var key := Vector2i(cx, cy)
+					if not cells.has(key):
+						cells[key] = []
+					cells[key].append({"image": work, "at": rect.position})
+		for entry: Dictionary in items:
+			var node: Node = entry["sprite"]
+			background.remove_child(node)
+			node.free()
+		var chunk_keys: Array = cells.keys()
+		chunk_keys.sort_custom(
+			func(a: Vector2i, b: Vector2i) -> bool:
+				return a.y < b.y if a.y == b.y else a.x < b.x
+		)
+		total_chunks += chunk_keys.size()
+		for offset: int in chunk_keys.size():
+			var key: Vector2i = chunk_keys[offset]
+			var chunk := Image.create(
+				CHUNK_SIZE, CHUNK_SIZE, false, Image.FORMAT_RGBA8
+			)
+			chunk.fill(Color(0, 0, 0, 0))
+			var origin := Vector2(key) * float(CHUNK_SIZE)
+			for cell_entry: Dictionary in cells[key]:
+				var work: Image = cell_entry["image"]
+				var at: Vector2i = Vector2i(
+					(Vector2(cell_entry["at"]) - origin).round()
+				)
+				var src := Rect2i(
+					Vector2i.ZERO, Vector2i(work.get_size())
+				)
+				var dst := at
+				if dst.x < 0:
+					src.position.x -= dst.x
+					src.size.x += dst.x
+					dst.x = 0
+				if dst.y < 0:
+					src.position.y -= dst.y
+					src.size.y += dst.y
+					dst.y = 0
+				src.size.x = mini(src.size.x, CHUNK_SIZE - dst.x)
+				src.size.y = mini(src.size.y, CHUNK_SIZE - dst.y)
+				if src.size.x <= 0 or src.size.y <= 0:
+					continue
+				chunk.blend_rect(work, src, dst)
+			var sprite := Sprite2D.new()
+			sprite.name = "WallShadowChunk_%d_%d" % [key.x, key.y]
+			sprite.texture = ImageTexture.create_from_image(chunk)
+			sprite.centered = false
+			sprite.position = origin
+			sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			sprite.set_meta("wall_static_chunk", true)
+			background.add_child(sprite)
+			background.move_child(sprite, start_index + offset)
+	for child: Node in background.get_children():
+		if _is_wall_shadow(child):
+			fallback += 1
+	print(
+		"LAB_MODE_E_SHADOWS baked=%d fallback=%d chunks=%d" % [
+			baked, fallback, total_chunks,
+		]
+	)
+
+
+func _shadow_bake_plan(sprite: Sprite2D) -> Dictionary:
+	var rotation_deg := rad_to_deg(sprite.rotation)
+	var quantized := wrapf(rotation_deg, 0.0, 360.0)
+	var scaled := sprite.scale != Vector2.ONE
+	# Conservative bake contract: only axis-aligned, unscaled shadows are
+	# baked in the lab. CPU resize/rotate cannot bit-match the GPU's NEAREST
+	# sampling phases for transformed sprites, and the visual oracle demands
+	# exactness. Transformed shadows stay as individual sprites (rare in
+	# production); Phase 2 owns the error-budget decision for them.
+	if scaled or quantized != 0.0:
+		return {}
+	var image: Image = sprite.texture.get_image()
+	if image.is_compressed():
+		image.decompress()
+	var origin := sprite.position + sprite.offset
+	return {"image": image, "world_origin": origin}
+
+
+func _composite_key(sprites: Array[Sprite2D]) -> String:
+	var parts: PackedStringArray = []
+	for sprite: Sprite2D in sprites:
+		parts.append("%s|%s|%s" % [
+			str(sprite.texture.resource_path), str(sprite.offset),
+			str(Vector2(sprite.texture.get_size())),
+		])
+	return "|".join(parts)
+
+
+func _compile_dynamic_atlas() -> void:
+	var wrappers := _find_wrappers()
+	var groups := {}  # key -> {"sprites": [...], "image": Image, "min": Vector2}
+	for wrapper: Node2D in wrappers:
+		var sprites := _wrapper_wall_sprites(wrapper)
+		if sprites.size() < 2:
+			continue
+		var key := _composite_key(sprites)
+		if not groups.has(key):
+			groups[key] = _build_part_composite(sprites)
+	var entries: Array = groups.keys()
+	entries.sort()
+	var regions := _pack_atlas(entries, groups)
+	var atlas: Texture2D = groups["__atlas_texture__"]
+	var replaced := 0
+	for wrapper: Node2D in wrappers:
+		var sprites := _wrapper_wall_sprites(wrapper)
+		if sprites.size() < 2:
+			continue
+		var key := _composite_key(sprites)
+		var plan: Dictionary = groups[key]
+		var sprite := Sprite2D.new()
+		sprite.name = "WallAtlasPart"
+		sprite.texture = atlas
+		sprite.region_enabled = true
+		sprite.region_rect = regions[key]
+		sprite.centered = false
+		sprite.position = sprites[0].position
+		sprite.offset = plan["min"]
+		sprite.rotation = sprites[0].rotation
+		sprite.scale = sprites[0].scale
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		sprite.set_meta("editor_runtime_wall_composite", true)
+		for old: Sprite2D in sprites:
+			wrapper.remove_child(old)
+			old.free()
+		wrapper.add_child(sprite)
+		wrapper.move_child(sprite, 0)
+		replaced += 1
+	print(
+		"LAB_MODE_E_ATLAS unique_composites=%d replaced_wrappers=%d" % [
+			entries.size(), replaced,
+		]
+	)
+
+
+func _wrapper_wall_sprites(wrapper: Node2D) -> Array[Sprite2D]:
+	var sprites: Array[Sprite2D] = []
+	for child: Node in wrapper.get_children():
+		if child is Sprite2D and child.has_meta("editor_runtime_instance"):
+			sprites.append(child)
+	sprites.sort_custom(
+		func(a: Sprite2D, b: Sprite2D) -> bool:
+			return int(a.get_meta("editor_runtime_image_pass", 0)) < int(
+				b.get_meta("editor_runtime_image_pass", 0)
+			)
+	)
+	return sprites
+
+
+## Composite in TEXTURE space: sources placed at their own offsets relative
+## to the shared minimum corner. Instance rotation/scale are NOT baked, so
+## identical assets share one atlas region across all instances.
+func _build_part_composite(sprites: Array[Sprite2D]) -> Dictionary:
+	var minimum: Vector2 = sprites[0].offset
+	var maximum: Vector2 = sprites[0].offset + Vector2(
+		sprites[0].texture.get_size()
+	)
+	for sprite: Sprite2D in sprites:
+		minimum = minimum.min(sprite.offset)
+		maximum = maximum.max(
+			sprite.offset + Vector2(sprite.texture.get_size())
+		)
+	var size := (maximum - minimum).ceil()
+	var composite := Image.create(
+		int(size.x), int(size.y), false, Image.FORMAT_RGBA8
+	)
+	composite.fill(Color(0, 0, 0, 0))
+	for sprite: Sprite2D in sprites:
+		var image: Image = sprite.texture.get_image()
+		if image.is_compressed():
+			image.decompress()
+		var at := Vector2i((sprite.offset - minimum).round())
+		var src := Rect2i(Vector2i.ZERO, Vector2i(image.get_size()))
+		if int(sprite.get_meta("editor_runtime_image_pass", 1)) == 1:
+			composite.blit_rect(image, src, at)
+		else:
+			composite.blend_rect(image, src, at)
+	return {"image": composite, "min": minimum}
+
+
+func _pack_atlas(keys: Array, groups: Dictionary) -> Dictionary:
+	keys.sort_custom(
+		func(a: String, b: String) -> bool:
+			var sa: Vector2 = Vector2(groups[a]["image"].get_size())
+			var sb: Vector2 = Vector2(groups[b]["image"].get_size())
+			return sa.y > sb.y if sa.y != sb.y else sa.x > sb.x
+	)
+	var rows: Array[Rect2i] = []
+	var regions := {}
+	var cursor_y := 0
+	for key: String in keys:
+		var image: Image = groups[key]["image"]
+		var rect := Rect2i(Vector2i.ZERO, Vector2i(image.get_size()))
+		var placed := false
+		for row_index: int in rows.size():
+			var row := rows[row_index]
+			if row.position.x + row.size.x + rect.size.x <= ATLAS_WIDTH:
+				rect.position = Vector2i(
+					row.position.x + row.size.x, row.position.y
+				)
+				row.size.x += rect.size.x
+				rows[row_index] = row
+				placed = true
+				break
+		if not placed:
+			rect.position = Vector2i(0, cursor_y)
+			rows.append(rect)
+			cursor_y += rect.size.y
+		regions[key] = rect
+	var atlas := Image.create(
+		ATLAS_WIDTH, maxi(cursor_y, 1), false, Image.FORMAT_RGBA8
+	)
+	atlas.fill(Color(0, 0, 0, 0))
+	for key: String in keys:
+		atlas.blend_rect(
+			groups[key]["image"],
+			Rect2i(Vector2i.ZERO, Vector2i(groups[key]["image"].get_size())),
+			regions[key].position
+		)
+	groups["__atlas_texture__"] = ImageTexture.create_from_image(atlas)
+	return regions
 
 
 func _synthetic_instances() -> Array:
@@ -439,7 +784,14 @@ func _first_wall_texture() -> Texture2D:
 func _attach_camera() -> void:
 	var camera := Camera2D.new()
 	camera.name = "LabCamera"
-	camera.position = _field_centroid()
+	camera.position = _camera_anchor
+	# Diagnostic override: park the camera away from the field to separate
+	# scene-constant draw overhead from field-visible draw cost.
+	var override := OS.get_environment("HC_LAB_CAMPOS")
+	if not override.is_empty():
+		var parts := override.split(",")
+		if parts.size() == 2:
+			camera.position = Vector2(float(parts[0]), float(parts[1]))
 	add_child(camera)
 	camera.make_current()
 
@@ -453,11 +805,21 @@ func _field_centroid() -> Vector2:
 		if child is Sprite2D and child.has_meta("editor_runtime_instance"):
 			sum += (child as Sprite2D).position
 			count += 1
+			if OS.has_environment("HC_LAB_DEBUG") and count <= 3:
+				print("LAB_DEBUG static sample pos=%s" % str(child.position))
 	for wrapper: Node2D in _find_wrappers():
 		sum += wrapper.position
 		count += 1
+		if OS.has_environment("HC_LAB_DEBUG") and count in [201, 202, 203]:
+			print("LAB_DEBUG wrapper sample pos=%s" % str(wrapper.position))
 	if count == 0:
 		return Vector2.ZERO
+	if OS.has_environment("HC_LAB_DEBUG"):
+		print(
+			"LAB_DEBUG centroid sum=%s count=%d mean=%s" % [
+				str(sum), count, str(sum / float(count)),
+			]
+		)
 	return sum / float(count)
 
 

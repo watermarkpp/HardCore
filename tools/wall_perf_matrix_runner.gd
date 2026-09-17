@@ -11,9 +11,13 @@ extends Node
 
 const TIMEOUT_MSEC := 300000
 const DEFAULT_MAPS := "比奇省,赤月峡谷,黑暗地带,石墓一层"
+# User-reported lag hotspot: the first clamp-worm pack right after entering
+# 黑暗地带 (top door cluster). Format "map_name:tx:ty;...".
+const DEFAULT_HOTSPOTS := "黑暗地带:21:11"
 
 var _game: Node = null
 var _maps: PackedStringArray = DEFAULT_MAPS.split(",")
+var _hotspots := {}
 var _seconds := 30.0
 var _stabilize := 8.0
 
@@ -27,11 +31,23 @@ func _ready() -> void:
 		match pair[0]:
 			"maps":
 				_maps = pair[1].split(",")
+			"hotspots":
+				_parse_hotspots(pair[1])
 			"seconds":
 				_seconds = float(pair[1])
 			"stabilize":
 				_stabilize = float(pair[1])
+	if _hotspots.is_empty():
+		_parse_hotspots(DEFAULT_HOTSPOTS)
 	_run.call_deferred()
+
+
+func _parse_hotspots(raw: String) -> void:
+	for entry: String in raw.split(";", false):
+		var fields := entry.split(":")
+		if fields.size() != 3:
+			continue
+		_hotspots[fields[0]] = Vector2i(int(fields[1]), int(fields[2]))
 
 
 func _run() -> void:
@@ -55,6 +71,8 @@ func _run() -> void:
 		print("WALL_PERF_MATRIX_TRAVEL map=%s" % label)
 		_game.change_zone(label)
 		await _wait_transition_done(deadline)
+		if _hotspots.has(label):
+			_pin_player_to_tile(label, _hotspots[label])
 		await get_tree().create_timer(_stabilize).timeout
 		probe.start_window(label, _seconds)
 		var summary: Dictionary = await probe.window_finished
@@ -65,6 +83,25 @@ func _run() -> void:
 		)
 	print("WALL_PERF_MATRIX_DONE maps=%d" % _maps.size())
 	get_tree().quit(0)
+
+
+func _pin_player_to_tile(map_name: String, tile: Vector2i) -> void:
+	if _game == null or _game.get("player") == null:
+		return
+	# Use the game's own tile converter: player world space is the canonical
+	# screen-px space from the map's projection profile, NOT raw ground px.
+	var world: Vector2 = _game._canonical_grid_cell_to_screen_px(tile)
+	if world == Vector2.INF or world == Vector2.ZERO:
+		return
+	_game._set_player_world_position(world)
+	var background: Node = _game.get("background")
+	if background != null and background.has_method("set_focus_position"):
+		background.set_focus_position(world)
+	print(
+		"WALL_PERF_HOTSPOT map=%s tile=[%d,%d] world=[%.0f,%.0f]" % [
+			map_name, tile.x, tile.y, world.x, world.y,
+		]
+	)
 
 
 func _wait_world_ready(deadline: int) -> void:

@@ -193,6 +193,18 @@ func _finish_window() -> void:
 	var frame_stats := _frame_percentiles()
 	summary["frame_ms"] = frame_stats
 	summary["video_adapter"] = RenderingServer.get_video_adapter_name()
+	var camera := get_viewport().get_camera_2d()
+	if camera != null:
+		summary["camera_world_position"] = [
+			snappedf(camera.get_global_position().x, 0.5),
+			snappedf(camera.get_global_position().y, 0.5),
+		]
+	if scan_root != null and scan_root.get("player") != null:
+		var player: Node2D = scan_root.get("player")
+		summary["player_world_position"] = [
+			snappedf(player.get_global_position().x, 0.5),
+			snappedf(player.get_global_position().y, 0.5),
+		]
 	var json := JSON.stringify(summary)
 	_write_outputs(json)
 	print("WALL_PERF_SUMMARY %s" % json)
@@ -239,10 +251,23 @@ func _collect_counts() -> Dictionary:
 		"wrapper_dynamic_children": 0,
 		"bridge_overlay_count": 0,
 		"static_sprite_count": 0,
+		"static_wall_shadow_count": 0,
+		"static_other_count": 0,
 		"visible_wrappers": 0,
 		"visible_dynamic_children": 0,
-		"visible_static_sprites": 0,
+		"visible_bridge_overlay_count": 0,
+		"visible_wall_base_count": 0,
+		"visible_wall_front_count": 0,
+		"visible_wall_shadow_count": 0,
+		"visible_static_other_count": 0,
+		"static_chunk_count": 0,
+		"visible_static_chunk_count": 0,
+		"visible_wall_composite_count": 0,
 	}
+	# Texture diversity of visible items; the renderer can only batch items
+	# that share a texture, so unique counts bound the best-case batching.
+	counts["visible_unique_texture_ids"] = {}
+	counts["visible_unique_wall_texture_ids"] = {}
 	if background == null or not is_instance_valid(background):
 		return counts
 	var commands: Array = background.get("_editor_runtime_bridge_commands")
@@ -258,6 +283,14 @@ func _collect_counts() -> Dictionary:
 	var root := scan_root if scan_root != null else get_parent()
 	var viewport_rect := get_viewport().get_visible_rect()
 	_scan_tree(root, viewport_rect, counts, false)
+	counts["visible_unique_texture_count"] = (
+		counts["visible_unique_texture_ids"].size()
+	)
+	counts["visible_unique_wall_texture_count"] = (
+		counts["visible_unique_wall_texture_ids"].size()
+	)
+	counts.erase("visible_unique_texture_ids")
+	counts.erase("visible_unique_wall_texture_ids")
 	return counts
 
 
@@ -276,25 +309,73 @@ func _scan_tree(
 			for sprite: Node in child.get_children():
 				if sprite.has_meta("static_authored_wall_bridge"):
 					overlay_count += 1
-				if (
-					sprite is CanvasItem
-					and _item_visible(sprite, viewport_rect)
-				):
-					any_visible = true
-				dynamic_children += 1
+					if sprite is CanvasItem and _item_visible(
+						sprite, viewport_rect
+					):
+						any_visible = true
+						counts["visible_bridge_overlay_count"] += 1
+						_track_texture(sprite, counts, false)
+				else:
+					# Pure dynamic children: base/front only, no bridge.
+					dynamic_children += 1
+					if sprite.get_meta("editor_runtime_wall_composite", false):
+						if sprite is CanvasItem and _item_visible(
+							sprite, viewport_rect
+						):
+							any_visible = true
+							counts["visible_wall_composite_count"] += 1
+							_track_texture(sprite, counts, true)
+					elif sprite is CanvasItem and _item_visible(
+						sprite, viewport_rect
+					):
+						any_visible = true
+						var pass_index := int(
+							sprite.get_meta("editor_runtime_image_pass", -1)
+						)
+						if pass_index == 1:
+							counts["visible_wall_base_count"] += 1
+						elif pass_index == 2:
+							counts["visible_wall_front_count"] += 1
+						_track_texture(sprite, counts, true)
 			counts["bridge_overlay_count"] += overlay_count
 			counts["wrapper_dynamic_children"] += dynamic_children
 			if any_visible:
 				counts["visible_wrappers"] += 1
 				counts["visible_dynamic_children"] += dynamic_children
 			_scan_tree(child, viewport_rect, counts, true)
+		elif not inside_wrapper and child.has_meta("wall_static_chunk"):
+			counts["static_chunk_count"] += 1
+			if child is CanvasItem and _item_visible(child, viewport_rect):
+				counts["visible_static_chunk_count"] += 1
+				_track_texture(child, counts, false)
+			_scan_tree(child, viewport_rect, counts, false)
 		elif not inside_wrapper and child.has_meta("editor_runtime_instance"):
 			counts["static_sprite_count"] += 1
+			var is_wall_shadow: bool = (
+				child.get_meta("editor_runtime_wall_asset", false)
+				and int(child.get_meta("editor_runtime_image_pass", -1)) == 0
+			)
+			if is_wall_shadow:
+				counts["static_wall_shadow_count"] += 1
+			else:
+				counts["static_other_count"] += 1
 			if child is CanvasItem and _item_visible(child, viewport_rect):
-				counts["visible_static_sprites"] += 1
+				if is_wall_shadow:
+					counts["visible_wall_shadow_count"] += 1
+				else:
+					counts["visible_static_other_count"] += 1
+				_track_texture(child, counts, is_wall_shadow)
 			_scan_tree(child, viewport_rect, counts, false)
 		else:
 			_scan_tree(child, viewport_rect, counts, inside_wrapper)
+
+
+func _track_texture(item: Node, counts: Dictionary, wall: bool) -> void:
+	if item is Sprite2D and (item as Sprite2D).texture != null:
+		var id: int = (item as Sprite2D).texture.get_instance_id()
+		counts["visible_unique_texture_ids"][id] = true
+		if wall:
+			counts["visible_unique_wall_texture_ids"][id] = true
 
 
 func _item_visible(item: CanvasItem, viewport_rect: Rect2) -> bool:

@@ -24,7 +24,7 @@ function Invoke-Lab([string]$Mode) {
         2>&1 | Select-String "LAB_VALIDATE|WALL_PERF_SUMMARY|SCREENSHOT|SCRIPT ERROR"
 }
 
-foreach ($mode in @("A", "B", "C", "D")) {
+foreach ($mode in @("A", "B", "C", "D", "E")) {
     if ($SkipLabs) { break }
     Invoke-Lab $mode
 }

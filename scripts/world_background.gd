@@ -2088,6 +2088,12 @@ func _build_one_editor_runtime_instance(
 	)
 	sprite.set_meta("editor_runtime_render_domain", render_domain)
 	sprite.set_meta("editor_runtime_image_pass", int(command.get("image_pass", -1)))
+	# WALL-P0 diagnostics: inert metadata letting the perf probe classify
+	# wall sprites (shadow vs base/front) without re-deriving asset types.
+	sprite.set_meta(
+		"editor_runtime_wall_asset",
+		str(command.get("asset", {}).get("asset_type", "")) == "wall_module"
+	)
 	if actor_sort_root != null:
 		# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
 		# Keep the sprite in that same z domain so Y order, not a fixed z,
