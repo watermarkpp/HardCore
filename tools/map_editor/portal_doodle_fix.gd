@@ -25,6 +25,15 @@ extends SceneTree
 ##   godot --headless -s tools/map_editor/portal_doodle_fix.gd -- scan
 ##   godot --headless -s tools/map_editor/portal_doodle_fix.gd -- apply
 ##   godot --headless -s tools/map_editor/portal_doodle_fix.gd -- verify
+##   godot --headless -s tools/map_editor/portal_doodle_fix.gd -- shrink-scan
+##   godot --headless -s tools/map_editor/portal_doodle_fix.gd -- shrink-apply
+##
+## The shrink action has a WIDER scope than the occlusion fix (user order):
+## EVERY graffiti whose world rect intersects a portal's world rect gets
+## shrink 10% x3, regardless of paint order - doodles that paint before the
+## portal never covered it (no layer move needed) but they still stand
+## under the portal and must be shrunk. Doodles already at scale_level
+## <= -3 (the user's five maps + previous apply rounds) are skipped.
 
 const REGISTRY_PATH := "res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
 const PORTAL_ASSET_PREFIX := "user.portal_gate."
@@ -36,7 +45,10 @@ func _init() -> void:
 	var mode := "scan"
 	if args.size() >= 1:
 		mode = args[0]
-	assert(mode in ["scan", "apply", "verify"], "mode must be scan|apply|verify")
+	assert(
+		mode in ["scan", "apply", "verify", "shrink-scan", "shrink-apply"],
+		"mode must be scan|apply|verify|shrink-scan|shrink-apply"
+	)
 	var registry: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
 		REGISTRY_PATH
 	))
@@ -128,10 +140,16 @@ func _process_map(map_key: String, mode: String, totals: Dictionary) -> void:
 			portal_rects[instance_id] = (portal_rects[instance_id] as Rect2).merge(
 				rect
 			)
-	# Covering detection: doodle command after portal's last command,
-	# rects intersect.
+	# Spatial relation (no paint-order filter): doodle stands UNDER the
+	# portal iff its world rect intersects the portal's world rect.
+	var under_portal := {}
+	for portal_id: String in portal_rects:
+		var portal_rect: Rect2 = portal_rects[portal_id]
+		for doodle: Dictionary in doodle_commands:
+			if (doodle["rect"] as Rect2).intersects(portal_rect):
+				under_portal[str(doodle["instance_id"])] = portal_id
+	# Occlusion relation: only doodles painting AFTER the portal.
 	var covering_by_doodle := {}
-	var other_covering := {}
 	for portal_id: String in portal_last_index:
 		var portal_last := int(portal_last_index[portal_id])
 		var portal_rect: Rect2 = portal_rects.get(portal_id, Rect2())
@@ -143,6 +161,47 @@ func _process_map(map_key: String, mode: String, totals: Dictionary) -> void:
 			if not (doodle["rect"] as Rect2).intersects(portal_rect):
 				continue
 			covering_by_doodle[str(doodle["instance_id"])] = portal_id
+	if mode == "shrink-scan" or mode == "shrink-apply":
+		if under_portal.is_empty():
+			return
+		totals["maps"] = int(totals["maps"]) + 1
+		var shrink_index := {}
+		for instance: Dictionary in object_base:
+			shrink_index[str(instance.get("instance_id", ""))] = instance
+		var changed := 0
+		for doodle_id: String in under_portal:
+			var doodle: Dictionary = shrink_index.get(doodle_id, {})
+			if int(doodle.get("instance_scale_level", 0)) <= -3:
+				continue
+			if mode == "shrink-apply":
+				doodle["instance_custom_scale"] = true
+				doodle["instance_scale_level"] = (
+					int(doodle.get("instance_scale_level", 0)) - 3
+				)
+				print(
+					"PORTAL_DOODLE2_SHRUNK map=%s doodle=%s asset=%s scale_level->%d under=%s" % [
+						map_key, doodle_id, str(doodle.get("asset_id", "")),
+						int(doodle["instance_scale_level"]),
+						str(under_portal[doodle_id]),
+					]
+				)
+			else:
+				print(
+					"PORTAL_DOODLE2_SHRINK_HIT map=%s doodle=%s asset=%s tile=%s scale_level=%s under=%s" % [
+						map_key, doodle_id, str(doodle.get("asset_id", "")),
+						str(doodle.get("tile", [])),
+						str(doodle.get("instance_scale_level", 0)),
+						str(under_portal[doodle_id]),
+					]
+				)
+			changed += 1
+		totals["covering"] = int(totals["covering"]) + changed
+		if mode == "shrink-apply" and changed > 0:
+			var out := FileAccess.open(path, FileAccess.WRITE)
+			assert(out != null, "cannot write %s" % path)
+			out.store_string(JSON.stringify(doc, "  ") + "\n")
+			out.close()
+		return
 	if covering_by_doodle.is_empty():
 		return
 	totals["maps"] = int(totals["maps"]) + 1
