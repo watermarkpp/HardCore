@@ -175,6 +175,12 @@ const PERFORMANCE_COUNTER_FIELDS: Array[String] = [
 	"hit_animation_requests",
 	"overhead_health_refreshes",
 	"actor_redraw_requests_from_damage",
+	## R1 monster struck system: aggregate counters only, never per-hit logs.
+	"monster_struck_event_count",
+	"monster_struck_visual_pending_max",
+	"monster_direct_magic_walk_delay_count",
+	"monster_magic_mine_struck_count",
+	"monster_dot_no_struck_count",
 ]
 const PERFORMANCE_FIELDS: Array[String] = PERFORMANCE_COUNTER_FIELDS
 

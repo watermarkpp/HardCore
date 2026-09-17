@@ -318,6 +318,19 @@ func reset(now_ms: Variant) -> bool:
 	return true
 
 
+## Direct-magic struck (RM_MAGSTRUCK) walk postponement. The original server
+## runs `m_dwWalkTick := m_dwWalkTick + 800 + Random(1000)`: the delay only
+## pushes the NEXT autonomous walk grant forward. It must not reset cadence
+## counters, must not touch the walk-wait lock, and must not cancel a
+## committed movement step (that step finishes; the following grant waits).
+## The caller owns the 800..1799ms composition (MonsterStruckPolicy).
+func postpone_walk_tick_ms(delay_ms: int) -> bool:
+	if not configured or authority_violation:
+		return false
+	walk_tick_ms += maxi(0, delay_ms)
+	return true
+
+
 func state_snapshot() -> Dictionary:
 	return {
 		"contract_id": CONTRACT_ID,

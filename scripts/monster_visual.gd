@@ -7,6 +7,7 @@ const ProjectileVisual := preload("res://scripts/monster_ranged_projectile_effec
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
+const MonsterStruckPolicyScript := preload("res://scripts/monster_struck_policy.gd")
 const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
 const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_contacts.json"
 const MANUAL_ALIGNMENT_DATA_PATH := (
@@ -84,6 +85,13 @@ var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
 var _hit_remaining := 0.0
+# Vanilla STRUCK queue (R1): incoming struck events queue as an integer while
+# the monster finishes its current committed action (attack pose / movement
+# step / earlier struck). A queued struck NEVER burns in the background:
+# _hit_remaining is assigned only when the struck becomes the visible action.
+# O(1) state, no per-hit Timer/Node/Array allocations.
+var _pending_struck_count := 0
+var _pending_struck_level := -1
 var _death_remaining := 0.0
 var _death_pose_held := false
 var _action_duration := 0.0
@@ -305,8 +313,18 @@ func _process(delta: float) -> void:
 func _advance_action_timers(delta: float) -> void:
 	var death_was_playing := _death_remaining > 0.0
 	_attack_remaining = maxf(0.0, _attack_remaining - delta)
-	_hit_remaining = maxf(0.0, _hit_remaining - delta)
+	# Only a struck that already STARTED counts down. With a queued backlog
+	# (>= 2) the original client plays frame time at 2/3 speed, i.e. the
+	# countdown runs at 1.5x until the backlog drains (MonsterStruckPolicy).
+	_hit_remaining = maxf(
+		0.0,
+		_hit_remaining
+		- delta * MonsterStruckPolicyScript.struck_speed_multiplier(
+			_pending_struck_count
+		)
+	)
 	_death_remaining = maxf(0.0, _death_remaining - delta)
+	_try_start_pending_struck()
 	if death_was_playing and _death_remaining <= 0.0 and actor._dying:
 		# Keep the final frame continuously. The owner timer later extends this as
 		# the corpse hold; there must never be a one-frame idle flash in between.
@@ -939,6 +957,79 @@ func play_attack(duration := 0.46) -> void:
 	_elapsed = 0.0
 
 
+## Vanilla R1 entry for monster struck visuals: queue one struck event.
+## O(1): integer counter only, no per-hit Timer/Node/Dictionary allocation.
+## The struck starts only after the monster's current committed action
+## (attack pose / movement step / earlier struck) finishes, mirroring the
+## original client action queue where SM_STRUCK is consumed after the current
+## action completes. Duration is resolved at start time from the monster's
+## canonical ActStruck frame count and MonsterStruckPolicy.struck_frame_ms.
+func queue_struck(monster_level := -1) -> void:
+	if _death_remaining > 0.0 or _death_pose_held:
+		return
+	if not is_instance_valid(actor):
+		return
+	if _pending_struck_count < MonsterStruckPolicyScript.MAX_PENDING_STRUCK:
+		_pending_struck_count += 1
+	if monster_level > 0:
+		_pending_struck_level = monster_level
+	RuntimeDiagnostics.increment_performance_counter(
+		&"monster_struck_event_count"
+	)
+	RuntimeDiagnostics.record_performance_max(
+		&"monster_struck_visual_pending_max",
+		float(_pending_struck_count)
+	)
+
+
+func pending_struck_count() -> int:
+	return _pending_struck_count
+
+
+## The struck becomes the visible action only when no death pose, no attack
+## pose, no earlier struck, and no committed movement step is playing.
+func _can_begin_struck() -> bool:
+	if _death_remaining > 0.0 or _death_pose_held:
+		return false
+	if _attack_remaining > 0.0 or _hit_remaining > 0.0:
+		return false
+	if not is_instance_valid(actor):
+		return false
+	# A committed movement step finishes first (original action-queue order).
+	# The struck never cancels the step and never plays "recoil while sliding".
+	if actor._movement_step_active or _hc_m30_is_walking():
+		return false
+	return true
+
+
+func _try_start_pending_struck() -> void:
+	if _pending_struck_count <= 0 or not _can_begin_struck():
+		return
+	_pending_struck_count -= 1
+	var struck_level := (
+		_pending_struck_level
+		if _pending_struck_level > 0
+		else (actor.level if is_instance_valid(actor) else 1)
+	)
+	var frame_count := maxi(
+		1,
+		MonsterAnimationPolicy.frame_count(active_resources, &"hit")
+	)
+	# Vanilla duration = ActStruck frames x max(80, 200 - level * 5) ms.
+	# No per-monster-name switch and no global 0.22s constant.
+	var duration := float(
+		frame_count * MonsterStruckPolicyScript.struck_frame_ms(struck_level)
+	) / 1000.0
+	_hc_m30_walk.interrupt_pose()
+	_hit_remaining = duration
+	_hc_m30_hit_duration = duration
+	_action_duration = duration
+	_elapsed = 0.0
+
+
+## Legacy direct-start primitive (test/compatibility callers only). The
+## production damage path must go through queue_struck so a struck during an
+## attack or committed movement step waits instead of silently burning away.
 func play_hit(duration := 0.22) -> void:
 	_hc_m30_walk.interrupt_pose()
 	if _death_remaining > 0.0:
@@ -971,6 +1062,9 @@ func play_death(duration := -1.0) -> float:
 	_hc_m30_death_duration = resolved_duration
 	_hit_remaining = 0.0
 	_attack_remaining = 0.0
+	# Death is the highest priority action: a pending struck backlog must not
+	# outlive the monster or play on the corpse.
+	_pending_struck_count = 0
 	_action_duration = resolved_duration
 	_elapsed = 0.0
 	return resolved_duration

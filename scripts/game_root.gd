@@ -9809,6 +9809,11 @@ func _ignore_canonical_ground_visual_tick(
 
 
 func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skill_id: String) -> void:
+	# R1: ground-effect ticks are the RM_MAGSTRUCK_MINE family (the vanilla
+	# TFireBurnEvent.Run sends RM_MAGSTRUCK_MINE, never RM_MAGSTRUCK). They
+	# keep normal MAC/damage and an ordinary STRUCK on positive damage, but
+	# must never postpone the target's walk tick by 800..1799ms - otherwise a
+	# fire wall would freeze a whole pack in place one second at a time.
 	_combat_runtime.apply_enemy_direct_spell_damage(
 		enemy,
 		stable_skill_id,
@@ -9818,6 +9823,7 @@ func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skil
 		Callable(self, "_resolve_magic_defense"),
 		-1,
 		_direct_spell_target_stats_scratch,
+		CombatRuntimeServiceScript.EnemyMagicDeliveryKind.MAGSTRUCK_MINE,
 	)
 
 

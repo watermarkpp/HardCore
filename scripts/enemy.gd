@@ -37,6 +37,12 @@ const MonsterTargetMagicEffectScript := preload(
 const MonsterMovementCadenceScript := preload(
 	"res://scripts/monster_movement_cadence.gd"
 )
+const MonsterStruckPolicyScript := preload(
+	"res://scripts/monster_struck_policy.gd"
+)
+## Shared read-only empty damage context so DOT/poison ticks never allocate a
+## per-tick Dictionary on the damage core path.
+const EMPTY_DAMAGE_CONTEXT: Dictionary = {}
 const MonsterNaturalRegenPolicyScript := preload(
 	"res://scripts/monster_natural_regen_policy.gd"
 )
@@ -2353,7 +2359,10 @@ func _physics_process_internal(delta: float) -> void:
 		_background_accumulated_delta = 0.0
 	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - delta)
 	_spatial_index_update()
-	_attack_timer = maxf(0.0, _attack_timer - delta)
+	# Vanilla m_dwHitTick is an absolute deadline: an already-overdue attack
+	# stays overdue (negative). Clamping at 0 would fabricate extra wait when
+	# a struck adds its small delay to an expired deadline (R1 policy).
+	_attack_timer -= delta
 	_hc_m30_attack_pose_remaining = maxf(0.0, _hc_m30_attack_pose_remaining - delta)
 	_update_status_effects(delta)
 	# Poison/status damage and natural regeneration are independent. Resolve
@@ -2680,7 +2689,9 @@ func _on_background_wakeup_timeout() -> void:
 		return
 	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - elapsed_seconds)
 	_spatial_index_update()
-	_attack_timer = maxf(0.0, _attack_timer - elapsed_seconds)
+	# Same negative-allowed deadline as the foreground tick: an overdue attack
+	# must stay overdue across background wakeups (R1 policy).
+	_attack_timer -= elapsed_seconds
 	_hc_m30_attack_pose_remaining = maxf(0.0, _hc_m30_attack_pose_remaining - elapsed_seconds)
 	_update_status_effects(elapsed_seconds)
 	if _dying or _death_pending:
@@ -6032,6 +6043,19 @@ func take_damage(
 	attacker: Node2D = null,
 	damage_context: Dictionary = {},
 ) -> void:
+	_apply_damage_core(amount, attacker, damage_context, true)
+
+
+## Shared damage core. `causes_struck` separates the vanilla ordinary STRUCK
+## channel (RM_STRUCK, sent only for positive direct damage) from DOT/poison
+## (DamageHealth only, never RM_STRUCK). Poison must keep dealing HP without
+## a struck visual, an attack deadline penalty or a walk delay.
+func _apply_damage_core(
+	amount: int,
+	attacker: Node2D,
+	damage_context: Dictionary,
+	causes_struck: bool,
+) -> void:
 	if _dying or _death_pending:
 		return
 	_record_performance_counter(&"take_damage_calls")
@@ -6045,10 +6069,23 @@ func take_damage(
 	_refresh_overhead_health()
 	if is_boss and not boss_rule.is_empty():
 		_apply_health_stage_mechanics()
-	if visual != null and current_hp > 0:
-		visual.play_hit()
+	if causes_struck and amount > 0 and current_hp > 0:
+		# Vanilla ordinary STRUCK (nDamage > 0, no MaxHP-percentage threshold):
+		# the NEXT attack deadline slips slightly and a struck visual event is
+		# queued. It never cancels a committed attack, never locks movement and
+		# never touches the walk cadence (the vanilla WalkTime struck line is
+		# commented out in all three verifiable source chains).
+		_apply_source_struck_attack_delay()
+		if visual != null:
+			visual.queue_struck(level)
 		if hp_before_damage - current_hp > 0:
 			_emit_player_physical_contact(attacker, damage_context)
+	elif not causes_struck and amount > 0:
+		# DOT tick: HP change only. Counted for R1 diagnostics so a poisoned
+		# pack provably stays free of struck recoil.
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_dot_no_struck_count"
+		)
 	if is_boss and _boss_phase_enabled and not _boss_phase_two and current_hp <= max_hp / 2:
 		_boss_phase_two = true
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
@@ -6069,6 +6106,51 @@ func take_damage(
 	queue_redraw()
 	if current_hp == 0:
 		_mark_death_pending()
+
+
+## Vanilla ordinary struck attack-tick penalty:
+## m_dwHitTick += 150 - min(130, Level * 4). Applied to the NEXT attack
+## deadline only; a committed attack release settles untouched.
+func _apply_source_struck_attack_delay() -> void:
+	_attack_timer += float(
+		MonsterStruckPolicyScript.attack_delay_ms(level)
+	) / 1000.0
+
+
+## Direct magic (RM_MAGSTRUCK) that passed the anti-magic stage: postpone the
+## next autonomous walk by 800 + Random(1000) ms through the movement
+## cadence. Never cancels a committed step, never clears a path session and
+## never freezes attacks (that would be control_time, which the vanilla code
+## does not do here). Fire-wall / ground-mine ticks (RM_MAGSTRUCK_MINE) must
+## never reach this method.
+## The roll comes from this actor's own RNG stream by default (the vanilla
+## server draws Random(1000) from the shared server stream, never from a
+## per-spell resolution stream - consuming the caller's spell RNG here would
+## shift the validated direct-spell RNG continuation, see
+## direct_spell_compiled_stats_parity_test). Callers may still pass an
+## explicit deterministic roll for tests.
+func apply_source_direct_magic_walk_delay(random_0_to_999 := -1) -> void:
+	if _dying or _death_pending:
+		return
+	if _movement_cadence == null:
+		return
+	var roll := random_0_to_999
+	if roll < 0:
+		roll = _rng.randi_range(0, 999)
+	if _movement_cadence.postpone_walk_tick_ms(
+		MonsterStruckPolicyScript.direct_magic_walk_delay_ms(roll)
+	):
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_direct_magic_walk_delay_count"
+		)
+
+
+## Vanilla green poison ticks damage health directly and never send
+## RM_STRUCK: HP only, no struck visual, no attack deadline penalty, no walk
+## delay. Reuses the shared core with causes_struck=false and a shared empty
+## context (no per-tick Dictionary allocation).
+func _apply_poison_tick_damage() -> void:
+	_apply_damage_core(poison_damage, null, EMPTY_DAMAGE_CONTEXT, false)
 
 
 func can_receive_damage() -> bool:
@@ -6411,7 +6493,7 @@ func _update_status_effects(delta: float) -> void:
 			0.0,
 			poison_tick_elapsed_seconds - poison_tick_interval_seconds
 		)
-		take_damage(poison_damage)
+		_apply_poison_tick_damage()
 	if poison_time <= 0.0:
 		poison_damage = 0
 		poison_tick_interval_seconds = 1.0

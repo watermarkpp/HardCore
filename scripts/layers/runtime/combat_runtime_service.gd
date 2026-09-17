@@ -1,6 +1,21 @@
 extends Node
 
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
+const MonsterStruckPolicyScript := preload("res://scripts/monster_struck_policy.gd")
+
+## R1: vanilla monster magic delivery classes.
+## DIRECT_MAGSTRUCK is the RM_MAGSTRUCK family (targeted/destined direct
+## magic): when the resolution enters the magic-defense stage (anti-magic did
+## not evade) and the target is a Lv<50 monster, the target's next autonomous
+## walk is postponed by 800 + Random(1000) ms.
+## MAGSTRUCK_MINE is the RM_MAGSTRUCK_MINE family (TFireBurnEvent ground
+## burns, e.g. wizard.fire_wall): MAC and damage resolve normally and a
+## positive tick still produces an ordinary STRUCK, but the walk tick is
+## NEVER postponed. Every pre-R1 caller keeps DIRECT_MAGSTRUCK semantics.
+enum EnemyMagicDeliveryKind {
+	DIRECT_MAGSTRUCK,
+	MAGSTRUCK_MINE,
+}
 
 var _direct_spell_stats_scratch: Dictionary = {}
 
@@ -62,6 +77,7 @@ func apply_enemy_direct_spell_damage(
 	magic_defense_adapter := Callable(),
 	anti_magic_roll := -1,
 	target_stats_scratch: Dictionary = {},
+	delivery_kind: EnemyMagicDeliveryKind = EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK,
 ) -> Dictionary:
 	if (
 		not is_instance_valid(target)
@@ -109,8 +125,21 @@ func apply_enemy_direct_spell_damage(
 		checked_anti_magic_roll,
 		magic_defense_adapter
 	)
+	# Vanilla order: the walk-tick postponement applies when the message
+	# actually enters the magic-defense stage (anti-magic did not evade),
+	# even if MAC later compresses the final damage to 0. The ordinary STRUCK
+	# (take_damage below) still requires final_damage > 0.
+	if (
+		delivery_kind == EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK
+		and bool(resolution.get("enters_magic_defense_stage", false))
+	):
+		_apply_direct_magic_walk_delay(target)
 	var final_damage := int(resolution.get("final_damage", 0))
 	if final_damage > 0:
+		if delivery_kind == EnemyMagicDeliveryKind.MAGSTRUCK_MINE:
+			RuntimeDiagnostics.increment_performance_counter(
+				&"monster_magic_mine_struck_count"
+			)
 		var damage_started_usec := RuntimeDiagnostics.timing_start()
 		target.call("take_damage", final_damage, source_actor)
 		RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
@@ -128,6 +157,25 @@ func _target_rejects_damage(target: Node) -> bool:
 		target.has_method("can_receive_damage")
 		and not bool(target.call("can_receive_damage"))
 	)
+
+
+## RM_MAGSTRUCK walk postponement (Lv<50 monsters, not source-exempt).
+## The 800..1799ms composition lives in MonsterStruckPolicy; the target owns
+## the movement cadence AND the roll (its own RNG stream, never the caller's
+## spell-resolution stream - that stream's continuation is a validated
+## contract). Fail-closed on targets without an integer level (summons keep
+## their own delivery rules and are not R1 scope).
+func _apply_direct_magic_walk_delay(target: Node) -> void:
+	if not target.has_method("apply_source_direct_magic_walk_delay"):
+		return
+	var raw_level: Variant = target.get("level")
+	if not raw_level is int:
+		return
+	if not MonsterStruckPolicyScript.direct_magic_can_delay_walk(
+		int(raw_level), false
+	):
+		return
+	target.call("apply_source_direct_magic_walk_delay")
 
 
 func _target_stats_with_runtime_buffs(target: Node) -> Dictionary:
