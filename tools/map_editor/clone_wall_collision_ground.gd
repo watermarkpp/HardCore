@@ -32,11 +32,21 @@ const WORKSPACE := "res://map_editor_workspace"
 
 
 func _init() -> void:
-	var source_doc: Dictionary = _load_doc(SOURCE_MAP)
+	# Usage: godot --headless -s tools/map_editor/clone_wall_collision_ground.gd
+	#   -- <source_map> [<target_map> ...]
+	# Defaults preserved for the original dark-zone run.
+	var args := OS.get_cmdline_user_args()
+	var source := SOURCE_MAP
+	var targets: Array = TARGETS
+	if args.size() >= 1:
+		source = args[0]
+	if args.size() >= 2:
+		targets = args.slice(1)
+	var source_doc: Dictionary = _load_doc(source)
 	# layers maps collection names (terrain_base, collision, ...) to arrays.
 	var source_layer: Dictionary = source_doc["layers"]
-	for target: String in TARGETS:
-		_apply_to_target(target, source_layer)
+	for target: String in targets:
+		_apply_to_target(target, source_layer, source)
 	print("CLONE_TRANSFER_DONE")
 	quit(0)
 
@@ -61,7 +71,7 @@ func _save_doc(map_key: String, doc: Dictionary) -> void:
 	file.close()
 
 
-func _apply_to_target(target: String, source_layer: Dictionary) -> void:
+func _apply_to_target(target: String, source_layer: Dictionary, source: String) -> void:
 	var doc: Dictionary = _load_doc(target)
 	var layer: Dictionary = doc["layers"]
 	var max_id := _max_instance_number(layer)
@@ -83,9 +93,9 @@ func _apply_to_target(target: String, source_layer: Dictionary) -> void:
 		var meta: Dictionary = doc["editor_meta"]
 		meta["revision"] = float(int(meta.get("revision", 0.0))) + 1.0
 	_save_doc(target, doc)
-	_transfer_ground(target)
+	_transfer_ground(target, source)
 	print(
-		"CLONE_TRANSFER map=%s walls %d->%d collision %d->%d erase->%d ground_stream=dark_current ids=%d..%d" % [
+		"CLONE_TRANSFER map=%s walls %d->%d collision %d->%d erase->%d ground_stream=source_current ids=%d..%d" % [
 			target, walls_before, walls.size(), collision_before,
 			(source_layer["collision"] as Array).size(),
 			(source_layer["collision_erase"] as Array).size(),
@@ -119,9 +129,9 @@ func _collect_instance_numbers(node: Variant, numbers: Array[int]) -> void:
 			_collect_instance_numbers(item, numbers)
 
 
-func _transfer_ground(target: String) -> void:
+func _transfer_ground(target: String, source: String) -> void:
 	var source_state_path := ProjectSettings.globalize_path(
-		"%s/%s/ground/ground_state.json" % [WORKSPACE, SOURCE_MAP]
+		"%s/%s/ground/ground_state.json" % [WORKSPACE, source]
 	)
 	var target_state_path := ProjectSettings.globalize_path(
 		"%s/%s/ground/ground_state.json" % [WORKSPACE, target]
@@ -130,15 +140,21 @@ func _transfer_ground(target: String) -> void:
 		source_state_path
 	))
 	state["map_id"] = target
-	state["dirty_chunks"] = ["c_0_0", "c_0_1", "c_1_0", "c_1_1", "c_2_0", "c_2_1"]
+	# Mark every chunk present in the source workspace dirty so the bake
+	# regenerates all previews from the transferred stream.
+	var dirty: Array = []
+	var source_chunk_dir := DirAccess.open(ProjectSettings.globalize_path(
+		"%s/%s/ground/chunks" % [WORKSPACE, source]
+	))
+	assert(source_chunk_dir != null, "source chunk dir missing")
+	for chunk_file: String in source_chunk_dir.get_files():
+		if chunk_file.ends_with(".json"):
+			dirty.append(chunk_file.get_basename())
+	state["dirty_chunks"] = dirty
 	var file := FileAccess.open(target_state_path, FileAccess.WRITE)
 	assert(file != null, "cannot open %s" % target_state_path)
 	file.store_string(JSON.stringify(state, "  ") + "\n")
 	file.close()
-	var source_chunk_dir := DirAccess.open(ProjectSettings.globalize_path(
-		"%s/%s/ground/chunks" % [WORKSPACE, SOURCE_MAP]
-	))
-	assert(source_chunk_dir != null, "source chunk dir missing")
 	var target_chunk_dir := DirAccess.open(ProjectSettings.globalize_path(
 		"%s/%s/ground/chunks" % [WORKSPACE, target]
 	))
