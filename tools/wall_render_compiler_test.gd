@@ -25,6 +25,9 @@ func _init() -> void:
 	_run_fixture_oversized()
 	_run_fixture_missing_image()
 	_run_fixture_transformed_static()
+	_run_fixture_ordinary_static_in_span()
+	_run_fixture_transformed_decoration_in_span()
+	_run_fixture_ordinary_static_outside_span()
 	_run_digest_sensitivity()
 	if _failures.is_empty():
 		print("WCOMPILER_RESULT PASS")
@@ -269,6 +272,148 @@ static func _static_command_with_scale(index: int) -> Dictionary:
 	var command := _static_shadow_command(index)
 	command["instance"]["scale"] = [1.5, 1.5]
 	return command
+
+
+## Ordinary static decoration (asset_type != wall_module) - the command
+## class that must be classified exactly once by the static-span planner
+## and never pre-attributed by the first scan pass.
+static func _static_decoration_command(
+	index: int,
+	scale: Array = [1.0, 1.0]
+) -> Dictionary:
+	return {
+		"image_path": "fixture_deco_%d.png" % index,
+		"image_pass": 0,
+		"render_domain": GEOMETRY_SERVICE.RENDER_DOMAIN_STATIC_BACKGROUND,
+		"actor_sort_group": "",
+		"instance": {
+			"instance_id": "d%d" % index, "asset_id": "deco",
+			"scale": scale, "rotation_deg": 0.0,
+			"offset_px": [0, 0], "flip_x": false, "flip_y": false,
+			"foot_tile": [index + 1, 2],
+		},
+		"asset": {
+			"asset_id": "deco", "asset_type": "static_decoration",
+			"foot_tile": [index + 1, 2],
+		},
+		"sort_tile": [index + 1, 2], "sort_baseline_tile": [index + 1, 2],
+		"layer_index": 0, "part_order": 0, "sequence": index,
+		"anchor": [32, 32],
+	}
+
+
+func _assert_exact_sets(
+	plan: Dictionary,
+	expected_chunk: Array,
+	expected_legacy: Array,
+	label: String
+) -> void:
+	if plan.get("contract_violation", false):
+		_failures.append("%s contract violation" % label)
+		return
+	var seen := {}
+	for bucket: Array in [
+		plan["atlas_command_indices"],
+		plan["shadow_chunk_command_indices"],
+		plan["legacy_command_indices"],
+	]:
+		for index: int in bucket:
+			if seen.has(index):
+				_failures.append(
+					"%s duplicate classification %d" % [label, index]
+				)
+			seen[index] = true
+	if seen.size() != expected_chunk.size() + expected_legacy.size():
+		_failures.append("%s closure size %d != expected %d" % [
+			label, seen.size(),
+			expected_chunk.size() + expected_legacy.size(),
+		])
+	for index: int in expected_chunk:
+		if not plan["shadow_chunk_command_indices"].has(index):
+			_failures.append("%s index %d not chunked" % [label, index])
+	for index: int in expected_legacy:
+		if not plan["legacy_command_indices"].has(index):
+			_failures.append("%s index %d not legacy" % [label, index])
+
+
+func _fixture_image(path: String) -> Image:
+	var image := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	if path.contains("deco"):
+		image.fill(Color(0.5, 0.5, 0.5, 1.0))
+	else:
+		image.fill(Color(0.0, 0.0, 0.0, 0.6))
+	return image
+
+
+func _run_fixture_ordinary_static_in_span() -> void:
+	var commands := [
+		_static_shadow_command(0),
+		_static_decoration_command(1),
+		_static_shadow_command(2),
+	]
+	var plan: Dictionary = COMPILER.compile_plan(
+		commands, Vector2i(8, 8),
+		func(_path: String) -> Vector2i: return Vector2i(64, 64)
+	)
+	_assert_exact_sets(plan, [0, 1, 2], [], "deco-in-span")
+	if plan["shadow_segments"].size() != 1:
+		_failures.append("deco-in-span expected one segment")
+	var materialized: Dictionary = COMPILER.materialize(
+		plan, commands, _fixture_image
+	)
+	if materialized.has("error"):
+		_failures.append("deco-in-span materialize: %s" % str(
+			materialized["error"]
+		))
+		return
+	var decoration_pixels := 0
+	for chunk: Dictionary in materialized["shadow_chunks"]:
+		var chunk_image: Image = chunk["image"]
+		for y in range(chunk_image.get_height()):
+			for x in range(chunk_image.get_width()):
+				var pixel := chunk_image.get_pixel(x, y)
+				# Fixture stack: shadow (black a=0.6) <- gray decoration
+				# (a=1.0) <- shadow. A decoration-influenced pixel is fully
+				# opaque with r == 0.5 * (1 - 0.6) = 0.2; shadows alone
+				# stay r == 0 with a < 1.
+				if pixel.a > 0.9 and pixel.r > 0.15 and pixel.r < 0.35:
+					decoration_pixels += 1
+	if decoration_pixels <= 0:
+		_failures.append("deco-in-span decoration pixels missing")
+
+
+func _run_fixture_transformed_decoration_in_span() -> void:
+	var commands := [
+		_static_shadow_command(0),
+		_static_decoration_command(1, [1.5, 1.0]),
+		_static_shadow_command(2),
+	]
+	var plan: Dictionary = COMPILER.compile_plan(
+		commands, Vector2i(8, 8),
+		func(_path: String) -> Vector2i: return Vector2i(64, 64)
+	)
+	_assert_exact_sets(plan, [0, 2], [1], "transformed-deco-in-span")
+	if plan["shadow_segments"].size() != 2:
+		_failures.append("transformed-deco-in-span expected two segments")
+	for segment: Dictionary in plan["shadow_segments"]:
+		if segment["command_indices"].has(1):
+			_failures.append(
+				"transformed-deco-in-span breaker inside segment"
+			)
+
+
+func _run_fixture_ordinary_static_outside_span() -> void:
+	var commands := [
+		_static_decoration_command(0),
+		_static_shadow_command(1),
+		_static_shadow_command(2),
+		_static_decoration_command(3),
+	]
+	var plan: Dictionary = COMPILER.compile_plan(
+		commands, Vector2i(8, 8),
+		func(_path: String) -> Vector2i: return Vector2i(64, 64)
+	)
+	_assert_exact_sets(plan, [1, 2], [0, 3], "deco-outside-span")
 
 
 static func _static_shadow_command(index: int) -> Dictionary:
