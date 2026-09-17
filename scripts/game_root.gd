@@ -1509,6 +1509,16 @@ func _ready() -> void:
 	# run the legacy synchronous environment build.
 	background.defer_initial_legacy_build_to_coordinator()
 	add_child(background)
+	# WALL-P0 diagnostics: inert unless explicitly enabled via env/arg or the
+	# user:// marker file; read-only metrics only. Preload (not the global
+	# class name) so the hook never depends on the script class cache.
+	var probe_script: GDScript = preload(
+		"res://scripts/wall_runtime_perf_probe.gd"
+	)
+	if probe_script.enabled_by_environment():
+		var wall_perf_probe: Node = probe_script.new()
+		wall_perf_probe.configure(background, self, true)
+		add_child(wall_perf_probe)
 	if loading_profile_enabled:
 		stage_started_usec = _loading_profile_mark(
 			loading_profile,
