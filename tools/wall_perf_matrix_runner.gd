@@ -20,6 +20,15 @@ var _maps: PackedStringArray = DEFAULT_MAPS.split(",")
 var _hotspots := {}
 var _seconds := 30.0
 var _stabilize := 8.0
+# C10 A/B support: tag distinguishes opt/legacy captures; screenshot saves a
+# same-spot PNG after each probe window for the pixel-diff gate.
+var _tag := ""
+var _screenshot := false
+var _c10_summaries: Array = []
+# Optional parallel list of runtime map ids: when present the runner uses
+# the PRODUCTION staged travel (_request_map_travel) instead of the legacy
+# change_zone path, so the wall render plan pipeline actually engages.
+var _map_ids: PackedInt64Array = PackedInt64Array()
 
 
 func _ready() -> void:
@@ -37,6 +46,13 @@ func _ready() -> void:
 				_seconds = float(pair[1])
 			"stabilize":
 				_stabilize = float(pair[1])
+			"tag":
+				_tag = pair[1]
+			"screenshot":
+				_screenshot = pair[1] == "1"
+			"map_ids":
+				for id_text: String in pair[1].split(",", false):
+					_map_ids.append(int(id_text))
 	if _hotspots.is_empty():
 		_parse_hotspots(DEFAULT_HOTSPOTS)
 	_run.call_deferred()
@@ -64,23 +80,113 @@ func _run() -> void:
 	).new()
 	probe.configure(background, _game, false)
 	_game.add_child(probe)
-	for map_name: String in _maps:
-		var label := map_name.strip_edges()
+	for i: int in _maps.size():
+		var label: String = _maps[i].strip_edges()
 		if label.is_empty():
 			continue
-		print("WALL_PERF_MATRIX_TRAVEL map=%s" % label)
-		_game.change_zone(label)
-		await _wait_transition_done(deadline)
+		print("WALL_PERF_MATRIX_TRAVEL map=%s tag=%s force_legacy=%s" % [
+			label, _tag, OS.get_environment("WALL_RENDER_FORCE_LEGACY"),
+		])
+		if i < _map_ids.size() and _map_ids[i] > 0:
+			# Production staged travel (WALL-P1R consumer pipeline), mirroring
+			# the smoke-test protocol exactly: request, wait for the
+			# transition to actually start, THEN emit covered; monster
+			# prefetch stays off so the streaming coordinator cannot
+			# interleave with the wall render manifest.
+			_game._monster_prefetch_enabled = false
+			# Force the ANIMATED (staged) transition path. _request_map_travel
+			# falls back to the synchronous _load_zone legacy rebuild when
+			# _should_animate_map_transition() is false (windowed runs), which
+			# bypasses the wall render pipeline entirely - the opposite of
+			# what C10 measures.
+			var op := Callable(_game, "_travel_to_map_immediate").bind(
+				_map_ids[i]
+			)
+			_ensure_player_ready_for_travel()
+			if not _game._begin_map_transition(op, _map_ids[i]):
+				var diag_player = _game.get("player")
+				push_error("WALL_PERF travel failed map=%s in_progress=%s dead=%s hp=%s" % [
+					label,
+					str(_game.get("_map_transition_in_progress")),
+					str(diag_player.get("_dead") if diag_player else "?"),
+					str(diag_player.get("current_hp") if diag_player else "?"),
+				])
+				get_tree().quit(1)
+				return
+			var wait_start := Time.get_ticks_msec() + 10000
+			while (
+				not bool(_game.get("_map_transition_in_progress"))
+				and Time.get_ticks_msec() < wait_start
+			):
+				await get_tree().process_frame
+			_game.hud.loading_transition_covered.emit({
+				"contract_id": "ui.loading.transition.v1",
+				"transition_id": _game._active_map_transition_id,
+			})
+			await _wait_transition_done(deadline)
+			var boot_deadline := Time.get_ticks_msec() + 60000
+			while (
+				bool(_game.get("_world_bootstrap_in_progress"))
+				and Time.get_ticks_msec() < boot_deadline
+			):
+				await get_tree().process_frame
+			if OS.get_environment("WALL_PERF_DEBUG") == "1":
+				print("WALL_PERF_DEBUG current_map=%s has_runtime=%s runtime_empty=%s plan_exists=%s stats=%s" % [
+					str(_game.get("current_map_id")),
+					str(background.MapEditorRuntimeBridgeScript.has_runtime_map(913203)),
+					str(background._runtime_data_for(913203).is_empty()),
+					str(FileAccess.file_exists("res://assets/data/runtime/map_editor/wall_render_plans/mengzhong_dark_area.wall_render_plan.json")),
+					str(background.wall_render_stats()),
+				])
+		else:
+			_game.change_zone(label)
+			await _wait_transition_done(deadline)
+		# game_root may rebuild the WorldBackground node across transitions;
+		# always measure the CURRENT background, never a detached one.
+		background = _game.get("background")
+		probe.configure(background, _game, false)
 		if _hotspots.has(label):
 			_pin_player_to_tile(label, _hotspots[label])
 		await get_tree().create_timer(_stabilize).timeout
+		_ensure_player_ready_for_travel()
 		probe.start_window(label, _seconds)
 		var summary: Dictionary = await probe.window_finished
+		var mode_stats: Dictionary = background.wall_render_stats() if (
+			background.has_method("wall_render_stats")
+		) else {}
+		summary["wall_render_stats"] = mode_stats
+		summary["runner_tag"] = _tag
+		summary["forced_legacy"] = (
+			OS.get_environment("WALL_RENDER_FORCE_LEGACY") == "1"
+		)
+		_c10_summaries.append(summary)
+		if _screenshot:
+			var image := get_viewport().get_texture().get_image()
+			var shot_name := "wallshot_%s_%s.png" % [label, _tag]
+			image.save_png("res://outputs/wall_perf/" + shot_name)
+			summary["screenshot"] = shot_name
+			print("WALL_PERF_SCREENSHOT file=%s" % shot_name)
 		print(
-			"WALL_PERF_MATRIX_RESULT map=%s p95_ms=%s" % [
-				label, str(summary.get("frame_ms", {}).get("p95", "?")),
+			"WALL_PERF_MATRIX_RESULT map=%s tag=%s p95_ms=%s mode=%s draw_avg=%s" % [
+				label, _tag,
+				str(summary.get("frame_ms", {}).get("p95", "?")),
+				str(mode_stats.get("wall_render_mode", "?")),
+				str(summary.get("draw_calls", {}).get("avg", "?")),
 			]
 		)
+	var report := {
+		"contract_id": "hardcore.wall_render_c10_probe.v1",
+		"runner_tag": _tag,
+		"forced_legacy": OS.get_environment("WALL_RENDER_FORCE_LEGACY") == "1",
+		"rows": _c10_summaries,
+	}
+	var report_path := "res://outputs/wall_perf/wallperf_c10_%s.json" % (
+		_tag if not _tag.is_empty() else "untagged"
+	)
+	var report_file := FileAccess.open(report_path, FileAccess.WRITE)
+	report_file.store_string(JSON.stringify(report, "\t"))
+	report_file.close()
+	print("WALL_PERF_C10_REPORT file=%s" % report_path)
 	print("WALL_PERF_MATRIX_DONE maps=%d" % _maps.size())
 	get_tree().quit(0)
 
@@ -102,6 +208,18 @@ func _pin_player_to_tile(map_name: String, tile: Vector2i) -> void:
 			map_name, tile.x, tile.y, world.x, world.y,
 		]
 	)
+
+
+func _ensure_player_ready_for_travel() -> void:
+	# The [21,11] hotspot is an active combat pack; the player can die during
+	# a window and _begin_map_transition refuses travel for dead players.
+	# Direct state surgery is acceptable in this measurement harness.
+	var player = _game.get("player")
+	if player == null:
+		return
+	if bool(player.get("_dead")):
+		player.set("_dead", false)
+	player.set("current_hp", player.get("max_hp"))
 
 
 func _wait_world_ready(deadline: int) -> void:

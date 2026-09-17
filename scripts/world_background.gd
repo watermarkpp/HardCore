@@ -1359,6 +1359,14 @@ func _register_wall_render_plan_resources(
 	var coord := bootstrap_coordinator
 	if coord == null:
 		return
+	# Measurement-only A/B hook (WALL-P1R C10): forces the complete legacy
+	# path for the same map through the same production pipeline. Fail-closed
+	# by construction - unset (or any other value) keeps normal behavior.
+	if OS.get_environment("WALL_RENDER_FORCE_LEGACY") == "1":
+		_wall_render_fallback_reason = (
+			"forced legacy (WALL_RENDER_FORCE_LEGACY)"
+		)
+		return
 	var runtime_path := str(MapEditorRuntimeBridgeScript.runtime_path(map_id))
 	if runtime_path.is_empty() or runtime.is_empty():
 		return
