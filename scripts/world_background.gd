@@ -777,6 +777,13 @@ func clear_environment() -> void:
 	_editor_runtime_actor_sort_roots.clear()
 	_editor_runtime_bridge_commands.clear()
 	_editor_runtime_bridge_size = Vector2i.ZERO
+	# WALL-P1R: clear cross-map diagnostic state so a legacy map built after
+	# a planned map never inherits its candidate/mode/fallback fields.
+	_wall_render_candidate = {}
+	_wall_render_plan_found = false
+	_wall_render_mode = "LEGACY"
+	_wall_render_fallback_reason = ""
+	_wall_render_derived_prefetch_failures = 0
 	_static_wall_bridge_image_cache.clear()
 	_static_wall_bridge_used_rect_cache.clear()
 	_static_wall_bridge_built_generation = -999999
@@ -1361,8 +1368,15 @@ func _register_wall_render_plan_resources(
 		% map_key
 	)
 	_wall_render_plan_found = FileAccess.file_exists(plan_path)
-	var raw_size: Array = runtime.get("design", {}).get("design_size", [64, 64])
-	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
+	# design_size authority mirrors the publisher: nested design.design_size.
+	# Missing/malformed design means no plan validation and a plain legacy
+	# map - never a silently assumed default size.
+	var design_container: Dictionary = runtime.get("design", {})
+	var design_raw: Array = design_container.get("design_size", [])
+	if design_raw.size() != 2 or int(design_raw[0]) <= 0 or int(design_raw[1]) <= 0:
+		_wall_render_fallback_reason = "runtime design.design_size missing"
+		return
+	var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
 		runtime.get("instances", [])
 	)
@@ -1417,9 +1431,13 @@ func _select_wall_render_mode() -> void:
 	_wall_render_derived_prefetch_failures = derived_failures
 	if derived_failures > 0:
 		return
+	# The descriptor transform is all-or-nothing: it flips the mode to
+	# LEGACY itself when its preflight or structural assertions fail, and
+	# OPTIMIZED is only recorded after a successful atomic swap.
+	if not _apply_wall_render_optimized_descriptors():
+		return
 	_wall_render_mode = "OPTIMIZED"
 	_wall_render_fallback_reason = ""
-	_apply_wall_render_optimized_descriptors()
 
 
 func _verify_derived_texture(record: Dictionary, width_key: String, height_key: String) -> String:
@@ -1449,11 +1467,12 @@ func _record_dimension(record: Dictionary, key: String) -> int:
 
 
 ## Replaces the wall-command legacy descriptors with optimized ones on pure
-## descriptor data: one atlas sprite per group mapping (anchored at the
-## representative command), chunk sprites inserted at each segment's insert
-## position, everything else (bridge sources, transformed breakers,
-## outside-span statics, non-wall instances) untouched.
-func _apply_wall_render_optimized_descriptors() -> void:
+## descriptor data - all-or-nothing (advisor Consumer R1.1 P0-3): the
+## preflight must prove every mapping command is representable before
+## _pending_map_descriptors is touched; any failure keeps the legacy set for
+## the WHOLE map. Returns true only when the optimized set was swapped in.
+## Per-group partial fallback is forbidden.
+func _apply_wall_render_optimized_descriptors() -> bool:
 	var plan: Dictionary = _wall_render_candidate["plan"]
 	var generation := _generation_token()
 	var commands := _editor_runtime_bridge_commands
@@ -1464,8 +1483,7 @@ func _apply_wall_render_optimized_descriptors() -> void:
 	for value: Variant in plan["shadow_chunk_command_indices"]:
 		chunk_set[int(value)] = true
 	var pages: Array = plan["atlas_pages"]
-	# Representative command -> {mapping, entry, page_path}; entries whose
-	# representative descriptor is missing keep their whole group legacy.
+	# Representative command -> {mapping, entry, page_path}.
 	var mapping_by_representative: Dictionary = {}
 	for entry: Dictionary in plan["atlas_entries"]:
 		for mapping: Dictionary in entry["group_mappings"]:
@@ -1479,21 +1497,50 @@ func _apply_wall_render_optimized_descriptors() -> void:
 				"entry": entry,
 				"page_path": page_path,
 			}
-	var representative_descriptors: Dictionary = {}
+	# Index every legacy descriptor by command.
+	var descriptor_by_command: Dictionary = {}
 	for descriptor: Dictionary in _pending_map_descriptors:
 		if str(descriptor.get("kind", "")) != "instance_sprite":
 			continue
-		var command_index := int(descriptor.get("source_index", -1))
-		if mapping_by_representative.has(command_index):
-			representative_descriptors[command_index] = descriptor
-	# Chunk records grouped per segment, emitted at the segment insert anchor.
+		descriptor_by_command[int(descriptor.get("source_index", -1))] = (
+			descriptor
+		)
+	# ── Preflight (advisor P0-3): prove the whole optimized set is
+	# representable BEFORE mutating _pending_map_descriptors.
+	for representative: int in mapping_by_representative:
+		if not descriptor_by_command.has(representative):
+			_wall_render_mode = "LEGACY"
+			_wall_render_fallback_reason = (
+				"atlas representative descriptor missing: %d" % representative
+			)
+			return false
+		var packed_preflight: Dictionary = mapping_by_representative[
+			representative
+		]
+		for value: Variant in packed_preflight["mapping"]["command_indices"]:
+			if not descriptor_by_command.has(int(value)):
+				_wall_render_mode = "LEGACY"
+				_wall_render_fallback_reason = (
+					"atlas mapping command descriptor missing: %d"
+					% int(value)
+				)
+				return false
+	# ── Transform: representative emits exactly one atlas sprite; EVERY
+	# other mapping command is consumed (advisor P0-2) - no legacy residue.
+	var atlas_command_to_representative: Dictionary = {}
+	for representative: int in mapping_by_representative:
+		for value: Variant in mapping_by_representative[representative][
+			"mapping"
+		]["command_indices"]:
+			atlas_command_to_representative[int(value)] = representative
 	var chunks_by_anchor: Dictionary = {}
 	for record: Dictionary in plan["shadow_chunks"]:
 		var anchor := int(record.get("insert_command_index", -1))
 		if not chunks_by_anchor.has(anchor):
 			chunks_by_anchor[anchor] = []
 		chunks_by_anchor[anchor].append(record)
-	var new_descriptors: Array = []
+	var new_descriptors: Array[Dictionary] = []
+	var emitted_atlas_count := 0
 	for descriptor: Dictionary in _pending_map_descriptors:
 		if str(descriptor.get("kind", "")) != "instance_sprite":
 			new_descriptors.append(descriptor)
@@ -1510,32 +1557,25 @@ func _apply_wall_render_optimized_descriptors() -> void:
 					record, commands, generation
 				))
 			chunks_by_anchor.erase(anchor)
-		if atlas_set.has(command_index):
-			if (
-				mapping_by_representative.has(command_index)
-				and representative_descriptors.has(command_index)
-			):
+		if atlas_command_to_representative.has(command_index):
+			if command_index == atlas_command_to_representative[command_index]:
 				var packed: Dictionary = mapping_by_representative[
 					command_index
 				]
-				var source_descriptor: Dictionary = (
-					representative_descriptors[command_index]
-				)
 				new_descriptors.append(_descriptor(
 					"wall_atlas_sprite", command_index, "object",
 					str(packed["page_path"]), Vector2.ZERO, -5,
 					{
-						"command": source_descriptor["payload"]["command"],
+						"command": descriptor["payload"]["command"],
 						"entry": packed["entry"],
 						"mapping": packed["mapping"],
-						"design_size": source_descriptor["payload"]["design_size"],
+						"design_size": descriptor["payload"]["design_size"],
 					},
 					generation
 				))
-			else:
-				# Representative descriptor missing (source image absent):
-				# keep this legacy sprite so the group stays renderable.
-				new_descriptors.append(descriptor)
+				emitted_atlas_count += 1
+			# Non-representative mapping commands are consumed by the
+			# group's single atlas sprite - emit nothing (P0-2).
 			continue
 		if chunk_set.has(command_index):
 			# Baked into a shadow chunk sprite; no legacy sprite.
@@ -1549,7 +1589,29 @@ func _apply_wall_render_optimized_descriptors() -> void:
 			new_descriptors.append(_wall_chunk_descriptor(
 				record, commands, generation
 			))
+	# ── Structural assertions (advisor P0-2): exact accounting on the
+	# transformed set; any failure reverts the WHOLE map to legacy.
+	var dynamic_group_count := 0
+	for entry: Dictionary in plan["atlas_entries"]:
+		dynamic_group_count += entry["group_mappings"].size()
+	if emitted_atlas_count != dynamic_group_count:
+		_wall_render_mode = "LEGACY"
+		_wall_render_fallback_reason = "atlas emission %d != group count %d" % [
+			emitted_atlas_count, dynamic_group_count,
+		]
+		return false
+	for transformed_descriptor: Dictionary in new_descriptors:
+		if str(transformed_descriptor.get("kind", "")) != "instance_sprite":
+			continue
+		if atlas_set.has(int(transformed_descriptor.get("source_index", -1))):
+			_wall_render_mode = "LEGACY"
+			_wall_render_fallback_reason = "atlas command legacy residue: %d" % (
+				int(transformed_descriptor["source_index"])
+			)
+			return false
+	# Commit point: swap the whole descriptor set atomically.
 	_pending_map_descriptors = new_descriptors
+	return true
 
 
 func _wall_chunk_descriptor(

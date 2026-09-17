@@ -667,7 +667,11 @@ func request_threaded_prefetch() -> int:
 			_requested += 1
 		else:
 			_entry["status"] = "request_failed"
-			diagnostic["prefetch_failure_count"] += 1
+			# Optional (wall-render derived) resources must not pollute
+			# required failure diagnostics; a missing optional texture is
+			# handled by mode selection falling back to LEGACY.
+			if _required:
+				diagnostic["prefetch_failure_count"] += 1
 	return _requested
 
 

@@ -86,7 +86,16 @@ func _publish_map(map_key: String) -> Dictionary:
 	if raw is not Dictionary:
 		return {"error": "runtime json unparsable"}
 	var instances: Array = raw.get("instances", [])
-	var design_raw: Array = raw.get("design_size", [64, 64])
+	# design_size authority is the runtime's nested design.design_size (the
+	# same field the game's visual geometry service consumes). A missing or
+	# malformed design must fail the publish - a silent default would bake
+	# every atlas/chunk position in the wrong screen space.
+	var design_container: Dictionary = raw.get("design", {})
+	if design_container.is_empty() or not design_container.has("design_size"):
+		return {"error": "runtime design.design_size missing"}
+	var design_raw: Array = design_container.get("design_size", [])
+	if design_raw.size() != 2 or int(design_raw[0]) <= 0 or int(design_raw[1]) <= 0:
+		return {"error": "runtime design.design_size malformed"}
 	var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
 	var commands: Array = GEOMETRY_SERVICE.sorted_draw_commands(instances)
 	var plan: Dictionary = COMPILER.compile_plan(

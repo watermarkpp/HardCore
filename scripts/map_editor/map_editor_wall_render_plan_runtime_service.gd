@@ -103,15 +103,33 @@ static func load_candidate(
 	var pages: Array = plan.get("atlas_pages", [])
 	if pages.is_empty() or pages.size() != page_heights.size():
 		return _reject("page count mismatch")
+	# page_index hardening (advisor R1.1): unique and an exact 0..N-1
+	# cover - no duplicate, no gap, no negative index ever reaches
+	# page_heights[...] below.
+	var seen_page_indices := {}
+	for record: Dictionary in pages:
+		var page_index := int(record.get("page_index", -1))
+		if page_index < 0 or page_index >= pages.size():
+			return _reject("page index out of range %d" % page_index)
+		if seen_page_indices.has(page_index):
+			return _reject("duplicate page index %d" % page_index)
+		seen_page_indices[page_index] = true
+	if seen_page_indices.size() != pages.size():
+		return _reject("page index coverage mismatch")
 	for record: Dictionary in pages:
 		var store_error := _validate_store_record(record)
 		if store_error != "":
 			return _reject(store_error)
+		var page_index := int(record.get("page_index", -1))
 		if int(record.get("width", -1)) != COMPILER.PAGE_WIDTH:
 			return _reject("page width mismatch")
-		if int(record.get("height", -1)) != int(
-			page_heights[int(record.get("page_index", -1))]
-		):
+		if int(record.get("height", -1)) <= 0 or int(
+			record.get("height", -1)
+		) > COMPILER.PAGE_MAX_HEIGHT:
+			return _reject("page height out of contract %d" % int(
+				record.get("height", -1)
+			))
+		if int(record.get("height", -1)) != int(page_heights[page_index]):
 			return _reject("page height mismatch")
 		if not ResourceLoader.exists(_resource_path(str(record["path"]))):
 			return _reject("page resource missing: %s" % str(record["path"]))

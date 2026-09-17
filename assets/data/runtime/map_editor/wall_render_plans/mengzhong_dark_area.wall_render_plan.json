@@ -6800,7 +6800,7 @@
 	"compiler_version": 2,
 	"contract_id": "hardcore.wall_render_plan.v1",
 	"design_size": [
-		64,
+		32,
 		64
 	],
 	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
@@ -7164,42 +7164,42 @@
 	"shadow_chunks": [
 		{
 			"grid_cell": [
-				-1,
+				0,
 				-1
 			],
 			"image": "():<Image#-9223371936778680685>",
 			"insert_command_index": 2,
-			"path": "assets/data/runtime/map_editor/wall_render_store/d4e8918c34a85b3bea6e1f7be147d2ac0f75f9b06802ae7c6e859efea08ba999.png",
-			"png_bytes": 13184,
+			"path": "assets/data/runtime/map_editor/wall_render_store/348d624399042d079c79d09eb5d28432af6c8d3d0064d8e95ea89c53f2adf072.png",
+			"png_bytes": 24186,
 			"position_px": [
-				-580.0,
-				-995.0
+				0.0,
+				-739.0
 			],
 			"segment_index": 0,
-			"sha256": "d4e8918c34a85b3bea6e1f7be147d2ac0f75f9b06802ae7c6e859efea08ba999",
+			"sha256": "348d624399042d079c79d09eb5d28432af6c8d3d0064d8e95ea89c53f2adf072",
 			"size_px": [
-				580,
-				329
+				783,
+				313
 			]
 		},
 		{
 			"grid_cell": [
-				0,
+				-1,
 				-1
 			],
 			"image": "():<Image#-9223371936761903468>",
 			"insert_command_index": 2,
-			"path": "assets/data/runtime/map_editor/wall_render_store/20901e62e5259b9e92599f961d7966e0db4d2daa80c3cf025a41338ddae9602b.png",
-			"png_bytes": 11405,
+			"path": "assets/data/runtime/map_editor/wall_render_store/21cc2d28d9c863ec18a18e1250857085016394445a2e1336106b045942342731.png",
+			"png_bytes": 1202,
 			"position_px": [
-				0.0,
-				-989.0
+				-68.0,
+				-467.0
 			],
 			"segment_index": 0,
-			"sha256": "20901e62e5259b9e92599f961d7966e0db4d2daa80c3cf025a41338ddae9602b",
+			"sha256": "21cc2d28d9c863ec18a18e1250857085016394445a2e1336106b045942342731",
 			"size_px": [
-				271,
-				307
+				68,
+				57
 			]
 		},
 		{
@@ -7209,16 +7209,16 @@
 			],
 			"image": "():<Image#-9223371936745126251>",
 			"insert_command_index": 124,
-			"path": "assets/data/runtime/map_editor/wall_render_store/0caf00919ea90d5de71c5bb829d1a31b42ea48a2a0d23182c57c53f4adbdcda3.png",
-			"png_bytes": 7997,
+			"path": "assets/data/runtime/map_editor/wall_render_store/d2c455286b7c861e024af19239dc205708a96de28ff5fec80be1185bffa13175.png",
+			"png_bytes": 4109,
 			"position_px": [
-				27.0,
-				-707.0
+				539.0,
+				-451.0
 			],
 			"segment_index": 1,
-			"sha256": "0caf00919ea90d5de71c5bb829d1a31b42ea48a2a0d23182c57c53f4adbdcda3",
+			"sha256": "d2c455286b7c861e024af19239dc205708a96de28ff5fec80be1185bffa13175",
 			"size_px": [
-				692,
+				485,
 				105
 			]
 		},
@@ -7232,8 +7232,8 @@
 			"path": "assets/data/runtime/map_editor/wall_render_store/70ba4926067ae0ed00a1c9befe7d94de60945b324af30e4ea207f0e2f6f46ba8.png",
 			"png_bytes": 3067,
 			"position_px": [
-				-773.0,
-				-691.0
+				-261.0,
+				-435.0
 			],
 			"segment_index": 1,
 			"sha256": "70ba4926067ae0ed00a1c9befe7d94de60945b324af30e4ea207f0e2f6f46ba8",
@@ -7244,22 +7244,22 @@
 		},
 		{
 			"grid_cell": [
-				-1,
+				1,
 				-1
 			],
 			"image": "():<Image#-9223371936711571817>",
-			"insert_command_index": 177,
-			"path": "assets/data/runtime/map_editor/wall_render_store/b1afcc4db41cc0d09b4f30e86c49d7fbec547d1893c238a686ee0fb759b0d958.png",
-			"png_bytes": 3599,
+			"insert_command_index": 124,
+			"path": "assets/data/runtime/map_editor/wall_render_store/b12da82966edb535cb2cf526738207e0978b569e1aaa0ff6332752f9d53bf0f9.png",
+			"png_bytes": 4014,
 			"position_px": [
-				-741.0,
-				-625.0
+				1024.0,
+				-434.0
 			],
-			"segment_index": 2,
-			"sha256": "b1afcc4db41cc0d09b4f30e86c49d7fbec547d1893c238a686ee0fb759b0d958",
+			"segment_index": 1,
+			"sha256": "b12da82966edb535cb2cf526738207e0978b569e1aaa0ff6332752f9d53bf0f9",
 			"size_px": [
-				741,
-				81
+				207,
+				88
 			]
 		},
 		{
@@ -7269,37 +7269,37 @@
 			],
 			"image": "():<Image#-9223371936694794600>",
 			"insert_command_index": 177,
-			"path": "assets/data/runtime/map_editor/wall_render_store/5629a7532df7cff929e3f43c83999428f4fbd88d0b8485ddce72354bbf04c8ec.png",
-			"png_bytes": 10279,
+			"path": "assets/data/runtime/map_editor/wall_render_store/89443cc84857dfb08b153c767aa1518fa2536ef59194cafb39a516e6d9fa42f3.png",
+			"png_bytes": 8463,
 			"position_px": [
-				0.0,
-				-627.0
+				507.0,
+				-371.0
 			],
 			"segment_index": 2,
-			"sha256": "5629a7532df7cff929e3f43c83999428f4fbd88d0b8485ddce72354bbf04c8ec",
+			"sha256": "89443cc84857dfb08b153c767aa1518fa2536ef59194cafb39a516e6d9fa42f3",
 			"size_px": [
-				815,
+				517,
 				89
 			]
 		},
 		{
 			"grid_cell": [
-				0,
+				1,
 				-1
 			],
 			"image": "():<Image#-9223371936678017383>",
-			"insert_command_index": 251,
-			"path": "assets/data/runtime/map_editor/wall_render_store/f672a635b7c7689feddc91de3325bb83a074c3cdd8cb6b40707e3fa4521ded81.png",
-			"png_bytes": 3068,
+			"insert_command_index": 177,
+			"path": "assets/data/runtime/map_editor/wall_render_store/a9125e17215235cc95194891d74689f53bf6846abf83eed6e37ec254190a841e.png",
+			"png_bytes": 2287,
 			"position_px": [
-				59.0,
-				-578.0
+				1024.0,
+				-371.0
 			],
-			"segment_index": 3,
-			"sha256": "f672a635b7c7689feddc91de3325bb83a074c3cdd8cb6b40707e3fa4521ded81",
+			"segment_index": 2,
+			"sha256": "a9125e17215235cc95194891d74689f53bf6846abf83eed6e37ec254190a841e",
 			"size_px": [
-				788,
-				56
+				303,
+				73
 			]
 		},
 		{
@@ -7308,12 +7308,32 @@
 				-1
 			],
 			"image": "():<Image#-9223371936661240166>",
+			"insert_command_index": 177,
+			"path": "assets/data/runtime/map_editor/wall_render_store/d0170a55db45badebd6ddc61ed32b261b93a60234a343534abc1098f2764fb45.png",
+			"png_bytes": 2752,
+			"position_px": [
+				-229.0,
+				-354.0
+			],
+			"segment_index": 2,
+			"sha256": "d0170a55db45badebd6ddc61ed32b261b93a60234a343534abc1098f2764fb45",
+			"size_px": [
+				148,
+				66
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				-1
+			],
+			"image": "():<Image#-9223371936644462949>",
 			"insert_command_index": 251,
 			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
 			"png_bytes": 860,
 			"position_px": [
-				-709.0,
-				-562.0
+				1307.0,
+				-322.0
 			],
 			"segment_index": 3,
 			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
@@ -7324,38 +7344,18 @@
 		},
 		{
 			"grid_cell": [
-				0,
-				-1
-			],
-			"image": "():<Image#-9223371936644462949>",
-			"insert_command_index": 266,
-			"path": "assets/data/runtime/map_editor/wall_render_store/16b8f5bb0d8381eb6eed41e9c44ea165054ae79787e1257b95caa591295f5175.png",
-			"png_bytes": 3067,
-			"position_px": [
-				91.0,
-				-562.0
-			],
-			"segment_index": 4,
-			"sha256": "16b8f5bb0d8381eb6eed41e9c44ea165054ae79787e1257b95caa591295f5175",
-			"size_px": [
-				788,
-				56
-			]
-		},
-		{
-			"grid_cell": [
 				-1,
 				-1
 			],
 			"image": "():<Image#-9223371936627685732>",
-			"insert_command_index": 266,
+			"insert_command_index": 251,
 			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
 			"png_bytes": 860,
 			"position_px": [
-				-677.0,
-				-546.0
+				-197.0,
+				-306.0
 			],
-			"segment_index": 4,
+			"segment_index": 3,
 			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
 			"size_px": [
 				52,
@@ -7368,17 +7368,97 @@
 				-1
 			],
 			"image": "():<Image#-9223371936610908515>",
-			"insert_command_index": 280,
-			"path": "assets/data/runtime/map_editor/wall_render_store/d2b1a9e54c2884091856785a86e344627a67b827d298a3a3691b73c862f813e5.png",
-			"png_bytes": 10775,
+			"insert_command_index": 251,
+			"path": "assets/data/runtime/map_editor/wall_render_store/09a5c4edbd3e77b26c9b4c2baa1b73c1228ea0cb3481dc38a0a47e37eccc0a3b.png",
+			"png_bytes": 1827,
 			"position_px": [
-				123.0,
-				-546.0
+				571.0,
+				-307.0
+			],
+			"segment_index": 3,
+			"sha256": "09a5c4edbd3e77b26c9b4c2baa1b73c1228ea0cb3481dc38a0a47e37eccc0a3b",
+			"size_px": [
+				212,
+				41
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				-1
+			],
+			"image": "():<Image#-9223371936594131298>",
+			"insert_command_index": 266,
+			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
+			"png_bytes": 860,
+			"position_px": [
+				1339.0,
+				-306.0
+			],
+			"segment_index": 4,
+			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
+			"size_px": [
+				52,
+				40
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"image": "():<Image#-9223371936577354081>",
+			"insert_command_index": 266,
+			"path": "assets/data/runtime/map_editor/wall_render_store/0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a.png",
+			"png_bytes": 860,
+			"position_px": [
+				-165.0,
+				-290.0
+			],
+			"segment_index": 4,
+			"sha256": "0d09f205c03d9cef83f433403017a82fda7bca6fde0796f3dbf79013fd091b5a",
+			"size_px": [
+				52,
+				40
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"image": "():<Image#-9223371936560576864>",
+			"insert_command_index": 266,
+			"path": "assets/data/runtime/map_editor/wall_render_store/98a46a1d3d0b2cc2b240ce82eecb2319e7553f00456b41f45bccc3f647f3dbf1.png",
+			"png_bytes": 1768,
+			"position_px": [
+				603.0,
+				-291.0
+			],
+			"segment_index": 4,
+			"sha256": "98a46a1d3d0b2cc2b240ce82eecb2319e7553f00456b41f45bccc3f647f3dbf1",
+			"size_px": [
+				148,
+				41
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				-1
+			],
+			"image": "():<Image#-9223371936543799647>",
+			"insert_command_index": 280,
+			"path": "assets/data/runtime/map_editor/wall_render_store/fd9edd6e70039f268e72afdf6f0d5092382f7904a7a0ace4cf756f5e7c10a295.png",
+			"png_bytes": 5542,
+			"position_px": [
+				1244.0,
+				-290.0
 			],
 			"segment_index": 5,
-			"sha256": "d2b1a9e54c2884091856785a86e344627a67b827d298a3a3691b73c862f813e5",
+			"sha256": "fd9edd6e70039f268e72afdf6f0d5092382f7904a7a0ace4cf756f5e7c10a295",
 			"size_px": [
-				900,
+				291,
 				210
 			]
 		},
@@ -7387,119 +7467,59 @@
 				-1,
 				-1
 			],
-			"image": "():<Image#-9223371936594131298>",
+			"image": "():<Image#-9223371936527022430>",
 			"insert_command_index": 280,
-			"path": "assets/data/runtime/map_editor/wall_render_store/60d1d4e49419d1c12430d5d36a5e25ab29a3ee1cf8dbbc835aa48fa54fd3ccde.png",
-			"png_bytes": 12037,
+			"path": "assets/data/runtime/map_editor/wall_render_store/c0b74e3c9e50310cde5e3e897f507a1b228ec8a6a60630ae03f8fe27d64081d9.png",
+			"png_bytes": 11473,
 			"position_px": [
-				-1024.0,
-				-530.0
+				-772.0,
+				-274.0
 			],
 			"segment_index": 5,
-			"sha256": "60d1d4e49419d1c12430d5d36a5e25ab29a3ee1cf8dbbc835aa48fa54fd3ccde",
+			"sha256": "c0b74e3c9e50310cde5e3e897f507a1b228ec8a6a60630ae03f8fe27d64081d9",
 			"size_px": [
-				655,
-				194
-			]
-		},
-		{
-			"grid_cell": [
-				-2,
-				-1
-			],
-			"image": "():<Image#-9223371936577354081>",
-			"insert_command_index": 280,
-			"path": "assets/data/runtime/map_editor/wall_render_store/3a2807aec06e47ec0e08a649476051739032ef7631d1b12fce16a6b0b40a43cb.png",
-			"png_bytes": 3965,
-			"position_px": [
-				-1284.0,
-				-387.0
-			],
-			"segment_index": 5,
-			"sha256": "3a2807aec06e47ec0e08a649476051739032ef7631d1b12fce16a6b0b40a43cb",
-			"size_px": [
-				260,
-				73
-			]
-		},
-		{
-			"grid_cell": [
-				-1,
-				-1
-			],
-			"image": "():<Image#-9223371936560576864>",
-			"insert_command_index": 415,
-			"path": "assets/data/runtime/map_editor/wall_render_store/4705758e2074ae34cc645f7f9cd63367f3db95c722f38b61a834e01ebafa3839.png",
-			"png_bytes": 2108,
-			"position_px": [
-				-933.0,
-				-355.0
-			],
-			"segment_index": 6,
-			"sha256": "4705758e2074ae34cc645f7f9cd63367f3db95c722f38b61a834e01ebafa3839",
-			"size_px": [
-				532,
-				41
+				772,
+				216
 			]
 		},
 		{
 			"grid_cell": [
 				0,
-				-1
-			],
-			"image": "():<Image#-9223371936543799647>",
-			"insert_command_index": 415,
-			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
-			"png_bytes": 935,
-			"position_px": [
-				700.0,
-				-355.0
-			],
-			"segment_index": 6,
-			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
-			"size_px": [
-				51,
-				41
-			]
-		},
-		{
-			"grid_cell": [
-				-2,
-				-1
-			],
-			"image": "():<Image#-9223371936527022430>",
-			"insert_command_index": 415,
-			"path": "assets/data/runtime/map_editor/wall_render_store/32eb06e01d948c5f467d6dfe8c482fe48b835656ef860822e1880ca3c2da96f5.png",
-			"png_bytes": 1097,
-			"position_px": [
-				-1316.0,
-				-339.0
-			],
-			"segment_index": 6,
-			"sha256": "32eb06e01d948c5f467d6dfe8c482fe48b835656ef860822e1880ca3c2da96f5",
-			"size_px": [
-				51,
-				41
-			]
-		},
-		{
-			"grid_cell": [
-				-1,
 				-1
 			],
 			"image": "():<Image#-9223371936510245213>",
-			"insert_command_index": 431,
-			"path": "assets/data/runtime/map_editor/wall_render_store/f19f6dc6f53ed534b028a54678494127a115b53a6d3ae8b60fc5c69e000b48cd.png",
-			"png_bytes": 2045,
+			"insert_command_index": 280,
+			"path": "assets/data/runtime/map_editor/wall_render_store/08e9d370e24d88ac0bae92717ff962c421a9e84b639e48e934abfc3e48db7092.png",
+			"png_bytes": 6513,
 			"position_px": [
-				-901.0,
-				-339.0
+				0.0,
+				-275.0
 			],
-			"segment_index": 7,
-			"sha256": "f19f6dc6f53ed534b028a54678494127a115b53a6d3ae8b60fc5c69e000b48cd",
+			"segment_index": 5,
+			"sha256": "08e9d370e24d88ac0bae92717ff962c421a9e84b639e48e934abfc3e48db7092",
 			"size_px": [
-				468,
-				41
+				719,
+				195
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"image": "():<Image#-9223371936493467996>",
+			"insert_command_index": 415,
+			"path": "assets/data/runtime/map_editor/wall_render_store/59d13768198161a3f322a3e81ddfff1b8049a9fb75d26f0586c895594b2e9c15.png",
+			"png_bytes": 2367,
+			"position_px": [
+				-804.0,
+				-98.0
+			],
+			"segment_index": 6,
+			"sha256": "59d13768198161a3f322a3e81ddfff1b8049a9fb75d26f0586c895594b2e9c15",
+			"size_px": [
+				435,
+				56
 			]
 		},
 		{
@@ -7507,15 +7527,15 @@
 				0,
 				-1
 			],
-			"image": "():<Image#-9223371936493467996>",
-			"insert_command_index": 431,
+			"image": "():<Image#-9223371936476690779>",
+			"insert_command_index": 415,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
 			"png_bytes": 935,
 			"position_px": [
-				668.0,
-				-339.0
+				60.0,
+				-99.0
 			],
-			"segment_index": 7,
+			"segment_index": 6,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
 				51,
@@ -7524,42 +7544,22 @@
 		},
 		{
 			"grid_cell": [
-				-2,
+				1,
 				-1
 			],
-			"image": "():<Image#-9223371936476690779>",
-			"insert_command_index": 431,
+			"image": "():<Image#-9223371936459913562>",
+			"insert_command_index": 415,
 			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
 			"png_bytes": 935,
 			"position_px": [
-				-1348.0,
-				-323.0
+				1212.0,
+				-99.0
 			],
-			"segment_index": 7,
+			"segment_index": 6,
 			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
 				51,
 				41
-			]
-		},
-		{
-			"grid_cell": [
-				-2,
-				0
-			],
-			"image": "():<Image#-9223371936459913562>",
-			"insert_command_index": 445,
-			"path": "assets/data/runtime/map_editor/wall_render_store/b88aa4f213b86ca36b7be07fc76e3e383ab3a1fa8a4ddda751631d4cf2cf3203.png",
-			"png_bytes": 494,
-			"position_px": [
-				-1380.0,
-				0.0
-			],
-			"segment_index": 8,
-			"sha256": "b88aa4f213b86ca36b7be07fc76e3e383ab3a1fa8a4ddda751631d4cf2cf3203",
-			"size_px": [
-				50,
-				16
 			]
 		},
 		{
@@ -7568,18 +7568,18 @@
 				-1
 			],
 			"image": "():<Image#-9223371936443136345>",
-			"insert_command_index": 445,
-			"path": "assets/data/runtime/map_editor/wall_render_store/f45b199ad8799fbbe6693ecf05b6b5affb20f0e88c7538a4bdcfea01d4d29423.png",
-			"png_bytes": 16235,
+			"insert_command_index": 431,
+			"path": "assets/data/runtime/map_editor/wall_render_store/c7350796ce7ffcee7b6a5068a0f08d2f806ee0be58782608f5b6f6f00a780a90.png",
+			"png_bytes": 2122,
 			"position_px": [
-				-869.0,
-				-323.0
+				-836.0,
+				-82.0
 			],
-			"segment_index": 8,
-			"sha256": "f45b199ad8799fbbe6693ecf05b6b5affb20f0e88c7538a4bdcfea01d4d29423",
+			"segment_index": 7,
+			"sha256": "c7350796ce7ffcee7b6a5068a0f08d2f806ee0be58782608f5b6f6f00a780a90",
 			"size_px": [
-				869,
-				323
+				499,
+				56
 			]
 		},
 		{
@@ -7588,38 +7588,38 @@
 				-1
 			],
 			"image": "():<Image#-9223371936426359128>",
-			"insert_command_index": 445,
-			"path": "assets/data/runtime/map_editor/wall_render_store/7133efa4b05a72b63a6907093bf2411d9ca046d5ec2d6320b316ba4495e9790d.png",
-			"png_bytes": 15081,
+			"insert_command_index": 431,
+			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
+			"png_bytes": 935,
 			"position_px": [
-				0.0,
-				-323.0
+				28.0,
+				-83.0
 			],
-			"segment_index": 8,
-			"sha256": "7133efa4b05a72b63a6907093bf2411d9ca046d5ec2d6320b316ba4495e9790d",
+			"segment_index": 7,
+			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				687,
-				271
+				51,
+				41
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
+				1,
 				-1
 			],
 			"image": "():<Image#-9223371936409581911>",
-			"insert_command_index": 445,
-			"path": "assets/data/runtime/map_editor/wall_render_store/f5927ce9fa88671b837eca686d071ff34283d90daf5b2d3452f68fc45716bd57.png",
-			"png_bytes": 11062,
+			"insert_command_index": 431,
+			"path": "assets/data/runtime/map_editor/wall_render_store/168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e.png",
+			"png_bytes": 935,
 			"position_px": [
-				-1605.0,
-				-307.0
+				1180.0,
+				-83.0
 			],
-			"segment_index": 8,
-			"sha256": "f5927ce9fa88671b837eca686d071ff34283d90daf5b2d3452f68fc45716bd57",
+			"segment_index": 7,
+			"sha256": "168f5878b1f470cdc4e5ec3d9107d24075ebf85b8c91518fc1ef374166b8145e",
 			"size_px": [
-				308,
-				307
+				51,
+				41
 			]
 		},
 		{
@@ -7628,18 +7628,18 @@
 				0
 			],
 			"image": "():<Image#-9223371936392804694>",
-			"insert_command_index": 671,
-			"path": "assets/data/runtime/map_editor/wall_render_store/6f97b365ca9a19aac34328247a059d7979f4fd4b789be358cdfd053a175a1ffd.png",
-			"png_bytes": 2430,
+			"insert_command_index": 445,
+			"path": "assets/data/runtime/map_editor/wall_render_store/1a29dfad0d4752addaf082faa6c63b0772e676722b55650beafd9fc0c51bd68b.png",
+			"png_bytes": 1323,
 			"position_px": [
-				-1445.0,
-				0.0
+				-1093.0,
+				45.0
 			],
-			"segment_index": 9,
-			"sha256": "6f97b365ca9a19aac34328247a059d7979f4fd4b789be358cdfd053a175a1ffd",
+			"segment_index": 8,
+			"sha256": "1a29dfad0d4752addaf082faa6c63b0772e676722b55650beafd9fc0c51bd68b",
 			"size_px": [
-				148,
-				64
+				69,
+				87
 			]
 		},
 		{
@@ -7648,38 +7648,18 @@
 				-1
 			],
 			"image": "():<Image#-9223371936376027477>",
-			"insert_command_index": 671,
-			"path": "assets/data/runtime/map_editor/wall_render_store/238dfbcd29cb4d51cc48e93783c5c6c174d5e5d1f2a48c939bdffbadea36d9ed.png",
-			"png_bytes": 467,
+			"insert_command_index": 445,
+			"path": "assets/data/runtime/map_editor/wall_render_store/e748f76ae6046876dc8d56b420942234b4b4519736b0fd2dc06c21f55e19b852.png",
+			"png_bytes": 5761,
 			"position_px": [
-				-69.0,
-				-18.0
+				-933.0,
+				-66.0
 			],
-			"segment_index": 9,
-			"sha256": "238dfbcd29cb4d51cc48e93783c5c6c174d5e5d1f2a48c939bdffbadea36d9ed",
+			"segment_index": 8,
+			"sha256": "e748f76ae6046876dc8d56b420942234b4b4519736b0fd2dc06c21f55e19b852",
 			"size_px": [
-				50,
-				18
-			]
-		},
-		{
-			"grid_cell": [
-				-1,
-				0
-			],
-			"image": "():<Image#-9223371936359250260>",
-			"insert_command_index": 671,
-			"path": "assets/data/runtime/map_editor/wall_render_store/6ae46dc84355825a91d8ba64955e5897ab8cfd43960cd38a34a14105b2a02894.png",
-			"png_bytes": 1250,
-			"position_px": [
-				-66.0,
-				0.0
-			],
-			"segment_index": 9,
-			"sha256": "6ae46dc84355825a91d8ba64955e5897ab8cfd43960cd38a34a14105b2a02894",
-			"size_px": [
-				66,
-				48
+				933,
+				66
 			]
 		},
 		{
@@ -7687,79 +7667,119 @@
 				0,
 				-1
 			],
-			"image": "():<Image#-9223371936342473043>",
-			"insert_command_index": 671,
-			"path": "assets/data/runtime/map_editor/wall_render_store/f7f040f387f4f0231d109f3c19f32e353098f4ed919cb404c37df9c65bd8cd09.png",
-			"png_bytes": 101,
+			"image": "():<Image#-9223371936359250260>",
+			"insert_command_index": 445,
+			"path": "assets/data/runtime/map_editor/wall_render_store/f5ebed3f843d223fe77eb9172af22ad0bc8aa02d29cebdb3387c2293a40665e9.png",
+			"png_bytes": 1920,
 			"position_px": [
-				27.0,
-				-3.0
+				0.0,
+				-67.0
 			],
-			"segment_index": 9,
-			"sha256": "f7f040f387f4f0231d109f3c19f32e353098f4ed919cb404c37df9c65bd8cd09",
+			"segment_index": 8,
+			"sha256": "f5ebed3f843d223fe77eb9172af22ad0bc8aa02d29cebdb3387c2293a40665e9",
 			"size_px": [
-				15,
-				3
+				746,
+				67
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
+				0,
+				0
+			],
+			"image": "():<Image#-9223371936342473043>",
+			"insert_command_index": 445,
+			"path": "assets/data/runtime/map_editor/wall_render_store/486e63ece64979b1732e4786fafd4a38feae6882bac277157f76ee3f55a6f4bf.png",
+			"png_bytes": 18755,
+			"position_px": [
+				379.0,
+				0.0
+			],
+			"segment_index": 8,
+			"sha256": "486e63ece64979b1732e4786fafd4a38feae6882bac277157f76ee3f55a6f4bf",
+			"size_px": [
+				645,
+				256
+			]
+		},
+		{
+			"grid_cell": [
+				1,
 				-1
 			],
 			"image": "():<Image#-9223371936325695826>",
-			"insert_command_index": 671,
-			"path": "assets/data/runtime/map_editor/wall_render_store/ae113e3e9185e2f52f752a5c5dfad7c0bedfec7e7c56b9577ed808fc9fe0be70.png",
-			"png_bytes": 134,
+			"insert_command_index": 445,
+			"path": "assets/data/runtime/map_editor/wall_render_store/66609d0e7605916ac28d2212cabb02fddc19b6c040ba8ea7711dccaa749bfc20.png",
+			"png_bytes": 1762,
 			"position_px": [
-				-1441.0,
-				-3.0
+				1051.0,
+				-67.0
 			],
-			"segment_index": 9,
-			"sha256": "ae113e3e9185e2f52f752a5c5dfad7c0bedfec7e7c56b9577ed808fc9fe0be70",
+			"segment_index": 8,
+			"sha256": "66609d0e7605916ac28d2212cabb02fddc19b6c040ba8ea7711dccaa749bfc20",
 			"size_px": [
-				139,
-				3
+				148,
+				67
 			]
 		},
 		{
 			"grid_cell": [
-				0,
+				1,
 				0
 			],
 			"image": "():<Image#-9223371936308918609>",
-			"insert_command_index": 671,
-			"path": "assets/data/runtime/map_editor/wall_render_store/c6b49f9e8becc6709f82f050af2491f02bddd11e18a17116e644c207c9da0b0a.png",
-			"png_bytes": 982,
+			"insert_command_index": 445,
+			"path": "assets/data/runtime/map_editor/wall_render_store/7dfb589855a97e37de95760a963116811399308684bc1ea3ae94b05347482db2.png",
+			"png_bytes": 946,
 			"position_px": [
-				0.0,
+				1024.0,
 				0.0
 			],
-			"segment_index": 9,
-			"sha256": "c6b49f9e8becc6709f82f050af2491f02bddd11e18a17116e644c207c9da0b0a",
+			"segment_index": 8,
+			"sha256": "7dfb589855a97e37de95760a963116811399308684bc1ea3ae94b05347482db2",
 			"size_px": [
-				47,
+				87,
 				44
 			]
 		},
 		{
 			"grid_cell": [
-				-2,
+				-1,
 				0
 			],
 			"image": "():<Image#-9223371936292141392>",
-			"insert_command_index": 699,
-			"path": "assets/data/runtime/map_editor/wall_render_store/ab745e30d9bb3723cd3469bde840fe08f32a821ced769d80dad400dfd81c0bde.png",
-			"png_bytes": 23426,
+			"insert_command_index": 445,
+			"path": "assets/data/runtime/map_editor/wall_render_store/1df7433dc712fef80e08b7d42be50ef71cd12a8e5a855b9f8937cd087937723e.png",
+			"png_bytes": 9182,
 			"position_px": [
-				-1669.0,
-				45.0
+				-1024.0,
+				0.0
 			],
-			"segment_index": 10,
-			"sha256": "ab745e30d9bb3723cd3469bde840fe08f32a821ced769d80dad400dfd81c0bde",
+			"segment_index": 8,
+			"sha256": "1df7433dc712fef80e08b7d42be50ef71cd12a8e5a855b9f8937cd087937723e",
 			"size_px": [
-				645,
-				498
+				239,
+				272
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"image": "():<Image#-9223371936275364175>",
+			"insert_command_index": 671,
+			"path": "assets/data/runtime/map_editor/wall_render_store/5f883f2b43f8a7241883d98f6934855be4bcc970e35864d20dc191bd37136486.png",
+			"png_bytes": 2465,
+			"position_px": [
+				443.0,
+				238.0
+			],
+			"segment_index": 9,
+			"sha256": "5f883f2b43f8a7241883d98f6934855be4bcc970e35864d20dc191bd37136486",
+			"size_px": [
+				116,
+				66
 			]
 		},
 		{
@@ -7767,19 +7787,79 @@
 				-1,
 				0
 			],
-			"image": "():<Image#-9223371936275364175>",
+			"image": "():<Image#-9223371936258586958>",
+			"insert_command_index": 671,
+			"path": "assets/data/runtime/map_editor/wall_render_store/761d492115fd54ff6d368d91a4fb0ac07cd638de53e16a801aff9485b6f2fade.png",
+			"png_bytes": 2478,
+			"position_px": [
+				-933.0,
+				253.0
+			],
+			"segment_index": 9,
+			"sha256": "761d492115fd54ff6d368d91a4fb0ac07cd638de53e16a801aff9485b6f2fade",
+			"size_px": [
+				148,
+				67
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				0
+			],
+			"image": "():<Image#-9223371936241809741>",
 			"insert_command_index": 699,
-			"path": "assets/data/runtime/map_editor/wall_render_store/e8feaac776198c3fcc339412080c679874e8b85493bda25a67df76e0d5d3ade8.png",
-			"png_bytes": 40991,
+			"path": "assets/data/runtime/map_editor/wall_render_store/b338ff934fc072a9480ec695d71a9584eb0f3f6c40e4db8acf5b3342f1cd1cba.png",
+			"png_bytes": 46386,
 			"position_px": [
 				-1024.0,
-				29.0
+				285.0
 			],
 			"segment_index": 10,
-			"sha256": "e8feaac776198c3fcc339412080c679874e8b85493bda25a67df76e0d5d3ade8",
+			"sha256": "b338ff934fc072a9480ec695d71a9584eb0f3f6c40e4db8acf5b3342f1cd1cba",
 			"size_px": [
-				1007,
+				1024,
 				515
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"image": "():<Image#-9223371936225032524>",
+			"insert_command_index": 699,
+			"path": "assets/data/runtime/map_editor/wall_render_store/ab2a8119c99e36d0dff7cf79526818c2b3f5d18ec2e972bfdbd7bcf51b63d54b.png",
+			"png_bytes": 8863,
+			"position_px": [
+				0.0,
+				285.0
+			],
+			"segment_index": 10,
+			"sha256": "ab2a8119c99e36d0dff7cf79526818c2b3f5d18ec2e972bfdbd7bcf51b63d54b",
+			"size_px": [
+				495,
+				147
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				0
+			],
+			"image": "():<Image#-9223371936208255307>",
+			"insert_command_index": 699,
+			"path": "assets/data/runtime/map_editor/wall_render_store/09b5e53cfdb0b2291155f0c5fd9437ba7b47ff0117b96e9ca5ff5b0f3ca5effb.png",
+			"png_bytes": 3839,
+			"position_px": [
+				-1157.0,
+				367.0
+			],
+			"segment_index": 10,
+			"sha256": "09b5e53cfdb0b2291155f0c5fd9437ba7b47ff0117b96e9ca5ff5b0f3ca5effb",
+			"size_px": [
+				133,
+				182
 			]
 		}
 	],

@@ -3114,7 +3114,6 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	background.set_pending_arrival_position(
 		arrival_result.get("position_px", Vector2.ZERO) as Vector2
 	)
-	background.submit_staged_build()
 
 	# 2) REQUEST_RESOURCES -> 3) WAIT_RESOURCES
 	coordinator.advance(WorldBootstrapCoordinator.Stage.REQUEST_RESOURCES)
@@ -3134,6 +3133,13 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 		return false
 	if not coordinator.is_generation_current(generation):
 		return false
+
+	# WALL-P1R C4: the descriptor queue is handed over only after
+	# WAIT_RESOURCES (and the required-resource gate) completed, so
+	# submit_staged_build's optimized/legacy mode selection can verify the
+	# prefetched derived textures. The resource manifest was fully built
+	# during prepare_map_build; nothing needs the queue before this point.
+	background.submit_staged_build()
 
 	# 4) BUILD_MAP: one atomic map unit per queue task, frame-budgeted.
 	coordinator.advance(WorldBootstrapCoordinator.Stage.BUILD_MAP)
