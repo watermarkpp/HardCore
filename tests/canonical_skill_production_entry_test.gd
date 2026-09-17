@@ -192,7 +192,10 @@ func _run() -> void:
 				cell._sprite != null and cell._sprite.frame_count() == 6,
 				"火墙未加载主库1630..1635六帧动画"
 			)
-	assert(fire_wall_visual_count == 4, "火墙canonical真实入口未按主合同创建2×2四格动画")
+	assert(
+		fire_wall_visual_count == 9,
+		"火墙canonical真实入口必须按当前主合同创建3×3九格动画"
+	)
 
 	PlayerState.learned_skills = {
 		SkillDataLoader.display_name("wizard.magic_shield"): 3,
