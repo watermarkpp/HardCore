@@ -3026,6 +3026,16 @@ func _run_map_transition(
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
+	# P0-3b: route_arrival_position never consults environment collision
+	# (the collision layer does not exist yet at selection time), so a map
+	# whose routed arrival point sits on an environment-blocked cell used
+	# to hard-fail the ready contract even though the world itself is
+	# complete. With collision built, relocate the player to the nearest
+	# unblocked point before validating; the blocked-arrival invariant the
+	# contract enforces ("the player never stands inside a wall") is then
+	# satisfied in the freshly built world instead of discarding the whole
+	# transition.
+	_maybe_relocate_blocked_arrival()
 	if _check_world_ready_contract():
 		_relocate_main_pets_after_map_arrival()
 		# FW-COLD (GPT audit 2026-09-16): while Loading still covers the
@@ -3098,6 +3108,41 @@ func _run_map_transition(
 		# whole thing to the central recovery owner (safe home).
 		_world_bootstrap_coordinator.finish(false, "ready_contract_failed")
 		_fail_map_transition(&"post_arrival_safe_home")
+
+
+## P0-3b: nearest-unblocked-point relocation for a blocked routed arrival.
+## Only relocates a living player whose current position is actually
+## environment-blocked; every other condition is left to the normal ready
+## contract / failure paths. Bounded spiral search keeps the relocation
+## deterministic and cheap.
+func _maybe_relocate_blocked_arrival() -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	if not is_instance_valid(background):
+		return
+	if bool(player._dead) or int(player.current_hp) <= 0:
+		return
+	if not background.is_environment_point_blocked(player.global_position):
+		return
+	var origin := player.global_position
+	var best := Vector2.INF
+	var radius := 24.0
+	while radius <= 320.0 and best == Vector2.INF:
+		var steps := maxi(8, int(radius / 4.0))
+		for i: int in steps:
+			var angle := TAU * float(i) / float(steps)
+			var candidate := origin + Vector2(cos(angle), sin(angle)) * radius
+			if not background.is_environment_point_blocked(candidate):
+				best = candidate
+				break
+		radius += 24.0
+	if best == Vector2.INF:
+		return
+	player.global_position = best
+	player.velocity = Vector2.ZERO
+	if is_instance_valid(background):
+		background.set_focus_position(player.global_position)
+	print("[MapTransition] blocked arrival point; relocated player to nearest unblocked point (%.0f, %.0f)" % [best.x, best.y])
 
 
 ## P0-3: single owner for a FAILED map transition. Every FAILED path funnels
