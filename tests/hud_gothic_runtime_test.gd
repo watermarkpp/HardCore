@@ -439,7 +439,11 @@ func _run() -> void:
 	hud._begin_item_slot_press(1, slot_center, -1)
 	hud._finish_item_slot_press(1, slot_center)
 	assert(use_signals.size() == 1, "空槽单击不应发出 use")
-	assert("快捷物品 2 为空" in hud.loot_label.text, "空槽单击应给出既有风格提示")
+	# R1.1 closure: an empty quick-slot tap is a failed action, so the hint
+	# moved to the dedicated error channel (text unchanged); the ordinary
+	# notice lane must not carry it any more.
+	assert("快捷物品 2 为空" in hud.error_label.text, "空槽单击应给出错误通道提示")
+	assert(not ("快捷物品 2 为空" in hud.loot_label.text), "空槽提示不得再写入常规通知通道")
 
 	var before_menu_use_count := use_signals.size()
 	hud._begin_item_slot_press(2, slot_center, 7)

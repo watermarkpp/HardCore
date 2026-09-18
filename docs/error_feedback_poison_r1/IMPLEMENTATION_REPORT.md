@@ -1,5 +1,7 @@
 # IMPLEMENTATION_REPORT — R1 统一错误反馈 + 中毒表现
 
+> **R1.1 修订记录（20260918，控制器复审后）**：本报告按 R1 原样保留，仅作历史记录。控制器复审结论：SHA 链不实（"HEAD `b812d3cf` = origin/codex/integration `f06a3d29` + 本任务提交"与实际链不符，R1.1 文档只引用稳定祖先 `83840d3a14f7c26fb7306d8dc16c2e40de5aa185` = origin/codex/integration）；测试未注册 `$Suites`；"中毒表现"章节的方案（底部 HUD 条旗标 + 蓝环保留）被判定为篡改用户需求并已在 R1.1 重做——用户要求"中毒/麻痹与麻痹状态一样：脚下无圆环、只在人物血条下有一个标志"。R1.1 实施记录见 `../error_feedback_poison_r11/IMPLEMENTATION_REPORT.md`。
+
 - BASE：`4a91db49c7ae1738e75fbc114356da4423281cee`（任务开工时 origin/codex/integration）
 - RESULT：本提交 `fix(ui): unify error feedback and poison status presentation`（父提交 `f06a3d29`，rebase 后 = origin/codex/integration 当前 HEAD + 本提交）
 - 工作树：`C:\Users\Administrator\Documents\HardCore-worktrees\error-feedback-poison-r1-20260918`，分支 `glm/error-feedback-poison-r1`

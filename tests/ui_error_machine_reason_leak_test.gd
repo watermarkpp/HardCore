@@ -47,6 +47,15 @@ func _read_script(res_path: String) -> String:
 	return file.get_as_text()
 
 
+func _count_occurrences(source: String, needle: String) -> int:
+	var total := 0
+	var cursor := source.find(needle)
+	while cursor >= 0:
+		total += 1
+		cursor = source.find(needle, cursor + needle.length())
+	return total
+
+
 func _assert_no_shown_reason_concatenation(source: String, res_path: String) -> void:
 	# Any show_error_message / show_message call whose argument interpolates a
 	# machine reason field is a leak. from_result/user_message wrappers are the
@@ -137,6 +146,66 @@ func _run() -> void:
 	)
 	assert(UIErrorFeedbackScript.from_reason("", "后备文本") == "后备文本", "empty reason returns fallback")
 	assert(UIErrorFeedbackScript.from_reason("anything_else", "装备暂无法使用。") == "装备暂无法使用。", "unmapped reason returns fallback")
+
+	# --- R1.1 closure: temporary item buff reasons map to Chinese ------------
+	var buff_reason_expected := {
+		"invalid_arguments": "物品效果参数无效，无法使用。",
+		"contract_mismatch": "物品效果与当前规则不匹配，无法使用。",
+		"duration_invalid": "物品效果时长无效，无法使用。",
+		"buff_group_missing": "物品效果组缺失，无法使用。",
+		"modifiers_missing": "物品效果数值缺失，无法使用。",
+		"stat_not_allowed": "物品效果包含不允许的属性，无法使用。",
+	}
+	for buff_reason: String in buff_reason_expected:
+		assert(
+			UIErrorFeedbackScript.from_reason(buff_reason, "后备文本") == str(buff_reason_expected[buff_reason]),
+			"temporary buff reason %s must map to Chinese" % buff_reason
+		)
+		assert(
+			UIErrorFeedbackScript.is_machine_reason(buff_reason),
+			"temporary buff reason %s must classify as machine reason" % buff_reason
+		)
+
+	# --- R1.1 closure: item-use authority reports structured results ---------
+	var player_state := _read_script("res://scripts/player_state.gd")
+	assert(
+		player_state.contains("func use_inventory_index_result(index: int) -> Dictionary:"),
+		"use authority must expose the structured result entrypoint"
+	)
+	assert(
+		player_state.contains("return str(use_inventory_index_result(index).get(\"message\", \"\"))"),
+		"the String entrypoint must be a wrapper over the structured result"
+	)
+	assert(
+		not player_state.contains("return str(buff_result.get(\"reason\""),
+		"temporary buff failures must never return the raw machine reason as the player message"
+	)
+	assert(
+		player_state.contains("UIErrorFeedbackScript.from_reason(buff_reason"),
+		"temporary buff failures must classify through the error boundary"
+	)
+	assert(
+		player_state.contains("func _learn_skill_result(skill_name: String, inventory_index := -1) -> Dictionary:"),
+		"skill learning must expose the structured result contract"
+	)
+	assert(
+		player_state.contains("func apply_weapon_repair_oil_result(full_repair: bool) -> Dictionary:"),
+		"repair oil must expose the structured result contract"
+	)
+	assert(
+		player_state.contains("_use_item_failure(\"blessing_rng_not_ready\", \"祝福油随机源尚未就绪\")"),
+		"the production blessing-oil use path must classify the RNG rejection through the structured contract"
+	)
+	var inventory_panel := _read_script("res://scripts/inventory_panel.gd")
+	assert(
+		inventory_panel.contains("from_result(use_result,"),
+		"inventory use failures must pass the error boundary"
+	)
+	assert(
+		_count_occurrences(inventory_panel, "use_inventory_index_result(") >= 2
+		and _count_occurrences(inventory_panel, "use_inventory_index(") == 0,
+		"inventory use must consume the structured result, not the raw String"
+	)
 
 	assert(UIErrorFeedbackScript.user_message("stale_instance") == UIErrorFeedbackScript.GENERIC_FALLBACK, "bare token blocked")
 	assert(UIErrorFeedbackScript.user_message("some invalid_thing") == UIErrorFeedbackScript.GENERIC_FALLBACK, "invalid_ namespace blocked")

@@ -10222,13 +10222,10 @@ func _status_buff_entries() -> Array:
 	for buff: Dictionary in PlayerState.temporary_item_buffs.values():
 		if float(buff.remaining) <= 0.0: continue
 		entries.append({"id":"item:" + str(buff.buffGroup), "item_id":int(buff.get("item_id", -1)), "remaining":float(buff.remaining), "started_at":int(buff.get("started_at_usec", 0))})
-	# Unified poison status flag: legacy poison and monster-source poison merge
-	# into ONE strip entry. Presentation only -- gameplay decay/tick logic is
-	# untouched. The entry disappears immediately when both sources end or the
-	# player dies; map-switch pause follows the existing poison clock contract.
-	var poison_remaining := player.poison_status_remaining()
-	if player.current_hp > 0 and poison_remaining > 0.0:
-		entries.append({"id":"poison", "skill":"施毒术", "remaining":poison_remaining, "started_at":0})
+	# Player 麻痹/中毒 no longer surface on the bottom HUD buff strip (R1.1):
+	# they present as fixed-slot dots on the status marker row under the
+	# player overhead HP bar (PlayerStatusMarkerStrip). Gameplay poison and
+	# control timers are unchanged.
 	return entries
 
 
@@ -13121,7 +13118,9 @@ func _finish_loot_collection_outcomes(transaction_pending: Array, result: Dictio
 
 func _on_loot_collection_rejected(_item_name: String, message: String) -> void:
 	if is_instance_valid(hud):
-		hud.show_message(message)
+		# A rejected pickup is an operation failure: it belongs to the
+		# dedicated error channel, not the general notice lane.
+		hud.show_error_message(message)
 
 
 func _on_player_stats_changed(current_hp: int, max_hp: int) -> void:
@@ -13186,12 +13185,24 @@ func _on_scroll_used(item_name: String) -> void:
 		player.velocity = Vector2.ZERO
 		_relocate_main_pets_after_map_arrival()
 	elif effect == "repair_oil":
-		hud.show_message(PlayerState.apply_weapon_repair_oil(false))
+		_report_repair_oil_result(PlayerState.apply_weapon_repair_oil_result(false))
 		return
 	elif effect == "war_god_oil":
-		hud.show_message(PlayerState.apply_weapon_repair_oil(true))
+		_report_repair_oil_result(PlayerState.apply_weapon_repair_oil_result(true))
 		return
 	hud.show_message("使用了%s" % item_name)
+
+
+func _report_repair_oil_result(result: Dictionary) -> void:
+	# The repair-oil authority now reports a structured result: an actual
+	# repair stays on the notice lane, every rejection (no weapon, nothing to
+	# repair, save failure) surfaces on the dedicated error channel.
+	if bool(result.get("success", false)):
+		hud.show_message(str(result.get("message", "")))
+	else:
+		hud.show_error_message(
+			UIErrorFeedbackScript.from_result(result, "修复失败，请稍后重试。")
+		)
 
 
 func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:

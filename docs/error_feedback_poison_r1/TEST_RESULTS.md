@@ -1,5 +1,10 @@
 # TEST_RESULTS — R1 统一错误反馈 + 中毒表现
 
+> **R1.1 修订记录（20260918，控制器复审后）**：本文件按 R1 原样保留，仅作历史记录，以下结论已被控制器复审部分推翻并在 R1.1 重做：
+> 1. SHA 链不实：本文件所记 HEAD `b812d3cf` / 父提交 `f06a3d29` 与实际提交链不符；实际链见 `docs/error_feedback_poison_r11/IMPLEMENTATION_REPORT.md`（R1.1 唯一引用基线 = `83840d3a14f7c26fb7306d8dc16c2e40de5aa185` = origin/codex/integration）。
+> 2. 全部 5 个测试均未注册进 `tools/run_godot_tests.ps1` 的正式 `$Suites`，不构成长期回归门禁；R1.1 已补注册（critical 套件）。
+> 3. "麻痹蓝环逐字保留 / 中毒条目加入底部状态条" 的 PASS 判定错误：用户明确要求"中毒脚下绿色圆圈去掉。和麻痹一样。只需要在人物血条下有个标志。做法与麻痹状态一样"，即两种状态共用人物血条下的头顶标志系统、不再使用脚下圆环。R1.1 已移除麻痹蓝环与底部条毒旗标，新建 `PlayerStatusMarkerStrip`（血条下固定槽位：麻痹左/中毒右），测试与取证一并重做。
+
 运行环境：工作树 `C:\Users\Administrator\Documents\HardCore-worktrees\error-feedback-poison-r1-20260918`（分支 `glm/error-feedback-poison-r1`，HEAD `b812d3cf` = origin/codex/integration `f06a3d29` + 本任务提交）。测试经 `tools/run_godot_tests.ps1`（console/headless、每树 `.godot/runtime_appdata`、`outputs/test_logs`）。视觉取证为真实窗口化 Godot 运行（`Godot_v4.7-stable_win64.exe --resolution 1280x720`）。
 
 ## 1. 新增测试（全部 PASS）

@@ -1258,7 +1258,7 @@ func _add_context_action(label: String, action: Dictionary, disabled := false) -
 func _on_context_action(id: int) -> void:
 	var action: Dictionary = _context_actions.get(id, {})
 	var result: Dictionary = {}
-	var legacy_message := ""
+	var use_result: Dictionary = {}
 	match str(action.get("action", "none")):
 		"equip":
 			var equip_index := int(action.get("index", -1))
@@ -1274,14 +1274,27 @@ func _on_context_action(id: int) -> void:
 			var equipped: Variant = PlayerState.equipment.get(str(action.get("slot", "")), {})
 			result = PlayerState.unequip_to_inventory_slot(str(action.get("slot", "")), target_slot, str(equipped.get("instance_id", "")) if equipped is Dictionary else "")
 		"use":
-			legacy_message = PlayerState.use_inventory_index(int(action.get("index", -1)))
+			use_result = PlayerState.use_inventory_index_result(int(action.get("index", -1)))
 		_:
 			return
-	if not legacy_message.is_empty():
-		_clear_inventory_selection_styles()
-		_clear_equipment_selection()
-		refresh()
-		item_detail_presenter.show_message("[color=#e8c277]%s[/color]" % legacy_message)
+	if not use_result.is_empty():
+		if bool(use_result.get("success", false)):
+			_clear_inventory_selection_styles()
+			_clear_equipment_selection()
+			refresh()
+			item_detail_presenter.show_message("[color=#e8c277]%s[/color]" % str(use_result.get("message", "")))
+		else:
+			# A failed use keeps the prior selection and presenter; the
+			# authoritative failure message surfaces via the dedicated error
+			# channel as player-readable Chinese.
+			if not selected_inventory_ref.is_empty():
+				_show_inventory_detail(selected_inventory_index)
+			elif not selected_equipment_slot.is_empty():
+				_show_equipment_detail(selected_equipment_slot)
+			_show_error_message(
+				UIErrorFeedbackScript.from_result(use_result, "使用失败，请稍后重试。"),
+				2.0
+			)
 		return
 	if bool(result.get("success", false)):
 		_clear_inventory_selection_styles()
@@ -1356,10 +1369,18 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 				2.0
 			)
 		return
-	var result_message := PlayerState.use_inventory_index(index)
+	var use_result := PlayerState.use_inventory_index_result(index)
 	_clear_inventory_selection_styles()
 	refresh()
-	item_detail_presenter.show_message("[color=#e8c277]%s[/color]" % result_message)
+	if bool(use_result.get("success", false)):
+		item_detail_presenter.show_message("[color=#e8c277]%s[/color]" % str(use_result.get("message", "")))
+	else:
+		# A failed use is an operation failure: dedicated error channel with a
+		# player-readable Chinese message, never the raw authority string.
+		_show_error_message(
+			UIErrorFeedbackScript.from_result(use_result, "使用失败，请稍后重试。"),
+			2.0
+		)
 
 
 func _clear_pressed_suppression(index: int) -> void:

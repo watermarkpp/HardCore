@@ -1685,95 +1685,122 @@ func _last_item_commit_succeeded() -> bool:
 	return bool(_last_runtime_commit_profile.get("success", false))
 
 
+func _use_item_success(message: String) -> Dictionary:
+	return {"success": true, "reason": "", "message": message}
+
+
+func _use_item_failure(reason: String, message: String) -> Dictionary:
+	return {"success": false, "reason": reason, "message": message}
+
+
 func use_inventory_index(index: int) -> String:
+	return str(use_inventory_index_result(index).get("message", ""))
+
+
+## Structured use contract (R1.1 closure): {"success", "reason", "message"}.
+## "message" is always player-readable Chinese; "reason" is a machine token
+## for diagnostics only and never reaches the player UI.
+func use_inventory_index_result(index: int) -> Dictionary:
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
-		return "请先选择物品"
+		return _use_item_failure("no_item_selected", "请先选择物品")
 	var item_name := str(inventory[index].get("name", ""))
 	var item := GameData.get_item_record(item_name)
 	var kind := str(item.get("kind", ""))
 	var effect := str(item.get("useEffect", ""))
 	if kind == "skill_book":
-		return learn_skill(item_name, index)
+		return _learn_skill_result(item_name, index)
 	if item.get("usable", true) == false:
-		return "%s当前没有可执行的本地规则" % item_name
+		return _use_item_failure("no_local_rule", "%s当前没有可执行的本地规则" % item_name)
 	if kind == "scroll":
 		if effect in ["blessing_oil", "repair_oil", "war_god_oil"]:
 			var weapon_value: Variant = equipment.get("武器", {})
 			if not weapon_value is Dictionary or weapon_value.is_empty():
-				return "需要先装备武器"
+				return _use_item_failure("weapon_required", "需要先装备武器")
 			if effect == "blessing_oil":
 				if item_name != "祝福油":
-					return "%s效果配置无效" % item_name
+					return _use_item_failure("effect_config_invalid", "%s效果配置无效" % item_name)
 				if _blessing_oil_rng == null:
-					return "祝福油随机源尚未就绪"
+					return _use_item_failure("blessing_rng_not_ready", "祝福油随机源尚未就绪")
 				var blessing_result := use_blessing_oil_inventory_index(
 					index,
 					_blessing_oil_rng
 				)
 				if bool(blessing_result.get("ok", false)):
 					scroll_requested.emit(item_name)
-				return str(blessing_result.get("message", "祝福油使用失败"))
+					return _use_item_success(str(blessing_result.get("message", "祝福油使用成功")))
+				return _use_item_failure(
+					str(blessing_result.get("reason", "blessing_failed")),
+					str(blessing_result.get("message", "祝福油使用失败"))
+				)
 			if effect in ["repair_oil", "war_god_oil"]:
-				return _use_weapon_repair_oil_item(index, effect == "war_god_oil")
+				return _use_weapon_repair_oil_item_result(index, effect == "war_god_oil")
 		if _consume_inventory_index(index):
 			scroll_requested.emit(item_name)
 			if _last_item_commit_succeeded():
 				_emit_item_audio_committed(item, "use_success")
-			return "使用：%s" % item_name
-		return "物品数量不足"
+			return _use_item_success("使用：%s" % item_name)
+		return _use_item_failure("insufficient_items", "物品数量不足")
 	if kind != "consumable":
-		return "%s当前不可使用" % item_name
+		return _use_item_failure("not_usable", "%s当前不可使用" % item_name)
 	if item_name == "祝福油":
 		if effect != "blessing_oil":
-			return "祝福油效果配置无效"
+			return _use_item_failure("effect_config_invalid", "祝福油效果配置无效")
 		var weapon_value: Variant = equipment.get("武器", {})
 		if not weapon_value is Dictionary or weapon_value.is_empty():
-			return "需要先装备武器"
+			return _use_item_failure("weapon_required", "需要先装备武器")
 		if _blessing_oil_rng == null:
-			return "祝福油随机源尚未就绪"
+			return _use_item_failure("blessing_rng_not_ready", "祝福油随机源尚未就绪")
 		var blessing_result := use_blessing_oil_inventory_index(index, _blessing_oil_rng)
 		if bool(blessing_result.get("ok", false)):
 			consumable_requested.emit(item_name)
-		return str(blessing_result.get("message", "祝福油使用失败"))
+			return _use_item_success(str(blessing_result.get("message", "祝福油使用成功")))
+		return _use_item_failure(
+			str(blessing_result.get("reason", "blessing_failed")),
+			str(blessing_result.get("message", "祝福油使用失败"))
+		)
 	if effect == "temporary_stat_buff":
 		var profile: Variant = item.get("effectProfile", {})
 		if not profile is Dictionary:
-			return "%s效果配置无效" % item_name
+			return _use_item_failure("effect_config_invalid", "%s效果配置无效" % item_name)
 		var buffs_before := temporary_item_buffs.duplicate(true)
 		var revision_before := temporary_item_buff_revision
 		var inventory_before := inventory.duplicate(true)
 		var buff_result := apply_temporary_item_buff(item_name, profile, false)
 		if not bool(buff_result.get("ok", false)):
-			return str(buff_result.get("reason", "增益效果应用失败"))
+			var buff_reason := str(buff_result.get("reason", "buff_apply_failed"))
+			return _use_item_failure(
+				buff_reason,
+				UIErrorFeedbackScript.from_reason(buff_reason, "增益效果应用失败")
+			)
 		if not _consume_inventory_index_without_commit(index) or not _commit_save():
 			inventory = inventory_before
 			temporary_item_buffs = buffs_before
 			temporary_item_buff_revision = revision_before
 			recalculate_stats(false)
-			return "使用失败，物品和原有效果已保留"
+			return _use_item_failure("save_failed", "使用失败，物品和原有效果已保留")
 		recalculate_stats()
 		inventory_changed.emit()
 		_emit_item_audio_committed(item, "use_success")
-		return "使用：%s" % item_name
+		return _use_item_success("使用：%s" % item_name)
 	if _consume_inventory_index(index):
 		consumable_requested.emit(item_name)
 		if _last_item_commit_succeeded():
 			_emit_item_audio_committed(item, "use_success")
-		return "使用：%s" % item_name
-	return "物品数量不足"
+		return _use_item_success("使用：%s" % item_name)
+	return _use_item_failure("insufficient_items", "物品数量不足")
 
 
-func _use_weapon_repair_oil_item(index: int, full_repair: bool) -> String:
+func _use_weapon_repair_oil_item_result(index: int, full_repair: bool) -> Dictionary:
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
-		return "物品数量不足"
+		return _use_item_failure("insufficient_items", "物品数量不足")
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
-		return "需要先装备武器"
+		return _use_item_failure("weapon_required", "需要先装备武器")
 	_ensure_raw_durability_fields(weapon_value)
 	var current := int(weapon_value.get("durability_raw", 0))
 	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
 	if current >= maximum:
-		return "武器无需修复"
+		return _use_item_failure("weapon_not_damaged", "武器无需修复")
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
 	var record: Dictionary = inventory[index]
@@ -1788,32 +1815,38 @@ func _use_weapon_repair_oil_item(index: int, full_repair: bool) -> String:
 		inventory = inventory_before
 		equipment = equipment_before
 		recalculate_stats(false)
-		return "修复油存档失败，物品和装备均未改变"
+		return _use_item_failure("save_failed", "修复油存档失败，物品和装备均未改变")
 	inventory_changed.emit()
 	equipment_changed.emit()
 	profile_changed.emit()
 	_emit_item_audio_committed(item_audio_ref, "use_success")
-	return "武器已完全修复" if full_repair else "武器已部分修复"
+	return _use_item_success("武器已完全修复" if full_repair else "武器已部分修复")
 
 
 func apply_weapon_repair_oil(full_repair: bool) -> String:
+	return str(apply_weapon_repair_oil_result(full_repair).get("message", ""))
+
+
+## Structured repair-oil contract (R1.1 closure): {"success", "reason",
+## "message"} with a player-readable Chinese message in every branch.
+func apply_weapon_repair_oil_result(full_repair: bool) -> Dictionary:
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
-		return "需要先装备武器"
+		return _use_item_failure("weapon_required", "需要先装备武器")
 	_ensure_raw_durability_fields(weapon_value)
 	var current := int(weapon_value.get("durability_raw", 0))
 	var maximum := maxi(1, int(weapon_value.get("max_durability_raw", 1)))
 	if current >= maximum:
-		return "武器无需修复"
+		return _use_item_failure("weapon_not_damaged", "武器无需修复")
 	var equipment_before := equipment.duplicate(true)
 	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
 	if not _commit_save():
 		equipment = equipment_before
 		recalculate_stats(false)
-		return "武器修复存档失败"
+		return _use_item_failure("save_failed", "武器修复存档失败")
 	equipment_changed.emit()
 	profile_changed.emit()
-	return "武器已完全修复" if full_repair else "武器已部分修复"
+	return _use_item_success("武器已完全修复" if full_repair else "武器已部分修复")
 
 
 func _apply_weapon_repair_oil_without_commit(
@@ -2376,17 +2409,24 @@ func unequip_slot(slot: String, destination_slot := -1) -> String:
 
 
 func learn_skill(skill_name: String, inventory_index := -1) -> String:
+	return str(_learn_skill_result(skill_name, inventory_index).get("message", ""))
+
+
+## Structured learn contract (R1.1 closure): {"success", "reason", "message"}.
+## "message" is always player-readable Chinese; "reason" is a machine token
+## for diagnostics only and never reaches the player UI.
+func _learn_skill_result(skill_name: String, inventory_index := -1) -> Dictionary:
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	if stable_skill_id.is_empty():
-		return "技能数据不存在"
+		return _use_item_failure("skill_data_missing", "技能数据不存在")
 	var skill := GameData.get_skill(skill_name, 0)
 	if skill.is_empty():
-		return "技能数据不存在"
+		return _use_item_failure("skill_data_missing", "技能数据不存在")
 	var skill_profession := str(skill.get("profession", ""))
 	if not skill_profession.is_empty() and skill_profession != profession:
-		return "%s只能由%s学习" % [skill_name, skill_profession]
+		return _use_item_failure("profession_mismatch", "%s只能由%s学习" % [skill_name, skill_profession])
 	if not has_item(skill_name):
-		return "背包中缺少《%s》技能书" % skill_name
+		return _use_item_failure("book_missing", "背包中缺少《%s》技能书" % skill_name)
 	var book_index := inventory_index
 	if (
 		book_index < 0 or book_index >= inventory.size()
@@ -2399,7 +2439,7 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 				book_index = index
 				break
 	if book_index < 0:
-		return "背包中缺少《%s》技能书" % skill_name
+		return _use_item_failure("book_missing", "背包中缺少《%s》技能书" % skill_name)
 	var book_audio_ref := (inventory[book_index] as Dictionary).duplicate(true)
 	var progress_before: Dictionary = _skill_progression.snapshot()
 	var inventory_before := inventory.duplicate(true)
@@ -2410,19 +2450,25 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 	if not bool(learn_result.get("accepted", false)):
 		match str(learn_result.get("outcome", "")):
 			"max":
-				return "%s已达到最高等级" % skill_name
+				return _use_item_failure("skill_max_rank", "%s已达到最高等级" % skill_name)
 			"level_requirement":
-				return "需要人物等级%d" % int(learn_result.get("required_level", 1))
+				return _use_item_failure(
+					"level_requirement",
+					"需要人物等级%d" % int(learn_result.get("required_level", 1))
+				)
 			_:
 				# Player-readable Chinese only; the raw progression reason stays
 				# in diagnostics, never concatenated into the player message.
-				return UIErrorFeedbackScript.from_result(
-					learn_result,
-					"技能学习失败，请稍后重试。"
+				return _use_item_failure(
+					str(learn_result.get("reason", "learn_failed")),
+					UIErrorFeedbackScript.from_result(
+						learn_result,
+						"技能学习失败，请稍后重试。"
+					)
 				)
 	if not _consume_inventory_index_without_commit(book_index):
 		_skill_progression.load_snapshot(progress_before)
-		return "技能书消耗失败"
+		return _use_item_failure("book_consume_failed", "技能书消耗失败")
 	var base_rank := int(learn_result.get("base_rank", 0))
 	learned_skills[skill_name] = base_rank
 	var outcome := str(learn_result.get("outcome", ""))
@@ -2443,7 +2489,7 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 		quick_slots.assign(quick_before)
 		_skill_progression.load_snapshot(progress_before)
 		recalculate_stats(false)
-		return "技能学习存档失败，技能书和技能均未改变"
+		return _use_item_failure("save_failed", "技能学习存档失败，技能书和技能均未改变")
 	inventory_changed.emit()
 	skills_changed.emit()
 	skill_progression_changed.emit(_skill_progression.snapshot())
@@ -2451,9 +2497,9 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 	_emit_item_audio_committed(book_audio_ref, "use_success")
 	match outcome:
 		"upgraded":
-			return "技能提升：%s（当前%d级）" % [skill_name, base_rank]
+			return _use_item_success("技能提升：%s（当前%d级）" % [skill_name, base_rank])
 		_:
-			return "已学会：%s" % skill_name
+			return _use_item_success("已学会：%s" % skill_name)
 
 
 func is_skill_learned(skill_name: String) -> bool:
@@ -5789,9 +5835,11 @@ func use_quick_item_slot(index: int, expected_item_name := "") -> Dictionary:
 			"reason": "no_inventory",
 			"message": "背包中没有%s" % bound_name,
 		}
-	var before_count := item_count(bound_name)
-	var use_result := use_inventory_index(inventory_index)
-	var ok := item_count(bound_name) < before_count
+	var use_result := use_inventory_index_result(inventory_index)
+	# The structured use contract is authoritative: a declared success consumed
+	# the item, every failure keeps it. The former count-delta heuristic cannot
+	# distinguish "rejected" from "no-op" and is no longer needed.
+	var ok := bool(use_result.get("success", false))
 	var item := GameData.get_item_record(bound_name)
 	var kind := str(item.get("kind", ""))
 	return {
@@ -5800,8 +5848,8 @@ func use_quick_item_slot(index: int, expected_item_name := "") -> Dictionary:
 		"slot_index": index,
 		"item_name": bound_name,
 		"kind": kind,
-		"message": use_result,
-		"reason": "use_failed" if not ok else "used",
+		"message": str(use_result.get("message", "")),
+		"reason": str(use_result.get("reason", "")) if not ok else "used",
 	}
 
 

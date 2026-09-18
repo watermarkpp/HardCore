@@ -1080,7 +1080,9 @@ func _finish_item_slot_press(slot_index: int, release_position: Vector2, touch_i
 		return
 	var item_name := _item_slot_bound_name(slot_index)
 	if item_name.is_empty():
-		show_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
+		# Tapping an empty quick slot is a failed action: it belongs to the
+		# dedicated error channel, not the general notice lane.
+		show_error_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
 		return
 	item_quick_slot_use_requested.emit(slot_index, item_name)
 

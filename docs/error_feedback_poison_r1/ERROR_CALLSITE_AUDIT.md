@@ -1,5 +1,11 @@
 # ERROR_CALLSITE_AUDIT — R1 统一错误反馈施工审计
 
+> **R1.1 修订记录（20260918，控制器复审后）**：本审计主体仍然有效，按 R1 原样保留。R1.1 修正/补齐以下条目：
+> 1. "拾取拒绝 | NON_ERROR | 保持 LootFeedback" → 已重分类为 ERROR：`game_root._on_loot_collection_rejected` 现走 `hud.show_error_message(message)`（拾取被拒是操作失败；LootFeedback 层自身的其余反馈未动）。
+> 2. 快捷栏空点击（`hud.gd`）→ ERROR：`show_error_message("快捷物品 %d 为空：长按槽位可从背包选择")`。
+> 3. 物品使用权威（`player_state.use_inventory_index` 家族：技能书/修复油/战争之油/祝福油/临时增益/快捷栏）→ 结构化 `{success, reason, message}` 契约（`use_inventory_index_result` / `_learn_skill_result` / `apply_weapon_repair_oil_result`），消费方（inventory_panel/game_root）失败经 `UIErrorFeedback.from_result` 走错误通道；String 入口保留为兼容包装（消息逐字不变）。
+> 4. `REASON_MESSAGES` 补 6 条临时增益机器原因中文映射（invalid_arguments/contract_mismatch/duration_invalid/buff_group_missing/modifiers_missing/stat_not_allowed）。
+
 基线：`4a91db49c7ae1738e75fbc114356da4423281cee`（origin/codex/integration，rebase 后父提交 `f06a3d29`）。
 
 分类定义：
