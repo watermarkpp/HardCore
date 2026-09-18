@@ -13,6 +13,7 @@ const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout
 const ChassisDesignsScript := preload("res://scripts/hud_chassis_designs.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
+const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
 const INVENTORY_PANEL_SCRIPT_PATH := "res://scripts/inventory_panel.gd"
 const MonsterDisplayFormatterScript := preload("res://scripts/monster_display_formatter.gd")
@@ -133,6 +134,13 @@ var data_label: Label
 var profile_label: Label
 var quest_tracker_label: Label
 var loot_label: Label
+## Dedicated player-error channel. Independent from loot_label/show_message on
+## purpose: show_message also carries non-error notices, so raising that lane's
+## layer would change unrelated notice behavior. The error label always renders
+## above every modal panel (Inventory 50 / Warehouse 55 / Shop 60 / Skill 60 /
+## ItemDetailPresenter 4095).
+var error_label: Label
+var _error_message_timer := 0.0
 var target_label: Label
 var target_health_fill: ColorRect
 var auto_target_button: Button
@@ -427,6 +435,25 @@ func _build_hidden_compatibility_info(root: Control) -> void:
 	loot_label.add_theme_font_size_override("font_size", 22)
 	loot_label.add_theme_color_override("font_color", Color("ffd06f"))
 	root.add_child(loot_label)
+
+	# Error channel copies the LootNotice presentation geometry but lives on
+	# its own absolute layer above every modal panel, including the docked
+	# ItemDetailPresenter at z=4095.
+	error_label = Label.new()
+	error_label.name = "ErrorNotice"
+	error_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	error_label.offset_left = 360
+	error_label.offset_top = 132
+	error_label.offset_right = -360
+	error_label.offset_bottom = 172
+	error_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	error_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	error_label.add_theme_font_size_override("font_size", 22)
+	error_label.add_theme_color_override("font_color", Color("ffd06f"))
+	error_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	error_label.z_as_relative = false
+	error_label.z_index = 4096
+	root.add_child(error_label)
 
 
 func _build_target_bar(root: Control) -> void:
@@ -2161,6 +2188,9 @@ func _process(delta: float) -> void:
 	_loot_message_timer = maxf(0.0, _loot_message_timer - delta)
 	if _loot_message_timer == 0.0 and loot_label != null:
 		loot_label.text = ""
+	_error_message_timer = maxf(0.0, _error_message_timer - delta)
+	if _error_message_timer == 0.0 and error_label != null:
+		error_label.text = ""
 
 
 func update_hp(current_hp: int, max_hp: int) -> void:
@@ -2513,6 +2543,20 @@ func show_message(message: String, seconds := 2.0) -> void:
 	if loot_label != null:
 		loot_label.text = message
 		_loot_message_timer = seconds
+
+
+## Dedicated player-error channel. Fully independent from show_message: the
+## two timers and labels never clear each other. Machine reasons passed by
+## mistake are replaced by generic Chinese prose at this boundary; raw reasons
+## stay in logs/diagnostics only.
+func show_error_message(message: String, seconds := 2.0) -> void:
+	var visible_message := UIErrorFeedbackScript.user_message(message)
+	if visible_message.is_empty():
+		return
+
+	if error_label != null:
+		error_label.text = visible_message
+		_error_message_timer = maxf(0.1, seconds)
 
 
 func update_quick_slots() -> void:

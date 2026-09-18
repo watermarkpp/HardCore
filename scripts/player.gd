@@ -1507,6 +1507,13 @@ func apply_monster_poison(tick_damage: int, seconds: float, interval_seconds: fl
 	return applied
 
 
+## Presentation-facing accessor for the unified poison status flag. Reads both
+## poison sources (legacy + monster-source) without mutating any gameplay
+## state. The HUD status strip uses this to show exactly one 中毒 flag.
+func poison_status_remaining() -> float:
+	return maxf(poison_time, _monster_source_poison.remaining_seconds)
+
+
 func _update_monster_source_poison(delta: float) -> void:
 	if _dead or current_hp <= 0:
 		_monster_source_poison.clear()
@@ -1548,8 +1555,10 @@ func _draw() -> void:
 		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
 	if control_time > 0.0:
 		draw_circle(Vector2(0, -4), 37.0, Color(0.42, 0.62, 1.0, 0.75), false, 4.0)
-	if poison_time > 0.0 or _monster_source_poison.remaining_seconds > 0.0:
-		draw_circle(Vector2(0, -4), 40.0, Color(0.20, 0.85, 0.22, 0.70), false, 4.0)
+	# Poison no longer draws a ground ring under the character. The poisoned
+	# state presents through the HUD status strip (see GameRoot
+	# _status_buff_entries / GameHUD.update_status_buffs), sharing the existing
+	# status-flag lane. Gameplay poison timers are unchanged.
 
 
 func _apply_profile_stats() -> void:

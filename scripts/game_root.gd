@@ -13,6 +13,7 @@ var _audio_runtime_service: Node
 var _player_level_up_effect: Node2D
 
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
@@ -2416,9 +2417,11 @@ func _handle_safe_logout_failure(action: StringName, result: Dictionary) -> void
 		action,
 		str(result.get("reason", "safe_logout_failed"))
 	)
-	if is_instance_valid(hud) and hud.has_method("show_message"):
-		hud.show_message(
-			"安全退出失败：%s" % str(result.get("reason", "")),
+	if is_instance_valid(hud) and hud.has_method("show_error_message"):
+		# Player sees Chinese prose only; the raw reason stays in the
+		# diagnostic above and in push_error via the reporter.
+		hud.show_error_message(
+			UIErrorFeedbackScript.from_result(result, "安全退出失败，请稍后重试。"),
 			2.0
 		)
 
@@ -2442,11 +2445,10 @@ func _handle_home_resolution_failure(
 		action,
 		str(result.get("reason", "home_resolution_failed"))
 	)
-	if is_instance_valid(hud) and hud.has_method("show_message"):
-		hud.show_message(
-			"目标位置解析失败：%s" % str(result.get("reason", "")),
-			2.0
-		)
+	if is_instance_valid(hud) and hud.has_method("show_error_message"):
+		# Player-readable Chinese only; the raw resolution reason is retained
+		# in the diagnostic above and in push_error via the reporter.
+		hud.show_error_message("无法确定安全返回位置。", 2.0)
 
 
 func _report_safe_logout_error_production(action: StringName, reason: String) -> void:
@@ -2581,25 +2583,29 @@ func _on_map_teleport_requested(request: Dictionary) -> void:
 	if not MapTeleportRuntimePolicyScript.request_matches_rule(request, rule):
 		if is_instance_valid(hud):
 			hud.set_map_teleport_availability({selected_map_id: rule})
-			hud.show_message(str(rule.get("reason", "传送条件已经失效")))
+			hud.show_error_message(
+				UIErrorFeedbackScript.user_message(
+					str(rule.get("reason", "传送条件已经失效"))
+				)
+			)
 		return
 	var destination_map_id := int(rule.get("destination_map_id", -1))
 	var travel_profile := _resolve_projection_profile_for_map(destination_map_id)
 	if not bool(travel_profile.get("success", false)):
 		missing_projection_rejection_count += 1
 		projection_rejection_reason = str(travel_profile.get("reason", ""))
-		hud.show_message("目标地图投影暂不可用（%d）" % destination_map_id)
+		hud.show_error_message("目标地图投影暂不可用（%d）" % destination_map_id)
 		return
 	var map_data := GameData.get_map_by_id(destination_map_id)
 	if map_data.is_empty():
-		hud.show_message("地图数据不存在：%d" % destination_map_id)
+		hud.show_error_message("地图数据不存在：%d" % destination_map_id)
 		return
 	var operation := Callable(self, "_teleport_to_map_immediate").bind(
 		destination_map_id,
 		str(rule.get("arrival_anchor_id", "")),
 	)
 	if not _begin_map_transition(operation, destination_map_id):
-		hud.show_message("当前无法开始传送")
+		hud.show_error_message("当前无法开始传送")
 
 
 func _teleport_to_map_immediate(map_id: int, arrival_anchor_id: String) -> bool:
@@ -2649,11 +2655,11 @@ func _request_map_travel(map_id: int) -> bool:
 		projection_rejection_reason = str(
 			travel_profile.get("reason", "")
 		)
-		hud.show_message("当前地图投影暂不可用（%d）" % map_id)
+		hud.show_error_message("当前地图投影暂不可用（%d）" % map_id)
 		return false
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty():
-		hud.show_message("地图数据不存在：%d" % map_id)
+		hud.show_error_message("地图数据不存在：%d" % map_id)
 		return false
 	if current_map_id == map_id:
 		return false
@@ -2696,7 +2702,7 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		current_runtime, portal_id
 	)
 	if endpoint.is_empty():
-		hud.show_message("传送节点端点不存在", 1.5)
+		hud.show_error_message("传送节点端点不存在", 1.5)
 		return false
 	var current_ground_gu := (
 		MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
@@ -2712,11 +2718,11 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		current_ground_gu,
 		fresh_activation
 	):
-		hud.show_message("传送节点尚未稳定，请稍候或先离开入口", 1.5)
+		hud.show_error_message("传送节点尚未稳定，请稍候或先离开入口", 1.5)
 		return false
 	var request := MapPortalRuntimeServiceScript.travel_request(endpoint)
 	if not _valid_portal_request(request):
-		hud.show_message("传送节点配置无效", 1.5)
+		hud.show_error_message("传送节点配置无效", 1.5)
 		return false
 	if not MapPortalTravelGuardScript.begin_travel(_portal_guard_state):
 		return false
@@ -2724,7 +2730,7 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 	var map_data := GameData.get_map_by_id(target_map_id)
 	if map_data.is_empty():
 		_portal_guard_state["travel_in_flight"] = false
-		hud.show_message("地图数据不存在：%d" % target_map_id)
+		hud.show_error_message("地图数据不存在：%d" % target_map_id)
 		return false
 	var target_runtime := MapEditorRuntimeBridgeScript.load_map(target_map_id)
 	var target_portal_id := str(request.get("target_portal_id", ""))
@@ -2733,16 +2739,16 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 	)
 	if target_runtime.is_empty() or target_endpoint.is_empty():
 		_portal_guard_state["travel_in_flight"] = false
-		hud.show_message("目标地图或目标门点不可用", 1.5)
+		hud.show_error_message("目标地图或目标门点不可用", 1.5)
 		return false
 	if str(target_runtime.get("source", {}).get("map_id", "")) != str(request.get("target_map_key", "")):
 		_portal_guard_state["travel_in_flight"] = false
-		hud.show_message("目标地图标识不匹配", 1.5)
+		hud.show_error_message("目标地图标识不匹配", 1.5)
 		return false
 	var target_tile := _portal_tile(target_endpoint.get("tile", []))
 	if target_tile == Vector2.INF or target_tile != _portal_tile(request.get("target_tile", [])):
 		_portal_guard_state["travel_in_flight"] = false
-		hud.show_message("目标门点坐标不匹配", 1.5)
+		hud.show_error_message("目标门点坐标不匹配", 1.5)
 		return false
 	map_data = _runtime_named_map_data(map_data)
 	var operation := Callable(self, "_complete_portal_travel").bind(
@@ -4741,7 +4747,7 @@ func _on_skill_input_started(
 		return
 	var skill_name := PlayerState.skill_name_for_slot(slot_group, slot_index)
 	if skill_name.is_empty():
-		hud.show_message("技能栏为空")
+		hud.show_error_message("技能栏为空")
 		return
 	var metadata := SkillInputPolicyScript.metadata(skill_name)
 	if metadata.is_empty() or bool(metadata.get("passive", false)):
@@ -5437,7 +5443,7 @@ func _cycle_target() -> void:
 			_cancel_magic_target()
 		else:
 			_cancel_target()
-		hud.show_message(
+		hud.show_error_message(
 			"周围12格内没有可锁定目标"
 			if magic_domain
 			else "周围10格内没有可锁定目标"
@@ -6035,7 +6041,7 @@ func _try_interact() -> void:
 			nearest = node
 			nearest_distance_gu = distance_gu
 	if nearest == null:
-		hud.show_message("附近没有可交互目标")
+		hud.show_error_message("附近没有可交互目标")
 		return
 	nearest.interact(self)
 
@@ -6054,7 +6060,7 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 			if slot_group == PlayerState.SKILL_SLOT_GROUP_ATTACK
 			else "攻击环%d" % (slot_index + 1)
 		)
-		hud.show_message("%s为空" % group_label)
+		hud.show_error_message("%s为空" % group_label)
 		return
 	var metadata := SkillInputPolicyScript.metadata(skill_name)
 	if bool(metadata.get("toggle", false)):
@@ -6066,7 +6072,7 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		if show_failure:
-			hud.show_message("技能尚未学习")
+			hud.show_error_message("技能尚未学习")
 		return &"rejected"
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
@@ -6074,7 +6080,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		return &"rejected"
 	if not SkillVisibilityPolicyScript.is_skill_castable(stable_skill_id):
 		if show_failure:
-			hud.show_message("该技能已隐藏，无法使用")
+			hud.show_error_message("该技能已隐藏，无法使用")
 		return &"rejected"
 	_activate_magic_skill_domain()
 	var input_metadata := SkillInputPolicyScript.metadata(stable_skill_id)
@@ -6088,7 +6094,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		# Player.request_skill as the authority for dead/control/struck locks.
 		if not player.request_skill(skill_name):
 			if show_failure:
-				hud.show_message("技能动作或冷却尚未结束")
+				hud.show_error_message("技能动作或冷却尚未结束")
 			return &"busy"
 		_skill_cast_target = null
 		return &"accepted"
@@ -6101,7 +6107,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		)
 		if not bool(heal_selection.get("valid", false)):
 			if show_failure:
-				hud.show_message("附近没有可治疗的友方")
+				hud.show_error_message("附近没有可治疗的友方")
 			_skill_cast_target = null
 			_selected_friendly_instance_id = 0
 			return &"rejected"
@@ -6122,20 +6128,20 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
 			_selected_friendly_instance_id = 0
 		if show_failure:
-			hud.show_message("魔法不足")
+			hud.show_error_message("魔法不足")
 		return &"rejected"
 	if not player.can_request_skill(skill_name):
 		if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
 			_selected_friendly_instance_id = 0
 		if show_failure:
-			hud.show_message("技能动作或冷却尚未结束")
+			hud.show_error_message("技能动作或冷却尚未结束")
 		return &"busy"
 	_skill_cast_target = null
 	if stable_skill_id == WILD_RUSH_SKILL_ID:
 		_skill_cast_target = _select_wild_rush_target()
 		if _skill_cast_target == null:
 			if show_failure:
-				hud.show_message("附近没有可冲撞的低级普通怪物")
+				hud.show_error_message("附近没有可冲撞的低级普通怪物")
 			return &"rejected"
 		_face_skill_cast_target()
 	elif _skill_needs_target(str(profile.get("cast_type", "melee"))):
@@ -6144,11 +6150,11 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	if _definition_requires_hostile_target(definition):
 		if not is_instance_valid(_skill_cast_target):
 			if show_failure:
-				hud.show_message("法术需要有效目标")
+				hud.show_error_message("法术需要有效目标")
 			return &"rejected"
 		if not _spell_definition_allows_target(definition, _skill_cast_target):
 			if show_failure:
-				hud.show_message("目标超出该法术的有效范围")
+				hud.show_error_message("目标超出该法术的有效范围")
 			return &"rejected"
 	var locked_skill_target_id := 0
 	if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
@@ -6163,7 +6169,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	if not player.request_skill(skill_name, locked_skill_target_id):
 		_selected_friendly_instance_id = 0
 		if show_failure:
-			hud.show_message("技能动作或冷却尚未结束")
+			hud.show_error_message("技能动作或冷却尚未结束")
 		return &"busy"
 	if stable_skill_id.begins_with("warrior."):
 		_skill_cast_target = null
@@ -6256,7 +6262,7 @@ func _on_item_quick_slot_assignment_requested(
 	var result := PlayerState.assign_quick_item_slot(slot_index, item_name)
 	if not bool(result.get("ok", false)):
 		_sync_item_quick_slots_to_hud()
-		hud.show_message(str(result.get("message", "快捷物品绑定失败")))
+		hud.show_error_message(UIErrorFeedbackScript.user_message(str(result.get("message", "快捷物品绑定失败"))))
 		return
 	_sync_item_quick_slots_to_hud()
 	hud.show_message(str(result.get("message", "快捷物品已绑定")))
@@ -6270,7 +6276,7 @@ func _on_item_quick_slot_use_requested(
 		return
 	var result := PlayerState.use_quick_item_slot(slot_index, item_name)
 	if not bool(result.get("ok", false)):
-		hud.show_message(str(result.get("message", "快捷物品使用失败")))
+		hud.show_error_message(UIErrorFeedbackScript.user_message(str(result.get("message", "快捷物品使用失败"))))
 		return
 	# consumable/scroll effects are already surfaced by their existing signal
 	# chain; only skill_book needs an immediate visible confirmation.
@@ -6292,7 +6298,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 		)
 	)
 	if not bool(result.get("ok", false)):
-		hud.show_message("技能栏配置失败")
+		hud.show_error_message("技能栏配置失败")
 		return
 	if not PlayerState.apply_skill_button_assignment(result):
 		if is_instance_valid(hud) and hud.has_method("set_skill_button_assignments"):
@@ -6300,7 +6306,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 				"set_skill_button_assignments",
 				PlayerState.skill_button_assignments_snapshot()
 			)
-		hud.show_message("技能栏配置未能保存")
+		hud.show_error_message("技能栏配置未能保存")
 		return
 	if is_instance_valid(hud):
 		hud.cancel_attack_inputs(&"skill_assignment_changed")
@@ -6859,17 +6865,17 @@ func _commit_warrior_melee_modifier_events(modifiers: Dictionary) -> void:
 
 func _on_special_action_pressed(effect_id: String) -> void:
 	if not PlayerState.has_special_effect(effect_id):
-		hud.show_message("特殊装备已失效")
+		hud.show_error_message("特殊装备已失效")
 		return
 	match effect_id:
 		"teleport":
 			if _try_safe_ring_teleport():
 				hud.show_message("传送戒指：安全位移")
 			else:
-				hud.show_message("前方没有合法传送落点")
+				hud.show_error_message("前方没有合法传送落点")
 		"flame_skill":
 			if not player.spend_mana(5):
-				hud.show_message("火球需要5点魔法")
+				hud.show_error_message("火球需要5点魔法")
 				return
 			_skill_cast_target = null
 			_ensure_skill_cast_target(null)
@@ -6897,7 +6903,7 @@ func _on_special_action_pressed(effect_id: String) -> void:
 			hud.show_message("火焰戒指：火球")
 		"recovery_skill":
 			if not player.spend_mana(5):
-				hud.show_message("治愈需要5点魔法")
+				hud.show_error_message("治愈需要5点魔法")
 				return
 			var amount := maxi(12, int(PlayerState.level / 2) + int(PlayerState.computed_stats.get("tao_max", 0)) * 2)
 			player.restore_health(amount)
@@ -6990,7 +6996,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 			# domain during windup, reject the cast instead of degrading to the
 			# generic ground/direction fallback used by untargeted area spells.
 			_skill_cast_target = null
-			hud.show_message("锁定目标已失效，技能未释放", 1.5)
+			hud.show_error_message("锁定目标已失效，技能未释放", 1.5)
 			return
 		_skill_cast_target = release_target
 	var friendly_identity_release: Dictionary = release_geometry.get(
@@ -7020,7 +7026,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 	)
 	var hit_any := bool(execution.get("effect_success", false))
 	if not bool(execution.get("accepted", false)):
-		hud.show_message("技能释放失败", 1.5)
+		hud.show_error_message("技能释放失败", 1.5)
 		return
 	if hit_any:
 		_play_skill_audio_phase(stable_skill_id, "effect")
@@ -10216,6 +10222,13 @@ func _status_buff_entries() -> Array:
 	for buff: Dictionary in PlayerState.temporary_item_buffs.values():
 		if float(buff.remaining) <= 0.0: continue
 		entries.append({"id":"item:" + str(buff.buffGroup), "item_id":int(buff.get("item_id", -1)), "remaining":float(buff.remaining), "started_at":int(buff.get("started_at_usec", 0))})
+	# Unified poison status flag: legacy poison and monster-source poison merge
+	# into ONE strip entry. Presentation only -- gameplay decay/tick logic is
+	# untouched. The entry disappears immediately when both sources end or the
+	# player dies; map-switch pause follows the existing poison clock contract.
+	var poison_remaining := player.poison_status_remaining()
+	if player.current_hp > 0 and poison_remaining > 0.0:
+		entries.append({"id":"poison", "skill":"施毒术", "remaining":poison_remaining, "started_at":0})
 	return entries
 
 
@@ -13167,7 +13180,7 @@ func _on_scroll_used(item_name: String) -> void:
 	elif effect == "random_teleport" or "随机" in item_name:
 		var destination := _find_valid_random_teleport_position(player.global_position)
 		if destination == player.global_position:
-			hud.show_message("附近没有可用传送落点")
+			hud.show_error_message("附近没有可用传送落点")
 			return
 		_set_player_world_position(destination)
 		player.velocity = Vector2.ZERO
@@ -13307,7 +13320,7 @@ func _hc_skill_preflight(stable_skill_id: String, target_id: int) -> bool:
 	var clear := _hc_lightning_clear(victim, player.global_position)
 	if not clear and hud != null and Time.get_ticks_msec() - _hc_lightning_hint_ms >= 500:
 		_hc_lightning_hint_ms = Time.get_ticks_msec()
-		hud.show_message("目标被遮挡或已失效", 1.5)
+		hud.show_error_message("目标被遮挡或已失效", 1.5)
 	return clear
 
 
