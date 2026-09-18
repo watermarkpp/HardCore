@@ -99,8 +99,12 @@
 
 - 结论：**0 项 REGRESSION 归因于 R1.1**；13 项基线既有 + 5 项偶发（复跑/交叉树验证）。
 
-### 5.2 R2（统一玩家通知）critical（integration merge 5a29fdae 前、R2 树 @ a9c9472，2026-09-18 18:01）
+### 5.2 R2（统一玩家通知）critical（R2 未提交候选工作树，2026-09-18 18:01）
 
+- 证据链（如实修正：原表述"R2 树 @ a9c9472"不成立——18:01 时该 commit 尚不存在，a9c9472 于 18:10 才提交）：
+  full critical 运行于 **R2 未提交候选工作树（BASE 4b001cbc + R2 生产改动；当时工作树内容与 a9c9472 的差异仅为 warrior_skill_state_machine_test 的旧通道断言）**，18:01 完成；
+  随后仅修正该测试断言（测试侧，无生产代码改动），18:07 定向复跑 10/10 PASS；
+  18:10 将最终内容提交为 **a9c9472**。full critical 并非针对该已提交 SHA 运行，差异已由定向复跑覆盖，按效率规范未重跑 363 项。
 - 结果：**363 项（357+6 新注册），347 PASS，16 FAIL**（`runner_results_critical_20260918_180133_274_2664.json`）。
 - 8 个 R2 测试全部 PASS，注册映射：player_notice_overlay/item_style/dedupe_priority/action_result_contract/equipment_success_notice_real_input/skill_learning_notice_real_input → `$Suites.critical`（L602-609）；item_style+equipment_success 另入 `$Suites.equipment`（L611-614）；scope_guard/overlay 为 R1.1 已注册改写（L590-597）。
 - 16 FAIL 分类（其中 13 项与 §5.1 相同签名 → BASELINE_EXISTING，不再重复列表）：
@@ -112,6 +116,14 @@
 | summon_owner_teleport_runtime_test | FAIL(套件内) | PASS | PASS；R2 树单独复跑 PASS | FLAKY（套件负载下的位移竞态；两树隔离均 PASS） |
 
 - 修复后定向复跑：warrior_skill_state_machine + hud_gothic_runtime + 8 个 R2 测试 = **10/10 PASS**（18:07）。未再跑第二次全量 critical（仅 1 处测试侧断言修正，按效率规范不重跑 363 项）。
+
+### 5.4 R2.1 Closure（评审收口三项，2026-09-18 18:37）
+
+1. **证据表述修正**：§5.2 的"@a9c9472"事实错误已按真实时序重写（见上）。
+2. **ActionResult 机器文本防泄漏**：`UIPlayerNotice.from_action_result()` 对 `success == false` 的结果强制经过 `UIErrorFeedback.from_result(result, "操作失败，请稍后重试。")`——message 本身是机器 token/空串/命名空间原因时一律落到中文兜底，未来锻造/合成/强化等任何 ActionResult 接入方都无法把内部 reason 打到玩家界面。
+3. **契约空格**：带 `item_ref` 的 ActionResult，message 与物品名之间的间隔为契约文本（message 尾部显式空格），渲染为"锻造成功 屠龙"，不依赖 HBox 容器间距。
+- 新增断言（扩充已注册的 player_notice_action_result_contract_test，无新文件、critical 总数不变 363）：机器 token message → "操作失败，请稍后重试。"；空 message → 同兜底；全行 full_text()=="锻造成功 屠龙"；纯文本失败不加尾空格。
+- 定向复跑（评审指定 4 项 + 相关通知测试共 9 项，60s）：**9/9 PASS**（`runner_results_adhoc_20260918_183749_858_21040.json`）。
 
 ### 5.3 视觉验收（窗口化真实 GPU，1600x720）
 

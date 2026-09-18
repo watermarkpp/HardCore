@@ -51,7 +51,10 @@ func _run() -> void:
 		"item_ref": forged_item,
 	})
 	await settle()
-	expect(hud.error_label.text == "锻造成功", "forge success message renders")
+	# R2.1 contract spacing: the gap between message and item name is explicit
+	# text owned by the contract, never container padding.
+	expect(hud.error_label.text == "锻造成功 ", "forge success message renders with explicit trailing gap")
+	expect(presenter.full_text() == "锻造成功 屠龙", "full line reads '锻造成功 屠龙' with explicit spacing")
 	expect(presenter.item_label.text == "屠龙", "item_ref name renders through UIItemNameStyle")
 	expect(presenter.item_label.get_theme_color("font_color") == NameStyleScript.describe(forged_item, {}).get("color"), "item_ref color is authoritative")
 	var notice := presenter.current_notice()
@@ -94,10 +97,36 @@ func _run() -> void:
 	hud.present_action_result({"success": false, "message": "强化材料不足", "notice_code": "reinforce.materials_insufficient", "notice_kind": "error"})
 	expect(hud.error_label.text == "强化材料不足", "later failure preempts earlier success")
 
+	# --- R2.1 machine-message boundary on failed action results --------------
+	# A future service that stuffs the raw reason into `message` must still
+	# never leak it: the failure path runs through UIErrorFeedback.from_result.
+	presenter.clear_for_test()
+	hud.present_action_result({
+		"success": false,
+		"reason": "materials_insufficient",
+		"message": "materials_insufficient",
+		"notice_code": "forge.leak_probe",
+		"notice_kind": "error",
+	})
+	await settle()
+	expect(hud.error_label.text == "操作失败，请稍后重试。", "machine-token failure message falls back to Chinese prose (got [%s])" % hud.error_label.text)
+	expect(not presenter.full_text().contains("materials_insufficient"), "machine token in message never reaches the overlay")
+	presenter.clear_for_test()
+	hud.present_action_result({
+		"success": false,
+		"reason": "",
+		"message": "",
+		"notice_kind": "error",
+	})
+	await settle()
+	expect(hud.error_label.text == "操作失败，请稍后重试。", "empty failure message falls back to Chinese prose")
+	# Spacing never applies to a text-only failure (no item segment).
+	expect(hud.error_label.text.ends_with("。"), "fallback prose stays intact without item spacing")
+
 	hud.queue_free()
 	await settle()
 	if failures.is_empty():
-		print("PLAYER_NOTICE_ACTION_RESULT_CONTRACT_PASS: item_ref, kind fallback, reason hidden, preemption")
+		print("PLAYER_NOTICE_ACTION_RESULT_CONTRACT_PASS: item_ref, kind fallback, reason hidden, preemption, machine-message guard, contract spacing")
 		get_tree().quit(0)
 	else:
 		for failure in failures:

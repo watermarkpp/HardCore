@@ -142,15 +142,26 @@ static func from_action_result(result: Dictionary) -> Dictionary:
 	var kind := str(result.get("notice_kind", ""))
 	if not is_valid_kind(kind):
 		kind = KIND_SUCCESS if success else KIND_ERROR
+	# Machine-reason boundary (R2.1): a failed action whose message is itself
+	# a machine token or namespaced reason never reaches the player overlay;
+	# the error-feedback authority supplies the Chinese fallback. Success
+	# prose is business-authored and passes through untouched.
+	var message := str(result.get("message", ""))
+	if not success:
+		message = UIErrorFeedback.from_result(result, "操作失败，请稍后重试。")
 	var notice := {
 		"kind": kind,
 		"code": str(result.get("notice_code", "")),
-		"message": str(result.get("message", "")),
+		"message": message,
 		"duration": DEFAULT_DURATION,
 	}
 	var item_ref: Variant = result.get("item_ref", {})
 	if item_ref is Dictionary and not (item_ref as Dictionary).is_empty():
 		var resolved := resolve_item_ref(item_ref)
+		# Contract spacing (R2.1): message + item name read as one line
+		# ("锻造成功 屠龙"); the gap is explicit text, never container padding.
+		if not notice["message"].is_empty() and not str(notice["message"]).ends_with(" "):
+			notice["message"] = str(notice["message"]) + " "
 		notice["segments"] = [
 			item_segment(resolved["item"], resolved["instance"]),
 		]
