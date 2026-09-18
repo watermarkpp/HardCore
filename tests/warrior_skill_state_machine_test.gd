@@ -31,7 +31,9 @@ func _run() -> void:
 	player._attack_action_timer = 0.45
 	game._handle_toggle_skill_input("半月弯刀")
 	assert(player.half_moon_enabled, "半月首次开关被通用施法预检错误拒绝")
-	assert(game.hud.loot_label.text == "半月弯刀：开启", "半月首次开关仍显示错误失败提示")
+	# UNIFIED-PLAYER-NOTICE R2: global toggle notices moved from the retired
+	# loot_label lane to the central overlay (prefix label = error_label alias).
+	assert(game.hud.error_label.text == "半月弯刀：开启", "半月首次开关仍显示错误失败提示")
 	assert(player.current_mp == 0, "半月开关不得消耗MP")
 	assert(is_equal_approx(player._attack_timer, 0.75), "半月开关不得修改攻击间隔")
 	assert(is_equal_approx(player._attack_action_timer, 0.45), "半月开关不得修改攻击动作计时")
@@ -39,7 +41,7 @@ func _run() -> void:
 	assert(not player.half_moon_enabled, "半月第二次开关没有正常关闭")
 	game._handle_toggle_skill_input("烈火剑法")
 	assert(player.fire_sword_enabled, "烈火首次开关被通用施法预检错误拒绝")
-	assert(game.hud.loot_label.text == "烈火剑法：开启", "烈火首次开关仍显示错误失败提示")
+	assert(game.hud.error_label.text == "烈火剑法：开启", "烈火首次开关仍显示错误失败提示")
 	assert(player.current_mp == 0, "烈火开关不得消耗MP")
 	assert(is_equal_approx(player._attack_timer, 0.75), "烈火开关不得修改攻击间隔")
 	assert(is_equal_approx(player._attack_action_timer, 0.45), "烈火开关不得修改攻击动作计时")

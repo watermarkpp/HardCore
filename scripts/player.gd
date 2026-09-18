@@ -65,6 +65,9 @@ signal skill_requested(skill_name: String, origin: Vector2, direction: Vector2, 
 signal skill_cast_started(stable_skill_id: String)
 signal warrior_skill_state_changed(skill_name: String, enabled: bool, message: String)
 signal resources_changed(current_hp: int, max_hp: int, current_mp: int, max_mp: int)
+## R2: fired once when a potion-granted combat buff (ac/mac) fully expires, so
+## the central notice layer can report the end of the effect exactly once.
+signal potion_buff_expired(kind: String)
 signal movement_performed(position: Vector2, facing: Vector2)
 signal death_requested
 

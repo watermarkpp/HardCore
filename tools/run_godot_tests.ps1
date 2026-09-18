@@ -596,6 +596,23 @@ $Suites.critical = @($Suites.critical + @(
     'tests/player_health_bar_status_marker_test.tscn'
 ) | Select-Object -Unique)
 
+# September 18 UNIFIED-PLAYER-NOTICE R2: the unified central notice layer is a
+# permanent regression gate. The overlay/contract tests run in critical; the
+# real-input notice tests also join the equipment lane (§38).
+$Suites.critical = @($Suites.critical + @(
+    'tests/player_notice_overlay_test.tscn',
+    'tests/player_notice_item_style_test.tscn',
+    'tests/player_notice_dedupe_priority_test.tscn',
+    'tests/player_notice_action_result_contract_test.tscn',
+    'tests/equipment_success_notice_real_input_test.tscn',
+    'tests/skill_learning_notice_real_input_test.tscn'
+) | Select-Object -Unique)
+
+$Suites.equipment = @($Suites.equipment + @(
+    'tests/player_notice_item_style_test.tscn',
+    'tests/equipment_success_notice_real_input_test.tscn'
+) | Select-Object -Unique)
+
 # ── Q0-A: final judgement contract ──
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.

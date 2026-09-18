@@ -249,6 +249,9 @@ var _taoist_main_pets_persistence_provider := Callable()
 # Test-only failure injection. Production ignores it unless test_mode is true.
 var _test_force_atomic_write_failure := false
 var temporary_item_buffs: Dictionary = {}
+## R2: fired when a timed item buff (神水类) fully expires; carries the item
+## name so the notice layer can report "XX效果结束" exactly once.
+signal temporary_item_buff_expired(item_name: String)
 var temporary_item_buff_revision := 0
 
 
@@ -7327,6 +7330,8 @@ func advance_temporary_item_buffs(delta: float) -> void:
 		return
 	for item_name: String in expired:
 		temporary_item_buffs.erase(item_name)
+		# R2: the central notice layer reports the end of a timed 神水 effect.
+		temporary_item_buff_expired.emit(item_name)
 	temporary_item_buff_revision += 1
 	recalculate_stats()
 
