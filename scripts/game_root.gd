@@ -1985,79 +1985,161 @@ func _pump_pending_warm_textures() -> void:
 	):
 		if _frame_texture_threaded.has(path):
 			continue
-		if ResourceLoader.load_threaded_request(path, "Texture2D", true) == OK:
+		# PERF-R2 R5: combat warm-up must never use sub threads - the main
+		# thread's frame time stability outranks background texture speed.
+		if ResourceLoader.load_threaded_request(path, "Texture2D", false) == OK:
 			_frame_texture_threaded[path] = true
 
 
+## perf-smoothness-r1 C-R1 (PERF-R2 R7): the workset priority comes from the
+## player's ACTUAL bound attack slots and attack ring, not the learned-skills
+## Dictionary whose key order is historical. A skill the player cannot cast
+## has zero first-cast value.
+func _active_skill_workset_candidates() -> Array[String]:
+	var raw: Array = []
+	raw.append_array(
+		PlayerState.skill_slots_for_group(
+			PlayerState.SKILL_SLOT_GROUP_ATTACK
+		)
+	)
+	raw.append_array(
+		PlayerState.skill_slots_for_group(
+			PlayerState.SKILL_SLOT_GROUP_ATTACK_RING
+		)
+	)
+	return CasterSkillVisualRegistry.workset_skill_order(raw, 7)
+
+
+## PERF-R2 R8: thread-pump texture paths with a REAL absolute deadline.
+## No synchronous load() ever runs on this budget path: paths are admitted
+## through load_threaded_request, polled every frame, and only a
+## THREAD_LOAD_LOADED status may call load_threaded_get. The deadline stops
+## new admissions; already-in-flight completions are still collected so no
+## threaded work is wasted or leaked.
+func _prewarm_texture_paths_until(
+	paths: Array[String],
+	deadline_usec: int
+) -> Dictionary:
+	var cursor := 0
+	var in_flight: Dictionary = {}
+	var loaded := 0
+	var failed := 0
+	while cursor < paths.size() or not in_flight.is_empty():
+		var deadline_hit := Time.get_ticks_usec() >= deadline_usec
+		if not deadline_hit:
+			while (
+				in_flight.size() < FRAME_TEXTURE_WARM_MAX_IN_FLIGHT
+				and cursor < paths.size()
+			):
+				var path := paths[cursor]
+				cursor += 1
+				if CasterSkillVisualRegistry.frame_texture_is_resident(path):
+					loaded += 1
+					continue
+				var err := ResourceLoader.load_threaded_request(
+					path, "Texture2D", true
+				)
+				if err == OK:
+					in_flight[path] = true
+				else:
+					failed += 1
+		for raw_path: Variant in in_flight.keys():
+			var path := str(raw_path)
+			var status := ResourceLoader.load_threaded_get_status(path)
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				in_flight.erase(path)
+				var texture := ResourceLoader.load_threaded_get(
+					path
+				) as Texture2D
+				if texture != null:
+					CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+					loaded += 1
+				else:
+					failed += 1
+			elif (
+				status == ResourceLoader.THREAD_LOAD_FAILED
+				or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+			):
+				in_flight.erase(path)
+				failed += 1
+		if in_flight.is_empty() and (
+			cursor >= paths.size() or Time.get_ticks_usec() >= deadline_usec
+		):
+			break
+		await get_tree().process_frame
+	return {
+		"loaded": loaded,
+		"failed": failed,
+		"not_admitted": paths.size() - cursor,
+		"in_flight_at_deadline": in_flight.size(),
+		"deadline_exceeded": Time.get_ticks_usec() >= deadline_usec,
+	}
+
+
 func _prewarm_learned_skill_visuals() -> void:
-	# perf-smoothness-r1 Phase C: the loading window is explicitly opened for
-	# this one prewarm entry and closed at READY release; combat-time texture
-	# misses go through the async warm-up channel instead.
+	# perf-smoothness-r1 Phase C + C-R1: the loading window is explicitly
+	# opened for this one prewarm entry and closed at READY release; combat
+	# texture misses go through the async warm-up channel instead. The whole
+	# entry now runs under ONE enforced absolute deadline: texture prewarm is
+	# thread-pumped frame by frame and stops admitting past the budget.
 	CasterSkillVisualRegistry.set_loading_window_active(true)
 	CasterSkillVisualRegistry.unpin_all_frames()
-	if PlayerState.test_mode and PlayerState.learned_skills.is_empty():
+	var workset: Array[String] = _active_skill_workset_candidates()
+	if workset.is_empty():
 		return
 	var started_usec := Time.get_ticks_usec()
-	# Bounded first-cast workset (audit): NOT every learned skill - the 32 MiB
-	# frame LRU cannot hold them anyway. Fire wall always participates last so
-	# its frames stay the hottest LRU entries.
-	var workset: Array[String] = CasterSkillVisualRegistry.workset_skill_order(
-		PlayerState.learned_skills.keys()
-	)
-	var skipped := 0
-	var deadline_exceeded := false
+	var deadline_usec := started_usec + LOADING_PREWARM_BUDGET_USEC
+	var all_paths: Array[String] = []
 	for skill_id: String in workset:
-		var is_fire_wall := skill_id == "wizard.fire_wall"
-		# One absolute deadline: non-critical prewarm stops when the budget is
-		# gone. The fire-wall first-cast workset is READY-critical and never
-		# skipped by the deadline.
-		if deadline_exceeded and not is_fire_wall:
-			skipped += 1
-			continue
-		CasterSkillVisualRegistry.prewarm_animation(skill_id)
-		if (
-			not deadline_exceeded
-			and not is_fire_wall
-			and Time.get_ticks_usec() - started_usec
-				> LOADING_PREWARM_BUDGET_USEC
-		):
-			deadline_exceeded = true
-	for audio_id: String in ["sword", "wood", "fist"]:
-		PresentationAssets.audio(audio_id)
-	for action_key: String in ["attack", "hit", "cast", "death"]:
-		PresentationAssets.player_texture(action_key)
-	# FW-COLD2 Phase A: re-touch the first-cast skill LAST, then prove
-	# residency before Loading ends - the READY-critical workset gate. A
-	# failed residency re-runs the (idempotent) prewarm once inside the
-	# loading window; only genuinely missing files can still report missing.
-	CasterSkillVisualRegistry.prewarm_animation("wizard.fire_wall")
-	var fw_residency := CasterSkillVisualRegistry.animation_residency(
-		"wizard.fire_wall"
-	)
-	if int(fw_residency.get("missing_paths", []).size()) > 0:
-		CasterSkillVisualRegistry.prewarm_animation("wizard.fire_wall")
-		fw_residency = CasterSkillVisualRegistry.animation_residency(
-			"wizard.fire_wall"
+		all_paths.append_array(
+			CasterSkillVisualRegistry.animation_frame_paths(skill_id)
 		)
-	var fw_missing: Array = fw_residency.get("missing_paths", [])
-	# Pin the bounded workset lease: first-cast skills + fire wall frames are
-	# exempt from LRU eviction while the pin budget bounds the lease.
+	var pump_result: Dictionary = await _prewarm_texture_paths_until(
+		all_paths, deadline_usec
+	)
+	# Optional low-cost warming yields to the same deadline: skipped entirely
+	# once the budget is gone (PERF-R2 R8 - the deadline is absolute).
+	var optional_skipped := false
+	if Time.get_ticks_usec() < deadline_usec:
+		for audio_id: String in ["sword", "wood", "fist"]:
+			PresentationAssets.audio(audio_id)
+		for action_key: String in ["attack", "hit", "cast", "death"]:
+			PresentationAssets.player_texture(action_key)
+	else:
+		optional_skipped = true
+	# READY-critical workset gate: every workset skill must be fully resident
+	# before Loading ends. A deadline-exceeded skill stays admitted on the
+	# next frames ONLY if the hard budget still allows it - the gate reports
+	# truthfully instead of pretending.
+	var incomplete_skills: Array[String] = []
+	for skill_id: String in workset:
+		var residency: Dictionary = CasterSkillVisualRegistry.animation_residency(
+			skill_id
+		)
+		if int(residency.get("missing_paths", []).size()) > 0:
+			incomplete_skills.append(skill_id)
+	# Pin the bounded workset lease (atomic per skill): accepted skills are
+	# exempt from LRU eviction; rejected skills are reported truthfully.
 	var pin_result: Dictionary = CasterSkillVisualRegistry.pin_skill_workset(
 		workset
 	)
 	var prewarm_usec := Time.get_ticks_usec() - started_usec
 	print(
-		"[LOADING-WORKSET] skills=%d skipped=%d deadline_exceeded=%s prewarm_ms=%d pinned=%d rejected=%d fw_resident=%d/%d%s"
+		"[LOADING-WORKSET] skills=%d paths=%d loaded=%d failed=%d not_admitted=%d prewarm_ms=%d deadline_exceeded=%s optional_skipped=%s accepted=%s rejected=%s pinned_paths=%d pinned_bytes=%d incomplete=%s"
 		% [
 			workset.size(),
-			skipped,
-			str(deadline_exceeded),
+			all_paths.size(),
+			int(pump_result.get("loaded", 0)),
+			int(pump_result.get("failed", 0)),
+			int(pump_result.get("not_admitted", 0)),
 			prewarm_usec / 1000,
-			int(pin_result.get("pinned", -1)),
-			int(pin_result.get("rejected", -1)),
-			int(fw_residency.get("resident_frames", 0)),
-			int(fw_residency.get("expected_frames", 0)),
-			"" if fw_missing.is_empty() else " missing=%s" % [fw_missing],
+			str(pump_result.get("deadline_exceeded", false)),
+			str(optional_skipped),
+			str(pin_result.get("accepted_skills", [])),
+			str(pin_result.get("rejected_skills", [])),
+			int(pin_result.get("pinned_paths", -1)),
+			int(pin_result.get("pinned_bytes", -1)),
+			str(incomplete_skills),
 		]
 	)
 
@@ -3177,17 +3259,17 @@ func _run_map_transition(
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
 	if _check_world_ready_contract():
 		_relocate_main_pets_after_map_arrival()
-		# FW-COLD (GPT audit 2026-09-16): while Loading still covers the
-		# gameplay, prewarm every animation frame of the player's learned
-		# skills (learned skills are a superset of the hotbar). The first
-		# real cast must be a pure texture-cache hit instead of a main-thread
-		# synchronous load spike. Loading-phase work only: damage, spatial
-		# index and fire wall systems are untouched.
-		_prewarm_learned_skill_visuals()
-		# FW-COLD2 Phase B: really draw the fire wall visual once per frame
-		# texture while the loading overlay still covers the screen, so the
-		# first real cast skips the first-render cold path. Presentation-only.
-		await _warm_fire_wall_render_path()
+		# FW-COLD (perf-smoothness-r1 C-R1): thread-pumped, deadline-aware
+		# prewarm of the ACTUAL bound workset under the loading overlay. The
+		# first real cast of every workset skill must be a pure texture-cache
+		# hit. Loading-phase work only: damage, spatial index and fire wall
+		# systems are untouched.
+		await _prewarm_learned_skill_visuals()
+		# FW-COLD2 Phase B + PERF-R2 R7/C8: the GPU render warm is bound to
+		# the workset - a warrior/taoist without fire wall bound never pays
+		# for fire-wall warm-up here.
+		if _active_skill_workset_candidates().has("wizard.fire_wall"):
+			await _warm_fire_wall_render_path()
 		if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 			return
 		if is_instance_valid(_town_music_controller):

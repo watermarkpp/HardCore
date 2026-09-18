@@ -243,21 +243,31 @@ func _process(delta: float) -> void:
 	if _shared_clock_ms.is_valid():
 		_apply_shared_clock_frame()
 		return
+	# perf-smoothness-r1 C-R1 (PERF-R2 R19/Phase D first item): catch-up must
+	# commit ONLY the final frame. A long frame (e.g. 100 ms) used to bind
+	# every intermediate texture in one render frame; the player only ever
+	# sees the last one, so compute the final index in closed form and apply
+	# it once. Frame-index parity with small-delta playback is contract-tested.
 	_elapsed += delta
-	while _elapsed >= _frame_time_seconds:
-		_elapsed -= _frame_time_seconds
-		var next_frame := current_frame_index + 1
-		if next_frame >= _frames.size():
-			if _loop:
-				next_frame = 0
-			else:
-				next_frame = _frames.size() - 1
-				playback_complete = true
-				animation_finished.emit(skill_id)
-		current_frame_index = next_frame
+	if _elapsed < _frame_time_seconds:
+		return
+	var steps := int(floor(_elapsed / _frame_time_seconds))
+	_elapsed -= float(steps) * _frame_time_seconds
+	if _loop:
+		current_frame_index = (
+			(current_frame_index + steps) % _frames.size()
+		)
 		_apply_frame(current_frame_index)
-		if playback_complete:
-			break
+		return
+	var target_frame := current_frame_index + steps
+	if target_frame >= _frames.size():
+		current_frame_index = _frames.size() - 1
+		_apply_frame(current_frame_index)
+		playback_complete = true
+		animation_finished.emit(skill_id)
+		return
+	current_frame_index = target_frame
+	_apply_frame(current_frame_index)
 
 
 func set_shared_clock_ms(clock_ms_provider: Callable) -> void:

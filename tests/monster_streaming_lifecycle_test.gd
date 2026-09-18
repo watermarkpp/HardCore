@@ -34,11 +34,204 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	await _t1_stale_prefetch_job_must_retire()
+	await _t1b_stale_retire_must_not_pollute_cache()
+	await _t1c_generation_failure_replacement()
+	await _t1d_non_idle_failure_records_real_path()
 	await _t2_failed_entry_must_not_block_retry()
 	_t3_runtime_ready_jobs_must_not_be_blocked()
+	_t3b_runtime_lane_never_uses_sub_threads()
 	_cleanup()
-	print("MONSTER_STREAMING_LIFECYCLE_PASS retire/retry/prefix")
+	print("MONSTER_STREAMING_LIFECYCLE_PASS retire/retry/prefix/genreuse/realpath/subthreads")
 	get_tree().quit(0)
+
+
+## B1 (PERF-R2 R3): a stale loaded profile with NO current demand is retired
+## WITHOUT cache admission - it must not evict the live map's LRU entries.
+func _t1b_stale_retire_must_not_pollute_cache() -> void:
+	_coordinator = CoordinatorScript.new()
+	MonsterVisual.set_streaming_coordinator(_coordinator)
+	MonsterVisual.reset_client_resource_cache()
+	# Generation 0 treats current-1 as negative (dead) - advance the fence so
+	# a genuine stale (previous-generation) job is recognizable.
+	_coordinator._set_world_generation(1)
+	var ids: Array[int] = Fixtures.catalog_ids()
+	var mapping_stale := _mapping_for(ids[4])
+	var key_stale := _key_for(mapping_stale)
+	# Current generation owns a small resident profile worth protecting.
+	var small := _small_profile()
+	var small_bytes: int = _coordinator._decoded_rgba8_profile_bytes(small)
+	_coordinator.retain_client_resource_profile("live_entry", small)
+	var cached_before: int = int(
+		_coordinator.monster_streaming_diagnostics().decoded_rgba8_bytes
+	)
+	# Craft a stale loaded job that nobody in the current world needs.
+	_coordinator._threaded_profile_requests[key_stale] = {
+		"state": "loaded",
+		"lane": CoordinatorScript.JOB_LANE_MAP_PREFETCH,
+		"map_generation": _coordinator.current_world_generation() - 1,
+		"request_sequence": 9,
+		"resources": small,
+	}
+	_coordinator._loaded_pending_keys[key_stale] = small_bytes
+	var stale_before: int = int(
+		_coordinator.monster_streaming_diagnostics().stale_completion_count
+	)
+	_coordinator._retire_stale_loaded_jobs()
+	assert(
+		not _coordinator._threaded_profile_requests.has(key_stale),
+		"stale loaded job must be cleared"
+	)
+	assert(
+		int(_coordinator.monster_streaming_diagnostics().stale_completion_count)
+			== stale_before + 1,
+		"stale retirement must be diagnosed"
+	)
+	assert(
+		_coordinator.client_resources(key_stale).is_empty(),
+		"stale resource with no demand must NOT enter the cache"
+	)
+	assert(
+		int(_coordinator.monster_streaming_diagnostics().decoded_rgba8_bytes)
+			== cached_before,
+		"stale retirement must not change live cache accounting"
+	)
+	assert(
+		_coordinator.client_resources("live_entry").is_empty() == false,
+		"stale retirement must not evict the live map's cache entry"
+	)
+
+
+## B2 (PERF-R2 R2): an old-generation failed/permanent entry must not block
+## a fresh request from the CURRENT generation.
+func _t1c_generation_failure_replacement() -> void:
+	_coordinator = CoordinatorScript.new()
+	MonsterVisual.set_streaming_coordinator(_coordinator)
+	MonsterVisual.reset_client_resource_cache()
+	_coordinator._set_world_generation(1)
+	var ids: Array[int] = Fixtures.catalog_ids()
+	var mapping := _mapping_for(ids[5])
+	var key := _key_for(mapping)
+	var stale_generation: int = _coordinator.current_world_generation() - 1
+	_coordinator.request_client_profile(mapping, ids[5], stale_generation)
+	assert(_coordinator._threaded_profile_requests.has(key))
+	_coordinator._threaded_profile_requests[key] = {
+		"state": "permanent_failed",
+		"lane": CoordinatorScript.JOB_LANE_MAP_PREFETCH,
+		"map_generation": stale_generation,
+		"failure_count": 3,
+	}
+	var duplicates_before: int = int(
+		_coordinator.monster_streaming_diagnostics().duplicate_request_count
+	)
+	# The CURRENT generation demands the same key: the terminal old-generation
+	# entry must be replaced by a fresh request, not dedup-blocked.
+	_coordinator.request_client_profile(
+		mapping, ids[5], _coordinator.current_world_generation()
+	)
+	var job: Dictionary = _coordinator._threaded_profile_requests.get(key, {})
+	assert(
+		str(job.get("state", "")) not in ["failed", "permanent_failed"]
+		and int(job.get("map_generation", -1))
+			== _coordinator.current_world_generation(),
+		"current generation must own a FRESH job, not the old failure"
+	)
+	assert(
+		int(job.get("failure_count", 0)) == 0,
+		"fresh request must not inherit the old failure provenance"
+	)
+	assert(
+		int(_coordinator.monster_streaming_diagnostics().duplicate_request_count)
+			== duplicates_before,
+		"replacement must not count as a duplicate"
+	)
+	# The fresh request's pump started a REAL thread load for this monster.
+	# Let it complete and be consumed/dispatched so no in-flight engine load
+	# outlives this test (dummy-renderer exit safety - an unconsumed threaded
+	# request is the source of the intermittent RID corruption on quit).
+	var settled := await _poll_until(
+		func() -> bool:
+			return not _coordinator._threaded_profile_requests.has(key)
+	)
+	assert(settled, "fresh job must settle (load + dispatch) before test end")
+
+
+## B4 (PERF-R2 R4): a non-idle action failure records the REAL failed path.
+## Real engine-side load succeeds (valid monster atlas), then the expected
+## size check fails on a non-idle action - the poll must record that exact
+## action's path, never a hardcoded idle path. No engine ERROR log is emitted
+## (loading succeeded), keeping the runner's stderr gate clean.
+func _t1d_non_idle_failure_records_real_path() -> void:
+	_coordinator = CoordinatorScript.new()
+	MonsterVisual.set_streaming_coordinator(_coordinator)
+	MonsterVisual.reset_client_resource_cache()
+	var ids: Array[int] = Fixtures.catalog_ids()
+	var mapping := _mapping_for(ids[6])
+	var key := _key_for(mapping)
+	var paths: Dictionary = {}
+	var wrong_sizes: Dictionary = {}
+	var actions: Dictionary = mapping.get("actions", {})
+	for action_name: String in CoordinatorScript.ACTIONS:
+		var action: Dictionary = actions.get(action_name, {})
+		paths[action_name] = str(action.get("path", ""))
+		wrong_sizes[action_name] = Vector2i(99999, 99999)
+		ResourceLoader.load_threaded_request(
+			paths[action_name], "Texture2D", false
+		)
+	# Wait until every real texture is genuinely loaded.
+	var all_loaded := false
+	for frame_wait: int in range(600):
+		all_loaded = true
+		for action_name: String in CoordinatorScript.ACTIONS:
+			var status := ResourceLoader.load_threaded_get_status(
+				paths[action_name]
+			)
+			if status != ResourceLoader.THREAD_LOAD_LOADED:
+				all_loaded = false
+				break
+		if all_loaded:
+			break
+		await get_tree().process_frame
+	assert(all_loaded, "real monster textures must load before the poll")
+	_coordinator._threaded_profile_requests[key] = {
+		"state": "loading",
+		"lane": CoordinatorScript.JOB_LANE_RUNTIME_DEMAND,
+		"map_generation": -1,
+		"request_sequence": 20,
+		"paths": paths,
+		"expected_sizes": wrong_sizes,
+	}
+	_coordinator.poll_once(Engine.get_process_frames() + 1)
+	var expected_failure_path: String = str(
+		paths[CoordinatorScript.ACTIONS[0]]
+	)
+	assert(
+		_coordinator._failure_details.has(key),
+		"engine-side failure must be diagnosed"
+	)
+	assert(
+		str(_coordinator._failure_details[key].get("path", ""))
+			== expected_failure_path,
+		"failed_path must be the REAL failing action path"
+	)
+	assert(
+		str(_coordinator._failure_details[key].get("state", ""))
+			in ["failed", "permanent_failed"],
+		"failure detail must carry a terminal/failed state"
+	)
+
+
+## B5 (PERF-R2 R5): live-combat runtime demand never uses sub threads.
+func _t3b_runtime_lane_never_uses_sub_threads() -> void:
+	_coordinator = CoordinatorScript.new()
+	MonsterVisual.set_streaming_coordinator(_coordinator)
+	assert(
+		_coordinator._job_use_sub_threads({"lane": "map_prefetch"}) == true,
+		"loading map prefetch may use sub threads"
+	)
+	assert(
+		_coordinator._job_use_sub_threads({"lane": "runtime_demand"}) == false,
+		"combat runtime demand must NOT use sub threads"
+	)
 
 
 func _mapping_for(monster_id: int) -> Dictionary:

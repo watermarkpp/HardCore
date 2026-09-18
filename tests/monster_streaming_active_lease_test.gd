@@ -73,8 +73,13 @@ func _run() -> void:
 	assert(_coordinator.visual_resource_state(far_enemy.visual) == "registered")
 	assert(_coordinator.waiting_visual_count() == 0, "far registered visual must not be a permanent waiter")
 	live_enemy.global_position = offscreen_position
-	live_visual._resource_residency_timer = 0.0
-	live_visual._process(MonsterVisual.RESOURCE_RESIDENCY_CHECK_SECONDS)
+	# perf-smoothness-r1 C-R1 (PERF-R2 takeover): with a coordinator present,
+	# MonsterVisual._process() no longer owns residency polling - the
+	# coordinator is the single poll owner (_poll_visual_residency ->
+	# streaming_residency_poll -> _update_resource_residency). Drive the
+	# production path instead of the retired per-visual timer hack.
+	await get_tree().process_frame
+	_coordinator.poll_once(Engine.get_process_frames())
 	assert(
 		_coordinator.visual_resource_state(live_visual) == "registered",
 		"off-screen live visual did not release its active lease",

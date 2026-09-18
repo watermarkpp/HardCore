@@ -122,7 +122,9 @@ $MonsterStreamingExpected = @(
     'tests/monster_streaming_no_visual_queue_test.tscn',
     'tests/monster_streaming_no_sync_load_test.tscn',
     'tests/monster_streaming_spatial_index_non_regression_test.tscn',
-    'tests/monster_streaming_scaling_test.tscn'
+    'tests/monster_streaming_scaling_test.tscn',
+    'tests/monster_streaming_lifecycle_test.tscn',
+    'tests/monster_streaming_active_lease_test.tscn'
 )
 
 $SkillPlanSuite = 'skill_execution_plan_critical'

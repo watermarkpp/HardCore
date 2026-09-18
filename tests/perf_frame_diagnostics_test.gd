@@ -27,6 +27,7 @@ func _run() -> void:
 	_check_boundary_discard()
 	_check_device_lab_feeder()
 	_check_aoe_window_complete()
+	_check_aoe_window_rejects_foreign_tick()
 	_check_aoe_window_oneshot_and_other_skill()
 	_check_aoe_window_deadline()
 	_check_separated_cache_diagnostics()
@@ -110,8 +111,28 @@ func _check_aoe_window_complete() -> void:
 	assert(float(report.get("max_ms", -1.0)) >= 349.0)
 	var field_ms := float(report.get("cast_to_field_ms", -1.0))
 	var tick_ms := float(report.get("cast_to_tick_ms", -1.0))
-	var death_ms := float(report.get("cast_to_death_ms", -1.0))
+	# C-R1 (PERF-R2 R9): the death milestone is non-causal and renamed.
+	var death_ms := float(report.get("cast_to_first_any_death_ms", -1.0))
+	assert(
+		str(report.get("milestone_causality", "")) == "non_causal_first_any_death"
+	)
 	assert(field_ms >= 0.0 and tick_ms >= field_ms and death_ms >= tick_ms)
+
+
+func _check_aoe_window_rejects_foreign_tick() -> void:
+	# C-R1 (PERF-R2 R9): a non-fire-wall ground tick must not set the tick
+	# milestone (window stays open, nothing is reported).
+	AoeEngagementWindow.reset_for_tests()
+	AoeEngagementWindow.on_skill_cast("wizard.fire_wall")
+	AoeEngagementWindow.record_frame_interval_ms(16.0)
+	AoeEngagementWindow.on_ground_damage_tick("taoist.poison")
+	assert(AoeEngagementWindow.window_active())
+	assert(not AoeEngagementWindow.is_reported())
+	# The real fire-wall tick then completes the window as usual.
+	AoeEngagementWindow.on_field_spawned("wizard.fire_wall")
+	AoeEngagementWindow.on_ground_damage_tick("wizard.fire_wall")
+	AoeEngagementWindow.on_enemy_death_committed()
+	assert(AoeEngagementWindow.is_reported())
 
 
 func _check_aoe_window_oneshot_and_other_skill() -> void:

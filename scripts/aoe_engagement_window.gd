@@ -65,13 +65,20 @@ static func on_field_spawned(stable_skill_id: String) -> void:
 static func on_ground_damage_tick(stable_skill_id: String) -> void:
 	if not OS.is_debug_build() or not _active:
 		return
+	# perf-smoothness-r1 C-R1 (PERF-R2 R9): the tick milestone must actually
+	# gate on the fire-wall skill id - an unrelated ground tick from another
+	# skill must not open this window's milestone.
+	if stable_skill_id != FIRE_WALL_SKILL_ID:
+		return
 	if _cast_to_tick_ms >= 0.0:
 		return
-	# The canonical ground tick family is currently fire-wall-only; the id is
-	# recorded as a fact in the report but does not gate the milestone.
 	_cast_to_tick_ms = _elapsed_ms()
 
 
+## perf-smoothness-r1 C-R1 (PERF-R2 R9): NON-CAUSAL milestone. The current
+## death pipeline carries no reliable source_skill_id, so this records
+## first_any_death_after_fire_wall_cast - NOT fire_wall_caused_death. It
+## must never be used as evidence that the fire wall caused the kill.
 static func on_enemy_death_committed() -> void:
 	if not OS.is_debug_build() or not _active or _cast_to_death_ms >= 0.0:
 		return
@@ -142,7 +149,10 @@ static func _report(reason: String) -> void:
 		"reason": reason,
 		"cast_to_field_ms": _cast_to_field_ms,
 		"cast_to_tick_ms": _cast_to_tick_ms,
-		"cast_to_death_ms": _cast_to_death_ms,
+		# NON-CAUSAL (PERF-R2 R9): first death of ANY monster after the cast,
+		# not evidence of a fire-wall-caused kill.
+		"cast_to_first_any_death_ms": _cast_to_death_ms,
+		"milestone_causality": "non_causal_first_any_death",
 		"frames": sorted.size(),
 		"frames_dropped": _frames_dropped,
 		"over33": over33,
@@ -152,7 +162,7 @@ static func _report(reason: String) -> void:
 		"max_ms": max_ms,
 	}
 	print(
-		"[AOE-WINDOW] reason=%s cast_to_field_ms=%.1f cast_to_tick_ms=%.1f cast_to_death_ms=%.1f frames=%d frames_dropped=%d over33=%d over50=%d over100=%d p95_ms=%.1f max_ms=%.1f"
+		"[AOE-WINDOW] reason=%s cast_to_field_ms=%.1f cast_to_tick_ms=%.1f cast_to_first_any_death_ms=%.1f(non-causal) frames=%d frames_dropped=%d over33=%d over50=%d over100=%d p95_ms=%.1f max_ms=%.1f"
 		% [
 			reason,
 			_cast_to_field_ms,

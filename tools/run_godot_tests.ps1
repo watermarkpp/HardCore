@@ -240,7 +240,8 @@ $Suites.caster_visual_critical = @(
     "tests/gameplay_input_gate_test.tscn",
     "tests/input_release_cleanup_test.tscn",
     "tests/initial_world_input_lock_test.tscn",
-    "tests/map_transition_input_lock_test.tscn"
+    "tests/map_transition_input_lock_test.tscn",
+    'tests/caster_skill_workset_lease_test.tscn'
 )
 
 $Suites.taoist_critical = @(
@@ -367,7 +368,9 @@ $Suites.monster_streaming_critical = @(
     'tests/monster_streaming_no_visual_queue_test.tscn',
     'tests/monster_streaming_no_sync_load_test.tscn',
     'tests/monster_streaming_spatial_index_non_regression_test.tscn',
-    'tests/monster_streaming_scaling_test.tscn'
+    'tests/monster_streaming_scaling_test.tscn',
+    'tests/monster_streaming_lifecycle_test.tscn',
+    'tests/monster_streaming_active_lease_test.tscn'
 )
 
 $Suites.skill_execution_plan_critical = @(
@@ -471,7 +474,8 @@ $Suites.skill_panel_layout_critical = @(
 
 $Suites.device_lab_critical = @(
     'tests/device_lab_runtime_test.tscn',
-    'tests/device_lab_patch_bootstrap_test.tscn'
+    'tests/device_lab_patch_bootstrap_test.tscn',
+    'tests/perf_frame_diagnostics_test.tscn'
 )
 
 $Suites.audit_upgrade_critical = @(

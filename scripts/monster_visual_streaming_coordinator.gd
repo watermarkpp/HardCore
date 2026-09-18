@@ -145,11 +145,27 @@ func request_client_profile(
 		duplicate_request_count += 1
 		return
 	if _threaded_profile_requests.has(cache_key):
-		# The first request owns the job's generation provenance. A later visual
-		# from another generation may reuse the completion, but must never retag
-		# the job and erase the stale-completion diagnostic.
-		duplicate_request_count += 1
-		return
+		var existing: Dictionary = _threaded_profile_requests[cache_key]
+		var existing_state := str(existing.get("state", ""))
+		var existing_generation := int(existing.get("map_generation", -1))
+		var generation_changed := (
+			map_generation >= 0
+			and existing_generation >= 0
+			and map_generation != existing_generation
+		)
+		if generation_changed and existing_state in ["failed", "permanent_failed"]:
+			# perf-smoothness-r1 C-R1 (PERF-R2 R2): a terminal job from an
+			# older generation must never block the current generation. The
+			# old world's failure provenance cannot be inherited: erase it so
+			# the current generation creates its own fresh request.
+			_erase_terminal_request(cache_key)
+		else:
+			# The first request owns the job's generation provenance. A later
+			# visual from another generation may reuse the completion, but
+			# must never retag the job and erase the stale-completion
+			# diagnostic.
+			duplicate_request_count += 1
+			return
 	var paths := {}
 	var expected_sizes := {}
 	var frame_size_values: Array = client_mapping.get("frameSize", [160, 160])
@@ -222,12 +238,16 @@ func _pump_threaded_profile_queue() -> void:
 			continue
 		var paths: Dictionary = job.get("paths", {})
 		var failed_path := ""
+		# perf-smoothness-r1 C-R1 (PERF-R2 R5): use_sub_threads=true can steal
+		# main-thread time. Acceptable while the loading overlay covers the
+		# map prefetch, never during live combat (runtime demand lane).
+		var use_sub_threads := _job_use_sub_threads(job)
 		for action_name: String in ACTIONS:
 			var path := str(paths.get(action_name, ""))
 			var request_error := ResourceLoader.load_threaded_request(
 				path,
 				"Texture2D",
-				true
+				use_sub_threads
 			)
 			if request_error != OK:
 				failed_path = path
@@ -263,6 +283,31 @@ func _mark_job_failed(cache_key: String, job: Dictionary, failed_path: String) -
 		"failure_count": failure_count,
 	}
 	failed_resource_count += 1
+
+
+## perf-smoothness-r1 C-R1 (PERF-R2 R5/B5): only loading-window map prefetch
+## may use sub threads; live-combat runtime demand must not compete with the
+## main thread.
+func _job_use_sub_threads(job: Dictionary) -> bool:
+	return str(job.get("lane", "")) == JOB_LANE_MAP_PREFETCH
+
+
+## perf-smoothness-r1 C-R1 (PERF-R2 R2): uniformly retire a terminal
+## (failed/permanent_failed) job request. Clears every bookkeeping index the
+## job may occupy so the dedup key is fully released for a fresh request.
+func _erase_terminal_request(cache_key: String) -> void:
+	if not _threaded_profile_requests.has(cache_key):
+		return
+	var job: Dictionary = _threaded_profile_requests[cache_key]
+	var state := str(job.get("state", ""))
+	if state == "permanent_failed":
+		permanent_failed_request_count = maxi(
+			0,
+			permanent_failed_request_count - 1
+		)
+	_threaded_profile_queue.erase(cache_key)
+	_loaded_pending_keys.erase(cache_key)
+	_threaded_profile_requests.erase(cache_key)
 
 
 ## Releases dead failure entries that nobody needs (freeing the dedup key)
@@ -310,17 +355,24 @@ func _retry_eligible_failed_jobs() -> void:
 
 
 func _failure_retry_is_warranted(cache_key: String, job: Dictionary) -> bool:
+	var job_generation := int(job.get("map_generation", -1))
+	if job_generation >= 0 and job_generation != _map_prefetch_generation:
+		# perf-smoothness-r1 C-R1 (PERF-R2 R2): a failed job from an older
+		# generation belongs to a dead world; retrying it can never serve the
+		# current generation and its completion would be stale-retired anyway.
+		return false
 	if str(job.get("lane", "")) == JOB_LANE_MAP_PREFETCH:
 		return _map_prefetch_keys.has(cache_key)
 	return _has_resource_waiters(cache_key)
 
 
-## perf-smoothness-r1 Phase B (audit PERF-03): an in-flight map-prefetch job
-## from an older generation loses its delivery entry when release_map_pins
-## clears _map_prefetch_keys. Retire it through the normal dispatch path so
-## the shared resource can still enter the bounded cache and the dedup slot
-## is freed; the stale completion is diagnosed and the new world is never
-## touched by the old generation.
+## perf-smoothness-r1 Phase B (audit PERF-03) + C-R1 (PERF-R2 R3): an
+## in-flight map-prefetch job from an older generation loses its delivery
+## entry when release_map_pins clears _map_prefetch_keys. Retirement policy:
+## - current generation needs the same key  -> reuse into the map flow;
+## - a current visual explicitly waits      -> deliver to the waiter;
+## - nobody in the current world needs it   -> retire WITHOUT polluting the
+##   new LRU (a dead world's atlas must not evict the live map's entries).
 func _retire_stale_loaded_jobs() -> void:
 	for cache_key: String in _threaded_profile_requests.keys():
 		var job: Dictionary = _threaded_profile_requests[cache_key]
@@ -329,8 +381,21 @@ func _retire_stale_loaded_jobs() -> void:
 		if str(job.get("lane", "")) != JOB_LANE_MAP_PREFETCH:
 			continue
 		var generation := int(job.get("map_generation", -1))
-		if generation >= 0 and generation != _map_prefetch_generation:
+		if generation < 0 or generation == _map_prefetch_generation:
+			continue
+		# Current generation now needs exactly this profile: reuse the
+		# completed resource through the formal map dispatch path.
+		if _map_prefetch_keys.has(cache_key):
+			_dispatch_loaded_job(cache_key, job, true)
+			continue
+		# A current visual explicitly waits for it.
+		if _has_resource_waiters(cache_key):
 			_dispatch_loaded_job(cache_key, job, false)
+			continue
+		# Nobody in the current world needs it: retire without cache admission.
+		stale_completion_count += 1
+		_loaded_pending_keys.erase(cache_key)
+		_threaded_profile_requests.erase(cache_key)
 
 
 ## The single formal streaming poll. GameRoot calls this once per frame with
@@ -348,22 +413,25 @@ func poll_once(frame_id: int) -> Dictionary:
 			continue
 		var ready := true
 		var failed := false
+		var failed_path := ""
 		var paths: Dictionary = job.get("paths", {})
 		for action_name: String in ACTIONS:
+			var action_path := str(paths.get(action_name, ""))
 			status_poll_count += 1
-			var status := ResourceLoader.load_threaded_get_status(
-				str(paths.get(action_name, ""))
-			)
+			var status := ResourceLoader.load_threaded_get_status(action_path)
 			if (
 				status == ResourceLoader.THREAD_LOAD_FAILED
 				or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
 			):
+				# perf-smoothness-r1 C-R1 (PERF-R2 R4): record the REAL failed
+				# action path, not a hardcoded idle path.
 				failed = true
+				failed_path = action_path
 				break
 			if status != ResourceLoader.THREAD_LOAD_LOADED:
 				ready = false
 		if failed:
-			_mark_job_failed(cache_key, job, str(paths.get("idle", "")))
+			_mark_job_failed(cache_key, job, failed_path)
 			continue
 		if not ready:
 			continue
@@ -373,8 +441,9 @@ func poll_once(frame_id: int) -> Dictionary:
 		var result := helper._client_profile_shell(mapping)
 		var expected_sizes: Dictionary = job.get("expected_sizes", {})
 		for action_name: String in ACTIONS:
+			var action_path := str(paths[action_name])
 			var texture := ResourceLoader.load_threaded_get(
-				str(paths[action_name])
+				action_path
 			) as Texture2D
 			_threaded_texture_get_count += 1
 			if (
@@ -383,6 +452,7 @@ func poll_once(frame_id: int) -> Dictionary:
 					!= Vector2i(expected_sizes[action_name])
 			):
 				failed = true
+				failed_path = action_path
 				break
 			result[action_name] = texture
 			result["frame_counts"][action_name] = int(
@@ -390,8 +460,11 @@ func poll_once(frame_id: int) -> Dictionary:
 					"framesPerDirection", 1
 				)
 			)
-		if failed or not MonsterAnimationPolicy.validate(result).is_empty():
-			_mark_job_failed(cache_key, job, str(paths.get("idle", "")))
+		var validation_errors: Array = []
+		if not failed:
+			validation_errors = MonsterAnimationPolicy.validate(result)
+		if failed or not validation_errors.is_empty():
+			_mark_job_failed(cache_key, job, failed_path)
 			continue
 		job["state"] = "loaded"
 		job["resources"] = result
