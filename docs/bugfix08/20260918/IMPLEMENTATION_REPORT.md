@@ -1,8 +1,9 @@
 # BUG-08 施工报告：祖玛休眠怪远程受击不反击 + 脚下白圈清理
 
 日期：2026-09-18
-分支：`codex/bug08-zuma-dormant-damage-wake`
+分支：`codex/bug08-zuma-dormant-damage-wake`（已合并并删除）
 工作树：`C:\Users\Administrator\Documents\HardCore-worktrees\bug08-zuma-dormant-damage-wake-20260918`（已删除）
+R1 closure：本报告提交同时包含 suite 注册与场景 G 增强（见文末 R1 章节）。
 
 ## 基线与最终 SHA
 
@@ -10,10 +11,11 @@
 |---|---|
 | AUDITED_BASE | `4a91db49c7ae1738e75fbc114356da4423281cee` |
 | EXEC_BASE | `4a91db49c7ae1738e75fbc114356da4423281cee`（远端施工期间未前进，无需 rebase） |
-| FINAL_COMMIT | `08cec5fc8d620a7f16082e1573fe5f33064dd880`（fix 提交） |
-| 报告提交 | 见本文件所在提交 |
-| MERGED_INTEGRATION_SHA | `08cec5fc8d620a7f16082e1573fe5f33064dd880` |
-| REMOTE_INTEGRATION_SHA | `08cec5fc8d620a7f16082e1573fe5f33064dd880`（push 后核对一致） |
+| FIX_COMMIT | `08cec5fc8d620a7f16082e1573fe5f33064dd880`（核心修复，生产代码仅 `scripts/enemy.gd`） |
+| REPORT/R1_COMMIT | 本报告所在提交（R1 closure：suite 注册 + 场景 G + 报告修正） |
+| FINAL_INTEGRATION_SHA | 本提交即 `codex/integration` 最终 HEAD（push 后以 `git rev-parse origin/codex/integration` 核对一致） |
+
+历史核对记录：`08cec5fc` push 后远端与本地均为该 SHA；随后报告/R1 提交前进，最终 HEAD 以本表为准。
 
 注：主工作树 `C:\Users\Administrator\Documents\HardCore` 当时位于 `codex/wall-p1r-rollout-r2-r4` 且带用户未提交修改，按"保护现场"规则未触碰；`codex/integration` 实际检出于 `C:\Users\Administrator\Documents\hc-integration-v4`，合并/冒烟/push 均在该工作树完成。
 
@@ -77,7 +79,7 @@ if actual_damage > 0 and is_instance_valid(attacker):
 ## dormant ID 扫描结果
 
 - 静态 dormant（`monster_behavior_profiles.json`）：153 祖玛雕像、155 祖玛雕像3、156-159 祖玛卫士系、160 祖玛教主（`zuma_dormant` / `zuma_guard_holy_word` / `w1_mixed_sculture_king_160`，均含 `dormant: true`，**未删除**）。
-- 154 祖玛雕像0：已 retired（`RETIRED_SOURCE_ONLY_MONSTER_IDS`），测试不覆盖、不恢复。
+- 154 祖玛雕像0：退役来源为 `assets/data/vanilla_176/monsters.json` 中 `monsterId=154` 的 `recordStatus: "retired"`，并由 `tests/canonical_monster_variant_prune_test.py` 固定列入 P3C 退役 ID 集（不得进入 canonical active/animation/service universe），运行时 `setup()` 因 canonical catalog 无该活跃条目而 fail-closed。注意 `enemy.gd` 的 `RETIRED_SOURCE_ONLY_MONSTER_IDS` 常量仅含 `[71]`，与 154 无关。测试不覆盖 154、不恢复运行。
 - 动态 dormant：124 触龙神（`burrowAmbush` 期间 `_burrowed=true, dormant=true`），受 burrow 保护条款覆盖。
 
 ## 白圈来源与影响面
@@ -101,12 +103,14 @@ if actual_damage > 0 and is_instance_valid(attacker):
 
 `tests/monster_dormant_ground_marker_contract_test.py`：禁色 `Color(0.52, 0.50, 0.46, 0.72)` 不存在；`if dormant:` 体内不得出现 `draw_circle`；正向断言 dormant AI/伤害唤醒/burrow/profile 数据仍在（不禁止 AI 中的 `if dormant` 判断）。
 
+R1 新增场景 G（生产链集成）：`CombatRuntimeService.apply_enemy_direct_spell_damage(enemy, "wizard.lightning", 50, player, null, Callable(), ANTI_MAGIC_ROLL_SIDES-1)` 对 153/156/160 直接走真实服务结算链（`take_damage(final_damage, source_actor=player)`），断言结算成功、实际扣血、dormant 解除、threat 归属 player、retarget 后 target==player。参数确定性：三个目标的编译 `anti_magic_points` 均为 0，roll=SIDES-1 永不闪避；未传 MAC adapter 时 final_damage==raw_damage。
+
 ## 全部测试结果
 
 | 门禁 | 结果 |
 |---|---|
 | Godot parse（`--headless --editor --quit`，全量导入+解析） | PASS，exit 0，0 SCRIPT ERROR（日志复查 0 命中） |
-| monster_dormant_damage_wake_test（新） | PASS |
+| monster_dormant_damage_wake_test（新，含 R1 场景 G） | PASS |
 | monster_target_acquisition_test（含 ID 153 第一警戒范围） | PASS |
 | monster_threat_animation_test | PASS |
 | player_direct_spell_damage_test | PASS |
@@ -114,6 +118,7 @@ if actual_damage > 0 and is_instance_valid(attacker):
 | monster_struck_visual_queue_test | PASS |
 | hc_monster_ai/runtime_test | PASS |
 | hc_monster_ai/w1_special_delivery_runtime_test | PASS |
+| 正式 monster suite（R1 注册后全量） | 见 R1 章节 |
 | 白圈 source guard（pytest） | PASS（4 passed） |
 | zuma_area_test | **FAIL（基线预存，与本修复无关，见下）** |
 | centipede_cave_test | **FAIL（基线预存，与本修复无关，见下）** |
@@ -126,7 +131,7 @@ if actual_damage > 0 and is_instance_valid(attacker):
 
 1. **基线对照**：将工作树 `enemy.gd` 换回 `4a91db49` 原版（无本修复）运行 `zuma_area_test`，失败断言与数量完全相同（`祖玛地图659怪物数量不符`）；已还原并核对 diff。
 2. **第二环境对照**：在 `hc-integration-v4`（同基线、暖缓存、无本修复）运行，同样失败。
-3. **根因（探针实测）**：开机地图为 910001（比奇省·单机重制，82 个怪）；`travel_to_map(659/1378)` 后 `current_map_id` 仍为 910001——formal loader（FREEZE-P0.2/P0.3R）按 `map_runtime_release_registry.json` fail-closed 拒绝非正式图，而该 registry 只发布 8 张 editor runtime 世界图（910001-910007、911001-911003 等）。旧 authored 祖玛/蜈蚣洞地图 ID（659/1378）已不再是可加载正式图，两个测试的"旧图旅行+计数"假设被**有意的生产契约变更**淘汰。
+3. **根因（探针实测）**：开机地图为 910001（比奇省·单机重制，82 个怪）；`travel_to_map(659/1378)` 后 `current_map_id` 仍为 910001——formal loader（FREEZE-P0.2/P0.3R）按 `map_runtime_release_registry.json` fail-closed 拒绝未发布地图。当前正式 registry 发布 **67 张** implemented_playable editor runtime 世界图（910001-910007 世界图、911xxx/912xxx/913xxx/914xxx-918xxx 副本区等）；旧 authored 地图 ID 659/1378 **不在 registry**，祖玛区域已迁移到 `913101-913106`，蜈蚣洞/死亡山谷区域已迁移到 `913201-913207`。两个测试的"旧图旅行+计数"假设被**有意的生产契约变更**淘汰。
 4. **休眠内容已迁移且验证正常**：探针实测新世界 `913101`（mengzhong_zuma_temple_f1，盟重→祖玛寺庙）加载成功，40 个怪中 17 个 dormant（含祖玛雕像、祖玛卫士）——出生休眠契约在新世界+本修复下正常。
 5. **回归价值已被新测试覆盖**：旧 zuma 测试对 BUG-08 的核心价值（祖玛雕像出生休眠 `assert(statue.dormant)`）由新测试场景 A 以 stable monsterId 全量覆盖。
 
@@ -166,3 +171,21 @@ if actual_damage > 0 and is_instance_valid(attacker):
 1. `zuma_area_test` / `centipede_cave_test` 为基线预存过时测试，需 integration/maps 域按新世界契约（release registry + 910xxx/911xxx 正式图）单独重写；在重写前它们对所有近期 integration 状态均失败。
 2. DOT/poison（attacker=null）不会触发伤害唤醒——符合"有效攻击者"契约，祖玛无 DOT 来源，无实际影响。
 3. 本次 0 伤害仍计入 threat 的既有行为未整改（任务明确不扩大范围）。
+
+## BUG-08-R1 closure（复审后补充）
+
+复审结论：核心修复 PASS，保留 `08cec5fc`，不需要重做。R1 只做闭环，不再触碰 `enemy.gd` 核心修复代码：
+
+1. **长期回归门禁补全（P1）**：`tests/monster_dormant_damage_wake_test.tscn` 注册进 `tools/run_godot_tests.ps1` 的 `$Suites.monster`（此前只能 adhoc 手动运行，正式 suite 不会执行它）。注册后全量正式 monster suite 结果见下。
+2. **场景 G（P2，已实施）**：新增生产法术链集成断言（`CombatRuntimeService` → `take_damage(final, player)` → damage wake → retarget），覆盖复审第 4 节验证过的真实 wizard.lightning 链路，防止未来 `source_actor` 传递回归。
+3. **报告事实修正（复审第十六/十七/十八节）**：
+   - 正式 registry 为 **67 张** implemented_playable 地图（原报告"8 张"为统计脚本误把数组属性当元素计数所致，已修正；659/1378 确不在 registry，祖玛迁移至 913101-913106、蜈蚣/死亡山谷迁移至 913201-913207 的结论不变）；
+   - 154 退役来源改为 `monsters.json recordStatus=retired` + `canonical_monster_variant_prune_test.py`（`RETIRED_SOURCE_ONLY_MONSTER_IDS` 仅 [71]，与此无关）；
+   - SHA 表改为 FIX_COMMIT `08cec5fc` + 最终 HEAD 以本报告提交为准。
+4. **白圈 Python guard 保持 adhoc（P2 接受现状）**：仍为施工验收证据；如需长期 formal gate，可后续改写为 Godot .tscn 契约测试或建立 Python contract runner，不在本任务范围。
+
+### 正式 monster suite 运行结果（R1 注册后）
+
+`-Suite monster` 全量：**45/46 PASS**，新注册的 `monster_dormant_damage_wake_test` 在正式 suite 内 PASS（含场景 G）。
+
+唯一失败：`monster_world_integration_test`（"ID 76 runtime did not expose the complete V505 source profile"，loot 契约断言）。基线对照：将 `enemy.gd` 换回 `08cec5fc~1` 原版复跑，同断言同失败——**基线预存失败**，且该测试本就在 monster suite 内（非本次注册引入），属 loot/数据域既有问题，与 BUG-08 的 dormant/wake/绘制改动无因果路径，不在本任务范围。

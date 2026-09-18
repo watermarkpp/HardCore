@@ -3,10 +3,17 @@ extends Node2D
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd")
+const CombatRuntimeServiceScript := preload(
+	"res://scripts/layers/runtime/combat_runtime_service.gd"
+)
+const CombatResolutionRulesScript := preload(
+	"res://scripts/combat_resolution_rules.gd"
+)
 
 ## Stable monsterIds carrying the authored static dormant contract. 154 is
-## retired source-only and intentionally absent; 124 is the separate burrow
-## ambush mechanic covered by its own scenario below.
+## pruned from the canonical active universe (monsters.json recordStatus
+## "retired") and intentionally absent; 124 is the separate burrow ambush
+## mechanic covered by its own scenario below.
 const DORMANT_MONSTER_IDS: Array[int] = [153, 155, 156, 157, 158, 159, 160]
 const BURROW_AMBUSH_MONSTER_ID := 124
 
@@ -36,6 +43,7 @@ func _run() -> void:
 	await _test_zero_damage_never_wakes(player)
 	await _test_lethal_damage_needs_no_wake(player)
 	await _test_burrow_ambush_is_not_woken(player)
+	await _test_production_direct_spell_chain_wakes(player)
 
 	player.queue_free()
 	print("MONSTER_DORMANT_DAMAGE_WAKE_PASS checks=%d" % _checks)
@@ -262,6 +270,61 @@ func _test_burrow_ambush_is_not_woken(player: PlayerCharacter) -> void:
 	_checks += 5
 	enemy.free()
 	await get_tree().process_frame
+
+
+## Scenario G: the production wizard direct-spell chain
+## (CombatRuntimeService.apply_enemy_direct_spell_damage -> take_damage(final,
+## player)) must reach the damage wake exactly like the direct take_damage
+## path. This keeps a future source_actor regression from silently re-freezing
+## the dormant monsters while real spells keep landing.
+func _test_production_direct_spell_chain_wakes(player: PlayerCharacter) -> void:
+	var service := CombatRuntimeServiceScript.new()
+	for monster_id: int in [153, 156, 160]:
+		var enemy := await _make_dormant_enemy(monster_id, player)
+		player.global_position = _ground_position_from_enemy(
+			enemy,
+			Vector2(RANGED_DAMAGE_DISTANCE_GU, 0.0),
+		)
+		var hp_before := enemy.current_hp
+		# anti_magic_roll = SIDES - 1 can never evade these targets (their
+		# compiled anti_magic_points are 0), and no magic-defense adapter means
+		# final_damage == raw damage: the resolution is fully deterministic.
+		var resolution: Dictionary = service.apply_enemy_direct_spell_damage(
+			enemy,
+			"wizard.lightning",
+			50,
+			player,
+			null,
+			Callable(),
+			CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1,
+		)
+		assert(
+			bool(resolution.get("success", false)),
+			"monster %d lightning resolution must succeed" % monster_id,
+		)
+		var final_damage := int(resolution.get("final_damage", 0))
+		assert(
+			final_damage > 0 and enemy.current_hp == hp_before - final_damage,
+			"monster %d lightning must commit actual HP damage" % monster_id,
+		)
+		assert(
+			not enemy.dormant,
+			"monster %d must wake through the production spell chain" % monster_id,
+		)
+		assert(
+			enemy._threat_for(player) > 0.0,
+			"monster %d spell source must own threat" % monster_id,
+		)
+		enemy._retarget(0.0)
+		assert(
+			enemy.target == player,
+			"monster %d must fight the spell caster through retarget" % monster_id,
+		)
+		_checks += 6
+		enemy.queue_free()
+		await get_tree().process_frame
+	service.free()
+	_checks += 1
 
 
 func _make_dormant_enemy(monster_id: int, player: PlayerCharacter) -> EnemyActor:
