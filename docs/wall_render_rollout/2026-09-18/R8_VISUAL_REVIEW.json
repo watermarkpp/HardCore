@@ -1,0 +1,16 @@
+{
+  "review_status": "closed",
+  "mengzhong_dark_area": {
+    "classification": "LOCALIZED_ANIMATED_PHASE_DIFFERENCE",
+    "differing_ratio": 0.00182,
+    "differing_pixels": 5810,
+    "verdict": "PASS",
+    "method": "wall-only masked diff tolerance=8 + red-cluster spatial analysis",
+    "rationale": "all 18 clusters inside one 145x65 spawn-area animated element; structural identity independently proven by R6 strict node-count==plan (325 groups / 35 chunks) and zero residue"
+  },
+  "mengzhong_stone_coffin_room": {
+    "verdict": "PASS",
+    "method": "wall-only masked diff tolerance=8",
+    "differing_pixels": 0
+  }
+}

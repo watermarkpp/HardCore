@@ -1,0 +1,11 @@
+{
+  "failed_maps": [],
+  "rerun_on_candidate": "post blocked-arrival relocation fix (6b392ed9 lineage)",
+  "checks": 387,
+  "verdict": "PASS",
+  "maps": 67,
+  "contract_id": "hardcore.wall_render_r6_strict_summary.v1",
+  "a_maps": 60,
+  "strict_rules": "stage==READY, success==true, failure_reason==map_transition_ready, map_transition lock absent, combat token inactive, arrival map match",
+  "final_marker": "WALL_RENDER_R6_STRICT_PASS maps=67 a_maps=60 checks=387"
+}

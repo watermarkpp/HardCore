@@ -1,0 +1,2267 @@
+{
+	"accounting": {
+		"atlas_commands": 128,
+		"legacy_commands": 8,
+		"shadow_chunk_commands": 0,
+		"total_commands": 136
+	},
+	"atlas_command_indices": [
+		0,
+		27,
+		54,
+		70,
+		96,
+		121,
+		1,
+		28,
+		55,
+		68,
+		95,
+		120,
+		2,
+		29,
+		56,
+		73,
+		98,
+		123,
+		3,
+		31,
+		57,
+		72,
+		97,
+		122,
+		4,
+		32,
+		58,
+		76,
+		100,
+		125,
+		6,
+		33,
+		59,
+		74,
+		99,
+		124,
+		7,
+		34,
+		60,
+		78,
+		103,
+		127,
+		8,
+		37,
+		61,
+		77,
+		101,
+		126,
+		9,
+		38,
+		62,
+		80,
+		105,
+		129,
+		10,
+		39,
+		63,
+		79,
+		104,
+		128,
+		11,
+		40,
+		64,
+		82,
+		107,
+		131,
+		12,
+		41,
+		65,
+		81,
+		106,
+		130,
+		13,
+		42,
+		66,
+		84,
+		109,
+		133,
+		14,
+		43,
+		67,
+		83,
+		108,
+		132,
+		15,
+		44,
+		69,
+		86,
+		111,
+		135,
+		16,
+		45,
+		71,
+		85,
+		110,
+		134,
+		17,
+		46,
+		88,
+		113,
+		18,
+		47,
+		87,
+		112,
+		19,
+		48,
+		90,
+		115,
+		20,
+		49,
+		89,
+		114,
+		21,
+		50,
+		92,
+		117,
+		23,
+		51,
+		91,
+		116,
+		24,
+		52,
+		94,
+		119,
+		26,
+		53,
+		93,
+		118
+	],
+	"atlas_entries": [
+		{
+			"command_indices": [
+				1,
+				28,
+				55,
+				68,
+				95,
+				120
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000001:9:0",
+				"wall_part:inst_000004:15:0",
+				"wall_part:inst_000007:21:0",
+				"wall_part:inst_000009:24:0",
+				"wall_part:inst_000012:30:0",
+				"wall_part:inst_000015:36:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						1
+					],
+					"group_key": "wall_part:inst_000001:9:0",
+					"representative_command_index": 1
+				},
+				{
+					"command_indices": [
+						28
+					],
+					"group_key": "wall_part:inst_000004:15:0",
+					"representative_command_index": 28
+				},
+				{
+					"command_indices": [
+						55
+					],
+					"group_key": "wall_part:inst_000007:21:0",
+					"representative_command_index": 55
+				},
+				{
+					"command_indices": [
+						68
+					],
+					"group_key": "wall_part:inst_000009:24:0",
+					"representative_command_index": 68
+				},
+				{
+					"command_indices": [
+						95
+					],
+					"group_key": "wall_part:inst_000012:30:0",
+					"representative_command_index": 95
+				},
+				{
+					"command_indices": [
+						120
+					],
+					"group_key": "wall_part:inst_000015:36:0",
+					"representative_command_index": 120
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 1,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				3,
+				31,
+				57,
+				72,
+				97,
+				122
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000001:9:1",
+				"wall_part:inst_000004:15:1",
+				"wall_part:inst_000007:21:1",
+				"wall_part:inst_000009:24:1",
+				"wall_part:inst_000012:30:1",
+				"wall_part:inst_000015:36:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						3
+					],
+					"group_key": "wall_part:inst_000001:9:1",
+					"representative_command_index": 3
+				},
+				{
+					"command_indices": [
+						31
+					],
+					"group_key": "wall_part:inst_000004:15:1",
+					"representative_command_index": 31
+				},
+				{
+					"command_indices": [
+						57
+					],
+					"group_key": "wall_part:inst_000007:21:1",
+					"representative_command_index": 57
+				},
+				{
+					"command_indices": [
+						72
+					],
+					"group_key": "wall_part:inst_000009:24:1",
+					"representative_command_index": 72
+				},
+				{
+					"command_indices": [
+						97
+					],
+					"group_key": "wall_part:inst_000012:30:1",
+					"representative_command_index": 97
+				},
+				{
+					"command_indices": [
+						122
+					],
+					"group_key": "wall_part:inst_000015:36:1",
+					"representative_command_index": 122
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 3,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				6,
+				33,
+				59,
+				74,
+				99,
+				124
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000001:9:2",
+				"wall_part:inst_000004:15:2",
+				"wall_part:inst_000007:21:2",
+				"wall_part:inst_000009:24:2",
+				"wall_part:inst_000012:30:2",
+				"wall_part:inst_000015:36:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						6
+					],
+					"group_key": "wall_part:inst_000001:9:2",
+					"representative_command_index": 6
+				},
+				{
+					"command_indices": [
+						33
+					],
+					"group_key": "wall_part:inst_000004:15:2",
+					"representative_command_index": 33
+				},
+				{
+					"command_indices": [
+						59
+					],
+					"group_key": "wall_part:inst_000007:21:2",
+					"representative_command_index": 59
+				},
+				{
+					"command_indices": [
+						74
+					],
+					"group_key": "wall_part:inst_000009:24:2",
+					"representative_command_index": 74
+				},
+				{
+					"command_indices": [
+						99
+					],
+					"group_key": "wall_part:inst_000012:30:2",
+					"representative_command_index": 99
+				},
+				{
+					"command_indices": [
+						124
+					],
+					"group_key": "wall_part:inst_000015:36:2",
+					"representative_command_index": 124
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 6,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				8,
+				37,
+				61,
+				77,
+				101,
+				126
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000001:9:3",
+				"wall_part:inst_000004:15:3",
+				"wall_part:inst_000007:21:3",
+				"wall_part:inst_000009:24:3",
+				"wall_part:inst_000012:30:3",
+				"wall_part:inst_000015:36:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						8
+					],
+					"group_key": "wall_part:inst_000001:9:3",
+					"representative_command_index": 8
+				},
+				{
+					"command_indices": [
+						37
+					],
+					"group_key": "wall_part:inst_000004:15:3",
+					"representative_command_index": 37
+				},
+				{
+					"command_indices": [
+						61
+					],
+					"group_key": "wall_part:inst_000007:21:3",
+					"representative_command_index": 61
+				},
+				{
+					"command_indices": [
+						77
+					],
+					"group_key": "wall_part:inst_000009:24:3",
+					"representative_command_index": 77
+				},
+				{
+					"command_indices": [
+						101
+					],
+					"group_key": "wall_part:inst_000012:30:3",
+					"representative_command_index": 101
+				},
+				{
+					"command_indices": [
+						126
+					],
+					"group_key": "wall_part:inst_000015:36:3",
+					"representative_command_index": 126
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 8,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				10,
+				39,
+				63,
+				79,
+				104,
+				128
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000002:11:0",
+				"wall_part:inst_000005:17:0",
+				"wall_part:inst_000008:23:0",
+				"wall_part:inst_000010:26:0",
+				"wall_part:inst_000013:32:0",
+				"wall_part:inst_000016:38:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						10
+					],
+					"group_key": "wall_part:inst_000002:11:0",
+					"representative_command_index": 10
+				},
+				{
+					"command_indices": [
+						39
+					],
+					"group_key": "wall_part:inst_000005:17:0",
+					"representative_command_index": 39
+				},
+				{
+					"command_indices": [
+						63
+					],
+					"group_key": "wall_part:inst_000008:23:0",
+					"representative_command_index": 63
+				},
+				{
+					"command_indices": [
+						79
+					],
+					"group_key": "wall_part:inst_000010:26:0",
+					"representative_command_index": 79
+				},
+				{
+					"command_indices": [
+						104
+					],
+					"group_key": "wall_part:inst_000013:32:0",
+					"representative_command_index": 104
+				},
+				{
+					"command_indices": [
+						128
+					],
+					"group_key": "wall_part:inst_000016:38:0",
+					"representative_command_index": 128
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 10,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				12,
+				41,
+				65,
+				81,
+				106,
+				130
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000002:11:1",
+				"wall_part:inst_000005:17:1",
+				"wall_part:inst_000008:23:1",
+				"wall_part:inst_000010:26:1",
+				"wall_part:inst_000013:32:1",
+				"wall_part:inst_000016:38:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						12
+					],
+					"group_key": "wall_part:inst_000002:11:1",
+					"representative_command_index": 12
+				},
+				{
+					"command_indices": [
+						41
+					],
+					"group_key": "wall_part:inst_000005:17:1",
+					"representative_command_index": 41
+				},
+				{
+					"command_indices": [
+						65
+					],
+					"group_key": "wall_part:inst_000008:23:1",
+					"representative_command_index": 65
+				},
+				{
+					"command_indices": [
+						81
+					],
+					"group_key": "wall_part:inst_000010:26:1",
+					"representative_command_index": 81
+				},
+				{
+					"command_indices": [
+						106
+					],
+					"group_key": "wall_part:inst_000013:32:1",
+					"representative_command_index": 106
+				},
+				{
+					"command_indices": [
+						130
+					],
+					"group_key": "wall_part:inst_000016:38:1",
+					"representative_command_index": 130
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 12,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				14,
+				43,
+				67,
+				83,
+				108,
+				132
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000002:11:2",
+				"wall_part:inst_000005:17:2",
+				"wall_part:inst_000008:23:2",
+				"wall_part:inst_000010:26:2",
+				"wall_part:inst_000013:32:2",
+				"wall_part:inst_000016:38:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						14
+					],
+					"group_key": "wall_part:inst_000002:11:2",
+					"representative_command_index": 14
+				},
+				{
+					"command_indices": [
+						43
+					],
+					"group_key": "wall_part:inst_000005:17:2",
+					"representative_command_index": 43
+				},
+				{
+					"command_indices": [
+						67
+					],
+					"group_key": "wall_part:inst_000008:23:2",
+					"representative_command_index": 67
+				},
+				{
+					"command_indices": [
+						83
+					],
+					"group_key": "wall_part:inst_000010:26:2",
+					"representative_command_index": 83
+				},
+				{
+					"command_indices": [
+						108
+					],
+					"group_key": "wall_part:inst_000013:32:2",
+					"representative_command_index": 108
+				},
+				{
+					"command_indices": [
+						132
+					],
+					"group_key": "wall_part:inst_000016:38:2",
+					"representative_command_index": 132
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 14,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				16,
+				45,
+				71,
+				85,
+				110,
+				134
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000002:11:3",
+				"wall_part:inst_000005:17:3",
+				"wall_part:inst_000008:23:3",
+				"wall_part:inst_000010:26:3",
+				"wall_part:inst_000013:32:3",
+				"wall_part:inst_000016:38:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						16
+					],
+					"group_key": "wall_part:inst_000002:11:3",
+					"representative_command_index": 16
+				},
+				{
+					"command_indices": [
+						45
+					],
+					"group_key": "wall_part:inst_000005:17:3",
+					"representative_command_index": 45
+				},
+				{
+					"command_indices": [
+						71
+					],
+					"group_key": "wall_part:inst_000008:23:3",
+					"representative_command_index": 71
+				},
+				{
+					"command_indices": [
+						85
+					],
+					"group_key": "wall_part:inst_000010:26:3",
+					"representative_command_index": 85
+				},
+				{
+					"command_indices": [
+						110
+					],
+					"group_key": "wall_part:inst_000013:32:3",
+					"representative_command_index": 110
+				},
+				{
+					"command_indices": [
+						134
+					],
+					"group_key": "wall_part:inst_000016:38:3",
+					"representative_command_index": 134
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 16,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1344,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				18,
+				47,
+				87,
+				112
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000003:13:0",
+				"wall_part:inst_000006:19:0",
+				"wall_part:inst_000011:28:0",
+				"wall_part:inst_000014:34:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						18
+					],
+					"group_key": "wall_part:inst_000003:13:0",
+					"representative_command_index": 18
+				},
+				{
+					"command_indices": [
+						47
+					],
+					"group_key": "wall_part:inst_000006:19:0",
+					"representative_command_index": 47
+				},
+				{
+					"command_indices": [
+						87
+					],
+					"group_key": "wall_part:inst_000011:28:0",
+					"representative_command_index": 87
+				},
+				{
+					"command_indices": [
+						112
+					],
+					"group_key": "wall_part:inst_000014:34:0",
+					"representative_command_index": 112
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 18,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				20,
+				49,
+				89,
+				114
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000003:13:1",
+				"wall_part:inst_000006:19:1",
+				"wall_part:inst_000011:28:1",
+				"wall_part:inst_000014:34:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						20
+					],
+					"group_key": "wall_part:inst_000003:13:1",
+					"representative_command_index": 20
+				},
+				{
+					"command_indices": [
+						49
+					],
+					"group_key": "wall_part:inst_000006:19:1",
+					"representative_command_index": 49
+				},
+				{
+					"command_indices": [
+						89
+					],
+					"group_key": "wall_part:inst_000011:28:1",
+					"representative_command_index": 89
+				},
+				{
+					"command_indices": [
+						114
+					],
+					"group_key": "wall_part:inst_000014:34:1",
+					"representative_command_index": 114
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 20,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1728,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				23,
+				51,
+				91,
+				116
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000003:13:2",
+				"wall_part:inst_000006:19:2",
+				"wall_part:inst_000011:28:2",
+				"wall_part:inst_000014:34:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						23
+					],
+					"group_key": "wall_part:inst_000003:13:2",
+					"representative_command_index": 23
+				},
+				{
+					"command_indices": [
+						51
+					],
+					"group_key": "wall_part:inst_000006:19:2",
+					"representative_command_index": 51
+				},
+				{
+					"command_indices": [
+						91
+					],
+					"group_key": "wall_part:inst_000011:28:2",
+					"representative_command_index": 91
+				},
+				{
+					"command_indices": [
+						116
+					],
+					"group_key": "wall_part:inst_000014:34:2",
+					"representative_command_index": 116
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 23,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				26,
+				53,
+				93,
+				118
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000003:13:3",
+				"wall_part:inst_000006:19:3",
+				"wall_part:inst_000011:28:3",
+				"wall_part:inst_000014:34:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						26
+					],
+					"group_key": "wall_part:inst_000003:13:3",
+					"representative_command_index": 26
+				},
+				{
+					"command_indices": [
+						53
+					],
+					"group_key": "wall_part:inst_000006:19:3",
+					"representative_command_index": 53
+				},
+				{
+					"command_indices": [
+						93
+					],
+					"group_key": "wall_part:inst_000011:28:3",
+					"representative_command_index": 93
+				},
+				{
+					"command_indices": [
+						118
+					],
+					"group_key": "wall_part:inst_000014:34:3",
+					"representative_command_index": 118
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 26,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				0,
+				27,
+				54,
+				70,
+				96,
+				121
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000017:8:0",
+				"wall_part:inst_000020:14:0",
+				"wall_part:inst_000023:20:0",
+				"wall_part:inst_000025:25:0",
+				"wall_part:inst_000028:31:0",
+				"wall_part:inst_000031:37:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						0
+					],
+					"group_key": "wall_part:inst_000017:8:0",
+					"representative_command_index": 0
+				},
+				{
+					"command_indices": [
+						27
+					],
+					"group_key": "wall_part:inst_000020:14:0",
+					"representative_command_index": 27
+				},
+				{
+					"command_indices": [
+						54
+					],
+					"group_key": "wall_part:inst_000023:20:0",
+					"representative_command_index": 54
+				},
+				{
+					"command_indices": [
+						70
+					],
+					"group_key": "wall_part:inst_000025:25:0",
+					"representative_command_index": 70
+				},
+				{
+					"command_indices": [
+						96
+					],
+					"group_key": "wall_part:inst_000028:31:0",
+					"representative_command_index": 96
+				},
+				{
+					"command_indices": [
+						121
+					],
+					"group_key": "wall_part:inst_000031:37:0",
+					"representative_command_index": 121
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 0,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				2,
+				29,
+				56,
+				73,
+				98,
+				123
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000017:8:1",
+				"wall_part:inst_000020:14:1",
+				"wall_part:inst_000023:20:1",
+				"wall_part:inst_000025:25:1",
+				"wall_part:inst_000028:31:1",
+				"wall_part:inst_000031:37:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						2
+					],
+					"group_key": "wall_part:inst_000017:8:1",
+					"representative_command_index": 2
+				},
+				{
+					"command_indices": [
+						29
+					],
+					"group_key": "wall_part:inst_000020:14:1",
+					"representative_command_index": 29
+				},
+				{
+					"command_indices": [
+						56
+					],
+					"group_key": "wall_part:inst_000023:20:1",
+					"representative_command_index": 56
+				},
+				{
+					"command_indices": [
+						73
+					],
+					"group_key": "wall_part:inst_000025:25:1",
+					"representative_command_index": 73
+				},
+				{
+					"command_indices": [
+						98
+					],
+					"group_key": "wall_part:inst_000028:31:1",
+					"representative_command_index": 98
+				},
+				{
+					"command_indices": [
+						123
+					],
+					"group_key": "wall_part:inst_000031:37:1",
+					"representative_command_index": 123
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 2,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				4,
+				32,
+				58,
+				76,
+				100,
+				125
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000017:8:2",
+				"wall_part:inst_000020:14:2",
+				"wall_part:inst_000023:20:2",
+				"wall_part:inst_000025:25:2",
+				"wall_part:inst_000028:31:2",
+				"wall_part:inst_000031:37:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						4
+					],
+					"group_key": "wall_part:inst_000017:8:2",
+					"representative_command_index": 4
+				},
+				{
+					"command_indices": [
+						32
+					],
+					"group_key": "wall_part:inst_000020:14:2",
+					"representative_command_index": 32
+				},
+				{
+					"command_indices": [
+						58
+					],
+					"group_key": "wall_part:inst_000023:20:2",
+					"representative_command_index": 58
+				},
+				{
+					"command_indices": [
+						76
+					],
+					"group_key": "wall_part:inst_000025:25:2",
+					"representative_command_index": 76
+				},
+				{
+					"command_indices": [
+						100
+					],
+					"group_key": "wall_part:inst_000028:31:2",
+					"representative_command_index": 100
+				},
+				{
+					"command_indices": [
+						125
+					],
+					"group_key": "wall_part:inst_000031:37:2",
+					"representative_command_index": 125
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 4,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				7,
+				34,
+				60,
+				78,
+				103,
+				127
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000017:8:3",
+				"wall_part:inst_000020:14:3",
+				"wall_part:inst_000023:20:3",
+				"wall_part:inst_000025:25:3",
+				"wall_part:inst_000028:31:3",
+				"wall_part:inst_000031:37:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						7
+					],
+					"group_key": "wall_part:inst_000017:8:3",
+					"representative_command_index": 7
+				},
+				{
+					"command_indices": [
+						34
+					],
+					"group_key": "wall_part:inst_000020:14:3",
+					"representative_command_index": 34
+				},
+				{
+					"command_indices": [
+						60
+					],
+					"group_key": "wall_part:inst_000023:20:3",
+					"representative_command_index": 60
+				},
+				{
+					"command_indices": [
+						78
+					],
+					"group_key": "wall_part:inst_000025:25:3",
+					"representative_command_index": 78
+				},
+				{
+					"command_indices": [
+						103
+					],
+					"group_key": "wall_part:inst_000028:31:3",
+					"representative_command_index": 103
+				},
+				{
+					"command_indices": [
+						127
+					],
+					"group_key": "wall_part:inst_000031:37:3",
+					"representative_command_index": 127
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 7,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				9,
+				38,
+				62,
+				80,
+				105,
+				129
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000018:10:0",
+				"wall_part:inst_000021:16:0",
+				"wall_part:inst_000024:22:0",
+				"wall_part:inst_000026:27:0",
+				"wall_part:inst_000029:33:0",
+				"wall_part:inst_000032:39:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						9
+					],
+					"group_key": "wall_part:inst_000018:10:0",
+					"representative_command_index": 9
+				},
+				{
+					"command_indices": [
+						38
+					],
+					"group_key": "wall_part:inst_000021:16:0",
+					"representative_command_index": 38
+				},
+				{
+					"command_indices": [
+						62
+					],
+					"group_key": "wall_part:inst_000024:22:0",
+					"representative_command_index": 62
+				},
+				{
+					"command_indices": [
+						80
+					],
+					"group_key": "wall_part:inst_000026:27:0",
+					"representative_command_index": 80
+				},
+				{
+					"command_indices": [
+						105
+					],
+					"group_key": "wall_part:inst_000029:33:0",
+					"representative_command_index": 105
+				},
+				{
+					"command_indices": [
+						129
+					],
+					"group_key": "wall_part:inst_000032:39:0",
+					"representative_command_index": 129
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 9,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				11,
+				40,
+				64,
+				82,
+				107,
+				131
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000018:10:1",
+				"wall_part:inst_000021:16:1",
+				"wall_part:inst_000024:22:1",
+				"wall_part:inst_000026:27:1",
+				"wall_part:inst_000029:33:1",
+				"wall_part:inst_000032:39:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						11
+					],
+					"group_key": "wall_part:inst_000018:10:1",
+					"representative_command_index": 11
+				},
+				{
+					"command_indices": [
+						40
+					],
+					"group_key": "wall_part:inst_000021:16:1",
+					"representative_command_index": 40
+				},
+				{
+					"command_indices": [
+						64
+					],
+					"group_key": "wall_part:inst_000024:22:1",
+					"representative_command_index": 64
+				},
+				{
+					"command_indices": [
+						82
+					],
+					"group_key": "wall_part:inst_000026:27:1",
+					"representative_command_index": 82
+				},
+				{
+					"command_indices": [
+						107
+					],
+					"group_key": "wall_part:inst_000029:33:1",
+					"representative_command_index": 107
+				},
+				{
+					"command_indices": [
+						131
+					],
+					"group_key": "wall_part:inst_000032:39:1",
+					"representative_command_index": 131
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 11,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1344,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				13,
+				42,
+				66,
+				84,
+				109,
+				133
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000018:10:2",
+				"wall_part:inst_000021:16:2",
+				"wall_part:inst_000024:22:2",
+				"wall_part:inst_000026:27:2",
+				"wall_part:inst_000029:33:2",
+				"wall_part:inst_000032:39:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						13
+					],
+					"group_key": "wall_part:inst_000018:10:2",
+					"representative_command_index": 13
+				},
+				{
+					"command_indices": [
+						42
+					],
+					"group_key": "wall_part:inst_000021:16:2",
+					"representative_command_index": 42
+				},
+				{
+					"command_indices": [
+						66
+					],
+					"group_key": "wall_part:inst_000024:22:2",
+					"representative_command_index": 66
+				},
+				{
+					"command_indices": [
+						84
+					],
+					"group_key": "wall_part:inst_000026:27:2",
+					"representative_command_index": 84
+				},
+				{
+					"command_indices": [
+						109
+					],
+					"group_key": "wall_part:inst_000029:33:2",
+					"representative_command_index": 109
+				},
+				{
+					"command_indices": [
+						133
+					],
+					"group_key": "wall_part:inst_000032:39:2",
+					"representative_command_index": 133
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 13,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				15,
+				44,
+				69,
+				86,
+				111,
+				135
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000018:10:3",
+				"wall_part:inst_000021:16:3",
+				"wall_part:inst_000024:22:3",
+				"wall_part:inst_000026:27:3",
+				"wall_part:inst_000029:33:3",
+				"wall_part:inst_000032:39:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						15
+					],
+					"group_key": "wall_part:inst_000018:10:3",
+					"representative_command_index": 15
+				},
+				{
+					"command_indices": [
+						44
+					],
+					"group_key": "wall_part:inst_000021:16:3",
+					"representative_command_index": 44
+				},
+				{
+					"command_indices": [
+						69
+					],
+					"group_key": "wall_part:inst_000024:22:3",
+					"representative_command_index": 69
+				},
+				{
+					"command_indices": [
+						86
+					],
+					"group_key": "wall_part:inst_000026:27:3",
+					"representative_command_index": 86
+				},
+				{
+					"command_indices": [
+						111
+					],
+					"group_key": "wall_part:inst_000029:33:3",
+					"representative_command_index": 111
+				},
+				{
+					"command_indices": [
+						135
+					],
+					"group_key": "wall_part:inst_000032:39:3",
+					"representative_command_index": 135
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 15,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1728,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				17,
+				46,
+				88,
+				113
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000019:12:0",
+				"wall_part:inst_000022:18:0",
+				"wall_part:inst_000027:29:0",
+				"wall_part:inst_000030:35:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						17
+					],
+					"group_key": "wall_part:inst_000019:12:0",
+					"representative_command_index": 17
+				},
+				{
+					"command_indices": [
+						46
+					],
+					"group_key": "wall_part:inst_000022:18:0",
+					"representative_command_index": 46
+				},
+				{
+					"command_indices": [
+						88
+					],
+					"group_key": "wall_part:inst_000027:29:0",
+					"representative_command_index": 88
+				},
+				{
+					"command_indices": [
+						113
+					],
+					"group_key": "wall_part:inst_000030:35:0",
+					"representative_command_index": 113
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 17,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				544,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				19,
+				48,
+				90,
+				115
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000019:12:1",
+				"wall_part:inst_000022:18:1",
+				"wall_part:inst_000027:29:1",
+				"wall_part:inst_000030:35:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						19
+					],
+					"group_key": "wall_part:inst_000019:12:1",
+					"representative_command_index": 19
+				},
+				{
+					"command_indices": [
+						48
+					],
+					"group_key": "wall_part:inst_000022:18:1",
+					"representative_command_index": 48
+				},
+				{
+					"command_indices": [
+						90
+					],
+					"group_key": "wall_part:inst_000027:29:1",
+					"representative_command_index": 90
+				},
+				{
+					"command_indices": [
+						115
+					],
+					"group_key": "wall_part:inst_000030:35:1",
+					"representative_command_index": 115
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 19,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				544,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				21,
+				50,
+				92,
+				117
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000019:12:2",
+				"wall_part:inst_000022:18:2",
+				"wall_part:inst_000027:29:2",
+				"wall_part:inst_000030:35:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						21
+					],
+					"group_key": "wall_part:inst_000019:12:2",
+					"representative_command_index": 21
+				},
+				{
+					"command_indices": [
+						50
+					],
+					"group_key": "wall_part:inst_000022:18:2",
+					"representative_command_index": 50
+				},
+				{
+					"command_indices": [
+						92
+					],
+					"group_key": "wall_part:inst_000027:29:2",
+					"representative_command_index": 92
+				},
+				{
+					"command_indices": [
+						117
+					],
+					"group_key": "wall_part:inst_000030:35:2",
+					"representative_command_index": 117
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 21,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				544,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				24,
+				52,
+				94,
+				119
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000019:12:3",
+				"wall_part:inst_000022:18:3",
+				"wall_part:inst_000027:29:3",
+				"wall_part:inst_000030:35:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						24
+					],
+					"group_key": "wall_part:inst_000019:12:3",
+					"representative_command_index": 24
+				},
+				{
+					"command_indices": [
+						52
+					],
+					"group_key": "wall_part:inst_000022:18:3",
+					"representative_command_index": 52
+				},
+				{
+					"command_indices": [
+						94
+					],
+					"group_key": "wall_part:inst_000027:29:3",
+					"representative_command_index": 94
+				},
+				{
+					"command_indices": [
+						119
+					],
+					"group_key": "wall_part:inst_000030:35:3",
+					"representative_command_index": 119
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 24,
+					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				544,
+				192,
+				272
+			]
+		}
+	],
+	"atlas_page_heights": [
+		816
+	],
+	"atlas_pages": [
+		{
+			"height": 816,
+			"page_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/aaecaddb41b238fc6f559efd41f30f9ad5ac8ce091f190bd92515336fc2d8d99.png",
+			"png_bytes": 428011,
+			"sha256": "aaecaddb41b238fc6f559efd41f30f9ad5ac8ce091f190bd92515336fc2d8d99",
+			"width": 2048
+		}
+	],
+	"compiler_version": 2,
+	"contract_id": "hardcore.wall_render_plan.v1",
+	"design_size": [
+		32,
+		32
+	],
+	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+	"legacy_command_indices": [
+		5,
+		22,
+		25,
+		30,
+		35,
+		36,
+		75,
+		102
+	],
+	"map_key": "chiyue_red_moon_lair",
+	"shadow_chunk_command_indices": [],
+	"shadow_chunks": [],
+	"shadow_segments": [],
+	"source_commands_sha256": "ed41cddb16e7b6a93888135e34a1c95d84794fcd12d8adf9975067a2470eb286",
+	"source_image_sha256": {
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png": "b22cdb87956bc0ba359b4436c3c2a73c1bf7c27b5dec813cf9d4b170d8612ae1",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png": "00221d805ff0625a0de836d6425bccde485bbe794961351932922228e8eaf701",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png": "d73153141a2cc3471098b6d5de0fbcac365d99a8c9bf4e6eaad418b93097faa6",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png": "0ddd04b153fa425235cc359f8e9ec3181ea94b9ba0b356045d33c4270bca6064",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png": "df803273ee469cd4fcfdb9bfe957b7afc39f9f58f1bab910d9b477c791faec2d",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png": "8bcb76df5dcddb19447af687d5025f4d5cead1b29942d6cedb000603f4dfc992",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png": "03abb50d824234d8f341ab2b5b24f43ebe0ee57e4a40a1c704c8c86b2a8e8970",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png": "b98643c3b18891fc3f3926c75eb7c120b403b6e51405619e00cb5949d181d2b5",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png": "6d0da8e1d1937a493fda2c1e2f5c4d0bfea9ef4a080d8a357f81cb42bf698d90",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png": "704b146277a2948f985051a2f1e1831ad91c6d7f477951cfa1d33a92dfe17d12",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png": "0b14cc13bbd87cd73dafe3b588261d6589760ff90bec863d44b1d54bc75ccc64",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png": "22391ac2bf931e004f665877fcf4398fbfa42762debf0075844bb127d507c433",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png": "1c130e7e7e92080b2814fd948ab1cfee87cccf14df2eba90f03aa231a39ca07f",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png": "5a011c91a4613cd5f402c2159fbeec91eae1e1116e4bf2d77703a4b60d359263",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png": "0fe1a9cf72cd290f0a53ced20ee20557445c5e45a5ece500252e81bbf0d0cdc9",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png": "9365879c3351aabe678dd7370d514e36e6d71c78261377ca56da7f8bf953d474",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png": "d18a50ac56c263c8a47c7be860f1e3d92f9cafd4eedf8f3f57f0b9e9d6c87e66",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png": "376eebe115fc1ebdd18c8193c63cfbd0ede36d1811c4f7cb9fafcb6a8712ca40",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png": "e3c7f0e0887d62bc40e3c493bac926f891a0ca775d6a7915e61ce9d8d8b949ef",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png": "a2ac0854e45bc2c2ded04586cd1874dccb0f13d3df60b981eab48270a8615a50",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png": "b73a07bdcc18581edfc4663784550101a6427187e1d9b889ea299bb8697c87c4",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png": "d30ed3c10e2048d86a2aa2b8c59022a1afdca32c02d91549dbd67d862fdc30cb",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png": "138ed9e2e0d753cd2380bce3bcf6d8481938728536304181bffe84e7548cea5a",
+		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png": "90eb2ccdf4278efa8b7099c4ad40caa8839ae1cbe3175faf1a6517193c237cc4"
+	},
+	"source_runtime_json_sha256": "f7b3740d5111c8f9566b278bc4cb6ff7ff1cc3f91f0acf37aaf5a5e7054b77cf",
+	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
+}
