@@ -406,7 +406,11 @@ func _apply_frame(frame_index: int) -> bool:
 		return false
 	var frame: Dictionary = _frames[frame_index]
 	var path := "res://%s" % str(frame.get("path", ""))
-	var loaded := CasterSkillVisualRegistry.load_texture_path(path)
+	# perf-smoothness-r1 Phase C (audit): combat-time misses must never
+	# synchronously load/decode on the main thread. Inside the loading window
+	# this is the normal synchronous prewarm path; in combat a miss returns
+	# null and the frame is skipped while the async warm-up channel fills it.
+	var loaded := CasterSkillVisualRegistry.request_animation_frame_texture(path)
 	if loaded == null:
 		return false
 	texture = loaded

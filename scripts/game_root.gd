@@ -3,6 +3,14 @@ extends Node2D
 const BICH_RUNTIME_MAP_ID := 910001
 const ORC_TOMB_F3_RUNTIME_MAP_ID := 911003
 const INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC := 60000
+## perf-smoothness-r1 Phase C (audit 20260918): the loading window owns ONE
+## prewarm entry with ONE absolute deadline. Non-critical prewarm stops when
+## the budget is gone; the fire-wall first-cast workset always completes and
+## is pinned. Combat never synchronously loads/decodes textures: misses are
+## queued and drained through the bounded threaded warm-up channel below.
+const LOADING_PREWARM_BUDGET_USEC := 1500000
+const FRAME_TEXTURE_WARM_PER_FRAME := 2
+const FRAME_TEXTURE_WARM_MAX_IN_FLIGHT := 4
 const TownMusicControllerScript := preload("res://scripts/town_music_controller.gd")
 const AudioRuntimeServiceScript := preload("res://scripts/audio_runtime_service.gd")
 const LevelUpEffectScript := preload("res://scripts/ui_level_up_preview.gd")
@@ -1783,6 +1791,9 @@ func _process(delta: float) -> void:
 			]
 		)
 	preload("res://scripts/monster_source_frames.gd").poll()
+	# perf-smoothness-r1 Phase C: drain combat texture misses through the
+	# bounded threaded warm-up channel (no synchronous decode in combat).
+	_pump_pending_warm_textures()
 	if not _prepared_loot_collection.is_empty(): _poll_prepared_loot_collection()
 	var process_started_usec := RuntimeDiagnostics.timing_start()
 	# R3X-4: advance deferred death settlement/materialization in bounded main
@@ -1944,28 +1955,106 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 ## off the main thread, and caster skill frames prewarm above. The audio
 ## warming is idempotent (all three swing ids, whatever the equipped
 ## weapon resolves to).
+## perf-smoothness-r1 Phase C: bounded async warm-up channel for combat-time
+## animation-frame misses. The registry queues paths instead of synchronously
+## loading/decoding on the main thread; this pump admits a few threaded
+## requests per frame and retains finished textures back into the registry
+## cache. Deliberately no-ops while the loading window is active.
+var _frame_texture_threaded: Dictionary = {}
+
+
+func _pump_pending_warm_textures() -> void:
+	if CasterSkillVisualRegistry.is_loading_window_active():
+		return
+	for path: String in _frame_texture_threaded.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			_frame_texture_threaded.erase(path)
+			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
+			if texture != null:
+				CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+		elif (
+			status == ResourceLoader.THREAD_LOAD_FAILED
+			or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+		):
+			_frame_texture_threaded.erase(path)
+	if _frame_texture_threaded.size() >= FRAME_TEXTURE_WARM_MAX_IN_FLIGHT:
+		return
+	for path: String in CasterSkillVisualRegistry.take_pending_warm_paths(
+		FRAME_TEXTURE_WARM_PER_FRAME
+	):
+		if _frame_texture_threaded.has(path):
+			continue
+		if ResourceLoader.load_threaded_request(path, "Texture2D", true) == OK:
+			_frame_texture_threaded[path] = true
+
+
 func _prewarm_learned_skill_visuals() -> void:
+	# perf-smoothness-r1 Phase C: the loading window is explicitly opened for
+	# this one prewarm entry and closed at READY release; combat-time texture
+	# misses go through the async warm-up channel instead.
+	CasterSkillVisualRegistry.set_loading_window_active(true)
+	CasterSkillVisualRegistry.unpin_all_frames()
 	if PlayerState.test_mode and PlayerState.learned_skills.is_empty():
 		return
-	for skill_name: String in PlayerState.learned_skills.keys():
-		CasterSkillVisualRegistry.prewarm_animation(skill_name)
+	var started_usec := Time.get_ticks_usec()
+	# Bounded first-cast workset (audit): NOT every learned skill - the 32 MiB
+	# frame LRU cannot hold them anyway. Fire wall always participates last so
+	# its frames stay the hottest LRU entries.
+	var workset: Array[String] = CasterSkillVisualRegistry.workset_skill_order(
+		PlayerState.learned_skills.keys()
+	)
+	var skipped := 0
+	var deadline_exceeded := false
+	for skill_id: String in workset:
+		var is_fire_wall := skill_id == "wizard.fire_wall"
+		# One absolute deadline: non-critical prewarm stops when the budget is
+		# gone. The fire-wall first-cast workset is READY-critical and never
+		# skipped by the deadline.
+		if deadline_exceeded and not is_fire_wall:
+			skipped += 1
+			continue
+		CasterSkillVisualRegistry.prewarm_animation(skill_id)
+		if (
+			not deadline_exceeded
+			and not is_fire_wall
+			and Time.get_ticks_usec() - started_usec
+				> LOADING_PREWARM_BUDGET_USEC
+		):
+			deadline_exceeded = true
 	for audio_id: String in ["sword", "wood", "fist"]:
 		PresentationAssets.audio(audio_id)
 	for action_key: String in ["attack", "hit", "cast", "death"]:
 		PresentationAssets.player_texture(action_key)
-	# FW-COLD2 Phase A (remote review 2026-09-16): the 32 MB frame cache is
-	# LRU-ordered, so a wizard with many learned skills can evict the earliest
-	# prewarmed frames during the sweep above. Re-touch the known first-cast
-	# skill LAST so its frames are the hottest entries, then prove residency
-	# before Loading ends - if this is not 6/6, FW-COLD is not complete.
+	# FW-COLD2 Phase A: re-touch the first-cast skill LAST, then prove
+	# residency before Loading ends - the READY-critical workset gate. A
+	# failed residency re-runs the (idempotent) prewarm once inside the
+	# loading window; only genuinely missing files can still report missing.
 	CasterSkillVisualRegistry.prewarm_animation("wizard.fire_wall")
 	var fw_residency := CasterSkillVisualRegistry.animation_residency(
 		"wizard.fire_wall"
 	)
+	if int(fw_residency.get("missing_paths", []).size()) > 0:
+		CasterSkillVisualRegistry.prewarm_animation("wizard.fire_wall")
+		fw_residency = CasterSkillVisualRegistry.animation_residency(
+			"wizard.fire_wall"
+		)
 	var fw_missing: Array = fw_residency.get("missing_paths", [])
+	# Pin the bounded workset lease: first-cast skills + fire wall frames are
+	# exempt from LRU eviction while the pin budget bounds the lease.
+	var pin_result: Dictionary = CasterSkillVisualRegistry.pin_skill_workset(
+		workset
+	)
+	var prewarm_usec := Time.get_ticks_usec() - started_usec
 	print(
-		"[FW-WARM] cpu_resident=%d/%d%s"
+		"[LOADING-WORKSET] skills=%d skipped=%d deadline_exceeded=%s prewarm_ms=%d pinned=%d rejected=%d fw_resident=%d/%d%s"
 		% [
+			workset.size(),
+			skipped,
+			str(deadline_exceeded),
+			prewarm_usec / 1000,
+			int(pin_result.get("pinned", -1)),
+			int(pin_result.get("rejected", -1)),
 			int(fw_residency.get("resident_frames", 0)),
 			int(fw_residency.get("expected_frames", 0)),
 			"" if fw_missing.is_empty() else " missing=%s" % [fw_missing],
@@ -2945,6 +3034,9 @@ func _begin_initial_world_bootstrap() -> void:
 		_world_bootstrap_in_progress = false
 		return
 	_record_player_world_location()
+	# perf-smoothness-r1 Phase C: initial-world READY releases the loading
+	# window; combat-time texture misses now queue for async warm-up.
+	CasterSkillVisualRegistry.set_loading_window_active(false)
 	_on_player_stats_changed(player.current_hp, player.max_hp)
 	_world_bootstrap_in_progress = false
 	_release_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
@@ -3108,6 +3200,9 @@ func _run_map_transition(
 		# Release the world first. Reusable UI then warms invisibly in small,
 		# frame-separated batches; this keeps Loading and gameplay input responsive
 		# while removing the one-time cost from the player's first panel click.
+		# perf-smoothness-r1 Phase C: map-transition READY releases the loading
+		# window the same way the initial-world READY does.
+		CasterSkillVisualRegistry.set_loading_window_active(false)
 		hud.finish_loading_transition()
 		# FRAME-STALL discipline (remote review 2026-09-16): arm the generic
 		# long-frame probe only now - loading has ended and the prewarm

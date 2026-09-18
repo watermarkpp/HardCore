@@ -40,6 +40,166 @@ static var _frame_texture_evictions := 0
 static var _sync_decode_calls := 0
 static var _sync_decode_usec := 0
 
+## perf-smoothness-r1 Phase C (audit 20260918): bounded skill workset lease.
+## The loading window prewarms a budgeted workset (first-cast skills + fire
+## wall) and PINS those frames: a pinned frame is exempt from LRU eviction
+## while the pin budget bounds the lease. Outside the loading window
+## (combat) a cache miss must never synchronously load/decode on the main
+## thread; the path is queued for async warm-up and the frame is skipped.
+const WORKSET_PIN_BUDGET_BYTES := 16 * 1024 * 1024
+static var _pinned_paths: Dictionary = {}
+static var _pinned_bytes := 0
+static var _loading_window_active := true
+static var _pending_warm_paths: Array[String] = []
+
+
+## Loading window gate. `true` (default) keeps every pre-existing
+## synchronous path; `false` (combat) bans synchronous texture work for
+## animation-frame requests.
+static func set_loading_window_active(active: bool) -> void:
+	_loading_window_active = active
+
+
+static func is_loading_window_active() -> bool:
+	return _loading_window_active
+
+
+## Combat-safe animation-frame fetch. Loading window: identical to
+## load_texture_path(). Combat: cache hit is served, a miss is queued for
+## the async warm-up channel and returns null (the animation player skips
+## the frame instead of hitching the main thread).
+static func request_animation_frame_texture(path: String) -> Texture2D:
+	if _loading_window_active:
+		return load_texture_path(path)
+	if path.is_empty():
+		return null
+	_frame_texture_serial += 1
+	if _frame_textures.has(path):
+		_frame_texture_use[path] = _frame_texture_serial
+		_frame_texture_hits += 1
+		return _frame_textures[path] as Texture2D
+	if not _pending_warm_paths.has(path):
+		_pending_warm_paths.append(path)
+	return null
+
+
+static func pending_warm_path_count() -> int:
+	return _pending_warm_paths.size()
+
+
+static func take_pending_warm_paths(limit := 4) -> Array[String]:
+	var batch: Array[String] = []
+	while batch.size() < limit and not _pending_warm_paths.is_empty():
+		batch.append(_pending_warm_paths.pop_front())
+	return batch
+
+
+static func clear_pending_warm_paths() -> void:
+	_pending_warm_paths.clear()
+
+
+## Async warm-up completion: the threaded channel hands the loaded texture
+## back here so the cache and diagnostics stay the single accounting point.
+static func retain_loaded_texture(path: String, texture: Texture2D, forced_bytes := -1) -> void:
+	if texture == null or path.is_empty():
+		return
+	_retain_frame_texture(path, texture, forced_bytes)
+
+
+## Pin the given frame paths as the first-cast workset lease. Pins beyond
+## the byte budget are REJECTED (bounded lease, audit: no unbounded pin).
+static func pin_frame_paths(
+	paths: Array[String],
+	budget_bytes := WORKSET_PIN_BUDGET_BYTES,
+	forced_per_frame_bytes := -1
+) -> Dictionary:
+	var pinned := 0
+	var rejected := 0
+	for path: String in paths:
+		if path.is_empty() or _pinned_paths.has(path):
+			continue
+		var bytes := forced_per_frame_bytes
+		if bytes < 0:
+			var texture := _frame_textures.get(path) as Texture2D
+			if texture == null:
+				rejected += 1
+				continue
+			bytes = ceili(
+				float(texture.get_width() * texture.get_height() * 4)
+					* 4.0 / 3.0
+			)
+		if _pinned_bytes + bytes > budget_bytes:
+			rejected += 1
+			continue
+		_pinned_paths[path] = bytes
+		_pinned_bytes += bytes
+		pinned += 1
+	return {"pinned": pinned, "rejected": rejected}
+
+
+static func unpin_all_frames() -> void:
+	_pinned_paths.clear()
+	_pinned_bytes = 0
+
+
+## Pin the resident frames of the given workset skills (bounded by the pin
+## budget). Loading-window-only: called right after prewarm while frames
+## are guaranteed resident. Walks the same manifest structure as
+## prewarm_animation and pins every currently resident frame path.
+static func pin_skill_workset(skill_ids: Array[String]) -> Dictionary:
+	var paths: Array[String] = []
+	for skill_id: String in skill_ids:
+		if skill_id.is_empty() or not is_runtime_ready(skill_id):
+			continue
+		var phase_ids: Array[String] = [""]
+		for key: String in profile(skill_id).get("animation_phases", {}):
+			phase_ids.append(key)
+		for resolved_phase: String in phase_ids:
+			var animation := animation_profile(skill_id, resolved_phase)
+			if str(animation.get("contract", "")) != "caster_skill_animation.v1":
+				continue
+			for sequence: Variant in animation.get("sequences", []):
+				if not sequence is Dictionary:
+					continue
+				for frame: Variant in sequence.get("frames", []):
+					if not frame is Dictionary:
+						continue
+					var path := "res://%s" % str(frame.get("path", ""))
+					if path != "res://" and _frame_textures.has(path):
+						paths.append(path)
+	return pin_frame_paths(paths)
+
+
+static func pinned_frame_count() -> int:
+	return _pinned_paths.size()
+
+
+## Budgeted first-cast workset selection. Learned order is the priority
+## order; at most `max_skills` entries are kept, and wizard.fire_wall always
+## participates as the LAST (hottest) entry when actually learned. Used by
+## the loading window's prewarm (audit: bounded workset instead of every
+## learned skill, which the 32 MiB LRU cannot hold anyway).
+static func workset_skill_order(learned: Array, max_skills := 4) -> Array[String]:
+	var ordered: Array[String] = []
+	var seen: Dictionary = {}
+	var fire_wall_id := ""
+	for raw_skill: Variant in learned:
+		var skill_name := str(raw_skill)
+		if skill_name.is_empty():
+			continue
+		var skill_id := ProfessionRules.skill_id(skill_name)
+		if skill_id.is_empty() or seen.has(skill_id):
+			continue
+		seen[skill_id] = true
+		if skill_id == "wizard.fire_wall":
+			fire_wall_id = skill_id
+			continue
+		if ordered.size() < max_skills:
+			ordered.append(skill_id)
+	if not fire_wall_id.is_empty():
+		ordered.append(fire_wall_id)
+	return ordered
+
 
 static func profile(skill_name_or_id: String) -> Dictionary:
 	var skill_id := ProfessionRules.skill_id(skill_name_or_id)
@@ -171,10 +331,12 @@ static func load_texture_path(path: String) -> Texture2D:
 	return decoded
 
 
-static func _retain_frame_texture(path: String, loaded: Texture2D) -> void:
+static func _retain_frame_texture(path: String, loaded: Texture2D, forced_bytes := -1) -> void:
 	# RGBA plus a complete mip chain is a conservative bound for these 2D
 	# source/imported textures. Oversized textures still draw without retention.
-	var bytes := ceili(float(loaded.get_width() * loaded.get_height() * 4) * 4.0 / 3.0)
+	var bytes := forced_bytes
+	if bytes < 0:
+		bytes = ceili(float(loaded.get_width() * loaded.get_height() * 4) * 4.0 / 3.0)
 	if bytes > TEXTURE_CACHE_BYTES:
 		return
 	while not _frame_textures.is_empty() and (
@@ -184,9 +346,17 @@ static func _retain_frame_texture(path: String, loaded: Texture2D) -> void:
 		var oldest := ""
 		var oldest_serial := _frame_texture_serial + 1
 		for key: String in _frame_texture_use:
+			# Pinned workset lease (perf-smoothness-r1 Phase C): a pinned
+			# first-cast frame is exempt from eviction while its budget holds.
+			if _pinned_paths.has(key):
+				continue
 			if int(_frame_texture_use[key]) < oldest_serial:
 				oldest = key
 				oldest_serial = int(_frame_texture_use[key])
+		if oldest.is_empty():
+			# Every resident frame is pinned: the lease budget prevents this
+			# from exceeding the cache, but never evict a pinned frame.
+			break
 		_frame_texture_resident_bytes -= int(_frame_texture_bytes[oldest])
 		_frame_textures.erase(oldest)
 		_frame_texture_use.erase(oldest)
@@ -220,6 +390,11 @@ static func frame_texture_cache_diagnostics() -> Dictionary:
 		"evictions": _frame_texture_evictions,
 		"sync_decode_calls": _sync_decode_calls,
 		"sync_decode_usec": _sync_decode_usec,
+		# perf-smoothness-r1 Phase C workset lease + combat gate accounting.
+		"pinned_count": _pinned_paths.size(),
+		"pinned_bytes": _pinned_bytes,
+		"loading_window_active": _loading_window_active,
+		"pending_warm_count": _pending_warm_paths.size(),
 	}
 
 
