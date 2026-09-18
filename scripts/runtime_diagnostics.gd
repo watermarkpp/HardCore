@@ -181,6 +181,9 @@ const PERFORMANCE_COUNTER_FIELDS: Array[String] = [
 	"monster_direct_magic_walk_delay_count",
 	"monster_magic_mine_struck_count",
 	"monster_dot_no_struck_count",
+	## R1.2 presentation FIFO overflow (fixed ring capacity exhausted; the
+	## newest event is dropped - queued actions keep their order).
+	"monster_presentation_queue_overflow",
 ]
 const PERFORMANCE_FIELDS: Array[String] = PERFORMANCE_COUNTER_FIELDS
 

@@ -71,6 +71,8 @@ func _run() -> void:
 	await _test_backlog_acceleration_and_drain()
 	await _test_attack_presentation_waits_for_started_struck()
 	await _test_backlog_drains_before_pending_attack_starts()
+	await _test_fifo_attack_between_strucks()
+	await _test_multiple_attack_requests_keep_order()
 	await _test_walk_grant_does_not_flip_playing_struck()
 	await _test_death_clears_pending()
 	await _test_queue_is_counter_only_and_capped()
@@ -232,6 +234,49 @@ func _test_backlog_drains_before_pending_attack_starts() -> void:
 	await _dispose_fixture()
 
 
+## R1.2 review P1 closure, Test A (true FIFO across a later struck): with a
+## struck playing, an attack request arriving BEFORE a further struck must
+## play between them - A -> B(attack) -> C, never A -> C -> B.
+func _test_fifo_attack_between_strucks() -> void:
+	await _make_fixture(43)
+	_visual.queue_struck(43)
+	_visual._advance_action_timers(0.016)
+	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck A is the current action")
+	_visual.play_attack(0.5)
+	_visual.queue_struck(43)
+	_check(_visual.pending_struck_count() == 1, "struck C queued behind attack B")
+	_visual._advance_action_timers(0.3)
+	_check(_visual._hit_remaining == 0.0, "struck A finished")
+	_check(is_equal_approx(_visual._attack_remaining, 0.5), "attack B starts before the later struck C")
+	_visual._update_animation_frame(0.0)
+	_check(_visual.current_state == "attack", "FIFO: attack B plays, struck C waits")
+	_visual._advance_action_timers(0.6)
+	_check(_visual._attack_remaining == 0.0, "attack B finished")
+	_check(_visual._hit_remaining > 0.0, "struck C starts after attack B")
+	_visual._update_animation_frame(0.0)
+	_check(_visual.current_state == "hit", "FIFO order A -> B -> C holds")
+	await _dispose_fixture()
+
+
+## R1.2 review P1 closure, Test B: multiple attack requests during a struck
+## backlog stay separate FIFO events with their own durations - never merged
+## into the last one.
+func _test_multiple_attack_requests_keep_order() -> void:
+	await _make_fixture(43)
+	_visual.queue_struck(43)
+	_visual._advance_action_timers(0.016)
+	_visual.play_attack(0.3)
+	_visual.play_attack(0.2)
+	_visual._advance_action_timers(0.3)
+	_check(_visual._hit_remaining == 0.0, "struck A finished")
+	_check(is_equal_approx(_visual._attack_remaining, 0.3), "attack B starts with its own duration")
+	_visual._advance_action_timers(0.35)
+	_check(is_equal_approx(_visual._attack_remaining, 0.2), "attack C keeps its own duration (no merge)")
+	_visual._advance_action_timers(0.3)
+	_check(_visual._attack_remaining == 0.0 and _visual._hit_remaining == 0.0, "presentation FIFO drained fully")
+	await _dispose_fixture()
+
+
 ## P1 verification item (presentation layer ONLY): the walk cadence granting
 ## the next step while a struck plays must not flip the presentation away
 ## from the struck, and the struck clock must keep its own duration. The
@@ -256,8 +301,8 @@ func _test_queue_is_counter_only_and_capped() -> void:
 	for _i: int in range(300):
 		_visual.queue_struck(43)
 	_check(
-		_visual.pending_struck_count() == MonsterStruckPolicy.MAX_PENDING_STRUCK,
-		"malformed-input guard caps the integer queue at 255"
+		_visual.pending_struck_count() == MonsterVisual.PRESENTATION_QUEUE_CAPACITY,
+		"malformed-input guard caps the presentation FIFO at its fixed capacity"
 	)
 	_check(_visual._hit_remaining == 0.0, "mass queueing still does not start a burn")
 	await _dispose_fixture()

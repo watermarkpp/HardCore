@@ -85,20 +85,29 @@ var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
 var _hit_remaining := 0.0
-# Vanilla STRUCK queue (R1): incoming struck events queue as an integer while
-# the monster finishes its current committed action (attack pose / movement
-# step / earlier struck). A queued struck NEVER burns in the background:
-# _hit_remaining is assigned only when the struck becomes the visible action.
-# O(1) state, no per-hit Timer/Node/Array allocations.
+# R1.2 vanilla presentation FIFO (review closure): struck and attack
+# presentation events queue in strict arrival order - exactly the original
+# client model where the next action message is consumed only after the
+# current action finishes (`while m_nCurrentAction = 0 and GetMessage(@Msg)`).
+# Fixed capacity, preallocated packed arrays, O(1) enqueue/dequeue, no
+# per-hit Timer/Node/Dictionary allocation. Gameplay authority (_attack_timer,
+# pending release records, WalkTick, damage) is untouched by this queue.
+const PRESENTATION_QUEUE_CAPACITY := 16
+
+enum PresentationAction {
+	STRUCK,
+	ATTACK,
+}
+
+var _presentation_kind := PackedByteArray()
+var _presentation_duration := PackedFloat32Array()
+var _presentation_head := 0
+var _presentation_tail := 0
+var _presentation_count := 0
+# Acceleration/diagnostic counter only: the number of struck events WAITING
+# in the queue (the playing struck is dequeued first). It drives the vanilla
+# backlog 1.5x playback speed; it NEVER decides the action order anymore.
 var _pending_struck_count := 0
-var _pending_struck_level := -1
-# R1.1 attack presentation request (vanilla action queue): when a STRUCK is
-# the current action, the next attack presentation parks here (O(1), two
-# fields, no allocation) and starts when the struck and its earlier backlog
-# drain. Gameplay attack authority (_attack_timer, pending release records)
-# is untouched by this waiting.
-var _pending_attack_presentation := false
-var _pending_attack_presentation_duration := 0.0
 var _death_remaining := 0.0
 var _death_pose_held := false
 var _action_duration := 0.0
@@ -117,6 +126,12 @@ var _streaming_resource_key := ""
 var _streaming_world_generation := -1
 var _last_ground_contact_position := Vector2.INF
 var _last_ground_indicator_radii := Vector2.INF
+
+
+func _init() -> void:
+	# Preallocate the presentation FIFO once per visual (16 bytes + 16 floats).
+	_presentation_kind.resize(PRESENTATION_QUEUE_CAPACITY)
+	_presentation_duration.resize(PRESENTATION_QUEUE_CAPACITY)
 
 
 static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
@@ -331,8 +346,7 @@ func _advance_action_timers(delta: float) -> void:
 		)
 	)
 	_death_remaining = maxf(0.0, _death_remaining - delta)
-	_try_start_pending_struck()
-	_try_start_pending_attack_presentation()
+	_try_start_next_presentation()
 	if death_was_playing and _death_remaining <= 0.0 and actor._dying:
 		# Keep the final frame continuously. The owner timer later extends this as
 		# the corpse hold; there must never be a one-frame idle flash in between.
@@ -946,20 +960,17 @@ func _load_client_texture(path: String, expected_size: Vector2i) -> Texture2D:
 	return ImageTexture.create_from_image(image) if image != null and not image.is_empty() else null
 
 
-## R1.1 attack presentation request entry. The vanilla client consumes the
-## next action message only after the current action finishes
-## (`while m_nCurrentAction = 0 and GetMessage(@Msg)`), so a new attack
-## presentation must NOT overwrite a STRUCK that is already playing: while
-## `_hit_remaining > 0` the request parks in the O(1) pending slot and starts
-## from `_try_start_pending_attack_presentation()` when the struck (and any
-## earlier queued struck backlog) drains. This is presentation-only waiting:
-## the monster's attack gameplay clock and release records keep running.
+## R1.2 attack presentation entry (vanilla action FIFO). While any action is
+## playing or queued the request is appended in arrival order - multiple
+## attack requests stay separate events and are never merged or overwritten.
+## Only when nothing is playing does the attack start immediately (the
+## historical play_attack behaviour). Presentation-only waiting: gameplay
+## attack authority is untouched.
 func play_attack(duration := 0.46) -> void:
 	if _death_remaining > 0.0 or _death_pose_held:
 		return
-	if _hit_remaining > 0.0:
-		_pending_attack_presentation = true
-		_pending_attack_presentation_duration = duration
+	if _hit_remaining > 0.0 or _attack_remaining > 0.0 or _presentation_count > 0:
+		_enqueue_presentation(PresentationAction.ATTACK, duration)
 		return
 	_start_attack_visual(duration)
 
@@ -981,37 +992,73 @@ func _start_attack_visual(duration: float) -> void:
 	_elapsed = 0.0
 
 
-## Starts the parked attack presentation once no struck is playing or queued
-## (vanilla FIFO: a struck backlog that arrived before the attack request
-## finishes first). Runs every action tick right after the struck queue.
-func _try_start_pending_attack_presentation() -> void:
-	if not _pending_attack_presentation:
+## O(1) FIFO append. On overflow (fixed capacity exhausted) the NEWEST event
+## is dropped and counted - the actions already queued keep their order.
+func _enqueue_presentation(kind: PresentationAction, duration: float) -> void:
+	if _presentation_count >= PRESENTATION_QUEUE_CAPACITY:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_presentation_queue_overflow"
+		)
 		return
-	if _hit_remaining > 0.0 or _attack_remaining > 0.0 or _pending_struck_count > 0:
-		return
-	_pending_attack_presentation = false
-	_start_attack_visual(_pending_attack_presentation_duration)
+	_presentation_kind[_presentation_tail] = kind
+	_presentation_duration[_presentation_tail] = duration
+	_presentation_tail = (_presentation_tail + 1) % PRESENTATION_QUEUE_CAPACITY
+	_presentation_count += 1
+	if kind == PresentationAction.STRUCK:
+		_pending_struck_count += 1
 
 
-## Vanilla R1 entry for monster struck visuals: queue one struck event.
-## O(1): integer counter only, no per-hit Timer/Node/Dictionary allocation.
-## The struck starts only after the monster's current committed action
-## (attack pose / movement step / earlier struck) finishes, mirroring the
-## original client action queue where SM_STRUCK is consumed after the current
-## action completes. Duration is resolved at start time from the monster's
-## canonical ActStruck frame count and MonsterStruckPolicy.struck_frame_ms.
+## Dequeues and starts the next presentation event in strict arrival order.
+## A struck only starts when its extra movement gate passes (committed step /
+## visible walk finish first); an attack behind a blocked struck waits too -
+## head-of-line blocking IS the vanilla action queue.
+func _try_start_next_presentation() -> void:
+	if _presentation_count <= 0:
+		return
+	if _hit_remaining > 0.0 or _attack_remaining > 0.0:
+		return
+	if _death_remaining > 0.0 or _death_pose_held:
+		return
+	var kind: int = _presentation_kind[_presentation_head]
+	if kind == PresentationAction.STRUCK and not _can_begin_struck():
+		return
+	var duration := _presentation_duration[_presentation_head]
+	_presentation_head = (_presentation_head + 1) % PRESENTATION_QUEUE_CAPACITY
+	_presentation_count -= 1
+	if kind == PresentationAction.STRUCK:
+		_pending_struck_count -= 1
+		_start_struck_visual(duration)
+	else:
+		_start_attack_visual(duration)
+
+
+## Vanilla R1 entry for monster struck visuals: enqueue one struck event in
+## arrival order. O(1): two packed-array writes, no per-hit Timer/Node/
+## Dictionary allocation. Duration is resolved at enqueue time from the
+## monster's canonical ActStruck frame count and struck_frame_ms(level).
 func queue_struck(monster_level := -1) -> void:
 	if _death_remaining > 0.0 or _death_pose_held:
 		return
 	if not is_instance_valid(actor):
 		return
-	if _pending_struck_count < MonsterStruckPolicyScript.MAX_PENDING_STRUCK:
-		_pending_struck_count += 1
-	if monster_level > 0:
-		_pending_struck_level = monster_level
 	RuntimeDiagnostics.increment_performance_counter(
 		&"monster_struck_event_count"
 	)
+	var struck_level := (
+		monster_level
+		if monster_level > 0
+		else maxi(1, actor.level)
+	)
+	var frame_count := maxi(
+		1,
+		MonsterAnimationPolicy.frame_count(active_resources, &"hit")
+	)
+	# Vanilla duration = ActStruck frames x max(80, 200 - level * 5) ms.
+	# No per-monster-name switch and no global 0.22s constant.
+	var duration := float(
+		frame_count * MonsterStruckPolicyScript.struck_frame_ms(struck_level)
+	) / 1000.0
+	_enqueue_presentation(PresentationAction.STRUCK, duration)
 	RuntimeDiagnostics.record_performance_max(
 		&"monster_struck_visual_pending_max",
 		float(_pending_struck_count)
@@ -1038,24 +1085,7 @@ func _can_begin_struck() -> bool:
 	return true
 
 
-func _try_start_pending_struck() -> void:
-	if _pending_struck_count <= 0 or not _can_begin_struck():
-		return
-	_pending_struck_count -= 1
-	var struck_level := (
-		_pending_struck_level
-		if _pending_struck_level > 0
-		else (actor.level if is_instance_valid(actor) else 1)
-	)
-	var frame_count := maxi(
-		1,
-		MonsterAnimationPolicy.frame_count(active_resources, &"hit")
-	)
-	# Vanilla duration = ActStruck frames x max(80, 200 - level * 5) ms.
-	# No per-monster-name switch and no global 0.22s constant.
-	var duration := float(
-		frame_count * MonsterStruckPolicyScript.struck_frame_ms(struck_level)
-	) / 1000.0
+func _start_struck_visual(duration: float) -> void:
 	_hc_m30_walk.interrupt_pose()
 	_hit_remaining = duration
 	_hc_m30_hit_duration = duration
@@ -1098,11 +1128,12 @@ func play_death(duration := -1.0) -> float:
 	_hc_m30_death_duration = resolved_duration
 	_hit_remaining = 0.0
 	_attack_remaining = 0.0
-	# Death is the highest priority action: a pending struck backlog must not
-	# outlive the monster or play on the corpse.
+	# Death is the highest priority action: the whole presentation FIFO must
+	# not outlive the monster or play on the corpse.
+	_presentation_head = 0
+	_presentation_tail = 0
+	_presentation_count = 0
 	_pending_struck_count = 0
-	# A parked attack request is equally void once the monster dies.
-	_pending_attack_presentation = false
 	_action_duration = resolved_duration
 	_elapsed = 0.0
 	return resolved_duration
