@@ -14,6 +14,7 @@ var _player_level_up_effect: Node2D
 
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
+const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
@@ -1543,6 +1544,9 @@ func _ready() -> void:
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
 	PlayerState.item_audio_committed.connect(_on_item_audio_committed)
+	# R2: timed 神水 effects report their end through the central notice layer.
+	PlayerState.temporary_item_buff_expired.connect(_on_temporary_item_buff_expired)
+	player.potion_buff_expired.connect(_on_player_potion_buff_expired)
 	add_child(player)
 	_player_level_up_effect = LevelUpEffectScript.new()
 	_player_level_up_effect.name = "PlayerLevelUpEffect"
@@ -2108,6 +2112,21 @@ func _cancel_player_input_boundary(reason: StringName) -> void:
 	_reset_attack_action_lifecycle(reason)
 
 
+## R2: timed 神水 (temporary stat buff) expiry reports once through the
+## central notice layer, using the authoritative item name.
+func _on_temporary_item_buff_expired(item_name: String) -> void:
+	if not is_instance_valid(hud):
+		return
+	hud.show_message("%s效果结束" % item_name)
+
+
+## R2: legacy potion combat buffs (ac/mac) report their end the same way.
+func _on_player_potion_buff_expired(kind: String) -> void:
+	if not is_instance_valid(hud):
+		return
+	hud.show_message("神水效果结束")
+
+
 func _on_player_levels_gained(previous_level: int, new_level: int) -> void:
 	if new_level <= previous_level or not is_instance_valid(player):
 		return
@@ -2116,6 +2135,8 @@ func _on_player_levels_gained(previous_level: int, new_level: int) -> void:
 	# level loop. The approved visual follows the actor rather than a world point.
 	if is_instance_valid(_player_level_up_effect):
 		_player_level_up_effect.replay(player.approved_ground_footpoint_local_px())
+	# R2: the level-up result joins the unified central notice layer.
+	hud.show_success_message("等级提升至 %d" % new_level)
 
 
 func _update_town_music_presence() -> void:
@@ -6278,10 +6299,12 @@ func _on_item_quick_slot_use_requested(
 	if not bool(result.get("ok", false)):
 		hud.show_error_message(UIErrorFeedbackScript.user_message(str(result.get("message", "快捷物品使用失败"))))
 		return
-	# consumable/scroll effects are already surfaced by their existing signal
-	# chain; only skill_book needs an immediate visible confirmation.
-	if str(result.get("kind", "")) == "skill_book":
-		hud.show_message(str(result.get("message", "技能学习成功")))
+	# One player action owns one central result notice (R2). Only the
+	# contract-approved uses report (skill books, blessing/repair oils,
+	# timed 神水); instant potions stay silent by design.
+	var used_item := GameData.get_item_record(str(result.get("item_name", "")))
+	if UIPlayerNoticeScript.should_report_item_use(used_item):
+		hud.show_success_message(str(result.get("message", "")))
 
 
 func _on_skill_button_assignment_requested(request: Dictionary) -> void:
@@ -13167,7 +13190,9 @@ func _on_consumable_used(item_name: String) -> void:
 		player.restore_health(30)
 		player.restore_mana(30)
 		player.apply_defense_buff(60.0, 2)
-	hud.show_message("使用了%s" % item_name)
+	# R2: the generic "使用了X" text is retired here — the structured use
+	# result is the single central owner for every consumable use notice, so
+	# this legacy signal lane must not add a second one. Effects stay.
 
 
 func _on_scroll_used(item_name: String) -> void:
@@ -13190,7 +13215,9 @@ func _on_scroll_used(item_name: String) -> void:
 	elif effect == "war_god_oil":
 		_report_repair_oil_result(PlayerState.apply_weapon_repair_oil_result(true))
 		return
-	hud.show_message("使用了%s" % item_name)
+	# R2: the generic "使用了X" text is retired here — the structured use
+	# result is the single central owner for every scroll use notice, so this
+	# legacy signal lane must not add a second one. Effects stay.
 
 
 func _report_repair_oil_result(result: Dictionary) -> void:

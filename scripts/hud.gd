@@ -134,13 +134,15 @@ var data_label: Label
 var profile_label: Label
 var quest_tracker_label: Label
 var loot_label: Label
-## Dedicated player-error channel. Independent from loot_label/show_message on
-## purpose: show_message also carries non-error notices, so raising that lane's
-## layer would change unrelated notice behavior. The error label always renders
-## above every modal panel (Inventory 50 / Warehouse 55 / Shop 60 / Skill 60 /
-## ItemDetailPresenter 4095).
+## Unified central notice layer (UNIFIED-PLAYER-NOTICE R2). One presenter
+## owns every transient global notice: same geometry the former error channel
+## used, priority preemption, dedupe and a bounded queue. `error_label` stays
+## as a compatibility alias to the presenter's primary text label so existing
+## error-channel tests and call sites keep working.
+const PlayerNoticePresenterScript := preload("res://scripts/player_notice_presenter.gd")
+const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
+var notice_presenter: PlayerNoticePresenter
 var error_label: Label
-var _error_message_timer := 0.0
 var target_label: Label
 var target_health_fill: ColorRect
 var auto_target_button: Button
@@ -203,7 +205,6 @@ var _last_hp := 120
 var _last_max_hp := 120
 var _last_mp := 40
 var _last_max_mp := 40
-var _loot_message_timer := 0.0
 var _warrior_snapshot: Dictionary = {}
 var _special_actions: Array[String] = []
 var _special_action_index := 0
@@ -436,24 +437,14 @@ func _build_hidden_compatibility_info(root: Control) -> void:
 	loot_label.add_theme_color_override("font_color", Color("ffd06f"))
 	root.add_child(loot_label)
 
-	# Error channel copies the LootNotice presentation geometry but lives on
-	# its own absolute layer above every modal panel, including the docked
-	# ItemDetailPresenter at z=4095.
-	error_label = Label.new()
-	error_label.name = "ErrorNotice"
-	error_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	error_label.offset_left = 360
-	error_label.offset_top = 132
-	error_label.offset_right = -360
-	error_label.offset_bottom = 172
-	error_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	error_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	error_label.add_theme_font_size_override("font_size", 22)
-	error_label.add_theme_color_override("font_color", Color("ffd06f"))
-	error_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	error_label.z_as_relative = false
-	error_label.z_index = 4096
-	root.add_child(error_label)
+	# Unified central notice overlay copies the former error-channel geometry
+	# and lives on the same absolute layer above every modal panel, including
+	# the docked ItemDetailPresenter at z=4095. All global notices (success,
+	# error, warning, info, item results) render through this single layer.
+	notice_presenter = PlayerNoticePresenterScript.new()
+	notice_presenter.name = "PlayerNoticeOverlay"
+	root.add_child(notice_presenter)
+	error_label = notice_presenter.prefix_label
 
 
 func _build_target_bar(root: Control) -> void:
@@ -2186,13 +2177,9 @@ func _toggle_skill_book() -> void:
 		skill_panel.open_for("技能导师")
 
 
-func _process(delta: float) -> void:
-	_loot_message_timer = maxf(0.0, _loot_message_timer - delta)
-	if _loot_message_timer == 0.0 and loot_label != null:
-		loot_label.text = ""
-	_error_message_timer = maxf(0.0, _error_message_timer - delta)
-	if _error_message_timer == 0.0 and error_label != null:
-		error_label.text = ""
+## Notice timing moved into PlayerNoticePresenter (R2); the HUD itself no
+## longer runs a per-frame callback. The loot label is kept for layout
+## compatibility; global notices no longer write it.
 
 
 func update_hp(current_hp: int, max_hp: int) -> void:
@@ -2541,24 +2528,68 @@ func apply_warehouse_sort_result(result: Dictionary) -> void:
 	warehouse_panel.apply_sort_result(result)
 
 
+## Unified player-notice entry (UNIFIED-PLAYER-NOTICE R2). Every transient
+## global notice -- success, error, warning, info, item results -- goes
+## through exactly this layer. Business layers report what happened; the
+## presenter decides rendering, priorities, dedupe and queueing.
+func show_notice(notice: Dictionary) -> void:
+	if notice_presenter != null:
+		notice_presenter.present(notice)
+
+
+## Dedicated item notice: renders "prefix + authoritative item name + suffix"
+## as one line where only the item name carries its official UIItemNameStyle
+## color/outline (e.g. "已装备 裁决之杖", "已卸下 井中月").
+func show_item_notice(
+	prefix: String,
+	item: Dictionary,
+	instance: Dictionary = {},
+	suffix := "",
+	kind := "success",
+	seconds := 2.0,
+	dedupe_key := ""
+) -> void:
+	show_notice({
+		"kind": kind,
+		"duration": seconds,
+		"dedupe_key": dedupe_key,
+		"segments": [
+			UIPlayerNoticeScript.text_segment(prefix),
+			UIPlayerNoticeScript.item_segment(item, instance),
+			UIPlayerNoticeScript.text_segment(suffix),
+		],
+	})
+
+
+## ActionResult contract for future player-action services (forge, synth,
+## reinforce...). Services never touch the HUD; the calling layer forwards
+## the authoritative result dictionary here.
+func present_action_result(result: Dictionary) -> void:
+	show_notice(UIPlayerNoticeScript.from_action_result(result))
+
+
+func show_success_message(message: String, seconds := 2.0) -> void:
+	show_notice({"kind": "success", "message": message, "duration": seconds})
+
+
+func show_warning_message(message: String, seconds := 2.0) -> void:
+	show_notice({"kind": "warning", "message": message, "duration": seconds})
+
+
+## General notice lane. Routes into the unified central overlay; the
+## loot_label below stays reserved for layout compatibility only.
 func show_message(message: String, seconds := 2.0) -> void:
-	if loot_label != null:
-		loot_label.text = message
-		_loot_message_timer = seconds
+	show_notice({"kind": "info", "message": message, "duration": seconds})
 
 
-## Dedicated player-error channel. Fully independent from show_message: the
-## two timers and labels never clear each other. Machine reasons passed by
-## mistake are replaced by generic Chinese prose at this boundary; raw reasons
-## stay in logs/diagnostics only.
+## Player-error channel. Machine reasons passed by mistake are replaced by
+## generic Chinese prose at this boundary; raw reasons stay in logs only.
+## Errors carry the highest notice priority and preempt success/info.
 func show_error_message(message: String, seconds := 2.0) -> void:
 	var visible_message := UIErrorFeedbackScript.user_message(message)
 	if visible_message.is_empty():
 		return
-
-	if error_label != null:
-		error_label.text = visible_message
-		_error_message_timer = maxf(0.1, seconds)
+	show_notice({"kind": "error", "message": visible_message, "duration": seconds})
 
 
 func update_quick_slots() -> void:

@@ -14,6 +14,7 @@ const ItemDetailPresenterScript = preload("res://scripts/item_detail_docked_pres
 
 const UIItemDetailDockScript := preload("res://scripts/ui_item_detail_dock.gd")
 const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
+const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
 const UIItemSelectionVisualScript := preload("res://scripts/ui_item_selection_visual.gd")
 const UISelectionDismissGuardScript := preload("res://scripts/ui_selection_dismiss_guard.gd")
 
@@ -949,6 +950,30 @@ func _show_error_message(message: String, seconds := 2.0) -> void:
 		hud_node.show_error_message(message, seconds)
 
 
+## Central success lane (UNIFIED-PLAYER-NOTICE R2): item-use and auto-sort
+## successes surface through the unified overlay instead of the detail
+## presenter, so one player action owns exactly one global result notice.
+func _show_success_message(message: String) -> void:
+	var hud_node := get_parent()
+	if hud_node != null and hud_node.has_method("show_success_message"):
+		hud_node.show_success_message(message)
+
+
+## Item notice with the authoritative item name style: only the item name
+## carries its official color/outline inside the central overlay.
+func _show_item_notice(
+	prefix: String,
+	item: Dictionary,
+	instance: Dictionary,
+	suffix := "",
+	kind := "success",
+	dedupe_key := ""
+) -> void:
+	var hud_node := get_parent()
+	if hud_node != null and hud_node.has_method("show_item_notice"):
+		hud_node.show_item_notice(prefix, item, instance, suffix, kind, 2.0, dedupe_key)
+
+
 func _select_equipment_slot(slot: String) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
@@ -985,6 +1010,17 @@ func _select_equipment_slot(slot: String) -> void:
 				selected_equipment_ref = _equipment_selection_ref(selected_equipment_slot, equipped) if equipped is Dictionary else {}
 				refresh()
 				_show_equipment_detail(selected_equipment_slot)
+				# Committed equipment surfaces once through the central overlay,
+				# using the post-commit instance so ★ names stay correct (R2).
+				if equipped is Dictionary and not (equipped as Dictionary).is_empty():
+					_show_item_notice(
+						"已装备 ",
+						GameData.get_item_record(equipped),
+						equipped,
+						"",
+						"success",
+						"equipment.equip"
+					)
 			else:
 				# Rejected transactions leave the original source selection and
 				# detail intact; the failure surfaces through the dedicated
@@ -1259,6 +1295,8 @@ func _on_context_action(id: int) -> void:
 	var action: Dictionary = _context_actions.get(id, {})
 	var result: Dictionary = {}
 	var use_result: Dictionary = {}
+	var use_item_record: Dictionary = {}
+	var unequip_record: Dictionary = {}
 	match str(action.get("action", "none")):
 		"equip":
 			var equip_index := int(action.get("index", -1))
@@ -1272,9 +1310,13 @@ func _on_context_action(id: int) -> void:
 				_show_error_message("背包已满，没有空位可以卸下装备。")
 				return
 			var equipped: Variant = PlayerState.equipment.get(str(action.get("slot", "")), {})
+			if equipped is Dictionary:
+				unequip_record = equipped
 			result = PlayerState.unequip_to_inventory_slot(str(action.get("slot", "")), target_slot, str(equipped.get("instance_id", "")) if equipped is Dictionary else "")
 		"use":
-			use_result = PlayerState.use_inventory_index_result(int(action.get("index", -1)))
+			var use_index := int(action.get("index", -1))
+			use_item_record = GameData.get_item_record(_inventory_record(use_index))
+			use_result = PlayerState.use_inventory_index_result(use_index)
 		_:
 			return
 	if not use_result.is_empty():
@@ -1282,7 +1324,10 @@ func _on_context_action(id: int) -> void:
 			_clear_inventory_selection_styles()
 			_clear_equipment_selection()
 			refresh()
-			item_detail_presenter.show_message("[color=#e8c277]%s[/color]" % str(use_result.get("message", "")))
+			# One player action owns one global result notice (R2): only the
+			# contract-approved uses report; instant potions stay silent.
+			if UIPlayerNoticeScript.should_report_item_use(use_item_record):
+				_show_success_message(str(use_result.get("message", "")))
 		else:
 			# A failed use keeps the prior selection and presenter; the
 			# authoritative failure message surfaces via the dedicated error
@@ -1307,7 +1352,31 @@ func _on_context_action(id: int) -> void:
 		refresh()
 		if not selected_equipment_slot.is_empty():
 			_show_equipment_detail(selected_equipment_slot)
+			# Committed equip reports once through the central overlay with
+			# the post-commit instance (R2).
+			var committed: Variant = PlayerState.equipment.get(selected_equipment_slot, {})
+			if committed is Dictionary and not (committed as Dictionary).is_empty():
+				_show_item_notice(
+					"已装备 ",
+					GameData.get_item_record(committed),
+					committed,
+					"",
+					"success",
+					"equipment.equip"
+				)
 		else:
+			# A replace commit lands in the bag: the single player action is
+			# an UNEQUIP from the old slot (R2: one notice, never two).
+			var destination: Variant = result.get("destination", {})
+			if destination is Dictionary and not unequip_record.is_empty():
+				_show_item_notice(
+					"已卸下 ",
+					GameData.get_item_record(unequip_record),
+					unequip_record,
+					"",
+					"success",
+					"equipment.unequip"
+				)
 			_hide_item_detail()
 	else:
 		# Failed transaction keeps the prior selection and presenter; no prose
@@ -1362,6 +1431,17 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 			selected_equipment_ref = _equipment_selection_ref(selected_equipment_slot, equipped) if equipped is Dictionary else {}
 			refresh()
 			_show_equipment_detail(selected_equipment_slot)
+			# Committed equipment surfaces once through the central overlay,
+			# using the post-commit instance so ★ names stay correct (R2).
+			if equipped is Dictionary and not (equipped as Dictionary).is_empty():
+				_show_item_notice(
+					"已装备 ",
+					GameData.get_item_record(equipped),
+					equipped,
+					"",
+					"success",
+					"equipment.equip"
+				)
 		else:
 			_show_inventory_detail(index)
 			_show_error_message(
@@ -1373,7 +1453,11 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 	_clear_inventory_selection_styles()
 	refresh()
 	if bool(use_result.get("success", false)):
-		item_detail_presenter.show_message("[color=#e8c277]%s[/color]" % str(use_result.get("message", "")))
+		# One player action owns one global result notice (R2). Only the
+		# contract-approved uses report (skill books, oils, timed 神水);
+		# instant potions stay silent by design.
+		if UIPlayerNoticeScript.should_report_item_use(item):
+			_show_success_message(str(use_result.get("message", "")))
 	else:
 		# A failed use is an operation failure: dedicated error channel with a
 		# player-readable Chinese message, never the raw authority string.
@@ -1403,7 +1487,8 @@ func _on_auto_sort_pressed() -> void:
 	_clear_equipment_selection()
 	refresh()
 	if bool(result.get("success", false)):
-		item_detail_presenter.show_message("[color=#e8c277]自动整理完成[/color]")
+		# Auto-sort success moves into the unified central overlay (R2).
+		_show_success_message("自动整理完成")
 	else:
 		# A rejected sort is an operation failure: dedicated error channel,
 		# while the success notice stays in the original presenter lane.
