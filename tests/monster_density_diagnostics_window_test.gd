@@ -78,9 +78,14 @@ func _run() -> void:
 	assert(RuntimeDiagnostics.performance_counter(&"enemy_physics_calls") == 1)
 	assert(RuntimeDiagnostics.performance_counter(&"enemy_physics_usec") == segment_elapsed_usec)
 	runtime.call("_process", 0.016)
+	# perf-smoothness-r1 (audit PERF-02): the Device Lab sampler measures the
+	# real wall-clock interval between process callbacks; the clamped delta
+	# argument is no longer sampled. The first call after a reset only sets
+	# the baseline, the second produces the first real sample.
+	runtime.call("_process", 0.016)
 	var process_sample_window := RuntimeDiagnostics.read_performance_window()
 	assert(int(process_sample_window.get("frame_count", -1)) == 1)
-	assert(is_equal_approx(float(process_sample_window.get("frame_ms_p50", -1.0)), 16.0))
+	assert(float(process_sample_window.get("frame_ms_p50", -1.0)) >= 0.0)
 	assert(RuntimeDiagnostics.timing_start() > 0)
 	RuntimeDiagnostics.set_performance_release_context(
 		"release.diagnostics.test",

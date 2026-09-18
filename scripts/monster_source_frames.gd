@@ -12,6 +12,12 @@ static var _queue: Array[String] = []
 static var _last_use: Dictionary = {}
 static var _resident_bytes := 0
 static var _last_poll_frame := -1
+## Separated overlay-channel counters (perf-smoothness-r1 Phase A, PERF-01):
+## this cache owns ONLY special-attack overlay frames. The monster BODY
+## atlases live in MonsterVisualStreamingCoordinator and must never be
+## inferred from these numbers.
+static var _loads := 0
+static var _evictions := 0
 
 static func data() -> Dictionary:
 	if _data.is_empty():
@@ -44,6 +50,7 @@ static func poll() -> void:
 			var loaded := ResourceLoader.load_threaded_get(path) as Texture2D
 			_requested.erase(path)
 			if loaded == null: continue
+			_loads += 1
 			var bytes := loaded.get_width() * loaded.get_height() * 4
 			while _resident_bytes + bytes > CACHE_BUDGET and not _textures.is_empty():
 				var oldest := str(_textures.keys()[0])
@@ -53,6 +60,7 @@ static func poll() -> void:
 				_resident_bytes -= old.get_width() * old.get_height() * 4
 				_textures.erase(oldest)
 				_last_use.erase(oldest)
+				_evictions += 1
 			_textures[path] = loaded
 			_last_use[path] = frame
 			_resident_bytes += bytes
@@ -77,6 +85,22 @@ static func texture(path: String) -> Texture2D:
 
 
 static func resident_texture_count() -> int:
-	# FRAME-STALL diagnostics: how many monster frame textures are resident.
-	# Read by the GameRoot long-frame probe; no behavioral effect.
+	# FRAME-STALL diagnostics: how many monster OVERLAY frame textures are
+	# resident. Read by the GameRoot long-frame probe; no behavioral effect.
+	# Prefer diagnostics() at new call sites: this count says nothing about
+	# the monster body atlases owned by the streaming coordinator.
 	return _textures.size()
+
+
+## Separated overlay-channel diagnostics (perf-smoothness-r1 Phase A).
+## Read-only facts: entries, resident bytes, queue state and lifetime
+## load/eviction totals for THIS overlay cache only.
+static func diagnostics() -> Dictionary:
+	return {
+		"entries": _textures.size(),
+		"resident_bytes": _resident_bytes,
+		"requested": _requested.size(),
+		"queued": _queue.size(),
+		"loads": _loads,
+		"evictions": _evictions,
+	}

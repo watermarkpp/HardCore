@@ -169,7 +169,11 @@ func _process(delta: float) -> void:
 	# applies the explicit Debug/performance gate, so a normal Debug build and
 	# every Release build remain free of frame-sample work unless a diagnostics
 	# window was deliberately opened by the lab command.
-	RuntimeDiagnostics.record_frame_time_ms(maxf(delta, 0.0) * 1000.0)
+	# perf-smoothness-r1 Phase A (PERF-02): the old `delta * 1000.0` feeder
+	# recorded the engine-clamped process delta (8/60 = 0.133s default) and
+	# was blind to real stalls. The Device Lab recorder now measures the
+	# wall-clock interval between its own process callbacks instead.
+	RuntimeDiagnostics.record_device_lab_frame_interval()
 	if _busy:
 		return
 	_poll_elapsed += maxf(delta, 0.0)
@@ -177,6 +181,13 @@ func _process(delta: float) -> void:
 		return
 	_poll_elapsed = 0.0
 	_poll_inbox()
+
+
+func _notification(what: int) -> void:
+	# perf-smoothness-r1 Phase A: an app pause is a measurement boundary for
+	# the Device Lab wall-clock frame sampler as well.
+	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_RESUMED]:
+		RuntimeDiagnostics.reset_device_lab_frame_interval()
 
 
 func _poll_inbox() -> void:

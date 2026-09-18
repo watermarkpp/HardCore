@@ -378,20 +378,23 @@ var _drop_nodes_max_per_frame_override := -1
 var _test_force_loot_materialization_failure_count := 0
 var _pending_loot_collections: Array = []
 var _prepared_loot_collection: Dictionary = {}
-## FRAME-STALL probe: fires once per session on the first >250ms frame, but
-## only after loading has ended (armed post-baseline), so bootstrap spikes
-## cannot consume it. Counters are facts only: absence of growth means no
-## tracked CPU cache grew - engine-side costs (render/driver/allocator) are
+## FRAME-STALL probe: fires once per session on the first >250ms wall-clock
+## frame, but only after loading has ended (armed post-baseline), so bootstrap
+## spikes cannot consume it. Counters are facts only: absence of growth means
+## no tracked CPU cache grew - engine-side costs (render/driver/allocator) are
 ## NOT observable through these counters and must not be inferred from them.
 var _first_long_frame_diagnosed := false
 var _first_combat_probe_armed := false
-## First fire wall cast probe (remote review 2026-09-16): on the first
-## wizard.fire_wall cast, record the next 12 rendered frame durations and
-## report them with 33.3/50/100 ms thresholds - no threshold guessing beyond
-## that, and no causal claims from cache counters.
-var _fw_first_cast_recorded := false
-var _fw_first_cast_frames_left := 0
-var _fw_first_cast_frame_ms: Array[float] = []
+## Session identity header (perf-smoothness-r1 Phase A): printed once per
+## process at the first loading-window end so every captured log discloses
+## what ran and where. Engine timing parameters are included because the
+## process-delta clamp they define was itself a measurement defect.
+static var _session_header_printed := false
+## AOE first-engagement window (perf-smoothness-r1 Phase A): the cast/field/
+## tick/death milestones and real frame intervals live in AoeEngagementWindow;
+## GameRoot only forwards events. Replaces the retired 12-delta probe whose
+## window could never cover the actual engagement and whose samples were
+## clamped deltas.
 var _loot_collection_flush_queued := false
 ## Legacy loot candidates are rejected unless a focused test explicitly opts
 ## into the old fixture shape. Formal pickups always carry map/generation
@@ -1716,7 +1719,13 @@ func _notification(what: int) -> void:
 		# paused tree close the WHEN_PAUSED menu cleanly on the next idle tick.
 		call_deferred("_toggle_system_menu")
 	elif what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		# Perf Window probe (perf-smoothness-r1): an app pause is a measurement
+		# boundary. Reset the wall-clock baseline so the post-resume frame is
+		# not recorded as a giant fake frame interval.
+		RuntimeDiagnostics.reset_wall_frame_interval()
 		_cancel_player_input_boundary(&"application_interrupted")
+	elif what == NOTIFICATION_APPLICATION_RESUMED:
+		RuntimeDiagnostics.reset_wall_frame_interval()
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_cancel_all_mobile_attack_inputs(true)
 		_cancel_all_skill_inputs(true)
@@ -1743,41 +1752,36 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	# FRAME-STALL probe (reworked per remote review 2026-09-16): armed only
-	# after loading ends so bootstrap spikes cannot consume the one shot.
-	# The counters are neutral facts: they show whether any tracked CPU
-	# cache grew during the frame and nothing more.
-	if _first_combat_probe_armed and not _first_long_frame_diagnosed and delta > 0.25:
+	# Real frame pacing (perf-smoothness-r1 Phase A): `_process(delta)` is
+	# clamped by the engine (8/60 = 0.133s default) and was provably blind to
+	# real stalls (PERF-02 of the 2026-09-18 audit). Measure wall-clock time
+	# between process callbacks instead. -1.0 marks a measurement boundary
+	# (first frame or pause/resume discard), never a gameplay stall.
+	var wall_interval_ms := -1.0
+	if OS.is_debug_build():
+		wall_interval_ms = RuntimeDiagnostics.wall_frame_interval_ms()
+	# AOE first-engagement window (see AoeEngagementWindow): bounded ring of real
+	# frame intervals between the first fire wall cast and first batch death.
+	if wall_interval_ms >= 0.0 and AoeEngagementWindow.window_active():
+		AoeEngagementWindow.record_frame_interval_ms(wall_interval_ms)
+	# FRAME-STALL long-frame probe (perf-smoothness-r1 Phase A): armed only
+	# after loading ends so bootstrap spikes cannot consume the one shot. Now
+	# keyed on the real wall interval (the old `delta > 0.25` could never fire
+	# under the engine's clamped delta). Counters remain neutral facts.
+	if _first_combat_probe_armed and not _first_long_frame_diagnosed and wall_interval_ms > 250.0:
 		_first_long_frame_diagnosed = true
 		print(
-			"[FRAME-STALL] long frame %.3fs at process frame %d: caster=%s presentation=%d monster_frames=%d"
+			"[FRAME-STALL] long frame %.3fs at process frame %d: caster=%s presentation=%d monster_overlay=%s"
 			% [
-				delta,
+				wall_interval_ms / 1000.0,
 				Engine.get_process_frames(),
 				CasterSkillVisualRegistry.frame_texture_cache_diagnostics(),
 				PresentationAssets.cached_resource_count(),
 				preload(
 					"res://scripts/monster_source_frames.gd"
-				).resident_texture_count()
+				).diagnostics(),
 			]
 		)
-	# First fire wall cast window: record the 12 rendered frame durations
-	# that follow the first cast event, then report with fixed thresholds.
-	if _fw_first_cast_frames_left > 0:
-		_fw_first_cast_frame_ms.append(delta * 1000.0)
-		_fw_first_cast_frames_left -= 1
-		if _fw_first_cast_frames_left == 0:
-			var over33 := 0
-			var over50 := 0
-			var over100 := 0
-			for frame_ms: float in _fw_first_cast_frame_ms:
-				over33 += 1 if frame_ms > 33.3 else 0
-				over50 += 1 if frame_ms > 50.0 else 0
-				over100 += 1 if frame_ms > 100.0 else 0
-			print(
-				"[FW-FIRST-CAST] frames_ms=%s over33=%d over50=%d over100=%d"
-				% [str(_fw_first_cast_frame_ms), over33, over50, over100]
-			)
 	preload("res://scripts/monster_source_frames.gd").poll()
 	if not _prepared_loot_collection.is_empty(): _poll_prepared_loot_collection()
 	var process_started_usec := RuntimeDiagnostics.timing_start()
@@ -2004,15 +2008,56 @@ func _warm_fire_wall_render_path() -> void:
 	await RenderingServer.frame_post_draw
 	# FRAME-STALL baseline: one print at the end of the loading window. The
 	# one-time long-frame probe (see _process) prints the same counters when
-	# the first >250ms frame occurs; the delta localizes the stall source.
+	# the first >250ms wall-clock frame occurs; the delta localizes the stall
+	# source. Counters are separated per cache owner (perf-smoothness-r1
+	# PERF-01): caster skill frames, presentation assets, monster overlay
+	# frames, and the monster BODY streaming coordinator are distinct caches.
+	var body_streaming := {}
+	if _streaming_coordinator != null:
+		var raw_body: Dictionary = _streaming_coordinator.monster_streaming_diagnostics()
+		body_streaming = {
+			"ready": raw_body.get("ready_resource_count", 0),
+			"failed": raw_body.get("failed_request_count", raw_body.get("failed_resource_count", 0)),
+			"decoded_bytes": raw_body.get("decoded_rgba8_bytes", 0),
+			"pinned_bytes": raw_body.get("pinned_decoded_rgba8_bytes", 0),
+			"leased": raw_body.get("leased_visual_count", 0),
+			"sync_loads": raw_body.get("sync_load_count", 0),
+		}
 	print(
-		"[FRAME-STALL] baseline: caster=%s presentation=%d monster_frames=%d"
+		"[FRAME-STALL] baseline: caster=%s presentation=%d monster_overlay=%s monster_body=%s"
 		% [
 			CasterSkillVisualRegistry.frame_texture_cache_diagnostics(),
 			PresentationAssets.cached_resource_count(),
 			preload(
 				"res://scripts/monster_source_frames.gd"
-			).resident_texture_count()
+			).diagnostics(),
+			JSON.stringify(body_streaming),
+		]
+	)
+
+
+## Session identity header (perf-smoothness-r1 Phase A): once per process.
+## Discloses the running identity and the engine timing parameters that
+## define the process-delta clamp, so captured logs are self-describing.
+func _print_session_diagnostics_header() -> void:
+	if _session_header_printed:
+		return
+	_session_header_printed = true
+	var refresh_rate := -1.0
+	if DisplayServer.get_name() != "headless":
+		refresh_rate = DisplayServer.screen_get_refresh_rate()
+	print(
+		"[SESSION-ID] godot=%s renderer=%s adapter=%s api=%s refresh=%.1fHz physics_tps=%d max_physics_steps=%d app_version=%s os=%s"
+		% [
+			Engine.get_version_info().get("string", ""),
+			str(ProjectSettings.get_setting("rendering/renderer/rendering_method", "")),
+			RenderingServer.get_video_adapter_name(),
+			RenderingServer.get_video_adapter_api_version(),
+			refresh_rate,
+			Engine.physics_ticks_per_second,
+			Engine.max_physics_steps_per_frame,
+			str(ProjectSettings.get_setting("application/config/version", "")),
+			OS.get_name(),
 		]
 	)
 
@@ -3068,6 +3113,7 @@ func _run_map_transition(
 		# long-frame probe only now - loading has ended and the prewarm
 		# baseline has printed - so bootstrap spikes cannot consume it.
 		_first_combat_probe_armed = true
+		_print_session_diagnostics_header()
 		if PlayerState.test_mode and hud.loading_transition_overlay != null:
 			# Test-mode fast path hides the fade overlay immediately so tests
 			# can assert the bootstrap completed without waiting the fade tween.
@@ -6967,17 +7013,12 @@ func _on_skill_cast_audio_started(stable_skill_id: String) -> void:
 	_play_skill_audio_phase(stable_skill_id, "cast")
 
 
-## FW-COLD2 diagnosis (remote review 2026-09-16): on the first fire wall
-## cast, open a 12-rendered-frame recording window. The following _process
-## deltas are the rendered frame durations (a cost inside frame N shows up
-## as the delta reported at frame N+1), reported once with fixed
-## 33.3/50/100 ms thresholds and no causal interpretation.
+## AOE first-engagement window (perf-smoothness-r1 Phase A): the first
+## wizard.fire_wall cast opens the milestone window in AoeEngagementWindow. The
+## window closes on the first committed enemy death (or its deadline) and
+## reports real wall-clock frame intervals once. See AoeEngagementWindow.
 func _on_first_fire_wall_cast_probe(stable_skill_id: String) -> void:
-	if _fw_first_cast_recorded or stable_skill_id != "wizard.fire_wall":
-		return
-	_fw_first_cast_recorded = true
-	_fw_first_cast_frame_ms.clear()
-	_fw_first_cast_frames_left = 12
+	AoeEngagementWindow.on_skill_cast(stable_skill_id)
 
 
 func _on_item_audio_committed(identity_domain: String, identity_id: int, semantic_event: String) -> void:
@@ -9318,6 +9359,8 @@ func _spawn_canonical_ground_field(
 		positions.append(fallback_position)
 
 	if stable_skill_id == FIRE_WALL_SKILL_ID:
+		# AOE window probe: fire wall field spawn milestone. Diagnostics only.
+		AoeEngagementWindow.on_field_spawned(stable_skill_id)
 		var field_snapshot_validation_context := (
 			_canonical_snapshot_validation_context(
 				_canonical_screen_px_to_ground_gu(fallback_position)
@@ -9838,6 +9881,9 @@ func _ignore_canonical_ground_visual_tick(
 
 
 func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skill_id: String) -> void:
+	# AOE window probe: first canonical ground damage tick after the first
+	# fire wall cast. Diagnostics only, one write while the window is active.
+	AoeEngagementWindow.on_ground_damage_tick(stable_skill_id)
 	# R1: ground-effect ticks are the RM_MAGSTRUCK_MINE family (the vanilla
 	# TFireBurnEvent.Run sends RM_MAGSTRUCK_MINE, never RM_MAGSTRUCK). They
 	# keep normal MAC/damage and an ordinary STRUCK on positive damage, but
@@ -12689,6 +12735,9 @@ func _commit_enemy_death_item(death: Dictionary) -> void:
 	RuntimeDiagnostics.increment_performance_counter(
 		&"death_queue_committed_count"
 	)
+	# AOE window probe: first committed death closes the first-engagement
+	# window. Diagnostics only.
+	AoeEngagementWindow.on_enemy_death_committed()
 
 
 func _schedule_queued_enemy_respawn(death: Dictionary) -> void:

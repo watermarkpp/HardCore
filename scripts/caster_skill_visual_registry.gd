@@ -32,6 +32,13 @@ static var _frame_texture_serial := 0
 static var _frame_texture_resident_bytes := 0
 static var _frame_texture_loads := 0
 static var _frame_texture_hits := 0
+## Separated counters (perf-smoothness-r1 Phase A, PERF-08/09 evidence):
+## LRU evictions and the synchronous miss path. The Image.load fallback is
+## a synchronous decode on the calling thread; its accumulated time is the
+## measured "first cast hitch after eviction" cost, not a guess.
+static var _frame_texture_evictions := 0
+static var _sync_decode_calls := 0
+static var _sync_decode_usec := 0
 
 
 static func profile(skill_name_or_id: String) -> Dictionary:
@@ -152,9 +159,13 @@ static func load_texture_path(path: String) -> Texture2D:
 	# tests and runtime use the same pixels; exports still use normal imports.
 	if not FileAccess.file_exists(path):
 		return null
+	_sync_decode_calls += 1
+	var decode_started_usec := Time.get_ticks_usec()
 	var image := Image.new()
 	if image.load(ProjectSettings.globalize_path(path)) != OK or image.is_empty():
+		_sync_decode_usec += Time.get_ticks_usec() - decode_started_usec
 		return null
+	_sync_decode_usec += Time.get_ticks_usec() - decode_started_usec
 	var decoded := ImageTexture.create_from_image(image)
 	_retain_frame_texture(path, decoded)
 	return decoded
@@ -180,6 +191,7 @@ static func _retain_frame_texture(path: String, loaded: Texture2D) -> void:
 		_frame_textures.erase(oldest)
 		_frame_texture_use.erase(oldest)
 		_frame_texture_bytes.erase(oldest)
+		_frame_texture_evictions += 1
 	_frame_textures[path] = loaded
 	_frame_texture_use[path] = _frame_texture_serial
 	_frame_texture_bytes[path] = bytes
@@ -194,6 +206,9 @@ static func clear_frame_texture_cache() -> void:
 	_frame_texture_serial = 0
 	_frame_texture_loads = 0
 	_frame_texture_hits = 0
+	_frame_texture_evictions = 0
+	_sync_decode_calls = 0
+	_sync_decode_usec = 0
 
 
 static func frame_texture_cache_diagnostics() -> Dictionary:
@@ -202,6 +217,9 @@ static func frame_texture_cache_diagnostics() -> Dictionary:
 		"resident_bytes": _frame_texture_resident_bytes,
 		"loads": _frame_texture_loads,
 		"hits": _frame_texture_hits,
+		"evictions": _frame_texture_evictions,
+		"sync_decode_calls": _sync_decode_calls,
+		"sync_decode_usec": _sync_decode_usec,
 	}
 
 

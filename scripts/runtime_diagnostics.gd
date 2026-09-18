@@ -211,6 +211,24 @@ static var _frame_threshold_counts := {
 	"over_50": 0,
 	"over_100": 0,
 }
+## Real wall-clock frame pacing (perf-smoothness-r1 Phase A). `_process(delta)`
+## is clamped by the engine at max_physics_steps_per_frame/physics_ticks_per_second
+## (8/60 ≈ 0.133s by default), so delta-based sampling is blind to real stalls.
+## This recorder measures the wall time between consecutive process callbacks
+## with Time.get_ticks_usec instead. Deliberately NOT gated: the ungated
+## FRAME-STALL/AOE window probes in GameRoot share it, and it costs one native
+## clock read per process frame on Debug builds only (Release call sites are
+## guarded by OS.is_debug_build() before calling).
+const WALL_BOUNDARY_DISCARD_MS := 5000.0
+static var _wall_usec_prev := 0
+static var _wall_usec_valid := false
+static var _wall_boundary_discards := 0
+# Device Lab keeps its OWN prev timestamp: it is gated and may be toggled
+# independently of the ungated probe recorder, and two recorders sharing one
+# prev would steal each other's intervals within the same process frame.
+static var _device_lab_wall_usec_prev := 0
+static var _device_lab_wall_usec_valid := false
+static var _device_lab_wall_boundary_discards := 0
 
 
 static func is_enabled(category := &"") -> bool:
@@ -359,6 +377,69 @@ static func record_frame_time_ms(frame_ms: float) -> void:
 		_frame_threshold_counts["over_50"] = int(_frame_threshold_counts["over_50"]) + 1
 	if sample > float(FRAME_THRESHOLD_MS["over_100"]):
 		_frame_threshold_counts["over_100"] = int(_frame_threshold_counts["over_100"]) + 1
+
+
+## Measures the real wall-clock interval since the previous process callback
+## in milliseconds. Returns -1.0 for the first call after a reset/boundary
+## (no interval exists yet) and when a gap exceeds WALL_BOUNDARY_DISCARD_MS —
+## app pause/resume and scheduler stalls are measurement boundaries, not
+## gameplay stalls, and must not enter the frame distribution (each discard
+## is counted and disclosed). This is the sole feed for the FRAME-STALL
+## long-frame probe, the AOE window probe, and the Device Lab frame samples;
+## clamped `_process(delta)` must never be used for real stall detection.
+static func wall_frame_interval_ms() -> float:
+	var now_usec := Time.get_ticks_usec()
+	var prev := _wall_usec_prev
+	var had_prev := _wall_usec_valid
+	_wall_usec_prev = now_usec
+	_wall_usec_valid = true
+	# _wall_usec_valid is the baseline sentinel; a timestamp value itself can
+	# legitimately be <= 0 right after engine start, so a sign check would
+	# misread a real baseline as "unset".
+	if not had_prev:
+		return -1.0
+	var gap_ms := float(now_usec - prev) / 1000.0
+	if gap_ms > WALL_BOUNDARY_DISCARD_MS:
+		_wall_boundary_discards += 1
+		return -1.0
+	return gap_ms
+
+
+static func reset_wall_frame_interval() -> void:
+	# Called on APPLICATION_PAUSED/RESUMED so the post-resume frame is treated
+	# as a fresh boundary instead of a giant fake frame interval.
+	_wall_usec_prev = 0
+	_wall_usec_valid = false
+
+
+static func wall_boundary_discard_count() -> int:
+	return _wall_boundary_discards
+
+
+## Device Lab gated wrapper: feeds the wall-clock interval into the explicit
+## Debug/Device Lab frame-sample ring. Replaces the old clamped-delta feeder.
+## Uses its own prev timestamp so it cannot interact with the ungated probe
+## recorder (see above).
+static func record_device_lab_frame_interval() -> void:
+	if not performance_enabled():
+		return
+	var now_usec := Time.get_ticks_usec()
+	var prev := _device_lab_wall_usec_prev
+	var had_prev := _device_lab_wall_usec_valid
+	_device_lab_wall_usec_prev = now_usec
+	_device_lab_wall_usec_valid = true
+	if not had_prev:
+		return
+	var gap_ms := float(now_usec - prev) / 1000.0
+	if gap_ms > WALL_BOUNDARY_DISCARD_MS:
+		_device_lab_wall_boundary_discards += 1
+		return
+	record_frame_time_ms(gap_ms)
+
+
+static func reset_device_lab_frame_interval() -> void:
+	_device_lab_wall_usec_prev = 0
+	_device_lab_wall_usec_valid = false
 
 
 static func _frame_percentile(samples: Array, fraction: float) -> float:
