@@ -55,11 +55,12 @@ func _ready() -> void:
 	)
 	print("P03_CASE1 pre_arrival_keep_world done")
 
-	# --- Case 2: end-to-end post-arrival failure (production arrival point)
-	# 913201 ready-contract failure is map-content owned (P0-2): the blocked
-	# arrival point fails the ready contract in legacy AND optimized. The
-	# production driver must end FAILED with the safe-home policy applied:
-	# combat token cleared, lock released AFTER relocation, player at home.
+	# --- Case 2: end-to-end blocked arrival on 913201 (P0-3b relocation).
+	# The routed arrival cell is environment-blocked; with collision built
+	# the FINALIZE stage relocates the player to the nearest unblocked
+	# point and the ready contract PASSES in the freshly built world
+	# (OPTIMIZED). The whole world is kept: no FAILED transition, no
+	# safe-home recovery, no stranded locks or combat token.
 	var op := Callable(game, "_travel_to_map_immediate").bind(913201)
 	var hop := Time.get_ticks_msec() + 10000
 	if not game._begin_map_transition(op, 913201):
@@ -79,78 +80,78 @@ func _ready() -> void:
 	var settle := Time.get_ticks_msec() + 90000
 	while bool(game._map_transition_in_progress) and Time.get_ticks_msec() < settle:
 		await get_tree().create_timer(0.016, true).timeout
-	await get_tree().create_timer(1.0, true).timeout
+	# Assert the transition contract at the moment it resolves - the
+	# arrival pack on this map may kill the player seconds later, which is
+	# the production death flow's domain, not the transition's.
 	var snap: Dictionary = coord.snapshot()
-	print("P03_CASE2 stage=%s reason=%s gen=%d" % [
+	print("P03_CASE2 stage=%s reason=%s gen=%d map=%d mode=%s" % [
 		str(snap.get("stage", "?")),
 		str(snap.get("failure_reason", "?")),
 		int(coord.generation),
+		int(game.current_map_id),
+		str(game.background.wall_render_stats().get("wall_render_mode", "?")),
 	])
 	_check(
-		str(snap.get("failure_reason", "")) != ""
-		or int(coord.generation) == before_gen + 2,
-		"post-arrival: failure reason must have been recorded",
+		str(snap.get("stage", "")) == "READY",
+		"blocked arrival: contract must PASS after relocation",
 	)
 	_check(
-		int(coord.generation) == before_gen + 2,
-		"post-arrival: generation must advance twice (failed bootstrap + "
-		+ "safe-home recovery transition)",
+		str(snap.get("failure_reason", "")) == "map_transition_ready",
+		"blocked arrival: failure_reason must be map_transition_ready",
+	)
+	_check(
+		int(coord.generation) == before_gen + 1,
+		"blocked arrival: generation must advance exactly once",
+	)
+	_check(
+		int(game.current_map_id) == 913201,
+		"blocked arrival: the world must be kept (913201, no safe-home)",
 	)
 	_check(
 		not game.player.combat_transition_is_active(),
-		"post-arrival: combat token must be released by the central fn",
+		"blocked arrival: combat token must be released on READY",
 	)
 	_check(
-		bool(game.player.current_hp > 0) and not bool(game.player._dead),
-		"post-arrival: player must be alive (dead players go through the "
-		+ "production death revival inside the safe-home policy)",
+		not game.background.is_environment_point_blocked(
+			game.player.global_position
+		),
+		"blocked arrival: relocated player must not be blocked",
 	)
-	# Safe-home recovery resolved (or deliberately kept locked when the home
-	# cannot resolve); in the resolved case the lock is gone and the player
-	# is at the bich home position.
-	var home: Dictionary = game._resolve_bich_home()
-	if bool(home.get("valid", false)):
-		_check(
-			not (game._gameplay_input_locks as Dictionary).has("map_transition"),
-			"post-arrival: lock released after safe-home relocation",
-		)
-		_check(
-			not game.background.is_environment_point_blocked(
-				game.player.global_position
-			),
-			"post-arrival: relocated player must not be blocked",
-		)
-	else:
-		_check(
-			(game._gameplay_input_locks as Dictionary).has("map_transition"),
-			"post-arrival: unresolved home must KEEP the lock (explicit owner)",
-		)
-	print("P03_CASE2 post_arrival_safe_home done")
-	# The safe-home recovery is a full production home transition (town
-	# revival for a dead player, service-home travel for a living one).
-	# Wait for it to complete, then assert the recovered state.
+	_check(
+		(game._gameplay_input_locks as Dictionary).is_empty()
+		or not (game._gameplay_input_locks as Dictionary).has("map_transition"),
+		"blocked arrival: no stranded map_transition lock",
+	)
+	print("P03_CASE2 blocked_arrival_relocation done")
+	# Final deterministic state. 913201 is a hazardous dungeon: the player
+	# may be killed by the arrival pack after the (valid) transition. Both
+	# outcomes are production-owned deterministic states: fully unlocked
+	# and alive, or inside the production death flow (player_death lock
+	# held, death screen owned by the revival path). A stranded
+	# map_transition lock or an active combat token is the only failure.
 	var recovery_deadline := Time.get_ticks_msec() + 45000
 	var settled := false
 	while Time.get_ticks_msec() < recovery_deadline:
 		await get_tree().create_timer(0.1, true).timeout
-		if (
-			not bool(game._map_transition_in_progress)
-			and not bool(game.player._dead)
-			and int(game.player.current_hp) > 0
-			and not (game._gameplay_input_locks as Dictionary).has("player_death")
-			and not (game._gameplay_input_locks as Dictionary).has("map_transition")
-		):
-			settled = true
-			break
+		var locks: Dictionary = game._gameplay_input_locks
+		var token_active := bool(game.player.combat_transition_is_active())
+		var idle := not bool(game._map_transition_in_progress)
+		if idle and not token_active and not locks.has("map_transition"):
+			if not bool(game.player._dead) and int(game.player.current_hp) > 0 and not locks.has("player_death"):
+				settled = true
+				break
+			if locks.has("player_death"):
+				settled = true
+				break
 	print("P03_STATE settled=%s map=%d dead=%s hp=%d locks=%s" % [
 		str(settled), int(game.current_map_id), str(game.player._dead),
 		int(game.player.current_hp),
 		JSON.stringify(game._gameplay_input_locks),
 	])
-	_check(settled, "post-arrival: safe-home recovery must complete")
+	_check(settled, "blocked arrival: deterministic end state (alive or in the production death flow)")
 	_check(
 		not game.player.combat_transition_is_active(),
-		"post-arrival: combat token must be released by the central fn",
+		"blocked arrival: combat token must be released",
 	)
 	_finish(before_gen)
 
