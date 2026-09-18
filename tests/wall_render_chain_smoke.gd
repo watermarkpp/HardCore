@@ -173,21 +173,23 @@ func _travel(game: Node, map_id: int, map_key: String) -> Dictionary:
 		"transition_id": game._active_map_transition_id,
 	})
 	await get_tree().create_timer(0.016, true).timeout
-	var t0 := Time.get_ticks_msec()
-	var poll_deadline := Time.get_ticks_msec() + 120000
+	# Sampled BEFORE _begin_map_transition (see R6 strict driver): in
+	# test_mode the whole bootstrap and a chained recovery can complete
+	# within one driver poll, so the only stable baseline is pre-request.
+	# The target bootstrap's generation is pre_generation + 1.
 	var pre_generation := int(coord.generation)
+	var poll_deadline := Time.get_ticks_msec() + 120000
 	while Time.get_ticks_msec() < poll_deadline:
 		var snap: Dictionary = coord.snapshot()
 		var stage: String = str(snap.get("stage", ""))
 		var generation := int(snap.get("generation", -1))
 		var last_failure: Dictionary = coord.last_failure
 		if (
-			stage == "FAILED" and generation == pre_generation
+			stage == "FAILED" and generation == pre_generation + 1
 		) or (
 			not last_failure.is_empty()
-			and int(last_failure.get("generation", -1)) == pre_generation
-			and pre_generation > 0
-			and generation >= pre_generation
+			and int(last_failure.get("generation", -1)) == pre_generation + 1
+			and generation >= pre_generation + 1
 		):
 			# Target bootstrap FAILED and a chained recovery already took
 			# over: reconstruct FAILED evidence from the audit trail.
@@ -198,7 +200,7 @@ func _travel(game: Node, map_id: int, map_key: String) -> Dictionary:
 			failed["failure_reason"] = str(
 				last_failure.get("reason", "unknown_chained_recovery")
 			)
-			failed["generation"] = pre_generation
+			failed["generation"] = pre_generation + 1
 			_log("R7_STRICT_FAILED_SNAPSHOT %s" % JSON.stringify(failed))
 			var recovery_deadline := Time.get_ticks_msec() + 90000
 			while (
@@ -210,7 +212,7 @@ func _travel(game: Node, map_id: int, map_key: String) -> Dictionary:
 		if (
 			not bool(game._map_transition_in_progress)
 			and stage == "READY"
-			and Time.get_ticks_msec() - t0 > 400
+			and generation == pre_generation + 1
 		):
 			break
 		if Time.get_ticks_msec() > poll_deadline - 1:

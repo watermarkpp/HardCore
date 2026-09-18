@@ -147,7 +147,6 @@ func _strict_snapshot(game: Node, map_key: String) -> Dictionary:
 ## chained recovery is then waited out so the chain can continue.
 func _travel_strict(game: Node, map_id: int, map_key: String) -> Dictionary:
 	var coord = game._world_bootstrap_coordinator
-	var t0 := Time.get_ticks_msec()
 	var lock_deadline := Time.get_ticks_msec() + 15000
 	_log("R6_STAGE travel_begin map=%d key=%s" % [map_id, map_key])
 	while (
@@ -170,6 +169,10 @@ func _travel_strict(game: Node, map_id: int, map_key: String) -> Dictionary:
 	# _should_animate_map_transition() false, so _request_map_travel falls
 	# back to the synchronous legacy _load_zone and bypasses the staged
 	# wall-render pipeline entirely. Force the staged transition.
+	# Sample the generation BEFORE the transition starts: in test_mode the
+	# whole bootstrap (and a chained recovery) can complete within one
+	# driver poll, so this is the only stable pre-transition baseline.
+	var pre_generation := int(coord.generation)
 	var op := Callable(game, "_travel_to_map_immediate").bind(map_id)
 	if not game._begin_map_transition(op, map_id):
 		var refused := _strict_snapshot(game, map_key)
@@ -190,23 +193,21 @@ func _travel_strict(game: Node, map_id: int, map_key: String) -> Dictionary:
 	# reports FAILED (capture immediately - the production safe-home
 	# recovery may chain its own transition without the flag ever going
 	# observable false), the chained recovery has already overwritten the
-	# stage (detected via the persistent last_failure audit trail or a
-	# generation jump), or the flag clears on a READY contract.
+	# stage (detected via the persistent last_failure audit trail), or the
+	# flag clears on a READY contract. The target bootstrap's generation is
+	# pre_generation + 1 (pre_generation was sampled before the request).
 	var poll_deadline := Time.get_ticks_msec() + 120000
-	var failed_seen := false
-	var pre_generation := int(coord.generation)
 	while Time.get_ticks_msec() < poll_deadline:
 		var snap: Dictionary = coord.snapshot()
 		var stage: String = str(snap.get("stage", ""))
 		var generation := int(snap.get("generation", -1))
 		var last_failure: Dictionary = coord.last_failure
 		if (
-			stage == "FAILED" and generation == pre_generation
+			stage == "FAILED" and generation == pre_generation + 1
 		) or (
 			not last_failure.is_empty()
-			and int(last_failure.get("generation", -1)) == pre_generation
-			and pre_generation > 0
-			and generation >= pre_generation
+			and int(last_failure.get("generation", -1)) == pre_generation + 1
+			and generation >= pre_generation + 1
 		):
 			# The target bootstrap FAILED and a chained recovery transition
 			# already took over the coordinator: reconstruct the FAILED
@@ -221,7 +222,7 @@ func _travel_strict(game: Node, map_id: int, map_key: String) -> Dictionary:
 			failed["coordinator_map_id"] = int(
 				last_failure.get("map_id", map_id)
 			)
-			failed["generation"] = pre_generation
+			failed["generation"] = pre_generation + 1
 			failed["audit_source"] = "last_failure_persistent_trail"
 			_log("R6_STRICT_FAILED_SNAPSHOT %s" % JSON.stringify(failed))
 			var recovery_deadline := Time.get_ticks_msec() + 90000
@@ -240,34 +241,14 @@ func _travel_strict(game: Node, map_id: int, map_key: String) -> Dictionary:
 		if (
 			not bool(game._map_transition_in_progress)
 			and stage == "READY"
-			and Time.get_ticks_msec() - t0 > 400
+			and generation == pre_generation + 1
 		):
 			break
 		await get_tree().create_timer(0.016, true).timeout
-	if not failed_seen:
-		await _wait_bootstrap_idle(game)
-		var settled := _strict_snapshot(game, map_key)
-		settled["hop_kind"] = "normal"
-		return settled
-	# FAILED hop: permanent verdict first.
-	var failed_snap := _strict_snapshot(game, map_key)
-	failed_snap["hop_kind"] = "transition_failed"
-	_log("R6_STRICT_FAILED_SNAPSHOT %s" % JSON.stringify(failed_snap))
-	# Wait out the production safe-home recovery (if one chained) so the
-	# chain can continue collecting other maps.
-	var recovery_deadline := Time.get_ticks_msec() + 90000
-	while (
-		bool(game._map_transition_in_progress)
-		and Time.get_ticks_msec() < recovery_deadline
-	):
-		await get_tree().create_timer(0.05, true).timeout
-	var settle_deadline := Time.get_ticks_msec() + 30000
-	while (
-		bool(game._world_bootstrap_in_progress)
-		and Time.get_ticks_msec() < settle_deadline
-	):
-		await get_tree().create_timer(0.05, true).timeout
-	return failed_snap
+	await _wait_bootstrap_idle(game)
+	var settled := _strict_snapshot(game, map_key)
+	settled["hop_kind"] = "normal"
+	return settled
 
 
 func _ready() -> void:
