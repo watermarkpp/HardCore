@@ -21,6 +21,7 @@ func _ready() -> void:
 	var map_key := ""
 	var mode := "optimized"
 	var out_path := ""
+	var hide_dynamic := false
 	for arg: String in OS.get_cmdline_user_args():
 		var pair := arg.split("=", true, 1)
 		if pair.size() != 2:
@@ -29,6 +30,7 @@ func _ready() -> void:
 			"map": map_key = pair[1]
 			"mode": mode = pair[1]
 			"out": out_path = pair[1]
+			"hide_dynamic": hide_dynamic = pair[1] == "1"
 	if map_key.is_empty() or out_path.is_empty():
 		printerr("VISUAL_CAPTURE missing map/out")
 		get_tree().quit(1)
@@ -93,13 +95,28 @@ func _ready() -> void:
 	# entity drift stays bounded; the diff tool reports the ratio.
 	await get_tree().create_timer(2.0, true).timeout
 	var stats: Dictionary = game.background.wall_render_stats()
+	if hide_dynamic:
+		# P1-1 wall-only masked capture: hide monsters (zone_content
+		# group), the player (and its skill FX), the HUD (and its floating
+		# text) so the two modes are compared on the background/wall
+		# composites and chunks alone. Particles attached to hidden
+		# entities go with them.
+		for enemy in get_tree().get_nodes_in_group("zone_content"):
+			if enemy is CanvasItem:
+				enemy.visible = false
+		if is_instance_valid(game.player) and game.player is CanvasItem:
+			game.player.visible = false
+		if is_instance_valid(game.hud) and game.hud is CanvasItem:
+			game.hud.visible = false
+		await get_tree().create_timer(0.2, true).timeout
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()
 	DirAccess.make_dir_recursive_absolute(
 		ProjectSettings.globalize_path(out_path.get_base_dir())
 	)
 	image.save_png(ProjectSettings.globalize_path(out_path))
-	print("VISUAL_CAPTURE %s mode=%s saved=%s wall_mode=%s" % [
+	print("VISUAL_CAPTURE %s mode=%s saved=%s wall_mode=%s hidden_dynamic=%s" % [
 		map_key, mode, out_path, str(stats["wall_render_mode"]),
+		str(hide_dynamic),
 	])
 	get_tree().quit(0)
