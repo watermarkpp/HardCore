@@ -2024,8 +2024,13 @@ func _prewarm_texture_paths_until(
 	var in_flight: Dictionary = {}
 	var loaded := 0
 	var failed := 0
+	# perf(R13-D1): first moment the absolute deadline became true, so the
+	# in-flight drain tail is measurable (diagnostics only, no behavior).
+	var first_deadline_hit_usec := 0
 	while cursor < paths.size() or not in_flight.is_empty():
 		var deadline_hit := Time.get_ticks_usec() >= deadline_usec
+		if deadline_hit and first_deadline_hit_usec == 0:
+			first_deadline_hit_usec = Time.get_ticks_usec()
 		if not deadline_hit:
 			while (
 				in_flight.size() < FRAME_TEXTURE_WARM_MAX_IN_FLIGHT
@@ -2067,12 +2072,21 @@ func _prewarm_texture_paths_until(
 		):
 			break
 		await get_tree().process_frame
+	var completed_usec := Time.get_ticks_usec()
+	var tail_after_deadline_ms := 0.0
+	if first_deadline_hit_usec > 0:
+		tail_after_deadline_ms = (
+			float(completed_usec - first_deadline_hit_usec) / 1000.0
+		)
 	return {
 		"loaded": loaded,
 		"failed": failed,
 		"not_admitted": paths.size() - cursor,
 		"in_flight_at_deadline": in_flight.size(),
-		"deadline_exceeded": Time.get_ticks_usec() >= deadline_usec,
+		"deadline_exceeded": first_deadline_hit_usec > 0,
+		"deadline_hit_at_usec": first_deadline_hit_usec,
+		"completed_at_usec": completed_usec,
+		"tail_after_deadline_ms": tail_after_deadline_ms,
 	}
 
 
@@ -2125,7 +2139,7 @@ func _prewarm_learned_skill_visuals() -> void:
 	)
 	var prewarm_usec := Time.get_ticks_usec() - started_usec
 	print(
-		"[LOADING-WORKSET] skills=%d paths=%d loaded=%d failed=%d not_admitted=%d prewarm_ms=%d deadline_exceeded=%s optional_skipped=%s accepted=%s rejected=%s pinned_paths=%d pinned_bytes=%d incomplete=%s"
+		"[LOADING-WORKSET] skills=%d paths=%d loaded=%d failed=%d not_admitted=%d prewarm_ms=%d deadline_exceeded=%s tail_after_deadline_ms=%.1f optional_skipped=%s accepted=%s rejected=%s pinned_paths=%d pinned_bytes=%d incomplete=%s"
 		% [
 			workset.size(),
 			all_paths.size(),
@@ -2134,6 +2148,7 @@ func _prewarm_learned_skill_visuals() -> void:
 			int(pump_result.get("not_admitted", 0)),
 			prewarm_usec / 1000,
 			str(pump_result.get("deadline_exceeded", false)),
+			float(pump_result.get("tail_after_deadline_ms", 0.0)),
 			str(optional_skipped),
 			str(pin_result.get("accepted_skills", [])),
 			str(pin_result.get("rejected_skills", [])),
@@ -3170,6 +3185,26 @@ func _run_map_transition(
 	target_map_id: int
 ) -> void:
 	hud.begin_loading_transition(transition_id)
+	# perf(R13-D1): total-loading timing profile. Read-only diagnostics only;
+	# the production execution order below is untouched. Covered = the moment
+	# the overlay confirmed coverage (loading_transition_covered); total = the
+	# moment hud.finish_loading_transition() starts (fade excluded).
+	var r13_mode := "map_transition"
+	if _world_bootstrap_in_progress:
+		r13_mode = "initial_world"
+	var r13_loading_profile := {
+		"mode": r13_mode,
+		"transition_id": transition_id,
+		"target_map_id": target_map_id,
+		"covered_usec": 0,
+		"monster_prefetch_ms": 0.0,
+		"world_pipeline_ms": 0.0,
+		"actor_spawn_ms": 0.0,
+		"skill_workset_ms": 0.0,
+		"render_warm_ms": 0.0,
+		"finalize_ms": 0.0,
+	}
+	var r13_stage_started_usec := Time.get_ticks_usec()
 	if not PlayerState.test_mode:
 		while _map_transition_in_progress and _active_map_transition_id == transition_id:
 			var request: Dictionary = await hud.loading_transition_covered
@@ -3177,7 +3212,12 @@ func _run_map_transition(
 				str(request.get("contract_id", "")) == LoadingTransitionOverlay.CONTRACT_ID
 				and str(request.get("transition_id", "")) == transition_id
 			):
+				r13_loading_profile["covered_usec"] = Time.get_ticks_usec()
 				break
+	else:
+		# Test mode skips the real covered await; anchor at begin for the
+		# stage decomposition (diagnostics only).
+		r13_loading_profile["covered_usec"] = r13_stage_started_usec
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	# Initial entry deliberately does not prewarm every reusable panel. That
@@ -3185,6 +3225,7 @@ func _run_map_transition(
 	# screen wait for unrelated UI layout/action preparation. Panels remain
 	# on-demand and are created only when the player opens them.
 	_last_monster_prefetch_status.clear()
+	r13_stage_started_usec = Time.get_ticks_usec()
 	_preload_map_loot_icons(target_map_id)
 	if PlayerState.test_mode:
 		_last_monster_prefetch_status = {"complete": true}
@@ -3207,6 +3248,9 @@ func _run_map_transition(
 			)
 	elif _monster_prefetch_enabled:
 		_streaming_coordinator.release_map_pins()
+	r13_loading_profile["monster_prefetch_ms"] = (
+		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+	)
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	# HC-P1-004: stage the world build through the coordinator budget queues
@@ -3214,9 +3258,14 @@ func _run_map_transition(
 	# operation below only performs zone arrival (content spawn + player
 	# placement); WorldBackground.set_zone_data() skips the rebuild because the
 	# environment was already staged-built for the same map.
+	r13_stage_started_usec = Time.get_ticks_usec()
 	var built_ok := await _run_world_build_pipeline(target_map_id, transition_id)
+	r13_loading_profile["world_pipeline_ms"] = (
+		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+	)
 	if not built_ok or not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
+	r13_stage_started_usec = Time.get_ticks_usec()
 	_collecting_staged_actor_plan = true
 	_staged_actor_source_index = 0
 	_staged_actor_spawn_failure_reason = ""
@@ -3236,6 +3285,9 @@ func _run_map_transition(
 			_bootstrap_max_items_per_frame(),
 			_bootstrap_slice_budget_ms()
 		)
+	r13_loading_profile["actor_spawn_ms"] = (
+		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+	)
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	var actor_summary := _world_bootstrap_coordinator.ready_contract_summary()
@@ -3264,12 +3316,20 @@ func _run_map_transition(
 		# first real cast of every workset skill must be a pure texture-cache
 		# hit. Loading-phase work only: damage, spatial index and fire wall
 		# systems are untouched.
+		r13_stage_started_usec = Time.get_ticks_usec()
 		await _prewarm_learned_skill_visuals()
+		r13_loading_profile["skill_workset_ms"] = (
+			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+		)
 		# FW-COLD2 Phase B + PERF-R2 R7/C8: the GPU render warm is bound to
 		# the workset - a warrior/taoist without fire wall bound never pays
 		# for fire-wall warm-up here.
+		r13_stage_started_usec = Time.get_ticks_usec()
 		if _active_skill_workset_candidates().has("wizard.fire_wall"):
 			await _warm_fire_wall_render_path()
+		r13_loading_profile["render_warm_ms"] = (
+			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+		)
 		if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 			return
 		if is_instance_valid(_town_music_controller):
@@ -3285,6 +3345,43 @@ func _run_map_transition(
 		# perf-smoothness-r1 Phase C: map-transition READY releases the loading
 		# window the same way the initial-world READY does.
 		CasterSkillVisualRegistry.set_loading_window_active(false)
+		# perf(R13-D1): finalize = READY release tail (music context + window
+		# close) up to the finish_loading_transition call. Total = covered ->
+		# finish, the player-visible Loading duration (fade excluded). Bootstrap
+		# stage data comes from the coordinator's own non-destructive
+		# diagnostic - no second implementation.
+		r13_loading_profile["finalize_ms"] = (
+			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+		)
+		var r13_bootstrap_diag: Dictionary = (
+			_world_bootstrap_coordinator.diagnostic
+		)
+		var r13_total_usec: int = maxi(
+			1,
+			Time.get_ticks_usec() - int(r13_loading_profile.get("covered_usec", 0)),
+		)
+		r13_loading_profile["total_ms"] = float(r13_total_usec) / 1000.0
+		if OS.is_debug_build():
+			print("[LOADING-TOTAL] ", JSON.stringify({
+				"mode": r13_loading_profile.get("mode", ""),
+				"transition_id": str(r13_loading_profile.get("transition_id", "")),
+				"target_map_id": int(r13_loading_profile.get("target_map_id", -1)),
+				"monster_prefetch_ms": float(r13_loading_profile.get("monster_prefetch_ms", 0.0)),
+				"world_pipeline_ms": float(r13_loading_profile.get("world_pipeline_ms", 0.0)),
+				"actor_spawn_ms": float(r13_loading_profile.get("actor_spawn_ms", 0.0)),
+				"skill_workset_ms": float(r13_loading_profile.get("skill_workset_ms", 0.0)),
+				"render_warm_ms": float(r13_loading_profile.get("render_warm_ms", 0.0)),
+				"finalize_ms": float(r13_loading_profile.get("finalize_ms", 0.0)),
+				"total_ms": float(r13_loading_profile.get("total_ms", 0.0)),
+				"stage_elapsed_ms": r13_bootstrap_diag.get("stage_elapsed_ms", {}),
+				"map_slice_count": int(r13_bootstrap_diag.get("map_slice_count", 0)),
+				"collision_slice_count": int(r13_bootstrap_diag.get("collision_slice_count", 0)),
+				"actor_slice_count": int(r13_bootstrap_diag.get("actor_slice_count", 0)),
+				"map_max_slice_ms": float(r13_bootstrap_diag.get("map_max_slice_ms", 0.0)),
+				"collision_max_slice_ms": float(r13_bootstrap_diag.get("collision_max_slice_ms", 0.0)),
+				"actor_max_slice_ms": float(r13_bootstrap_diag.get("actor_max_slice_ms", 0.0)),
+				"actor_max_item_ms": float(r13_bootstrap_diag.get("actor_max_item_ms", 0.0)),
+			}))
 		hud.finish_loading_transition()
 		# FRAME-STALL discipline (remote review 2026-09-16): arm the generic
 		# long-frame probe only now - loading has ended and the prewarm

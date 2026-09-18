@@ -454,6 +454,37 @@ func _test_bounded_snapshot() -> void:
 	root.add_child(camera)
 	var camera_snapshot := DeviceLabRuntimeScript.build_snapshot(root)
 	assert(camera_snapshot["scene"].get("camera_zoom", -1.0) == 1.25, "WorldCamera zoom missing from snapshot")
+	# perf(R13-D1): caster first-cast snapshot projection. Field set matches
+	# the registry diagnostics surface; loading_window_active keeps its REAL
+	# bool type (never a 1/0 counter projection).
+	var caster_visuals: Variant = camera_snapshot.get("caster_skill_visuals", null)
+	assert(caster_visuals is Dictionary, "caster skill visual snapshot missing")
+	for caster_field: String in DeviceLabRuntimeScript.CASTER_SKILL_VISUAL_DIAGNOSTIC_FIELDS:
+		assert(
+			(caster_visuals as Dictionary).has(caster_field),
+			"caster diagnostic field missing: %s" % caster_field
+		)
+	CasterSkillVisualRegistry.set_loading_window_active(true)
+	var active_snapshot: Dictionary = (
+		DeviceLabRuntimeScript._caster_skill_visual_snapshot()
+	)
+	assert(
+		bool(active_snapshot.get("loading_window_active", false)) == true,
+		"loading_window_active=true must project to snapshot true"
+	)
+	CasterSkillVisualRegistry.set_loading_window_active(false)
+	var inactive_snapshot: Dictionary = (
+		DeviceLabRuntimeScript._caster_skill_visual_snapshot()
+	)
+	assert(
+		bool(inactive_snapshot.get("loading_window_active", true)) == false,
+		"loading_window_active=false must project to snapshot false"
+	)
+	assert(
+		typeof(inactive_snapshot.get("loading_window_active")) == TYPE_BOOL,
+		"loading_window_active must stay a real bool in the projection"
+	)
+	CasterSkillVisualRegistry.set_loading_window_active(true)
 	var enemy_nodes: Array[Node2D] = []
 	for index in range(DeviceLabRuntimeScript.MAX_SNAPSHOT_ENEMY_ACTIVITY_SCAN + 4):
 		var enemy := Node2D.new()

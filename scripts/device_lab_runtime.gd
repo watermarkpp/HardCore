@@ -124,6 +124,10 @@ const MONSTER_STREAMING_DIAGNOSTIC_FIELDS := [
 	"loaded_pending_decoded_rgba8_bytes",
 	"map_pinned_profile_count",
 	"pinned_decoded_rgba8_bytes",
+	"bootstrap_handoff_hold_count",
+	"bootstrap_handoff_resident_count",
+	"retry_requeue_count",
+	"permanent_failed_request_count",
 ]
 
 ## perf(R13): caster first-cast readiness snapshot. Values come EXCLUSIVELY
@@ -1071,8 +1075,9 @@ static func _monster_streaming_snapshot(root: Node) -> Dictionary:
 	return result
 
 
-## perf(R13): caster first-cast readiness snapshot. Read-only projection of
-## the registry's single diagnostics surface - no second state copy.
+## perf(R13): caster first-cast readiness snapshot. Values come EXCLUSIVELY
+## from CasterSkillVisualRegistry.frame_texture_cache_diagnostics() - this
+## list is a projection, never a second copy of the cache state.
 static func _caster_skill_visual_snapshot() -> Dictionary:
 	var result := {}
 	for field: String in CASTER_SKILL_VISUAL_DIAGNOSTIC_FIELDS:
@@ -1081,7 +1086,12 @@ static func _caster_skill_visual_snapshot() -> Dictionary:
 		CasterSkillVisualRegistry.frame_texture_cache_diagnostics()
 	)
 	for field: String in CASTER_SKILL_VISUAL_DIAGNOSTIC_FIELDS:
-		result[field] = _non_negative_counter(diagnostics.get(field, 0))
+		if field == "loading_window_active":
+			# perf(R13-D1): preserve the real bool - a counter projection
+			# would turn it into 1/0 and break the true/false contract.
+			result[field] = bool(diagnostics.get(field, false))
+		else:
+			result[field] = _non_negative_counter(diagnostics.get(field, 0))
 	return result
 
 
