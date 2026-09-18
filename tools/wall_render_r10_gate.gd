@@ -45,10 +45,10 @@ func _ready() -> void:
 		blocked.append("source_manifest.json incomplete: %s" % str(manifest.keys()))
 	# --- R0/R1: live authority classification (never a stored string) ---
 	var authority := AUTHORITY.classify()
+	var counts := {"A": 0, "B": 0, "C": 0}
 	if authority["error"] != "":
 		blocked.append("authority classify error: %s" % str(authority["error"]))
 	else:
-		var counts := {"A": 0, "B": 0, "C": 0}
 		for row: Dictionary in authority["rows"]:
 			counts[str(row.get("class", "?"))] = counts.get(
 				str(row.get("class", "?")), 0
@@ -85,7 +85,7 @@ func _ready() -> void:
 	var r8 := _load_json("%s/R8_VISUAL_REVIEW.json" % EVIDENCE_DIR)
 	var r8_open: Array = []
 	for map_key: String in r8.keys():
-		var entry: Dictionary = r8[map_key]
+		var entry: Variant = r8[map_key]
 		if entry is Dictionary and str(entry.get("verdict", "")) != "PASS":
 			r8_open.append(map_key)
 	if r8.get("mengzhong_stone_coffin_room", {}) == {}:
