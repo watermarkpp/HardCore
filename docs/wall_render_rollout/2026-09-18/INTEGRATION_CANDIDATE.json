@@ -1,16 +1,17 @@
 {
   "runtime_service": "integration version unchanged",
-  "candidate_branch": "codex/wall-p1r-final-integration",
-  "integration_base": "83840d3a14f7c26fb7306d8dc16c2e40de5aa185",
+  "candidate_branch": "codex/wall-p1r-final-v2",
+  "integration_base": "4b001cbcef315164e5a69fb2f4a647b35706114a",
   "store_png": 409,
   "game_root": "integration version + P0-3 central failure owner + P0-3b blocked-arrival relocation",
   "validated": "true",
   "coordinator": "integration version + last_failure audit trail",
   "wall_render_plans": 60,
   "mainline_commits_kept": 14,
-  "candidate_head": "6b392ed9b0b773aaa7643aa6d7bdb98b193ee643",
+  "candidate_head": "40f064ea",
   "store_imports": 409,
   "regression": "GAME_ROOT_FAIL_MAP_TRANSITION_TEST_PASS, WALL_RENDER_FORCE_LEGACY_GATE_TEST_PASS",
   "contract_id": "hardcore.wall_render_integration_candidate.v1",
-  "world_background": "integration + rollout FORCE_LEGACY hook + R11 debug-build gate"
+  "world_background": "integration + rollout FORCE_LEGACY hook + R11 debug-build gate",
+  "rebuild_note": "rebuilt from current integration 4b001cbc; mainline deltas (poison presentation, loot error channel) do not overlap wall transition hunks; strict R6/R7 rerun green on the rebuilt tree"
 }
