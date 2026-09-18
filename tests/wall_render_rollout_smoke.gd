@@ -200,12 +200,13 @@ func _travel_strict(game: Node, map_id: int, map_key: String) -> Dictionary:
 		var stage: String = str(snap.get("stage", ""))
 		var generation := int(snap.get("generation", -1))
 		var last_failure: Dictionary = coord.last_failure
-		if stage == "FAILED" and generation == pre_generation + 1:
-			failed_seen = true
-			break
 		if (
-			int(last_failure.get("generation", -1)) == pre_generation + 1
-			or generation >= pre_generation + 2
+			stage == "FAILED" and generation == pre_generation
+		) or (
+			not last_failure.is_empty()
+			and int(last_failure.get("generation", -1)) == pre_generation
+			and pre_generation > 0
+			and generation >= pre_generation
 		):
 			# The target bootstrap FAILED and a chained recovery transition
 			# already took over the coordinator: reconstruct the FAILED
@@ -220,7 +221,7 @@ func _travel_strict(game: Node, map_id: int, map_key: String) -> Dictionary:
 			failed["coordinator_map_id"] = int(
 				last_failure.get("map_id", map_id)
 			)
-			failed["generation"] = pre_generation + 1
+			failed["generation"] = pre_generation
 			failed["audit_source"] = "last_failure_persistent_trail"
 			_log("R6_STRICT_FAILED_SNAPSHOT %s" % JSON.stringify(failed))
 			var recovery_deadline := Time.get_ticks_msec() + 90000

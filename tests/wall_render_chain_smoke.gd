@@ -1,8 +1,12 @@
 extends Node
 
-## WALL-P1R R7: long mixed-chain cross-map consumer smoke (>=15 hops).
+## WALL-P1R R7 STRICT: long mixed-chain cross-map consumer smoke (16 hops).
 ## Sequence interleaves A (OPTIMIZED) and B (LEGACY plan-missing) maps,
-## including re-entries of the same map. Per hop, assert on arrival:
+## including re-entries of the same map. Per hop, the STRICT transition
+## contract must hold on arrival (P0-5):
+##   stage == READY, success == true, failure_reason == "map_transition_ready",
+##   map_transition lock absent, player combat token inactive,
+## plus the original assertions:
 ##   1. node counts match EXACTLY the current map's plan (no residue from
 ##      the previous map: composite == groups, chunk nodes == chunks;
 ##      B maps must have zero P1R nodes)
@@ -10,6 +14,8 @@ extends Node
 ##   3. zero unexpected sync loads
 ##   4. coordinator generation strictly increases by one per bootstrap
 ##   5. mode is OPTIMIZED (A) / LEGACY (B)
+## Driver-side recovery may keep the chain moving; it never converts a
+## FAILED hop. A FAILED hop permanently fails the run (exit 1).
 ## Usage: godot --headless --path . res://tests/wall_render_chain_smoke.tscn
 
 const AUTHORITY := preload("res://tools/wall_rollout_authority.gd")
@@ -97,7 +103,43 @@ func _recover(game: Node) -> void:
 		await get_tree().create_timer(0.016, true).timeout
 
 
-func _travel(game: Node, map_id: int) -> bool:
+## P0-5 strict snapshot: everything the contract names, at the moment the
+## hop resolves. Uses the coordinator's persistent last_failure audit trail
+## when a chained recovery transition overwrote the FAILED stage.
+func _strict_snapshot(game: Node, map_key: String, hop_id: int) -> Dictionary:
+	var coord = game._world_bootstrap_coordinator
+	var snap: Dictionary = coord.snapshot()
+	var stats: Dictionary = game.background.wall_render_stats()
+	return {
+		"map_key": map_key,
+		"hop_target_id": hop_id,
+		"stage": str(snap.get("stage", "?")),
+		"success": bool(snap.get("success", false)),
+		"failure_reason": str(snap.get("failure_reason", "?")),
+		"coordinator_map_id": int(snap.get("map_id", -1)),
+		"generation": int(coord.generation),
+		"current_map_id": int(game.current_map_id),
+		"transition_in_progress": bool(game._map_transition_in_progress),
+		"locks": JSON.stringify(game._gameplay_input_locks),
+		"map_transition_lock": bool(
+			(game._gameplay_input_locks as Dictionary).has("map_transition")
+		),
+		"combat_token_active": bool(game.player.combat_transition_is_active()),
+		"player_dead": bool(game.player._dead),
+		"player_hp": int(game.player.current_hp),
+		"wall_mode": str(stats.get("wall_render_mode", "?")),
+		"plan_found": bool(stats.get("wall_render_plan_found", false)),
+		"composites": _count_meta(game, "editor_runtime_wall_composite"),
+		"chunks": _count_meta(game, "wall_static_chunk"),
+	}
+
+
+## Strict travel. Returns the END-OF-HOP snapshot; the caller applies the
+## strict verdict. A chained production recovery (P0-3) after a FAILED
+## arrival is detected via the persistent last_failure trail or a
+## generation jump, and the FAILED evidence is reconstructed from it.
+func _travel(game: Node, map_id: int, map_key: String) -> Dictionary:
+	var coord = game._world_bootstrap_coordinator
 	var lock_deadline := Time.get_ticks_msec() + 15000
 	while (
 		not bool(game.gameplay_input_is_enabled())
@@ -106,14 +148,20 @@ func _travel(game: Node, map_id: int) -> bool:
 		await _recover(game)
 		await get_tree().create_timer(0.016, true).timeout
 	if int(game.current_map_id) == map_id:
-		return true
+		var already := _strict_snapshot(game, map_key, map_id)
+		already["hop_kind"] = "already_on_map"
+		return already
 	if not bool(game.gameplay_input_is_enabled()):
 		_log("R7_STAGE unreachable map=%d input=false" % map_id)
-		return false
+		var blocked := _strict_snapshot(game, map_key, map_id)
+		blocked["hop_kind"] = "unreachable_input_locked"
+		return blocked
 	var op := Callable(game, "_travel_to_map_immediate").bind(map_id)
 	if not game._begin_map_transition(op, map_id):
 		_log("R7_STAGE travel_refused map=%d" % map_id)
-		return false
+		var refused := _strict_snapshot(game, map_key, map_id)
+		refused["hop_kind"] = "travel_refused"
+		return refused
 	var deadline := Time.get_ticks_msec() + 10000
 	while (
 		not bool(game._map_transition_in_progress)
@@ -125,10 +173,49 @@ func _travel(game: Node, map_id: int) -> bool:
 		"transition_id": game._active_map_transition_id,
 	})
 	await get_tree().create_timer(0.016, true).timeout
-	while bool(game._map_transition_in_progress):
-		if Time.get_ticks_msec() > deadline + 60000:
+	var t0 := Time.get_ticks_msec()
+	var poll_deadline := Time.get_ticks_msec() + 120000
+	var pre_generation := int(coord.generation)
+	while Time.get_ticks_msec() < poll_deadline:
+		var snap: Dictionary = coord.snapshot()
+		var stage: String = str(snap.get("stage", ""))
+		var generation := int(snap.get("generation", -1))
+		var last_failure: Dictionary = coord.last_failure
+		if (
+			stage == "FAILED" and generation == pre_generation
+		) or (
+			not last_failure.is_empty()
+			and int(last_failure.get("generation", -1)) == pre_generation
+			and pre_generation > 0
+			and generation >= pre_generation
+		):
+			# Target bootstrap FAILED and a chained recovery already took
+			# over: reconstruct FAILED evidence from the audit trail.
+			var failed := _strict_snapshot(game, map_key, map_id)
+			failed["hop_kind"] = "transition_failed"
+			failed["stage"] = "FAILED"
+			failed["success"] = false
+			failed["failure_reason"] = str(
+				last_failure.get("reason", "unknown_chained_recovery")
+			)
+			failed["generation"] = pre_generation
+			_log("R7_STRICT_FAILED_SNAPSHOT %s" % JSON.stringify(failed))
+			var recovery_deadline := Time.get_ticks_msec() + 90000
+			while (
+				bool(game._map_transition_in_progress)
+				and Time.get_ticks_msec() < recovery_deadline
+			):
+				await get_tree().create_timer(0.05, true).timeout
+			return failed
+		if (
+			not bool(game._map_transition_in_progress)
+			and stage == "READY"
+			and Time.get_ticks_msec() - t0 > 400
+		):
+			break
+		if Time.get_ticks_msec() > poll_deadline - 1:
 			_log("R7_STAGE transition_timeout map=%d" % map_id)
-			return false
+			break
 		await _recover(game)
 		await get_tree().create_timer(0.016, true).timeout
 	var idle_deadline := Time.get_ticks_msec() + 30000
@@ -137,7 +224,9 @@ func _travel(game: Node, map_id: int) -> bool:
 		and Time.get_ticks_msec() < idle_deadline
 	):
 		await get_tree().create_timer(0.016, true).timeout
-	return true
+	var arrived := _strict_snapshot(game, map_key, map_id)
+	arrived["hop_kind"] = "normal"
+	return arrived
 
 
 func _ready() -> void:
@@ -180,6 +269,7 @@ func _ready() -> void:
 		game._world_bootstrap_coordinator.generation
 	)
 	var hops_ok := 0
+	var strict_failed_hops: PackedStringArray = []
 	for hop: Dictionary in chain:
 		var map_key := str(hop["key"])
 		var map_id := int(hop["id"])
@@ -188,20 +278,46 @@ func _ready() -> void:
 			if str(row["map_key"]) == map_key:
 				klass = str(row["class"])
 		_log("R7_HOP %s class=%s" % [map_key, klass])
-		if not await _travel(game, map_id):
-			_check(false, "%s: hop unreachable" % map_key)
-			continue
-		if int(game.current_map_id) != map_id:
-			_check(false, "%s: arrival mismatch" % map_key)
-			continue
-		var generation := int(game._world_bootstrap_coordinator.generation)
-		_check(
-			generation == previous_generation + 1,
-			"%s: generation %d -> %d" % [
-				map_key, previous_generation, generation,
-			],
+		var snap: Dictionary = await _travel(game, map_id, map_key)
+		var hop_kind := str(snap.get("hop_kind", "normal"))
+		# P0-5 strict transition verdict - permanent, no recovery conversion.
+		var strict_ok := (
+			hop_kind == "normal" or hop_kind == "already_on_map"
+		) and (
+			str(snap.get("stage", "")) == "READY"
+			and bool(snap.get("success", false))
+			and str(snap.get("failure_reason", "")) == "map_transition_ready"
+			and not bool(snap.get("map_transition_lock", true))
+			and not bool(snap.get("combat_token_active", true))
+			and int(snap.get("current_map_id", -1)) == map_id
+			and not bool(snap.get("transition_in_progress", true))
 		)
-		previous_generation = generation
+		if not strict_ok:
+			strict_failed_hops.append(map_key)
+			_check(
+				false,
+				"%s: STRICT hop FAILED (%s stage=%s reason=%s cur=%d locks=%s token=%s)" % [
+					map_key, hop_kind, str(snap.get("stage", "?")),
+					str(snap.get("failure_reason", "?")),
+					int(snap.get("current_map_id", -1)),
+					str(snap.get("locks", "?")),
+					str(snap.get("combat_token_active", "?")),
+				],
+			)
+			await _recover(game)
+			previous_generation = int(
+				game._world_bootstrap_coordinator.generation
+			)
+			continue
+		var generation := int(snap.get("generation", -1))
+		if hop_kind != "already_on_map":
+			_check(
+				generation == previous_generation + 1,
+				"%s: generation %d -> %d" % [
+					map_key, previous_generation, generation,
+				],
+			)
+			previous_generation = generation
 		var coord = game._world_bootstrap_coordinator
 		var stats: Dictionary = game.background.wall_render_stats()
 		if klass == "A":
@@ -251,15 +367,15 @@ func _ready() -> void:
 	_check(hops_ok == chain.size(), "hops completed %d/%d" % [
 		hops_ok, chain.size(),
 	])
-	if _failures.is_empty():
-		print("WALL_RENDER_R7_CHAIN_PASS hops=%d checks=%d" % [
+	if _failures.is_empty() and strict_failed_hops.is_empty():
+		print("WALL_RENDER_R7_STRICT_PASS hops=%d checks=%d" % [
 			chain.size(), _pass_count,
 		])
 		get_tree().quit(0)
 	else:
 		for failure: String in _failures:
 			print("R7_FAIL ", failure)
-		print("WALL_RENDER_R7_CHAIN_FAIL failures=%d checks=%d" % [
-			_failures.size(), _pass_count,
+		print("WALL_RENDER_R7_STRICT_FAIL hops=%d failed_hops=%s checks=%d" % [
+			chain.size(), str(strict_failed_hops), _pass_count,
 		])
 		get_tree().quit(1)
