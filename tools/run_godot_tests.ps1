@@ -583,6 +583,19 @@ $Suites.critical = @($Suites.critical + @(
     'tests/shared_warehouse_migration_test.tscn'
 ) | Select-Object -Unique)
 
+# September 18 R1.1 closure: the error-feedback boundary and the player
+# overhead status-marker presentation are permanent regression gates. The R1
+# versions of these tests existed but were never registered here; they are
+# registered now together with the corrected marker-row tests.
+$Suites.critical = @($Suites.critical + @(
+    'tests/ui_error_feedback_scope_guard_test.tscn',
+    'tests/ui_error_machine_reason_leak_test.tscn',
+    'tests/ui_error_feedback_overlay_test.tscn',
+    'tests/repair_20260913/inventory_error_feedback_real_input_test.tscn',
+    'tests/player_poison_presentation_test.tscn',
+    'tests/player_health_bar_status_marker_test.tscn'
+) | Select-Object -Unique)
+
 # ── Q0-A: final judgement contract ──
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.

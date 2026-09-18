@@ -1,11 +1,10 @@
 extends Node
 
-## Poison status presentation (R1). Verifies the poisoned state presents
-## through the existing HUD status-flag strip lane (the same lane used by
-## 魔法盾/隐身术/治愈术), with exactly one 中毒 flag merged across both poison
-## sources, immediate expiry, death clearing and zero gameplay changes.
-## The former green ground ring must be gone from player.gd while the existing
-## paralysis (control) ring stays byte-identical.
+## Poison/paralysis status presentation (R1.1 closure). The player presents
+## both states the way the user required and the way monsters already do: as
+## fixed-slot dots on the status marker row UNDER the overhead HP bar
+## (PlayerStatusMarkerStrip). No ground rings for either state, no entry on the
+## bottom HUD buff strip. Gameplay timers/values are only read, never changed.
 
 const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
 
@@ -37,21 +36,39 @@ func _run() -> void:
 		"no ground ring drawing may remain for poison"
 	)
 	assert(
-		player_source.contains("draw_circle(Vector2(0, -4), 37.0, Color(0.42, 0.62, 1.0, 0.75), false, 4.0)"),
-		"the existing paralysis control ring must stay byte-identical"
+		not player_source.contains("draw_circle(Vector2(0, -4), 37.0, Color(0.42, 0.62, 1.0, 0.75), false, 4.0)"),
+		"the paralysis ground ring must also be removed (R1.1): both states present under the HP bar"
 	)
 	assert(
-		player_source.contains("if control_time > 0.0:"),
-		"the paralysis ring condition must stay"
+		not player_source.contains("if control_time > 0.0:\n\t\tdraw_circle"),
+		"no control-conditioned ground ring drawing may remain"
 	)
 	assert(
 		player_source.contains("func poison_status_remaining() -> float:"),
 		"presentation accessor must exist"
 	)
+	var health_bar_source := _read("res://scripts/player_health_bar.gd")
+	assert(
+		health_bar_source.contains("PlayerStatusMarkerStripScript.new()"),
+		"the overhead health bar must attach the status marker strip"
+	)
+	assert(
+		health_bar_source.contains("STATUS_MARKER_ROW_GAP"),
+		"the marker row must sit below the bar by the documented gap"
+	)
+	var marker_source := _read("res://scripts/player_status_marker_strip.gd")
+	assert(
+		marker_source.contains("markers.append(\"paralysis\")") and marker_source.contains("markers.append(\"poison\")"),
+		"the strip must expose the fixed-order marker contract"
+	)
+	assert(
+		marker_source.contains("MARKER_DOT_RADIUS := 3.0") and marker_source.contains("MARKER_SLOT_OFFSET_X := 5.0"),
+		"marker geometry mirrors the established overhead dot idiom"
+	)
 	var game_root_source := _read("res://scripts/game_root.gd")
 	assert(
-		game_root_source.contains("\"id\":\"poison\", \"skill\":\"施毒术\""),
-		"poison must join the existing status strip lane via the 施毒术 icon entry"
+		not game_root_source.contains("\"id\":\"poison\""),
+		"poison must not surface on the bottom HUD buff strip"
 	)
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
@@ -62,92 +79,100 @@ func _run() -> void:
 	var hud: Node = game.hud
 	assert(player != null and hud != null, "runtime boot must expose player and hud")
 	player.set_physics_process(false)
+	var health_bar: Node = player.health_bar
+	assert(health_bar != null, "player exposes its overhead health bar")
+	var marker_strip: Node = health_bar.status_marker_strip
+	assert(marker_strip != null and marker_strip.name == "PlayerStatusMarkerStrip", "health bar owns the status marker strip")
+	assert(
+		marker_strip.position == health_bar.layout_snapshot()["status_marker_strip_position"],
+		"marker row sits directly below the bar at the documented offset"
+	)
 
-	# --- Case A: legacy poison ----------------------------------------------
+	# --- Case A: legacy poison -> single fixed-slot poison marker ------------
 	player.poison_time = 0.0
 	player._monster_source_poison.clear()
 	player.apply_poison(3, 12.0)
 	assert(player.poison_time > 0.0, "caseA legacy poison active")
-	var entries_a: Array = game._status_buff_entries()
-	var poison_a := _poison_entries(entries_a)
-	assert(poison_a.size() == 1, "caseA exactly one poison flag, got %d" % poison_a.size())
-	assert(int(ceil(float(poison_a[0].remaining))) == int(ceil(player.poison_time)), "caseA strip remaining mirrors legacy poison")
-	assert(str(poison_a[0].skill) == "施毒术", "caseA strip icon source is the existing poison skill icon")
+	var markers_a: Array[String] = marker_strip.active_status_markers()
+	assert(_join(markers_a) == "poison", "caseA exactly the poison marker, got [%s]" % _join(markers_a))
+	assert(_poison_entries(game._status_buff_entries()).is_empty(), "caseA no bottom-strip entry for poison")
 
-	# --- Case B: monster source poison ---------------------------------------
+	# --- Case B: monster source poison ----------------------------------------
 	player.poison_time = 0.0
 	player._monster_source_poison.clear()
 	assert(player.apply_monster_poison(2, 9.0, 2.5), "caseB monster poison applied")
-	var entries_b: Array = game._status_buff_entries()
-	var poison_b := _poison_entries(entries_b)
-	assert(poison_b.size() == 1, "caseB exactly one poison flag for source poison")
-	assert(
-		is_equal_approx(float(poison_b[0].remaining), player._monster_source_poison.remaining_seconds),
-		"caseB strip remaining mirrors monster source poison"
-	)
+	var markers_b: Array[String] = marker_strip.active_status_markers()
+	assert(_join(markers_b) == "poison", "caseB one poison marker for source poison, got [%s]" % _join(markers_b))
 
-	# --- Case C: both sources at once -> one flag ----------------------------
+	# --- Case C: both sources at once -> still one poison marker --------------
 	player.apply_poison(3, 12.0)
 	assert(player.poison_time > 0.0 and player._monster_source_poison.remaining_seconds > 0.0, "caseC both sources active")
-	var entries_c: Array = game._status_buff_entries()
-	var poison_c := _poison_entries(entries_c)
-	assert(poison_c.size() == 1, "caseC both sources must render one merged flag")
-	assert(
-		is_equal_approx(float(poison_c[0].remaining), player.poison_status_remaining()),
-		"caseC merged remaining equals maxf(legacy, source)"
-	)
+	var markers_c: Array[String] = marker_strip.active_status_markers()
+	assert(_join(markers_c) == "poison", "caseC both sources merge into one poison marker, got [%s]" % _join(markers_c))
 	assert(
 		is_equal_approx(player.poison_status_remaining(), maxf(player.poison_time, player._monster_source_poison.remaining_seconds)),
 		"caseC accessor semantics"
 	)
 
-	# --- Case D: one source ends, the other remains --------------------------
+	# --- Case D: one source ends, the other remains ---------------------------
 	player.poison_time = 0.0
 	assert(player._monster_source_poison.remaining_seconds > 0.0, "caseD source poison remains")
-	var entries_d: Array = game._status_buff_entries()
-	assert(_poison_entries(entries_d).size() == 1, "caseD flag persists while one source remains")
+	assert(_join(marker_strip.active_status_markers()) == "poison", "caseD marker persists while one source remains")
 
-	# --- Case E: all sources end ---------------------------------------------
+	# --- Case E: all sources end -----------------------------------------------
 	player.poison_time = 0.0
 	player._monster_source_poison.clear()
 	assert(is_zero_approx(player.poison_status_remaining()), "caseE no poison left")
-	assert(_poison_entries(game._status_buff_entries()).is_empty(), "caseE flag removed immediately")
+	assert(marker_strip.active_status_markers().is_empty(), "caseE marker removed immediately")
 
-	# --- Strip rendering lifecycle through the real HUD lane ------------------
-	hud.update_status_buffs([{"id": "poison", "skill": "施毒术", "remaining": 5.0, "started_at": 0}])
-	var icon: TextureRect = hud._status_buff_icons.get("poison")
-	assert(icon != null, "strip creates one icon for the poison entry")
-	assert(icon.visible, "poison icon visible while poisoned")
-	var seconds: Label = icon.get_node("Seconds")
-	assert(seconds.text == "5", "poison icon carries the same countdown rule as the lane")
-	var expected_texture: Texture2D = HUDSkillIconCatalog.SKILL_TEXTURES.get("施毒术")
-	assert(expected_texture != null and icon.texture == expected_texture, "poison icon reuses the existing catalog texture")
-	hud.update_status_buffs([])
-	assert(not icon.visible, "poison icon hidden when the state ends")
-
-	# --- Case F: death clears the flag immediately ----------------------------
+	# --- Case F: death clears the poison marker, gameplay poison untouched ----
 	player.poison_time = 30.0
 	player._monster_source_poison.clear()
 	player.current_hp = 0
 	player._dead = true
 	assert(player.poison_status_remaining() > 0.0, "caseF gameplay poison is NOT cleared by presentation")
-	assert(_poison_entries(game._status_buff_entries()).is_empty(), "caseF flag cleared on death without touching gameplay")
+	assert(marker_strip.active_status_markers().is_empty(), "caseF marker cleared on death without touching gameplay")
 	player._dead = false
 	player.current_hp = 100
 
-	# --- Case G: paralysis presentation untouched -----------------------------
+	# --- Case G: paralysis -> its own fixed slot, still no ground ring --------
+	player.poison_time = 0.0
+	player._monster_source_poison.clear()
 	player.control_time = 0.0
 	player.apply_control(5.0)
 	assert(player.control_time == 5.0, "caseG control state entry unchanged")
-	var entries_g: Array = game._status_buff_entries()
-	for entry: Dictionary in entries_g:
-		assert(str(entry.get("id", "")) != "paralysis" and str(entry.get("id", "")) != "control", "caseG paralysis keeps out of the strip lane (unchanged behavior)")
-	assert(player_source.contains("draw_circle(Vector2(0, -4), 37.0, Color(0.42, 0.62, 1.0, 0.75), false, 4.0)"), "caseG paralysis ring visual unchanged")
+	var markers_g: Array[String] = marker_strip.active_status_markers()
+	assert(_join(markers_g) == "paralysis", "caseG paralysis shows its own marker, got [%s]" % _join(markers_g))
+	assert(_poison_entries(game._status_buff_entries()).is_empty(), "caseG no strip entry for paralysis either")
+
+	# --- Case H: paralysis + poison -> fixed slot order ------------------------
+	player.apply_poison(3, 12.0)
+	assert(player.control_time > 0.0 and player.poison_time > 0.0, "caseH both statuses active")
+	var markers_h: Array[String] = marker_strip.active_status_markers()
+	assert(_join(markers_h) == "paralysis,poison", "caseH fixed order: paralysis slot first, poison slot second, got [%s]" % _join(markers_h))
+	# Slots stay fixed: the paralysis dot never re-centers when poison ends.
+	player.poison_time = 0.0
+	player._monster_source_poison.clear()
+	var markers_h2: Array[String] = marker_strip.active_status_markers()
+	assert(_join(markers_h2) == "paralysis", "caseH paralysis keeps its own slot after poison ends")
+	assert(
+		marker_strip.marker_slot_center("paralysis").x < 0.0 and marker_strip.marker_slot_center("poison").x > 0.0,
+		"caseH fixed slot geometry: paralysis left, poison right"
+	)
+
+	# --- Case I: clean state ----------------------------------------------------
+	player.control_time = 0.0
+	assert(marker_strip.active_status_markers().is_empty(), "caseI no markers in the clean state")
+	assert(_poison_entries(game._status_buff_entries()).is_empty(), "caseI no strip entries for either state")
 
 	game.queue_free()
 	await get_tree().process_frame
-	print("PLAYER_POISON_PRESENTATION_PASS: no ground ring, one strip flag, lifecycle, death clear, paralysis untouched")
+	print("PLAYER_POISON_PRESENTATION_PASS: no ground rings, fixed-slot markers under the HP bar, lifecycle, death clear")
 	get_tree().quit(0)
+
+
+func _join(markers: Array[String]) -> String:
+	return ",".join(markers)
 
 
 func _read(res_path: String) -> String:

@@ -60,10 +60,40 @@ func _run() -> void:
 	# --- Both lanes coexist: no mechanical mass replacement ------------------
 	var error_calls := _count(game_root, "show_error_message(")
 	var message_calls := _count(game_root, "show_message(")
-	assert(error_calls >= 25, "error channel must be actively used (got %d)" % error_calls)
-	assert(message_calls >= 10, "normal channel must survive (got %d)" % message_calls)
+	assert(error_calls >= 40, "error channel must be actively used (got %d)" % error_calls)
+	assert(message_calls >= 14, "normal channel must survive (got %d)" % message_calls)
 	# show_error_message must never be routed through show_message or back.
 	assert(not game_root.contains("show_message(show_error_message"), "lanes must not be chained")
+
+	# --- R1.1 closure: the remaining failure entries are on the error lane ---
+	assert(
+		game_root.contains("func _on_loot_collection_rejected(")
+		and game_root.contains("hud.show_error_message(message)"),
+		"loot pickup rejection must surface on the error channel"
+	)
+	assert(
+		game_root.contains("apply_weapon_repair_oil_result(")
+		and game_root.contains("func _report_repair_oil_result(")
+		and game_root.contains("hud.show_error_message("),
+		"repair-oil failures must classify through the structured result"
+	)
+	assert(
+		hud.contains("show_error_message(\"快捷物品 %d 为空：长按槽位可从背包选择\""),
+		"empty quick-slot taps must surface on the error channel"
+	)
+	assert(
+		_count(inventory_panel, "use_inventory_index(") == 0
+		and _count(inventory_panel, "use_inventory_index_result(") >= 2,
+		"item use must go through the structured result contract"
+	)
+	assert(
+		_count(inventory_panel, "item_detail_presenter.show_message(\"[color=#e8c277]%s[/color]\" % str(use_result.get(\"message\", \"\")))") == 2,
+		"item-use success keeps the presenter lane, failures go to the error channel"
+	)
+	assert(
+		inventory_panel.contains("from_result(use_result,"),
+		"use failures must pass the error boundary, never raw result text"
+	)
 
 	# --- HUD: show_message semantics unchanged, error lane independent ------
 	assert(hud.contains("func show_message(message: String, seconds := 2.0) -> void:"), "show_message signature frozen")

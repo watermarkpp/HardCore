@@ -21,6 +21,12 @@ const REASON_MESSAGES := {
 	"safe_logout_failed": "安全退出失败，请稍后重试。",
 	"home_resolution_failed": "无法确定安全返回位置。",
 	"no_injured_friendly_target_in_range": "附近没有可治疗的友方。",
+	"invalid_arguments": "物品效果参数无效，无法使用。",
+	"contract_mismatch": "物品效果与当前规则不匹配，无法使用。",
+	"duration_invalid": "物品效果时长无效，无法使用。",
+	"buff_group_missing": "物品效果组缺失，无法使用。",
+	"modifiers_missing": "物品效果数值缺失，无法使用。",
+	"stat_not_allowed": "物品效果包含不允许的属性，无法使用。",
 }
 
 ## Explicit machine tokens that must never reach the player UI, even wrapped
