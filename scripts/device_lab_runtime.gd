@@ -217,7 +217,25 @@ func _notification(what: int) -> void:
 
 
 func _poll_inbox() -> void:
-	if _busy or not FileAccess.file_exists(PENDING_PATH):
+	if _busy:
+		return
+	# perf(R13): Android host channel. The internal inbox lives under user://
+	# (/data/data/<pkg>/files) where adb-shell writes are denied by SELinux on
+	# this device family (runas_app domain vs untrusted_app). A shell-writable
+	# mirror under the external app-files dir provides a host write path;
+	# results still land in the internal outbox (readable via run-as). This is
+	# a debug-only channel - Release builds never reach _poll_inbox.
+	var external_pending := _external_mirror_pending_path()
+	if (
+		not external_pending.is_empty()
+		and FileAccess.file_exists(external_pending)
+	):
+		var external_bytes := FileAccess.get_file_as_bytes(external_pending)
+		DirAccess.remove_absolute(external_pending)
+		if external_bytes.size() > 0:
+			_process_command_bytes(external_bytes)
+			return
+	if not FileAccess.file_exists(PENDING_PATH):
 		return
 	# Claim the command before parsing. A host can safely write a new pending
 	# command only after this rename has completed.
@@ -226,8 +244,24 @@ func _poll_inbox() -> void:
 	var inbox := DirAccess.open(INBOX_DIR)
 	if inbox == null or inbox.rename("pending.json", "processing.json") != OK:
 		return
-	_busy = true
 	var bytes := FileAccess.get_file_as_bytes(PROCESSING_PATH)
+	_process_command_bytes(bytes)
+
+
+## perf(R13): debug-only Android host channel - see _poll_inbox. Returns the
+## shell-writable mirror inbox path, or "" when unavailable (non-Android or
+## an unsafe package token).
+func _external_mirror_pending_path() -> String:
+	if OS.get_name() != "Android":
+		return ""
+	var pkg := OS.get_user_data_dir().get_base_dir().get_file()
+	if pkg.is_empty() or not _is_safe_token(pkg):
+		return ""
+	return "/sdcard/Android/data/%s/files/device_lab/inbox/pending.json" % pkg
+
+
+func _process_command_bytes(bytes: PackedByteArray) -> void:
+	_busy = true
 	var command := _parse_command(bytes)
 	var nonce := str(command.get("nonce", ""))
 	if nonce.is_empty():
