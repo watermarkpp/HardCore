@@ -6056,6 +6056,32 @@ func take_damage(
 	_apply_damage_core(amount, attacker, damage_context, true)
 
 
+## Proximity is not the only authored wake condition for static dormant
+## monsters: an actually received HP loss from a live attacker must wake them
+## too, otherwise a ranged hit only builds threat while the actor stays
+## frozen until the player walks into the wake range. Damage already populated
+## the threat table before this helper runs, so it never assigns a target
+## directly; the existing threat/retarget policy keeps choosing the target.
+## Burrow/ambush is a separate authored mechanic: monster 124 (触龙神) must
+## stay underground until its own emergeRange contract wakes it.
+func _wake_dormant_from_received_damage(
+	attacker: Node2D,
+	actual_damage: int,
+) -> void:
+	if actual_damage <= 0:
+		return
+	if current_hp <= 0:
+		return
+	if not dormant:
+		return
+	if _burrowed:
+		return
+	if not _target_candidate_is_live(attacker):
+		return
+	dormant = false
+	_retarget_timer = 0.0
+
+
 ## Shared damage core. `causes_struck` separates the vanilla ordinary STRUCK
 ## channel (RM_STRUCK, sent only for positive direct damage) from DOT/poison
 ## (DamageHealth only, never RM_STRUCK). Poison must keep dealing HP without
@@ -6074,8 +6100,10 @@ func _apply_damage_core(
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
-	if current_hp < hp_before_damage and is_instance_valid(attacker):
-		_hc_received_damage(attacker, float(hp_before_damage - current_hp))
+	var actual_damage := hp_before_damage - current_hp
+	if actual_damage > 0 and is_instance_valid(attacker):
+		_wake_dormant_from_received_damage(attacker, actual_damage)
+		_hc_received_damage(attacker, float(actual_damage))
 	_refresh_overhead_health()
 	if is_boss and not boss_rule.is_empty():
 		_apply_health_stage_mechanics()
@@ -6983,8 +7011,9 @@ func _draw() -> void:
 		)
 	if control_time > 0.0 or charm_time > 0.0:
 		draw_circle(Vector2(0, -5), radius_px + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
-	if dormant:
-		draw_circle(Vector2(0, -5), radius_px + 3.0, Color(0.52, 0.50, 0.46, 0.72))
+	# No dormant ground marker: dormancy is an AI state only. The former gray
+	# translucent disc was never an authored affordance and duplicated the
+	# normal contact shadow under every sleeping monster.
 	if _boss_warning > 0.0:
 		_draw_boss_warning_ground_projection()
 	if draw_procedural_fallback:
