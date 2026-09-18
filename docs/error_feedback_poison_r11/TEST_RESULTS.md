@@ -70,13 +70,58 @@
 
 ## 5. 集成正式套件（merge 后于 integration 树复跑）
 
-| 套件 | 结果 |
-|---|---|
-| critical（含本次新注册 6 项） | 待集成复跑后填写（分批/后台） |
+### 5.1 R1.1 收口 critical（integration @ 4b001cbc，2026-09-18 16:40）
+
+- 结果：**357 项，339 PASS，18 FAIL**（`outputs/test_logs/runner_results_critical_20260918_164022_766_5032.json`，git_head=4b001cbc）。
+- 注：本次运行 TimeoutSeconds=60（与本仓库基线对照一致，归因有效）；60 并未证明为最小必要值，属既定参数而非效率最优，后续轮次应回归 8s 默认并单独豁免确实需要的慢测试。
+- 18 项 FAIL 的基线归因（对照 r11-baseline-83840d3a，仅跑该 18 项，同 60s）：
+
+| 测试 | current | baseline | 失败签名（两侧逐字比对） | 分类 |
+|---|---|---|---|---|
+| skill_semantic_contracts_test | FAIL | FAIL | wizard.fire_wall::fire_wall_exact_2x2 | BASELINE_EXISTING |
+| canonical_snapshot_propagation_test | FAIL | FAIL | fire wall controller must own 4 visual cells | BASELINE_EXISTING |
+| skill_production_canonical_entry_test | FAIL | FAIL | fire wall must own exactly 4 pure-visual cells | BASELINE_EXISTING |
+| hud_authority_integration_test | FAIL | FAIL | Assertion failed.（同一断言点 L175） | BASELINE_EXISTING |
+| inventory_equipment_ui_test | FAIL | FAIL | 人物属性超长时没有右侧滑块 | BASELINE_EXISTING |
+| equipment_durability_policy_test | FAIL | FAIL | 零耐久装备仍提供属性 | BASELINE_EXISTING |
+| equipment_precise_durability_test | FAIL | FAIL | raw零耐久装备仍提供属性 | BASELINE_EXISTING |
+| monster_world_integration_test | FAIL | FAIL | ID 76 runtime did not expose the complete V505 source profile | BASELINE_EXISTING |
+| skill_contract_manifest_test | FAIL | FAIL | Assertion failed.（同一断言点 L57） | BASELINE_EXISTING |
+| skill_source_of_truth_test | FAIL | FAIL | Package integrity failed: ["runtime_sot_hash_mismatch"] | BASELINE_EXISTING |
+| w6_visual_contract_test | FAIL | FAIL | valid W7 affix was not accepted | BASELINE_EXISTING |
+| warehouse_gothic_ui_test | FAIL | FAIL | 共享金币存入没有按 100000 扣除身上金币 | BASELINE_EXISTING |
+| shop_gothic_ui_test | FAIL | FAIL | 匕首详情正文缺少 价格 行 | BASELINE_EXISTING |
+| fire_wall_hit_parity_test | FAIL | PASS | 首轮崩溃签名（无断言）；复跑 PASS | FLAKY（偶发） |
+| fire_wall_tick_claim_parity_test | FAIL | PASS | 同上；复跑 PASS | FLAKY（偶发） |
+| fire_wall_boundary_target_test | FAIL | PASS | 同上；复跑 PASS | FLAKY（偶发） |
+| unbuilt_planned_map_not_playable_test | FAIL | PASS | 复跑打出 PASS 标记但进程未按时退出 | FLAKY（偶发） |
+| bich_monster_visual_test | FAIL | PASS | 钉耙猫 current_state≠walk（方向诊断 2==2 正确）；monster/enemy 代码两树零差异；R2 树复跑 PASS | FLAKY（负载/资源流送时序） |
+
+- 结论：**0 项 REGRESSION 归因于 R1.1**；13 项基线既有 + 5 项偶发（复跑/交叉树验证）。
+
+### 5.2 R2（统一玩家通知）critical（integration merge 5a29fdae 前、R2 树 @ a9c9472，2026-09-18 18:01）
+
+- 结果：**363 项（357+6 新注册），347 PASS，16 FAIL**（`runner_results_critical_20260918_180133_274_2664.json`）。
+- 8 个 R2 测试全部 PASS，注册映射：player_notice_overlay/item_style/dedupe_priority/action_result_contract/equipment_success_notice_real_input/skill_learning_notice_real_input → `$Suites.critical`（L602-609）；item_style+equipment_success 另入 `$Suites.equipment`（L611-614）；scope_guard/overlay 为 R1.1 已注册改写（L590-597）。
+- 16 FAIL 分类（其中 13 项与 §5.1 相同签名 → BASELINE_EXISTING，不再重复列表）：
+
+| 测试 | current | baseline(83840d3a) | integration(4b001cbc) | 分类 |
+|---|---|---|---|---|
+| complete_client_resource_catalog_test | FAIL | FAIL（同签名：缺 manifest.json） | PASS（该树已生成产物） | BASELINE_EXISTING（outputs 生成物缺失，环境性） |
+| warrior_skill_state_machine_test | FAIL | PASS | PASS | R2 引入 → 已修：断言从退役的 loot_label 通道迁至中央通知层（R2 合同有意变更），修复后复跑 PASS |
+| summon_owner_teleport_runtime_test | FAIL(套件内) | PASS | PASS；R2 树单独复跑 PASS | FLAKY（套件负载下的位移竞态；两树隔离均 PASS） |
+
+- 修复后定向复跑：warrior_skill_state_machine + hud_gothic_runtime + 8 个 R2 测试 = **10/10 PASS**（18:07）。未再跑第二次全量 critical（仅 1 处测试侧断言修正，按效率规范不重跑 363 项）。
+
+### 5.3 视觉验收（窗口化真实 GPU，1600x720）
+
+- 混合格式"已装备 裁决之杖"：前缀 140px 通知色 + 物品名 167px 超金色（UIItemNameStyle），背包面板打开时可见；错误通道"需要攻击46"207px 纯通知色。
+- 产物：`outputs/test_logs/r2_visual_probe_*.png`（gitignored，本机存档）；探针临时文件已删除（创建 17:10/18:0x，删除 18:10，位于 res://tests/ 但零引用、无测试枚举 res://tests，未参与任何正式运行）。
 
 ## 6. 诚实结论
 
 - PART A（玩家血条下标志系统 + 双环移除 + 底部条毒旗标移除）：实现完成，测试与取证通过。
 - PART B（use 权威结构化 + 遗漏错误入口补完）：实现完成，测试通过；String 入口兼容性有回归证据。
-- PART C（测试门禁）：6 测试已注册 `$Suites.critical`；integration 树的 critical 复跑在合并后执行，结果见 §5（未跑前本节不构成 PASS）。
+- PART C（测试门禁）：6 测试已注册 `$Suites.critical`；integration critical 复跑完成（§5.1），0 项回归归因 R1.1，本节成立。
 - 既有失败继承：R1 记录的 8 个基线既有失败未在本任务触碰；本次另发现 2 个（§4），同样未触碰。
+- 效率规范自评偏差（记录在案）：全轮次统一 TimeoutSeconds=60 未证明最小必要（对照有效性不受影响）；critical 运行期间曾 git add 与创建过未跟踪探针文件（证据链见 §5.3，判 NON_IMPACTING）；后续轮次改为"冻结候选树→测试→结束后暂存/提交"。
