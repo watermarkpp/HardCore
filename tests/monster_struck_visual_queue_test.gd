@@ -56,6 +56,10 @@ func _make_fixture(monster_level: int) -> void:
 		"frame_counts": {"idle": 4, "walk": 6, "attack": 6, "hit": 3, "death": 4},
 		"direction_mode": "mir2_north_first",
 	}
+	# R1.3: struck duration comes from the canonical metadata cache, not from
+	# residency. The fixture simulates a 3-frame ActStruck monster (the
+	# real-catalog load path is tested separately against monster 241).
+	_visual._canonical_struck_frame_count = 3
 
 
 func _dispose_fixture() -> void:
@@ -67,12 +71,15 @@ func _run() -> void:
 	await _test_idle_struck_starts_fully()
 	await _test_struck_during_attack_waits_then_plays_fully()
 	await _test_struck_during_committed_step_waits()
-	await _test_struck_during_visible_movement_waits()
+	await _test_struck_when_idle_starts_despite_visible_walk()
 	await _test_backlog_acceleration_and_drain()
 	await _test_attack_presentation_waits_for_started_struck()
 	await _test_backlog_drains_before_pending_attack_starts()
 	await _test_fifo_attack_between_strucks()
 	await _test_multiple_attack_requests_keep_order()
+	await _test_epoch_barrier_releases_after_committed_step()
+	await _test_canonical_struck_duration_is_residency_independent()
+	await _test_backlog_speed_uses_full_fifo_depth()
 	await _test_walk_grant_does_not_flip_playing_struck()
 	await _test_death_clears_pending()
 	await _test_queue_is_counter_only_and_capped()
@@ -141,15 +148,88 @@ func _test_struck_during_committed_step_waits() -> void:
 	await _dispose_fixture()
 
 
-func _test_struck_during_visible_movement_waits() -> void:
+## R1.3 semantic update (review closure): a struck enqueued while NO movement
+## step is committed starts immediately - mere visible walking afterwards
+## (velocity/walk pose) must never delay a presentation that had no barrier.
+func _test_struck_when_idle_starts_despite_visible_walk() -> void:
 	await _make_fixture(43)
+	_visual.queue_struck(43)
+	_visual._advance_action_timers(0.016)
+	_check(_visual.pending_struck_count() == 0, "idle-arrival struck starts immediately")
+	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck plays its full duration")
 	_enemy.velocity = Vector2(120.0, 0.0)
+	_visual._advance_action_timers(0.05)
+	_visual._update_animation_frame(0.0)
+	_check(_visual.current_state == "hit", "later walk does not flip the presentation")
+	_enemy.velocity = Vector2.ZERO
+	await _dispose_fixture()
+
+
+## R1.3 P1 acceptance (epoch barrier, unit level): the struck waits only for
+## the EXACT committed step it arrived during. Once that step ends, a NEW
+## pursuit step must never delay the struck further, and gameplay keeps
+## moving (no cancel, no WalkTick penalty).
+func _test_epoch_barrier_releases_after_committed_step() -> void:
+	await _make_fixture(43)
+	# Step A begins (production increments the epoch at the same point).
+	_enemy._movement_step_active = true
+	_enemy._movement_step_epoch += 1
 	_visual.queue_struck(43)
 	_visual._advance_action_timers(0.05)
-	_check(_visual.pending_struck_count() == 1, "moving monster keeps the struck queued")
-	_enemy.velocity = Vector2.ZERO
+	_check(_visual.pending_struck_count() == 1, "struck waits for its own step A")
+	_check(_visual._hit_remaining == 0.0, "no background burn during step A")
+	# Step A completes; the pursuit immediately starts step B (new epoch).
+	_enemy._movement_step_active = false
+	_enemy._movement_step_epoch += 1
+	_enemy._movement_step_active = true
 	_visual._advance_action_timers(0.016)
-	_check(_visual.pending_struck_count() == 0, "struck starts once movement stops")
+	_check(_visual.pending_struck_count() == 0, "struck released even though step B is walking")
+	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck plays its full duration during step B")
+	_check(_enemy._movement_step_active, "gameplay step B keeps moving (no hard-stun)")
+	_visual._update_animation_frame(0.0)
+	_check(_visual.current_state == "hit", "presentation keeps the struck over the walk")
+	_enemy._movement_step_active = false
+	await _dispose_fixture()
+
+
+## R1.3 P2 acceptance: canonical struck duration is residency-independent.
+## Monster 241 (飞火流星) has 6 ActStruck frames in the catalog; with an
+## EMPTY active_resources the duration must still be 6 x frame_ms.
+func _test_canonical_struck_duration_is_residency_independent() -> void:
+	# The real catalog load path: monster 241 resolves to 6, a normal monster
+	# without the 6-frame exception resolves to the 2-frame fallback.
+	var visual_probe := StruckVisualFixture.new()
+	_check(visual_probe._load_canonical_struck_frame_count(241) == 6, "catalog metadata: monster 241 hit = 6 frames")
+	_check(visual_probe._load_canonical_struck_frame_count(43) == 2, "catalog metadata: normal monster hit = 2 frames")
+	visual_probe.queue_free()
+	await _make_fixture(43)
+	_visual._canonical_struck_frame_count = _visual._load_canonical_struck_frame_count(241)
+	# Simulate released/cold residency: no active resources at all.
+	_visual.active_resources = {}
+	_visual.queue_struck(43)
+	_visual._advance_action_timers(0.016)
+	_check(
+		is_equal_approx(_visual._hit_remaining, 0.48),
+		"cold-activation struck still resolves 6 x 80ms (not the 2-frame fallback)"
+	)
+	await _dispose_fixture()
+
+
+## R1.3 P2 acceptance: the backlog speed watches the WHOLE presentation FIFO
+## (Actor.pas m_boMsgMuch counts all queued messages, not only struck ones).
+func _test_backlog_speed_uses_full_fifo_depth() -> void:
+	await _make_fixture(43)
+	_visual.queue_struck(43)
+	_visual._advance_action_timers(0.016)
+	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck playing with an empty queue")
+	_visual.play_attack(0.5)
+	_visual.queue_struck(43)
+	_check(_visual._presentation_count == 2, "FIFO holds [ATTACK, STRUCK] behind the playing struck")
+	# Depth 2 => 1.5x: a 0.1s delta burns 0.15s of the playing struck.
+	_visual._advance_action_timers(0.1)
+	_check(is_equal_approx(_visual._hit_remaining, 0.09), "playing struck accelerates on total FIFO depth (2/3 frame time)")
+	_visual._advance_action_timers(0.6)
+	_check(_visual._hit_remaining == 0.0, "queue drains fully afterwards")
 	await _dispose_fixture()
 
 

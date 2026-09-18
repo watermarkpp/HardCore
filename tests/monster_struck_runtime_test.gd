@@ -56,6 +56,7 @@ func _run() -> void:
 	await _test_fire_wall_pack_never_walk_locked()
 	await _test_level_fifty_white_boar()
 	await _test_poison_is_hp_only()
+	await _test_continuous_pursuit_struck_barrier()
 	print("MONSTER_STRUCK_RUNTIME_PASS checks=%d" % _checks)
 	get_tree().quit(0)
 
@@ -88,6 +89,19 @@ func _make_enemy(monster_id: int, monster_level: int) -> EnemyActor:
 	visual.setup(enemy)
 	enemy.visual = visual
 	enemy.add_child(visual)
+	# Minimal canonical resources + a body sprite so the presentation state
+	# machine can run in this headless fixture (monster 18 renders through the
+	# same fallback in production residency; only the metadata cache differs).
+	visual.sprite = Sprite2D.new()
+	visual.add_child(visual.sprite)
+	var flat_texture := GradientTexture2D.new()
+	flat_texture.width = 48
+	flat_texture.height = 64
+	visual.active_resources = {
+		"idle": flat_texture, "walk": flat_texture, "attack": flat_texture, "hit": flat_texture, "death": flat_texture,
+		"frame_counts": {"idle": 4, "walk": 6, "attack": 6, "hit": 2, "death": 4},
+		"direction_mode": "mir2_north_first",
+	}
 	return enemy
 
 
@@ -412,6 +426,59 @@ func _test_poison_is_hp_only() -> void:
 			"poison tick %d did not slip the attack deadline" % tick
 		)
 	_check(cadence.walk_tick_ms == tick_before, "poison never touched the walk cadence")
+	enemy.free()
+
+
+## R1.3 P1 acceptance: continuous pursuit must not starve a struck. Step A is
+## committed through the real production step entry; the struck arrives
+## DURING step A; step A completes; step B starts immediately through the
+## same production entry (new epoch, still walking). The struck presentation
+## must be released as soon as ITS step is over - it must not wait for the
+## whole pursuit - while gameplay keeps moving and the walk cadence is
+## untouched.
+func _test_continuous_pursuit_struck_barrier() -> void:
+	var enemy := await _make_enemy(18, 43)
+	var cadence = enemy._movement_cadence
+	var tick_before: int = cadence.walk_tick_ms
+	# Canonical metadata path (what _ready would load for monster 18): 2 frames.
+	enemy.visual._canonical_struck_frame_count = (
+		enemy.visual._load_canonical_struck_frame_count(18)
+	)
+	# Step A through the production entry point (epoch increments inside).
+	var step_started := enemy._begin_autonomous_step_without_cadence(
+		Vector2.RIGHT, 1.0, false, &"pursuit", null
+	)
+	_check(step_started, "production step entry commits pursuit step A")
+	var epoch_a := enemy._movement_step_epoch
+	_check(enemy._movement_step_active, "step A is the committed movement")
+	# The struck arrives DURING step A -> barrier = step A's epoch.
+	enemy.visual.queue_struck(43)
+	_check(enemy.visual.pending_struck_count() == 1, "struck queued during step A")
+	enemy.visual._advance_action_timers(0.05)
+	_check(enemy.visual.pending_struck_count() == 1, "step A still holds the struck")
+	_check(enemy.visual._hit_remaining == 0.0, "no background burn behind the barrier")
+	# Step A completes (production clear); the pursuit immediately commits
+	# step B through the same production entry (new epoch, still walking).
+	enemy._clear_autonomous_step_state()
+	enemy._begin_autonomous_step_without_cadence(
+		Vector2.RIGHT, 1.0, false, &"pursuit", null
+	)
+	_check(enemy._movement_step_active, "pursuit continues with step B")
+	_check(
+		enemy._movement_step_epoch == epoch_a + 1,
+		"step B observed a new movement epoch"
+	)
+	# The struck is released NOW, even though step B is walking.
+	enemy.visual._advance_action_timers(0.016)
+	_check(enemy.visual.pending_struck_count() == 0, "struck released once its own step finished")
+	_check(
+		is_equal_approx(enemy.visual._hit_remaining, 0.16),
+		"struck duration = canonical 2 frames x 80ms at level 43"
+	)
+	_check(enemy._movement_step_active, "gameplay step B keeps moving (no hard-stun)")
+	_check(cadence.walk_tick_ms == tick_before, "walk_tick_ms untouched by the barrier release")
+	enemy.visual._update_animation_frame(0.0)
+	_check(enemy.visual.current_state == "hit", "presentation keeps the struck over the walk")
 	enemy.free()
 
 

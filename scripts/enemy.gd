@@ -460,6 +460,13 @@ var _target_disengage_axis_cells := 0
 var _target_focus_tick_ms := 0
 var _movement_authority_failed_closed := false
 var _movement_step_active := false
+## R1.3 pure observation counter (review closure): incremented every time a
+## NEW autonomous step actually begins. It lets the presentation FIFO record
+## "which movement step a struck is waiting for" without adding any gameplay
+## hard-stun: once the observed epoch differs, that step is over and the
+## struck presentation may start even if the monster is already walking the
+## next cell. Never read for gameplay decisions.
+var _movement_step_epoch := 0
 var _movement_step_start_ground_gu := Vector2.INF
 var _movement_step_start_screen_px := Vector2.INF
 var _movement_step_target_ground_gu := Vector2.INF
@@ -1624,6 +1631,9 @@ func _begin_autonomous_step_without_cadence(
 		if is_instance_valid(engagement_target)
 		else 0
 	)
+	# R1.3: a genuinely new committed step begins here (single production
+	# assignment point of _movement_step_active). Pure observation order.
+	_movement_step_epoch += 1
 	_movement_step_active = true
 	var step_direction_ground := (
 		MonsterNeighborStepPolicyScript.desired_ground_direction(neighbor)

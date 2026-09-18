@@ -101,9 +101,21 @@ enum PresentationAction {
 
 var _presentation_kind := PackedByteArray()
 var _presentation_duration := PackedFloat32Array()
+# R1.3: per-entry movement-step barrier. A struck enqueued WHILE an autonomous
+# step is active records that step's observation epoch; it may only start once
+# that exact step is over (epoch moved on / step no longer active). Later
+# pursuit steps never delay it - matching the vanilla queue where the struck
+# message is consumed right after the walk it arrived during. -1 = no barrier.
+var _presentation_step_barrier := PackedInt32Array()
 var _presentation_head := 0
 var _presentation_tail := 0
 var _presentation_count := 0
+# R1.3 canonical hit-frame metadata (review closure): the ActStruck frame
+# count is appearance metadata from the monster animation catalog, NOT a
+# texture-residency state. Cached once at _ready so a struck enqueued during
+# cold activation / async streaming / released residency still gets the exact
+# vanilla duration (e.g. monster 241 = 6 frames, never the 2-frame fallback).
+var _canonical_struck_frame_count := 2
 # Acceleration/diagnostic counter only: the number of struck events WAITING
 # in the queue (the playing struck is dequeued first). It drives the vanilla
 # backlog 1.5x playback speed; it NEVER decides the action order anymore.
@@ -129,9 +141,11 @@ var _last_ground_indicator_radii := Vector2.INF
 
 
 func _init() -> void:
-	# Preallocate the presentation FIFO once per visual (16 bytes + 16 floats).
+	# Preallocate the presentation FIFO once per visual (16 bytes + 16 floats
+	# + 16 ints for the movement-step barriers).
 	_presentation_kind.resize(PRESENTATION_QUEUE_CAPACITY)
 	_presentation_duration.resize(PRESENTATION_QUEUE_CAPACITY)
+	_presentation_step_barrier.resize(PRESENTATION_QUEUE_CAPACITY)
 
 
 static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
@@ -153,6 +167,8 @@ func setup(owner_actor: EnemyActor) -> void:
 func _ready() -> void:
 	configure_actor_y_sort_item(self, "visual_root")
 	_has_authored_client_art = not _client_mapping_for(actor.monster_data).is_empty()
+	# Canonical struck frame count is resolved once from appearance metadata.
+	_canonical_struck_frame_count = _load_canonical_struck_frame_count(actor.monster_id)
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
 	position = _runtime_visual_origin()
 	visible = false
@@ -335,14 +351,16 @@ func _process(delta: float) -> void:
 func _advance_action_timers(delta: float) -> void:
 	var death_was_playing := _death_remaining > 0.0
 	_attack_remaining = maxf(0.0, _attack_remaining - delta)
-	# Only a struck that already STARTED counts down. With a queued backlog
-	# (>= 2) the original client plays frame time at 2/3 speed, i.e. the
-	# countdown runs at 1.5x until the backlog drains (MonsterStruckPolicy).
+	# Only a struck that already STARTED counts down. With a backlog (>= 2)
+	# pending presentation events the original client plays frame time at 2/3
+	# speed, i.e. the countdown runs at 1.5x until the backlog drains
+	# (MonsterStruckPolicy; Actor.pas m_boMsgMuch watches the WHOLE message
+	# list, so the vanilla-faithful counter is the full FIFO depth).
 	_hit_remaining = maxf(
 		0.0,
 		_hit_remaining
 		- delta * MonsterStruckPolicyScript.struck_speed_multiplier(
-			_pending_struck_count
+			_presentation_count
 		)
 	)
 	_death_remaining = maxf(0.0, _death_remaining - delta)
@@ -994,7 +1012,7 @@ func _start_attack_visual(duration: float) -> void:
 
 ## O(1) FIFO append. On overflow (fixed capacity exhausted) the NEWEST event
 ## is dropped and counted - the actions already queued keep their order.
-func _enqueue_presentation(kind: PresentationAction, duration: float) -> void:
+func _enqueue_presentation(kind: PresentationAction, duration: float, step_barrier := -1) -> void:
 	if _presentation_count >= PRESENTATION_QUEUE_CAPACITY:
 		RuntimeDiagnostics.increment_performance_counter(
 			&"monster_presentation_queue_overflow"
@@ -1002,6 +1020,7 @@ func _enqueue_presentation(kind: PresentationAction, duration: float) -> void:
 		return
 	_presentation_kind[_presentation_tail] = kind
 	_presentation_duration[_presentation_tail] = duration
+	_presentation_step_barrier[_presentation_tail] = step_barrier
 	_presentation_tail = (_presentation_tail + 1) % PRESENTATION_QUEUE_CAPACITY
 	_presentation_count += 1
 	if kind == PresentationAction.STRUCK:
@@ -1009,9 +1028,12 @@ func _enqueue_presentation(kind: PresentationAction, duration: float) -> void:
 
 
 ## Dequeues and starts the next presentation event in strict arrival order.
-## A struck only starts when its extra movement gate passes (committed step /
-## visible walk finish first); an attack behind a blocked struck waits too -
-## head-of-line blocking IS the vanilla action queue.
+## A struck only waits for the EXACT movement step that was committed when it
+## arrived (recorded observation epoch): once that cell is done, the struck
+## starts even if the monster is already pursuing the next cell - the vanilla
+## queue consumes the struck message right after its current walk finishes,
+## and gameplay movement is never penalized. An attack behind a blocked
+## struck waits too - head-of-line blocking IS the vanilla action queue.
 func _try_start_next_presentation() -> void:
 	if _presentation_count <= 0:
 		return
@@ -1020,8 +1042,15 @@ func _try_start_next_presentation() -> void:
 	if _death_remaining > 0.0 or _death_pose_held:
 		return
 	var kind: int = _presentation_kind[_presentation_head]
-	if kind == PresentationAction.STRUCK and not _can_begin_struck():
-		return
+	if kind == PresentationAction.STRUCK:
+		var barrier := _presentation_step_barrier[_presentation_head]
+		if (
+			barrier >= 0
+			and is_instance_valid(actor)
+			and actor._movement_step_active
+			and actor._movement_step_epoch == barrier
+		):
+			return
 	var duration := _presentation_duration[_presentation_head]
 	_presentation_head = (_presentation_head + 1) % PRESENTATION_QUEUE_CAPACITY
 	_presentation_count -= 1
@@ -1033,9 +1062,10 @@ func _try_start_next_presentation() -> void:
 
 
 ## Vanilla R1 entry for monster struck visuals: enqueue one struck event in
-## arrival order. O(1): two packed-array writes, no per-hit Timer/Node/
-## Dictionary allocation. Duration is resolved at enqueue time from the
-## monster's canonical ActStruck frame count and struck_frame_ms(level).
+## arrival order. O(1): three packed-array writes, no per-hit Timer/Node/
+## Dictionary allocation. Duration is resolved from the CANONICAL ActStruck
+## frame count (appearance metadata cached at _ready - residency independent)
+## and struck_frame_ms(level).
 func queue_struck(monster_level := -1) -> void:
 	if _death_remaining > 0.0 or _death_pose_held:
 		return
@@ -1049,16 +1079,20 @@ func queue_struck(monster_level := -1) -> void:
 		if monster_level > 0
 		else maxi(1, actor.level)
 	)
-	var frame_count := maxi(
-		1,
-		MonsterAnimationPolicy.frame_count(active_resources, &"hit")
-	)
 	# Vanilla duration = ActStruck frames x max(80, 200 - level * 5) ms.
 	# No per-monster-name switch and no global 0.22s constant.
 	var duration := float(
-		frame_count * MonsterStruckPolicyScript.struck_frame_ms(struck_level)
+		_canonical_struck_frame_count
+		* MonsterStruckPolicyScript.struck_frame_ms(struck_level)
 	) / 1000.0
-	_enqueue_presentation(PresentationAction.STRUCK, duration)
+	# Record which committed movement step this struck must outlive: only that
+	# exact cell delays the presentation, never the later pursuit steps.
+	var step_barrier := (
+		actor._movement_step_epoch
+		if actor._movement_step_active
+		else -1
+	)
+	_enqueue_presentation(PresentationAction.STRUCK, duration, step_barrier)
 	RuntimeDiagnostics.record_performance_max(
 		&"monster_struck_visual_pending_max",
 		float(_pending_struck_count)
@@ -1069,28 +1103,32 @@ func pending_struck_count() -> int:
 	return _pending_struck_count
 
 
-## The struck becomes the visible action only when no death pose, no attack
-## pose, no earlier struck, and no committed movement step is playing.
-func _can_begin_struck() -> bool:
-	if _death_remaining > 0.0 or _death_pose_held:
-		return false
-	if _attack_remaining > 0.0 or _hit_remaining > 0.0:
-		return false
-	if not is_instance_valid(actor):
-		return false
-	# A committed movement step finishes first (original action-queue order).
-	# The struck never cancels the step and never plays "recoil while sliding".
-	if actor._movement_step_active or _hc_m30_is_walking():
-		return false
-	return true
-
-
 func _start_struck_visual(duration: float) -> void:
 	_hc_m30_walk.interrupt_pose()
 	_hit_remaining = duration
 	_hc_m30_hit_duration = duration
 	_action_duration = duration
 	_elapsed = 0.0
+
+
+## Canonical ActStruck frame count from the monster identity boundary (read
+## once at _ready). Evidence note (R1.3): the runtime authority is
+## canonical_monster_catalog.json - every one of the 156 entries resolves
+## through appearance_profile_id to appearance_profiles[].actions.hit
+## .framesPerDirection (109 profiles = 2 frames, monster 241's shared profile
+## = 6 frames). This is appearance metadata, not texture-residency state, so
+## a struck enqueued during cold activation / async streaming still gets the
+## exact vanilla duration. appearance_profile() is cached by MonsterIdentity;
+## this stays a one-shot read per visual.
+func _load_canonical_struck_frame_count(monster_id: int) -> int:
+	var actions: Variant = MonsterIdentityScript.appearance_profile(monster_id).get("actions", {})
+	if actions is Dictionary:
+		var hit: Variant = actions.get("hit", {})
+		if hit is Dictionary:
+			var count := int(hit.get("framesPerDirection", 2))
+			if count > 0:
+				return count
+	return 2
 
 
 ## Legacy direct-start primitive (test/compatibility callers only). The
