@@ -16,6 +16,12 @@ const CLIENT_RESOURCE_CACHE_CAPACITY := 12
 const CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES := 64 * 1024 * 1024
 const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
 const MAX_CONCURRENT_PROFILE_LOADS := 2
+## perf-smoothness-r1 Phase B (audit PERF-04): transient load failures are
+## retried with backoff while somebody still needs the profile; exhausted
+## attempts become permanent and stop retrying. Pre-validation failures
+## (missing/invalid source at request time) are permanent immediately.
+const MAX_FAILURE_RETRIES := 3
+const FAILURE_RETRY_BACKOFF_MSEC := 2000
 ## Subscriber expiry is housekeeping, not resource-completion work. Keep the
 ## loader/status path per-frame, but visit a fixed number of weak subscriptions
 ## so a dense map cannot add one full visual walk to every rendered frame.
@@ -59,6 +65,16 @@ var _sync_load_count := 0
 var _sync_load_paths: Array[String] = []
 var _request_order: Array[String] = []
 var _apply_order: Array[String] = []
+
+## perf-smoothness-r1 Phase B lifecycle state:
+## - loaded-not-admitted accounting (audit PERF-05): textures held by jobs
+##   that finished loading but have not entered the bounded cache yet.
+## - failure details survive entry release so map_prefetch_status keeps
+##   reporting real failures after a dead entry frees its dedup slot.
+var _loaded_pending_keys: Dictionary = {}
+var _failure_details: Dictionary = {}
+var _retry_requeue_count := 0
+var permanent_failed_request_count := 0
 
 ## Per-visual/per-resource residency state. A visual is only a waiter while it
 ## has explicitly requested activation; registration alone is deliberately not
@@ -143,14 +159,24 @@ func request_client_profile(
 		var action: Dictionary = actions.get(action_name, {})
 		var path := str(action.get("path", ""))
 		if path.is_empty() or not ResourceLoader.exists(path):
+			# The source is missing at request time: permanent bad data, no
+			# retry can fix it this session (audit PERF-04 classification).
 			_threaded_profile_requests[cache_key] = {
-				"state": "failed",
+				"state": "permanent_failed",
 				"mapping": client_mapping,
 				"monster_id": monster_id,
 				"map_generation": map_generation,
 				"request_sequence": _request_sequence,
 				"lane": job_lane,
 				"failed_path": path,
+				"failure_count": MAX_FAILURE_RETRIES,
+			}
+			permanent_failed_request_count += 1
+			_failure_details[cache_key] = {
+				"monsterId": monster_id,
+				"path": path,
+				"state": "permanent_failed",
+				"failure_count": MAX_FAILURE_RETRIES,
 			}
 			failed_resource_count += 1
 			_request_sequence += 1
@@ -208,14 +234,103 @@ func _pump_threaded_profile_queue() -> void:
 				break
 			_threaded_texture_request_count += 1
 		if not failed_path.is_empty():
-			job["state"] = "failed"
-			job["failed_path"] = failed_path
-			failed_resource_count += 1
+			_mark_job_failed(cache_key, job, failed_path)
 		else:
 			job["state"] = "loading"
 			active_count += 1
 		_threaded_profile_requests[cache_key] = job
 	active_request_count = _threaded_profile_requests.size()
+
+
+## perf-smoothness-r1 Phase B (audit PERF-04): classify a load failure and
+## record its real action/path. Transient failures get a bounded backoff
+## retry while demand remains; exhausted attempts become permanent.
+func _mark_job_failed(cache_key: String, job: Dictionary, failed_path: String) -> void:
+	var failure_count := int(job.get("failure_count", 0)) + 1
+	job["failure_count"] = failure_count
+	job["failed_path"] = failed_path
+	if failure_count >= MAX_FAILURE_RETRIES:
+		job["state"] = "permanent_failed"
+		permanent_failed_request_count += 1
+	else:
+		job["state"] = "failed"
+		job["retry_at_msec"] = Time.get_ticks_msec() + FAILURE_RETRY_BACKOFF_MSEC
+	_threaded_profile_requests[cache_key] = job
+	_failure_details[cache_key] = {
+		"monsterId": int(job.get("monster_id", -1)),
+		"path": failed_path,
+		"state": str(job.get("state", "")),
+		"failure_count": failure_count,
+	}
+	failed_resource_count += 1
+
+
+## Releases dead failure entries that nobody needs (freeing the dedup key)
+## and requeues backoff-elapsed transient failures with live demand.
+func _retry_eligible_failed_jobs() -> void:
+	var now_msec := Time.get_ticks_msec()
+	var requeued := false
+	for cache_key: String in _threaded_profile_requests.keys():
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		var state := str(job.get("state", ""))
+		if state != "failed" and state != "permanent_failed":
+			continue
+		if not _failure_retry_is_warranted(cache_key, job):
+			# No current map membership and no waiter: the entry only blocks
+			# future same-key requests, so release it. A later demand starts
+			# a fresh request; the failure detail stays reported.
+			if state == "permanent_failed":
+				permanent_failed_request_count -= 1
+			_threaded_profile_requests.erase(cache_key)
+			continue
+		if state == "permanent_failed":
+			continue
+		if int(job.get("failure_count", 0)) >= MAX_FAILURE_RETRIES:
+			# Attempts exhausted: stop retrying, keep the known-bad state.
+			job["state"] = "permanent_failed"
+			permanent_failed_request_count += 1
+			_failure_details[cache_key] = {
+				"monsterId": int(job.get("monster_id", -1)),
+				"path": str(job.get("failed_path", "")),
+				"state": "permanent_failed",
+				"failure_count": int(job.get("failure_count", 0)),
+			}
+			_threaded_profile_requests[cache_key] = job
+			continue
+		if now_msec < int(job.get("retry_at_msec", 0)):
+			continue
+		job["state"] = "queued"
+		job["retry_at_msec"] = 0
+		_threaded_profile_requests[cache_key] = job
+		_threaded_profile_queue.append(cache_key)
+		_retry_requeue_count += 1
+		requeued = true
+	if requeued:
+		_pump_threaded_profile_queue()
+
+
+func _failure_retry_is_warranted(cache_key: String, job: Dictionary) -> bool:
+	if str(job.get("lane", "")) == JOB_LANE_MAP_PREFETCH:
+		return _map_prefetch_keys.has(cache_key)
+	return _has_resource_waiters(cache_key)
+
+
+## perf-smoothness-r1 Phase B (audit PERF-03): an in-flight map-prefetch job
+## from an older generation loses its delivery entry when release_map_pins
+## clears _map_prefetch_keys. Retire it through the normal dispatch path so
+## the shared resource can still enter the bounded cache and the dedup slot
+## is freed; the stale completion is diagnosed and the new world is never
+## touched by the old generation.
+func _retire_stale_loaded_jobs() -> void:
+	for cache_key: String in _threaded_profile_requests.keys():
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		if str(job.get("state", "")) != "loaded":
+			continue
+		if str(job.get("lane", "")) != JOB_LANE_MAP_PREFETCH:
+			continue
+		var generation := int(job.get("map_generation", -1))
+		if generation >= 0 and generation != _map_prefetch_generation:
+			_dispatch_loaded_job(cache_key, job, false)
 
 
 ## The single formal streaming poll. GameRoot calls this once per frame with
@@ -248,10 +363,7 @@ func poll_once(frame_id: int) -> Dictionary:
 			if status != ResourceLoader.THREAD_LOAD_LOADED:
 				ready = false
 		if failed:
-			job["state"] = "failed"
-			job["failed_path"] = str(paths.get("idle", ""))
-			failed_resource_count += 1
-			_threaded_profile_requests[cache_key] = job
+			_mark_job_failed(cache_key, job, str(paths.get("idle", "")))
 			continue
 		if not ready:
 			continue
@@ -279,15 +391,18 @@ func poll_once(frame_id: int) -> Dictionary:
 				)
 			)
 		if failed or not MonsterAnimationPolicy.validate(result).is_empty():
-			job["state"] = "failed"
-			job["failed_path"] = str(paths.get("idle", ""))
-			failed_resource_count += 1
-			_threaded_profile_requests[cache_key] = job
+			_mark_job_failed(cache_key, job, str(paths.get("idle", "")))
 			continue
 		job["state"] = "loaded"
 		job["resources"] = result
 		_threaded_profile_requests[cache_key] = job
+		# Loaded-not-admitted accounting (audit PERF-05): the finished job's
+		# textures are residency until the dispatch enters the bounded cache.
+		var pending_bytes := _decoded_rgba8_profile_bytes(result)
+		_loaded_pending_keys[cache_key] = pending_bytes
+	_retry_eligible_failed_jobs()
 	_commit_loaded_profiles()
+	_retire_stale_loaded_jobs()
 	_pump_threaded_profile_queue()
 	if helper != null:
 		helper.free()
@@ -331,16 +446,17 @@ func _commit_loaded_profiles() -> void:
 				))
 			)
 	)
-	# Commit only the ready prefix. A later completion cannot overtake an
-	# earlier runtime request, but queued/loading jobs no longer consume loaded
-	# slots in the queue pump, so this ordering fence cannot deadlock the pump.
+	# Deliver ready jobs in stable request-sequence order. perf-smoothness-r1
+	# Phase B (audit PERF-05): a queued/loading job no longer BLOCKS already
+	# loaded later requests - one slow early atlas must not stall profiles a
+	# waiter can use now. Sequence order still keeps delivery deterministic.
 	for cache_key: String in runtime_keys:
 		var job: Dictionary = _threaded_profile_requests[cache_key]
 		var state := str(job.get("state", ""))
-		if state == "failed":
+		if state == "failed" or state == "permanent_failed":
 			continue
 		if state != "loaded":
-			break
+			continue
 		_dispatch_loaded_job(cache_key, job, false)
 
 
@@ -357,6 +473,8 @@ func _dispatch_loaded_job(
 		# Old-generation completion: never applied to the new world; the shared
 		# resource may still enter the bounded cache.
 		stale_completion_count += 1
+	if _loaded_pending_keys.has(cache_key):
+		_loaded_pending_keys.erase(cache_key)
 	var resources: Dictionary = job.get("resources", {})
 	var decoded_rgba8_bytes := _decoded_rgba8_profile_bytes(resources)
 	# A loaded completion is a delivery operation. Keep a true current waiter
@@ -603,13 +721,24 @@ func map_prefetch_status() -> Dictionary:
 				streamed += 1
 			continue
 		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
-		if str(job.get("state", "")) == "failed":
+		var job_state := str(job.get("state", ""))
+		if job_state == "failed" or job_state == "permanent_failed":
 			failed += 1
 			failed_details.append({
 				"monsterId": int(job.get("monster_id", -1)),
 				"path": str(job.get("failed_path", "")),
-				"state": "failed",
+				"state": job_state,
+				"failure_count": int(job.get("failure_count", 0)),
 			})
+			continue
+		if _failure_details.has(cache_key) and job_state.is_empty():
+			# The entry itself was released (no demand left), but the current
+			# map still asked for this key: report the real failure so the
+			# completion contract stays honest. A live retrying/loading job
+			# must stay pending instead of being counted failed twice.
+			var failure: Dictionary = _failure_details[cache_key]
+			failed += 1
+			failed_details.append(failure.duplicate())
 			continue
 		var path_states := []
 		for path: Variant in job.get("paths", {}).values():
@@ -650,6 +779,8 @@ func release_map_pins() -> void:
 	_map_pinned_decoded_rgba8_bytes = 0
 	_bootstrap_handoff_hold_keys.clear()
 	_bootstrap_handoff_hold_generation = -1
+	# Failure details belong to the old map's request set.
+	_failure_details.clear()
 	for cache_key: String in _threaded_profile_queue.duplicate():
 		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
 		if (
@@ -1319,4 +1450,16 @@ func monster_streaming_diagnostics() -> Dictionary:
 		"same_key_reload_count": same_key_reload_count,
 		"evicted_before_first_apply_count": evicted_before_first_apply_count,
 		"late_completion_resident_skip_count": late_completion_resident_skip_count,
+		# perf-smoothness-r1 Phase B lifecycle accounting (audit PERF-03/04/05).
+		"loaded_pending_request_count": _loaded_pending_keys.size(),
+		"loaded_pending_decoded_rgba8_bytes": _loaded_pending_bytes_total(),
+		"retry_requeue_count": _retry_requeue_count,
+		"permanent_failed_request_count": permanent_failed_request_count,
 	}
+
+
+func _loaded_pending_bytes_total() -> int:
+	var total := 0
+	for value: Variant in _loaded_pending_keys.values():
+		total += int(value)
+	return total
