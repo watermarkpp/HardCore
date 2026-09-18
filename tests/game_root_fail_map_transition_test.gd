@@ -55,12 +55,86 @@ func _ready() -> void:
 	)
 	print("P03_CASE1 pre_arrival_keep_world done")
 
+	# --- Case 2b: post_arrival_safe_home policy through the central owner.
+	# A real post-arrival FAILED transition must route the player back to
+	# the service home WORLD with no stranded map_transition lock and no
+	# combat token. A living player must start that recovery immediately -
+	# the 5s death-settle window is only for hp<=0 players whose death
+	# settlement has not landed yet.
+	var op2 := Callable(game, "_travel_to_map_immediate").bind(913202)
+	# 913202's arrival pack can kill the player between READY and the
+	# failure injection; pad HP so the living-player branch is genuinely
+	# exercised (the death branch is covered by the production town
+	# revival path and by case 2's settled-state clauses).
+	game.player.max_hp = 9999
+	game.player.current_hp = 9999
+	var hop2 := Time.get_ticks_msec() + 10000
+	if not game._begin_map_transition(op2, 913202):
+		print("P03_CASE2B travel refused - aborting case 2b")
+		_finish(before_gen)
+		return
+	while (
+		not bool(game._map_transition_in_progress)
+		and Time.get_ticks_msec() < hop2
+	):
+		await get_tree().create_timer(0.016, true).timeout
+	game.hud.loading_transition_covered.emit({
+		"contract_id": "ui.loading.transition.v1",
+		"transition_id": game._active_map_transition_id,
+	})
+	var settle2b := Time.get_ticks_msec() + 90000
+	while bool(game._map_transition_in_progress) and Time.get_ticks_msec() < settle2b:
+		await get_tree().create_timer(0.016, true).timeout
+	_check(
+		int(game.current_map_id) == 913202
+		and str(coord.snapshot().get("stage", "")) == "READY",
+		"case 2b: pre-failure travel to 913202 must be READY",
+	)
+	_check(
+		not bool(game.player._dead) and int(game.player.current_hp) > 0,
+		"case 2b: player must be alive to exercise the living-player branch",
+	)
+	var t0 := Time.get_ticks_msec()
+	await game._fail_map_transition(&"post_arrival_safe_home")
+	var central_ms := Time.get_ticks_msec() - t0
+	_check(
+		central_ms < 3000,
+		"case 2b: living player must start safe-home immediately "
+		+ "(%d ms, no 5s death-settle wait)" % central_ms,
+	)
+	var done2b := Time.get_ticks_msec() + 90000
+	while (
+		(bool(game._map_transition_in_progress)
+			or int(game.current_map_id) != 910001)
+		and Time.get_ticks_msec() < done2b
+	):
+		await get_tree().create_timer(0.05, true).timeout
+	await get_tree().create_timer(0.5, true).timeout
+	_check(
+		int(game.current_map_id) == 910001,
+		"case 2b: recovery must land the player in the home world",
+	)
+	_check(
+		not bool(game.player._dead) and int(game.player.current_hp) > 0,
+		"case 2b: living player must stay alive through safe-home",
+	)
+	_check(
+		not (game._gameplay_input_locks as Dictionary).has("map_transition"),
+		"case 2b: no stranded map_transition lock",
+	)
+	_check(
+		not game.player.combat_transition_is_active(),
+		"case 2b: no stranded combat token",
+	)
+	print("P03_CASE2B post_arrival_safe_home done (central=%d ms)" % central_ms)
+
 	# --- Case 2: end-to-end blocked arrival on 913201 (P0-3b relocation).
 	# The routed arrival cell is environment-blocked; with collision built
 	# the FINALIZE stage relocates the player to the nearest unblocked
 	# point and the ready contract PASSES in the freshly built world
 	# (OPTIMIZED). The whole world is kept: no FAILED transition, no
 	# safe-home recovery, no stranded locks or combat token.
+	var before_gen_case2 := int(coord.generation)
 	var op := Callable(game, "_travel_to_map_immediate").bind(913201)
 	var hop := Time.get_ticks_msec() + 10000
 	if not game._begin_map_transition(op, 913201):
@@ -100,7 +174,7 @@ func _ready() -> void:
 		"blocked arrival: failure_reason must be map_transition_ready",
 	)
 	_check(
-		int(coord.generation) == before_gen + 1,
+		int(coord.generation) == before_gen_case2 + 1,
 		"blocked arrival: generation must advance exactly once",
 	)
 	_check(

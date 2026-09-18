@@ -1,16 +1,43 @@
 {
-  "review_status": "closed",
-  "mengzhong_dark_area": {
-    "classification": "LOCALIZED_ANIMATED_PHASE_DIFFERENCE",
-    "differing_ratio": 0.00182,
-    "differing_pixels": 5810,
-    "verdict": "PASS",
-    "method": "wall-only masked diff tolerance=8 + red-cluster spatial analysis",
-    "rationale": "all 18 clusters inside one 145x65 spawn-area animated element; structural identity independently proven by R6 strict node-count==plan (325 groups / 35 chunks) and zero residue"
-  },
-  "mengzhong_stone_coffin_room": {
-    "verdict": "PASS",
-    "method": "wall-only masked diff tolerance=8",
-    "differing_pixels": 0
-  }
+	"review_status": "closed",
+	"method": "wall-only masked diff: hide_dynamic=1 captures (monsters via zone_content group, player, HUD hidden) + wall_pixel_diff tolerance=8 + red-cluster spatial analysis",
+	"mengzhong_death_coffin": {
+		"requested_map_id": 913207,
+		"opt_capture": "res://outputs/wall_perf/r8_masked/death_coffin_optimized.png",
+		"legacy_capture": "res://outputs/wall_perf/r8_masked/death_coffin_legacy.png",
+		"heatmap": "res://outputs/wall_perf/r8_masked/death_coffin_heatmap.png",
+		"tolerance": 8,
+		"differing_pixels": 0,
+		"differing_ratio": 0.0,
+		"max_channel_delta": 2,
+		"mean_abs_delta": 0.00409490132265198,
+		"red_cluster_analysis": {
+			"cluster_count": 0,
+			"largest_cluster_bbox": null
+		},
+		"classification": "WALL_STRUCTURE_IDENTICAL",
+		"history": "Original R8 commit 35f6ea01 flagged 4.81% on the unmasked full-frame diff; the masked wall-only rerun (hide_dynamic=1) shows the entire delta was dynamic entities, not the wall structure.",
+		"verdict": "PASS"
+	},
+	"mengzhong_dark_area": {
+		"requested_map_id": 913203,
+		"opt_capture": "res://outputs/wall_perf/r8_masked/dark_opt.png",
+		"legacy_capture": "res://outputs/wall_perf/r8_masked/dark_legacy.png",
+		"heatmap": "res://outputs/wall_perf/r8_masked/dark_heatmap.png",
+		"tolerance": 8,
+		"differing_pixels": 5810,
+		"differing_ratio": 0.00182,
+		"mean_abs_delta": 0.1125,
+		"max_channel_delta": 237,
+		"red_cluster_analysis": {
+			"cluster_count": 18,
+			"largest_cluster_bbox": [911, 1005, 1055, 1040],
+			"all_clusters_within": [911, 1005, 1055, 1069]
+		},
+		"classification": "LOCALIZED_ANIMATED_PHASE_DIFFERENCE",
+		"rationale": "All 18 clusters inside one 145x65 spawn-area animated element; no wall-layout-scale difference. Structural identity independently proven by R6 strict node-count==plan (325 groups / 35 chunks, zero residue).",
+		"verdict": "PASS"
+	},
+	"note": "mengzhong_stone_coffin_room (913202) was mistakenly substituted for mengzhong_death_coffin (913207) in the 383da586 evidence; corrected in final-v2 by rerunning the real review target (913207).",
+	"verdict": "R8_MANUAL_REVIEW_CLOSED_BOTH_MAPS_PASS"
 }

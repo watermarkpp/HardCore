@@ -3187,7 +3187,8 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 			# window to land so the recovery picks the right branch.
 			var death_settle := Time.get_ticks_msec() + 5000
 			while (
-				not bool(player._dead)
+				int(player.current_hp) <= 0
+				and not bool(player._dead)
 				and Time.get_ticks_msec() < death_settle
 			):
 				await get_tree().create_timer(0.05, true).timeout

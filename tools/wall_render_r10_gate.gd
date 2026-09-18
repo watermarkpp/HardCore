@@ -88,8 +88,8 @@ func _ready() -> void:
 		var entry: Variant = r8[map_key]
 		if entry is Dictionary and str(entry.get("verdict", "")) != "PASS":
 			r8_open.append(map_key)
-	if r8.get("mengzhong_stone_coffin_room", {}) == {}:
-		blocked.append("R8 review missing mengzhong_stone_coffin_room")
+	if r8.get("mengzhong_death_coffin", {}) == {}:
+		blocked.append("R8 review missing mengzhong_death_coffin")
 	if r8.get("mengzhong_dark_area", {}) == {}:
 		blocked.append("R8 review missing mengzhong_dark_area")
 	if not r8_open.is_empty():
